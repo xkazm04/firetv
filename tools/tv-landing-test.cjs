@@ -90,6 +90,11 @@ test('view 4: the actions say what Select does; the phone carries the real code 
  const nb=landingView(SCENARIOS.nobody());
  assert.deepEqual([nb.learner,nb.primary,nb.place],[null,'Choose who is studying','Choose who'],'no one at the desk: an app asks who first');
  assert.equal(primaryLabel('Ema','marked'),'Continue as Ema');
+ // the lamp is drawn, not focused: `say` is what a screen reader hears for the stop it is on, in the words the eye reads
+ assert.equal(landingView(SCENARIOS.returning()).say,'Math Buddy. Marked. Two-step equations · 3 of 4 right. The marked set is still on the desk. Continue as Ema.');
+ assert.equal(landingView({...SCENARIOS.returning(),focus:3}).say,'Someone else. Ema is at the desk.');
+ assert.equal(f.say,'Pair your phone. Open 10.0.0.7:3000/phone, then enter 4 7 1 1.','the code digit by digit');
+ assert.equal(nb.say.includes('Choose who is studying'),true,'no one seated: the app stop says Select asks who');
 });
 
 test('paper 1: the default look draws each scenario with its hooks and its real words',()=>{
@@ -103,6 +108,10 @@ test('paper 1: the default look draws each scenario with its hooks and its real 
  assert.doesNotMatch(r,/data-role="desk-pin"/,'a paired phone shows no code');
  assert.equal((html('someoneElse').match(/data-role="desk-object"/g)||[]).length,2);
  const f=html('firstRun');assert.match(f,/data-role="desk-pin"[^>]*>4711</,'the pairing code is the session\'s');assert.match(f,/10\.0\.0\.7:3000\/phone/);
+ // a screen reader hears "Code 4711": the label is a hidden word, not an aria-label on a plain div (ARIA drops those)
+ assert.match(f,/class="pp-sr">Code <\/span><div class="pp-pin"/);assert.doesNotMatch(f,/aria-label="Code/);
+ assert.match(f,/data-role="desk-announce" aria-live="polite" aria-atomic="true">Pair your phone\./,'the stop the lamp is on is spoken');
+ assert.match(f,/class="pp-sr">No phone paired</);assert.match(html('returning'),/class="pp-sr">Phone paired</,'the phone chip says its state in words, not only in its drawing');
  assert.match(html('nobody'),/Whose desk\?/);
  const z=html('returning','maths');assert.match(z,/data-role="desk-zoom"[^>]*data-app="maths"/,'Select plays the hand-off of the lit app');assert.match(z,/Opening/);
  assert.doesNotMatch(r,/dangerouslySetInnerHTML|<script/);
@@ -123,7 +132,8 @@ test('lock 1: the blueprint theme renders when a test instantiates it explicitly
   assert.match(html,/data-theme="blueprint"/,k);assert.match(html,/data-role="desk-scene"/,k);
   const apps=(html.match(/data-role="desk-object"/g)||[]).length;assert.equal(apps,k==='someoneElse'?2:3,`${k}: one entry per app on the profile`);
  }
- const f=draw(bp,landingView(SCENARIOS.firstRun()));assert.match(f,/data-role="desk-pin"/);assert.match(f,/4711/);
+ const f=draw(bp,landingView(SCENARIOS.firstRun()));assert.match(f,/data-role="desk-pin"/);assert.match(f,/4711/);assert.match(f,/<span>PIN<\/span>/,'its visible PIN label names the code');
+ assert.match(f,/class="bp-sr" data-role="desk-announce" aria-live="polite"[^>]*>Pair your phone\./,'the same spoken line as paper');
  assert.match(draw(bp,landingView(SCENARIOS.returning())),/Two-step equations/,'the same words as paper');
  assert.match(draw(bp,landingView(SCENARIOS.returning()),'maths'),/data-role="desk-zoom"|data-zoom/,'and the same hand-off');
 });

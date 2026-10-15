@@ -62,7 +62,7 @@ const scribe = (name: string): Provider<ListenRequest, Heard> => ({
 register("listen", [scribe("gravitone"), scribe("elevenlabs")], () => (cloud() ? "elevenlabs" : "gravitone"));
 
 /** The language is detected, not pinned: a learner may answer in Czech or Ukrainian, and that is a signal. */
-export async function listen(audio: Blob, filename: string, opts: { timeoutMs?: number } = {}): Promise<EngineResult<Heard>> {
-  const { answer: a, provider: name, ms } = await call("listen", provider("listen"), { audio, filename, timeoutMs: opts.timeoutMs });
+export async function listen(audio: Blob, filename: string, opts: { timeoutMs?: number; use: string }): Promise<EngineResult<Heard>> {
+  const { answer: a, provider: name, ms } = await call("listen", provider("listen"), { audio, filename, timeoutMs: opts.timeoutMs, use: opts.use });
   return { json: a.raw, provider: name, ms };
 }

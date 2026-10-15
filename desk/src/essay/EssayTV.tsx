@@ -18,6 +18,7 @@ import { CIT, BONE, EssayBrand as Brand, EssayArrow as Arrow } from "@/tv/marks"
 import { ESSAY_FONTS } from "./fonts";
 import { EssayCabinet } from "./EssayCabinet";
 import { WorkroomScreen } from "./Workroom";
+import { afterFonts } from "@/lib/afterFonts";
 
 const MUTE = "rgba(238,233,224,.5)";
 
@@ -135,13 +136,13 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
       brk.innerHTML = `<path d="${d}" fill="none" stroke="${CIT}" stroke-width="4"/>`;
     });
     place();
-    document.fonts?.ready.then(place).catch(() => {});
+    afterFonts(place);
   }, []);
 
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const chosen = lens && s.essayType === lens.id;
   const reading = pieceBeingRead(a?.piece);
-  const refused = refusalCaption(s.status);
+  const refused = refusalCaption(s);
   const cap = job?.phase === "running" ? { label: "Reading", text: reading ? "The desk is reading your piece, a paragraph at a time. Each one lands here." : "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" && (chosen || !a) ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
     : refused ? refused
@@ -209,7 +210,7 @@ export function EssayPlan({ s }: { s: Session }) {
   const done = slots.every(Boolean);
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const fit = here >= 0 && slots[here] ? planFit(defs, here, slots[here]) : null;
-  const refused = refusalCaption(s.status);
+  const refused = refusalCaption(s);
   const cap = job?.phase === "running" ? { label: "Reading", text: "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Press OK on Read it to send it again." }
     : refused ? refused
@@ -403,7 +404,7 @@ function Page({ sn, n, v, lens, type, inked, job, unruled, pending }: { sn: Sent
       }
     };
     fit();
-    document.fonts?.ready.then(fit).catch(() => {});
+    afterFonts(fit);
   }, [sn.n, sn.text, t?.fix.move, t?.fix.pattern]);
 
   const note = v?.note?.trim();

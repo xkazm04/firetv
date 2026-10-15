@@ -6,7 +6,8 @@
  * a sentence that exists and a mastery verdict is never a prompt's mood.
  */
 import { text } from "../engines/text";
-import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, numberedLines, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, revise, ruledSentences, SIDES, splitSentences, summaryLine, SUPPORTS, taught, unanswered, unruledLines, type AnalysisType, type Sentence } from "../rules/essay";
+import { assemble, data, dataRows, say } from "../prompt/assemble";
+import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, sentenceRows, revise, ruledSentences, SIDES, splitSentences, summaryLine, SUPPORTS, taught, unanswered, unruledLines, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
 import { getLearner, LearnersUnread, readLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
 import { DeskSaid } from "./job";
@@ -80,10 +81,9 @@ const lensOf = (type: string): Lens => ANALYSIS_TYPES.find((t) => t.id === type)
 async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voice: Voice, focus?: { para: number; of: number }) {
   // with `focus` (one paragraph of a piece) the observations come back unruled: analysePiece rules the whole piece once
   const stats = paragraphStats(sentences.filter((s) => judged.has(s.n)));
-  const numbered = numberedLines(sentences), piece = paragraphCount(sentences) > 1;
+  const piece = paragraphCount(sentences) > 1;
   const ns = [...judged].sort((a, b) => a - b);
-  const { json, provider } = await text<{ observations: Record<string, unknown>[] }>({
-    system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
+  const system = withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
       `Observe each sentence by its number and report only what you see; the desk decides what is done well and what needs fixing. ` +
       `${OBSERVE[lens.id]} ` +
       `Give one observation for every sentence you are asked to judge. ` +
@@ -91,12 +91,17 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
       `For a 'faulty' verdict only, add a fix to a sentence you see a problem in: 'move' names the technique in 2 to 6 words (for example "Concede, then turn it back"), ` +
       `and 'pattern' is a sentence frame with the content left as bracketed slots for the student to fill (for example "Although [the other side], [why your claim still holds]."). ` +
       `${PATTERN_RULE} ` +
-      `Plain text, to be read aloud.`, voice),
-    prompt: `The student's ${piece ? `piece, ${paragraphCount(sentences)} paragraphs,` : "paragraph,"} sentence by sentence:\n${numbered}\n\n` +
-      (focus ? `Judge only paragraph ${focus.para + 1} of ${focus.of}: sentences ${ns[0]} to ${ns.at(-1)}, one observation each, in the context of the whole piece.\n` : "") +
-      `Counts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`,
-    schema: schemaFor(lens), model: "best", use: "essay-read",
-  });
+      `Plain text, to be read aloud.`, voice);
+  // the learner's sentences are data; the desk's counts and first-pass roles ride beside each as its own note
+  const asked = assemble("essay-read", {
+    system: [say("stance", system)],
+    prompt: [
+      dataRows("sentences", `The student's ${piece ? `piece, ${paragraphCount(sentences)} paragraphs,` : "paragraph,"} sentence by sentence`, sentenceRows(sentences)),
+      say("focus", focus && `Judge only paragraph ${focus.para + 1} of ${focus.of}: sentences ${ns[0]} to ${ns.at(-1)}, one observation each, in the context of the whole piece.`),
+      say("counts", `Counts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`),
+    ],
+  }, { prompt: "\n" });
+  const { json, provider } = await text<{ observations: Record<string, unknown>[] }>({ ...asked, schema: schemaFor(lens), model: "best", use: "essay-read" });
   // A highlight may only land on a sentence number that exists, and only on one this call judges: an observation for
   // any other number, or an `observations` that is not a list at all, is dropped. Which sentences are faulty is
   // decided by code (rules/essay decideVerdicts), which also keeps a fix only on a faulty sentence (cleanFix).
@@ -228,20 +233,26 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   const old = reading.sentences.find((s) => s.n === n)!, before = reading.verdicts.find((v) => v.n === n);
   const play = playFor(reading.type);
   const move = taught(before, { move: play.move, pattern: play.pattern })?.fix;
-  const numbered = numberedLines(next.sentences);
-  const { json, provider } = await text<{ observations: Record<string, unknown>[] }>({
-    system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
+  const system = withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
       `The student has rewritten one sentence of their paragraph, sentence ${n}. Observe sentence ${n} alone, in the context of the paragraph, and give exactly one observation, for sentence ${n}; report only what you see, the desk decides whether it now does its job. ` +
       `${OBSERVE[lens.id]} Do not observe the other sentences. ` +
       `The note is one short sentence a student can act on, no praise-padding. ${NEVER_REWRITE} ` +
       `For a 'faulty' verdict only, add a fix to a sentence you see a problem in: 'move' names the technique in 2 to 6 words, and 'pattern' is a sentence frame with the content left as bracketed slots. ` +
-      `${PATTERN_RULE} Plain text, to be read aloud.`, voice),
-    prompt: `The student's paragraph, sentence by sentence, with sentence ${n} as rewritten:\n${numbered}\n\n` +
-      `Before the rewrite, sentence ${n} read: "${old.text}"` + (before ? ` (${before.verdict}: ${before.note})` : "") + `.\n` +
-      (move ? `The move they were asked to make: ${move.move} (pattern: ${move.pattern}).\n` : "") +
-      `Observe sentence ${n} alone.`,
-    schema: reviseSchema(lens), model: "best", use: "essay-revise",
-  });
+      `${PATTERN_RULE} Plain text, to be read aloud.`, voice);
+  // the sentences, the old one, the earlier note and the move are the learner's or a model's words: data. The verdict is the desk's.
+  const asked = assemble("essay-revise", {
+    system: [say("stance", system)],
+    prompt: [
+      dataRows("sentences", `The student's paragraph, sentence by sentence, with sentence ${n} as rewritten`, sentenceRows(next.sentences)),
+      data("before", `Before the rewrite, sentence ${n} read`, old.text),
+      say("verdict", before && `The desk's verdict on it then: ${before.verdict}.`),
+      data("note", "The note it had", before?.note),
+      data("move", "The move they were asked to make", move?.move),
+      data("pattern", "Its pattern", move?.pattern),
+      say("ask", `Observe sentence ${n} alone.`),
+    ],
+  }, { prompt: "\n" });
+  const { json, provider } = await text<{ observations: Record<string, unknown>[] }>({ ...asked, schema: reviseSchema(lens), model: "best", use: "essay-revise" });
   // only the observation for sentence n is read; one that is missing or that the lens cannot read fails the run, so a
   // verdict is never invented. The others come from the first pass, as context for the rule.
   const got = (Array.isArray(json?.observations) ? json.observations : []).find((o) => o?.n === n);

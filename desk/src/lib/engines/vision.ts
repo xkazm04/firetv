@@ -46,10 +46,13 @@ export const ollamaVision: Provider<VisionRequest, unknown> = {
     const post = (b: Record<string, unknown>) => fetch(`${HOST}/api/chat`, { method: "POST", body: JSON.stringify(b), signal: ctx?.signal })
       .catch((e: Error) => { throw new EngineError(e.name === "AbortError" ? "timeout" : "unreachable", reported, `ollama is not reachable: ${e.message}`); });
     let res = await post({ ...body, think: false });
-    if (!res.ok) res = await post(body);
+    // Only a 400 says the request body was refused (the think key); a 404 (model not pulled) or a 5xx is not cured by resending the image.
+    if (res.status === 400) res = await post(body);
     if (!res.ok) throw new EngineError("exit", reported, `ollama ${res.status}: ${(await res.text()).slice(0, 300)}`);
     const data = await res.json();
     const content: string = data.message?.content ?? "";
+    // ollama names why it stopped: "length" is a ceiling, not a malformed answer (unattempted-is-not-failed)
+    if (data.done_reason === "length") throw new EngineError("cutoff", reported, "ollama stopped at its length limit before the answer was finished");
     return { raw: content, provider: reported, audit: content.slice(0, 2000) };
   },
   probe: () => ollamaProbe(HOST, MODEL),

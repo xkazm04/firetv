@@ -287,8 +287,10 @@ test('jobs 1: while the set is being marked Practice says so; a failed mark show
  assert.equal(bad.phase,'failed');
  assert.ok(bad.text.startsWith('The desk could not mark the set. It took too long.'),`the job's own sentence first: ${bad.text}`);
  assert.match(bad.text,/[Ss]nap(ping)? the sheet again/,'and that snapping again tries again');
- const plain=markLine({practice:unmarked,jobs:{mark:job('failed',{error:'The desk could not mark the set. Try again.'})}});
- assert.doesNotMatch(plain.text,/Try again\..*Snap/,'"Try again." is not said twice: the snap line says how');
+ const plain=markLine({practice:unmarked,jobs:{mark:job('failed',{error:'The desk could not mark the set.'})}});
+ assert.equal(plain.text,'The desk could not mark the set. '+R().SNAP_AGAIN,'the sentence of the job, then the snap line, nothing rewritten');
+ const said=markLine({practice:unmarked,jobs:{mark:job('failed',{error:'The page was blank. Try again.'})}});
+ assert.ok(said.text.startsWith('The page was blank. Try again. '),'the TV never edits the words of the job: no wording is matched');
  assert.equal(markLine({practice:unmarked,jobs:{mark:job('done')}}),null,'a done mark: unchanged');
 });
 

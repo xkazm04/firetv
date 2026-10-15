@@ -134,13 +134,14 @@ const STUB={name:'stub',run:async(req)=>{
 // ------------------------------------------------------------------ the pass-through: every call timed and read
 const inner=stub?STUB:reg.provider('text');
 let current=null;
-reg.useProvider('text',{name:inner.name,run:async(req)=>{
+// ctx carries the deadline's abort signal: a wrapper that drops it leaves a timed-out CLI running and spending (engines/call.ts)
+reg.useProvider('text',{name:inner.name,deadlineMs:inner.deadlineMs,run:async(req,ctx)=>{
  const t0=Date.now();
  const call={ms:0,asked:req.schema?.properties?.specs?.maxItems??null,returned:0,error:null};
  try{
   // CALC_YIELD_THINKING=off asks the real engine to answer without hidden reasoning (TextRequest.thinking: false), to
   // measure speed against yield before items.ts asks for it
-  const out=await inner.run(process.env.CALC_YIELD_THINKING==='off'?{...req,thinking:false}:req);
+  const out=await inner.run(process.env.CALC_YIELD_THINKING==='off'?{...req,thinking:false}:req,ctx);
   call.ms=Date.now()-t0;
   if(current)read(current,req,out);
   return out;

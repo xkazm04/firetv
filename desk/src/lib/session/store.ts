@@ -5,6 +5,7 @@
  * work happens in the route handlers and lands as further events. Kept on globalThis so Next's
  * dev reloads do not lose the desk mid-session; persisted as JSON on every change.
  */
+import { RETRYABLE, type JobFailure } from "../desk/failure";
 import type { Workroom } from "../twin/workroom";
 import { randomInt } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
@@ -252,7 +253,7 @@ export type JobKind = "read" | "hint" | "lesson" | "explain" | "mark" | "practic
 export type JobPhase = "running" | "done" | "failed";
 /** What a run was asked with, held so a failed run can be asked again in place (POST /api/session/retry). Never an answer, never an image. */
 export type JobInput = Record<string, string | number>;
-export interface Job { id: string; phase: JobPhase; startedAt: number; endedAt?: number; key?: string; error?: string; input?: JobInput; /** The status line the run set when it started (P8): a switch that drops the run clears it while it still reads this. */ start?: string; /** The learner the run is for (P11): a running job of a learner who is not seated does not block the seated one, and its failure leaves no retry. A job without one behaves as it always did. */ by?: string; }
+export interface Job { id: string; phase: JobPhase; startedAt: number; endedAt?: number; key?: string; error?: string; /** Why a failed run failed, as a value (lib/desk/failure.ts), and whether asking again can end differently: what Try again is offered on. A job saved before they existed has neither, and is offered as before. */ failure?: JobFailure; retry?: boolean; input?: JobInput; /** The status line the run set when it started (P8): a switch that drops the run clears it while it still reads this. */ start?: string; /** The learner the run is for (P11): a running job of a learner who is not seated does not block the seated one, and its failure leaves no retry. A job without one behaves as it always did. */ by?: string; }
 export type Jobs = Partial<Record<JobKind, Job>>;
 /** Said for a run the desk was restarted in the middle of. */
 export const INTERRUPTED = "The desk was restarted before this finished. Ask again.";
@@ -341,6 +342,8 @@ export interface Session {
    * (lib/session/pairing.ts view); the seated learner's own is in the fields above.
    */
   away?: Record<string, MathsSlot>;
+  /** The essay refusal the analyse route said before any run (rules/essay.ts refusalCaption): the status it set, kept as a value so no screen decodes the sentence. A later status that is not this one is not a refusal. */
+  essayRefused?: string;
   status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null; /** the local day the log was first written: it is one evening's, see dayed */ day?: string; /** when the evening was last ended (session.end): the phone's recap shows for an evening ended since local midnight */ endedAt?: number };
   updatedAt: number;
   /** Who this copy was drawn for (lib/session/pairing.ts view): never stored, set only on what a route sends. */
@@ -375,8 +378,8 @@ export type Event =
   | { type: "walk"; ix: number } | { type: "practice.clear" }
   | { type: "practice.second"; n: number; verdict: "right" | "wrong" }
   | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string; slipAt?: SlipAt }
-  | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string; by?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
-  | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" };
+  | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string; by?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string; failure?: JobFailure }
+  | { type: "status"; text: string; essayRefused?: boolean } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" };
 
 /**
  * The one door for what a screen or phone posts (api/session POST, after the server-only refusals): for each client-postable
@@ -408,7 +411,7 @@ const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { ty
   "task.add": { name: f.name, sub: f.subject, min: f.num }, "task.done": { id: f.str, done: f.bool },
   "timer.start": {}, "timer.pause": {}, "timer.tick": { seconds: f.num }, "timer.skipbreak": {},
   "topic.open": { topic: f.str, stay: maybe(f.bool) }, walk: { ix: f.int }, "practice.clear": {},
-  status: { text: f.str }, "session.end": {}, reset: {},
+  status: { text: f.str, essayRefused: maybe(f.bool) }, "session.end": {}, reset: {},
 };
 /** Why a posted event is refused, or null when it may go to the reducer. */
 export function badPost(e: unknown): string | null {
@@ -498,7 +501,7 @@ export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry
   const at = s.learner.id, cur = s.pages[s.pageIx]?.id;
   if (s.pages.every((p) => p.owner === at) && (!s.practice || s.practice.owner === at) && (!s.hint || s.hint.owner === at) && (!s.lesson || s.lesson.owner === at)) return s;
   const hist = new Map<string, HistoryEntry[]>();
-  const lines = (id: string) => { if (!hist.has(id)) { let h: HistoryEntry[] = []; try { h = historyOf(id) ?? []; } catch {} hist.set(id, h); } return hist.get(id)!; };
+  const lines = (id: string) => { if (!hist.has(id)) { let h: HistoryEntry[] = []; try { h = historyOf(id) ?? []; } catch { /* read as no history: the only reader that throws (boot, readable) has set learnersUnread, and the status says it */ } hist.set(id, h); } return hist.get(id)!; };
   const ids = s.profiles.map((p) => p.id);
   const snapped = (p: Page) => Number(/-(\d+)$/.exec(p.id)?.[1] ?? 0);
   const readBy = (p: Page) => { let best: [string, number] | null = null;
@@ -747,7 +750,7 @@ function step(s: Session, e: Event): Session {
     case "job.done": case "job.failed": { const j = s.jobs?.[e.kind]; if (!j || j.id !== e.id) return s;
       // a failure that lands for a learner who is not seated leaves no failed job: it is not the next learner to retry (P11)
       if (e.type === "job.failed" && j.by !== undefined && j.by !== me) { n.jobs = { ...s.jobs }; delete n.jobs[e.kind]; break; }
-      n.jobs = { ...s.jobs, [e.kind]: e.type === "job.done" ? { ...j, phase: "done", endedAt: Date.now() } : { ...j, phase: "failed", endedAt: Date.now(), error: e.error } };
+      n.jobs = { ...s.jobs, [e.kind]: e.type === "job.done" ? { ...j, phase: "done", endedAt: Date.now() } : { ...j, phase: "failed", endedAt: Date.now(), error: e.error, ...(e.failure ? { failure: e.failure, retry: RETRYABLE[e.failure] } : {}) } };
       // a lesson pick that failed for the hint on screen ends the wait the same way "no lesson" does
       if (e.type === "job.failed" && e.kind === "lesson" && j.key === s.hint?.key) { n.lesson = null; n.noLesson = true; }
       break; }
@@ -815,7 +818,7 @@ function step(s: Session, e: Event): Session {
       n.practice = { ...s.practice, items: s.practice.items.map((x) => (x.n === e.n ? shown({ ...x, second: e.verdict }) : x)) }; break; }
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
-    case "status": n.status = e.text; break;
+    case "status": n.status = e.text; n.essayRefused = e.essayRefused ? e.text : undefined; break;
     case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.log = { ...s.log, endedAt: Date.now() }; break;
     case "reset": return fresh();
   }
@@ -955,7 +958,7 @@ if (!store.session.jobs) store.session.jobs = {};
 // the startup reads go through readLearner: an unreadable learners.json is said once, in one sentence, never read as an empty book
 let learnersUnread = false;
 const readable = (id: string) => { try { return readLearner(id); } catch (err) { learnersUnread = true; throw err; } };
-try { store.session = settleOwners(store.session, (id) => readable(id).history); } catch {}
+try { store.session = settleOwners(store.session, (id) => readable(id).history); } catch (e) { console.error("desk session: the work's owners could not be settled at start:", e instanceof Error ? e.message : e); }
 // the Sunday page is drawn fresh for whoever is seated, never taken from the file
 store.session = { ...store.session, week: weekRead(store.session) };
 // the learner's latest paper (v2 M5b), read back through cleanPaper from their record, never taken from the saved session
@@ -1050,7 +1053,7 @@ export function dispatch(e: Event): Session {
     if (id) try { kept = addPaper(id, e.rows); } catch (err) { failed = true; console.error("A paper could not be saved:", err instanceof Error ? err.message : err); }
     if (!kept) {
       store.session = { ...store.session, status: !id ? NOBODY_AT_DESK : failed ? PAPER_NOT_SAVED : PAPER_NO_ROW, updatedAt: Date.now() };
-      store.subs.forEach((fn) => { try { fn(store.session); } catch {} });
+      notify();
       return store.session;
     }
   }
@@ -1073,20 +1076,20 @@ export function dispatch(e: Event): Session {
     const id = store.session.learner?.id;
     if (id) try {
       const l = readLearner(id);
-      store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null, ...(store.session.status === LEARNER_UNREAD ? { status: "" } : {}) };
+      store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory.map((n) => n.text), history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null, ...(store.session.status === LEARNER_UNREAD ? { status: "" } : {}) };
       rehydrateTold = "";
     } catch (err) {
       tellRehydrate(err instanceof Error ? err.message : String(err));
       // the same learner keeps its own records (WD13); a learner switched to never shows the previous learner's (WD14a)
       if (before.learner?.id !== id) {
         const b = blank(id);
-        store.session = { ...store.session, skills: b.skills, writing: b.writing, memory: b.memory, history: b.history, englishLearning: b.english, paper: null, status: LEARNER_UNREAD };
+        store.session = { ...store.session, skills: b.skills, writing: b.writing, memory: b.memory.map((n) => n.text), history: b.history, englishLearning: b.english, paper: null, status: LEARNER_UNREAD };
       }
     }
   }
   if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) store.session = { ...store.session, week: weekRead(store.session) };
   writeSession();
-  store.subs.forEach((fn) => { try { fn(store.session); } catch {} });
+  notify();
   return store.session;
 }
 /**
@@ -1114,7 +1117,7 @@ function writeSession(): void {
     if (store.saved === false) console.error("desk session: session.json is being written again");
     store.saved = true;
   } catch (e) {
-    try { rmSync(tmp, { force: true }); } catch {}
+    try { rmSync(tmp, { force: true }); } catch { /* best effort: the write's own failure is logged just below */ }
     if (store.saved !== false) console.error("desk session: session.json could not be written, so the session will not survive a restart:", e instanceof Error ? e.message : e);
     store.saved = false;
   }
@@ -1125,4 +1128,6 @@ export function settleSaved(): boolean { return store.settled !== false; }
 export function hintCounted(): boolean { return store.counted !== false; }
 /** Whether the last session.json write landed (HF4). */
 export function sessionSaved(): boolean { return store.saved !== false; }
+/** Hand the session to every subscriber. One that throws does not stop the others, and is said: a stream's own send catches what it expects (session/stream route). */
+function notify() { store.subs.forEach((fn) => { try { fn(store.session); } catch (e) { console.error("desk session: a subscriber threw:", e instanceof Error ? e.message : e); } }); }
 export function subscribe(fn: Sub) { store.subs.add(fn); return () => store.subs.delete(fn); }

@@ -8,14 +8,15 @@
 import { randomUUID } from "node:crypto";
 import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
+import type { Again } from "../engines/types";
 import { dispatch, getSession, type Profile, type Screen } from "../session/store";
-import { getLearner, saveEnglish } from "../session/learners";
+import { getLearner, readLearner, saveEnglish } from "../session/learners";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS } from "./curriculum";
 import { adultAllowed, adultContent } from "../rules/mode";
 import { audienceOf, keywordAudience, topicText } from "./gate";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
-import { ConversationError } from "./errors";
+import { ConversationError, lingaLine } from "./errors";
 import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
@@ -71,8 +72,8 @@ function blank(learnerId: string, stage: LevelCheck["stage"]): LevelCheck {
 }
 
 interface Ctx { profile: Profile; learning: EnglishLearning; adult: boolean; commandId: string; }
-const ask = (system: string, prompt: Record<string, unknown>, shape: Record<string, unknown>, timeoutMs = 90000) =>
-  text<Record<string, unknown>>({ system, prompt: JSON.stringify(prompt), schema: shape, model: "fast", timeoutMs, isolated: true, shorten: true, use: "linga-check" });
+const ask = (system: string, prompt: Record<string, unknown>, shape: Record<string, unknown>, timeoutMs = 90000, after?: Again) =>
+  text<Record<string, unknown>>({ system, prompt: JSON.stringify(prompt), schema: shape, model: "fast", timeoutMs, isolated: true, shorten: true, use: "linga-check" }, after);
 
 /**
  * One model call against the check. Pending while it runs; the result lands only on the same check,
@@ -87,7 +88,7 @@ async function call(k: LevelCheck, token: string, failure: string, work: () => P
     commit(next, stageScreen(next));
     return next;
   } catch (e) {
-    try { const now = current(k, token); commit({ ...now, pending: null, error: failure }, stageScreen(now)); } catch { /* a newer check owns the screen */ }
+    try { const now = current(k, token); commit({ ...now, pending: null, error: lingaLine(e, failure) }, stageScreen(now)); } catch { /* a newer check owns the screen */ }
     throw e;
   }
 }
@@ -216,7 +217,8 @@ async function propose(k: LevelCheck, ctx: Ctx, token: string, count: number, sw
       const gap = `Your previous answer had no topic set in the learner's interest (learner.interest): ${fresh.map(t => t.title).join("; ")}. Answer again under the same rules, with ${count > 1 ? "at least two topics" : "the topic"} set in that interest,${inInterest}${count > 1 ? ", still with the two closest to their goal first" : ""}.`;
       console.info("Linga plan: no topic carried the learner's interest; asked once more.");
       try {
-        const again = await ask(system, { ...request, task: `${request.task}\n${gap}` }, planSchema(count), 120000), second = pick(again.json);
+        // asked again inside the first call's deadline, booked as its next try (types.ts Again)
+        const again = await ask(system, { ...request, task: `${request.task}\n${gap}` }, planSchema(count), 120000, r.again), second = pick(again.json);
         ms += again.ms;
         if (second.some(t => touchesInterest(t, stems))) { fresh = second; provider = again.provider; }
         else console.warn("Linga plan: the second answer missed the interest too; the first is kept.");
@@ -235,7 +237,7 @@ export const isCheckAction = (action: string) => action === "level-self" || acti
 
 /** The check's actions. Returns true when it handled the action. */
 export async function checkCommand(action: string, input: Record<string, unknown>, profile: Profile, commandId: string): Promise<boolean> {
-  const s = getSession(), learnerId = profile.id, learning = getLearner(learnerId).english;
+  const s = getSession(), learnerId = profile.id, learning = readLearner(learnerId).english;
   const prefs = learning.preferences ?? defaultPreferences(profile);
   const ctx: Ctx = { profile, learning, adult: adultContent(profile, prefs), commandId };
   const open = s.check?.learnerId === learnerId ? s.check : null;

@@ -1,0 +1,63 @@
+{
+  "schema": "conform-run/1",
+  "worker": "0db426a7-e35b-4f35-9df2-34c2cd3dc840",
+  "subject": "test-harness",
+  "evaluatedAt": "2026-10-15T00:43:46.437413+00:00",
+  "provider": "agy",
+  "model": "gemini-3.8-flash-high",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "test-harness",
+      "context": "tv-surface",
+      "reason": "tv-surface defines the TV client UI screens, navigation keymap, and session presentation components (desk/src/tv/, desk/src/app/tv/); it contains frontend presentation code rather than test harness machinery, and not-applicable is not accepted from this seat."
+    },
+    {
+      "subject": "test-harness",
+      "context": "desk-pipelines",
+      "reason": "desk-pipelines provides backend homework analysis pipelines and API routes for mathematics and essay processing; it contains application pipeline services rather than test harness machinery, and not-applicable is not accepted from this seat."
+    },
+    {
+      "subject": "test-harness",
+      "context": "pen-core",
+      "reason": "pen-core is the pure JVM core module implementing telestrator geometric primitives, undo history, and communication state machines; it contains domain models and algorithms rather than test harness machinery, and not-applicable is not accepted from this seat."
+    },
+    {
+      "subject": "test-harness",
+      "context": "linga",
+      "reason": "linga contains English-practice React UI components, audio handlers, and pedagogical conversation rule logic; it contains module application code rather than test harness machinery, and not-applicable is not accepted from this seat."
+    },
+    {
+      "subject": "test-harness",
+      "context": "uat",
+      "reason": "withdrawn after review: reviewer (sonnet): The 'four-member outcome vocabulary without an inconclusive member' claim could not be confirmed: verdict.cjs yields pass/conditional/fail, with per-item and recertify 'not-evaluable'/'uncertain' states that act as inconclusive, and the cited line 517 records its synthesized state as an explicit 'fi"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-15T00:43:46.437413+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "test-harness"
+      ],
+      "techniques": [
+        "context-starved-executor",
+        "derived-selection-must-be-measured",
+        "flake-lifecycle",
+        "history-driven-partitioning",
+        "isolation-lanes",
+        "live-app-harness",
+        "negative-control-tests",
+        "out-of-graph-artifacts",
+        "pin-the-call-not-the-name",
+        "platform-quirk-absorption",
+        "recorded-interaction-fixtures",
+        "suite-partitioning"
+      ],
+      "deviations": 1,
+      "context": "uat",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    }
+  ]
+}

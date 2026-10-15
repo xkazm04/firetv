@@ -35,8 +35,9 @@ import { slipsShown } from "../rules/slips";
 import { voiceOf, withManner } from "../rules/voice";
 import { topic } from "../library/syllabus";
 import { PATHS, pathOfTopic, topicIn, type PathInfo } from "../library/paths";
-import { getLearner, recordAttempt } from "../session/learners";
-import { notesBlock } from "./memory";
+import { recallLearner, recordAttempt } from "../session/learners";
+import { notesPart } from "./memory";
+import { assemble, data, dataRows, say, type Part } from "../prompt/assemble";
 import type { PracticeItem, SchoolSystem } from "../session/store";
 
 const SCHEMA = {
@@ -55,20 +56,24 @@ export const EXPLAIN_WITHHOLD = "Socratic rules, absolute: never state the final
  */
 export interface Seen { answer?: string; working?: string[]; slip?: string; line?: number }
 
-/** What the learner said, as all three explanation prompts carry it: rough speech, read charitably. */
-const heardBlock = (transcript: string) =>
-  `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably ` +
-  `and answer what they meant:\n«${transcript}»\n\n`;
+/** What the learner said, as all three explanation prompts carry it: rough speech, read charitably, and quoted as data. */
+const heardParts = (transcript: string): Part[] => [
+  say("heard-how", "What the student said was transcribed from speech. The transcription may be rough or misheard — read it charitably and answer what they meant."),
+  data("heard", "What the student said", transcript),
+];
 
-/** The block the prompt carries after the question; empty (so the prompt is as it was) when nothing was seen. */
-function seenBlock(seen?: Seen): string {
-  if (!seen) return "";
-  const parts: string[] = [];
-  if (seen.answer) parts.push(`What the student wrote as their answer: «${seen.answer}»`);
-  if (seen.working?.length) parts.push(`Their working, line by line:\n${seen.working.map((l, k) => `${k + 1}. ${l}`).join("\n")}`);
-  if (seen.slip) parts.push(`The desk found this slip: ${seen.slip}${seen.working?.length && seen.line !== undefined ? `, on line ${seen.line}` : ""}.`);
-  return parts.length ? `${parts.join("\n\n")}\n\n` : "";
+/** What the desk has seen of the item, after the question: their writing as data, the desk's slip in its own words; each part absent when there is nothing. */
+function seenParts(seen?: Seen): Part[] {
+  if (!seen) return [];
+  return [
+    data("answer", "What the student wrote as their answer", seen.answer),
+    dataRows("working", "Their working, line by line", seen.working?.map((value, k) => ({ n: k + 1, value }))),
+    say("slip", seen.slip && `The desk found this slip: ${seen.slip}${seen.working?.length && seen.line !== undefined ? `, on line ${seen.line}` : ""}.`),
+  ];
 }
+
+/** The topic line every explanation prompt opens with: the desk's own words. */
+const topicPart = (t: { name: string; blurb?: string } | undefined, topicId: string) => say("topic", `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}`.trim());
 
 export async function explain(
   itemQuestion: string,
@@ -84,23 +89,25 @@ export async function explain(
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   if (calc) return explainCalc(itemQuestion, transcript, topicId, learnerId, seen);
   const t = topic(topicId);
-  const memory = getLearner(learnerId).memory;
+  const notes = recallLearner(learnerId);
 
-  const system = schoolSystem(age);
+  const asked = assemble("explain-linear", {
+    system: [say("stance", schoolSystem(age))],
+    prompt: [
+      topicPart(t, topicId),
+      data("question", "The question", itemQuestion),
+      ...seenParts(seen),
+      ...heardParts(transcript),
+      ...notesPart(notes),
+      say("ask", "Reply to them in one or two sentences that point at the step, not the answer."),
+      say("slips", `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits ` +
+        `or their reasoning was sound:\n${slipVocabulary(topicId)}`),
+      say("value", `value: the final value of x the student says they got, written as a plain number or simple fraction (nine is 9, ` +
+        `minus three is -3, seven halves is 7/2). Their value, not yours — do not work it out. An empty string if they did not say one.`),
+    ],
+  });
 
-  const prompt =
-    `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
-    `The question: ${itemQuestion}\n\n` +
-    seenBlock(seen) +
-    heardBlock(transcript) +
-    notesBlock(memory) +
-    `Reply to them in one or two sentences that point at the step, not the answer.\n\n` +
-    `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits ` +
-    `or their reasoning was sound:\n${slipVocabulary(topicId)}\n\n` +
-    `value: the final value of x the student says they got, written as a plain number or simple fraction (nine is 9, ` +
-    `minus three is -3, seven halves is 7/2). Their value, not yours — do not work it out. An empty string if they did not say one.`;
-
-  return heard(await text<{ reply: string; slip: string; value: string }>({ system, prompt, schema: SCHEMA, model: "best", use: "explain" }), topicId);
+  return heard(await text<{ reply: string; slip: string; value: string }>({ ...asked, schema: SCHEMA, model: "best", use: "explain" }), topicId);
 }
 
 /** The school stance, in the learner's age voice (rules/voice): the linear items' and the school units' system prompt, one text. */
@@ -130,20 +137,24 @@ export async function explainSchool(
   seen?: Seen,
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   const t = topicIn(topicId);
-  const memory = getLearner(learnerId).memory;
-  const prompt =
-    `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
-    `The question: ${itemQuestion}\n\n` +
-    seenBlock(seen) +
-    heardBlock(transcript) +
-    notesBlock(memory) +
-    `Reply to them in one or two sentences that point at the step, not the answer.\n\n` +
-    `value: the final answer the student says they got, written in figures as they said it: a whole number, a fraction, ` +
-    `a mixed number, a decimal or a percentage (eleven twelfths is 11/12, one and five twelfths is 1 5/12, nought point five is 0.5, ` +
-    `thirty-five percent is 35%), with a currency sign if they said one (seven euros fifteen is €7.15); a ratio with its colon ` +
-    `(two to three is 2:3) and two amounts joined by and (twenty-four and thirty-six is 24 and 36). ` +
-    `Their answer, not yours — do not work it out and do not simplify it. An empty string if they did not say one.`;
-  const { json, provider, ms } = await text<{ reply: string; value: string }>({ system: schoolSystem(age), prompt, schema: SCHOOL_SCHEMA, model: "best", use: "explain" });
+  const notes = recallLearner(learnerId);
+  const asked = assemble("explain-school", {
+    system: [say("stance", schoolSystem(age))],
+    prompt: [
+      topicPart(t, topicId),
+      data("question", "The question", itemQuestion),
+      ...seenParts(seen),
+      ...heardParts(transcript),
+      ...notesPart(notes),
+      say("ask", "Reply to them in one or two sentences that point at the step, not the answer."),
+      say("value", `value: the final answer the student says they got, written in figures as they said it: a whole number, a fraction, ` +
+        `a mixed number, a decimal or a percentage (eleven twelfths is 11/12, one and five twelfths is 1 5/12, nought point five is 0.5, ` +
+        `thirty-five percent is 35%), with a currency sign if they said one (seven euros fifteen is €7.15); a ratio with its colon ` +
+        `(two to three is 2:3) and two amounts joined by and (twenty-four and thirty-six is 24 and 36). ` +
+        `Their answer, not yours — do not work it out and do not simplify it. An empty string if they did not say one.`),
+    ],
+  });
+  const { json, provider, ms } = await text<{ reply: string; value: string }>({ ...asked, schema: SCHOOL_SCHEMA, model: "best", use: "explain" });
   return {
     reply: (typeof json?.reply === "string" ? json.reply : "").trim(),
     value: typeof json?.value === "string" ? json.value.trim() : "",
@@ -170,7 +181,7 @@ async function explainCalc(
   seen?: Seen,
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   const t = topicIn(topicId);
-  const memory = getLearner(learnerId).memory;
+  const notes = recallLearner(learnerId);
 
   const system =
     `You are a calculus tutor listening to a first-year university student on the ${calcCourse(topicId).name} course explain their own working out loud. ` +
@@ -178,21 +189,25 @@ async function explainCalc(
     `Point at the step they should look at again, or at the step that was the good one. ` +
     `One or two sentences. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.`;
 
-  const prompt =
-    `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
-    `The question: ${itemQuestion}\n\n` +
-    seenBlock(seen) +
-    heardBlock(transcript) +
-    notesBlock(memory) +
-    `Reply to them in one or two sentences that point at the step, not the answer.\n\n` +
-    `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits ` +
-    `or their reasoning was sound:\n${slipVocabulary(topicId)}\n\n` +
-    `value: the final answer the student says they got, as plain text - an expression in x using ^ for powers, sqrt(), ` +
-    `e^, ln, sin, cos and so on, or a number or a fraction (six x plus two is 6x + 2, minus three is -3, seven halves is ` +
-    `7/2, x squared plus C is x^2 + C; include +C if they say it). Their answer, not yours — do not work it out. ` +
-    `An empty string if they did not say one.`;
+  const asked = assemble("explain-calc", {
+    system: [say("stance", system)],
+    prompt: [
+      topicPart(t, topicId),
+      data("question", "The question", itemQuestion),
+      ...seenParts(seen),
+      ...heardParts(transcript),
+      ...notesPart(notes),
+      say("ask", "Reply to them in one or two sentences that point at the step, not the answer."),
+      say("slips", `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits ` +
+        `or their reasoning was sound:\n${slipVocabulary(topicId)}`),
+      say("value", `value: the final answer the student says they got, as plain text - an expression in x using ^ for powers, sqrt(), ` +
+        `e^, ln, sin, cos and so on, or a number or a fraction (six x plus two is 6x + 2, minus three is -3, seven halves is ` +
+        `7/2, x squared plus C is x^2 + C; include +C if they say it). Their answer, not yours — do not work it out. ` +
+        `An empty string if they did not say one.`),
+    ],
+  });
 
-  return heard(await text<{ reply: string; slip: string; value: string }>({ system, prompt, schema: SCHEMA, model: "best", use: "explain" }), topicId);
+  return heard(await text<{ reply: string; slip: string; value: string }>({ ...asked, schema: SCHEMA, model: "best", use: "explain" }), topicId);
 }
 
 /** What was heard, as the desk keeps it: a slip only from the topic's list. */

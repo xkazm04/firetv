@@ -411,7 +411,7 @@ test('MB-B8 ground: a cz learner with a recorded fractions slip gets notation, s
  prompts.length=0;
  id=await run('Solve for x: 3x - 7 = 11',{id:'ground-none'});
  assert.equal((await post('hint',{})).status,200);await drain();
- assert.equal(prompts.at(-1).prompt,'Problem: Solve for x: 3x - 7 = 11\n\nGive the FIRST hint: the smallest push that gets the learner moving.\nKeep the hint and what_to_try_next to 25 words or fewer each.');
+ assert.equal(prompts.at(-1).prompt,'Problem: "Solve for x: 3x - 7 = 11"\nGive the FIRST hint: the smallest push that gets the learner moving.\nKeep the hint and what_to_try_next to 25 words or fewer each.');
  // a fractions task with no record gets the method but no slip line and, on the default system, no notation
  prompts.length=0;
  id=await run('3/4 + 1/6',{id:'ground-fresh'});

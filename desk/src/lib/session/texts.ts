@@ -45,8 +45,23 @@ function cleanPiece(v: unknown): Piece | null {
   const versions = p.versions.filter((x) => x && typeof x.text === "string" && typeof x.at === "number" && (TEXT_SOURCES as readonly string[]).includes(x.source));
   return versions.length ? { id: p.id, format: p.format, title: p.title, versions } : null;
 }
+const whyNot = (e: unknown) => (e instanceof Error ? e.message : String(e));
+let told = "";
+/** A read failure goes to the server log, once per distinct failure: the shelf is listed on every request. */
+function tell(line: string): void { if (line !== told) console.error(line); told = line; }
+/**
+ * A kept piece, or null. No file is null quietly (a delete can race a list); a file the desk cannot read is null too, but
+ * said in the log: it is somebody's writing, and nothing writes over it (addVersion answers 404 for a piece it cannot read).
+ */
 function readPiece(learnerId: string, id: string): Piece | null {
-  try { return cleanPiece(JSON.parse(readFileSync(fileOf(learnerId, id), "utf8"))); } catch { return null; }
+  let text: string;
+  try { text = readFileSync(fileOf(learnerId, id), "utf8"); }
+  catch (e) { if ((e as NodeJS.ErrnoException)?.code !== "ENOENT") tell(`desk texts: ${fileOf(learnerId, id)} could not be read, so it is left off the shelf: ${whyNot(e)}`); return null; }
+  try {
+    const p = cleanPiece(JSON.parse(text));
+    if (!p) tell(`desk texts: ${fileOf(learnerId, id)} is not a kept piece, so it is left off the shelf`);
+    return p;
+  } catch (e) { tell(`desk texts: ${fileOf(learnerId, id)} is not readable JSON, so it is left off the shelf: ${whyNot(e)}`); return null; }
 }
 /** Written to a temporary name, then renamed over: a crash mid-write leaves the old version, never half a file. */
 function writePiece(learnerId: string, p: Piece): void {
@@ -56,7 +71,8 @@ function writePiece(learnerId: string, p: Piece): void {
   renameSync(tmp, to);
 }
 function ids(learnerId: string): string[] {
-  try { return readdirSync(folder(learnerId)).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5)).filter((id) => PIECE_ID.test(id)); } catch { return []; }
+  try { return readdirSync(folder(learnerId)).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5)).filter((id) => PIECE_ID.test(id)); }
+  catch (e) { if ((e as NodeJS.ErrnoException)?.code !== "ENOENT") tell(`desk texts: ${folder(learnerId)} could not be listed, so the shelf shows nothing: ${whyNot(e)}`); return []; }
 }
 
 /** The text a version may hold, or the sentence saying why not. */

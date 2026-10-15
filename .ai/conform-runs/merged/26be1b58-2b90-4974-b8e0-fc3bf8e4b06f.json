@@ -1,0 +1,171 @@
+{
+ "schema": "conform-run/1",
+ "worker": "26be1b58-2b90-4974-b8e0-fc3bf8e4b06f",
+ "subject": "prompt-assembly",
+ "evaluatedAt": "2026-10-14T23:44:25.405420+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "desk-pipelines",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "desk/src/lib/desk/hint.ts:166 The desk pipelines assemble prompts via ad-hoc string concatenation and late call-site string appending (`prompt + extra`) rather than through an owned, budgeted, and sealed layered prompt assembler.",
+   "techniques": [
+    {
+     "technique": "layered-composition",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/desk/hint.ts:166 Prompts are constructed by string concatenation at individual call sites with post-construction appended strings (`prompt + extra`) rather than a dedicated assembler per prompt family."
+    },
+    {
+     "technique": "variable-interpolation",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/desk/explain.ts:92 Prompt variables are interpolated via template strings with silent fallbacks to empty strings (`?? \"\"`) rather than declared typed contracts with loud failures on missing inputs."
+    },
+    {
+     "technique": "context-budgeting",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/desk/memory.ts:25 Learner memory notes are concatenated into prompts without a token budget, degradation ladder, or drop notices, bounded only by a raw array length cap in persistence."
+    },
+    {
+     "technique": "summary-evidence-gate",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/desk/memory.ts:87 Model-written summary lines are saved to learner memory and injected into future prompts without source pointers or verification against session evidence."
+    },
+    {
+     "technique": "house-vocabulary-layer",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/rules/maths.ts:88 Maintains a single authored vocabulary mapping topic slip IDs to descriptions that is injected into prompts to constrain mistake naming to a closed vocabulary."
+    },
+    {
+     "technique": "task-envelope",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/desk/hint.ts:147 Prompts open with persona and role priming ('You are...') instead of an actionable locate/done/check task envelope."
+    },
+    {
+     "technique": "fingerprinting-and-cache-keys",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/desk/items.ts:92 Requests are dispatched directly to the text engine without computing or recording a prompt fingerprint or cache key over the standing layers."
+    },
+    {
+     "technique": "capability-documentation",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/desk/items.ts:244 Dynamically documents only the active practice shapes for the given topic mapped from the topic path registry rather than listing all global shapes."
+    }
+   ],
+   "registryProposal": "The standard should address educational tutoring systems where closed pedagogical error vocabularies (slips) act as a domain-specific house vocabulary layer to ground mistake diagnosis."
+  },
+  {
+   "context": "linga",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "desk/src/lib/english/conversation.ts:346 The Linga conversation tutor constructs prompts through ad-hoc object merging and string interpolation without an owned, budgeted layered assembler or prompt fingerprinting.",
+   "techniques": [
+    {
+     "technique": "layered-composition",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/english/conversation.ts:346 Composes prompts by string concatenations and dynamic JSON object spreading at the call site without an isolated, sealed assembler per prompt family."
+    },
+    {
+     "technique": "history-compaction",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/english/conversation.ts:104 Truncates conversation turns using an unannounced array slice (`transcript: c.turns.slice(-18)`) without compacting call/result pairs, proactive/reactive thresholds, or synthesizing missing results."
+    },
+    {
+     "technique": "context-budgeting",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/english/conversation.ts:99 Applies hardcoded array slice limits without explicit token budget floors, degradation ladders, or notices naming omitted evidence."
+    },
+    {
+     "technique": "task-envelope",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/english/conversation.ts:83 Opens the system prompt with persona and role priming ('You are Linga...') instead of an actionable locate/done/check envelope."
+    },
+    {
+     "technique": "deferred-interface-invalidation",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/english/conversation.ts:198 Defers standing-layer configuration changes (preferences and teaching notes) to the next scene while immediately revoking incompatible active scenes when age safety policies tighten."
+    },
+    {
+     "technique": "capability-documentation",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/english/conversation.ts:88 Documents only the active subset of capability rubrics (focusSkill, reviewSkill, repair) dynamically filtered from the curriculum rather than exposing the whole inactive skill registry."
+    },
+    {
+     "technique": "fingerprinting-and-cache-keys",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/english/conversation.ts:170 Conversations do not generate or stamp a prompt fingerprint or cache key representing the standing system prompt and configuration layers."
+    },
+    {
+     "technique": "variable-interpolation",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/english/conversation.ts:84 Variables are embedded using inline ternary expressions and string interpolation rather than declared typed variable slots with explicit trust classifications."
+    }
+   ],
+   "registryProposal": "The standard should distinguish conversational rehearsal contexts where domain safety policies (e.g. minor protection and age gating) trigger immediate conversation termination while pedagogical preference updates are deferred to subsequent scenes."
+  }
+ ],
+ "declined": [
+  {
+   "subject": "prompt-assembly",
+   "context": "pen-core",
+   "reason": "Subject does not apply: pen-core is a Kotlin canvas drawing and WebSocket network protocol engine for video telestration with no LLM prompt assembly."
+  },
+  {
+   "subject": "prompt-assembly",
+   "context": "session",
+   "reason": "Subject does not apply: session manages learner profiles, filesystem persistence, device pairing, and HTTP endpoints with no LLM prompt assembly."
+  },
+  {
+   "subject": "prompt-assembly",
+   "context": "tv-surface",
+   "reason": "Subject does not apply: tv-surface consists of TV frontend React UI screens, D-pad navigation, and CSS styling with no LLM prompt assembly."
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-14T23:44:25.405420+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [
+    "capability-documentation",
+    "context-budgeting",
+    "fingerprinting-and-cache-keys",
+    "house-vocabulary-layer",
+    "layered-composition",
+    "summary-evidence-gate",
+    "task-envelope",
+    "variable-interpolation"
+   ],
+   "deviations": 1,
+   "context": "desk-pipelines",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-14T23:44:25.405420+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [
+    "capability-documentation",
+    "context-budgeting",
+    "deferred-interface-invalidation",
+    "fingerprinting-and-cache-keys",
+    "history-compaction",
+    "layered-composition",
+    "task-envelope",
+    "variable-interpolation"
+   ],
+   "deviations": 1,
+   "context": "linga",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}

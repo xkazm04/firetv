@@ -12,7 +12,7 @@ import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
-import { follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
+import { deskLine, follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
 import { forensicAt, planAt, switchEndsLine } from "@/tv/keys";
 import { dayOf } from "@/tv/mathsRows";
 import { counted, hintedLine, recapCaption, recapLine, recapRows, startOfDay, tasksLine } from "@/tv/recapRows";
@@ -48,7 +48,12 @@ const NAME_MAX = 40;
  */
 function inOrder() {
   let tail: Promise<unknown> = Promise.resolve();
-  return (job: () => Promise<unknown>): Promise<unknown> => { tail = tail.then(job).catch(() => undefined); return tail; };
+  return (job: () => Promise<unknown>): Promise<unknown> => {
+    const run = tail.then(job);
+    // the queue outlives a failed post: the next one still goes, in order; the caller holds `run` and says the failure
+    tail = run.catch(() => { /* said by the caller, through run */ });
+    return run;
+  };
 }
 /** What a fresh page load holds in the Essay and Say panels: a new learner in the seat starts from these. */
 const FRESH_PARAS = ["Many students are tired. Sleep is important. Schools start early. This is bad."];
@@ -149,7 +154,7 @@ export default function Phone() {
 
   // camera on when a screen is asking for a photo: capture, or practice with a set still to mark
   // (a read that failed and can be asked again offers Try again on this panel, not a camera: the same test as `failed("read")` below)
-  const readAgain = s?.jobs?.read?.phase === "failed" && !!s.jobs.read.input && s.jobs.read.id !== passed;
+  const readAgain = s?.jobs?.read?.phase === "failed" && !!s.jobs.read.input && s.jobs.read.retry !== false && s.jobs.read.id !== passed;
   const camWanted = (screen === "capture" && !readAgain) || (screen === "practice" && !!s?.practice && !s.practice.marked && route === "snap");
   useEffect(() => {
     if (!camWanted) { cam?.getTracks().forEach((t) => t.stop()); setCam(null); return; }
@@ -171,7 +176,7 @@ export default function Phone() {
    */
   const join = async (code = pin, how: JoinHow = "typed") => {
     let r: Response | null = null;
-    try { r = await post({ type: "join", code }); } catch {}
+    try { r = await post({ type: "join", code }); } catch { /* r stays null, and joinRefusal says "That did not reach the desk." */ }
     if (r?.ok) { setMsg(""); reconnect(); return; }
     const j = r ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
     const refusal = joinRefusal({ status: r?.status, error: j.error, how });
@@ -181,12 +186,12 @@ export default function Phone() {
   // four digits join by themselves; Join stays as the fallback tap
   const onPin = (v: string) => { const d = v.replace(/\D/g, "").slice(0, 4); setPin(d); if (d.length === 4 && s && !s.joined) join(d); };
   // a code an earlier version stored is cleared on open; the phone keeps none now, and a join never reads one
-  useEffect(() => { try { localStorage.removeItem("desk.pin"); } catch {} }, []);
+  useEffect(() => { try { localStorage.removeItem("desk.pin"); } catch { /* storage is blocked, so there is no stored code to clear */ } }, []);
   // the desk forgets this phone: its fingerprint is dropped there and its cookie goes here, and the stream reopens as a guest
   // it says forgotten only once the desk has answered that it is; a refusal or no answer leaves the phone paired
   const forget = async () => {
     let r: Response | null = null;
-    try { r = await post({ type: "leave" }); } catch {}
+    try { r = await post({ type: "leave" }); } catch { /* r stays null, and leaveOutcome says "That did not reach the desk." */ }
     const j = r && !r.ok ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
     const out = leaveOutcome({ status: r?.status, error: j.error });
     setMsg(out.line);
@@ -200,8 +205,8 @@ export default function Phone() {
     try {
       const r = await call("/api/read", { image: dataUrl, subject: sub, title, w, h }); const j = await r.json();
       if (moved()) return;
-      // a run that failed (502) is on the desk with its sentence and a Try again; only a refusal needs the line here
-      if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(r.status === 502 ? "" : (j.error ?? `The desk could not read it (${r.status}).`)); }
+      // a run that failed is on the desk with its sentence and a Try again (its body says failure); only a refusal needs the line here
+      if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(deskLine(j, `The desk could not read it (${r.status}).`)); }
     } catch (e) { if (!moved()) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
   };
   const toJpeg = (src: HTMLVideoElement | HTMLImageElement, sw: number, sh: number) => {
@@ -283,7 +288,7 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNotice(null);
     // after a switch, readPiece here is the last learner's render: it would post their paragraphs
-    try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void readPiece(true); } catch {}
+    try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void readPiece(true); } catch { /* said on the next line */ }
     if (!moved()) setNote("That did not reach the desk.");
   };
   const openKept = (id: string, text: string) => { const ps = paragraphsOf(text); setPieceId(id); setSource("message"); loadParagraphs(ps.length ? ps : [text], `Opened from your shelf: ${ps.length} paragraph${ps.length === 1 ? "" : "s"}. Change it, then read it again as a new version.`); };
@@ -317,7 +322,7 @@ export default function Phone() {
   };
   const ask = async () => { if (!page) return; const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("");
     try { const r = await call("/api/hint", { askedQ: q, itemIx: s?.itemIx }); if (moved()) return; setQ("");
-      if (!r.ok && r.status !== 502) { const j = await r.json().catch(() => ({} as { error?: string })); if (moved()) return; setMsg(j.error ?? `The desk could not ask (${r.status}).`); } }
+      if (!r.ok) { const j = await r.json().catch(() => null); if (moved()) return; setMsg(deskLine(j, `The desk could not ask (${r.status}).`)); } }
     catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); } };
   /** The Say panel's button: the sentence to the TV. */
   const checkSentence = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("sending…");
@@ -327,7 +332,8 @@ export default function Phone() {
       setMsg((j as { error?: string }).error ?? `The desk could not check that sentence (${r.status}).`); }
     catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   /** The desk's failed run of this kind that can be asked again in place: it holds what it was asked with. */
-  const failed = (kind: JobKind) => { const j = s?.jobs?.[kind]; return j?.phase === "failed" && j.input && j.id !== passed ? j : null; };
+  // a failure asking again cannot change (job.retry false: failure.ts) is not offered again; the panel goes back to its own step
+  const failed = (kind: JobKind) => { const j = s?.jobs?.[kind]; return j?.phase === "failed" && j.input && j.retry !== false && j.id !== passed ? j : null; };
   /** A hint that failed for the item the TV is on. */
   const hintAgain = (() => { const h = failed("hint"); return h && page && h.key === page.items[s?.itemIx ?? 0]?.key ? h : null; })();
   /** One press: the desk asks again with what it holds — the same page, the same item and question, the same topic. */
@@ -335,10 +341,10 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setMsg(""); if (kind === "read") setPhase("sending");
     try {
-      const r = await call("/api/session/retry", { kind }); const j = await r.json().catch(() => ({} as { error?: string }));
+      const r = await call("/api/session/retry", { kind }); const j = await r.json().catch(() => null);
       if (moved()) return;
       if (kind === "read") setPhase(r.ok ? "sent" : "failed");
-      if (!r.ok && r.status !== 502) setMsg(j.error ?? `The desk could not try again (${r.status}).`);
+      if (!r.ok) setMsg(deskLine(j, `The desk could not try again (${r.status}).`));
     } catch (e) { if (!moved()) { if (kind === "read") setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
   };
   /** A Mic press is listening: the phone does not move away from the field it is filling. */
@@ -514,8 +520,8 @@ export default function Phone() {
           <p>At the desk now: <b>{s?.learner?.name ?? "no one yet"}</b></p>
           {s && (s.draft || s.screen === "profile") ? <>
             <p>The TV takes the picks; type the name here.</p>
-            <div className="field"><input placeholder="Name" maxLength={NAME_MAX} value={pname} onChange={(e) => { setPname(e.target.value); void nameQueue(() => post({ type: "profile.draft", patch: { name: e.target.value } })); }} /></div>
-            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => void nameQueue(() => post({ type: "profile.save" }))}>Save</button>
+            <div className="field"><input placeholder="Name" maxLength={NAME_MAX} value={pname} onChange={(e) => { setPname(e.target.value); nameQueue(() => post({ type: "profile.draft", patch: { name: e.target.value } })).catch(() => { /* a lost keystroke: the next one sends the whole name again */ }); }} /></div>
+            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => nameQueue(() => post({ type: "profile.save" })).catch(() => setMsg("That did not reach the desk."))}>Save</button>
               <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 

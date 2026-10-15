@@ -18,8 +18,9 @@ type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: strin
   | { kind: "piece"; text: string; type: AnalysisType; keep?: boolean; pieceId?: string; source?: string };
 
 /** E3-b: a reading refused before any run with a line for the learner says the line on the TV's status line too, whichever door sent it. */
-function refusedWithLine(error: string) {
-  dispatch({ type: "status", text: error });
+/** A refusal said before any run: on the session as the status, and as an essay refusal when it is one (the essay screens caption it). */
+function refusedWithLine(error: string, essay = true) {
+  dispatch({ type: "status", text: error, essayRefused: essay });
   return NextResponse.json({ error }, { status: 400 });
 }
 
@@ -34,7 +35,7 @@ export async function POST(req: Request) {
   if (!body || typeof body !== "object" || !KINDS.includes(body.kind)) return NextResponse.json({ error: NOT_A_READING }, { status: 400 });
   if ((body.kind === "english" && blank(body.sentence)) || (body.kind === "essay" && blank(body.text))) return NextResponse.json({ error: NOT_A_READING }, { status: 400 });
   const sentenceLong = body.kind === "english" ? sentenceProblem(body.sentence) : null;
-  if (sentenceLong) return refusedWithLine(sentenceLong);
+  if (sentenceLong) return refusedWithLine(sentenceLong, false);
   // a reading is somebody's: with no one at the desk there is no one to read it for
   const who = getSession().learner;
   // the tutor's voice fits the seated profile's age (rules/voice); no age known speaks as it always has

@@ -84,7 +84,12 @@ function answers(over) {
   return a;
 }
 const md5 = (b64) => crypto.createHash("md5").update(Buffer.from(b64, "base64")).digest("hex");
-const problemOf = (prompt) => (/^Problem:[ \t]*\n?([^\n]*)/m.exec(prompt || "") || [])[1]?.trim();
+// the problem as the prompt carries it: quoted data since lib/prompt/assemble.ts (`Problem: "2x+3=11"`), read back as text
+const problemOf = (prompt) => {
+  const raw = (/^Problem:[ \t]*\n?([^\n]*)/m.exec(prompt || "") || [])[1]?.trim();
+  if (!raw || !raw.startsWith('"')) return raw;
+  try { return JSON.parse(raw); } catch { return raw; }
+};
 function replayProviders(a) {
   const pages = Object.fromEntries(Object.values(corpus.pages).map((p) => [p.md5, p.subject]));
   const vision = { name: "replay", async run(req) {
@@ -112,8 +117,9 @@ function replayProviders(a) {
 }
 /** What the model said on each text call, whichever provider answered - the leak tally scores the model, not the gate. */
 function recording(inner, calls) {
-  return { name: inner.name, async run(req) {
-    const out = await inner.run(req);
+  // ctx carries the deadline's abort signal: a wrapper that drops it leaves a timed-out CLI running and spending (engines/call.ts)
+  return { name: inner.name, deadlineMs: inner.deadlineMs, async run(req, ctx) {
+    const out = await inner.run(req, ctx);
     let said = out.raw;
     if (typeof said === "string") { try { said = JSON.parse(said.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "")); } catch { said = { hint: said, what_to_try_next: "" }; } }
     calls.push({ q: problemOf(req.prompt), reask: /gave the answer away/.test(req.prompt), said: said || {} });

@@ -38,6 +38,9 @@ prototype/identity/on-air.html
 
 # /perfect vault (Obsidian-openable, not content)
 .perfect/
+.explorer/
+# /architect vault (Obsidian-openable, not content)
+.architect/
 
 # Death Ride generation workspace; provenance and selected atlas pages are versioned
 deathride/art/raw/
@@ -88,9 +91,11 @@ deathride/art/reports/p4-draft-location.json
 
 # BEGIN ai-registry linked skills (managed by ai-registry/scripts/link-registry.mjs)
 # Links are machine state; the declarations live in .ai/manifest.yaml (`skills:` and `knowledge.domains`).
+/.claude/skills/architect
 /.claude/skills/contest
 /.claude/skills/council
 /.claude/skills/cx
+/.claude/skills/explorer
 /.claude/skills/leonardo
 /.claude/skills/scan-sweep
 /.claude/skills/spark

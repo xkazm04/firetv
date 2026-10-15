@@ -54,6 +54,15 @@ export function joinSentences(sentences: Pick<Sentence, "text" | "para">[]): str
 export const paragraphCount = (sentences: Pick<Sentence, "para">[]) => new Set(sentences.map((s) => s.para ?? 0)).size || 1;
 
 /** The numbered lines a reading prompt shows the model; a "Paragraph k" line opens each paragraph of a longer piece. */
+/** The same rows as numberedLines, for the prompt assembler: the learner's sentence as data, the desk's count and role as its note, the paragraph as its heading. */
+export function sentenceRows(sentences: Sentence[]): { n: number; value: string; note: string; head?: string }[] {
+  const many = paragraphCount(sentences) > 1;
+  return sentences.map((s, i) => ({
+    n: s.n, value: s.text, note: `[${s.words} words, first-pass role: ${s.role}]`,
+    ...(many && (i === 0 || s.para !== sentences[i - 1].para) ? { head: `Paragraph ${(s.para ?? 0) + 1}:` } : {}),
+  }));
+}
+
 export function numberedLines(sentences: Sentence[]): string {
   const many = paragraphCount(sentences) > 1;
   return sentences.map((s, i) => (many && (i === 0 || s.para !== sentences[i - 1].para) ? `${i ? "\n" : ""}Paragraph ${(s.para ?? 0) + 1}:\n` : "") +
@@ -129,15 +138,12 @@ const pieceParagraphLongLine = (n: number) => `Paragraph ${n} is too long to rea
 export const NOT_ENGLISH_LINE = "Essay Master reads English writing. This paragraph is not in English, so the desk did not read it.";
 
 /**
- * E3-c: the caption the stage gives a refusal line the desk said before any run (the status the analyse route
- * dispatches), or null when the status is anything else. It recognises the lines from the sources above.
+ * E3-c: the caption the stage gives a refusal the desk said before any run, or null. The analyse route dispatches
+ * it as one (session essayRefused), so this reads a value: no line is recognised by its wording, and a status that
+ * merely reads like a refusal is not one.
  */
-export function refusalCaption(status: unknown): { label: string; text: string } | null {
-  if (typeof status !== "string" || !status) return null;
-  const known = status === NOT_ENGLISH_LINE || status === PARAGRAPH_TOO_LONG_LINE || status === PIECE_EMPTY_LINE || status === PIECE_TOO_LONG_LINE
-    || (status === pieceParagraphsLine(Number(/^That is (\d+) paragraphs\./.exec(status)?.[1])))
-    || (status === pieceParagraphLongLine(Number(/^Paragraph (\d+) is too/.exec(status)?.[1])));
-  return known ? { label: "Not read", text: status } : null;
+export function refusalCaption(s: { status?: unknown; essayRefused?: unknown }): { label: string; text: string } | null {
+  return typeof s.status === "string" && s.status && s.essayRefused === s.status ? { label: "Not read", text: s.status } : null;
 }
 
 const ENGLISH_WORDS = new Set(("the of and to a in is that it was for on are as with they be at this have from or by not but we you their would should can more than which also because " +

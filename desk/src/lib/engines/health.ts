@@ -39,6 +39,8 @@ const WHY: Record<EngineErrorKind, string> = {
   unreachable: "It is not answering.",
   exit: "It stopped part way.",
   shape: "It answered in pieces.",
+  cutoff: "It was cut off at a limit.",
+  declined: "It declined to answer.",
 };
 
 const NO_PROBE = "No probe for this one: add ?live=1 to run it for real.";
@@ -55,7 +57,7 @@ async function probeRow(kind: EngineKind, budgetMs: number): Promise<EngineRow> 
     const p = provider(kind);
     if (!p.probe) return row(name, null, NO_PROBE);
     const asked = p.probe();
-    asked.catch(() => {});
+    asked.catch(() => { /* its outcome is read below, raced against the budget; this only keeps a late loser from being unhandled */ });
     const late = new Promise<null>((resolve) => { timer = setTimeout(() => resolve(null), budgetMs); });
     const r: ProbeResult | null = await Promise.race([asked, late]);
     return r ? row(name, r.ok, r.say) : row(name, false, `${name} did not answer in ${budgetMs} ms.`);
@@ -91,12 +93,12 @@ export async function engineCheck(opts: { live?: boolean; sample?: string; budge
   if (!opts.live) return engineStatus(opts.budgetMs);
   const budget = opts.budgetMs ?? BUDGET_MS, sample = opts.sample;
   const runs: Record<EngineKind, Promise<EngineRow>> = {
-    text: liveRow("text", () => text({ system: "Answer in JSON.", prompt: "Set ok to the word yes.", schema: { type: "object", properties: { ok: { type: "string" } }, required: ["ok"] } })),
+    text: liveRow("text", () => text({ system: "Answer in JSON.", prompt: "Set ok to the word yes.", schema: { type: "object", properties: { ok: { type: "string" } }, required: ["ok"] }, use: "smoke" })),
     vision: sample
-      ? liveRow("vision", () => vision({ imageBase64: sample, prompt: "What is the title printed at the top of this page?", schema: { type: "object", properties: { title: { type: "string" } }, required: ["title"] } }))
+      ? liveRow("vision", () => vision({ imageBase64: sample, prompt: "What is the title printed at the top of this page?", schema: { type: "object", properties: { title: { type: "string" } }, required: ["title"] }, use: "smoke" }))
       : probeRow("vision", budget),
-    embed: liveRow("embed", () => embed({ texts: ["factoring quadratics"] })),
-    speak: liveRow("speak", () => speak({ text: "The desk can speak." })),
+    embed: liveRow("embed", () => embed({ texts: ["factoring quadratics"], use: "smoke" })),
+    speak: liveRow("speak", () => speak({ text: "The desk can speak.", use: "smoke" })),
     listen: probeRow("listen", budget),
   };
   return Promise.all(KINDS.map((k) => runs[k]));

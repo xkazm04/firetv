@@ -58,7 +58,7 @@ export function Pair({ s }: { s: Session }) {
   const url = s.phoneUrl + "?pin=" + s.pin;
   // qrcode's browser build draws the code; generated here so the store stays free of UI.
   const [svg, setSvg] = useState("");
-  useEffect(() => { let live = true; QRCode.toString(url, { type: "svg", margin: 1 }).then((x) => { if (live) setSvg(x); }).catch(() => {}); return () => { live = false; }; }, [url]);
+  useEffect(() => { let live = true; QRCode.toString(url, { type: "svg", margin: 1 }).then((x) => { if (live) setSvg(x); }).catch((e) => console.error("desk TV: the pairing QR could not be drawn; the code is still shown to type", e)); return () => { live = false; }; }, [url]);
   return (<>
     <div className="band band-rule" />
     <div className="content-full" style={{ display: "grid", placeItems: "center", textAlign: "center" }}>
@@ -118,7 +118,7 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
   const ovScale = H / p.h;
   // what the pipelines behind this page are doing, in the caption: a read that failed, a hint on its way or not coming
   const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
-  const pageLine = read?.phase === "failed" ? failedReadLine(p.subject) : hj?.phase === "running" ? "thinking about a hint…" : hj?.phase === "failed" ? "no hint that time — Select to try again" : p.missing?.length ? missingLine(p.missing) : undefined;
+  const pageLine = read?.phase === "failed" ? failedReadLine(p.subject) : hj?.phase === "running" ? "thinking about a hint…" : hj?.phase === "failed" ? (hj.retry === false ? "no hint for this one" : "no hint that time — Select to try again") : p.missing?.length ? missingLine(p.missing) : undefined;
   return (<>
     <div className="band band-rule" />
     <main className="content-full">
@@ -143,7 +143,7 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
         {s.pages.map((pg, i) => <div key={pg.id} className="thumb" data-current={i === s.pageIx} style={{ backgroundImage: `url(${pg.img})` }} />)}
       </div>
       <div className="ticker" style={{ left: 120 * s.pages.length + 40 }}>
-        <span>{p.items.length} items</span><i>·</i><span>{p.readMs ? `read in ${(p.readMs / 1000).toFixed(0)} s` : read?.phase === "failed" ? "not read" : "reading"}</span><i>·</i><span>{hj?.phase === "failed" ? "Select to try again" : "Select for a hint"}</span><i>·</i><span>Menu for the overview</span>
+        <span>{p.items.length} items</span><i>·</i><span>{p.readMs ? `read in ${(p.readMs / 1000).toFixed(0)} s` : read?.phase === "failed" ? "not read" : "reading"}</span><i>·</i><span>{hj?.phase === "failed" && hj.retry !== false ? "Select to try again" : "Select for a hint"}</span><i>·</i><span>Menu for the overview</span>
       </div>
     </main>
   </>);

@@ -7,7 +7,7 @@
  */
 import { NextResponse } from "next/server";
 import { getSession, type JobKind } from "@/lib/session/store";
-import { MOVED_ON, NOTHING } from "@/lib/desk/job";
+import { MOVED_ON, NOTHING, NOT_AGAIN } from "@/lib/desk/job";
 import { POST as read } from "../../read/route";
 import { POST as hint } from "../../hint/route";
 import { POST as practice } from "../../practice/route";
@@ -28,6 +28,8 @@ export async function POST(req: Request) {
   const job = kind ? s.jobs?.[kind] : undefined;
   const route = kind ? ROUTES[kind] : undefined;
   if (!kind || !job || !route || job.phase !== "failed" || !job.input) return NextResponse.json({ error: NOTHING }, { status: 409 });
+  // a ceiling, a refusal, a desk refusal or an unreadable learner file meets the same input the same way (failure.ts)
+  if (job.retry === false) return NextResponse.json({ error: NOT_AGAIN, failure: job.failure }, { status: 409 });
   // a failed run of the learner who left is not the seated one's to ask again (a session restored from disk)
   if (job.by !== undefined && job.by !== s.learner?.id) return NextResponse.json({ error: MOVED_ON }, { status: 409 });
   // a hint is for the item it was asked about: if the page under it has changed, there is nothing to ask again

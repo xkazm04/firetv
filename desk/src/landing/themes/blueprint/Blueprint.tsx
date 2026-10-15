@@ -15,6 +15,7 @@ import type { AppView, WhenIcon } from "@/landing/model";
 import type { ThemeLandingProps } from "../types";
 import { BLUEPRINT_FONTS } from "./fonts";
 import { drawingOf } from "./drawings";
+import { afterFonts } from "@/lib/afterFonts";
 
 const ACC: Record<Subject, string> = { maths: "#ffe45c", english: "#ff7d6e", essay: "#62e8b4" };
 const GL: Record<Subject, string> = { maths: "255,228,92", english: "255,125,110", essay: "98,232,180" };
@@ -168,7 +169,7 @@ export function BlueprintLanding({ view, zoom, boot }: ThemeLandingProps) {
       setFit((p) => (p.fs.join() === fs.join() && p.w.join() === w.join() ? p : { fs, w }));
     };
     run();
-    document.fonts?.ready.then(run).catch(() => {});
+    afterFonts(run);
   }, [names, fr, n]);
 
   // the callout is a plate cut at one corner: its frame is drawn at the size its words made
@@ -180,7 +181,7 @@ export function BlueprintLanding({ view, zoom, boot }: ThemeLandingProps) {
     const e = coRef.current; if (!e) return;
     const run = () => setBox((p) => (p.w === e.offsetWidth && p.h === e.offsetHeight ? p : { w: e.offsetWidth, h: e.offsetHeight }));
     run();
-    document.fonts?.ready.then(run).catch(() => {});
+    afterFonts(run);
   }, [capKey, fr, co.width]);
 
   const L0 = lay(0, fr, lv);
@@ -209,12 +210,13 @@ export function BlueprintLanding({ view, zoom, boot }: ThemeLandingProps) {
       <Motes rgb={glow} />
       <div className="bp-sheetframe"><SheetFrame /></div>
       <div className="bp-flood" />
+      <div className="bp-sr" data-role="desk-announce" aria-live="polite" aria-atomic="true">{view.say}</div>
 
       {fr && (
         <div className="bp-phone" data-role="desk-phone" data-paired="false" data-focused={at === "phone"}>
           <div className="ph"><div className="scr">
             <div className="pl">{I.lock}<span>PIN</span></div>
-            <div className="pin" data-role="desk-pin" aria-label={`Code ${phone.pin}`}>{phone.pin}</div>
+            <div className="pin" data-role="desk-pin">{phone.pin}</div>
             <div className="pdots" aria-hidden="true"><i /><i /><i /></div>
           </div></div>
           <div className="url">{phone.url}</div>

@@ -58,7 +58,10 @@ function stub(){seen=[];reg.useProvider('text',{name:'stub',run:async(req)=>{
 }});}
 const PARA='The school day starts too early. Research found that teenagers fall asleep later. Therefore the start should move.';
 const P='Solve for x:  3x − 7 = 11';
-const sys=async(fn)=>{stub();await fn();assert.equal(seen.length,1,'one model call, as before');return seen[0].system;};
+// a prompt that carries quoted data ends its system with the assembler's data clause (lib/prompt/assemble.ts, pinned in
+// tools/prompt-assembly-test.cjs); the voice is what this suite compares, so the clause is taken off before it does
+const DATA_CLAUSE=require(path.join(root,'src/lib/prompt/assemble.ts')).DATA_CLAUSE;
+const sys=async(fn)=>{stub();await fn();assert.equal(seen.length,1,'one model call, as before');return seen[0].system.replace(' '+DATA_CLAUSE,'');};
 /** Every engine prompt at one age, keyed like TODAY (the english hint without a rule card). */
 async function prompts(age){
  const o={};
@@ -185,7 +188,7 @@ function seat(id,age,text){
 function captureSystems(){
  const systems=[];
  reg.useProvider('text',{name:'stub',run:async(req)=>{
-  systems.push(req.system);const p=Object.keys(req.schema?.properties??{});
+  systems.push(req.system.replace(' '+DATA_CLAUSE,''));const p=Object.keys(req.schema?.properties??{});
   const a=p.includes('observations')?{observations:[1,2,3].map((n)=>({n,job:'context',note:'n'})),summary:'s'}:p.includes('explanation')?{explanation:'e'}:p.includes('lesson')?{lesson:'none',why:'x'}:p.includes('reply')?{reply:'Look at the first step again.',slip:'unclear',value:''}:{hint:'Look at the sign.',what_to_try_next:'Write it.'};
   return {raw:JSON.stringify(a)};
  }});

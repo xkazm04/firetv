@@ -994,7 +994,7 @@ export function PageScreen({ s }: { s: Session }) {
   const line = s.reading ? "Reading the page… the problems appear here all at once when it is read."
     : read?.phase === "failed" ? "The desk could not read this page. Open Try again on the phone."
     : hj?.phase === "running" ? "Thinking about a hint for this one…"
-    : hj?.phase === "failed" ? "No hint that time. Select to try again."
+    : hj?.phase === "failed" ? (hj.retry === false ? "No hint for this one." : "No hint that time. Select to try again.")
     : p.missing?.length ? missingLine(p.missing)
     : it ? `Number ${it.label ?? it.n} is under the lamp. Select for a hint — the next step, never the answer.` : "Nothing on this page could be read as a problem.";
   const band = (scale: number) => it ? { top: it.band[0] * scale, height: Math.max(8, (it.band[1] - it.band[0]) * scale) } : null;

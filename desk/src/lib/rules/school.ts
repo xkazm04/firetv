@@ -84,6 +84,7 @@
  *
  * Pure: no React, no filesystem, no model, no network; imports only a type from the store.
  */
+import { checkerFault, Unreadable } from "./fault";
 import { commaSystem, readTask } from "./taskText";
 import type { SchoolSystem } from "@/lib/session/store";
 import { EN_CARD, EN_ORD, figuresOfCzech } from "./numberWords";
@@ -321,7 +322,7 @@ function readInner(answer: string, sys: SchoolSystem): Reading | null {
  */
 export function readNumber(answer: unknown, system: unknown): Reading | null {
   if (typeof answer !== "string" || !isSystem(system)) return null;
-  try { return readInner(answer, system); } catch { return null; }
+  try { return readInner(answer, system); } catch (e) { checkerFault("school.readNumber", e); return null; }
 }
 
 // ------------------------------------------------------------------ the shapes
@@ -443,7 +444,6 @@ type Node =
   | { k: "op"; op: Op; a: Node; b: Node }
   | { k: "par"; a: Node };
 
-class Unreadable extends Error {}
 
 /**
  * expr := term (('+'|'-') term)*;  term := unary (('×'|'*'|'÷') unary)*;  unary := '-' unary | atom;
@@ -510,7 +510,7 @@ function parseExpr(src: string): Node | null {
   try {
     const n = expr();
     return i === toks.length ? n : null;
-  } catch {
+  } catch (e) { checkerFault("school.parseExpr", e);
     return null;
   }
 }
@@ -1305,7 +1305,7 @@ export function wellFormed(spec: unknown): { ok: true } | { ok: false; why: stri
   try {
     const r = read(spec);
     return r.ok ? { ok: true } : { ok: false, why: r.why };
-  } catch {
+  } catch (e) { checkerFault("school.wellFormed", e);
     return { ok: false, why: REJECT.read };
   }
 }
@@ -1590,7 +1590,7 @@ function printQuestion(spec: unknown, system?: SchoolSystem): { plain: string; t
       plain: `Work out ${plainOf(node)}.${tail ? ` ${tail}` : ""}`,
       tex: `\\text{Work out } ${texOf(node)}.${tail ? ` \\text{ ${tail}}` : ""}`,
     };
-  } catch {
+  } catch (e) { checkerFault("school.question", e);
     return null;
   }
 }
@@ -2232,7 +2232,7 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
     const slips = slipCandidates(r).filter(([, c]) => !eq(c, t));
     const named = slips.find(([, c]) => eq(c, v)) ?? slips.find(([, c]) => rounds(c));
     return named ? { verdict: "wrong", slip: named[0], form, why: WHY.slip } : { verdict: "wrong", form, why: WHY.wrong };
-  } catch {
+  } catch (e) { checkerFault("school.check", e);
     return { verdict: "unsure", why: WHY.unreadable };
   }
 }
@@ -2292,7 +2292,7 @@ export function slipValue(spec: unknown, slipId: unknown): string | null {
       if (v.verdict === "wrong" && v.slip === slipId) return w;
     }
     return null;
-  } catch {
+  } catch (e) { checkerFault("school.slipValue", e);
     return null;
   }
 }
@@ -2656,7 +2656,7 @@ function pythRooted(k: { find: "longest" | "shorter"; x: bigint; y: bigint }, te
 export function leaksSchool(spec: unknown, hint: unknown): boolean {
   if (typeof hint !== "string" || !hint.trim()) return false;
   let r: Read;
-  try { r = read(spec); } catch { return false; }
+  try { r = read(spec); } catch (e) { checkerFault("school.leaksSchool read", e); return false; }
   if (!r.ok) return false;
   try {
     const pr = leakProfile(r), { T, targets } = pr;
@@ -2756,7 +2756,7 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
       }
     }
     return false;
-  } catch {
+  } catch (e) { checkerFault("school.leaksSchool", e);
     return true;
   }
 }
@@ -4411,7 +4411,7 @@ function specOnce(text: unknown): SchoolSpec | null {
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
     return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readMixed(t) ?? readStory(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
       ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t) ?? readPythagoras(t) ?? readProbability(t) ?? readPercentTop(t) ?? readPythagorasDp(t) ?? readProbabilityTop(t);
-  } catch {
+  } catch (e) { checkerFault("school.specOnce", e);
     return null;
   }
 }
@@ -4448,7 +4448,7 @@ export function unitOf(spec: unknown): string | null {
     const fr = (x: Node) => x.k === "frac" || x.k === "mixed";
     if (n.k !== "op" || !fr(n.a) || !fr(n.b)) return null;
     return n.op === "+" || n.op === "-" ? "frac-add-sub" : "frac-mul-div";
-  } catch {
+  } catch (e) { checkerFault("school.unitOf", e);
     return null;
   }
 }

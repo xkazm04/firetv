@@ -30,8 +30,9 @@
  */
 import { text } from "../engines/text";
 import { topic } from "../library/syllabus";
-import { getLearner } from "../session/learners";
-import { notesBlock } from "./memory";
+import { getLearner, recallLearner, RECALL_UNREAD, type Learner } from "../session/learners";
+import { notesPart } from "./memory";
+import { assemble, dataList, say } from "../prompt/assemble";
 import { slip as slipById, type Slip } from "../rules/maths";
 import { degenerate, verify } from "./verify";
 import type { PracticeItem, SchoolSystem } from "../session/store";
@@ -109,31 +110,36 @@ export function aimBlock(aim: readonly string[] | undefined): string {
  * to say: the topic, the learner (learnerBlock), the desk's notes, the learner's slips here, the aim (aimBlock), what the
  * set already holds, and the task.
  */
-function ask(topicId: string, memory: string[], slips: string[], want: number, avoid: string[], learner = "", aim = "") {
+function ask(topicId: string, memory: Pick<Learner, "memory" | "memoryDropped"> | null, slips: string[] | null, want: number, avoid: string[], learner = "", aim = "") {
   const t = topic(topicId);
   const name = t?.name ?? topicId;
   const blurb = t?.blurb ?? "";
   // the slips are read as the desk would say them, never as ids: the model has not seen our vocabulary
-  const said = slips.map((id) => slipById(id)).filter((x): x is Slip => !!x);
+  const said = (slips ?? []).map((id) => slipById(id)).filter((x): x is Slip => !!x);
   const known = said.length
     ? `Mistakes this student has actually made on this topic before:\n${said.map((x) => `- ${x.says} (it shows at ${x.points})`).join("\n")}\n` +
       `Include questions where a mistake like these would show itself. Do not flag which ones, do not mention the mistake in the question, and do not make those questions any harder than the rest.\n\n`
+    : slips === null ? `${RECALL_UNREAD} Spread the questions evenly across the usual ways this topic goes wrong.\n\n`
     : `The desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\n`;
-  const prompt =
-    `Topic: ${name}\n${blurb}\n\n` +
-    learner +
-    notesBlock(memory) +
-    known +
-    aim +
-    (avoid.length ? `Do not repeat any of these, which the student already has:\n${avoid.map((q) => `- ${q}`).join("\n")}\n\n` : "") +
-    `Write ${want} practice questions on this topic.\n` +
-    `Rules:\n` +
-    `- Every question must be solvable by hand in under a minute.\n` +
-    `- Vary the shape: different arrangements of the terms, some with negatives, some with the x-term on the right.\n` +
-    `- Every answer must be an integer or a simple fraction with a small denominator. No decimals, no surds.\n` +
-    `- Order them so they get harder across the set: the first is the gentlest, the last is the hardest.\n` +
-    `- State the answer you get for each; it will be checked.`;
-  return text<{ items: Candidate[] }>({ system: SYSTEM, prompt, schema: SCHEMA, model: "fast", use: "practice" });
+  const asked = assemble("practice-linear", {
+    system: [say("stance", SYSTEM)],
+    prompt: [
+      say("topic", `Topic: ${name}\n${blurb}`.trim()),
+      say("learner", learner.trim()),
+      ...notesPart(memory),
+      say("slips", known.trim()),
+      say("aim", aim.trim()),
+      dataList("avoid", "Do not repeat any of these, which the student already has", avoid),
+      say("ask", `Write ${want} practice questions on this topic.\n` +
+        `Rules:\n` +
+        `- Every question must be solvable by hand in under a minute.\n` +
+        `- Vary the shape: different arrangements of the terms, some with negatives, some with the x-term on the right.\n` +
+        `- Every answer must be an integer or a simple fraction with a small denominator. No decimals, no surds.\n` +
+        `- Order them so they get harder across the set: the first is the gentlest, the last is the hardest.\n` +
+        `- State the answer you get for each; it will be checked.`),
+    ],
+  });
+  return text<{ items: Candidate[] }>({ ...asked, schema: SCHEMA, model: "fast", use: "practice" });
 }
 
 /** Candidates that survive substitution, deduped against what we already have. */
@@ -208,10 +214,10 @@ export async function makeItems(
 
 /** A linear-equation set, written by the model and kept only where substitution proves its stated answer. */
 async function makeLinearItems(topicId: string, learnerId: string, n: number, learner = "", aim = ""): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
-  const me = getLearner(learnerId);
-  const memory = me.memory;
+  const me = recallLearner(learnerId);
+  const memory = me;
   // the named mistakes this learner has made HERE: the set is written for them, not for the topic
-  const slips = me.skills[topicId]?.slips ?? [];
+  const slips = me ? me.skills[topicId]?.slips ?? [] : null;
   const items: PracticeItem[] = [];
   let provider = "";
   let ms = 0;
@@ -309,31 +315,36 @@ const REQUIREMENT_LINES: Record<CalcRequirement, string> = {
  * say: the topic, the learner (learnerBlock), the desk's notes, the learner's slips here, what the set already holds, the
  * task with its shapes, and the rules - the topic's requirement line among them when its definition names one.
  */
-function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory: string[], slips: string[], want: number, avoid: string[], learner = "", requires?: CalcRequirement) {
+function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory: Pick<Learner, "memory" | "memoryDropped"> | null, slips: string[] | null, want: number, avoid: string[], learner = "", requires?: CalcRequirement) {
   const t = topicIn(topicId);
   // the slips as the desk would say them, never as ids
-  const said = slips.map((id) => CALC_SLIPS.find((x) => x.id === id)).filter((x): x is (typeof CALC_SLIPS)[number] => !!x);
+  const said = (slips ?? []).map((id) => CALC_SLIPS.find((x) => x.id === id)).filter((x): x is (typeof CALC_SLIPS)[number] => !!x);
   const known = said.length
     ? `Mistakes this student has actually made on this topic before:\n${said.map((x) => `- ${x.says} (it shows at ${x.points})`).join("\n")}\n` +
       `Include questions where a mistake like these would show itself. Do not flag which ones, and do not make those questions any harder than the rest.\n\n`
+    : slips === null ? `${RECALL_UNREAD} Spread the questions evenly across the usual ways this topic goes wrong.\n\n`
     : `The desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\n`;
-  const prompt =
-    `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
-    learner +
-    notesBlock(memory) +
-    known +
-    (avoid.length ? `Do not repeat any of these, which the student already has:\n${avoid.map((q) => `- ${q}`).join("\n")}\n\n` : "") +
-    `Write ${want} specs for practice questions on this topic, using only these shapes:\n${shapes.map((s) => `- ${SHAPE_LINES[s]}`).join("\n")}\n` +
-    `Rules:\n` +
-    `- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n` +
-    `- Every question must be workable by hand in a few minutes.\n` +
-    (requires ? REQUIREMENT_LINES[requires] : "") +
-    `- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n` +
-    (leavesUnused(shapes) ? `- A field the shape does not use is left as an empty string (0 for steps).\n` : "") +
-    `- Do not work any question out: give the specs only.`;
+  const asked = assemble("practice-calc", {
+    system: [say("stance", calcSystem(topicId))],
+    prompt: [
+      say("topic", `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}`.trim()),
+      say("learner", learner.trim()),
+      ...notesPart(memory),
+      say("slips", known.trim()),
+      dataList("avoid", "Do not repeat any of these, which the student already has", avoid),
+      say("ask", `Write ${want} specs for practice questions on this topic, using only these shapes:\n${shapes.map((s) => `- ${SHAPE_LINES[s]}`).join("\n")}\n` +
+        `Rules:\n` +
+        `- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n` +
+        `- Every question must be workable by hand in a few minutes.\n` +
+        (requires ? REQUIREMENT_LINES[requires] : "") +
+        `- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n` +
+        (leavesUnused(shapes) ? `- A field the shape does not use is left as an empty string (0 for steps).\n` : "") +
+        `- Do not work any question out: give the specs only.`),
+    ],
+  });
   // thinking off: writing nine short specs is not a reasoning task and the desk checks every one in code. Measured live
   // (tools/calc-model-yield.cjs, 6 topics): on = 62-90 s a call with two engine timeouts, off = 7-14 s and every set made
-  return text<{ specs: unknown[] }>({ system: calcSystem(topicId), prompt, schema: calcSchema(shapes, want), accept: CALC_ACCEPT, model: "fast", thinking: false, use: "practice" });
+  return text<{ specs: unknown[] }>({ ...asked, schema: calcSchema(shapes, want), accept: CALC_ACCEPT, model: "fast", thinking: false, use: "practice" });
 }
 
 /** A point as the spec holds it: a plain numeral as a number, inf / -inf for a limit, a constant as its plain text. */
@@ -380,9 +391,9 @@ const sameKey = (q: string) => q.replace(/\s+/g, "").toLowerCase();
  * { n, question: the printed question, spec } - the spec carries only what the question prints.
  */
 async function makeCalcItems(topicId: string, learnerId: string, n: number, word?: boolean | number, learner = "", system?: SchoolSystem): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
-  const me = getLearner(learnerId);
-  const memory = me.memory;
-  const slips = me.skills[topicId]?.slips ?? [];
+  const me = recallLearner(learnerId);
+  const memory = me;
+  const slips = me ? me.skills[topicId]?.slips ?? [] : null;
   const shapes = shapesOf(topicId);
   const requires = requirementOfTopic(topicId);
   const kept: { spec: CalcSpec | Calc2Spec; question: string; difficulty: number }[] = [];

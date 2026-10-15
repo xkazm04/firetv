@@ -19,25 +19,41 @@ const temps=()=>fs.readdirSync(data).filter((f)=>f!=='learners.json');
 after(()=>{if(globalThis.__desk)clearInterval(globalThis.__desk.ticker);fs.rmSync(base,{recursive:true,force:true});});
 
 test('a save writes a valid book and leaves no temp file behind',()=>{
-  const l=L.getLearner('ann');l.memory=['likes fractions'];
+  const note={text:'likes fractions',at:1700000000000,source:'nightly'};
+  const l=L.getLearner('ann');l.memory=[note];
   L.saveLearner(l);
   const book=JSON.parse(fs.readFileSync(FILE,'utf8'));
-  assert.deepEqual(book.ann.memory,['likes fractions']);
+  assert.deepEqual(book.ann.memory,[note],'a note is kept with its date and its writer');
   L.recordAttempt('bob','frac-add-sub',true);
   assert.deepEqual(Object.keys(JSON.parse(fs.readFileSync(FILE,'utf8'))).sort(),['ann','bob']);
   L.saveEnglish('ann',L.getLearner('ann').english);
   assert.deepEqual(temps(),[]);
 });
 
+test('notes: a save over the cap keeps the newest and counts what it dropped; a prompt reads each with its age, as the desk\'s unchecked notes',()=>{
+  const l=L.getLearner('capped');l.memory=Array.from({length:43},(_,i)=>({text:`note ${i}`,at:i,source:'nightly'}));
+  L.saveLearner(l);
+  const r=L.getLearner('capped');
+  assert.equal(r.memory.length,40);assert.equal(r.memory[0].text,'note 3','the oldest go');assert.equal(r.memoryDropped,3,'and how many is kept');
+  const M=require(path.join(root,'src/lib/desk/memory.ts')),A=require(path.join(root,'src/lib/prompt/assemble.ts'));
+  const now=Date.UTC(2026,9,15),day=24*60*60*1000;
+  const p=A.assemble('t',{system:[A.say('s','S')],prompt:M.notesPart({memory:[{text:'Old one.',at:null,source:'legacy'},{text:'Skips the "last" line.',at:now-3*day,source:'nightly'}],memoryDropped:2},now)}).prompt;
+  assert.match(p,/written by the desk, not checked by anyone/,'framed as notes, never as knowledge');
+  assert.ok(p.includes('1. "Old one."  (undated)'),'a legacy note\'s age is unknown, never guessed');
+  assert.ok(p.includes('2. "Skips the \\"last\\" line."  (3 days ago)'),'quoted as data, with its age');
+  assert.match(p,/2 older notes were dropped to keep this list short\./);
+  assert.equal(A.assemble('t',{prompt:M.notesPart({memory:[]},now)}).prompt,'','no notes, no heading');
+  assert.equal(M.ageOf(now-day,now),'(yesterday)');assert.equal(M.ageOf(now-20*day,now),'(2 weeks ago)');
+});
 test('a failed write leaves the previous learners.json byte-identical and saveLearner throws',()=>{
   const before=fs.readFileSync(FILE);
   // the rename fails (as a locked or read-only target does on Windows)
   const real=fs.renameSync;fs.renameSync=()=>{throw Object.assign(new Error('EPERM: simulated'),{code:'EPERM'});};
   try{
-    const l=L.getLearner('ann');l.memory=['changed'];
+    const l=L.getLearner('ann');l.memory=[{text:'changed',at:1,source:'nightly'}];
     assert.throws(()=>L.saveLearner(l),/could not be written, so progress was not saved/);
     assert.throws(()=>L.saveEnglish('ann',l.english),/could not be written/);
-    assert.throws(()=>L.addMemory('ann','more'),/could not be written/);
+    assert.throws(()=>L.recordAttempt('ann','frac-add-sub',true),/could not be written/);
   }finally{fs.renameSync=real;}
   assert.ok(before.equals(fs.readFileSync(FILE)),'learners.json byte-identical');
   assert.deepEqual(temps(),[],'the temp file is removed');
@@ -114,10 +130,10 @@ test('papers 3: an older record without the field reads exactly as before',()=>{
   const l=L.getLearner('old');
   assert.equal('papers' in l,false,'no field until a paper is entered');
   const rest=l;
-  assert.deepEqual(rest.memory,['a']);
+  assert.deepEqual(rest.memory,[{text:'a',at:null,source:'legacy'}],'a note kept as a bare string reads as an undated legacy note');
   assert.deepEqual(Object.keys(rest).sort(),['digest','english','history','id','memory','skills','writing']);
-  L.addMemory('old','b');
-  assert.deepEqual(L.getLearner('old').memory,['a','b']);
+  L.saveLearner({...l,memory:[...l.memory,{text:'b',at:2,source:'nightly'}]});
+  assert.deepEqual(L.getLearner('old').memory.map((n)=>[n.text,n.source]),[['a','legacy'],['b','nightly']]);
   assert.equal('papers' in L.getLearner('old'),false);
 });
 
@@ -219,6 +235,6 @@ test('OPT-10: saveEnglish reads learners.json once - the book it writes into is 
   fs.readFileSync=function(p,...a){if(String(p)===FILE)reads++;return real.call(this,p,...a);};
   try{L.saveEnglish('o10',en);}finally{fs.readFileSync=real;}
   assert.equal(reads,1,`saveEnglish read learners.json ${reads} times`);
-  assert.deepEqual(L.getLearner('o10').memory,['kept'],'the rest of the learner is kept');
+  assert.deepEqual(L.getLearner('o10').memory.map((n)=>n.text),['kept'],'the rest of the learner is kept');
   fs.rmSync(FILE,{force:true});
 });

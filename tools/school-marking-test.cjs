@@ -316,10 +316,10 @@ test('9: the Calculus explanation prompt is byte for byte what it was, and a lin
   `One or two sentences. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.`;
  const mem=learners.getLearner(LEARNER).memory;
  const prompt=`Topic: ${t.name}\n${t.blurb}\n\n`+
-  `The question: ${q}\n\n`+
-  `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably `+
-  `and answer what they meant:\n«${tr}»\n\n`+
-  (mem.length?`What the desk has learned about this student:\n${mem.map((m)=>`- ${m}`).join('\n')}\n\n`:'')+
+  `The question: ${JSON.stringify(q)}\n\n`+
+  `What the student said was transcribed from speech. The transcription may be rough or misheard — read it charitably `+
+  `and answer what they meant.\n\nWhat the student said: ${JSON.stringify(tr)}\n\n`+
+  (mem.length?`What the desk has learned about this student:\n${mem.map((m)=>JSON.stringify(m)).join('\n')}\n\n`:'')+
   `Reply to them in one or two sentences that point at the step, not the answer.\n\n`+
   `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits `+
   `or their reasoning was sound:\n${M.slipVocabulary(topic)}\n\n`+
@@ -327,7 +327,7 @@ test('9: the Calculus explanation prompt is byte for byte what it was, and a lin
   `e^, ln, sin, cos and so on, or a number or a fraction (six x plus two is 6x + 2, minus three is -3, seven halves is `+
   `7/2, x squared plus C is x^2 + C; include +C if they say it). Their answer, not yours — do not work it out. `+
   `An empty string if they did not say one.`;
- assert.equal(req.system,system,'the Calculus system prompt, unchanged (no age voice, whatever the age)');
+ assert.equal(req.system,system+' '+require(src('lib/prompt/assemble.ts')).DATA_CLAUSE,'the Calculus system prompt, unchanged but for the data clause (no age voice, whatever the age)');
  assert.equal(req.prompt,prompt,'the Calculus prompt, unchanged');
  assert.deepEqual(Object.keys(req.schema.properties).sort(),['reply','slip','value']);
  // a linear item: the school system in the learner's voice, the value of x, as before
@@ -369,14 +369,14 @@ test('10: a settled explanation names the value the desk heard; nothing settled,
 
 test('11: the explanation prompt carries the written answer, the working as numbered lines and the slip with its line; never the right answer',async()=>{
  const asked=()=>seenText[0].prompt;
- const stay=(prompt,right)=>{assert.ok(prompt.indexOf('The question: ')<prompt.indexOf('What the student wrote as their answer'),'after the question');assert.ok(prompt.indexOf('The desk found this slip')<prompt.indexOf('What the student said, transcribed'),'before the transcript');const upTo=prompt.slice(0,prompt.indexOf('What the student said, transcribed'));for(const re of right)assert.doesNotMatch(upTo,re,'the right answer is not in the part the item supplies (the value examples further down are fixed text)');};
+ const stay=(prompt,right)=>{assert.ok(prompt.indexOf('The question: ')<prompt.indexOf('What the student wrote as their answer'),'after the question');assert.ok(prompt.indexOf('The desk found this slip')<prompt.indexOf('What the student said was transcribed'),'before the transcript');const upTo=prompt.slice(0,prompt.indexOf('What the student said was transcribed'));for(const re of right)assert.doesNotMatch(upTo,re,'the right answer is not in the part the item supplies (the value examples further down are fixed text)');};
  // (e) a school item: a wrong written answer, two working lines, a code slip and a pen line
  const sq='Add 1/2 and 1/3',sspec=S.specFromQuestion(sq);
  stubText(()=>({reply:'Look at the bottoms.',value:''}));
  await X.explainItem({n:1,question:sq,spec:sspec,studentAnswer:'2/5',studentWorking:'1/2 + 1/3 = 2/5; 2/5 = 0.4',verdict:'wrong',slip:'tops-and-bottoms',slipAt:{line:0},said:M.ASK(1)},'I added the tops and the bottoms',UNIT,LEARNER,()=>false,12);
  let p=asked();
- assert.ok(p.includes('What the student wrote as their answer: «2/5»\n\n'));
- assert.ok(p.includes('Their working, line by line:\n1. 1/2 + 1/3 = 2/5\n2. 2/5 = 0.4\n\n'));
+ assert.ok(p.includes('What the student wrote as their answer: "2/5"\n\n'));
+ assert.ok(p.includes('Their working, line by line:\n1. "1/2 + 1/3 = 2/5"\n2. "2/5 = 0.4"\n\n'));
  assert.ok(p.includes(`The desk found this slip: ${M.slip('tops-and-bottoms',UNIT).says}, on line 1.\n\n`));
  stay(p,[/5\/6/]);
  // (f) a Calculus item and a linear one
@@ -384,26 +384,26 @@ test('11: the explanation prompt carries the written answer, the working as numb
  stubText(()=>({reply:'Look at the second term.',slip:'unclear',value:''}));
  await X.explainItem({n:1,question:cq,spec:{shape:'derivative',f:'3x^2 + 2x'},studentAnswer:'6x',studentWorking:'3 * 2x + 2\n6x',verdict:'wrong',slip:'arithmetic-slip',slipAt:{line:1},said:M.ASK(1)},'I got six x',  'calc1-rules',LEARNER,()=>false,12,'cz');
  p=asked();
- assert.match(p,/What the student wrote as their answer: «6x»/);assert.match(p,/line by line:\n1\. 3 \* 2x \+ 2\n2\. 6x\n\n/);
+ assert.match(p,/What the student wrote as their answer: "6x"/);assert.match(p,/line by line:\n1\. "3 \* 2x \+ 2"\n2\. "6x"\n\n/);
  assert.ok(p.includes(`The desk found this slip: ${M.slip('arithmetic-slip','calc1-rules').says}, on line 2.\n\n`));
  stay(p,[/6x \+ 2\b/]);
  const lin='linear-two-step';
  stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:''}));
  await X.explainItem({n:1,question:'2x + 3 = 11',studentAnswer:'7',studentWorking:'2x = 14; x = 7',verdict:'wrong',slip:'undo-wrong-order',slipAt:{line:0},said:M.ASK(1)},'I got seven',lin,LEARNER,()=>false,12);
  p=asked();
- assert.match(p,/What the student wrote as their answer: «7»/);assert.match(p,/line by line:\n1\. 2x = 14\n2\. x = 7\n\n/);
+ assert.match(p,/What the student wrote as their answer: "7"/);assert.match(p,/line by line:\n1\. "2x = 14"\n2\. "x = 7"\n\n/);
  assert.ok(p.includes(`The desk found this slip: ${M.slip('undo-wrong-order',lin).says}, on line 1.\n\n`));
  stay(p,[/\b4\b/]);
  // a bare answer is not repeated as a working line, and no line is named without working
  stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:''}));
  await X.explainItem({n:1,question:'2x + 3 = 11',studentAnswer:'7',verdict:'wrong',slip:'undo-wrong-order',slipAt:{line:0},said:M.ASK(1)},'seven',lin,LEARNER,()=>false,12);
- assert.doesNotMatch(asked(),/line by line|on line/);assert.match(asked(),/«7»/);
+ assert.doesNotMatch(asked(),/line by line|on line/);assert.match(asked(),/answer: "7"/);
 });
 
 test('12: an item with nothing seen sends today\'s prompt byte for byte, a school item and a linear one',async()=>{
  const mem=()=>learners.getLearner(LEARNER).memory,tr='I added them';
- const memory=()=>(mem().length?`What the desk has learned about this student:\n${mem().map((m)=>`- ${m}`).join('\n')}\n\n`:'');
- const head=(t,q)=>`Topic: ${t.name}\n${t.blurb}\n\nThe question: ${q}\n\nWhat the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably and answer what they meant:\n«${tr}»\n\n`+memory()+`Reply to them in one or two sentences that point at the step, not the answer.\n\n`;
+ const memory=()=>(mem().length?`What the desk has learned about this student:\n${mem().map((m)=>JSON.stringify(m)).join('\n')}\n\n`:'');
+ const head=(t,q)=>`Topic: ${t.name}\n${t.blurb}\n\nThe question: ${JSON.stringify(q)}\n\nWhat the student said was transcribed from speech. The transcription may be rough or misheard — read it charitably and answer what they meant.\n\nWhat the student said: ${JSON.stringify(tr)}\n\n`+memory()+`Reply to them in one or two sentences that point at the step, not the answer.\n\n`;
  // a school item
  const sq='Add 3/4 and 1/6';
  stubText(()=>({reply:'Look at the bottoms.',value:''}));
@@ -429,7 +429,7 @@ test('13: the ceiling: with the answer and working in the prompt, a reply that s
  const lin='linear-two-step';
  stubText(()=>({reply:'The answer is 4.',slip:'unclear',value:'4'}));
  const x=await X.explainItem({n:1,question:'2x + 3 = 11',studentAnswer:'4',studentWorking:'2x = 8; x = 4',verdict:'unsure'},'I got four',lin,LEARNER,()=>true,12);
- assert.match(seenText[0].prompt,/Their working, line by line:\n1\. 2x = 8\n2\. x = 4/);
+ assert.match(seenText[0].prompt,/Their working, line by line:\n1\. "2x = 8"\n2\. "x = 4"/);
  assert.equal(x.settled.verdict,'right');assert.equal(x.reply,'The desk heard 4. '+M.RIGHT(1));
  // an unsettled one: the item's own line, no heard sentence
  stubText(()=>({reply:'The answer is 4.',slip:'unclear',value:''}));

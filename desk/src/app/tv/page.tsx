@@ -69,7 +69,7 @@ export default function TV() {
     try { if (q === "tv" || q === "desk") localStorage.setItem("desk-display", q); setDisplay(localStorage.getItem("desk-display") === "desk" ? "desk" : "tv"); }
     catch { setDisplay(q === "desk" ? "desk" : "tv"); }
   }, []);
-  const toggleDisplay = () => setDisplay((d) => { const n = d === "desk" ? "tv" : "desk"; try { localStorage.setItem("desk-display", n); } catch {} return n; });
+  const toggleDisplay = () => setDisplay((d) => { const n = d === "desk" ? "tv" : "desk"; try { localStorage.setItem("desk-display", n); } catch { /* storage is blocked: the choice holds for this page only */ } return n; });
   /** The stage this screen is drawn on. The landing is one picture with nothing more to fit, so it keeps the TV's. */
   const shown: Display = s?.screen === "landing" ? "tv" : display;
 
@@ -96,7 +96,7 @@ export default function TV() {
         const old = audio.current; old?.pause(); if (old?.src.startsWith("blob:")) URL.revokeObjectURL(old.src);
         const next = new Audio(URL.createObjectURL(blob)); next.onended = () => URL.revokeObjectURL(next.src);
         audio.current = next; await next.play(); }
-      catch { try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(line)); } catch {} }
+      catch { try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(line)); } catch (e) { console.warn("desk TV: neither the voice nor the browser could say the line; it stays on screen", e); } }
     })();
   }, [s, voice]);
 
@@ -134,7 +134,7 @@ export default function TV() {
       if (stop && step.events.some((x) => x.type === "nav")) {
         const cut = matchMedia("(prefers-reduced-motion: reduce)").matches;
         zooming.current = true; setZoom(stop);
-        setTimeout(() => { void runStep(step, { post, call, apply }).catch(() => {}); }, cut ? 0 : ZOOM_MS);
+        setTimeout(() => { void runStep(step, { post, call, apply }).catch((e) => console.error("desk TV: a landing step failed", e)); }, cut ? 0 : ZOOM_MS);
         // a post that never lands must not leave the desk frozen behind the zoom
         setTimeout(() => { if (zooming.current) { zooming.current = false; setZoom(null); } }, 4000);
         return;
@@ -154,7 +154,7 @@ export default function TV() {
         <button onClick={() => post({ type: "reset" })}>Reset session</button>
         <button onClick={() => post({ type: "join" })}>Fake phone</button>
         <button aria-pressed={display === "desk"} onClick={toggleDisplay} title="A 2880×1620 stage for a PC monitor; off is the 1920×1080 TV">Desk display</button>
-        <button onClick={() => void bench.current?.requestFullscreen().catch(() => {})} title="The stage alone; Esc leaves">Fullscreen</button>
+        <button onClick={() => void bench.current?.requestFullscreen().catch(() => { /* the browser refused: the operator's bench stays windowed */ })} title="The stage alone; Esc leaves">Fullscreen</button>
         <span className="status">{connected ? "" : "reconnecting… "}{s?.status}</span>
       </div>
       {testBar && s && lingaOwns(s) && <LingaTestBar s={s} />}

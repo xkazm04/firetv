@@ -1,0 +1,1051 @@
+{
+  "schema": "conform-detail/1",
+  "pairs": {
+    "desk-subjects/desk-pipelines/prompt-assembly": {
+      "context": "desk-pipelines",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-14",
+      "evaluatedTs": "2026-10-14T23:44:25.405Z",
+      "worker": "26be1b58-2b90-4974-b8e0-fc3bf8e4b06f",
+      "techniques": [
+        {
+          "technique": "layered-composition",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/desk/hint.ts:166 Prompts are constructed by string concatenation at individual call sites with post-construction appended strings (`prompt + extra`) rather than a dedicated assembler per prompt family."
+        },
+        {
+          "technique": "variable-interpolation",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/desk/explain.ts:92 Prompt variables are interpolated via template strings with silent fallbacks to empty strings (`?? \"\"`) rather than declared typed contracts with loud failures on missing inputs."
+        },
+        {
+          "technique": "context-budgeting",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/desk/memory.ts:25 Learner memory notes are concatenated into prompts without a token budget, degradation ladder, or drop notices, bounded only by a raw array length cap in persistence."
+        },
+        {
+          "technique": "summary-evidence-gate",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/desk/memory.ts:87 Model-written summary lines are saved to learner memory and injected into future prompts without source pointers or verification against session evidence."
+        },
+        {
+          "technique": "house-vocabulary-layer",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/rules/maths.ts:88 Maintains a single authored vocabulary mapping topic slip IDs to descriptions that is injected into prompts to constrain mistake naming to a closed vocabulary."
+        },
+        {
+          "technique": "task-envelope",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/desk/hint.ts:147 Prompts open with persona and role priming ('You are...') instead of an actionable locate/done/check task envelope."
+        },
+        {
+          "technique": "fingerprinting-and-cache-keys",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/desk/items.ts:92 Requests are dispatched directly to the text engine without computing or recording a prompt fingerprint or cache key over the standing layers."
+        },
+        {
+          "technique": "capability-documentation",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/desk/items.ts:244 Dynamically documents only the active practice shapes for the given topic mapped from the topic path registry rather than listing all global shapes."
+        }
+      ],
+      "registryProposal": "The standard should address educational tutoring systems where closed pedagogical error vocabularies (slips) act as a domain-specific house vocabulary layer to ground mistake diagnosis."
+    },
+    "desk-linga/linga/prompt-assembly": {
+      "context": "linga",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-14",
+      "evaluatedTs": "2026-10-14T23:44:25.405Z",
+      "worker": "26be1b58-2b90-4974-b8e0-fc3bf8e4b06f",
+      "techniques": [
+        {
+          "technique": "layered-composition",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:346 Composes prompts by string concatenations and dynamic JSON object spreading at the call site without an isolated, sealed assembler per prompt family."
+        },
+        {
+          "technique": "history-compaction",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:104 Truncates conversation turns using an unannounced array slice (`transcript: c.turns.slice(-18)`) without compacting call/result pairs, proactive/reactive thresholds, or synthesizing missing results."
+        },
+        {
+          "technique": "context-budgeting",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:99 Applies hardcoded array slice limits without explicit token budget floors, degradation ladders, or notices naming omitted evidence."
+        },
+        {
+          "technique": "task-envelope",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:83 Opens the system prompt with persona and role priming ('You are Linga...') instead of an actionable locate/done/check envelope."
+        },
+        {
+          "technique": "deferred-interface-invalidation",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/english/conversation.ts:198 Defers standing-layer configuration changes (preferences and teaching notes) to the next scene while immediately revoking incompatible active scenes when age safety policies tighten."
+        },
+        {
+          "technique": "capability-documentation",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/english/conversation.ts:88 Documents only the active subset of capability rubrics (focusSkill, reviewSkill, repair) dynamically filtered from the curriculum rather than exposing the whole inactive skill registry."
+        },
+        {
+          "technique": "fingerprinting-and-cache-keys",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:170 Conversations do not generate or stamp a prompt fingerprint or cache key representing the standing system prompt and configuration layers."
+        },
+        {
+          "technique": "variable-interpolation",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:84 Variables are embedded using inline ternary expressions and string interpolation rather than declared typed variable slots with explicit trust classifications."
+        }
+      ],
+      "registryProposal": "The standard should distinguish conversational rehearsal contexts where domain safety policies (e.g. minor protection and age gating) trigger immediate conversation termination while pedagogical preference updates are deferred to subsequent scenes."
+    },
+    "desk-subjects/desk-pipelines/agent-memory": {
+      "context": "desk-pipelines",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:17:21.215Z",
+      "worker": "74a7848a-9c98-4c5f-9d2b-f9e20c1b6b1b",
+      "techniques": [
+        {
+          "technique": "consolidation",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/desk/memory.ts:87 The durable write retains only generated sentences, with no supporting episode references, confidence or contradiction lineage."
+        },
+        {
+          "technique": "filter-at-the-id-door",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/desk/memory.ts:24 This recall path renders supplied strings directly; it does not load model-selected memory IDs."
+        },
+        {
+          "technique": "read-set-bounded-links",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/desk/memory.ts:19 The memory extraction contract exposes sentences, with no model-authored memory-reference fields to resolve."
+        },
+        {
+          "technique": "recall-injection",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/desk/memory.ts:25 Every retained sentence is injected without a token budget or relevance selection; labeling the block does not bound its cost."
+        },
+        {
+          "technique": "self-trained-capture-filter",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/desk/memory.ts:79 This pass calls the model directly; its subsequent fixed output filters do not learn a screen from empty extractions."
+        }
+      ]
+    },
+    "desk-linga/linga/agent-memory": {
+      "context": "linga",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:17:21.215Z",
+      "worker": "74a7848a-9c98-4c5f-9d2b-f9e20c1b6b1b",
+      "techniques": [
+        {
+          "technique": "decay-and-forgetting",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:358 Adding a taught item discards the oldest items past the cap instead of demoting by value while preserving an audit trail."
+        },
+        {
+          "technique": "filter-at-the-id-door",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/english/conversation.ts:246 Code selects the review item through dueTaught; the model does not choose memory IDs from a shortlist."
+        },
+        {
+          "technique": "loss-site-inventory",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:104 The assembled tutor input silently windows conversation turns and learning evidence, whereas the phone can render the full current transcript."
+        }
+      ]
+    },
+    "tooling/uat/agent-memory": {
+      "context": "uat",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:17:21.215Z",
+      "worker": "74a7848a-9c98-4c5f-9d2b-f9e20c1b6b1b",
+      "techniques": [
+        {
+          "technique": "probe-without-write-back",
+          "verdict": "not-applicable",
+          "evidence": "uat/rubric.md:34 This recall metric measures missed teaching corrections, not a scheduled memory-retrieval health probe."
+        },
+        {
+          "technique": "working-memory",
+          "verdict": "deviation",
+          "evidence": "uat/driver/linga-text.cjs:510 The Character prompt receives recentSteps from this ten-step window; older decisions disappear by position rather than being synthesized into current constraints, decisions and open threads."
+        }
+      ]
+    },
+    "desk-platform/session/agent-memory": {
+      "context": "session",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:17:21.215Z",
+      "worker": "74a7848a-9c98-4c5f-9d2b-f9e20c1b6b1b",
+      "techniques": [
+        {
+          "technique": "decay-and-forgetting",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/session/learners.ts:302 Saving enforces memory retention by deleting the oldest strings, without value-based demotion, archival or tombstones."
+        },
+        {
+          "technique": "durable-store-failure-posture",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/session/learners.ts:141 Although writers refuse an unreadable book and readLearner offers a strict alternative, getLearner uses this fallback and cannot distinguish corruption from empty memory."
+        }
+      ]
+    },
+    "tooling/uat/test-harness": {
+      "context": "uat",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:43:46.437Z",
+      "techniques": [
+        {
+          "technique": "context-starved-executor",
+          "verdict": "deviation",
+          "evidence": "uat/driver/linga-text.cjs:517 The driver automatically synthesizes missing placement/plan state instead of declaring unmet preconditions in machine-readable form and refusing to run, and uses a four-member outcome vocabulary without an inconclusive member."
+        },
+        {
+          "technique": "live-app-harness",
+          "verdict": "deviation",
+          "evidence": "uat/README.md:15 The live-app harness (L2) driving real running browser instances of TV and phone surfaces is unbuilt and marked 'not scaffolded yet', leaving Linga UAT entirely on simulated in-process renders."
+        },
+        {
+          "technique": "history-driven-partitioning",
+          "verdict": "deviation",
+          "evidence": "uat/driver/linga-text.cjs:272 Parallel Character worker execution assigns tasks via an unweighted dynamic index queue without longest-first bin-packing based on retained timing history."
+        },
+        {
+          "technique": "recorded-interaction-fixtures",
+          "verdict": "deviation",
+          "evidence": "uat/driver/linga-text.cjs:43 All model exchanges invoke the live Claude CLI process directly on each run without a record/playback fixture mechanism to capture and replay remote interactions."
+        },
+        {
+          "technique": "derived-selection-must-be-measured",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:189 The driver validates requested journey selection against parsed journey definitions and throws if unknown, preventing the runner from selecting zero tests and exiting green."
+        },
+        {
+          "technique": "platform-quirk-absorption",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:46 The runner intercepts incompatible environment configurations before child processes launch and converts them to clear actionable diagnoses."
+        },
+        {
+          "technique": "suite-partitioning",
+          "verdict": "conformant",
+          "evidence": "uat/README.md:14 Linga UAT explicitly partitions tests into separate tiers (L1 theoretical, LT text-live, L2 empirical) with distinct runtimes, engines, and concurrency policies."
+        },
+        {
+          "technique": "flake-lifecycle",
+          "verdict": "conformant",
+          "evidence": "uat/driver/ledger.cjs:17 The ledger chains recurring findings across runs and measures how many runs passed each open gap by unasked to track debt aging."
+        },
+        {
+          "technique": "isolation-lanes",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:262 Child processes run with dedicated, per-Character DESK_DATA_DIR paths and sanitized environment variables to isolate state."
+        },
+        {
+          "technique": "out-of-graph-artifacts",
+          "verdict": "conformant",
+          "evidence": "uat/README.md:5 The driver isolates modules into subdirectories so that uninstrumented artifacts from Essay and Math modules do not break Linga's driver."
+        },
+        {
+          "technique": "pin-the-call-not-the-name",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:52 The driver extracts metadata blocks directly from markdown files via structured regular expressions without loading executable modules."
+        },
+        {
+          "technique": "negative-control-tests",
+          "verdict": "conformant",
+          "evidence": "uat/driver/recertify.cjs:149 Recertification verifies that outcome changes on an unchanged product are classified as noise rather than valid regressions."
+        }
+      ],
+      "withdrawn": {
+        "worker": "0db426a7-e35b-4f35-9df2-34c2cd3dc840",
+        "state": "deviation",
+        "at": "2026-10-15T00:44:14.541633+00:00",
+        "reason": "reviewer (sonnet): The 'four-member outcome vocabulary without an inconclusive member' claim could not be confirmed: verdict.cjs yields pass/conditional/fail, with per-item and recertify 'not-evaluable'/'uncertain' states that act as inconclusive, and the cited line 517 records its synthesized state as an explicit 'fi"
+      }
+    },
+    "desk-platform/engines/voice-io": {
+      "context": "engines",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:14:47.550Z",
+      "worker": "9edc4e26-0b60-459c-a453-7db22a1802a5",
+      "techniques": [
+        {
+          "technique": "engine-abstraction",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/types.ts:36 Provider interface declares name, run, and probe, but omits queryable engine capabilities and retired-engine normalization; downstream route branches directly on provider name prefix."
+        },
+        {
+          "technique": "real-time-synthesis-budget",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/voice.ts:48 piperSpeak spawns a new piper process per utterance instead of maintaining a resident daemon, paying CLI startup and model reload cost on every synthesis call."
+        },
+        {
+          "technique": "portable-provider-package",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/voice.ts:32 Engines directly read process.env instead of using an engine host seam or standard discovery conventions."
+        },
+        {
+          "technique": "render-acceptance",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/voice.ts:61 Audio payload is returned without inspecting for internal silence, empty headers, or corrupt audio buffers."
+        },
+        {
+          "technique": "speech-ready-text",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/types.ts:17 SpeakRequest passes raw text to synthesis without normalising markdown, suppressing code blocks, or expanding spoken abbreviations."
+        },
+        {
+          "technique": "decode-time-vocabulary-biasing",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/listen.ts:48 Listen request passes raw audio without phrase biasing or vocabulary hints even when context vocabulary is known."
+        },
+        {
+          "technique": "on-device-vs-cloud",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/engines/listen.ts:9 Defaults to local on-device transcription, requiring explicit environment configuration for cloud services with no silent fallback."
+        }
+      ],
+      "registryProposal": "Clarify in engine-abstraction how resident process lifecycles (like CLI TTS binaries) should be managed within generic stateless provider contracts."
+    },
+    "desk-linga/linga/voice-io": {
+      "context": "linga",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:14:47.550Z",
+      "worker": "9edc4e26-0b60-459c-a453-7db22a1802a5",
+      "techniques": [
+        {
+          "technique": "stt-pipeline",
+          "verdict": "deviation",
+          "evidence": "desk/src/english/ReplyBox.tsx:61 Interim recognition results are joined directly into draft text rather than displayed provisionally, and capture lacks live audio level metering."
+        },
+        {
+          "technique": "tts-pipeline",
+          "verdict": "deviation",
+          "evidence": "desk/src/english/useEnglishAudio.ts:28 Audio synthesis fetches entire unsegmented sentences; fallback to browser speech synthesis masks failure behind the same speaking state."
+        },
+        {
+          "technique": "engine-abstraction",
+          "verdict": "deviation",
+          "evidence": "desk/src/english/useEnglishAudio.ts:20 Frontend code directly references browser window.speechSynthesis rather than abstracting it behind a unified audio provider seam."
+        },
+        {
+          "technique": "voice-ux-integration",
+          "verdict": "conformant",
+          "evidence": "desk/src/english/useEnglishAudio.ts:29 Speech playback promptly cancels and revokes audio resources on component cleanup, pause, or screen navigation."
+        },
+        {
+          "technique": "transcript-normalization",
+          "verdict": "conformant",
+          "evidence": "desk/src/english/ReplyBox.tsx:70 Transcribed draft is handed directly to the conversational agent without destructive intermediate normalizer rewrites."
+        },
+        {
+          "technique": "on-device-vs-cloud",
+          "verdict": "conformant",
+          "evidence": "desk/src/english/ReplyBox.tsx:73 Explicit privacy notice informs the user that the browser may send speech to a remote recognition service prior to initiating capture."
+        },
+        {
+          "technique": "speech-ready-text",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/english/conversation.ts:92 Tutor prompts strictly mandate plain English without markdown formatting and limit output to 1-2 short sentences for optimal synthesis readiness."
+        }
+      ],
+      "registryProposal": "Document how educational language learning interfaces should handle student speech review workflows alongside real-time level metering."
+    },
+    "desk-platform/engines/quality-gates": {
+      "context": "engines",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:50:47.392Z",
+      "techniques": [
+        {
+          "technique": "chokepoint-tag-registry",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/registry.ts:2 The registry module acts as the designated provider selection seam, but the codebase defines no inline callsite tags, no tag registry mapping callers to authorized providers, and no static negative-space lint or gate to forbid direct external imports or child process executions outside engines/."
+        },
+        {
+          "technique": "refusal-names-a-reachable-remedy",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/engines/vision.ts:29 Probe failure provides an exact actionable command remedy for operator recovery."
+        },
+        {
+          "technique": "unmeasurable-criteria",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/engines/health.ts:58 Evaluates health as ok: null when no probe is registered, explicitly avoiding false positive or negative assumptions."
+        },
+        {
+          "technique": "blocking-by-input-determinism",
+          "verdict": "conformant",
+          "evidence": "tools/engines-rules-test.cjs:3 Tests execute deterministically by stubbing engine responses through the registry without calling external CLIs or network models."
+        },
+        {
+          "technique": "unparseable-form-is-a-finding",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/engines/shape.ts:77 Unparseable model output immediately converts to a typed EngineError shape violation rather than passing or falling back."
+        }
+      ],
+      "withdrawn": {
+        "worker": "1f1a3d22-d0b0-4676-8d5c-d62529fe5846",
+        "state": "deviation",
+        "at": "2026-10-15T01:51:13.811706+00:00",
+        "reason": "reviewer (sonnet): The evidence depends on a `callEngine` seam that grep finds nowhere in desk/src or tools, and the absence of any repo-wide negative-space gate is unconfirmed: registry.ts:2 is only a doc comment, and engines-rules-test.cjs has a spawn-count case and 'sweep' cases I did not trace."
+      }
+    },
+    "tooling/uat/quality-gates": {
+      "context": "uat",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "conformant",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:50:47.392Z",
+      "worker": "1f1a3d22-d0b0-4676-8d5c-d62529fe5846",
+      "techniques": [
+        {
+          "technique": "self-reported-gate-inputs",
+          "verdict": "conformant",
+          "evidence": "uat/driver/verdict.cjs:109 The journey verdict is calculated strictly in code by verdictOf from row answers and metric gates rather than accepting the judge's self-reported verdict; the judge's verdict is tracked separately in judgeVerdict."
+        },
+        {
+          "technique": "unmeasurable-criteria",
+          "verdict": "conformant",
+          "evidence": "uat/driver/verdict.cjs:93 When a metric denominator is zero or counts are missing, the gate evaluates to conditional: nothing counted rather than silently passing or falsely failing."
+        },
+        {
+          "technique": "policy-projection",
+          "verdict": "conformant",
+          "evidence": "uat/driver/metrics.cjs:2 The metric registry acts as the single source of truth from which the judge schema, journey gates, before/after delta comparisons, and report sections are projected."
+        },
+        {
+          "technique": "waiver-names-its-finding",
+          "verdict": "conformant",
+          "evidence": "uat/accepted-gaps.md:7 Standing waivers AG-1 through AG-5 explicitly identify the finding class, rationale, and specific ceiling bounds."
+        },
+        {
+          "technique": "item-liveness",
+          "verdict": "conformant",
+          "evidence": "uat/driver/ledger.cjs:18 Open findings across runs track unasked occurrences, ensuring unaddressed quality gaps age visibly rather than quietly dropping out of view."
+        },
+        {
+          "technique": "shared-substrate-check-partition",
+          "verdict": "conformant",
+          "evidence": "uat/accepted-gaps.md:10 Explicitly partitions what the text-live LT simulation substrate can evaluate from concerns requiring L2 device hardware evaluation."
+        },
+        {
+          "technique": "advancement-evidence-fields",
+          "verdict": "conformant",
+          "evidence": "uat/driver/recertify.cjs:193 Advancement of a finding from open to fixed requires stamping recertify_run, recertify_status, and recertify_evidence."
+        },
+        {
+          "technique": "refusal-names-a-reachable-remedy",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:46 The preflight check refusing the codex engine provides the exact remedy command: unset it and run again."
+        },
+        {
+          "technique": "blocking-by-input-determinism",
+          "verdict": "conformant",
+          "evidence": "tools/uat-verdict-test.cjs:9 Verdict tests execute deterministically against committed fixtures without model or network calls."
+        },
+        {
+          "technique": "gate-laddering",
+          "verdict": "conformant",
+          "evidence": "uat/driver/recertify.cjs:2 Recertification ladders checks by executing only affected character x journey pairs before escalating to broader runs."
+        },
+        {
+          "technique": "oracle-frozen-during-repair",
+          "verdict": "conformant",
+          "evidence": "uat/driver/recertify.cjs:13 Recertification evaluates against identical code verdict criteria, preventing regression thresholds from drifting during repair."
+        },
+        {
+          "technique": "decidable-in-a-window",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:69 Screens presented to the judge are capped at 8000 characters per step, ensuring the decision evaluation window remains finite and bounded."
+        },
+        {
+          "technique": "severity-by-construction",
+          "verdict": "conformant",
+          "evidence": "uat/driver/verdict.cjs:142 Verdict severity is constructed hierarchically from component reasons, mapping any critical check failure directly to fail."
+        },
+        {
+          "technique": "instrument-answers-only-its-own-question",
+          "verdict": "conformant",
+          "evidence": "uat/driver/metrics.cjs:17 Informative metrics like recall are explicitly flagged informative: true and excluded from gating regressions."
+        },
+        {
+          "technique": "prose-rule-drift",
+          "verdict": "conformant",
+          "evidence": "tools/uat-metrics-test.cjs:112 Test verifies bidirectional consistency between rubric prose rows in rubric.md and code metrics in metrics.cjs."
+        },
+        {
+          "technique": "match-the-resolved-artifact",
+          "verdict": "conformant",
+          "evidence": "uat/driver/surface.cjs:6 The driver inspects server-rendered HTML output from react-dom/server rather than regex-matching raw React source components."
+        },
+        {
+          "technique": "gate-liveness",
+          "verdict": "conformant",
+          "evidence": "tools/uat-metrics-test.cjs:117 Asserts that invoking invalid journey names fails immediately during argument parsing rather than exiting 0 vacuously."
+        }
+      ]
+    },
+    "desk-surfaces/tv-surface/docs-sync": {
+      "context": "tv-surface",
+      "subject": "docs-sync",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T02:24:19.618Z",
+      "techniques": [
+        {
+          "technique": "cross-repo-drift-detection",
+          "verdict": "not-applicable",
+          "evidence": "docs/STUDY-DESK-SCREENS.md:15 This inventory and the implementation it describes reside in the same repository."
+        },
+        {
+          "technique": "doc-rot-detection",
+          "verdict": "deviation",
+          "evidence": "docs/STUDY-DESK-SCREENS.md:13 Counting the quoted members of desk/src/lib/session/store.ts:37 yields 40; the documented count does not reproduce, and no general documentation freshness checker was located."
+        }
+      ],
+      "withdrawn": {
+        "worker": "e37bfe63-9d8a-4fef-a408-a373b407379d",
+        "state": "deviation",
+        "at": "2026-10-15T02:24:57.120830+00:00",
+        "reason": "reviewer (sonnet): The count mismatch is real (the Screen union has 40 members, the doc says 38 and points at store.ts:23 when the union is at line 37), but docs/STUDY-DESK-SCREENS.md and desk/src/lib/session/store.ts are not among tv-surface's context files, so the verdict is about a repo-wide doc and shared lib rath"
+      }
+    },
+    "desk-surfaces/landing/docs-sync": {
+      "context": "landing",
+      "subject": "docs-sync",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T02:24:19.618Z",
+      "worker": "e37bfe63-9d8a-4fef-a408-a373b407379d",
+      "techniques": [
+        {
+          "technique": "cross-repo-drift-detection",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/landing/LandingTV.tsx:3 The component explicitly identifies its design document within this repository."
+        },
+        {
+          "technique": "doc-rot-detection",
+          "verdict": "deviation",
+          "evidence": "context-map.json:194 desk/src/design/desk-landing.css:2 identifies Small Worlds, and docs/DESIGN-STUDY-DESK.md:3 explicitly records replacing Left on the Desk on 2026-09-29; this context description remains stale."
+        }
+      ]
+    },
+    "desk-surfaces/phone-surface/docs-sync": {
+      "context": "phone-surface",
+      "subject": "docs-sync",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T02:24:19.618Z",
+      "worker": "e37bfe63-9d8a-4fef-a408-a373b407379d",
+      "techniques": [
+        {
+          "technique": "cross-repo-drift-detection",
+          "verdict": "not-applicable",
+          "evidence": "docs/STUDY-DESK-SCREENS.md:18 The phone documentation and its named implementations are in the same repository."
+        },
+        {
+          "technique": "doc-rot-detection",
+          "verdict": "deviation",
+          "evidence": "desk/src/app/phone/page.tsx:74 Lines 266 and 271 join all paragraphs and send text: whole with keep: keepIt; lines 697-698 expose keeping and reading the whole piece, contradicting this unqualified comment."
+        }
+      ]
+    },
+    "desk-surfaces/tv-surface/table": {
+      "context": "tv-surface",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T02:50:57.526Z",
+      "worker": "79a625b6-61c2-482f-a836-c44302b90ddb",
+      "techniques": [
+        {
+          "technique": "clipboard-range-round-trip",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/keys.ts:464 Table mode navigates and opens sentences; searches found no cell-range clipboard implementation."
+        },
+        {
+          "technique": "compressed-scroll-space",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/EssayTV.tsx:472 A six-row focus window is rendered without a dataset-height scroll spacer."
+        },
+        {
+          "technique": "export-escapes-for-its-consumer",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/EssayTV.tsx:497 The table offers sentence navigation; searches found no CSV export path."
+        },
+        {
+          "technique": "filtering",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/EssayTV.tsx:473 The table displays a positional paragraph slice and exposes no filtering controls or predicate."
+        },
+        {
+          "technique": "grid-keyboard-model",
+          "verdict": "deviation",
+          "evidence": "desk/src/essay/EssayTV.tsx:481 Read-only comparative columns use div/span markup instead of native table semantics or an equivalent accessible grid."
+        },
+        {
+          "technique": "one-door-for-range-writes",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/EssayTV.tsx:489 Sentence cells render read-only text; the table has no paste, fill, cut, or clear writer."
+        },
+        {
+          "technique": "performance",
+          "verdict": "deviation",
+          "evidence": "desk/src/essay/EssayTV.tsx:485 Only six rows mount, but Table declares neither semantic total row/column counts nor full-set row/cell positions required for windowed tables."
+        }
+      ]
+    },
+    "desk-surfaces/landing/table": {
+      "context": "landing",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T02:50:57.526Z",
+      "worker": "79a625b6-61c2-482f-a836-c44302b90ddb",
+      "techniques": []
+    },
+    "telestrator/pen-core/translation-pipeline-topology": {
+      "context": "pen-core",
+      "subject": "translation-pipeline-topology",
+      "bundle": "localization",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:13:35.245Z",
+      "worker": "220cfc2b-a27c-4641-9e31-66836d079f00",
+      "techniques": [
+        {
+          "technique": "canonical-and-derived-split",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Annotation.kt:99 The serialized artifact is an annotation document; no machine-translated artifact store was identified."
+        },
+        {
+          "technique": "canonical-fallback-serving",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Timeline.kt:10 Content selection is by annotation visibility time, without a translated-unit serving path."
+        },
+        {
+          "technique": "fuzzy-reuse-under-a-threshold",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:32 Stored history consists of editing operations, without translation-memory matching."
+        },
+        {
+          "technique": "hand-authored-exception-contract",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:240 User-provided annotation labels are retained directly; no human-authored exceptions to machine translation were identified."
+        },
+        {
+          "technique": "language-registry-single-source",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:13 The inspected connection contract identifies a pen and PIN, without a translation target or language selection."
+        },
+        {
+          "technique": "non-translatable-value-classification",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:230 This is annotation-label handling, without catalog values being dispatched to a translation engine."
+        },
+        {
+          "technique": "prompt-context-contract",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:98 The engine consumes pen messages and media time; no machine-translation request was identified."
+        },
+        {
+          "technique": "pseudo-localization-readiness",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Smoothing.kt:21 This scoped processing library supplies geometry rather than a product localization-readiness surface."
+        },
+        {
+          "technique": "serialization-transport-safety",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:167 The deserialized payload is a pen message, outside the technique's batch-translation precondition."
+        },
+        {
+          "technique": "sharded-translation-ci",
+          "verdict": "not-applicable",
+          "evidence": "core/build.gradle.kts:20 The inspected build input supports companion contract tests; no corpus translation workload was identified."
+        },
+        {
+          "technique": "source-hash-translation-cache",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:302 Document reuse tracks an annotation instance for heartbeat publication, without cached translations."
+        },
+        {
+          "technique": "source-identical-value-audit",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Annotation.kt:102 The decoded data is an annotation document; no committed target-language catalog was identified."
+        }
+      ]
+    },
+    "telestrator/tv-app/translation-pipeline-topology": {
+      "context": "tv-app",
+      "subject": "translation-pipeline-topology",
+      "bundle": "localization",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:13:35.245Z",
+      "techniques": [
+        {
+          "technique": "canonical-and-derived-split",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/build.gradle.kts:100 The build copies companion assets; no machine-translated output was identified."
+        },
+        {
+          "technique": "canonical-fallback-serving",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/transport/LanTransport.kt:115 The route serves the loaded HTML directly, without selecting translated units."
+        },
+        {
+          "technique": "fuzzy-reuse-under-a-threshold",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/Overlay.kt:227 Reuse concerns stroke geometry keyed by annotation ID, without translation memory."
+        },
+        {
+          "technique": "hand-authored-exception-contract",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/Overlay.kt:184 The overlay draws supplied annotation labels; no hand-authored translated-page exceptions were identified."
+        },
+        {
+          "technique": "language-registry-single-source",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:109 The inspected runtime selection chooses a pen transport; no supported-language switcher or translation matrix was found."
+        },
+        {
+          "technique": "non-translatable-value-classification",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/Qr.kt:17 Pairing content is encoded as a QR code, without dispatching catalog values to a translation engine."
+        },
+        {
+          "technique": "prompt-context-contract",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:107 Received text enters the pen conversation; no machine-translation request was identified."
+        },
+        {
+          "technique": "pseudo-localization-readiness",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/Overlay.kt:26 The inspected rendering path displays annotation data; no localization-readiness undertaking or translated build was identified."
+        },
+        {
+          "technique": "serialization-transport-safety",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/transport/PenTransport.kt:100 This transport carries pen protocol frames, outside the batch machine-translation precondition."
+        },
+        {
+          "technique": "sharded-translation-ci",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/build.gradle.kts:99 The inspected asset-generation task copies bundled files; no translation corpus job was identified."
+        },
+        {
+          "technique": "source-hash-translation-cache",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/Thumbnailer.kt:39 The cache identifies video thumbnails by playback time, without storing translations."
+        },
+        {
+          "technique": "source-identical-value-audit",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/res/values/strings.xml:3 Resource enumeration found only the default values directory, with no target-language catalogs to compare."
+        }
+      ],
+      "withdrawn": {
+        "worker": "220cfc2b-a27c-4641-9e31-66836d079f00",
+        "state": "not-applicable",
+        "at": "2026-10-15T03:14:01.027358+00:00",
+        "reason": "reviewer (sonnet): The anchor LanTransport.kt:79 is the pairingUrl line and does not itself show the absence of a translation pipeline; the serving claim rests on neighbouring lines and the technique anchors are incidental (a Copy task, stroke-cache reuse, label drawing)."
+      }
+    },
+    "desk-subjects/math-buddy/translation-pipeline-topology": {
+      "context": "math-buddy",
+      "subject": "translation-pipeline-topology",
+      "bundle": "localization",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:13:35.245Z",
+      "techniques": [
+        {
+          "technique": "canonical-and-derived-split",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathText.tsx:201 The component consumes supplied text directly; no machine-translated artifact storage was identified."
+        },
+        {
+          "technique": "canonical-fallback-serving",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathText.tsx:174 The fallback preserves raw text after a rendering failure; it does not resolve missing translated units."
+        },
+        {
+          "technique": "fuzzy-reuse-under-a-threshold",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/working.ts:49 Checks validate mathematical working; no translation-memory matches are reused."
+        },
+        {
+          "technique": "hand-authored-exception-contract",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/sheetRows.ts:52 These are inline source captions, without a hand-authored translated-page exception pipeline."
+        },
+        {
+          "technique": "language-registry-single-source",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathsTV.tsx:48 The enumerated choices are screens and lighting modes; no language-offer surface or translation build matrix was identified."
+        },
+        {
+          "technique": "non-translatable-value-classification",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathText.tsx:61 Text nodes are rendered as supplied, without being sent to a translation engine."
+        },
+        {
+          "technique": "prompt-context-contract",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathsTV.tsx:45 The scoped UI receives session state; no machine-translation request construction was identified."
+        },
+        {
+          "technique": "pseudo-localization-readiness",
+          "verdict": "not-applicable",
+          "evidence": "tools/maths-type-test.cjs:6 The inspected tests exercise mathematical typesetting; no translation-readiness work or translated build was identified."
+        },
+        {
+          "technique": "serialization-transport-safety",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/typeset.ts:484 Delimiter handling here parses mathematical notation, without a batch translation wire format."
+        },
+        {
+          "technique": "sharded-translation-ci",
+          "verdict": "not-applicable",
+          "evidence": "tools/tv-sheet-test.cjs:5 The scoped test workload checks sheet behavior; no corpus translation job was identified."
+        },
+        {
+          "technique": "source-hash-translation-cache",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/mathsRows.ts:26 Page selection uses current session homework, without a source-hashed translation store."
+        },
+        {
+          "technique": "source-identical-value-audit",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/mathsRows.ts:121 The inspected captions are inline source text; no target-language catalogs were identified in this context."
+        }
+      ],
+      "withdrawn": {
+        "worker": "220cfc2b-a27c-4641-9e31-66836d079f00",
+        "state": "not-applicable",
+        "at": "2026-10-15T03:14:01.039938+00:00",
+        "reason": "reviewer (sonnet): The anchor MathText.tsx:203 is just the raw-text/try line of a typesetting component and does not show a translation pipeline is absent; the technique anchors (working.ts tick logic, sheetRows.ts English caption) are incidental, and the caption is a hard-coded English string."
+      }
+    },
+    "telestrator/pen-core/agent-cli-transport": {
+      "context": "pen-core",
+      "subject": "agent-cli-transport",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:35:11.841Z",
+      "worker": "8e15b9b8-c5f1-428f-aad6-9ac98a400578",
+      "techniques": [
+        {
+          "technique": "availability-probe",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:7 The conversation consumes values and emits effects; no agent binary is selected or probed."
+        },
+        {
+          "technique": "child-observed-posture",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:31 This engine transforms pen input into annotations; the negative searches found no agent child whose posture it must verify."
+        },
+        {
+          "technique": "dated-capability-matrix",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:7 The protocol describes phone messages, not version-dependent agent CLI capabilities."
+        },
+        {
+          "technique": "fallback-ladder",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:41 Transport commands control media playback; there is no optional agent transport to replace."
+        },
+        {
+          "technique": "host-routed-approval-round-trip",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:163 The admission decision checks a pen pairing PIN, not a child's tool approval request."
+        },
+        {
+          "technique": "output-normalization",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:167 Parsing decodes pen messages rather than agent answer envelopes."
+        },
+        {
+          "technique": "permission-stance-enforcement",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:100 The operation applies drawing input, without a repository-scanning or editing agent."
+        },
+        {
+          "technique": "subscription-auth-selection",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:73 Authentication concerns phone pairing, without provider credentials or child billing."
+        },
+        {
+          "technique": "thread-custody-across-resume",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:195 The session identifier denotes a pen pairing generation, not a resumable agent thread."
+        }
+      ]
+    },
+    "desk-platform/engines/agent-cli-transport": {
+      "context": "engines",
+      "subject": "agent-cli-transport",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:35:11.841Z",
+      "worker": "8e15b9b8-c5f1-428f-aad6-9ac98a400578",
+      "techniques": [
+        {
+          "technique": "availability-probe",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/text.ts:108 Both CLI probes check filesystem presence without executing a version command or establishing authorization in the run environment."
+        },
+        {
+          "technique": "child-observed-posture",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/codex.ts:57 Codex discards its event output and performs no child-observed check that the requested sandbox is in force; the inspected tests do not verify that posture."
+        },
+        {
+          "technique": "dated-capability-matrix",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/codex.ts:48 Schema support and its invocation are hardcoded without consulting versioned capability data carrying verification dates and methods."
+        },
+        {
+          "technique": "fallback-ladder",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/call.ts:20 Claude has no provider floor, so timeoutMs: 0 yields an immediate deadline and NaN remains NaN instead of being floored to a sane minimum."
+        },
+        {
+          "technique": "host-routed-approval-round-trip",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/text.ts:67 The attended Claude surface removes native tools; the Codex adapter serves unattended UAT generation, so no attended native approval loop is present."
+        },
+        {
+          "technique": "output-normalization",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/text.ts:54 The CLI's error subtype becomes prose inside a generic exit error rather than a typed classification callers can branch on."
+        },
+        {
+          "technique": "permission-stance-enforcement",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/text.ts:65 These adapters expose answer-generation calls in temporary working directories, without a workspace scan or unattended editing seam."
+        },
+        {
+          "technique": "subscription-auth-selection",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/text.ts:33 Environment construction preserves all host credentials and session markers; Codex likewise spawns without an explicit child environment."
+        },
+        {
+          "technique": "thread-custody-across-resume",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/codex.ts:46 Codex uses ephemeral calls and Claude disables session persistence; neither adapter stores an identifier for resume."
+        }
+      ]
+    },
+    "telestrator/tv-app/agent-cli-transport": {
+      "context": "tv-app",
+      "subject": "agent-cli-transport",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:35:11.841Z",
+      "worker": "8e15b9b8-c5f1-428f-aad6-9ac98a400578",
+      "techniques": [
+        {
+          "technique": "availability-probe",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/transport/LanTransport.kt:36 The availability check concerns a listening port, without an agent binary or login."
+        },
+        {
+          "technique": "child-observed-posture",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:28 The host drives network messages and effects; no agent child was found."
+        },
+        {
+          "technique": "dated-capability-matrix",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:109 The transport setting chooses a pen network transport, without encoding CLI capabilities."
+        },
+        {
+          "technique": "fallback-ladder",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:111 LAN and relay are phone connectivity choices, not alternative model providers."
+        },
+        {
+          "technique": "host-routed-approval-round-trip",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:58 Refusals concern pen pairing, without child tool requests needing human decisions."
+        },
+        {
+          "technique": "output-normalization",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/transport/PenTransport.kt:100 The input channel reads WebSocket text frames, not CLI answer envelopes."
+        },
+        {
+          "technique": "permission-stance-enforcement",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:219 Edits modify annotations through the session rather than granting an agent workspace access."
+        },
+        {
+          "technique": "subscription-auth-selection",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:41 The credentials bind a phone to the TV; there is no agent billing environment."
+        },
+        {
+          "technique": "thread-custody-across-resume",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:47 Opening creates a pen protocol conversation, without restoring a child-owned model thread."
+        }
+      ]
+    },
+    "desk-platform/session/agent-runtime-assembly": {
+      "context": "session",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T04:16:35.570Z",
+      "worker": "8b789f75-3938-48f4-84c6-4371962d524d",
+      "techniques": [
+        {
+          "technique": "indeterminate-closure-on-interruption",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/session/store.ts:241 Interrupted runs are closed as failed with a prose error string (INTERRUPTED) rather than a first-class indeterminate status."
+        }
+      ]
+    }
+  }
+}

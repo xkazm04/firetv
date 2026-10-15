@@ -4,6 +4,7 @@
  * a first-class answer (lessons §7: a menu tends to get something picked).
  */
 import { text } from "../engines/text";
+import { assemble, data, say } from "../prompt/assemble";
 import { LESSONS, bestWindow, type Lesson } from "../library/lessons";
 import { readQuestion } from "../rules/kinds";
 import { leaksLine, type Specs } from "./hint";
@@ -27,11 +28,15 @@ function checkedWhy(subject: Subject, problem: string, l: Lesson, why: string, s
 
 export async function pickLesson(subject: Subject, problem: string, system?: SchoolSystem): Promise<LessonPick | null> {
   const menu = LESSONS.filter((l) => l.subject === subject).map((l) => `- ${l.id}: ${l.title} — teaches: ${l.concepts.join(", ")}`).join("\n");
-  const { json } = await text<{ lesson: string; why: string }>({
-    system: "You match a student's problem to the one lesson in a small library that teaches the method it needs. Most problems are NOT covered by a small library — if none of the lessons teaches the required method, answer exactly 'none'. A wrong lesson wastes the student's time; 'none' does not.",
-    prompt: `Problem:\n${problem}\n\nLessons:\n${menu}\n\nAnswer with the lesson id (or 'none') and one sentence saying why, phrased for the student: "chosen because your problem needs …".`,
-    schema: SCHEMA, model: "fast", use: "lesson-pick",
+  const asked = assemble("lesson-pick", {
+    system: [say("stance", "You match a student's problem to the one lesson in a small library that teaches the method it needs. Most problems are NOT covered by a small library — if none of the lessons teaches the required method, answer exactly 'none'. A wrong lesson wastes the student's time; 'none' does not.")],
+    prompt: [
+      data("problem", "Problem", problem),
+      say("menu", `Lessons:\n${menu}`),
+      say("ask", `Answer with the lesson id (or 'none') and one sentence saying why, phrased for the student: "chosen because your problem needs …".`),
+    ],
   });
+  const { json } = await text<{ lesson: string; why: string }>({ ...asked, schema: SCHEMA, model: "fast", use: "lesson-pick" });
   // only an id from the menu that was offered counts: 'none', another subject's id and a non-string are no lesson
   const offered = LESSONS.filter((x) => x.subject === subject);
   const l = typeof json.lesson === "string" ? offered.find((x) => x.id === json.lesson.trim()) : undefined;

@@ -57,6 +57,47 @@ test('case b: a throwing provider is ok false / exit; a provider past its timeou
  assert(!fs.readFileSync(LEDGER,'utf8').includes('boom'));
 });
 
+// ---- architect 2026-10-15 (model-call-outcome-integrity): what a finished call may claim about itself
+const USE={tokens:{input:10,output:20,cacheRead:null,cacheWrite:null},notionalUsd:0.002};
+test('case b2: an answer outside the schema is booked as shape with the spend it cost, never as ok',async()=>{
+ stub('stub','Sure! Here is prose.',{usage:USE});
+ await assert.rejects(()=>text({system:'s',prompt:'p',schema:{type:'object',properties:{hint:{type:'string'}},required:['hint']},use:'hint'}),(e)=>e instanceof EngineError&&e.kind==='shape');
+ const r=rows();assert.equal(r.length,1);
+ assert.deepEqual([r[0].ok,r[0].error,r[0].use],[false,'shape','hint']);
+ assert.deepEqual(r[0].tokens,USE.tokens,'the failed answer was still paid for, and the row says what it cost');
+});
+test('case b3: a provider that fails after reporting its usage has that usage on the failure row (spend precedes the error)',async()=>{
+ reg.useProvider('text',{name:'stub',run:async()=>{const e=new EngineError('exit','stub','exited 1');e.usage=USE;throw e;}});
+ await assert.rejects(()=>text({system:'s',prompt:'p',use:'hint'}),(e)=>e.kind==='exit');
+ const [r]=rows();assert.deepEqual([r.ok,r.error],[false,'exit']);assert.deepEqual(r.tokens,USE.tokens);
+});
+test('case b4: a cut-off or declined attempt is its own kind on the row and to the caller, never shape',async()=>{
+ for(const kind of ['cutoff','declined']){
+  fs.rmSync(LEDGER,{force:true});
+  reg.useProvider('text',{name:'stub',run:async()=>{const e=new EngineError(kind,'stub','stopped');e.usage=USE;throw e;}});
+  await assert.rejects(()=>text({system:'s',prompt:'p',schema:{type:'object'},use:'hint'}),(e)=>e instanceof EngineError&&e.kind===kind);
+  const [r]=rows();assert.deepEqual([r.ok,r.error],[false,kind]);assert.deepEqual(r.tokens,USE.tokens);
+ }
+});
+test('case b5: the claude envelope is read for why the turn ended before its answer is',()=>{
+ const {stopOf}=load('engines/text.ts');
+ assert.deepEqual(stopOf({stop_reason:'end_turn'}),null);assert.deepEqual(stopOf({stop_reason:'stop_sequence'}),null);
+ assert.equal(stopOf({stop_reason:'max_tokens'}).kind,'cutoff');
+ assert.equal(stopOf({stop_reason:'refusal'}).kind,'declined');
+ assert.equal(stopOf({is_error:true,subtype:'error_during_execution'}).kind,'exit');
+ assert.match(stopOf({is_error:true,subtype:'error_during_execution'}).why,/error_during_execution/);
+});
+test('case b7: the sentence of a failed run says what failed and why, never what to do: no surface has to cut an action out of it',()=>{
+ const {jobError}=load('desk/job.ts');
+ assert.equal(jobError('mark',new Error('boom')),'The desk could not mark the set.');
+ for(const k of ['timeout','unreachable','exit','shape','cutoff','declined'])assert.doesNotMatch(jobError('mark',new EngineError(k,'stub','x')),/Try again/i,k);
+});
+test('case b6: the job and smoke copy name every kind, and a cut-off is never worded as an answer in pieces',()=>{
+ const {jobError}=load('desk/job.ts');
+ const cut=jobError('hint',new EngineError('cutoff','stub','x')),no=jobError('hint',new EngineError('declined','stub','x')),shape=jobError('hint',new EngineError('shape','stub','x'));
+ assert.notEqual(cut,shape);assert.notEqual(no,shape);assert.doesNotMatch(cut,/pieces/);assert.doesNotMatch(no,/pieces/);
+});
+
 test('case c: a shorten re-ask gives two rows, try 1 and try 2, with the same use',async()=>{
  let n=0;
  reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({hint:n++===0?'far too long a hint':'ok'})})});
@@ -147,6 +188,15 @@ test('case h: pickLesson, the hint ask, makeItems, markSet and the lessons embed
  assert(!fs.readFileSync(LEDGER,'utf8').includes('econ-mark'),'no learner id in the ledger');
 });
 
+test('case h2: a hint asked again for a leak leaves two hint rows, try 1 and try 2: the caller re-ask is booked as one turn',async()=>{
+ let n=0;
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify(n++===0?{hint:'So x = 6.',what_to_try_next:'Write x = 6.'}:{hint:'What undoes the minus 7?',what_to_try_next:'Write your answer under the line.'})})});
+ const {hint}=load('desk/hint.ts');
+ let got;const r=await rowsOf(async()=>{got=await hint('maths','Solve for x:  3x − 7 = 11',{});});
+ assert.equal(n,2,'the leak was asked again');assert.equal(got.hint,'What undoes the minus 7?');
+ assert.deepEqual(r.map((x)=>[x.use,x.try]),[['hint',1],['hint',2]]);
+});
+
 // ---- case i: the rest of the labelled call sites
 const src=(f)=>fs.readFileSync(path.join(root,'src',f),'utf8');
 
@@ -175,7 +225,7 @@ test('case i2: the explain functions, the Linga check ask and the speak route la
  const ex=src('lib/desk/explain.ts');
  assert.equal((ex.match(/use: 'explain'|use: "explain"/g)||[]).length,3);
  assert.equal((ex.match(/text<[^\n]*model: "best", use: "explain" \}\)/g)||[]).length,3,'each explain label sits inside a text request');
- assert(/text<Record<string, unknown>>\(\{[^\n]*use: "linga-check" \}\)/.test(src('lib/english/check.ts')),'check.ts ask: linga-check');
+ assert(/text<Record<string, unknown>>\(\{[^\n]*use: "linga-check" \}(, after)?\)/.test(src('lib/english/check.ts')),'check.ts ask: linga-check');
  assert(/speak\(\{ text: [^\n]*use: "speak" \}\)/.test(src('app/api/speak/route.ts')),'speak route: speak');
 });
 
@@ -183,8 +233,8 @@ test('case j: the Essay Master and Linga text calls label their call (EC1c)',()=
  const es=src('lib/desk/essay.ts'),cv=src('lib/english/conversation.ts');
  assert.equal((es.match(/use: "essay-read"/g)||[]).length,1);
  assert.equal((es.match(/use: "essay-revise"/g)||[]).length,1);
- assert(/schema: schemaFor\(lens\), model: "best", use: "essay-read",\s*\}\);/.test(es),'essay-read sits inside the judge request');
- assert(/schema: reviseSchema\(lens\), model: "best", use: "essay-revise",\s*\}\);/.test(es),'essay-revise sits inside the reviseSentence request');
+ assert(/schema: schemaFor\(lens\), model: "best", use: "essay-read",?\s*\}\);/.test(es),'essay-read sits inside the judge request');
+ assert(/schema: reviseSchema\(lens\), model: "best", use: "essay-revise",?\s*\}\);/.test(es),'essay-revise sits inside the reviseSentence request');
  for(const l of ['linga-take','linga-pitch','linga-opening','linga-cut'])assert.equal((cv.match(new RegExp('use:"'+l+'"','g'))||[]).length,1,l);
  assert.equal((cv.match(/use:action==="coach"\?"linga-coach":action==="replay"\?"linga-replay":"linga-turn"/g)||[]).length,1,'turn/coach/replay label');
  assert.equal((es.match(/await text</g)||[]).length,2);

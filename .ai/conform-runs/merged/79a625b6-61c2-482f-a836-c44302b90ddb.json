@@ -1,0 +1,110 @@
+{
+ "schema": "conform-run/1",
+ "worker": "79a625b6-61c2-482f-a836-c44302b90ddb",
+ "subject": "table",
+ "evaluatedAt": "2026-10-15T02:50:57.526600+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "tv-surface",
+   "subject": "table",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "desk/src/essay/EssayTV.tsx:481 The TV's paragraph comparison table renders visual column headers without table or grid semantics, leaving header associations unavailable to assistive technology.",
+   "techniques": [
+    {
+     "technique": "clipboard-range-round-trip",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/keys.ts:464 Table mode navigates and opens sentences; searches found no cell-range clipboard implementation."
+    },
+    {
+     "technique": "compressed-scroll-space",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/essay/EssayTV.tsx:472 A six-row focus window is rendered without a dataset-height scroll spacer."
+    },
+    {
+     "technique": "export-escapes-for-its-consumer",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/essay/EssayTV.tsx:497 The table offers sentence navigation; searches found no CSV export path."
+    },
+    {
+     "technique": "filtering",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/essay/EssayTV.tsx:473 The table displays a positional paragraph slice and exposes no filtering controls or predicate."
+    },
+    {
+     "technique": "grid-keyboard-model",
+     "verdict": "deviation",
+     "evidence": "desk/src/essay/EssayTV.tsx:481 Read-only comparative columns use div/span markup instead of native table semantics or an equivalent accessible grid."
+    },
+    {
+     "technique": "one-door-for-range-writes",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/essay/EssayTV.tsx:489 Sentence cells render read-only text; the table has no paste, fill, cut, or clear writer."
+    },
+    {
+     "technique": "performance",
+     "verdict": "deviation",
+     "evidence": "desk/src/essay/EssayTV.tsx:485 Only six rows mount, but Table declares neither semantic total row/column counts nor full-set row/cell positions required for windowed tables."
+    }
+   ]
+  },
+  {
+   "context": "landing",
+   "subject": "table",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "desk/src/landing/themes/paper/Paper.tsx:154 Context and repository searches located the landing's app shelf and captions, with no landing hits for the listed table terms, and its app-selection objects do not compare records across uniform columns.",
+   "techniques": [],
+   "absenceTerms": [
+    "<table",
+    "DataTable",
+    "gridcell",
+    "columnheader",
+    "aria-sort"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "table",
+   "context": "math-buddy",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-15T02:50:57.526600+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "table"
+   ],
+   "techniques": [
+    "clipboard-range-round-trip",
+    "compressed-scroll-space",
+    "export-escapes-for-its-consumer",
+    "filtering",
+    "grid-keyboard-model",
+    "one-door-for-range-writes",
+    "performance"
+   ],
+   "deviations": 1,
+   "context": "tv-surface",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-15T02:50:57.526600+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "table"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "landing",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

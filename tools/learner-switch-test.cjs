@@ -151,14 +151,37 @@ test('P7-a (b): a run that fails on an unreadable learners.json says one desk se
  const s=store.getSession();
  assert.equal(s.jobs.memory.phase,'failed');assert.equal(s.jobs.memory.error,store.LEARNER_UNREAD_RUN);assert.equal(s.status,store.LEARNER_UNREAD_RUN);
  assert.doesNotMatch(s.status,/Try again/);assert.equal(store.LEARNER_UNREAD_RUN,'The learner file could not be read just now, so this was not saved.');
+ assert.equal(s.jobs.memory.failure,'unread');assert.equal(s.jobs.memory.retry,false);
  assert.ok(fs.readFileSync(LJ()).equals(was),'learners.json is untouched');
  fs.rmSync(LJ(),{force:true});
 });
-test('P7-a (b): control, any other failure still says Try again',async()=>{
+test('P7-a (b): control, any other failure is its own sentence and is offered again (retry), where the unread one is not',async()=>{
  const job=require(src('lib/desk/job.ts'));
  store.dispatch({type:'reset'});
  const c=catchErrors();try{await job.runJob('memory',async()=>{throw new Error('boom');});}finally{c.done();}
- assert.match(store.getSession().jobs.memory.error,/Try again\.$/);
+ const m=store.getSession().jobs.memory;
+ assert.equal(m.error,'The desk could not write tonight down.');assert.notEqual(m.error,store.LEARNER_UNREAD_RUN);
+ // whether asking again can help is a value (failure.ts), not words in the sentence
+ assert.equal(m.failure,'unknown');assert.equal(m.retry,true);
+});
+test('P7-a (c): an unreadable record reaches a prompt as unavailable, never empty; a writer fails before its model call',async()=>{
+ const l=require(src('lib/session/learners.ts'));
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
+ truncatedBook();
+ const seen=[];answer=async(req)=>{seen.push(req.prompt);throw new Error('stub stops here');};
+ const c=catchErrors();
+ try{
+  await require(src('lib/desk/explain.ts')).explain('2x + 3 = 11','I took away three','linear-one-step','ema').catch(()=>{});
+  await require(src('lib/desk/items.ts')).makeItems('linear-one-step','ema',6).catch(()=>{});
+  assert(seen.length>=2,`both asked (${seen.length})`);
+  for(const p of seen){
+   assert.match(p,/could not be read just now/,'the record is said to be unavailable');
+   assert.doesNotMatch(p,/recorded no mistakes/,'never that there were none');
+  }
+  seen.length=0;
+  await assert.rejects(require(src('lib/desk/memory.ts')).writeMemory('ema',{topic:'linear-one-step',items:[]}),(e)=>e instanceof l.LearnersUnread);
+  assert.equal(seen.length,0,'the memory writer pays for no call it could not save');
+ }finally{c.done();fs.rmSync(LJ(),{force:true});}
 });
 
 // ---- robustness-1: a run writes its status line only while its learner is seated ----

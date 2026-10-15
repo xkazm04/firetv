@@ -12,14 +12,20 @@ import path from "node:path";
 export type JSONSchema = Record<string, unknown>;
 
 /** `schema` is what the model is asked for; `accept`, when set, is the looser shape the caller holds the answer to (optional parts it checks and drops itself); `shorten` allows one re-ask when the answer only runs strings past their maxLength (shape.ts); `thinking: false` asks the provider to answer without hidden reasoning, for a short call where speed is the product (a provider without that switch ignores it). */
-export interface TextRequest { system: string; prompt: string; schema?: JSONSchema; accept?: JSONSchema; model?: "fast" | "best"; timeoutMs?: number; isolated?: boolean; shorten?: boolean; thinking?: boolean; use?: string; }
-export interface VisionRequest { imageBase64: string; prompt: string; schema?: JSONSchema; timeoutMs?: number; use?: string; }
-export interface SpeakRequest { text: string; voice?: string; timeoutMs?: number; use?: string; }
-export interface EmbedRequest { texts: string[]; timeoutMs?: number; use?: string; }
-export interface ListenRequest { audio: Blob; filename: string; timeoutMs?: number; use?: string; }
+export interface TextRequest { system: string; prompt: string; schema?: JSONSchema; accept?: JSONSchema; model?: "fast" | "best"; timeoutMs?: number; isolated?: boolean; shorten?: boolean; thinking?: boolean; use: string; /** The assembled prompt's fingerprint (lib/prompt/assemble.ts), recorded on the ledger row. */ fingerprint?: string; }
+export interface VisionRequest { imageBase64: string; prompt: string; schema?: JSONSchema; timeoutMs?: number; use: string; fingerprint?: string; }
+export interface SpeakRequest { text: string; voice?: string; timeoutMs?: number; use: string; }
+export interface EmbedRequest { texts: string[]; timeoutMs?: number; use: string; }
+export interface ListenRequest { audio: Blob; filename: string; timeoutMs?: number; use: string; }
 export interface Heard { text: string; language?: string; }
 
-export interface EngineResult<T> { json: T; provider: string; ms: number; raw?: string; }
+/**
+ * What a caller's own re-ask of a finished answer is owed: when that call's deadline ends and which try the re-ask is.
+ * Handed back to the seam (text(req, first.again)), the re-ask spends only what is left and is booked as that try, so a
+ * judged-then-asked-again turn ends inside one deadline (model-call-outcome-integrity: one-deadline-across-attempts).
+ */
+export interface Again { deadlineAt: number; try: number; }
+export interface EngineResult<T> { json: T; provider: string; ms: number; raw?: string; again?: Again; }
 
 /**
  * What a provider hands back: its raw answer (a string to parse, or an already parsed value), the provider
@@ -47,10 +53,16 @@ export type EngineKind = keyof Providers;
 /**
  * Why an engine call failed. shape: the answer does not match the caller's schema (`path` names the first
  * field, "" for the whole answer); timeout: no answer in time; exit: the provider ran and failed (a non-zero
- * exit or an error status); unreachable: the provider could not be started or reached, or none is configured.
+ * exit or an error status); unreachable: the provider could not be started or reached, or none is configured;
+ * cutoff: a ceiling ended the answer before it was finished (an output limit, a length stop) - a fact about the
+ * request, never evidence about the model's quality; declined: the model, or a policy layer beside it, stopped
+ * without an answer to judge (a refusal stop). Only shape speaks about the answer; the other five speak about the
+ * attempt (model-call-outcome-integrity: unattempted-is-not-failed).
  */
-export type EngineErrorKind = "shape" | "timeout" | "exit" | "unreachable";
+export type EngineErrorKind = "shape" | "timeout" | "exit" | "unreachable" | "cutoff" | "declined";
 export class EngineError extends Error {
+  /** What the provider reported it used before it failed, when it reported anything: the ledger books it (call.ts). */
+  usage?: Usage;
   constructor(public kind: EngineErrorKind, public provider: string, message: string, public path?: string) {
     super(message);
     this.name = "EngineError";

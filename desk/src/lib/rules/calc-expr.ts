@@ -29,6 +29,8 @@
  * Anything else - another letter, a dangling operator, over 200 characters, nesting deeper than 40 - is null.
  */
 
+import { Unreadable } from "./fault";
+
 // ------------------------------------------------------------------ the tree
 
 export type FnName =
@@ -158,7 +160,6 @@ function lex(src: string): Tok[] | null {
   return out;
 }
 
-class Unreadable extends Error {}
 const TRIG_INVERSE: Partial<Record<FnName, FnName>> = { sin: "asin", cos: "acos", tan: "atan" };
 
 /**

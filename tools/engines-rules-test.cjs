@@ -122,14 +122,14 @@ test('case 10: a break that is not a length overrun is not re-asked: the first r
  assert.equal(plain.length,1,'no re-ask without shorten');
 });
 
-test('case 11: a second answer that still fails, or a re-ask that errors, ends in the original rejection',async()=>{
+test('case 11: a second answer that still fails ends in the original rejection; a re-ask that errors ends as that error (architect 2026-10-15: never relabelled as shape)',async()=>{
  const {text}=load('engines/text.ts');
  const long={topics:[{why:'x'.repeat(25),skill:'ask'}]};
  const prompts=stubSeq(long,{topics:[{why:'y'.repeat(30),skill:'ask'},{why:'z'.repeat(40),skill:'tell'}]});
  await assert.rejects(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true}),(e)=>{isShape('topics[0].why')(e);assert.match(e.message,/25 characters, at most 20/);assert.doesNotMatch(e.message,/30 characters|topics\[1\]/);return true;});
  assert.equal(prompts.length,2,'at most one extra call');
  const again=stubSeq(long,new (engineError())('timeout','stub','too slow'));
- await assert.rejects(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true}),(e)=>{isShape('topics[0].why')(e);assert.match(e.message,/25 characters/);return true;});
+ await assert.rejects(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true}),(e)=>{assert(e instanceof engineError());assert.equal(e.kind,'timeout','the re-ask timed out, and the caller is told so, as the ledger row for try 2 says');return true;});
  assert.equal(again.length,2);
 });
 
@@ -205,13 +205,54 @@ test('case 16: deadlineFor takes the request, else the kind\'s default, floored 
  assert.equal(deadlineFor('text',load('engines/codex.ts').codexCli,{timeoutMs:90000}),240000,'codex floor survives the move');
 });
 
-test('case 17: a shorten re-ask that never settles ends in the first shape rejection, after exactly two provider calls',async()=>{
+test('case 17: a shorten re-ask that never settles ends as a timeout within the ONE deadline both attempts share, after exactly two provider calls',async()=>{
  let calls=0;
  reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1)return {raw:{topics:[{why:'x'.repeat(25),skill:'ask'}]}};return new Promise(()=>{});}});
  const {text}=load('engines/text.ts');
- await assert.rejects(within(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true,timeoutMs:30})),(e)=>{isShape('topics[0].why')(e);assert.match(e.message,/25 characters/);return true;});
+ const t0=Date.now();
+ await assert.rejects(within(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true,timeoutMs:1000}),3000),(e)=>{assert(e instanceof engineError());assert.equal(e.kind,'timeout');return true;});
  assert.equal(calls,2);
+ // a fresh deadline for the re-ask would end near 2000; the bound sits halfway, wide of any loop stall
+ assert(Date.now()-t0<1500,`both attempts end inside the one 1000 ms deadline (plus scheduling), took ${Date.now()-t0} ms`);
 });
+test('case 17b: the re-ask gets what is left of the first deadline, not a fresh one',async()=>{
+ let calls=0;
+ reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1){await new Promise(r=>setTimeout(r,600));return {raw:{topics:[{why:'x'.repeat(25),skill:'ask'}]}};}return new Promise(()=>{});}});
+ const {text}=load('engines/text.ts');
+ const t0=Date.now();
+ await assert.rejects(within(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true,timeoutMs:1000}),3000),(e)=>e instanceof engineError()&&e.kind==='timeout');
+ const took=Date.now()-t0;
+ assert.equal(calls,2);
+ // the old seam ends at 600 + a fresh 1000 = 1600; the bound sits halfway, wide of any loop stall (a lazy require, a ledger write)
+ assert(took<1300,`ended inside the one 1000 ms deadline (plus scheduling), not 600 + a fresh 1000: took ${took} ms`);
+});
+test('case 17d: a caller\'s re-ask handed the first answer\'s ticket ends inside that call\'s deadline, not a fresh one',async()=>{
+ let calls=0;
+ reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1){await new Promise(r=>setTimeout(r,600));return {raw:ANSWER.text};}return new Promise(()=>{});}});
+ const {text}=load('engines/text.ts');
+ const t0=Date.now();
+ const first=await text({system:'s',prompt:'p',timeoutMs:1000});
+ assert.equal(first.again.try,2);assert(Math.abs(first.again.deadlineAt-(t0+1000))<100,'the ticket names the first call\'s own deadline');
+ await assert.rejects(within(text({system:'s',prompt:'p again',timeoutMs:1000},first.again),3000),(e)=>e instanceof engineError()&&e.kind==='timeout');
+ const took=Date.now()-t0;
+ assert.equal(calls,2);
+ // the old seam ends at 600 + a fresh 1000 = 1600; the bound sits halfway, wide of any loop stall
+ assert(took<1300,`the turn ended inside the one 1000 ms deadline (plus scheduling), not 600 + a fresh 1000: took ${took} ms`);
+});
+test('case 17e: a re-ask whose ticket has no time left is not started: timeout, and the provider is never called',async()=>{
+ let calls=0;
+ reg().useProvider('text',{name:'stub',run:async()=>{calls++;return {raw:ANSWER.text};}});
+ const {text}=load('engines/text.ts');
+ await assert.rejects(text({system:'s',prompt:'p'},{deadlineAt:Date.now()-1,try:2}),(e)=>e instanceof engineError()&&e.kind==='timeout');
+ assert.equal(calls,0);
+});
+test('case 17c: the re-ask is chosen from the code validate() sets, not from its wording',()=>{
+ const {validate,onlyTooLong}=load('engines/shape.ts');
+ const b=validate({why:'x'.repeat(25)},{type:'object',properties:{why:{type:'string',maxLength:20}}});
+ assert.equal(b[0][2],'long');assert(onlyTooLong(b));
+ assert(!onlyTooLong([['why','25 characters, at most 20']]),'the same words without the code are not a long break');
+});
+
 
 test('GUARD case 18: a stub that answers at once resolves with its provider and ms for all five kinds',async()=>{
  for(const k of KINDS){
@@ -474,4 +515,22 @@ test('UD-22: after the one re-ask, a string still over its maxLength is cut at a
  // no boundary to cut at: the rejection stands
  stubSeq({premise:'x'.repeat(450),skill:'ask'},{premise:'x'.repeat(450),skill:'ask'});
  await assert.rejects(text({system:'s',prompt:'p',schema:S,isolated:true,shorten:true}),isShape('premise'));
+});
+
+test('sweep case 6: vision retries without think only for a 400 (the key rejected); a 404 or 500 is one POST and ends in that status',async()=>{
+ const {ollamaVision}=load('engines/vision.ts'),real=globalThis.fetch;
+ const ctx={signal:new AbortController().signal},req={imageBase64:'aGk=',prompt:'p'};
+ const run=async(statuses)=>{
+  const posts=[];
+  globalThis.fetch=async(url,init)=>{const b=JSON.parse(init.body);posts.push('think' in b);const s=statuses[Math.min(posts.length-1,statuses.length-1)];
+   return s===200?{ok:true,status:200,json:async()=>({message:{content:'{}'}}),text:async()=>''}:{ok:false,status:s,text:async()=>`status ${s}`};};
+  const out=await ollamaVision.run(req,ctx).then(()=>'ok',(e)=>e.message);
+  return {posts,out};
+ };
+ try{
+  const a=await run([404]);assert.equal(a.posts.length,1,'404: one POST');assert.match(a.out,/404/);
+  const b=await run([500]);assert.equal(b.posts.length,1,'500: one POST');assert.match(b.out,/500/);
+  const c=await run([400,200]);assert.deepEqual(c.posts,[true,false],'400: think:false first, then the body without think');assert.equal(c.out,'ok');
+  const d=await run([400,404]);assert.equal(d.posts.length,2);assert.match(d.out,/404/);
+ }finally{globalThis.fetch=real;}
 });

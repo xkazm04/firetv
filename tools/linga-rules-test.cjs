@@ -10,7 +10,7 @@ const {cleanEnglish,mergeEvidence,validateObservations}=require(path.join(root,'
 const engine=require(path.join(root,'src/lib/engines/text.ts'));
 let answer=async()=>({json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1});
 const realText=engine.text;
-engine.text=(req)=>answer(req);
+engine.text=(req,after)=>answer(req,after);
 const {englishCommand}=require(path.join(root,'src/lib/english/conversation.ts'));
 const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
 const {getLearner,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
@@ -43,6 +43,33 @@ test('choices, assisted replies and uncertain observations cannot earn "on your 
  learning=mergeEvidence(learning,[evidence({id:'e7',episodeId:'ep2',sceneId:'team'})]);assert.equal(learning.achievements.request,'transfer');
  learning=mergeEvidence(learning,[evidence({id:'e8',success:false})]);assert.equal(learning.achievements.request,'transfer');
  assert.equal(mergeEvidence(learning,[evidence({id:'e7'})]).evidence.length,learning.evidence.length);
+});
+test('an unreadable learner file stops a Linga command before any model call, and says so',async()=>{
+ const L=require(path.join(root,'src/lib/session/learners.ts')),{LINGA_UNREAD}=require(path.join(root,'src/lib/english/errors.ts'));
+ fresh();
+ // the book as it was before this test, restored after: later tests count what is in it
+ const f=path.join(data,'learners.json'),before=fs.existsSync(f)?fs.readFileSync(f):null;
+ if(!before)L.saveEnglish('ema',L.blank('ema').english);
+ const was=fs.readFileSync(f);fs.writeFileSync(f,was.subarray(0,was.length-5));
+ let calls=0;answer=async()=>{calls++;return {json:{},provider:'test',ms:1};};
+ const real=console.error;console.error=()=>{};
+ try{
+  await assert.rejects(command('start',{sceneId:'booking'}),(e)=>e instanceof L.LearnersUnread);
+  assert.equal(calls,0,'no model call is paid for a turn that could not be saved');
+  const c=getSession().conversation;if(c)assert.equal(c.error,LINGA_UNREAD);
+ }finally{console.error=real;if(before)fs.writeFileSync(f,before);else fs.rmSync(f,{force:true});}
+});
+test('the scene premise and partner reach the tutor as input data, never in its system prompt',async()=>{
+ fresh();const seen=[];
+ answer=async(req)=>{seen.push(req);return {json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1};};
+ await command('start',{sceneId:'booking'});
+ assert(seen.length>=1);
+ for(const req of seen){
+  const input=JSON.parse(req.prompt);
+  assert.equal(typeof input.scene.premise,'string');assert(input.scene.premise.length>10,'the premise is in the input');
+  assert(!req.system.includes(input.scene.premise),'and not in the system prompt');assert(!req.system.includes(input.scene.partner),'nor the partner');
+  assert.match(req.system,/scene\.premise in the input JSON/);
+ }
 });
 test('legacy learner migration discards malformed evidence and keeps safe defaults',()=>{assert.deepEqual(cleanEnglish(undefined),emptyEnglish());assert.equal(cleanEnglish({evidence:[{skill:'request'}]}).evidence.length,0);});
 test('adult scenario cannot be started for a minor even by direct API command',async()=>{fresh();await assert.rejects(command('start',{sceneId:'date'}),e=>e.status===403);});
@@ -251,7 +278,7 @@ test('an optional moment or observation that overruns its limit is dropped, and 
   moment:{kind:'fix',said:'I has booking',better:'I have a booking',why:'w'.repeat(300)}})})});
  engine.text=realText;
  try{await command('turn',{text:'I has booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});}
- finally{engine.text=(req)=>answer(req);reg.resetProviders();}
+ finally{engine.text=(req,after)=>answer(req,after);reg.resetProviders();}
  const after=getSession().conversation;
  assert.equal(after.error,'');assert.equal(after.turns.length,3);assert.equal(after.turns.at(-1).text,'What name is it under?');
  assert.equal(after.moment,null,'the over-long moment is dropped, not the turn');
@@ -312,6 +339,15 @@ test('a topic touches the interest when its title or premise names one of the in
  const plan=[scene('Share your idea in a team meeting'),scene('Summarise a project update'),scene('Cooking for your team'),scene('Planning a trip')];
  assert.equal(plan.filter(t=>P.touchesInterest(t,w)).length,1);
  assert.equal(plan.slice(0,2).filter(t=>P.touchesInterest(t,w)).length,0);
+});
+test("the interest re-ask spends what is left of the plan call's deadline: it carries that answer's ticket",async()=>{
+ fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true,goal:'speak more fluently in meetings',interest:'travelling and cooking'},notes:[]});
+ const work=[topic('Share your idea in a team meeting','all','relate'),topic('Summarise a project update','all','narrate')];
+ const ticket={deadlineAt:Date.now()+60000,try:2},seen=[];
+ answer=async(req,after)=>{const p=JSON.parse(req.prompt);if(p.step!=='plan')throw new Error('unexpected '+p.step);seen.push(after);return {json:{topics:work.slice(0,p.count)},provider:'test',ms:1,again:ticket};};
+ await command('plan-propose');
+ assert.equal(seen.length,2);assert.equal(seen[0],undefined,'the first plan call starts its own deadline');assert.equal(seen[1],ticket,"the re-ask is handed the first answer's ticket");
 });
 test('a plan that misses a known interest is asked for once more with the gap named; no topic is written by the desk',async()=>{
  const setUp=async interest=>{fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
@@ -510,7 +546,7 @@ test('ladder case 5: help.ts drops a malformed rung and the turn still lands; wi
  const reg=require(path.join(root,'src/lib/engines/registry.ts'));
  reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'And for how many nights?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'x'.repeat(400),meaning:'nights: how many times you sleep there',starter:7}})})});
  engine.text=realText;
- try{await reply('For Friday.');}finally{engine.text=(req)=>answer(req);reg.resetProviders();}
+ try{await reply('For Friday.');}finally{engine.text=(req,after)=>answer(req,after);reg.resetProviders();}
  c=getSession().conversation;assert.equal(c.error,'');assert.equal(c.turns.at(-1).text,'And for how many nights?');
  await command('cue');assert.equal(getSession().conversation.cue,'nights: how many times you sleep there');
 });
@@ -1327,11 +1363,30 @@ test('cut case 4: a failed or empty Cut makes up no note; the take stays as it w
  assert.equal(c.phase,'conversation');assert.equal(c.pending,null);assert.equal(c.turns.length,turns);assert.equal(c.cut,undefined);
  assert.match(c.error,/could not give notes on this take/);assert.equal(getLearner('jakub').english.sessions.some(x=>x.id===c.id),false,'nothing recorded');
  answer=async req=>({json:{notes:[{turnId:'nope',quote:'invented',kind:'word',note:'Made up.',better:''}]},provider:'test',ms:1});
- await assert.rejects(command('cut'),e=>e.status===502);
+ await assert.rejects(command('cut'),e=>e.kind==='shape'&&e.status===undefined,'an unusable answer is a model failure (shape), never a learner refusal');
  c=getSession().conversation;assert.equal(c.phase,'conversation');assert.equal(c.cut,undefined,'no note survived, so none is shown');
  assert(turn().accepts(c,'cut','adult'),'Cut is offered again');
  answer=async req=>GOOD_NOTES(JSON.parse(req.prompt));await command('cut');
  assert.equal(getSession().conversation.cut.notes.length,2);
+});
+test("taxonomy: a Linga model failure carries failure and retry like the desk jobs; a cut-off or refusal is not offered again",async()=>{
+ const {EngineError}=require(path.join(root,'src/lib/engines/types.ts'));
+ const {LINGA_NOT_AGAIN}=require(path.join(root,'src/lib/english/errors.ts'));
+ const {POST}=require(path.join(root,'src/app/api/english/route.ts'));
+ const post=async(action,extra={})=>{const s=getSession();const r=await POST(new Request('http://desk/api/english',{method:'POST',body:JSON.stringify({action,learnerId:s.learner.id,episodeId:s.conversation?.id,commandId:'tx-'+(++counter),...extra})}));return {status:r.status,body:await r.json()};};
+ for(const [kind,retry] of [['cutoff',false],['declined',false],['timeout',true],['shape',true]]){
+  fresh();answer=async()=>{throw new EngineError(kind,'stub','x');};
+  const r=await post('start',{sceneId:'booking'});
+  assert.equal(r.status,502,kind);assert.equal(r.body.failure,kind);assert.equal(r.body.retry,retry,kind);
+  const line=getSession().conversation.error;
+  if(retry){assert.notEqual(r.body.error,LINGA_NOT_AGAIN,kind);assert.equal(line,'The scene could not be prepared. Try again or choose another situation.',kind+': its own line, as before');}
+  else{assert.equal(r.body.error,LINGA_NOT_AGAIN,kind);assert.equal(line,LINGA_NOT_AGAIN,kind+': the session line says so too');}
+ }
+ fresh();answer=async()=>{throw new Error('boom');};
+ const u=await post('start',{sceneId:'booking'});
+ assert.deepEqual([u.status,u.body.failure,u.body.retry],[502,'unknown',true]);assert.match(u.body.error,/please retry/);
+ fresh();const refusal=await post('start',{sceneId:'date'});
+ assert.equal(refusal.status,403,'a refusal stays a 4xx with no failure value');assert.equal(refusal.body.failure,undefined);
 });
 test('cut case 5: Family mode refuses Cut on the server with a plain reason and no model call',async()=>{
  fresh();await command('start',{sceneId:'booking'});
