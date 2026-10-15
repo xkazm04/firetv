@@ -26,6 +26,9 @@ class LinkTextTest {
         for(s in listOf(LinkText.STARTING,LinkText.READY,LinkText.LOST,LinkText.BLOCKED,LinkText.PORT_BUSY,LinkText.NO_WIFI)) { assertTrue(s.length<=60,s); assertFalse(s.contains("8765"),s) }
         assertNotEquals(LinkText.PORT_BUSY,LinkText.NO_WIFI)
     }
+    @Test fun notNowNamesTheCommandAndTheScreen() {
+        assertEquals("""{"t":"notNow","for":"buy","screen":"RACE"}""",LinkText.notNowJson("buy","race"))
+    }
     @Test fun screenNamesAreOneWordPerPhase() {
         assertEquals(setOf("LOBBY","GARAGE","CAREER","COUNTDOWN","RACE","RESULTS"),phases.map(LinkText::screen).toSet())
     }

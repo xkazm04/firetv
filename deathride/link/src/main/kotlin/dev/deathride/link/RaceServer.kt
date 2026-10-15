@@ -274,6 +274,8 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                     previousInputNs=receiveNs;profileInputs!!.append(inputSample)
                 }
             }
+            /** A command this screen does not take: say so, so the phone can show why the button did nothing. */
+            suspend fun notNow(command: String) { socket.send(LinkText.notNowJson(command,phase)) }
             for(frame in socket.incoming) {
                 val receiveNs=if(profileInputs!=null)System.nanoTime() else 0L
                 if(generation!=s.generation)break
@@ -291,19 +293,19 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                             msg["fire"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["mine"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["weapon"]?.jsonPrimitive?.intOrNull?:0,msg["ability"]?.jsonPrimitive?.doubleOrNull?:0.0,
                             msg["f"]?.jsonPrimitive?.intOrNull==1,now,receiveNs)
                     }
-                    "track" -> { val index=Courses.indexOf(msg.text("id"));if(index in Courses.playableIndices && (phase=="lobby" || phase=="results"))requestTrack(index) }
+                    "track" -> { val index=Courses.indexOf(msg.text("id"));if(index in Courses.playableIndices) { if(phase=="lobby" || phase=="results")requestTrack(index) else notNow("track") } }
                     "surface" -> { val index=Surfaces.practice.indexOfFirst { it.id==msg.text("id") }; if(index>=0)surfaceRequest.set(index) }
-                    "car" -> { val index=CarCatalog.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0 && (phase=="lobby" || phase=="results" || phase=="garage" || phase=="career"))s.carRequest.set(index) }
-                    "garage" -> if(phase=="lobby" || phase=="results" || phase=="career")command.compareAndSet(0,3)
-                    "career" -> if(phase=="lobby" || phase=="results")command.compareAndSet(0,4)
-                    "careerStart" -> if(s.id==0 && phase=="career")command.compareAndSet(0,5)
-                    "difficulty" -> if(s.id==0 && phase=="career") { val index=Career.difficulties.indexOfFirst{it.id==msg.text("id")};if(index>=0)difficultyRequest.set(index) }
-                    "buy" -> if(phase=="garage") {
+                    "car" -> { val index=CarCatalog.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0) { if(phase=="lobby" || phase=="results" || phase=="garage" || phase=="career")s.carRequest.set(index) else notNow("car") } }
+                    "garage" -> if(phase=="lobby" || phase=="results" || phase=="career")command.compareAndSet(0,3) else notNow("garage")
+                    "career" -> if(phase=="lobby" || phase=="results")command.compareAndSet(0,4) else notNow("career")
+                    "careerStart" -> if(phase!="career")notNow("careerStart") else if(s.id==0)command.compareAndSet(0,5)
+                    "difficulty" -> if(phase!="career")notNow("difficulty") else if(s.id==0) { val index=Career.difficulties.indexOfFirst{it.id==msg.text("id")};if(index>=0)difficultyRequest.set(index) }
+                    "buy" -> if(phase!="garage")notNow("buy") else {
                         val part=Parts.all.indexOfFirst{it.id==msg.text("part")};val car=CarCatalog.all.indexOfFirst{it.id==msg.text("car")}
                         val tier=msg["tier"]?.jsonPrimitive?.intOrNull
                         if(part>=0 && car>=0 && tier!=null && tier>=0 && msg.text("profile")==s.profileId)s.shopRequest.compareAndSet(null,ShopRequest(s.profileId,car,part,tier))
                     }
-                    "market" -> if(phase=="garage" || phase=="career" && s.id==0 && msg.text("action")=="ally") {
+                    "market" -> if(phase!="garage" && phase!="career")notNow("market") else if(phase=="garage" || s.id==0 && msg.text("action")=="ally") {
                         val action=msg.text("action");val id=msg.text("id");val revision=msg["revision"]?.jsonPrimitive?.longOrNull
                         val car=CarCatalog.all.indexOfFirst{it.id==msg.text("car")}
                         if(action in setOf("buy","trade","item","loan","repay","repair","service","contract","ally") && id.length<=64 && revision!=null && revision>=0 && car>=0 && msg.text("profile")==s.profileId)

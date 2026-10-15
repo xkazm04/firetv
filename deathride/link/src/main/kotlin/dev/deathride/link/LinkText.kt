@@ -23,6 +23,8 @@ object LinkText {
     const val PORT_BUSY="Port busy. Close the other Death Ride, reopen."
     const val NO_WIFI="No Wi-Fi. Connect the TV to your network."
     const val BLOCKED="Phone link unavailable. Close the other Death Ride, reopen."
+    /** A command the phone sent that this screen does not take; the phone can say why a button did nothing. */
+    fun notNowJson(command: String,phase: String)="{\"t\":\"notNow\",\"for\":\"$command\",\"screen\":\"${screen(phase)}\"}"
     /** The name of the screen the TV is on, one word, for the phone to show instead of deriving it. */
     fun screen(phase: String): String = when(phase) {
         "lobby" -> "LOBBY"; "garage" -> "GARAGE"; "career" -> "CAREER"; "countdown" -> "COUNTDOWN"; "race" -> "RACE"; "results" -> "RESULTS"

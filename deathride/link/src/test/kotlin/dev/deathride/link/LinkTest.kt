@@ -56,7 +56,7 @@ class LinkTest {
             assertEquals("LOBBY",good.next("hud")["screen"]!!.jsonPrimitive.content)
             fun barrier() { ws.sendText("""{"t":"ping","ts":123}""",true).join();good.next("pong") }
             val buy="""{"t":"buy","profile":"couch-0","car":"Line","part":"brakes","tier":0}"""
-            host.phase="race";ws.sendText(buy,true).join();barrier();assertNull(host.slots[0].shopRequest.get())
+            host.phase="race";ws.sendText(buy,true).join();val notNow=good.next("notNow");assertEquals("buy",notNow["for"]!!.jsonPrimitive.content);assertEquals("RACE",notNow["screen"]!!.jsonPrimitive.content);barrier();assertNull(host.slots[0].shopRequest.get())
             host.phase="garage";ws.sendText(buy,true).join();ws.sendText(buy.replace("brakes","engine"),true).join();barrier()
             val request=host.slots[0].shopRequest.getAndSet(null)!!;assertEquals("brakes",dev.deathride.core.Parts.all[request.part].id);assertEquals(0,request.tier)
             ws.sendText(buy.replace("couch-0","another-profile"),true).join();barrier();assertNull(host.slots[0].shopRequest.get())
