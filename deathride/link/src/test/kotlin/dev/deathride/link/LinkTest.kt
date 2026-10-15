@@ -53,6 +53,7 @@ class LinkTest {
             val bad=Listener(); val badWs=connect(bad); badWs.sendText("""{"t":"hello","pin":"invalid"}""",true).join(); val refused=bad.next("error"); assertEquals("BAD_PIN",refused["code"]!!.jsonPrimitive.content); assertTrue(refused["message"]!!.jsonPrimitive.content.length<=44); badWs.abort()
             val good=Listener(); val ws=connect(good); ws.sendText("""{"t":"hello","pin":"${host.pin}"}""",true).join()
             val welcome=good.next("welcome"); val token=welcome["token"]!!.jsonPrimitive.content; assertEquals(0,welcome["slot"]!!.jsonPrimitive.int)
+            assertEquals("LOBBY",good.next("hud")["screen"]!!.jsonPrimitive.content)
             fun barrier() { ws.sendText("""{"t":"ping","ts":123}""",true).join();good.next("pong") }
             val buy="""{"t":"buy","profile":"couch-0","car":"Line","part":"brakes","tier":0}"""
             host.phase="race";ws.sendText(buy,true).join();barrier();assertNull(host.slots[0].shopRequest.get())

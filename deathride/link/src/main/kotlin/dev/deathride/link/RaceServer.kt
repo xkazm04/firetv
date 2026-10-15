@@ -120,7 +120,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     @Volatile var pickupsJson: ()->String={"[]"}
     @Volatile var frameNumber=0L
     @Volatile var flashFrames=0L
-    @Volatile var serverStatus="Opening port $port..."
+    @Volatile var serverStatus=LinkText.STARTING
     @Volatile var running=false
     @Volatile var paused=false
     @Volatile var raceLaps=3
@@ -134,7 +134,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     private var engine: ApplicationEngine?=null
     private var networkJob: Job?=null
     private val origin=System.nanoTime()
-    private val errors=CoroutineExceptionHandler { _, e -> running=false; serverStatus="Link error: ${e.javaClass.simpleName}"; log(serverStatus) }
+    private val errors=CoroutineExceptionHandler { _, e -> running=false; serverStatus=LinkText.LOST; log("Link error: ${e.javaClass.simpleName}") }
     /** Link work runs below the render thread's priority (ART maps this to a positive nice value) so input bursts and JSON do not take its core. */
     private val linkDispatcher=java.util.concurrent.Executors.newCachedThreadPool(object: java.util.concurrent.ThreadFactory {
         private val count=java.util.concurrent.atomic.AtomicInteger()
@@ -165,7 +165,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         networkJob=scope.launch {
             repeat(10) {
                 val free=runCatching { ServerSocket().use { socket -> socket.reuseAddress=true; socket.bind(InetSocketAddress("0.0.0.0",port)) }; true }.getOrDefault(false)
-                if(!free) { serverStatus="Port $port busy; retry ${it+1}/10"; delay(300); return@repeat }
+                if(!free) { serverStatus=LinkText.STARTING; log("Port $port busy; retry ${it+1}/10"); delay(300); return@repeat }
                 val candidate=embeddedServer(CIO, host="0.0.0.0",port=port,parentCoroutineContext=errors+linkDispatcher) {
                     install(WebSockets) { maxFrameSize=2048; masking=false }
                     routing {
@@ -192,14 +192,14 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                     }
                 }
                 if(runCatching { candidate.start(false) }.isSuccess) {
-                    engine=candidate; running=true; serverStatus="Ready on local Wi-Fi"; log("pairing ${pairingUrl()}")
+                    engine=candidate; running=true; serverStatus=LinkText.READY; log("pairing ${pairingUrl()}")
                     launch { while(isActive) { delay(10000); address=lanAddress(); log(metricsJson()) } }
                     return@launch
                 }
                 runCatching { candidate.stop(0,0) }; delay(300)
             }
-            serverStatus="Port $port unavailable. Close the other race app, then reopen."
-            log(serverStatus)
+            serverStatus=LinkText.BLOCKED
+            log("Port $port unavailable")
         }
     }
     private suspend fun handle(socket: DefaultWebSocketServerSession) {
@@ -240,7 +240,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                     cur.append("{\"t\":\"hud\",\"speed\":").appendFixed(s.speed,2).append(",\"lap\":").append(s.lap).append(",\"pos\":").append(s.position).append(",\"combat\":").append(s.combatHud.ifEmpty{s.combatJson})
                         .append(",\"surface\":\"").append(surface.id).append("\",\"drifting\":").append(s.drifting).append(",\"driftQuality\":").appendFixed(s.driftQuality,3).append(",\"slipRadians\":").appendFixed(s.slipRadians,3)
                         .append(",\"spunOut\":").append(s.spunOut).append(",\"loadTransfer\":").appendFixed(s.loadTransfer,3).append(",\"surfaceId\":\"").append(s.surfaceId).append("\",\"impact\":").appendFixed(s.impact,3)
-                        .append(",\"phase\":\"").append(currentPhase).append("\",\"eventType\":\"").append(eventType).append("\",\"raceEntrants\":").append(raceEntrants).append(",\"raceLaps\":").append(raceLaps)
+                        .append(",\"phase\":\"").append(currentPhase).append("\",\"screen\":\"").append(LinkText.screen(currentPhase)).append("\",\"eventType\":\"").append(eventType).append("\",\"raceEntrants\":").append(raceEntrants).append(",\"raceLaps\":").append(raceLaps)
                         .append(",\"raceMode\":\"").append(raceMode).append("\",\"stale\":").append(s.stale).append(",\"sceneryReady\":").append(sceneryReady).append(",\"paused\":").append(paused).append(meta).append('}')
                     if(now-lastSentMs>=HUD_HEARTBEAT_MS || !sameChars(cur,last)) {
                         socket.send(cur.toString()); lastSentMs=now
