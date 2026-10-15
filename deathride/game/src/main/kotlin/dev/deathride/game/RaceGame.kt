@@ -766,7 +766,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             label(when(phase){"career"->"THE ASH CIRCUIT";"garage"->"PARTS / PER CAR";"results"->"RACE RESULTS";else->"${courseCatalog[selectedTrack].name} / ${activeRegion.name} / ${world.raceLaps} LAPS"},42f,644f)
             label(if(phase=="lobby")"FEEL  /  ${server.feel.id.uppercase()}" else "BACK: LOBBY   /   ${server.feel.id}",810f,691f)
             val notice=if(::saves.isInitialized)saves.notice else ""
-            label(if(notice.isNotEmpty())notice.uppercase() else if(scene.ready)"TWO PHONES. ONE CIRCUIT." else "PREPARING CIRCUIT",810f,654f,if(notice.startsWith("Save failed"))warning else if(scene.ready && notice.isEmpty())muted else accent)
+            label(TvCopy.statusLine(notice,scene.ready),810f,654f,if(notice.startsWith("Save failed"))warning else if(scene.ready && notice.isEmpty())muted else accent)
         }
         if(phase=="race" || phase=="countdown" || phase=="results") {
             for(c in world.cars)if(c.entered) {
@@ -786,7 +786,6 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 title("SCAN + GO",64f,578f)
                 detail.setColor(HudTheme.bone);detail.wrapped(TvCopy.LOBBY_STEPS,64f,517f,320f,27f)
                 updateQr();label("PIN ${server.pin}",232f,408f,accent)
-                detail.setColor(muted);detail.wrapped("No app needed.\nTwo phone seats.",232f,378f,152f,25f)
                 label(addressLabel,64f,246f)
                 label(if(server.running)"${server.slots.count{it.connected}} / 2 PHONES CONNECTED" else server.serverStatus,64f,214f,accent)
                 label("SELECT / PRACTICE",124f,168f,bg)

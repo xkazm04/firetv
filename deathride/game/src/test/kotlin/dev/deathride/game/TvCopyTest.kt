@@ -24,6 +24,14 @@ class TvCopyTest {
         assertFalse(TvCopy.LOBBY_STEPS.contains("GO",ignoreCase=false),"Auto layout has no GO to hold")
         assertFalse(TvCopy.LOBBY_STEPS.contains("Hold",ignoreCase=true))
     }
+    private fun raceGameSource(): String? {
+        for(p in listOf("src/main/kotlin/dev/deathride/game/RaceGame.kt","game/src/main/kotlin/dev/deathride/game/RaceGame.kt","deathride/game/src/main/kotlin/dev/deathride/game/RaceGame.kt")) { val f=File(p);if(f.exists())return f.readText() }
+        return null
+    }
+    @Test fun lobbyDoesNotRepeatItself() {
+        val src=raceGameSource()?:return
+        for(gone in listOf("TWO PHONES. ONE CIRCUIT","No app needed","Two phone seats"))assertFalse(src.contains(gone),"slogan came back: $gone")
+    }
     @Test fun statusLineHasNoSlogan() {
         assertEquals("",TvCopy.statusLine("",true))
         assertEquals("PREPARING CIRCUIT",TvCopy.statusLine("",false))
