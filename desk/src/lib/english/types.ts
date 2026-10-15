@@ -86,6 +86,28 @@ export interface Moment {
    * ("tomatoes are"). Worked out by code when the moment is made, and again when a record is cleaned; never on a word.
    */
   slip?: string; fix?: string;
+  /**
+   * A fix's self-repair (K2, repair.ts): absent on a word moment, on a fix shown at once, and on every moment saved before.
+   * While it is withheld, better is "" and fix is absent: both wait in server memory until a try holds or Show me.
+   */
+  repair?: MomentRepair;
+}
+/** Where a fix's self-repair stands (repair.ts). Written by code only; the try is never evidence. */
+export interface MomentRepair {
+  /** the rung on screen: 0 say it again, 1 the why as a clue, 2 the fix shown */
+  rung: 0 | 1 | 2;
+  /** whether the partner's line after the moment supplied wording: a self-repair leaves the next reply this supported */
+  support: boolean;
+  /** the learner's latest try, in their words */
+  tried?: string;
+  /** a try held (repair.ts judgeTry) */
+  held?: boolean;
+  /** it held before the fix was shown: the learner found it */
+  selfRepaired?: boolean;
+  /** no further try is taken: one held, or the one try after the fix was shown */
+  spent?: boolean;
+  /** a restart lost the withheld fix: it can no longer be shown or judged */
+  lost?: boolean;
 }
 /**
  * A moment kept on the learner record. The review fields are written by code (review.ts), never by the model:
@@ -107,6 +129,8 @@ export interface Taught extends Moment {
    * of the learner's, the key words a later use is judged on. `said` is then empty: the learner never said it wrong.
    */
   line?: LineSource; key?: string;
+  /** a fix's self-repair (K2): whether a try held before the fix was shown, and the learner's latest try; never evidence */
+  selfRepaired?: boolean; tried?: string;
 }
 /** Where a scene's hidden line came from (K4, line.ts): the level check's better phrase, the opening's offer, the quiz answer. */
 export type LineSource = "check" | "offer" | "quiz";

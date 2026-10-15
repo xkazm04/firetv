@@ -259,3 +259,15 @@ count anywhere ("2 of 3 held" is never printed). A take is never evidence: it wr
 evidence, session, digest, certificate, review reuse or collectible), and the first take's lines and notes are never
 rewritten. The branch borrows the data line's style; a branch style in `design/linga.css` and the captures (the
 branch, a struck note and an open one, at 1920 x 1080 and 1280 x 720; the phone recap at 390 px) are owed.
+
+**The self-repair moment** (K2, `lib/english/repair.ts`; the owner's ruling on LG-4, the withhold option). A **fix**
+moment asks for the learner's line before it shows the fix. `linga-moment` keeps the comparison: the before slot shows
+what they said, and the after slot is an **empty plum frame** (`.lo-card.lo-open`, dashed like every slot still to
+fill) while the fix is withheld. The fix itself is not on the session: it waits in server memory, like an unrevealed
+rescue rung. The learner says or types the line again on the phone's reply box; code judges it with no model call
+(the slip's words gone and the fix's words said). The rungs climb one per miss: **say it again**, then the why as **a
+clue** (A1-A2 learners start here), then the fix shown, then one more try. **Show me** and **Back to the conversation**
+are always offered. A try that holds strikes the slip in the before slot (Take Two's struck mark) and puts the
+learner's own line in the after slot: **You found it** when the fix was never shown. A picture, no count. A **word**
+moment (a missing English word) shows its English at once, as before. The captures (the empty frame, the clue, a held
+self-repair, at 1920 x 1080 and 1280 x 720; the phone's moment panel at 390 px) are owed.

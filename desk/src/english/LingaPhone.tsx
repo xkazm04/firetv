@@ -283,12 +283,28 @@ function TakePanel({c,take,run,busy,inFlight,end}:{c:Conversation;take:Take;run:
   </>;
 }
 
+/**
+ * A moment on the phone. A fix moment (K2, repair.ts) asks for the learner's line again before it shows the fix: the
+ * reply box takes the try (judged by code, never evidence), the why comes as a clue after a miss, Show me shows the fix,
+ * and Back is always there. A word moment, or a fix shown at once, is the moment as before.
+ */
 function MomentPanel({c,run,busy}:{c:Conversation;run:Run;busy:boolean}){
-  const m=c.moment!;
-  return <>
+  const m=c.moment!,r=m.kind==="fix"?m.repair:undefined;
+  const back=<button className="pbtn" data-signal={!r||!accepts(c,"moment-try")?"true":undefined} data-secondary={r&&accepts(c,"moment-try")?"true":undefined} disabled={busy||!accepts(c,"moment-done")} onClick={()=>run("moment-done")}>Back to the conversation</button>;
+  if(!r)return <>
     <p><b>{m.kind==="fix"?"One thing to fix":"A word for this scene"}</b></p>
     <div className="linga-status">{m.kind==="fix"?<>You said “{m.said}”<br/>Try “{m.better}”</>:<>You wanted to say “{m.said}”<br/>In English: “{m.better}”</>}</div>
     <p>{m.why}</p>
-    <button className="pbtn" data-signal="true" disabled={busy||!accepts(c,"moment-done")} onClick={()=>run("moment-done")}>Back to the conversation</button>
+    {back}
+  </>;
+  const shown=!!m.better&&!r.held;
+  return <>
+    <p><b>{r.held?(r.selfRepaired?"You found it":"You said it"):"One thing to fix"}</b></p>
+    <div className="linga-status" aria-live="polite">{r.held?<>You said <s>“{m.said}”</s><br/>Now: “{r.tried}”</>:shown?<>You said “{m.said}”<br/>Try “{m.better}”</>:<>You said “{m.said}”<br/>{r.lost?"Linga lost this fix when the desk restarted.":"Say it again, your way."}</>}</div>
+    {(r.rung>=1||r.held||r.lost)&&<p>{m.why}</p>}
+    {accepts(c,"moment-try")&&<ReplyBox ready={!busy} busy={busy} question={m.turnId} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
+      onSend={(text,mode,question,attempt)=>run("moment-try",{text,mode,lastTurnId:question,commandId:attempt})} note="A try is practice: it is not recorded as evidence."/>}
+    {accepts(c,"moment-show")&&<button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("moment-show")}>Show me</button>}
+    {back}
   </>;
 }

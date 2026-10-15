@@ -262,10 +262,13 @@ test('a moment needs an exact quote, holds the scene, is spaced out, and makes t
  const taught=getLearner('ema').english.taught.length;
  answer=async()=>({json:{reply:'What date was it?',observations:[],moment:{kind:'fix',said:'I have booking',better:'I have a booking',why:'A booking is one thing, so it takes "a".'}},provider:'test',ms:1});
  await command('turn',{text:'I have booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});
- c=getSession().conversation;assert.equal(getSession().screen,'linga-moment');assert.equal(c.moment.better,'I have a booking');assert.equal(c.supported,true);
- assert.equal(getLearner('ema').english.taught.length,taught+1);
+ // K2 revised this row on purpose: a fix waits for the learner's try (repair.ts), so its better is not on the moment and its
+ // Taught item is written when the moment closes; it read better on the moment and taught+1 at once before
+ c=getSession().conversation;assert.equal(getSession().screen,'linga-moment');assert.equal(c.moment.better,'','the fix waits for a try');assert.equal(c.supported,true);
+ assert.equal(getLearner('ema').english.taught.length,taught,'nothing kept while the moment is open');
  await assert.rejects(command('turn',{text:'Another reply',mode:'text',lastTurnId:c.turns.at(-1).id}),e=>e.status===409);
  await command('moment-done');c=getSession().conversation;assert.equal(c.moment,null);assert.equal(getSession().screen,'linga-talk');
+ assert.equal(getLearner('ema').english.taught.length,taught+1,'kept when it closes');assert.equal(c.moments.at(-1).better,'I have a booking');
  await command('turn',{text:'I have booking for Friday, yes.',mode:'text',lastTurnId:c.turns.at(-1).id});
  assert.equal(getSession().conversation.moment,null,'no second moment on the very next turn');
 });
@@ -687,10 +690,10 @@ const TURN_STATES={
  finished:['linga-recap',convo({turns:REPLIED,phase:'finished'})],
  unprepared:['linga-talk',convo({turns:[]})],
 };
-const CONVERSATION_ACTIONS=['turn','cue','quiz','choice','coach','replay','capture','pause','resume','repeat','leave','finish','moment-done'];
+const CONVERSATION_ACTIONS=['turn','cue','quiz','choice','coach','replay','capture','pause','resume','repeat','leave','finish','moment-done','moment-try','moment-show'];
 /** A stub engine that answers every conversation call well: the opening, a turn, a coach that quotes the reply, a replay. */
 function answerAll(){answer=async req=>{const p=JSON.parse(req.prompt);return {json:/^Coach/.test(p.task??'')?{before:p.submittedReply.slice(0,6),after:'I work in a hotel',note:'Try the verb alone.'}:{title:'T',goal:'G',opening:'Hi?',reply:'Ok. And then?',observations:[]},provider:'test',ms:1};};}
-const extraFor=(action,c)=>action==='turn'?{text:'I like it.',mode:'text',lastTurnId:c.turns.at(-1)?.id}:action==='choice'?{option:0}:action==='capture'?{active:true}:{};
+const extraFor=(action,c)=>action==='moment-try'?{text:'I work in a hotel.',mode:'text',lastTurnId:c.moment?.turnId}:action==='turn'?{text:'I like it.',mode:'text',lastTurnId:c.turns.at(-1)?.id}:action==='choice'?{option:0}:action==='capture'?{active:true}:{};
 
 test('turn case 1: each fixture names its state, and paused while a reply is pending is waiting',()=>{
  const T=turn();
@@ -720,7 +723,11 @@ test('turn case 3: resume during a turn in flight is refused, the token stays, a
 test('turn case 4: in every state the view offers, an enabled conversation action is one the server accepts',async()=>{
  const V=view(),sample={text:'I like it.',option:0,band:'B1',topicId:'p-a',sceneId:'booking'};
  const sweep={...SWEEP,...Object.fromEntries(Object.entries(TURN_STATES).map(([name,[screen,c]])=>['turn '+name,fixture(screen,{placement:placed(),conversation:c})])),
-  'paused+pending':fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED,paused:true,pending:'held'})})};
+  'paused+pending':fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED,paused:true,pending:'held'})}),
+  // K2: a fix moment withheld, on its clue, shown, and held (repair.ts)
+  ...Object.fromEntries([0,1].map(rung=>[`moment withheld ${rung}`,fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,better:'',fix:undefined,slip:'am work',repair:{rung,support:false}}})})])),
+  'moment shown':fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,repair:{rung:2,support:false}}})}),
+  'moment held':fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,repair:{rung:0,support:false,tried:'I work in a hotel.',held:true,selfRepaired:true,spent:true}}})})};
  let checked=0;
  for(const [name,fx] of Object.entries(sweep))for(const ui of [{},{menu:true}]){
   const v=V.lingaView(sessionOf(fx),ui);
@@ -982,6 +989,8 @@ test('K1 case 6: a slip taught twice merges into one Taught item; "My tomatoes a
  let c=await slipStart([VIKTOR],()=>({reply:'Lovely! How big is it now?',supportProvided:false,observations:[],moment:{kind:'fix',said:'My tomatoes is big.',better:'My tomatoes are big.',why:'Tomatoes is plural, so it takes are.'}}));
  assert.equal(c.review.id,VIKTOR.id);assert.equal(c.review.fix,'tomatoes are');
  await reply('I have tomatoes. My tomatoes is big.');
+ // K2: the moment joins the scene's moments, and merges into the record, when it closes
+ assert(getSession().conversation.moment,'the stop itself still happens');await command('moment-done');
  c=getSession().conversation;
  assert.equal(c.moments.length,1,'the stop itself still happens');assert.equal(c.moments[0].slip,'tomatoes is');assert.equal(c.moments[0].fix,'tomatoes are');
  const taught=getLearner('ema').english.taught;
@@ -2250,4 +2259,154 @@ test('UD-10: context() carries this scene\'s moments as taughtThisScene, and the
  let sent;answer=async(req)=>{sent=JSON.parse(req.prompt);return {json:{before:'I have booking',after:'I have a booking',note:'Good.'},provider:'test',ms:1};};
  await command('coach');
  assert.deepEqual(sent.taughtThisScene,[{said:'I have booking',better:'I have a booking'}]);
+});
+
+// ---- K2 self-repair: a fix moment asks for the learner's line before it shows the fix (repair.ts; LG-4, the withhold option)
+/** The 2026-10-14 LT moment on Viktor's line, as the tutor would return it for this reply. */
+const TOMATO={said:'My tomatoes is one metre',better:'My tomatoes are one metre',why:'Tomatoes is plural, so it takes are.'};
+let k2Calls=0;
+/** A learner at `level` in a scene where the next reply yields the tomato moment; every model call is counted. */
+async function k2Moment({level='B1',partner='Lovely! Is that big for a tomato plant?',moment={kind:'fix',...TOMATO},observations=[]}={}){
+ fresh();saveEnglish('ema',{...emptyEnglish(),preferences:{...defaultPreferences(),level}});k2Calls=0;
+ answer=async req=>{k2Calls++;const p=JSON.parse(req.prompt);return {json:p.submittedReply?{reply:partner,supportProvided:false,observations,moment}:{title:'Garden',goal:'Show the garden.',opening:'Hi Grandpa! How tall are your plants?',supportProvided:false},provider:'test',ms:1};};
+ await command('start',{sceneId:'weekend',replace:true});
+ await command('turn',{text:'My tomatoes is one metre.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ k2Calls=0;return getSession().conversation;
+}
+const momentTry=text=>command('moment-try',{text,mode:'text',lastTurnId:getSession().conversation.moment.turnId});
+/** better and the fix key, absent from everything the TV and the phone read */
+function withheldEverywhere(where){
+ const json=JSON.stringify(getSession());
+ assert(!json.includes(TOMATO.better),`${where}: better is not in the session`);
+ assert(!/tomatoes are/i.test(json),`${where}: nor is the fix key`);
+}
+test('K2 case 1 GATE: the session has no better until a try holds; "My tomatoes are one metre." holds before the fix is shown, frees the next reply, with no model call',async()=>{
+ let c=await k2Moment();
+ assert.equal(getSession().screen,'linga-moment');assert.equal(c.moment.kind,'fix');assert.equal(c.moment.slip,'tomatoes is');
+ assert.deepEqual(c.moment.repair,{rung:0,support:false},'B1 starts at "say it again"');assert.equal(c.supported,true,'a moment models wording');
+ withheldEverywhere('after the turn');
+ assert.equal(c.moments.length,0,'not one of the scene\'s moments while open');assert.equal(getLearner('ema').english.taught.length,0,'not on the record while open');
+ const V=view();let v=V.lingaView(getSession());
+ assert.equal(v.hero.after.quote,'');assert.equal(v.hero.open,true,'the after slot is an empty frame');assert.equal(v.hero.note,'','no clue yet');
+ assert.deepEqual(v.answer,{id:'answer',action:'moment-try',label:'Say it again',lastTurnId:c.moment.turnId});
+ assert.deepEqual(v.actions.map(a=>a.id),['show-me','back'],'Show me and Back, on the TV row and so on the phone');
+ assert.doesNotMatch(V.viewText(v),/tomatoes are/i,'nor in the words the LT driver reads');
+ await momentTry('My tomatoes are one metre.');
+ c=getSession().conversation;
+ assert.equal(k2Calls,0,'judged by code: no model call');
+ assert.equal(c.moment.repair.held,true);assert.equal(c.moment.repair.selfRepaired,true);assert.equal(c.moment.repair.tried,'My tomatoes are one metre.');
+ assert.equal(c.supported,false,'an unshown self-repair clears supported');
+ assert.equal(c.turns.filter(t=>t.role==='learner').length,1,'a try is never a turn');assert.equal(getLearner('ema').english.evidence.length,0,'nor evidence');
+ v=V.lingaView(getSession());
+ assert.deepEqual(v.hero.before,{kicker:'You said',quote:TOMATO.said,struck:'tomatoes is'},'the slip struck');
+ assert.deepEqual(v.hero.after,{kicker:'You found it',quote:'My tomatoes are one metre.'},'the learner\'s own line in the after slot');
+ assert.equal(v.hero.open,undefined);assert.equal(v.answer,null,'no more tries');assert.deepEqual(v.actions.map(a=>a.id),['back']);
+ assert.doesNotMatch(JSON.stringify(v.hero)+v.caption,/\d+ (of|tries|try)/,'a picture, no count');
+ await command('moment-done');c=getSession().conversation;
+ const t=getLearner('ema').english.taught;
+ assert.equal(t.length,1);assert.equal(t[0].better,TOMATO.better);assert.equal(t[0].selfRepaired,true);assert.equal(t[0].tried,'My tomatoes are one metre.');assert.equal(t[0].repair,undefined);
+ assert.equal(c.moments.length,1);assert.equal(c.moments[0].better,TOMATO.better,'the fix joins the scene\'s moments when it closes');
+ assert.equal(c.supported,false,'still free after Back');
+ // the next reply is the learner's own: its observation is unsupported
+ answer=async()=>({json:{reply:'And the beans?',supportProvided:false,observations:[{skill:'describe',quote:'My tomatoes are very tall',success:true,confidence:'clear',note:'Described the plants.'}]},provider:'test',ms:1});
+ await reply('My tomatoes are very tall now.');
+ const e=getSession().conversation.evidence.at(-1);assert.equal(e?.quote,'My tomatoes are very tall');assert.equal(e.supported,false,'own-words credit after a self-repair');
+ console.log(`# K2 case 1: held "${t[0].tried}" selfRepaired=${t[0].selfRepaired} supported=${c.supported} modelCalls=0`);
+});
+test('K2 case 2: "My tomatoes is one metre." is not held; misses climb to the clue, then the fix, then one more try',async()=>{
+ let c=await k2Moment();const V=view();
+ await momentTry('My tomatoes is one metre.');c=getSession().conversation;
+ assert.equal(c.moment.repair.held,undefined,'the slip still stands: not held');assert.equal(c.moment.repair.rung,1,'the clue');
+ withheldEverywhere('after a miss');assert.equal(V.lingaView(getSession()).hero.note,TOMATO.why,'the why is the clue');
+ await momentTry('My plants are one metre.');c=getSession().conversation;
+ assert.equal(c.moment.repair.held,undefined,'undecided: the fix key is not said');assert.equal(c.moment.repair.rung,2);
+ assert.equal(c.moment.better,TOMATO.better,'a second miss shows the fix');assert.equal(c.supported,true);
+ const v=V.lingaView(getSession());assert.deepEqual(v.hero.after,{kicker:'Try',quote:TOMATO.better});assert.equal(v.answer.label,'Say it once more');assert.deepEqual(v.actions.map(a=>a.id),['back']);
+ await momentTry('My tomatoes is one metre!');c=getSession().conversation;
+ assert.equal(c.moment.repair.spent,true);assert.equal(c.moment.repair.held,undefined);
+ await assert.rejects(momentTry('My tomatoes are one metre.'),e=>e.status===409,'one more try, no more');
+ assert.equal(k2Calls,0);
+ await command('moment-done');
+ const t=getLearner('ema').english.taught[0];assert.equal(t.selfRepaired,false);assert.equal(t.tried,'My tomatoes is one metre!');
+ assert.equal(getSession().conversation.supported,true,'a revealed fix keeps the next reply supported');
+ console.log(`# K2 case 2: "My tomatoes is one metre." not held -> rung 1; undecided -> rung 2 (shown); one more try, then spent; modelCalls=${k2Calls}`);
+});
+test('K2 case 3: after Show me, a bare repeat of the fix key is not held and supported stays true; the learner\'s sentence holds, unshown never',async()=>{
+ let c=await k2Moment();
+ await command('moment-show');c=getSession().conversation;
+ assert.equal(c.moment.better,TOMATO.better);assert.equal(c.moment.fix,'tomatoes are');assert.equal(c.moment.repair.rung,2);
+ await momentTry('tomatoes are');c=getSession().conversation;
+ assert.equal(c.moment.repair.held,undefined,'the bare fix key read off the card is no repair');assert.equal(c.supported,true);assert.equal(c.moment.repair.spent,true);
+ await command('moment-done');assert.equal(getLearner('ema').english.taught[0].selfRepaired,false);
+ // the full sentence after the fix was shown holds, but it was shown: no self-repair, still supported
+ await k2Moment();await command('moment-show');await momentTry('My tomatoes are one metre.');c=getSession().conversation;
+ assert.equal(c.moment.repair.held,true);assert.equal(c.moment.repair.selfRepaired,false);assert.equal(c.supported,true);
+ assert.equal(view().lingaView(getSession()).hero.after.kicker,'You said it');
+ // the judge itself (repair.ts judgeTry), on the 10-14 LT pairs
+ const {judgeTry}=require(path.join(root,'src/lib/english/repair.ts')),S=slipMod();
+ const tom={...TOMATO,...S.slipOf(TOMATO.said,TOMATO.better)};
+ assert.equal(judgeTry(tom,'My tomatoes are one metre.',false),true);assert.equal(judgeTry(tom,'My tomatoes is one metre.',false),false);
+ assert.equal(judgeTry(tom,'tomatoes are',false),true,'before the fix is shown, finding the key is the learner\'s own');
+ assert.equal(judgeTry(tom,'tomatoes are',true),null,'after it, a bare echo is not held');assert.equal(judgeTry(tom,'Tomatoes are.',true),null);
+ const venue={said:'we was discussing about this venue',better:'we were discussing this venue'};
+ assert.equal(judgeTry({...venue,...S.slipOf(venue.said,venue.better)},'we were discussing this venue',false),true,'P07\'s third fixture');
+ // a fix with no guarded key falls back to take.ts heldOf, kind word, over (said, better)
+ const plain={said:'I will',better:'I would'},pk={...plain,...S.slipOf(plain.said,plain.better)};
+ assert.equal(judgeTry(pk,'I would',false),true);assert.equal(judgeTry(pk,'I will',false),false);assert.equal(judgeTry(pk,'Maybe later.',false),null);
+});
+test('K2 case 4: a word moment still shows its better at once and takes no try; A1 starts at the clue rung',async()=>{
+ let c=await k2Moment({moment:{kind:'word',said:'rajčata',better:'tomatoes',why:'The red fruit in your garden.'}});
+ assert.equal(c.moment.better,'tomatoes');assert.equal(c.moment.repair,undefined);assert(JSON.stringify(getSession()).includes('"better":"tomatoes"'));
+ await assert.rejects(momentTry('My tomatoes.'),e=>e.status===409);
+ assert.equal(view().lingaView(getSession()).answer,null);
+ c=await k2Moment({level:'A1'});
+ assert.equal(c.moment.repair.rung,1,'A1-A2 start on the clue');withheldEverywhere('A1');
+ const v=view().lingaView(getSession());assert.equal(v.hero.note,TOMATO.why);assert.equal(v.hero.open,true);
+ await momentTry('My tomatoes is big.');assert.equal(getSession().conversation.moment.repair.rung,2,'one miss on the clue shows the fix');
+ assert.equal(getSession().conversation.moment.better,TOMATO.better);
+});
+test('K2 case 5: a fix the partner\'s line or an observation note already said is shown at once; nothing else on the session echoes a withheld fix',async()=>{
+ let c=await k2Moment({partner:'Wow, your tomatoes are one metre tall!'});
+ assert.equal(c.moment.repair,undefined,'the partner said the fix key: nothing left to withhold');assert.equal(c.moment.better,TOMATO.better);
+ c=await k2Moment({observations:[{skill:'describe',quote:'My tomatoes is one metre',success:false,confidence:'clear',note:'Say "tomatoes are".'}]});
+ assert.equal(c.moment.repair,undefined,'an observation note said it');
+ c=await k2Moment({moment:{kind:'fix',...TOMATO,why:'Say "tomatoes are": more than one.'}});
+ assert.equal(c.moment.repair,undefined,'its own why said it: the clue would be the fix');
+ // the turn prompt asks the tutor not to say it
+ let prompt;fresh();await command('start',{sceneId:'booking',replace:true});
+ answer=async req=>{prompt=JSON.parse(req.prompt);return {json:{reply:'Ok.',observations:[]},provider:'test',ms:1};};
+ await reply('I has booking.');
+ assert.match(prompt.task,/never say better or its corrected words in your reply or in an observation note/);
+ // while withheld: not in shownLines, and neither device draws it
+ c=await k2Moment();
+ assert(!review().shownLines(c).some(x=>/tomatoes are/i.test(x)));
+ const sf=require(path.resolve(__dirname,'../uat/driver/surface.cjs')).surfaceOf(getSession());
+ assert.doesNotMatch(sf.shown,/tomatoes are/i,'neither device draws it');assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
+ assert.match(sf.phone,/Say it again, your way/);assert.match(sf.phone,/Show me/);
+});
+test('K2 case 6: a self-repaired fix is not a shown line; Finish over an open moment keeps it; a restart that lost the fix says so and keeps nothing',async()=>{
+ let c=await k2Moment();await momentTry('My tomatoes are one metre.');await command('moment-done');c=getSession().conversation;
+ assert(!review().shownLines(c).includes(TOMATO.better),'the TV showed the learner\'s own line, never the fix');
+ c=await k2Moment();await command('finish');
+ assert.equal(getLearner('ema').english.taught.length,1,'Finish over a moment keeps it');assert.equal(getSession().conversation.moments.length,1);
+ c=await k2Moment();globalThis.__lingaRepair.clear();
+ await command('moment-show');c=getSession().conversation;
+ assert.equal(c.moment.repair.lost,true);withheldEverywhere('after a restart');
+ const T=turn();assert.equal(T.accepts(c,'moment-try'),false);assert.equal(T.refusal(c,'moment-try'),T.LOST);
+ assert.match(view().lingaView(getSession()).caption,/lost this fix/);
+ await command('moment-done');assert.equal(getLearner('ema').english.taught.length,0,'nothing kept: the fix existed only in memory');
+});
+test('K2 case 7: the server refuses exactly what the table refuses on a fix moment at every rung',async()=>{
+ const T=turn(),wrong=[];
+ const fixes={'withheld 0':{rung:0,support:false},'withheld 1':{rung:1,support:false},shown:{rung:2,support:false},spent:{rung:2,support:false,tried:'x',spent:true},held:{rung:0,support:false,tried:'I work.',held:true,selfRepaired:true,spent:true},lost:{rung:0,support:false,lost:true}};
+ for(const [name,repair] of Object.entries(fixes))for(const action of CONVERSATION_ACTIONS){
+  const withheld=repair.rung<2&&!repair.held;
+  const c=convo({turns:REPLIED,moment:{...MOMENT,...(withheld?{better:'',fix:undefined}:{}),repair}});
+  const s=install(fixture('linga-moment',{placement:placed(),conversation:c}));answerAll();
+  const ok=T.accepts(c,action);let got='accepted';
+  try{await englishCommand({action,learnerId:s.learner.id,episodeId:c.id,commandId:`k2-table-${++counter}`,...extraFor(action,c)});}
+  catch(e){got=e.status===409?'refused':`error ${e.status}: ${e.message}`;}
+  if(got!==(ok?'accepted':'refused'))wrong.push(`${name} · ${action}: table ${ok?'accepts':'refuses'}, server ${got}`);
+ }
+ assert.deepEqual(wrong,[]);
 });

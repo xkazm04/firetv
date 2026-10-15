@@ -459,6 +459,10 @@
 .linga-tv .lo-note-label { display: block; color: var(--lo-muted-line); font-size: 22px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
 .linga-tv .lo-before q { display: block; margin-top: 8px; color: #7b6a6c; font-family: var(--lo-serif); font-size: 40px; line-height: 1.2; }
 .linga-tv .lo-compare .lo-card { margin-top: 40px; }
+/* a fix still withheld (K2): the after slot is an empty plum frame, dashed like every slot still to fill; the learner's line fills it */
+.linga-tv .lo-card.lo-open { border: 3px dashed var(--lo-frame); background: rgba(255, 249, 236, .5); box-shadow: none; }
+.linga-tv .lo-card.lo-open::before { opacity: .35; }
+.linga-tv .lo-card.lo-open .lo-card-text { min-height: 1.18em; }
 .linga-tv .lo-note { max-width: 720px; margin-top: 24px; color: var(--lo-data); font-size: 30px; font-weight: 700; line-height: 1.3; }
 
 /* speaking progress: stepping stones on a dashed path */

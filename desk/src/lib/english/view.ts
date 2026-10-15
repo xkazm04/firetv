@@ -20,6 +20,8 @@ import { modeOf } from "../rules/mode";
 import { accepts, refusal, turnState } from "./turn";
 import { runningTake, takeSpent } from "./take";
 import { lostLine, type LostTask } from "./lostfound";
+import { showOpen } from "./repair";
+import { slipStands } from "./slip";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
 
 /**
@@ -53,6 +55,8 @@ export const VIEW_ACTION_IDS = [
   "start-situation", "next-situation", "previous-chapter", "next-chapter",
   // the conversation, the moment, the coach and the recap
   "resume", "finish", "retry-scene", "cue", "quiz", "pick-phrase", "coach", "replay", "back", "learning-map",
+  // a fix moment (K2): the withheld fix shown on request; the learner's try is the phone's answer
+  "show-me",
   // the menu
   "menu-back", "my-level", "my-topics", "phone-setup", "sentence-help",
   // the certificate (Family W10): home's door to a new one, the menu's, the plate and the list of them
@@ -92,7 +96,8 @@ export interface ViewRun {
 }
 export interface ViewAction { id: ActionId; label: string; help: string; run: ViewRun; disabled?: boolean; needs?: Need; }
 /** What takes a typed or spoken answer on this screen: the phone's reply box, the PC test bar, the driver's "answer". */
-export interface Answer { id: "answer"; action: "check-answer" | "check-task" | "plan-goal" | "turn"; label: string; lastTurnId?: string; taskId?: string; }
+/** On a fix moment (K2) the answer is a try, "moment-try", and lastTurnId is the learner turn the moment is on. */
+export interface Answer { id: "answer"; action: "check-answer" | "check-task" | "plan-goal" | "turn" | "moment-try"; label: string; lastTurnId?: string; taskId?: string; }
 /** The line the TV speaks. A new key plays it again; blocked keeps it silent. */
 export interface Spoken { line: string; key: string; blocked: boolean; slow: boolean; speaker: string; }
 export interface Recap { title: string; replies: number; spoken: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
@@ -120,9 +125,13 @@ export type Hero =
       sentence?: string;
       /** the scene that taught it, so the sentence is not read as one the learner said tonight */
       from?: string }
-  | { kind: "comparison"; before: { kicker: string; quote: string }; after: { kicker: string; quote: string }; note: string;
+  | { kind: "comparison"; before: { kicker: string; quote: string;
+      /** a fix the learner repaired (K2): the excerpt of the quote struck through, the slip they found; never a count */
+      struck?: string }; after: { kicker: string; quote: string }; note: string;
       /** the picture in the arch when it is not the coach's; the data line under the picture */
-      art?: ArtKey; data?: string }
+      art?: ArtKey; data?: string;
+      /** a fix still withheld (K2): the after slot is an empty frame, waiting for the learner's line */
+      open?: boolean }
   | { kind: "menu"; kicker: string; title: string; entries: string[]; selected: number }
   /** the recap of a take ended by Cut (v2 L3): the notes as a tape strip, one pin each, the focused pin's note in the caption slot.
    * A pin whose note had its Take Two (v2 L4) carries a mark: held (its quote struck), open, or undecided ("Not decided");
@@ -238,6 +247,8 @@ function answerOf(s: Session, lc: LevelCheck | null, c: Conversation | null): An
   }
   // The phone keeps its reply box during the recognition quiz, and a turn is accepted there: the turn table decides.
   const said = c ? (runningTake(c)?.turns ?? c.turns).at(-1) : undefined;
+  // a fix moment (K2) takes the learner's try in the same box, while it takes one; never a turn
+  if (panel === "moment" && c?.moment && accepts(c, "moment-try")) return { id: "answer", action: "moment-try", label: c.moment.repair?.rung === 2 ? "Say it once more" : "Say it again", lastTurnId: c.moment.turnId };
   if (panel === "talk" && c && accepts(c, "turn") && said?.role === "partner") return { id: "answer", action: "turn", label: `Reply to ${c.partner}`, lastTurnId: said.id };
   return null;
 }
@@ -426,10 +437,27 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     // Next first (the map opens on chapter 1, where Previous wraps to 8); each caption names the chapter it goes to, not its goal, which reads as this chapter's
     actions = [act("next-chapter", "Next chapter", `${ENGLISH_SKILLS[(chapter + 1) % 8].name}.`, { ui: { chapter: (chapter + 1) % 8 } }), act("previous-chapter", "Previous chapter", `${ENGLISH_SKILLS[(chapter + 7) % 8].name}.`, { ui: { chapter: (chapter + 7) % 8 } })];
   } else if (c && s.screen === "linga-moment" && c.moment) {
-    const m = c.moment; tag = "A moment";
-    hero = { kind: "comparison", before: { kicker: m.kind === "fix" ? "You said" : "You wanted to say", quote: m.said }, after: { kicker: m.kind === "fix" ? "Try" : "In English", quote: m.better }, note: m.why };
-    caption = "Then carry on from where the scene stopped."; captionTag = m.kind === "fix" ? "One thing to fix" : "A word for this scene";
-    actions = [act("back", "Back to the conversation", "Carry on from where the scene stopped.", cmd("moment-done"), { disabled: refused("moment-done") })];
+    const m = c.moment, r = m.kind === "fix" ? m.repair : undefined; tag = "A moment";
+    const back = act("back", "Back to the conversation", "Carry on from where the scene stopped.", cmd("moment-done"), { disabled: refused("moment-done") });
+    if (!r) {
+      hero = { kind: "comparison", before: { kicker: m.kind === "fix" ? "You said" : "You wanted to say", quote: m.said }, after: { kicker: m.kind === "fix" ? "Try" : "In English", quote: m.better }, note: m.why };
+      caption = "Then carry on from where the scene stopped."; captionTag = m.kind === "fix" ? "One thing to fix" : "A word for this scene";
+      actions = [back];
+    } else {
+      // K2 (repair.ts): the learner looks for the fix first. The slip stays; the after slot is an empty frame until a try
+      // holds (the slip struck, their own line in the slot) or the fix is shown. The why is the clue. A picture, no count.
+      const shown = !!m.better && !r.held, open = !r.held && !shown;
+      hero = { kind: "comparison", before: { kicker: "You said", quote: m.said, ...(r.held ? { struck: (m.slip && slipStands(m.said, m.slip)) || m.said } : {}) },
+        after: r.held ? { kicker: r.selfRepaired ? "You found it" : "You said it", quote: r.tried ?? "" } : shown ? { kicker: "Try", quote: m.better } : { kicker: "Your line", quote: "" },
+        note: r.rung >= 1 || r.held || r.lost ? m.why : "", ...(open ? { open: true } : {}) };
+      captionTag = r.held ? (r.selfRepaired ? "Your own fix" : "Fixed") : r.lost ? "One thing to fix" : shown ? "The fix" : r.rung === 1 ? "A clue" : "One thing to fix";
+      caption = r.lost ? "Linga lost this fix when the desk restarted. Carry on from where the scene stopped."
+        : r.held ? "Then carry on from where the scene stopped."
+        : r.spent ? "Then carry on from where the scene stopped."
+        : shown ? "Say it once more on your phone, or carry on."
+        : "Say it again on your phone, your way. Or ask Linga to show you.";
+      actions = [...(showOpen(m) ? [act("show-me", "Show me", "See Linga's fix. You can say it once more after.", cmd("moment-show"), { disabled: refused("moment-show") })] : []), back];
+    }
   } else if (c && s.screen === "linga-coach" && c.coaching) {
     tag = "One useful change";
     hero = { kind: "comparison", before: { kicker: "You said", quote: c.coaching.before }, after: { kicker: "One way to try it", quote: c.coaching.after }, note: c.coaching.note };
@@ -611,6 +639,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     }
     if (lc.stage !== "verdict") onPhone(lc.stage === "plan" ? act("not-now", "Not now", "Leave for now. Linga asks again when you come back to your topics.", cmd("check-leave")) : stopCheck);
   }
+  if (panel === "moment" && c && showOpen(c.moment)) onPhone(act("show-me", "Show me", "See Linga's fix. You can say it once more after.", cmd("moment-show"), { disabled: refused("moment-show") }));
   if (panel === "moment" && c) onPhone(act("back", "Back to the conversation", "Carry on from where the scene stopped.", cmd("moment-done"), { disabled: refused("moment-done") }));
   // the phone's live conversation: Resume while the learner paused, the coach's replay, else the reply helpers
   if (panel === "talk" && c && take) {
@@ -685,7 +714,7 @@ export function viewText(v: LingaView): string {
     case "topics": out.push(h.kicker, ...h.topics.map(t => `  [${t.id}] ${t.title} — ${t.skill}\n      why: ${t.why}`)); break;
     case "scene": out.push(...(h.own ? ["Your own scene"] : []), h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : []), ...(h.lost ? [lostLine(h.lost)] : [])); break;
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
-    case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
+    case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"${h.before.struck ? `, "${h.before.struck}" struck through` : ""}`, h.open ? `${h.after.kicker}: an empty frame, waiting for your line` : `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
     case "tape": out.push(h.kicker, h.title, ...h.pins.map((x, i) => `  pin ${i + 1} · ${x.label}: "${x.quote}"${x.better ? ` → "${x.better}"` : ""}\n      note: ${x.note}${x.mark ? `\n      Take Two: ${TAKE_MARK_WORDS[x.mark]}` : ""}`),
       ...(h.branch ? [`  Take Two of pin ${h.branch.pin + 1}, a branch from it: ${h.branch.partner} says "${h.branch.from}"${h.branch.again ? `; you again: "${h.branch.again}"` : ""}`] : []), h.data); break;

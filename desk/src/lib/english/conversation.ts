@@ -17,9 +17,10 @@ import { EngineError } from "../engines/types";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, spokenBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
-import { bringBack, dueTaught, keepMoment, markReused, markSlipped, offer, partnerLines, reuseOf, reviewOf, shownLines, slipsAgain, SLIP_AGAIN_TASK, usedLine } from "./review";
-import { slipOf } from "./slip";
+import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, partnerLines, reuseOf, reviewOf, shownLines, slipsAgain, SLIP_AGAIN_TASK, usedLine } from "./review";
+import { findKey, slipOf } from "./slip";
 import { checkLine, forgetLine, heldLine, holdLine, keepLine, LINE_MAX, lineBack, lineFound, lineTaught, OFFER_BANDS, offerLine, quizLine, showsLine, type HiddenLine } from "./line";
+import { afterTry, forget, heldFor, judgeTry, remember, revealed, triedLine, withhold } from "./repair";
 import { copiesShown } from "./credit";
 import { applyStep, currentStep, missionDone, missionOf, STEP_MAX } from "./mission";
 import { accepts, isTurnAction, refusal } from "./turn";
@@ -140,6 +141,22 @@ function parseMoment(value:unknown,reply:string,turnId:string):Moment|null{
   // a fix carries its slip keys (K1, slip.ts), worked out by code here and never asked of the model
   const keys=kind==="fix"?slipOf(said,better):null;
   return {id:`${turnId}:moment`,kind,said,better,why,turnId,at:Date.now(),...(keys??{})};
+}
+/**
+ * A moment closes (Back, or Finish over it). Its fix comes back from server memory (repair.ts), it joins the scene's
+ * moments, and only now is it kept on the learner record (review.ts keepMoment), with its self-repair: while it was open
+ * nothing of it reached the record or the scene's moments, so no screen could list a withheld fix (K2). The slips its
+ * turn already counted are remembered with it, so one reply still counts once. A fix a restart lost closes with nothing kept.
+ */
+function closeMoment(c:Conversation,allowed:(t:{sceneId:string})=>boolean):Conversation{
+  const open=c.moment;if(!open)return c;
+  const m=revealed(open),held=heldFor(open.id);forget(open.id);
+  if(!m)return {...c,moment:null};
+  const {repair,...plain}=m,at=c.turns.findIndex(t=>t.id===m.turnId);
+  const item={...plain,sceneId:c.sceneId,title:c.title,...(repair?{selfRepaired:!!repair.selfRepaired,...(repair.tried?{tried:repair.tried}:{})}:{})};
+  const now=getLearner(c.learnerId).english,before={...c,turns:at<0?c.turns:c.turns.slice(0,at)};
+  saveEnglish(c.learnerId,{...now,taught:keepMoment(now.taught,item,partnerLines(before),TAUGHT_CAP,held?.counted??[],allowed)});
+  return {...c,moment:null,moments:[...(c.moments??[]),m]};
 }
 
 /**
@@ -293,6 +310,8 @@ export async function englishCommand(raw:unknown){
   if(!c||c.id!==input.episodeId||c.learnerId!==learnerId)throw new ConversationError("This conversation has changed. Open the current scene.",409);
   if(c.commands.includes(commandId))return getSession();
   const prefs=learning.preferences??defaultPreferences(profile),scene=sceneOf(c),deskMode=modeOf(profile,prefs);
+  // the taught items this learner may be shown now (curriculum.taughtAllowed): a slip said again, a moment kept
+  const allowed=taughtAllowed(profile,prefs,learning);
   if(!scene||!audienceAllowed(profile,prefs,scene.audience))throw new ConversationError("This situation is no longer available for this learner.",403);
   // L3 (lostfound.ts): the learner's lost thing, for the phone to draw; a reply to this request only, never the session
   if(action==="lost-picture")return {picture:lostPicture(c)};
@@ -307,7 +326,24 @@ export async function englishCommand(raw:unknown){
   if(action==="leave"&&runningTake(c)){commit({...c,pending:null,capture:false},"linga-talk");return getSession();}
   if(action==="leave") {commit({...c,pending:null,paused:true,capture:false,quizOpen:false},"linga");return getSession();}
   if(action==="resume") {commit({...c,paused:false,capture:false,error:""},screenFor(c),parkCheck());return getSession();}
-  if(action==="moment-done") {commit({...c,moment:null},"linga-talk");return getSession();}
+  if(action==="moment-done") {commit({...closeMoment(c,allowed),commands:[...c.commands,commandId].slice(-100)},"linga-talk");return getSession();}
+  if(action==="moment-try"){
+    // K2 (repair.ts): the learner's line again on a fix moment, judged by code with no model call. Never a turn, never evidence.
+    const m=c.moment!,r=m.repair!,commands=[...c.commands,commandId].slice(-100);
+    if(input.lastTurnId!==m.turnId)throw new ConversationError("This moment has changed. Look at the TV again.",409);
+    const said=required(input.text,"reply",1200);
+    if(!["speech","text"].includes(String(input.mode)))throw new ConversationError("Choose a speech or typed reply.");
+    const fix=revealed(m);
+    if(!fix){commit({...c,moment:{...m,repair:{...r,lost:true}},capture:false,commands},"linga-moment");return getSession();}
+    const shown=r.rung>=2,held=judgeTry(fix,said,shown)===true,repair=afterTry(r,triedLine(said,fix.fix),held);
+    // the fix reaches the session once a try held or the rungs reached it; a self-repair frees the next reply (repair.ts)
+    commit({...c,moment:{...(held||repair.rung>=2?fix:m),repair},capture:false,supported:held&&!shown?r.support:c.supported,commands},"linga-moment");return getSession();
+  }
+  if(action==="moment-show"){
+    // Show me: the withheld fix, from server memory; one more try follows (repair.ts). A restart that lost it says so.
+    const m=c.moment!,r=m.repair!,fix=revealed(m);
+    commit({...c,moment:fix?{...fix,repair:{...r,rung:2}}:{...m,repair:{...r,lost:true}},capture:false,commands:[...c.commands,commandId].slice(-100)},"linga-moment");return getSession();
+  }
   if(action==="capture") {commit({...c,capture:true,captureAt:Date.now()});return getSession();}
   if(action==="pause") {commit({...c,paused:!c.paused,capture:false},undefined,c.paused?parkCheck():undefined);return getSession();}
   if(action==="repeat") {commit({...c,audioNonce:c.audioNonce+1,capture:false});return getSession();}
@@ -332,7 +368,7 @@ export async function englishCommand(raw:unknown){
     saveEnglish(learnerId,mergeEvidence(learning,[e]));
     commit({...c,supported:true,quizOpen:!correct,cue:correct?"Now use the idea in your own reply on the phone.":"That phrase has a different purpose. Try the other option.",help:c.help&&{...c.help,shown:false},commands:[...c.commands,commandId],evidence:[...c.evidence,e]},"linga-talk");return getSession();
   }
-  if(action==="finish"){endTake(c,commandId);return getSession();}
+  if(action==="finish"){endTake(closeMoment(c,allowed),commandId);return getSession();}
   if(action==="cut"){
     // Cut (v2 L3, Adult mode; the turn table took it): one fast call over this take's learner lines asks for at most
     // three notes, and code keeps the ones that quote the learner (notes.ts). With one kept the take ends as finish
@@ -375,14 +411,14 @@ export async function englishCommand(raw:unknown){
   const mayStop=action==="turn"&&momentAllowed(c);
   // K1: a taught slip said again is found by code before the call (review.ts slipsAgain): this scene's moments and the
   // taught fixes this learner may be shown. The first asks the partner for a soft recast; record-tier ones count below.
-  const allowed=taughtAllowed(profile,prefs,learning),again=action==="turn"?slipsAgain(reply,c,learning.taught.filter(allowed)):[];
+  const again=action==="turn"?slipsAgain(reply,c,learning.taught.filter(allowed)):[];
   // L3: the lost-property table after this reply, decided in code before the call; the partner phrases it, and it lands with the turn
   const lost=action==="turn"?lostTurn(c,reply):undefined;
   commit({...c,pending:commandId,capture:false,error:""});
   try{
     // The first LT run: 3 moments in 16 conversations, with clear errors in most learner turns. "Most turns are none"
     // read as "almost never"; the gap and cap in momentAllowed already keep a scene a scene.
-    const momentTask=mayStop?(beginner(c)?" This learner is a beginner: stop only for a word or phrase they will need again in this scene, never on a goodbye, a thanks or a closing line.":"")+" moment: you may stop the scene for one thing. Stop with a fix when submittedReply has an error that blurs the meaning, an error this learner has now made more than once in the transcript, or a basic error their level should already control; said is an exact excerpt of submittedReply, better is the same idea said well, why is one short reason. Stop with a word when the learner reached for a word or phrase in another language, talked around a missing word, or used a clearly wrong word; said is exactly what they used (their own-language words are fine), better is the English they needed (the word or phrase, or at most one short sentence using it in this scene), why is what it means in plain words. A word moment is vocabulary only: a grammar point (a verb form, an article, word order) is a fix, and a fix needs an exact excerpt of an English reply. When the reply has such an error, stop for it rather than letting it pass, and pick the one that matters most. Never stop for a valid alternative, a style or register choice, or a one-off slip that does not blur meaning. Otherwise kind none with empty fields.":" moment: kind none with empty fields.";
+    const momentTask=mayStop?(beginner(c)?" This learner is a beginner: stop only for a word or phrase they will need again in this scene, never on a goodbye, a thanks or a closing line.":"")+" moment: you may stop the scene for one thing. Stop with a fix when submittedReply has an error that blurs the meaning, an error this learner has now made more than once in the transcript, or a basic error their level should already control; said is an exact excerpt of submittedReply, better is the same idea said well, why is one short reason. With a fix, never say better or its corrected words in your reply or in an observation note: the learner looks for the fix first. Stop with a word when the learner reached for a word or phrase in another language, talked around a missing word, or used a clearly wrong word; said is exactly what they used (their own-language words are fine), better is the English they needed (the word or phrase, or at most one short sentence using it in this scene), why is what it means in plain words. A word moment is vocabulary only: a grammar point (a verb form, an article, word order) is a fix, and a fix needs an exact excerpt of an English reply. When the reply has such an error, stop for it rather than letting it pass, and pick the one that matters most. Never stop for a valid alternative, a style or register choice, or a one-off slip that does not blur meaning. Otherwise kind none with empty fields.":" moment: kind none with empty fields.";
     const stepTask=c.mission&&!missionDone(c.mission)?" step: currentStep is the one goal this learner is working on. Set reached true only when submittedReply itself, in the learner's own words, does it, and quote the exact words of submittedReply that did it (at least two words); otherwise reached false with an empty quote.":"";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
     const task=action==="turn"?{task:`Respond in character to submittedReply, then assess it against the allowed skills. Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}`,submittedReply:reply,...(again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
@@ -401,16 +437,24 @@ export async function englishCommand(raw:unknown){
       // K4: the scene's hidden line found, in code, on its key words (line.ts lineFound): kept on the record for a later room
       const hidden=c.line&&!c.line.found?heldLine(c.id):null,found=hidden?lineFound(reply,c,hidden):null;
       // a slip said again counts on the record (record tier only, and once per reply); a moment on a slip the record already
-      // holds marks that item instead of teaching it twice (review.ts keepMoment)
+      // holds marks that item instead of teaching it twice (review.ts keepMoment, when the moment closes)
       const at=Date.now(),counted=again.filter(h=>h.record).map(h=>h.keys.slip);
       const slipped=counted.reduce((t,slip)=>markSlipped(t,slip,at,allowed),learned.taught);
-      const taught=moment?keepMoment(slipped,{...moment,sceneId:c.sceneId,title:c.title},partnerLines(c),TAUGHT_CAP,counted,allowed):slipped;
-      const kept=reused&&c.review?markReused(taught,c.review.id,c.id,reused,at,c.sceneId):taught;
+      // the moment itself is kept on the record when it closes (closeMoment), so a withheld fix never reaches a screen early
+      const kept=reused&&c.review?markReused(slipped,c.review.id,c.id,reused,at,c.sceneId):slipped;
       saveEnglish(learnerId,{...learned,taught:found&&hidden?keepLine(kept,lineTaught(hidden,c,at),{at,conversationId:c.id,sceneId:c.sceneId,quote:found},TAUGHT_CAP):kept});
       if(found)forgetLine(c.id);
-      // a moment models wording, so the reply after it is supported practice
+      // K2 (repair.ts): a fix is withheld, its better and fix key in server memory, unless its own why, the partner's line or
+      // an observation note already said them; a word, as before, shows at once. A1-A2 learners start on the clue.
+      const support=result.json.supportProvided!==false;let onScreen:Moment|null=null;
+      if(moment){
+        remember(moment,counted);
+        const says=(x:string)=>findPhrase(x,moment.better)!==null||(!!moment.fix&&findKey(x,moment.fix)!==null);
+        onScreen=moment.kind==="fix"&&![moment.why,partnerReply,...observations.map(o=>o.note)].some(says)?withhold(moment,beginner(c)?1:0,support):moment;
+      }
+      // a moment models wording, so the reply after it is supported practice (a self-repair frees it again, repair.ts)
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
-      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported||copied},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{}),...(found&&hidden&&c.line?{line:{...c.line,found:usedLine(reply,found),foundTurn:turnId,text:hidden.text}}:{})};
+      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported||copied},partner],supported:moment?true:support,moment:onScreen,moments:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{}),...(found&&hidden&&c.line?{line:{...c.line,found:usedLine(reply,found),foundTurn:turnId,text:hidden.text}}:{})};
     }else if(action==="coach"){
       const before=line(result.json.before,180);
       if(audienceSafe(c,line(result.json.after,180))===null||audienceSafe(c,line(result.json.note,220))===null)throw new Error("The coach note did not fit this learner.");if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");

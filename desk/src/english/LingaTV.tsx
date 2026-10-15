@@ -164,6 +164,13 @@ function artFor(h:Hero,s:Session):ArtKey{
 /** The conversation's goal under a partner's line, when the line leaves it room; the screen then starts one type step down (linga.css, data-fit). */
 function talkGoal(h:Hero):string|null{return h.kind==="scene"&&h.said&&h.subtitle&&h.said.length<=140?h.subtitle:null;}
 
+/** A quote with one excerpt struck through, as Take Two strikes a held note: the picture of a slip the learner fixed. */
+function struck(quote:string,part?:string):React.ReactNode{
+  const at=part?quote.indexOf(part):-1;
+  if(!part||at<0)return quote;
+  return <>{quote.slice(0,at)}<s data-role="linga-struck">{part}</s>{quote.slice(at+part.length)}</>;
+}
+
 /** A title in Georgia, one size smaller for each step in length so it never takes a third line. */
 function Title({text}:{text:string}){return <h1 className="lo-title" data-role="linga-title" data-size={text.length<=34?"l":text.length<=50?"m":"s"}>{text}</h1>;}
 
@@ -188,9 +195,10 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
     }
     // On the recap, the phrase this scene invited and the learner has yet to use stands where the title would be.
     case "track":return <><Kicker text={h.kicker}/>{h.sentence?<SentenceCard className="lo-compact" label={h.from?`From ${h.from}`:"A sentence to take with you"} text={h.sentence}/>:<Title text={h.title}/>}<Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;
+    // a fix moment (K2): the slip the learner repaired is struck (Take Two's mark), and a fix still withheld leaves the after slot an empty frame
     case "comparison":return <><Kicker text={v.tag}/><div className="lo-compare linga-comparison">
-      <div className="lo-before"><span>{h.before.kicker}</span><q>{h.before.quote}</q></div>
-      <SentenceCard label={h.after.kicker} text={h.after.quote}/>
+      <div className="lo-before"><span>{h.before.kicker}</span><q>{struck(h.before.quote,h.before.struck)}</q></div>
+      <SentenceCard className={h.open?"lo-open":""} role={h.open?"linga-open":undefined} label={h.after.kicker} text={h.after.quote}/>
     </div>{h.note&&<div className="lo-note">{h.note}</div>}{caption}{h.data&&<DataLine>{h.data}</DataLine>}</>;
     // the certificate: the band and its name, the caption's one sentence, then the plate (OpenDoor Plate)
     case "cert":return <><Kicker text={h.kicker}/><Title text={h.title}/>{caption}{(h.topics.length>0||h.skills.length>0||(h.open?.length??0)>0||h.quote)&&<Plate topics={h.topics} skills={h.skills} quote={h.quote} open={h.open}/>}</>;

@@ -10,6 +10,7 @@
  */
 import type { Mode } from "../rules/mode";
 import { forkOf, runningTake, takeSpent } from "./take";
+import { showOpen, tryOpen } from "./repair";
 import type { Conversation } from "./types";
 
 /**
@@ -26,8 +27,10 @@ export type TurnState = typeof TURN_STATES[number];
  * Every conversation command after the scene has started. "capture" is starting the phone's microphone. "cut" ends a
  * take with up to three notes (v2 L3): Adult mode only, so accepts() takes the mode. "take-two" plays one cut note's
  * beat again (v2 L4; not "replay", which is the coach's) and also takes the note; "take-end" ends that take early.
+ * "moment-try" is the learner's line again on a fix moment, judged by code with no model call, and "moment-show" shows
+ * the withheld fix (K2, repair.ts).
  */
-export const TURN_ACTIONS = ["turn", "cue", "quiz", "choice", "coach", "replay", "capture", "pause", "resume", "repeat", "leave", "finish", "moment-done", "cut", "take-two", "take-end"] as const;
+export const TURN_ACTIONS = ["turn", "cue", "quiz", "choice", "coach", "replay", "capture", "pause", "resume", "repeat", "leave", "finish", "moment-done", "cut", "take-two", "take-end", "moment-try", "moment-show"] as const;
 export type TurnAction = typeof TURN_ACTIONS[number];
 export function isTurnAction(action: string): action is TurnAction { return (TURN_ACTIONS as readonly string[]).includes(action); }
 
@@ -50,6 +53,7 @@ export function turnState(c: Conversation): TurnState {
  * and a pause, never over a reply in flight, a moment or the coach. Take Two (Adult mode) starts from a finished take's
  * notes; inside it the learner says their line and the cast answers, and nothing else of the scene is offered: no Cut,
  * coach, replay, quiz, help, pause or finish. A reply in flight inside a take is "waiting", and Leave there cancels it.
+ * A fix moment (K2) takes the learner's try and its microphone while a try is open, and Show me while the fix is withheld.
  */
 export const ACCEPTS: Record<TurnState, readonly TurnAction[]> = {
   finished: ["repeat", "take-two"],
@@ -57,7 +61,7 @@ export const ACCEPTS: Record<TurnState, readonly TurnAction[]> = {
   preparing: ["leave", "repeat"],
   waiting: ["leave", "repeat"],
   unprepared: ["resume", "finish", "leave", "repeat"],
-  moment: ["moment-done", "resume", "finish", "leave", "repeat"],
+  moment: ["moment-done", "moment-try", "moment-show", "capture", "resume", "finish", "leave", "repeat"],
   paused: ["resume", "pause", "finish", "leave", "repeat", "cut"],
   coaching: ["replay", "pause", "resume", "finish", "leave", "repeat"],
   quiz: ["turn", "cue", "quiz", "choice", "coach", "capture", "pause", "resume", "finish", "leave", "repeat", "cut"],
@@ -90,11 +94,16 @@ function noteRefusal(c: Conversation, note: unknown): string {
 export function accepts(c: Conversation, action: string, mode?: Mode, note?: number): boolean {
   if (!isTurnAction(action) || !ACCEPTS[turnState(c)].includes(action)) return false;
   if ((action === "turn" || action === "capture") && spent(c)) return false;
+  // on a moment, a try and its microphone while the fix moment takes a try, Show me while its fix is withheld (repair.ts)
+  if (action === "moment-try" || action === "capture" && c.moment) return tryOpen(c.moment);
+  if (action === "moment-show") return showOpen(c.moment);
   if (action === "cut") return mode === "adult" && hasReply(c);
   if (action === "take-two") return mode === "adult" && !noteRefusal(c, note);
   return action !== "coach" || hasReply(c);
 }
 
+/** The sentence for a fix a restart lost (repair.ts). */
+export const LOST = "Linga lost this fix when the desk restarted. Go back to the conversation.";
 /** The sentence for a line or a microphone on a take that has had its cast turns. */
 export const SPENT = "That was the take. Go back to the notes.";
 const BY_STATE: Record<TurnState, string> = {
@@ -114,6 +123,8 @@ const BY_ACTION: Partial<Record<TurnAction, string>> = {
   replay: "Ask for a coaching moment first.",
   choice: "Open Choose a phrase first.",
   "moment-done": "There is no moment on screen.",
+  "moment-try": "There is no moment on screen.",
+  "moment-show": "There is no moment on screen.",
   cut: "Say a line in the scene first; Cut gives notes on your own words.",
 };
 
@@ -130,5 +141,7 @@ export function refusal(c: Conversation, action: string, mode?: Mode, note?: num
   if ((action === "turn" || action === "capture") && spent(c)) return SPENT;
   if (action === "take-end" && !runningTake(c)) return "There is no take running.";
   if (action === "cut" && state === "paused") return BY_ACTION.cut!;
+  if (state === "moment" && (action === "moment-try" || action === "capture")) return c.moment?.repair?.lost ? LOST : c.moment?.repair ? "That was your try. Go back to the conversation." : "This moment shows its words at once.";
+  if (state === "moment" && action === "moment-show") return c.moment?.repair?.lost ? LOST : "The fix is already on screen.";
   return (state === "quiz" || state === "your-turn") && BY_ACTION[action as TurnAction] || BY_STATE[state];
 }
