@@ -171,7 +171,10 @@ test('a co-star who is a learner profile earns observations from their own line,
   assert.deepEqual(jakub.evidence.map(e=>e.quote),['Sorry, what date did you book it?'],'only a quote of the co-star\'s own line, on their record');
   assert.equal(jakub.evidence[0].turnId,conv().turns.find(t=>t.role==='costar').id);
   assert.equal(conv().moment?.said,'I need my booking','a moment on the learner\'s own line still stops the scene');
-  assert.equal(ema.taught.length,1);assert.equal(jakub.taught.length,0);
+  // K2: a fix moment is kept on the record when it closes, so it is not there while it is open
+  assert.equal(ema.taught.length,0);assert.equal(jakub.taught.length,0);
+  await command('moment-done');
+  assert.equal(getLearner('ema').english.taught.length,1);assert.equal(getLearner('jakub').english.taught.length,0);
 });
 
 test('Family mode: a co-star profile makes the room the stricter of the two; a named co-star leaves the learner\'s mode',async()=>{
