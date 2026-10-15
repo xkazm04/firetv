@@ -145,11 +145,13 @@ class AudioTest {
         val raw=File("../assets/audio/cues.json").readText()
         val json=com.badlogic.gdx.utils.JsonReader().parse(raw)
         val voice=json.get("cues").first{it.getString("id")=="voice.mechanic.seizure"}
-        assertEquals("fail",voice.getString("technicalStatus"))
-        assertEquals("owner-accepted",voice.getString("status"))
-        assertTrue(voice.get("technicalFailures").asStringArray().contains("silence"))
+        // 2026-10-15 re-record passes the silence screen; the status must follow the measured screen, never hide a failure.
+        val screened=voice.getString("technicalStatus")
+        assertEquals(if(screened=="pass") "technical-pass" else "owner-accepted",voice.getString("status"))
+        assertEquals(screened=="pass",voice.get("technicalFailures").size==0)
         val withoutAuthority=raw.replace("\"ownerEvidence\": \"docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md sections 2-4\"", "\"ownerEvidence\": \"\"")
-        assertTrue(CueManifest.parse(withoutAuthority).cues.getValue("voice.mechanic.seizure").path.isEmpty())
+        // Only a clip that failed its screen needs the owner authority to play; a passing take keeps its path.
+        assertEquals(screened!="pass",CueManifest.parse(withoutAuthority).cues.getValue("voice.mechanic.seizure").path.isEmpty())
         assertThrows(IllegalArgumentException::class.java){CueManifest.parse(raw.replace("\"musicMode\": \"none\"","\"musicMode\": \"bad\""))}
     }
 
