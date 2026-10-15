@@ -19,7 +19,13 @@ export const RECAP_EMPTY = "Not tonight";
  * then `skipped` items the child left empty (MB-B1, rules/marks). Each is drawn by its own mark (tv/screens RECAP_PEN).
  */
 export interface MathsSet { right: number; of: number; unsure?: number; skipped?: number }
-export interface MathsTile { app: "maths"; empty: string | null; sets: MathsSet[]; pages: number; hints: number; second: number }
+export interface MathsTile { app: "maths"; empty: string | null; sets: MathsSet[]; pages: number; hints: number; second: number; hinted: Hinted[] }
+/**
+ * A problem that had a hint tonight, by the name the learner knows it (MB-B23): its printed number, or its lettered
+ * part ("5b"), with the page it is on only when two hinted problems share a name. `second` when it needed a second hint.
+ * `name` is null for a hint whose problem the session can no longer name: it is counted, never guessed.
+ */
+export interface Hinted { name: string | null; page?: number; second: boolean }
 export interface LingaTile { app: "english"; empty: string | null; talks: number[] }
 export interface EssayTile { app: "essay"; empty: string | null; readings: Array<{ lens: string; against: number; of: number; fixed?: number }> }
 export type RecapTile = MathsTile | LingaTile | EssayTile;
@@ -63,7 +69,7 @@ export function recapRows(s: Session, now: number): RecapTile[] {
         if (c.pages) pages += c.pages;
       }
       const hints = s.log?.hints ?? 0, second = s.log?.hard?.length ?? 0;
-      return { app, empty: mine.length || hints ? null : RECAP_EMPTY, sets, pages, hints, second };
+      return { app, empty: mine.length || hints ? null : RECAP_EMPTY, sets, pages, hints, second, hinted: hintedOf(s) };
     }
     if (app === "english") {
       const talks = (s.englishLearning?.sessions ?? []).filter((x) => tonight(x.at)).map((x) => x.turns);
@@ -74,6 +80,62 @@ export function recapRows(s: Session, now: number): RecapTile[] {
     for (const h of mine) { const c = parseDetail(h.kind, h.detail); if (c.against !== undefined && c.of !== undefined) readings.push({ lens: h.label, against: c.against, of: c.of, ...(c.fixed ? { fixed: c.fixed } : {}) }); }
     return { app, empty: mine.length ? null : RECAP_EMPTY, readings };
   });
+}
+
+/**
+ * A problem's name as the learner knows it from the paper: the printed number, or a lettered part with its number
+ * ('a)' on 5 is "5a"; '3b' stays "3b"). A label too long to be a part's letter is not trusted: the number.
+ */
+export function problemName(n: number, label?: string): string | null {
+  if (!Number.isFinite(n)) return null;
+  const l = (label ?? "").replace(/[()\s.]/g, "");
+  if (!l || l.length > 5) return String(n);
+  return /^\d/.test(l) ? l : `${n}${l}`;
+}
+/** The tail of an item key (desk/read itemKey: page id, printed number, label, a repeat suffix), for a page no longer held. */
+const KEY_TAIL = /:(\d+)(?::([^:#]+))?(?:#\d+)?$/;
+/**
+ * Tonight's hinted problems, from the evening log (MB-B23): `log.problems` holds each hinted item's key once, `log.hard`
+ * the problems that needed a second hint (by their item, as the hint route stores it). Each key is looked up on the
+ * learner's pages - the seated learner's, as the log is - and named by problemName, in page and printed order; a key
+ * whose page is gone is named from the key itself, and one that cannot be read stays unnamed (and last). Names only:
+ * never the problem's text.
+ */
+export function hintedOf(s: Pick<Session, "pages" | "log">): Hinted[] {
+  const keys = s.log?.problems ?? [], hard = new Set(s.log?.hard ?? []);
+  const found: Array<Hinted & { at: [number, number] }> = [];
+  keys.forEach((key, k) => {
+    for (let p = 0; p < (s.pages ?? []).length; p++) {
+      const items = s.pages[p].items ?? [], i = items.findIndex((x) => x.key === key);
+      if (i >= 0) { const it = items[i]; found.push({ name: problemName(it.n, it.label), page: p + 1, second: hard.has(it.text) || hard.has(key), at: [p, i] }); return; }
+    }
+    const m = KEY_TAIL.exec(key);
+    found.push({ name: m ? problemName(+m[1], m[2]) : null, second: hard.has(key), at: [Infinity, k] });
+  });
+  found.sort((a, b) => a.at[0] - b.at[0] || a.at[1] - b.at[1]);
+  const twice = (x: Hinted) => x.name !== null && found.filter((y) => y.name === x.name).length > 1;
+  return found.map((x) => ({ name: x.name, ...(twice(x) && x.page ? { page: x.page } : {}), second: x.second }));
+}
+/** How many hinted problems the phone's line names before "and k more". */
+export const HINTED_NAMED = 6;
+/** A hinted problem in words: "5b", or "3 on page 2" when another hinted problem is called 3 too. */
+const said = (x: Hinted) => `${x.name}${x.page ? ` on page ${x.page}` : ""}`;
+const andList = (xs: string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
+/**
+ * The phone's line of which problems had a hint (MB-B23): "Hints on 3 and 5b; a second on 5b." Up to HINTED_NAMED
+ * named, the rest (and any the session cannot name) as "and k more"; the second hints named when they are among the
+ * named, else counted. No hint tonight: "No hints tonight.". Names and counts only - never a problem's text.
+ */
+export function hintedLine(t: MathsTile): string {
+  const named = t.hinted.filter((x) => x.name !== null);
+  if (!named.length) return t.second ? `${counted(t.second, "problem")} needed a second hint.` : t.hints ? "Nothing needed a second hint." : "No hints tonight.";
+  const shown = named.slice(0, HINTED_NAMED), rest = t.hinted.length - shown.length;
+  const head = `${t.hints === 1 && t.hinted.length === 1 ? "A hint on" : "Hints on"} ${andList([...shown.map(said), ...(rest ? [`${rest} more`] : [])])}`;
+  const two = t.hinted.filter((x) => x.second), twoShown = two.filter((x) => shown.includes(x));
+  const tail = !two.length && !t.second ? "none needed a second"
+    : twoShown.length === two.length && two.length === t.second ? `a second on ${andList(twoShown.map(said))}`
+    : `${counted(Math.max(t.second, two.length), "problem")} needed a second`;
+  return `${head}; ${tail}.`;
 }
 
 /** A set's slips: what is neither right, nor the desk's doubt, nor left empty. */

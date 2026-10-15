@@ -76,7 +76,7 @@ test('case 1: recapRows draws tonight\'s work per app - sets, pages, hints, talk
  const {recapRows}=recap();
  const s=evening();
  assert.deepEqual(recapRows(s,NOW),[
-  {app:'maths',empty:null,sets:[{right:4,of:6}],pages:1,hints:3,second:1},
+  {app:'maths',empty:null,sets:[{right:4,of:6}],pages:1,hints:3,second:1,hinted:[{name:null,second:false},{name:null,second:false}]},
   {app:'english',empty:null,talks:[7,4]},
   {app:'essay',empty:null,readings:[{lens:'Argument',against:2,of:5}]},
  ]);
@@ -88,7 +88,7 @@ test('case 2: only the apps on the learner\'s profile, in the desk\'s order; an 
  assert.deepEqual(recapRows(jakub({history:evening().history,englishLearning:evening().englishLearning}),NOW).map((t)=>t.app),['english','essay'],'Jakub never gets a Math Buddy tile, whatever his history holds');
  assert.deepEqual(recapRows(session({profiles:[{...EMA,modules:['essay','maths']}]}),NOW).map((t)=>t.app),['maths','essay'],'the desk\'s left-to-right order, not the profile\'s');
  const quiet=recapRows(session(),NOW);
- assert.deepEqual(quiet[0],{app:'maths',empty:'Not tonight',sets:[],pages:0,hints:0,second:0},'no counts invented');
+ assert.deepEqual(quiet[0],{app:'maths',empty:'Not tonight',sets:[],pages:0,hints:0,second:0,hinted:[]},'no counts invented');
  for(const t of quiet)assert.equal(t.empty,'Not tonight');
  assert.equal(words('Not tonight').length,2);
 });
@@ -807,4 +807,45 @@ test('MB-B1 recap 3: the TV tile draws a skipped item as the empty answer line, 
  assert.deepEqual(marksOf(draw(s,NOW)),[['right:rc-tk','look:rc-ring','unsure:rc-ask','skipped:rc-skip']]);
  const all=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'0 of 2 right, 2 skipped'}]});
  assert.deepEqual(marksOf(draw(all,NOW)),[['skipped:rc-skip','skipped:rc-skip']],'an all-skipped set: no ring, no tick');
+});
+
+// MB-B23: the recap names which problems had a hint, by the name the learner knows them - never their text
+const HP=(id,items)=>({id,subject:'maths',title:'Sheet',img:'',w:1,h:1,items:items.map(([n,label,text],i)=>({n,...(label?{label}:{}),text,cx:0,cy:i,band:[i,i],key:`${id}:${n}${label?`:${label}`:''}`}))});
+const SHEET=HP('pA',[[3,null,'2x + 1 = 7'],[5,'a)','x/2 = 4'],[5,'b)','3x - 2 = 10']]);
+const hintTile=(log,pages=[SHEET])=>recap().recapRows(session({pages,log:{started:null,minutes:0,problems:[],hard:[],hints:0,...log}}),NOW)[0];
+test('MB-B23 rows 1: the hinted problems are named in page order, a lettered part with its number, and the second hint by name',()=>{
+ const {hintedLine}=recap();
+ const t=hintTile({problems:['pA:5:b)','pA:3'],hard:['3x - 2 = 10'],hints:3});
+ assert.deepEqual(t.hinted,[{name:'3',second:false},{name:'5b',second:true}]);
+ assert.equal(hintedLine(t),'Hints on 3 and 5b; a second on 5b.');
+ assert.equal(hintedLine(hintTile({problems:['pA:3'],hints:1})),'A hint on 3; none needed a second.');
+ assert.equal(hintedLine(hintTile({problems:['pA:5:a)'],hard:['x/2 = 4'],hints:2})),'Hints on 5a; a second on 5a.');
+ const flat=hintedLine(t)+JSON.stringify(t.hinted);
+ for(const [,, text] of [[3,null,'2x + 1 = 7'],[5,'a)','x/2 = 4'],[5,'b)','3x - 2 = 10']])assert.ok(!flat.includes(text),'never a problem\'s text');
+});
+test('MB-B23 rows 2: an empty evening, an unnameable hint, a page gone and two pages with the same number',()=>{
+ const {hintedLine,problemName}=recap();
+ assert.equal(hintedLine(hintTile({})),'No hints tonight.');
+ assert.deepEqual(hintTile({}).hinted,[]);
+ assert.equal(hintedLine(hintTile({problems:['k1'],hints:1})),'Nothing needed a second hint.','a key that names nothing is counted, never guessed');
+ assert.equal(hintedLine(hintTile({problems:['k1'],hard:['some text'],hints:2})),'1 problem needed a second hint.');
+ assert.equal(hintedLine(hintTile({problems:['gone:4:c)'],hints:1},[])),'A hint on 4c; none needed a second.','a page no longer held: named from its key');
+ const two=hintTile({problems:['pA:3','pB:3'],hard:['y = 2'],hints:3},[SHEET,HP('pB',[[3,null,'y = 2']])]);
+ assert.equal(hintedLine(two),'Hints on 3 on page 1 and 3 on page 2; a second on 3 on page 2.');
+ assert.equal(problemName(5,'(b)'),'5b');assert.equal(problemName(2,'3b'),'3b');assert.equal(problemName(7),'7');assert.equal(problemName(7,'part one'),'7');
+});
+test('MB-B23 rows 3: a long evening names six and says how many more; a second hint past the six is counted',()=>{
+ const {hintedLine}=recap();
+ const page=HP('pL',Array.from({length:9},(_,i)=>[i+1,null,`q${i+1}`]));
+ const t=hintTile({problems:page.items.map((x)=>x.key).reverse(),hard:['q2','q9'],hints:11},[page]);
+ assert.equal(hintedLine(t),'Hints on 1, 2, 3, 4, 5, 6 and 3 more; 2 problems needed a second.');
+ assert.equal(hintedLine(hintTile({problems:page.items.slice(0,7).map((x)=>x.key),hard:['q2'],hints:8},[page])),'Hints on 1, 2, 3, 4, 5, 6 and 1 more; a second on 2.');
+});
+test('MB-B23 rows 4: the names are the seated learner\'s - a learner switch takes the hints away with the pages',()=>{
+ const {reduce}=store(),{hintedLine}=recap();
+ const s=session({profiles:[EMA,{...JAKUB,modules:['maths','english','essay']}],pages:[SHEET],log:{started:null,minutes:0,problems:['pA:3'],hard:[],hints:1}});
+ const j=reduce(s,{type:'learner.set',id:'jakub'});
+ assert.equal(hintedLine(recap().recapRows(j,NOW).find((t)=>t.app==='maths')),'No hints tonight.');
+ const back=reduce(j,{type:'learner.set',id:'ema'});
+ assert.equal(hintedLine(recap().recapRows(back,NOW).find((t)=>t.app==='maths')),'A hint on 3; none needed a second.');
 });
