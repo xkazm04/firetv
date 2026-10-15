@@ -13,6 +13,10 @@ class LinkTextTest {
         assertEquals(LinkText.FULL,LinkText.refusal("lobby",true,false).code)
         assertEquals(LinkText.PROFILE_TAKEN,LinkText.refusal("lobby",true,true).code)
     }
+    @Test fun refusalsSayTvCodeNeverPin() {
+        for(p in phases) for(pin in listOf(true,false)) for(seat in listOf(true,false)) assertFalse(LinkText.refusal(p,pin,seat).message.contains("PIN"))
+        assertEquals("Wrong TV code. Check the TV.",LinkText.refusal("lobby",false,true).message)
+    }
     @Test fun refusalJsonCarriesCodeAndMessage() {
         val j=kotlinx.serialization.json.Json.parseToJsonElement(LinkText.refusalJson(LinkText.refusal("lobby",false,true))).let{it as kotlinx.serialization.json.JsonObject}
         assertEquals("error",(j["t"] as kotlinx.serialization.json.JsonPrimitive).content)

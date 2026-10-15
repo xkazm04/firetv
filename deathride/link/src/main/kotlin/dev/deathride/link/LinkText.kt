@@ -12,7 +12,7 @@ object LinkText {
     /** Why a pairing hello was not given a seat, in the order [RaceServer] checks it. */
     fun refusal(phase: String,pinOk: Boolean,seatFree: Boolean): Refusal = when {
         phase=="race" || phase=="countdown" -> Refusal(RACE_ON,"Race on. Join from the lobby.")
-        !pinOk -> Refusal(BAD_PIN,"Wrong PIN. Check the TV.")
+        !pinOk -> Refusal(BAD_PIN,"Wrong TV code. Check the TV.")
         !seatFree -> Refusal(FULL,"Both seats taken. REWIND on the TV resets.")
         else -> Refusal(PROFILE_TAKEN,"That profile is already in.")
     }
