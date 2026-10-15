@@ -679,7 +679,7 @@ Drained from `2026-10-09-maths-l1` (Math Buddy read in code by five Characters, 
   - origin: 2026-10-09-maths-l1/L1-vojtech-18-MB1-5, 2026-10-09-maths-l1/L1-radka-41-MB5-7
   - recommendation: build — `MathsTile` (`tv/recapRows.ts:47-57`) draws page icons and one lamp per hint, the second-hint lamps lit, and names no problem; the phone line has the hint count only, with no second-hint count. And `recapRows`, the phone Recap and the week read the seated learner's session fields and record; the other child's evening sits in `away` until they are seated again (`lib/session/store.ts:379-386`, `seat()` moves slots). The phone's recap line adds "k needed a second hint"; the phone Recap lists every learner with work tonight, one block each
   - owner: end-of-session-memory-recap council rework
-  - status: open (the phone's second-hint count is built by 13-i (4e209aef); per-learner blocks and problem naming stay open (delivery 13-ii))
+  - status: open (the phone's second-hint count is built by 13-i (4e209aef); problem naming is built (bf99e8ac rows, 26e477c4 TV lamps named, the phone's Recap line naming them with the second hints, replacing its list of hard problems' text); per-learner blocks stay open, held for the owner (ask 276c835a))
   - ceiling: naming the problems puts the sheet's content on the recap, which the curtain forbids for Essay and does not for Math
 - **MB-B24** — A "Secure on the desk" tag beside marks lost on that topic, and the statement behind a row is never shown
   - origin: 2026-10-09-maths-l1/L1-radka-41-MB4-7, 2026-10-09-maths-l1/L1-vojtech-18-MB4-6

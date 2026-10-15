@@ -15,7 +15,7 @@ import { LingaPhone } from "@/english/LingaPhone";
 import { follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
 import { forensicAt, planAt, switchEndsLine } from "@/tv/keys";
 import { dayOf } from "@/tv/mathsRows";
-import { counted, recapCaption, recapLine, recapRows, startOfDay, tasksLine } from "@/tv/recapRows";
+import { counted, hintedLine, recapCaption, recapLine, recapRows, startOfDay, tasksLine } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
 import { markCounts } from "@/lib/rules/marks";
@@ -723,7 +723,7 @@ export default function Phone() {
             return <div className="precap" data-role="phone-recap"><b>{s.learner ? `${s.learner.name}, tonight` : "Tonight"}</b>{tally}
               <ul>{tiles.map((t) => <li key={t.app} data-app={t.app}>{recapLine(t)}</li>)}{list && <li data-app="tasks">{list}</li>}</ul>
               <p style={{ margin: "10px 0 0", fontWeight: 600 }}>{recapCaption(tiles)}</p>
-              {tiles.some((t) => t.app === "maths" && !t.empty) && <ul>{s.log.hard.length ? s.log.hard.map((h) => <li key={h}>Needed a second hint: {h}</li>) : <li>Nothing needed a second hint.</li>}</ul>}</div>;
+              {tiles.map((t) => (t.app === "maths" && !t.empty ? <ul key="hinted"><li data-role="phone-hinted">{hintedLine(t)}</li></ul> : null))}</div>;
           })()}
           <WeekPage lines={s.learner ? s.week : null} />
           <p style={{ fontSize: 12 }}>The TV shows {TV_WORDS[s.screen] ?? "the desk"}{s.status && Object.values(s.jobs ?? {}).some((j) => j?.phase === "running") ? <> · {s.status}</> : null}.</p></div>}

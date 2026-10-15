@@ -212,7 +212,7 @@ test('GUARD: the phone still receives the recap, and its End session still posts
  const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
  assert.match(phone,/tiles\.some\(\(t\) => !t\.empty\) \|\| \(s\.log\.endedAt \?\? 0\) >= startOfDay\(now\)/,'M7: the phone\'s Recap shows for a tile with work or an evening ended since local midnight, whatever the TV shows');
  assert.doesNotMatch(phone,/s\.screen === "recap" \|\| s\.log\.problems\.length/,'M7: not tied to the TV\'s screen or the log');
- assert.match(phone,/tiles\.some\(\(t\) => t\.app === "maths" && !t\.empty\) && <ul>\{s\.log\.hard\.length/,'M7: the second-hint line only when the maths tile is not empty');
+ assert.match(phone,/t\.app === "maths" && !t\.empty \? <ul key="hinted"><li data-role="phone-hinted">\{hintedLine\(t\)\}/,'M7 (MB-B23): the hinted-problems line only when the maths tile is not empty');
  assert.match(phone,/post\(\{ type: "session\.end" \}\)/,'End session on the phone');
 });
 
@@ -865,4 +865,11 @@ test('MB-B23 TV: a lamp per hinted problem with its name beneath, the second-hin
  assert.deepEqual(lampsOf(old),[]);assert.equal([...old.matchAll(/<b( data-second="true")?><\/b>/g)].length,2);
  const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8'),em=/\.rc \.rc-lamp em \{[^}]*?(\d+)px/.exec(css);
  assert.ok(em&&+em[1]>=28,'the name under a lamp is 28px or more');
+});
+test('MB-B23 phone: the Recap tab says which problems had a hint by name, from hintedLine - never the problem\'s text',()=>{
+ const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ const sec=phone.split('screen === "parent"')[1]?.split('<WeekPage')[0]??'';
+ assert.match(sec,/hintedLine\(/,'the parent panel calls hintedLine');
+ assert.doesNotMatch(sec,/log\.hard\.map|Needed a second hint: \{/,'no hinted problem\'s text on the phone');
+ assert.match(sec,/data-role="phone-hinted"/);
 });
