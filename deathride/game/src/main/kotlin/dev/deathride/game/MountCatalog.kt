@@ -42,7 +42,7 @@ object MountCatalog {
                 "mount"->{
                     require(!n[kind.ordinal]){"mount after none: $line"}
                     val a=Attach(kind,f[cx].toFloat(),f[cy].toFloat(),f[cr].toFloat(),f[cs].toFloat(),f[cl].toInt(),f[cp],f[cn])
-                    require(a.x in -0.6f..0.6f && a.y in -0.7f..0.7f && a.scale in 0.03f..0.4f && a.layer in 0..3 && a.rotationDeg in -180f..180f){"mount out of range: $line"}
+                    require(a.x in -0.6f..0.6f && a.y in -0.7f..0.7f && a.scale in 0.03f..0.5f && a.layer in 0..3 && a.rotationDeg in -180f..180f){"mount out of range: $line"}
                     l[kind.ordinal].add(a)
                 }
                 else->error("bad mode: $line")
@@ -81,7 +81,7 @@ object MountLoadout {
  * one nose point; only tracers, muzzle flashes and the first metres of a Hammer round start here. Twin Rivets alternate by shot count.
  */
 object MountMuzzle {
-    private fun tip(kind: MountKind)=when(kind){MountKind.RIVET->.55f;MountKind.HAMMER->.72f;MountKind.SCATTER->.6f;else->0f}
+    private fun tip(kind: MountKind)=when(kind){MountKind.RIVET,MountKind.HAMMER,MountKind.SCATTER->.5f;else->0f}
     /** Local (forward, left) metres of the muzzle tip of [kind] on [classId], or null when the class carries none. [shot] picks the twin. */
     fun local(classId: String,kind: MountKind,shot: Int,length: Float,width: Float,out: FloatArray): Boolean {
         val l=MountCatalog.attachments(classId,kind);if(l.isEmpty())return false

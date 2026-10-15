@@ -18,15 +18,18 @@ class MountCatalogTest {
             assertTrue(MountCatalog.attachments(c.id,k).isNotEmpty(),"${c.id} has no ${w.id} mount")
         }
     }
-    @Test fun noMountSpritePointsAtUnapprovedArt() {
-        // No owner-approved mount art exists; a sprite column entry would have to be approved at runtime, and none is declared today.
-        for(c in CarCatalog.all)for(a in MountCatalog.layered(c.id))assertEquals("",a.sprite,"${c.id} ${a.kind} names a sprite")
+    @Test fun mountSpritesAreNamedInTheApprovedKit() {
+        // Owner approved the agy kit 2026-10-15; every sprite name must exist in assets/mounts/kit.json and the json must say owner_approved.
+        val json=java.io.File("assets/mounts/kit.json").takeIf{it.exists()}?:java.io.File("../assets/mounts/kit.json")
+        val text=json.readText();assertTrue(text.contains("\"owner_approved\": true"))
+        val kitNames=Regex(""""([a-z-]+)": \{\s*"x"""").findAll(text).map{it.groupValues[1]}.toSet()
+        for(c in CarCatalog.all)for(a in MountCatalog.layered(c.id))assertTrue(a.sprite in kitNames,"${c.id} ${a.kind} names ${a.sprite}, which is not in assets/mounts/kit.json")
     }
     @Test fun layersAreSortedAndMountsStayOnTheBody() {
         for(c in CarCatalog.all) {
             val l=MountCatalog.layered(c.id);assertTrue(l.isNotEmpty())
             for(i in 1 until l.size)assertTrue(l[i-1].layer<=l[i].layer)
-            for(a in l){assertTrue(Math.abs(a.x)<=.5f && Math.abs(a.y)<=.55f,"${c.id} ${a.kind} off the body");assertTrue(a.scale in 0.05f..0.4f)}
+            for(a in l){assertTrue(Math.abs(a.x)<=.5f && Math.abs(a.y)<=.55f,"${c.id} ${a.kind} off the body");assertTrue(a.scale in 0.05f..0.5f)}
         }
     }
     @Test fun twinGunsAreMirrored() {

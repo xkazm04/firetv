@@ -18,7 +18,7 @@ import kotlin.math.sin
  * Mounts rotate with the car heading, draw after the body and the wheel overlay, and are ordered by catalog layer within a car.
  * Damage states darken them; a wreck shows them dropped, crooked and charred, with no animation.
  */
-class MountPainter(private val art: AtlasArt?,private val pixel: ()->Texture?,val source: WeaponFireSource=CombatDerivedFireSource()) {
+class MountPainter(private val art: AtlasArt?,private val pixel: ()->Texture?,val source: WeaponFireSource=CombatDerivedFireSource(),private val kit: MountSprites?=MountSprites.load()) {
     val animator=MountAnimator()
     /** Rectangles issued in the last [draw], for the audits. */
     var quads=0;private set
@@ -57,7 +57,7 @@ class MountPainter(private val art: AtlasArt?,private val pixel: ()->Texture?,va
             unit=a.scale*length;tint=carTint;alpha=1f
             val age=if(wreck)MountAnim.IDLE else animator.age(slot,a.kind)
             val kick=MountAnim.kick(a.kind,age);val flash=MountAnim.flash(a.kind,age)
-            val sprite=art?.takeIf{a.sprite.isNotEmpty() && it.approved(a.sprite)}
+            val sprite=art
             when(a.kind) {
                 MountKind.RIVET->rivet(sprite,a,kick,flash,if(wreck)0f else animator.spin(slot),if(wreck)-1f else MountAnim.eject(age))
                 MountKind.HAMMER->hammer(sprite,a,kick,flash)
@@ -79,19 +79,21 @@ class MountPainter(private val art: AtlasArt?,private val pixel: ()->Texture?,va
         bt.setColor(PAL[c*3]*k,PAL[c*3+1]*k,PAL[c*3+2]*k,a*alpha)
         bt.draw(t,px-ww*.5f,py-hh*.5f,ww*.5f,hh*.5f,ww,hh,1f,1f,deg+rot,0,0,1,1,false,false);quads++
     }
-    private fun sprite(art: AtlasArt,a: Attach,backX: Float): Boolean {
-        val r=art.region(a.sprite)?:return false
+    /** Draws the owner-approved kit sprite named by the catalog row, centred on the mount point and shifted back by [backX] (recoil). */
+    private fun sprite(a: Attach,backX: Float): Boolean {
+        val k=kit?:return false;val bt=b?:return false
+        val r=k.region(a.sprite)?:return false
+        val w=unit;val h=unit*r.regionHeight/r.regionWidth
         val px=ox+(-backX*dc)*unit;val py=oy+(-backX*ds)*unit
-        val bt=b?:return false
         bt.setColor(tint,tint,tint,alpha)
-        art.draw(bt,a.sprite,px,py,unit,unit*r.image.regionHeight/r.image.regionWidth,deg)
+        bt.draw(r,px-w*.5f,py-h*.5f,w*.5f,h*.5f,w,h,1f,1f,deg)
         bt.setColor(1f,1f,1f,1f);tex=pixel()
         return true
     }
 
     private fun rivet(art: AtlasArt?,a: Attach,kick: Float,flash: Float,spin: Float,eject: Float) {
         val ks=kick*.22f
-        if(art==null || !sprite(art,a,ks)) {
+        if(!sprite(a,ks)) {
             q(-.18f,0f,.56f,.46f,0f,DARK);q(-.18f,0f,.48f,.38f,0f,STEEL);q(-.2f,0f,.30f,.10f,0f,LIGHT)
             q(.2f-ks,0f,.66f,.2f,0f,DARK);q(.2f-ks,0f,.62f,.13f,0f,STEEL)
             val phase=spin/(2f*PI.toFloat())
@@ -108,7 +110,7 @@ class MountPainter(private val art: AtlasArt?,private val pixel: ()->Texture?,va
     }
     private fun hammer(art: AtlasArt?,a: Attach,kick: Float,flash: Float) {
         val ks=kick*.28f
-        if(art==null || !sprite(art,a,ks)) {
+        if(!sprite(a,ks)) {
             q(-.15f,0f,.6f,.66f,0f,DARK);q(-.15f,0f,.52f,.58f,0f,STEEL);q(-.2f,0f,.26f,.26f,0f,DARK);q(-.2f,0f,.16f,.16f,0f,LIGHT)
             q(.2f-ks,0f,.9f,.36f,0f,DARK);q(.2f-ks,0f,.84f,.28f,0f,STEEL);q(0f-ks,0f,.1f,.3f,0f,ORANGE)
             q(.62f-ks,0f,.18f,.5f,0f,DARK);q(.62f-ks,0f,.12f,.42f,0f,ORANGE)
@@ -119,7 +121,7 @@ class MountPainter(private val art: AtlasArt?,private val pixel: ()->Texture?,va
     }
     private fun scatter(art: AtlasArt?,a: Attach,kick: Float,flash: Float) {
         val ks=kick*.2f
-        if(art==null || !sprite(art,a,ks)) {
+        if(!sprite(a,ks)) {
             q(-.22f,0f,.5f,.58f,0f,DARK);q(-.22f,0f,.42f,.5f,0f,STEEL)
             for(r in -1..1){q(.2f-ks,r*.12f,.62f,.16f,r*14f,DARK);q(.2f-ks,r*.12f,.58f,.1f,r*14f,STEEL);q(.52f-ks,r*.17f,.07f,.14f,r*14f,AMBER)}
         }
@@ -128,7 +130,7 @@ class MountPainter(private val art: AtlasArt?,private val pixel: ()->Texture?,va
         }
     }
     private fun mine(art: AtlasArt?,a: Attach,pop: Float) {
-        if(art==null || !sprite(art,a,0f)) {
+        if(!sprite(a,0f)) {
             q(0f,0f,.74f,.92f,0f,DARK);q(0f,0f,.64f,.82f,0f,STEEL);q(0f,.34f,.64f,.1f,0f,AMBER);q(0f,-.34f,.64f,.1f,0f,AMBER)
             val rest=if(pop<0f)1f else .35f;alpha=rest
             q(0f,0f,.44f,.44f,0f,DARK);q(0f,0f,.36f,.36f,0f,LIGHT);q(.02f,0f,.12f,.12f,0f,RED);alpha=1f
@@ -142,7 +144,7 @@ class MountPainter(private val art: AtlasArt?,private val pixel: ()->Texture?,va
     }
     private fun spikes(art: AtlasArt?,a: Attach,kick: Float,flash: Float) {
         val ex=kick*.28f
-        if(art==null || !sprite(art,a,-ex)) {
+        if(!sprite(a,-ex)) {
             q(-.32f,0f,.3f,1.04f,0f,DARK);q(-.32f,0f,.22f,.96f,0f,STEEL)
             for(i in -1..1) {
                 val y=i*.32f

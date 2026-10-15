@@ -37,6 +37,8 @@ if __name__ == '__main__':
         print(len(rs), 'briefs')
     else:
         b = AgyBudget(); by = {r['id']: r for r in rs}
+        for r in rs:
+            by[r['id'].replace('-v1', '-v2')] = dict(r, id=r['id'].replace('-v1', '-v2'), logical_name=r['logical_name'])
         for rid in a.ids or list(by):
             if MP.stage_spend() >= 12: print('KIT CAP'); sys.exit(2)
             res = generate(by[rid], style_for(by[rid]), b); print(rid, res['status'], res.get('error', ''), flush=True)
