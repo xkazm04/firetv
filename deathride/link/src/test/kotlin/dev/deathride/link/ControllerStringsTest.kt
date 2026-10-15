@@ -66,6 +66,10 @@ class ControllerStringsTest {
         assertTrue(page.contains(".offer p.more{display:none"))
     }
 
+    @Test fun allyButtonIsTheLabelAlone() {
+        assertFalse(page.contains("' / '+offer.reason"))
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
