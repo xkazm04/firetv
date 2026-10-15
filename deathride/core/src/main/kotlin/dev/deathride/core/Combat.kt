@@ -132,6 +132,19 @@ class Combat(private val world: World,val enabled: Boolean) {
     fun cooldownFraction(id: Int,weapon: Int)=min(1.0,cooldowns[id*Weapons.all.size+weapon]/Weapons.all[weapon].cooldownSeconds)
     fun heatFraction(id: Int,weapon: Int)=heat[id*Weapons.all.size+weapon]
     fun overheated(id: Int,weapon: Int)=locked[id*Weapons.all.size+weapon]
+    /** The one word a weapon shows the player: EMPTY (no rounds), OVERHEATED (locked out), COOLING (burst in flight or
+     * between shots), HOT (heat >= [HOT_FRACTION], still firing), else READY. Constants only: no allocation, no sim state. */
+    fun weaponStatus(id: Int,weapon: Int): String {
+        val n=id*Weapons.all.size+weapon
+        return when {
+            ammunition[n]<=0->"EMPTY"
+            locked[n]->"OVERHEATED"
+            burstLeft[n]>0 || cooldowns[n]/Weapons.all[weapon].cooldownSeconds>0.005->"COOLING"
+            heat[n]>=HOT_FRACTION->"HOT"
+            else->"READY"
+        }
+    }
+    private companion object { const val HOT_FRACTION=0.6 }
     /** Monotonic count of bullets/shots/drops this weapon has fired since the race reset; a change means "muzzle flash now". */
     fun fireCount(id: Int,weapon: Int)=fireCounter[id*Weapons.all.size+weapon]
     internal fun setAmmo(id: Int,weapon: Int,count: Int){ammunition[id*Weapons.all.size+weapon]=count}
