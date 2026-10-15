@@ -2100,8 +2100,10 @@ const placesOf = (r: NumberReading, value: Q): number => {
  *   - any other decimal within one unit of its last written place of √sq is unsure (7.3 for √52), as a rounding is
  *     everywhere in this file (its places counted trailing zeros aside: 7.20 is a tenth); a fraction or a mixed number is
  *     unsure (the question asks for a decimal to its places);
- *   - else wrong, naming a slip for a slip's exact value or a rounding of it, or (a shorter side) for a correct rounding of
- *     the squares added and rooted.
+ *   - else wrong, naming a slip for a slip's exact value, or by the right answer's own rule for a decimal that is the slip's
+ *     value correctly rounded at its written places: the sides added, the root not taken (45.9 for 45.94), and for a
+ *     shorter side the squares added, as written or rooted (7.2 for √52). A slip whose value rounds to the right answer at
+ *     the places asked is never named, nor is any slip for an answer two slips give (MB-B20 cycle 17).
  */
 function checkRounded(r: ReadOk, K: Extract<Kind, { k: "pyth-dp" }>, reading: NumberReading): SchoolVerdict {
   const form = reading.form, v = fromRat(reading.value);
@@ -2114,11 +2116,17 @@ function checkRounded(r: ReadOk, K: Extract<Kind, { k: "pyth-dp" }>, reading: Nu
   // the old path counts places as this file always has, trailing zeros aside (7.20 is within a tenth of √52)
   const kk = form === "decimal" ? placesOf(reading, v) : 0;
   if (kk > 0 && nearRoot(v, K.sq, onePlace(kk))) return { verdict: "unsure", form, why: WHY.roughly };
-  const rounds = (c: Q) => kk > 0 && !exactAt(c, kk) && withinPlace(v, c, kk);
-  const slips = slipCandidates(r).filter(([, c]) => !eq(c, r.truth));
-  const named = slips.find(([, c]) => eq(c, v)) ?? slips.find(([, c]) => rounds(c));
-  if (named) return { verdict: "wrong", slip: named[0], form, why: WHY.slip };
-  if (K.find === "shorter" && k > 0 && nearRoot(v, add(mul(K.x, K.x), mul(K.y, K.y)), halfPlace(k))) return { verdict: "wrong", slip: "pyth-squares-added", form, why: WHY.slip };
+  // MB-B20 cycle 17, the slips by the right answer's own rule: a slip's value as written, or that value correctly rounded
+  // at the answer's written places (trailing zeros counted, a decimal only). A slip whose value rounds to the right answer
+  // at the places asked is never named; an answer two slips give names none
+  const halfUp = (c: Q, p: number) => mk((BigInt(2) * c.n * pow10(p) + c.d) / (BigInt(2) * c.d), pow10(p))!;
+  const slips: { id: string; at: (p: number) => Q; exact: boolean }[] = slipCandidates(r)
+    .filter(([, c]) => !eq(c, r.truth))
+    .map(([id, c]) => ({ id, at: (p: number) => halfUp(c, p), exact: eq(c, v) }));
+  if (K.find === "shorter") slips.push({ id: "pyth-squares-added", at: (p) => rootRounded(add(mul(K.x, K.x), mul(K.y, K.y)), p), exact: false });
+  const asked = rootRounded(K.sq, K.dp);
+  const ids = new Set(slips.filter((s) => !eq(s.at(K.dp), asked) && (s.exact || (form === "decimal" && k > 0 && eq(s.at(k), v)))).map((s) => s.id));
+  if (ids.size === 1) return { verdict: "wrong", slip: [...ids][0], form, why: WHY.slip };
   return { verdict: "wrong", form, why: WHY.wrong };
 }
 

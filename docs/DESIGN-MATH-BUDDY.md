@@ -193,7 +193,12 @@ attempt still moves no slip on the ruler. A top-rung probability item names its 
 chances instead of multiplying" ("The chances were added. For both things to happen, multiply the chance of each, so
 the answer is smaller than either chance.") on two independent events, and "Put the first one back" ("The first pick
 was treated as put back. It is kept out, so the second pick has fewer to choose from.") on two picks without
-replacement; at least one of two dice names none.
+replacement; at least one of two dice names none. A top-rung Pythagoras item keeps the unit's own words (they already fit
+a rounded side, so they stay on the unit's list): "Added the squares for a shorter side" on the squares added, as written
+or rooted, and "Stopped before the square root" on the squares combined. Each is named by the right answer's own rule: the
+slip's value as written, or that value correctly rounded at the answer's written places, trailing zeros counted (45.9 or
+45.94 for 2.5 and 6.3, not 46.0). A slip that rounds to the right answer at the places asked is never named, and an
+answer two slips give names none (1.9 for 1.1 and 0.8).
 
 **A typed set** (Family W6) is marked by the same code from the strings the learner typed on the phone instead of strings a model read from a photo (`markTyped` in `desk/src/lib/desk/mark.ts`, `POST /api/mark` with `answers`): one string per question, a school or Calculus item by `settleSpec` under the seated learner's system, a linear item by the substitution rule when the desk can solve the equation itself. A blank or unreadable answer is "not sure", never wrong, exactly as a photographed empty answer is. There is no working and no pen position, so a wrong typed item gets the wavy underline on its answer line. No vision call and no model call is made; the history line and the learner record are the ones a photographed sheet writes.
 

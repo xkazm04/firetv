@@ -528,3 +528,61 @@ test('MB-B20 the probability top rung names its own slips: the chances added, th
  }
  assert.ok(named>SEEDS*0.8,`named on ${named} of ${SEEDS}`);
 });
+
+/** A value in hundredths rounded half up to k places (1 or 2), as text: 4594n at 1 is '45.9'. */
+const hundredthsAt=(N100,k)=>{const r=k===2?N100:(N100+5n)/10n,s=String(r).padStart(k+1,'0');return `${s.slice(0,-k)}.${s.slice(-k)}`;};
+/** A square root in hundredths' squares rounded half up to k places: rootAt(5200n,1) is '7.2' (√52). */
+const rootAt=(S100,k)=>{const M=S100*10n**BigInt(2*k-2),f=isqrt(M),r=(2n*f+1n)**2n<=4n*M?f+1n:f,s=String(r).padStart(k+1,'0');return `${s.slice(0,-k)}.${s.slice(-k)}`;};
+
+test('MB-B20 cycle 17 the Pythagoras top rung names the squares added and the root not taken by the right answer\'s own rounding rule, the unit\'s own slips',()=>{
+ const M=require(path.resolve(__dirname,'../desk/src/lib/rules/maths.ts'));
+ const py=(expr,unit='cm')=>({shape:'pythagoras',expr,unit}),got=(spec,a,sys='uk')=>{const v=S.check(spec,a,sys);return [v.verdict,v.slip];};
+ // the unit's own two slips, reused: on the unit's list as before, never on a top-rung list
+ assert.deepEqual(S.SCHOOL_UNIT_SLIPS.pythagoras,['pyth-sides-added','pyth-no-root','pyth-squares-added']);
+ assert.deepEqual(M.slipsFor('pythagoras').map((s)=>s.id),[...S.SCHOOL_UNIT_SLIPS.pythagoras],'the unit\'s list (and the explain prompt) is unchanged');
+ assert.equal(Object.prototype.hasOwnProperty.call(S.SCHOOL_TOP_SLIPS,'pythagoras'),false);
+ const says=(id)=>S.SCHOOL_SLIPS.find((s)=>s.id===id).says;
+ for(const id of ['pyth-squares-added','pyth-no-root']){
+  assert.doesNotMatch(says(id),/\b(?:one|two|three|four|five|six|seven|eight|nine|ten|half|quarter|third|once|twice)\b|\d/i,id);
+  assert.ok(says(id).split(/\s+/).length<=25,id);
+ }
+ // a shorter side from the squares added: rooted and rounded at the places written (√52 for √20), or not rooted at all
+ const sh=py('shorter 6 4 dp1');
+ for(const a of ['7.2','7.21','52','x = 7.2 cm'])assert.deepEqual(got(sh,a),['wrong','pyth-squares-added'],a);
+ assert.deepEqual(got(sh,'7,2','cz'),['wrong','pyth-squares-added']);
+ assert.deepEqual(got(sh,'20'),['wrong','pyth-no-root']);
+ for(const a of ['7.20','7.3','7'])assert.equal(got(sh,a)[1],undefined,`${a} is no correct rounding of √52 at its places`);
+ // the root not taken: exact, or correctly rounded at its written places, trailing zeros counted (46.72 to a tenth is 46.7)
+ const lg=py('longest 2.4 6.4 dp1');
+ for(const a of ['46.72','46.7'])assert.deepEqual(got(lg,a),['wrong','pyth-no-root'],a);
+ assert.equal(got(lg,'46.8')[1],undefined,'within a tenth is no rounding of it');
+ assert.deepEqual(got(py('longest 2.5 6.3 dp2','m'),'45.9'),['wrong','pyth-no-root']);
+ assert.equal(got(py('longest 2.5 6.3 dp2','m'),'46.0')[1],undefined,'46.0 is a tenth: 45.94 to a tenth is 45.9');
+ // two slips that give one answer name none (1.1 + 0.8 and 1.85 both 1.9); the slip's own exact value still names it
+ assert.deepEqual(got(py('longest 1.1 0.8 dp1'),'1.9'),['wrong',undefined]);
+ assert.deepEqual(got(py('longest 1.1 0.8 dp1'),'1.85'),['wrong','pyth-no-root']);
+ // a slip that rounds to the right answer at the places asked is never named (1.12 and √1.12 both 1.1)
+ assert.deepEqual(got(py('shorter 1.6 1.2 dp1'),'1.12'),['wrong',undefined]);
+ assert.equal(got(py('shorter 1.6 1.2 dp1'),'1.1')[0],'right');
+ // the desk's line is the slip's own words; the unit's slip is taken without the top-rung flag
+ assert.deepEqual(M.settleSpec(2,sh,'7.2',undefined,'pythagoras'),{verdict:'wrong',slip:'pyth-squares-added',said:says('pyth-squares-added')});
+ assert.equal(M.settled(2,false,'pyth-no-root','pythagoras').slip,'pyth-no-root');
+ // a tier 1/2 item is judged as before
+ assert.deepEqual(got(py('shorter 10 6'),'136'),['wrong','pyth-squares-added']);assert.deepEqual(got(py('longest 6 8'),'100'),['wrong','pyth-no-root']);
+ // property: every seed's two slips, worked by hand at the places asked, are named when they stand alone; no line leaks
+ let squares=0,root=0;
+ for(let seed=0;seed<SEEDS;seed++){
+  const spec=S.genPythagorasTop(seed),h=sideByHand(spec.expr),dp=h.dp,X2=h.x*h.x,Y2=h.y*h.y;
+  const slips=[['pyth-sides-added',hundredthsAt(10n*(h.x+h.y),dp)],['pyth-no-root',hundredthsAt(h.S100,dp)]];
+  if(h.find==='shorter')slips.push(['pyth-squares-added',rootAt(X2+Y2,dp)],['pyth-squares-added',hundredthsAt(X2+Y2,dp)]);
+  for(const [id,w] of slips){
+   if(id==='pyth-sides-added')continue;
+   const alone=w!==h.answer&&slips.every(([id2,w2])=>id2===id||w2!==w);
+   const unit=spec.unit==='m'?'metres':spec.unit;
+   assert.deepEqual(got(spec,`${w} ${unit}`),['wrong',alone?id:undefined],`${spec.expr}: ${w}`);
+   if(alone)id==='pyth-no-root'?root++:squares++;
+   assert.equal(S.leaksSchool(spec,says(id)),false,spec.expr);
+  }
+ }
+ assert.ok(root>SEEDS*0.9&&squares>SEEDS*0.3,`the root not taken on ${root}, the squares added on ${squares} of ${SEEDS}`);
+});
