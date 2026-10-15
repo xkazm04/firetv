@@ -2653,7 +2653,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "conformant",
+          "evidence": "uat/driver/verdict.cjs:109 Simulated user journeys are gated through deterministic code checks, unified metric projections, and audited gap waivers, preventing subjective model drift from masking acceptance regressions.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         },
         {
           "subject": "voice-io",

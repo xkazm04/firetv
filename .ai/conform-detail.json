@@ -378,6 +378,143 @@
         }
       ],
       "registryProposal": "Document how educational language learning interfaces should handle student speech review workflows alongside real-time level metering."
+    },
+    "desk-platform/engines/quality-gates": {
+      "context": "engines",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:50:47.392Z",
+      "techniques": [
+        {
+          "technique": "chokepoint-tag-registry",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/registry.ts:2 The registry module acts as the designated provider selection seam, but the codebase defines no inline callsite tags, no tag registry mapping callers to authorized providers, and no static negative-space lint or gate to forbid direct external imports or child process executions outside engines/."
+        },
+        {
+          "technique": "refusal-names-a-reachable-remedy",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/engines/vision.ts:29 Probe failure provides an exact actionable command remedy for operator recovery."
+        },
+        {
+          "technique": "unmeasurable-criteria",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/engines/health.ts:58 Evaluates health as ok: null when no probe is registered, explicitly avoiding false positive or negative assumptions."
+        },
+        {
+          "technique": "blocking-by-input-determinism",
+          "verdict": "conformant",
+          "evidence": "tools/engines-rules-test.cjs:3 Tests execute deterministically by stubbing engine responses through the registry without calling external CLIs or network models."
+        },
+        {
+          "technique": "unparseable-form-is-a-finding",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/engines/shape.ts:77 Unparseable model output immediately converts to a typed EngineError shape violation rather than passing or falling back."
+        }
+      ],
+      "withdrawn": {
+        "worker": "1f1a3d22-d0b0-4676-8d5c-d62529fe5846",
+        "state": "deviation",
+        "at": "2026-10-15T01:51:13.811706+00:00",
+        "reason": "reviewer (sonnet): The evidence depends on a `callEngine` seam that grep finds nowhere in desk/src or tools, and the absence of any repo-wide negative-space gate is unconfirmed: registry.ts:2 is only a doc comment, and engines-rules-test.cjs has a spawn-count case and 'sweep' cases I did not trace."
+      }
+    },
+    "tooling/uat/quality-gates": {
+      "context": "uat",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "conformant",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:50:47.392Z",
+      "worker": "1f1a3d22-d0b0-4676-8d5c-d62529fe5846",
+      "techniques": [
+        {
+          "technique": "self-reported-gate-inputs",
+          "verdict": "conformant",
+          "evidence": "uat/driver/verdict.cjs:109 The journey verdict is calculated strictly in code by verdictOf from row answers and metric gates rather than accepting the judge's self-reported verdict; the judge's verdict is tracked separately in judgeVerdict."
+        },
+        {
+          "technique": "unmeasurable-criteria",
+          "verdict": "conformant",
+          "evidence": "uat/driver/verdict.cjs:93 When a metric denominator is zero or counts are missing, the gate evaluates to conditional: nothing counted rather than silently passing or falsely failing."
+        },
+        {
+          "technique": "policy-projection",
+          "verdict": "conformant",
+          "evidence": "uat/driver/metrics.cjs:2 The metric registry acts as the single source of truth from which the judge schema, journey gates, before/after delta comparisons, and report sections are projected."
+        },
+        {
+          "technique": "waiver-names-its-finding",
+          "verdict": "conformant",
+          "evidence": "uat/accepted-gaps.md:7 Standing waivers AG-1 through AG-5 explicitly identify the finding class, rationale, and specific ceiling bounds."
+        },
+        {
+          "technique": "item-liveness",
+          "verdict": "conformant",
+          "evidence": "uat/driver/ledger.cjs:18 Open findings across runs track unasked occurrences, ensuring unaddressed quality gaps age visibly rather than quietly dropping out of view."
+        },
+        {
+          "technique": "shared-substrate-check-partition",
+          "verdict": "conformant",
+          "evidence": "uat/accepted-gaps.md:10 Explicitly partitions what the text-live LT simulation substrate can evaluate from concerns requiring L2 device hardware evaluation."
+        },
+        {
+          "technique": "advancement-evidence-fields",
+          "verdict": "conformant",
+          "evidence": "uat/driver/recertify.cjs:193 Advancement of a finding from open to fixed requires stamping recertify_run, recertify_status, and recertify_evidence."
+        },
+        {
+          "technique": "refusal-names-a-reachable-remedy",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:46 The preflight check refusing the codex engine provides the exact remedy command: unset it and run again."
+        },
+        {
+          "technique": "blocking-by-input-determinism",
+          "verdict": "conformant",
+          "evidence": "tools/uat-verdict-test.cjs:9 Verdict tests execute deterministically against committed fixtures without model or network calls."
+        },
+        {
+          "technique": "gate-laddering",
+          "verdict": "conformant",
+          "evidence": "uat/driver/recertify.cjs:2 Recertification ladders checks by executing only affected character x journey pairs before escalating to broader runs."
+        },
+        {
+          "technique": "oracle-frozen-during-repair",
+          "verdict": "conformant",
+          "evidence": "uat/driver/recertify.cjs:13 Recertification evaluates against identical code verdict criteria, preventing regression thresholds from drifting during repair."
+        },
+        {
+          "technique": "decidable-in-a-window",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:69 Screens presented to the judge are capped at 8000 characters per step, ensuring the decision evaluation window remains finite and bounded."
+        },
+        {
+          "technique": "severity-by-construction",
+          "verdict": "conformant",
+          "evidence": "uat/driver/verdict.cjs:142 Verdict severity is constructed hierarchically from component reasons, mapping any critical check failure directly to fail."
+        },
+        {
+          "technique": "instrument-answers-only-its-own-question",
+          "verdict": "conformant",
+          "evidence": "uat/driver/metrics.cjs:17 Informative metrics like recall are explicitly flagged informative: true and excluded from gating regressions."
+        },
+        {
+          "technique": "prose-rule-drift",
+          "verdict": "conformant",
+          "evidence": "tools/uat-metrics-test.cjs:112 Test verifies bidirectional consistency between rubric prose rows in rubric.md and code metrics in metrics.cjs."
+        },
+        {
+          "technique": "match-the-resolved-artifact",
+          "verdict": "conformant",
+          "evidence": "uat/driver/surface.cjs:6 The driver inspects server-rendered HTML output from react-dom/server rather than regex-matching raw React source components."
+        },
+        {
+          "technique": "gate-liveness",
+          "verdict": "conformant",
+          "evidence": "tools/uat-metrics-test.cjs:117 Asserts that invoking invalid journey names fails immediately during argument parsing rather than exiting 0 vacuously."
+        }
+      ]
     }
   }
 }
