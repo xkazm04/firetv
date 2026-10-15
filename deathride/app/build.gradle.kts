@@ -7,7 +7,7 @@ android {
     compileSdk = 36
     defaultConfig {
         applicationId = providers.gradleProperty("appId").getOrElse("dev.deathride.campaign")
-        resValue("string", "app_name", providers.gradleProperty("appLabel").getOrElse("Death Ride Campaign"))
+        resValue("string", "app_name", providers.gradleProperty("appLabel").getOrElse("Death Ride"))
         resValue("integer", "race_port", providers.gradleProperty("racePort").getOrElse("8770"))
         minSdk = 28; targetSdk = 34; versionCode = 1; versionName = "0.1-spike"
         ndk { abiFilters += tvAbis }
