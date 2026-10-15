@@ -54,6 +54,15 @@ export function joinSentences(sentences: Pick<Sentence, "text" | "para">[]): str
 export const paragraphCount = (sentences: Pick<Sentence, "para">[]) => new Set(sentences.map((s) => s.para ?? 0)).size || 1;
 
 /** The numbered lines a reading prompt shows the model; a "Paragraph k" line opens each paragraph of a longer piece. */
+/** The same rows as numberedLines, for the prompt assembler: the learner's sentence as data, the desk's count and role as its note, the paragraph as its heading. */
+export function sentenceRows(sentences: Sentence[]): { n: number; value: string; note: string; head?: string }[] {
+  const many = paragraphCount(sentences) > 1;
+  return sentences.map((s, i) => ({
+    n: s.n, value: s.text, note: `[${s.words} words, first-pass role: ${s.role}]`,
+    ...(many && (i === 0 || s.para !== sentences[i - 1].para) ? { head: `Paragraph ${(s.para ?? 0) + 1}:` } : {}),
+  }));
+}
+
 export function numberedLines(sentences: Sentence[]): string {
   const many = paragraphCount(sentences) > 1;
   return sentences.map((s, i) => (many && (i === 0 || s.para !== sentences[i - 1].para) ? `${i ? "\n" : ""}Paragraph ${(s.para ?? 0) + 1}:\n` : "") +

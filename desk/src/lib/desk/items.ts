@@ -31,7 +31,8 @@
 import { text } from "../engines/text";
 import { topic } from "../library/syllabus";
 import { getLearner, recallLearner, RECALL_UNREAD } from "../session/learners";
-import { notesBlock } from "./memory";
+import { notesPart } from "./memory";
+import { assemble, dataList, say } from "../prompt/assemble";
 import { slip as slipById, type Slip } from "../rules/maths";
 import { degenerate, verify } from "./verify";
 import type { PracticeItem } from "../session/store";
@@ -78,19 +79,23 @@ function ask(topicId: string, memory: string[] | null, slips: string[] | null, w
       `Include questions where a mistake like these would show itself. Do not flag which ones, do not mention the mistake in the question, and do not make those questions any harder than the rest.\n\n`
     : slips === null ? `${RECALL_UNREAD} Spread the questions evenly across the usual ways this topic goes wrong.\n\n`
     : `The desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\n`;
-  const prompt =
-    `Topic: ${name}\n${blurb}\n\n` +
-    notesBlock(memory) +
-    known +
-    (avoid.length ? `Do not repeat any of these, which the student already has:\n${avoid.map((q) => `- ${q}`).join("\n")}\n\n` : "") +
-    `Write ${want} practice questions on this topic.\n` +
-    `Rules:\n` +
-    `- Every question must be solvable by hand in under a minute.\n` +
-    `- Vary the shape: different arrangements of the terms, some with negatives, some with the x-term on the right.\n` +
-    `- Every answer must be an integer or a simple fraction with a small denominator. No decimals, no surds.\n` +
-    `- Order them so they get harder across the set: the first is the gentlest, the last is the hardest.\n` +
-    `- State the answer you get for each; it will be checked.`;
-  return text<{ items: Candidate[] }>({ system: SYSTEM, prompt, schema: SCHEMA, model: "fast", use: "practice" });
+  const asked = assemble("practice-linear", {
+    system: [say("stance", SYSTEM)],
+    prompt: [
+      say("topic", `Topic: ${name}\n${blurb}`.trim()),
+      notesPart(memory),
+      say("slips", known.trim()),
+      dataList("avoid", "Do not repeat any of these, which the student already has", avoid),
+      say("ask", `Write ${want} practice questions on this topic.\n` +
+        `Rules:\n` +
+        `- Every question must be solvable by hand in under a minute.\n` +
+        `- Vary the shape: different arrangements of the terms, some with negatives, some with the x-term on the right.\n` +
+        `- Every answer must be an integer or a simple fraction with a small denominator. No decimals, no surds.\n` +
+        `- Order them so they get harder across the set: the first is the gentlest, the last is the hardest.\n` +
+        `- State the answer you get for each; it will be checked.`),
+    ],
+  });
+  return text<{ items: Candidate[] }>({ ...asked, schema: SCHEMA, model: "fast", use: "practice" });
 }
 
 /** Candidates that survive substitution, deduped against what we already have. */
@@ -238,21 +243,25 @@ function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory
       `Include questions where a mistake like these would show itself. Do not flag which ones, and do not make those questions any harder than the rest.\n\n`
     : slips === null ? `${RECALL_UNREAD} Spread the questions evenly across the usual ways this topic goes wrong.\n\n`
     : `The desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\n`;
-  const prompt =
-    `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
-    notesBlock(memory) +
-    known +
-    (avoid.length ? `Do not repeat any of these, which the student already has:\n${avoid.map((q) => `- ${q}`).join("\n")}\n\n` : "") +
-    `Write ${want} specs for practice questions on this topic, using only these shapes:\n${shapes.map((s) => `- ${SHAPE_LINES[s]}`).join("\n")}\n` +
-    `Rules:\n` +
-    `- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n` +
-    `- Every question must be workable by hand in a few minutes.\n` +
-    `- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n` +
-    (leavesUnused(shapes) ? `- A field the shape does not use is left as an empty string (0 for steps).\n` : "") +
-    `- Do not work any question out: give the specs only.`;
+  const asked = assemble("practice-calc", {
+    system: [say("stance", calcSystem(topicId))],
+    prompt: [
+      say("topic", `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}`.trim()),
+      notesPart(memory),
+      say("slips", known.trim()),
+      dataList("avoid", "Do not repeat any of these, which the student already has", avoid),
+      say("ask", `Write ${want} specs for practice questions on this topic, using only these shapes:\n${shapes.map((s) => `- ${SHAPE_LINES[s]}`).join("\n")}\n` +
+        `Rules:\n` +
+        `- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n` +
+        `- Every question must be workable by hand in a few minutes.\n` +
+        `- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n` +
+        (leavesUnused(shapes) ? `- A field the shape does not use is left as an empty string (0 for steps).\n` : "") +
+        `- Do not work any question out: give the specs only.`),
+    ],
+  });
   // thinking off: writing nine short specs is not a reasoning task and the desk checks every one in code. Measured live
   // (tools/calc-model-yield.cjs, 6 topics): on = 62-90 s a call with two engine timeouts, off = 7-14 s and every set made
-  return text<{ specs: unknown[] }>({ system: calcSystem(topicId), prompt, schema: calcSchema(shapes, want), accept: CALC_ACCEPT, model: "fast", thinking: false, use: "practice" });
+  return text<{ specs: unknown[] }>({ ...asked, schema: calcSchema(shapes, want), accept: CALC_ACCEPT, model: "fast", thinking: false, use: "practice" });
 }
 
 /** A point as the spec holds it: a plain numeral as a number, inf / -inf for a limit, a constant as its plain text. */

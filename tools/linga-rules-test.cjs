@@ -59,6 +59,18 @@ test('an unreadable learner file stops a Linga command before any model call, an
   const c=getSession().conversation;if(c)assert.equal(c.error,LINGA_UNREAD);
  }finally{console.error=real;if(before)fs.writeFileSync(f,before);else fs.rmSync(f,{force:true});}
 });
+test('the scene premise and partner reach the tutor as input data, never in its system prompt',async()=>{
+ fresh();const seen=[];
+ answer=async(req)=>{seen.push(req);return {json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1};};
+ await command('start',{sceneId:'booking'});
+ assert(seen.length>=1);
+ for(const req of seen){
+  const input=JSON.parse(req.prompt);
+  assert.equal(typeof input.scene.premise,'string');assert(input.scene.premise.length>10,'the premise is in the input');
+  assert(!req.system.includes(input.scene.premise),'and not in the system prompt');assert(!req.system.includes(input.scene.partner),'nor the partner');
+  assert.match(req.system,/scene\.premise in the input JSON/);
+ }
+});
 test('legacy learner migration discards malformed evidence and keeps safe defaults',()=>{assert.deepEqual(cleanEnglish(undefined),emptyEnglish());assert.equal(cleanEnglish({evidence:[{skill:'request'}]}).evidence.length,0);});
 test('adult scenario cannot be started for a minor even by direct API command',async()=>{fresh();await assert.rejects(command('start',{sceneId:'date'}),e=>e.status===403);});
 test('duplicate turn commits once, failed reply is retryable, and English preserves Maths across reset',async()=>{

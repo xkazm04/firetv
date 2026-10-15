@@ -233,8 +233,8 @@ test('case j: the Essay Master and Linga text calls label their call (EC1c)',()=
  const es=src('lib/desk/essay.ts'),cv=src('lib/english/conversation.ts');
  assert.equal((es.match(/use: "essay-read"/g)||[]).length,1);
  assert.equal((es.match(/use: "essay-revise"/g)||[]).length,1);
- assert(/schema: schemaFor\(lens\), model: "best", use: "essay-read",\s*\}\);/.test(es),'essay-read sits inside the judge request');
- assert(/schema: reviseSchema\(lens\), model: "best", use: "essay-revise",\s*\}\);/.test(es),'essay-revise sits inside the reviseSentence request');
+ assert(/schema: schemaFor\(lens\), model: "best", use: "essay-read",?\s*\}\);/.test(es),'essay-read sits inside the judge request');
+ assert(/schema: reviseSchema\(lens\), model: "best", use: "essay-revise",?\s*\}\);/.test(es),'essay-revise sits inside the reviseSentence request');
  for(const l of ['linga-take','linga-pitch','linga-opening','linga-cut'])assert.equal((cv.match(new RegExp('use:"'+l+'"','g'))||[]).length,1,l);
  assert.equal((cv.match(/use:action==="coach"\?"linga-coach":action==="replay"\?"linga-replay":"linga-turn"/g)||[]).length,1,'turn/coach/replay label');
  assert.equal((es.match(/await text</g)||[]).length,2);

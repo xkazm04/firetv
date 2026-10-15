@@ -22,6 +22,7 @@
  */
 import { text } from "../engines/text";
 import { EngineError, type Again } from "../engines/types";
+import { assemble, data, say } from "../prompt/assemble";
 import { cardText, type RuleCard } from "../rules/english";
 import { equationOf, expressionOf, leaks, withheldLine } from "../rules/maths";
 import { leaksCalc, withheldCalc } from "../rules/calc";
@@ -159,14 +160,25 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
     `(no "Perfect", "Great", "Right", "Good"); start with the maths.` +
     (opts.rule ? `\n\nThe grammar that applies has been worked out already. Use it and do not contradict it:\n${cardText(opts.rule)}` : ""),
     voice);
-  const stage = opts.previous
-    ? `The learner already had this hint and pressed "still stuck":\n«${opts.previous}»\nGive the NEXT hint. It must go ONE STEP FURTHER than the previous one — do not repeat it — and still stop short of the answer.`
-    : `Give the FIRST hint: the smallest push that gets the learner moving.`;
   const maths = subject === "maths";
-  const prompt = `Problem: ${problem}\n` + (opts.askedQ ? `The student asked: "${opts.askedQ}"\n` : "") + `\n${stage}` +
-    (maths ? `\nKeep the hint and what_to_try_next to ${MAX_HINT_WORDS} words or fewer each.` : "") + (maths && opts.ground ? `\n${opts.ground}` : "");
-  const ask = (extra: string, after?: Again) => text<Said>({ system, prompt: prompt + extra, schema: maths ? MATHS_SCHEMA : SCHEMA, model: "fast", use: "hint" }, after);
-  const first = await ask("");
+  // the problem was read from a photo, the question was typed by the learner and the previous hint was written by a
+  // model: all three are data. The re-ask is the same prompt with one more part (told), assembled again, never appended to.
+  const prompt = (told?: string) => assemble("hint", {
+    system: [say("stance", system)],
+    prompt: [
+      data("problem", "Problem", problem),
+      data("asked", "The student asked", opts.askedQ),
+      ...(opts.previous
+        ? [say("stage", `The learner already had this hint and pressed "still stuck".`), data("previous", "The hint they had", opts.previous),
+          say("next", `Give the NEXT hint. It must go ONE STEP FURTHER than the previous one — do not repeat it — and still stop short of the answer.`)]
+        : [say("stage", `Give the FIRST hint: the smallest push that gets the learner moving.`)]),
+      say("words", maths && `Keep the hint and what_to_try_next to ${MAX_HINT_WORDS} words or fewer each.`),
+      say("ground", maths && opts.ground),
+      say("told", told),
+    ],
+  }, { prompt: "\n" });
+  const ask = (told?: string, after?: Again) => text<Said>({ ...prompt(told), schema: maths ? MATHS_SCHEMA : SCHEMA, model: "fast", use: "hint" }, after);
+  const first = await ask();
   const leaked = maths ? leakedIn(problem, spec, first.json, opts.system) : null, long = maths ? longIn(first.json) : null;
   if (!leaked && !long) return { hint: first.json.hint, next: first.json.what_to_try_next, provider: first.provider, ms: first.ms };
   // the faulty line is not handed back; the model is told where, and asked again, once. A leak and a length are named together.
@@ -174,7 +186,7 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
     : `Your previous hint ${[leaked && `gave the answer away (in ${leaked})`, long && `was over ${MAX_HINT_WORDS} words (in ${long})`].filter(Boolean).join(" and ")}. ` +
       `Write it again: one step, ${leaked ? "stop short of the answer, " : ""}and keep the hint and what_to_try_next to ${MAX_HINT_WORDS} words or fewer each.`;
   // the re-ask spends what is left of the first call's deadline and is booked as its next try; a failed one leaves the first answer
-  const again = await ask(`\n\n${told}`, first.again).catch((e: unknown) => {
+  const again = await ask(told, first.again).catch((e: unknown) => {
     console.warn(`[hint] the re-ask failed (${e instanceof EngineError ? e.kind : "unknown"}); the first answer decides.`);
     return null;
   });

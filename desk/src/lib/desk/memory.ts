@@ -2,13 +2,14 @@
  * What the session taught the desk about this learner.
  *
  * One to three plain sentences in the third person, written to be read back into a later prompt
- * — items.ts and explain.ts carry them, through notesBlock below (hint.ts does not). So: prose, not JSON, not bullets, no
+ * — items.ts and explain.ts carry them, through notesPart below, as quoted data (hint.ts does not). So: prose, not JSON, not bullets, no
  * numbers the next session cannot check. The existing memory goes into the prompt so the desk
  * does not write the same sentence forty times.
  */
 import { text } from "../engines/text";
 import { topicIn } from "../library/paths";
 import { getLearner, readLearner, RECALL_UNREAD, saveLearner } from "../session/learners";
+import { assemble, dataList, dataRows, say, type Part } from "../prompt/assemble";
 import { slip as slipById } from "../rules/maths";
 import type { PracticeItem } from "../session/store";
 import { askedText } from "../rules/calc-word";
@@ -20,10 +21,12 @@ const SCHEMA = {
   required: ["lines"],
 };
 
-/** The learner's notes as every prompt that reads them back carries them (explain.ts, items.ts); empty when there are none, the unavailable line when the record could not be read (null). */
-export function notesBlock(memory: readonly string[] | null): string {
-  if (memory === null) return `${RECALL_UNREAD}\n\n`;
-  return memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "";
+/**
+ * The learner's notes as every prompt that reads them back carries them (explain.ts, items.ts): model-written, so quoted
+ * as data; absent when there are none; the unavailable line when the record could not be read (null).
+ */
+export function notesPart(memory: readonly string[] | null): Part {
+  return memory === null ? say("notes", RECALL_UNREAD) : dataList("notes", "What the desk has learned about this student", memory);
 }
 
 /** A filter that drops a line equal (case, runs of space) to a held note or to an earlier line of the same answer. */
@@ -41,12 +44,12 @@ export async function writeMemory(
   const items = session.items ?? [];
   const t = session.topic ? topicIn(session.topic) : undefined;
 
+  // each question as data, the desk's verdict and slip as its note; the learner's working (read from a photo) quoted too
   const rows = items.map((i) => {
     const s = i.slip ? slipById(i.slip, session.topic) : undefined;
-    return `${i.n}. ${askedText(i)} — ${i.verdict ?? "not marked"}` +
-      (s ? ` (${s.id}: ${s.says})` : "") +
-      (i.studentWorking ? ` — their working: ${i.studentWorking}` : "");
-  }).join("\n");
+    return { n: i.n, value: askedText(i), note: `— ${i.verdict ?? "not marked"}` + (s ? ` (${s.id}: ${s.says})` : "") +
+      (i.studentWorking ? ` — their working: ${JSON.stringify(i.studentWorking)}` : "") };
+  });
 
   const right = items.filter((i) => i.verdict === "right").length;
   const wrong = items.filter((i) => i.verdict === "wrong").length;
@@ -59,11 +62,10 @@ export async function writeMemory(
     "No LaTeX. Never write the student's name; call them 'they'. Say only what tonight actually showed.";
 
   // one section per app that had work tonight; counts, lens names and the closed slip vocabulary only
-  const maths = items.length || session.hintsUsed
-    ? `Topic worked on tonight: ${t?.name ?? session.topic ?? "unknown"}\n` +
-      `Marked: ${right} right, ${wrong} wrong, ${unsure} the desk could not call.\n` +
-      `Hints asked for: ${session.hintsUsed ?? 0}\n\n` + (rows ? `The set:\n${rows}\n\n` : "")
-    : "";
+  const maths = !!(items.length || session.hintsUsed);
+  const mathsLine = maths && `Topic worked on tonight: ${t?.name ?? session.topic ?? "unknown"}\n` +
+    `Marked: ${right} right, ${wrong} wrong, ${unsure} the desk could not call.\n` +
+    `Hints asked for: ${session.hintsUsed ?? 0}`;
   const essay = (session.essay ?? []).length
     ? `Essay Master tonight:\n${session.essay!.map((e) => `- a reading through the ${e.lens} lens: ${e.sentences} sentences read, ${e.before} to fix when read` +
       (e.after !== e.before ? `, ${e.after} after rewrites` : "")).join("\n")}\n\n`
@@ -72,12 +74,19 @@ export async function writeMemory(
     ? `Linga tonight: ${session.linga.conversations} English conversation${session.linga.conversations === 1 ? "" : "s"}, ${session.linga.replies} replies from them.\n\n`
     : "";
 
-  const prompt =
-    maths + essay + linga +
-    (existing.length ? `What you already noted about them — do not repeat any of it:\n${existing.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
-    `Write what tonight added. If tonight added nothing new, return an empty list.`;
+  const asked = assemble("memory", {
+    system: [say("stance", system)],
+    prompt: [
+      say("maths", mathsLine),
+      dataRows("set", "The set", maths ? rows : []),
+      say("essay", essay.trim()),
+      say("linga", linga.trim()),
+      dataList("noted", "What you already noted about them — do not repeat any of it", existing),
+      say("ask", "Write what tonight added. If tonight added nothing new, return an empty list."),
+    ],
+  });
 
-  const { json } = await text<{ lines: string[] }>({ system, prompt, schema: SCHEMA, model: "fast", thinking: false, use: "memory" });
+  const { json } = await text<{ lines: string[] }>({ ...asked, schema: SCHEMA, model: "fast", thinking: false, use: "memory" });
   const lines = (Array.isArray(json?.lines) ? json.lines : [])
     .filter((l): l is string => typeof l === "string")
     .map((l) => l.trim().replace(/^[-*\d.\s]+/, ""))

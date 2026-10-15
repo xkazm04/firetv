@@ -161,7 +161,7 @@ test('the paragraph reaches the model numbered from one, with every sentence pre
  const lines=seen[0].prompt.split('\n').filter(l=>/^\d+\. /.test(l));
  assert.deepEqual(lines.map(l=>Number(l.split('.')[0])),[1,2,3]);
  assert.match(seen[0].prompt,/3 sentences/);
- assert.match(lines[1],/^2\. Research found that teenagers fall asleep later\. {2}\[7 words, first-pass role: evidence\]$/);
+ assert.match(lines[1],/^2\. "Research found that teenagers fall asleep later\." {2}\[7 words, first-pass role: evidence\]$/,'the sentence quoted as data, the desk\'s note beside it');
 });
 test('a verdict can only land on a sentence number that exists',async()=>{
  answer=reply({verdicts:[
@@ -542,7 +542,7 @@ test('rewrite case 3: reviseSentence re-judges sentence n alone, in its paragrap
  assert.match(system,/sentence 2 alone/i,'the model is asked for sentence 2 alone');
  assert.match(system,/Lens for this reading: Evidence/);
  assert.match(system,/Never rewrite their sentences/);
- for(const [k,x] of a.sentences.entries())assert.ok(prompt.includes(`${k+1}. ${x.text}`),`the whole numbered paragraph: ${x.n}`);
+ for(const [k,x] of a.sentences.entries())assert.ok(prompt.includes(`${k+1}. ${JSON.stringify(x.text)}`),`the whole numbered paragraph: ${x.n}`);
  assert.ok(prompt.includes(playFor('evidence').move),'the move the page taught (the playbook, when the verdict had no fix of its own)');
  assert.ok(prompt.includes(OLD2),'the sentence before the rewrite');
  // a verdict with its own fix: that move is the one asked about, and it rides on `was` so the TV can ink it
