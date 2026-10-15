@@ -30,8 +30,8 @@ export interface MathsTile { app: "maths"; empty: string | null; sets: MathsSet[
 export interface Hinted { name: string | null; page?: number; second: boolean }
 /**
  * A problem of tonight's marked set that the desk ringed with a named slip: its number as the set prints it ("4", a
- * part "2b") and the slip's short label from rules (rules/school `short`: "added the percentages"). Only a slip that
- * carries a short is named; any other ring stays unlabelled on the set's rail. Never the question, an answer or a value.
+ * part "2b") and the slip's short label from rules (rules/school `short`: "added the percentages"). Every slip carries
+ * a short (cycle 21); a ring with no slip, or one rules cannot resolve, stays unlabelled on the set's rail. Never the question, an answer or a value.
  */
 export interface Slipped { name: string; slip: string }
 export interface LingaTile { app: "english"; empty: string | null; talks: number[] }
@@ -125,7 +125,7 @@ export function hintedOf(s: Pick<Session, "pages" | "log">): Hinted[] {
   return found.map((x) => ({ name: x.name, ...(twice(x) && x.page ? { page: x.page } : {}), second: x.second }));
 }
 /**
- * Tonight's named slips: the ringed items of the set on the desk whose slip has a short label in rules (rules/maths
+ * Tonight's named slips: the ringed items of the set on the desk whose slip rules resolve, by its short label (rules/maths
  * `slip(id, topic).short`), in the set's order. Only a marked set, and only when it is tonight's: the last practice
  * line of the history (mark.ts writes one per marked set, a settle restates it in place) is dated since local midnight
  * and written under this set's topic (its name, or its bare id). A set from an earlier evening names nothing.

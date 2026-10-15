@@ -768,6 +768,27 @@ export const CALC_SLIPS: readonly CalcSlip[] = [
   { id: "arithmetic-slip", name: "A number came out wrong", says: "The method is right but the arithmetic on one line is not. Re-do just that line.", points: "the line you are on", shapes: CALC_SHAPES },
 ];
 
+/**
+ * Each slip's label under the TV recap's ring (cycle 21), by id: a faithful compression of its `name` - lowercase, four
+ * words and 24 characters at most (rules/school SHORT_WORDS, SHORT_CHARS), no value, no two the same. Kept beside
+ * CALC_SLIPS, not in it, so the frozen Calculus 1 table (tools/calc1-frozen.json) stays byte for byte.
+ */
+export const CALC_SLIP_SHORT: Readonly<Record<CalcSlip["id"], string>> = {
+  "lost-constant": "constant left off",
+  "sign": "sign turned over",
+  "forgot-chain": "the inside forgotten",
+  "product-as-product": "product rule skipped",
+  "quotient-order": "quotient rule backwards",
+  "power-off-by-one": "power moved wrong way",
+  "wrong-trig-sign": "a trig sign flipped",
+  "lost-inner-factor": "inner factor kept in",
+  "limit-substituted-early": "point put in early",
+  "bounds-swapped": "bounds swapped",
+  "forgot-second-derivative-check": "kind of point unchecked",
+  "decimal-newton-slip": "a newton step slipped",
+  "arithmetic-slip": "a number went wrong",
+};
+
 /** The slip ids the model may pick from for an item of this shape, already judged wrong by code. */
 export function slipsFor(shape: unknown): string[] {
   if (isCalc2Spec({ shape })) return calc2SlipsFor(shape);

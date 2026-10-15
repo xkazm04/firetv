@@ -315,7 +315,8 @@ answer two slips give names none (1.9 for 1.1 and 0.8).
 - **Recap slips** (cycle 19) - under the set rails, tonight's set's named slips, one to a line: the pen's ring, the
   item's number in the hand at 32 px, a dot, and the slip's short label in pen at 28 px ("2 · added the percentages").
   The short is decided in rules (rules/school `short`: lowercase, four words and 24 characters at most, no value) and
-  only a step up's top-rung slips and Pythagoras' carry one; any other ring stays on the rail unlabelled. Two, then
+  every slip carries one - the school units', the linear and the Calculus tables alike (cycle 21), no two on one topic
+  the same, English only like the titles; a ring with no slip stays on the rail unlabelled. Two, then
   "k more". A label wraps between its words, never inside one, and is never cut by CSS. Only the set on the desk when
   the last practice line is tonight's. `tv/recapRows` `slippedOf`.
 - **Taped card** - a cream card with a strip of amber tape: the one caption slot beside the paper. On the hint:

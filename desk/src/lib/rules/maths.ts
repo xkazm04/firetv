@@ -16,32 +16,35 @@ import { spanStarts } from "../../maths/typeset";
 import { isCalc2Spec } from "./calc2";
 import { leaksMaturita, readsMaturita } from "./maturita";
 import { EN_CARD, figuresOfCzech, fold } from "./numberWords";
-import { CALC_SHAPES, CALC_SLIPS, checkAnswer, partsFromQuestion as calcPartsOf, slipsFor as calcSlipsFor, specFromQuestion as calcSpecOf } from "./calc";
+import { CALC_SHAPES, CALC_SLIP_SHORT, CALC_SLIPS, checkAnswer, partsFromQuestion as calcPartsOf, slipsFor as calcSlipsFor, specFromQuestion as calcSpecOf } from "./calc";
 import { calcTopics, judgeOfTopic } from "../library/paths";
 import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_TOP_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec, specFromQuestion as schoolSpecOf } from "./school";
 import type { SchoolSystem } from "../session/store";
 import { DISAGREES, markCounts, type Markable } from "./marks";
 
-/** `name` is what the TV sets as the slip's title; `short` its label on the recap (rules/school SchoolSlip, a few only); `says` is the desk's line; `points` the place in words. */
-export interface Slip { id: string; topics: string[]; says: string; points: string; name: string; short?: string; }
+/**
+ * `name` is what the TV sets as the slip's title; `short` its label on the recap's ring (every slip carries one: lowercase,
+ * rules/school SHORT_WORDS and SHORT_CHARS at most, no value, distinct within a topic); `says` is the desk's line; `points` the place in words.
+ */
+export interface Slip { id: string; topics: string[]; says: string; points: string; name: string; short: string; }
 
 const ONE = "linear-one-step";
 const TWO = "linear-two-step";
 const BOTH = "linear-both-sides";
 
 export const SLIPS: Slip[] = [
-  { id: "undo-wrong-order", topics: [TWO, BOTH], says: "You undid the multiplication before the addition. Look at the order the two operations were done to x, and undo them the other way round.", points: "the second line", name: "Undone in the wrong order" },
-  { id: "sign-lost-moving", topics: [ONE, TWO, BOTH], says: "A term changed sides but kept its sign. Check what happened to that term as it crossed the equals sign.", points: "the line where the term moved", name: "Sign lost crossing the equals" },
-  { id: "divided-one-term", topics: [TWO, BOTH], says: "You divided only part of that side. Everything on the side has to be divided, not just the term next to x.", points: "the left-hand side", name: "Only one term divided" },
-  { id: "bracket-first-term-only", topics: [BOTH], says: "The bracket was expanded onto the first term only. The number outside multiplies every term inside.", points: "the expanded bracket", name: "Bracket on the first term only" },
-  { id: "collect-x-wrong-sign", topics: [BOTH], says: "The x-terms were collected with the wrong sign. Check the sign of the x-term you moved across.", points: "the line where the x-terms met", name: "x-terms gathered with the wrong sign" },
-  { id: "multiplied-not-divided", topics: [ONE, TWO], says: "You multiplied where the operation needed undoing by dividing. Look at what is being done to x on that line.", points: "the last line", name: "Multiplied instead of divided" },
-  { id: "added-not-subtracted", topics: [ONE, TWO], says: "The same operation was done again instead of being undone. Read what is attached to x and ask what reverses it.", points: "the first line of working", name: "Done again instead of undone" },
-  { id: "one-side-only", topics: [ONE, TWO, BOTH], says: "The step was done to one side and not the other. Whatever you do to one side has to happen to both.", points: "the right-hand side", name: "Done to one side only" },
-  { id: "arithmetic-slip", topics: [ONE, TWO, BOTH], says: "The method is right but a number came out wrong. Re-do just the arithmetic on that line.", points: "the line you are on", name: "A number came out wrong" },
-  { id: "negative-mishandled", topics: [TWO, BOTH], says: "A negative was dropped somewhere in that step. Track the minus sign through the line.", points: "the line with the negative", name: "A minus sign dropped" },
-  { id: "fraction-not-cleared", topics: [TWO, BOTH], says: "The fraction was left in place instead of being undone. Look at what the x is being divided by.", points: "the left-hand side", name: "The fraction left in place" },
-  { id: "answer-not-checked", topics: [ONE, TWO, BOTH], says: "The working stops before the check. Put your value back into the original equation and see whether the two sides agree.", points: "the original equation", name: "The answer not checked" },
+  { id: "undo-wrong-order", topics: [TWO, BOTH], says: "You undid the multiplication before the addition. Look at the order the two operations were done to x, and undo them the other way round.", points: "the second line", name: "Undone in the wrong order", short: "undone in wrong order" },
+  { id: "sign-lost-moving", topics: [ONE, TWO, BOTH], says: "A term changed sides but kept its sign. Check what happened to that term as it crossed the equals sign.", points: "the line where the term moved", name: "Sign lost crossing the equals", short: "sign lost crossing over" },
+  { id: "divided-one-term", topics: [TWO, BOTH], says: "You divided only part of that side. Everything on the side has to be divided, not just the term next to x.", points: "the left-hand side", name: "Only one term divided", short: "only one term divided" },
+  { id: "bracket-first-term-only", topics: [BOTH], says: "The bracket was expanded onto the first term only. The number outside multiplies every term inside.", points: "the expanded bracket", name: "Bracket on the first term only", short: "bracket on one term" },
+  { id: "collect-x-wrong-sign", topics: [BOTH], says: "The x-terms were collected with the wrong sign. Check the sign of the x-term you moved across.", points: "the line where the x-terms met", name: "x-terms gathered with the wrong sign", short: "wrong sign on x-terms" },
+  { id: "multiplied-not-divided", topics: [ONE, TWO], says: "You multiplied where the operation needed undoing by dividing. Look at what is being done to x on that line.", points: "the last line", name: "Multiplied instead of divided", short: "multiplied not divided" },
+  { id: "added-not-subtracted", topics: [ONE, TWO], says: "The same operation was done again instead of being undone. Read what is attached to x and ask what reverses it.", points: "the first line of working", name: "Done again instead of undone", short: "done again not undone" },
+  { id: "one-side-only", topics: [ONE, TWO, BOTH], says: "The step was done to one side and not the other. Whatever you do to one side has to happen to both.", points: "the right-hand side", name: "Done to one side only", short: "done to one side" },
+  { id: "arithmetic-slip", topics: [ONE, TWO, BOTH], says: "The method is right but a number came out wrong. Re-do just the arithmetic on that line.", points: "the line you are on", name: "A number came out wrong", short: "a number went wrong" },
+  { id: "negative-mishandled", topics: [TWO, BOTH], says: "A negative was dropped somewhere in that step. Track the minus sign through the line.", points: "the line with the negative", name: "A minus sign dropped", short: "a minus sign dropped" },
+  { id: "fraction-not-cleared", topics: [TWO, BOTH], says: "The fraction was left in place instead of being undone. Look at what the x is being divided by.", points: "the left-hand side", name: "The fraction left in place", short: "fraction left in place" },
+  { id: "answer-not-checked", topics: [ONE, TWO, BOTH], says: "The working stops before the check. Put your value back into the original equation and see whether the two sides agree.", points: "the original equation", name: "The answer not checked", short: "answer not checked" },
 ];
 
 /**
@@ -50,7 +53,7 @@ export const SLIPS: Slip[] = [
  * rules/calc's own; like the school table, none carries a value.
  */
 const CALC_AS_SLIPS: Slip[] = CALC_SLIPS.map((c) => ({
-  id: c.id, says: c.says, points: c.points, name: c.name,
+  id: c.id, says: c.says, points: c.points, name: c.name, short: CALC_SLIP_SHORT[c.id],
   topics: calcTopics().filter((t) => (t.shapes ?? []).some((sh) => calcSlipsFor(sh).includes(c.id))).map((t) => t.id),
 }));
 const isCalcTopic = (topicId: string) => judgeOfTopic(topicId) === "calc";
@@ -61,7 +64,7 @@ const isCalcTopic = (topicId: string) => judgeOfTopic(topicId) === "calc";
  * from the spec's own operands (rules/school check), never picked by a model.
  */
 const SCHOOL_AS_SLIPS: Slip[] = SCHOOL_SLIPS.map((c) => ({
-  id: c.id, says: c.says, points: c.points, name: c.name, ...(c.short ? { short: c.short } : {}),
+  id: c.id, says: c.says, points: c.points, name: c.name, short: c.short,
   topics: Object.keys(SCHOOL_UNIT_SLIPS).filter((u) => SCHOOL_UNIT_SLIPS[u].includes(c.id)),
 }));
 

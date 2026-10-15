@@ -76,7 +76,7 @@ test('case 1: recapRows draws tonight\'s work per app - sets, pages, hints, talk
  const {recapRows}=recap();
  const s=evening();
  assert.deepEqual(recapRows(s,NOW),[
-  {app:'maths',empty:null,sets:[{right:4,of:6}],pages:1,hints:3,second:1,hinted:[{name:null,second:false},{name:null,second:false}],slipped:[]},
+  {app:'maths',empty:null,sets:[{right:4,of:6}],pages:1,hints:3,second:1,hinted:[{name:null,second:false},{name:null,second:false}],slipped:[{name:'2',slip:'a number went wrong'}]},
   {app:'english',empty:null,talks:[7,4]},
   {app:'essay',empty:null,readings:[{lens:'Argument',against:2,of:5}]},
  ]);
@@ -408,7 +408,10 @@ test('GUARD: new work after an open, or a write that failed, is still written do
 const GOLDEN={ema:'6584d25f6a2d4cd2',jakub:'459bdc34371da4e6'};
 test('GUARD: the recap\'s tiles are drawn exactly as before - Ema\'s evening and Jakub\'s quiet one',()=>{
  const hash=(x)=>require('node:crypto').createHash('sha256').update(x).digest('hex').slice(0,16);
- assert.equal(hash(draw(evening(),NOW)),GOLDEN.ema);
+ // cycle 21: Ema's ringed arithmetic slip is now named under the rail; that one row aside, her tiles are byte for byte as before
+ const ema=draw(evening(),NOW),row=/<div class="rc-lamps" data-role="recap-slips">.*?<\/div>/s;
+ assert.deepEqual(slipsOfHtml(ema),['2 · a number went wrong'],'the only new thing is the named slip');
+ assert.equal(hash(ema.replace(row,'')),GOLDEN.ema);
  assert.equal(hash(draw(jakub(),NOW)),GOLDEN.jakub);
 });
 
@@ -882,44 +885,73 @@ const PCT={topic:'pct-change',marked:true,stretch:true,items:[
  {n:4,question:'Decrease 50 by 10%.',studentAnswer:'40',verdict:'wrong',slip:'pct-ten-stopped'},
  {n:5,question:'Increase 30 by 10%.',studentAnswer:'34',verdict:'wrong'}]};
 const pctEvening=(patch={})=>session({practice:PCT,history:[{at:TODAY(17),kind:'practice',label:'Percent increase and decrease',detail:'1 of 5 right'}],...patch});
-test('cycle 19 rules: a short label on the top-rung and Pythagoras slips only - lowercase, four words at most, no digit',()=>{
- const S=require(path.join(root,'src/lib/rules/school.ts')),{slip}=require(path.join(root,'src/lib/rules/maths.ts'));
- const shorts=S.SCHOOL_SLIPS.filter((x)=>x.short).map((x)=>x.id).sort();
- const want=[...Object.values(S.SCHOOL_TOP_SLIPS).flat(),...S.SCHOOL_UNIT_SLIPS.pythagoras].sort();
- assert.deepEqual(shorts,want,'every top-rung slip and every Pythagoras slip, and no other');
- for(const x of S.SCHOOL_SLIPS.filter((y)=>y.short)){
-  assert.equal(x.short,x.short.toLowerCase(),x.id);assert.doesNotMatch(x.short,/\d/,x.id);
-  assert.ok(x.short.split(/\s+/).length<=S.SHORT_WORDS&&x.short.length<=S.SHORT_CHARS,`${x.id}: "${x.short}" fits`);
+// cycle 21: every slip a marked set can name carries a short - the linear, Calculus and school tables, exhaustively, so a
+// slip added later without one fails here; each fits under a ring, has no value, and no two slips one topic can name share one
+test('cycle 21 rules: every slip that can be named on a marked set has a short - lowercase, four words at most, no digit, distinct within its topic',()=>{
+ const S=require(path.join(root,'src/lib/rules/school.ts')),C=require(path.join(root,'src/lib/rules/calc.ts'));
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ // the Calculus shorts sit beside CALC_SLIPS (CALC_SLIP_SHORT), so the frozen Calculus 1 table stays byte for byte
+ const calc=C.CALC_SLIPS.map((x)=>({...x,short:C.CALC_SLIP_SHORT[x.id]}));
+ assert.deepEqual(Object.keys(C.CALC_SLIP_SHORT).sort(),C.CALC_SLIPS.map((x)=>x.id).sort(),'a short for every Calculus slip, and no stray id');
+ const tables=[['linear',M.SLIPS],['calculus',calc],['school',S.SCHOOL_SLIPS]];
+ let n=0;
+ for(const [t,rows] of tables)for(const x of rows){
+  n++;
+  assert.equal(typeof x.short,'string',`${t} ${x.id}: has a short`);
+  assert.ok(x.short.trim()===x.short&&x.short.length>0,`${t} ${x.id}: not blank`);
+  assert.equal(x.short,x.short.toLowerCase(),`${t} ${x.id}`);assert.doesNotMatch(x.short,/\d/,`${t} ${x.id}: no digit`);
+  assert.ok(x.short.split(/\s+/).length<=S.SHORT_WORDS&&x.short.length<=S.SHORT_CHARS,`${t} ${x.id}: "${x.short}" fits`);
  }
- assert.equal(slip('pct-added','pct-change').short,'added the percentages','carried through rules/maths slip()');
- assert.equal(slip('arithmetic-slip').short,undefined,'a linear slip has none');
+ assert.ok(n>=80,`all ${n} slips checked`);
+ // every id a topic can name, read the way slip(id, topic) reads it: a school unit's list with its top rung, a calc topic's
+ // shapes (rules/calc slipsFor, calc2's ids included), the linear topics' table
+ const {calcTopics}=require(path.join(root,'src/lib/library/paths.ts'));
+ const topics=new Set([...Object.keys(S.SCHOOL_UNIT_SLIPS),...Object.keys(S.SCHOOL_TOP_SLIPS),'linear-one-step','linear-two-step','linear-both-sides',...calcTopics().map((t)=>t.id)]);
+ for(const topic of topics){
+  const ids=new Set([...M.slipsFor(topic).map((s)=>s.id),...(S.SCHOOL_TOP_SLIPS[topic]??[])]);
+  for(const sh of (calcTopics().find((t)=>t.id===topic)?.shapes??[]))for(const id of C.slipsFor(sh))ids.add(id);
+  assert.ok(ids.size>0,`${topic}: has slips`);
+  const seen=new Map();
+  for(const id of ids){
+   const s=M.slip(id,topic);
+   assert.ok(s&&typeof s.short==='string'&&s.short,`${topic} ${id}: named with a short`);
+   assert.ok(!seen.has(s.short),`${topic}: "${s.short}" is shared by ${seen.get(s.short)} and ${id}`);seen.set(s.short,id);
+  }
+ }
+ assert.equal(M.slip('pct-added','pct-change').short,'added the percentages','carried through rules/maths slip()');
+ assert.equal(M.slip('arithmetic-slip').short,'a number went wrong','a linear slip carries one');
+ assert.equal(M.slip('bounds-swapped').short,'bounds swapped','a Calculus slip carries one');
 });
-test('cycle 19 rows: tonight\'s set names its ringed items whose slip has a short, in the set\'s order; nothing else',()=>{
+test('cycle 19 rows: tonight\'s set names its ringed items by their slip\'s short, in the set\'s order; nothing else',()=>{
  const {recapRows,slippedOf}=recap();
  const t=recapRows(pctEvening(),NOW)[0];
- assert.deepEqual(t.slipped,[{name:'2',slip:'added the percentages'},{name:'3',slip:'percent of the new'}],'a unit slip without a short and a ring with no slip are not named');
+ assert.deepEqual(t.slipped,[{name:'2',slip:'added the percentages'},{name:'3',slip:'percent of the new'},{name:'4',slip:'stopped a step early'}],'every ring with a slip is named; a ring with no slip is not');
  const flat=JSON.stringify(t);
  for(const i of PCT.items){assert.ok(!flat.includes(i.question),i.question);assert.ok(!flat.includes(`"${i.studentAnswer}"`),i.studentAnswer);}
  assert.deepEqual(slippedOf(pctEvening({history:[{at:YESTERDAY,kind:'practice',label:'Percent increase and decrease',detail:'1 of 5 right'}]}),NOW),[],'yesterday\'s set names nothing tonight');
  assert.deepEqual(slippedOf(pctEvening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'4 of 6 right'}]}),NOW),[],'tonight\'s line is another set\'s');
- assert.deepEqual(slippedOf(pctEvening({history:[{at:TODAY(17),kind:'practice',label:'pct-change',detail:'1 of 5 right'}]}),NOW).length,2,'a line under the bare id is the set\'s too');
+ assert.deepEqual(slippedOf(pctEvening({history:[{at:TODAY(17),kind:'practice',label:'pct-change',detail:'1 of 5 right'}]}),NOW).length,3,'a line under the bare id is the set\'s too');
  assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,marked:false}}),NOW),[],'an unmarked set names nothing');
  const py={topic:'pythagoras',marked:true,items:[{n:1,question:'q',verdict:'wrong',slip:'pyth-no-root'},{n:2,question:'q',verdict:'right',slip:'pyth-sides-added'}]};
  assert.deepEqual(slippedOf(session({practice:py,history:[{at:TODAY(18),kind:'practice',label:"Pythagoras' theorem",detail:'1 of 2 right'}]}),NOW),[{name:'1',slip:'no square root'}],'a usual Pythagoras item\'s slip is named too; a right item never');
- assert.deepEqual(recapRows(evening(),NOW)[0].slipped,[],'a linear set\'s arithmetic slip has no short');
+ assert.deepEqual(recapRows(evening(),NOW)[0].slipped,[{name:'2',slip:'a number went wrong'}],'a linear set\'s arithmetic slip is named too (cycle 21)');
 });
 const slipsOfHtml=(html)=>[...html.matchAll(/<span class="rc-lamp" data-slip="true"><i data-v="look"><svg class="rc-ring"[^>]*>.*?<\/svg><\/i><em>([^<]*)<small>([^<]*)<\/small><\/em><\/span>/g)].map((m)=>`${m[1]} · ${m[2]}`);
 test('cycle 19 TV: under the rail, the pen\'s ring with the item\'s number and the slip\'s short label - two at most, then "k more"; never a value',()=>{
- const html=draw(pctEvening(),NOW);
+ const two={...PCT,items:PCT.items.filter((i)=>i.n!==4)};
+ const html=draw(pctEvening({practice:two}),NOW);
  assert.deepEqual(slipsOfHtml(html),['2 · added the percentages','3 · percent of the new']);
  assert.doesNotMatch(html,/recap-slips-more/);
  for(const i of PCT.items){assert.ok(!html.includes(i.question),i.question);}
  assert.ok(!/>(260|48|100)</.test(html),'no answer drawn');
- const three={...PCT,items:[...PCT.items,{n:6,question:'q6',studentAnswer:'1',verdict:'wrong',slip:'pct-added',tier:3,stretch:true}]};
- const many=draw(pctEvening({practice:three}),NOW);
+ const many=draw(pctEvening(),NOW);
  assert.deepEqual(slipsOfHtml(many),['2 · added the percentages','3 · percent of the new']);
  assert.match(many,/data-role="recap-slips-more">1 more</);
- assert.doesNotMatch(draw(evening(),NOW),/recap-slips/,'no named slip: no row');
+ const four={...PCT,items:[...PCT.items,{n:6,question:'q6',studentAnswer:'1',verdict:'wrong',slip:'pct-added',tier:3,stretch:true}]};
+ assert.match(draw(pctEvening({practice:four}),NOW),/data-role="recap-slips-more">2 more</);
+ assert.deepEqual(slipsOfHtml(draw(evening(),NOW)),['2 · a number went wrong'],'a linear set\'s slip is named too (cycle 21)');
+ const none={...PCT,items:PCT.items.filter((i)=>!i.slip)};
+ assert.doesNotMatch(draw(pctEvening({practice:none}),NOW),/recap-slips/,'no named slip: no row');
  const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8');
  const rules=[...css.matchAll(/\.rc \.rc-lamp\[data-slip\][^{]*\{([^}]*)\}/g)].map((m)=>m[1]).join(' ');
  assert.ok(rules,'the slip label has its own rules');
