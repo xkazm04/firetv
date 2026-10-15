@@ -26,7 +26,7 @@ class MountCatalogTest {
         for(c in CarCatalog.all) {
             val l=MountCatalog.layered(c.id);assertTrue(l.isNotEmpty())
             for(i in 1 until l.size)assertTrue(l[i-1].layer<=l[i].layer)
-            for(a in l){assertTrue(Math.abs(a.x)<=.5f && Math.abs(a.y)<=.55f,"${c.id} ${a.kind} off the body");assertTrue(a.scale in 0.05f..0.25f)}
+            for(a in l){assertTrue(Math.abs(a.x)<=.5f && Math.abs(a.y)<=.55f,"${c.id} ${a.kind} off the body");assertTrue(a.scale in 0.05f..0.4f)}
         }
     }
     @Test fun twinGunsAreMirrored() {

@@ -75,3 +75,31 @@ object MountLoadout {
     fun has(mask: Int,kind: MountKind)=mask and (1 shl kind.ordinal)!=0
     fun maskOf(vararg kinds: MountKind): Int { var m=0;for(k in kinds)m=m or (1 shl k.ordinal);return m }
 }
+
+/**
+ * Where a shot is DRAWN leaving the car: the muzzle tip of the mounted weapon, not the nose. The simulation still resolves hits from
+ * one nose point; only tracers, muzzle flashes and the first metres of a Hammer round start here. Twin Rivets alternate by shot count.
+ */
+object MountMuzzle {
+    private fun tip(kind: MountKind)=when(kind){MountKind.RIVET->.55f;MountKind.HAMMER->.72f;MountKind.SCATTER->.6f;else->0f}
+    /** Local (forward, left) metres of the muzzle tip of [kind] on [classId], or null when the class carries none. [shot] picks the twin. */
+    fun local(classId: String,kind: MountKind,shot: Int,length: Float,width: Float,out: FloatArray): Boolean {
+        val l=MountCatalog.attachments(classId,kind);if(l.isEmpty())return false
+        val a=l[Math.floorMod(shot,l.size)]
+        out[0]=a.x*length+tip(kind)*a.scale*length;out[1]=a.y*width;return true
+    }
+
+    /** World metres of the muzzle for [world]'s car [i]'s last traced volley into [out] (x,y); false when the class has no such mount. */
+    fun world(world: World,i: Int,out: DoubleArray): Boolean {
+        val combat=world.combat;val weapon=combat.traceWeapon[i]
+        val kind=when(weapon){Weapons.RIVET->MountKind.RIVET;Weapons.SCATTER->MountKind.SCATTER;else->return false}
+        return of(world,i,kind,combat.fireCount(i,weapon),out)
+    }
+    /** World metres of [kind]'s muzzle on car [i]; [shot] picks the twin. */
+    fun of(world: World,i: Int,kind: MountKind,shot: Int,out: DoubleArray): Boolean {
+        val c=world.cars[i];val id=c.carClass?.id?:"Line";val shape=CarShapeCache.of(id)
+        if(!local(id,kind,shot,shape.lengthM.toFloat(),shape.widthM.toFloat(),buf))return false
+        out[0]=c.x+c.cosHeading*buf[0]-c.sinHeading*buf[1];out[1]=c.y+c.sinHeading*buf[0]+c.cosHeading*buf[1];return true
+    }
+    private val buf=FloatArray(2)
+}

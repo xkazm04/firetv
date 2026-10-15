@@ -511,6 +511,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         ?: world.cars.firstOrNull { it.human } ?: world.cars[0]
     private lateinit var carSprites: CarSprites
     private lateinit var mountPainter: MountPainter
+    private val muzzleOf:(Int,DoubleArray)->Boolean={i,out->MountMuzzle.world(world,i,out)}
     private val abilityHudKeys=KeyCache("hud/ability-")
     private val viewBounds=ViewBounds()
     private fun drawWorld(dt: Double) {
@@ -539,7 +540,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         worldMatrix.set(view.camera.combined).translate(640f,350f,0f).scale(pixelsPerM.toFloat(),pixelsPerM.toFloat(),1f).translate(-focusX.toFloat(),-focusY.toFloat(),0f)
         viewBounds.set(focusX,focusY,pixelsPerM)
         profiler?.mark(12,"DR.effectsUpdate")
-        atlasEffects.update(world.snapshot,dt);atmosphere.update(dt)
+        atlasEffects.update(world.snapshot,dt,muzzleOf);atmosphere.update(dt)
         profiler?.mark(13,"DR.sceneryDraw")
         batch.projectionMatrix=worldMatrix;batch.begin();scene.draw(batch,viewBounds);batch.end()
         profiler?.mark(14,"DR.carsEffects")

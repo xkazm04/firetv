@@ -20,6 +20,7 @@ class AtlasEffects(private val art: AtlasArt) {
     var driftSmokeEmitted=0L;private set
     var driftSkidsEmitted=0L;private set
     val activeCount: Int get() { var count=0;for(n in pool.indices step 7)if(pool[n+6]>0)count++;return count }
+    private val muzzleBuf=DoubleArray(2)
     fun clear() { pool.fill(0f);trace.fill(0.0);flash.fill(0.0);smoke.fill(0.0);driftSmoke.fill(0.0);wreck.fill(false);blasts.fill(0);next=0;skidClock=0.0;driftSmokeEmitted=0;driftSkidsEmitted=0 }
     private fun emit(kind: Int,x: Double,y: Double,size: Double,heading: Double=0.0,life: Double=art.duration(keys[kind])): Boolean {
         if(!art.available(keys[kind]) || life<=0)return false
@@ -27,12 +28,12 @@ class AtlasEffects(private val art: AtlasArt) {
         pool[n]=kind.toFloat();pool[n+1]=x.toFloat();pool[n+2]=y.toFloat();pool[n+3]=size.toFloat();pool[n+4]=(heading*180/PI).toFloat();pool[n+5]=0f;pool[n+6]=life.toFloat()
         return true
     }
-    fun update(s: Snapshot,dt: Double) {
+    fun update(s: Snapshot,dt: Double,muzzleOf: ((Int,DoubleArray)->Boolean)?=null) {
         if(blasts.size!=s.blastCount)blasts=IntArray(s.blastCount) // course transition only
         for(n in pool.indices step 7)if(pool[n+6]>0){pool[n+5]+=dt.toFloat();if(pool[n+5]>=pool[n+6])pool[n+6]=0f}
         skidClock+=dt;val skid=skidClock>=.15;if(skid)skidClock=0.0
         for(i in 0..5)if(s.entered(i)) {
-            if(s.traceSeconds(i)>trace[i])emit(0,s.traceX(i),s.traceY(i),3.0,s.heading(i))
+            if(s.traceSeconds(i)>trace[i]){if(muzzleOf!=null && muzzleOf(i,muzzleBuf))emit(0,muzzleBuf[0],muzzleBuf[1],3.0,s.heading(i)) else emit(0,s.traceX(i),s.traceY(i),3.0,s.heading(i))}
             if(s.flash(i)>flash[i])emit(2,s.x(i),s.y(i),4.0,s.heading(i))
             if(s.wrecked(i) && !wreck[i])emit(6,s.x(i),s.y(i),9.0,life=20.0)
             smoke[i]+=dt

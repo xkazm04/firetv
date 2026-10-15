@@ -101,6 +101,8 @@ class Combat(private val world: World,val enabled: Boolean) {
     val sabotageTarget=IntArray(Tuning.CAR_COUNT){-1}
     val repairPickupsTaken=IntArray(Tuning.CAR_COUNT);val ammoPickupsTaken=IntArray(Tuning.CAR_COUNT)
     val shots=IntArray(Weapons.all.size);val hits=IntArray(DamageKind.entries.size);val deaths=IntArray(DamageKind.entries.size)
+    /** Weapon index of the last traced volley per car; visual only, so the renderer can draw it from the mount. */
+    val traceWeapon=IntArray(Tuning.CAR_COUNT)
     val traceSeconds=DoubleArray(Tuning.CAR_COUNT);val traceX=DoubleArray(Tuning.CAR_COUNT);val traceY=DoubleArray(Tuning.CAR_COUNT)
     val traceEndX=DoubleArray(Tuning.CAR_COUNT);val traceEndY=DoubleArray(Tuning.CAR_COUNT)
     val projectiles=Array(CombatRules["projectileCapacity"].toInt()){Projectile()}
@@ -292,7 +294,7 @@ class Combat(private val world: World,val enabled: Boolean) {
                 val barrier=world.obstacles.solidFraction(x,y,ex,ey)
                 if(barrier<time){time=barrier;target=-1}
                 if(target>=0 && hitMask and (1 shl target)==0){hitMask=hitMask or (1 shl target);damage(target,w.damage*c.weaponDamageScale,id,if(weapon==Weapons.SCATTER)DamageKind.SCATTER else DamageKind.RIVET)}
-                if(ray==rays/2){traceX[id]=x;traceY[id]=y;traceEndX[id]=x+(ex-x)*time;traceEndY[id]=y+(ey-y)*time;traceSeconds[id]=w.lifeSeconds}
+                if(ray==rays/2){traceX[id]=x;traceY[id]=y;traceEndX[id]=x+(ex-x)*time;traceEndY[id]=y+(ey-y)*time;traceSeconds[id]=w.lifeSeconds;traceWeapon[id]=weapon}
             }
     }
     private fun placeMine(c: Car): Boolean {

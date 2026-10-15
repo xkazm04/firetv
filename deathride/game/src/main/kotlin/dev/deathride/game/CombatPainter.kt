@@ -6,6 +6,8 @@ import kotlin.math.*
 
 /** Geometry only: no game-art assets, growing collections or per-frame effect objects. */
 class CombatPainter {
+    private val muzzle=DoubleArray(2)
+    private companion object { const val HAMMER_BLEND_M=6f }
     private fun ring(r: ShapeRenderer,x: Float,y: Float,radius: Float,width: Float) {
         val u=UnitRing.SEGMENTS_24
         for(i in 0 until 24)r.rectLine(x+u.cos[i].toFloat()*radius,y+u.sin[i].toFloat()*radius,x+u.cos[i+1].toFloat()*radius,y+u.sin[i+1].toFloat()*radius,width)
@@ -42,7 +44,14 @@ class CombatPainter {
         val spriteMuzzle=art?.available("effects/muzzle")==true
         val combat=w.combat
         for(p in combat.projectiles)if(p.active) {
-            val x=p.x.toFloat();val y=p.y.toFloat();val dx=(p.vx/Weapons.all[1].speedMps).toFloat();val dy=(p.vy/Weapons.all[1].speedMps).toFloat()
+            var x=p.x.toFloat();var y=p.y.toFloat()
+            // The first metres leave the roof launcher, then merge into the simulated line.
+            val out=(Weapons.all[1].rangeM-p.remainingM).toFloat();val blend=1f-out/HAMMER_BLEND_M
+            if(blend>0f && MountMuzzle.of(w,p.owner,MountKind.HAMMER,0,muzzle)){
+                val c=w.cars[p.owner];val nx=c.x+c.cosHeading*(c.spec.circleOffsetM+c.spec.circleRadiusM);val ny=c.y+c.sinHeading*(c.spec.circleOffsetM+c.spec.circleRadiusM)
+                x+=((muzzle[0]-nx)*blend).toFloat();y+=((muzzle[1]-ny)*blend).toFloat()
+            }
+            val dx=(p.vx/Weapons.all[1].speedMps).toFloat();val dy=(p.vy/Weapons.all[1].speedMps).toFloat()
             val trail=(Weapons.all[1].speedMps*Weapons.all[1].traceSeconds).toFloat()
             r.setColor(1f,.36f,.10f,.32f);r.rectLine(x-dx*trail,y-dy*trail,x,y,1.2f)
             r.setColor(1f,.86f,.40f,1f);r.rectLine(x-dx*1.4f,y-dy*1.4f,x+dx*.5f,y+dy*.5f,.55f)
@@ -50,8 +59,10 @@ class CombatPainter {
         for(i in w.cars.indices)if(combat.traceSeconds[i]>0) {
             val alpha=(combat.traceSeconds[i]/Weapons.all[0].traceSeconds).toFloat()
             r.setColor(1f,.78f,.36f,alpha*.85f)
-            r.rectLine(combat.traceX[i].toFloat(),combat.traceY[i].toFloat(),combat.traceEndX[i].toFloat(),combat.traceEndY[i].toFloat(),.12f)
-            if(!spriteMuzzle)r.circle(combat.traceX[i].toFloat(),combat.traceY[i].toFloat(),.55f*alpha,8)
+            val mounted=MountMuzzle.world(w,i,muzzle)
+            val sx=if(mounted)muzzle[0].toFloat() else combat.traceX[i].toFloat();val sy=if(mounted)muzzle[1].toFloat() else combat.traceY[i].toFloat()
+            r.rectLine(sx,sy,combat.traceEndX[i].toFloat(),combat.traceEndY[i].toFloat(),.12f)
+            if(!spriteMuzzle)r.circle(sx,sy,.55f*alpha,8)
         }
         for(b in combat.blasts)if(b.remainingSeconds>0) {
             val life=Weapons.all[2].traceSeconds;val age=(1-b.remainingSeconds/life).toFloat();val radius=b.radiusM.toFloat()
