@@ -151,14 +151,18 @@ test('P7-a (b): a run that fails on an unreadable learners.json says one desk se
  const s=store.getSession();
  assert.equal(s.jobs.memory.phase,'failed');assert.equal(s.jobs.memory.error,store.LEARNER_UNREAD_RUN);assert.equal(s.status,store.LEARNER_UNREAD_RUN);
  assert.doesNotMatch(s.status,/Try again/);assert.equal(store.LEARNER_UNREAD_RUN,'The learner file could not be read just now, so this was not saved.');
+ assert.equal(s.jobs.memory.failure,'unread');assert.equal(s.jobs.memory.retry,false);
  assert.ok(fs.readFileSync(LJ()).equals(was),'learners.json is untouched');
  fs.rmSync(LJ(),{force:true});
 });
-test('P7-a (b): control, any other failure still says Try again',async()=>{
+test('P7-a (b): control, any other failure is its own sentence and is offered again (retry), where the unread one is not',async()=>{
  const job=require(src('lib/desk/job.ts'));
  store.dispatch({type:'reset'});
  const c=catchErrors();try{await job.runJob('memory',async()=>{throw new Error('boom');});}finally{c.done();}
- assert.match(store.getSession().jobs.memory.error,/Try again\.$/);
+ const m=store.getSession().jobs.memory;
+ assert.equal(m.error,'The desk could not write tonight down.');assert.notEqual(m.error,store.LEARNER_UNREAD_RUN);
+ // whether asking again can help is a value (failure.ts), not words in the sentence
+ assert.equal(m.failure,'unknown');assert.equal(m.retry,true);
 });
 
 // ---- robustness-1: a run writes its status line only while its learner is seated ----
