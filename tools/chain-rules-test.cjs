@@ -277,6 +277,17 @@ const CZ_CORRECT=[
   [{shape:'derivative',f:'log_10(x^2)'},["y' = (log(x^2))'","= 2x/(x^2 ln 10)"]],
   [{shape:'derivative',f:'log_10(3x)'},["y' = lg(3x)'","= 3/(3x ln 10)"]],
 ];
+test('a log with its base before a primed bracket is primed whole, in every base form, for every system',()=>{
+  const L2={shape:'derivative',f:'log_2(x^2+1)'};
+  for(const lg of ['log_2','log2','log_(2)','log₂'])for(const sys of [undefined,'uk','us','cz','de']){
+    assert.deepEqual(chainChecks(L2,[`y' = ${lg}(x^2+1)'`,'= 2x/((x^2+1) ln 2)'],sys),[true,true],`${lg} ${sys}: a correct working rings nothing`);
+    assert.equal(chainPen(L2,[`y' = ${lg}(x^2+1)'`,'= 2x/((x^2+1) ln 2)'],sys),null);
+    assert.equal(chainPen(L2,[`y' = ${lg}(x^2+1)'`,'= 1/((x^2+1) ln 2)'],sys),1,`${lg} ${sys}: the dropped inside derivative is pinned to its own line`);
+  }
+  // a number before a bracket with no log is still a coefficient
+  assert.deepEqual(chainChecks({shape:'derivative',f:'3x^2'},["y' = 3(x^2)'",'= 6x']),[true,true]);
+});
+
 test('MB-B36 property: 200 correct Czech workings (each line equal to, or following, the line before) ring nothing for cz',()=>{
   const rnd=mulberry(37);let n=0;
   for(let k=0;k<200;k++){
