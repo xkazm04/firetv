@@ -329,7 +329,7 @@ function pctSlipByHand(expr){
 test('MB-B20 the top rung names its own slips: the percent taken of the new amount and the percentages added, never the forward list\'s',()=>{
  const M=require(path.resolve(__dirname,'../desk/src/lib/rules/maths.ts'));
  const pc=(expr,unit)=>({shape:'percent-change',expr,...(unit?{unit}:{})}),slipOf=(spec,a)=>S.check(spec,a,'uk');
- assert.deepEqual(S.SCHOOL_TOP_SLIPS,{'pct-change':['pct-of-new','pct-added']});
+ assert.deepEqual(S.SCHOOL_TOP_SLIPS['pct-change'],['pct-of-new','pct-added']);
  // the commonest: 20% off a price after a 20% rise (432 for 450), 10% on after a 10% sale (594 for 600)
  const off=slipOf(pc('before increase 540 by 20%','€'),'€432');assert.deepEqual([off.verdict,off.slip],['wrong','pct-of-new']);
  assert.equal(slipOf(pc('before increase 540 by 20%','€'),'432').slip,'pct-of-new');
@@ -469,4 +469,54 @@ test('MB-B20 the probability top rung: values, the judge on equal forms and roun
   assert.match(st.text,/^[A-Z][^?]*\?$/,id);
   assert.doesNotMatch(st.text,/\b(?:one|two|three|four|five|six|seven|eight|nine|ten|half|quarter|third|once|twice)\b|\d/i,id);
  }
+});
+
+/** The top rung's own slip worked by hand: the two chances added (dice, a coin with a dice or a spinner), or the first counter put back; null for at least one. */
+function probSlipByHand(expr){
+ const body=expr.replace(/^(?:socks|sweets|game) /,''),B=BigInt;
+ const dice=(e)=>(e==='even'||e==='odd'?[3n,6n]:e.startsWith('over ')?[6n-B(e.slice(5)),6n]:[1n,6n]);
+ const bag=(t)=>Object.fromEntries(t.split(', ').map((x)=>{const [c,n]=x.split(' ');return [c,B(n)];}));
+ const sum=(s)=>Object.values(s).reduce((x,y)=>x+y,0n);
+ let id,N,D,d;
+ if(/^dice least /.test(body))return null;
+ if((d=/^dice (\S+|over \d) and (\S+|over \d)$/.exec(body))){const [a,b]=dice(d[1]),[c,e]=dice(d[2]);id='prob-added';N=a*e+c*b;D=b*e;}
+ else if((d=/^coin (heads|tails) and dice (.+)$/.exec(body))){const [a,b]=dice(d[2]);id='prob-added';N=b+2n*a;D=2n*b;}
+ else if((d=/^coin (heads|tails) and spinner (.+) ask (\w+)$/.exec(body))){const s=bag(d[2]),t=sum(s);id='prob-added';N=t+2n*s[d[3]];D=2n*t;}
+ else if((d=/^draw (.+) both (\w+)$/.exec(body))){const s=bag(d[1]),t=sum(s);id='prob-replaced';N=s[d[2]]**2n;D=t*t;}
+ else if((d=/^draw (.+) (\w+) then (\w+)$/.exec(body))){const s=bag(d[1]),t=sum(s);id='prob-replaced';N=s[d[2]]*s[d[3]];D=t*t;}
+ const g=gcd(N,D);return {id,N:N/g,D:D/g};
+}
+
+test('MB-B20 the probability top rung names its own slips: the chances added, the first counter put back, never the single-draw list\'s',()=>{
+ const M=require(path.resolve(__dirname,'../desk/src/lib/rules/maths.ts'));
+ const pb=(expr)=>({shape:'probability',expr}),got=(spec,a)=>{const v=S.check(spec,a,'uk');return [v.verdict,v.slip];};
+ assert.deepEqual(S.SCHOOL_TOP_SLIPS.probability,['prob-added','prob-replaced']);
+ // the commonest: heads and a 6 as a half plus a sixth (2/3 for 1/12); both red put back (9/64 for 3/28), in any equal form
+ assert.deepEqual(got(pb('coin heads and dice 6'),'2/3'),['wrong','prob-added']);
+ assert.deepEqual(got(pb('coin heads and dice 6'),'4/6'),['wrong','prob-added']);
+ assert.deepEqual(got(pb('dice 6 and even'),'4/6'),['wrong','prob-added']);
+ assert.deepEqual(got(pb('coin tails and spinner red 3, blue 5 ask red'),'7/8'),['wrong','prob-added']);
+ assert.deepEqual(got(pb('draw red 3, blue 5 both red'),'9/64'),['wrong','prob-replaced']);
+ assert.deepEqual(got(pb('draw red 3, blue 5 both red'),'0.140625'),['wrong','prob-replaced']);
+ assert.deepEqual(got(pb('sweets draw red 5, green 4 green then red'),'20/81'),['wrong','prob-replaced']);
+ // a value no slip gives stays the plain wrong; the answer stays right; at least one names none; the single-draw slips are not this rung's
+ assert.deepEqual(got(pb('draw red 3, blue 5 both red'),'3/8'),['wrong',undefined]);
+ assert.deepEqual(got(pb('draw red 3, blue 5 both red'),'3/28'),['right',undefined]);
+ assert.deepEqual(got(pb('dice least 6'),'1/3'),['wrong',undefined]);
+ assert.deepEqual(M.slipsFor('probability').map((s)=>s.id),[...S.SCHOOL_UNIT_SLIPS.probability],'the unit\'s list (and the explain prompt) is unchanged');
+ assert.equal(S.check(pb('bag red 3, blue 5, green 2 ask red'),'3','uk').slip,'prob-count-alone','a single draw is judged as before');
+ // the desk's line is the slip's own words, no value; a model's pick of a top slip is never taken
+ const says=(id)=>S.SCHOOL_SLIPS.find((s)=>s.id===id).says;
+ assert.deepEqual(M.settleSpec(2,pb('draw red 3, blue 5 both red'),'9/64',undefined,'probability'),{verdict:'wrong',slip:'prob-replaced',said:says('prob-replaced')});
+ assert.equal(M.settled(5,false,'prob-added','probability').slip,undefined,'a pick not named by code');
+ assert.equal(M.slip('prob-replaced','probability').name,'Put the first one back');
+ // property: every seed's own slip, worked by hand, is named; its line never leaks the item's answer
+ let named=0;
+ for(let seed=0;seed<SEEDS;seed++){
+  const p=S.genProbabilityTop(seed),h=probSlipByHand(p.expr),t=probByHand(p.expr);
+  if(!h||(h.N===t.N&&h.D===t.D))continue;
+  assert.deepEqual(got(p,`${h.N}/${h.D}`),['wrong',h.id],`${p.expr}: ${h.N}/${h.D}`);named++;
+  assert.equal(S.leaksSchool(p,says(h.id)),false,p.expr);
+ }
+ assert.ok(named>SEEDS*0.8,`named on ${named} of ${SEEDS}`);
 });

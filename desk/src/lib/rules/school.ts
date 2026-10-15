@@ -1670,6 +1670,9 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "prob-part-over-rest", name: "Compared with the rest instead of the whole", says: "The counters asked about were compared with the other counters. Compare them with all the counters in the bag, the ones asked about included.", points: "the bottom of the fraction" },
   { id: "prob-one-over-colours", name: "One over the number of colours", says: "Every colour was given the same chance. The counts differ, so each colour has its own chance: its count over all the counters.", points: "the bottom of the fraction" },
   { id: "prob-own", name: "The chance of the event itself", says: "This is the chance of the colour itself, but the question asks for the chance it is not. Take it away from a whole.", points: "the last line" },
+  // the top rung of probability (MB-B20): named on a top-rung item only (SCHOOL_TOP_SLIPS)
+  { id: "prob-added", name: "Added the chances instead of multiplying", says: "The chances were added. For both things to happen, multiply the chance of each, so the answer is smaller than either chance.", points: "the line where the chances were combined" },
+  { id: "prob-replaced", name: "Put the first one back", says: "The first pick was treated as put back. It is kept out, so the second pick has fewer to choose from.", points: "the second fraction" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */
@@ -1709,6 +1712,8 @@ function commonFactors(a: bigint, b: bigint): bigint[] {
  *   - decimals a ± b, a × b (W7 batch 2), P the working's places (the longer of the two for ±, their sum for ×): the
  *     numbers lined up by their last digits, (a·10^pa ± b·10^pb) / 10^P, when their places differ; the point put back
  *     by the wrong count, the value × 10^k for k = -1 and 1..P-1 (products only); the point left out, the value × 10^P.
+ *   - two events (MB-B20, the probability top rung, SCHOOL_TOP_SLIPS): two independent chances added instead of
+ *     multiplied; the first counter put back before the second draw (a × b over the total squared).
  */
 function slipCandidates(r: ReadOk): [string, Q][] {
   const out: [string, Q][] = [];
@@ -1809,8 +1814,22 @@ function slipCandidates(r: ReadOk): [string, Q][] {
     if (K.mode === "not") cands.push(["prob-own", mk(ev, total)!]);
     return distinctSlips(cands, r.truth);
   }
-  // MB-B20: no slip of the probability list is named on a top-rung item (two events have their own ways to go wrong)
-  if (K.k === "prob-two") return [];
+  if (K.k === "prob-two") {
+    // MB-B20, the top rung's own slips (SCHOOL_TOP_SLIPS), never the single-draw list's: two independent chances added
+    // instead of multiplied (a dice's and a dice's, the coin's half and the dice's or the spinner's); the first counter put
+    // back before the second draw, a × b over the total squared. At least one of two dice names none
+    const half = mk(ONE, BigInt(2))!, total = K.counts.reduce((a, [, n]) => a + n, Z);
+    const count = (c: string) => K.counts.find(([x]) => x === c)![1];
+    const cands: [string, Q][] = [];
+    if (K.form === "dice-and") cands.push(["prob-added", add(diceChance(K.events[0]), diceChance(K.events[1]))]);
+    else if (K.form === "coin-dice") cands.push(["prob-added", add(half, diceChance(K.events[0]))]);
+    else if (K.form === "coin-spin") cands.push(["prob-added", add(half, mk(count(K.ask[0]), total)!)]);
+    else if (K.form === "draw-both" || K.form === "draw-then") {
+      const a = count(K.ask[0]), b = K.form === "draw-both" ? a : count(K.ask[1]);
+      cands.push(["prob-replaced", mk(a * b, total * total)!]);
+    }
+    return distinctSlips(cands, r.truth);
+  }
   if (K.k === "pct-top") {
     // MB-B20, the top rung's own slips (SCHOOL_TOP_SLIPS), never the forward list's: the amount before a change worked as a
     // change of the amount after it, A × (100 ∓ p)/100 (20% off a price after a 20% rise); the percentages added into one
@@ -3643,6 +3662,7 @@ export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
  */
 export const SCHOOL_TOP_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "pct-change": ["pct-of-new", "pct-added"],
+  "probability": ["prob-added", "prob-replaced"],
 };
 
 /**
