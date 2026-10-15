@@ -329,8 +329,12 @@ function dNode(n: Node): Node | null {
 }
 
 const PRIME = /[′']/;
-/** A function name before a primed bracket; `log_(10)` is the base-10 log a comma-system line is read into (calc-read czechAnswer). */
-const FN_BEFORE = /(?<![A-Za-z])(?:arcsin|arccos|arctan|asin|acos|atan|sinh|cosh|tanh|sin|cos|tan|sec|csc|cot|ln|log(?:_\(10\))?|exp|sqrt|cbrt|abs)\s*$/;
+/**
+ * A function name before a primed bracket. A log carries its base as the engine reads it - `log_(10)` (what a comma-system
+ * line is read into, calc-read czechAnswer), `log_(2)`, `log_2`, `log2`, `log₂` - so the base is part of the function,
+ * never a coefficient in front of the bracket (`log_2(x)'` was read as log_2 of (x)' = log_2(1) and rang a correct line).
+ */
+const FN_BEFORE = /(?<![A-Za-z])(?:arcsin|arccos|arctan|asin|acos|atan|sinh|cosh|tanh|sin|cos|tan|sec|csc|cot|ln|log(?:_\([^()]*\)|_?\d+(?:\.\d+)?|[₀-₉]+)?|exp|sqrt|cbrt|abs)\s*$/;
 /**
  * Each "(B)'" (or "sin(B)'") in a line replaced by the derivative of what is primed, in brackets; the line unchanged when
  * it has no such prime; null when a primed bracket cannot be read (a letter before it that is not a function name -

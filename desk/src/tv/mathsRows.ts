@@ -163,7 +163,7 @@ function sheetCount(n: number, cap: boolean): string {
 }
 
 /** Words in a line, as the card is counted. */
-const wordCount = (t: string) => t.split(/s+/).filter(Boolean).length;
+const wordCount = (t: string) => t.split(/\s+/).filter(Boolean).length;
 /**
  * The Sheet's Six more card (math-buddy-A): what the next six are aimed at, said truthfully. A school unit written by code
  * (rules/school SCHOOL_UNIT_SLIPS) with a live slip on it names the newest one in the desk's own slip words - the set is
@@ -365,7 +365,6 @@ export const AIM_WORDS = 25;
 const AIM_HEAD = "Aimed at what the paper lost:";
 const MORE_WORD = ["", "one", "two", "three", "four", "five"];
 const moreOf = (n: number) => (n ? ` and ${MORE_WORD[n] ?? "several"} more` : "");
-const aimWords = (t: string) => t.split(/\s+/).filter(Boolean).length;
 /**
  * What a set opened from a paper's recovery row aims at (MB-B40), for the Practice card: "Aimed at what the paper lost:"
  * and the lost statements in the GCSE map's own words, as many whole as fit in AIM_WORDS, then "and one more". Null for a
@@ -380,7 +379,7 @@ export function aimLine(p: (Pick<Practice, "aim"> & Partial<Pick<Practice, "topi
   const kept: string[] = [];
   for (let i = 0; i < said.length; i++) {
     const tail = moreOf(said.length - i - 1);
-    if (kept.length && aimWords(`${AIM_HEAD} ${[...kept, said[i]].join("; ")}${tail}`) > AIM_WORDS) break;
+    if (kept.length && wordCount(`${AIM_HEAD} ${[...kept, said[i]].join("; ")}${tail}`) > AIM_WORDS) break;
     kept.push(said[i]);
   }
   return `${AIM_HEAD} ${kept.join("; ")}${moreOf(said.length - kept.length)}.`;
