@@ -221,7 +221,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
             deltaHud=greeting["hudDelta"]?.jsonPrimitive?.intOrNull==1
             slot=claim(greeting.text("token"),greeting.text("pin"),greeting.text("profile"))
             val s=slot
-            if(s==null) { socket.send("{\"t\":\"error\",\"message\":\"Pair from the lobby and check the PIN. Two cars may already be reserved; press REWIND in the TV lobby to reset pairing.\"}"); socket.close(CloseReason(CloseReason.Codes.VIOLATED_POLICY,"pairing")); return }
+            if(s==null) { socket.send(LinkText.refusalJson(LinkText.refusal(phase,greeting.text("pin")==pin,slots.any{!it.claimed}))); socket.close(CloseReason(CloseReason.Codes.VIOLATED_POLICY,"pairing")); return }
             generation=s.generation
             s.hudDelta=deltaHud
             socket.send("{\"t\":\"welcome\",\"slot\":${s.id},\"token\":\"${s.token}\",\"tvNow\":${nowMs()},\"phase\":\"$phase\"}")

@@ -50,7 +50,7 @@ class LinkTest {
             val feedback=Json.parseToJsonElement(catalog.body()).jsonObject["driftFeedback"]!!.jsonObject
             assertEquals(dev.deathride.core.VisualTuning["driftHapticQuality"],feedback["quality"]!!.jsonPrimitive.double)
             host.slots[0].driftQuality=.5;host.slots[0].slipRadians=.4;host.slots[0].spunOut=true
-            val bad=Listener(); val badWs=connect(bad); badWs.sendText("""{"t":"hello","pin":"invalid"}""",true).join(); assertEquals("error",bad.next("error")["t"]!!.jsonPrimitive.content); badWs.abort()
+            val bad=Listener(); val badWs=connect(bad); badWs.sendText("""{"t":"hello","pin":"invalid"}""",true).join(); val refused=bad.next("error"); assertEquals("BAD_PIN",refused["code"]!!.jsonPrimitive.content); assertTrue(refused["message"]!!.jsonPrimitive.content.length<=44); badWs.abort()
             val good=Listener(); val ws=connect(good); ws.sendText("""{"t":"hello","pin":"${host.pin}"}""",true).join()
             val welcome=good.next("welcome"); val token=welcome["token"]!!.jsonPrimitive.content; assertEquals(0,welcome["slot"]!!.jsonPrimitive.int)
             fun barrier() { ws.sendText("""{"t":"ping","ts":123}""",true).join();good.next("pong") }

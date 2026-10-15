@@ -1,0 +1,28 @@
+package dev.deathride.link
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.*
+
+class LinkTextTest {
+    private val phases=listOf("lobby","garage","career","countdown","race","results")
+    @Test fun everyRefusalIsOneShortLineAndSaysItsReason() {
+        val all=phases.flatMap { p -> listOf(true,false).flatMap { pin -> listOf(true,false).map { seat -> LinkText.refusal(p,pin,seat) } } }
+        for(r in all) { assertTrue(r.message.length<=44,r.message); assertFalse(r.message.contains("error",ignoreCase=true),r.message) }
+        assertEquals(LinkText.RACE_ON,LinkText.refusal("race",true,true).code)
+        assertEquals(LinkText.RACE_ON,LinkText.refusal("countdown",false,false).code)
+        assertEquals(LinkText.BAD_PIN,LinkText.refusal("lobby",false,true).code)
+        assertEquals(LinkText.FULL,LinkText.refusal("lobby",true,false).code)
+        assertEquals(LinkText.PROFILE_TAKEN,LinkText.refusal("lobby",true,true).code)
+    }
+    @Test fun refusalJsonCarriesCodeAndMessage() {
+        val j=kotlinx.serialization.json.Json.parseToJsonElement(LinkText.refusalJson(LinkText.refusal("lobby",false,true))).let{it as kotlinx.serialization.json.JsonObject}
+        assertEquals("error",(j["t"] as kotlinx.serialization.json.JsonPrimitive).content)
+        assertEquals("BAD_PIN",(j["code"] as kotlinx.serialization.json.JsonPrimitive).content)
+    }
+    @Test fun linkStatusLinesFitTheTvLobbyLabel() {
+        for(s in listOf(LinkText.STARTING,LinkText.READY,LinkText.LOST,LinkText.BLOCKED)) { assertTrue(s.length<=60,s); assertFalse(s.contains("port",ignoreCase=true),s) }
+        assertTrue(LinkText.BLOCKED.contains("unavailable"))
+    }
+    @Test fun screenNamesAreOneWordPerPhase() {
+        assertEquals(setOf("LOBBY","GARAGE","CAREER","COUNTDOWN","RACE","RESULTS"),phases.map(LinkText::screen).toSet())
+    }
+}
