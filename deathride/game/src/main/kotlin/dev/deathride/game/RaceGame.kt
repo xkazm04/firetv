@@ -784,8 +784,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 val car=CarCatalog.all[selectedCars[0]]
                 // Left column: pair. Centre: lesson caption + campaign card. Right: car. Hints share one tidy footer row.
                 title("SCAN + GO",64f,578f)
-                detail.setColor(HudTheme.bone);detail.wrapped(TvCopy.LOBBY_STEPS,64f,517f,320f,27f)
-                updateQr();label("PIN ${server.pin}",232f,408f,accent)
+                detail.setColor(HudTheme.bone);detail.wrapped(TvCopy.PAIR_LINE,64f,517f,320f,27f)
+                updateQr();label(TvCopy.CODE_LABEL,232f,408f,accent);title(server.pin,232f,372f)
                 label(addressLabel,64f,246f)
                 label(if(server.running)"${server.slots.count{it.connected}} / 2 PHONES CONNECTED" else server.serverStatus,64f,214f,accent)
                 TvCopy.mainButton("lobby",false).let{label(it,224f-detail.width(it)/2,168f,bg)}

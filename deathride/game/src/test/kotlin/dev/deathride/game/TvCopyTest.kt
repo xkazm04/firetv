@@ -17,12 +17,14 @@ class TvCopyTest {
         assertEquals("GET READY",TvCopy.countdownCue(listOf("Auto","Auto")))
         assertEquals("HOLD GO",TvCopy.countdownCue(listOf("Auto","Classic")))
     }
-    @Test fun pairingStepsAreShortAndStepThreeNamesNoControl() {
-        val lines=TvCopy.LOBBY_STEPS.lines()
-        assertEquals(3,lines.size)
-        for(l in lines)assertTrue(words(l)<=6,"step too long: $l")
-        assertFalse(TvCopy.LOBBY_STEPS.contains("GO",ignoreCase=false),"Auto layout has no GO to hold")
-        assertFalse(TvCopy.LOBBY_STEPS.contains("Hold",ignoreCase=true))
+    @Test fun pairingIsOneLineAndTheCodeIsCalledTvCode() {
+        assertTrue(words(TvCopy.PAIR_LINE)<=10,TvCopy.PAIR_LINE)
+        assertFalse(TvCopy.PAIR_LINE.contains("Hold",ignoreCase=true))
+        assertEquals("TV CODE",TvCopy.CODE_LABEL)
+        val html=phone()
+        if(html!=null)assertTrue(html.contains("TV code"),"phone no longer says TV code")
+        val src=raceGameSource()
+        if(src!=null)assertFalse(src.contains("\"PIN "),"the TV says TV code, not PIN")
     }
     private fun raceGameSource(): String? {
         for(p in listOf("src/main/kotlin/dev/deathride/game/RaceGame.kt","game/src/main/kotlin/dev/deathride/game/RaceGame.kt","deathride/game/src/main/kotlin/dev/deathride/game/RaceGame.kt")) { val f=File(p);if(f.exists())return f.readText() }
@@ -70,7 +72,7 @@ class TvCopyTest {
         assertEquals("INSTALL TIER 2 / 300 CR",TvCopy.installLabel(2,300))
         val html=phone()
         if(html!=null) {
-            assertTrue(html.contains("INSTALL '+"),"phone install verb changed")
+            assertTrue(html.contains("INSTALL TIER '+"),"phone install verb changed")
             assertTrue(html.contains("Link lost"),"phone link wording changed")
         }
         val src=raceGameSource()

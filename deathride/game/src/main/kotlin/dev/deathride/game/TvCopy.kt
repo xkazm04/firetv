@@ -5,8 +5,9 @@ package dev.deathride.game
  * (deathride/controller/index.html). The TV is read from 3 m: a picture and one short line per screen.
  */
 object TvCopy {
-    /** The pairing steps under SCAN + GO. Step 3 names no control: the phone's layout decides whether GO is a button. */
-    const val LOBBY_STEPS="1  Same Wi-Fi as this TV\n2  Scan with your phone\n3  Drive"
+    /** One line under SCAN + GO. The phone calls the four digits the "TV code"; the TV used to call them PIN. */
+    const val PAIR_LINE="Same Wi-Fi as the TV. Scan or type the code."
+    const val CODE_LABEL="TV CODE"
     /** Same word as the phone's footer button. */
     const val START_RACE="START RACE"
     const val NEXT_ROUND="RACE NEXT ROUND"
