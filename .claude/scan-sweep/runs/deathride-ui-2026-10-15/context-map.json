@@ -1,0 +1,12 @@
+{
+  "note": "Death Ride contexts for the UI-perfectionist + ambiguity-guardian sweep, 2026-10-15. Root context-map.json is the Study Desk map and has no Death Ride entries.",
+  "contexts": [
+    {"name": "dr-phone-controller", "paths": ["deathride/controller/"], "description": "Phone web controller: drive pad, buttons, garage/career/car/feel sheets, pairing"},
+    {"name": "dr-tv-screens", "paths": ["deathride/game/src/"], "description": "TV rendering: lobby, garage, career, race HUD, captions, minimap, fonts, painters"},
+    {"name": "dr-link", "paths": ["deathride/link/src/"], "description": "HTTP/WebSocket host: pairing, HUD message the phone renders, catalog, phase vocabulary"},
+    {"name": "dr-campaign-copy", "paths": ["deathride/core/src/main/kotlin/dev/deathride/core/Campaign.kt", "deathride/core/src/main/kotlin/dev/deathride/core/Career.kt", "deathride/core/src/main/kotlin/dev/deathride/core/Garage.kt", "deathride/core/src/main/kotlin/dev/deathride/core/Commerce.kt", "deathride/narrative/", "deathride/core/src/main/resources/data/"], "description": "Strings and tables that reach the player: career, garage, market, story, difficulty, layouts"},
+    {"name": "dr-race-core", "paths": ["deathride/core/src/main/kotlin/dev/deathride/core/"], "description": "Simulation: world, combat, drift, abilities, AI, tracks (UI-relevant seams only)"},
+    {"name": "dr-app-desktop", "paths": ["deathride/app/src/", "deathride/desktop/"], "description": "Android TV shell and desktop launcher: first screen, pairing URL/PIN presentation"},
+    {"name": "dr-tools", "paths": ["deathride/tools/"], "description": "Harnesses; sweep only where they generate player-facing text"}
+  ]
+}
