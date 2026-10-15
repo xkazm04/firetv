@@ -310,3 +310,11 @@ test('MB-B20 the fixed sentence after a second leak: a reverse percentage and a 
  }
  assert.equal(S.withheldSchool({shape:'percent-change',expr:'increase 60 by 15%'}),S.SCHOOL_WITHHELD['pct-change'],'a tier-1/2 change keeps the unit\'s line');
 });
+
+test('MB-B20 a side of one metre is printed in the singular and read back',()=>{
+ const spec={shape:'pythagoras',expr:'ladder 3 1 dp1',unit:'m'};
+ assert.ok(S.wellFormed(spec).ok);
+ const q=S.question(spec,'uk').plain;
+ assert.match(q,/its foot 1 metre from the wall/);assert.doesNotMatch(q,/\b1 metres\b/);
+ for(const sys of SYSTEMS)assert.deepEqual(S.specFromQuestion(S.question(spec,sys).plain,sys),spec,sys);
+});

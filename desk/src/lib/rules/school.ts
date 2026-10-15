@@ -1413,7 +1413,8 @@ function printQuestion(spec: unknown, system?: SchoolSystem): { plain: string; t
       // MB-B20: the tier-1/2 sentence or a word problem, the sides as written ("2.5 cm", "6 metres"), then the places asked
       const u = specUnit(st.spec);
       if (u !== "mm" && u !== "cm" && u !== "m") return null;
-      const side = (x: string) => (u === "m" ? { plain: `${x} metres`, tex: `${x} \\text{ metres}` } : { plain: `${x} ${u}`, tex: `${x} \\text{ ${u}}` });
+      const metres = (x: string) => (x === "1" ? "metre" : "metres");
+      const side = (x: string) => (u === "m" ? { plain: `${x} ${metres(x)}`, tex: `${x} \\text{ ${metres(x)}}` } : { plain: `${x} ${u}`, tex: `${x} \\text{ ${u}}` });
       const body = fillText(K.story ? PYTH_STORIES[K.story].text : PYTH_BARE[K.find], { "{X}": side(K.xt), "{Y}": side(K.yt) }), tail = placesLine(K.dp);
       return { plain: `${body.plain} ${tail}`, tex: `${body.tex} \\text{ ${tail}}` };
     }
