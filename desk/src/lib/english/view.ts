@@ -23,6 +23,7 @@ import { runningTake, takeSpent } from "./take";
 import { lostLine, type LostTask } from "./lostfound";
 import { showOpen } from "./repair";
 import { slipStands } from "./slip";
+import { beatCaption, beatOf, duetAgain } from "./duet";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
 
 /**
@@ -98,7 +99,9 @@ export interface ViewRun {
 export interface ViewAction { id: ActionId; label: string; help: string; run: ViewRun; disabled?: boolean; needs?: Need; }
 /** What takes a typed or spoken answer on this screen: the phone's reply box, the PC test bar, the driver's "answer". */
 /** On a fix moment (K2) the answer is a try, "moment-try", and lastTurnId is the learner turn the moment is on. */
-export interface Answer { id: "answer"; action: "check-answer" | "check-task" | "plan-goal" | "turn" | "moment-try"; label: string; lastTurnId?: string; taskId?: string; }
+export interface Answer { id: "answer"; action: "check-answer" | "check-task" | "plan-goal" | "turn" | "moment-try"; label: string; lastTurnId?: string; taskId?: string;
+  /** in a duet (L2, duet.ts): whose beat the reply box takes, sent with the turn */
+  speaker?: "learner" | "costar"; }
 /** The line the TV speaks. A new key plays it again; blocked keeps it silent. */
 export interface Spoken { line: string; key: string; blocked: boolean; slow: boolean; speaker: string; }
 export interface Recap { title: string; replies: number; spoken: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
@@ -255,7 +258,8 @@ function answerOf(s: Session, lc: LevelCheck | null, c: Conversation | null): An
   const said = c ? (runningTake(c)?.turns ?? c.turns).at(-1) : undefined;
   // a fix moment (K2) takes the learner's try in the same box, while it takes one; never a turn
   if (panel === "moment" && c?.moment && accepts(c, "moment-try")) return { id: "answer", action: "moment-try", label: c.moment.repair?.rung === 2 ? "Say it once more" : "Say it again", lastTurnId: c.moment.turnId };
-  if (panel === "talk" && c && accepts(c, "turn") && said?.role === "partner") return { id: "answer", action: "turn", label: `Reply to ${c.partner}`, lastTurnId: said.id };
+  const beat = c ? beatOf(c) : "learner";
+  if (panel === "talk" && c && accepts(c, "turn", undefined, undefined, beat) && said?.role === "partner") return { id: "answer", action: "turn", label: beat === "costar" && c.duet ? `${c.duet.coStar} replies to ${c.partner}` : `Reply to ${c.partner}`, lastTurnId: said.id, ...(c.duet ? { speaker: beat } : {}) };
   return null;
 }
 
@@ -275,7 +279,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   const st = c ? turnState(c) : null, inFlight = st === "preparing" || st === "waiting";
   const refused = (action: string) => !c || !accepts(c, action);
   // Cut (v2 L3): Adult mode only, where the learner has a line of their own (turn.ts reads the mode for it)
-  const mode = modeOf(p, prefs), hasLine = !!c?.turns.some(t => t.role === "learner"), cutting = mode === "adult" && hasLine;
+  const mode = modeOf(p, prefs), hasLine = !!c?.turns.some(t => t.role === "learner"), cutting = mode === "adult" && hasLine && !c?.duet;
   // L1: the phrases this learner owns and may see now (an adult scene's only where adult content is on), quotes checked in code
   const owned = ownedPhrases(l, taughtAllowed(p, prefs, l), repliesOf(c));
   const cutAction = () => act("cut", "Cut", "End this take. Linga gives up to three notes, each quoting your own words.", cmd("cut"), { disabled: waiting || !c || !accepts(c, "cut", mode) });
@@ -548,6 +552,9 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (c.review?.used && c.review.usedTurn === lastLearner?.id && st === "your-turn" && !c.cue && !c.capture) {
       caption = `“${c.review.better}”, from ${c.review.fromTitle}. Now answer on your phone.`; captionTag = "Used again";
     }
+    // a duet (L2, duet.ts): whose turn it is, in the caption slot
+    const beat = st === "your-turn" && captionTag !== "Used again" ? beatCaption(c, s.learner?.name ?? "") : null;
+    if (beat) { caption = beat.text; captionTag = beat.tag; }
     if (c.quizOpen) {
       hero = { kind: "choices", kicker: "A little support · recognition practice", prompt: scene.quiz.question, options: [...scene.quiz.options], small: true };
       actions = scene.quiz.options.map((x, i) => act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") }));
@@ -559,7 +566,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       const second = hasReply ? act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting || refused("coach") }) : quiz;
       // At the top of the ladder the help button gives way to the recognition fallback.
       const first = inFlight ? act("cancel", "Cancel & go back", "Cancel the pending reply and keep the conversation for later.", cmd("leave"), { disabled: refused("leave") }) : help.offered ? act("cue", help.label, help.help, cmd("cue"), { disabled: refused("cue") }) : second === quiz ? null : quiz;
-      actions = st === "unprepared" ? [act("retry-scene", "Retry the scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true })), chooseSituation("Choose a different situation.", "Choose another")]
+      actions = st === "unprepared" ? [act("retry-scene", "Retry the scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true, ...duetAgain(c) })), chooseSituation("Choose a different situation.", "Choose another")]
         : st === "paused" ? [act("resume", "Resume", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }), act("finish", "Finish rehearsal", "End here and keep your learning evidence.", cmd("finish"), { disabled: refused("finish") }), ...(cutting ? [cutAction()] : [])]
         : [...(first ? [first] : []), second, ...(cutting && !c.quizOpen ? [cutAction()] : [])];
       // The mission is done: the way on is the primary action, and the child may still keep talking (turn.ts takes a turn).
@@ -681,7 +688,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     onPhone(inFlight ? act("cancel", "Cancel pending turn", "Cancel the pending reply and keep the conversation for later.", cmd("leave"), { disabled: refused("leave") })
       : act("repeat", "Repeat audio", "Hear the last line again.", cmd("repeat"), { disabled: refused("repeat") }));
     onPhone(act("finish", "Finish rehearsal (phone)", "End this scene and save a recap.", cmd("finish"), { disabled: refused("finish") }));
-    if (st === "unprepared") onPhone(act("retry-scene", "Retry preparing scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true })));
+    if (st === "unprepared") onPhone(act("retry-scene", "Retry preparing scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true, ...duetAgain(c) })));
   }
 
   // a check action the table (activity.ts) would refuse is drawn disabled, wherever it is offered

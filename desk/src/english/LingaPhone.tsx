@@ -11,6 +11,8 @@ import { NOTE_LABEL } from "@/lib/english/notes";
 import { currentStep } from "@/lib/english/mission";
 import { accepts, turnState } from "@/lib/english/turn";
 import { runningTake } from "@/lib/english/take";
+import { beatOf, COSTAR_MAX } from "@/lib/english/duet";
+import { LOST_SCENE } from "@/lib/english/lostfound";
 import { activeCheck, helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
 import { LostPicture } from "./LostPicture";
@@ -75,20 +77,22 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
         <p><b>{c.title}</b><br/>{c.goal}{c.mission&&currentStep(c.mission)&&<><br/>Now: {currentStep(c.mission)}</>}</p>
         {c.lost&&<LostPicture learnerId={s.learner?.id} episodeId={c.id} partner={c.partner}/>}
         <div className="linga-status" aria-live="polite">{inFlight?"Your partner is preparing a reply…":c.paused?"Paused. Resume when you are ready.":st==="coaching"?c.coaching?.note:currentQuestion||"Preparing your scene…"}</div>
+        {c.duet&&<p className="linga-status" data-role="linga-beat"><b>{c.duet.beat==="costar"?`${c.duet.coStar}'s turn`:`${s.learner?.name??"Your"}'s turn`}</b>{c.duet.held&&<><br/><small>{s.learner?.name} said: “{c.duet.held.text}”</small></>}</p>}
         {c.error&&<p className="linga-error" role="alert">{c.error}</p>}
         {c.paused?<button className="pbtn" data-signal="true" disabled={refused("resume")} onClick={()=>run("resume")}>Resume conversation</button>:st==="coaching"?<>
           <p>One way to try it: “{c.coaching?.after}”</p><button className="pbtn" data-signal="true" disabled={refused("replay")} onClick={()=>run("replay")}>Replay with a new question</button>
         </>:<>
-          {c.cue&&<p><b>{helpOf(c).tag}</b><br/>{c.cue}</p>}
+          {/* L2: in a duet's learner beat the help is the co-star helper, the same rungs and the same cue action, no model call */}
+          {c.duet&&beatOf(c)==="learner"?<CoStarHelper c={c} learner={s.learner?.name??""} cue={cue} busy={busy} run={run}/>:c.cue&&<p><b>{helpOf(c).tag}</b><br/>{c.cue}</p>}
           {c.quizOpen&&scene&&<><p>{scene.quiz.question}</p>{scene.quiz.options.map((x,i)=><button className="pbtn" data-secondary="true" key={x} disabled={refused("choice")} onClick={()=>run("choice",{option:i})}>{x}</button>)}</>}
-          <ReplyBox ready={!!currentQuestion} busy={pending} question={c.turns.at(-1)?.id} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
-            onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt})} note="Recorded as written practice. It counts toward On your own, as speaking does."/>
-          <div className="linga-buttons">{cue&&<button className="pbtn" data-secondary="true" disabled={busy||cue.disabled} onClick={()=>run("cue")}>{cue.label}</button>}{quiz&&<button className="pbtn" data-secondary="true" disabled={busy||quiz.disabled} onClick={()=>run("quiz")}>{quiz.label}</button>}</div>
+          <ReplyBox key={beatOf(c)} ready={!!currentQuestion} busy={pending} question={c.turns.at(-1)?.id} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
+            onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt,...(c.duet?{speaker:beatOf(c)}:{})})} note={c.duet?.beat==="costar"?(c.duet.coStarLearnerId?`${c.duet.coStar}'s line counts on ${c.duet.coStar}'s own map.`:`${c.duet.coStar}'s line keeps the scene going; it is not recorded.`):"Recorded as written practice. It counts toward On your own, as speaking does."}/>
+          <div className="linga-buttons">{cue&&!(c.duet&&beatOf(c)==="learner")&&<button className="pbtn" data-secondary="true" disabled={busy||cue.disabled} onClick={()=>run("cue")}>{cue.label}</button>}{quiz&&<button className="pbtn" data-secondary="true" disabled={busy||quiz.disabled} onClick={()=>run("quiz")}>{quiz.label}</button>}</div>
           <button className="pbtn" data-secondary="true" disabled={refused("coach")} onClick={()=>run("coach")}>Pause & coach</button>
         </>}
         <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(inFlight?"leave":"repeat")}>{inFlight?"Cancel pending turn":"Repeat audio"}</button><button className="pbtn" data-secondary="true" disabled={refused("finish")} onClick={()=>run("finish")}>Finish rehearsal</button>{cut&&<button className="pbtn" data-secondary="true" disabled={busy||cut.disabled} onClick={()=>run("cut")}>Cut · notes on my lines</button>}</div>
         {st==="unprepared"&&<button className="pbtn" onClick={()=>run("start",{sceneId:c.sceneId,replace:true})}>Retry preparing scene</button>}
-        <details><summary>Conversation transcript</summary><div className="linga-transcript">{c.turns.map(t=><p key={t.id} data-role={t.role}><b>{t.role==="learner"?`You · ${t.mode==="speech"?"spoken":"written"}`:c.partner}</b>{t.text}</p>)}</div></details>
+        <details><summary>Conversation transcript</summary><div className="linga-transcript">{c.turns.map(t=><p key={t.id} data-role={t.role}><b>{t.role==="learner"?`${c.duet?s.learner?.name:"You"} · ${t.mode==="speech"?"spoken":"written"}`:t.role==="costar"?c.duet?.coStar??"Co-star":c.partner}</b>{t.text}</p>)}</div></details>
       </>}
       <button className="pbtn" data-secondary="true" onClick={()=>post({type:"subject",subject:"english"}).then(()=>post({type:"nav",screen:"linga"}))}>Linga on the TV</button>
       <button className="pbtn" data-secondary="true" onClick={onSentence}>Help with a sentence</button>
@@ -201,10 +205,14 @@ function PitchBox({run,busy}:{run:Run;busy:boolean}){
   </>;
 }
 
-function StartPanel({s,learning,run,busy,list,pitch,takeTwo}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean;list:boolean;pitch:boolean;takeTwo:ViewAction[]}){
+function StartPanel({s,learning,run:send,busy,list,pitch,takeTwo}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean;list:boolean;pitch:boolean;takeTwo:ViewAction[]}){
   const profile=s.profiles.find(p=>p.id===s.learner?.id),c=s.conversation,prefs=learning.preferences??defaultPreferences(profile);
+  // L2: "Play with someone in the room" - every start below carries the co-star while it is on (duet.ts startDuet checks it)
+  const [duet,setDuet]=useState<{on:boolean;coStar:string;coStarLearnerId:string}>({on:false,coStar:"",coStarLearnerId:""});
+  const duo=duet.on&&(duet.coStar.trim()||duet.coStarLearnerId)?{duet:{coStar:duet.coStar,...(duet.coStarLearnerId?{coStarLearnerId:duet.coStarLearnerId}:{})}}:null;
+  const run:Run=(action,extra)=>send(action,action==="start"&&duo?{...extra,...duo}:extra);
   const next=recommendFor(profile,learning),placement=learning.placement,home=lingaHome(s);
-  const pick=list&&<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).map(x=><option key={x.id} value={x.id}>{x.name}{isPitchId(x.id)?" · your own":""}</option>)}</select></label>;
+  const pick=list&&<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).filter(x=>!duo||x.id!==LOST_SCENE).map(x=><option key={x.id} value={x.id}>{x.name}{isPitchId(x.id)?" · your own":""}</option>)}</select></label>;
   const level=placement&&<p className="linga-note">Your level: <b>{placement.band} · {BAND_NAME[placement.band]}</b>{placement.source==="self"?" · self-chosen":""}</p>;
   const planned=<div className="linga-buttons"><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("plan-open")}>My topics</button><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>Find my level again</button></div>;
   let body;
@@ -243,6 +251,15 @@ function StartPanel({s,learning,run,busy,list,pitch,takeTwo}:{s:Session;learning
       {pick}{planned}
     </>;break;
   }
+  const others=s.profiles.filter(p=>p.id!==s.learner?.id);
+  const together=home!=="check-part-way"&&<div className="linga-duet" data-role="linga-duet">
+    <label className="linga-check"><input type="checkbox" checked={duet.on} disabled={busy} onChange={e=>setDuet({...duet,on:e.target.checked})}/><span>Play with someone in the room</span></label>
+    {duet.on&&<>
+      <label>Your co-star&apos;s name<input value={duet.coStar} maxLength={COSTAR_MAX} placeholder="Mum, Tom, Grandpa…" onChange={e=>setDuet({...duet,coStar:e.target.value})}/></label>
+      {others.length>0&&<label>Or a learner at this desk<select value={duet.coStarLearnerId} onChange={e=>setDuet({...duet,coStarLearnerId:e.target.value})}><option value="">No one: just the name</option>{others.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label>}
+      <p className="linga-note">You take turns on this phone: {s.learner?.name} first, then your co-star. Linga hosts and answers you both. Only a learner chosen here keeps what they say on their own map.{next.id===LOST_SCENE?" The lost jacket is played on your own.":""}</p>
+    </>}
+  </div>;
   return <>
     {c?.phase==="finished"&&<>
       <p className="linga-status">Rehearsal saved. Your map shows the evidence you collected.</p>
@@ -262,8 +279,24 @@ function StartPanel({s,learning,run,busy,list,pitch,takeTwo}:{s:Session;learning
       {(c.moments??[]).length>0&&<div className="linga-transcript"><b>From this rehearsal</b>{c.moments.map(m=><p key={m.id}>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/><small>{m.why}</small></p>)}</div>}
     </>}
     {body}
+    {together}
     {pitch&&<PitchBox run={run} busy={busy}/>}
   </>;
+}
+
+/**
+ * The co-star helper (L2, duet.ts): during the learner's beat, the rescue ladder of the host's line, one rung at a time,
+ * for the co-star to whisper or read out. It runs the cue action, so no model call, and a starter revealed here makes
+ * the learner's reply supported, as the learner's own tap would.
+ */
+function CoStarHelper({c,learner,cue,busy,run}:{c:Conversation;learner:string;cue?:ViewAction;busy:boolean;run:Run}){
+  const help=helpOf(c);
+  return <details className="linga-helper" data-role="linga-costar-helper" open={!!c.cue}>
+    <summary>Co-star helper</summary>
+    <p className="linga-note">For {c.duet?.coStar}: whisper or read this to {learner||"the learner"}. A way to start counts as help.</p>
+    {c.cue&&<p><b>{help.tag}</b><br/>{c.cue}</p>}
+    {cue&&<button className="pbtn" data-secondary="true" disabled={busy||cue.disabled} onClick={()=>run("cue")}>{cue.label}</button>}
+  </details>;
 }
 
 /**

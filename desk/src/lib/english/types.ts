@@ -179,7 +179,15 @@ export interface EnglishLearning {
    */
   pitches?: PlanTopic[];
 }
-export interface ConversationTurn { id: string; role: "partner" | "learner"; text: string; mode?: EvidenceMode; supported?: boolean; }
+/** "costar": the second person in the room in a duet (L2, duet.ts), never the seated learner and never evidence of theirs. */
+export interface ConversationTurn { id: string; role: "partner" | "learner" | "costar"; text: string; mode?: EvidenceMode; supported?: boolean; }
+/**
+ * Two people in the room (L2, duet.ts): the seated learner and a co-star take beats in turn, and the partner, as the
+ * scene's host, answers the pair in one call. `coStar` is a short name typed on the phone, or a profile's first name;
+ * `coStarLearnerId` a second learner profile at this desk, the only co-star whose own lines can earn evidence. `beat` is
+ * whose line comes next; `held` is the learner's line of this pair, kept until the co-star's arrives.
+ */
+export interface Duet { coStar: string; coStarLearnerId?: string; beat: "learner" | "costar"; held?: ConversationTurn }
 export interface Coaching { before: string; after: string; note: string; }
 /** A rung of the rescue ladder: 1 said more simply, 2 what it means, 3 a way to start. */
 export type HelpRung = 1 | 2 | 3;
@@ -252,6 +260,8 @@ export interface Conversation {
   cut?: Cut;
   /** absent until a Take Two (v2 L4) starts from one of the cut notes; oldest first, the running one last */
   takes?: Take[];
+  /** absent unless the scene was started as a duet (L2, duet.ts) */
+  duet?: Duet;
   commands: string[]; evidence: EnglishEvidence[];
   provider?: string; responseMs?: number; startedAt: number;
 }

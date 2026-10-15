@@ -11,6 +11,7 @@
 import type { Mode } from "../rules/mode";
 import { forkOf, runningTake, takeSpent } from "./take";
 import { showOpen, tryOpen } from "./repair";
+import { duetRefusal, duetRefuses } from "./duet";
 import type { Conversation } from "./types";
 
 /**
@@ -89,11 +90,13 @@ function noteRefusal(c: Conversation, note: unknown): string {
 
 /**
  * `mode` is the learner's (rules/mode.ts modeOf); "cut" and "take-two" read it, and with none given both are refused.
- * `note` is the cut note a "take-two" plays again; no other action reads it.
+ * `note` is the cut note a "take-two" plays again; no other action reads it. `speaker` is who sends a "turn" in a duet
+ * (L2, duet.ts): only the one whose beat it is, and outside a duet only the learner; a duet also refuses Cut and Take Two.
  */
-export function accepts(c: Conversation, action: string, mode?: Mode, note?: number): boolean {
+export function accepts(c: Conversation, action: string, mode?: Mode, note?: number, speaker?: unknown): boolean {
   if (!isTurnAction(action) || !ACCEPTS[turnState(c)].includes(action)) return false;
   if ((action === "turn" || action === "capture") && spent(c)) return false;
+  if (duetRefuses(c, action, speaker)) return false;
   // on a moment, a try and its microphone while the fix moment takes a try, Show me while its fix is withheld (repair.ts)
   if (action === "moment-try" || action === "capture" && c.moment) return tryOpen(c.moment);
   if (action === "moment-show") return showOpen(c.moment);
@@ -129,9 +132,12 @@ const BY_ACTION: Partial<Record<TurnAction, string>> = {
 };
 
 /** The sentence a refused action shows the learner: what the state asks for first, or what the action is missing. */
-export function refusal(c: Conversation, action: string, mode?: Mode, note?: number): string {
+export function refusal(c: Conversation, action: string, mode?: Mode, note?: number, speaker?: unknown): string {
   const state = turnState(c);
   if (action === "cut" && mode !== "adult") return "Cut is part of Adult mode.";
+  // the duet's own refusals (duet.ts), where the state would take the action: not your beat, a half-said pair, Cut and Take Two
+  const duet = duetRefusal(c, action, speaker);
+  if (duet && (action === "take-two" ? mode === "adult" : ACCEPTS[state].includes(action as TurnAction))) return duet;
   if (action === "take-two") {
     if (mode !== "adult") return "Take Two is part of Adult mode.";
     if (state === "take-two") return "A take is already running. Finish it first.";
