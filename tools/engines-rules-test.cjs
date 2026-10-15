@@ -494,3 +494,21 @@ test('UD-22: after the one re-ask, a string still over its maxLength is cut at a
  stubSeq({premise:'x'.repeat(450),skill:'ask'},{premise:'x'.repeat(450),skill:'ask'});
  await assert.rejects(text({system:'s',prompt:'p',schema:S,isolated:true,shorten:true}),isShape('premise'));
 });
+
+test('sweep case 6: vision retries without think only for a 400 (the key rejected); a 404 or 500 is one POST and ends in that status',async()=>{
+ const {ollamaVision}=load('engines/vision.ts'),real=globalThis.fetch;
+ const ctx={signal:new AbortController().signal},req={imageBase64:'aGk=',prompt:'p'};
+ const run=async(statuses)=>{
+  const posts=[];
+  globalThis.fetch=async(url,init)=>{const b=JSON.parse(init.body);posts.push('think' in b);const s=statuses[Math.min(posts.length-1,statuses.length-1)];
+   return s===200?{ok:true,status:200,json:async()=>({message:{content:'{}'}}),text:async()=>''}:{ok:false,status:s,text:async()=>`status ${s}`};};
+  const out=await ollamaVision.run(req,ctx).then(()=>'ok',(e)=>e.message);
+  return {posts,out};
+ };
+ try{
+  const a=await run([404]);assert.equal(a.posts.length,1,'404: one POST');assert.match(a.out,/404/);
+  const b=await run([500]);assert.equal(b.posts.length,1,'500: one POST');assert.match(b.out,/500/);
+  const c=await run([400,200]);assert.deepEqual(c.posts,[true,false],'400: think:false first, then the body without think');assert.equal(c.out,'ok');
+  const d=await run([400,404]);assert.equal(d.posts.length,2);assert.match(d.out,/404/);
+ }finally{globalThis.fetch=real;}
+});
