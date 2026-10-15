@@ -2,8 +2,10 @@
  * Practice from a paper aims at what was lost (BACKLOG MB-B40). Select on a recovery row (MB-B9, RP1) carries the unit
  * into the session as the paper's aim (Session.paperAim); a set asked for on that unit from Get ready for school is then
  * written with the paper's lost statements as its aim: on a model-written equations unit the statements, the learner's
- * age and school system go into the prompt as data, and every set carries the statements' codes (Practice.aim) so the
- * taped card can say what it aims at. A set opened any other way is asked for exactly as before.
+ * age and school system go into the prompt as data; on a code-written unit (cycle 14) a statement that picks some of a
+ * tier's forms (rules/school paperSteer) steers half the draw to them. The set carries the codes it was written for
+ * (Practice.aim) so the taped card can say what it aims at, and only those. A set opened any other way is asked for
+ * exactly as before, byte for byte on the code-written units.
  * Run with npm test in desk/ (directly: node tools/paper-aim-test.cjs). No model is called - the text engine is a stub
  * that records the request - and the data directory is disposable, under the OS temp dir.
  */
@@ -129,11 +131,86 @@ test('aim 4: a set asked for any other way carries no aim section - the prompt b
  assert.equal(S().practice.aim,undefined);
 });
 
-test('aim 5: a code-written unit from the paper - still no engine call, and the set carries its aim',async()=>{
+test('aim 5: a code-written unit from the paper - no engine call; a statement that steers nothing leaves the set unaimed, one that steers is carried',async()=>{
+ // N2 is all of adding and subtracting fractions: no form to pick, so the usual draw and no aim on the card (cycle 14)
  seat();fromPaper('frac-add-sub');stubText();
  const res=await post({topic:'frac-add-sub'});assert.equal(res.status,200);
  assert.equal(seen.length,0,'no model call');
- assert.deepEqual(S().practice.aim,['N2']);assert.equal(S().practice.items.length,6);
+ assert.equal(S().practice.aim,undefined,'the card claims no aim the set did not take');assert.equal(S().practice.items.length,6);
+ // R4 (ratio notation, simplest form) on ratio-share steers the draw to simplifying, and the set says so
+ seat();store.dispatch({type:'paper.enter',rows:[{q:'3',marks:0,outOf:3,codes:['R4']},{q:'4',marks:0,outOf:2,codes:['R5']}]});
+ fromPaper('ratio-share');stubText();
+ const r2=await post({topic:'ratio-share'});assert.equal(r2.status,200,await r2.clone().text());
+ assert.equal(seen.length,0,'no model call');
+ const pr=S().practice;assert.deepEqual(pr.aim,['R4'],'only the statement that steered: R5 is all of tier 2 already');
+ assert.equal(pr.items.length,6);
+ assert.ok(pr.items.filter((it)=>SR.formOf('ratio-share',it.spec)==='simplify').length>=3,'half the set simplifies a ratio');
+});
+
+test('aim 7: the map from a paper\'s statements to a unit\'s forms - pinned to the generators and to the statements, decided in code',()=>{
+ // every form list is what the unit's generator draws at that tier, no more and no fewer
+ for(const [u,tiers] of Object.entries(SR.SCHOOL_UNIT_FORMS))for(const t of [1,2]){
+  const got=new Set();for(let k=0;k<600;k++){const f=SR.formOf(u,SR.generatorFor(u)(k,t));assert.ok(f,`${u} tier ${t} seed ${k} has a form`);got.add(f);}
+  assert.deepEqual([...got].sort(),[...tiers[t]].sort(),`${u} tier ${t}`);
+ }
+ // every mapped statement is a real one that touches its unit, and names forms of that unit
+ for(const [u,by] of Object.entries(SR.STATEMENT_FORMS))for(const [c,forms] of Object.entries(by)){
+  const st=STATEMENTS.find((x)=>x.code===c);assert.ok(st&&st.touches.includes(u),`${c} touches ${u}`);
+  const all=new Set([...SR.SCHOOL_UNIT_FORMS[u][1],...SR.SCHOOL_UNIT_FORMS[u][2]]);for(const f of forms)assert.ok(all.has(f),`${c}: ${f}`);
+ }
+ const steer=(u,c,t=[1,2])=>SR.paperSteer(u,c,t);
+ assert.deepEqual(steer('dec-convert',['N10']),{forms:{1:['fraction-decimal','decimal-fraction'],2:['fraction-decimal','decimal-fraction']},codes:['N10']});
+ assert.deepEqual(steer('area',['G17']),{forms:{2:['composite']},codes:['G17']},'composites are tier 2 only');
+ assert.equal(steer('dec-convert',['N10','R9']),null,'the two together are every conversion: nothing to pick');
+ assert.equal(steer('ratio-share',['R5']),null,'not mapped: sharing is the whole of tier 2');
+ assert.deepEqual(steer('ratio-share',['R5','R4']),{forms:{1:['simplify']},codes:['R4']});
+ assert.equal(steer('area',['G17'],[1]),null,'a tier the set does not draw steers nothing');
+ for(const [u,c] of [['frac-add-sub',['N2']],['pct-change',['R9']],['probability',['P4']],['mean-range',['S4']],['area',['nope',7,null]],['constructor',['N10']],['dec-convert',undefined]])assert.equal(steer(u,c),null,`${u} ${c}`);
+});
+
+/**
+ * Captured from c4f39c53, before cycle 14: the draws of every code-written unit at every rung - with no aim in three
+ * systems on seven seeds, and aimed at the newest two of the unit's slips in two systems on two seeds (an aimed draw scans
+ * far more seeds, so its grid is smaller). A set opened without a paper is byte-identical.
+ */
+const PLAIN_FP='1ee66af9aafde06d139cf6fb2886ab61374649552a8b2af6771daab9cc59c4f1',SLIPS_FP='ea4443df628f6b6defa5d5f0d60bb2370bbeafd9196b39b19247ef9b7cf844f7';
+function fingerprint(slipsOn,paper){
+ const h=crypto.createHash('sha256');
+ const systems=slipsOn?[undefined,'cz']:[undefined,'cz','uk'],seeds=slipsOn?[0,42]:[0,1,7,42,999,123456,4294967295-3];
+ for(const u of Object.keys(SR.SCHOOL_GENERATORS))for(const mix of ['easier','standard','harder'])for(const sys of systems)for(const seed of seeds){
+  const aim=slipsOn?[...SR.SCHOOL_UNIT_SLIPS[u]].reverse().slice(0,2):[];
+  const r=paper===undefined?makeSchoolItems(u,6,seed,mix,mix==='harder',aim,sys):makeSchoolItems(u,6,seed,mix,mix==='harder',aim,sys,paper(u));
+  if(paper!==undefined)assert.equal(r.aim,undefined,`${u}: no aim when nothing steered`);
+  h.update(JSON.stringify(r.items)+'\n');}
+ return h.digest('hex');
+}
+
+test('aim 8: a set with no paper aim - or one that steers nothing - is drawn byte for byte as before cycle 14',()=>{
+ assert.equal(fingerprint(false),PLAIN_FP,'the usual draw');
+ assert.equal(fingerprint(true),SLIPS_FP,'the slip-aimed draw');
+ // a paper that steers nothing: no statement, a whole-unit statement, every form of the unit, an unknown code
+ const idle=(u)=>u==='dec-convert'?['N10','R9']:u==='ratio-share'?['R5','N11']:u==='area'?['nope']:['N2','R9','S4','G20','P4'];
+ assert.equal(fingerprint(false,()=>[]),PLAIN_FP);assert.equal(fingerprint(false,idle),PLAIN_FP);
+ assert.equal(fingerprint(true,idle),SLIPS_FP,'the slips still aim a set the paper does not steer');
+});
+
+test('aim 9: a steered set - half from the forms the paper lost, the tier mix and six distinct questions kept, seeded, before the slips',()=>{
+ const cases=[['dec-convert',['N10']],['dec-convert',['R9']],['ratio-share',['R4']],['area',['G16']],['area',['G17']],['area',['G16','G17']]];
+ for(const [u,codes] of cases)for(const mix of ['easier','standard','harder'])for(const seed of [0,3,42,77777]){
+  const r=makeSchoolItems(u,6,seed,mix,false,[],'uk',codes),plain=makeSchoolItems(u,6,seed,mix,false,[],'uk');
+  assert.deepEqual(r,{...makeSchoolItems(u,6,seed,mix,false,[],'uk',codes),ms:r.ms},'seeded: the same draw twice');
+  assert.equal(r.items.length,6);assert.equal(new Set(r.items.map((i)=>i.question)).size,6,'six distinct');
+  assert.deepEqual(r.items.map((i)=>i.tier).sort(),plain.items.map((i)=>i.tier).sort(),'the rung\'s tier mix');
+  const steer=SR.paperSteer(u,codes,[...new Set(plain.items.map((i)=>i.tier))]);
+  const hits=r.items.filter((i)=>steer.forms[i.tier]?.includes(SR.formOf(u,i.spec))).length;
+  // half the set, or every slot of the steered tiers when they hold fewer (a harder ratio set has two tier-1 items)
+  const room=plain.items.filter((i)=>steer.forms[i.tier]).length;
+  assert.ok(hits>=Math.min(3,room),`${u} ${codes} ${mix} ${seed}: ${hits} aimed of ${room}`);
+  assert.deepEqual(r.aim,steer.codes,'the set names the statements it was drawn for');
+ }
+ // the paper comes before the learner's slips: with both, the draw is the paper's
+ const both=makeSchoolItems('area',6,5,'standard',false,['area-no-half'],'uk',['G17']),paperOnly=makeSchoolItems('area',6,5,'standard',false,[],'uk',['G17']);
+ assert.deepEqual(both.items,paperOnly.items);assert.deepEqual(both.aim,['G17']);
 });
 
 test('aim 6: the taped card says what the set aims at, in at most 25 words, with no number; a set with no aim draws as before',()=>{
@@ -165,25 +242,4 @@ test('aim 6: the taped card says what the set aims at, in at most 25 words, with
  const css=fs.readFileSync(src('design/maths-lamplight.css'),'utf8');
  const rule=/\.mb-card \.aim\s*\{([^}]*)\}/.exec(css);assert.ok(rule,'the line has its rule');
  const px=/font-size:\s*(\d+)px/.exec(rule[1]);assert.ok(px&&Number(px[1])>=28,'and nothing under 28 px');
-});
-
-test('aim 7: the map from a paper\'s statements to a unit\'s forms - pinned to the generators and to the statements, decided in code',()=>{
- // every form list is what the unit's generator draws at that tier, no more and no fewer
- for(const [u,tiers] of Object.entries(SR.SCHOOL_UNIT_FORMS))for(const t of [1,2]){
-  const got=new Set();for(let k=0;k<600;k++){const f=SR.formOf(u,SR.generatorFor(u)(k,t));assert.ok(f,`${u} tier ${t} seed ${k} has a form`);got.add(f);}
-  assert.deepEqual([...got].sort(),[...tiers[t]].sort(),`${u} tier ${t}`);
- }
- // every mapped statement is a real one that touches its unit, and names forms of that unit
- for(const [u,by] of Object.entries(SR.STATEMENT_FORMS))for(const [c,forms] of Object.entries(by)){
-  const st=STATEMENTS.find((x)=>x.code===c);assert.ok(st&&st.touches.includes(u),`${c} touches ${u}`);
-  const all=new Set([...SR.SCHOOL_UNIT_FORMS[u][1],...SR.SCHOOL_UNIT_FORMS[u][2]]);for(const f of forms)assert.ok(all.has(f),`${c}: ${f}`);
- }
- const steer=(u,c,t=[1,2])=>SR.paperSteer(u,c,t);
- assert.deepEqual(steer('dec-convert',['N10']),{forms:{1:['fraction-decimal','decimal-fraction'],2:['fraction-decimal','decimal-fraction']},codes:['N10']});
- assert.deepEqual(steer('area',['G17']),{forms:{2:['composite']},codes:['G17']},'composites are tier 2 only');
- assert.equal(steer('dec-convert',['N10','R9']),null,'the two together are every conversion: nothing to pick');
- assert.equal(steer('ratio-share',['R5']),null,'not mapped: sharing is the whole of tier 2');
- assert.deepEqual(steer('ratio-share',['R5','R4']),{forms:{1:['simplify']},codes:['R4']});
- assert.equal(steer('area',['G17'],[1]),null,'a tier the set does not draw steers nothing');
- for(const [u,c] of [['frac-add-sub',['N2']],['pct-change',['R9']],['probability',['P4']],['mean-range',['S4']],['area',['nope',7,null]],['constructor',['N10']],['dec-convert',undefined]])assert.equal(steer(u,c),null,`${u} ${c}`);
 });

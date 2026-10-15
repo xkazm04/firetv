@@ -9,8 +9,9 @@
  * the model's single items alone - no screen sends it; the course walk (tools/calc-course-test.cjs) does, so its rows keep
  * pinning the model's set.
  * A set asked for while Get ready for school is open on the unit a paper's recovery row carried (Session.paperAim, MB-B40)
- * is aimed at that paper's lost statements on the unit: they go to the set writer and onto the set (Practice.aim), for the
- * taped card. The body cannot ask for an aim; any other set is asked for exactly as before.
+ * is aimed at that paper's lost statements on the unit: they go to the set writer, and the ones it was written for go onto
+ * the set (Practice.aim), for the taped card - all of them into an equations prompt, on a code-written unit the ones that
+ * steered its draw (rules/school paperSteer). The body cannot ask for an aim; any other set is asked for exactly as before.
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
@@ -45,7 +46,9 @@ export async function POST(req: Request) {
     // two rounds and not one question the desk could check: a failed set (job.ts's practice sentence, "Try again."),
     // never an empty paper reported as ready - and the set on the desk stays as it was
     if (!made.items.length) throw new Error(`no verifiable question in ${made.tries} rounds`);
-    dispatch({ type: "practice.set", practice: { topic, items: made.items, marked: false, owner: learner, ...(stretch ? { stretch: true as const } : {}), ...(aim.length ? { aim } : {}) } });
+    // the set carries only the statements it was written for (makeItems' aim): a code-written unit's draw the paper did
+    // not steer names none, so the card never claims an aim the set did not take
+    dispatch({ type: "practice.set", practice: { topic, items: made.items, marked: false, owner: learner, ...(stretch ? { stretch: true as const } : {}), ...(made.aim?.length ? { aim: made.aim } : {}) } });
     return made;
   }, { key: topic, input: { topic, ...(stretch ? { stretch: 1 } : {}), ...(word ? {} : { word: 0 }) }, start: START, done: (m) => (m ? `${m.items.length} questions ready in ${(m.ms / 1000).toFixed(0)} s` : "") });
   if (!r.ok) return refused(r);

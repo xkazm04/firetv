@@ -470,12 +470,23 @@ Typed entry is the door that ships; the photo path is M5c's.
   open (The usual or A step up, also after its worked lesson) is aimed at the statements that gave the topic its lost marks
   (`aimOf` in `lib/rules/recovery.ts`): on an equations unit the model's prompt gets them in the map's own words
   (`aimBlock` in `lib/desk/items.ts`), and the code still checks every
-  answer; a code-written unit draws as before, since no statement maps to a generator's shapes yet. The set carries the
-  codes (`Practice.aim`), and the Practice screen's taped card opens with one line, at most 25 words (`aimLine` in
+  answer; a code-written unit is steered where a statement picks some of a tier's forms (cycle 14, below). The set carries
+  the codes it was written for (`Practice.aim`), and the Practice screen's taped card opens with one line, at most 25 words (`aimLine` in
   `tv/mathsRows.ts`, `maths-practice-aim`, 30 px, pen-red over a dashed rule): "Aimed at what the paper lost: solve linear
   equations in one unknown, including the unknown on both sides." The aim is a statement, never the question, its marks
   or a code. It is gone on any other screen, a new paper, a learner switch, a new evening and once the set is written; a
   set opened any other way carries no aim section. Six more on the sheet is not aimed.
+- Code-written sets steer toward what the paper lost (cycle 14, 2026-10-15). `lib/rules/school.ts` holds the map, decided
+  in code with no model: `SCHOOL_UNIT_FORMS` lists the forms a unit's generator draws at tiers 1 and 2 (read off a spec by
+  `formOf`, pinned to the generators' own draws), `STATEMENT_FORMS` which of them a statement is about (dec-convert: N10
+  the fraction-decimal conversions, R9 the ones with a percent; ratio-share: R4 simplifying a ratio; area: G16 the
+  triangle, G17 two rectangles joined), and `paperSteer` steers a tier only when the lost statements pick SOME of its
+  forms. A steered set is the slip aim's own draw (`aimedSchoolDraw` in `lib/desk/items.ts`): half the six from the aimed
+  forms, the rung's tier mix and six distinct questions kept, tier 3 never aimed; a paper that steers comes before the
+  learner's slips. A statement that is its whole unit (N2 on the fraction units, R9 on percent change, S4, G20, the
+  probability statements) or a whole tier (R5 sharing) steers nothing: the set is the usual draw, byte for byte, and the
+  card says no aim. So "Aimed at what the paper lost: ratio notation, including simplest form" stands over a set that
+  simplifies three ratios; over adding fractions from an N2 paper there is no line.
 - Every model-written set knows who it is for (cycle 13, 2026-10-15). The equations and the Calculus prompt both carry
   one learner section after the topic (`learnerBlock` in `lib/desk/items.ts`): "The student is 14, in Year 10 of school in
   England. Pitch the questions there.", the age alone, or "The student studies in Germany." for a learner the desk knows
