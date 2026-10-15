@@ -13,6 +13,9 @@ KIT = {
  'scatter': "Scatter: one nose-mounted fan of three short flared barrels spreading slightly apart toward the right, on a heavy rectangular breech block. Silhouette first: a wedge that widens to the right.",
  'hammer': "Hammer: one roof-mounted heavy launcher, a single short fat tube with a wide muzzle brake at the right end and a boxy breech and orange warning band. Silhouette first: a thick horizontal cylinder with a flared mouth.",
  'mine': "Mine: one rear drop tray, a shallow square steel cradle holding one round armed proximity mine disc with a small red light, open toward the right. Silhouette first: a square tray with a round disc inside.",
+ 'armor1': "Armour plate, tier 1 (light): one long narrow flat side-armour plate, a single bent sheet of scrap steel with four crude bolts, thin and patched, a little rust. Silhouette first: a long thin rectangle about four times longer than wide, long axis horizontal.",
+ 'armor2': "Armour plate, tier 2 (reinforced): one long narrow flat side-armour plate of thick riveted steel in two overlapping layers with a yellow-black hazard stripe and a row of heavy rivets. Silhouette first: a long thin rectangle about four times longer than wide with a stepped edge, long axis horizontal.",
+ 'armor3': "Armour plate, tier 3 (heavy): one long narrow side-armour plate of massive layered welded steel with a row of short blunt spikes along its outer edge and scorched battle damage. Silhouette first: a long thick rectangle about four times longer than wide with a toothed edge, long axis horizontal.",
  'spikes': "Spikes: one bar of three bone-and-steel contact spikes of equal length on a thin mounting rail, spikes pointing to the right. Silhouette first: a comb with three parallel spikes.",
 }
 def ref():

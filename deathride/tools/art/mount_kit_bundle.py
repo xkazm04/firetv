@@ -5,7 +5,8 @@ from pathlib import Path
 from PIL import Image
 ROOT = Path(__file__).resolve().parents[2]; ART = ROOT/'art'
 CELLS = {'rivet-needle': 'mount-proof/mount-rivet-needle-v1', 'rivet-bastion': 'mount-proof/mount-rivet-bastion-v1', 'rivet-comet': 'mount-proof/mount-rivet-comet-v1',
-         'scatter': 'mount-kit/mount-scatter-line-v1', 'hammer': 'mount-kit/mount-hammer-line-v2', 'mine': 'mount-kit/mount-mine-line-v1', 'spikes': 'mount-kit/mount-spikes-line-v1'}
+         'scatter': 'mount-kit/mount-scatter-line-v1', 'hammer': 'mount-kit/mount-hammer-line-v2', 'mine': 'mount-kit/mount-mine-line-v1', 'spikes': 'mount-kit/mount-spikes-line-v1',
+         'armor1': 'mount-kit/mount-armor1-line-v1', 'armor2': 'mount-kit/mount-armor2-line-v1', 'armor3': 'mount-kit/mount-armor3-line-v1'}
 RIVET = {'Needle': 'needle', 'Line': 'needle', 'Flint': 'needle', 'Quill': 'needle', 'Bastion': 'bastion', 'Trail': 'bastion', 'Vandal': 'bastion', 'Bulwark': 'bastion', 'Comet': 'comet', 'Kestrel': 'comet'}
 CW, CH, COLS = 128, 112, 4
 def main():

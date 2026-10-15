@@ -65,11 +65,16 @@ object MountCatalog {
 
 /** Which mount kinds a car currently carries. Bits are [MountKind.ordinal]. Pure read of core state. */
 object MountLoadout {
+    /** The installed armour tier (0..3) rides in bits 8-9 of the mask; the ARMOR kind bit says there is any. */
+    const val TIER_SHIFT=8
+    fun armorTier(mask: Int)=(mask shr TIER_SHIFT) and 3
+    fun armorMask(tier: Int)=if(tier<=0)0 else (1 shl MountKind.ARMOR.ordinal) or (tier.coerceAtMost(3) shl TIER_SHIFT)
     fun mask(c: Car,combat: Combat): Int {
         var m=(1 shl MountKind.RIVET.ordinal) or (1 shl MountKind.MINE.ordinal)
         if(combat.capacity(c.id,Weapons.HAMMER)>0)m=m or (1 shl MountKind.HAMMER.ordinal)
         if(combat.capacity(c.id,Weapons.SCATTER)>0)m=m or (1 shl MountKind.SCATTER.ordinal)
         if(c.utilityMask and 1!=0)m=m or (1 shl MountKind.SPIKES.ordinal)
+        if(c.armorTier>0)m=m or (1 shl MountKind.ARMOR.ordinal) or (c.armorTier shl TIER_SHIFT)
         return m
     }
     fun has(mask: Int,kind: MountKind)=mask and (1 shl kind.ordinal)!=0

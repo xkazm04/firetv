@@ -32,7 +32,7 @@ class MountShots: ApplicationAdapter() {
             for(y in 0 until 720)for(x in 0 until 1280)up.drawPixel(x,719-y,pix.getPixel(x,y))
             PixmapIO.writePNG(Gdx.files.absolute(File(out,name).absolutePath),up);pix.dispose();up.dispose()
         }
-        val everything=MountLoadout.maskOf(MountKind.RIVET,MountKind.HAMMER,MountKind.SCATTER,MountKind.MINE,MountKind.SPIKES)
+        val everything=MountLoadout.maskOf(MountKind.RIVET,MountKind.HAMMER,MountKind.SCATTER,MountKind.MINE,MountKind.SPIKES) or MountLoadout.armorMask(3)
         fun drawCar(id: String,cx: Float,cy: Float,ppm: Float,mask: Int,state: Int=0,heading: Double=0.0,grid: Boolean=false) {
             val s=CarShapes.forId(id);val l=s.lengthM.toFloat();val w=s.widthM.toFloat()
             val hp=when(state){0->1f;1->.5f;2->.2f;else->.1f}
@@ -54,6 +54,10 @@ class MountShots: ApplicationAdapter() {
                 MountLoadout.maskOf(MountKind.SCATTER) to "scatter",MountLoadout.maskOf(MountKind.MINE,MountKind.SPIKES) to "mine+spikes",everything to "all")
             for((i,c) in cells.withIndex())drawCar(id,213f+(i%3)*427f,540f-(i/3)*360f,ppm,c.first,0,0.0,grid)
             save("$tag-solo-$id.png")
+            // Armour tiers: none, 1, 2, 3 on the same car.
+            clear()
+            for(t in 0..3)drawCar(id,213f+(t%3)*427f,540f-(t/3)*360f,ppm,MountLoadout.armorMask(t),0,0.0,grid)
+            save("$tag-armor-$id.png")
             // Fire strip: rows are weapons, columns are four moments of the animation.
             clear()
             val rows=listOf(MountKind.RIVET,MountKind.HAMMER,MountKind.SCATTER,MountKind.MINE,MountKind.SPIKES)

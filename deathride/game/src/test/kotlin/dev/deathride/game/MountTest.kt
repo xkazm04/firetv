@@ -22,8 +22,8 @@ class MountCatalogTest {
         // Owner approved the agy kit 2026-10-15; every sprite name must exist in assets/mounts/kit.json and the json must say owner_approved.
         val json=java.io.File("assets/mounts/kit.json").takeIf{it.exists()}?:java.io.File("../assets/mounts/kit.json")
         val text=json.readText();assertTrue(text.contains("\"owner_approved\": true"))
-        val kitNames=Regex(""""([a-z-]+)": \{\s*"x"""").findAll(text).map{it.groupValues[1]}.toSet()
-        for(c in CarCatalog.all)for(a in MountCatalog.layered(c.id))assertTrue(a.sprite in kitNames,"${c.id} ${a.kind} names ${a.sprite}, which is not in assets/mounts/kit.json")
+        val kitNames=Regex(""""([a-z0-9-]+)": \{\s*"x"""").findAll(text).map{it.groupValues[1]}.toSet()
+        for(c in CarCatalog.all)for(a in MountCatalog.layered(c.id))assertTrue(a.sprite in kitNames || (a.sprite=="armor" && listOf("armor1","armor2","armor3").all{it in kitNames}),"${c.id} ${a.kind} names ${a.sprite}, which is not in assets/mounts/kit.json")
     }
     @Test fun layersAreSortedAndMountsStayOnTheBody() {
         for(c in CarCatalog.all) {

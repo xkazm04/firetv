@@ -169,7 +169,7 @@ class Car(val id: Int, track: Track) {
     var countersteerSmoothness=1.0;var previousDriftSteer=0.0
     var spec=CarSpec()
     var carClass: CarClass?=null
-    var armorReduction=0.0;var weaponSlots=1;var weaponDamageScale=1.0
+    var armorReduction=0.0;/** Installed armour part tier 0..3, for the renderer only. */var armorTier=0;var weaponSlots=1;var weaponDamageScale=1.0
     var maxHp=CombatRules["maxHp"];var startingCondition=1.0;var utilityMask=0
     var turboRemaining=0.0;var fuelRemaining=0.0;var engineScale=1.0
     val ability=AbilityState()

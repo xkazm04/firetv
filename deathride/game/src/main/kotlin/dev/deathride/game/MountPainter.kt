@@ -64,7 +64,7 @@ class MountPainter(private val art: AtlasArt?,private val pixel: ()->Texture?,va
                 MountKind.SCATTER->scatter(sprite,a,kick,flash)
                 MountKind.MINE->mine(sprite,a,if(wreck)-1f else MountAnim.pop(age))
                 MountKind.SPIKES->spikes(sprite,a,kick,flash)
-                MountKind.ARMOR->{}
+                MountKind.ARMOR->armor(a,MountLoadout.armorTier(mask))
             }
         }
         batch.setColor(1f,1f,1f,1f)
@@ -80,9 +80,9 @@ class MountPainter(private val art: AtlasArt?,private val pixel: ()->Texture?,va
         bt.draw(t,px-ww*.5f,py-hh*.5f,ww*.5f,hh*.5f,ww,hh,1f,1f,deg+rot,0,0,1,1,false,false);quads++
     }
     /** Draws the owner-approved kit sprite named by the catalog row, centred on the mount point and shifted back by [backX] (recoil). */
-    private fun sprite(a: Attach,backX: Float): Boolean {
+    private fun sprite(a: Attach,backX: Float,name: String=a.sprite): Boolean {
         val k=kit?:return false;val bt=b?:return false
-        val r=k.region(a.sprite)?:return false
+        val r=k.region(name)?:return false
         val w=unit;val h=unit*r.regionHeight/r.regionWidth
         val px=ox+(-backX*dc)*unit;val py=oy+(-backX*ds)*unit
         bt.setColor(tint,tint,tint,alpha)
@@ -91,6 +91,8 @@ class MountPainter(private val art: AtlasArt?,private val pixel: ()->Texture?,va
         return true
     }
 
+    /** Flank plate for the installed tier; art only, a missing kit draws nothing. */
+    private fun armor(a: Attach,tier: Int) { if(tier>0)sprite(a,0f,"armor$tier") }
     private fun rivet(art: AtlasArt?,a: Attach,kick: Float,flash: Float,spin: Float,eject: Float) {
         val ks=kick*.22f
         if(!sprite(a,ks)) {
