@@ -126,15 +126,20 @@ export function hintedOf(s: Pick<Session, "pages" | "log">): Hinted[] {
 }
 /**
  * Tonight's named slips: the ringed items of the set on the desk whose slip rules resolve, by its short label (rules/maths
- * `slip(id, topic).short`), in the set's order. Only a marked set, and only when it is tonight's: the last practice
- * line of the history (mark.ts writes one per marked set, a settle restates it in place) is dated since local midnight
- * and written under this set's topic (its name, or its bare id). A set from an earlier evening names nothing.
+ * `slip(id, topic).short`), in the set's order. Only a marked set, and only when it is tonight's: its marking stamp
+ * (Practice.markedAt, cycle 22) falls since local midnight. A set marked before the stamp existed is dated the old way:
+ * the last practice line of the history (mark.ts writes one per marked set, a settle restates it in place) is dated since
+ * local midnight and written under this set's topic (its name, or its bare id). A set from an earlier evening names nothing.
  */
 export function slippedOf(s: Pick<Session, "practice" | "history">, now: number): Slipped[] {
   const p = s.practice;
   if (!p?.marked) return [];
-  const h = (s.history ?? []).findLast((x) => x.kind === "practice");
-  if (!h || h.at < startOfDay(now) || h.at > now || (h.label !== (topicIn(p.topic)?.name ?? p.topic) && h.label !== p.topic)) return [];
+  const tonight = (at: number) => at >= startOfDay(now) && at <= now;
+  if (typeof p.markedAt === "number") { if (!tonight(p.markedAt)) return []; }
+  else {
+    const h = (s.history ?? []).findLast((x) => x.kind === "practice");
+    if (!h || !tonight(h.at) || (h.label !== (topicIn(p.topic)?.name ?? p.topic) && h.label !== p.topic)) return [];
+  }
   return (p.items ?? []).flatMap((it): Slipped[] => {
     const short = it.verdict === "wrong" && it.slip ? slipById(it.slip, p.topic)?.short : undefined, name = problemName(it.n, it.part);
     return short && name ? [{ name, slip: short }] : [];

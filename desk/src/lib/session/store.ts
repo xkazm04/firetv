@@ -162,7 +162,13 @@ export interface Practice { topic: string; items: PracticeItem[]; pageId?: strin
    * The slips a step up's tier-3 draw was aimed at (cycle 18, rules/school TOP_SLIP_FORMS ids of the set's unit), only when
    * the aim changed the draw; absent on any other set.
    */
-  topAim?: string[]; }
+  topAim?: string[];
+  /**
+   * When the set was marked (cycle 22, ms since the epoch, the clock history lines are dated by): stamped by the one
+   * practice.marked that marks it, so the recap can tell tonight's set from an older one. Kept only on a marked set; absent
+   * on a set marked before the stamp, which the recap dates by its history line instead.
+   */
+  markedAt?: number; }
 
 /** The statement codes a set may be aimed at (MB-B40): the GCSE map's own, nothing else. */
 const STATEMENT_CODES = new Set(STATEMENTS.map((x) => x.code));
@@ -225,13 +231,15 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
 /** A set as a screen may see it: its items `shown`, and the step-up flag kept only when it is true. */
 const shownPractice = (p: Practice | null | undefined): Practice | null => {
   if (!p) return null;
-  const { stretch, aim, topAim, ...rest } = p;
+  const { stretch, aim, topAim, markedAt, ...rest } = p;
   // an aim is kept only as statement codes the desk knows (MB-B40): never text, never a question
   const aimed = Array.isArray(aim) ? aim.filter((c): c is string => typeof c === "string" && STATEMENT_CODES.has(c)) : [];
   // a step up's slip aim only as slip ids its unit's top rung names (cycle 18), on a step up
   const by = Object.prototype.hasOwnProperty.call(TOP_SLIP_FORMS, p.topic) ? TOP_SLIP_FORMS[p.topic] : {};
   const topAimed = stretch === true && Array.isArray(topAim) ? [...new Set(topAim.filter((c): c is string => typeof c === "string" && Object.prototype.hasOwnProperty.call(by, c)))] : [];
-  return { ...rest, items: (p.items ?? []).map(shown), ...(stretch === true ? { stretch: true as const } : {}), ...(aimed.length ? { aim: aimed } : {}), ...(topAimed.length ? { topAim: topAimed } : {}) };
+  return { ...rest, items: (p.items ?? []).map(shown), ...(stretch === true ? { stretch: true as const } : {}), ...(aimed.length ? { aim: aimed } : {}), ...(topAimed.length ? { topAim: topAimed } : {}),
+    // the marking stamp only on a marked set, and only as a real time (cycle 22): junk on an older file is no stamp
+    ...(p.marked === true && typeof markedAt === "number" && Number.isFinite(markedAt) && markedAt > 0 ? { markedAt } : {}) };
 };
 /**
  * The homework pipelines (lib/desk/job.ts runs each one). One record per kind: the latest run of that kind,
@@ -793,8 +801,8 @@ function step(s: Session, e: Event): Session {
     case "topic.open": n.topic = e.topic; n.subject = "maths"; if (e.stay) break; n.screen = "topics"; n.focus = Math.max(0, topicsOf(learnerPath(s)).findIndex((t) => t.id === e.topic)); break;
     case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? me }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; if (s.paperAim) n.paperAim = null; break;
     // a marked set lands on the sheet - all six verdicts at once - focused on the first item to look at
-    case "practice.marked": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => (x.practice ? { ...x, practice: { ...x.practice, items: e.items.map(shown), marked: true }, walkIx: 0 } : null)); break; }
-      if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = "sheet"; n.focus = firstToLook(n.practice.items); } break;
+    case "practice.marked": { const markedAt = Date.now(); if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => (x.practice ? { ...x, practice: { ...x.practice, items: e.items.map(shown), marked: true, markedAt }, walkIx: 0 } : null)); break; }
+      if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true, markedAt }; n.walkIx = 0; n.screen = "sheet"; n.focus = firstToLook(n.practice.items); } break; }
     // an explanation: the reply always lands on its item; a verdict only on an item still unsure (a settled item stays settled);
     // on an item already wrong, a slip with no verdict renames it - from the topic's vocabulary only, verdict and pen untouched
     case "practice.settle": if (s.practice) { const topic = s.practice.topic; n.practice = { ...s.practice, items: s.practice.items.map((it) => it.n !== e.n ? it

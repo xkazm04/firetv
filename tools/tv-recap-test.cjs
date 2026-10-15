@@ -959,3 +959,44 @@ test('cycle 19 TV: under the rail, the pen\'s ring with the item\'s number and t
  for(const px of rules.matchAll(/font[^;]*?(\d+)px/g))assert.ok(+px[1]>=28,`${px[0]}: 28px or more`);
  assert.match(rules,/font-size: 28px/);
 });
+
+// cycle 22: a marked set carries when it was marked (Practice.markedAt), and the recap dates the set by that stamp; a set
+// marked before the stamp existed is dated by its history line, as cycle 19 did
+test('cycle 22 rows: a stamped set is tonight\'s by its stamp, not by the history line; an unstamped one by the line, as before',()=>{
+ const {slippedOf}=recap();
+ const named=[{name:'2',slip:'added the percentages'},{name:'3',slip:'percent of the new'},{name:'4',slip:'stopped a step early'}];
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:TODAY(17)}}),NOW),named,'stamped tonight: named');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:YESTERDAY}}),NOW),[],'stamped an earlier evening: nothing, though tonight\'s line is under the set\'s topic');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:TODAY(17)},history:[{at:YESTERDAY,kind:'practice',label:'Percent increase and decrease',detail:'1 of 5 right'}]}),NOW),named,'stamped tonight: named, though the last line is yesterday\'s');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:TODAY(17)},history:[{at:TODAY(18),kind:'practice',label:'Two-step equations',detail:'4 of 6 right'}]}),NOW),named,'stamped tonight: named, though the last line is another set\'s');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:TODAY(17)},history:[]}),NOW),named,'stamped tonight: no line needed');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:NOW+60000}}),NOW),[],'a stamp after now is not tonight\'s');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,marked:false,markedAt:TODAY(17)}}),NOW),[],'an unmarked set names nothing, stamp or not');
+ // unstamped (an older session on disk): the history line decides, exactly as cycle 19
+ assert.deepEqual(slippedOf(pctEvening(),NOW),named,'unstamped, tonight\'s line: named');
+ assert.deepEqual(slippedOf(pctEvening({history:[{at:YESTERDAY,kind:'practice',label:'Percent increase and decrease',detail:'1 of 5 right'}]}),NOW),[],'unstamped, yesterday\'s line: nothing');
+ // on the TV: an old set's slips drawn under tonight's rail never, tonight's stamped set's even when a later line is another set's
+ assert.doesNotMatch(draw(pctEvening({practice:{...PCT,markedAt:YESTERDAY}}),NOW),/recap-slips/,'an earlier evening\'s set: no slip row');
+ assert.deepEqual(slipsOfHtml(draw(pctEvening({practice:{...PCT,markedAt:TODAY(17)},history:[{at:TODAY(18),kind:'practice',label:'Two-step equations',detail:'4 of 6 right'}]}),NOW)),['2 · added the percentages','3 · percent of the new']);
+});
+test('cycle 22 store: practice.marked stamps the set by the desk\'s clock - seated or away; a set is stamped only when marked, and junk is no stamp',()=>{
+ const {reduce}=store(),real=Date.now;
+ try{
+  Date.now=()=>TODAY(19);
+  const unmarked={...PCT,marked:false,items:PCT.items.map(({verdict,slip,studentAnswer,...i})=>i)};
+  const s=reduce(session({practice:unmarked}),{type:'practice.marked',items:PCT.items});
+  assert.equal(s.practice.marked,true);assert.equal(s.practice.markedAt,TODAY(19),'the seated learner\'s set is stamped');
+  assert.equal(s.history.length,0,'the stamp is the set\'s; the history is untouched');
+  const slot={pages:[],pageIx:0,itemIx:0,reading:false,hint:null,lesson:null,noLesson:false,lessonPaused:false,topic:null,practice:{...unmarked,owner:'jakub'},walkIx:0,tasks:[],log:{problems:[],hints:0,hard:[]}};
+  const a=reduce(session({away:{jakub:slot}}),{type:'practice.marked',items:PCT.items,owner:'jakub'});
+  assert.equal(a.away.jakub.practice.markedAt,TODAY(19),'an away learner\'s set is stamped too');
+  assert.equal(a.practice,null);
+  // a set written through the store's whitelist (the same one session.json is read back through): the stamp only on a
+  // marked set, only as a real time
+  const set=(p)=>reduce(session(),{type:'practice.set',practice:p}).practice;
+  assert.equal(set({...unmarked,markedAt:TODAY(17)}).markedAt,undefined,'a new, unmarked set carries no stamp');
+  assert.equal(set({...PCT,markedAt:TODAY(17)}).markedAt,TODAY(17),'a marked set keeps its stamp');
+  for(const junk of ['2026-09-24',null,NaN,-1,0,Infinity,{}])assert.ok(!('markedAt' in set({...PCT,markedAt:junk})),`${String(junk)}: no stamp`);
+  assert.ok(!('markedAt' in set(PCT)),'an older set with no stamp loads unchanged');
+ }finally{Date.now=real;}
+});

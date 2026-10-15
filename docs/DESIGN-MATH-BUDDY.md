@@ -317,8 +317,10 @@ answer two slips give names none (1.9 for 1.1 and 0.8).
   The short is decided in rules (rules/school `short`: lowercase, four words and 24 characters at most, no value) and
   every slip carries one - the school units', the linear and the Calculus tables alike (cycle 21), no two on one topic
   the same, English only like the titles; a ring with no slip stays on the rail unlabelled. Two, then
-  "k more". A label wraps between its words, never inside one, and is never cut by CSS. Only the set on the desk when
-  the last practice line is tonight's. `tv/recapRows` `slippedOf`.
+  "k more". A label wraps between its words, never inside one, and is never cut by CSS. Only the set on the desk, and only when
+  it was marked tonight: the set carries when it was marked (cycle 22, `Practice.markedAt`, stamped by the one
+  `practice.marked`), so an earlier evening's set names nothing even under a practice line from tonight; a set marked
+  before the stamp is dated by its last practice line being tonight's and under its topic. `tv/recapRows` `slippedOf`.
 - **Taped card** - a cream card with a strip of amber tape: the one caption slot beside the paper. On the hint:
   the learner's question from the phone in the blue hand (`maths-said`), HINT with two pips, the hint, and the next
   step in the pen-dark hand. A hint on a Calculus page is written in a first-year Calculus I stance when the learner
