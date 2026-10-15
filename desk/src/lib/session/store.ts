@@ -1041,14 +1041,14 @@ export function dispatch(e: Event): Session {
     const id = store.session.learner?.id;
     if (id) try {
       const l = readLearner(id);
-      store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null, ...(store.session.status === LEARNER_UNREAD ? { status: "" } : {}) };
+      store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory.map((n) => n.text), history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null, ...(store.session.status === LEARNER_UNREAD ? { status: "" } : {}) };
       rehydrateTold = "";
     } catch (err) {
       tellRehydrate(err instanceof Error ? err.message : String(err));
       // the same learner keeps its own records (WD13); a learner switched to never shows the previous learner's (WD14a)
       if (before.learner?.id !== id) {
         const b = blank(id);
-        store.session = { ...store.session, skills: b.skills, writing: b.writing, memory: b.memory, history: b.history, englishLearning: b.english, paper: null, status: LEARNER_UNREAD };
+        store.session = { ...store.session, skills: b.skills, writing: b.writing, memory: b.memory.map((n) => n.text), history: b.history, englishLearning: b.english, paper: null, status: LEARNER_UNREAD };
       }
     }
   }

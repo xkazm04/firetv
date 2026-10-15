@@ -89,7 +89,7 @@ export async function explain(
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   if (calc) return explainCalc(itemQuestion, transcript, topicId, learnerId, seen);
   const t = topic(topicId);
-  const memory = recallLearner(learnerId)?.memory ?? null;
+  const notes = recallLearner(learnerId);
 
   const asked = assemble("explain-linear", {
     system: [say("stance", schoolSystem(age))],
@@ -98,7 +98,7 @@ export async function explain(
       data("question", "The question", itemQuestion),
       ...seenParts(seen),
       ...heardParts(transcript),
-      notesPart(memory),
+      ...notesPart(notes),
       say("ask", "Reply to them in one or two sentences that point at the step, not the answer."),
       say("slips", `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits ` +
         `or their reasoning was sound:\n${slipVocabulary(topicId)}`),
@@ -137,7 +137,7 @@ export async function explainSchool(
   seen?: Seen,
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   const t = topicIn(topicId);
-  const memory = recallLearner(learnerId)?.memory ?? null;
+  const notes = recallLearner(learnerId);
   const asked = assemble("explain-school", {
     system: [say("stance", schoolSystem(age))],
     prompt: [
@@ -145,7 +145,7 @@ export async function explainSchool(
       data("question", "The question", itemQuestion),
       ...seenParts(seen),
       ...heardParts(transcript),
-      notesPart(memory),
+      ...notesPart(notes),
       say("ask", "Reply to them in one or two sentences that point at the step, not the answer."),
       say("value", `value: the final answer the student says they got, written in figures as they said it: a whole number, a fraction, ` +
         `a mixed number, a decimal or a percentage (eleven twelfths is 11/12, one and five twelfths is 1 5/12, nought point five is 0.5, ` +
@@ -181,7 +181,7 @@ async function explainCalc(
   seen?: Seen,
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   const t = topicIn(topicId);
-  const memory = recallLearner(learnerId)?.memory ?? null;
+  const notes = recallLearner(learnerId);
 
   const system =
     `You are a calculus tutor listening to a first-year university student on the ${calcCourse(topicId).name} course explain their own working out loud. ` +
@@ -196,7 +196,7 @@ async function explainCalc(
       data("question", "The question", itemQuestion),
       ...seenParts(seen),
       ...heardParts(transcript),
-      notesPart(memory),
+      ...notesPart(notes),
       say("ask", "Reply to them in one or two sentences that point at the step, not the answer."),
       say("slips", `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits ` +
         `or their reasoning was sound:\n${slipVocabulary(topicId)}`),

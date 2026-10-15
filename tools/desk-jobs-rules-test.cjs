@@ -900,7 +900,9 @@ test('a memory line the notes already hold - or said twice tonight - is not writ
  stubText({other:()=>({lines:['  they UNDO the   constant first. ','They check by substituting.','They check by  substituting.']})});
  const second=await writeMemory('jobs-memory-dup',{topic:'linear-one-step',hintsUsed:2});
  assert.deepEqual(second,['They check by substituting.'],'only what tonight added is returned');
- assert.deepEqual(L.getLearner('jobs-memory-dup').memory,['They undo the constant first.','They like one step at a time.','They check by substituting.']);
+ const kept=L.getLearner('jobs-memory-dup').memory;
+ assert.deepEqual(kept.map((n)=>n.text),['They undo the constant first.','They like one step at a time.','They check by substituting.']);
+ assert.ok(kept.every((n)=>n.source==='nightly'&&typeof n.at==='number'),'each note is dated and names its writer');
 });
 
 test('case 6d: a snap whose title is not text is read under the desk\'s own title - the learner file is written, and no "could not write" is said',async()=>{

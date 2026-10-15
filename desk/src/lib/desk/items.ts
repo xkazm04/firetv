@@ -30,7 +30,7 @@
  */
 import { text } from "../engines/text";
 import { topic } from "../library/syllabus";
-import { getLearner, recallLearner, RECALL_UNREAD } from "../session/learners";
+import { getLearner, recallLearner, RECALL_UNREAD, type Learner } from "../session/learners";
 import { notesPart } from "./memory";
 import { assemble, dataList, say } from "../prompt/assemble";
 import { slip as slipById, type Slip } from "../rules/maths";
@@ -68,7 +68,7 @@ const SYSTEM =
   "Each question is a single equation in x. Each answer is the value of x alone, as a plain number " +
   "(for example -4) or a simple fraction (for example 7/2) — no words, no 'x =', no units.";
 
-function ask(topicId: string, memory: string[] | null, slips: string[] | null, want: number, avoid: string[]) {
+function ask(topicId: string, memory: Pick<Learner, "memory" | "memoryDropped"> | null, slips: string[] | null, want: number, avoid: string[]) {
   const t = topic(topicId);
   const name = t?.name ?? topicId;
   const blurb = t?.blurb ?? "";
@@ -83,7 +83,7 @@ function ask(topicId: string, memory: string[] | null, slips: string[] | null, w
     system: [say("stance", SYSTEM)],
     prompt: [
       say("topic", `Topic: ${name}\n${blurb}`.trim()),
-      notesPart(memory),
+      ...notesPart(memory),
       say("slips", known.trim()),
       dataList("avoid", "Do not repeat any of these, which the student already has", avoid),
       say("ask", `Write ${want} practice questions on this topic.\n` +
@@ -148,7 +148,7 @@ export async function makeItems(
 /** A linear-equation set, written by the model and kept only where substitution proves its stated answer. */
 async function makeLinearItems(topicId: string, learnerId: string, n: number): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
   const me = recallLearner(learnerId);
-  const memory = me?.memory ?? null;
+  const memory = me;
   // the named mistakes this learner has made HERE: the set is written for them, not for the topic
   const slips = me ? me.skills[topicId]?.slips ?? [] : null;
   const items: PracticeItem[] = [];
@@ -234,7 +234,7 @@ function calcSchema(shapes: (CalcShape | Calc2SpecShape)[], want: number): JSONS
 /** The reply is held only to "a list of objects": one spec off its shape is dropped by code, not the whole round. */
 const CALC_ACCEPT: JSONSchema = { type: "object", properties: { specs: { type: "array", items: { type: "object" } } }, required: ["specs"] };
 
-function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory: string[] | null, slips: string[] | null, want: number, avoid: string[]) {
+function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory: Pick<Learner, "memory" | "memoryDropped"> | null, slips: string[] | null, want: number, avoid: string[]) {
   const t = topicIn(topicId);
   // the slips as the desk would say them, never as ids
   const said = (slips ?? []).map((id) => CALC_SLIPS.find((x) => x.id === id)).filter((x): x is (typeof CALC_SLIPS)[number] => !!x);
@@ -247,7 +247,7 @@ function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory
     system: [say("stance", calcSystem(topicId))],
     prompt: [
       say("topic", `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}`.trim()),
-      notesPart(memory),
+      ...notesPart(memory),
       say("slips", known.trim()),
       dataList("avoid", "Do not repeat any of these, which the student already has", avoid),
       say("ask", `Write ${want} specs for practice questions on this topic, using only these shapes:\n${shapes.map((s) => `- ${SHAPE_LINES[s]}`).join("\n")}\n` +
@@ -308,7 +308,7 @@ const sameKey = (q: string) => q.replace(/\s+/g, "").toLowerCase();
  */
 async function makeCalcItems(topicId: string, learnerId: string, n: number, word?: boolean | number): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
   const me = recallLearner(learnerId);
-  const memory = me?.memory ?? null;
+  const memory = me;
   const slips = me ? me.skills[topicId]?.slips ?? [] : null;
   const shapes = shapesOf(topicId);
   const kept: { spec: CalcSpec | Calc2Spec; question: string; difficulty: number }[] = [];

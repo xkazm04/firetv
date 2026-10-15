@@ -74,7 +74,9 @@ export interface Learner {
   skills: Record<string, SkillRecord>;
   /** the same record, one per Essay Master lens (structure, argument, evidence, language) — kept apart so no maths count ever includes a lens */
   writing: Record<string, SkillRecord>;
-  memory: string[];         // plain sentences the model reads, newest last, capped at 40
+  memory: MemoryNote[];     // the desk's notes on the learner, newest last, capped at 40 (MEMORY_CAP)
+  /** How many older notes the cap has dropped, so a prompt can say the list is not everything (agent-memory: loss-site-inventory). Absent at none. */
+  memoryDropped?: number;
   history: HistoryEntry[];  // what happened, newest last, capped at 20
   /**
    * The week, recorded (Family W9, rules/digest): one dated entry per marked set, finished Linga conversation, Essay
@@ -86,6 +88,26 @@ export interface Learner {
   digest: DigestEntry[];
   /** The papers entered (v2 M5b), newest last, capped at PAPERS_CAP; absent until the first paper, and on a learners.json written before it. */
   papers?: StoredPaper[];
+}
+
+/**
+ * One note the desk wrote about a learner (agent-memory: observation-clock): the sentence, when it was written, and
+ * which writer wrote it - the nightly memory writer (lib/desk/memory.ts), or "legacy" for a note kept as a bare string
+ * before notes were dated (at null: its age is unknown, never guessed). A note is the desk's own observation, which no
+ * person has confirmed; a prompt that reads it back says so.
+ */
+export interface MemoryNote { text: string; at: number | null; source: "nightly" | "legacy" }
+
+/** Notes as they are kept: a bare string (written before notes were dated) reads as a legacy note; anything else is dropped. */
+export function cleanNotes(raw: unknown): MemoryNote[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((m): MemoryNote[] => {
+    if (typeof m === "string") return m.trim() ? [{ text: m, at: null, source: "legacy" }] : [];
+    if (!m || typeof m !== "object") return [];
+    const o = m as Record<string, unknown>;
+    if (typeof o.text !== "string" || !o.text.trim()) return [];
+    return [{ text: o.text, at: typeof o.at === "number" && Number.isFinite(o.at) ? o.at : null, source: o.source === "nightly" ? "nightly" : "legacy" }];
+  }).slice(-MEMORY_CAP);
 }
 
 // the same data dir the session store uses — derived the same way, not hard-coded
@@ -265,7 +287,7 @@ function clean(id: string, l: unknown): Learner {
       ...(typeof h.ref === "string" && h.ref ? { ref: h.ref } : {}),
     }));
   const papers = cleanPapers(o.papers);
-  return { id, english: cleanEnglish(o.english), skills, writing, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history: capped(history),
+  return { id, english: cleanEnglish(o.english), skills, writing, memory: cleanNotes(o.memory), ...(typeof o.memoryDropped === "number" && o.memoryDropped > 0 ? { memoryDropped: Math.floor(o.memoryDropped) } : {}), history: capped(history),
     // the week's digest, whitelisted entry by entry (rules/digest cleanDigest); none on a file written before it existed
     digest: cleanDigest(o.digest),
     // the papers entered, each read back through cleanPaper (a malformed one is none); the field is absent with none, as on a file written before M5b
@@ -311,7 +333,9 @@ export function readLearner(id: string): Learner {
 }
 
 export function saveLearner(l: Learner): void {
-  writeLearner(l.id, { ...l, memory: l.memory.slice(-MEMORY_CAP), history: capped(l.history ?? []), digest: (l.digest ?? []).slice(-DIGEST_CAP), ...(l.papers?.length ? { papers: l.papers.slice(-PAPERS_CAP) } : {}) });
+  // the cap drops the oldest notes; how many is kept, so the list can say it is not everything
+  const dropped = Math.max(0, l.memory.length - MEMORY_CAP) + (l.memoryDropped ?? 0);
+  writeLearner(l.id, { ...l, memory: l.memory.slice(-MEMORY_CAP), ...(dropped ? { memoryDropped: dropped } : {}), history: capped(l.history ?? []), digest: (l.digest ?? []).slice(-DIGEST_CAP), ...(l.papers?.length ? { papers: l.papers.slice(-PAPERS_CAP) } : {}) });
 }
 
 /** English commits (and saveLearner, the same way) report a disk failure instead of claiming progress was saved - an unreadable learners.json too. */
@@ -390,14 +414,6 @@ function step(before: SkillRecord | undefined, topic: string, right: boolean, sl
     // a usual attempt carries the step-up record over untouched (Family W8)
     ...(prev.stretch ? { stretch: prev.stretch } : {}),
   };
-}
-
-export function addMemory(id: string, line: string): void {
-  const t = (line ?? "").trim();
-  if (!t) return;
-  const l = getLearner(id);
-  l.memory = [...l.memory, t].slice(-MEMORY_CAP);
-  saveLearner(l);
 }
 
 /** One thing that happened, appended. Newest last; the oldest fall off the end, except a lesson's watched line (capped). */

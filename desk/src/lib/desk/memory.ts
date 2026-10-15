@@ -8,25 +8,43 @@
  */
 import { text } from "../engines/text";
 import { topicIn } from "../library/paths";
-import { getLearner, readLearner, RECALL_UNREAD, saveLearner } from "../session/learners";
+import { getLearner, readLearner, RECALL_UNREAD, saveLearner, type Learner, type MemoryNote } from "../session/learners";
 import { assemble, dataList, dataRows, say, type Part } from "../prompt/assemble";
 import { slip as slipById } from "../rules/maths";
 import type { PracticeItem } from "../session/store";
 import { askedText } from "../rules/calc-word";
 import type { Evening } from "../../tv/recapRows";
 
+/** The longest note the writer may keep: one or two plain sentences. */
+export const NOTE_MAX = 240;
+
 const SCHEMA = {
   type: "object",
-  properties: { lines: { type: "array", items: { type: "string" } } },
+  properties: { lines: { type: "array", items: { type: "string", maxLength: NOTE_MAX } } },
   required: ["lines"],
 };
 
+const DAY = 24 * 60 * 60 * 1000;
+/** A note's age in the words a prompt carries it: undated for a legacy note, never a guess. */
+export function ageOf(at: number | null, now = Date.now()): string {
+  if (at === null) return "(undated)";
+  const days = Math.floor((now - at) / DAY);
+  return days <= 0 ? "(today)" : days === 1 ? "(yesterday)" : days < 14 ? `(${days} days ago)` : `(${Math.floor(days / 7)} weeks ago)`;
+}
+
 /**
- * The learner's notes as every prompt that reads them back carries them (explain.ts, items.ts): model-written, so quoted
- * as data; absent when there are none; the unavailable line when the record could not be read (null).
+ * The learner's notes as every prompt that reads them back carries them (explain.ts, items.ts). They are the desk's
+ * own observations, written by a model and confirmed by no one, so they are framed as notes, quoted as data, each with
+ * its age, and the list says when the cap has dropped older ones (agent-memory: observation-clock, loss-site-inventory).
+ * Absent when there are none; the unavailable line when the record could not be read (null).
  */
-export function notesPart(memory: readonly string[] | null): Part {
-  return memory === null ? say("notes", RECALL_UNREAD) : dataList("notes", "What the desk has learned about this student", memory);
+export function notesPart(me: Pick<Learner, "memory" | "memoryDropped"> | null, now = Date.now()): Part[] {
+  if (!me) return [say("notes", RECALL_UNREAD)];
+  return [
+    dataRows("notes", "The desk's own earlier notes on this student (written by the desk, not checked by anyone, oldest first)",
+      me.memory.map((n: MemoryNote, i) => ({ n: i + 1, value: n.text, note: ageOf(n.at, now) }))),
+    say("dropped", me.memory.length && me.memoryDropped ? `${me.memoryDropped} older note${me.memoryDropped === 1 ? " was" : "s were"} dropped to keep this list short.` : ""),
+  ];
 }
 
 /** A filter that drops a line equal (case, runs of space) to a held note or to an earlier line of the same answer. */
@@ -40,7 +58,7 @@ export async function writeMemory(
   learnerId: string,
   session: { topic?: string; items?: PracticeItem[]; hintsUsed?: number } & Partial<Evening>,
 ): Promise<string[]> {
-  const existing = readLearner(learnerId).memory;
+  const existing = readLearner(learnerId).memory.map((n) => n.text);
   const items = session.items ?? [];
   const t = session.topic ? topicIn(session.topic) : undefined;
 
@@ -86,7 +104,7 @@ export async function writeMemory(
     ],
   });
 
-  const { json } = await text<{ lines: string[] }>({ ...asked, schema: SCHEMA, model: "fast", thinking: false, use: "memory" });
+  const { json } = await text<{ lines: string[] }>({ ...asked, schema: SCHEMA, model: "fast", thinking: false, shorten: true, use: "memory" });
   const lines = (Array.isArray(json?.lines) ? json.lines : [])
     .filter((l): l is string => typeof l === "string")
     .map((l) => l.trim().replace(/^[-*\d.\s]+/, ""))
@@ -94,6 +112,10 @@ export async function writeMemory(
     .filter(distinctFrom(existing))
     .slice(0, 3);
   // WD10: the lines are added in ONE save (read fresh: the record may have moved while the model wrote), so a failed write keeps none and a Try again writes each once
-  if (lines.length) { const l = getLearner(learnerId); saveLearner({ ...l, memory: [...l.memory, ...lines] }); }
+  if (lines.length) {
+    // each note is dated and names its writer (agent-memory: observation-clock); the text is what the model wrote, as kept
+    const l = getLearner(learnerId), at = Date.now();
+    saveLearner({ ...l, memory: [...l.memory, ...lines.map((text): MemoryNote => ({ text, at, source: "nightly" }))] });
+  }
   return lines;
 }
