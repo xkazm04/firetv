@@ -34,9 +34,13 @@
  *   - one number per answer: an integer, a terminating decimal, a fraction `a/b`, a mixed number `1 1/2` (the fraction
  *     proper, 0 < top < bottom), a percent `25%` / `25 %` / `25 percent`, or a ratio `a:b` (kept as a pair, never a
  *     value: in cz and de ':' is also the division sign);
- *   - ignored around it: a leading `x =`, `answer:`, `ans:` or `=`, one trailing full stop, spaces;
- *   - a unit from the closed list UNITS (and the English words for them) after the number, or a currency sign before
- *     or after it, is returned as `unit` and never changes the number; any other trailing word is null;
+ *   - ignored around it: a leading single-letter name and `=` (`x =`, `c =`), `P(...) =` (one to 20 characters inside, no
+ *     brackets or '='), `answer:`, `ans:` or `=`, one trailing full stop, spaces. A two-letter or segment name, a name
+ *     with a digit, two names and an equation stay null. Ceiling: the check compares values, not names, so a wrong
+ *     name with the right value (`a = 10` where c is asked) is right; a school spec names no unknown to compare to;
+ *   - a unit from the closed list UNITS (and the English words for them; "cm squared", "sq cm", "square cm" are cm2, and
+ *     "Kč" or "korun" the Czech crown, MB-B4) after the number, or a currency sign before or after it, is returned as
+ *     `unit` and never changes the number; any other trailing word is null;
  *   - us and uk: '.' is the decimal point; ',' only separates thousands in the strict 1,234 / 12,345,678 grouping, and
  *     any other comma (`0,5`, `1,5`, `1,00`) is null (a comma is also a list: `0,5` may be "0 and 5"); a space inside
  *     a number (`1 000`) is null;
@@ -80,7 +84,10 @@
  *
  * Pure: no React, no filesystem, no model, no network; imports only a type from the store.
  */
+import { checkerFault, Unreadable } from "./fault";
+import { commaSystem, readTask } from "./taskText";
 import type { SchoolSystem } from "@/lib/session/store";
+import { EN_CARD, EN_ORD, figuresOfCzech } from "./numberWords";
 
 // ------------------------------------------------------------------ exact rationals
 
@@ -112,6 +119,21 @@ const exactAt = (a: Q, k: number) => (a.n * pow10(k)) % a.d === Z;
 /** The fewest decimal places that write a terminating value exactly (0 for a whole number); 12 at most. */
 function placesNeeded(a: Q): number { let k = 0; while (k < 12 && !exactAt(a, k)) k++; return k; }
 
+/** The integer square root of n, rounded down (Newton's method on bigints): exact, no floating point (M2b, Pythagoras). */
+function isqrt(n: bigint): bigint {
+  if (n < BigInt(2)) return n < Z ? Z : n;
+  let x = n, y = (x + ONE) / BigInt(2);
+  while (y < x) { x = y; y = (x + n / x) / BigInt(2); }
+  return x;
+}
+/**
+ * The slips a kind can show, each used only where its value differs from the answer and from every other slip's: a value
+ * that is also the answer is no slip (it is right), and a value two slips share cannot say which was made (M2b).
+ */
+function distinctSlips(cands: [string, Q][], truth: Q): [string, Q][] {
+  return cands.filter(([id, v], i) => !eq(v, truth) && !cands.some(([id2, v2], j) => j !== i && id2 !== id && eq(v, v2)));
+}
+
 /** A rational as the desk hands it out: lowest terms, d > 0, both safe integers (the reader's bounds keep them so). */
 export interface Rat { n: number; d: number }
 const toRat = (q: Q): Rat => ({ n: Number(q.n), d: Number(q.d) });
@@ -123,16 +145,17 @@ export const SCHOOL_SYSTEMS: readonly SchoolSystem[] = ["us", "uk", "cz", "de"];
 const isSystem = (s: unknown): s is SchoolSystem => typeof s === "string" && (SCHOOL_SYSTEMS as readonly string[]).includes(s);
 
 /** The closed unit list, as the desk writes each one. */
-export const UNITS = ["cm", "m", "km", "mm", "cm2", "m2", "kg", "g", "l", "ml", "min", "h", "s", "€", "$", "£"] as const;
+export const UNITS = ["cm", "m", "km", "mm", "cm2", "m2", "kg", "g", "l", "ml", "min", "h", "s", "€", "$", "£", "Kč"] as const;
 export type Unit = (typeof UNITS)[number];
 
 /** Every spelling the reader takes for a unit, longest first so 'cm2' is never 'm2' and 'min' never 'm'. */
 const UNIT_SPELLINGS: [string, Unit][] = (() => {
   const out: [string, Unit][] = [];
   const add = (u: Unit, ...s: string[]) => s.forEach((w) => out.push([w, u]));
-  const len = (u: Unit, stem: string) => [`${stem}res`, `${stem}re`, `${stem}ers`, `${stem}er`];
-  add("cm2", "cm2", "cm^2", "cm²", ...len("cm2", "square centimet"));
-  add("m2", "m2", "m^2", "m²", ...len("m2", "square met"));
+  const len = (_u: Unit, stem: string) => [`${stem}res`, `${stem}re`, `${stem}ers`, `${stem}er`];
+  // MB-B4: "cm squared", "sq cm" and "square cm" are how a UK learner writes cm2 (and the same for m2)
+  add("cm2", "cm2", "cm^2", "cm²", "cm squared", "sq cm", "square cm", ...len("cm2", "square centimet"));
+  add("m2", "m2", "m^2", "m²", "m squared", "sq m", "square m", ...len("m2", "square met"));
   add("cm", "cm", ...len("cm", "centimet"));
   add("mm", "mm", ...len("mm", "millimet"));
   add("km", "km", ...len("km", "kilomet"));
@@ -147,6 +170,8 @@ const UNIT_SPELLINGS: [string, Unit][] = (() => {
   add("€", "€", "euros", "euro");
   add("$", "$", "dollars", "dollar");
   add("£", "£"); // not "pounds": money or weight
+  // MB-B4: the Czech crown after the amount ("12,50 Kč", matched lower-cased); not "liber" (pounds: money or weight)
+  add("Kč", "kč", "czk", "korun", "koruny", "koruna");
   return out.sort((a, b) => b[0].length - a[0].length);
 })();
 
@@ -217,10 +242,13 @@ function parsePlain(t: string, sys: SchoolSystem): Plain | null {
   return frac === undefined ? { q, form: "integer", places: 0 } : { q, form: "decimal", places: f.length };
 }
 
+/** What readInner and writtenFraction both ignore at the start: one letter then '=', 'P(...)' then '=', 'answer:', 'ans:' or '='. */
+const ANSWER_NAME = /^(?:[a-z] ?=|p\([^()=]{1,20}\) ?=|answer ?[:=]|ans ?[:=]|=) ?/i;
+
 function readInner(answer: string, sys: SchoolSystem): Reading | null {
   if (answer.length > MAX_ANSWER) return null;
   let s = normalise(answer);
-  s = s.replace(/^(?:x ?=|answer ?[:=]|ans ?[:=]|=) ?/i, "");
+  s = s.replace(ANSWER_NAME, "");
   if (/[^.]\.$/.test(s)) s = s.slice(0, -1).trimEnd();
   if (!s) return null;
   // a currency sign before the number
@@ -294,7 +322,7 @@ function readInner(answer: string, sys: SchoolSystem): Reading | null {
  */
 export function readNumber(answer: unknown, system: unknown): Reading | null {
   if (typeof answer !== "string" || !isSystem(system)) return null;
-  try { return readInner(answer, system); } catch { return null; }
+  try { return readInner(answer, system); } catch (e) { checkerFault("school.readNumber", e); return null; }
 }
 
 // ------------------------------------------------------------------ the shapes
@@ -309,7 +337,9 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     `allowNegative` lets the value be zero or below (a subtraction that crosses zero). Units: add and subtract
  *     fractions (a/b ± c/d), multiply and divide fractions (a/b × c/d, a/b ÷ c/d, Family W7), add, subtract and
  *     multiply decimals (4.35 + 2.8, 3.6 × 0.4; W7 batch 2), where a € or £ `unit` prints its sign before each amount
- *     ("Work out €4.35 + €2.80.", "Work out £3.45 × 4.": the count is not money).
+ *     ("Work out €4.35 + €2.80.", "Work out £3.45 × 4.": the count is not money). MB-B20, the top rung of a step up on
+ *     the two fractions units: an operand may be a mixed number ("1 3/4 + 2 1/3", "4 1/2 ÷ 3/4"), and an expr that starts
+ *     with a story's id ("walk 1 3/4 + 2 1/3", `unit` km) is printed as that word problem (STORIES) - still no store key.
  *   - fraction-of (W7, "A fraction of an amount"): expr "a/b of N", a proper fraction of a whole amount, "Find 3/5 of
  *     40 kg."; `unit` is the amount's unit (and the answer's). The value is a/b × N, exactly.
  *   - missing (W7, "Equivalent fractions"): expr "a/b = ?/d" or "a/b = c/?", one number missing on the right, "Fill in
@@ -325,8 +355,11 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     (and the answer's). The value is p × N / 100 exactly, to at most two decimal places.
  *   - percent-change (W7 batch 2, "Percent increase and decrease"): expr "increase B by p%" or "decrease B by p%", a whole
  *     amount 1 to 1000 changed by a percent above 0 (at most 100 up, below 100 down), "Increase 60 by 15%.", "Decrease
- *     €80 by 25%."; `unit` as for an amount. The value is B × (100 ± p) / 100 exactly: the change applied to the whole,
- *     never a reverse percentage (finding the original), which is a later unit.
+ *     €80 by 25%."; `unit` as for an amount. The value is B × (100 ± p) / 100 exactly: the change applied to the whole.
+ *     MB-B20, the top rung of a step up (`pct-top`, still no store key): "before increase 540 by 20%" (the amount before
+ *     the change, a reverse percentage), "increase 200 by 10% then decrease by 20%" (two changes in turn), "increase 800
+ *     by 5% for 3 years" (one change over 2..5 years), each optionally after a story's id (PCT_STORIES, money only); the
+ *     value exact to two places.
  *   - ratio (W7 batch 3, "Ratio and sharing"), two-part ratios of whole numbers only: expr "12:18" (write it in its
  *     simplest form: the answer is a RATIO, 2:3), "60 in 2:3" (share 60 in the ratio 2:3: the answer is a PAIR of amounts,
  *     24 and 36, in the ratio's order; `unit` is the amount's, optional, as for a fraction of an amount) or "2:3 = ?:15" /
@@ -344,6 +377,25 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *   - stat (W7 batch 3, "Mean and range"): expr "mean 4, 7, 9, 10" or "range 12, 5, 9, 20, 7", three to ten whole numbers
  *     0..999 in the order printed; no unit. The mean is the total over the count exactly, allowed only when it terminates
  *     within two decimal places; the range the largest less the smallest, above nothing.
+ *   - pythagoras (v2 M2b, Pythagoras' theorem; the unit is mapped to a Foundation statement, never certified): expr "longest 6 8"
+ *     (the two shorter sides 6 and 8 are given: find the longest) or "shorter 10 6" (the longest side 10 and one shorter side 6
+ *     are given: find the other shorter side); `unit` mm, cm or m, required: the answer's own. All three sides are whole numbers,
+ *     at most 100 (a scaled Pythagorean triple); the truth is an exact integer square root, never a floating point root.
+ *     MB-B20, the top rung of a step up (`pyth-dp`): "longest 2.5 6 dp1", "shorter 9.5 4.2 dp2" or a story's id
+ *     (PYTH_STORIES: "ladder 6 2.5 dp1", "screen 52 29 dp1", "field 80 45 dp1") - sides whole or to one place, at most 100,
+ *     the side asked no rational, its answer rounded to 1 or 2 places as the question says (`checkRounded` judges it by the
+ *     rounding rulings MK5 / D2 R1a). The truth is that rounding, decided in bigints; the exact square rides the kind.
+ *   - probability (v2 M2b, the probability of an event in a single experiment): expr "bag red 3, blue 5, green 2 ask red" (a bag
+ *     of two to four different colours, at most 20 counters, one taken at random; ask a colour, "not red", or "red or blue") or
+ *     "complement red 0.35" / "complement red 35%" (the probability of a colour is stated, as a decimal or a percent: find the
+ *     probability it does not happen). No unit. The value is a fraction strictly between 0 and 1, exactly; a certain or an
+ *     impossible event is not well formed; the answer in any equal form (a fraction, unsimplified too, a decimal, a percent) is right.
+ *     MB-B20, the top rung of a step up (`prob-two`, two events): "dice 6 and even", "dice least over 4" (two fair dice; a
+ *     number, even, odd or more than 2..4), "coin heads and dice odd", "coin tails and spinner red 3, blue 5 ask red", "draw
+ *     red 3, blue 5 both red", "draw red 3, blue 5, green 2 red then blue" (two counters without replacement), each
+ *     optionally after a story's id (PROB_STORIES: "socks draw black 4, white 6 both white", "sweets draw red 5, green 4 green
+ *     then red", "game coin heads and dice over 3"). The value is an exact fraction, judged as tiers 1 and 2 are: any equal
+ *     form is right, a fraction need not be in its simplest form (as the fractions top rung, which asks for no form).
  */
 export type ComputeSpec = { shape: "compute"; expr: string; form?: "simplest" | "decimal"; unit?: Unit; allowNegative?: true };
 export type FractionOfSpec = { shape: "fraction-of"; expr: string; unit?: Unit };
@@ -358,13 +410,15 @@ export type RatioSpec = { shape: "ratio"; expr: string; unit?: Unit };
 export type RateSpec = { shape: "rate"; expr: string; unit: Unit };
 export type AreaSpec = { shape: "area"; expr: string; unit: Unit };
 export type StatSpec = { shape: "stat"; expr: string };
-export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec | RatioSpec | RateSpec | AreaSpec | StatSpec;
+export type PythagorasSpec = { shape: "pythagoras"; expr: string; unit: Unit };
+export type ProbabilitySpec = { shape: "probability"; expr: string };
+export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec | RatioSpec | RateSpec | AreaSpec | StatSpec | PythagorasSpec | ProbabilitySpec;
 export type SchoolShape = SchoolSpec["shape"];
-export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change", "ratio", "rate", "area", "stat"];
+export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change", "ratio", "rate", "area", "stat", "pythagoras", "probability"];
 /** The shapes whose amount may carry a unit (the answer is in it too). */
 const AMOUNT_SHAPES: readonly SchoolShape[] = ["fraction-of", "percent-of", "percent-change"];
 /** Every shape that may carry a `unit` (W7 batch 3: a ratio's shared amount; each kind says whether it takes one). */
-const UNIT_SHAPES: readonly SchoolShape[] = [...AMOUNT_SHAPES, "ratio", "rate", "area"];
+const UNIT_SHAPES: readonly SchoolShape[] = [...AMOUNT_SHAPES, "ratio", "rate", "area", "pythagoras"];
 /**
  * The things a rate question may price (W7 batch 3), plural as the question prints them, with the singular for "What does
  * 1 pen cost?". Closed, so a rate spec never carries free text; the generator draws only the short ones (a row's width).
@@ -384,15 +438,17 @@ type Op = "+" | "-" | "×" | "÷";
 type Node =
   | { k: "num"; q: Q; s: string; whole: boolean }
   | { k: "frac"; n: bigint; d: bigint }
+  // MB-B20: a mixed number "w n/d" (a whole part, a space, a fraction), worth w + n/d; read() asks for w >= 1 and 0 < n < d
+  | { k: "mixed"; w: bigint; n: bigint; d: bigint }
   | { k: "neg"; a: Node }
   | { k: "op"; op: Op; a: Node; b: Node }
   | { k: "par"; a: Node };
 
-class Unreadable extends Error {}
 
 /**
  * expr := term (('+'|'-') term)*;  term := unary (('×'|'*'|'÷') unary)*;  unary := '-' unary | atom;
- * atom := int '/' int (a fraction: '/' binds only two whole numbers, so 3/4 ÷ 2/3 is (3/4) ÷ (2/3)) | number | '(' expr ')'.
+ * atom := int '/' int (a fraction: '/' binds only two whole numbers, so 3/4 ÷ 2/3 is (3/4) ÷ (2/3)) | int int '/' int (a
+ * mixed number, MB-B20: "1 3/4", a whole number and a fraction with only a space between them) | number | '(' expr ')'.
  */
 function parseExpr(src: string): Node | null {
   if (typeof src !== "string" || !src.trim() || src.length > MAX_EXPR) return null;
@@ -436,6 +492,12 @@ function parseExpr(src: string): Node | null {
     if (!/^\d/.test(t)) throw new Unreadable();
     i++;
     const whole = !t.includes(".");
+    // MB-B20: a whole number straight before a fraction is a mixed number's whole part ("1 3/4"): no sign joins them
+    if (whole && /^\d+$/.test(peek() ?? "") && toks[i + 1] === "/" && /^\d+$/.test(toks[i + 2] ?? "")) {
+      const n = toks[i], d = toks[i + 2];
+      i += 3;
+      return { k: "mixed", w: BigInt(t), n: BigInt(n), d: BigInt(d) };
+    }
     if (peek() === "/") {
       const b = toks[i + 1];
       if (!whole || b === undefined || !/^\d+$/.test(b)) throw new Unreadable();
@@ -448,7 +510,7 @@ function parseExpr(src: string): Node | null {
   try {
     const n = expr();
     return i === toks.length ? n : null;
-  } catch {
+  } catch (e) { checkerFault("school.parseExpr", e);
     return null;
   }
 }
@@ -458,6 +520,7 @@ function evalNode(n: Node): Q | null {
   switch (n.k) {
     case "num": return n.q;
     case "frac": return mk(n.n, n.d);
+    case "mixed": return mk(n.w * n.d + n.n, n.d);
     case "par": return evalNode(n.a);
     case "neg": { const a = evalNode(n.a); return a ? { n: -a.n, d: a.d } : null; }
     case "op": {
@@ -476,7 +539,7 @@ function countOps(n: Node): number {
   }
 }
 function literals(n: Node, out: Node[] = []): Node[] {
-  if (n.k === "num" || n.k === "frac") out.push(n);
+  if (n.k === "num" || n.k === "frac" || n.k === "mixed") out.push(n);
   else if (n.k === "op") { literals(n.a, out); literals(n.b, out); }
   else literals(n.a, out);
   return out;
@@ -522,6 +585,23 @@ const REJECT = {
   rateUnit: "A cost is in euros or pounds and a distance in km, and the spec names the one it is.",
   areaUnit: "An area names its square unit, cm2 or m2.",
   sameList: "Every number in the list is the same: there is nothing to work out.",
+  pythUnit: "A side is in mm, cm or metres, and the spec names which.",
+  pythBig: "A side is longer than a school question uses (at most 100).",
+  pythTriangle: "The longest side is not longer than the other side: it is not a right-angled triangle.",
+  pythWhole: "The missing side is not a whole number.",
+  probBag: "A bag holds two to four different colours, each at least one counter, at most twenty counters in all.",
+  probColour: "The question asks about a colour that is not in the bag.",
+  probTwo: "A question about either of two colours names two different colours.",
+  probCertain: "The probability is nothing or a whole: a certain or an impossible event is not asked here.",
+  probRange: "A stated probability is above nothing and below a whole.",
+  probSame: "The probability asked for equals the one given, so the question would print its own answer.",
+  story: "The word problem does not fit the expression: its operation, its two fractions or its unit.",
+  pctStory: "The word problem does not fit the change: its kind, its direction or its money.",
+  pythSide: "A side is above nothing, at most 100, and written to one decimal place at most with no trailing zero.",
+  pythExact: "The missing side is exact: there is nothing to round.",
+  pythRound: "The side rounded to the places asked ends in a zero, or has fewer than two figures.",
+  pythStory: "The word problem does not fit the sides: its kind or its unit.",
+  probStory: "The word problem does not fit the events: its kind or its colours.",
 } as const;
 
 /**
@@ -529,7 +609,8 @@ const REJECT = {
  * number (a/b = ?/d or a/b = c/?: `known` is d or c, `slot` says which is missing), or a fraction to simplify.
  */
 type Kind =
-  | { k: "compute" }
+  // MB-B20: `story` names the word problem the computation is printed in (STORIES), when it is one
+  | { k: "compute"; story?: StoryId }
   | { k: "of"; a: bigint; b: bigint; N: bigint }
   | { k: "missing"; a: bigint; b: bigint; known: bigint; slot: "top" | "bottom" }
   | { k: "simplify"; a: bigint; b: bigint }
@@ -545,7 +626,22 @@ type Kind =
   // W7 batch 3: a rectangle's two sides, a triangle's base and height, or two rectangles' four sides, as written
   | { k: "area"; fig: "rectangle" | "triangle" | "composite"; sides: Q[]; texts: string[] }
   // W7 batch 3: the mean or the range of a list, in the order printed
-  | { k: "stat"; stat: "mean" | "range"; xs: bigint[] };
+  | { k: "stat"; stat: "mean" | "range"; xs: bigint[] }
+  // M2b: find the longest side from the two shorter (x, y), or a shorter side from the longest (x) and the other shorter (y)
+  | { k: "pyth"; find: "longest" | "shorter"; x: bigint; y: bigint }
+  // M2b: a bag's colours with their counts in the order printed, and the colour(s) asked about (mode: one, not one, either of two)
+  | { k: "prob"; mode: "colour" | "not" | "or"; counts: [string, bigint][]; ask: string[] }
+  // M2b: the stated probability p of a colour; the probability it does not happen
+  | { k: "prob-comp"; colour: string; p: Q; ptext: string }
+  // MB-B20, the percent-change top rung: the amount before a change (`before`: `base` is the amount after it), two changes
+  // in turn (`then`), or one change `years` times over (`years`); `story` the word problem it is printed in (PCT_STORIES)
+  | { k: "pct-top"; form: PctForm; base: bigint; steps: { up: boolean; p: Q; ptext: string }[]; years: number; story?: PctStoryId }
+  // MB-B20, the Pythagoras top rung: sides x and y as written (xt, yt; a decimal allowed), the side asked rounded to `dp`
+  // places; `sq` is that side's exact square, never a whole or a rational square; `story` its word problem (PYTH_STORIES)
+  | { k: "pyth-dp"; find: "longest" | "shorter"; x: Q; y: Q; xt: string; yt: string; dp: 1 | 2; sq: Q; story?: PythStoryId }
+  // MB-B20, the probability top rung: two events (`form`, ProbForm) - the dice's events in order, the coin's side, a
+  // spinner's or a bag's colours with their counts in the order printed and the colour(s) asked; `story` its word problem
+  | { k: "prob-two"; form: ProbForm; events: DiceEvent[]; side?: "heads" | "tails"; counts: [string, bigint][]; ask: string[]; story?: ProbStoryId };
 type Structure = { ok: true; spec: SchoolSpec; node: Node; kind: Kind } | { ok: false; why: string };
 /** `pair` (W7 batch 3, a ratio share): the two amounts in the ratio's order; `truth` is then the first of them. */
 type ReadOk = { ok: true; spec: SchoolSpec; node: Node; kind: Kind; truth: Q; pair?: [Q, Q] };
@@ -578,9 +674,206 @@ const AREA_RES: [RegExp, "rectangle" | "triangle" | "composite"][] = [
   [new RegExp(String.raw`^rectangles ${SIDE_SRC} by ${SIDE_SRC} and ${SIDE_SRC} by ${SIDE_SRC}$`), "composite"],
 ];
 /** W7 batch 3: "mean 4, 7, 9, 10" or "range 12, 5, 9, 20, 7": three to ten whole numbers, a comma and a space between. */
+/** M2b: the colours a bag holds, closed so a spec never carries free text. */
+export const PROB_COLOURS = ["red", "blue", "green", "yellow", "white", "black", "orange", "purple", "pink"] as const;
+const COL = `(?:${PROB_COLOURS.join("|")})`;
+/** "bag red 3, blue 5, green 2 ask red" (also "ask not red", "ask red or blue") and "complement red 0.35" / "complement red 35%". */
+const PROB_BAG_RE = new RegExp(String.raw`^bag (${COL} [1-9]\d?(?:, ${COL} [1-9]\d?){1,3}) ask (?:(${COL})|not (${COL})|(${COL}) or (${COL}))$`);
+const PROB_COMP_RE = new RegExp(String.raw`^complement (${COL}) (0\.(?:[1-9]\d?|0[1-9])|[1-9]\d?%)$`);
+/** M2b: "longest 6 8" (the shorter sides given) or "shorter 10 6" (the longest and a shorter side given): sides of up to three digits. */
+const PYTH_RE = /^(longest|shorter) ([1-9]\d{0,2}) ([1-9]\d{0,2})$/;
 const STAT_RE = /^(mean|range) ((?:0|[1-9]\d{0,2})(?:, (?:0|[1-9]\d{0,2})){2,9})$/;
 const sideQ = (x: string): Q => { const [w, f = ""] = x.split("."); return mk(BigInt(w + f), pow10(f.length))!; };
 const fracNode = (n: bigint, d: bigint): Node => ({ k: "frac", n, d });
+
+/**
+ * MB-B20: the word problems a top-rung fractions item may be printed in, a closed list. A story spec is a `compute` whose
+ * expr starts with the story's id ("walk 1 3/4 + 2 1/3"), so it adds no store key: the operation must be the story's own,
+ * both operands a fraction or a mixed number, and `unit` the story's (the answer's unit; the rope's answer is a count, no
+ * unit). `{A}` and `{B}` are the expression's two operands in its order. Each says one situation and asks one question; no
+ * number word stands in a text (the leak check reads words as numbers), and every number in it is an operand.
+ */
+export const STORIES = {
+  walk: { op: "+", unit: "km", text: "A walk is {A} km to the lake and {B} km back. How far is the whole walk?" },
+  apples: { op: "+", unit: "kg", text: "A bag holds {A} kg of apples and a box holds {B} kg. How much do they hold together?" },
+  ribbon: { op: "-", unit: "m", text: "A ribbon is {A} metres long and {B} metres is cut off. How much ribbon is left?" },
+  juice: { op: "-", unit: "l", text: "A jug holds {A} litres of juice and {B} litres are poured out. How much juice is left?" },
+  rice: { op: "×", unit: "kg", text: "A sack holds {A} kg of rice. How much rice is {B} of the sack?" },
+  rope: { op: "÷", unit: undefined, text: "A rope {A} metres long is cut into pieces {B} metres long. How many pieces are there?" },
+} as const satisfies Record<string, { op: Op; unit: Unit | undefined; text: string }>;
+export type StoryId = keyof typeof STORIES;
+const isStoryId = (x: unknown): x is StoryId => typeof x === "string" && Object.prototype.hasOwnProperty.call(STORIES, x);
+
+/** MB-B20: the three kinds of a top-rung percent change - the amount before a change, two changes in turn, one change over the years. */
+export type PctForm = "before" | "then" | "years";
+type PctText = { form: PctForm; up: boolean | undefined; text: string };
+/**
+ * MB-B20: the word problems a top-rung percent-change item may be printed in, a closed list, each with its kind and (for a
+ * single change) its direction. A story spec's expr starts with the story's id ("sale before decrease 540 by 20%") and its
+ * `unit` is money (€, £, $ or Kč, the learner's own via localMoney). Placeholders: {A} the amount, {P} and {Q} the percents,
+ * {D} and {E} "up" or "down", {N} the years. One situation and one question each; no number word in a text.
+ */
+export const PCT_STORIES = {
+  sale: { form: "before", up: false, text: "In a sale, a coat costs {A} after {P} off. What did it cost before the sale?" },
+  rise: { form: "before", up: true, text: "After a {P} rise, a train ticket costs {A}. What did it cost before the rise?" },
+  bike: { form: "then", up: undefined, text: "A bike costs {A}. Its price goes {D} by {P} and then {E} by {Q}. What does it cost now?" },
+  savings: { form: "years", up: true, text: "A savings account holds {A} and earns {P} interest each year. How much is in it after {N} years?" },
+  car: { form: "years", up: false, text: "A car is worth {A} and loses {P} of its value each year. What is it worth after {N} years?" },
+} as const satisfies Record<string, PctText>;
+export type PctStoryId = keyof typeof PCT_STORIES;
+const isPctStory = (x: unknown): x is PctStoryId => typeof x === "string" && Object.prototype.hasOwnProperty.call(PCT_STORIES, x);
+/** MB-B20: the bare top-rung percent changes as a question prints them ({U} and {V} "Increase"/"increase" or "Decrease"/"decrease"). */
+const PCT_BARE: readonly PctText[] = [
+  { form: "before", up: true, text: "After an increase of {P}, an amount is {A}. What was the amount before the increase?" },
+  { form: "before", up: false, text: "After a decrease of {P}, an amount is {A}. What was the amount before the decrease?" },
+  { form: "then", up: undefined, text: "{U} {A} by {P}, then {V} the result by {Q}." },
+  { form: "years", up: undefined, text: "{U} {A} by {P} each year for {N} years." },
+];
+/** "before increase 540 by 20%", "increase 200 by 10% then decrease by 20%", "increase 800 by 5% for 3 years" (MB-B20). */
+const PCT_BEFORE_RE = new RegExp(String.raw`^before (increase|decrease) (${W4}) by ${PCT_SRC}%$`);
+const PCT_THEN_RE = new RegExp(String.raw`^(increase|decrease) (${W4}) by ${PCT_SRC}% then (increase|decrease) by ${PCT_SRC}%$`);
+const PCT_YEARS_RE = new RegExp(String.raw`^(increase|decrease) (${W4}) by ${PCT_SRC}% for ([2-5]) years$`);
+const pctQ = (t: string): Q => { const [w, f = ""] = t.split("."); return mk(BigInt(w + f), pow10(f.length))!; };
+
+/** MB-B20: a top-rung percent change's structure (a story id first, when it is one), or why not. */
+function pctTopStructure(s: Record<string, unknown>): Structure {
+  let expr = s.expr as string, story: PctStoryId | undefined;
+  const sm = /^([a-z]+) (.+)$/.exec(expr);
+  if (sm && isPctStory(sm[1])) { story = sm[1]; expr = sm[2]; }
+  const step = (verb: string, p: string) => ({ up: verb === "increase", p: pctQ(p), ptext: p });
+  let kind: Extract<Kind, { k: "pct-top" }> | null = null, m: RegExpExecArray | null;
+  if ((m = PCT_BEFORE_RE.exec(expr))) kind = { k: "pct-top", form: "before", base: BigInt(m[2]), steps: [step(m[1], m[3])], years: 1 };
+  else if ((m = PCT_THEN_RE.exec(expr))) kind = { k: "pct-top", form: "then", base: BigInt(m[2]), steps: [step(m[1], m[3]), step(m[4], m[5])], years: 1 };
+  else if ((m = PCT_YEARS_RE.exec(expr))) kind = { k: "pct-top", form: "years", base: BigInt(m[2]), steps: [step(m[1], m[3])], years: Number(m[4]) };
+  if (!kind) return { ok: false, why: story ? REJECT.pctStory : REJECT.read };
+  if (story) {
+    const st: PctText = PCT_STORIES[story];
+    if (st.form !== kind.form || (st.up !== undefined && st.up !== kind.steps[0].up) || !(isMoney(s.unit) || s.unit === "$")) return { ok: false, why: REJECT.pctStory };
+    kind.story = story;
+  }
+  return { ok: true, spec: s as SchoolSpec, node: fracNode(ONE, ONE), kind };
+}
+
+/**
+ * MB-B20: the word problems a top-rung Pythagoras item may be printed in, a closed list: which side is asked and the unit the
+ * sides and the answer are in. {X} and {Y} are the two sides of the expr in its order ("ladder 6 2.5 dp1": the ladder 6
+ * metres, its foot 2.5 metres out, the height up the wall asked). One situation and one question each; no number word.
+ */
+export const PYTH_STORIES = {
+  ladder: { find: "shorter", unit: "m", text: "A ladder {X} long leans against a wall, its foot {Y} from the wall. How high up the wall does it reach?" },
+  screen: { find: "longest", unit: "cm", text: "A screen is {X} wide and {Y} high. How long is its diagonal?" },
+  field: { find: "longest", unit: "m", text: "A rectangular field is {X} long and {Y} wide. How long is its diagonal?" },
+} as const satisfies Record<string, { find: "longest" | "shorter"; unit: Unit; text: string }>;
+export type PythStoryId = keyof typeof PYTH_STORIES;
+const isPythStory = (x: unknown): x is PythStoryId => typeof x === "string" && Object.prototype.hasOwnProperty.call(PYTH_STORIES, x);
+/** MB-B20: the bare top-rung Pythagoras questions, the same sentences as tiers 1 and 2; the places asked follow them. */
+const PYTH_BARE = {
+  longest: "A right-angled triangle has shorter sides {X} and {Y}. Find the longest side.",
+  shorter: "A right-angled triangle has longest side {X} and a shorter side {Y}. Find the other shorter side.",
+} as const;
+/** "longest 2.5 6 dp1", "shorter 9.5 4.2 dp2", "ladder 6 2.5 dp1": a side whole or to one place, the places asked 1 or 2 (MB-B20). */
+const PYTH_DP_SIDE = String.raw`(?:[1-9]\d{0,2}|0)(?:\.\d)?`;
+const PYTH_DP_RE = new RegExp(String.raw`^(longest|shorter|ladder|screen|field) (${PYTH_DP_SIDE}) (${PYTH_DP_SIDE}) dp([12])$`);
+/** The sentence after a top-rung Pythagoras question: the places its answer is rounded to. */
+const placesLine = (dp: 1 | 2) => `Give your answer to ${dp} decimal place${dp === 1 ? "" : "s"}.`;
+
+/** MB-B20: a top-rung Pythagoras item's structure, or why not. */
+function pythDpStructure(s: Record<string, unknown>): Structure {
+  const m = PYTH_DP_RE.exec(s.expr as string);
+  if (!m) return { ok: false, why: REJECT.read };
+  const story = isPythStory(m[1]) ? m[1] : undefined, find = story ? PYTH_STORIES[story].find : (m[1] as "longest" | "shorter");
+  const [x, y] = [sideQ(m[2]), sideQ(m[3])], xx = mul(x, x), yy = mul(y, y);
+  const kind: Kind = { k: "pyth-dp", find, x, y, xt: m[2], yt: m[3], dp: m[4] === "1" ? 1 : 2, sq: find === "longest" ? add(xx, yy) : sub(xx, yy), ...(story ? { story } : {}) };
+  return { ok: true, spec: s as SchoolSpec, node: fracNode(ONE, ONE), kind };
+}
+
+/** |v - √S| < h, decided exactly for S above nothing that is no rational square (so the distance is never exactly h). */
+function nearRoot(v: Q, S: Q, h: Q): boolean {
+  const lo = sub(v, h), hi = add(v, h), below = (a: Q, b: Q) => a.n * b.d < b.n * a.d;
+  if (hi.n <= Z || !below(S, mul(hi, hi))) return false;
+  return lo.n <= Z || below(mul(lo, lo), S);
+}
+/** √S rounded to dp places, half up, exactly: floor(√(4·S·10^2dp)) halved up (no floating point). */
+function rootRounded(S: Q, dp: number): Q {
+  const r = (isqrt((S.n * pow10(2 * dp) * BigInt(4)) / S.d) + ONE) / BigInt(2);
+  return mk(r, pow10(dp))!;
+}
+/** Is S the square of a rational (its top and bottom in lowest terms both squares)? */
+const ratSquare = (S: Q) => S.n >= Z && isqrt(S.n) ** BigInt(2) === S.n && isqrt(S.d) ** BigInt(2) === S.d;
+/** Half a unit and a whole unit of the k-th decimal place. */
+const halfPlace = (k: number) => mk(BigInt(5), pow10(k + 1))!, onePlace = (k: number) => mk(ONE, pow10(k))!;
+
+/**
+ * MB-B20, the six kinds of a top-rung probability item: two fair dice, both events asked ("dice-and") or at least one
+ * showing an event ("dice-least"); a fair coin with a fair dice ("coin-dice") or with a spinner of equal coloured sections
+ * ("coin-spin"); two counters taken from a bag without replacement, both one colour ("draw-both") or one colour then
+ * another ("draw-then").
+ */
+export type ProbForm = "dice-and" | "dice-least" | "coin-dice" | "coin-spin" | "draw-both" | "draw-then";
+/** MB-B20: what a dice is asked to show - a number 1..6, an even or an odd number, or a number more than k (2..4). */
+type DiceEvent = { kind: "n" | "even" | "odd" | "over"; k: number };
+/**
+ * MB-B20: the word problems a top-rung probability item may be printed in, a closed list, each with its kind and (for a
+ * drawer or a jar) the two colours in the order printed. A story spec's expr starts with the story's id ("socks draw black
+ * 4, white 6 both black"). Placeholders: {A} and {B} the two counts, {C} and {D} the colours asked, {S} heads or tails,
+ * {E} the dice's event. One situation and one question each; no number word in a text.
+ */
+export const PROB_STORIES = {
+  socks: { form: "draw-both", colours: ["black", "white"], text: "A drawer holds {A} black socks and {B} white socks. Sam takes a sock at random and keeps it, then takes another. What is the probability that both are {C}?" },
+  sweets: { form: "draw-then", colours: ["red", "green"], text: "A jar holds {A} red sweets and {B} green sweets. Ali picks a sweet at random and eats it, then picks another. What is the probability that the first is {C} and the second is {D}?" },
+  game: { form: "coin-dice", colours: [], text: "In a game you flip a fair coin and roll a fair dice. You win with {S} and {E}. What is the probability that you win?" },
+} as const satisfies Record<string, { form: ProbForm; colours: readonly string[]; text: string }>;
+export type ProbStoryId = keyof typeof PROB_STORIES;
+const isProbStory = (x: unknown): x is ProbStoryId => typeof x === "string" && Object.prototype.hasOwnProperty.call(PROB_STORIES, x);
+/** MB-B20: the bare top-rung probability questions, by kind ({L} the bag's or the spinner's counts, "3 red, 2 blue and 5 green"). */
+const PROB_BARE: Readonly<Record<ProbForm, string>> = {
+  "dice-and": "A fair red dice and a fair blue dice are rolled. Find the probability that the red dice shows {E} and the blue dice shows {F}.",
+  "dice-least": "A fair red dice and a fair blue dice are rolled. Find the probability that at least one of them shows {E}.",
+  "coin-dice": "A fair coin is flipped and a fair dice is rolled. Find the probability of {S} and {E}.",
+  "coin-spin": "A fair coin is flipped and a spinner with {L} equal sections is spun. Find the probability of {S} and {C}.",
+  "draw-both": "A bag has {L} counters. A counter is taken at random without replacement, then another is taken. Find the probability that both are {C}.",
+  "draw-then": "A bag has {L} counters. A counter is taken at random without replacement, then another is taken. Find the probability that the first is {C} and the second is {D}.",
+};
+/** A dice event as an expr writes it: "6", "even", "odd", "over 4". */
+const DICE_EV = String.raw`(?:[1-6]|even|odd|over [2-4])`;
+/** Two or three colours with their counts, as a bag's expr writes them: "red 3, blue 5". */
+const PROB_COUNTS = String.raw`${COL} [1-9]\d?(?:, ${COL} [1-9]\d?){1,2}`;
+const PROB_TOP_RES: [RegExp, ProbForm][] = [
+  [new RegExp(String.raw`^dice (${DICE_EV}) and (${DICE_EV})$`), "dice-and"],
+  [new RegExp(String.raw`^dice least (${DICE_EV})$`), "dice-least"],
+  [new RegExp(String.raw`^coin (heads|tails) and dice (${DICE_EV})$`), "coin-dice"],
+  [new RegExp(String.raw`^coin (heads|tails) and spinner (${PROB_COUNTS}) ask (${COL})$`), "coin-spin"],
+  [new RegExp(String.raw`^draw (${PROB_COUNTS}) both (${COL})$`), "draw-both"],
+  [new RegExp(String.raw`^draw (${PROB_COUNTS}) (${COL}) then (${COL})$`), "draw-then"],
+];
+const diceEvent = (t: string): DiceEvent => (t === "even" || t === "odd" ? { kind: t, k: 0 } : t.startsWith("over ") ? { kind: "over", k: Number(t.slice(5)) } : { kind: "n", k: Number(t) });
+/** The chance a fair dice shows the event: 1/6, 1/2, or (6 - k)/6. */
+const diceChance = (e: DiceEvent): Q => mk(e.kind === "n" ? ONE : e.kind === "over" ? BigInt(6 - e.k) : BigInt(3), BigInt(6))!;
+const countsOf = (t: string) => t.split(", ").map((x): [string, bigint] => { const [c, n] = x.split(" "); return [c, BigInt(n)]; });
+
+/** MB-B20: a top-rung probability item's structure (a story id first, when it is one), or why not. */
+function probTopStructure(s: Record<string, unknown>): Structure {
+  let expr = s.expr as string, story: ProbStoryId | undefined;
+  const sm = /^([a-z]+) (.+)$/.exec(expr);
+  if (sm && isProbStory(sm[1])) { story = sm[1]; expr = sm[2]; }
+  for (const [re, form] of PROB_TOP_RES) {
+    const m = re.exec(expr);
+    if (!m) continue;
+    const kind: Extract<Kind, { k: "prob-two" }> = { k: "prob-two", form, events: [], counts: [], ask: [] };
+    if (form === "dice-and") kind.events = [diceEvent(m[1]), diceEvent(m[2])];
+    else if (form === "dice-least") kind.events = [diceEvent(m[1])];
+    else if (form === "coin-dice") { kind.side = m[1] as "heads" | "tails"; kind.events = [diceEvent(m[2])]; }
+    else if (form === "coin-spin") { kind.side = m[1] as "heads" | "tails"; kind.counts = countsOf(m[2]); kind.ask = [m[3]]; }
+    else { kind.counts = countsOf(m[1]); kind.ask = form === "draw-both" ? [m[2]] : [m[2], m[3]]; }
+    if (story) {
+      const st = PROB_STORIES[story], cols: readonly string[] = st.colours;
+      if (st.form !== form || (cols.length > 0 && kind.counts.map(([c]) => c).join() !== cols.join())) return { ok: false, why: REJECT.probStory };
+      kind.story = story;
+    }
+    return { ok: true, spec: s as SchoolSpec, node: fracNode(ONE, ONE), kind };
+  }
+  return { ok: false, why: story ? REJECT.probStory : REJECT.read };
+}
 
 /** The spec's structure (printable), without its truth. The W7 shapes are read in their one printed spelling each. */
 function structure(spec: unknown): Structure {
@@ -595,6 +888,14 @@ function structure(spec: unknown): Structure {
     if (s.unit !== undefined && !(UNITS as readonly unknown[]).includes(s.unit)) return { ok: false, why: REJECT.unit };
     if (s.allowNegative !== undefined && s.allowNegative !== true) return { ok: false, why: REJECT.flag };
     const node = parseExpr(s.expr as string);
+    // MB-B20: a word problem, "walk 1 3/4 + 2 1/3": the story's operation on two fractions or mixed numbers, in its unit
+    const sm = typeof s.expr === "string" && s.expr.length <= MAX_EXPR ? /^([a-z]+) (.+)$/.exec(s.expr) : null;
+    if (sm && isStoryId(sm[1])) {
+      const story = STORIES[sm[1]], node = parseExpr(sm[2]), operand = (x: Node) => x.k === "frac" || x.k === "mixed";
+      if (!node || node.k !== "op" || node.op !== story.op || !operand(node.a) || !operand(node.b)) return { ok: false, why: REJECT.story };
+      if (s.form !== undefined || s.allowNegative !== undefined || s.unit !== story.unit) return { ok: false, why: REJECT.story };
+      return { ok: true, spec: s as SchoolSpec, node, kind: { k: "compute", story: sm[1] } };
+    }
     return node ? { ok: true, spec: s as SchoolSpec, node, kind: { k: "compute" } } : { ok: false, why: REJECT.read };
   }
   // the W7 shapes take no form and no sign flag; only an amount (a fraction or a percent of it) takes a unit
@@ -646,6 +947,28 @@ function structure(spec: unknown): Structure {
     }
     return { ok: false, why: REJECT.read };
   }
+  if (shape === "probability") {
+    let m = PROB_BAG_RE.exec(s.expr);
+    if (m) {
+      const counts = m[1].split(", ").map((x): [string, bigint] => { const [c, n] = x.split(" "); return [c, BigInt(n)]; });
+      const mode = m[2] ? "colour" : m[3] ? "not" : "or", ask = m[2] ? [m[2]] : m[3] ? [m[3]] : [m[4], m[5]];
+      return { ok: true, spec: s as SchoolSpec, node: fracNode(ONE, ONE), kind: { k: "prob", mode, counts, ask } };
+    }
+    if ((m = PROB_COMP_RE.exec(s.expr))) {
+      const pct = m[2].endsWith("%"), t = pct ? m[2].slice(0, -1) : m[2].slice(2);
+      const p = pct ? mk(BigInt(t), BigInt(100))! : mk(BigInt(t), pow10(t.length))!;
+      return { ok: true, spec: s as SchoolSpec, node: fracNode(ONE, ONE), kind: { k: "prob-comp", colour: m[1], p, ptext: m[2] } };
+    }
+    // MB-B20: anything else may be a top-rung item, two events ("dice 6 and even", "draw red 3, blue 5 both red")
+    return probTopStructure(s);
+  }
+  if (shape === "pythagoras") {
+    const m = PYTH_RE.exec(s.expr);
+    // MB-B20: anything else may be a top-rung item, its answer rounded ("longest 2.5 6 dp1")
+    if (!m) return pythDpStructure(s);
+    const [x, y] = [BigInt(m[2]), BigInt(m[3])];
+    return { ok: true, spec: s as SchoolSpec, node: fracNode(x, y), kind: { k: "pyth", find: m[1] as "longest" | "shorter", x, y } };
+  }
   if (shape === "stat") {
     const m = STAT_RE.exec(s.expr);
     if (!m) return { ok: false, why: REJECT.read };
@@ -680,7 +1003,8 @@ function structure(spec: unknown): Structure {
   }
   if (shape === "percent-change") {
     const m = PCT_CHANGE_RE.exec(s.expr);
-    if (!m) return { ok: false, why: REJECT.read };
+    // MB-B20: anything else may be a top-rung item (a reverse percentage, two changes, a change over the years)
+    if (!m) return pctTopStructure(s);
     const [w, f = ""] = m[3].split("."), p = mk(BigInt(w + f), pow10(f.length))!, base = BigInt(m[2]), up = m[1] === "increase";
     const H = BigInt(100), factor = up ? add(qi(H), p) : sub(qi(H), p);
     const node: Node = { k: "op", op: "×", a: { k: "num", q: qi(base), s: m[2], whole: true }, b: { k: "num", q: div(factor, qi(H))!, s: m[3], whole: true } };
@@ -776,6 +1100,35 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
     if (eq(truth, qi(K.base)) || eq(truth, K.p)) return { ok: false, why: REJECT.prints };
     return ok(truth);
   }
+  if (K.k === "pct-top") {
+    // MB-B20: the amount before the change (after ÷ (100 ± p)/100), two changes in turn, one change `years` times over;
+    // each percent as a lone change takes it, the value to two places at most, never a number the question prints
+    const H = BigInt(100), factor = (x: { up: boolean; p: Q }) => div(x.up ? add(qi(H), x.p) : sub(qi(H), x.p), qi(H))!;
+    if (K.steps.some((x) => x.ptext.endsWith(".0"))) return { ok: false, why: REJECT.trailing };
+    if (K.steps.some((x) => x.p.n <= Z || (x.up ? x.p.n > H * x.p.d : x.p.n >= H * x.p.d))) return { ok: false, why: REJECT.changeRange };
+    let truth: Q;
+    if (K.form === "before") truth = div(qi(K.base), factor(K.steps[0]))!;
+    else if (K.form === "then") truth = mul(mul(qi(K.base), factor(K.steps[0])), factor(K.steps[1]));
+    else { truth = qi(K.base); for (let i = 0; i < K.years; i++) truth = mul(truth, factor(K.steps[0])); }
+    if (!exactAt(truth, 2)) return { ok: false, why: REJECT.twoPlaces };
+    if (truth.n > BigInt(MAX_RESULT) * truth.d) return { ok: false, why: REJECT.result };
+    if (eq(truth, qi(K.base)) || K.steps.some((x) => eq(truth, x.p)) || (K.form === "years" && eq(truth, qi(BigInt(K.years))))) return { ok: false, why: REJECT.prints };
+    return ok(truth);
+  }
+  if (K.k === "pyth-dp") {
+    // MB-B20: the side asked is √sq, never a rational (so a rounding has no tie); the truth is it rounded to `dp` places,
+    // ending in no zero and of two figures or more, so it is written to exactly the places asked and a rounding of it is right
+    const u = (st.spec as { unit?: Unit }).unit;
+    if (K.story ? u !== PYTH_STORIES[K.story].unit : u !== "mm" && u !== "cm" && u !== "m") return { ok: false, why: K.story ? REJECT.pythStory : REJECT.pythUnit };
+    const top = qi(BigInt(100));
+    if ([K.xt, K.yt].some((t) => t.endsWith(".0")) || [K.x, K.y].some((x) => x.n <= Z || x.n > top.n * x.d)) return { ok: false, why: REJECT.pythSide };
+    if (K.find === "shorter" && K.y.n * K.x.d >= K.x.n * K.y.d) return { ok: false, why: REJECT.pythTriangle };
+    if (ratSquare(K.sq)) return { ok: false, why: REJECT.pythExact };
+    const truth = rootRounded(K.sq, K.dp);
+    if (exactAt(truth, K.dp - 1) || truth.n < truth.d) return { ok: false, why: REJECT.pythRound };
+    if (eq(truth, K.x) || eq(truth, K.y)) return { ok: false, why: REJECT.prints };
+    return ok(truth);
+  }
   if (K.k === "ratio-simplify") {
     // W7 batch 3: the same ratio in lowest terms; the truth's top and bottom ARE its two parts (2/3 for 2:3)
     if (K.a > lim || K.b > lim) return { ok: false, why: REJECT.big };
@@ -808,7 +1161,7 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
   if (K.k === "rate") {
     // W7 batch 3: q2 of them at p for q1 is p × q2 / q1; a cost in € or £, a distance in km; to the penny at most
     const u = (st.spec as { unit?: Unit }).unit;
-    if (K.measure === "cost" ? u !== "€" && u !== "£" : u !== "km") return { ok: false, why: REJECT.rateUnit };
+    if (K.measure === "cost" ? !isMoney(u) : u !== "km") return { ok: false, why: REJECT.rateUnit };
     if (K.q1 < BigInt(2)) return { ok: false, why: REJECT.rateOne };
     if (K.q2 === K.q1) return { ok: false, why: REJECT.sameRate };
     if (K.q1 > lim || K.q2 > lim || K.p.n > lim * K.p.d) return { ok: false, why: REJECT.big };
@@ -831,6 +1184,59 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
     // two half sides of a triangle make eighths (2.5 × 3.5 ÷ 2 = 4.375): not a school answer
     if (!exactAt(truth, 2)) return { ok: false, why: REJECT.twoPlaces };
     return ok(truth);
+  }
+  if (K.k === "prob") {
+    // M2b: the counters asked about over all the counters, in whole counters; never nothing and never all of them
+    const names = K.counts.map(([c]) => c), total = K.counts.reduce((a, [, n]) => a + n, Z);
+    if (new Set(names).size !== names.length || K.counts.some(([, n]) => n < ONE) || total > BigInt(20)) return { ok: false, why: REJECT.probBag };
+    if (K.ask.some((c) => !names.includes(c))) return { ok: false, why: REJECT.probColour };
+    if (new Set(K.ask).size !== K.ask.length) return { ok: false, why: REJECT.probTwo };
+    const ev = K.ask.reduce((a, c) => a + K.counts.find(([x]) => x === c)![1], Z);
+    const truth = mk(K.mode === "not" ? total - ev : ev, total)!;
+    return truth.n <= Z || truth.n >= truth.d ? { ok: false, why: REJECT.probCertain } : ok(truth);
+  }
+  if (K.k === "prob-comp") {
+    // M2b: 1 less the stated probability, exactly; a decimal does not end in a zero, and the answer is not the figure given
+    if (K.ptext.endsWith("0") && !K.ptext.includes("%")) return { ok: false, why: REJECT.trailing };
+    if (K.p.n <= Z || K.p.n >= K.p.d) return { ok: false, why: REJECT.probRange };
+    const truth = sub(qi(ONE), K.p);
+    return eq(truth, K.p) ? { ok: false, why: REJECT.probSame } : ok(truth);
+  }
+  if (K.k === "prob-two") {
+    // MB-B20: independent events multiply (a coin is a half); at least one is a whole less neither; without replacement the
+    // second draw is from a counter fewer, and of the colour drawn first one fewer. Never nothing and never certain
+    const half = mk(ONE, BigInt(2))!, total = K.counts.reduce((a, [, n]) => a + n, Z), names = K.counts.map(([c]) => c);
+    if (K.counts.length) {
+      if (new Set(names).size !== names.length || K.counts.some(([, n]) => n < ONE) || total > BigInt(20)) return { ok: false, why: REJECT.probBag };
+      if (K.ask.some((c) => !names.includes(c))) return { ok: false, why: REJECT.probColour };
+      if (K.form === "draw-then" && K.ask[0] === K.ask[1]) return { ok: false, why: REJECT.probTwo };
+    }
+    const count = (c: string) => K.counts.find(([x]) => x === c)![1];
+    let truth: Q;
+    if (K.form === "dice-and") truth = mul(diceChance(K.events[0]), diceChance(K.events[1]));
+    else if (K.form === "dice-least") { const not = sub(qi(ONE), diceChance(K.events[0])); truth = sub(qi(ONE), mul(not, not)); }
+    else if (K.form === "coin-dice") truth = mul(half, diceChance(K.events[0]));
+    else if (K.form === "coin-spin") truth = mul(half, mk(count(K.ask[0]), total)!);
+    else {
+      const a = count(K.ask[0]), b = K.form === "draw-both" ? a - ONE : count(K.ask[1]);
+      truth = mk(a * b, total * (total - ONE)) ?? qi(Z);
+    }
+    return truth.n <= Z || truth.n >= truth.d ? { ok: false, why: REJECT.probCertain } : ok(truth);
+  }
+  if (K.k === "pyth") {
+    // M2b: c squared is a squared plus b squared, in whole numbers only; the root is the bigint integer square root
+    const u = (st.spec as { unit?: Unit }).unit;
+    if (u !== "mm" && u !== "cm" && u !== "m") return { ok: false, why: REJECT.pythUnit };
+    const top = BigInt(100);
+    if (K.x > top || K.y > top) return { ok: false, why: REJECT.pythBig };
+    if (K.find === "longest") {
+      const sq = K.x * K.x + K.y * K.y, c = isqrt(sq);
+      if (c * c !== sq) return { ok: false, why: REJECT.pythWhole };
+      return c > top ? { ok: false, why: REJECT.pythBig } : ok(qi(c));
+    }
+    if (K.y >= K.x) return { ok: false, why: REJECT.pythTriangle };
+    const sq = K.x * K.x - K.y * K.y, a = isqrt(sq);
+    return a * a !== sq ? { ok: false, why: REJECT.pythWhole } : ok(qi(a));
   }
   if (K.k === "stat") {
     // W7 batch 3: the total over the count, to two places at most; the largest less the smallest, above nothing
@@ -858,6 +1264,12 @@ function read(spec: unknown): Read {
       if (l.d === Z) return { ok: false, why: REJECT.divZero };
       if (l.n > lim) return { ok: false, why: REJECT.big };
       if (l.d === ONE || l.d > dlim) return { ok: false, why: REJECT.denominator };
+    } else if (l.k === "mixed") {
+      // MB-B20: a whole part 1..1000 and a proper fraction n/d, 0 < n < d, with a bottom 2..100
+      if (l.d === Z) return { ok: false, why: REJECT.divZero };
+      if (l.w > lim || l.n > lim) return { ok: false, why: REJECT.big };
+      if (l.d === ONE || l.d > dlim) return { ok: false, why: REJECT.denominator };
+      if (l.w < ONE || l.n < ONE || l.n >= l.d) return { ok: false, why: REJECT.proper };
     } else if (l.k === "num") {
       if (babs(l.q.n) > lim * l.q.d) return { ok: false, why: REJECT.big };
       if (!l.whole && l.s.split(".")[1].length > MAX_LITERAL_PLACES) return { ok: false, why: REJECT.places };
@@ -893,7 +1305,7 @@ export function wellFormed(spec: unknown): { ok: true } | { ok: false; why: stri
   try {
     const r = read(spec);
     return r.ok ? { ok: true } : { ok: false, why: r.why };
-  } catch {
+  } catch (e) { checkerFault("school.wellFormed", e);
     return { ok: false, why: REJECT.read };
   }
 }
@@ -906,6 +1318,7 @@ function plainOf(n: Node): string {
   switch (n.k) {
     case "num": return n.s;
     case "frac": return `${n.n}/${n.d}`;
+    case "mixed": return `${n.w} ${n.n}/${n.d}`;
     case "neg": return `-${plainOf(n.a)}`;
     case "par": return `(${plainOf(n.a)})`;
     case "op": return `${plainOf(n.a)} ${OP_PLAIN[n.op]} ${plainOf(n.b)}`;
@@ -915,12 +1328,13 @@ function texOf(n: Node): string {
   switch (n.k) {
     case "num": return n.s;
     case "frac": return `\\frac{${n.n}}{${n.d}}`;
+    case "mixed": return `${n.w}\\frac{${n.n}}{${n.d}}`;
     case "neg": return `-${texOf(n.a)}`;
     case "par": return `(${texOf(n.a)})`;
     case "op": return `${texOf(n.a)} ${OP_TEX[n.op]} ${texOf(n.b)}`;
   }
 }
-const UNIT_WORD: Record<Unit, string> = { cm: "cm", m: "m", km: "km", mm: "mm", cm2: "cm²", m2: "m²", kg: "kg", g: "g", l: "litres", ml: "ml", min: "minutes", h: "hours", s: "seconds", "€": "euros", $: "dollars", "£": "pounds" };
+const UNIT_WORD: Record<Unit, string> = { cm: "cm", m: "m", km: "km", mm: "mm", cm2: "cm²", m2: "m²", kg: "kg", g: "g", l: "litres", ml: "ml", min: "minutes", h: "hours", s: "seconds", "€": "euros", $: "dollars", "£": "pounds", "Kč": "Kč" };
 /**
  * An amount's unit as a fraction-of question prints it after the number: a one-letter unit as its word, because the
  * typesetter sets a lone letter as a variable (40 m would read as 40 times m). € and £ are printed as a sign before
@@ -928,14 +1342,38 @@ const UNIT_WORD: Record<Unit, string> = { cm: "cm", m: "m", km: "km", mm: "mm", 
  */
 const AMOUNT_WORD: Record<Unit, string> = { ...UNIT_WORD, m: "metres", g: "grams", l: "litres", h: "hours", s: "seconds" };
 
+/** The money units a question prints as a sign (MB-B4: the Czech crown with € and £). */
+const isMoney = (u: unknown): u is "€" | "£" | "Kč" => u === "€" || u === "£" || u === "Kč";
+/** The no-break space: a number and its unit never part at a line end (Czech typography, CS-NBSP). */
+const NBSP = "\u00a0";
+/** Does the money sign go after the amount? Kč always; € and £ in a comma system too (12,50 Kč, 12,50 €); never in us or uk (£12.50). */
+const signAfter = (u: Unit, system?: SchoolSystem) => u === "Kč" || commaSystem(system);
+/** One money amount: '£60', or after it with a no-break space, '60 Kč' (TeX: '60~\text{Kč}', ~ the no-break space). */
+function moneyText(N: string, u: "€" | "£" | "Kč", system?: SchoolSystem): { plain: string; tex: string } {
+  return signAfter(u, system) ? { plain: `${N}${NBSP}${u}`, tex: `${N}~\\text{${u}}` } : { plain: `${u}${N}`, tex: `${u}${N}` };
+}
+
 /**
- * An amount as a question prints it: € and £ as a sign before the number (€60); any other unit as its word after it (60
- * kg, 60 metres), a dollar as "60 dollars" since the typesetter reads a plain '$' as TeX's math delimiter and drops it.
+ * An amount as a question prints it: € and £ as a sign before the number (€60), after it in a comma system and always
+ * for Kč (60 Kč, MB-B4); any other unit as its word after it (60 kg, 60 metres), a dollar as "60 dollars" since the
+ * typesetter reads a plain '$' as TeX's math delimiter and drops it.
  */
-function amountText(N: string, u: Unit | undefined): { plain: string; tex: string } {
+function amountText(N: string, u: Unit | undefined, system?: SchoolSystem): { plain: string; tex: string } {
   if (!u) return { plain: N, tex: N };
-  if (u === "€" || u === "£") return { plain: `${u}${N}`, tex: `${u}${N}` };
+  if (isMoney(u)) return moneyText(N, u, system);
   return { plain: `${N} ${AMOUNT_WORD[u]}`, tex: `${N} \\text{ ${AMOUNT_WORD[u]}}` };
+}
+
+/**
+ * A template with {X} placeholders filled (MB-B20 word problems): the plain text, and the TeX with each run of words in
+ * \text{} and each value as its own TeX, in order.
+ */
+function fillText(text: string, vals: Record<string, { plain: string; tex: string }>): { plain: string; tex: string } {
+  const parts = text.split(/(\{[A-Z]\})/), has = (x: string) => Object.prototype.hasOwnProperty.call(vals, x);
+  return {
+    plain: parts.map((x) => (has(x) ? vals[x].plain : x)).join(""),
+    tex: parts.filter((x) => x !== "").map((x) => (has(x) ? vals[x].tex : `\\text{${x}}`)).join(" "),
+  };
 }
 
 /**
@@ -963,36 +1401,56 @@ const workingPlaces = (d: DecOp) => (d.op === "×" ? d.pa + d.pb : Math.max(d.pa
  * ("€4.35 + €2.80"), and before the amount only of an amount times a whole count ("£3.45 × 4"); null otherwise (another
  * unit, a fraction, a count that is not whole), and the question then names the unit after it as before.
  */
-function moneyLine(n: Node, unit: Unit): { plain: string; tex: string } | null {
-  if ((unit !== "€" && unit !== "£") || n.k !== "op" || n.a.k !== "num" || n.b.k !== "num") return null;
-  if (n.op === "+" || n.op === "-") return { plain: `${unit}${n.a.s} ${n.op} ${unit}${n.b.s}`, tex: `${unit}${n.a.s} ${n.op} ${unit}${n.b.s}` };
-  if (n.op === "×" && n.b.whole) return { plain: `${unit}${n.a.s} × ${n.b.s}`, tex: `${unit}${n.a.s} \\times ${n.b.s}` };
+function moneyLine(n: Node, unit: Unit, system?: SchoolSystem): { plain: string; tex: string } | null {
+  if (!isMoney(unit) || n.k !== "op" || n.a.k !== "num" || n.b.k !== "num") return null;
+  const A = moneyText(n.a.s, unit, system), B = moneyText(n.b.s, unit, system);
+  if (n.op === "+" || n.op === "-") return { plain: `${A.plain} ${n.op} ${B.plain}`, tex: `${A.tex} ${n.op} ${B.tex}` };
+  if (n.op === "×" && n.b.whole) return { plain: `${A.plain} × ${n.b.s}`, tex: `${A.tex} \\times ${n.b.s}` };
   return null;
+}
+
+/**
+ * A question in the learner's own number writing (MB-B4): in a comma system (cz, de) every point between two digits is
+ * the decimal comma (38,2; '{,}' in TeX, so the typesetter adds no space after it) and a percent sign stands after a
+ * no-break space (34 %), as Czech and German typesetting write them. us and uk are returned exactly as printed.
+ */
+function inSystem(q: { plain: string; tex: string }, system?: SchoolSystem): { plain: string; tex: string } {
+  if (!commaSystem(system)) return q;
+  return {
+    plain: q.plain.replace(/(\d)\.(?=\d)/g, "$1,").replace(/(\d)%/g, `$1${NBSP}%`),
+    tex: q.tex.replace(/(\d)\.(?=\d)/g, "$1{,}").replace(/(\d)\\%/g, "$1~\\%"),
+  };
 }
 
 /**
  * The question, printed by code from the spec, as plain text and the TeX the typesetter reads: 'Work out 3/4 + 1/6.'
  * and '\text{Work out } \frac{3}{4} + \frac{1}{6}.', with 'Give your answer in its simplest form.' (or 'as a
  * decimal.', or 'in cm.') after it when the spec asks. Null when the spec is malformed; never a throw, never the
- * answer (the spec has none, and only its own numbers are printed).
+ * answer (the spec has none, and only its own numbers are printed). `system` (MB-B4): the learner's school system; in cz
+ * and de the question is written as they write numbers (inSystem: 38,2; 34 %; money signs after the amount); no system,
+ * us and uk print it as it always was. specFromQuestion(text, system) reads every printed question back to its spec.
  */
-export function question(spec: unknown): { plain: string; tex: string } | null {
+export function question(spec: unknown, system?: SchoolSystem): { plain: string; tex: string } | null {
+  const sys = isSystem(system) ? system : undefined, q = printQuestion(spec, sys);
+  return q && inSystem(q, sys);
+}
+function printQuestion(spec: unknown, system?: SchoolSystem): { plain: string; tex: string } | null {
   try {
     const st = structure(spec);
     if (!st.ok) return null;
     const K = st.kind;
     if (K.k === "of") {
-      const am = amountText(String(K.N), specUnit(st.spec));
+      const am = amountText(String(K.N), specUnit(st.spec), system);
       return { plain: `Find ${K.a}/${K.b} of ${am.plain}.`, tex: `\\text{Find } \\frac{${K.a}}{${K.b}} \\text{ of } ${am.tex}.` };
     }
     if (K.k === "pct-of") {
       // W7 batch 2: "Find 35% of 80.", "Find 15% of €60.", "Find 12% of 250 kg."
-      const am = amountText(String(K.N), specUnit(st.spec));
+      const am = amountText(String(K.N), specUnit(st.spec), system);
       return { plain: `Find ${K.ptext}% of ${am.plain}.`, tex: `\\text{Find } ${K.ptext}\\% \\text{ of } ${am.tex}.` };
     }
     if (K.k === "pct-change") {
       // W7 batch 2: "Increase 60 by 15%.", "Decrease €80 by 25%.", "Decrease 250 kg by 12%."
-      const am = amountText(String(K.base), specUnit(st.spec)), verb = K.up ? "Increase" : "Decrease";
+      const am = amountText(String(K.base), specUnit(st.spec), system), verb = K.up ? "Increase" : "Decrease";
       return { plain: `${verb} ${am.plain} by ${K.ptext}%.`, tex: `\\text{${verb} } ${am.tex} \\text{ by } ${K.ptext}\\%.` };
     }
     if (K.k === "missing") {
@@ -1003,7 +1461,7 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
     // W7 batch 3: "Write 12:18 in its simplest form.", "Share €60 in the ratio 2:3.", "Fill in the missing number: 2:3 = ?:15."
     if (K.k === "ratio-simplify") return { plain: `Write ${K.a}:${K.b} in its simplest form.`, tex: `\\text{Write } ${K.a}:${K.b} \\text{ in its simplest form.}` };
     if (K.k === "ratio-share") {
-      const am = amountText(String(K.T), specUnit(st.spec));
+      const am = amountText(String(K.T), specUnit(st.spec), system);
       return { plain: `Share ${am.plain} in the ratio ${K.a}:${K.b}.`, tex: `\\text{Share } ${am.tex} \\text{ in the ratio } ${K.a}:${K.b}.` };
     }
     if (K.k === "stat") {
@@ -1026,13 +1484,80 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
         tex: `\\text{Find the total area of rectangles } ${A.tex} \\text{ by } ${B.tex} \\text{ and } ${C.tex} \\text{ by } ${D.tex}.`,
       };
     }
+    if (K.k === "prob-two") {
+      // MB-B20: "A fair coin is flipped and a fair dice is rolled. Find the probability of heads and a 6.", "A bag has 3 red and
+      // 5 blue counters. A counter is taken at random without replacement, then another is taken. Find the probability that
+      // both are red.", or a word problem - the counts and a dice's number outside the TeX text
+      const word = (x: string) => ({ plain: x, tex: `\\text{${x}}` });
+      const ev = (e: DiceEvent) => (e.kind === "n" ? { plain: `a ${e.k}`, tex: `\\text{a } ${e.k}` } : e.kind === "over" ? { plain: `a number more than ${e.k}`, tex: `\\text{a number more than } ${e.k}` } : word(`an ${e.kind} number`));
+      const list = {
+        plain: K.counts.map(([c, n], i) => `${n} ${c}${i < K.counts.length - 2 ? ", " : i === K.counts.length - 2 ? " and " : ""}`).join(""),
+        tex: K.counts.map(([c, n], i) => `${n} \\text{ ${c}${i < K.counts.length - 2 ? ", " : i === K.counts.length - 2 ? " and " : ""}}`).join(" "),
+      };
+      const vals: Record<string, { plain: string; tex: string }> = { "{L}": list };
+      if (K.events[0]) vals["{E}"] = ev(K.events[0]);
+      if (K.events[1]) vals["{F}"] = ev(K.events[1]);
+      if (K.side) vals["{S}"] = word(K.side);
+      if (K.ask[0]) vals["{C}"] = word(K.ask[0]);
+      if (K.ask[1]) vals["{D}"] = word(K.ask[1]);
+      if (K.counts.length === 2) { vals["{A}"] = { plain: String(K.counts[0][1]), tex: String(K.counts[0][1]) }; vals["{B}"] = { plain: String(K.counts[1][1]), tex: String(K.counts[1][1]) }; }
+      return fillText(K.story ? PROB_STORIES[K.story].text : PROB_BARE[K.form], vals);
+    }
+    if (K.k === "prob" || K.k === "prob-comp") {
+      // M2b: "A bag has 3 red, 5 blue and 2 green counters. Find the probability that one taken at random is red." (also "is not
+      // red", "is red or blue"); "The probability that a spinner lands on red is 0.35. What is the probability it does not land
+      // on red?" - words and numbers in turn, the numbers outside the TeX text
+      const bits: (string | { n: string; tex?: string })[] = [];
+      if (K.k === "prob-comp") {
+        bits.push(`The probability that a spinner lands on ${K.colour} is `, { n: K.ptext, tex: K.ptext.replace("%", "\\%") }, `. What is the probability it does not land on ${K.colour}?`);
+      } else {
+        bits.push("A bag has ");
+        K.counts.forEach(([c, n], i) => bits.push({ n: String(n) }, ` ${c}${i < K.counts.length - 2 ? ", " : i === K.counts.length - 2 ? " and " : ""}`));
+        const [a, b] = K.ask;
+        bits.push(` counters. Find the probability that one taken at random is ${K.mode === "not" ? `not ${a}` : K.mode === "or" ? `${a} or ${b}` : a}.`);
+      }
+      return {
+        plain: bits.map((x) => (typeof x === "string" ? x : x.n)).join(""),
+        tex: bits.map((x) => (typeof x === "string" ? `\\text{${x}}` : x.tex ?? x.n)).join(" "),
+      };
+    }
+    if (K.k === "pct-top") {
+      // MB-B20: "After a 20% rise, a train ticket costs €540. What did it cost before the rise?", "Increase 200 by 10%, then
+      // decrease the result by 20%.", "A savings account holds €800 and earns 5% interest each year. How much is in it after 3 years?"
+      const [P, Q2] = K.steps, word = (x: string) => ({ plain: x, tex: /^\d+$/.test(x) ? x : `\\text{${x}}` });
+      const pct = (x: { ptext: string }) => ({ plain: `${x.ptext}%`, tex: `${x.ptext}\\%` });
+      const verb = (x: { up: boolean }) => (x.up ? "increase" : "decrease"), cap = (x: string) => x[0].toUpperCase() + x.slice(1);
+      const vals: Record<string, { plain: string; tex: string }> = { "{A}": amountText(String(K.base), specUnit(st.spec), system), "{P}": pct(P), "{N}": word(String(K.years)), "{U}": word(cap(verb(P))) };
+      if (Q2) Object.assign(vals, { "{Q}": pct(Q2), "{V}": word(verb(Q2)), "{D}": word(P.up ? "up" : "down"), "{E}": word(Q2.up ? "up" : "down") });
+      const text = K.story ? PCT_STORIES[K.story].text : PCT_BARE.find((b) => b.form === K.form && (b.up === undefined || b.up === P.up))!.text;
+      return fillText(text, vals);
+    }
+    if (K.k === "pyth-dp") {
+      // MB-B20: the tier-1/2 sentence or a word problem, the sides as written ("2.5 cm", "6 metres"), then the places asked
+      const u = specUnit(st.spec);
+      if (u !== "mm" && u !== "cm" && u !== "m") return null;
+      const metres = (x: string) => (x === "1" ? "metre" : "metres");
+      const side = (x: string) => (u === "m" ? { plain: `${x} ${metres(x)}`, tex: `${x} \\text{ ${metres(x)}}` } : { plain: `${x} ${u}`, tex: `${x} \\text{ ${u}}` });
+      const body = fillText(K.story ? PYTH_STORIES[K.story].text : PYTH_BARE[K.find], { "{X}": side(K.xt), "{Y}": side(K.yt) }), tail = placesLine(K.dp);
+      return { plain: `${body.plain} ${tail}`, tex: `${body.tex} \\text{ ${tail}}` };
+    }
+    if (K.k === "pyth") {
+      // M2b: "A right-angled triangle has shorter sides 6 cm and 8 cm. Find the longest side." - one plain sentence, no diagram;
+      // a side in metres is printed as the word (the typesetter sets a lone m as a letter)
+      const u = specUnit(st.spec);
+      if (u !== "mm" && u !== "cm" && u !== "m") return null;
+      const side = (x: bigint) => (u === "m" ? { plain: `${x} metres`, tex: `${x} \\text{ metres}` } : { plain: `${x} ${u}`, tex: `${x} \\text{ ${u}}` });
+      const [X, Y] = [side(K.x), side(K.y)];
+      if (K.find === "longest") return { plain: `A right-angled triangle has shorter sides ${X.plain} and ${Y.plain}. Find the longest side.`, tex: `\\text{A right-angled triangle has shorter sides } ${X.tex} \\text{ and } ${Y.tex}. \\text{ Find the longest side.}` };
+      return { plain: `A right-angled triangle has longest side ${X.plain} and a shorter side ${Y.plain}. Find the other shorter side.`, tex: `\\text{A right-angled triangle has longest side } ${X.tex} \\text{ and a shorter side } ${Y.tex}. \\text{ Find the other shorter side.}` };
+    }
     if (K.k === "rate") {
       // W7 batch 3: "5 pens cost €3.50. What do 8 pens cost?", "12 kg cost €30. What does 1 kg cost?", "240 km in 3 hours. How far in 5 hours?"
       if (K.measure === "distance") {
         const hrs = (n: bigint) => (n === ONE ? "hour" : "hours");
         return { plain: `${K.ptext} km in ${K.q1} hours. How far in ${K.q2} ${hrs(K.q2)}?`, tex: `${K.ptext} \\text{ km in } ${K.q1} \\text{ hours. How far in } ${K.q2} \\text{ ${hrs(K.q2)}?}` };
       }
-      const am = amountText(K.ptext, specUnit(st.spec)), one = K.q2 === ONE, item = one ? RATE_NOUNS[K.noun] : K.noun;
+      const am = amountText(K.ptext, specUnit(st.spec), system), one = K.q2 === ONE, item = one ? RATE_NOUNS[K.noun] : K.noun;
       return {
         plain: `${K.q1} ${K.noun} cost ${am.plain}. What ${one ? "does" : "do"} ${K.q2} ${item} cost?`,
         tex: `${K.q1} \\text{ ${K.noun} cost } ${am.tex}. \\text{ What ${one ? "does" : "do"} } ${K.q2} \\text{ ${item} cost?}`,
@@ -1049,15 +1574,23 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
       return { plain: `Write ${K.text} ${asked}.`, tex: `\\text{Write } ${tex} \\text{ ${asked}.}` };
     }
     const { node } = st, s = st.spec as ComputeSpec;
+    // MB-B20: a word problem, its words around the two operands: "A walk is 1 3/4 km to the lake and 2 1/3 km back. ..."
+    if (K.k === "compute" && K.story && node.k === "op") {
+      const parts = STORIES[K.story].text.split(/(\{A\}|\{B\})/), at = (x: string) => (x === "{A}" ? node.a : node.b);
+      return {
+        plain: parts.map((x) => (x === "{A}" || x === "{B}" ? plainOf(at(x)) : x)).join(""),
+        tex: parts.filter((x) => x !== "").map((x) => (x === "{A}" || x === "{B}" ? texOf(at(x)) : `\\text{${x}}`)).join(" "),
+      };
+    }
     // money (W7 batch 2): "Work out €4.35 + €2.80.", "Work out £3.45 × 4." - the sign on each amount, never on a count
-    const money = s.unit ? moneyLine(node, s.unit) : null;
+    const money = s.unit ? moneyLine(node, s.unit, system) : null;
     if (money && !s.form) return { plain: `Work out ${money.plain}.`, tex: `\\text{Work out } ${money.tex}.` };
     const tail = s.form === "simplest" ? "Give your answer in its simplest form." : s.form === "decimal" ? "Give your answer as a decimal." : s.unit ? `Give your answer in ${UNIT_WORD[s.unit]}.` : "";
     return {
       plain: `Work out ${plainOf(node)}.${tail ? ` ${tail}` : ""}`,
       tex: `\\text{Work out } ${texOf(node)}.${tail ? ` \\text{ ${tail}}` : ""}`,
     };
-  } catch {
+  } catch (e) { checkerFault("school.question", e);
     return null;
   }
 }
@@ -1065,66 +1598,88 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
 // ------------------------------------------------------------------ the slips a closed form can detect
 
 /** `name` is the slip's title, `says` the desk's line, `points` where to look: none carries a value. */
-export interface SchoolSlip { id: string; name: string; says: string; points: string }
+/**
+ * `short`: the slip's label under the TV recap's ring (tv/recapRows `slippedOf`) - lowercase, at most four words, no value,
+ * a faithful compression of `name`; every slip carries one (cycle 21; the linear and Calculus tables too), and no two slips a
+ * unit can name (SCHOOL_UNIT_SLIPS with its SCHOOL_TOP_SLIPS) share one. English only, like the titles.
+ */
+export interface SchoolSlip { id: string; name: string; short: string; says: string; points: string }
+/** The longest a slip's `short` may be, in words and in characters: it must fit under a ring on the recap's sheet without a cut. */
+export const SHORT_WORDS = 4, SHORT_CHARS = 24;
 
 export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
-  { id: "tops-and-bottoms", name: "Added the tops and the bottoms", says: "The tops were combined and so were the bottoms. Fractions need the same bottom first; then only the tops change.", points: "the line where the fractions were combined" },
-  { id: "top-not-scaled", name: "The top not scaled with the bottom", says: "A bottom was changed to the common one but its top was not multiplied by the same number.", points: "the line where the bottoms were made the same" },
-  { id: "tops-one-bottom", name: "Added the tops, kept one bottom", says: "The tops were combined over one of the two bottoms. Make the bottoms the same before combining the tops.", points: "the line where the tops were combined" },
-  { id: "wrong-direction", name: "Subtracted the wrong way round", says: "The subtraction was done the other way round. It is the first number take away the second.", points: "the subtraction" },
+  { id: "tops-and-bottoms", name: "Added the tops and the bottoms", short: "added tops and bottoms", says: "The tops were combined and so were the bottoms. Fractions need the same bottom first; then only the tops change.", points: "the line where the fractions were combined" },
+  { id: "top-not-scaled", name: "The top not scaled with the bottom", short: "top not scaled", says: "A bottom was changed to the common one but its top was not multiplied by the same number.", points: "the line where the bottoms were made the same" },
+  { id: "tops-one-bottom", name: "Added the tops, kept one bottom", short: "kept one bottom", says: "The tops were combined over one of the two bottoms. Make the bottoms the same before combining the tops.", points: "the line where the tops were combined" },
+  { id: "wrong-direction", name: "Subtracted the wrong way round", short: "subtracted the wrong way", says: "The subtraction was done the other way round. It is the first number take away the second.", points: "the subtraction" },
   // equivalent fractions (Family W7)
-  { id: "added-same", name: "Added the same number to top and bottom", says: "The same number was added to the top and the bottom. Equal fractions come from multiplying or dividing the top and the bottom by the same number.", points: "the line where the fraction changed" },
-  { id: "one-part-only", name: "Only one part changed", says: "One part of the fraction was changed and the other was left as it was. Whatever the bottom is multiplied or divided by, the top is too.", points: "the part that was left as it was" },
-  { id: "wrong-factor", name: "Scaled by the wrong number", says: "The top and the bottom were not scaled by the same number. Find what the bottom was multiplied or divided by, and do exactly that to the top.", points: "the number you multiplied or divided by" },
+  { id: "added-same", name: "Added the same number to top and bottom", short: "added to both parts", says: "The same number was added to the top and the bottom. Equal fractions come from multiplying or dividing both by the same number.", points: "the line where the fraction changed" },
+  { id: "one-part-only", name: "Only one part changed", short: "only one part changed", says: "Only one part of the fraction was changed. Whatever the bottom is multiplied or divided by, the top is too.", points: "the part that was left as it was" },
+  { id: "wrong-factor", name: "Scaled by the wrong number", short: "scaled by wrong number", says: "The top and bottom were scaled by different numbers. Find what the bottom was multiplied or divided by; do the same to the top.", points: "the number you multiplied or divided by" },
   // a fraction of an amount (Family W7)
-  { id: "of-upside-down", name: "Divided by the top, multiplied by the bottom", says: "The amount was divided by the top and multiplied by the bottom. Divide by the bottom to find a single part, then multiply by the top.", points: "the division" },
-  { id: "of-one-part", name: "Stopped at a single part", says: "The amount was divided by the bottom, which gives a single part. The top says how many of those parts to take.", points: "the last line" },
-  { id: "of-not-divided", name: "Multiplied without dividing", says: "The amount was multiplied by the top but never divided by the bottom. A fraction of an amount is smaller than the amount.", points: "the multiplication" },
-  { id: "of-rest", name: "Found the part that is left", says: "This is the part left over, not the part asked for. The top says how many parts to take.", points: "the last line" },
+  { id: "of-upside-down", name: "Divided by the top, multiplied by the bottom", short: "top and bottom swapped", says: "The amount was divided by the top and multiplied by the bottom. Divide by the bottom for one part, then multiply by the top.", points: "the division" },
+  { id: "of-one-part", name: "Stopped at a single part", short: "stopped at one part", says: "The amount was divided by the bottom, which gives a single part. The top says how many of those parts to take.", points: "the last line" },
+  { id: "of-not-divided", name: "Multiplied without dividing", short: "never divided", says: "The amount was multiplied by the top but never divided by the bottom. A fraction of an amount is smaller than the amount.", points: "the multiplication" },
+  { id: "of-rest", name: "Found the part that is left", short: "the part left over", says: "This is the part left over, not the part asked for. The top says how many parts to take.", points: "the last line" },
   // multiply and divide fractions (Family W7)
-  { id: "added-not-multiplied", name: "Added instead of multiplied", says: "The fractions were added. Multiplying fractions means multiplying the tops together and the bottoms together.", points: "the line where the fractions were combined" },
-  { id: "kept-second", name: "The fraction you divide by not flipped", says: "Dividing by a fraction is multiplying by it turned upside down. The fraction you divide by was not turned over before multiplying.", points: "the line where the division became a multiplication" },
-  { id: "flipped-first", name: "The wrong fraction flipped", says: "The first fraction was turned upside down. Only the fraction you divide by is turned over.", points: "the fraction that was turned over" },
-  { id: "bottoms-added", name: "Multiplied the tops, added the bottoms", says: "The tops were multiplied but the bottoms were added. The tops and the bottoms are both multiplied.", points: "the bottom of the answer" },
+  { id: "added-not-multiplied", name: "Added instead of multiplied", short: "added not multiplied", says: "The fractions were added. Multiplying fractions means multiplying the tops together and the bottoms together.", points: "the line where the fractions were combined" },
+  { id: "kept-second", name: "The fraction you divide by not flipped", short: "second one not flipped", says: "Dividing by a fraction is multiplying by it turned upside down. The fraction you divide by was not turned over before multiplying.", points: "the line where the division became a multiplication" },
+  { id: "flipped-first", name: "The wrong fraction flipped", short: "wrong fraction flipped", says: "The first fraction was turned upside down. Only the fraction you divide by is turned over.", points: "the fraction that was turned over" },
+  { id: "bottoms-added", name: "Multiplied the tops, added the bottoms", short: "added the bottoms", says: "The tops were multiplied but the bottoms were added. The tops and the bottoms are both multiplied.", points: "the bottom of the answer" },
   // add, subtract and multiply decimals (Family W7 batch 2)
-  { id: "dec-lined-up", name: "Lined up the last digits, not the points", says: "The numbers were lined up by their last digits instead of by their decimal points. Write them with the points one under the other, then add or take away.", points: "the line where the numbers were written one under the other" },
-  { id: "dec-point-product", name: "The point put back in the wrong place", says: "The digits of the product are right but the point is in the wrong place. Count the digits after the points in the question: the answer has that many after its point.", points: "the decimal point in the answer" },
-  { id: "dec-point-dropped", name: "The point left out", says: "The digits are right but the decimal point was never put back, so the answer is far too big. Put the point back where the places say.", points: "the answer" },
+  { id: "dec-lined-up", name: "Lined up the last digits, not the points", short: "points not lined up", says: "The numbers were lined up by their last digits, not their points. Put the points one under the other, then add or take away.", points: "the line where the numbers were written one under the other" },
+  { id: "dec-point-product", name: "The point put back in the wrong place", short: "point in wrong place", says: "The digits are right but the point is misplaced. Count the digits after the points in the question: the answer has that many.", points: "the decimal point in the answer" },
+  { id: "dec-point-dropped", name: "The point left out", short: "point left out", says: "The digits are right but the point was never put back, so the answer is far too big. Put the point back.", points: "the answer" },
   // fractions, decimals and percent (Family W7 batch 2)
-  { id: "conv-flipped", name: "The fraction turned upside down", says: "The bottom was divided by the top. A fraction is its top divided by its bottom, never the other way round.", points: "the division" },
-  { id: "conv-not-scaled", name: "The percent sign moved without scaling", says: "The percent sign was put on or taken off and the number left as it was. A percent counts hundredths, so the number has to be multiplied or divided by a hundred as well.", points: "the answer" },
-  { id: "conv-wrong-way", name: "The point moved the wrong way", says: "The point moved two places, but the wrong way. A decimal written as a percent gets bigger; a percent written as a decimal gets smaller.", points: "the decimal point" },
-  { id: "conv-ten-times", name: "Ten times too big or too small", says: "The answer is ten times too big or too small: the point moved one place too few or too many, or the bottom has one zero too many or too few. Count the places again.", points: "the decimal point or the bottom" },
-  { id: "conv-top-dot-bottom", name: "The top and bottom written as a decimal", says: "The top and the bottom were written either side of a point. A fraction is the top divided by the bottom: that division gives the decimal.", points: "the answer" },
+  { id: "conv-flipped", name: "The fraction turned upside down", short: "fraction upside down", says: "The bottom was divided by the top. A fraction is its top divided by its bottom, never the other way round.", points: "the division" },
+  { id: "conv-not-scaled", name: "The percent sign moved without scaling", short: "percent sign not scaled", says: "The percent sign was put on or taken off and the number left alone. A percent counts hundredths: multiply or divide by a hundred.", points: "the answer" },
+  { id: "conv-wrong-way", name: "The point moved the wrong way", short: "point moved wrong way", says: "The point moved two places, but the wrong way. A decimal written as a percent gets bigger; a percent written as a decimal gets smaller.", points: "the decimal point" },
+  { id: "conv-ten-times", name: "Ten times too big or too small", short: "a place missed", says: "The answer is ten times too big or too small, so a place was missed. Count the places again.", points: "the decimal point or the bottom" },
+  { id: "conv-top-dot-bottom", name: "The top and bottom written as a decimal", short: "top and bottom joined", says: "The top and the bottom were written either side of a point. A fraction is the top divided by the bottom; divide for the decimal.", points: "the answer" },
   // a percent of an amount (Family W7 batch 2)
-  { id: "pct-divided", name: "Divided by the percent", says: "The amount was divided by the percentage. A percentage of an amount is that many hundredths of it: find one hundredth of the amount, then take that many.", points: "the division" },
-  { id: "pct-times-whole", name: "The percent used as a whole number", says: "The amount was multiplied by the percentage as if it were a whole number, so the answer is far bigger than the amount. A percentage is a number of hundredths, so divide by a hundred as well.", points: "the multiplication" },
-  { id: "pct-ten-stopped", name: "Found ten percent and stopped", says: "This is ten percent of the amount, the first step. Build the percentage asked for from it.", points: "the last line" },
-  { id: "pct-rest", name: "Found the part that is left", says: "This is the part of the amount that is left over, not the percentage asked for. Take the percentage itself of the amount.", points: "the last line" },
+  { id: "pct-divided", name: "Divided by the percent", short: "divided by the percent", says: "The amount was divided by the percentage. Find one hundredth of the amount, then take that many.", points: "the division" },
+  { id: "pct-times-whole", name: "The percent used as a whole number", short: "percent as whole number", says: "The amount was multiplied by the percentage as a whole number, so the answer is far too big. Divide by a hundred as well.", points: "the multiplication" },
+  { id: "pct-ten-stopped", name: "Found ten percent and stopped", short: "stopped a step early", says: "This is ten percent of the amount, the first step. Build the percentage asked for from it.", points: "the last line" },
+  { id: "pct-rest", name: "Found the part that is left", short: "the part left over", says: "This is the part of the amount that is left over, not the percentage asked for. Take the percentage itself of the amount.", points: "the last line" },
   // percent increase and decrease (Family W7 batch 2)
-  { id: "change-only", name: "Found the change and stopped", says: "This is the change itself, the percentage of the amount. The question asks for the new amount: add the change on, or take it off.", points: "the last line" },
-  { id: "change-wrong-way", name: "Went the wrong way", says: "The change was added where the amount goes down, or taken off where it goes up. Read the question again: an increase adds, a decrease takes away.", points: "the line where the change was added or taken off" },
-  { id: "change-as-number", name: "The percent added as a plain number", says: "The percentage was added or taken off as a plain number, as if the amount were a hundred. Find that percentage of the amount itself first.", points: "the line where the percentage was added or taken off" },
+  { id: "change-only", name: "Found the change and stopped", short: "stopped at the change", says: "This is the change itself, the percentage of the amount. The question asks for the new amount: add the change on, or take it off.", points: "the last line" },
+  { id: "change-wrong-way", name: "Went the wrong way", short: "went the wrong way", says: "The change went the wrong way. Read the question again: an increase adds, a decrease takes away.", points: "the line where the change was added or taken off" },
+  { id: "change-as-number", name: "The percent added as a plain number", short: "percent as plain number", says: "The percentage was added or taken off as a plain number. Find that percentage of the amount first.", points: "the line where the percentage was added or taken off" },
+  // the top rung of percent increase and decrease (MB-B20): named on a top-rung item only (SCHOOL_TOP_SLIPS)
+  { id: "pct-of-new", name: "Took the percent of the new amount", short: "percent of the new", says: "The percentage was taken of the amount after the change, but it is a percentage of the amount before. Divide back to the original.", points: "the line where the percentage was taken" },
+  { id: "pct-added", name: "Added the percentages together", short: "added the percentages", says: "The percentages were added into one change. Each change is a percentage of the amount there is by then, so apply them one after another.", points: "the line where the percentages were combined" },
   // ratio and sharing (Family W7 batch 3)
-  { id: "ratio-split-each", name: "Divided by each number of the ratio", says: "The amount was divided by each number of the ratio in turn. Add the ratio's numbers first to find how many equal parts there are, then find the size of a single part.", points: "the division" },
-  { id: "ratio-as-amounts", name: "The ratio's numbers given as the amounts", says: "The numbers of the ratio were given as the answer. They say how many parts each side gets: find the size of a single part and multiply by them.", points: "the answer" },
-  { id: "ratio-swapped", name: "The ratio the wrong way round", says: "The ratio's two numbers were used the wrong way round. The first number of the ratio goes with the first amount, and the second with the second.", points: "the order in the answer" },
-  { id: "ratio-by-difference", name: "Divided by the difference", says: "The amount was divided by the difference between the ratio's numbers. The whole amount is all the parts together, so divide by their sum.", points: "the division" },
-  { id: "ratio-added-same", name: "Added instead of multiplied", says: "The same number was added to both sides of the ratio. Equal ratios come from multiplying or dividing both numbers by the same number.", points: "the line where the ratio changed" },
+  { id: "ratio-split-each", name: "Divided by each number of the ratio", short: "divided by each number", says: "The amount was divided by each number of the ratio in turn. Add the ratio's numbers first to find the equal parts, then one part.", points: "the division" },
+  { id: "ratio-as-amounts", name: "The ratio's numbers given as the amounts", short: "ratio given as amounts", says: "The ratio's numbers were given as the answer. They say how many parts each side gets: find one part and multiply by them.", points: "the answer" },
+  { id: "ratio-swapped", name: "The ratio the wrong way round", short: "ratio the wrong way", says: "The ratio's numbers were used the wrong way round. The first number goes with the first amount, the second with the second.", points: "the order in the answer" },
+  { id: "ratio-by-difference", name: "Divided by the difference", short: "divided by difference", says: "The amount was divided by the difference between the ratio's numbers. The whole amount is all the parts together, so divide by their sum.", points: "the division" },
+  { id: "ratio-added-same", name: "Added instead of multiplied", short: "added not multiplied", says: "The same number was added to both sides of the ratio. Equal ratios come from multiplying or dividing both numbers by the same number.", points: "the line where the ratio changed" },
   // unit rates and direct proportion (Family W7 batch 3)
-  { id: "rate-wrong-way", name: "Divided the wrong way round", says: "The division was done the wrong way round: it gives how many for each unit of money or distance, not the value of a single one. Divide the cost or the distance by how many there are.", points: "the division" },
-  { id: "rate-multiplied", name: "Multiplied instead of divided", says: "The two numbers in the first sentence were multiplied. The value of a single one comes from dividing by how many there are.", points: "the first line of working" },
-  { id: "rate-other-quantity", name: "Divided by the wrong number", says: "The cost or distance was divided by the number asked about instead of the number given. Divide by the number in the first sentence to find a single one, then multiply.", points: "the division" },
+  { id: "rate-wrong-way", name: "Divided the wrong way round", short: "divided the wrong way", says: "The division was done the wrong way round. Divide the cost or the distance by how many there are to find a single one.", points: "the division" },
+  { id: "rate-multiplied", name: "Multiplied instead of divided", short: "multiplied not divided", says: "The two numbers in the first sentence were multiplied. The value of a single one comes from dividing by how many there are.", points: "the first line of working" },
+  { id: "rate-other-quantity", name: "Divided by the wrong number", short: "divided by wrong number", says: "The cost or distance was divided by the number asked about. Divide by the number in the first sentence to find one, then multiply.", points: "the division" },
   // area of rectangles, triangles and composite shapes (Family W7 batch 3)
-  { id: "area-added-sides", name: "Added the lengths", says: "The lengths were added, which measures a distance round the shape, not the space inside it. An area comes from multiplying.", points: "the line where the lengths were combined" },
-  { id: "area-no-half", name: "The half left out", says: "The base and the height were multiplied but the result was not halved. A triangle takes up half of the rectangle drawn around it.", points: "the last line" },
-  { id: "area-one-part", name: "Only one rectangle", says: "This is the area of only one of the two rectangles. Find the area of each rectangle, then add them together.", points: "the last line" },
+  { id: "area-added-sides", name: "Added the lengths", short: "added the lengths", says: "The lengths were added, which measures a distance round the shape, not the space inside it. An area comes from multiplying.", points: "the line where the lengths were combined" },
+  { id: "area-no-half", name: "The half left out", short: "half left out", says: "The base and the height were multiplied but the result was not halved. A triangle takes up half of the rectangle drawn around it.", points: "the last line" },
+  { id: "area-one-part", name: "Only one rectangle", short: "only one rectangle", says: "This is the area of only one of the two rectangles. Find the area of each rectangle, then add them together.", points: "the last line" },
   // mean and range (Family W7 batch 3)
-  { id: "stat-not-divided", name: "Added but did not divide", says: "The numbers were added but the total was not shared out. The mean is the total divided by how many numbers there are.", points: "the last line" },
-  { id: "stat-wrong-count", name: "Divided by the wrong count", says: "The total was divided by the wrong number. Count the numbers in the list again and divide by exactly that many.", points: "the division" },
-  { id: "stat-median", name: "Took the middle value", says: "This is the middle value of the list put in order, not the mean. The mean shares the total out equally among the numbers.", points: "the answer" },
-  { id: "range-largest", name: "The largest number only", says: "This is the largest number of the list only. The range is the largest take away the smallest.", points: "the answer" },
-  { id: "range-backwards", name: "Took away the wrong way round", says: "The largest was taken away from the smallest, so the answer is below zero. The range is the largest take away the smallest, and it is never negative.", points: "the subtraction" },
+  { id: "stat-not-divided", name: "Added but did not divide", short: "added but not divided", says: "The numbers were added but the total was not shared out. The mean is the total divided by how many numbers there are.", points: "the last line" },
+  { id: "stat-wrong-count", name: "Divided by the wrong count", short: "divided by wrong count", says: "The total was divided by the wrong number. Count the numbers in the list again and divide by exactly that many.", points: "the division" },
+  { id: "stat-median", name: "Took the middle value", short: "took the middle one", says: "This is the middle value of the list put in order, not the mean. The mean shares the total out equally among the numbers.", points: "the answer" },
+  { id: "range-largest", name: "The largest number only", short: "largest number only", says: "This is the largest number of the list only. The range is the largest take away the smallest.", points: "the answer" },
+  { id: "range-backwards", name: "Took away the wrong way round", short: "took away backwards", says: "The largest was taken away from the smallest, so the answer is below zero. The range is the largest take away the smallest.", points: "the subtraction" },
+  // Pythagoras' theorem (v2 M2b)
+  { id: "pyth-sides-added", name: "Added the two sides", short: "added the sides", says: "The two lengths were added. The sides are linked through their squares, not their sum: multiply each by itself first, then add or take away.", points: "the line where the two lengths were combined" },
+  { id: "pyth-no-root", name: "Stopped before the square root", short: "no square root", says: "The square root was never taken. That result is the side multiplied by itself, so find the number that multiplies by itself to make it.", points: "the last line" },
+  { id: "pyth-squares-added", name: "Added the squares for a shorter side", short: "added the squares", says: "The squares were added, but a shorter side needs the other shorter square taken from the longest side's square. The longest is the biggest square.", points: "the line where the squares were combined" },
+  // the probability of an event (v2 M2b)
+  { id: "prob-count-alone", name: "The count instead of the chance", short: "count not the chance", says: "The number of counters was given, not a probability. Compare that number with all the counters in the bag; it is never above one whole.", points: "the answer" },
+  { id: "prob-part-over-rest", name: "Compared with the rest instead of the whole", short: "compared with the rest", says: "The counters asked about were compared with the other counters. Compare them with all the counters in the bag, the ones asked about included.", points: "the bottom of the fraction" },
+  { id: "prob-one-over-colours", name: "One over the number of colours", short: "same chance each colour", says: "Every colour was given the same chance. The counts differ, so each colour has its own chance: its count over all the counters.", points: "the bottom of the fraction" },
+  { id: "prob-own", name: "The chance of the event itself", short: "chance of the event", says: "This is the chance of the colour itself, but the question asks for the chance it is not. Take it away from a whole.", points: "the last line" },
+  // the top rung of probability (MB-B20): named on a top-rung item only (SCHOOL_TOP_SLIPS)
+  { id: "prob-added", name: "Added the chances instead of multiplying", short: "added the chances", says: "The chances were added. For both things to happen, multiply the chance of each, so the answer is smaller than either chance.", points: "the line where the chances were combined" },
+  { id: "prob-replaced", name: "Put the first one back", short: "put the first back", says: "The first pick was treated as put back. It is kept out, so the second pick has fewer to choose from.", points: "the second fraction" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */
@@ -1151,7 +1706,8 @@ function commonFactors(a: bigint, b: bigint): bigint[] {
  *   - p% of N (W7 batch 2): N ÷ p and N ÷ (p/100) divided by the percent; p × N the percent as a whole number; N ÷ 10
  *     ten percent and stopped (p not ten); (100 - p)% of N the part left;
  *   - B increased or decreased by p% (W7 batch 2): p% of B the change and stopped; B × (100 ∓ p)/100 the other way; B ± p
- *     the percent added or taken off as a plain number (the percent of a hundred, not of the amount);
+ *     the percent added or taken off as a plain number (the percent of a hundred, not of the amount). Its top rung (MB-B20)
+ *     names its own instead: the percent taken of the amount after the change; the percentages added into one change;
  *   - a missing ratio term a:b = ?:k (W7 batch 3): a + (k - b) the difference added; b × k / a the ratio the other way
  *     round (whole only). A ratio to simplify and a share are judged by `checkRatio`, whose pairs carry their own slips;
  *   - q2 at p for q1 (W7 batch 3, a rate): q1 ÷ p × q2 the division the wrong way round; p × q1 × q2 multiplied instead of
@@ -1163,6 +1719,8 @@ function commonFactors(a: bigint, b: bigint): bigint[] {
  *   - decimals a ± b, a × b (W7 batch 2), P the working's places (the longer of the two for ±, their sum for ×): the
  *     numbers lined up by their last digits, (a·10^pa ± b·10^pb) / 10^P, when their places differ; the point put back
  *     by the wrong count, the value × 10^k for k = -1 and 1..P-1 (products only); the point left out, the value × 10^P.
+ *   - two events (MB-B20, the probability top rung, SCHOOL_TOP_SLIPS): two independent chances added instead of
+ *     multiplied; the first counter put back before the second draw (a × b over the total squared).
  */
 function slipCandidates(r: ReadOk): [string, Q][] {
   const out: [string, Q][] = [];
@@ -1251,6 +1809,63 @@ function slipCandidates(r: ReadOk): [string, Q][] {
       else push("area-no-half", mul(a, b));
     }
     return out;
+  }
+  if (K.k === "prob" || K.k === "prob-comp") {
+    // M2b: the count of the event alone; the event's counters over the other counters; one over the number of colours; and, for
+    // "not" and a stated probability, the event's own probability. Each only where its value differs from the answer and from
+    // every other slip's (a bag of three equal colours: one over the colours IS the answer)
+    if (K.k === "prob-comp") return distinctSlips([["prob-own", K.p]], r.truth);
+    const total = K.counts.reduce((a, [, n]) => a + n, Z), ev = K.ask.reduce((a, c) => a + K.counts.find(([x]) => x === c)![1], Z);
+    const asked = K.mode === "not" ? total - ev : ev;
+    const cands: [string, Q][] = [["prob-count-alone", qi(asked)], ["prob-part-over-rest", mk(asked, total - asked)!], ["prob-one-over-colours", mk(ONE, BigInt(K.counts.length))!]];
+    if (K.mode === "not") cands.push(["prob-own", mk(ev, total)!]);
+    return distinctSlips(cands, r.truth);
+  }
+  if (K.k === "prob-two") {
+    // MB-B20, the top rung's own slips (SCHOOL_TOP_SLIPS), never the single-draw list's: two independent chances added
+    // instead of multiplied (a dice's and a dice's, the coin's half and the dice's or the spinner's); the first counter put
+    // back before the second draw, a × b over the total squared. At least one of two dice names none
+    const half = mk(ONE, BigInt(2))!, total = K.counts.reduce((a, [, n]) => a + n, Z);
+    const count = (c: string) => K.counts.find(([x]) => x === c)![1];
+    const cands: [string, Q][] = [];
+    if (K.form === "dice-and") cands.push(["prob-added", add(diceChance(K.events[0]), diceChance(K.events[1]))]);
+    else if (K.form === "coin-dice") cands.push(["prob-added", add(half, diceChance(K.events[0]))]);
+    else if (K.form === "coin-spin") cands.push(["prob-added", add(half, mk(count(K.ask[0]), total)!)]);
+    else if (K.form === "draw-both" || K.form === "draw-then") {
+      const a = count(K.ask[0]), b = K.form === "draw-both" ? a : count(K.ask[1]);
+      cands.push(["prob-replaced", mk(a * b, total * total)!]);
+    }
+    return distinctSlips(cands, r.truth);
+  }
+  if (K.k === "pct-top") {
+    // MB-B20, the top rung's own slips (SCHOOL_TOP_SLIPS), never the forward list's: the amount before a change worked as a
+    // change of the amount after it, A × (100 ∓ p)/100 (20% off a price after a 20% rise); the percentages added into one
+    // change, B × (100 ± p1 ± p2)/100 for two in turn and B × (100 ± n·p)/100 for the years (simple, not compound). A
+    // value of zero or below is no amount, and is not listed
+    const H = qi(BigInt(100)), B = qi(K.base), signed = (x: { up: boolean; p: Q }) => (x.up ? x.p : sub(qi(Z), x.p));
+    const changed = (pct: Q): Q | null => { const v = div(mul(B, add(H, pct)), H)!; return v.n > Z ? v : null; };
+    const cands: [string, Q][] = [];
+    const put = (id: string, v: Q | null) => { if (v) cands.push([id, v]); };
+    if (K.form === "before") put("pct-of-new", changed(sub(qi(Z), signed(K.steps[0]))));
+    else if (K.form === "then") put("pct-added", changed(add(signed(K.steps[0]), signed(K.steps[1]))));
+    else put("pct-added", changed(mul(qi(BigInt(K.years)), signed(K.steps[0]))));
+    return distinctSlips(cands, r.truth);
+  }
+  if (K.k === "pyth-dp") {
+    // MB-B20: the tier-1/2 slips from the sides as written, exact; the rooted squares-added slip is judged in `check` (a rounding)
+    const xx = mul(K.x, K.x), yy = mul(K.y, K.y);
+    const cands: [string, Q][] = [["pyth-sides-added", add(K.x, K.y)], ["pyth-no-root", K.sq]];
+    if (K.find === "shorter") cands.push(["pyth-squares-added", add(xx, yy)]);
+    return distinctSlips(cands, r.truth);
+  }
+  if (K.k === "pyth") {
+    // M2b: the two given sides added (a + b, or c + b); the squares combined and the root not taken (a² + b², or c² − b²); for a
+    // shorter side the squares added instead of taken away, c² + b² (its root is no whole number, so only the unrooted value is
+    // exact - the rooted slip has no exact value and is not listed)
+    const X = qi(K.x), Y = qi(K.y), xx = mul(X, X), yy = mul(Y, Y);
+    const cands: [string, Q][] = [["pyth-sides-added", add(X, Y)], ["pyth-no-root", K.find === "longest" ? add(xx, yy) : sub(xx, yy)]];
+    if (K.find === "shorter") cands.push(["pyth-squares-added", add(xx, yy)]);
+    return distinctSlips(cands, r.truth);
   }
   if (K.k === "rate") {
     // W7 batch 3, q1 at p, then q2: q1 ÷ p × q2 the division the wrong way round; p × q1 × q2 multiplied instead of divided;
@@ -1354,6 +1969,9 @@ const WHY = {
   lengthUnit: "This area carries a length unit, not a square one; the desk does not mark a unit wrong, and asks.",
   givenRatio: "This is a ratio equal to the one given; the question asks for the missing number.",
   notCompleting: "This ratio does not complete the one given, and the desk does not guess which number was meant.",
+  placesAsked: "This is a fraction; the question asks for a decimal rounded to the places it names, and the desk does not guess.",
+  fewFigures: "This is a correct rounding, but to fewer figures than the question asks for, and the desk does not guess.",
+  roughly: "This is close to the side, but it is not the side rounded correctly, and the desk does not guess.",
 } as const;
 
 /**
@@ -1466,7 +2084,7 @@ function judgeMissingRatio(r: ReadOk, v: Q, form: Reading["form"]): SchoolVerdic
 
 /** The top and bottom as written, for an answer that reads as a plain fraction ('9/12', 'x = 9/12', '9 / 12.'), or null. */
 function writtenFraction(answer: string): [bigint, bigint] | null {
-  let s = normalise(answer).replace(/^(?:x ?=|answer ?[:=]|ans ?[:=]|=) ?/i, "");
+  let s = normalise(answer).replace(ANSWER_NAME, "");
   if (/[^.]\.$/.test(s)) s = s.slice(0, -1).trimEnd();
   const m = /^(\d+) ?\/ ?(\d+)$/.exec(s);
   return m ? [BigInt(m[1]), BigInt(m[2])] : null;
@@ -1479,6 +2097,45 @@ const placesOf = (r: NumberReading, value: Q): number => {
   while (k > 0 && exactAt(scale, k - 1)) k--;
   return k;
 };
+
+/**
+ * MB-B20, the verdict on a top-rung Pythagoras answer, whose side √sq is no rational. Rulings MK5 and D2 R1a, as calc-read
+ * decimalCall decides a limit, with this file's own rounding rule as R1a's "old path":
+ *   - a decimal that is √sq correctly rounded at its own written places (trailing zeros counted) is never wrong: right with
+ *     two significant figures or more (7.2 and 7.21 for √52, whether one place or two was asked), unsure with fewer;
+ *   - a whole number that is a correct rounding (7 for √52) is unsure: R1a speaks of decimals, and it is never wrong;
+ *   - any other decimal within one unit of its last written place of √sq is unsure (7.3 for √52), as a rounding is
+ *     everywhere in this file (its places counted trailing zeros aside: 7.20 is a tenth); a fraction or a mixed number is
+ *     unsure (the question asks for a decimal to its places);
+ *   - else wrong, naming a slip for a slip's exact value, or by the right answer's own rule for a decimal that is the slip's
+ *     value correctly rounded at its written places: the sides added, the root not taken (45.9 for 45.94), and for a
+ *     shorter side the squares added, as written or rooted (7.2 for √52). A slip whose value rounds to the right answer at
+ *     the places asked is never named, nor is any slip for an answer two slips give (MB-B20 cycle 17).
+ */
+function checkRounded(r: ReadOk, K: Extract<Kind, { k: "pyth-dp" }>, reading: NumberReading): SchoolVerdict {
+  const form = reading.form, v = fromRat(reading.value);
+  if (form === "fraction" || form === "mixed") return { verdict: "unsure", form, why: WHY.placesAsked };
+  const k = form === "decimal" ? reading.places ?? 0 : 0;
+  if (nearRoot(v, K.sq, halfPlace(k))) {
+    const figures = String(babs(mul(v, qi(pow10(k))).n)).replace(/^0+/, "").length;
+    return form === "decimal" && figures >= 2 ? { verdict: "right", form, why: WHY.right } : { verdict: "unsure", form, why: WHY.fewFigures };
+  }
+  // the old path counts places as this file always has, trailing zeros aside (7.20 is within a tenth of √52)
+  const kk = form === "decimal" ? placesOf(reading, v) : 0;
+  if (kk > 0 && nearRoot(v, K.sq, onePlace(kk))) return { verdict: "unsure", form, why: WHY.roughly };
+  // MB-B20 cycle 17, the slips by the right answer's own rule: a slip's value as written, or that value correctly rounded
+  // at the answer's written places (trailing zeros counted, a decimal only). A slip whose value rounds to the right answer
+  // at the places asked is never named; an answer two slips give names none
+  const halfUp = (c: Q, p: number) => mk((BigInt(2) * c.n * pow10(p) + c.d) / (BigInt(2) * c.d), pow10(p))!;
+  const slips: { id: string; at: (p: number) => Q; exact: boolean }[] = slipCandidates(r)
+    .filter(([, c]) => !eq(c, r.truth))
+    .map(([id, c]) => ({ id, at: (p: number) => halfUp(c, p), exact: eq(c, v) }));
+  if (K.find === "shorter") slips.push({ id: "pyth-squares-added", at: (p) => rootRounded(add(mul(K.x, K.x), mul(K.y, K.y)), p), exact: false });
+  const asked = rootRounded(K.sq, K.dp);
+  const ids = new Set(slips.filter((s) => !eq(s.at(K.dp), asked) && (s.exact || (form === "decimal" && k > 0 && eq(s.at(k), v)))).map((s) => s.id));
+  if (ids.size === 1) return { verdict: "wrong", slip: [...ids][0], form, why: WHY.slip };
+  return { verdict: "wrong", form, why: WHY.wrong };
+}
 
 /**
  * The verdict on what a learner wrote, from the spec alone (the truth is recomputed, never stored):
@@ -1544,10 +2201,11 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
     }
     // W7 batch 2: an amount written with a percent sign - 28% for 35% of 80 = 28, or 2800% (equal in value, from 35 × 80) -
     // is the right number in the wrong form, or a slip: the desk does not guess, and never calls it right
-    if ((K.k === "pct-of" || K.k === "pct-change") && form === "percent" && (eq(mul(v, qi(BigInt(100))), t) || eq(v, t))) return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    if ((K.k === "pct-of" || K.k === "pct-change" || K.k === "pct-top") && form === "percent" && (eq(mul(v, qi(BigInt(100))), t) || eq(v, t))) return { verdict: "unsure", form, why: WHY.amountAsPercent };
     // W7 batch 3: an amount of these units is never a percentage (unsure, the desk does not guess what was meant); a cost's
     // value in cents or pence written bare (560 for €5.60) is the answer in another unit or a slip, and the desk does not guess
-    if ((K.k === "rate" || K.k === "area" || K.k === "stat") && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    if ((K.k === "rate" || K.k === "area" || K.k === "stat" || K.k === "pyth" || K.k === "pyth-dp") && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    if (K.k === "pyth-dp") return checkRounded(r, K, reading);
     if (K.k === "rate" && K.measure === "cost" && !reading.unit && !eq(v, t) && eq(v, mul(t, qi(BigInt(100))))) return { verdict: "unsure", form, why: WHY.pence };
     const simplest = K.k === "simplify" || (r.spec.shape === "compute" && r.spec.form === "simplest");
     const decimalAsked = r.spec.shape === "compute" && r.spec.form === "decimal";
@@ -1574,21 +2232,80 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
     const slips = slipCandidates(r).filter(([, c]) => !eq(c, t));
     const named = slips.find(([, c]) => eq(c, v)) ?? slips.find(([, c]) => rounds(c));
     return named ? { verdict: "wrong", slip: named[0], form, why: WHY.slip } : { verdict: "wrong", form, why: WHY.wrong };
-  } catch {
+  } catch (e) { checkerFault("school.check", e);
     return { verdict: "unsure", why: WHY.unreadable };
   }
 }
 
+// ------------------------------------------------------------------ which slips an item shows
+
+/** A value as a worksheet writes it: a whole number or a terminating decimal ('12', '0.035', '-5'), or null. */
+function plainText(c: Q): string | null {
+  if (!terminating(c)) return null;
+  const k = placesNeeded(c), neg = c.n < Z, digits = (babs(c.n) * pow10(k) / c.d).toString().padStart(k + 1, "0");
+  return (neg ? "-" : "") + (k === 0 ? digits : `${digits.slice(0, -k)}.${digits.slice(-k)}`);
+}
+
+/** The ways a value can be written down for `check` to read: plain, as a percent, as a fraction. */
+function writingsOf(c: Q): string[] {
+  const out: string[] = [], plain = plainText(c), pct = plainText(mul(c, qi(BigInt(100))));
+  if (plain !== null) out.push(plain);
+  if (pct !== null) out.push(`${pct}%`);
+  if (c.d !== ONE) out.push(`${c.n}/${c.d}`);
+  return out;
+}
+
+/** The pairs a ratio question's own judge names (checkRatio), by slip id, as the two numbers a child would write. */
+function slippedPairs(r: ReadOk, slipId: string): [Q, Q][] {
+  const K = r.kind;
+  if (K.k === "ratio-simplify") return slipId === "ratio-swapped" ? [[qi(r.truth.d), qi(r.truth.n)]] : [];
+  if (K.k !== "ratio-share") return [];
+  const T = qi(K.T), a = qi(K.a), b = qi(K.b), d = qi(babs(K.a - K.b));
+  const pair = r.pair ?? [a, b];
+  if (slipId === "ratio-swapped") return [[pair[1], pair[0]]];
+  if (K.a === K.b) return [];
+  if (slipId === "ratio-split-each") return [[div(T, a)!, div(T, b)!]];
+  if (slipId === "ratio-as-amounts") return [[a, b]];
+  if (slipId === "ratio-by-difference") return [[mul(div(T, d)!, a), mul(div(T, d)!, b)]];
+  return [];
+}
+
+/**
+ * The answer a child who made the slip `slipId` would write for this spec, as text `check` reads, or null when the slip
+ * does not show on it. Pinned to `check` itself: a text is returned only when `check(spec, text, "uk")` is wrong and names
+ * exactly this slip, so a slip "shows" on a spec precisely when the desk would name it. Pure; a junk spec, an unknown id or
+ * another unit's slip is null, never a throw.
+ */
+export function slipValue(spec: unknown, slipId: unknown): string | null {
+  if (typeof slipId !== "string") return null;
+  try {
+    const r = read(spec);
+    if (!r.ok) return null;
+    const writings: string[] = [];
+    for (const [x, y] of slippedPairs(r, slipId)) {
+      const xs = writingsOf(x), ys = writingsOf(y);
+      for (let i = 0; i < Math.min(xs.length, ys.length); i++) writings.push(`${xs[i]}:${ys[i]}`);
+    }
+    for (const [id, c] of slipCandidates(r)) if (id === slipId && !eq(c, r.truth)) writings.push(...writingsOf(c));
+    for (const w of writings) {
+      const v = check(spec, w, DEFAULT_SCHOOL_SYSTEM);
+      if (v.verdict === "wrong" && v.slip === slipId) return w;
+    }
+    return null;
+  } catch (e) { checkerFault("school.slipValue", e);
+    return null;
+  }
+}
+
+/** Does the slip `slipId` show on this spec: would `check` name it for the answer that slip gives? */
+export const slipShows = (spec: unknown, slipId: unknown): boolean => slipValue(spec, slipId) !== null;
+
 // ------------------------------------------------------------------ the leak check
 
-const SMALL: Record<string, number> = { zero: 0, nought: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19 };
-const TENS: Record<string, number> = { twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90 };
+const SMALL: Record<string, number> = { nought: 0, ...Object.fromEntries(Object.entries(EN_CARD).filter(([, n]) => n < 20)) };
+const TENS: Record<string, number> = Object.fromEntries(Object.entries(EN_CARD).filter(([, n]) => n >= 20));
 const UNIT_ORD: Record<string, number> = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9 };
-const ORD: Record<string, number> = {
-  half: 2, third: 3, quarter: 4, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, eleventh: 11, twelfth: 12,
-  thirteenth: 13, fourteenth: 14, fifteenth: 15, sixteenth: 16, seventeenth: 17, eighteenth: 18, nineteenth: 19, twentieth: 20,
-  thirtieth: 30, fortieth: 40, fiftieth: 50, sixtieth: 60, seventieth: 70, eightieth: 80, ninetieth: 90, hundredth: 100,
-};
+const ORD = EN_ORD;
 const own = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k);
 
 /** A fraction word's denominator ('twelfths' 12, 'halves' 2, 'twenty-fourths' 24), or null. 'second' alone is time. */
@@ -1703,7 +2420,7 @@ const RUN = /(?<![\w.,/:])(?:[.,]\d|\d)(?:[\d.,]|\s(?=\d)|\s*[/:]\s*(?=\d))*(?:\
 const SUP: Record<string, string> = { "⁰": "0", "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9" };
 const SUB: Record<string, string> = { "₀": "0", "₁": "1", "₂": "2", "₃": "3", "₄": "4", "₅": "5", "₆": "6", "₇": "7", "₈": "8", "₉": "9" };
 function leakText(line: string): string {
-  let t = line.toLowerCase()
+  let t = figuresOfCzech(line.toLowerCase())
     .replace(/([⁰¹²³⁴⁵⁶⁷⁸⁹]+)\s*[⁄∕/]\s*([₀₁₂₃₄₅₆₇₈₉]+)/g, (_, a: string, b: string) => `${[...a].map((c) => SUP[c]).join("")}/${[...b].map((c) => SUB[c]).join("")}`)
     .replace(VULGAR_RE, (c) => ` ${VULGAR[c]}`).replace(/[−–—‐‑]/g, "-").replace(/[⁄∕]/g, "/").replace(/[    ]/g, " ").replace(/[×*]/g, " x ").replace(/÷/g, " divided by ");
   t = t.replace(/(\d+)(?:\s+|\s*\/\s*)(\d+)(?:st|nd|rd|th)s?\b/g, "$1/$2").replace(/(\d)(?:st|nd|rd|th)s?\b/g, "$1");
@@ -1736,6 +2453,8 @@ interface LeakProfile {
   ratioLowest?: boolean;
   /** Values beside T that an operation in the hint must not make (rule 6): a share's second amount. */
   alsoT?: Q[];
+  /** MB-B20, a rounded side: its exact square. Any decimal within one unit of its last place of √root gives it away. */
+  root?: Q;
 }
 
 function leakProfile(r: ReadOk): LeakProfile {
@@ -1770,6 +2489,42 @@ function leakProfile(r: ReadOk): LeakProfile {
     if (T.d !== ONE) bare.add(String(mul(T, qi(pow10(placesNeeded(T)))).n));
     const restated: LeakProfile["restated"] = K.fig === "rectangle" ? [{ p: K.sides[0], o: "×", q: K.sides[1], both: true }] : [];
     return { T, targets: [T], lowestOnly: false, bare, restated, written: [] };
+  }
+  if (K.k === "prob" || K.k === "prob-comp") {
+    // M2b: the probability in any form (a fraction, unsimplified too, a decimal, a percent). The counters, the total, and a count
+    // over the total of another event are steps and pass; the method of the question, 1 less the event's own probability or the
+    // two events added, is restated (its result is still refused)
+    const restated: LeakProfile["restated"] = [];
+    if (K.k === "prob-comp") restated.push({ p: qi(ONE), o: "-", q: K.p, both: false });
+    else {
+      const total = K.counts.reduce((a, [, n]) => a + n, Z), got = K.ask.map((c) => K.counts.find(([x]) => x === c)![1]);
+      if (K.mode === "not") restated.push({ p: qi(ONE), o: "-", q: mk(got[0], total)!, both: false });
+      if (K.mode === "or") restated.push({ p: mk(got[0], total)!, o: "+", q: mk(got[1], total)!, both: true });
+    }
+    return { T, targets: [T], lowestOnly: false, bare: new Set(), restated, written: [] };
+  }
+  if (K.k === "prob-two") {
+    // MB-B20: the probability in any form. Each event's own chance, a count over the total, the chance of neither are steps
+    // and pass; the last operation that makes the answer (the two chances multiplied, a whole less neither) is refused
+    return { T, targets: [T], lowestOnly: false, bare: new Set(), restated: [], written: [] };
+  }
+  if (K.k === "pyth-dp") {
+    // MB-B20: the rounded side, any decimal close to the root at its last place (7.2, 7.21, 7.211 for √52), and the squared
+    // total under a root (leaksSchool). The squares, their total and the given sides are steps and pass
+    return { T, targets: [T], lowestOnly: false, bare: new Set(), restated: [], written: [], root: K.sq };
+  }
+  if (K.k === "pct-top") {
+    // MB-B20: the amount in any form, and its digits with the point left out; every step on the way (a single change, the
+    // amount after the first change or after a year, a multiplier) passes, and the last operation that makes it is refused
+    const bare = new Set<string>(), h = mul(T, qi(BigInt(100)));
+    if (h.d === ONE) bare.add(String(h.n));
+    if (T.d !== ONE) bare.add(String(mul(T, qi(pow10(placesNeeded(T)))).n));
+    return { T, targets: [T], lowestOnly: false, bare, restated: [], written: [] };
+  }
+  if (K.k === "pyth") {
+    // M2b: the side in any form. The squares, their sum or difference, and the given sides are steps and pass; the root of the
+    // last step makes the answer and is refused (rule 6 needs no restated operation: the question holds none)
+    return { T, targets: [T], lowestOnly: false, bare: new Set(), restated: [], written: [] };
   }
   if (K.k === "rate") {
     // W7 batch 3: the value in any form; its digits with the point left out (56 for 5.60) and a cost in cents or pence (560)
@@ -1825,14 +2580,16 @@ function leakProfile(r: ReadOk): LeakProfile {
   const restated: LeakProfile["restated"] = [];
   const n0 = r.node;
   if (n0.k === "op") {
-    const operand = (n: Node): Q | null => (n.k === "frac" || n.k === "num" ? evalNode(n) : null);
+    const operand = (n: Node): Q | null => (n.k === "frac" || n.k === "mixed" || n.k === "num" ? evalNode(n) : null);
     const a = operand(n0.a), b = operand(n0.b);
     if (a && b) {
       restated.push({ p: qabs(a), o: n0.op, q: qabs(b), both: n0.op === "+" || n0.op === "×" });
       if (n0.op === "÷" && b.n !== Z) restated.push({ p: qabs(a), o: "×", q: qabs(mk(b.d, b.n)!), both: true });
     }
-    if (n0.a.k === "frac" && n0.b.k === "frac") {
-      const [q1, s2, t2] = [n0.a.d, n0.b.n, n0.b.d];
+    // MB-B20: a mixed number works as its improper fraction (1 3/4 is 7/4): its top is the improper top
+    const top = (n: Node) => (n.k === "mixed" ? n.w * n.d + n.n : n.k === "frac" ? n.n : Z);
+    if ((n0.a.k === "frac" || n0.a.k === "mixed") && (n0.b.k === "frac" || n0.b.k === "mixed")) {
+      const [q1, s2, t2] = [n0.a.d, top(n0.b), n0.b.d];
       if (n0.op === "+" || n0.op === "-") { dens.add((q1 * t2) / bgcd(q1, t2)); dens.add(q1 * t2); }
       else if (n0.op === "×") dens.add(q1 * t2);
       else dens.add(q1 * s2);
@@ -1874,6 +2631,22 @@ function joiner(gap: string, before: string): Joiner | null {
 const apply = (o: Op, p: Q, q: Q): Q | null => (o === "+" ? add(p, q) : o === "-" ? sub(p, q) : o === "×" ? mul(p, q) : div(p, q));
 
 /**
+ * A Pythagoras line that takes the root of the item's squared total (X1a, App Master ruling 2026-10-09). The value the
+ * root is taken of is x²+y² for the longest side and x²−y² for a shorter side. Stated on its own it stays legitimate
+ * ('c squared is 1156.', '36 + 64 = 100'). It leaks when it sits under a root ('the square root of 1156', '√1156',
+ * 'odmocnina z 1156'), and when the line states it together with a root instruction ('... = 1156, teď odmocni.').
+ * 'Then take the square root of the total.' names no number and passes. `text` is the line as leakText reads it.
+ */
+function pythRooted(k: { find: "longest" | "shorter"; x: bigint; y: bigint }, text: string): boolean {
+  const total = String(k.find === "longest" ? k.x * k.x + k.y * k.y : k.x * k.x - k.y * k.y);
+  const plain = text.replace(/(\d)[, ](?=\d{3}(?!\d))/g, "$1");
+  // the total as a number standing alone, not part of a longer figure
+  if (!new RegExp(String.raw`(?<![\d.,])${total}(?![\d]|[.,]\d)`).test(plain)) return false;
+  // a root word or sign anywhere in the same line: under the root, or beside a root instruction, either way it is the step
+  return /square\s+root|\broot|sqrt|√|odmocn/.test(plain);
+}
+
+/**
  * Does this hint or explanation line state the answer, or give it away? The rule is in this file's header, and each
  * shape's own part of it in `leakProfile`. Two more readings of rule 6 (W7): three numbers chained by × and ÷ whose
  * value is the answer ("12 ÷ 4 × 3" for 3/4 = ?/12, "40 ÷ 5 × 3" for 3/5 of 40), and the joining words above. False
@@ -1883,7 +2656,7 @@ const apply = (o: Op, p: Q, q: Q): Q | null => (o === "+" ? add(p, q) : o === "-
 export function leaksSchool(spec: unknown, hint: unknown): boolean {
   if (typeof hint !== "string" || !hint.trim()) return false;
   let r: Read;
-  try { r = read(spec); } catch { return false; }
+  try { r = read(spec); } catch (e) { checkerFault("school.leaksSchool read", e); return false; }
   if (!r.ok) return false;
   try {
     const pr = leakProfile(r), { T, targets } = pr;
@@ -1915,6 +2688,8 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
         }
         return false;
       }
+      // MB-B20, a rounded side: a decimal within one unit of its last written place of the root gives it away (7.2, 7.21 for √52)
+      if (pr.root && rd.form === "decimal" && (rd.places ?? 0) > 0 && nearRoot(v, pr.root, onePlace(rd.places ?? 0))) return true;
       // simplify: an equal fraction that is not in lowest terms is a step on the way, not the answer
       const step = pr.lowestOnly && (rd.form === "fraction" || rd.form === "mixed") && rd.lowest === false;
       if (!step && targets.some((x) => eq(v, x))) return true;
@@ -1940,6 +2715,7 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
     };
     const text = leakText(hint);
     if (pr.written.some((re) => re.test(text))) return true;
+    if (r.kind.k === "pyth" && pythRooted(r.kind, text)) return true;
     const runs: { s: number; e: number; values: Q[] }[] = [];
     for (const m of text.matchAll(RUN)) {
       const run = m[0].replace(/[.,\s]+$/, "");
@@ -1948,6 +2724,9 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
       const values = readingsOf(run).flatMap((rd) => (rd.kind === "number" ? [qabs(fromRat(rd.value))] : []));
       runs.push({ s: m.index ?? 0, e: (m.index ?? 0) + run.length, values });
     }
+    // MB-B20, a rounded side: its squared total in a line with a root (X1a's rule, the total read in any system: 42,25 too)
+    const sq = pr.root;
+    if (sq && /square\s+root|\broot|sqrt|√|odmocn/.test(text) && runs.some((x) => x.values.some((v) => eq(v, sq)))) return true;
     // rule 6: two numbers joined by an operation whose value is the answer (or, for two whole numbers, a bare number of rule 4)
     const joinAt = (i: number) => joiner(text.slice(runs[i].e, runs[i + 1].s).trim(), text.slice(i > 0 ? runs[i - 1].e : 0, runs[i].s));
     const orient = (j: Joiner, x: Q, y: Q): [Q, Q, Op] => (j === "less" ? [y, x, "-"] : j === "into" ? [y, x, "÷"] : [x, y, j]);
@@ -1977,7 +2756,7 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
       }
     }
     return false;
-  } catch {
+  } catch (e) { checkerFault("school.leaksSchool", e);
     return true;
   }
 }
@@ -2155,6 +2934,133 @@ export function genMulDiv(seed: unknown, tier: unknown): SchoolSpec | null {
   return tier === 1 ? { shape: "compute", expr: "2/3 × 3/4" } : { shape: "compute", expr: "3/4 ÷ 2/5" };
 }
 
+// ------------------------------------------------------------------ MB-B20: the top rung of the two fractions units
+
+/** A mixed number w n/d as an expression writes it ("1 3/4"), or the proper fraction n/d when w is 0. */
+const mixedText = (w: number, n: number, d: number) => (w > 0 ? `${w} ${n}/${d}` : `${n}/${d}`);
+/** An improper n/d (n > d, d not 1) as a mixed number in lowest terms, or null when it is whole or proper. */
+function asMixed(n: number, d: number): string | null {
+  const g = gcdN(n, d), N = n / g, D = d / g;
+  return D === 1 || N < D ? null : mixedText(Math.floor(N / D), N % D, D);
+}
+/** A seed the top rung takes: a whole number 0..2^32 - 1. */
+const topSeed = (seed: unknown): seed is number => typeof seed === "number" && Number.isInteger(seed) && seed >= 0 && seed <= 0xffffffff;
+/**
+ * Does the item print its own answer in a part of a number? The value, or its fractional part, equal to an operand, an
+ * operand's fractional part or (for ÷) the turned-over divisor: "3 1/2 - 1 3/4" printing 3/4 when the answer is 1 3/4.
+ */
+function echoes(r: ReadOk): boolean {
+  const part = (x: Q) => (x.n > x.d && x.d !== ONE ? mk(x.n % x.d, x.d)! : x);
+  const T = r.truth, mine = [T, part(T)];
+  const seen = literals(r.node).flatMap((l) => { const v = evalNode(l); return v ? [v, part(v), ...(v.n > Z ? [mk(v.d, v.n)!] : [])] : []; });
+  return seen.some((x) => mine.some((y) => eq(x, y)));
+}
+
+/**
+ * The top rung of "Add and subtract fractions" (MB-B20), from a seed: a mixed number added to or taken from a mixed number
+ * or a proper fraction - whole parts 1..5 and 0..3, bottoms 2..12 like or unlike, each fraction part proper and in lowest
+ * terms, their common bottom at most 36; a subtraction is ordered so its value is above zero (it may need a whole broken into parts). An odd seed sets it
+ * as a word problem from STORIES (a walk or a bag of apples to add, a ribbon or a jug to take from, in km, kg, metres or
+ * litres), an even seed as a bare sum. A value that is whole, or that echoes a printed number (`echoes`), is drawn again,
+ * and the item must be `fair`. Pure and seeded; null for a seed that is not a whole number 0..2^32 - 1.
+ */
+export function genMixedAddSub(seed: unknown): SchoolSpec | null {
+  if (!topSeed(seed)) return null;
+  const rnd = prng(((seed * 2 + 3) ^ 0x5eed1609) >>> 0);
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd() * xs.length)]; }
+  const story = seed % 2 === 1, pairs = [...PAIRS[1], ...PAIRS[2]];
+  for (let t = 0; t < MAX_TRIES; t++) {
+    const [b, d] = pick(pairs), a = pick(tops(b)), c = pick(tops(d));
+    // a common bottom of at most 36: the rung is about the whole parts, not a larger multiple than tier 2 already asks (MB-B37)
+    if ((b * d) / gcdN(b, d) > 36) continue;
+    let A: [number, number, number] = [1 + Math.floor(rnd() * 5), a, b], B: [number, number, number] = [Math.floor(rnd() * 4), c, d];
+    const minus = rnd() < 0.5, size = (x: [number, number, number]) => (x[0] * x[2] + x[1]) / x[2];
+    if (minus) { if (size(A) === size(B)) continue; if (size(A) < size(B)) [A, B] = [B, A]; }
+    else if (rnd() < 0.5) [A, B] = [B, A];
+    const id: StoryId | null = story ? pick(minus ? (["ribbon", "juice"] as const) : (["walk", "apples"] as const)) : null;
+    const expr = `${id ? `${id} ` : ""}${mixedText(...A)} ${minus ? "-" : "+"} ${mixedText(...B)}`;
+    const unit = id ? STORIES[id].unit : undefined;
+    const spec: SchoolSpec = unit ? { shape: "compute", expr, unit } : { shape: "compute", expr };
+    const r = read(spec);
+    if (!r.ok || r.truth.d === ONE || echoes(r)) continue;
+    if (fair(spec)) return spec;
+  }
+  return story ? { shape: "compute", expr: "walk 1 3/4 + 2 1/3", unit: "km" } : { shape: "compute", expr: "1 3/4 + 2 1/3" };
+}
+
+/**
+ * The top rung of "Multiply and divide fractions" (MB-B20), from a seed. An even seed: a mixed number (whole part 1..3)
+ * multiplied by or divided by a mixed number (1..2) or a proper fraction, bottoms 2..10 in lowest terms; a whole value, or
+ * one whose bottom in lowest terms is above 60, is drawn again. An odd seed, a word problem from STORIES: a fraction of a sack of rice (a mixed number of kg times a proper
+ * fraction, "How much rice is 2/3 of the sack?") or a rope cut into equal pieces (a mixed number of metres divided by a
+ * piece of a proper fraction or a mixed number, the rope's length made as 2..9 pieces so the answer is a whole count),
+ * its answer's bottom at most 12.
+ * A value that echoes a printed number (`echoes`) is drawn again, and the item must be `fair`. Pure and seeded; null for a
+ * seed that is not a whole number 0..2^32 - 1.
+ */
+export function genMixedMulDiv(seed: unknown): SchoolSpec | null {
+  if (!topSeed(seed)) return null;
+  const rnd = prng(((seed * 2 + 3) ^ 0x5eed170a) >>> 0);
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd() * xs.length)]; }
+  const story = seed % 2 === 1, fracs = properLowest(2, 10);
+  for (let t = 0; t < MAX_TRIES; t++) {
+    let spec: SchoolSpec;
+    if (story && rnd() < 0.5) {
+      const [a, b] = pick(fracs), [c, d] = pick(fracs);
+      spec = { shape: "compute", expr: `rice ${mixedText(1 + Math.floor(rnd() * 9), a, b)} × ${c}/${d}`, unit: "kg" };
+    } else if (story) {
+      const [c, d] = pick(properLowest(2, 8)), w = Math.floor(rnd() * 3), k = 2 + Math.floor(rnd() * 8);
+      const rope = asMixed(k * (w * d + c), d);
+      if (!rope) continue;
+      spec = { shape: "compute", expr: `rope ${rope} ÷ ${mixedText(w, c, d)}` };
+    } else {
+      const [a, b] = pick(fracs), [c, d] = pick(fracs), times = rnd() < 0.5;
+      let A = mixedText(1 + Math.floor(rnd() * 3), a, b), B = mixedText(Math.floor(rnd() * 3), c, d);
+      if (times && rnd() < 0.5) [A, B] = [B, A];
+      spec = { shape: "compute", expr: `${A} ${times ? "×" : "÷"} ${B}` };
+    }
+    const r = read(spec);
+    // a bare item's answer has a bottom of at most 60 in lowest terms (3 7/9 × 2 4/5 = 10 26/45 is drawn again)
+    // and a word problem's answer a bottom of at most 12 (a rope's is a whole count)
+    if (!r.ok || (!story && (r.truth.d === ONE || r.truth.d > BigInt(60))) || (story && r.truth.d > BigInt(12)) || echoes(r)) continue;
+    if (fair(spec)) return spec;
+  }
+  return story ? { shape: "compute", expr: "rope 4 1/2 ÷ 3/4" } : { shape: "compute", expr: "2 1/4 × 1 2/3" };
+}
+
+/**
+ * The units with a top rung (MB-B20), by topic id, each with its generator: the two fractions units whose top items carry
+ * mixed numbers and word problems, percent change (the amount before a change, two changes, a change over the years),
+ * Pythagoras (sides with a decimal, the side rounded to the places asked) and probability (two events: dice, a coin with a
+ * dice or a spinner, two counters without replacement). A step up on one of them ("harder",
+ * rules/stretch tierCounts) asks for tier 3 here; no other set does, so a usual set and every other unit's sets are exactly
+ * as before. `system` makes a money amount the learner's own (localMoney, MB-B4), as the unit generators do.
+ */
+export const TOP_TIER_GENERATORS: Readonly<Record<string, (seed: number, system?: SchoolSystem) => SchoolSpec | null>> = {
+  "frac-add-sub": (seed) => genMixedAddSub(seed),
+  "frac-mul-div": (seed) => genMixedMulDiv(seed),
+  "pct-change": (seed, system) => localMoney(genPercentTop(seed), system),
+  "pythagoras": (seed) => genPythagorasTop(seed),
+  "probability": (seed) => genProbabilityTop(seed),
+};
+/** The top-rung generator for a topic id, or null: an own key only. */
+export const topGeneratorFor = (topicId: unknown) =>
+  typeof topicId === "string" && Object.prototype.hasOwnProperty.call(TOP_TIER_GENERATORS, topicId) ? TOP_TIER_GENERATORS[topicId] : null;
+/**
+ * The word problem a school spec is printed in (MB-B20), or null: a compute spec with a story (STORIES), a top-rung percent
+ * change (PCT_STORIES), a top-rung Pythagoras item (PYTH_STORIES) or a top-rung probability item (PROB_STORIES) with one.
+ */
+export function storyOf(spec: unknown): StoryId | PctStoryId | PythStoryId | ProbStoryId | null {
+  try {
+    const st = structure(spec);
+    if (!st.ok) return null;
+    const K = st.kind;
+    return (K.k === "compute" || K.k === "pct-top" || K.k === "pyth-dp" || K.k === "prob-two") && K.story ? K.story : null;
+  } catch {
+    return null;
+  }
+}
+
 // ------------------------------------------------------------------ the W7 batch 2 generators: decimals and percent
 
 /** A whole number of `p`-th places written as a decimal: (435, 2) is "4.35", (5, 2) "0.05", (28, 1) "2.8". */
@@ -2319,6 +3225,49 @@ export function genPercentChange(seed: unknown, tier: unknown): SchoolSpec | nul
   return tier === 1 ? { shape: "percent-change", expr: "increase 60 by 25%" } : { shape: "percent-change", expr: "increase 60 by 15%", unit: "€" };
 }
 
+/**
+ * The top rung of "Percent increase and decrease" (MB-B20), from a seed, each answer exact to the cent:
+ *   - the amount BEFORE a change (a reverse percentage): the answer a whole 20..900, the change a whole percent (5..80 off,
+ *     5..75 on) that leaves a whole amount: "After an increase of 20%, an amount is 540. What was the amount before the increase?";
+ *   - TWO changes in turn, each up or down by 5..50%, on a multiple of 10 up to 1000: "Increase 200 by 10%, then decrease the
+ *     result by 20%." (the same percent up then down is drawn too: it is not the amount it started at);
+ *   - one change over 2..5 YEARS (compound growth or loss; small percents over more years), on a multiple of 100 up to 5000.
+ * An even seed draws the three bare kinds with a unit as tier 2 does (money in most); an odd seed a word problem from
+ * PCT_STORIES (a sale, a fare rise, a bike's price, savings, a car's value), in € or £, which `localMoney` makes the
+ * learner's own. The value is to two places at most, never a number the question prints, and the item must be `fair`. Pure
+ * and seeded; null for a seed that is not a whole number 0..2^32 - 1.
+ */
+export function genPercentTop(seed: unknown): SchoolSpec | null {
+  if (!topSeed(seed)) return null;
+  const rnd = prng(((seed * 2 + 3) ^ 0x5eed1408) >>> 0);
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd() * xs.length)]; }
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd() * (hi - lo + 1));
+  const verb = (up: boolean) => (up ? "increase" : "decrease"), story = seed % 2 === 1;
+  for (let t = 0; t < MAX_TRIES; t++) {
+    const id: PctStoryId | null = story ? pick(Object.keys(PCT_STORIES) as PctStoryId[]) : null;
+    const form: PctForm = id ? PCT_STORIES[id].form : pick(["before", "then", "years"] as const);
+    const fixed: boolean | undefined = id ? PCT_STORIES[id].up : undefined, up = fixed ?? rnd() < 0.5;
+    let expr: string;
+    if (form === "before") {
+      const p = pick(up ? [5, 10, 15, 20, 25, 30, 40, 50, 60, 75] : [5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 75, 80]), was = 10 * int(2, 90);
+      const now = (was * (100 + (up ? p : -p))) / 100;
+      if (!Number.isInteger(now)) continue;
+      expr = `before ${verb(up)} ${now} by ${p}%`;
+    } else if (form === "then") {
+      const steps = [5, 10, 15, 20, 25, 30, 40, 50];
+      expr = `${verb(up)} ${10 * int(5, 100)} by ${pick(steps)}% then ${verb(rnd() < 0.5)} by ${pick(steps)}%`;
+    } else {
+      const p = pick(up ? [2, 3, 4, 5, 10, 20] : [5, 10, 20, 25, 50]), years = p <= 5 ? int(2, 4) : int(2, 3);
+      expr = `${verb(up)} ${100 * int(1, 50)} by ${p}% for ${years} years`;
+    }
+    const unit: Unit = id ? pick(["€", "£"] as const) : pick(PERCENT_UNITS);
+    const spec: SchoolSpec = { shape: "percent-change", expr: id ? `${id} ${expr}` : expr, unit };
+    if (!read(spec).ok) continue;
+    if (fair(spec)) return spec;
+  }
+  return story ? { shape: "percent-change", expr: "rise before increase 540 by 20%", unit: "€" } : { shape: "percent-change", expr: "before increase 540 by 20%", unit: "€" };
+}
+
 // ------------------------------------------------------------------ the W7 batch 3 generators: ratio, rates, area, mean and range
 
 /** Two different whole numbers lo..hi with no common factor, as a ratio in lowest terms. */
@@ -2480,25 +3429,219 @@ export function genStat(seed: unknown, tier: unknown): SchoolSpec | null {
   return tier === 1 ? { shape: "stat", expr: "mean 4, 7, 9, 12" } : { shape: "stat", expr: "mean 4, 7, 9, 10" };
 }
 
+// ------------------------------------------------------------------ the v2 M2b generators: Pythagoras' theorem, probability
+
+/** Every right-angled triangle with whole sides a < b < c and c at most 100 (the primitive triples and their multiples). */
+const TRIPLES: [number, number, number][] = (() => {
+  const out: [number, number, number][] = [];
+  for (let c = 5; c <= 100; c++) for (let a = 3; a < c; a++) { const b2 = c * c - a * a, b = Math.round(Math.sqrt(b2)); if (b > a && b < c && b * b === b2) out.push([a, b, c]); }
+  return out;
+})();
+
+/**
+ * One "Pythagoras' theorem" item, from a seed and a tier that code computed (a table of whole triples, never a root):
+ *   - tier 1: the longest side from the two shorter sides, the triple's longest at most 50 ("longest 6 8");
+ *   - tier 2: a shorter side from the longest side and the other shorter side, the longest at most 100 ("shorter 10 6").
+ * The unit is cm in half, mm and metres in a quarter each; the given sides turn round with the seed's draw. Drawn again: an item
+ * on which any listed slip of its kind has no value of its own (every generated item shows every slip of its kind) and an answer
+ * the question prints. Pure and seeded; null for a bad seed or tier.
+ */
+export function genPythagoras(seed: unknown, tier: unknown): SchoolSpec | null {
+  const rnd = seeded(seed, tier, 0x5eed2b02);
+  if (!rnd) return null;
+  const pool = tier === 1 ? TRIPLES.filter(([, , c]) => c <= 50) : TRIPLES;
+  for (let t = 0; t < MAX_TRIES; t++) {
+    const [a, b, c] = pool[Math.floor(rnd() * pool.length)], u = rnd(), flip = rnd() < 0.5;
+    const unit: Unit = u < 0.5 ? "cm" : u < 0.75 ? "mm" : "m";
+    const spec: SchoolSpec = tier === 1 ? { shape: "pythagoras", expr: `longest ${flip ? b : a} ${flip ? a : b}`, unit } : { shape: "pythagoras", expr: `shorter ${c} ${flip ? a : b}`, unit };
+    const r = read(spec);
+    if (!r.ok || slipCandidates(r).length !== (tier === 1 ? 2 : 3)) continue;
+    if (fair(spec)) return spec;
+  }
+  return tier === 1 ? { shape: "pythagoras", expr: "longest 6 8", unit: "cm" } : { shape: "pythagoras", expr: "shorter 10 6", unit: "cm" };
+}
+
+/** A count of tenths as a side is written: 25 is "2.5", 60 is "6". */
+const tenthsText = (t: number) => (t % 10 === 0 ? String(t / 10) : `${Math.floor(t / 10)}.${t % 10}`);
+
+/**
+ * The top rung of "Pythagoras' theorem" (MB-B20), from a seed: the side asked is no whole number, so the answer is rounded
+ * to the places the question names. An even seed: the longest side from two shorter sides 1..30, or a shorter side from a
+ * longest side 5..40 and the other shorter side, at least one side written to one decimal place, the answer to one or two
+ * places, in cm, mm or metres. An odd seed, a word problem from PYTH_STORIES to one place: a ladder 3..10 metres (whole or a
+ * half) with its foot out from the wall (a shorter side, with decimals), a screen's diagonal (cm, about sixteen by nine) or a
+ * rectangular field's (metres). Drawn again: an exact side, a rounded answer ending in a zero or below one, and an item that
+ * is not `fair`. Pure and seeded; null for a seed that is not a whole number 0..2^32 - 1.
+ */
+export function genPythagorasTop(seed: unknown): SchoolSpec | null {
+  if (!topSeed(seed)) return null;
+  const rnd = prng(((seed * 2 + 3) ^ 0x5eed2b04) >>> 0);
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd() * xs.length)]; }
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd() * (hi - lo + 1));
+  const story = seed % 2 === 1;
+  for (let t = 0; t < MAX_TRIES; t++) {
+    let spec: SchoolSpec;
+    if (story) {
+      const id = pick(Object.keys(PYTH_STORIES) as PythStoryId[]);
+      let x: number, y: number;
+      if (id === "ladder") { x = 5 * int(6, 20); y = int(5, Math.floor(x / 2)); }
+      else if (id === "screen") { x = 10 * int(40, 140); y = 10 * (Math.round((x / 10) * 9 / 16) + int(-2, 2)); }
+      else { x = 10 * int(20, 100); y = 10 * int(10, x / 10 - 5); }
+      spec = { shape: "pythagoras", expr: `${id} ${tenthsText(x)} ${tenthsText(y)} dp1`, unit: PYTH_STORIES[id].unit };
+    } else {
+      const longest = rnd() < 0.5, dp = rnd() < 0.5 ? 1 : 2, u = rnd(), unit: Unit = u < 0.5 ? "cm" : u < 0.75 ? "mm" : "m";
+      const x = longest ? int(10, 300) : int(50, 400), y = longest ? int(10, 300) : int(10, x - 10);
+      if (x % 10 === 0 && y % 10 === 0) continue;
+      spec = { shape: "pythagoras", expr: `${longest ? "longest" : "shorter"} ${tenthsText(x)} ${tenthsText(y)} dp${dp}`, unit };
+    }
+    if (!read(spec).ok) continue;
+    if (fair(spec)) return spec;
+  }
+  return story ? { shape: "pythagoras", expr: "ladder 6 2.5 dp1", unit: "m" } : { shape: "pythagoras", expr: "longest 2.5 7 dp1", unit: "cm" };
+}
+
+/**
+ * One "Probability of an event" item (a single experiment), from a seed and a tier that code computed:
+ *   - tier 1: a bag of two to four different colours, each 1 to 8 counters, 5 to 20 in all, one taken at random: the probability
+ *     that it is a named colour ("bag red 3, blue 5, green 2 ask red");
+ *   - tier 2, the kind turning with the seed alone (never a retry), a bag of three or four colours: the probability that it is NOT a
+ *     colour, one of two named colours, or (the third kind) the complement of a stated probability, 0.05 to 0.95 in steps of 0.05
+ *     but not 0.5, given as a decimal or (the seed again) as a percent ("complement red 0.35").
+ * A probability of nothing or a whole is never drawn (wellFormed refuses it); nor is an item on which a listed slip of its kind has
+ * no value of its own (a bag of equal colours makes one over the colours the answer), so every generated item shows every slip of
+ * its kind; nor an answer the question prints. Pure and seeded; null for a bad seed or tier.
+ */
+export function genProbability(seed: unknown, tier: unknown): SchoolSpec | null {
+  const rnd = seeded(seed, tier, 0x5eed2c03);
+  if (!rnd) return null;
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd!() * (hi - lo + 1));
+  const kind = tier === 1 ? "colour" : (["not", "or", "comp"] as const)[(seed as number) % 3];
+  const want = { colour: 3, not: 4, or: 3, comp: 1 }[kind];
+  for (let t = 0; t < MAX_TRIES; t++) {
+    let spec: SchoolSpec;
+    if (kind === "comp") {
+      const v = 5 * int(1, 19);
+      if (v === 50) continue;
+      const pct = Math.floor((seed as number) / 3) % 2 === 1, dec = String(v).padStart(2, "0").replace(/0$/, "");
+      spec = { shape: "probability", expr: `complement ${PROB_COLOURS[int(0, PROB_COLOURS.length - 1)]} ${pct ? `${v}%` : `0.${dec}`}` };
+    } else {
+      const m = tier === 1 ? int(2, 4) : int(3, 4), pool = [...PROB_COLOURS], names: string[] = [];
+      for (let i = 0; i < m; i++) names.push(pool.splice(int(0, pool.length - 1), 1)[0]);
+      const counts = names.map(() => int(1, 8)), total = counts.reduce((a, b) => a + b, 0);
+      if (total < 5 || total > 20) continue;
+      const a = int(0, m - 1);
+      let ask = names[a];
+      if (kind === "not") ask = `not ${ask}`;
+      else if (kind === "or") { const b = (a + int(1, m - 1)) % m; ask = `${names[a]} or ${names[b]}`; }
+      spec = { shape: "probability", expr: `bag ${names.map((c, i) => `${c} ${counts[i]}`).join(", ")} ask ${ask}` };
+    }
+    const r = read(spec);
+    if (!r.ok || slipCandidates(r).length !== want) continue;
+    if (fair(spec)) return spec;
+  }
+  return tier === 1 ? { shape: "probability", expr: "bag red 3, blue 5, green 2 ask red" } : { shape: "probability", expr: "bag red 3, blue 5, green 2 ask not red" };
+}
+
+/**
+ * The top rung of "Probability of an event" (MB-B20), from a seed: two events, the answer an exact fraction. An even seed,
+ * one of six bare kinds: two fair dice, both events asked (a number, even, odd, a number more than 2..4) or at least one
+ * showing an event; a fair coin with a fair dice, or with a spinner of two or three colours (4 to 12 equal sections); two
+ * counters from a bag of two or three colours (5 to 12 counters) without replacement, both one colour or one colour then
+ * another. An odd seed, a word problem from PROB_STORIES: socks from a drawer (both one colour), sweets from a jar (one
+ * colour then the other), both without replacement, or a game of a coin and a dice. Drawn again: a certain or impossible
+ * event, a question longer than the reader reads back, and an item that is not `fair`. Pure and seeded; null for a seed
+ * that is not a whole number 0..2^32 - 1.
+ */
+export function genProbabilityTop(seed: unknown): SchoolSpec | null {
+  if (!topSeed(seed)) return null;
+  const rnd = prng(((seed * 2 + 3) ^ 0x5eed2c04) >>> 0);
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd() * xs.length)]; }
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd() * (hi - lo + 1));
+  const ev = () => { const k = pick(["n", "n", "even", "odd", "over"] as const); return k === "n" ? String(int(1, 6)) : k === "over" ? `over ${int(2, 4)}` : k; };
+  const bag = (lo: number, hi: number, most: number) => {
+    const pool = [...PROB_COLOURS], names: string[] = [];
+    for (let i = int(2, 3); i > 0; i--) names.push(pool.splice(int(0, pool.length - 1), 1)[0]);
+    const counts = names.map(() => int(1, most)), total = counts.reduce((a, b) => a + b, 0);
+    return total < lo || total > hi ? null : names.map((c, i): [string, number] => [c, counts[i]]);
+  };
+  const listed = (xs: [string, number][]) => xs.map(([c, n]) => `${c} ${n}`).join(", ");
+  const story = seed % 2 === 1;
+  for (let t = 0; t < MAX_TRIES; t++) {
+    let expr: string;
+    if (story) {
+      const id = pick(Object.keys(PROB_STORIES) as ProbStoryId[]);
+      if (id === "game") expr = `game coin ${pick(["heads", "tails"] as const)} and dice ${ev()}`;
+      else {
+        const [x, y] = PROB_STORIES[id].colours, a = int(2, 8), b = int(2, 8);
+        if (a + b < 5 || a + b > 12) continue;
+        const ask = id === "socks" ? `both ${pick([x, y])}` : rnd() < 0.5 ? `${x} then ${y}` : `${y} then ${x}`;
+        expr = `${id} draw ${x} ${a}, ${y} ${b} ${ask}`;
+      }
+    } else {
+      const form = pick(["dice-and", "dice-least", "coin-dice", "coin-spin", "draw-both", "draw-then"] as const);
+      if (form === "dice-and") expr = `dice ${ev()} and ${ev()}`;
+      else if (form === "dice-least") expr = `dice least ${ev()}`;
+      else if (form === "coin-dice") expr = `coin ${pick(["heads", "tails"] as const)} and dice ${ev()}`;
+      else {
+        const xs = form === "coin-spin" ? bag(4, 12, 6) : bag(5, 12, 8);
+        if (!xs) continue;
+        const names = xs.map(([c]) => c), a = int(0, names.length - 1);
+        if (form === "coin-spin") expr = `coin ${pick(["heads", "tails"] as const)} and spinner ${listed(xs)} ask ${names[a]}`;
+        else if (form === "draw-both") expr = `draw ${listed(xs)} both ${names[a]}`;
+        else expr = `draw ${listed(xs)} ${names[a]} then ${names[(a + int(1, names.length - 1)) % names.length]}`;
+      }
+    }
+    const spec: SchoolSpec = { shape: "probability", expr };
+    if (!read(spec).ok) continue;
+    const q = question(spec);
+    if (!q || q.plain.length > MAX_TASK) continue;
+    if (fair(spec)) return spec;
+  }
+  return story ? { shape: "probability", expr: "socks draw black 4, white 6 both black" } : { shape: "probability", expr: "coin heads and dice 6" };
+}
+
+/**
+ * The units of v2 M2b, beyond the school path, with their generators. They join SCHOOL_GENERATORS (and the path) only when
+ * the sweep passes (tools/gcse-units-test.cjs): a unit that fails stays out of this table's spread there, its code kept.
+ */
+export const GCSE_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
+  "pythagoras": (seed, tier) => genPythagoras(seed, tier),
+  "probability": (seed, tier) => genProbability(seed, tier),
+};
+
+/** The money a learner's own school counts in (MB-B4): Kč in cz, € in de, £ in uk; us keeps what the generator drew. */
+const LOCAL_MONEY: Partial<Record<SchoolSystem, Unit>> = { cz: "Kč", de: "€", uk: "£" };
+/**
+ * A generated spec in the learner's money (MB-B4): a €, £ or $ amount becomes the system's own currency, the numbers
+ * untouched (the ceiling: a Kč figure is not retuned to Kč sizes). No system, us, or a spec with no money: as drawn.
+ */
+function localMoney(spec: SchoolSpec | null, system?: SchoolSystem): SchoolSpec | null {
+  const own = isSystem(system) ? LOCAL_MONEY[system] : undefined, u = (spec as { unit?: Unit } | null)?.unit;
+  return spec && own && (u === "€" || u === "£" || u === "$") && u !== own ? { ...spec, unit: own } as SchoolSpec : spec;
+}
+
 /**
  * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
  * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount, multiply and divide fractions; W7 batch
- * 2: decimals and percent; W7 batch 3: ratio and sharing, unit rates, area, mean and range). A topic not here is written as
+ * 2: decimals and percent; W7 batch 3: ratio and sharing, unit rates, area, mean and range; v2 M2b: Pythagoras' theorem and
+ * probability, once their sweep passed). A topic not here is written as
  * it always was.
  */
-export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
-  "frac-equivalent": (seed, tier) => genEquivalent(seed, tier),
-  "frac-of-amount": (seed, tier) => genOfAmount(seed, tier),
-  "frac-add-sub": (seed, tier) => gen(seed, tier),
-  "frac-mul-div": (seed, tier) => genMulDiv(seed, tier),
-  "dec-arith": (seed, tier) => genDecimal(seed, tier),
-  "dec-convert": (seed, tier) => genConvert(seed, tier),
-  "pct-of-amount": (seed, tier) => genPercentOf(seed, tier),
-  "pct-change": (seed, tier) => genPercentChange(seed, tier),
-  "ratio-share": (seed, tier) => genRatio(seed, tier),
-  "unit-rate": (seed, tier) => genRate(seed, tier),
-  "area": (seed, tier) => genArea(seed, tier),
-  "mean-range": (seed, tier) => genStat(seed, tier),
+export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2, system?: SchoolSystem) => SchoolSpec | null>> = {
+  "frac-equivalent": (seed, tier, system) => localMoney(genEquivalent(seed, tier), system),
+  "frac-of-amount": (seed, tier, system) => localMoney(genOfAmount(seed, tier), system),
+  "frac-add-sub": (seed, tier, system) => localMoney(gen(seed, tier), system),
+  "frac-mul-div": (seed, tier, system) => localMoney(genMulDiv(seed, tier), system),
+  "dec-arith": (seed, tier, system) => localMoney(genDecimal(seed, tier), system),
+  "dec-convert": (seed, tier, system) => localMoney(genConvert(seed, tier), system),
+  "pct-of-amount": (seed, tier, system) => localMoney(genPercentOf(seed, tier), system),
+  "pct-change": (seed, tier, system) => localMoney(genPercentChange(seed, tier), system),
+  "ratio-share": (seed, tier, system) => localMoney(genRatio(seed, tier), system),
+  "unit-rate": (seed, tier, system) => localMoney(genRate(seed, tier), system),
+  "area": (seed, tier, system) => localMoney(genArea(seed, tier), system),
+  "mean-range": (seed, tier, system) => localMoney(genStat(seed, tier), system),
+  // v2 M2b: the units that passed the sweep (tools/gcse-units-test.cjs); a unit that fails stays out of GCSE_GENERATORS' spread here
+  ...GCSE_GENERATORS,
 };
 /** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
 export const generatorFor = (topicId: unknown) =>
@@ -2522,7 +3665,182 @@ export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "unit-rate": ["rate-wrong-way", "rate-multiplied", "rate-other-quantity"],
   "area": ["area-added-sides", "area-no-half", "area-one-part"],
   "mean-range": ["stat-not-divided", "stat-wrong-count", "stat-median", "range-largest", "range-backwards"],
+  // v2 M2b: the units beyond the school path (a slip of a kind with no exact value is not listed: the rooted squares-added slip)
+  "pythagoras": ["pyth-sides-added", "pyth-no-root", "pyth-squares-added"],
+  "probability": ["prob-count-alone", "prob-part-over-rest", "prob-one-over-colours", "prob-own"],
 };
+
+/**
+ * MB-B20: the slips only a unit's TOP rung can show, by topic id, in SCHOOL_SLIPS order, each detected by code
+ * (slipCandidates). Kept off SCHOOL_UNIT_SLIPS: a usual item never shows them, so the unit's list - the explain prompt's
+ * vocabulary, an aimed set, the ruler - stays as it was; a step-up attempt never reaches the slip record (rules/slips).
+ */
+export const SCHOOL_TOP_SLIPS: Readonly<Record<string, readonly string[]>> = {
+  "pct-change": ["pct-of-new", "pct-added"],
+  "probability": ["prob-added", "prob-replaced"],
+};
+
+/**
+ * MB-B40 cycle 14, a code-written set aimed at what a paper lost: the FORMS a unit's generator draws at tiers 1 and 2, by
+ * topic id - only for a unit whose generator draws more than one form inside a tier, so a paper's statement can pick some
+ * of them. Each form is read off the spec by `formOf`, never from a model; tools/paper-aim-test.cjs pins every list to
+ * the generator's own draws. A unit not here has nothing a statement could pick and is never steered by a paper.
+ */
+export const SCHOOL_UNIT_FORMS: Readonly<Record<string, Readonly<Record<1 | 2, readonly string[]>>>> = {
+  "dec-convert": {
+    1: ["fraction-decimal", "fraction-percent", "decimal-fraction", "decimal-percent", "percent-decimal", "percent-fraction"],
+    2: ["fraction-decimal", "fraction-percent", "decimal-fraction", "decimal-percent", "percent-decimal", "percent-fraction"],
+  },
+  "ratio-share": { 1: ["simplify", "missing"], 2: ["share"] },
+  "area": { 1: ["rectangle", "triangle"], 2: ["composite", "triangle", "rectangle"] },
+};
+
+/**
+ * The form of a unit's spec (SCHOOL_UNIT_FORMS), read from the spec alone: a conversion is "<given>-<asked>" (the given
+ * form read off its expression: a '/' is a fraction, a '%' a percent, else a decimal), a ratio item "share" ('N in a:b'),
+ * "missing" ('a:b = ?:c') or "simplify" ('a:b'), an area item "composite" (two rectangles), "triangle" or "rectangle".
+ * Null for a unit with no forms or a spec of another shape.
+ */
+export function formOf(topicId: unknown, spec: unknown): string | null {
+  if (!isSchoolSpec(spec)) return null;
+  if (topicId === "dec-convert" && spec.shape === "convert") {
+    const given = spec.expr.includes("/") ? "fraction" : spec.expr.includes("%") ? "percent" : "decimal";
+    return `${given}-${spec.to}`;
+  }
+  if (topicId === "ratio-share" && spec.shape === "ratio") return spec.expr.includes(" in ") ? "share" : spec.expr.includes("=") ? "missing" : "simplify";
+  if (topicId === "area" && spec.shape === "area") return spec.expr.startsWith("rectangles ") ? "composite" : spec.expr.startsWith("triangle") ? "triangle" : "rectangle";
+  return null;
+}
+
+/**
+ * Which forms of a unit each paper statement (library/gcse.ts code) is about, by topic id: the map from what a marked
+ * paper says was lost to the generator's shapes. Decided here, by rule, from the statement's own words:
+ *   - dec-convert: N10 "move between terminating decimals and their fractions" is the two fraction-decimal conversions;
+ *     R9 "percentages ... as a fraction or decimal" is the four with a percent in them.
+ *   - ratio-share: R4 "ratio notation, including simplest form" is simplifying a ratio.
+ *   - area: G16 "area of triangles ..." is the triangle; G17 "... composite areas ..." is the two rectangles joined.
+ * A statement that covers its whole unit is not listed (N2 on the fraction and decimal units, R9 on the percent units,
+ * S4 on mean and range, G20 on Pythagoras, the probability statements, R11 on unit rates...): the usual set already is
+ * that statement. Nor is one whose forms are a whole tier and nothing else (R5 and N11, sharing, is all of tier 2 on
+ * ratio-share): aiming there would draw the set the unit always draws.
+ */
+export const STATEMENT_FORMS: Readonly<Record<string, Readonly<Record<string, readonly string[]>>>> = {
+  "dec-convert": { N10: ["fraction-decimal", "decimal-fraction"], R9: ["fraction-percent", "decimal-percent", "percent-decimal", "percent-fraction"] },
+  "ratio-share": { R4: ["simplify"] },
+  "area": { G16: ["triangle"], G17: ["composite"] },
+};
+
+/** A paper's steer on one unit's set: the forms aimed at in each tier it narrows, and the statements that lead there. */
+export interface PaperSteer { forms: Partial<Record<1 | 2, readonly string[]>>; codes: string[] }
+
+/**
+ * The steer a paper's lost statements put on a code-written set of `topicId` drawn at `tiers` (MB-B40 cycle 14). The aimed
+ * forms are every form the known statements name on this unit (STATEMENT_FORMS); a tier is steered only when they are
+ * SOME of its forms (SCHOOL_UNIT_FORMS) - none, or all of them, leaves the tier as it is drawn. Tier 3 is never steered
+ * (as a slip aim, MB-B20). `codes` are the statements, in the order given, that name a form of a steered tier. Null when
+ * no tier is steered: the set is drawn exactly as it would be with no paper. Pure.
+ */
+export function paperSteer(topicId: unknown, codes: readonly unknown[] | undefined, tiers: readonly number[]): PaperSteer | null {
+  if (typeof topicId !== "string" || !Object.prototype.hasOwnProperty.call(STATEMENT_FORMS, topicId)) return null;
+  const by = STATEMENT_FORMS[topicId], unit = SCHOOL_UNIT_FORMS[topicId];
+  const known = [...new Set((Array.isArray(codes) ? codes : []).filter((c): c is string => typeof c === "string" && Object.prototype.hasOwnProperty.call(by, c)))];
+  const aimed = new Set(known.flatMap((c) => by[c]));
+  const forms: PaperSteer["forms"] = {};
+  for (const t of [1, 2] as const) {
+    if (!tiers.includes(t)) continue;
+    const some = unit[t].filter((f) => aimed.has(f));
+    if (some.length && some.length < unit[t].length) forms[t] = some;
+  }
+  const steered = new Set([...(forms[1] ?? []), ...(forms[2] ?? [])]);
+  const led = known.filter((c) => by[c].some((f) => steered.has(f)));
+  return led.length ? { forms, codes: led } : null;
+}
+
+/**
+ * MB-B20 cycle 18, a step up aimed at its named slips: the KINDS a unit's top rung draws (tier 3), by topic id, each read
+ * off the spec by `topFormOf`, never from a model; tools/paper-aim-test.cjs pins every list to the rung's own draws. A
+ * percent change is "before" (the amount before a change), "then" (two changes in turn) or "years"; a Pythagoras side
+ * "longest" or "shorter"; a probability item its ProbForm. The fractions units' rungs name no slip and are not here.
+ */
+export const SCHOOL_TOP_FORMS: Readonly<Record<string, readonly string[]>> = {
+  "pct-change": ["before", "then", "years"],
+  "pythagoras": ["longest", "shorter"],
+  "probability": ["dice-and", "dice-least", "coin-dice", "coin-spin", "draw-both", "draw-then"],
+};
+
+/**
+ * Which top-rung kinds each slip named on a top-rung item happens on, by topic id: the slip's own candidates in
+ * slipCandidates, read off. Taking the percent of the new amount is only possible on the amount before a change; adding
+ * the percentages on two changes or the years; adding the chances on the three kinds with two independent events (at
+ * least one of two dice names none); putting the first one back on the two draws; adding the squares on a shorter side.
+ * A slip that shows on EVERY kind of its rung is not listed - aiming there would draw the rung it always draws (as a paper
+ * statement covering its whole unit, STATEMENT_FORMS): the root not taken, and the sides added, on Pythagoras.
+ */
+export const TOP_SLIP_FORMS: Readonly<Record<string, Readonly<Record<string, readonly string[]>>>> = {
+  "pct-change": { "pct-of-new": ["before"], "pct-added": ["then", "years"] },
+  "pythagoras": { "pyth-squares-added": ["shorter"] },
+  "probability": { "prob-added": ["dice-and", "coin-dice", "coin-spin"], "prob-replaced": ["draw-both", "draw-then"] },
+};
+
+/** The top-rung kind of a unit's tier-3 spec (SCHOOL_TOP_FORMS), read from the spec alone; null for any other spec or unit. */
+export function topFormOf(topicId: unknown, spec: unknown): string | null {
+  if (typeof topicId !== "string" || !Object.prototype.hasOwnProperty.call(SCHOOL_TOP_FORMS, topicId)) return null;
+  try {
+    const st = structure(spec);
+    if (!st.ok) return null;
+    const K = st.kind;
+    const f = topicId === "pct-change" && K.k === "pct-top" ? K.form : topicId === "pythagoras" && K.k === "pyth-dp" ? K.find : topicId === "probability" && K.k === "prob-two" ? K.form : null;
+    return f && SCHOOL_TOP_FORMS[topicId].includes(f) ? f : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The slips a learner made on a unit's top rung, read from a set as the session holds it: each item settled wrong with a
+ * slip that its kind's list names (TOP_SLIP_FORMS), counted only on a tier-3 item whose spec reads as a top-rung kind -
+ * so the Pythagoras ids the unit shares with tiers 1 and 2 count only where the rung drew them. In item order, each once.
+ */
+export function topSlipsOf(topicId: unknown, items: readonly { verdict?: unknown; slip?: unknown; tier?: unknown; spec?: unknown }[] | undefined): string[] {
+  if (typeof topicId !== "string" || !Object.prototype.hasOwnProperty.call(TOP_SLIP_FORMS, topicId)) return [];
+  const by = TOP_SLIP_FORMS[topicId], out: string[] = [];
+  for (const it of Array.isArray(items) ? items : []) {
+    if (!it || it.verdict !== "wrong" || it.tier !== 3 || typeof it.slip !== "string" || !Object.prototype.hasOwnProperty.call(by, it.slip)) continue;
+    if (!topFormOf(topicId, it.spec) || out.includes(it.slip)) continue;
+    out.push(it.slip);
+  }
+  return out;
+}
+
+/**
+ * The top-rung kinds a step up aims at for these slips (TOP_SLIP_FORMS), in SCHOOL_TOP_FORMS order, and the slips that
+ * lead there. Null when none is known, or when together they are every kind of the rung (nothing to pick). Pure.
+ */
+export function topSteer(topicId: unknown, slips: readonly unknown[] | undefined): { forms: string[]; slips: string[] } | null {
+  if (typeof topicId !== "string" || !Object.prototype.hasOwnProperty.call(TOP_SLIP_FORMS, topicId)) return null;
+  const by = TOP_SLIP_FORMS[topicId];
+  const known = [...new Set((Array.isArray(slips) ? slips : []).filter((s): s is string => typeof s === "string" && Object.prototype.hasOwnProperty.call(by, s)))];
+  const aimed = new Set(known.flatMap((s) => by[s]));
+  const forms = SCHOOL_TOP_FORMS[topicId].filter((f) => aimed.has(f));
+  return forms.length && forms.length < SCHOOL_TOP_FORMS[topicId].length ? { forms, slips: known } : null;
+}
+
+/** The most words the step-up aim line takes: the caption slot's budget, as the paper's aim line (tv/mathsRows AIM_WORDS). */
+const TOP_AIM_WORDS = 25;
+/**
+ * The Practice card's line for a step up aimed at its named slips (cycle 18): "Aimed at: " and each slip's own name, its
+ * first letter lowered, joined by "; " - "Aimed at: took the percent of the new amount." Only ids the unit's rung names
+ * (TOP_SLIP_FORMS); null when none. A slip's name, never a value, a question or an answer.
+ */
+export function topAimLine(topicId: unknown, slips: readonly unknown[] | undefined): string | null {
+  if (typeof topicId !== "string" || !Object.prototype.hasOwnProperty.call(TOP_SLIP_FORMS, topicId)) return null;
+  const by = TOP_SLIP_FORMS[topicId];
+  const names = [...new Set((Array.isArray(slips) ? slips : []).filter((s): s is string => typeof s === "string" && Object.prototype.hasOwnProperty.call(by, s)))]
+    .map((id) => SCHOOL_SLIPS.find((c) => c.id === id)?.name).filter((x): x is string => !!x).map((x) => x.charAt(0).toLowerCase() + x.slice(1));
+  if (!names.length) return null;
+  const line = `Aimed at: ${names.join("; ")}.`;
+  return line.split(/\s+/).length <= TOP_AIM_WORDS ? line : `Aimed at: ${names[0]}.`;
+}
 
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
 export const DEFAULT_SCHOOL_SYSTEM: SchoolSystem = "uk";
@@ -2573,6 +3891,41 @@ function readCombined(t0: string): SchoolSpec | null {
     // a bottom of 1 is a whole number written as a fraction: not these units' task
     if (r.node.k !== "op" || r.node.a.k !== "frac" || r.node.b.k !== "frac") return null;
     return spec;
+  }
+  return null;
+}
+
+/** One operand of a top-rung item (MB-B20): a mixed number "1 3/4" (a space between the whole part and the fraction) or a fraction. */
+const MIXED_SRC = String.raw`((?:[1-9]\d{0,2} )?[1-9]\d{0,2}\/[1-9]\d{0,2})`;
+
+/**
+ * Two numbers combined where at least one is a mixed number (MB-B20): '1 3/4 + 2 1/3', 'Work out 3 1/2 - 5/6', '2 1/4 ×
+ * 1 2/3', '4 1/2 ÷ 3/4' (the operation as a sign or a word, after the verbs readCombined takes, with its instruction after
+ * it); or null. Two plain fractions are readCombined's, never read here.
+ */
+function readMixed(t0: string): SchoolSpec | null {
+  let t = t0;
+  let form: ComputeSpec["form"];
+  const tail = /[.?!]?\s*(?:(give your answer in its (?:simplest form|lowest terms)|simplify your answer)|(give your answer as a decimal))\.?$/i.exec(t);
+  if (tail) { form = tail[1] ? "simplest" : "decimal"; t = t.slice(0, tail.index).trim(); }
+  t = t.replace(/\s*(?:=\s*(?:\?|_+|\.{3}|…)?)?\s*[.?!]?$/, "").trim();
+  const m = new RegExp(String.raw`^(?:${VERB_SRC}\s*:?\s*)?${MIXED_SRC}\s*(\+|-|plus|minus|×|x|\*|times|÷|divided by)\s*${MIXED_SRC}$`, "i").exec(t);
+  if (!m || !(/ /.test(m[1]) || / /.test(m[3]))) return null;
+  const op: Op = /^(?:-|minus)$/i.test(m[2]) ? "-" : /^(?:\+|plus)$/i.test(m[2]) ? "+" : /^(?:÷|divided by)$/i.test(m[2]) ? "÷" : "×";
+  const spec: SchoolSpec = { shape: "compute", expr: `${m[1]} ${op} ${m[3]}`, ...(form ? { form } : {}) };
+  return read(spec).ok ? spec : null;
+}
+
+/** A word problem of STORIES (MB-B20) exactly as `question` prints it, each operand a fraction or a mixed number; or null. */
+function readStory(t0: string): SchoolSpec | null {
+  const t = t0.trim();
+  for (const id of Object.keys(STORIES) as StoryId[]) {
+    const story = STORIES[id];
+    const src = story.text.split(/(\{A\}|\{B\})/).map((x) => (x === "{A}" || x === "{B}" ? MIXED_SRC : x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))).join("");
+    const m = new RegExp(`^${src.replace(/\\\?$/, "\\??")}$`, "i").exec(t);
+    if (!m) continue;
+    const spec: SchoolSpec = story.unit ? { shape: "compute", expr: `${id} ${m[1]} ${story.op} ${m[2]}`, unit: story.unit } : { shape: "compute", expr: `${id} ${m[1]} ${story.op} ${m[2]}` };
+    return read(spec).ok ? spec : null;
   }
   return null;
 }
@@ -2647,8 +4000,10 @@ function readSimplify(t0: string): SchoolSpec | null {
   return null;
 }
 
-/** A decimal or whole number as a worksheet prints it, an optional € or £ before it: 4.35, 0.4, 12, €2.80 (m[sign], m[number]). */
-const MONEY_DEC_SRC = String.raw`([€£])?\s?((?:0|[1-9]\d{0,3})(?:\.\d{1,3})?)`;
+/** A decimal or whole number as a worksheet prints it, an optional €, £ or Kč before it: 4.35, 0.4, 12, €2.80 (m[sign], m[number]). */
+const MONEY_DEC_SRC = String.raw`(€|£|Kč)?\s?((?:0|[1-9]\d{0,3})(?:\.\d{1,3})?)`;
+/** A money sign written after its amount ('2.80 €', '3.45 Kč', MB-B4) put before it, as MONEY_DEC_SRC reads it ('€2.80'). */
+const signFirst = (t: string) => t.replace(/((?:0|[1-9]\d{0,3})(?:\.\d{1,3})?)\s?(€|£|Kč)(?![\p{L}\d])/giu, (_, n: string, c: string) => `${/^k/i.test(c) ? "Kč" : c}${n}`);
 /** The phrasings of two numbers added, subtracted or multiplied, each giving sign and number (m[1..2], m[4..5]) and the operation word m[3]. */
 const DEC_TASKS: { re: RegExp; op: (w: string) => "+" | "-" | "×"; swap?: boolean }[] = [
   // '4.35 + 2.8', 'Work out 3.6 × 0.4', 'Calculate €4.35 + €2.80', '3.6 x 0.4', '4.35 plus 2.8'
@@ -2667,11 +4022,12 @@ const DEC_TASKS: { re: RegExp; op: (w: string) => "+" | "-" | "×"; swap?: boole
  * whole count ('£3.45 × 4'); any other placing of a sign is null.
  */
 function readDecimal(t0: string): SchoolSpec | null {
-  const t = t0.replace(/\s*(?:=\s*(?:\?|_+|\.{3}|…)?)?\s*[.?!]?$/, "").trim();
+  const t = signFirst(t0.replace(/\s*(?:=\s*(?:\?|_+|\.{3}|…)?)?\s*[.?!]?$/, "").trim());
   for (const { re, op, swap } of DEC_TASKS) {
     const m = re.exec(t);
     if (!m) continue;
-    let [sa, a, sb, b] = [m[1], m[2], m[4], m[5]];
+    const crown = (x: string | undefined) => (x && /^k/i.test(x) ? "Kč" : x);
+    let [sa, a, sb, b] = [crown(m[1]), m[2], crown(m[4]), m[5]];
     if (swap) [sa, a, sb, b] = [sb, b, sa, a];
     const o = op(m[3]);
     if (!a.includes(".") && !b.includes(".")) return null;
@@ -2786,8 +4142,8 @@ function readRatio(t0: string): SchoolSpec | null {
   return spec && read(spec).ok ? spec : null;
 }
 
-/** A price in a rate task: '€3.50', '£3.50', '3.50 euros', '30 euro' (pounds is money or weight: never read). */
-const RATE_PRICE = String.raw`(?:([€£])\s?((?:0|[1-9]\d{0,3})(?:\.\d\d)?)|((?:0|[1-9]\d{0,3})(?:\.\d\d)?)\s?(?:euros?|€))`;
+/** A price in a rate task: '€3.50', '£3.50', '3.50 euros', '30 euro', '3.50 €', '3.50 £', '3.50 Kč' (pounds is money or weight: never read). */
+const RATE_PRICE = String.raw`(?:([€£])\s?((?:0|[1-9]\d{0,3})(?:\.\d\d)?)|((?:0|[1-9]\d{0,3})(?:\.\d\d)?)\s?(euros?|€|£|Kč))`;
 /** How the question part of a cost asks it, the count and the item: 'What do 8 pens cost', 'Find the cost of 8 pens', 'What is the price of 1 kg'. */
 const RATE_ASK = String.raw`(?:what\s+(?:do|does)\s+([1-9]\d{0,2})\s+([a-z]+)\s+cost|how\s+much\s+(?:do|does)\s+([1-9]\d{0,2})\s+([a-z]+)\s+cost|(?:find|what\s+is)\s+the\s+(?:cost|price)\s+of\s+([1-9]\d{0,2})\s+([a-z]+))`;
 
@@ -2803,8 +4159,8 @@ function readRate(t0: string): SchoolSpec | null {
   const t = t0.replace(/[.?!]$/, "").trim();
   let m = new RegExp(String.raw`^(?:if\s+)?([1-9]\d{0,2})\s+([a-z]+)\s+cost\s+${RATE_PRICE}\s*[.,]\s*${RATE_ASK}$`, "i").exec(t);
   if (m) {
-    const [q1, noun] = [m[1], m[2].toLowerCase()], unit = (m[3] ?? "€") as Unit, price = m[4] ?? m[5];
-    const q2 = m[6] ?? m[8] ?? m[10], item = (m[7] ?? m[9] ?? m[11]).toLowerCase();
+    const [q1, noun] = [m[1], m[2].toLowerCase()], unit = (m[3] ?? (/^euro/i.test(m[6]) ? "€" : /^k/i.test(m[6]) ? "Kč" : m[6])) as Unit, price = m[4] ?? m[5];
+    const q2 = m[7] ?? m[9] ?? m[11], item = (m[8] ?? m[10] ?? m[12]).toLowerCase();
     if (!Object.prototype.hasOwnProperty.call(RATE_NOUNS, noun) || item !== (q2 === "1" ? RATE_NOUNS[noun] : noun)) return null;
     const spec: SchoolSpec = { shape: "rate", expr: `${q1} ${noun} cost ${price}, ${q2}`, unit };
     return read(spec).ok ? spec : null;
@@ -2869,6 +4225,145 @@ function readStat(t0: string): SchoolSpec | null {
   return read(spec).ok ? spec : null;
 }
 
+/** A side with its unit in a Pythagoras task: '6 cm', '6 mm', '6 m', '6 metres'. */
+const PY_SIDE = String.raw`([1-9]\d{0,2})\s?(mm|millimetres?|cm|centimetres?|m|metres?)`;
+const pyUnitOf = (u: string): Unit => (/^mm|^milli/i.test(u) ? "mm" : /^c/i.test(u) ? "cm" : "m");
+
+/**
+ * A Pythagoras task (v2 M2b), or null: 'A right-angled triangle has shorter sides 6 cm and 8 cm. Find the longest side.' or 'A
+ * right-angled triangle has longest side 10 cm and a shorter side 6 cm. Find the other shorter side.' (also 'right angled', 'one
+ * shorter side'); both sides carry the same unit, mm, cm or m. A diagram, a story, a hypotenuse, a decimal side, two units, and a
+ * spec wellFormed refuses (no whole third side, a shorter side longer than the longest) are all null.
+ */
+function readPythagoras(t0: string): SchoolSpec | null {
+  const t = t0.replace(/[.?!]$/, "").trim(), S = PY_SIDE, H = String.raw`^a right[- ]angled triangle has `;
+  let find: "longest" | "shorter", m = new RegExp(String.raw`${H}shorter sides ${S} and ${S}\.\s*find the longest side$`, "i").exec(t);
+  if (m) find = "longest";
+  else {
+    m = new RegExp(String.raw`${H}longest side ${S} and (?:a|one) shorter side ${S}\.\s*find the other shorter side$`, "i").exec(t);
+    find = "shorter";
+  }
+  if (!m) return null;
+  const u = pyUnitOf(m[2]);
+  if (pyUnitOf(m[4]) !== u) return null;
+  const spec: SchoolSpec = { shape: "pythagoras", expr: `${find} ${m[1]} ${m[3]}`, unit: u };
+  return read(spec).ok ? spec : null;
+}
+
+/**
+ * A printed template read back (MB-B20): each placeholder by its pattern (no group of its own inside), the words as printed
+ * with the case free and the last mark optional. The text each placeholder matched, or null.
+ */
+function readTemplate(text: string, pats: Record<string, string>, t: string): Record<string, string> | null {
+  const keys: string[] = [];
+  const src = text.split(/(\{[A-Z]\})/).map((x) => (Object.prototype.hasOwnProperty.call(pats, x) ? (keys.push(x), `(${pats[x]})`) : x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))).join("");
+  const m = new RegExp(`^${src.replace(/\\[.?]$/, "")}[.?]?$`, "i").exec(t.trim());
+  return m ? Object.fromEntries(keys.map((k, i) => [k, m[i + 1]])) : null;
+}
+
+/** A percent as a top-rung question prints it, with or without a space before the sign: '20%', '20 %' (MB-B20). */
+const PCT_WORD = String.raw`(?:0|[1-9]\d{0,2})(?:\.\d)?\s?%`;
+const PCT_PATS: Record<string, string> = { "{A}": ".+?", "{P}": PCT_WORD, "{Q}": PCT_WORD, "{N}": "[2-5]", "{U}": "increase|decrease", "{V}": "increase|decrease", "{D}": "up|down", "{E}": "up|down" };
+
+/**
+ * A top-rung percent change (MB-B20) exactly as `question` prints it - a bare reverse percentage, two changes in turn, a
+ * change over the years, or a word problem of PCT_STORIES - the amount as `amountOf` reads it; or null.
+ */
+function readPercentTop(t0: string): SchoolSpec | null {
+  const forms: [PctStoryId | null, PctText][] = [...PCT_BARE.map((b): [null, PctText] => [null, b]), ...(Object.keys(PCT_STORIES) as PctStoryId[]).map((id): [PctStoryId, PctText] => [id, PCT_STORIES[id]])];
+  for (const [id, tp] of forms) {
+    const g = readTemplate(tp.text, PCT_PATS, t0);
+    if (!g) continue;
+    const got = amountOf(g["{A}"].trim());
+    if (!got) return null;
+    const pc = (x: string) => x.replace(/\s?%$/, ""), dir = (x: string) => (/^(?:increase|up)$/i.test(x) ? "increase" : "decrease");
+    const first = tp.up === undefined ? dir(g["{U}"] ?? g["{D}"]) : tp.up ? "increase" : "decrease";
+    const expr = tp.form === "before" ? `before ${first} ${got.N} by ${pc(g["{P}"])}%`
+      : tp.form === "then" ? `${first} ${got.N} by ${pc(g["{P}"])}% then ${dir(g["{V}"] ?? g["{E}"])} by ${pc(g["{Q}"])}%`
+      : `${first} ${got.N} by ${pc(g["{P}"])}% for ${g["{N}"]} years`;
+    const spec: SchoolSpec = { shape: "percent-change", expr: id ? `${id} ${expr}` : expr, ...(got.unit ? { unit: got.unit } : {}) };
+    return read(spec).ok ? spec : null;
+  }
+  return null;
+}
+
+/** A top-rung side with its unit: '2.5 cm', '6 metres' (MB-B20). */
+const PY_DP_SIDE = String.raw`(?:[1-9]\d{0,2}|0)(?:\.\d)?\s?(?:mm|millimetres?|cm|centimetres?|m|metres?)`;
+/**
+ * A top-rung Pythagoras task (MB-B20) exactly as `question` prints it, or null: a tier-1/2 sentence or a word problem of
+ * PYTH_STORIES, its sides whole or to one place with one unit, then 'Give your answer to 1 decimal place.' (or 2 places).
+ */
+function readPythagorasDp(t0: string): SchoolSpec | null {
+  const t = t0.trim(), tail = /\s*give your answer to ([12]) decimal places?\.?$/i.exec(t);
+  if (!tail) return null;
+  const body = t.slice(0, tail.index);
+  const forms: [string, string][] = [...(Object.keys(PYTH_BARE) as (keyof typeof PYTH_BARE)[]).map((f): [string, string] => [f, PYTH_BARE[f]]), ...(Object.keys(PYTH_STORIES) as PythStoryId[]).map((id): [string, string] => [id, PYTH_STORIES[id].text])];
+  for (const [id, text] of forms) {
+    const g = readTemplate(text, { "{X}": PY_DP_SIDE, "{Y}": PY_DP_SIDE }, body);
+    if (!g) continue;
+    const side = (x: string) => { const m = /^([\d.]+)\s?([a-z]+)$/i.exec(x.trim()); return m ? { n: m[1], u: pyUnitOf(m[2]) } : null; };
+    const X = side(g["{X}"]), Y = side(g["{Y}"]);
+    if (!X || !Y || X.u !== Y.u) return null;
+    const spec: SchoolSpec = { shape: "pythagoras", expr: `${id} ${X.n} ${Y.n} dp${tail[1]}`, unit: X.u };
+    return read(spec).ok ? spec : null;
+  }
+  return null;
+}
+
+/** A dice event as a top-rung question prints it: 'a 6', 'an even number', 'an odd number', 'a number more than 4' (MB-B20). */
+const DICE_WORD = String.raw`a [1-6]|an even number|an odd number|a number more than [2-4]`;
+/** Two or three colours with their counts as a question prints them: '3 red, 2 blue and 5 green' (MB-B20). */
+const COUNTS_WORD = String.raw`\d{1,2} ${COL}(?:, \d{1,2} ${COL})? and \d{1,2} ${COL}`;
+const PROB_PATS: Record<string, string> = { "{L}": COUNTS_WORD, "{E}": DICE_WORD, "{F}": DICE_WORD, "{S}": "heads|tails", "{C}": COL, "{D}": COL, "{A}": String.raw`\d{1,2}`, "{B}": String.raw`\d{1,2}` };
+
+/**
+ * A top-rung probability task (MB-B20) exactly as `question` prints it - two dice, a coin with a dice or a spinner, two
+ * counters drawn without replacement, or a word problem of PROB_STORIES; or null.
+ */
+function readProbabilityTop(t0: string): SchoolSpec | null {
+  const forms: [ProbStoryId | null, ProbForm, string][] = [
+    ...(Object.keys(PROB_BARE) as ProbForm[]).map((f): [null, ProbForm, string] => [null, f, PROB_BARE[f]]),
+    ...(Object.keys(PROB_STORIES) as ProbStoryId[]).map((id): [ProbStoryId, ProbForm, string] => [id, PROB_STORIES[id].form, PROB_STORIES[id].text]),
+  ];
+  for (const [id, form, text] of forms) {
+    const g0 = readTemplate(text, PROB_PATS, t0);
+    if (!g0) continue;
+    const g = Object.fromEntries(Object.entries(g0).map(([k, v]) => [k, v.toLowerCase()]));
+    const ev = (x: string) => (/^a \d$/.test(x) ? x.slice(2) : x.startsWith("a number more than ") ? `over ${x.slice(19)}` : x.split(" ")[1]);
+    const counts = id && id !== "game" ? `${PROB_STORIES[id].colours[0]} ${g["{A}"]}, ${PROB_STORIES[id].colours[1]} ${g["{B}"]}` : (g["{L}"] ?? "").split(/, | and /).map((x) => x.split(" ").reverse().join(" ")).join(", ");
+    const expr = form === "dice-and" ? `dice ${ev(g["{E}"])} and ${ev(g["{F}"])}`
+      : form === "dice-least" ? `dice least ${ev(g["{E}"])}`
+      : form === "coin-dice" ? `coin ${g["{S}"]} and dice ${ev(g["{E}"])}`
+      : form === "coin-spin" ? `coin ${g["{S}"]} and spinner ${counts} ask ${g["{C}"]}`
+      : form === "draw-both" ? `draw ${counts} both ${g["{C}"]}`
+      : `draw ${counts} ${g["{C}"]} then ${g["{D}"]}`;
+    const spec: SchoolSpec = { shape: "probability", expr: id ? `${id} ${expr}` : expr };
+    return read(spec).ok ? spec : null;
+  }
+  return null;
+}
+
+/**
+ * A probability task (v2 M2b), or null: 'A bag has 3 red, 5 blue and 2 green counters. Find the probability that one taken at random
+ * is red.' (also 'is not red', 'is red or blue'; two to four colours from PROB_COLOURS, each with its count, at most 20 in all) or
+ * 'The probability that a spinner lands on red is 0.35. What is the probability it does not land on red?' (a decimal or a whole
+ * percent). A story, a second draw, a replacement, a colour not on the list, a count in words, a ratio, and a spec wellFormed refuses
+ * (a certain event, a colour not in the bag) are all null.
+ */
+function readProbability(t0: string): SchoolSpec | null {
+  const t = t0.replace(/[.?!]$/, "").trim().toLowerCase(), C = COL, item = String.raw`\d{1,2} ${C}`;
+  let m = new RegExp(String.raw`^a bag has (${item}(?:, ${item}){0,2} and ${item}) counters\.\s*find the probability that one taken at random is (?:(${C})|not (${C})|(${C}) or (${C}))$`).exec(t);
+  if (m) {
+    const items = m[1].split(/, | and /).map((x) => x.split(" ").reverse().join(" ")), ask = m[2] ? m[2] : m[3] ? `not ${m[3]}` : `${m[4]} or ${m[5]}`;
+    const spec: SchoolSpec = { shape: "probability", expr: `bag ${items.join(", ")} ask ${ask}` };
+    return read(spec).ok ? spec : null;
+  }
+  m = new RegExp(String.raw`^the probability that a spinner lands on (${C}) is (0\.\d{1,2}|\d{1,2}%)\.\s*what is the probability (?:that )?it does not land on (${C})$`).exec(t);
+  if (!m || m[3] !== m[1]) return null;
+  const spec: SchoolSpec = { shape: "probability", expr: `complement ${m[1]} ${m[2]}` };
+  return read(spec).ok ? spec : null;
+}
+
 /**
  * A worksheet task of a school fractions unit, read back into the spec it asks, for the hint's leak check - or null.
  * Conservative: what it does not read with one meaning is null, and a null task gets no school leak check (the general
@@ -2897,24 +4392,32 @@ function readStat(t0: string): SchoolSpec | null {
  *   - unit rates (W7 batch 3): `readRate`'s phrasings, a statement and one question, never a story;
  *   - area (W7 batch 3): `readArea`'s phrasings, every side with the same length unit;
  *   - mean and range (W7 batch 3): `readStat`'s phrasings, a list with a comma and a space between its numbers.
- * Null for: whole numbers or mixed numbers as operands (a whole amount after 'of' excepted), a decimal beside a fraction, three or more
+ *   - mixed numbers (MB-B20): `readMixed`'s two operands, at least one a mixed number '1 3/4' (the top rung of a step up), and a
+ *     word problem of STORIES exactly as `question` prints it (`readStory`); the top rungs of percent change, Pythagoras and
+ *     probability exactly as `question` prints them (`readPercentTop`, `readPythagorasDp`, `readProbabilityTop`), a decimal
+ *     comma read by readTask.
+ * Null for: whole numbers as operands (a whole amount after 'of' excepted), a mixed number written with a hyphen or with a
+ * fraction part that is not proper, a decimal beside a fraction, three or more
  * terms, any letter in the maths (an x), brackets, number words, an answer after '=', a bottom of 1 or 0, a leading
  * zero, 'the difference between' (its order is not said), a fraction of a fraction, a decimal or a thousands-separated
  * amount, two gaps or none, any other word, and a spec wellFormed refuses (a subtraction below zero, a simplify of a
  * fraction already in lowest terms or not proper, a missing number that is not whole). The printed question of every
  * practice item (`question`) reads back to its own spec. Pure; never throws.
  */
-export function specFromQuestion(text: unknown): SchoolSpec | null {
+function specOnce(text: unknown): SchoolSpec | null {
   if (typeof text !== "string" || !text.trim() || text.length > MAX_TASK) return null;
   try {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
-    return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
-      ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t);
-  } catch {
+    return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readMixed(t) ?? readStory(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
+      ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t) ?? readPythagoras(t) ?? readProbability(t) ?? readPercentTop(t) ?? readPythagorasDp(t) ?? readProbabilityTop(t);
+  } catch (e) { checkerFault("school.specOnce", e);
     return null;
   }
 }
+
+/** The spec a worksheet task is, read as written first, then with the middle dot, the fraction colon, the system's decimal comma and a leading instruction read (MB-B2). */
+export const specFromQuestion = (text: unknown, system?: SchoolSystem): SchoolSpec | null => readTask(text, system, specOnce);
 
 /**
  * The unit a school spec belongs to, by topic id, or null: a sum or difference of two fractions is add and subtract
@@ -2931,16 +4434,21 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "missing" || r.kind.k === "simplify") return "frac-equivalent";
     if (r.kind.k === "convert") return "dec-convert";
     if (r.kind.k === "pct-of") return "pct-of-amount";
-    if (r.kind.k === "pct-change") return "pct-change";
+    if (r.kind.k === "pct-change" || r.kind.k === "pct-top") return "pct-change";
+    if (r.kind.k === "pyth-dp") return "pythagoras";
     if (r.kind.k === "ratio-simplify" || r.kind.k === "ratio-share" || r.kind.k === "ratio-missing") return "ratio-share";
     if (r.kind.k === "rate") return "unit-rate";
     if (r.kind.k === "area") return "area";
     if (r.kind.k === "stat") return "mean-range";
+    if (r.kind.k === "pyth") return "pythagoras";
+    if (r.kind.k === "prob" || r.kind.k === "prob-comp" || r.kind.k === "prob-two") return "probability";
     const n = r.node;
     if (decimalPair(n)) return "dec-arith";
-    if (n.k !== "op" || n.a.k !== "frac" || n.b.k !== "frac") return null;
+    // MB-B20: a mixed number is a fraction operand too (1 3/4 + 2/3 is add and subtract fractions)
+    const fr = (x: Node) => x.k === "frac" || x.k === "mixed";
+    if (n.k !== "op" || !fr(n.a) || !fr(n.b)) return null;
     return n.op === "+" || n.op === "-" ? "frac-add-sub" : "frac-mul-div";
-  } catch {
+  } catch (e) { checkerFault("school.unitOf", e);
     return null;
   }
 }
@@ -2949,26 +4457,117 @@ export function unitOf(spec: unknown): string | null {
 
 /**
  * The line the TV shows and speaks when the model's hint on a school item gave the answer away twice: written here,
- * never by a model, one per unit. Each names the unit's method and carries no digit and no number word (leaksSchool
+ * never by a model, one per unit, each 25 words or fewer. Each names the unit's method and carries no digit and no number word (leaksSchool
  * reads words as numbers), so nothing on it can be the answer.
  */
 export const SCHOOL_WITHHELD = {
-  "frac-equivalent": "Find what the bottom was multiplied or divided by to make the new bottom, and do exactly the same to the top. To simplify, divide the top and the bottom by the biggest number that goes into both. The answer is yours to work out.",
-  "frac-of-amount": "Divide the amount by the bottom number to find the size of a single part, then multiply by the top number to take that many parts. The answer is yours to work out.",
-  "frac-add-sub": "Make the bottoms the same first: find a number both bottoms go into and rewrite each fraction over it. Then combine only the tops. The answer is yours to work out.",
-  "frac-mul-div": "To multiply, multiply the tops together and the bottoms together. To divide, turn the fraction you divide by upside down and multiply instead. Simplify at the end. The answer is yours to work out.",
-  "dec-convert": "A fraction is its top divided by its bottom, so dividing gives the decimal. A percentage counts hundredths, so a decimal is written as a percentage by finding how many hundredths it makes, and a percentage as a decimal the other way. To make a fraction, write the decimal as tenths, hundredths or thousandths and simplify. The answer is yours to work out.",
-  "pct-of-amount": "A percentage of an amount is that many hundredths of it. Find a single hundredth of the amount first and build the percentage up from it, or write the percentage as a decimal and multiply the amount by it. The answer is yours to work out.",
-  "pct-change": "First find the percentage of the amount: that is the change. Then add it on for an increase, or take it off for a decrease. The answer is yours to work out.",
-  "dec-arith": "To add or take away, write the numbers with their decimal points one under the other, filling empty places with zeros. To multiply, multiply as if there were no points, then give the answer as many digits after its point as the question's numbers have between them. The answer is yours to work out.",
-  "mean-range": "The mean is the total of the numbers divided by how many numbers there are. The range is the largest number take away the smallest. The answer is yours to work out.",
-  "area": "The area of a rectangle is its length times its width. For a triangle, multiply the base by the height and halve the result. For two rectangles together, find the area of each and add them. The answer is yours to work out.",
-  "unit-rate": "Find the value of a single one first: divide the cost or the distance by how many there are in the first sentence. Then multiply by the number the question asks about. The answer is yours to work out.",
-  "ratio-share": "To share in a ratio, add the ratio's numbers to find how many equal parts there are, divide the amount by that to find the size of a single part, then multiply by each number of the ratio. To simplify a ratio or find a missing number, multiply or divide both numbers by the same number. The answer is yours to work out.",
+  "frac-equivalent": "Multiply or divide top and bottom by the same number. To simplify, divide both by a common factor. The answer is yours to work out.",
+  "frac-of-amount": "Divide the amount by the bottom number to find a single part, then multiply by the top number. The answer is yours to work out.",
+  "frac-add-sub": "Make the bottoms the same first by rewriting each fraction. Then combine only the tops. The answer is yours to work out.",
+  "frac-mul-div": "To multiply, multiply tops and bottoms. To divide, flip the last fraction and multiply. Simplify at the end. The answer is yours to work out.",
+  "dec-convert": "Divide top by bottom for a decimal. Decimals go over their place value, then simplify. Percent means hundredths. The answer is yours to work out.",
+  "pct-of-amount": "Find a hundredth of the amount, then build up to the percentage you need. The answer is yours to work out.",
+  "pct-change": "Find the percentage of the amount: that is the change. Add it or take it off. The answer is yours to work out.",
+  "dec-arith": "Line up points to add or subtract. Multiply whole numbers, count places in both, put the point back. The answer is yours to work out.",
+  "mean-range": "The mean is the total divided by how many numbers. The range is largest take away smallest. The answer is yours to work out.",
+  "area": "Rectangle: length times width. Triangle: halve base times height. Joined rectangles: work out each, then add. The answer is yours to work out.",
+  "unit-rate": "Find the value of a single item first by dividing, then multiply by the amount asked about. The answer is yours to work out.",
+  "ratio-share": "Common factor to simplify. Missing term: scale both. Share: divide by the parts' total, times each part. The answer is yours to work out.",
+  "pythagoras": "Square the sides you know. Add for the longest side, subtract for a shorter side, then square root. The answer is yours to work out.",
+  "probability": "Probability is the counters you want divided by all the counters in the bag. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
 } as const;
-/** The withheld line for a school spec, chosen by its unit; the general line for any other. */
+/**
+ * MB-B20: the fixed sentence for a top-rung percent change, by its kind, in the same rules (one per kind, 25 words or fewer,
+ * no digit, no number word). The unit's own line teaches the forward change, which is the very slip of a reverse percentage
+ * (taking the percent off the new amount), so the rung says how to work back; two changes and the years say to apply each
+ * change to the amount there is now. A top-rung Pythagoras item keeps the unit's line. A top-rung probability item has its
+ * own too, since the unit's speaks of one draw from a bag: multiply the chance of each event; at least one is a whole less
+ * neither; a pick not put back leaves fewer for the next.
+ */
+export const TOP_WITHHELD = {
+  "pct-before": "The amount given already includes the change, so divide back to the original. The answer is yours to work out.",
+  "pct-steps": "Apply each change in turn to the amount you have now, not to the starting amount. The answer is yours to work out.",
+  "prob-and": "Find the chance of each part on its own, then multiply them together. The answer is yours to work out.",
+  "prob-least": "At least happens unless neither does: find the chance of neither, then take it from a whole. The answer is yours to work out.",
+  "prob-draw": "Nothing taken is put back, so the next pick has fewer to choose from. Multiply both chances. The answer is yours to work out.",
+} as const;
+
+/** The withheld line for a school spec, chosen by its unit (a top-rung percent change or probability item by its kind); the general line for any other. */
 export function withheldSchool(spec: unknown): string {
+  try {
+    const r = read(spec);
+    if (r.ok && r.kind.k === "pct-top") return TOP_WITHHELD[r.kind.form === "before" ? "pct-before" : "pct-steps"];
+    if (r.ok && r.kind.k === "prob-two") return TOP_WITHHELD[r.kind.form === "dice-least" ? "prob-least" : r.kind.form.startsWith("draw") ? "prob-draw" : "prob-and"];
+  } catch {
+    // a spec the desk cannot read gets the line its unit (or none) gives, below
+  }
   const u = unitOf(spec);
   return u && Object.prototype.hasOwnProperty.call(SCHOOL_WITHHELD, u) ? SCHOOL_WITHHELD[u as keyof typeof SCHOOL_WITHHELD] : SCHOOL_WITHHELD.any;
+}
+
+// ---- v2 M1: the worked answer a lesson shows ----
+
+/** A rational as plain candidates: whole, fraction, mixed, terminating decimal (up to 4 places), percent. */
+function writings(t: Q): string[] {
+  const neg = t.n < Z, n = neg ? -t.n : t.n, d = t.d, sign = neg ? "-" : "", out: string[] = [];
+  if (d === ONE) out.push(`${sign}${n}`);
+  else {
+    out.push(`${sign}${n}/${d}`);
+    if (n > d) out.push(`${sign}${n / d} ${n % d}/${d}`);
+  }
+  let dd = d; while (dd % BigInt(2) === Z) dd /= BigInt(2); while (dd % BigInt(5) === Z) dd /= BigInt(5);
+  if (dd === ONE) {
+    for (let places = 1; d !== ONE && places <= 4; places++) {
+      const scale = TEN ** BigInt(places);
+      if ((n * scale) % d === Z) { const v = (n * scale) / d, s = v.toString().padStart(places + 1, "0"); out.push(`${sign}${s.slice(0, -places)}.${s.slice(-places)}`); break; }
+    }
+    // a percent, whole or with up to 2 places (27/40 = 67.5%)
+    for (let places = 0; places <= 2; places++) {
+      const scale = BigInt(100) * TEN ** BigInt(places);
+      if ((n * scale) % d !== Z) continue;
+      const v = ((n * scale) / d).toString();
+      out.push(places ? `${sign}${v.padStart(places + 1, "0").slice(0, -places)}.${v.padStart(places + 1, "0").slice(-places)}%` : `${sign}${v}%`);
+      break;
+    }
+  }
+  return out;
+}
+
+/**
+ * The answer a worked example prints, decided by code twice: built from the spec's own truth (read), then kept only
+ * when `check` marks it right for this school system (so a lesson never shows an answer the desk would ring). The first
+ * writing `check` accepts wins, in the order whole, fraction, mixed, decimal, percent, each bare and then with the
+ * spec's unit; a ratio is written a:b. Null when no writing passes, and then the lesson withholds that example.
+ */
+export function workedAnswer(spec: unknown, system: unknown = DEFAULT_SCHOOL_SYSTEM): string | null {
+  const r = read(spec);
+  if (!r.ok) return null;
+  const unit = specUnit(r.spec), K = r.kind;
+  let candidates: string[];
+  if (K.k === "ratio-simplify") candidates = [`${r.truth.n}:${r.truth.d}`];
+  else if (K.k === "ratio-share" && r.pair) candidates = [`${r.pair[0].n / r.pair[0].d} and ${r.pair[1].n / r.pair[1].d}`, `${r.pair[0].n / r.pair[0].d}:${r.pair[1].n / r.pair[1].d}`];
+  else candidates = writings(r.truth);
+  // the form the question speaks in comes first: a question with a decimal, a percent or a unit is answered as a
+  // decimal (31.2 litres, not 156/5); a fraction question keeps its fraction. `check` still decides which forms pass.
+  const expr = String((r.spec as { expr?: unknown }).expr ?? "");
+  // MB-B20: a question with a mixed number in it, or a word problem, is answered as a mixed number (4 1/12, not 49/12)
+  const mixedAsked = K.k === "compute" && (!!K.story || literals(r.node).some((l) => l.k === "mixed"));
+  if (mixedAsked) candidates = [...candidates.filter((c) => / /.test(c)), ...candidates.filter((c) => !/ /.test(c))];
+  else if (unit || /[.%]/.test(expr) || ["percent-of", "percent-change", "rate", "area", "stat"].includes(r.spec.shape)) {
+    const dec = (c: string) => /^-?\d+\.\d+$/.test(c);
+    candidates = [...candidates.filter(dec), ...candidates.filter((c) => !dec(c))];
+  }
+  // money is written to the cent: £70.20, not £70.2
+  const cents = (c: string) => (/^-?\d+[.,]\d$/.test(c) ? `${c}0` : c);
+  // a money sign after the amount first where the question prints it there (12,50 Kč; 12,50 € in a comma system, MB-B4)
+  const after = (c: string) => [`${cents(c)}${NBSP}${unit}`, `${c}${NBSP}${unit}`];
+  const withUnit = (c: string) => (!unit ? [] : unit === "Kč" ? after(c) : isMoney(unit) && commaSystem(system as SchoolSystem) ? [...after(c), `${unit}${cents(c)}`, `${unit}${c}`]
+    : ["€", "$", "£"].includes(unit) ? [`${unit}${cents(c)}`, `${unit}${c}`, `${c} ${unit}`] : [`${c} ${unit}`]);
+  // a decimal is written the way the learner's school writes it: a comma first where the system uses one (cz, de)
+  const comma = system === "cz" || system === "de";
+  const local = (c: string) => (/\d\.\d/.test(c) ? (comma ? [c.replace(".", ","), c] : [c, c.replace(".", ",")]) : [c]);
+  // with its unit first where it has one (30 m2, not a bare 30), then bare
+  for (const c of candidates.flatMap(local).flatMap((c) => [...withUnit(c), c])) if (check(spec, c, system).verdict === "right") return c;
+  return null;
 }

@@ -26,7 +26,7 @@
  * offending selector and the measured value). Non-strict by default (prints violations, exits 0); --strict exits 1
  * on any violation or unreachable screen. A screen that cannot be reached is reported as such, and the run goes on.
  *
- * --path calc1: the scratch learner is seated on the Calculus 1 path (a profile.draft patch, mathPath 'calc1'), so every
+ * --path calc1 (or calc2, any path judged 'calc'): the scratch learner is seated on that Calculus path (a profile.draft patch, mathPath 'calc1'), so every
  * screen above is drawn for a Calculus learner, and then the path's rulers are walked: Topics at every focus 0..21 and
  * Tonight with 0, 7, 15 and 22 topics latched secure, with the same checks plus the ruler's own (RULER_CHECKS: the
  * focused name whole and on the stage, every name >= 34 px, strand labels apart, no gap at either end of the track).
@@ -50,9 +50,17 @@ const strict=argv.includes('--strict');
 /** --dry: no server, no browser - build every topic x screen state and render it with MathsTV to static markup. */
 const dry=argv.includes('--dry');
 const topicsArg=(()=>{const i=argv.indexOf('--topics');return i>=0&&argv[i+1]?argv[i+1].split(',').map(s=>s.trim()).filter(Boolean):null;})();
-/** --path calc1: seat the learner on the Calculus 1 path and walk its rulers too. Only calc1 is a path to ask for. */
+// ------------------------------------------------------------------ the desk's TypeScript, in this process
+
+const root=path.resolve(__dirname,'../desk');
+const ts=require(path.join(root,'node_modules/typescript'));
+const resolve=Module._resolveFilename;
+Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
+require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+/** --path <id>: seat the learner on that Calculus path and walk its rulers too. Any path judged 'calc' (calc1, calc2) is one to ask for. */
+const CALC_PATHS=(()=>{const P=require(require('node:path').resolve(__dirname,'../desk/src/lib/library/paths.ts'));return Object.values(P.PATHS).filter(p=>p.judge==='calc').map(p=>p.id);})();
 const pathArg=(()=>{const i=argv.indexOf('--path');return i>=0?argv[i+1]??'':null;})();
-if(pathArg!==null&&pathArg!=='calc1'){console.error(`Unknown path "${pathArg}": --path takes calc1 (the school path is the run with no --path).`);process.exit(2);}
+if(pathArg!==null&&!CALC_PATHS.includes(pathArg)){console.error(`Unknown path "${pathArg}": --path takes ${CALC_PATHS.join(' or ')} (the school path is the run with no --path).`);process.exit(2);}
 const base=process.env.MATHS_LIVE_URL||'http://localhost:3217';
 const SERVER_DATA=process.env.DESK_DATA_DIR;
 let key,chromium;
@@ -63,13 +71,6 @@ if(!dry){
  try{({chromium}=require('playwright'));}catch{console.error('Playwright is not installed: run npm install in tools/ (it is a devDependency there).');process.exit(2);}
 }
 
-// ------------------------------------------------------------------ the desk's TypeScript, in this process
-
-const root=path.resolve(__dirname,'../desk');
-const ts=require(path.join(root,'node_modules/typescript'));
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
 // the store is loaded only for its pure reducer; pointed at a scratch directory, so this process never reads or
 // writes the server's data (the store and the learner record both read DESK_DATA_DIR when they load)
 process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(os.tmpdir(),'maths-calc-live-'));
@@ -78,7 +79,9 @@ const {reduce}=require(path.join(root,'src/lib/session/store.ts'));
 const stopTicker=()=>{const g=globalThis.__desk;if(g?.ticker){clearInterval(g.ticker);g.ticker=null;}};
 
 const out=path.resolve(__dirname,'../artifacts/math-calculus');
-const topics=CALCULUS_1.topics.filter(t=>!topicsArg||topicsArg.includes(t.id));
+// the per-topic screens draw on the Calculus 1 example corpus: --path calc2 has none, so it walks the rulers alone
+const PATHS_LIB=require(path.join(root,'src/lib/library/paths.ts'));
+const topics=CALCULUS_1.topics.filter(t=>(!topicsArg||topicsArg.includes(t.id))&&(!pathArg||PATHS_LIB.pathOfTopic(t.id)===pathArg));
 if(topicsArg){const unknown=topicsArg.filter(id=>!CALCULUS_1.topics.some(t=>t.id===id));if(unknown.length){console.error(`Unknown topic id(s): ${unknown.join(', ')}. Known: ${CALCULUS_1.topics.map(t=>t.id).join(', ')}`);process.exit(2);}}
 
 // ------------------------------------------------------------------ the session endpoint, as the TV
@@ -176,7 +179,7 @@ function measure({LABELS,SAFE}){
 // ------------------------------------------------------------------ --path calc1: the path's rulers
 
 /** The profile the scratch learner is seated with: on the Calculus 1 path when --path calc1 asks for it. */
-const PROFILE={id:'calc-live',name:'Calc',type:'other',modules:['maths'],...(pathArg==='calc1'?{mathPath:'calc1'}:{})};
+const PROFILE={id:'calc-live',name:'Calc',type:'other',modules:['maths'],...(pathArg?{mathPath:pathArg}:{})};
 /** The first `n` topics of the path latched secure (lib/session/learners.ts' record shape), and the next one in hand. */
 function skillsFor(ids,n){
  const out=Object.fromEntries(ids.slice(0,n).map(id=>[id,{topic:id,seen:6,right:6,estimate:0.92,secure:true,lastSeen:0,slips:[]}]));
@@ -185,12 +188,12 @@ function skillsFor(ids,n){
 }
 /** The path runs: Topics at every focus (7 topics secure, the 8th in hand), Tonight with 0, 7, 15 and 22 secure. */
 function pathStates(base0){
- const ids=require(path.join(root,'src/lib/library/paths.ts')).topicsOf('calc1').map(t=>t.id);
+ const ids=require(path.join(root,'src/lib/library/paths.ts')).topicsOf(pathArg).map(t=>t.id);
  const clean={...base0,practice:null,topic:null,pages:[],hint:null};
  const R=(s,...events)=>events.reduce((x,e)=>reduce(x,e),s);
  return [
   ...ids.map((_,n)=>({screen:'topics',n,s:{...R(clean,{type:'nav',screen:'topics',focus:n}),focus:n,skills:skillsFor(ids,7)}})),
-  ...[0,7,15,22].map(n=>({screen:'tonight',n,s:{...R(clean,{type:'nav',screen:'tonight'}),skills:skillsFor(ids,n)}})),
+  ...[0,Math.round(ids.length/3),Math.round(2*ids.length/3),ids.length].map(n=>({screen:'tonight',n,s:{...R(clean,{type:'nav',screen:'tonight'}),skills:skillsFor(ids,n)}})),
  ];
 }
 /** The ruler's own checks, run in the TV page after `measure`: each a list of violations with a selector and a value. */

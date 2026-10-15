@@ -14,11 +14,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-const opts={compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText,file);
+const ts=require('./ts-load.cjs').ts();
 const SRC=path.join(root,'src');
 const PANEL=path.join(SRC,'app/phone/panelFor.ts'),PAGE=path.join(SRC,'app/phone/page.tsx');
 // loaded per test, so a missing module fails each case on its own
@@ -104,14 +100,16 @@ const FIXTURES={
  practice:{s:session({screen:'practice',practice:set(false)}),panel:'practice',why:'snap the whole sheet with the phone'},
  sheet:{s:session({screen:'sheet',practice:set(true)}),panel:'practice',why:'Tell the desk on the phone how you got there'},
  walk:{s:session({screen:'walk',practice:set(true)}),panel:'practice',why:'Tell the desk on the phone how you got there'},
- page:{s:session({screen:'page',pages:[page],jobs:{read:{id:'j1',kind:'read',phase:'failed',key:'p1',error:'x',startedAt:0}}}),panel:'capture',why:'The desk could not read this page. Snap it again on the phone'},
+ page:{s:session({screen:'page',pages:[page],jobs:{read:{id:'j1',kind:'read',phase:'failed',key:'p1',error:'x',startedAt:0}}}),panel:'capture',why:'The desk could not read this page. Open Try again on the phone'},
  essaytype:{s:session({screen:'essaytype',subject:'essay'}),panel:'paste',why:'Paste, type or dictate one paragraph on the phone'},
  sentence:{s:session({screen:'sentence',subject:'english',english:null}),panel:'say',why:'Say one sentence on your phone (nothing checked yet)'},
  forensic:{s:session({screen:'forensic',subject:'essay'}),panel:'paste',why:'Rewrite on my phone'},
+ paper:{s:session({screen:'paper'}),panel:'paper',why:'Type the marks of a paper you sat on the phone'},
+ essayplan:{s:session({screen:'essayplan',subject:'essay'}),panel:'paste',why:'Say it on the phone: the plan slot is sent from the Essay tab'},
 };
 for(const sc of SCREENS)if(sc.startsWith('linga'))FIXTURES[sc]={s:session({screen:sc,subject:'english'}),panel:'linga',why:'Linga: answer on your phone',linga:true};
 /** Hand-offs the TV makes that no phone panel does: the phone stays, and the gap is named. */
-const NO_PANEL={lesson:'circle on the phone to ask about this frame - no phone panel circles a lesson frame'};
+const NO_PANEL={};// the lesson's "circle on the phone" ask left both TVs (shell 79ed1a38, Math Buddy 2026-10-13): lesson asks nothing of the phone and is covered by case 3
 
 /** The phone after the TV moves from `from` to `to`: the panel it shows once both renders have run. */
 function walk(from,to){
@@ -294,10 +292,10 @@ test('case 13 (W6): the phone Practice panel has two routes - snap the sheet, ty
  assert.match(src,/call\("\/api\/mark", \{ answers:/,'to the mark route, with no image');
  assert.match(src,/document\.activeElement\.blur\(\)/,'the box in hand is let go before sending, so the phone can follow the TV');
  // the camera is on for the snap route only
- assert.match(src,/camWanted = screen === "capture" \|\| \(screen === "practice" && !!s\?\.practice && !s\.practice\.marked && route === "snap"\)/);
+ assert.match(src,/camWanted = \(screen === "capture" && !readAgain\) \|\| \(screen === "practice" && !!s\?\.practice && !s\.practice\.marked && route === "snap"\)/);
  // the box's own cap is the rule's: the one number
  const rules=fs.readFileSync(path.join(SRC,'lib/rules/maths.ts'),'utf8');
- assert.match(rules,/export const TYPED_ANSWER_MAX = 40;/);assert.match(src,/TYPED_ANSWER_MAX/);
+ assert.match(rules,/export const TYPED_ANSWER_MAX = 120;/);assert.match(src,/TYPED_ANSWER_MAX/);
  // phone-sized: the tap targets are at least 44 px, and the size that stops a phone zooming into a field is 16 px
  const css=fs.readFileSync(path.join(SRC,'app/globals.css'),'utf8');
  const rule=(sel)=>{const m=css.match(new RegExp(`(?:^|\\n)${sel.replace(/[.\[\]"=]/g,'\\$&')} \\{([^}]*)\\}`));assert.ok(m,`${sel} is styled`);return m[1];};
@@ -322,4 +320,626 @@ test('case 14 (W6): the TV\'s Practice card is not made false by the typed route
  assert.match(tv,/then snap the whole sheet with the phone/);
  const card=tv.slice(tv.indexOf('The phone is waiting for the sheet or your answers.')-200,tv.indexOf('The phone is waiting for the sheet or your answers.')+80);
  assert.doesNotMatch(card,/\btype\b/i,'no typing asked of the TV');
+});
+
+test('plan case 7 (panel): the plan screen hands the phone to the Essay panel',()=>{
+ const {panelFor}=P();
+ assert.equal(panelFor(session({screen:'essayplan',subject:'essay'})),'paste');
+ assert.equal(panelFor(session({joined:false,screen:'essayplan',subject:'essay'})),'join','an unjoined phone is still asked for the code first');
+});
+
+test('M3a: the typed route gives each part of a word problem its own labelled field, with the stem once above the first part',()=>{
+ const src=code(PAGE);
+ const panel=src.slice(src.indexOf('{screen === "practice" && s'),src.indexOf('{screen === "point"'));
+ assert.match(panel,/const at = partPlace\(pr\.items, i\)/,'each box asks where its item sits');
+ assert.match(panel,/at\.first && <p data-role="typed-stem"><b>\{at\.q\}\.<\/b> \{it\.stem\}<\/p>/,'the stem once, numbered as the paper numbers it');
+ assert.match(panel,/<label htmlFor=\{`ans-\$\{it\.n\}`\} data-part=\{at\.label\}><b>\(\{at\.label\}\)<\/b> \{it\.question\}<\/label>/,'each part its own label, by letter, above its own box');
+ assert.match(panel,/aria-label=\{`Your answer to question \$\{itemName\(pr\.items, i\)\}`\}/,'read aloud as 5(a)');
+ // still one box per item, in item order: the answers go to the mark route one per part
+ assert.match(panel,/pr\.items\.map\(\(it, i\) => <div className="pask"/);
+ assert.match(src,/answers: Array\.from\(\{ length: n \}, \(_, i\) => typed\[i\] \?\? ""\)/);
+});
+
+// ---------------------------------------------------------------- v2 M5b: the Paper panel (typed entry)
+
+const ENTRY=()=>require(path.join(SRC,'lib/rules/paperEntry.ts'));
+const PAPER_PANEL=path.join(SRC,'app/phone/PaperPanel.tsx');
+const row=(q,marks,outOf,codes=[])=>({q,marks:String(marks),outOf:String(outOf),codes});
+
+test('paper 1: every row the desk would leave out is shown, with its reason in plain words',()=>{
+ const {entryOf}=ENTRY();
+ const cases=[
+  [[row('','1','2','N1'.split(','))],/Row 1 is left out: This question has no number\./],
+  [[row('1234567890123','1','2')],/left out: A question number is at most 12 characters\./],
+  [[row('GCSE 1','1','2')],/Row 1 is left out: A question number is the number the paper prints/],
+  [[row('1','x','2')],/Question 1 is left out: The marks scored are not a whole number\./],
+  [[row('1','1','2.5')],/Question 1 is left out: The marks the question is worth are not a whole number\./],
+  [[row('1','','2')],/Question 1 is left out: Type 0 if nothing was scored\./],
+  [[row('1','  ','2')],/Question 1 is left out: Type 0 if nothing was scored\./],
+  [[row('1','1','')],/Question 1 is left out: Type what the question is out of\./],
+  [[row('1','1','2'),ENTRY().blankRow(),row('3','x','3'),row('4','','3')],/Question 3 is left out: The marks scored are not a whole number\./],
+  [[row('1','1','2'),ENTRY().blankRow(),row('3','x','3'),row('4','','3')],/Question 4 is left out: Type 0 if nothing was scored\./],
+  [[row('1','0','0')],/Question 1 is left out: A question is worth at least 1 mark\./],
+  [[row('1','0','7')],/Question 1 is left out: The desk takes at most 6 marks for one question\. Enter its parts one by one\./],
+  [[row('1','-1','2')],/Question 1 is left out: The marks scored cannot be below 0\./],
+  [[row('1','3','2')],/Question 1 is left out: The marks scored are more than the question is worth\./],
+  [[row('5(b)','1','2'),row('5 (B)','1','2')],/Question 5 \(B\) is left out: This question number is already on the paper\./],
+  [Array.from({length:81},(_,i)=>row(String(i+1),'0','1')),/Question 81 is left out: A paper has at most 80 questions\./],
+  [Array.from({length:14},(_,i)=>row(String(i+1),'0','6')),/Question 14 is left out: The desk takes at most 80 marks for one paper\./],
+ ];
+ for(const [rows,re] of cases){const e=entryOf(rows);assert.ok(e.drops.some(d=>re.test(d)),`${re}\n${e.drops.join('\n')}`);}
+ const codes=entryOf([row('1','0','2',['N1','NOPE','N2','N3','N4'])]);
+ assert.ok(codes.drops.some(d=>/Question 1: The desk does not know this statement code\. \(NOPE\)/.test(d)),codes.drops.join('\n'));
+ assert.ok(codes.drops.some(d=>/Question 1: A question names at most 3 statements\./.test(d)));
+ assert.equal(codes.kept,1,'the question stays, with the codes the desk knows');
+ const none=entryOf([row('3','0','4',['NOPE'])]);
+ assert.equal(none.kept,1);assert.match(none.notes[0],/Question 3 names no statement the desk knows, so it counts in the marks but sits on no topic\./);
+ assert.equal(entryOf([]).kept,0,'nothing typed: nothing to send');
+});
+
+test('paper 2: typed text is read as a whole number or left as text for the desk to drop - never guessed',()=>{
+ const {rawOf,entryOf,blankRow,isBlank}=ENTRY();
+ assert.deepEqual(rawOf([blankRow(),row(' 5(b) ',' 2 ','3',['N1'])]),[{q:' 5(b) ',marks:2,outOf:3,codes:['N1']}],'a blank row is not part of the paper; numbers are numbers');
+ assert.ok(isBlank(blankRow())&&!isBlank(row('1','','')));
+ assert.deepEqual(rawOf([row('1','2.5','3')])[0].marks,'2.5','a decimal stays text');
+ assert.equal(entryOf([row('1','','3')]).clean.items.length+entryOf([row('1','','3')]).clean.unmapped.length,0,'an empty marks box is not 0 marks');
+});
+
+test('paper 3: statements are picked by their can text, never by a code alone',()=>{
+ const {statementChoices,canOf}=ENTRY();
+ const {STATEMENTS}=require(path.join(SRC,'lib/library/gcse.ts'));
+ const all=statementChoices().flatMap(g=>g.items);
+ assert.equal(all.length,STATEMENTS.length,'every statement can be picked');
+ for(const c of all){assert.ok(c.can.length>8,`${c.code} has its can text`);assert.equal(canOf(c.code),c.can);}
+ const src=code(PAPER_PANEL);
+ assert.match(src,/\{c\.can\}/,'the list prints the can text');
+ assert.doesNotMatch(src,/>\s*\{c\.code\}|\{c\.code\}\s*</,'a code is never printed on its own');
+ assert.match(src,/post\(\{ type: "paper\.enter"/,'the rows go through the session door the phone uses for its other actions');
+ assert.ok(!fs.existsSync(path.join(SRC,'app/api/paper')),'no new route');
+});
+
+test('paper 4: no string the Paper panel renders names the board, over a sweep of papers',()=>{
+ const {entryOf,statementChoices}=ENTRY();
+ const BAD=/GCSE|1MA1/i;
+ const papers=[
+  [row('GCSE 1','1','2')],[row('1MA1 2','1','2')],[row('1','x','2',['GCSE'])],[row('1','1','2',['1MA1','N1'])],
+  [row('','','')],[row('1','9','2')],[row('1','1','9',['NOPE'])],[row('2','0','4',['N1','N2','N3','N4'])],
+  Array.from({length:90},(_,i)=>row(String(i+1),'0','6',['N2'])),
+ ];
+ for(const p of papers){const e=entryOf(p);for(const t of [...e.drops,...e.notes])assert.doesNotMatch(t,BAD,t);}
+ for(const g of statementChoices()){assert.doesNotMatch(g.name,BAD);for(const c of g.items)assert.doesNotMatch(c.can,BAD,c.code);}
+ assert.doesNotMatch(code(PAPER_PANEL).replace(/\/\/.*$/gm,''),/["'`>][^"'`<>]*(GCSE|1MA1)/i,'no board name in the panel\'s own copy');
+});
+
+test('paper 4b: no string the Paper panel shows names an exam tier; a harder statement is flagged as one',()=>{
+ const {entryOf}=ENTRY();
+ const src=code(PAPER_PANEL);
+ assert.doesNotMatch(src.replace(/\/\/.*$/gm,''),/["'\x60>][^"'\x60<>]*Foundation/,'no tier in the panel copy');
+ assert.match(src,/ \(a harder statement\)/);
+ const rows=[[row('1','0','7')],Array.from({length:14},(_,i)=>row(String(i+1),'0','6'))];
+ for(const p of rows){const e=entryOf(p);assert.ok(e.drops.length);for(const t of e.drops)assert.doesNotMatch(t,/Foundation|Higher/i,t);}
+});
+
+test('paper 4c: the picker finds a statement by its words and folds its areas',()=>{
+ const {choicesMatching,statementChoices}=ENTRY();
+ const all=statementChoices(),n=(gs)=>gs.reduce((k,g)=>k+g.items.length,0);
+ const e=choicesMatching('');
+ assert.equal(e.length,all.length);assert.equal(n(e),n(all),'an empty query gives every area and statement');
+ assert.equal(n(choicesMatching('   ')),n(all),'spaces alone are empty');
+ const sample=all[0].items.find(c=>c.can.split(/\s+/).length>=3).can,w=sample.split(/\s+/);
+ const two=choicesMatching(w[0]+' '+w[w.length-1]);
+ assert.ok(two.flatMap(g=>g.items).some(c=>c.can===sample));
+ for(const c of two.flatMap(g=>g.items))assert.ok(c.can.toLowerCase().includes(w[0].toLowerCase())&&c.can.toLowerCase().includes(w[w.length-1].toLowerCase()),c.can);
+ assert.ok(n(two)<=n(choicesMatching(w[0])),'a second word only narrows');
+ assert.equal(n(choicesMatching(sample.toUpperCase())),n(choicesMatching(sample.toLowerCase())));
+ assert.ok(n(choicesMatching(sample.toUpperCase()))>=1,'another case matches');
+ assert.deepEqual(choicesMatching('zzzqqq xx'),[],'nothing matches: no area');
+ assert.equal(choicesMatching(w[0]).every(g=>g.items.length>0),true,'an area with no match is not drawn');
+ const src=code(PAPER_PANEL);
+ assert.match(src,/<details key=\{g\.area\} className="ppaper-area" open=\{typing \|\| undefined\}>/,'each area folds, and opens while typing');
+ assert.match(src,/No statement has these words\./);
+ assert.match(src,/useState\(""\)/,'each row keeps its own filter text');
+ assert.match(src,/\(\$\{picked\} picked\)/,'the area summary counts its picks');
+});
+
+test('paper 5: a paper kept can be shown on the TV from the panel - the TV has no key into the list, so the phone is its door',()=>{
+ const src=code(PAPER_PANEL);
+ assert.match(src,/seated && kept && <button[^>]*onClick=\{\(\) => void post\(\{ type: "nav", screen: "paper" \}\)\}/);
+ const {panelFor}=P();
+ assert.equal(panelFor(session({screen:'paper'})),'paper','the TV on the list hands the phone to the panel');
+ assert.equal(panelFor(session({joined:false,screen:'paper'})),'join','an unjoined phone is still asked for the code first');
+});
+
+test('MB-B43: the Paper panel\'s heading and its Send button name the seated learner',()=>{
+ const src=fs.readFileSync(PAPER_PANEL,'utf8'),page=fs.readFileSync(PAGE,'utf8');
+ assert.match(src,/<h3>\{paperHeading\(name\)\}<\/h3>/);assert.match(src,/\{paperSend\(e\.kept, name\)\}/);
+ assert.match(src,/`A paper \$\{name\} sat`/);assert.match(src,/to \$\{name \? `\$\{name\}'s record` : "the TV"\}/);
+ assert.match(page,/<PaperPanel [^>]*name=\{s\?\.learner\?\.name\}/,'the panel is given the seated learner\'s name');
+ assert.doesNotMatch(src,/<h3>A paper you sat<\/h3>/,'no unnamed heading is left');
+});
+
+test('MB-B33 mic: the recogniser language follows the seated learner\'s school system (cs-CZ for cz, en-US otherwise) and the page uses the helper',()=>{
+ const {recogniserLang}=require(path.join(SRC,'app/phone/recogniserLang.ts'));
+ const profiles=[{id:'a',name:'A',type:'high-school',system:'cz',modules:[]},{id:'b',name:'B',type:'high-school',system:'us',modules:[]},{id:'c',name:'C',type:'high-school',modules:[]}];
+ assert.equal(recogniserLang({learner:{id:'a',name:'A'},profiles}),'cs-CZ');
+ for(const id of ['b','c','nobody'])assert.equal(recogniserLang({learner:{id,name:'x'},profiles}),'en-US',id);
+ assert.equal(recogniserLang({learner:null,profiles}),'en-US');assert.equal(recogniserLang(null),'en-US');assert.equal(recogniserLang(undefined),'en-US');
+ const page=code(PAGE);assert.match(page,/r\.lang = recogniserLang\(s\)/);assert.doesNotMatch(page,/r\.lang = "en-US"/);
+});
+
+// ---- X2 Type it (MB-B18, delivery 5b): a typed way to explain beside the hold button while a recogniser exists
+test('X2 Type it',async(t)=>{
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server'));
+ const {createElement}=require(path.join(root,'node_modules/react'));
+ const load=()=>require(path.join(SRC,'app/phone/ExplainTalk.tsx')).ExplainTalk;
+ const noop=()=>{};
+ const draw=(o)=>renderToStaticMarkup(createElement(load(),{micOk:true,holding:false,heard:'',reply:'',busy:false,typed:'',typing:false,
+  onHoldStart:noop,onHoldEnd:noop,onSendHeard:noop,onTryAgain:noop,onTyped:noop,onOpenTyping:noop,onCloseTyping:noop,onSendTyped:noop,onClearTyped:noop,...o}));
+ await t.test('(a) micOk, nothing heard, typing closed: the hold button and a Type it control',()=>{
+  const h=draw({});assert.match(h,/class="phold"/);assert.match(h,/>Type it</);assert.doesNotMatch(h,/<textarea/);
+ });
+ await t.test('(b) micOk, typing open: a labelled textarea and Send, disabled while blank',()=>{
+  const h=draw({typing:true});assert.match(h,/<textarea[^>]*aria-label="[^"]+"/);
+  assert.match(h,/<button[^>]*disabled=""[^>]*>Send<\/button>/,'blank text: Send is disabled');
+  assert.doesNotMatch(h,/class="phold"/);
+  assert.doesNotMatch(draw({typing:true,typed:'čitatel'}),/<button[^>]*disabled=""[^>]*>Send<\/button>/,'text typed: Send is enabled');
+ });
+ await t.test('(c) micOk false: the textarea shows and there is no hold button',()=>{
+  const h=draw({micOk:false});assert.match(h,/<textarea[^>]*aria-label=/);assert.doesNotMatch(h,/phold/);assert.doesNotMatch(h,/>Type it</);
+ });
+ await t.test('(d) heard set: I heard with Send and Try again',()=>{
+  const h=draw({heard:'two thirds'});assert.match(h,/I heard: “two thirds”/);assert.match(h,/>Send</);assert.match(h,/>Try again</);assert.doesNotMatch(h,/<textarea/);
+ });
+ await t.test('(e) page.tsx renders ExplainTalk, the typed text is not q, the walkIx effect clears it',()=>{
+  const p=code(PAGE);assert.match(p,/<ExplainTalk /);assert.match(p,/typed=\{typedExplain\}/);
+  assert.doesNotMatch(p,/<ExplainTalk [^>]*typed=\{q\}/);assert.match(p,/onSendTyped=\{\(\) => explain\(typedExplain\)\}/);
+  assert.match(p,/setTypedExplain\(""\);[^\n]*\}, \[s\?\.walkIx\]\)/,'the walkIx effect clears it');
+  assert.match(p,/setTypedExplain\(""\);[^\n]*\}, \[s\?\.learner\?\.id\]\)/,'a learner change clears it');
+  assert.match(p,/setHeard\(""\); setReply\(""\); setAgain\(""\);[^\n]*\}, \[s\?\.learner\?\.id\]\)/,'P12: a learner change also clears the heard words, the reply and the second try');
+ });
+});
+
+// ---- P15 (delivery 7d-3): a late explain reply is dropped when the learner or the walk item changed
+// The harness has no DOM, so explain() itself is cut out of page.tsx, transpiled and run against stubs: a behavioural test of the real code.
+test('P15 explain(): a reply that returns after the learner or the walk item changed sets neither reply nor msg; busy clears',async(t)=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const a=src.indexOf('const seat = useRef'),b=src.indexOf('/** One typed second go');
+ assert.ok(a>0&&b>a,'explain() is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const make=(s,respond)=>{
+  const calls=[];const rec=(k)=>(v)=>calls.push([k,v]);
+  const f=new Function('s','useRef','call','setBusy','setMsg','setReply','setHeard','setTypedExplain','setTyping',`${js}\nreturn {explain,seat};`);
+  const out=f(s,(v)=>({current:v}),respond,rec('busy'),rec('msg'),rec('reply'),rec('heard'),rec('typed'),rec('typing'));
+  return {...out,calls};
+ };
+ const reply=(body,ok=true,status=200)=>Promise.resolve({ok,status,json:async()=>body});
+ const gate=()=>{let open;const p=new Promise((r)=>{open=r;});return {p,open};};
+ const went=(calls,k)=>calls.filter(([x])=>x===k);
+ const seatedA={learner:{id:'ema'},walkIx:1};
+ await t.test('control: nothing changed - the reply lands and the heard and typed words clear',async()=>{
+  const m=make(seatedA,()=>reply({reply:'Good.'}));await m.explain('x');
+  assert.deepEqual(went(m.calls,'reply'),[['reply','Good.']]);assert.equal(went(m.calls,'heard').length,1);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('the learner changed while it was out: no reply, no heard or typed clearing, busy cleared',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.explain('x');
+  m.seat.current={id:'jakub',ix:1};g.open(reply({reply:'Good.'}));await p;
+  assert.equal(went(m.calls,'reply').length,0);assert.equal(went(m.calls,'msg').filter(([,v])=>v!=='').length,0);
+  assert.equal(went(m.calls,'heard').length,0);assert.equal(went(m.calls,'typed').length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('the walk item changed while it was out: the same',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.explain('x');
+  m.seat.current={id:'ema',ix:2};g.open(reply({error:'The desk could not follow that.'},false,502));await p;
+  assert.equal(went(m.calls,'reply').length,0);assert.equal(went(m.calls,'msg').filter(([,v])=>v!=='').length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('a failed send after a change is dropped too; unchanged, it says so',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.explain('x');
+  m.seat.current={id:'jakub',ix:1};g.open(Promise.reject(new Error('net')));await p.catch(()=>{});
+  assert.equal(went(m.calls,'msg').filter(([,v])=>v!=='').length,0);
+  const m2=make(seatedA,()=>Promise.reject(new Error('net')));await m2.explain('x');
+  assert.equal(went(m2.calls,'msg').filter(([,v])=>v!=='').length,1);
+ });
+ await t.test('it is sent for the item that was open at send time',async()=>{
+  let sent;const m=make(seatedA,(u,b)=>{sent=b;return reply({reply:'ok'});});await m.explain('x');assert.equal(sent.n,1);
+ });
+});
+
+// ---- P16 (delivery 7d-4): a late second-try reply is dropped when the learner or the walk item changed
+// Same method as P15: sendSecond() is cut out of page.tsx, transpiled and run against stubs.
+test('P16 sendSecond(): a reply that returns after the learner or the walk item changed sets neither again nor msg; busy clears',async(t)=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const e=src.indexOf('The evening ends first');
+ const a=src.indexOf('const seat = useRef'),b=src.lastIndexOf('/**',e);
+ assert.ok(a>0&&e>a&&b>a,'sendSecond() is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const make=(s,respond)=>{
+  const calls=[];const rec=(k)=>(v)=>calls.push([k,v]);
+  const f=new Function('s','useRef','call','again','busy','setAgain','setBusy','setMsg','setReply','setHeard','setTypedExplain','setTyping','document','HTMLElement',`${js}\nreturn {sendSecond,seat};`);
+  const out=f(s,(v)=>({current:v}),respond,'my go',false,rec('again'),rec('busy'),rec('msg'),rec('reply'),rec('heard'),rec('typed'),rec('typing'),{activeElement:null},class{});
+  return {...out,calls};
+ };
+ const reply=(body,ok=true,status=200)=>Promise.resolve({ok,status,json:async()=>body});
+ const gate=()=>{let open;const p=new Promise((r)=>{open=r;});return {p,open};};
+ const went=(calls,k)=>calls.filter(([x])=>x===k);
+ const full=(calls)=>went(calls,'msg').filter(([,v])=>v!=='');
+ const seatedA={learner:{id:'ema'},walkIx:1,practice:{items:[{n:10},{n:11},{n:12}]}};
+ await t.test('control: nothing changed - ok clears again; a refusal says the route\'s error; busy ends false',async()=>{
+  const m=make(seatedA,()=>reply({}));await m.sendSecond();
+  assert.deepEqual(went(m.calls,'again'),[['again','']]);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+  const m2=make(seatedA,()=>reply({error:'No second go here.'},false,409));await m2.sendSecond();
+  assert.deepEqual(full(m2.calls),[['msg','No second go here.']]);assert.equal(went(m2.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('the learner changed while it was out: no again, no msg, busy cleared',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.sendSecond();
+  m.seat.current={id:'jakub',ix:1};g.open(reply({}));await p;
+  assert.equal(went(m.calls,'again').length,0);assert.equal(full(m.calls).length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('the walk item changed while it was out: a refusal sets no msg; busy cleared',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.sendSecond();
+  m.seat.current={id:'ema',ix:2};g.open(reply({error:'No second go here.'},false,409));await p;
+  assert.equal(full(m.calls).length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('a failed send after a change is dropped too; unchanged, it says so',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.sendSecond();
+  m.seat.current={id:'jakub',ix:1};g.open(Promise.reject(new Error('net')));await p.catch(()=>{});
+  assert.equal(full(m.calls).length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+  const m2=make(seatedA,()=>Promise.reject(new Error('net')));await m2.sendSecond();
+  assert.equal(full(m2.calls).length,1);assert.match(full(m2.calls)[0][1],/^That did not reach the desk: /);
+ });
+ await t.test('it is sent for the item that was open at send time',async()=>{
+  let sent;const m=make(seatedA,(u,b)=>{sent=b;return reply({});});await m.sendSecond();assert.equal(sent.n,11);
+ });
+});
+
+// ---- P17 (delivery 7d-5): a learner switch clears the last learner's work on the phone
+// Same method as P15: the reset and its effect are cut out of page.tsx between stable markers, transpiled and run against stubs.
+const P17_LOAD={paras:['load paras'],sentence:'load sentence'};
+test('P17 (i) a learner switch resets the last learner\'s essay, photo, typed answers and lines to their load values',async(t)=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const a=src.indexOf('// P17 (i) begin'),b=src.indexOf('// P17 (i) end');
+ assert.ok(a>0&&b>a,'the reset is where the test expects it');
+ assert.ok(b<src.indexOf('const rec = useRef'),'it sits before the rec ref');
+ assert.match(src,/useState\(FRESH_SENTENCE\)/);assert.match(src,/useState<string\[\]>\(FRESH_PARAS\)/,'the load values are the ones the reset uses');
+ assert.match(src,/\[keep, setKeep\] = useState\(true\)/,'keep loads true');assert.match(src,/\[ring, setRing\] = useState<[^=]*\| null>\(null\)/,'ring loads null');
+ const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const NAMES=['Paras','Pix','ReadIx','Note','Info','Source','PieceId','Notice','Shot','Phase','Q','Msg','PaperRows','Typed','Sentence','Memory','Keep','Ring'];
+ const make=()=>{
+  const calls=[];const s={learner:null};let effect;
+  const setters=NAMES.map((n)=>(v)=>calls.push([n,v]));
+  const f=new Function('s','useRef','useEffect','blankRow','FRESH_PARAS','FRESH_SENTENCE',...NAMES.map((n)=>'set'+n),`${js}\nreturn null;`);
+  f(s,(v)=>({current:v}),(fn)=>{effect=fn;},()=>({blank:true}),P17_LOAD.paras,P17_LOAD.sentence,...setters);
+  const seat=(id)=>{s.learner=id?{id}:null;calls.length=0;effect();return calls.slice();};
+  return {seat};
+ };
+ const want={Paras:P17_LOAD.paras,Pix:0,ReadIx:[],Note:'',Info:'',Source:'message',PieceId:undefined,Notice:null,Shot:null,Phase:'idle',Q:'',Msg:'',PaperRows:[{blank:true}],Typed:[],Sentence:P17_LOAD.sentence,Memory:null,Keep:true,Ring:null};
+ await t.test('A to B: every listed state goes back to its load value',()=>{
+  const m=make();m.seat('ema');const c=m.seat('jakub');
+  assert.deepEqual(c.map(([n])=>n).sort(),[...NAMES].sort());
+  for(const [n,v] of c)assert.deepEqual(v,want[n],n);
+ });
+ await t.test('the first seating after load resets nothing',()=>{const m=make();assert.deepEqual(m.seat('ema'),[]);});
+ await t.test('A to none to A resets nothing',()=>{const m=make();m.seat('ema');assert.deepEqual(m.seat(null),[]);assert.deepEqual(m.seat('ema'),[]);});
+ await t.test('A to none to B resets when B sits, not when the seat empties',()=>{
+  const m=make();m.seat('ema');assert.deepEqual(m.seat(null),[]);assert.equal(m.seat('jakub').length,NAMES.length);
+ });
+ await t.test('A to B to B resets once',()=>{const m=make();m.seat('ema');m.seat('jakub');assert.deepEqual(m.seat('jakub'),[]);});
+});
+
+// ---- P17 (ii): a reply that returns after the learner changed is dropped by every handler
+// Each handler is cut out of page.tsx, transpiled and run against stubs. Only the learner is compared, never the walk item.
+test('P17 (ii) a reply that returns after the learner changed sets no state but busy, in every handler',async(t)=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const cut=(from,to)=>{const a=src.indexOf(from),e=src.indexOf(to,a);assert.ok(a>0&&e>a,`${from} is where the test expects it`);return src.slice(a,src.lastIndexOf('\n',e));};
+ const SETTERS=['Busy','Msg','Phase','Note','Info','Notice','ReadIx','PieceId','ShelfTick','Q','Paras'];
+ const PARAMS=['s','seat','call','post','shot','busy','typed','document','HTMLElement','onPlan','onSentence','slotText','rewrite','planFill','paras','pieceProblem','etype','keep','pieceId','source','essay','paragraphsOf','essayTooLong','pix','page','q','sentence',...SETTERS.map((n)=>'set'+n)];
+ const reply=(body,ok=true,status=200)=>Promise.resolve({ok,status,json:async()=>body});
+ const gate=()=>{let open;const p=new Promise((r)=>{open=r;});return {p,open};};
+ // build one handler; `respond(url, body)` is the network
+ const build=(slice,name,respond)=>{
+  const calls=[],urls=[],seat={current:{id:'ema',ix:1}};
+  const js=ts.transpileModule(slice,{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+  const f=new Function(...PARAMS,`${js}\nreturn {${name}};`);
+  const rec=(k)=>(v)=>calls.push([k,typeof v==='function'?'fn':v]);
+  const stubs={s:{practice:{items:[{n:10}]},walkIx:0,itemIx:0},seat,call:(u,b)=>{urls.push([u,b]);return respond(u,b);},post:(e)=>{urls.push(['post',e]);return respond('post',e);},shot:{url:'u',w:1,h:2},busy:false,typed:['a','b'],
+   document:{activeElement:null},HTMLElement:class{},onPlan:{i:0,plan:{}},onSentence:{n:2},slotText:'slot',rewrite:'rw',planFill:()=>({ok:true}),paras:['one','two'],pieceProblem:()=>'',
+   etype:'structure',keep:true,pieceId:'p1',source:'message',essay:'one',paragraphsOf:(x)=>[x],essayTooLong:()=>'',pix:0,page:{items:[]},q:'why',sentence:'I go.'};
+  const out=f(...PARAMS.map((p)=>p.startsWith('set')&&SETTERS.includes(p.slice(3))?rec(p.slice(3)):stubs[p]));
+  return {fn:out[name],calls,urls,seat,mark:()=>calls.length};
+ };
+ const sendS=cut('const send = async','const toJpeg'),slotS=cut('const sendSlot','useEffect(() => { if (onSentence)'),rewriteS=cut('const sendRewrite','/** Load a text as'),
+  pieceS=cut('const readPiece','const openKept'),paraS=cut('const analyseParagraph','/** From the sentence rewrite'),askS=cut('const ask = async',"/** The desk's failed run"),
+  retryS=cut('const retry = async','/** A Mic press'),workS=cut('const sendWorking','const sendTyped').replace(/\/\*\*\s*$/,''),typedS=cut('const sendTyped','// the set came back');
+ const okBody={piece:{pieceId:'p2'}};
+ // [label, slice, handler, args, network for a good reply, what the control must set]
+ const H=[
+  ['send',sendS,'send',['d',1,2,'maths','T'],()=>reply({}),(c)=>c.some(([k,v])=>k==='Phase'&&v==='sent')],
+  ['sendSlot',slotS,'sendSlot',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Msg'&&v==='on the TV')],
+  ['sendRewrite',rewriteS,'sendRewrite',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Msg'&&v==='on the TV')],
+  ['readPiece',pieceS,'readPiece',[],()=>reply(okBody),(c)=>c.some(([k,v])=>k==='PieceId'&&v==='p2')&&c.some(([k])=>k==='ShelfTick')],
+  ['acceptNotice',pieceS,'acceptNotice',[],(u)=>u==='/api/texts'?reply({}):reply(okBody),(c)=>c.some(([k,v])=>k==='PieceId'&&v==='p2')],
+  ['analyseParagraph',paraS,'analyseParagraph',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Msg'&&v==='on the TV')&&c.some(([k])=>k==='ReadIx')],
+  ['ask',askS,'ask',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Q'&&v==='')],
+  ['checkSentence',askS,'checkSentence',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Msg'&&v==='on the TV')],
+  ['retry',retryS,'retry',['read'],()=>reply({}),(c)=>c.some(([k,v])=>k==='Phase'&&v==='sent')],
+  ['sendWorking',workS,'sendWorking',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Phase'&&v==='sent')],
+  ['sendTyped',typedS,'sendTyped',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Phase'&&v==='sent')],
+ ];
+ assert.equal(H.length,11,'eleven handlers');
+ for(const [label,slice,name,args,net,sets] of H){
+  await t.test(`${label}: control - nothing changed, it sets what it sets today`,async()=>{
+   const m=build(slice,name,net);await m.fn(...args);await new Promise((r)=>setImmediate(r));
+   assert.ok(sets(m.calls),`${label} sets its state`);assert.equal(m.calls.filter(([k])=>k==='Busy').at(-1)[1],false);
+  });
+  await t.test(`${label}: the learner changed while the call was out - nothing set but busy, which ends false`,async()=>{
+   for(const how of ['ok','refusal','reject']){
+    const g=gate();const m=build(slice,name,()=>g.p);const p=m.fn(...args);const from=m.mark();
+    m.seat.current={id:'jakub',ix:1};
+    if(how==='ok')g.open(net('/api/x')); else if(how==='refusal')g.open(reply({error:'No.'},false,409)); else g.open(Promise.reject(new Error('net')));
+    await p.catch(()=>{});await new Promise((r)=>setImmediate(r));
+    const after=m.calls.slice(from);
+    assert.deepEqual(after.filter(([k])=>k!=='Busy'),[],`${label} (${how}) set no state after the switch`);
+    if(label!=='acceptNotice'){assert.equal(after.at(-1)[0],'Busy');assert.equal(after.at(-1)[1],false);}
+   }
+  });
+ }
+ await t.test('readPiece: a 428 after a switch sets no notice; an ok after a switch sets no piece id',async()=>{
+  const g=gate();const m=build(pieceS,'readPiece',()=>g.p);const p=m.fn();const from=m.mark();
+  m.seat.current={id:'jakub',ix:1};g.open(reply({notice:true,error:'Notice.'},false,428));await p;
+  assert.equal(m.calls.slice(from).filter(([k])=>k==='Notice').length,0);
+  const g2=gate();const m2=build(pieceS,'readPiece',()=>g2.p);const p2=m2.fn();const from2=m2.mark();
+  m2.seat.current={id:'jakub',ix:1};g2.open(reply(okBody));await p2;
+  assert.equal(m2.calls.slice(from2).filter(([k])=>k==='PieceId'||k==='ShelfTick').length,0);
+  const m3=build(pieceS,'readPiece',()=>reply({notice:true,error:'Notice.'},false,428));await m3.fn();
+  assert.deepEqual(m3.calls.filter(([k])=>k==='Notice'),[['Notice','Notice.']],'unchanged, the 428 still shows the notice');
+ });
+ await t.test('acceptNotice: after a switch it does not call readPiece (no piece is posted)',async()=>{
+  const g=gate();const m=build(pieceS,'acceptNotice',(u)=>u==='/api/texts'?g.p:reply(okBody));const p=m.fn();
+  m.seat.current={id:'jakub',ix:1};g.open(reply({}));await p;
+  assert.deepEqual(m.urls.map(([u])=>u),['/api/texts'],'only the notice was posted');
+  const m2=build(pieceS,'acceptNotice',()=>reply(okBody));await m2.fn();
+  assert.deepEqual(m2.urls.map(([u])=>u),['/api/texts','/api/analyse'],'unchanged, the piece follows the notice');
+ });
+ await t.test('request bodies are unchanged, and a walk item change alone drops nothing',async()=>{
+  const m=build(askS,'ask',()=>reply({}));await m.fn();assert.deepEqual(m.urls[0],['/api/hint',{askedQ:'why',itemIx:0}]);
+  const g=gate();const m2=build(askS,'ask',()=>g.p);const p=m2.fn();m2.seat.current={id:'ema',ix:2};g.open(reply({}));await p;
+  assert.ok(m2.calls.some(([k,v])=>k==='Q'&&v===''),'the learner is the same: the reply lands');
+  const w=build(workS,'sendWorking',()=>reply({}));await w.fn();assert.deepEqual(w.urls[0],['/api/mark',{image:'u',w:1,h:2}]);
+ });
+ assert.match(src,/onClick=\{checkSentence\}>Check it on the TV</,'the Say button calls the named handler');
+});
+
+// ---- SW1 (scan-sweep optimize 2026-10-13): the Say panel's Check it on the TV fails the way its eleven siblings do ----
+test('SW1: checkSentence - a call that never reached the desk says so and never rejects; a refusal shows the route\'s own line',async()=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const a=src.indexOf('const checkSentence'),e=src.indexOf("/** The desk's failed run",a);assert.ok(a>0&&e>a,'checkSentence is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,src.lastIndexOf('\n',e)),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const run=async(respond)=>{
+  const calls=[],seat={current:{id:'ema'}};
+  const f=new Function('seat','call','sentence','setBusy','setMsg',`${js}\nreturn checkSentence;`);
+  const fn=f(seat,()=>respond(),'I go.',(v)=>calls.push(['Busy',v]),(v)=>calls.push(['Msg',v]));
+  let threw=null;try{await fn();}catch(x){threw=x;}
+  return {threw,msg:calls.filter(([k])=>k==='Msg').at(-1)?.[1],busy:calls.filter(([k])=>k==='Busy').at(-1)?.[1]};
+ };
+ const reply=(body,ok,status)=>Promise.resolve({ok,status,json:async()=>body});
+ const down=await run(()=>Promise.reject(new TypeError('Failed to fetch')));
+ assert.equal(down.threw,null,'a network failure is handled, not left as an unhandled rejection');
+ assert.equal(down.msg,'That did not reach the desk.','the line its siblings say');assert.equal(down.busy,false);
+ const nobody=await run(()=>reply({error:'No one is at the desk yet.'},false,409));
+ assert.equal(nobody.msg,'No one is at the desk yet.','the route\'s own reason, not a bare "failed"');
+ const bare=await run(()=>reply({},false,500));
+ assert.match(bare.msg,/could not check that sentence \(500\)/);
+ assert.doesNotMatch(src.slice(a,e),/"failed"/,'no bare "failed" left in the handler');
+ assert.equal((await run(()=>reply({},true,200))).msg,'on the TV','unchanged: an ok is on the TV');
+});
+
+// ---- SW2 (scan-sweep optimize 2026-10-13): a camera granted after the panel let it go is stopped, never left running ----
+test('SW2: the camera effect stops a stream that arrives after the panel no longer wants it, and on unmount',async()=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const a=src.lastIndexOf('useEffect(() => {',src.indexOf('if (!camWanted)')),e=src.indexOf('}, [camWanted]);',a);
+ assert.ok(a>0&&e>a,'the camera effect is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,e+'}, [camWanted]);'.length),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const run=async(late)=>{
+  let effect=null,open;const granted=new Promise((r)=>{open=r;});const stopped=[],cams=[];
+  const navigator={mediaDevices:{getUserMedia:()=>granted}};
+  new Function('useEffect','camWanted','cam','setCam','video','setMsg','screen','navigator',js)((f)=>{effect=f;},true,null,(v)=>cams.push(v),{current:null},()=>{},'capture',navigator);
+  const cleanup=effect();
+  if(late)assert.equal(typeof cleanup,'function','the effect hands React a cleanup');
+  if(late&&typeof cleanup==='function')cleanup();
+  open({getTracks:()=>[{stop:()=>stopped.push('video')}]});await new Promise((r)=>setImmediate(r));
+  return {stopped,cams,cleanup};
+ };
+ const late=await run(true);
+ assert.deepEqual(late.stopped,['video'],'a stream granted after the panel let the camera go is stopped at once');
+ assert.deepEqual(late.cams,[],'and never becomes the panel\'s camera');
+ const wanted=await run(false);
+ assert.equal(wanted.cams.length,1,'unchanged: a stream that arrives while wanted is the camera');assert.deepEqual(wanted.stopped,[]);
+ wanted.cleanup();assert.deepEqual(wanted.stopped,['video'],'the page going away stops the camera in use');
+});
+
+// ---- SW3/SW4 (scan-sweep optimize 2026-10-13): case 13's phone-sized rule (44 px targets, 16 px fields) on every panel ----
+const phoneCss=()=>fs.readFileSync(path.join(SRC,'app/globals.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+const ruleOf=(css,sel)=>{const i=css.indexOf(`${sel} {`);assert.ok(i>=0,`${sel} is styled`);return css.slice(i,css.indexOf('}',i));};
+const pxOf=(decl,prop)=>Number((decl.match(new RegExp(`(?:^|[;{\\s])${prop}: (\\d+)px`))||[])[1]||0);
+test('SW3: every typed field on the phone is 16 px or more, so a phone does not zoom in when it is tapped',()=>{
+ const css=phoneCss();
+ // the .field row holds the code, the name, the question, the sentence, the plan slot and the paragraph
+ assert.ok(pxOf(ruleOf(css,'.field input, .field textarea, .field select'),'font-size')>=16,'.field controls are 16 px or more');
+ assert.ok(pxOf(ruleOf(css,'.ppaper-find'),'font-size')>=16,'the Paper panel\'s search box is 16 px or more');
+ assert.ok(pxOf(ruleOf(css,'.pask input'),'font-size')>=16,'unchanged: the typed answers');
+});
+test('SW4: the phone\'s tap targets are at least 44 px tall - the tab bar, the presets, the samples and the role switch',()=>{
+ const css=phoneCss();
+ for(const sel of ['.pnav button','.presets button','.samples button','.ptop .who button','.field input, .field textarea, .field select'])
+  assert.ok(pxOf(ruleOf(css,sel),'min-height')>=44,`${sel} is at least 44 px tall`);
+});
+
+// ---- PR5: every refused join says why on the Join panel ----
+const WRONG='That code is not on the TV.',TOO_MANY='Too many wrong codes. Wait five minutes, then type the code again.';
+const NEWCODE='The TV has a new code. Type the code the TV shows.',NOREACH='That did not reach the desk.';
+test('PR5: the join lines are the route\'s own, and carry no digit and no em dash',()=>{
+ const pairing=fs.readFileSync(path.join(SRC,'lib/session/pairing.ts'),'utf8');
+ assert(pairing.includes(`"${WRONG}"`)&&pairing.includes(`"${TOO_MANY}"`),'the route texts are the ones this suite expects');
+ for(const l of [NEWCODE,NOREACH])assert.doesNotMatch(l,/[0-9\u2014]/);
+});
+// PR10 supersedes PR5's remembered-code half: the phone no longer stores the code, so there is no remembered join and no row for it (typed and QR stand)
+test('PR10: a code the phone brought is no longer remembered - joinRefusal has no remembered row and says no new-code line',()=>{
+ const src=fs.readFileSync(PANEL,'utf8');
+ assert.doesNotMatch(src,/remembered/,'panelFor.ts has no remembered join');
+ assert.doesNotMatch(src,/The TV has a new code/);
+});
+test('PR5: a QR code the TV does not know says so, quietly, and is forgotten',()=>{
+ assert.deepEqual(P().joinRefusal({status:403,error:WRONG,how:'qr'}),{line:WRONG,shake:false,forget:true});
+});
+test('PR5: a cooldown refusal shows the route\'s text and keeps the stored code, typed or not',()=>{
+ for(const how of ['typed','qr'])assert.deepEqual(P().joinRefusal({status:403,error:TOO_MANY,how}),{line:TOO_MANY,shake:how==='typed',forget:false},how);
+});
+test('PR5: no answer says it did not reach the desk and keeps the stored code',()=>{
+ for(const how of ['typed','qr'])assert.deepEqual(P().joinRefusal({status:undefined,error:undefined,how}),{line:NOREACH,shake:how==='typed',forget:false},how);
+});
+test('PR5: any other refusal shows the route\'s text, or the wrong-code line when it sends none',()=>{
+ assert.deepEqual(P().joinRefusal({status:500,error:'Boom.',how:'qr'}),{line:'Boom.',shake:false,forget:false});
+ assert.deepEqual(P().joinRefusal({status:403,error:undefined,how:'qr'}),{line:WRONG,shake:false,forget:true});
+ assert.deepEqual(P().joinRefusal({status:403,error:undefined,how:'typed'}),{line:WRONG,shake:true,forget:false});
+});
+test('PR5: a typed wrong code shakes and keeps what is stored',()=>{
+ assert.deepEqual(P().joinRefusal({status:403,error:WRONG,how:'typed'}),{line:WRONG,shake:true,forget:false});
+});
+test('PR5: page.tsx join() sends every refusal through joinRefusal, quiet ones too',()=>{
+ const src=code(PAGE);
+ assert.match(src,/joinRefusal/,'page.tsx uses joinRefusal');
+ const at=src.indexOf('const join = async'),body=src.slice(at,src.indexOf('const onPin',at));
+ assert(at>0&&body.includes('joinRefusal('),'join() calls it');
+ assert.doesNotMatch(body,/if \(quiet\) return/,'a quiet join no longer returns before saying why');
+ // changed openly (PR10): the phone stores no code, so there is nothing for a refusal to forget and no remembered join
+ assert.doesNotMatch(body,/desk\.pin/,'join() neither stores nor forgets a code');
+ assert.match(src,/join\(q, "qr"\)/);assert.doesNotMatch(src,/"remembered"/);
+});
+
+// ---- PR10: the phone keeps no code ----
+test('PR10: page.tsx writes no desk.pin to localStorage, removes a stored one on open, and has no remembered join',()=>{
+ const src=code(PAGE);
+ assert.doesNotMatch(src,/localStorage\.setItem\("desk\.pin"/,'no write of the code');
+ assert.doesNotMatch(src,/localStorage\.getItem\("desk\.pin"/,'the code is never read back');
+ assert.doesNotMatch(src,/remembered/,'no remembered ref or join');
+ assert.match(src,/useEffect\(\(\) => \{[\s\S]{0,60}localStorage\.removeItem\("desk\.pin"\)[\s\S]{0,60}\}, \[\]\)/,'a stored code is removed on open');
+});
+test('PR10: JoinHow has no remembered',()=>{
+ assert.match(fs.readFileSync(PANEL,'utf8'),/export type JoinHow = "typed" \| "qr";/);
+});
+test('PR10: the Forget link is offered while this device is a phone - on the panel a joined phone sees',()=>{
+ const src=code(PAGE);
+ assert.match(src,/s\??\.viewer === "phone" && [\s\S]{0,120}Forget this desk/,'depends on the viewer being a phone');
+ const joined=src.slice(src.indexOf('screen === "joined"'),src.indexOf('screen === "profile" && <div'));
+ assert.match(joined,/Forget this desk/,'a joined phone can reach it');
+ assert.doesNotMatch(src,/hasDesk/,'no stored-code flag decides it');
+});
+
+// ---- PR11: a write the desk could not make is a desk fault, not a wrong code ----
+const JOIN_NOT_SAVED='The desk could not save this phone, so nothing changed. Type the same code again.',JOIN_DESK_FAULT='The desk had a problem and did not join this phone. Type the same code again.';
+const LEAVE_NOT_SAVED='The desk could not forget this phone, so it is still paired. Try again.',LEAVE_DESK_FAULT='The desk had a problem and did not forget this phone. It is still paired: try again.';
+const FORGOTTEN='This phone will ask for the code next time.';
+test('PR11: a join answered 500 or above never shakes and never forgets the code; it shows its error, or the desk-fault line',()=>{
+ for(const how of ['typed','qr']){
+  for(const status of [500,502])assert.deepEqual(P().joinRefusal({status,error:undefined,how}),{line:JOIN_DESK_FAULT,shake:false,forget:false},status+how);
+  assert.deepEqual(P().joinRefusal({status:500,error:JOIN_NOT_SAVED,how}),{line:JOIN_NOT_SAVED,shake:false,forget:false},how);
+ }
+ assert.deepEqual(P().joinRefusal({status:403,error:WRONG,how:'typed'}),{line:WRONG,shake:true,forget:false});
+ assert.deepEqual(P().joinRefusal({status:undefined,error:undefined,how:'typed'}),{line:NOREACH,shake:true,forget:false});
+});
+test('deskLine: a run that failed on the desk (its body says failure) adds no line; any other refusal says its error, whatever the status',()=>{
+ const {deskLine}=P(),F='The desk could not ask (502).';
+ assert.equal(deskLine({error:'The desk could not follow that. It took too long.',failure:'timeout',retry:true},F),'','a failed run: its sentence is on the TV');
+ assert.equal(deskLine({error:'Asking again would end the same way.',failure:'cutoff'},F),'');
+ assert.equal(deskLine({error:'Bad gateway from a proxy.'},F),'Bad gateway from a proxy.','a 502 that is not a run says its error');
+ for(const b of [null,undefined,{},{error:''},{error:3}])assert.equal(deskLine(b,F),F,JSON.stringify(b));
+});
+test("the profile queue hands each post's failure to its caller: Save that never lands says so, and the queue goes on",async()=>{
+ const raw=fs.readFileSync(PAGE,'utf8');
+ assert.match(raw,/post\(\{ type: "profile\.save" \}\)\)\.catch\(\(\) => setMsg\("That did not reach the desk\."\)\)/,'Save says when it did not land');
+ const at=raw.indexOf('function inOrder()'),body=raw.slice(at,raw.indexOf('\n}\n',at)+2);
+ const inOrder=new Function(body.replace(/: Promise<unknown>/g,'').replace(/\(job: \(\) => Promise<unknown>\)/,'(job)')+'\nreturn inOrder;')();
+ const q=inOrder(),seen=[];
+ await assert.rejects(q(async()=>{seen.push(1);throw new Error('offline');}),/offline/,'the caller sees its own failure');
+ await q(async()=>{seen.push(2);});assert.deepEqual(seen,[1,2],'and the next post still goes, in order');
+});
+test('page.tsx never reads a meaning out of a 502: the body says whether the failure is on the desk',()=>{
+ assert.doesNotMatch(code(PAGE),/status\s*[!=]==\s*502/);
+});
+test('PR11: leaveOutcome says forgotten only for a 2xx answer',()=>{
+ assert.deepEqual(P().leaveOutcome({status:200,error:undefined}),{line:FORGOTTEN,forgotten:true});
+ assert.deepEqual(P().leaveOutcome({status:500,error:LEAVE_NOT_SAVED}),{line:LEAVE_NOT_SAVED,forgotten:false});
+ for(const status of [500,502])assert.deepEqual(P().leaveOutcome({status,error:undefined}),{line:LEAVE_DESK_FAULT,forgotten:false},String(status));
+ assert.deepEqual(P().leaveOutcome({status:undefined,error:undefined}),{line:NOREACH,forgotten:false});
+});
+test('PR11: page.tsx forget() waits for the desk: leaveOutcome, reconnect only when forgotten, no empty handler, no forgotten line of its own',()=>{
+ const src=code(PAGE);
+ const at=src.indexOf('const forget =');assert(at>0,'forget() is there');
+ const body=src.slice(at,src.indexOf('\n    };',at));
+ assert.match(body,/leaveOutcome\(/);
+ assert.match(body,/if \(\w+\.forgotten\)\s*reconnect\(\)/,'reconnect() only when forgotten');
+ assert.equal((body.match(/reconnect\(\)/g)??[]).length,1);
+ assert.doesNotMatch(body,/\(\) => \{\}/,'no empty handler');
+ assert.doesNotMatch(src,/This phone will ask for the code next time/,'the line lives in panelFor.ts');
+});
+
+// ---- SW11 (scan-sweep optimize 2026-10-13): the phone's one status line is announced, as the Essay panel's notes are ----
+test('SW11: the status line every handler writes to is a polite live region; the Essay panel keeps its alerts',()=>{
+ const tree=code(PAGE);
+ const status=tree.match(/<div className="pstatus"[^>]*>/);assert.ok(status,'the status line is drawn');
+ assert.match(status[0],/role="status"/,'a screen reader hears "That did not reach the desk." as it is written');
+ assert.match(status[0],/aria-live="polite"/);
+ assert.equal((tree.match(/role="alert"/g)||[]).length,2,'unchanged: the Essay panel\'s two alerts');
+});
+
+// ---- PH-A/B (scan-sweep optimize Lane B 2026-10-13): the phone's name field, Linga's fields, End session ----
+/** A slice of the page's source, comments removed, as TypeScript turned to JS: a harness for a handler without a browser. */
+const pageJs=(src)=>ts.transpileModule(src,{compilerOptions:{target:ts.ScriptTarget.ES2020,module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.Preserve}}).outputText;
+const pageSlice=(re,what)=>{const m=re.exec(code(PAGE));assert.ok(m,`${what} is in page.tsx`);return m[0];};
+test('PH-LINGA: the Linga panel\'s typed fields are 16 px or more, as SW3 holds for the rest of the phone',()=>{
+ const css=fs.readFileSync(path.join(SRC,'design/linga.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+ const rule=ruleOf(css,'.linga-phone input, .linga-phone select, .linga-phone textarea');
+ assert.ok(pxOf(rule,'font-size')>=16,'.linga-phone input, select, textarea carry a 16 px font-size (font: inherit alone is the phone\'s 15 px)');
+});
+test('PH-NAMEMAX: the phone name input cannot type past the desk\'s cap',()=>{
+ const store=code(path.join(SRC,'lib/session/store.ts')),max=Number((/export const PROFILE_NAME_MAX = (\d+);/.exec(store)||[])[1]);
+ assert.ok(max>0,'the desk\'s cap is found');
+ const page=code(PAGE),mine=Number((/const NAME_MAX = (\d+);/.exec(page)||[])[1]);
+ assert.equal(mine,max,'the page restates the desk\'s cap (the store is server-only and cannot be imported into the page)');
+ assert.match(page,/placeholder="Name" maxLength=\{NAME_MAX\}/,'the profile name input carries maxLength={NAME_MAX}');
+});
+test('PH-NAMEORDER: the profile name posts go out one at a time, so a slow early post cannot land last',async()=>{
+ const js=pageJs(pageSlice(/function inOrder\(\)[\s\S]*?\n\}\n/,'inOrder'));
+ const inOrder=new Function(js+';return inOrder;')();
+ // a server that applies a post when it ARRIVES; an earlier post is slower than a later one
+ const run=async(queued)=>{
+  const applied=[];let n=0;const want='Ema Novak'.split('').map((_,i)=>'Ema Novak'.slice(0,i+1));
+  const post=(name)=>{const k=n++;return new Promise((res)=>setTimeout(()=>{applied.push(name);res();},(want.length-k)*3));};
+  const q=queued?inOrder():(job)=>job();
+  await Promise.all(want.map((name)=>q(()=>post(name))));
+  return applied[applied.length-1];
+ };
+ assert.notEqual(await run(false),'Ema Novak','control: un-awaited posts land out of order and the draft keeps a prefix');
+ assert.equal(await run(true),'Ema Novak','queued: the draft holds the name as typed');
+ const page=code(PAGE);
+ assert.match(page,/nameQueue\(\(\) => post\(\{ type: "profile\.draft", patch: \{ name: e\.target\.value \} \}\)\)/,'the Profile input posts through the queue');
+ assert.match(page,/nameQueue\(\(\) => post\(\{ type: "profile\.save" \}\)\)/,'Save waits behind the name posts');
+});
+test('PH-ENDTWICE: a second tap on End session before the first returns posts nothing',async()=>{
+ const body=pageSlice(/const endSession = async \(\) => \{[\s\S]*?\n    \};/,'endSession');
+ const js=pageJs(body);
+ const make=()=>{
+  const posts=[],calls=[],busy=[];let release;const gate=new Promise((r)=>{release=r;});
+  const env={post:async(e)=>{posts.push(e.type);await gate;},call:async(u)=>{calls.push(u);return {ok:true,json:async()=>({lines:[]})};},
+   setBusy:(b)=>busy.push(b),setMsg:()=>{},setMemory:()=>{},ending:{current:false}};
+  const fn=new Function(...Object.keys(env),js+';return endSession;')(...Object.values(env));
+  return {fn,posts,calls,busy,release};
+ };
+ const t=make(),a=t.fn(),b=t.fn();
+ await new Promise((r)=>setTimeout(r,5));
+ assert.deepEqual(t.posts,['session.end'],'one session.end for two taps');
+ t.release();await Promise.all([a,b]);
+ assert.equal(t.calls.length,1,'one /api/memory call');
+ assert.equal(t.busy[0],true,'busy is on from the first tap');
+ assert.equal(t.busy[t.busy.length-1],false,'and off when it is done');
+ const again=t.fn();await again;
+ assert.equal(t.posts.length,2,'after it finished, a later tap ends again (the guard is released)');
 });

@@ -2,10 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const data=path.resolve(__dirname,'../artifacts/linga-rules',String(Date.now()));process.env.DESK_DATA_DIR=data;
 const {emptyEnglish}=require(path.join(root,'src/lib/english/types.ts'));
 const {eligibleScenes,defaultPreferences}=require(path.join(root,'src/lib/english/curriculum.ts'));
@@ -13,7 +10,7 @@ const {cleanEnglish,mergeEvidence,validateObservations}=require(path.join(root,'
 const engine=require(path.join(root,'src/lib/engines/text.ts'));
 let answer=async()=>({json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1});
 const realText=engine.text;
-engine.text=(req)=>answer(req);
+engine.text=(req,after)=>answer(req,after);
 const {englishCommand}=require(path.join(root,'src/lib/english/conversation.ts'));
 const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
 const {getLearner,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
@@ -46,6 +43,33 @@ test('choices, assisted replies and uncertain observations cannot earn "on your 
  learning=mergeEvidence(learning,[evidence({id:'e7',episodeId:'ep2',sceneId:'team'})]);assert.equal(learning.achievements.request,'transfer');
  learning=mergeEvidence(learning,[evidence({id:'e8',success:false})]);assert.equal(learning.achievements.request,'transfer');
  assert.equal(mergeEvidence(learning,[evidence({id:'e7'})]).evidence.length,learning.evidence.length);
+});
+test('an unreadable learner file stops a Linga command before any model call, and says so',async()=>{
+ const L=require(path.join(root,'src/lib/session/learners.ts')),{LINGA_UNREAD}=require(path.join(root,'src/lib/english/errors.ts'));
+ fresh();
+ // the book as it was before this test, restored after: later tests count what is in it
+ const f=path.join(data,'learners.json'),before=fs.existsSync(f)?fs.readFileSync(f):null;
+ if(!before)L.saveEnglish('ema',L.blank('ema').english);
+ const was=fs.readFileSync(f);fs.writeFileSync(f,was.subarray(0,was.length-5));
+ let calls=0;answer=async()=>{calls++;return {json:{},provider:'test',ms:1};};
+ const real=console.error;console.error=()=>{};
+ try{
+  await assert.rejects(command('start',{sceneId:'booking'}),(e)=>e instanceof L.LearnersUnread);
+  assert.equal(calls,0,'no model call is paid for a turn that could not be saved');
+  const c=getSession().conversation;if(c)assert.equal(c.error,LINGA_UNREAD);
+ }finally{console.error=real;if(before)fs.writeFileSync(f,before);else fs.rmSync(f,{force:true});}
+});
+test('the scene premise and partner reach the tutor as input data, never in its system prompt',async()=>{
+ fresh();const seen=[];
+ answer=async(req)=>{seen.push(req);return {json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1};};
+ await command('start',{sceneId:'booking'});
+ assert(seen.length>=1);
+ for(const req of seen){
+  const input=JSON.parse(req.prompt);
+  assert.equal(typeof input.scene.premise,'string');assert(input.scene.premise.length>10,'the premise is in the input');
+  assert(!req.system.includes(input.scene.premise),'and not in the system prompt');assert(!req.system.includes(input.scene.partner),'nor the partner');
+  assert.match(req.system,/scene\.premise in the input JSON/);
+ }
 });
 test('legacy learner migration discards malformed evidence and keeps safe defaults',()=>{assert.deepEqual(cleanEnglish(undefined),emptyEnglish());assert.equal(cleanEnglish({evidence:[{skill:'request'}]}).evidence.length,0);});
 test('adult scenario cannot be started for a minor even by direct API command',async()=>{fresh();await assert.rejects(command('start',{sceneId:'date'}),e=>e.status===403);});
@@ -112,6 +136,43 @@ test('the level ladder is bounded, and the same answers always give the same ban
  assert.equal(P.startBand(null),'A2');assert.equal(P.startBand('A1'),'A1');assert.equal(P.startBand('C1'),'B2');
  assert.equal(P.kindFor('B2',[]),'say');assert.equal(P.kindFor('A2',[]),'choose');
 });
+test('a skip is no evidence, a weak pass is not strong, and two partials end the check (PC1 to PC4)',()=>{
+ const skip=band=>({band,verdict:'fail',kind:'say',response:'',skipped:true});
+ const say=(band,verdict)=>({band,verdict,kind:'say',response:'I go to school by bus every day.'});
+ const floor=P.staircase('A1',[skip('A1'),skip('A1')]);
+ assert.equal(floor.done,false,'two skipped A1 tasks do not floor the check');assert.equal(floor.confidence,'low');assert.equal(floor.band,'A1');assert.equal(floor.next,'A1');
+ assert.equal(P.staircase('B1',[skip('B1')]).next,'A2','a skip still moves the ladder down one band');
+ const weak=P.staircase('B1',[skip('B1'),{band:'A2',verdict:'pass',kind:'choose',response:'Yes please'},{band:'A2',verdict:'pass',kind:'listen',response:' Tuesday '}]);
+ assert.notEqual(weak.confidence,'high');assert.equal(weak.confidence,'low');
+ assert.equal(P.staircase('B1',[say('B1','pass'),say('B1','pass'),say('B2','fail')]).confidence,'high','two say passes under a say fail: high');
+ assert.notEqual(P.staircase('B1',[say('B1','pass'),say('B1','pass'),skip('B2')]).confidence,'high','a skip above is not a ceiling');
+ const two=P.staircase('B1',[say('B1','partial'),say('B1','partial')]);
+ assert.equal(two.done,true);assert.equal(two.band,'B1');assert.equal(two.confidence,'low');
+ assert.equal(P.staircase('B1',[{band:'B1',verdict:'pass',kind:'listen',response:'Tuesday'}]).next,'B1','a one-word listen pass does not climb into a say task');
+ assert.equal(P.staircase('B1',[{band:'B1',verdict:'pass',kind:'listen',response:'On Tuesday morning'}]).next,'B2','a longer listen pass is strong');
+ assert.equal(P.staircase('A2',[{band:'A2',verdict:'pass',kind:'choose',response:'x'}]).next,'B1','a weak pass still climbs when the next task is not a say task');
+ const task={id:'t',band:'A1',kind:'choose',prompt:'p',line:'',options:[],response:'',mode:'text',verdict:'fail',quote:'',note:'n',at:1,skipped:true};
+ const kept=P.cleanPlacement({at:1,band:'A1',selfBand:null,confidence:'low',source:'check',summary:'s',focus:'f',tasks:[task,{...task,id:'u',skipped:false}]});
+ assert.equal(kept.tasks[0].skipped,true);assert.equal('skipped' in kept.tasks[1],false);
+});
+test('the verdict line says what a not-high read rests on, in plain words (PC5)',()=>{
+ const t=(band,verdict,kind,response='',skipped)=>({band,verdict,kind,response,...(skipped?{skipped:true}:{})});
+ const say=(band,verdict)=>t(band,verdict,'say','I go to school by bus.');
+ const shapes={
+  skips:[P.restsLine('low',[t('A1','fail','choose','',true),t('A1','fail','choose','',true)]),/skipped/],
+  choice:[P.restsLine('low',[t('A2','pass','choose','Yes'),t('A2','pass','choose','No')]),/two options/],
+  oneWord:[P.restsLine('low',[t('B1','pass','listen','Tuesday'),t('B1','pass','listen','Monday')]),/one-word/],
+  mixed:[P.restsLine('low',[t('B1','fail','say','x'),t('A2','pass','choose','Yes'),t('A2','pass','listen','Tuesday')]),/./],
+  partly:[P.restsLine('low',[say('B1','partial'),say('B1','partial')]),/partly/],
+  disagreed:[P.restsLine('low',[say('A2','fail'),say('B1','pass')]),/disagreed/],
+  above:[P.restsLine('medium',[say('B1','pass'),say('B1','pass'),t('B2','fail','say','',true)]),/skipped task/],
+ };
+ for(const [name,[line,re]] of Object.entries(shapes)){
+  assert(re.test(line),name+': '+line);assert(line.split(/\s+/).length<=16,name+' is at most sixteen words');
+  assert(!/\d/.test(line)&&!line.includes(String.fromCharCode(8212)),name+' has no digit and no em dash');assert(!/fail/i.test(line),name+' never says failed');
+ }
+ assert.equal(P.restsLine('high',[]),'Your answers agreed with each other.');
+});
 test('the verdict comes from the English the answer shows, not from how well it argues',()=>{
  const say={kind:'say',band:'B2'},listen={kind:'listen',band:'B1',revealed:false};
  assert.equal(P.verdictFor(say,'yes','C1'),'pass');assert.equal(P.verdictFor(say,'yes','B1'),'partial');assert.equal(P.verdictFor(say,'yes','A2'),'fail');
@@ -135,6 +196,29 @@ test('the level check places the learner, keeps the answer key off the session, 
  assert.equal(getSession().screen,'linga-verdict');assert.equal(after.placement.band,'B1');assert.equal(after.placement.source,'check');assert.equal(after.preferences.level,'B1');
  assert.equal(after.evidence.length,before.evidence.length);assert.deepEqual(after.achievements,before.achievements);
 });
+// ---- UD-11: the level summary is built from what the learner wrote and said, and a focus that quotes is checked in code ----
+async function runCheck(summary){
+ fresh();let sent=null;
+ answer=wrap(req=>{const p=JSON.parse(req.prompt);if(p.step==='summary'){sent=p;return summary;}return checkAnswer(req);});
+ await command('check-start');await answerAbout(3);
+ for(let guard=0;getSession().check.stage==='tasks'&&guard<8;guard++){
+  const k=getSession().check,t=k.task;
+  if(t.kind==='choose'){const right=t.options.indexOf(RIGHT);await command('check-task',{checkId:k.id,taskId:t.id,option:['A1','A2','B1'].includes(t.band)?right:1-right});}
+  else await command('check-task',{checkId:k.id,taskId:t.id,text:'I think it was on the bus this morning.',mode:'speech'});
+ }
+ return {sent,focus:getLearner('ema').english.placement.focus};
+}
+test('UD-11: the summary call carries each task\'s answer and the goal; a focus quoting words never written is cut',async()=>{
+ const ok=await runCheck({summary:'You get by in everyday talk.',focus:'Say more than "on the bus this morning" next time'});
+ assert.equal(ok.sent.goal,'talk with friends online');
+ assert(ok.sent.tasks.length>0&&ok.sent.tasks.every(t=>typeof t.answer==='string'),'every task carries an answer key');
+ assert(ok.sent.tasks.some(t=>t.answer==='I think it was on the bus this morning.'),'the answer is the learner\'s own words');
+ assert.match(ok.focus,/on the bus this morning/,'a quote found in the answers stays');
+ const bad=await runCheck({summary:'You get by in everyday talk.',focus:'Fix "I goed to the shop" next time'});
+ assert.doesNotMatch(bad.focus,/goed/,'a quote the learner never wrote is cut');
+ assert(bad.focus.length>0,'the placement still has a focus');
+});
+
 test('a judge that misquotes the learner saves nothing, and the same answer can be sent again',async()=>{
  fresh();answer=wrap(req=>{const p=JSON.parse(req.prompt);if(p.step==='about')return {...checkAnswer(req),selfBand:'C1'};if(p.step==='judge')return {answered:'yes',english:'B2',quote:'words never said',note:'x'};return checkAnswer(req);});
  await command('check-start');await answerAbout(3);
@@ -178,10 +262,13 @@ test('a moment needs an exact quote, holds the scene, is spaced out, and makes t
  const taught=getLearner('ema').english.taught.length;
  answer=async()=>({json:{reply:'What date was it?',observations:[],moment:{kind:'fix',said:'I have booking',better:'I have a booking',why:'A booking is one thing, so it takes "a".'}},provider:'test',ms:1});
  await command('turn',{text:'I have booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});
- c=getSession().conversation;assert.equal(getSession().screen,'linga-moment');assert.equal(c.moment.better,'I have a booking');assert.equal(c.supported,true);
- assert.equal(getLearner('ema').english.taught.length,taught+1);
+ // K2 revised this row on purpose: a fix waits for the learner's try (repair.ts), so its better is not on the moment and its
+ // Taught item is written when the moment closes; it read better on the moment and taught+1 at once before
+ c=getSession().conversation;assert.equal(getSession().screen,'linga-moment');assert.equal(c.moment.better,'','the fix waits for a try');assert.equal(c.supported,true);
+ assert.equal(getLearner('ema').english.taught.length,taught,'nothing kept while the moment is open');
  await assert.rejects(command('turn',{text:'Another reply',mode:'text',lastTurnId:c.turns.at(-1).id}),e=>e.status===409);
  await command('moment-done');c=getSession().conversation;assert.equal(c.moment,null);assert.equal(getSession().screen,'linga-talk');
+ assert.equal(getLearner('ema').english.taught.length,taught+1,'kept when it closes');assert.equal(c.moments.at(-1).better,'I have a booking');
  await command('turn',{text:'I have booking for Friday, yes.',mode:'text',lastTurnId:c.turns.at(-1).id});
  assert.equal(getSession().conversation.moment,null,'no second moment on the very next turn');
 });
@@ -194,7 +281,7 @@ test('an optional moment or observation that overruns its limit is dropped, and 
   moment:{kind:'fix',said:'I has booking',better:'I have a booking',why:'w'.repeat(300)}})})});
  engine.text=realText;
  try{await command('turn',{text:'I has booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});}
- finally{engine.text=(req)=>answer(req);reg.resetProviders();}
+ finally{engine.text=(req,after)=>answer(req,after);reg.resetProviders();}
  const after=getSession().conversation;
  assert.equal(after.error,'');assert.equal(after.turns.length,3);assert.equal(after.turns.at(-1).text,'What name is it under?');
  assert.equal(after.moment,null,'the over-long moment is dropped, not the turn');
@@ -256,6 +343,15 @@ test('a topic touches the interest when its title or premise names one of the in
  assert.equal(plan.filter(t=>P.touchesInterest(t,w)).length,1);
  assert.equal(plan.slice(0,2).filter(t=>P.touchesInterest(t,w)).length,0);
 });
+test("the interest re-ask spends what is left of the plan call's deadline: it carries that answer's ticket",async()=>{
+ fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true,goal:'speak more fluently in meetings',interest:'travelling and cooking'},notes:[]});
+ const work=[topic('Share your idea in a team meeting','all','relate'),topic('Summarise a project update','all','narrate')];
+ const ticket={deadlineAt:Date.now()+60000,try:2},seen=[];
+ answer=async(req,after)=>{const p=JSON.parse(req.prompt);if(p.step!=='plan')throw new Error('unexpected '+p.step);seen.push(after);return {json:{topics:work.slice(0,p.count)},provider:'test',ms:1,again:ticket};};
+ await command('plan-propose');
+ assert.equal(seen.length,2);assert.equal(seen[0],undefined,'the first plan call starts its own deadline');assert.equal(seen[1],ticket,"the re-ask is handed the first answer's ticket");
+});
 test('a plan that misses a known interest is asked for once more with the gap named; no topic is written by the desk',async()=>{
  const setUp=async interest=>{fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
   await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true,goal:'speak more fluently in meetings',interest},notes:[]});};
@@ -315,6 +411,115 @@ const SWEEP={...HOMES,
  cert:fixture('linga-cert',{placement:placed(),certificates:[CERT_OLD,CERT_NEW],seenIds:[CERT_OLD.id,CERT_NEW.id]}),
  certs:fixture('linga-certs',{placement:placed(),certificates:[CERT_OLD,CERT_NEW],seenIds:[CERT_OLD.id,CERT_NEW.id]}),
 };
+// ---- S2: conversations start at the band the learner spoke; the placement's band and the staircase stay as they are ----
+const LT_RUN=path.resolve(__dirname,'../uat/runs/2026-10-14-lt');
+/**
+ * The ten stored LT placements. Their tasks were stored before the judge's readings were kept, so each say task's
+ * `answered` and `english` are RECONSTRUCTED here from its verdict and band, as P23 proposed: a pass reads as English
+ * at the task's band, a partial as one band below, a fail as two below, all answered "yes". It is the lowest English
+ * each verdict allows, and the test checks that verdictFor gives the stored verdict back from it. Listen and choose
+ * tasks are left without readings: they never count as production.
+ */
+function ltPlacements(){
+ const find=o=>{if(!o||typeof o!=='object')return null;if(Array.isArray(o.tasks)&&o.band&&o.source)return o;for(const v of Object.values(o)){const r=find(v);if(r)return r;}return null;};
+ const back={pass:0,partial:-1,fail:-2};
+ return fs.readdirSync(LT_RUN).filter(f=>f.endsWith('.json')&&!['findings.json','run.json'].includes(f)).map(f=>{
+  const p=find(JSON.parse(fs.readFileSync(path.join(LT_RUN,f),'utf8')));assert(p,f+' holds a placement');
+  const tasks=p.tasks.map(t=>{
+   if(t.kind!=='say'||t.skipped||t.english!==undefined)return t;
+   const r={...t,answered:'yes',english:P.shift(t.band,back[t.verdict])};
+   assert.equal(P.verdictFor(r,r.answered,r.english),t.verdict,f+': the reconstruction gives the stored verdict back');
+   return r;
+  });
+  // the run's facts keep the placement's band, source and tasks (no dates or ids), which is all the S2 rule reads
+  return {who:f.split('-')[0],placement:{band:p.band,source:p.source,tasks}};
+ });
+}
+test('S2: the ten stored LT placements - Lukas spoke B2 under a C1 read, Petra A2, Jana and Tomas unchanged',()=>{
+ const rows=ltPlacements().map(({who,placement})=>({who,placed:placement.band,spoke:P.spokenBand(placement.tasks),start:P.conversationBand(placement)}));
+ console.log('S2 per-Character result (english reconstructed from verdict + task band):\n'+rows.map(r=>`  ${r.who.padEnd(7)} placed ${r.placed}  spoke ${r.spoke??'none'}  conversations start ${r.start}${r.start!==r.placed?'  (lowered)':''}`).join('\n'));
+ const want={adela:['C1','C1','C1'],jana:['C2','C2','C2'],klara:['B1','B1','B1'],lukas:['C1','B2','B2'],martin:['B2','B2','B2'],oksana:['B2','B2','B2'],ondrej:['B2','B2','B2'],petra:['B1','A2','A2'],tomas:['A1',null,'A1'],viktor:['A2','A2','A2']};
+ assert.equal(rows.length,10);
+ for(const r of rows)assert.deepEqual([r.placed,r.spoke,r.start],want[r.who],r.who);
+ // the placement's own band is the staircase's, untouched: Lukas is still placed C1
+ const lukas=ltPlacements().find(x=>x.who==='lukas').placement;assert.equal(lukas.band,'C1');assert.equal(P.playBand(lukas,'C1'),'C1','his own pick of the read still wins');assert.equal(P.playBand(lukas,'A1'),'B2');
+});
+test('S2: spokenBand reads answered say tasks only, at their highest; conversationBand lowers at most one band, only when asked to speak at the level',()=>{
+ const say=(band,english,patch={})=>({band,kind:'say',answered:'yes',english,...patch});
+ assert.equal(P.spokenBand([]),null);
+ assert.equal(P.spokenBand([{band:'B1',kind:'listen',answered:'yes',english:'B1'},{band:'A2',kind:'choose'}]),null,'listening and choosing are not production');
+ assert.equal(P.spokenBand([say('B1','A2',{skipped:true}),say('B1','B1',{answered:'no'}),say('B1','none')]),null,'a skip, an off-task answer and no English give no band');
+ assert.equal(P.spokenBand([{band:'B1',kind:'say',verdict:'partial'}]),null,'a task stored before the readings were kept counts for nothing');
+ assert.equal(P.spokenBand([say('B2','A2'),say('B1','B1',{answered:'partly'}),say('B2','A2')]),'B1','the highest band spoken');
+ const placed=(band,tasks,source='check')=>({band,source,tasks});
+ assert.equal(P.conversationBand(placed('B1',[say('B1','A1')])),'A2','never more than one band below the read');
+ assert.equal(P.conversationBand(placed('B1',[say('A2','A2')])),'B1','an easier say task cannot show the higher band: no change');
+ assert.equal(P.conversationBand(placed('B1',[say('B1','A2')],'self')),'B1','a band picked by hand is kept as picked');
+ assert.equal(P.conversationBand(placed('B1',[say('B2','C1')])),'B1','spoken higher never lifts the start');
+ // the cleaner keeps the readings, tolerates their absence, and drops a malformed one without dropping the task
+ const task={id:'t',band:'B1',kind:'say',prompt:'p',line:'',options:[],response:'I went there.',mode:'speech',verdict:'partial',quote:'I went there.',note:'n',at:1};
+ const kept=P.cleanPlacement({at:1,band:'B1',selfBand:null,confidence:'low',source:'check',summary:'s',focus:'f',tasks:[{...task,answered:'partly',english:'A2'},task,{...task,id:'u',answered:'maybe',english:'Z9'},{...task,id:'v',english:'none'}]});
+ assert.equal(kept.tasks.length,4);
+ assert.equal(kept.tasks[0].answered,'partly');assert.equal(kept.tasks[0].english,'A2');
+ assert.equal('english' in kept.tasks[1],false);assert.equal('answered' in kept.tasks[2],false);assert.equal('english' in kept.tasks[2],false);assert.equal(kept.tasks[3].english,'none');
+});
+test('S2: a check that heard A2 under a B1 read keeps B1, starts conversations and topics at A2, and a Set up save keeps it the check\'s',async()=>{
+ fresh();const plans=[];
+ answer=wrap(req=>{const p=JSON.parse(req.prompt);
+  if(p.step==='judge')return {answered:'yes',english:p.kind==='say'?'A2':p.band,quote:p.response.slice(0,10),note:'A clear answer.'};
+  if(p.step==='plan')plans.push(p);
+  return checkAnswer(req);});
+ await command('check-start');await answerAbout(3);
+ for(let guard=0;getSession().check.stage==='tasks';guard++){
+  assert(guard<P.MAX_TASKS);const k=getSession().check,t=k.task;
+  if(t.kind==='choose')await command('check-task',{checkId:k.id,taskId:t.id,option:t.options.indexOf(RIGHT)});
+  else await command('check-task',{checkId:k.id,taskId:t.id,text:'I think it was on the bus this morning.',mode:'speech'});
+ }
+ let l=getLearner('ema').english;
+ assert.equal(l.placement.band,'B1','the check\'s read is unchanged');assert.equal(l.placement.source,'check');
+ assert.equal(l.preferences.level,'A2','conversations start at the band spoken');
+ const says=l.placement.tasks.filter(t=>t.kind==='say');assert(says.length>=2&&says.some(t=>['B1','B2','C1','C2'].includes(t.band)));
+ assert(says.every(t=>t.answered==='yes'&&t.english==='A2'),'each say task keeps the judge\'s readings');
+ assert(l.placement.tasks.filter(t=>t.kind==='choose').every(t=>!('english' in t)),'a choice has no judge reading');
+ // the verdict on the TV: both bands in the picture, the start band in the caption
+ const v=view().lingaView(getSession());
+ assert.equal(getSession().screen,'linga-verdict');assert.equal(v.hero.kind,'ladder');assert.equal(v.hero.band,'B1');assert.equal(v.hero.spoke,'A2');
+ assert.match(v.hero.kicker,/^Understood B1 · spoke A2/);assert.equal(v.caption,'Conversations start at A2, where your spoken answers were.');
+ // Set up saved after the split check, at either band: still the check's
+ await command('preferences',{preferences:{...l.preferences,level:'A2'},notes:[]});
+ l=getLearner('ema').english;assert.equal(l.placement.source,'check');assert.equal(l.placement.band,'B1');assert.equal(l.preferences.level,'A2');
+ await command('plan-propose');assert.equal(plans.at(-1).band,'A2','the topic plan is pitched at the band spoken');assert.match(plans.at(-1).bandGuide,/^A2:/);
+ await command('check-leave',{checkId:getSession().check.id});
+ await command('preferences',{preferences:{...l.preferences,level:'B1'},notes:[]});
+ l=getLearner('ema').english;assert.equal(l.placement.source,'check','the read itself is the check\'s too');assert.equal(l.preferences.level,'B1');
+ // the conversation plays at the preference: the tutor's pitch and the moment rate follow it
+ const seen=[];answer=async req=>{seen.push(req);return {json:{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'},provider:'test',ms:1};};
+ await command('preferences',{preferences:{...l.preferences,level:'A2'},notes:[]});
+ await command('start',{sceneId:'booking',replace:true});
+ assert.match(seen.at(-1).system,/Level: A2 on the CEFR scale/);assert.equal(getSession().conversation.preferences.level,'A2');
+ assert.equal(JSON.parse(seen.at(-1).prompt).levelCheck.band,'B1');assert.equal(JSON.parse(seen.at(-1).prompt).levelCheck.spokenAnswersAt,'A2');
+ // any other band by hand is the learner's own pick, as before
+ await command('preferences',{preferences:{...l.preferences,level:'B2'},notes:[]});
+ l=getLearner('ema').english;assert.equal(l.placement.source,'self');assert.equal(l.placement.band,'B2');
+});
+test('S2 view: the verdict shows the read and the band spoken when they differ, and only the read when they agree',()=>{
+ const V=view(),say=(band,english,mode='speech')=>({id:'s'+band+english,band,kind:'say',prompt:'p',line:'',options:[],response:'I like it.',mode,verdict:'partial',quote:'I like it.',note:'n',at:1,answered:'yes',english});
+ const split={...placed('B1'),tasks:[say('B1','A2')]};
+ let v=V.lingaView(sessionOf(fixture('linga-verdict',{placement:split,check:checkOf({stage:'verdict',turns:[],placement:split})})));
+ assert.equal(v.hero.spoke,'A2');assert.equal(v.hero.band,'B1');assert.equal(v.title,'B1 · Getting by');
+ assert.match(v.hero.kicker,/Understood B1 · spoke A2/);
+ assert.equal(v.caption,'Conversations start at A2, where your spoken answers were.');
+ assert(!/\d/.test(v.caption.replace(/\b[ABC][12]\b/g,'')),'no figure but band names');
+ assert.match(V.viewText(v),/marker on B1, second mark on A2/);
+ const clamped={...placed('B1'),tasks:[say('B1','A1')]};
+ v=V.lingaView(sessionOf(fixture('linga-verdict',{placement:clamped})));assert.equal(v.hero.spoke,'A1');assert.equal(v.caption,'Conversations start at A2, one step below the level you understood.');
+ const typed={...placed('B1'),tasks:[say('B1','A2','text')]};
+ v=V.lingaView(sessionOf(fixture('linga-verdict',{placement:typed})));assert.match(v.hero.kicker,/wrote A2/);assert.match(v.caption,/written answers/);
+ const agree={...placed('B1'),tasks:[say('B1','B1')]};
+ v=V.lingaView(sessionOf(fixture('linga-verdict',{placement:agree})));assert.equal('spoke' in v.hero,false);assert.equal(v.hero.kicker,"Linga's read · not a certificate");
+ const self={...split,source:'self'};
+ v=V.lingaView(sessionOf(fixture('linga-verdict',{placement:self})));assert.equal('spoke' in v.hero,false);
+});
 const offeredBy=v=>[...v.actions,...v.footer,...v.phone];
 
 test('view case 1: home decides six named states, the TV actions follow them, and the phone StartPanel renders all six',()=>{
@@ -453,7 +658,7 @@ test('ladder case 5: help.ts drops a malformed rung and the turn still lands; wi
  const reg=require(path.join(root,'src/lib/engines/registry.ts'));
  reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'And for how many nights?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'x'.repeat(400),meaning:'nights: how many times you sleep there',starter:7}})})});
  engine.text=realText;
- try{await reply('For Friday.');}finally{engine.text=(req)=>answer(req);reg.resetProviders();}
+ try{await reply('For Friday.');}finally{engine.text=(req,after)=>answer(req,after);reg.resetProviders();}
  c=getSession().conversation;assert.equal(c.error,'');assert.equal(c.turns.at(-1).text,'And for how many nights?');
  await command('cue');assert.equal(getSession().conversation.cue,'nights: how many times you sleep there');
 });
@@ -485,10 +690,10 @@ const TURN_STATES={
  finished:['linga-recap',convo({turns:REPLIED,phase:'finished'})],
  unprepared:['linga-talk',convo({turns:[]})],
 };
-const CONVERSATION_ACTIONS=['turn','cue','quiz','choice','coach','replay','capture','pause','resume','repeat','leave','finish','moment-done'];
+const CONVERSATION_ACTIONS=['turn','cue','quiz','choice','coach','replay','capture','pause','resume','repeat','leave','finish','moment-done','moment-try','moment-show'];
 /** A stub engine that answers every conversation call well: the opening, a turn, a coach that quotes the reply, a replay. */
 function answerAll(){answer=async req=>{const p=JSON.parse(req.prompt);return {json:/^Coach/.test(p.task??'')?{before:p.submittedReply.slice(0,6),after:'I work in a hotel',note:'Try the verb alone.'}:{title:'T',goal:'G',opening:'Hi?',reply:'Ok. And then?',observations:[]},provider:'test',ms:1};};}
-const extraFor=(action,c)=>action==='turn'?{text:'I like it.',mode:'text',lastTurnId:c.turns.at(-1)?.id}:action==='choice'?{option:0}:action==='capture'?{active:true}:{};
+const extraFor=(action,c)=>action==='moment-try'?{text:'I work in a hotel.',mode:'text',lastTurnId:c.moment?.turnId}:action==='turn'?{text:'I like it.',mode:'text',lastTurnId:c.turns.at(-1)?.id}:action==='choice'?{option:0}:action==='capture'?{active:true}:{};
 
 test('turn case 1: each fixture names its state, and paused while a reply is pending is waiting',()=>{
  const T=turn();
@@ -518,7 +723,11 @@ test('turn case 3: resume during a turn in flight is refused, the token stays, a
 test('turn case 4: in every state the view offers, an enabled conversation action is one the server accepts',async()=>{
  const V=view(),sample={text:'I like it.',option:0,band:'B1',topicId:'p-a',sceneId:'booking'};
  const sweep={...SWEEP,...Object.fromEntries(Object.entries(TURN_STATES).map(([name,[screen,c]])=>['turn '+name,fixture(screen,{placement:placed(),conversation:c})])),
-  'paused+pending':fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED,paused:true,pending:'held'})})};
+  'paused+pending':fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED,paused:true,pending:'held'})}),
+  // K2: a fix moment withheld, on its clue, shown, and held (repair.ts)
+  ...Object.fromEntries([0,1].map(rung=>[`moment withheld ${rung}`,fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,better:'',fix:undefined,slip:'am work',repair:{rung,support:false}}})})])),
+  'moment shown':fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,repair:{rung:2,support:false}}})}),
+  'moment held':fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,repair:{rung:0,support:false,tried:'I work in a hotel.',held:true,selfRepaired:true,spent:true}}})})};
  let checked=0;
  for(const [name,fx] of Object.entries(sweep))for(const ui of [{},{menu:true}]){
   const v=V.lingaView(sessionOf(fx),ui);
@@ -570,7 +779,7 @@ test('turn case 7 GUARD: leave during a turn in flight cancels it, and the late 
 const review=()=>require(path.join(root,'src/lib/english/review.ts'));
 const TAUGHT_A={id:'old1:t1:moment',kind:'fix',said:'I has booking',better:'I have a booking',why:'"I" goes with "have".',turnId:'old1:t1',at:10,sceneId:'booking',title:'A hotel booking'};
 /** older than A, but already used again: never due */
-const TAUGHT_B={id:'old2:t2:moment',kind:'word',said:'rezervace',better:'reservation',why:'The booking itself.',turnId:'old2:t2',at:5,sceneId:'booking',title:'A hotel booking',offered:1,reusedAt:6,reusedIn:'old3',reusedQuote:'reservation'};
+const TAUGHT_B={id:'old2:t2:moment',kind:'word',said:'rezervace',better:'reservation',why:'The booking itself.',turnId:'old2:t2',at:5,sceneId:'booking',title:'A hotel booking',offered:1,reusedAt:Date.now(),reusedIn:'old3',reusedQuote:'reservation'};
 const TAUGHT_C={id:'old4:t4:moment',kind:'word',said:'svačina',better:'a snack',why:'Food you eat between meals.',turnId:'old4:t4',at:20,sceneId:'weekend',title:'A weekend plan'};
 const REUSED='Hi, I have a booking for Friday.';
 const REVIEW={id:TAUGHT_A.id,kind:'fix',better:'I have a booking',fromTitle:'A hotel booking'};
@@ -590,7 +799,7 @@ test('review case 1: start picks the due taught item, the opening prompt invites
  const bring=prompts[0].bringBack;
  assert(bring,'the opening prompt carries bringBack');assert.equal(bring.phrase,'I have a booking');
  assert.match(bring.task,/invite/i);assert.match(bring.task,/never say it/i);
- assert.equal(taughtOf(TAUGHT_A.id).offered,1);assert.equal(taughtOf(TAUGHT_B.id).offered,1,'the reused item is not offered again');
+ assert.equal(taughtOf(TAUGHT_A.id).offered,1);assert.equal(taughtOf(TAUGHT_B.id).offered,1,'the item used again today is not due before tomorrow (K3)');
 });
 test('review case 2: an unsupported reply that uses the phrase is recorded by code, on the record and on the scene',async()=>{
  const c=await taughtStart([TAUGHT_B,TAUGHT_A]);
@@ -631,6 +840,13 @@ test('review case 4: the recap is the before-and-after picture when used, and th
  assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,'I have a booking');assert.match(v.hero.subtitle,/1 spoken/);
  assert(V.viewText(v).includes('I have a booking'));assert(v.baseCaption.split(/\s+/).length<=25);
 });
+test('UD-15: the TV recap\'s track hero names the scene the brought-back sentence was taught in',()=>{
+ const V=view(),turns=convo().turns;
+ const v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),taught:[TAUGHT_A],conversation:convo({phase:'finished',turns,review:REVIEW})})),{});
+ assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,'I have a booking');assert.equal(v.hero.from,REVIEW.fromTitle);
+ const tv=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.match(tv,/label=\{h\.from\?`From \$\{h\.from\}`:"A sentence to take with you"\}/,'the card labels its source');
+});
 test('review case 5: withholding - during the scene the phrase is on no screen until the learner has used it',()=>{
  const V=view();
  for(const [screen,c] of [['linga-talk',convo({turns:REPLIED})],['linga-talk',convo({turns:REPLIED,quizOpen:true})],['linga-talk',convo({turns:REPLIED,paused:true})],['linga-coach',TURN_STATES.coaching[1]],['linga-moment',TURN_STATES.moment[1]]])
@@ -644,25 +860,371 @@ test('review case 5: withholding - during the scene the phrase is on no screen u
  assert(v.baseCaption.includes('I have a booking'),'once used, the next screen says so');assert.equal(v.captionTag,'Used again');
  assert(v.baseCaption.split(/\s+/).length<=25);
 });
-test('review case 6: an item offered in two scenes without reuse is not due a third time',async()=>{
- const R=review();
- assert.equal(R.dueTaught([{...TAUGHT_A,offered:2},TAUGHT_C],'new').id,TAUGHT_C.id);
+test('review case 6 (K3): an item invited twice without a use is snoozed, not retired; an item saved retired comes back',async()=>{
+ const R=review(),now=Date.now();
+ const missed=R.offer(R.offer([TAUGHT_A],TAUGHT_A.id,now-2*R.DAY_MS),TAUGHT_A.id,now-R.DAY_MS)[0];
+ assert.equal(missed.offered,2);assert.equal(missed.nextDueAt,now-R.DAY_MS+R.SNOOZE_MS,'snoozed from its second invitation');assert.equal(missed.misses,0,'the count starts again');
+ assert.equal(R.dueTaught([missed,TAUGHT_C],'new').id,TAUGHT_C.id);
  assert.equal(R.dueTaught([TAUGHT_C,TAUGHT_A],'new').id,TAUGHT_A.id,'oldest first');
  assert.equal(R.dueTaught([TAUGHT_A],'old1'),null,'never from the rehearsal that taught it');
- let c=await taughtStart([{...TAUGHT_A,offered:2},TAUGHT_C]);assert.equal(c.review.id,TAUGHT_C.id);
- c=await taughtStart([{...TAUGHT_A,offered:2},TAUGHT_B]);assert.equal(c.review,null);assert.equal(prompts[0].bringBack,undefined);
+ let c=await taughtStart([missed,TAUGHT_C]);assert.equal(c.review.id,TAUGHT_C.id);
+ c=await taughtStart([missed,TAUGHT_B]);assert.equal(c.review,null);assert.equal(prompts[0].bringBack,undefined);
  assert.equal(taughtOf(TAUGHT_A.id).offered,2);
+ assert.equal(R.dueTaught([missed],'new',undefined,missed.nextDueAt).id,TAUGHT_A.id,'back when the snooze ends');
+ // a record saved before K3 with an item offered twice (retired, then) is snoozed from the day it was taught: long past here
+ const legacy=cleanEnglish({taught:[{...TAUGHT_A,offered:2}]}).taught[0];
+ assert.equal(legacy.nextDueAt,TAUGHT_A.at+R.SNOOZE_MS);assert.equal(R.dueTaught([legacy],'new').id,TAUGHT_A.id);
 });
-test('review case 7: cleanEnglish keeps a taught item\'s review fields and drops one with a malformed reusedAt',()=>{
- const kept={...TAUGHT_A,offered:1,reusedAt:99,reusedIn:'c9',reusedQuote:'I have a booking'};
- const taught=cleanEnglish({taught:[kept,{...TAUGHT_A,id:'bad',reusedAt:'yesterday'},TAUGHT_C]}).taught;
+test('review case 7: cleanEnglish keeps a taught item\'s review fields, schedules an item saved before K3, and drops a malformed one',()=>{
+ const R=review(),kept={...TAUGHT_A,offered:1,reusedAt:99,reusedIn:'c9',reusedQuote:'I have a booking'};
+ const taught=cleanEnglish({taught:[kept,{...TAUGHT_A,id:'bad',reusedAt:'yesterday'},{...TAUGHT_A,id:'bad2',reuses:[{at:'x'}]},{...TAUGHT_A,id:'bad3',nextDueAt:'soon'},TAUGHT_C]}).taught;
  assert.deepEqual(taught.map(t=>t.id),[TAUGHT_A.id,TAUGHT_C.id]);
- assert.deepEqual(taught[0],kept);assert.deepEqual(taught[1],TAUGHT_C,'an item never offered keeps no review fields');
+ // K1: a fix's slip keys are worked out again on every load (slip.ts), so a record saved before them gets them; a word gets none.
+ // K3: the use it kept becomes the first of its history, due one interval after it
+ assert.deepEqual(taught[0],{...kept,slip:'i has booking',fix:'i have a booking',reuses:[{at:99,conversationId:'c9',quote:'I have a booking'}],misses:0,nextDueAt:99+R.REUSE_INTERVALS_MS[0]});
+ assert.deepEqual(taught[1],TAUGHT_C,'an item never offered keeps no review fields');
+ assert.deepEqual(cleanEnglish({taught:[taught[0]]}).taught[0],taught[0],'a scheduled item loads as it was saved');
 });
 test('review case 8 GUARD: a learner with no taught items gets no review and no bringBack',async()=>{
  const c=await taughtStart([]);
  assert.equal(c.review??null,null);assert(!('bringBack' in prompts[0]));
  await reply(REUSED);assert(!('bringBack' in prompts[1]));
+});
+
+// ---- K1 slip keys: a taught fix is judged by the words that changed (slip.ts), not by its whole sentence
+const slipMod=()=>require(path.join(root,'src/lib/english/slip.ts'));
+/** Viktor's fix from the 2026-10-14 LT run, as the record keeps it */
+const VIKTOR={id:'v1:t1:moment',kind:'fix',said:'My tomatoes is one metr.',better:'My tomatoes are one metre tall.',why:'A plural subject like tomatoes takes are, not is.',turnId:'v1:t1',at:30,sceneId:'garden',title:'Show my tomato plants'};
+/** a learner whose record holds `taught`, and an engine that keeps every prompt and answers each turn with `turn()` */
+async function slipStart(taught,turn=()=>({reply:'Lovely! What colour are they?',supportProvided:false,observations:[]})){
+ fresh();saveEnglish('ema',{...emptyEnglish(),taught:cleanEnglish({taught}).taught});prompts=[];
+ answer=async req=>{const p=JSON.parse(req.prompt);prompts.push(p);return {json:p.submittedReply?turn(p):{title:'Garden',goal:'Show the garden.',opening:'Hi Grandpa! What is growing there?',supportProvided:false},provider:'test',ms:1};};
+ await command('start',{sceneId:'rover',replace:true});
+ return getSession().conversation;
+}
+test('K1 case 1: slipOf keeps the changed words with a neighbour - a change one, a drop or an addition both - and folds number words',()=>{
+ const S=slipMod();
+ assert.deepEqual(S.slipOf('My tomatoes is one metre','My tomatoes are one metre'),{slip:'tomatoes is',fix:'tomatoes are'});
+ assert.deepEqual(S.slipOf(VIKTOR.said,VIKTOR.better),{slip:'tomatoes is',fix:'tomatoes are'},'of two changes, the first whose own key is guarded');
+ assert.deepEqual(S.slipOf('saturday is more better for me','Saturday is better for me'),{slip:'is more better',fix:'is better'},'a dropped word keeps both neighbours');
+ assert.deepEqual(S.slipOf('I like creeper','I like the creeper.'),{slip:'like creeper',fix:'like the creeper'},'an added word keeps both neighbours');
+ assert.deepEqual(S.slipOf('we was discussing about this venue','we were discussing this venue'),{slip:'we was',fix:'we were'},'a known pair needs no content word');
+ assert.deepEqual(S.slipOf('He come with a car','He comes with a car'),{slip:'he come',fix:'he comes'});
+ assert.deepEqual(S.slipOf('I has booking','I have a booking'),{slip:'i has booking',fix:'i have a booking'},'a function-word key grows to a content word');
+ assert.equal(S.slipOf('I like it','I like it.'),null,'nothing changed');
+ assert.equal(S.slipOf('rezervace','reservation'),null,'a key needs two said-side words');
+ const k=S.slipOf('It is one metres','It is one metre');
+ assert.equal(S.slipIn('They are two metres now.',k),'two metres','number words are one class');
+});
+test('K1 case 2: the record tier refuses function-word-only keys and words the partner said; "Did he come" is no "he come"; the fix said raises nothing',()=>{
+ const S=slipMod();
+ assert.equal(S.guarded('i will'),false,'function words only: most stored "i will" are right English');
+ assert.equal(S.guarded('is more'),false);assert.equal(S.guarded('we was'),true,'on the teacher list');assert.equal(S.guarded('tomatoes is'),true);
+ const tom={slip:'tomatoes is',fix:'tomatoes are'},come={slip:'he come',fix:'he comes'};
+ assert.equal(S.recordTier(tom,['Grandpa, how big are the tomatoes?']),true);
+ assert.equal(S.recordTier(tom,['Look, the tomatoes is what I mean!']),false,'a key the partner said in this scene is never judged on the record');
+ assert.equal(S.recordTier({slip:'i will',fix:'i would'},[]),false);
+ assert.equal(S.slipIn('Did he come with the car?',come),null,'after an auxiliary the bare form is right');
+ assert.equal(S.slipIn('Can he come at six?',come),null);
+ assert.equal(S.slipIn('Please sit here, he come in ten minutes.',come),'he come');
+ assert.equal(S.slipIn('The tomatoes are green.',tom),null,'the fix said is no slip');
+ assert.equal(S.slipIn('Tomatoes is green, but tomatoes are sweet.',tom),null,'a reply that holds the fix is not flagged');
+ assert.equal(S.slipIn('Tomatoes is green.',tom),'Tomatoes is');
+ assert.equal(S.findKey('My TOMATOES   are big.',tom.fix),'TOMATOES   are');
+ assert(S.sameSlip('tomatoes is','my tomatoes is'));assert(!S.sameSlip('tomatoes is','tomato is'));
+});
+test('K1 case 3 GATE: replaying the 2026-10-14 LT moments over the stored learner lines flags the known recurrences; on other learners\' lines only two true "is more better" slips',()=>{
+ const S=slipMod(),dir=path.resolve(__dirname,'../uat/runs/2026-10-14-lt');
+ const people=fs.readdirSync(dir).filter(f=>/-\d+\.json$/.test(f)).sort().map(f=>({who:f.replace('.json',''),run:JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'))}));
+ // each learner's lines in run order, with that scene's partner lines; a moment sits on the first line that quotes it
+ for(const p of people){p.lines=[];p.moments=[];
+  for(const j of p.run.journeys){const c=j.facts?.conversation;
+   if(!c){for(const st of j.steps)if(typeof st.args?.text==='string')p.lines.push({scene:j.id,text:st.args.text,partner:[]});continue;}
+   const partner=c.turns.filter(t=>t.role==='partner').map(t=>t.text);
+   for(const t of c.turns)if(t.role==='learner'){p.lines.push({scene:j.id,text:t.text,partner});for(const m of c.moments??[])if(!p.moments.some(x=>x.m===m)&&t.text.includes(m.said))p.moments.push({m,at:p.lines.length-1});}}}
+ assert.equal(people.reduce((n,p)=>n+p.moments.length,0),17,'the corpus holds 17 stored moments');
+ const own=[],other=[];
+ for(const p of people)for(const {m,at} of p.moments){
+  const keys=S.slipOf(m.said,m.better);if(!keys)continue;
+  for(const l of p.lines.slice(at+1))if(S.slipIn(l.text,keys))own.push({who:p.who,slip:keys.slip,text:l.text,record:S.recordTier(keys,l.partner)});
+  for(const q of people)if(q!==p)for(const l of q.lines)if(S.slipIn(l.text,keys))other.push({who:q.who,from:p.who,slip:keys.slip,text:l.text,record:S.recordTier(keys,l.partner)});
+ }
+ // the six P06 names: Viktor 'tomatoes is' twice, Petra 'he come' once, Tomas 'I like creeper' three times
+ const known=[['viktor-67','tomatoes is','Tomatoes is green. And red. Red, I like.'],['viktor-67','tomatoes is','I have tomatoes. My tomatoes is big.'],['petra-38','he come','Sorry. I ask my colleague now. Please sit here, he come in ten minutes. I think it is okay.'],['tomas-9','like creeper','Creeper. I like creeper. Kráva ne.'],['tomas-9','like creeper','Yes! Creeper! I like creeper. Creeper boom!'],['tomas-9','like creeper','Yes! Creeper is my favourite. I like creeper.']];
+ for(const [who,slip,text] of known)assert(own.some(h=>h.who===who&&h.slip===slip&&h.text===text&&h.record),`${who} "${slip}" flagged on the record: ${text}`);
+ // one more the six did not name: Tomas's 'I like dog.' said again the next reply
+ assert.deepEqual(own.map(h=>`${h.who} ${h.slip}`).sort(),[...known.map(([w,s])=>`${w} ${s}`),'tomas-9 like dog'].sort());
+ assert(own.every(h=>h.record),'every recurrence is record tier');
+ // other learners' lines: the only flags are Martin's own "is more better" (a double comparative, wrong in any sentence) on Ondrej's key
+ assert.deepEqual(other.map(h=>`${h.from}->${h.who} ${h.slip} ${h.record?'record':'soft'}`),['ondrej-16->martin-45 is more better record','ondrej-16->martin-45 is more better record']);
+ assert(other.every(h=>/\bmore better\b/i.test(h.text)),'no flag on another learner\'s line is a false match');
+ console.log(`# K1 replay: ${own.length} recurrences flagged (${own.filter(h=>h.record).length} record tier) over ${people.reduce((n,p)=>n+p.lines.length,0)} learner lines; other learners: ${other.filter(h=>h.record).length} record-tier flags, ${other.filter(h=>!h.record).length} soft, all true "is more better" slips`);
+});
+test('K1 case 4: a taught slip said again reaches the turn prompt as slipAgain, counts once a reply on the record, and the fix said raises nothing',async()=>{
+ await slipStart([VIKTOR]);
+ await reply('Tomatoes is green. And red.');
+ const again=prompts.at(-1).slipAgain;
+ assert.deepEqual({said:again.said,better:again.better},{said:'Tomatoes is',better:'tomatoes are'},'the learner\'s exact words and the fix key');
+ assert.match(again.task,/right form/);assert.match(again.task,/Do not stop/);
+ let t=taughtOf(VIKTOR.id);assert.equal(t.slips,1);assert.equal(typeof t.slipAt,'number');
+ const first=t.slipAt;
+ await reply('The tomatoes are green.');
+ assert.equal(prompts.at(-1).slipAgain,undefined,'the right form raises nothing');assert.equal(taughtOf(VIKTOR.id).slips,1);
+ await reply('My tomatoes is red now.');
+ t=taughtOf(VIKTOR.id);assert.equal(t.slips,2,'the count only rises');assert(t.slipAt>=first);
+ assert.equal(getLearner('ema').english.taught.length,1);
+});
+test('K1 case 5: a function-word-only slip may ask for a soft recast but never writes the record',async()=>{
+ const WILL={...VIKTOR,id:'w1:t1:moment',said:'I will',better:'I would',turnId:'w1:t1'};
+ assert.deepEqual(slipMod().slipOf(WILL.said,WILL.better),{slip:'i will',fix:'i would'});
+ await slipStart([WILL]);
+ await reply('I will go there.');
+ assert.equal(prompts.at(-1).slipAgain.said,'I will','soft tier: the partner may recast');
+ assert.equal(taughtOf(WILL.id).slips,undefined,'record tier refused');
+});
+test('K1 case 6: a slip taught twice merges into one Taught item; "My tomatoes are big." in a later scene marks Viktor\'s item reused',async()=>{
+ const R=review();
+ assert.equal(R.findPhrase('My tomatoes are big.',VIKTOR.better),null,'today\'s whole-sentence test: null');
+ // the moment Linga made in the next scene on the same slip, said in a new sentence
+ let c=await slipStart([VIKTOR],()=>({reply:'Lovely! How big is it now?',supportProvided:false,observations:[],moment:{kind:'fix',said:'My tomatoes is big.',better:'My tomatoes are big.',why:'Tomatoes is plural, so it takes are.'}}));
+ assert.equal(c.review.id,VIKTOR.id);assert.equal(c.review.fix,'tomatoes are');
+ await reply('I have tomatoes. My tomatoes is big.');
+ // K2: the moment joins the scene's moments, and merges into the record, when it closes
+ assert(getSession().conversation.moment,'the stop itself still happens');await command('moment-done');
+ c=getSession().conversation;
+ assert.equal(c.moments.length,1,'the stop itself still happens');assert.equal(c.moments[0].slip,'tomatoes is');assert.equal(c.moments[0].fix,'tomatoes are');
+ const taught=getLearner('ema').english.taught;
+ assert.equal(taught.length,1,'taught once, not twice');assert.equal(taught[0].id,VIKTOR.id);assert.equal(taught[0].slips,1,'one reply counts once');
+ assert.equal(c.review.used,undefined,'the slip said is no reuse');
+ // a later scene: the fix key said unaided, in a sentence Linga never taught
+ c=await slipStart([VIKTOR]);
+ assert.equal(c.review.id,VIKTOR.id);
+ await reply('My tomatoes are big.');
+ const t=taughtOf(VIKTOR.id);
+ assert.equal(typeof t.reusedAt,'number');assert.equal(t.reusedQuote,'tomatoes are');
+ assert.equal(getSession().conversation.review.used,'My tomatoes are big.');
+ // the same guards as before: not after the partner said the fix key in this scene, not on a supported reply
+ const scene=convo({turns:[{id:'p1',role:'partner',text:'Your tomatoes are lovely!'}],review:R.reviewOf(cleanEnglish({taught:[VIKTOR]}).taught[0])});
+ assert.equal(R.reuseOf('My tomatoes are big.',scene),null,'the partner said it first');
+ assert.equal(R.reuseOf('My tomatoes are big.',{...scene,turns:convo().turns,supported:true}),null,'supported');
+ assert.equal(R.reuseOf('My tomatoes are big.',{...scene,turns:convo().turns}),'tomatoes are');
+ // a word item keeps today's whole-phrase test
+ assert.equal(R.reuseOf('I have a snack.',convo({review:R.reviewOf(TAUGHT_C)})),'a snack');assert.equal(R.reviewOf(TAUGHT_C).fix,undefined);
+});
+
+// ---- K3: taught items keep coming back until they hold (review.ts schedule; a fake clock, no model)
+const T0=Date.UTC(2026,9,1,9),HOUR=3600e3;
+test('K3 case 1: a first reuse schedules another invitation a day later, not before; then three and seven days; a use at the end of the ladder rests',()=>{
+ const R=review(),id=TAUGHT_A.id;let t=[{...TAUGHT_A,at:T0}];
+ assert.equal(R.dueTaught(t,'s1',undefined,T0+1).id,id,'a new item is due at once');
+ t=R.offer(t,id,T0+HOUR);
+ let used=T0+2*HOUR;t=R.markReused(t,id,'c1','I have a booking',used,'booking');
+ assert.equal(t[0].reusedAt,used);assert.deepEqual(t[0].reuses,[{at:used,conversationId:'c1',quote:'I have a booking',sceneId:'booking'}]);assert.equal(t[0].misses,0);
+ const ladder=[];
+ for(const [n,days] of [[1,1],[2,3],[3,7]]){
+  assert.equal(t[0].nextDueAt,used+days*R.DAY_MS,`use ${n}: due ${days} days later`);
+  assert.equal(R.dueTaught(t,'s',undefined,used+days*R.DAY_MS-1),null,`use ${n}: nothing comes due early`);
+  assert.equal(R.dueTaught(t,'s',undefined,used+days*R.DAY_MS).id,id,`use ${n}: due on the day`);
+  ladder.push(days);
+  used=used+days*R.DAY_MS+HOUR;t=R.offer(t,id,used-HOUR);t=R.markReused(t,id,`c${n+1}`,'I have a booking',used,'booking');
+ }
+ assert.deepEqual(ladder,[1,3,7]);
+ assert.equal(t[0].reuses.length,4);assert.equal(t[0].reusedAt,used,'reusedAt is the latest use');assert.equal(t[0].reusedIn,'c4');
+ assert.equal(t[0].nextDueAt,undefined);assert.equal(R.rests(t[0]),true);
+ assert.equal(R.dueTaught(t,'s',undefined,used+365*R.DAY_MS),null,'a use at the end of the ladder rests the item');
+ assert.deepEqual(cleanEnglish({taught:t}).taught[0].reuses.map(r=>r.conversationId),['c1','c2','c3','c4'],'the history survives a load, for a later "yours" rule (L1)');
+});
+test('K3 case 2: two invitations without a use snooze the item; it returns when the snooze ends, and two more misses snooze it again',()=>{
+ const R=review(),id=TAUGHT_A.id;let t=[{...TAUGHT_A,at:T0}];
+ t=R.offer(t,id,T0+HOUR);assert.equal(R.dueTaught(t,'s',undefined,T0+2*HOUR).id,id,'one miss: still due');
+ t=R.offer(t,id,T0+2*HOUR);
+ assert.equal(R.dueTaught(t,'s',undefined,T0+2*HOUR+R.SNOOZE_MS-1),null,'snoozed, nothing early');
+ assert.equal(R.dueTaught(t,'s',undefined,T0+2*HOUR+R.SNOOZE_MS).id,id,'back after the snooze, not retired');
+ const back=T0+2*HOUR+R.SNOOZE_MS;
+ t=R.offer(t,id,back);assert.equal(R.dueTaught(t,'s',undefined,back+HOUR).id,id,'the count started again');
+ t=R.offer(t,id,back+HOUR);assert.equal(R.dueTaught(t,'s',undefined,back+2*HOUR),null);assert.equal(t[0].offered,4);
+ // a use in the scene that snoozed it replaces the snooze with the ladder
+ t=R.markReused(R.offer(R.offer([{...TAUGHT_A,at:T0}],id,T0+HOUR),id,T0+2*HOUR),id,'c1','I have a booking',T0+3*HOUR);
+ assert.equal(t[0].nextDueAt,T0+3*HOUR+R.DAY_MS);
+});
+test('K3 case 3: a slipping item outranks an older due one, even snoozed or resting; a slip before its last invitation does not',()=>{
+ const R=review(),old={...TAUGHT_C,at:T0};
+ const snoozed={...TAUGHT_A,at:T0+5,offered:2,misses:0,offeredAt:T0+10,nextDueAt:T0+10+R.SNOOZE_MS};
+ assert.equal(R.dueTaught([old,snoozed],'s',undefined,T0+30).id,old.id,'without a slip: the older due item');
+ assert.equal(R.dueTaught([old,{...snoozed,slips:1,slipAt:T0+20}],'s',undefined,T0+30).id,snoozed.id,'its slip came back after the invitation: first');
+ assert.equal(R.dueTaught([old,{...snoozed,slips:1,slipAt:T0+8}],'s',undefined,T0+30).id,old.id,'a slip before the last invitation is spent');
+ const resting={...TAUGHT_A,at:T0,reuses:[1,2,3,4].map(n=>({at:T0+n,conversationId:'c'+n,quote:'I have a booking'})),reusedAt:T0+4};
+ assert.equal(R.dueTaught([old,resting],'s',undefined,T0+30).id,old.id);
+ assert.equal(R.dueTaught([old,{...resting,slips:1,slipAt:T0+9}],'s',undefined,T0+30).id,resting.id,'a resting item whose slip comes back is invited again');
+ // with two slipping, the latest slip first; the record-tier slip count comes from K1 markSlipped
+ const a={...snoozed,id:'a',slipAt:T0+20},b={...snoozed,id:'b',slipAt:T0+25};
+ assert.equal(R.dueTaught([a,b,old],'s',undefined,T0+30).id,'b');
+ assert.equal(R.dueTaught(R.markSlipped([old,{...snoozed}],'i has booking',T0+40),'s',undefined,T0+50).id,snoozed.id,'markSlipped makes it slip');
+});
+test('K3 case 4: a seeded run on a fake clock - used, not invited the same day, invited the next day; one model call per start and per turn, as before',async()=>{
+ const realNow=Date.now;let clock=T0;Date.now=()=>clock;
+ try{
+  let c=await taughtStart([{...TAUGHT_A,at:T0-review().DAY_MS}]);
+  assert.equal(c.review.id,TAUGHT_A.id);assert.equal(prompts.length,1,'the opening: one call');
+  clock+=HOUR;await reply(REUSED);assert.equal(prompts.length,2,'a turn: one call');
+  let t=taughtOf(TAUGHT_A.id);assert.equal(t.reusedAt,clock);assert.equal(t.nextDueAt,clock+review().DAY_MS);assert.equal(t.reuses.length,1);
+  const used=clock;
+  clock+=2*HOUR;prompts=[];await command('start',{sceneId:'booking',replace:true});
+  assert.equal(getSession().conversation.review,null,'not invited again the same day');assert.equal(prompts.length,1);assert.equal(prompts[0].bringBack,undefined);
+  clock=used+review().DAY_MS;prompts=[];await command('start',{sceneId:'rover',replace:true});
+  c=getSession().conversation;assert.equal(c.review.id,TAUGHT_A.id,'invited again a day after the use');assert.equal(prompts.length,1);assert.equal(prompts[0].bringBack.phrase,'I have a booking');
+  t=taughtOf(TAUGHT_A.id);assert.equal(t.offered,2);assert.equal(t.offeredAt,clock);assert.equal(t.misses,1);
+  await reply('Yes, I have a booking for two.');assert.equal(prompts.length,2,'still one call a turn');
+  t=taughtOf(TAUGHT_A.id);assert.equal(t.reuses.length,2);assert.equal(t.nextDueAt,clock+3*review().DAY_MS,'the second use: three days');
+  assert.notEqual(t.reuses[0].conversationId,t.reuses[1].conversationId,'two scenes in the history');
+ }finally{Date.now=realNow;}
+});
+
+// ---- K4: one line in every room (line.ts). A stubbed engine, no live model.
+const lineMod=()=>require(path.join(root,'src/lib/english/line.ts'));
+const BRIDGE='Which bridge do you mean?';
+const ROVER_OPENING={title:'Rover',goal:'Find the rover.',opening:'Hello there. Where are you going?',supportProvided:false};
+/** a learner whose record is `learning`, a rover scene started on an engine that keeps every prompt and request */
+let requests=[];
+async function roomStart(learning={},opening=ROVER_OPENING,turn=()=>({reply:'Good. Then turn left at the tree. What do you see?',supportProvided:false,observations:[]})){
+ fresh();saveEnglish('ema',{...emptyEnglish(),...learning});prompts=[];requests=[];
+ answer=async req=>{requests.push(req);const p=JSON.parse(req.prompt);prompts.push(p);return {json:p.submittedReply?turn(p):opening,provider:'test',ms:1};};
+ await command('start',{sceneId:'rover',replace:true});
+ return getSession().conversation;
+}
+const withoutScene=c=>JSON.stringify({...c,scene:undefined});
+test('K4 case 1: the rover scene hides its quiz answer; an unsupported reply that says its key words finds it - the recap pictures it and one Taught item is kept, unreused',async()=>{
+ const L=lineMod();
+ assert.equal(L.lineKey(BRIDGE),'bridge do you mean');assert.equal(L.lineKey('Could I have the bill, please?'),'the bill');assert.equal(L.lineKey('Yes, I am.'),null);
+ const c=await roomStart();
+ assert.deepEqual(c.line,{source:'quiz'},'the session knows the source only');
+ assert.equal(L.heldLine(c.id).text,BRIDGE);assert.equal(L.heldLine(c.id).key,'bridge do you mean');
+ assert(!withoutScene(getSession().conversation).includes('bridge do you mean')&&!withoutScene(getSession().conversation).includes(BRIDGE),'the line is in server memory, not the conversation (the scene contract carries its quiz, as before)');
+ assert.equal(prompts[0].roomLine.phrase,BRIDGE);assert.match(prompts[0].roomLine.task,/never say it/i);assert.match(prompts[0].roomLine.task,/one question/i);
+ assert.equal(prompts[0].bringBack,undefined,'no taught item: the review is untouched');
+ const before=getLearner('ema').english.taught.length;
+ await reply('Sorry, which bridge do you mean?');
+ assert.equal(prompts.length,2,'one call to open, one for the turn: no second call');
+ let now=getSession().conversation;assert.equal(now.line.found,'Sorry, which bridge do you mean?');assert.equal(now.line.text,BRIDGE);assert.equal(L.heldLine(c.id),null);
+ const taught=getLearner('ema').english.taught;assert.equal(taught.length,before+1,'one Taught item');
+ const item=taught.at(-1);
+ assert.equal(item.better,BRIDGE);assert.equal(item.reusedAt,undefined,'found here, not yet reused: a later room invites it');assert.equal(item.offered,undefined);
+ assert.equal(item.line,'quiz');assert.equal(item.key,'bridge do you mean');assert.equal(item.said,'');assert.equal(item.kind,'word');
+ await reply('The old one.');assert.equal(prompts[2].roomLine,undefined,'once found, the partner stops inviting it');
+ await command('finish');
+ const v=view().lingaView(getSession(),{});
+ assert.equal(v.hero.kind,'comparison');assert.equal(v.title,'You found it');
+ assert.deepEqual(v.hero.before,{kicker:'The line in this room',quote:BRIDGE});assert.deepEqual(v.hero.after,{kicker:'You said it tonight',quote:'Sorry, which bridge do you mean?'});
+ const text=view().viewText(v);assert(text.includes(`"${BRIDGE}"`));assert(text.includes('"Sorry, which bridge do you mean?"'));
+ assert.equal(getLearner('ema').english.taught.length,before+1,'finishing keeps it once');
+ // the item comes back in a later room, judged on its key words (review.ts reuseOf)
+ const R=review(),stored=cleanEnglish({taught:[item]}).taught[0];assert.deepEqual(stored,item,'it loads as it was kept');
+ const rv=R.reviewOf(stored);assert.equal(rv.key,'bridge do you mean');
+ assert.equal(R.reuseOf('So which bridge do you mean, the red one?',convo({review:rv})),'bridge do you mean');
+ assert.equal(R.reuseOf('Which bridge?',convo({review:rv})),null);
+});
+test('K4 case 2: no find after a partner line said it, after the quiz showed it, or on a supported reply; the partner stops inviting a shown line',async()=>{
+ let c=await roomStart({},{...ROVER_OPENING,opening:'Hello! There are two bridges here. Which bridge do you mean? Where to?'});
+ await reply('Which bridge do you mean?');
+ assert.equal(getSession().conversation.line.found,undefined,'the partner said it first');assert.equal(getLearner('ema').english.taught.length,0);
+ c=await roomStart({},ROVER_OPENING,()=>({reply:'Which bridge do you mean? There are two.',supportProvided:false,observations:[]}));
+ await reply('I want the bridge.');await reply('Which bridge do you mean?');
+ assert.equal(getSession().conversation.line.found,undefined,'a partner line already said it');
+ c=await roomStart();
+ await command('quiz');assert.equal(getSession().conversation.line.shown,true,'the quiz put it on screen');
+ await reply('I go to the river.');await reply('Which bridge do you mean?');
+ assert.equal(getSession().conversation.line.found,undefined,'shown by the quiz two turns ago');assert.equal(prompts.at(-1).roomLine,undefined);
+ c=await roomStart({},{...ROVER_OPENING,supportProvided:true});
+ await reply('Which bridge do you mean?');assert.equal(getSession().conversation.line.found,undefined,'a supported reply');
+ assert.deepEqual(getSession().conversation.line,{source:'quiz'},'not found, not handed over: the session holds no words of it');
+});
+test('K4 case 3: a zero-moment scene\'s recap hands over the line as the sentence to take, and keeps it as invited once; without a line it is today\'s bare track',async()=>{
+ await roomStart();
+ await reply('I go left at the big tree.');await command('finish');
+ const s=getSession(),c=s.conversation;assert.equal(c.moments.length,0);assert.equal(c.line.text,BRIDGE);assert.equal(c.line.found,undefined);
+ const v=view().lingaView(s,{});assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,BRIDGE);assert.equal('from' in v.hero,false);
+ assert(view().viewText(v).includes(`A sentence to take with you: "${BRIDGE}"`));
+ const item=getLearner('ema').english.taught.at(-1);assert.equal(item.better,BRIDGE);assert.equal(item.offered,1);assert.equal(item.misses,1);assert.equal(typeof item.offeredAt,'number');assert.equal(item.reusedAt,undefined);
+ // today, with no review and no line, the recap is a track with no sentence
+ const bare=view().lingaView(sessionOf(fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',turns:REPLIED})})),{});
+ assert.equal(bare.hero.kind,'track');assert.equal(bare.hero.sentence,undefined);
+ // a scene left with no reply hands nothing over and keeps nothing
+ await roomStart();await command('finish');assert.equal(getSession().conversation.line,null);assert.equal(getLearner('ema').english.taught.length,0);
+});
+test('K4 case 4: the check focus \'Try "he needs" instead of "he need"\' - the verdict shows "he need", and the first room hides "he needs" on its fix key',async()=>{
+ const L=lineMod(),task={id:'s1',band:'A2',kind:'say',prompt:'Tell me about your family.',line:'',options:[],response:'My brother he need a new bike.',mode:'speech',verdict:'partial',quote:'he need',note:'n',at:1};
+ const focus='Try "he needs" instead of "he need"',pl={...placed('A2'),focus,tasks:[task]};
+ assert.deepEqual(L.focusParts(focus,[task]),{focus,quote:'he need',line:'he needs'});
+ const {quotedFocus}=require(path.join(root,'src/lib/english/check.ts'));
+ assert.equal(quotedFocus(focus,[task]),focus,'a second quote no answer holds is the line, not a misquote');
+ assert.equal(quotedFocus('Try "a beer with friends" instead of "he need"',[task],l=>!/beer/.test(l)),L.FOCUS_FALLBACK,'a line the audience gate refuses takes the focus with it');
+ assert.equal(quotedFocus('Try "he needs" or "he wants" for "he need"',[task]),L.FOCUS_FALLBACK,'two unheld spans: a misquote');
+ assert.equal(quotedFocus('Try "he need a new bike please" not "he need"',[task]),L.FOCUS_FALLBACK,'a line that holds the learner\'s words');
+ let v=view().lingaView(sessionOf(fixture('linga-verdict',{placement:pl,check:checkOf({stage:'verdict',turns:[],placement:pl})})),{});
+ assert.equal(v.caption,'Your words: “he need”.');assert.equal(v.captionTag,'Your words');assert(view().viewText(v).includes('he need'));
+ v=view().lingaView(sessionOf(fixture('linga-verdict',{placement:{...pl,focus:L.FOCUS_FALLBACK}})),{});
+ assert(!v.caption.includes(L.FOCUS_FALLBACK),'the fallback focus is never the caption');
+ // the first room: no taught item due, so the check's line is hidden, keyed on its fix key, its slip absent
+ const c=await roomStart({placement:pl});
+ assert.deepEqual(c.line,{source:'check'});const h=L.heldLine(c.id);
+ assert.equal(h.text,'he needs');assert.equal(h.key,'he needs');assert.equal(h.slip,'he need');assert.equal(prompts[0].roomLine.phrase,'he needs');
+ await reply('He need a map.');assert.equal(getSession().conversation.line.found,undefined,'the slip again is no find');
+ await reply('My robot friend, he needs a map too.');
+ const now=getSession().conversation;assert.equal(now.line.found,'My robot friend, he needs a map too.');
+ const item=getLearner('ema').english.taught.at(-1);
+ assert.equal(item.kind,'fix');assert.equal(item.said,'he need');assert.equal(item.better,'he needs');assert.equal(item.title,'Your level check');assert.equal(item.slip,'he need');assert.equal(item.fix,'he needs');
+ await command('finish');
+ v=view().lingaView(getSession(),{});assert.deepEqual(v.hero.before,{kicker:'From your level check',quote:'he needs'});
+ // once kept, the check's line does not seed a room again; the fallback focus never seeds one
+ assert.equal(L.checkLine(pl,getLearner('ema').english.taught),null);
+ const c2=await roomStart({placement:{...pl,focus:L.FOCUS_FALLBACK}});assert.deepEqual(c2.line,{source:'quiz'});
+ // a due taught item stays the room's line (source 1): nothing is held beside it
+ const c3=await roomStart({placement:pl,taught:[TAUGHT_A]});assert.equal(c3.review.id,TAUGHT_A.id);assert.equal(c3.line,undefined);assert.equal(prompts[0].roomLine,undefined);
+});
+test('K4 case 5: the summary task asks for the better phrase in a second pair of quotes, and a check whose answers hold the first keeps the focus',async()=>{
+ const r=await runCheck({summary:'You get by in everyday talk.',focus:'Say "on the bus that morning" for "on the bus this morning"'});
+ assert.match(r.sent.task,/second pair of double quotes after the learner's words/);
+ assert.equal(r.focus,'Say "on the bus that morning" for "on the bus this morning"');
+ const p=getLearner('ema').english.placement;assert.deepEqual(lineMod().focusParts(p.focus,p.tasks),{focus:p.focus,quote:'on the bus this morning',line:'on the bus that morning'});
+});
+const OFFER='Is it near the landing site?';
+const B2={preferences:{...defaultPreferences(),level:'B2'}};
+test('K4 case 6: B2-C2 only - the opening offers a line, held off the session until found or handed over; a bad offer falls back to the quiz answer',async()=>{
+ const L=lineMod();
+ let c=await roomStart(B2,{...ROVER_OPENING,offer:OFFER});
+ assert.equal(requests[0].schema.properties.offer.maxLength,80);assert(requests[0].schema.required.includes('offer'));assert.match(prompts[0].task,/offer: one line/);
+ assert.deepEqual(c.line,{source:'offer'});assert.equal(L.heldLine(c.id).text,OFFER);assert.equal(L.heldLine(c.id).key,'near the landing site');
+ assert(!JSON.stringify(getSession()).includes(OFFER)&&!/landing site/i.test(JSON.stringify(getSession())),'absent from the whole session');
+ for(const ui of [{},{menu:true}]){const v=view().lingaView(getSession(),ui);assert(!JSON.stringify(v).includes('landing site'));}
+ await reply('I am looking for the rover.');assert(!JSON.stringify(getSession()).includes(OFFER),'still absent after a turn');assert.equal(prompts[1].roomLine.phrase,OFFER);
+ await reply('Is the rover near the landing site?');
+ assert.equal(getSession().conversation.line.found,'Is the rover near the landing site?');assert(JSON.stringify(getSession()).includes(OFFER),'found: now it may show');
+ // handed over: absent until the recap
+ c=await roomStart(B2,{...ROVER_OPENING,offer:OFFER});await reply('I am looking for the rover.');
+ assert(!JSON.stringify(getSession()).includes(OFFER));await command('finish');assert.equal(getSession().conversation.line.text,OFFER);
+ // dropped: too long, about the learner, in the cue, or refused by the audience gate - the quiz answer instead
+ for(const bad of ['x'.repeat(30)+' landing site '+'y'.repeat(40),'You are a brave explorer.','Which way should I go?','Shall we celebrate with a beer at the landing site?']){
+  c=await roomStart(B2,{...ROVER_OPENING,offer:bad});assert.deepEqual(c.line,{source:'quiz'},bad);assert.equal(L.heldLine(c.id).text,BRIDGE);
+ }
+ c=await roomStart(B2,ROVER_OPENING);assert.deepEqual(c.line,{source:'quiz'},'no offer given');
+ // below B2 the opening is never asked
+ c=await roomStart({},{...ROVER_OPENING,offer:OFFER});assert.equal(requests[0].schema.properties.offer,undefined);assert.doesNotMatch(prompts[0].task,/offer:/);assert.deepEqual(c.line,{source:'quiz'});
+});
+test('K4 case 7: a restart loses the line - no invitation, no find, and the recap falls back to today\'s',async()=>{
+ const c=await roomStart();lineMod().forgetLine(c.id);
+ await reply('Which bridge do you mean?');assert.equal(prompts[1].roomLine,undefined);assert.equal(getSession().conversation.line.found,undefined);
+ await command('finish');assert.equal(getSession().conversation.line,null);
+ const v=view().lingaView(getSession(),{});assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,undefined);assert.equal(getLearner('ema').english.taught.length,0);
+});
+test('K4 case 8: a fix moment keeps the recap\'s moment slot over a found line; the line goes on the phone; a word moment does not',()=>{
+ const V=view(),turns=[...REPLIED,{id:'l2',role:'learner',text:BRIDGE,mode:'speech'},{id:'p3',role:'partner',text:'The red one.'}];
+ const found={source:'quiz',found:BRIDGE,foundTurn:'l2',text:BRIDGE};
+ const fix={id:'m1',kind:'fix',said:'I am work in hotel',better:'I work in a hotel',why:'Work is the verb.',turnId:'l1',at:1};
+ let v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',turns,moments:[fix],line:found})})),{});
+ assert.equal(v.hero.kind,'comparison');assert.equal(v.hero.before.quote,fix.said);assert(v.details.some(d=>d.includes(BRIDGE)),'the line is still the learner\'s, on the phone');
+ v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',turns,moments:[{...fix,kind:'word',said:'most',better:'bridge'}],line:found})})),{});
+ assert.equal(v.title,'You found it');assert.equal(v.hero.before.quote,BRIDGE);
+ const phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8');assert.match(phone,/data-role="linga-line"/);
 });
 
 // ---- T10: the tutor's calls run with thinking off, and only they do ----
@@ -688,7 +1250,10 @@ test('thinking case 2: no text() caller outside the conversation asks for thinki
  // the conversation (wave S59: 4-6 s a turn instead of 52-90 s) and Calculus spec writing (2026-09-29, tools/calc-model-yield.cjs
  // on 6 topics: 7-14 s instead of 62-90 s with two engine timeouts; the desk checks every spec in code, so a hasty spec costs
  // one refused spec, never a wrong verdict). Hints, marking, the school question writer and the level check keep their thinking.
- assert.deepEqual(callers,['src/lib/desk/items.ts','src/lib/english/conversation.ts']);
+ // and the worked lesson's idea (v2 M1, 2026-10-07): its words are checked in code (lib/desk/worked.ts cleanIdea: no
+ // digit, three sentences) and fall back to the authored idea, so a hasty idea costs the model's wording, never a wrong number.
+ // and the evening's memory note (M4, 2026-10-09): a few plain sentences from counts, as the TV's recap also asks for it, held to nothing by the phone's End session.
+ assert.deepEqual(callers,['src/lib/desk/items.ts','src/lib/desk/memory.ts','src/lib/desk/worked.ts','src/lib/english/conversation.ts']);
  const items=fs.readFileSync(path.join(root,'src/lib/desk/items.ts'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
  assert.equal((items.match(/thinking\s*:\s*false/g)||[]).length,1,'items.ts asks for thinking off once: the Calculus spec writer');
  assert.match(items.split('function askCalc')[1]??'',/thinking:\s*false/,'and that one is in askCalc, not the school question writer');
@@ -697,7 +1262,8 @@ test('thinking case 2: no text() caller outside the conversation asks for thinki
 // ---- Family mode, W1: three school situations, offered to learners under 18 and to no one else
 const {ENGLISH_SCENES,ENGLISH_SKILLS,audienceAllowed}=require(path.join(root,'src/lib/english/curriculum.ts'));
 const SCHOOL=['teacher','project','lost'];
-const schoolIds=list=>list.filter(x=>x.audience==='school').map(x=>x.id);
+// the three free school situations; Speaking practice (v2 L2, speaking.ts) is school-audience too and has its own suite (cambridge-rules)
+const schoolIds=list=>list.filter(x=>x.audience==='school'&&!x.practice).map(x=>x.id);
 const prefsOf=p=>defaultPreferences(p);
 test('scene ids are unique, and the three school situations are authored to the scene contract',()=>{
  const ids=ENGLISH_SCENES.map(x=>x.id);assert.equal(new Set(ids).size,ids.length);
@@ -804,7 +1370,6 @@ test('the speech routes answer a bad request with 400 and a failed engine with a
  }finally{console.error=orig;reg.resetProviders();if(had===undefined)delete process.env.ELEVENLABS_API_KEY;}
 });
 test('the reply box stays closed until the scene is ready',()=>{
- require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
  const React=require(path.join(root,'node_modules/react'));
  const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server'));
  const {ReplyBox}=require(path.join(root,'src/english/ReplyBox.tsx'));
@@ -815,6 +1380,15 @@ test('the reply box stays closed until the scene is ready',()=>{
  assert.doesNotMatch(field(open),/disabled/);
  assert.match(closed,/Not yet/);
  assert.equal(open.includes('Not yet'),false);
+});
+test('MH-4: a finished capture pre-ticks the confirmation, an edit makes a typed reply',()=>{
+ const {afterCapture,afterEdit}=require(path.join(root,'src/english/ReplyBox.tsx'));
+ assert.deepEqual(afterCapture('which bridge do you mean'),{mode:'speech',confirmed:true,sendable:true});
+ assert.deepEqual(afterCapture('   '),{mode:'speech',confirmed:false,sendable:false});
+ assert.deepEqual(afterCapture(''),{mode:'speech',confirmed:false,sendable:false});
+ assert.deepEqual(afterEdit('which bridge'),{mode:'text',confirmed:false,sendable:true});
+ assert.equal(afterEdit('').sendable,false);
+ // the component itself is state-driven (effects and speech events), so the rendered tick after a capture needs a DOM: the browser harness covers it
 });
 test('the map and the print name spoken practice, not only written and choice',()=>{
  const {practiceLine}=require(path.join(root,'src/lib/english/rules.ts'));
@@ -984,4 +1558,993 @@ test('owner case 8 GUARD: leaving the check keeps it, and carrying on resumes th
  assert.equal(getSession().screen,'linga');assert.equal(getSession().check.id,k.id);assert.equal(getSession().check.turns.length,k.turns.length);
  await command('check-resume',{checkId:k.id});
  assert.equal(getSession().screen,'linga-check');assert.equal(getSession().check.turns.at(-1).id,asked);assert.equal(!!getSession().check.parked,false);
+});
+
+// ---- MH-2: a topic's audience is the stricter of its words and the model's label (gate.ts) ----
+const {audienceOf}=require(path.join(root,'src/lib/english/gate.ts'));
+const GATE_TABLE=[
+ // adult
+ ['Two people meet at a cafe. One hopes it turns into romance and tries to flirt a little.','all','adult'],
+ ['You are on a first date and want to keep the conversation going.','all','adult'],
+ ['Talk about dating apps with a friend.','all','adult'],
+ ['Ask your girlfriend what she wants for dinner.','all','adult'],
+ ['Tell your boyfriend you are running late.','all','adult'],
+ ['A romantic dinner for two at a restaurant.','older','adult'],
+ ['Order a beer at the bar.','all','adult'],
+ ['Choose a wine to go with the meal.','all','adult'],
+ ['A friend has had too much and is drunk at the party.','all','adult'],
+ ['Say no politely when someone offers you drugs.','all','adult'],
+ ['Explain why you do not like gambling.','all','adult'],
+ ['A night at the casino with colleagues.','all','adult'],
+ ['Betting on a football match with friends.','all','adult'],
+ ['A talk about sexual health at a clinic.','all','adult'],
+ ['Sex education questions.','all','adult'],
+ ['She wants to kiss him goodnight.','all','adult'],
+ ['A pub that serves alcohol asks for your ID.','all','adult'],
+ ['Flirting with a stranger on a train.','older','adult'],
+ ['Planning a second date after dinner.','all','adult'],
+ ['A date night with your partner.','all','adult'],
+ // older
+ ['Prepare for a job interview at a warehouse.','all','older'],
+ ['You answer questions in a JOB INTERVIEW for a shop.','all','older'],
+ ['A sharp disagreement at work about who finishes the report.','all','older'],
+ ['Settle a conflict at work with a colleague.','all','older'],
+ ['A workplace conflict over the shift list.','all','older'],
+ ['Argue with a colleague about the schedule.','all','older'],
+ // stays all: benign near-misses
+ ['Write the date on the calendar and tell your teacher.','all','all'],
+ ['What is the date today? Check the calendar.','all','all'],
+ ['Updating data in a spreadsheet for the class.','all','all'],
+ ['Read the menu at the coffee bar and order a latte.','all','all'],
+ ['Join the school band and talk about your instrument.','all','all'],
+ ['Ask a classmate to share their notes.','all','all'],
+ ['Order a pizza for the family.','all','all'],
+ ['A trip to the zoo with your class.','all','all'],
+ ['Buying a train ticket for tomorrow.','all','all'],
+ ['Talk about your favourite games with friends.','all','all'],
+ ['Sort the bottles in the recycling bin.','all','all'],
+ ['A sweet bakery order: two rolls and a juice.','all','all'],
+ ['Describe your weekend hobby.','all','all'],
+ ['The expiry date on the milk is today.','all','all'],
+ ['Sexton Street is where the library is.','all','all'],
+ ['Wine-coloured curtains in the shop window.','all','adult'],
+ // the label alone still holds when the words are clean
+ ['Talk about your weekend plans.','adult','adult'],
+ ['Talk about your hobbies.','older','older'],
+ ['Chatting about a quiet evening at home.','school','school'],
+ // the stricter wins
+ ['Prepare for a job interview.','adult','adult'],
+ ['Bring a beer to the barbecue.','older','adult'],
+];
+test('the audience gate: the stricter of the words and the label wins, near-misses stay "all" (MH-2)',()=>{
+ assert(GATE_TABLE.length>=40);
+ for(const [text,label,want] of GATE_TABLE)assert.equal(audienceOf(text,label),want,`${label} + "${text}"`);
+ for(const a of ['all','older','adult'])assert.equal(audienceOf('',a),a);
+});
+test('a romance premise the model labels "all" never reaches a 12-year-old\'s plan, and an adult\'s plan holds it (MH-2)',async()=>{
+ const romance={...topic('A coffee with Alex','all','relate'),premise:'Two people meet at a cafe. The learner hopes it turns into romance and tries to flirt a little.'};
+ const plan=req=>{const p=JSON.parse(req.prompt);return p.step==='plan'?{topics:[romance,topic('Gaming with friends','all'),topic('Planning a trip','all','negotiate')].slice(0,p.count)}:checkAnswer(req);};
+ fresh();answer=wrap(plan);const propose=async()=>{await command('plan-propose');const g=getSession().check;if(g.askGoal)await command('plan-goal',{checkId:g.id,text:'talk with friends online'});return getSession().check;};
+ let k=await propose();
+ assert(!k.topics.some(t=>t.title==='A coffee with Alex'),'kept out of the proposal');
+ await command('plan-agree',{checkId:k.id});assert(!getLearner('ema').english.plan.topics.some(t=>t.title==='A coffee with Alex'));
+ fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true},notes:[]});
+ answer=wrap(plan);k=await propose();
+ const held=k.topics.find(t=>t.title==='A coffee with Alex');assert(held,'an adult\'s plan holds it');assert.equal(held.audience,'adult');
+ await command('plan-agree',{checkId:k.id});assert(getLearner('jakub').english.plan.topics.some(t=>t.title==='A coffee with Alex'));
+ // a stale plan that already holds the topic as "all" is re-derived at agreement
+ fresh();answer=wrap(checkAnswer);k=await propose();
+ getSession().check.topics.push({...romance,id:'plan-stale',why:'x',audience:'all'});
+ await command('plan-agree',{checkId:k.id});assert(!getLearner('ema').english.plan.topics.some(t=>t.id==='plan-stale'));
+});
+
+// ---- MH-3: the TV recap shows one thing learned tonight ----
+test('the recap hero is the latest moment or coaching change as a picture; "It came back" wins, and with neither the track stays (MH-3)',()=>{
+ const V=view(),turns=[{id:'p1',role:'partner',text:'Hello. How can I help?'},{id:'l1',role:'learner',text:'I has booking',mode:'speech'},{id:'p2',role:'partner',text:'Which name is it under?'}];
+ const fix={id:'m1',kind:'fix',said:'I has booking',better:'I have a booking',why:'"I" goes with "have".',turnId:'l1',at:1},word={id:'m2',kind:'word',said:'rezervace',better:'reservation',why:'The booking itself.',turnId:'l1',at:2};
+ const recap=patch=>V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),taught:[TAUGHT_A],conversation:convo({phase:'finished',turns,...patch})})),{});
+ let v=recap({moments:[fix]});
+ assert.equal(v.hero.kind,'comparison');assert.deepEqual(v.hero.before,{kicker:'You said',quote:'I has booking'});assert.deepEqual(v.hero.after,{kicker:'Try',quote:'I have a booking'});
+ assert.equal(v.hero.note,'"I" goes with "have".');assert.equal(v.hero.art,'done');assert.match(v.hero.data,/1 spoken/);assert.match(v.hero.data,/1 moment to keep/);
+ v=recap({moments:[fix,word]});assert.deepEqual(v.hero.before,{kicker:'You wanted to say',quote:'rezervace'});assert.deepEqual(v.hero.after,{kicker:'In English',quote:'reservation'});
+ v=recap({moments:[fix],coaching:{before:'I want room',after:'Could I have a room, please?',note:'A polite request.'}});
+ assert.deepEqual(v.hero.before,{kicker:'You said',quote:'I want room'});assert.deepEqual(v.hero.after,{kicker:'One way to try it',quote:'Could I have a room, please?'});assert.equal(v.hero.note,'A polite request.');
+ v=recap({moments:[fix],review:{...REVIEW,used:REUSED,usedTurn:'l1'}});assert.equal(v.hero.kind,'comparison');assert.deepEqual(v.hero.after,{kicker:'You said it tonight',quote:REUSED});
+ v=recap({});assert.equal(v.hero.kind,'track');
+});
+
+// ---- MH-1: the phone is served over https when DESK_HTTPS=1 ----
+test('phoneUrl is https:// with DESK_HTTPS=1 and http:// without it (MH-1)',()=>{
+ const was=process.env.DESK_HTTPS;
+ try{
+  process.env.DESK_HTTPS='1';dispatch({type:'reset'});assert.match(getSession().phoneUrl,/^https:\/\/.+\/phone$/);
+  delete process.env.DESK_HTTPS;dispatch({type:'reset'});assert.match(getSession().phoneUrl,/^http:\/\/.+\/phone$/);
+  process.env.DESK_HTTPS='0';dispatch({type:'reset'});assert.match(getSession().phoneUrl,/^http:\/\//,'only "1" switches it on');
+ }finally{if(was===undefined)delete process.env.DESK_HTTPS;else process.env.DESK_HTTPS=was;dispatch({type:'reset'});}
+});
+
+// ---- v2 L3: pitch a scene, played now (lib/english/pitch.ts; conversation.ts "pitch"; check.ts pitchAsk)
+const PITCH=()=>require(path.join(root,'src/lib/english/pitch.ts'));
+const pitchTopic=(patch={})=>({id:'pitch-a1',title:'The dragon at the bank',goal:'Open an account for a dragon.',why:'Your own scene.',skill:'request',audience:'all',partner:'Mo · Bank clerk',premise:'A dragon wants to open a bank account; the learner translates for it.',cue:'Try: My friend would like to…',quiz:{question:'Which asks politely?',options:['Could you help us?','Give me money.'],correct:0},...patch});
+/** jakub is type "other": with the adult box ticked he is in Adult mode (rules/mode.ts modeOf). */
+async function adultAtDesk(){fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true},notes:[]});}
+test('pitch case 1: with a stubbed engine, a pitch is shaped once, kept as "pitch-", and started at once over the current scene',async()=>{
+ await adultAtDesk();await command('start',{sceneId:'booking'});const before=getSession().conversation.id;
+ const seen=[];answer=async req=>{const p=JSON.parse(req.prompt);seen.push({step:p.step??'opening',thinking:req.thinking});
+  if(p.step==='plan'){const {id,...t}=pitchTopic();return {json:{topics:[t]},provider:'test',ms:1};}
+  return {json:{title:'The dragon at the bank',goal:'Open the account.',opening:'Next, please. Oh. Is that a dragon?'},provider:'test',ms:1};};
+ await command('pitch',{text:'A dragon wants to open a bank account and I translate'});
+ const c=getSession().conversation,kept=getLearner('jakub').english.pitches;
+ assert.deepEqual(seen.map(x=>x.step),['plan','opening'],'one shaping call, then the opening start makes');
+ assert.equal(seen[0].thinking,false,'the shaping call runs with thinking off, as every conversation call');
+ assert.notEqual(c.id,before,'the pitch replaced the scene that was running');
+ assert.match(c.sceneId,/^pitch-[0-9a-f]{8}$/);assert.equal(kept.length,1);assert.equal(kept[0].id,c.sceneId);
+ assert.equal(c.scene.premise,pitchTopic().premise,'the scene contract is the shaped pitch');assert.equal(c.turns.length,1);
+ const profile=getSession().profiles.find(p=>p.id==='jakub'),prefs=getLearner('jakub').english.preferences;
+ const ids=eligibleScenes(profile,prefs,getLearner('jakub').english).map(x=>x.id);
+ assert(ids.includes(c.sceneId),'start resolves it through eligibleScenes');
+ assert(ids.indexOf(c.sceneId)<ids.indexOf('meet'),'after the plan topics, before the authored situations');
+});
+test('pitch case 2: pitches are capped at 12 and the newest are kept; the newest leads the list',()=>{
+ const {keepPitch,pitchScenes,PITCHES_CAP}=PITCH();
+ let l=emptyEnglish();for(let i=1;i<=14;i++)l=keepPitch(l,pitchTopic({id:`pitch-${i}`,title:`Scene ${i}`}));
+ assert.equal(PITCHES_CAP,12);assert.equal(l.pitches.length,12);
+ assert.deepEqual(l.pitches.map(t=>t.id),Array.from({length:12},(_,i)=>`pitch-${i+3}`),'the two oldest went');
+ assert.equal(pitchScenes(l)[0].id,'pitch-14');
+ assert.equal(keepPitch(l,pitchTopic({id:'pitch-14',title:'Again'})).pitches.length,12,'the same id is replaced, not doubled');
+});
+test('pitch case 3: cleanEnglish keeps and trims pitches; a record without any stays without the field',()=>{
+ const raw={pitches:[...Array.from({length:14},(_,i)=>pitchTopic({id:`pitch-${i}`})),pitchTopic({id:'plan-x'}),pitchTopic({id:'pitch-bad',premise:'A naked dragon.'}),{id:'pitch-junk'},'junk',pitchTopic({id:'pitch-13'})]};
+ const kept=cleanEnglish(raw).pitches;
+ assert.equal(kept.length,12,'trimmed to the newest 12');
+ assert.deepEqual(kept.map(t=>t.id),Array.from({length:12},(_,i)=>`pitch-${i+2}`),'no plan id, no never-list pitch, no malformed one, no duplicate');
+ assert.equal('pitches' in cleanEnglish({}),false);assert.deepEqual(cleanEnglish(undefined),emptyEnglish());
+ assert.equal(cleanEnglish({pitches:[pitchTopic({premise:'Two strangers flirt at a bar in the station.'})]}).pitches[0].audience,'adult','the gate reads a pitch on load too');
+});
+test('pitch case 4 GUARD: a pitch on the record is offered only in Adult mode; a Family profile never sees it',()=>{
+ const l={...emptyEnglish(),pitches:[pitchTopic()]};
+ const adult={id:'a',name:'A',type:'other',modules:['english'],mode:'adult'};
+ assert(eligibleScenes(adult,defaultPreferences(adult),l).some(x=>x.id==='pitch-a1'));
+ for(const p of [{...adult,mode:'family'},{id:'k',name:'K',type:'elementary',age:12,modules:['english']},{id:'t',name:'T',type:'high-school',age:16,modules:['english']}])
+  assert(!eligibleScenes(p,defaultPreferences(p),l).some(x=>x.id==='pitch-a1'),`${p.type} ${p.mode??''}`);
+ assert.deepEqual(eligibleScenes(adult,defaultPreferences(adult),emptyEnglish()).map(x=>x.id),eligibleScenes(adult,defaultPreferences(adult)).map(x=>x.id),'no pitch, no change');
+});
+test('pitch case 5: the phone offers Pitch a scene on its start panel in Adult mode only, and the TV marks a pitched card as the learner\'s own',()=>{
+ const V=view(),adultPrefs={...defaultPreferences({type:'other'}),adultConfirmed:true};
+ const asJakub=(fx)=>{const s=sessionOf(fx);return {...s,learner:{...s.learner,id:'jakub',name:'Jakub'}};};
+ const home=fixture('linga',{placement:placed(),preferences:adultPrefs,pitches:[pitchTopic()]});
+ const offered=V.lingaView(asJakub(home)).phone.find(a=>a.id==='pitch-scene');
+ assert(offered,'Adult mode: the start panel takes a pitch');assert.equal(offered.run.command.action,'pitch');assert.equal(offered.needs,'text');
+ assert(V.VIEW_ACTION_IDS.includes('pitch-scene'));
+ for(const [name,fx] of Object.entries(HOMES))assert(!V.lingaView(sessionOf(fx)).phone.some(a=>a.id==='pitch-scene'),`Family (${name}): no pitch`);
+ assert(!V.lingaView(asJakub(fixture('linga',{placement:placed(),preferences:{...adultPrefs,adultConfirmed:false}}))).phone.some(a=>a.id==='pitch-scene'),'"other" unconfirmed is Family');
+ assert(!V.lingaView(asJakub(fixture('linga-talk',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub'})}))).phone.some(a=>a.id==='pitch-scene'),'not over a live scene: the phone holds the conversation');
+ const scenes=asJakub(fixture('linga-scenes',{placement:placed(),preferences:adultPrefs,pitches:[pitchTopic()]}));
+ const first=V.lingaView(scenes,{sceneIndex:0});
+ assert.equal(first.title,'The dragon at the bank','no plan: the pitched scene leads the list');assert.equal(first.hero.own,true);
+ assert.match(V.viewText(first),/Your own scene/);
+ const authored=V.lingaView(scenes,{sceneIndex:1});assert.equal(authored.hero.own,undefined,'an authored situation is not marked');
+ assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/h\.own\?"Your own scene · ":""/,'the TV card draws the mark');
+});
+
+// ---- v2 L3: Cut and three notes (lib/english/notes.ts cleanNotes; turn.ts "cut")
+const NOTES=()=>require(path.join(root,'src/lib/english/notes.ts'));
+const TAKE=[{id:'p1',role:'partner',text:'Welcome to the bank. How can I help you today?'},{id:'l1',role:'learner',text:'Yesterday I go to the shop. My dragon want a account.',mode:'text'},{id:'p2',role:'partner',text:'A dragon? Does your dragon have an address?'},{id:'l2',role:'learner',text:'He live in a cave, very cosy, very hot.',mode:'speech'},{id:'p3',role:'partner',text:'I see. Please sign here.'}];
+const note=(patch={})=>({turnId:'l1',quote:'My dragon want a account',kind:'word',note:'Say an account before a vowel sound.',better:'My dragon wants an account',...patch});
+test('notes case 1: a misquote is dropped, and so is a quote of a partner line',()=>{
+ const {cleanNotes}=NOTES();
+ assert.equal(cleanNotes([note({quote:'My dragon wants a account'})],TAKE).length,0,'not character for character');
+ assert.equal(cleanNotes([note({quote:'He live in a cave'})],TAKE).length,0,'words of another learner turn under this turnId');
+ assert.equal(cleanNotes([note({turnId:'p2',quote:'Does your dragon have an address'})],TAKE).length,0,'a partner line is never quoted back as the learner\'s');
+ assert.equal(cleanNotes([note({turnId:'p3',quote:'Please sign here'}),note({turnId:'nope'})],TAKE).length,0,'a partner turn or an unknown turn');
+ assert.equal(cleanNotes([note({quote:''}),note({quote:'   '})],TAKE).length,0,'an empty quote');
+ assert.equal(cleanNotes([note({kind:'grammar'}),note({note:''}),note({note:'Good. Now try the article.'})],TAKE).length,0,'an unknown kind, no note, two sentences');
+ const [kept]=cleanNotes([note()],TAKE);
+ assert.deepEqual(kept,{turnId:'l1',quote:'My dragon want a account',kind:'word',note:'Say an account before a vowel sound.',better:'My dragon wants an account'});
+ assert.deepEqual(cleanNotes({notes:[note()]},TAKE),[kept],'the shaped answer { notes } is read too');
+ assert.deepEqual(cleanNotes('junk',TAKE),[]);assert.deepEqual(cleanNotes(undefined,TAKE),[]);
+});
+test('notes case 2: a fourth note is dropped, and so is a duplicate quote (notes do not pile on one slip)',()=>{
+ const {cleanNotes,NOTES_MAX}=NOTES();
+ assert.equal(NOTES_MAX,3);
+ const four=[note(),note({turnId:'l2',quote:'He live in a cave',kind:'meaning',note:'Lives, with an s, for one dragon.'}),note({quote:'Yesterday I go',kind:'register',note:'Fine at a bank counter.'}),note({turnId:'l2',quote:'very hot',kind:'word',note:'Cosy and hot is a nice pair.'})];
+ assert.deepEqual(cleanNotes(four,TAKE).map(n=>n.quote),['My dragon want a account','He live in a cave','Yesterday I go'],'the fourth is dropped');
+ const twice=[note(),note({kind:'meaning',note:'The same slip again.'}),note({quote:'my dragon want a account',note:'And again, in lower case.'})];
+ assert.equal(cleanNotes(twice,TAKE).length,1,'the same quote twice, or in another case, is one note');
+ assert.equal(cleanNotes([note({quote:'nothing like it'}),note(),note({quote:'My dragon want a account',note:'Again.'})],TAKE).length,1,'a dropped note does not take a quote');
+});
+test('notes case 3: a "form" note stays form only where the tense rule finds a conflict; otherwise it is meaning, labelled a reading',()=>{
+ const {cleanNotes,sentenceWith}=NOTES(),{resolveEnglish}=require(path.join(root,'src/lib/rules/english.ts'));
+ assert.equal(sentenceWith(TAKE[1].text,'Yesterday I go'),'Yesterday I go to the shop.');
+ assert.notEqual(resolveEnglish('Yesterday I go to the shop.').conflict,null,'the fixture: the rule sees go against yesterday');
+ assert.equal(resolveEnglish('My dragon want a account.').conflict,null,'the fixture: no tense conflict here');
+ const [ruled]=cleanNotes([note({quote:'Yesterday I go',kind:'form',note:'Yesterday asks for went.',better:'Yesterday I went'})],TAKE);
+ assert.equal(ruled.kind,'form');assert.equal(ruled.reading,undefined);
+ const [read]=cleanNotes([note({kind:'form',note:'Wants, for one dragon.'})],TAKE);
+ assert.equal(read.kind,'meaning','no rule conflict: not form');assert.equal(read.reading,true,'and labelled a reading');
+ const [crossing]=cleanNotes([note({quote:'shop. My dragon',kind:'form',note:'Two sentences run together.'})],TAKE);
+ assert.equal(crossing.kind,'form','a quote across a sentence end is read against the whole turn, where yesterday clashes');
+});
+test('cut case 1: turnState and accepts for "cut" in every state - Adult mode, a reply of the learner\'s, the learner\'s turn, the quiz or a pause',()=>{
+ const T=turn();
+ assert(T.TURN_ACTIONS.includes('cut'));
+ const want={finished:false,preparing:false,waiting:false,unprepared:false,moment:false,paused:true,coaching:false,quiz:true,'your-turn':true};
+ for(const [name,[,c]] of Object.entries(TURN_STATES)){
+  assert.equal(T.turnState(c),name);
+  assert.equal(T.accepts(c,'cut','adult'),want[name],`adult · ${name}`);
+  assert.equal(T.ACCEPTS[name].includes('cut'),want[name],`the table · ${name}`);
+ }
+ for(const [name,c] of [['your-turn, no reply yet',convo()],['quiz, no reply yet',convo({quizOpen:true})],['paused, no reply yet',convo({paused:true})]]){
+  assert.equal(T.accepts(c,'cut','adult'),false,name);assert.match(T.refusal(c,'cut','adult'),/Say a line in the scene first/,name);
+ }
+});
+test('cut case 2: Family mode refuses "cut" in every state, and so does a caller that names no mode',()=>{
+ const T=turn();
+ for(const [name,[,c]] of Object.entries(TURN_STATES)){
+  assert.equal(T.accepts(c,'cut','family'),false,`family · ${name}`);assert.equal(T.accepts(c,'cut'),false,`no mode · ${name}`);
+  assert.equal(T.refusal(c,'cut','family'),'Cut is part of Adult mode.');
+ }
+ for(const a of CONVERSATION_ACTIONS)for(const [name,[,c]] of Object.entries(TURN_STATES))assert.equal(T.accepts(c,a,'adult'),T.accepts(c,a),`the mode changes no other action: ${a} · ${name}`);
+});
+/** The adult at the desk in a booking scene with two replies of his own; `cutAnswer` is what the Cut call returns. */
+async function adultTake(cutAnswer){
+ await adultAtDesk();
+ const calls=[];answer=async req=>{const p=JSON.parse(req.prompt);calls.push({task:(p.task??'').slice(0,4),thinking:req.thinking,prompt:p});
+  if(/^Cut:/.test(p.task??''))return cutAnswer(p);
+  if(p.submittedReply)return {json:{reply:'Of course. Which date was it?',observations:[]},provider:'test',ms:1};
+  return {json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1};};
+ await command('start',{sceneId:'booking',replace:true});
+ for(const text of ['Yesterday I book a room here.','I want check the date please.'])await command('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ return calls;
+}
+const GOOD_NOTES=p=>{const [a,b]=p.learnerTurns;return {json:{notes:[
+ {turnId:a.turnId,quote:'Yesterday I book',kind:'form',note:'Yesterday asks for the past: booked.',better:'Yesterday I booked'},
+ {turnId:b.turnId,quote:'I want check',kind:'form',note:'Say want to before another verb.',better:'I want to check'},
+ {turnId:b.turnId,quote:'Which date was it',kind:'meaning',note:'Not your words.',better:''},
+ {turnId:a.turnId,quote:'a room hear',kind:'word',note:'A misquote.',better:''}]},provider:'test',ms:1};};
+test('cut case 3: Cut in Adult mode asks once over the learner\'s lines, keeps the notes that quote them, and ends the take as finish does',async()=>{
+ const calls=await adultTake(GOOD_NOTES);
+ const before=getLearner('jakub').english,c0=getSession().conversation;
+ await command('cut');
+ const c=getSession().conversation,after=getLearner('jakub').english,cut=calls.filter(x=>x.task==='Cut:');
+ assert.equal(cut.length,1,'one call');assert.equal(cut[0].thinking,false,'fast, thinking off');
+ assert.deepEqual(cut[0].prompt.learnerTurns.map(x=>x.text),['Yesterday I book a room here.','I want check the date please.'],'the learner\'s turns only, never the partner\'s');
+ assert.equal(c.phase,'finished');assert.equal(getSession().screen,'linga-recap');
+ assert.deepEqual(c.cut.notes.map(n=>[n.quote,n.kind,n.reading??false]),[['Yesterday I book','form',false],['I want check','meaning',true]],'the partner quote and the misquote are dropped; a form note without a tense conflict is a reading');
+ assert(c.cut.notes.every(n=>c0.turns.some(t=>t.id===n.turnId&&t.role==='learner')),'each note keeps the turnId it quotes (Take Two forks from it)');
+ assert.equal(after.sessions.filter(x=>x.id===c.id).length,1,'the session is recorded, as finish records it');
+ assert.deepEqual(after.evidence,before.evidence,'notes never write evidence');assert.deepEqual(after.achievements,before.achievements,'nor move a skill');
+ await assert.rejects(command('cut'),e=>e.status===409,'a finished take takes no second Cut');
+});
+test('cut case 4: a failed or empty Cut makes up no note; the take stays as it was with the error line, and Cut can be pressed again',async()=>{
+ await adultTake(async()=>{throw new Error('engine down');});
+ const turns=getSession().conversation.turns.length;
+ await assert.rejects(command('cut'));
+ let c=getSession().conversation;
+ assert.equal(c.phase,'conversation');assert.equal(c.pending,null);assert.equal(c.turns.length,turns);assert.equal(c.cut,undefined);
+ assert.match(c.error,/could not give notes on this take/);assert.equal(getLearner('jakub').english.sessions.some(x=>x.id===c.id),false,'nothing recorded');
+ answer=async req=>({json:{notes:[{turnId:'nope',quote:'invented',kind:'word',note:'Made up.',better:''}]},provider:'test',ms:1});
+ await assert.rejects(command('cut'),e=>e.kind==='shape'&&e.status===undefined,'an unusable answer is a model failure (shape), never a learner refusal');
+ c=getSession().conversation;assert.equal(c.phase,'conversation');assert.equal(c.cut,undefined,'no note survived, so none is shown');
+ assert(turn().accepts(c,'cut','adult'),'Cut is offered again');
+ answer=async req=>GOOD_NOTES(JSON.parse(req.prompt));await command('cut');
+ assert.equal(getSession().conversation.cut.notes.length,2);
+});
+test("taxonomy: a Linga model failure carries failure and retry like the desk jobs; a cut-off or refusal is not offered again",async()=>{
+ const {EngineError}=require(path.join(root,'src/lib/engines/types.ts'));
+ const {LINGA_NOT_AGAIN}=require(path.join(root,'src/lib/english/errors.ts'));
+ const {POST}=require(path.join(root,'src/app/api/english/route.ts'));
+ const post=async(action,extra={})=>{const s=getSession();const r=await POST(new Request('http://desk/api/english',{method:'POST',body:JSON.stringify({action,learnerId:s.learner.id,episodeId:s.conversation?.id,commandId:'tx-'+(++counter),...extra})}));return {status:r.status,body:await r.json()};};
+ for(const [kind,retry] of [['cutoff',false],['declined',false],['timeout',true],['shape',true]]){
+  fresh();answer=async()=>{throw new EngineError(kind,'stub','x');};
+  const r=await post('start',{sceneId:'booking'});
+  assert.equal(r.status,502,kind);assert.equal(r.body.failure,kind);assert.equal(r.body.retry,retry,kind);
+  const line=getSession().conversation.error;
+  if(retry){assert.notEqual(r.body.error,LINGA_NOT_AGAIN,kind);assert.equal(line,'The scene could not be prepared. Try again or choose another situation.',kind+': its own line, as before');}
+  else{assert.equal(r.body.error,LINGA_NOT_AGAIN,kind);assert.equal(line,LINGA_NOT_AGAIN,kind+': the session line says so too');}
+ }
+ fresh();answer=async()=>{throw new Error('boom');};
+ const u=await post('start',{sceneId:'booking'});
+ assert.deepEqual([u.status,u.body.failure,u.body.retry],[502,'unknown',true]);assert.match(u.body.error,/please retry/);
+ fresh();const refusal=await post('start',{sceneId:'date'});
+ assert.equal(refusal.status,403,'a refusal stays a 4xx with no failure value');assert.equal(refusal.body.failure,undefined);
+});
+test('cut case 5: Family mode refuses Cut on the server with a plain reason and no model call',async()=>{
+ fresh();await command('start',{sceneId:'booking'});
+ answer=async()=>({json:{reply:'Of course. Which date?',observations:[]},provider:'test',ms:1});
+ await command('turn',{text:'Could you help?',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ assert(turn().accepts(getSession().conversation,'cut','adult'),'the same take would take Cut in Adult mode');
+ let calls=0;answer=async()=>{calls++;throw new Error('no call expected');};
+ await assert.rejects(command('cut'),e=>e.status===403&&e.message==='Cut is part of Adult mode.');
+ assert.equal(calls,0);assert.equal(getSession().conversation.phase,'conversation');
+});
+test('cut case 6: the view offers Cut in Adult mode only, and the Cut recap is a tape: up to three pins, one caption, one sentence each',()=>{
+ const V=view(),adultPrefs={...defaultPreferences({type:'other'}),adultConfirmed:true};
+ const asJakub=(fx)=>{const s=sessionOf(fx);return {...s,learner:{...s.learner,id:'jakub',name:'Jakub'}};};
+ assert(V.VIEW_ACTION_IDS.includes('cut')&&V.VIEW_ACTION_IDS.includes('note'));
+ for(const [name,[screen,c]] of Object.entries(TURN_STATES))for(const ui of [{},{menu:true}])
+  assert(!V.offeredActions(V.lingaView(sessionOf(fixture(screen,{placement:placed(),conversation:c})),ui)).some(a=>a.id==='cut'),`Family · ${name}: no Cut`);
+ const talk=V.lingaView(asJakub(fixture('linga-talk',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub',turns:REPLIED})})));
+ const tvCut=talk.actions.find(a=>a.id==='cut');assert(tvCut&&!tvCut.disabled,'Adult · your turn: Cut on the TV row');assert.equal(tvCut.run.command.action,'cut');
+ assert(!V.lingaView(asJakub(fixture('linga-talk',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub'})}))).actions.some(a=>a.id==='cut'),'no line of the learner\'s yet: no Cut');
+ const pausedCut=V.lingaView(asJakub(fixture('linga-talk',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub',turns:REPLIED,paused:true})}))).actions.find(a=>a.id==='cut');
+ assert(pausedCut&&!pausedCut.disabled,'Adult · paused: Cut');
+ const notes=[{turnId:'l1',quote:'I am work',kind:'form',note:'Say I work, with no am.',better:'I work'},{turnId:'l1',quote:'in hotel',kind:'word',note:'Say in a hotel.',better:'in a hotel'},{turnId:'l1',quote:'work in hotel',kind:'meaning',note:'Clear enough to be understood.',reading:true}];
+ const recap=asJakub(fixture('linga-recap',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub',turns:REPLIED,phase:'finished',cut:{at:1,notes}})}));
+ const v=V.lingaView(recap);
+ assert.equal(v.hero.kind,'tape');assert.equal(v.hero.pins.length,3);
+ assert.deepEqual(v.hero.pins.map(x=>x.label),['Form','Word','A reading']);
+ assert.equal(v.baseCaption,'Say I work, with no am.','the caption slot holds one note: the first, at rest');assert.equal(v.captionTag,'Form');
+ assert.deepEqual(v.actions.map(a=>a.id),['note','note','note','choose-situation','learning-map']);
+ const second=V.lingaView({...recap,focus:1});assert.equal(second.caption,'Say in a hotel.');assert.equal(second.captionTag,'Word');assert.equal(second.hero.selected,1);
+ for(const n of notes)assert(!/[.!?]\s+\S/.test(n.note),'one sentence per caption');
+ assert.match(V.viewText(v),/pin 1 · Form: "I am work" → "I work"\n      note: Say I work, with no am\./);
+ const tv=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.match(tv,/h\.kind==="topics"\|\|h\.kind==="tape"\?"plan"/,'the tape takes the row-of-doors layout');assert.match(tv,/data-role="linga-tape"/);
+});
+
+// ---- v2 L4: Take Two (lib/english/take.ts heldOf and forkOf; turn.ts "take-two" and "take-end")
+const TAKES=()=>require(path.join(root,'src/lib/english/take.ts'));
+const FORM={turnId:'l1',quote:'Yesterday I book',kind:'form',note:'Yesterday asks for the past.',better:'Yesterday I booked'};
+const WORD={turnId:'l1',quote:'a account',kind:'word',note:'Say an before a vowel sound.',better:'an account'};
+const MEANING={turnId:'l2',quote:'I want check',kind:'meaning',note:'Say want to before another verb.',better:'I want to check',reading:true};
+const REGISTER={turnId:'l2',quote:'Give me the key',kind:'register',note:'Too blunt for a hotel desk.',better:'Could I have the key, please?'};
+/** [why, note, the learner's line in the take, the noted turn's text (form notes), heldOf's answer] */
+const HELD=[
+ // form: the tense rule decides, on the sentences that carry the noted sentence's own time marker
+ ['form · the past form now, with the same marker',FORM,'Yesterday I booked a room here.','Yesterday I book a room here.',true],
+ ['form · the same clash again',FORM,'Yesterday I book a room here.','Yesterday I book a room here.',false],
+ ['form · the better phrase parroted, and the clash still there in the next sentence',FORM,'Yesterday I booked a room, as you say. Yesterday I go to the bank.','Yesterday I book a room here.',false],
+ ['form · another clash with the same marker (present perfect with yesterday)',FORM,'Yesterday I have booked a room.','Yesterday I book a room here.',false],
+ ['form · an irregular past form',FORM,'Yesterday I went to the hotel and booked a room.','Yesterday I book a room here.',true],
+ ['form · two sentences with the marker, both agree',FORM,'Yesterday I booked it. Yesterday I paid for it.','Yesterday I book a room here.',true],
+ ['form · the marker in the middle of the sentence',{...FORM,quote:'We go',better:'We went'},'We went to the cinema last week.','We go to the cinema last week.',true],
+ ['form · the marker in the middle, the clash again',{...FORM,quote:'We go',better:'We went'},'We go to the cinema last week.','We go to the cinema last week.',false],
+ ['form · present perfect with yesterday, mended',{...FORM,quote:'has gone',better:'went'},'She went to Paris yesterday.','She has gone to Paris yesterday.',true],
+ ['form · present perfect with yesterday, again',{...FORM,quote:'has gone',better:'went'},'She has gone to Paris yesterday.','She has gone to Paris yesterday.',false],
+ ['form · since asks for the present perfect, and gets it',{...FORM,quote:'I live',better:'I have lived'},'I have lived here since 2019.','I live here since 2019.',true],
+ ['form · since, and the present simple again',{...FORM,quote:'I live',better:'I have lived'},'I live here since 2019.','I live here since 2019.',false],
+ ['form · no sentence carries the marker: code cannot tell which one is the line again',FORM,'I booked a room here.','Yesterday I book a room here.',null],
+ ['form · another marker is not the noted one',FORM,'Last week I book a room.','Yesterday I book a room here.',null],
+ ['form · the marker, but no verb form the rule reads',FORM,'Yesterday, the room.','Yesterday I book a room here.',null],
+ ['form · "every" is not the marker "ever"',{...FORM,quote:'Have you ever see',better:'Have you ever seen'},'Every day I see it.','Have you ever see a dragon?',null],
+ ['form · a noted sentence with no clash is no rule to hold',{...FORM,quote:'I like',better:'I love'},'I love tea.','I like tea.',null],
+ ['form · an empty line',FORM,'   ','Yesterday I book a room here.',null],
+ // word: the quoted words gone and the better phrase said
+ ['word · the better words, the quote gone',WORD,'My dragon wants an account.',undefined,true],
+ ['word · the better words in capitals and with punctuation',WORD,'AN ACCOUNT, for my dragon!',undefined,true],
+ ['word · the quote again',WORD,'My dragon wants a account.',undefined,false],
+ ['word · the better words said, and the quote too',WORD,'An account, please, not a account.',undefined,false],
+ ['word · the quote gone, but the better words not said',WORD,'My dragon wants a bank account.',undefined,null],
+ ['word · no better phrase on the note',{...WORD,better:undefined},'My dragon wants an account.',undefined,null],
+ ['word · the better phrase says the quote: looked for outside it',{...WORD,quote:'account',better:'an account'},'He wants an account.',undefined,true],
+ ['word · the better phrase says the quote, and the bare quote is said again outside it',{...WORD,quote:'account',better:'an account'},'He wants an account, and one more account.',undefined,false],
+ ['word · the bare quote, the better phrase not said',{...WORD,quote:'account',better:'an account'},'He wants account.',undefined,false],
+ ['word · a missing article mended',{...WORD,quote:'in hotel',better:'in a hotel'},'I work in a hotel.',undefined,true],
+ ['word · the missing article again',{...WORD,quote:'in hotel',better:'in a hotel'},'I work in hotel.',undefined,false],
+ ['word · something else said: code cannot tell',{...WORD,quote:'in hotel',better:'in a hotel'},'I work at the station.',undefined,null],
+ ['word · an own-language word gone, the English said',{...WORD,quote:'Bahnhof',better:'station'},'Where is the station?',undefined,true],
+ ['word · the own-language word again',{...WORD,quote:'Bahnhof',better:'station'},'Where is the Bahnhof?',undefined,false],
+ // meaning (a reading too): the better phrase contained, else not decided
+ ['meaning · the better phrase said',MEANING,'I want to check the date.',undefined,true],
+ ['meaning · the better phrase in another case',MEANING,'i WANT to check, please',undefined,true],
+ ['meaning · the same words again: no rule says it is wrong',MEANING,'I want check the date.',undefined,null],
+ ['meaning · something else said',MEANING,'Can I see the date?',undefined,null],
+ ['meaning · no better phrase on the note',{...MEANING,better:undefined},'I want to check the date.',undefined,null],
+ ['meaning · a note that was never a reading',{...MEANING,quote:'He live in a cave',better:'He lives in a cave',reading:undefined},'He lives in a cave, very cosy.',undefined,true],
+ // register: no rule reads register
+ ['register · the better phrase said',REGISTER,'Could I have the key, please?',undefined,null],
+ ['register · the same words again',REGISTER,'Give me the key.',undefined,null],
+ ['register · no better phrase',{...REGISTER,better:undefined},'Could you give me the key?',undefined,null],
+];
+test(`take case 1: heldOf, the table (${HELD.length} rows): held, not held, or null where code cannot tell`,()=>{
+ const {heldOf}=TAKES(),counts={};
+ assert(HELD.length>=30,'at least 30 rows');
+ for(const [why,n,line,noted,want] of HELD){
+  assert.equal(heldOf(n,line,noted),want,why);
+  const k=(counts[n.kind]??={held:0,'not held':0,null:0});k[want===true?'held':want===false?'not held':'null']++;
+ }
+ assert(HELD.filter(r=>r[4]===null).length>=8,'at least 8 null rows');
+ for(const kind of ['form','word','meaning','register'])assert(counts[kind],`rows of kind ${kind}`);
+ assert.equal(heldOf(FORM,'Yesterday I booked a room, as you say. Yesterday I go to the bank.','Yesterday I book a room here.'),false,'the parrot row: a form note is the rule\'s, never the phrase\'s');
+ console.log('# heldOf table, per kind (held / not held / null):',Object.entries(counts).map(([k,c])=>`${k} ${c.held}/${c['not held']}/${c.null}`).join(', '));
+});
+test('take case 2: forkOf is the partner line nearest before the noted learner turn',()=>{
+ const {forkOf}=TAKES();
+ assert.equal(forkOf({...WORD,turnId:'l1'},TAKE).id,'p1');
+ assert.equal(forkOf({...WORD,turnId:'l2'},TAKE).id,'p2');
+ assert.equal(forkOf({...WORD,turnId:'p2'},TAKE),null,'a partner turn is no noted turn');
+ assert.equal(forkOf({...WORD,turnId:'gone'},TAKE),null,'an unknown turn');
+ assert.equal(forkOf({...WORD,turnId:'l1'},TAKE.slice(1)),null,'no partner line before it');
+ const two=[TAKE[0],TAKE[1],{id:'l1b',role:'learner',text:'And a card.',mode:'text'}];
+ assert.equal(forkOf({...WORD,turnId:'l1b'},two).id,'p1','two learner turns in a row: the partner line before both');
+});
+/** Fixtures for Take Two's place in the turn table: a finished take with a Cut, one with a take running, one waiting inside it. */
+const CUT_NOTES=[{turnId:'l1',quote:'I am work',kind:'form',note:'Say I work, with no am.',better:'I work'},{turnId:'l1',quote:'in hotel',kind:'word',note:'Say in a hotel.',better:'in a hotel'}];
+const RUNNING={note:0,from:'p1',turns:[{id:'p1:take',role:'partner',text:'Hello. How can I help?'}],held:null,at:2};
+const TAKE_STATES={
+ 'finished, cut':convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES}}),
+ 'take-two':convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES},takes:[RUNNING]}),
+ 'waiting, in a take':convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES},takes:[RUNNING],pending:'held'}),
+ 'paused, in a take (a reload pauses every conversation)':convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES},takes:[RUNNING],paused:true}),
+};
+test('take case 3: turnState, accepts and refusal for "take-two" and "take-end" in every state',()=>{
+ const T=turn();
+ assert(T.TURN_ACTIONS.includes('take-two')&&T.TURN_ACTIONS.includes('take-end')&&T.TURN_STATES.includes('take-two'));
+ assert(!T.TURN_ACTIONS.includes('take'),'its own name');
+ assert.equal(T.turnState(TAKE_STATES['finished, cut']),'finished');
+ assert.equal(T.turnState(TAKE_STATES['take-two']),'take-two');
+ assert.equal(T.turnState(TAKE_STATES['waiting, in a take']),'waiting');
+ assert.equal(T.turnState(TAKE_STATES['paused, in a take (a reload pauses every conversation)']),'take-two','a take is not paused');
+ // the table: only a finished take starts one, only a running one ends one
+ for(const state of T.TURN_STATES){
+  assert.equal(T.ACCEPTS[state].includes('take-two'),state==='finished',`the table · take-two · ${state}`);
+  assert.equal(T.ACCEPTS[state].includes('take-end'),state==='take-two',`the table · take-end · ${state}`);
+ }
+ assert.deepEqual([...T.ACCEPTS['take-two']].sort(),['capture','repeat','take-end','turn'],'inside a take: a line, the microphone, the audio again, and back to the notes');
+ // every state of a live scene refuses both, in either mode, with a plain reason
+ for(const [name,[,c]] of Object.entries(TURN_STATES))for(const mode of ['adult','family',undefined]){
+  assert.equal(T.accepts(c,'take-two',mode,0),false,`take-two · ${name} · ${mode}`);assert.equal(T.accepts(c,'take-end',mode),false,`take-end · ${name} · ${mode}`);
+  assert(T.refusal(c,'take-two',mode,0).length>10,`a reason · ${name}`);
+ }
+ assert.equal(T.refusal(TURN_STATES['your-turn'][1],'take-two','adult',0),'Take Two starts from a note at Cut.');
+ assert.equal(T.refusal(TURN_STATES.finished[1],'take-two','adult',0),'Take Two starts from a note at Cut, and this take has none.','finished by Finish: no cut');
+ assert.equal(T.refusal(TURN_STATES.waiting[1],'take-two','adult',0),'The partner is preparing a reply. You can cancel and return later.','a reply in flight');
+ assert.equal(T.refusal(TURN_STATES['your-turn'][1],'take-end','adult'),'There is no take running.');
+ // a finished take with its notes: Adult mode, a note of this take's that has not had its take
+ const cut=TAKE_STATES['finished, cut'];
+ assert.equal(T.accepts(cut,'take-two','adult',0),true);assert.equal(T.accepts(cut,'take-two','adult',1),true);
+ for(const mode of ['family',undefined]){assert.equal(T.accepts(cut,'take-two',mode,0),false,`${mode}`);assert.equal(T.refusal(cut,'take-two',mode,0),'Take Two is part of Adult mode.');}
+ for(const bad of [2,-1,0.5,undefined,'0']){assert.equal(T.accepts(cut,'take-two','adult',bad),false,`note ${bad}`);assert.equal(T.refusal(cut,'take-two','adult',bad),'Choose one of the notes on this take.');}
+ const had=convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES},takes:[{...RUNNING,endedAt:3}]});
+ assert.equal(T.turnState(had),'finished','an ended take leaves the rehearsal finished');
+ assert.equal(T.accepts(had,'take-two','adult',0),false);assert.equal(T.refusal(had,'take-two','adult',0),'This note has had its Take Two.');
+ assert.equal(T.accepts(had,'take-two','adult',1),true,'another note still can');
+ const orphan=convo({turns:[REPLIED[1],REPLIED[2]],phase:'finished',cut:{at:1,notes:CUT_NOTES}});
+ assert.equal(T.accepts(orphan,'take-two','adult',0),false);assert.equal(T.refusal(orphan,'take-two','adult',0),'This note has no line of the scene to go back to.');
+ // a take running: a second one is refused; inside it only its own four actions
+ const run=TAKE_STATES['take-two'];
+ assert.equal(T.accepts(run,'take-two','adult',1),false);assert.equal(T.refusal(run,'take-two','adult',1),'A take is already running. Finish it first.');
+ for(const a of T.TURN_ACTIONS.filter(x=>x!=='take-two'))assert.equal(T.accepts(run,a,'adult'),['turn','capture','repeat','take-end'].includes(a),`inside a take · ${a}`);
+ for(const a of ['cut','coach','replay','quiz','cue','pause','finish'])assert.equal(T.refusal(run,a,'adult'),'Say your line again on your phone, or go back to the notes.',a);
+ const wait=TAKE_STATES['waiting, in a take'];
+ assert.deepEqual(T.TURN_ACTIONS.filter(a=>T.accepts(wait,a,'adult',1)),['repeat','leave'],'a reply in flight inside a take: cancel it, or hear the line again');
+ assert.equal(T.refusal(wait,'take-two','adult',1),'The partner is preparing a reply. You can cancel and return later.');
+ // a spent take (both cast turns played): still take-two, and only Back to the notes and Repeat are taken
+ const SPENT_TURNS=[{id:'p1:take',role:'partner',text:'Hello.'},{id:'s1',role:'learner',text:'Yesterday I booked it.',mode:'text'},{id:'s2',role:'partner',text:'Cast 1.'},{id:'s3',role:'learner',text:'Yes.',mode:'text'},{id:'s4',role:'partner',text:'Cast 2.'}];
+ const spentC=convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES},takes:[{...RUNNING,turns:SPENT_TURNS}]});
+ assert.equal(T.turnState(spentC),'take-two','a spent take is still in the take');
+ for(const a of T.TURN_ACTIONS.filter(x=>x!=='take-two'))assert.equal(T.accepts(spentC,a,'adult'),['repeat','take-end'].includes(a),`spent take · ${a}`);
+ assert.equal(T.refusal(spentC,'turn','adult'),'That was the take. Go back to the notes.');assert.equal(T.refusal(spentC,'capture','adult'),'That was the take. Go back to the notes.');
+ // the mode still changes no other action, with a take in the fixtures too
+ for(const a of CONVERSATION_ACTIONS)for(const c of Object.values(TAKE_STATES))assert.equal(T.accepts(c,a,'adult'),T.accepts(c,a),`the mode changes no other action: ${a}`);
+});
+/** The adult's take with notes on both lines, cut; the stub answers the cast in a take as `Cast N.`; every call is listed. */
+async function cutTake(){
+ const calls=await adultTake(GOOD_NOTES);await command('cut');
+ let cast=0;answer=async req=>{const p=JSON.parse(req.prompt);calls.push({task:(p.task??'').slice(0,4),thinking:req.thinking,prompt:p,schema:req.schema});
+  if(/^Take Two:/.test(p.task??''))return {json:{reply:`Cast ${++cast}. And then?`,help:{simpler:'',meaning:'',starter:''}},provider:'test',ms:1};
+  throw new Error('no other call expected');};
+ return calls;
+}
+test('take case 4: one full stubbed run - a scene, Cut, Take Two on one note, the line again with no call, two cast turns, the end; nothing reaches the learner record',async()=>{
+ const calls=await cutTake(),T=turn();
+ const c0=getSession().conversation,english0=JSON.parse(JSON.stringify(getLearner('jakub').english)),turns0=JSON.parse(JSON.stringify(c0.turns)),cut0=JSON.parse(JSON.stringify(c0.cut));
+ const evidence0=JSON.parse(JSON.stringify(c0.evidence)),before=calls.length;
+ assert.equal(c0.phase,'finished');assert.equal(getSession().screen,'linga-recap');assert.equal(c0.cut.notes[0].quote,'Yesterday I book');
+ // Take Two on the first note: the partner line before the noted turn, its stored text, no call, the audio again
+ await command('take-two',{note:0});
+ let c=getSession().conversation;const fork=c0.turns[c0.turns.findIndex(t=>t.id===c0.cut.notes[0].turnId)-1];
+ assert.equal(calls.length,before,'the line again is no model call');
+ assert.equal(getSession().screen,'linga-talk');assert.equal(T.turnState(c),'take-two');
+ assert.equal(c.takes.length,1);assert.equal(c.takes[0].from,fork.id);assert.equal(c.takes[0].note,0);assert.equal(c.takes[0].held,null);
+ assert.deepEqual(c.takes[0].turns.map(t=>[t.role,t.text]),[['partner',fork.text]],'the stored text, word for word');
+ assert.equal(fork.text,'Hello. How can I help?');assert.equal(c.audioNonce,c0.audioNonce+1,'the audio, by a new nonce');
+ // the learner says the line again, the cast answers; then a second line and a second cast turn, and the take ends
+ await command('turn',{text:'Yesterday I booked a room here.',mode:'speech',lastTurnId:c.takes[0].turns.at(-1).id});
+ c=getSession().conversation;assert.equal(T.turnState(c),'take-two');assert.equal(getSession().screen,'linga-talk');
+ assert.equal(c.takes[0].held,true,'the form note held: the past form with yesterday');
+ await assert.rejects(command('turn',{text:'Late.',mode:'text',lastTurnId:fork.id}),e=>e.status===409,'a line answered to an older line');
+ await command('turn',{text:'Yesterday I go there, I think.',mode:'text',lastTurnId:c.takes[0].turns.at(-1).id});
+ c=getSession().conversation;
+ assert.deepEqual(c.takes[0].turns.map(t=>[t.role,t.text]),[['partner',fork.text],['learner','Yesterday I booked a room here.'],['partner','Cast 1. And then?'],['learner','Yesterday I go there, I think.'],['partner','Cast 2. And then?']]);
+ assert.equal(c.takes[0].held,true,'held is decided on the first line of the take');
+ assert.equal(c.takes[0].endedAt,undefined,'two cast turns: the take is spent but does not end by itself');
+ assert.equal(T.turnState(c),'take-two');assert.equal(getSession().screen,'linga-talk');
+ const spentView=view().lingaView(getSession());
+ assert.equal(spentView.spoken.line,'Cast 2. And then?');assert.equal(spentView.spoken.blocked,false);assert.equal(spentView.audible,true,'the last cast line is heard');
+ const take=calls.slice(before);
+ await assert.rejects(command('turn',{text:'More.',mode:'text',lastTurnId:c.takes[0].turns.at(-1).id}),e=>e.status===409&&e.message==='That was the take. Go back to the notes.');
+ await assert.rejects(command('capture',{active:true}),e=>e.status===409&&e.message==='That was the take. Go back to the notes.');
+ assert.equal(calls.length,before+2,'a third turn makes no call');
+ await command('repeat');assert.equal(getSession().conversation.audioNonce,c.audioNonce+1,'repeat bumps the nonce');
+ await command('take-end');c=getSession().conversation;
+ assert.equal(typeof c.takes[0].endedAt,'number','Back to the notes ends the spent take');
+ assert.equal(T.turnState(c),'finished');assert.equal(getSession().screen,'linga-recap');assert.equal(calls.length,before+2);
+ assert.equal(take.length,2,'two calls: one per cast turn');assert(take.length<=3,'at most 3 calls');
+ for(const x of take){assert.equal(x.thinking,false,'fast, thinking off');assert.equal(x.task,'Take');assert.equal(x.prompt.bringBack,undefined,'no taught phrase invited');assert.deepEqual(Object.keys(x.schema.properties).sort(),['help','reply'],'the replay schema: no observations, no moment');}
+ assert.deepEqual(take[0].prompt.transcript.map(t=>t.text),[fork.text],"the scene up to the fork, the fork line once (UD-17), the learner's line only as submittedReply; the first take's noted line is not in it");
+ // never evidence, and the first take is as it was
+ assert.deepEqual(getLearner('jakub').english,english0,"the learner record's english is deep-equal before and after");
+ assert.deepEqual(c.turns,turns0,"the first take's turns are unchanged");assert.deepEqual(c.cut,cut0,'and its notes');
+ assert.deepEqual(c.evidence,evidence0,'no evidence on the conversation either');
+ // at most one take per note; another note still can, and Back to the notes ends it early with no call
+ await assert.rejects(command('take-two',{note:0}),e=>e.status===409&&e.message==='This note has had its Take Two.');
+ await command('take-two',{note:1});c=getSession().conversation;
+ assert.equal(c.takes[1].from,c0.turns[c0.turns.findIndex(t=>t.id===c0.cut.notes[1].turnId)-1].id,'the second note forks at the partner line before its own turn');
+ await command('take-end');c=getSession().conversation;
+ assert.equal(typeof c.takes[1].endedAt,'number');assert.equal(c.takes[1].held,null,'ended before the line again: not decided');
+ assert.equal(getSession().screen,'linga-recap');assert.equal(calls.length,before+2,'no call to start or end a take');
+ assert.deepEqual(getLearner('jakub').english,english0,'still nothing on the learner record');
+ await assert.rejects(command('take-two',{note:2}),e=>e.status===409&&/Choose one of the notes/.test(e.message));
+});
+test('take case 9: a spent take on the TV shows the last cast line, the spent caption and Back to the notes; the phone takes no reply',()=>{
+ const V=view();
+ const spentTake={note:1,from:'p1',turns:[{id:'p1:take',role:'partner',text:'Hello.'},{id:'s1',role:'learner',text:'I work in a hotel.',mode:'text'},{id:'s2',role:'partner',text:'Cast 1.'},{id:'s3',role:'learner',text:'Yes.',mode:'text'},{id:'s4',role:'partner',text:'Cast 2. And then?'}],held:true,at:2};
+ const v=V.lingaView(takeView('linga-talk',{takes:[spentTake]}));
+ assert.equal(v.hero.said,'Cast 2. And then?');assert.equal(v.captionTag,'Take done');assert.equal(v.caption,'That was the take. Go back to the notes when you are ready.');
+ assert.deepEqual(v.actions.map(a=>[a.id,a.run.command?.action,!!a.disabled]),[['take-end','take-end',false]]);assert.equal(v.answer,null);
+ assert.equal(v.spoken.line,'Cast 2. And then?');assert.equal(v.spoken.blocked,false);assert.equal(v.audible,true);
+ const ids=V.offeredActions(v).map(a=>a.id);assert(ids.includes('take-end')&&ids.includes('repeat'),'Back to the notes and Repeat audio stay');
+ for(const id of ['turn','capture','answer'])assert(!ids.includes(id),`no ${id}`);
+ const sf=require(path.resolve(__dirname,'../uat/driver/surface.cjs')).surfaceOf(takeView('linga-talk',{takes:[spentTake]}));assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
+});
+test('take case 5: inside a take the server refuses Cut, the coach, the quiz, pause and finish; Leave cancels a reply in flight and keeps the take',async()=>{
+ await cutTake();await command('take-two',{note:0});
+ for(const action of ['cut','coach','quiz','cue','pause','finish','replay','resume'])
+  await assert.rejects(command(action),e=>e.status===409&&e.message==='Say your line again on your phone, or go back to the notes.',action);
+ let release;answer=()=>new Promise(r=>release=r);
+ const take=getSession().conversation.takes[0];
+ const inflight=command('turn',{text:'Yesterday I booked it.',mode:'text',lastTurnId:take.turns.at(-1).id,commandId:'held-take'});
+ assert.equal(turn().turnState(getSession().conversation),'waiting');
+ await assert.rejects(command('take-end'),e=>e.status===409,'not while the cast is answering');
+ await command('leave');
+ const c=getSession().conversation;
+ assert.equal(c.pending,null);assert.equal(turn().turnState(c),'take-two','the take stays');assert.equal(getSession().screen,'linga-talk');
+ release({json:{reply:'Too late.'},provider:'test',ms:1});
+ await assert.rejects(inflight,e=>e.status===409);
+ assert.deepEqual(getSession().conversation.takes[0].turns,take.turns,'the late reply is dropped');
+});
+/** The adult's recap after Cut, with `takes` on it, and the same take on the talk screen; as the view and the surface read them. */
+const TAKE_NOTES=[{turnId:'l1',quote:'I am work',kind:'form',note:'Say I work, with no am.',better:'I work'},{turnId:'l1',quote:'in hotel',kind:'word',note:'Say in a hotel.',better:'in a hotel'},{turnId:'l1',quote:'work in hotel',kind:'meaning',note:'Clear enough to be understood.',reading:true}];
+const ENDED=(note,held,again)=>({note,from:'p1',turns:[{id:`p1:take${note}`,role:'partner',text:'Hello. How can I help?'},...(again?[{id:`c1:t${note}`,role:'learner',text:again,mode:'text'},{id:`c1:r${note}`,role:'partner',text:'Nice. Which one?'}]:[])],held,at:2+note,endedAt:3+note});
+function takeView(screen,patch,ui={},mode='adult'){
+ const prefs={...defaultPreferences({type:'other'}),adultConfirmed:mode==='adult'};
+ const s=sessionOf(fixture(screen,{placement:placed(),preferences:prefs,conversation:convo({learnerId:'jakub',turns:REPLIED,phase:'finished',cut:{at:1,notes:TAKE_NOTES},...patch})}));
+ const at={...s,learner:{...s.learner,id:'jakub',name:'Jakub'},...ui};
+ if(mode==='family')at.profiles=at.profiles.map(p=>p.id==='jakub'?{...p,mode:'family'}:p);
+ return at;
+}
+test('take case 6: the recap marks each note that had its take - struck when held, open, or "Not decided" - and draws the take as a branch; no count',()=>{
+ const V=view();
+ const s=takeView('linga-recap',{takes:[ENDED(0,true,'I work in a hotel.'),ENDED(1,null,''),ENDED(2,false,'I work in hotel.')]});
+ const v=V.lingaView(s);
+ assert.equal(v.hero.kind,'tape');
+ assert.deepEqual(v.hero.pins.map(x=>x.mark),['held','undecided','open']);
+ assert.deepEqual(v.hero.branch,{pin:0,partner:'Robin · Receptionist',from:'Hello. How can I help?',again:'I work in a hotel.'},'at rest the first pin: its take, from the line it forked at');
+ assert.deepEqual(V.lingaView({...s,focus:2}).hero.branch,{pin:2,partner:'Robin · Receptionist',from:'Hello. How can I help?',again:'I work in hotel.'},'the focused pin\'s take');
+ assert.deepEqual(v.actions.map(a=>a.id),['note','note','note','choose-situation','learning-map'],'the TV row is the tape\'s, as before');
+ const text=V.viewText(v);
+ assert.match(text,/pin 1 · Form: "I am work" → "I work"\n      note: Say I work, with no am\.\n      Take Two: held, the quote struck through/);
+ assert.match(text,/Take Two: not decided/);assert.match(text,/Take Two: still open/);
+ assert.match(text,/Take Two of pin 1, a branch from it: Robin · Receptionist says "Hello. How can I help\?"; you again: "I work in a hotel\."/);
+ assert.doesNotMatch(text,/\d+ (of|out of) \d+|held \d|\d+ held/,'no count of held notes anywhere');
+ // a note with no take carries no mark, and with no take at all there is no branch
+ const one=V.lingaView(takeView('linga-recap',{takes:[ENDED(1,true,'I work in a hotel.')]}));
+ assert.deepEqual(one.hero.pins.map(x=>x.mark),[undefined,'held',undefined]);assert.equal(one.hero.branch.pin,1,'the latest take, when the focused pin has none');
+ assert.equal(V.lingaView(takeView('linga-recap',{})).hero.branch,undefined);
+ // the TV draws the mark and the branch; the phone strikes the held quote and says Not decided
+ const S=require(path.resolve(__dirname,'../uat/driver/surface.cjs')),sf=S.surfaceOf(s);
+ assert.match(sf.tv,/Not decided/);assert.match(sf.tv,/You again/);assert.match(sf.tv,/Take Two · Form/);assert.match(sf.phone,/Not decided/);assert.match(sf.phone,/Take Two, you said: “I work in a hotel\.”/);
+ assert.doesNotMatch(sf.shown,/\d+ (of|out of) \d+ (notes|held)/,'no count on either device');
+ const tv=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8');
+ assert.match(tv,/<s data-role="linga-struck">/);assert.match(tv,/data-role="linga-branch"/);assert.match(phone,/t\?\.held===true\?<s>/);
+});
+test('take case 7: the phone\'s recap offers Take Two per note in Adult mode, disabled with the refusal where refused; Family is offered none',()=>{
+ const V=view(),S=require(path.resolve(__dirname,'../uat/driver/surface.cjs'));
+ const s=takeView('linga-recap',{takes:[ENDED(0,true,'I work in a hotel.')]});
+ const offers=V.lingaView(s).phone.filter(a=>a.id==='take-two');
+ assert.deepEqual(offers.map(a=>[a.label,a.disabled,a.run.command]),[['Take Two · note 1',true,{action:'take-two',extra:{note:0}}],['Take Two · note 2',false,{action:'take-two',extra:{note:1}}],['Take Two · note 3',false,{action:'take-two',extra:{note:2}}]]);
+ assert.equal(offers[0].help,'This note has had its Take Two.','the refusal, as the server says it');
+ const sf=S.surfaceOf(s);
+ assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
+ assert.match(sf.phone,/This note has had its Take Two\./,'the phone shows the refusal');
+ assert.deepEqual(sf.controls.filter(c=>c.side==='phone'&&c.label.startsWith('Take Two')).map(c=>[c.label,c.disabled]),[['Take Two · note 1',true],['Take Two · note 2',false],['Take Two · note 3',false]]);
+ assert.deepEqual(sf.offered.filter(o=>o.id==='take-two').map(o=>o.run.command.extra.note),[1,2],'the enabled ones are offered to pick');
+ // a take running elsewhere would make every note wait; Family mode is offered none
+ assert(!V.offeredActions(V.lingaView(takeView('linga-recap',{},{},'family'))).some(a=>a.id==='take-two'),'Family: no Take Two');
+ assert(!V.offeredActions(V.lingaView(takeView('linga-recap',{cut:undefined}))).some(a=>a.id==='take-two'),'finished by Finish: no notes, no Take Two');
+});
+test('take case 8: inside a take the TV shows the line again and Back to the notes, and nothing else of the scene is offered',()=>{
+ const V=view(),S=require(path.resolve(__dirname,'../uat/driver/surface.cjs'));
+ const running={note:1,from:'p1',turns:[{id:'p1:take',role:'partner',text:'Hello. How can I help?'}],held:null,at:2};
+ const s=takeView('linga-talk',{takes:[running],audioNonce:1});
+ const v=V.lingaView(s);
+ assert.equal(v.tag,'Take Two');assert.equal(v.hero.kind,'scene');assert.equal(v.hero.take,true);
+ assert.equal(v.hero.said,'Hello. How can I help?');assert.equal(v.hero.subtitle,'“in hotel”','the noted quote under the line');
+ assert.equal(v.spoken.line,'Hello. How can I help?');assert.equal(v.spoken.blocked,false);assert.match(v.spoken.key,/p1:take:1$/,'a new key: the line plays again');
+ assert.deepEqual(v.actions.map(a=>[a.id,a.run.command?.action,!!a.disabled]),[['take-end','take-end',false]]);
+ assert.equal(v.answer.action,'turn');assert.equal(v.answer.lastTurnId,'p1:take','the reply box answers the take\'s line');
+ const ids=V.offeredActions(v).map(a=>a.id);
+ for(const id of ['cut','coach','quiz','cue','replay','finish','resume','pick-phrase'])assert(!ids.includes(id),`no ${id} inside a take`);
+ const sf=S.surfaceOf(s);assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
+ assert.match(sf.phone,/Take Two · A booking/);assert.match(sf.phone,/Your note: “in hotel” → “in a hotel”/);
+ // the cast answering: Cancel on the TV row, the take stays
+ const wait=V.lingaView(takeView('linga-talk',{takes:[{...running,turns:[...running.turns,{id:'c1:x',role:'learner',text:'I work in a hotel.',mode:'text'}]}],pending:'held'}));
+ assert.deepEqual(wait.actions.map(a=>[a.id,a.run.command?.action]),[['cancel','leave']]);assert.equal(wait.answer,null);
+ const sw=S.surfaceOf(takeView('linga-talk',{takes:[{...running,turns:[...running.turns,{id:'c1:x',role:'learner',text:'I work in a hotel.',mode:'text'}]}],pending:'held'}));
+ assert.deepEqual(sw.strays,[]);assert.deepEqual(sw.unrendered,[]);
+});
+test('LG-12: the tag Try it again ends with the first reply after a replay',async()=>{
+ fresh();answerAll();
+ await command('start',{sceneId:'booking',replace:true});
+ await command('turn',{text:'I booked two nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ await command('coach');await command('replay');
+ const V=view();
+ assert.equal(getSession().conversation.phase,'replay');
+ assert.equal(V.lingaView(getSession(),{}).tag,'Try it again');
+ await command('turn',{text:'I booked three nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ assert.equal(getSession().conversation.phase,'conversation','LG-12: the first reply after a replay ends the replay');
+ assert.equal(V.lingaView(getSession(),{}).tag,'Conversation','LG-12: the TV tag says Conversation again');
+});
+
+// ---- LG-20: the minor boundary on partner lines is code, not only the prompt (gate.ts partnerLine)
+const {REDIRECT_LINE,partnerLine}=require(path.join(root,'src/lib/english/gate.ts'));
+const DATING='Would you like to go on a date with me tonight?',NEVERLINE='Let me show you something nude and explicit.';
+/** an engine that gives `line` as the opening and as every reply, with a help ladder written for that line */
+function says(line){answer=async req=>({json:{title:'A booking',goal:'Fix a booking.',opening:line,reply:line,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'Say yes.',meaning:'a date: a romantic meeting',starter:'I would like to'},before:'I booked',after:'I booked two nights',note:'Clear.'},provider:'test',ms:1});}
+const partnerSaid=()=>getSession().conversation.turns.filter(t=>t.role==='partner').map(t=>t.text);
+test('LG-20: the redirect is one plain sentence, no em dash, and itself passes the gate',()=>{
+ assert.doesNotMatch(REDIRECT_LINE,/—|–/);assert.equal(REDIRECT_LINE.split(/[.!?]/).filter(Boolean).length,1);
+ assert.equal(partnerLine(REDIRECT_LINE,false),REDIRECT_LINE);
+ assert.equal(partnerLine('a bar of chocolate',false),'a bar of chocolate');
+ assert.equal(partnerLine('Which hotel is it?',false),'Which hotel is it?');
+});
+for(const [name,line] of [['dating',DATING],['never-list',NEVERLINE]]){
+ test(`LG-20: a ${name} line to a 13-year-old is replaced at the opening, a turn and a replay, shown and stored as the redirect`,async()=>{
+  fresh();getSession().profiles.find(p=>p.id==='ema').age=13;
+  says(line);await command('start',{sceneId:'booking',replace:true});
+  assert.deepEqual(partnerSaid(),[REDIRECT_LINE],'opening');assert.equal(getSession().conversation.help?.simpler,undefined,'no help written for the held line');
+  await command('turn',{text:'I booked two nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+  assert.deepEqual(partnerSaid(),[REDIRECT_LINE,REDIRECT_LINE],'turn');assert.equal(getSession().conversation.phase,'conversation','the scene goes on');
+  await command('coach');await command('replay');
+  assert.deepEqual(partnerSaid(),[REDIRECT_LINE,REDIRECT_LINE,REDIRECT_LINE],'replay');
+  assert(!JSON.stringify(getSession().conversation).includes(line),'the model text is stored nowhere on the conversation');
+ });
+}
+test('LG-20: the same lines pass unchanged to an adult outside Family mode, and are held again in Family mode',async()=>{
+ fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true},notes:[]});
+ for(const line of [DATING,NEVERLINE]){
+  says(line);await command('start',{sceneId:'booking',replace:true});
+  await command('turn',{text:'I booked two nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+  await command('coach');await command('replay');
+  assert.deepEqual(partnerSaid(),[line,line,line]);
+ }
+ getSession().profiles.find(p=>p.id==='jakub').mode='family';
+ says(DATING);await command('start',{sceneId:'booking',replace:true});
+ await command('turn',{text:'I booked two nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ assert.deepEqual(partnerSaid(),[REDIRECT_LINE,REDIRECT_LINE],'Family mode holds it at 18+');
+});
+test('LG-20: the Take Two cast line is held too when the desk went to Family mode after the take began',async()=>{
+ const calls=await cutTake();
+ await command('take-two',{note:0});
+ answer=async()=>({json:{reply:DATING,help:{simpler:'',meaning:'',starter:''}},provider:'test',ms:1});
+ getSession().profiles.find(p=>p.id==='jakub').mode='family';
+ const c=getSession().conversation;
+ await command('turn',{text:'Yesterday I booked a room here.',mode:'speech',lastTurnId:c.takes[0].turns.at(-1).id});
+ assert.equal(getSession().conversation.takes[0].turns.at(-1).text,REDIRECT_LINE);
+ assert(!JSON.stringify(getSession().conversation).includes(DATING));
+});
+
+// ------------------------------------------------------------------ UAT 2026-10-14: UD-4 and UD-10 (conversation.ts)
+test('UD-4: a moment, a title, a goal and a coaching note carrying a list word never reach a 13-year-old; an adult keeps them',async()=>{
+ fresh();getSession().profiles.find(p=>p.id==='ema').age=13;
+ answer=async()=>({json:{title:'Beer with friends',goal:'Order a beer.',opening:'Hello. How can I help?'},provider:'test',ms:1});
+ await command('start',{sceneId:'booking',replace:true});let c=getSession().conversation;
+ assert.doesNotMatch(c.title+c.goal,/beer/i,'title and goal fall back to the scene');
+ answer=async()=>({json:{reply:'What name is it under?',observations:[],moment:{kind:'fix',said:'I have booking',better:'Have a beer!',why:'A drink.'}},provider:'test',ms:1});
+ await command('turn',{text:'I have booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});
+ c=getSession().conversation;assert.equal(c.moment,null);assert.equal(c.moments.length,0);
+ assert(!JSON.stringify(getLearner('ema').english.taught).includes('beer'),'not stored for review either');
+ answer=async()=>({json:{before:'I have booking',after:'I have a booking',note:'Next time, have a beer.'},provider:'test',ms:1});
+ await assert.rejects(command('coach'));assert.equal(getSession().conversation.coaching,null);
+});
+test('UD-10: context() carries this scene\'s moments as taughtThisScene, and the turn prompt sends them',async()=>{
+ fresh();await command('start',{sceneId:'booking',replace:true});let c=getSession().conversation;
+ answer=async()=>({json:{reply:'What date was it?',observations:[],moment:{kind:'fix',said:'I have booking',better:'I have a booking',why:'A booking takes "a".'}},provider:'test',ms:1});
+ await command('turn',{text:'I have booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});
+ await command('moment-done');c=getSession().conversation;
+ let sent;answer=async(req)=>{sent=JSON.parse(req.prompt);return {json:{before:'I have booking',after:'I have a booking',note:'Good.'},provider:'test',ms:1};};
+ await command('coach');
+ assert.deepEqual(sent.taughtThisScene,[{said:'I have booking',better:'I have a booking'}]);
+});
+
+// ---- K2 self-repair: a fix moment asks for the learner's line before it shows the fix (repair.ts; LG-4, the withhold option)
+/** The 2026-10-14 LT moment on Viktor's line, as the tutor would return it for this reply. */
+const TOMATO={said:'My tomatoes is one metre',better:'My tomatoes are one metre',why:'Tomatoes is plural, so it takes are.'};
+let k2Calls=0;
+/** A learner at `level` in a scene where the next reply yields the tomato moment; every model call is counted. */
+async function k2Moment({level='B1',partner='Lovely! Is that big for a tomato plant?',moment={kind:'fix',...TOMATO},observations=[]}={}){
+ fresh();saveEnglish('ema',{...emptyEnglish(),preferences:{...defaultPreferences(),level}});k2Calls=0;
+ answer=async req=>{k2Calls++;const p=JSON.parse(req.prompt);return {json:p.submittedReply?{reply:partner,supportProvided:false,observations,moment}:{title:'Garden',goal:'Show the garden.',opening:'Hi Grandpa! How tall are your plants?',supportProvided:false},provider:'test',ms:1};};
+ await command('start',{sceneId:'weekend',replace:true});
+ await command('turn',{text:'My tomatoes is one metre.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ k2Calls=0;return getSession().conversation;
+}
+const momentTry=text=>command('moment-try',{text,mode:'text',lastTurnId:getSession().conversation.moment.turnId});
+/** better and the fix key, absent from everything the TV and the phone read */
+function withheldEverywhere(where){
+ const json=JSON.stringify(getSession());
+ assert(!json.includes(TOMATO.better),`${where}: better is not in the session`);
+ assert(!/tomatoes are/i.test(json),`${where}: nor is the fix key`);
+}
+test('K2 case 1 GATE: the session has no better until a try holds; "My tomatoes are one metre." holds before the fix is shown, frees the next reply, with no model call',async()=>{
+ let c=await k2Moment();
+ assert.equal(getSession().screen,'linga-moment');assert.equal(c.moment.kind,'fix');assert.equal(c.moment.slip,'tomatoes is');
+ assert.deepEqual(c.moment.repair,{rung:0,support:false},'B1 starts at "say it again"');assert.equal(c.supported,true,'a moment models wording');
+ withheldEverywhere('after the turn');
+ assert.equal(c.moments.length,0,'not one of the scene\'s moments while open');assert.equal(getLearner('ema').english.taught.length,0,'not on the record while open');
+ const V=view();let v=V.lingaView(getSession());
+ assert.equal(v.hero.after.quote,'');assert.equal(v.hero.open,true,'the after slot is an empty frame');assert.equal(v.hero.note,'','no clue yet');
+ assert.deepEqual(v.answer,{id:'answer',action:'moment-try',label:'Say it again',lastTurnId:c.moment.turnId});
+ assert.deepEqual(v.actions.map(a=>a.id),['show-me','back'],'Show me and Back, on the TV row and so on the phone');
+ assert.doesNotMatch(V.viewText(v),/tomatoes are/i,'nor in the words the LT driver reads');
+ await momentTry('My tomatoes are one metre.');
+ c=getSession().conversation;
+ assert.equal(k2Calls,0,'judged by code: no model call');
+ assert.equal(c.moment.repair.held,true);assert.equal(c.moment.repair.selfRepaired,true);assert.equal(c.moment.repair.tried,'My tomatoes are one metre.');
+ assert.equal(c.supported,false,'an unshown self-repair clears supported');
+ assert.equal(c.turns.filter(t=>t.role==='learner').length,1,'a try is never a turn');assert.equal(getLearner('ema').english.evidence.length,0,'nor evidence');
+ v=V.lingaView(getSession());
+ assert.deepEqual(v.hero.before,{kicker:'You said',quote:TOMATO.said,struck:'tomatoes is'},'the slip struck');
+ assert.deepEqual(v.hero.after,{kicker:'You found it',quote:'My tomatoes are one metre.'},'the learner\'s own line in the after slot');
+ assert.equal(v.hero.open,undefined);assert.equal(v.answer,null,'no more tries');assert.deepEqual(v.actions.map(a=>a.id),['back']);
+ assert.doesNotMatch(JSON.stringify(v.hero)+v.caption,/\d+ (of|tries|try)/,'a picture, no count');
+ await command('moment-done');c=getSession().conversation;
+ const t=getLearner('ema').english.taught;
+ assert.equal(t.length,1);assert.equal(t[0].better,TOMATO.better);assert.equal(t[0].selfRepaired,true);assert.equal(t[0].tried,'My tomatoes are one metre.');assert.equal(t[0].repair,undefined);
+ assert.equal(c.moments.length,1);assert.equal(c.moments[0].better,TOMATO.better,'the fix joins the scene\'s moments when it closes');
+ assert.equal(c.supported,false,'still free after Back');
+ // the next reply is the learner's own: its observation is unsupported
+ answer=async()=>({json:{reply:'And the beans?',supportProvided:false,observations:[{skill:'describe',quote:'My tomatoes are very tall',success:true,confidence:'clear',note:'Described the plants.'}]},provider:'test',ms:1});
+ await reply('My tomatoes are very tall now.');
+ const e=getSession().conversation.evidence.at(-1);assert.equal(e?.quote,'My tomatoes are very tall');assert.equal(e.supported,false,'own-words credit after a self-repair');
+ console.log(`# K2 case 1: held "${t[0].tried}" selfRepaired=${t[0].selfRepaired} supported=${c.supported} modelCalls=0`);
+});
+test('K2 case 2: "My tomatoes is one metre." is not held; misses climb to the clue, then the fix, then one more try',async()=>{
+ let c=await k2Moment();const V=view();
+ await momentTry('My tomatoes is one metre.');c=getSession().conversation;
+ assert.equal(c.moment.repair.held,undefined,'the slip still stands: not held');assert.equal(c.moment.repair.rung,1,'the clue');
+ withheldEverywhere('after a miss');assert.equal(V.lingaView(getSession()).hero.note,TOMATO.why,'the why is the clue');
+ await momentTry('My plants are one metre.');c=getSession().conversation;
+ assert.equal(c.moment.repair.held,undefined,'undecided: the fix key is not said');assert.equal(c.moment.repair.rung,2);
+ assert.equal(c.moment.better,TOMATO.better,'a second miss shows the fix');assert.equal(c.supported,true);
+ const v=V.lingaView(getSession());assert.deepEqual(v.hero.after,{kicker:'Try',quote:TOMATO.better});assert.equal(v.answer.label,'Say it once more');assert.deepEqual(v.actions.map(a=>a.id),['back']);
+ await momentTry('My tomatoes is one metre!');c=getSession().conversation;
+ assert.equal(c.moment.repair.spent,true);assert.equal(c.moment.repair.held,undefined);
+ await assert.rejects(momentTry('My tomatoes are one metre.'),e=>e.status===409,'one more try, no more');
+ assert.equal(k2Calls,0);
+ await command('moment-done');
+ const t=getLearner('ema').english.taught[0];assert.equal(t.selfRepaired,false);assert.equal(t.tried,'My tomatoes is one metre!');
+ assert.equal(getSession().conversation.supported,true,'a revealed fix keeps the next reply supported');
+ console.log(`# K2 case 2: "My tomatoes is one metre." not held -> rung 1; undecided -> rung 2 (shown); one more try, then spent; modelCalls=${k2Calls}`);
+});
+test('K2 case 3: after Show me, a bare repeat of the fix key is not held and supported stays true; the learner\'s sentence holds, unshown never',async()=>{
+ let c=await k2Moment();
+ await command('moment-show');c=getSession().conversation;
+ assert.equal(c.moment.better,TOMATO.better);assert.equal(c.moment.fix,'tomatoes are');assert.equal(c.moment.repair.rung,2);
+ await momentTry('tomatoes are');c=getSession().conversation;
+ assert.equal(c.moment.repair.held,undefined,'the bare fix key read off the card is no repair');assert.equal(c.supported,true);assert.equal(c.moment.repair.spent,true);
+ await command('moment-done');assert.equal(getLearner('ema').english.taught[0].selfRepaired,false);
+ // the full sentence after the fix was shown holds, but it was shown: no self-repair, still supported
+ await k2Moment();await command('moment-show');await momentTry('My tomatoes are one metre.');c=getSession().conversation;
+ assert.equal(c.moment.repair.held,true);assert.equal(c.moment.repair.selfRepaired,false);assert.equal(c.supported,true);
+ assert.equal(view().lingaView(getSession()).hero.after.kicker,'You said it');
+ // the judge itself (repair.ts judgeTry), on the 10-14 LT pairs
+ const {judgeTry}=require(path.join(root,'src/lib/english/repair.ts')),S=slipMod();
+ const tom={...TOMATO,...S.slipOf(TOMATO.said,TOMATO.better)};
+ assert.equal(judgeTry(tom,'My tomatoes are one metre.',false),true);assert.equal(judgeTry(tom,'My tomatoes is one metre.',false),false);
+ assert.equal(judgeTry(tom,'tomatoes are',false),true,'before the fix is shown, finding the key is the learner\'s own');
+ assert.equal(judgeTry(tom,'tomatoes are',true),null,'after it, a bare echo is not held');assert.equal(judgeTry(tom,'Tomatoes are.',true),null);
+ const venue={said:'we was discussing about this venue',better:'we were discussing this venue'};
+ assert.equal(judgeTry({...venue,...S.slipOf(venue.said,venue.better)},'we were discussing this venue',false),true,'P07\'s third fixture');
+ // a fix with no guarded key falls back to take.ts heldOf, kind word, over (said, better)
+ const plain={said:'I will',better:'I would'},pk={...plain,...S.slipOf(plain.said,plain.better)};
+ assert.equal(judgeTry(pk,'I would',false),true);assert.equal(judgeTry(pk,'I will',false),false);assert.equal(judgeTry(pk,'Maybe later.',false),null);
+});
+test('K2 case 4: a word moment still shows its better at once and takes no try; A1 starts at the clue rung',async()=>{
+ let c=await k2Moment({moment:{kind:'word',said:'rajčata',better:'tomatoes',why:'The red fruit in your garden.'}});
+ assert.equal(c.moment.better,'tomatoes');assert.equal(c.moment.repair,undefined);assert(JSON.stringify(getSession()).includes('"better":"tomatoes"'));
+ await assert.rejects(momentTry('My tomatoes.'),e=>e.status===409);
+ assert.equal(view().lingaView(getSession()).answer,null);
+ c=await k2Moment({level:'A1'});
+ assert.equal(c.moment.repair.rung,1,'A1-A2 start on the clue');withheldEverywhere('A1');
+ const v=view().lingaView(getSession());assert.equal(v.hero.note,TOMATO.why);assert.equal(v.hero.open,true);
+ await momentTry('My tomatoes is big.');assert.equal(getSession().conversation.moment.repair.rung,2,'one miss on the clue shows the fix');
+ assert.equal(getSession().conversation.moment.better,TOMATO.better);
+});
+test('K2 case 5: a fix the partner\'s line or an observation note already said is shown at once; nothing else on the session echoes a withheld fix',async()=>{
+ let c=await k2Moment({partner:'Wow, your tomatoes are one metre tall!'});
+ assert.equal(c.moment.repair,undefined,'the partner said the fix key: nothing left to withhold');assert.equal(c.moment.better,TOMATO.better);
+ c=await k2Moment({observations:[{skill:'describe',quote:'My tomatoes is one metre',success:false,confidence:'clear',note:'Say "tomatoes are".'}]});
+ assert.equal(c.moment.repair,undefined,'an observation note said it');
+ c=await k2Moment({moment:{kind:'fix',...TOMATO,why:'Say "tomatoes are": more than one.'}});
+ assert.equal(c.moment.repair,undefined,'its own why said it: the clue would be the fix');
+ // the turn prompt asks the tutor not to say it
+ let prompt;fresh();await command('start',{sceneId:'booking',replace:true});
+ answer=async req=>{prompt=JSON.parse(req.prompt);return {json:{reply:'Ok.',observations:[]},provider:'test',ms:1};};
+ await reply('I has booking.');
+ assert.match(prompt.task,/never say better or its corrected words in your reply or in an observation note/);
+ // while withheld: not in shownLines, and neither device draws it
+ c=await k2Moment();
+ assert(!review().shownLines(c).some(x=>/tomatoes are/i.test(x)));
+ const sf=require(path.resolve(__dirname,'../uat/driver/surface.cjs')).surfaceOf(getSession());
+ assert.doesNotMatch(sf.shown,/tomatoes are/i,'neither device draws it');assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
+ assert.match(sf.phone,/Say it again, your way/);assert.match(sf.phone,/Show me/);
+});
+test('K2 case 6: a self-repaired fix is not a shown line; Finish over an open moment keeps it; a restart that lost the fix says so and keeps nothing',async()=>{
+ let c=await k2Moment();await momentTry('My tomatoes are one metre.');await command('moment-done');c=getSession().conversation;
+ assert(!review().shownLines(c).includes(TOMATO.better),'the TV showed the learner\'s own line, never the fix');
+ c=await k2Moment();await command('finish');
+ assert.equal(getLearner('ema').english.taught.filter(t=>t.line===undefined).length,1,'Finish over a moment keeps it (a K4 hidden line handed over at finish is its own item)');assert.equal(getSession().conversation.moments.length,1);
+ c=await k2Moment();globalThis.__lingaRepair.clear();
+ await command('moment-show');c=getSession().conversation;
+ assert.equal(c.moment.repair.lost,true);withheldEverywhere('after a restart');
+ const T=turn();assert.equal(T.accepts(c,'moment-try'),false);assert.equal(T.refusal(c,'moment-try'),T.LOST);
+ assert.match(view().lingaView(getSession()).caption,/lost this fix/);
+ await command('moment-done');assert.equal(getLearner('ema').english.taught.filter(t=>t.line===undefined).length,0,'nothing kept: the fix existed only in memory');
+});
+test('K2 case 7: the server refuses exactly what the table refuses on a fix moment at every rung',async()=>{
+ const T=turn(),wrong=[];
+ const fixes={'withheld 0':{rung:0,support:false},'withheld 1':{rung:1,support:false},shown:{rung:2,support:false},spent:{rung:2,support:false,tried:'x',spent:true},held:{rung:0,support:false,tried:'I work.',held:true,selfRepaired:true,spent:true},lost:{rung:0,support:false,lost:true}};
+ for(const [name,repair] of Object.entries(fixes))for(const action of CONVERSATION_ACTIONS){
+  const withheld=repair.rung<2&&!repair.held;
+  const c=convo({turns:REPLIED,moment:{...MOMENT,...(withheld?{better:'',fix:undefined}:{}),repair}});
+  const s=install(fixture('linga-moment',{placement:placed(),conversation:c}));answerAll();
+  const ok=T.accepts(c,action);let got='accepted';
+  try{await englishCommand({action,learnerId:s.learner.id,episodeId:c.id,commandId:`k2-table-${++counter}`,...extraFor(action,c)});}
+  catch(e){got=e.status===409?'refused':`error ${e.status}: ${e.message}`;}
+  if(got!==(ok?'accepted':'refused'))wrong.push(`${name} · ${action}: table ${ok?'accepts':'refuses'}, server ${got}`);
+ }
+ assert.deepEqual(wrong,[]);
+});
+
+// ---- L1: phrases you own (review.ts yoursOf; own.ts; the recap, the TV home strip, the print page). A fake clock, local days, no model.
+const own=()=>require(path.join(root,'src/lib/english/own.ts'));
+/** local noon on 5 October 2026, plus `d` days and `h` hours: day boundaries in the desk's own time zone, whatever it is */
+const NOON=(d=0,h=0)=>new Date(2026,9,5+d,12+h).getTime();
+const BOOKED='I have a booking';
+/** one turn as the pipeline runs it: reuseOf decides on the scene as it stood; only a use it counts reaches markReused */
+function useIn(t,reply,scene,at){const R=review(),q=R.reuseOf(reply,scene);return q?R.markReused(t,TAUGHT_A.id,scene.id,q,at,scene.sceneId):t;}
+const sceneFor=(id,sceneId,patch={})=>convo({id,sceneId,review:review().reviewOf(TAUGHT_A),...patch});
+const YOURS_A={...TAUGHT_A,at:NOON(-3),reuses:[{at:NOON(0),conversationId:'cA',sceneId:'booking',quote:BOOKED},{at:NOON(1),conversationId:'cB',sceneId:'rover',quote:BOOKED}],reusedAt:NOON(1),reusedIn:'cB',reusedQuote:BOOKED};
+YOURS_A.yours={at:NOON(1),uses:[YOURS_A.reuses[0],YOURS_A.reuses[1]]};
+/** an owned item taught in the adult-audience date scene */
+const ADULT_OWNED={...YOURS_A,id:'d:1',sceneId:'date',said:'What music you like',better:'What kind of music do you like',reuses:[],yours:{at:NOON(3),uses:[{at:NOON(2),conversationId:'d1',sceneId:'date',quote:'What kind of music do you like'},{at:NOON(3),conversationId:'d2',sceneId:'weekend',quote:'what kind of music do you like'}]}};
+test('L1 case 1: used unaided in scene A on day 1 and scene B on day 2 is "yours"; two uses on one day, or in one scene, are not',()=>{
+ const R=review(),base=[{...TAUGHT_A,at:NOON(-3)}];
+ let t=useIn(base,'Hi, I have a booking for Friday.',sceneFor('cA','booking'),NOON(0));
+ assert.equal(t[0].reuses.length,1);assert.equal(t[0].yours,undefined,'one use is not yours');
+ t=useIn(t,'Yes, I have a booking here.',sceneFor('cB','rover'),NOON(1));
+ assert.deepEqual(t[0].yours,{at:NOON(1),uses:[t[0].reuses[0],t[0].reuses[1]]},'scene A day 1, scene B day 2: yours');
+ assert.deepEqual(t[0].yours.uses.map(u=>[u.conversationId,u.sceneId,u.quote]),[['cA','booking',BOOKED],['cB','rover',BOOKED]]);
+ // the same uses on one local day, in three scenes: not yours, however many
+ let same=useIn(useIn(base,'I have a booking.',sceneFor('c1','booking'),NOON(0,-2)),'I have a booking, yes.',sceneFor('c2','rover'),NOON(0,3));
+ same=useIn(same,'I have a booking!',sceneFor('c3','weekend'),NOON(0,5));
+ assert.equal(same[0].reuses.length,3);assert.equal(same[0].yours,undefined,'one day is not enough');
+ // in one scene on two days: not yours
+ const one=useIn(useIn(base,'I have a booking.',sceneFor('c1','booking'),NOON(0)),'I have a booking.',sceneFor('c2','booking'),NOON(4));
+ assert.equal(one[0].reuses.length,2);assert.equal(one[0].yours,undefined,'one scene is not enough');
+ // day 1 booking, day 1 rover, day 2 booking: the day-2 use is apart from the rover one only
+ const mixed=useIn(same.map(x=>({...x,reuses:x.reuses.slice(0,2)})),'I have a booking.',sceneFor('c4','booking'),NOON(1));
+ assert.deepEqual(mixed[0].yours.uses.map(u=>u.conversationId),['c2','c4'],'the earliest earlier use in another scene on another day');
+ assert.equal(R.yoursOf({...TAUGHT_A,reuses:[{at:NOON(0),conversationId:'x',quote:BOOKED},{at:NOON(2),conversationId:'y',sceneId:'rover',quote:BOOKED}]}),null,'a use kept before K3 names no scene and cannot count');
+ assert.equal(R.yoursOf({...TAUGHT_A,reuses:[{at:NOON(0),conversationId:'x',sceneId:'booking',quote:'a booking'},{at:NOON(2),conversationId:'y',sceneId:'rover',quote:BOOKED}]}),null,'a quote that does not say the item cannot count');
+});
+test('L1 case 2: a supported, already-shown or copied reply never counts toward "yours"; the next unaided one does',()=>{
+ const base=[{...TAUGHT_A,at:NOON(-3)}];
+ const day1=useIn(base,'Hi, I have a booking for Friday.',sceneFor('cA','booking'),NOON(0));
+ const supported=useIn(day1,'I have a booking.',sceneFor('cB','rover',{supported:true}),NOON(1));
+ const shown=useIn(day1,'I have a booking.',sceneFor('cB','rover',{turns:[{id:'p1',role:'partner',text:'Do you have a booking? I have a booking list.'}]}),NOON(1));
+ const copied=useIn(day1,'You said: I have a booking.',sceneFor('cB','rover',{turns:[{id:'p1',role:'partner',text:'Say after me: I have a booking.'}]}),NOON(1));
+ const moment=useIn(day1,'I have a booking.',sceneFor('cB','rover',{moments:[{id:'m',kind:'fix',said:'I has booking',better:'I have a booking',why:'x',turnId:'t',at:1}]}),NOON(1));
+ for(const [name,t] of Object.entries({supported,shown,copied,moment})){assert.equal(t[0].reuses.length,1,`${name}: no use recorded`);assert.equal(t[0].yours,undefined,`${name}: not yours`);}
+ const later=useIn(supported,'Sorry, I have a booking.',sceneFor('cC','weekend'),NOON(2));
+ assert.equal(later[0].yours.uses[1].conversationId,'cC','the next unaided use in another scene on another day');
+});
+test('L1 case 3: the latch never unsets - more uses, invitations and a slip keep it; a slip after it reopens the item for review first',()=>{
+ const R=review(),y=YOURS_A.yours,{keysOf}=require(path.join(root,'src/lib/english/slip.ts'));
+ let t=R.markReused([YOURS_A],YOURS_A.id,'cC',BOOKED,NOON(5),'weekend');assert.deepEqual(t[0].yours,y,'a later use keeps the first latch');
+ t=R.offer(t,YOURS_A.id,NOON(6));assert.deepEqual(t[0].yours,y);
+ t=R.markReused(R.markReused(t,YOURS_A.id,'cD',BOOKED,NOON(9),'booking'),YOURS_A.id,'cE',BOOKED,NOON(20),'rover');
+ assert.equal(R.rests(t[0]),true);assert.equal(R.dueTaught(t,'new',undefined,NOON(60)),null,'at the end of the ladder it rests');
+ const slipped=R.markSlipped(t,keysOf(TAUGHT_A).slip,NOON(61));
+ assert(slipped[0].slipAt>slipped[0].yours.at&&slipped[0].slips===1,'a slip after the latch');
+ assert.equal(R.dueTaught([{...TAUGHT_C,at:NOON(-9)},...slipped],'new',undefined,NOON(62)).id,YOURS_A.id,'reopened: the slipping item comes first');
+ assert.deepEqual(slipped[0].yours,y,'and it stays yours');
+ assert.deepEqual(cleanEnglish({taught:slipped}).taught[0].yours,y,'through a load');
+});
+test('L1 case 4: the cleaner works the latch out for an old record from its history, keeps one the history no longer holds, and refuses one that breaks the rule',()=>{
+ const {yours,...old}=YOURS_A;
+ assert.deepEqual(cleanEnglish({taught:[old]}).taught[0].yours,yours,'computed from the history on load');
+ assert.deepEqual(cleanEnglish({taught:[{...YOURS_A,reuses:[YOURS_A.reuses[1]]}]}).taught[0].yours,yours,'a latch outlives a trimmed history');
+ const bent={...YOURS_A,reuses:[],yours:{at:NOON(1),uses:[{...YOURS_A.reuses[0],sceneId:'rover'},YOURS_A.reuses[1]]}};
+ const kept=cleanEnglish({taught:[bent]}).taught;assert.equal(kept.length,1);assert.equal(kept[0].yours,undefined,'one scene twice is no latch, stored or not');
+ assert.equal(cleanEnglish({taught:[{...YOURS_A,yours:{at:1,uses:[1]}}]}).taught.length,0,'a malformed latch drops the item, as any malformed field does');
+});
+test('L1 case 5: the scene whose use completes it shows "Yours now" - the learner\'s two quotes, no digit; one model call a turn, as before',async()=>{
+ const realNow=Date.now;let clock=NOON(1);Date.now=()=>clock;
+ try{
+  const seeded={...TAUGHT_A,at:NOON(-3),reuses:[YOURS_A.reuses[0]],reusedAt:NOON(0),reusedIn:'cA',reusedQuote:BOOKED,nextDueAt:NOON(0)+review().DAY_MS};
+  const c=await taughtStart([seeded]);assert.equal(c.review.id,TAUGHT_A.id,'due the next day, invited in the rover scene');
+  clock+=HOUR;await reply(REUSED);assert.equal(prompts.length,2,'one call to open, one a turn');
+  const t=taughtOf(TAUGHT_A.id);assert(t.yours,'yours');assert.equal(t.yours.uses[1].conversationId,c.id);assert.equal(t.yours.uses[1].sceneId,'rover');
+  await command('finish');assert.equal(prompts.length,2,'no call to finish');
+  const after=getSession().conversation;assert.equal(after.phase,'finished');
+  const V=view(),v=V.lingaView(sessionOf(fixture('linga-recap',{...getLearner('ema').english,conversation:after})),{});
+  assert.equal(v.hero.kind,'comparison');assert.equal(v.hero.kicker,'Yours now');assert.equal(v.title,'Yours now');
+  assert.deepEqual(v.hero.before,{kicker:'You said it · A booking that is missing',quote:BOOKED},'the earlier scene\'s quote, its scene named');
+  assert.deepEqual(v.hero.after,{kicker:'And tonight',quote:REUSED},'tonight\'s line');
+  assert(after.turns.some(x=>x.role==='learner'&&x.text.includes(v.hero.after.quote)),'tonight\'s quote is the learner\'s reply');
+  assert.doesNotMatch(JSON.stringify(v.hero),/\d/,'no digit on the hero');assert.doesNotMatch(v.baseCaption,/\d/);
+  assert(V.viewText(v).includes('Yours now'));
+  console.log('# L1 recap hero:',JSON.stringify(v.hero));
+  // a later scene that used it again did not make it yours: "It came back", as before
+  const later=V.lingaView(sessionOf(fixture('linga-recap',{...getLearner('ema').english,conversation:{...after,id:'cZ'}})),{});
+  assert.equal(later.title,'It came back');
+  assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/<Kicker text=\{h\.kicker\?\?v\.tag\}\/>/,'the TV draws the comparison\'s own kicker');
+ }finally{Date.now=realNow;}
+});
+test('L1 case 6: the TV home draws the owned phrases as a strip with no count and no digit; Adult as a progress line; an adult scene\'s item never in Family',()=>{
+ const V=view(),digits={...YOURS_A,id:'n:1',better:'I have a booking for 2',reuses:[]};
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),React=require(path.join(root,'node_modules/react'));
+ const {Yours}=require(path.join(root,'src/english/OpenDoor.tsx'));
+ const v=V.lingaView(sessionOf(fixture('linga',{placement:placed(),taught:[YOURS_A,ADULT_OWNED,digits]})),{});assert.equal(v.home,'no-plan');
+ assert.deepEqual(v.hero.yours,{phrases:[BOOKED],style:'objects'},'Family: Open Door objects; the adult scene\'s item and the phrase with a digit are left out');
+ assert.doesNotMatch(JSON.stringify(v.hero.yours),/\d/,'no digit on the strip (the band in home\'s kicker is home\'s own, as before)');
+ const html=renderToStaticMarkup(React.createElement(Yours,v.hero.yours));
+ assert.match(html,/data-role="linga-yours"/);assert(html.includes(BOOKED));
+ assert.doesNotMatch(html.replace(/<[^>]*>/g,' '),/\d/,'the drawn strip shows no digit');
+ console.log('# L1 home strip:',JSON.stringify(v.hero.yours));
+ assert(V.viewText(v).includes(`Yours: "${BOOKED}"`));
+ assert.equal(V.lingaView(sessionOf(fixture('linga',{placement:placed()})),{}).hero.yours,undefined,'none owned: home as it was');
+ // Adult mode: the list as progress, and an adult scene's item is shown there
+ const adultPrefs={...defaultPreferences({type:'other'}),adultConfirmed:true};
+ const asJakub=(fx)=>{const s=sessionOf(fx);return {...s,learner:{...s.learner,id:'jakub',name:'Jakub'}};};
+ const a=V.lingaView(asJakub(fixture('linga',{placement:placed(),preferences:adultPrefs,taught:[YOURS_A,ADULT_OWNED]})),{});
+ assert.equal(a.hero.yours.style,'list');assert.deepEqual(a.hero.yours.phrases,[BOOKED,'What kind of music do you like']);
+ assert.match(renderToStaticMarkup(React.createElement(Yours,a.hero.yours)),/Phrases you own/);
+ // never over a conversation waiting
+ const resume=V.lingaView(sessionOf(fixture('linga',{placement:placed(),taught:[YOURS_A],conversation:convo({turns:REPLIED})})),{});
+ assert.equal(resume.home,'resume');assert.equal(resume.hero.yours,undefined);
+ assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/\{h\.yours&&<Yours phrases=\{h\.yours\.phrases\} style=\{h\.yours\.style\}\/>\}/,'the TV draws the strip under home\'s words');
+});
+test('L1 case 7: the print page lists each owned phrase with the learner\'s exact words from two uses and the scene names; an adult scene\'s item is absent in Family',()=>{
+ const O=own(),{renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),React=require(path.join(root,'node_modules/react'));
+ const {PhrasesYouOwn}=require(path.join(root,'src/english/PhrasesYouOwn.tsx'));
+ const {taughtAllowed}=require(path.join(root,'src/lib/english/curriculum.ts'));
+ const l={...emptyEnglish(),taught:[YOURS_A,ADULT_OWNED,{...TAUGHT_C}],sessions:[{id:'cA',sceneId:'booking',title:'A booking that is missing',at:NOON(0),turns:3}]};
+ const kid={id:'k',name:'K',type:'elementary',age:10,modules:['english']},adult={id:'a',name:'A',type:'other',modules:['english'],mode:'adult'};
+ // the replies still at hand (tonight's conversation cB): a quote from it must be an exact substring of one of them
+ const replies={cB:['Yes, I have a booking here.']};
+ const fam=O.ownedPhrases(l,taughtAllowed(kid,defaultPreferences(kid),l),replies);
+ assert.deepEqual(fam.map(o=>o.id),[YOURS_A.id],'Family: the adult scene\'s item is absent');
+ assert.deepEqual(fam[0].uses.map(u=>[u.quote,u.scene]),[[BOOKED,'A booking that is missing'],[BOOKED,'The missing moon rover']]);
+ assert(replies.cB.some(r=>r.includes(fam[0].uses[1].quote)),'an exact substring of the reply');
+ assert.deepEqual(O.ownedPhrases(l,taughtAllowed(adult,defaultPreferences(adult),l),replies).map(o=>o.id),[YOURS_A.id,'d:1'],'Adult: both');
+ assert.equal(O.ownedPhrases(l,()=>true,{cB:['I have booking, yes.']}).some(o=>o.id===YOURS_A.id),false,'a quote not in the reply at hand is never printed');
+ const html=renderToStaticMarkup(React.createElement(PhrasesYouOwn,{owned:fam}));
+ assert.match(html,/<h2>Phrases you own<\/h2>/);assert(html.includes(`<b>${BOOKED}</b>`));
+ assert.equal((html.match(/“I have a booking” · /g)||[]).length,2,'both of the learner\'s quotes');
+ assert(html.includes('A booking that is missing')&&html.includes('The missing moon rover'),'the scene names');
+ assert(!html.includes('music'),'Family: no adult item');assert.doesNotMatch(html.replace(/<[^>]*>/g,' '),/\d/,'no digit');
+ console.log('# L1 print section:',html.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim());
+ assert.equal(renderToStaticMarkup(React.createElement(PhrasesYouOwn,{owned:[]})),'','none owned: nothing printed');
+ const page=fs.readFileSync(path.join(root,'src/app/english/print/page.tsx'),'utf8');
+ assert.match(page,/ownedPhrases\(l,taughtAllowed\(p,l\.preferences\?\?defaultPreferences\(p\),l\),repliesOf\(s\.conversation\)\)/,'the page reads them through the audience rule and the quote check');
+ assert.match(page,/<PhrasesYouOwn owned=\{owned\}\/>/);
+ // collectibles stay the existing latches only (owner ruling S1): no collectible for "yours"
+ assert.doesNotMatch(fs.readFileSync(path.join(root,'src/lib/rules/collect.ts'),'utf8'),/yours/i);
 });

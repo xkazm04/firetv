@@ -10,11 +10,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-const opts={compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText,file);
+const L=require('./ts-load.cjs'),ts=L.ts(),{transpile}=L,opts=L.options;
 process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(os.tmpdir(),'desk-tv-recap-'));
 after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
 // loaded per test, so a missing module fails each case on its own
@@ -80,7 +76,7 @@ test('case 1: recapRows draws tonight\'s work per app - sets, pages, hints, talk
  const {recapRows}=recap();
  const s=evening();
  assert.deepEqual(recapRows(s,NOW),[
-  {app:'maths',empty:null,sets:[{right:4,of:6}],pages:1,hints:3,second:1},
+  {app:'maths',empty:null,sets:[{right:4,of:6}],pages:1,hints:3,second:1,hinted:[{name:null,second:false},{name:null,second:false}],slipped:[{name:'2',slip:'a number went wrong'}]},
   {app:'english',empty:null,talks:[7,4]},
   {app:'essay',empty:null,readings:[{lens:'Argument',against:2,of:5}]},
  ]);
@@ -92,9 +88,26 @@ test('case 2: only the apps on the learner\'s profile, in the desk\'s order; an 
  assert.deepEqual(recapRows(jakub({history:evening().history,englishLearning:evening().englishLearning}),NOW).map((t)=>t.app),['english','essay'],'Jakub never gets a Math Buddy tile, whatever his history holds');
  assert.deepEqual(recapRows(session({profiles:[{...EMA,modules:['essay','maths']}]}),NOW).map((t)=>t.app),['maths','essay'],'the desk\'s left-to-right order, not the profile\'s');
  const quiet=recapRows(session(),NOW);
- assert.deepEqual(quiet[0],{app:'maths',empty:'Not tonight',sets:[],pages:0,hints:0,second:0},'no counts invented');
+ assert.deepEqual(quiet[0],{app:'maths',empty:'Not tonight',sets:[],pages:0,hints:0,second:0,hinted:[],slipped:[]},'no counts invented');
  for(const t of quiet)assert.equal(t.empty,'Not tonight');
  assert.equal(words('Not tonight').length,2);
+});
+
+// the static words a screen's JSX can show: text nodes with each {...} removed, and a string or template literal that is a whole child with each ${...} removed; '=>' starts no text node
+function staticText(src){
+ const strip=(t)=>{let o;do{o=t;t=t.replace(/\{[^{}]*\}/g,' ');}while(t!==o);return t.replace(/{[^{}]*$/,' ');};
+ return [...src.matchAll(/(?<!=)>([^<>]*)</g)].map((m)=>{
+  const lit=m[1].match(/^\s*\{\s*(?:`([^`]*)`|"([^"]*)"|'([^']*)')\s*\}\s*$/);
+  return lit?(lit[1]??lit[2]??lit[3]).replace(/\$\{[^}]*\}/g,' '):strip(m[1]);
+ }).filter((t)=>/[A-Za-z]/.test(t)&&!/[=;()]/.test(t));
+}
+test('13-i-b: the Recap word check counts static words in text with expressions and in whole-child literals, and not code',()=>{
+ const count=(x)=>words(staticText(x).join(' ')).length;
+ assert.equal(count('<div>and {n} earlier</div>'),2);
+ assert.equal(count('<div>{`and ${n} earlier`}</div>'),2);
+ assert.equal(count('<i>{x}</i>'),0);
+ assert.equal(count('(_, i) => i < t.second'),0);
+ assert.equal(count('<p>Back to the desk</p>'),4);
 });
 
 test('case 3: the recap is a picture - no problem text, question or answer in its rows, and 25 words or fewer on screen',()=>{
@@ -109,7 +122,7 @@ test('case 3: the recap is a picture - no problem text, question or answer in it
  assert.ok(sec,'screens.tsx has its Recap section');
  assert.doesNotMatch(sec,/log\.hard/,'the hinted problems are not listed');
  assert.doesNotMatch(sec,/Send to parent/,'no fake send');
- const jsxText=[...sec.matchAll(/>([^<>{}]*)</g)].map((m)=>m[1]).filter((t)=>/[A-Za-z]/.test(t)&&!/[=;()]/.test(t));
+ const jsxText=staticText(sec);
  const captions=[session(),evening(),evening({history:[{at:TODAY(17),kind:'practice',label:'T',detail:'6 of 6 right'}],englishLearning:noEnglish,log:{...evening().log,hard:[],hints:0}}),jakub(),
   evening({history:[...evening().history,{at:TODAY(19),kind:'practice',label:'T',detail:'0 of 12 right'},{at:TODAY(19),kind:'writing',label:'Evidence',detail:'9 of 9 sentences to fix'}]})]
   .map((x)=>recapCaption(recapRows(x,NOW)));
@@ -197,17 +210,18 @@ test('case 6: Back, and Select on the desk, go to the landing at rest - for Ema 
 
 test('GUARD: the phone still receives the recap, and its End session still posts session.end',()=>{
  const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
- assert.match(phone,/s\.screen === "recap"/,'the phone\'s Recap panel opens while the TV is on the recap');
+ assert.match(phone,/tiles\.some\(\(t\) => !t\.empty\) \|\| \(s\.log\.endedAt \?\? 0\) >= startOfDay\(now\)/,'M7: the phone\'s Recap shows for a tile with work or an evening ended since local midnight, whatever the TV shows');
+ assert.doesNotMatch(phone,/s\.screen === "recap" \|\| s\.log\.problems\.length/,'M7: not tied to the TV\'s screen or the log');
+ assert.match(phone,/t\.app === "maths" && !t\.empty \? <ul key="hinted"><li data-role="phone-hinted">\{hintedLine\(t\)\}/,'M7 (MB-B23): the hinted-problems line only when the maths tile is not empty');
  assert.match(phone,/post\(\{ type: "session\.end" \}\)/,'End session on the phone');
 });
 
 test('extra: the recap rows stay free of the filesystem-backed session modules',()=>{
- const out=ts.transpileModule(fs.readFileSync(RECAP,'utf8'),opts).outputText;
+ const out=transpile(fs.readFileSync(RECAP,'utf8'),opts).outputText;
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);
 });
 
 // ---- follow-up 2026-09-25 (tv-recap): the recap draws without the model, and asks it at most once an evening; the shell and the modules import no cycle
-require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{...opts.compilerOptions,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
 // next/font runs only under Next: here each face module answers with its class names
 for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){
  const file=path.join(root,'src',f),m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
@@ -218,9 +232,9 @@ const {createElement}=require(path.join(root,'node_modules/react'));
 function draw(s,now){const {Recap}=require(path.join(root,'src/tv/screens.tsx'));const real=Date.now;if(now)Date.now=()=>now;
  try{return renderToStaticMarkup(createElement(Recap,{s,focus:0}));}finally{Date.now=real;}}
 /** The text engine, stubbed at the provider seam; `asked` counts the calls that reached it. */
-let asked=0;
-function engine(answer){asked=0;delete process.env.DESK_TEXT_ENGINE;require(path.join(root,'src/lib/desk/memory.ts'));
- reg().useProvider('text',{name:'stub',run:async()=>{asked++;return {raw:answer()};}});}
+let asked=0,lastReq=null;
+function engine(answer){asked=0;lastReq=null;delete process.env.DESK_TEXT_ENGINE;require(path.join(root,'src/lib/desk/memory.ts'));
+ reg().useProvider('text',{name:'stub',run:async(req)=>{asked++;lastReq=req;return {raw:answer()};}});}
 const SCRATCH='recap-scratch',DAYS2=2*86400000;
 /** Ema's evening at the real clock (the routes read the store, not a fixed now), on a scratch learner id. */
 function seat(patch={}){
@@ -238,6 +252,7 @@ async function openRecap(){
 }
 const backToDesk=()=>{for(const e of keys().tvKey(store().getSession(),'back',LOCAL).events)store().dispatch(e);};
 const lined=()=>JSON.stringify({lines:['They undo the constant first once they see it.']});
+const linedNew=()=>JSON.stringify({lines:['They read an argument one sentence at a time.']});
 
 test('follow-up 1: the recap opens with the text engine down - every tile and the caption drawn',async()=>{
  const {recapRows,recapCaption}=recap();
@@ -267,11 +282,111 @@ test('follow-up 2: two opens of the same evening -> at most one engine call',asy
 
 test('follow-up 3: an evening with nothing to note (no marked set, no hint) opens with no engine call',async()=>{
  try{
-  seat({practice:null,topic:null,log:{started:null,minutes:0,problems:[],hard:[],hints:0}});engine(lined);
+  seat({practice:null,topic:null,history:[],englishLearning:noEnglish,log:{started:null,minutes:0,problems:[],hard:[],hints:0}});engine(lined);
   const r=await require(path.join(root,'src/app/api/memory/route.ts')).POST(new Request('http://desk/api/memory',{method:'POST',body:'{}'}));
-  assert.equal(r.status,200);assert.deepEqual(await r.json(),{lines:[]});
+  assert.equal(r.status,200);assert.deepEqual(await r.json(),{lines:[],asked:false});
   assert.equal(asked,0,`engine calls: ${asked}`);
  }finally{reg().resetProviders();}
+});
+
+const memoryPost=async()=>{const r=await require(path.join(root,'src/app/api/memory/route.ts')).POST(new Request('http://desk/api/memory',{method:'POST',body:'{}'}));return {status:r.status,body:await r.json()};};
+const noMaths={practice:null,topic:null,log:{started:null,minutes:0,problems:[],hard:[],hints:0}};
+
+test('M2: an Essay-only evening and a Linga-only evening are written down too; the prompt carries counts and lens names, never a learner text',async()=>{
+ try{
+  seat({...noMaths,englishLearning:noEnglish,history:[{at:Date.now()-1000,kind:'writing',label:'Argument',detail:'1 of 5 sentences to fix, 1 fixed'}]});engine(linedNew);
+  let r=await memoryPost();
+  assert.equal(r.status,200);assert.deepEqual(r.body,{lines:['They read an argument one sentence at a time.'],asked:true});
+  assert.equal(asked,1,'an Essay line is work');
+  assert.match(lastReq.prompt,/Essay Master tonight/);assert.match(lastReq.prompt,/Argument lens: 5 sentences read, 2 to fix when read, 1 after rewrites/);
+  assert.doesNotMatch(lastReq.prompt,/Topic worked on tonight/,'no maths section for an evening with no maths');
+  assert.doesNotMatch(lastReq.prompt,/Linga tonight/);
+  r=await memoryPost();assert.deepEqual(r.body,{lines:[],asked:true,already:true},'the same evening is not written twice, and the answer says it was written already');assert.equal(asked,1);
+  // a new Essay line is new work: the evening key covers it
+  globalThis.__desk.session={...store().getSession(),history:[...store().getSession().history,{at:Date.now()-500,kind:'writing',label:'Evidence',detail:'2 of 4 sentences to fix'}]};
+  await memoryPost();assert.equal(asked,2,'a new reading is new work');
+  seat({...noMaths,history:[],englishLearning:{...noEnglish,sessions:[{id:'a',sceneId:'cafe',title:'At the cafe',at:Date.now()-1000,turns:7},{id:'b',sceneId:'station',title:'At the station',at:Date.now()-900,turns:4}]}});engine(lined);
+  r=await memoryPost();assert.equal(r.body.asked,true);assert.equal(asked,1,'a Linga conversation is work');
+  assert.match(lastReq.prompt,/Linga tonight: 2 English conversations, 11 replies/);
+  assert.doesNotMatch(lastReq.prompt,/cafe|station|Essay Master tonight|Topic worked on tonight/i,'no scene, no other app');
+  // yesterday's work is not tonight's
+  seat({...noMaths,englishLearning:noEnglish,history:[{at:YESTERDAY,kind:'writing',label:'Argument',detail:'2 of 5 sentences to fix'}]});engine(lined);
+  r=await memoryPost();assert.deepEqual(r.body,{lines:[],asked:false});assert.equal(asked,0);
+ }finally{reg().resetProviders();}
+});
+
+test('M3: the phone\'s What the desk noticed has five states, and a failed write never reads as an empty evening',()=>{
+ const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ assert.match(phone,/Nothing new to note tonight\./,'the model was asked and returned none');
+ assert.match(phone,/Nothing worked on tonight\./,'nothing was asked');
+ assert.match(phone,/Tonight is already written down\./,'End session after the TV Menu wrote the evening says it was written, not that there was nothing');
+ assert.match(phone,/already: j\.already === true/,'the route\'s already flag reaches the panel');
+ assert.doesNotMatch(phone,/Nothing written down tonight/,'the old catch-all is gone');
+ assert.match(phone,/asked: j\.asked !== false/,'the route says which case it is');
+ assert.match(phone,/\{ error: j\.error \?\? /,'a non-ok answer shows the desk\'s own sentence');
+ assert.match(phone,/catch \{ setMemory\(\{ error: /,'a thrown fetch is a failure too, not an empty evening');
+ assert.doesNotMatch(phone,/memory\.map\(\(l\) => <li key=\{l\}>/,'a list key is never the line text');
+ assert.match(phone,/memory\.lines\.map\(\(l, i\) => <li key=\{i\}>/);
+});
+
+test('M4: the phone End session ends the evening first, then writes it down, as the TV Menu does',()=>{
+ const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ const body=/const endSession = async \(\) => \{([\s\S]*?)\n  \};/.exec(phone)?.[1]??'';
+ assert.ok(body,'endSession found');
+ const end=body.indexOf('post({ type: "session.end" })'),mem=body.indexOf('call("/api/memory"'),busy=body.indexOf('setBusy(true)');
+ assert.ok(end>=0&&mem>end,'session.end is posted before /api/memory is called');
+ assert.ok(busy>=0&&busy<end,'busy is on from the first tap, before session.end is posted (a second tap in that round trip must not post another)');
+ assert.match(body.slice(0,end),/if \(ending\.current\) return;\s*ending\.current = true;/,'a ref guard answers a second tap at once, before the first render');
+ assert.match(body.slice(mem),/finally \{ setBusy\(false\); ending\.current = false; \}/,'busy and the guard are released together when the memory call is done');
+ assert.equal((body.match(/setBusy\(true\)/g)||[]).length,1,'busy is turned on once');
+ assert.doesNotMatch(body.slice(end),/setBusy\(true\)/,'the old shape, busy only around the memory call, is gone');
+ assert.match(body.slice(0,mem),/try \{ await post\(\{ type: "session\.end" \}\); \} catch \(e\) \{ setMsg\(/,'a failed session.end is caught and shown in the status line');
+ assert.doesNotMatch(body.slice(mem),/session\.end/,'nothing ends the evening after the memory');
+ assert.match(phone,/busy \? "Writing tonight down…" : "End session"/);
+ const tv=fs.readFileSync(path.join(root,'src/tv/keys.ts'),'utf8');
+ assert.ok(tv.indexOf('o.ev({ type: "session.end" }); o.calls.push({ url: "/api/memory"')>0,'the TV does the same order');
+ assert.match(fs.readFileSync(path.join(root,'src/lib/desk/memory.ts'),'utf8'),/model: "fast", thinking: false/,'writeMemory does not think');
+});
+
+test('M5: the evening log belongs to one evening - the first event of a later day clears it, session.end does not',()=>{
+ const {reduce}=store(),real=Date.now,at=(d,h)=>new Date(2026,8,d,h,0,0).getTime();
+ const hint=(key,stage=1)=>({type:'hint.set',hint:{key,problem:'3x + 7 = 1',stage,hint1:null,hint2:null,askedQ:'',owner:'ema'}});
+ try{
+  Date.now=()=>at(24,19);
+  let s=session({timer:{running:false,left:1500,phase:'work'},away:{jakub:{pages:[],pageIx:0,itemIx:0,reading:false,hint:null,lesson:null,noLesson:false,lessonPaused:false,topic:null,practice:null,walkIx:0,tasks:[],log:{problems:['j1'],hints:2,hard:['j-hard']}}}});
+  s=reduce(s,hint('k1'));s=reduce(s,{type:'hint.stage',stage:2});
+  assert.equal(s.log.hints,1);assert.deepEqual(s.log.hard,['3x + 7 = 1']);assert.equal(s.log.day,'2026-9-24','stamped with the local day on the first write');
+  Date.now=()=>at(24,23);
+  s=reduce(s,{type:'session.end'});
+  assert.equal(s.log.hints,1,'session.end clears nothing: the recap still reads it');assert.equal(s.away.jakub.log.hints,2);assert.equal(s.log.endedAt,at(24,23));
+  {Date.now=()=>at(25,9);const e=reduce(s,{type:'session.end'}),{recapRows:rr,recapCaption:rc}=recap();assert.equal(e.log.hints,0,'UD-13: ending on a later day clears the old log first');assert.equal(rc(rr(e,at(25,10))),'A quiet evening.');Date.now=()=>at(24,23);}
+  const same=reduce(s,{type:'focus',focus:0});assert.equal(same.log.hints,1,'later the same evening: kept');
+  Date.now=()=>at(25,17);
+  const next=reduce(s,{type:'focus',focus:0});
+  assert.deepEqual([next.log.hints,next.log.problems,next.log.hard,next.log.minutes,next.log.started],[0,[],[],0,null],'the first event of the next day clears the seated log');
+  assert.deepEqual(next.away.jakub.log,{problems:[],hints:0,hard:[]},'and every away slot\'s');
+  const {recapRows,recapCaption}=recap();
+  const tiles=recapRows(next,at(25,18));
+  assert.equal(recapCaption(tiles),'A quiet evening.');
+  assert.equal(tiles.find((t)=>t.app==='maths').hints,0);
+  // the second evening's own work is its own
+  const again=reduce(next,hint('k9'));assert.equal(again.log.hints,1);assert.equal(again.log.day,'2026-9-25');
+  // a log from before the stamp is dated by the day its timer started
+  const old=reduce(session({log:{started:at(23,16),minutes:30,problems:['a'],hard:[],hints:2}}),{type:'focus',focus:0});
+  assert.equal(old.log.hints,0);
+ }finally{Date.now=real;}
+});
+
+test('M6: "all of it right" needs a marked item; a hints-only, a homework-only and a Linga-only evening each say what they were',()=>{
+ const {recapRows,recapCaption}=recap(),cap=(s)=>recapCaption(recapRows(s,NOW));
+ const bare={practice:null,history:[],englishLearning:noEnglish,log:{started:null,minutes:0,problems:[],hard:[],hints:0}};
+ assert.equal(cap(session({...bare,history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'6 of 6 right'}]})),'Good evening\'s work - all of it right.');
+ assert.equal(cap(session({...bare,log:{...bare.log,hints:3}})),'Worked through with 3 hints; nothing was marked.');
+ assert.equal(cap(session({...bare,log:{...bare.log,hints:1}})),'Worked through with 1 hint; nothing was marked.');
+ assert.equal(cap(session({...bare,history:[{at:TODAY(18),kind:'homework',label:'Sheet one',detail:'8 problems read'}]})),'Read 1 page; nothing was marked.');
+ assert.equal(cap(session({...bare,englishLearning:{...noEnglish,sessions:[{id:'a',sceneId:'cafe',title:'x',at:TODAY(17),turns:7},{id:'b',sceneId:'station',title:'y',at:TODAY(18),turns:4}]}})),'Two conversations in English; nothing to mark.');
+ for(const c of [session({...bare,log:{...bare.log,hints:3}}),session({...bare,history:[{at:TODAY(18),kind:'homework',label:'Sheet one',detail:'8 problems read'}]})])assert.doesNotMatch(cap(c),/all of it right/);
+ assert.equal(cap(session({...bare,history:[{at:TODAY(19),kind:'writing',label:'Argument',detail:'2 of 5 sentences to fix'}]})),'Good evening\'s work - two to look at together.');
 });
 
 test('GUARD: new work after an open, or a write that failed, is still written down',async()=>{
@@ -293,7 +408,10 @@ test('GUARD: new work after an open, or a write that failed, is still written do
 const GOLDEN={ema:'6584d25f6a2d4cd2',jakub:'459bdc34371da4e6'};
 test('GUARD: the recap\'s tiles are drawn exactly as before - Ema\'s evening and Jakub\'s quiet one',()=>{
  const hash=(x)=>require('node:crypto').createHash('sha256').update(x).digest('hex').slice(0,16);
- assert.equal(hash(draw(evening(),NOW)),GOLDEN.ema);
+ // cycle 21: Ema's ringed arithmetic slip is now named under the rail; that one row aside, her tiles are byte for byte as before
+ const ema=draw(evening(),NOW),row=/<div class="rc-lamps" data-role="recap-slips">.*?<\/div>/s;
+ assert.deepEqual(slipsOfHtml(ema),['2 · a number went wrong'],'the only new thing is the named slip');
+ assert.equal(hash(ema.replace(row,'')),GOLDEN.ema);
  assert.equal(hash(draw(jakub(),NOW)),GOLDEN.jakub);
 });
 
@@ -339,7 +457,7 @@ test('follow-up 4, the scan bites: a seeded import cycle is found, and the same 
 });
 
 // ---- S76 (cx): the desk's "not sure" reaches the recap - a dashed ring, never a slip; an older line draws as it always did
-const TONIGHT=[{verdict:'right'},{verdict:'right'},{verdict:'right'},{verdict:'wrong'},{verdict:'unsure'},{verdict:'unsure'}];
+const TONIGHT=[{verdict:'right'},{verdict:'right'},{verdict:'right'},{verdict:'wrong'},{verdict:'unsure',studentAnswer:'4/22'},{verdict:'unsure',studentAnswer:'1.33'}]; // MB-B1: answers the desk could not call (an unsure item with no answer is skipped)
 const marksOf=(html)=>[...html.matchAll(/data-role="recap-set">(.*?)<\/div>/g)].map((m)=>[...m[1].matchAll(/data-v="(\w+)"><svg class="(rc-\w+)"/g)].map((x)=>`${x[1]}:${x[2]}`));
 test('S76 case 1: a set marked 3 right, 1 wrong, 2 not sure draws 3 ticks, 1 pen ring and 2 dashed rings',()=>{
  const {rightLine}=require(path.join(root,'src/lib/rules/maths.ts')),{parseDetail,recapRows,recapCaption}=recap();
@@ -374,7 +492,7 @@ test('S77: the phone\'s Recap is the TV\'s tiles in words - a line per app, the 
   {at:TODAY(18),kind:'homework',label:'Sheet two',detail:'1 problem read'},{at:TODAY(18),kind:'homework',label:'Sheet three',detail:'2 problems read'}],
   log:{...evening().log,hints:1}});
  assert.deepEqual(lines(s),[
-  'Math Buddy - one set: 3 right, 1 slip, 2 the desk was not sure of; 3 pages; 1 hint',
+  'Math Buddy - one set: 3 right, 1 slip, 2 the desk was not sure of; 3 pages; 1 hint, 1 needed a second',
   'Linga - two conversations, 11 replies',
   'Essay Master - one reading (Argument): 2 of 5 sentences to fix']);
  assert.deepEqual(lines(jakub()),['Linga - not tonight','Essay Master - not tonight'],'an app with nothing tonight says so');
@@ -462,4 +580,440 @@ test('S78: a task id is unique across everything the desk holds - many adds in o
   const y=reduce(session({tasks:[{id:'t'+T,sub:'maths',name:'old',min:5,done:false},{id:'t'+T+'-1',sub:'maths',name:'old2',min:5,done:false}]}),{type:'task.add',name:'new',sub:'maths',min:10});
   assert.equal(new Set(y.tasks.map((t)=>t.id)).size,3,'a fresh id beside two held ones');
  }finally{Date.now=real;}
+});
+
+const WR=(h,label,detail)=>({at:TODAY(h),kind:'writing',label,detail});
+const phoneEssay=(history)=>{const {recapRows,recapLine}=recap();return recapLine(recapRows(session({history}),NOW)[2]);};
+test('13-i RC1: the essay phone line never sums counts across readings; each count is one reading, in the order read',()=>{
+ assert.equal(phoneEssay([WR(19,'Argument','2 of 5 sentences to fix')]),'Essay Master - one reading (Argument): 2 of 5 sentences to fix');
+ assert.equal(phoneEssay([WR(17,'Evidence','3 of 5 sentences to fix'),WR(18,'Evidence','1 of 5 sentences to fix')]),'Essay Master - two readings (Evidence): 3 of 5, then 1 of 5 sentences to fix');
+ assert.equal(phoneEssay([WR(17,'Structure','2 of 5 sentences to fix'),WR(18,'Evidence','1 of 4 sentences to fix')]),'Essay Master - two readings: Structure 2 of 5, then Evidence 1 of 4 sentences to fix');
+ const five=[3,2,1].length&&[WR(10,'Evidence','4 of 5 sentences to fix'),WR(11,'Evidence','4 of 5 sentences to fix'),WR(12,'Evidence','3 of 5 sentences to fix'),WR(13,'Evidence','2 of 5 sentences to fix'),WR(14,'Evidence','1 of 5 sentences to fix')];
+ assert.equal(phoneEssay(five),'Essay Master - five readings (Evidence), the last three: 3 of 5, then 2 of 5, then 1 of 5 sentences to fix');
+ const mixed=[WR(10,'Structure','4 of 5 sentences to fix'),WR(11,'Evidence','4 of 5 sentences to fix'),WR(12,'Structure','2 of 5 sentences to fix'),WR(13,'Evidence','3 of 4 sentences to fix'),WR(14,'Structure','1 of 5 sentences to fix')];
+ assert.equal(phoneEssay(mixed),'Essay Master - five readings, the last three: Structure 2 of 5, then Evidence 3 of 4, then Structure 1 of 5 sentences to fix');
+ assert.equal(phoneEssay([WR(17,'Evidence','3 of 5 sentences to fix, 1 fixed'),WR(18,'Evidence','1 of 5 sentences to fix, 2 fixed')]),'Essay Master - two readings (Evidence): 3 of 5, then 1 of 5 sentences to fix, 3 fixed tonight','fixed stays summed over tonight');
+ // the recap lists lenses in history order, the order read
+ assert.match(phoneEssay([WR(17,'Structure','2 of 5 sentences to fix'),WR(18,'Argument','1 of 5 sentences to fix')]),/Structure 2 of 5, then Argument 1 of 5/);
+});
+test('13-i RC2: the caption counts only the last reading, so one paragraph read twice is not counted twice',()=>{
+ const {recapRows,recapCaption}=recap();
+ const cap=(h)=>recapCaption(recapRows(session({practice:null,englishLearning:noEnglish,log:{started:null,minutes:0,problems:[],hard:[],hints:0},history:h}),NOW));
+ assert.equal(cap([WR(18,'Evidence','3 of 5 sentences to fix'),WR(19,'Evidence','1 of 5 sentences to fix')]),'Good evening\'s work - one to look at together.');
+});
+test('13-i RC7: the phone\'s maths line says how many hints needed a second; no second, no clause',()=>{
+ const {recapRows,recapLine}=recap(),line=(log)=>recapLine(recapRows(session({log:{started:null,minutes:0,problems:['k'],hard:[],hints:0,...log}}),NOW)[0]);
+ assert.equal(line({hints:3,hard:['a']}),'Math Buddy - 3 hints, 1 needed a second');
+ assert.equal(line({hints:1}),'Math Buddy - 1 hint');
+});
+
+test('13-i RC4: railOf keeps a reading with something to fix citron and a clean one never',()=>{
+ const {railOf}=recap();
+ for(const [of,against,arrows,back] of [[5,2,5,2],[12,3,12,3],[14,2,12,2],[14,14,12,12],[30,1,12,1],[30,29,12,11],[20,0,12,0],[0,0,0,0]])
+  assert.deepEqual(railOf(of,against),{arrows,back},`railOf(${of},${against})`);
+});
+test('13-i RC3: five readings draw the last three rails and "2 earlier"; maths sets do the same',()=>{
+ const hist=[10,11,12,13,14].map((h,i)=>WR(h,'Evidence',`${i+1} of 14 sentences to fix`));
+ const html=draw(session({history:hist}),NOW);
+ assert.equal((html.match(/data-role="recap-reading"/g)||[]).length,3);
+ assert.equal((html.match(/data-role="recap-earlier"/g)||[]).length,1);
+ assert.match(html,/2 earlier/);
+ const sets=[10,11,12,13,14].map((h)=>({at:TODAY(h),kind:'practice',label:'Two-step equations',detail:'3 of 6 right'}));
+ const m=draw(session({history:sets}),NOW);
+ assert.equal((m.match(/data-role="recap-set"/g)||[]).length,3);
+ assert.match(m,/2 earlier/);
+ assert.doesNotMatch(draw(session({history:hist.slice(0,3)}),NOW),/recap-earlier/,'three readings need no earlier line');
+});
+// SW5 (scan-sweep optimize 2026-10-13): the Linga tile draws its last five talks and, like the other two tiles, says how many came before
+test('SW5: seven talks tonight draw the last five marks and "2 earlier"; five or fewer draw no earlier line',()=>{
+ const talks=(n)=>Array.from({length:n},(_,i)=>({id:`t${i}`,sceneId:'cafe',title:'At the cafe',at:TODAY(10+i),turns:3+i}));
+ const html=draw(session({englishLearning:{...noEnglish,sessions:talks(7)}}),NOW);
+ const tile=html.slice(html.indexOf('data-app="english"'),html.indexOf('data-app="essay"'));
+ assert.equal((tile.match(/data-role="recap-talk"/g)||[]).length,5,'the last five talks');
+ assert.match(tile,/data-role="recap-earlier"[^>]*>2 earlier</,'and the two before them, counted');
+ const five=draw(session({englishLearning:{...noEnglish,sessions:talks(5)}}),NOW);
+ const t5=five.slice(five.indexOf('data-app="english"'),five.indexOf('data-app="essay"'));
+ assert.equal((t5.match(/data-role="recap-talk"/g)||[]).length,5);assert.doesNotMatch(t5,/recap-earlier/,'five need no earlier line');
+});
+// SW6 (scan-sweep optimize 2026-10-13): the shell's lesson ticker asks nothing the phone cannot do and names the remote's button
+test('SW6: the lesson ticker - paused or playing - names Play, not the bench keyboard, and asks no circle on the phone',()=>{
+ const {LessonScreen}=require(path.join(root,'src/tv/screens.tsx'));
+ const lesson={id:'l1',title:'Past simple',t:0,text:'yesterday · ago',why:'Unit 6.',youtube:null};
+ const ticker=(paused)=>{const h=renderToStaticMarkup(createElement(LessonScreen,{s:session({subject:'english',screen:'lesson',lesson,lessonPaused:paused})}));return h.slice(h.indexOf('class="ticker"'));};
+ for(const paused of [false,true]){
+  const t=ticker(paused);
+  // no phone panel circles a lesson frame (tools/phone-panel-test.cjs NO_PANEL): the TV must not ask for one
+  assert.doesNotMatch(t,/circle on the phone/i,`paused=${paused}: no ask the phone cannot answer`);
+  assert.doesNotMatch(t,/\bSpace\b/,`paused=${paused}: the remote has no Space key`);
+  assert.match(t,/\bPlay\b/,`paused=${paused}: the remote's own button`);
+ }
+ assert.match(ticker(true),/paused/);assert.match(ticker(false),/playing/);
+});
+// SW11 (scan-sweep optimize 2026-10-13, tv-surface): Play/Pause reaches the player - the embed accepts commands and the lesson screens send them
+/** A TS/TSX source with block comments and whole-line or trailing // comments removed (a URL's // is kept). */
+const noComments=(t)=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
+test('SW11: the lesson embed enables the player API and both lesson screens send pauseVideo/playVideo when lessonPaused changes',()=>{
+ const {LessonScreen}=require(path.join(root,'src/tv/screens.tsx')),M=require(path.join(root,'src/maths/MathsTV.tsx'));
+ const lesson={id:'l1',title:'Past simple',t:0,text:'yesterday · ago',why:'Unit 6.',youtube:'abc123',concepts:[]};
+ const shellHtml=renderToStaticMarkup(createElement(LessonScreen,{s:session({subject:'english',screen:'lesson',lesson})}));
+ const mathsHtml=renderToStaticMarkup(createElement(M.LessonScreen,{s:session({subject:'maths',screen:'lesson',lesson})}));
+ for(const [name,h] of [['shell',shellHtml],['maths',mathsHtml]]){
+  const src=(h.match(/<iframe[^>]*src="([^"]*)"/)||[])[1];
+  assert.ok(src,`${name}: the embed is drawn`);
+  assert.match(src,/(\?|&amp;|&)enablejsapi=1(&amp;|&|$)/,`${name}: the embed accepts player commands`);
+ }
+ // the command the player takes, as the IFrame API's postMessage form
+ const {playerCommand}=keys();
+ assert.equal(typeof playerCommand,'function','keys.ts names the command');
+ assert.deepEqual(JSON.parse(playerCommand(true)),{event:'command',func:'pauseVideo',args:''});
+ assert.deepEqual(JSON.parse(playerCommand(false)),{event:'command',func:'playVideo',args:''});
+ // each lesson screen posts it to the embed's window
+ for(const f of ['src/tv/screens.tsx','src/maths/MathsTV.tsx']){
+  const t=noComments(fs.readFileSync(path.join(root,f),'utf8'));
+  assert.match(t,/playerCommand\(/,`${f}: sends the command`);
+  assert.match(t,/postMessage\(/,`${f}: posts it to the iframe`);
+ }
+});
+// SW12 (scan-sweep optimize 2026-10-13, tv-surface): Math Buddy's lesson says what SW6 holds for the shell - Play, no circle on the phone, no Space
+test('SW12: the maths lesson line - paused or playing - names Play, not the bench keyboard, and asks no circle on the phone',()=>{
+ const M=require(path.join(root,'src/maths/MathsTV.tsx'));
+ const lesson={id:'l1',title:'Past simple',t:0,text:'yesterday · ago',why:'Unit 6.',youtube:null,concepts:[]};
+ const line=(paused)=>{const h=renderToStaticMarkup(createElement(M.LessonScreen,{s:session({subject:'maths',screen:'lesson',lesson,lessonPaused:paused})}));const i=h.indexOf('class="mb-paused"');return h.slice(i,h.indexOf('</div>',i));};
+ for(const paused of [false,true]){
+  const t=line(paused);
+  assert.ok(t.length>0,`paused=${paused}: the line is drawn`);
+  assert.doesNotMatch(t,/circle on the phone/i,`paused=${paused}: no ask the phone cannot answer`);
+  assert.doesNotMatch(t,/\bSpace\b/,`paused=${paused}: the remote has no Space key`);
+  assert.match(t,/\bPlay\b/,`paused=${paused}: the remote's own button`);
+ }
+});
+// SW14 (scan-sweep optimize 2026-10-13, tv-surface): the hint and lesson screens draw an empty state, as the page and sentence screens do
+test('SW14: hint and lesson with their data gone draw a band, a title and a caption naming Back - not an empty stage',()=>{
+ const {HintScreen,LessonScreen,PageScreen,SentenceScreen}=require(path.join(root,'src/tv/screens.tsx'));
+ const drawn=[['hint',createElement(HintScreen,{s:session({subject:'english',screen:'hint',hint:null}),focus:0})],['lesson',createElement(LessonScreen,{s:session({subject:'english',screen:'lesson',lesson:null})})],
+  ['page',createElement(PageScreen,{s:session({screen:'page',pages:[]}),view:'band'})],['sentence',createElement(SentenceScreen,{s:session({subject:'english',screen:'sentence',english:null}),focus:0})]];
+ const empty=drawn.filter(([,el])=>renderToStaticMarkup(el)==='').map(([n])=>n);
+ assert.deepEqual(empty,[],'no data screen draws nothing');
+ for(const [n,el] of drawn.slice(0,2)){
+  const h=renderToStaticMarkup(el);
+  assert.match(h,/class="band /,`${n}: the band`);
+  assert.match(h,/class="title"/,`${n}: a title`);
+  assert.match(h,/class="cap"[^]*Back/,`${n}: a caption that names Back`);
+ }
+});
+// SW15 (scan-sweep optimize 2026-10-13, tv-surface): a label that carries the meaning alone is at or above On Air's 28 px floor (docs/DESIGN-ON-AIR.md: furniture labels only go to 20-22 px)
+/** [selector, px] for every rule of a stylesheet that draws generated text from an attribute and sets a px font size. */
+function attrLabelSizes(css){
+ const out=[];
+ for(const m of css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/([^{}]+)\{([^{}]*)\}/g)){
+  if(!/content:\s*attr\(/.test(m[2]))continue;
+  const px=m[2].match(/font-size:\s*(\d+(?:\.\d+)?)px/);
+  if(px)out.push([m[1].trim(),Number(px[1])]);
+ }
+ return out;
+}
+test('SW15: the sentence screen\'s tense label (.tok::after, content attr(data-l)) is at least 28 px',()=>{
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8');
+ const rows=attrLabelSizes(css);
+ assert.ok(rows.some(([sel])=>/\.tok::after/.test(sel)),'control: the scan finds the label rule');
+ assert.deepEqual(rows.filter(([,px])=>px<28),[],'no attribute-drawn label is under the floor');
+ // the scan bites: a seeded 26 px label is found, the same rule in a comment is not
+ assert.deepEqual(attrLabelSizes('.x::after { content: attr(data-l); font-size: 26px; }'),[['.x::after',26]]);
+ assert.deepEqual(attrLabelSizes('/* .x::after { content: attr(data-l); font-size: 26px; } */'),[]);
+});
+// SW16 (scan-sweep optimize 2026-10-13, tv-surface): the /probe hydration check is a dev-server tool - a production build answers 404
+test('SW16: /probe renders in development and throws notFound() in production',()=>{
+ const Probe=require(path.join(root,'src/app/probe/page.tsx')).default;
+ const was=process.env.NODE_ENV;
+ try{
+  process.env.NODE_ENV='development';
+  assert.match(renderToStaticMarkup(createElement(Probe)),/probe:/,'control: the dev page is drawn');
+  process.env.NODE_ENV='production';
+  let err=null;try{renderToStaticMarkup(createElement(Probe));}catch(e){err=e;}
+  assert.ok(err,'production does not draw the diagnostic page');
+  assert.match(String(err.digest??''),/NEXT_(HTTP_ERROR_FALLBACK|NOT_FOUND)/,'it is the framework\'s 404, not another error');
+ }finally{process.env.NODE_ENV=was;}
+});
+// SW9 (scan-sweep optimize 2026-10-13): the page's lower third marks a cut paragraph as cut, and only a cut one (as the lesson text does)
+test('SW9: an essay paragraph on the page screen ends in an ellipsis only when it was cut',()=>{
+ const {PageScreen}=require(path.join(root,'src/tv/screens.tsx'));
+ const pg=(text)=>({id:'e1',subject:'essay',day:'x',title:'My essay',img:'',w:100,h:100,readMs:2000,items:[{n:1,key:'k1',text,band:[0,10]}]});
+ const lt=(text)=>{const h=renderToStaticMarkup(createElement(PageScreen,{s:session({screen:'page',pages:[pg(text)]}),view:'band'}));const m=h.match(/class="txt"[^>]*>([^<]*)</);return m&&m[1];};
+ assert.equal(lt('Cats sleep a lot.'),'Cats sleep a lot.','a short paragraph is shown whole, with no ellipsis');
+ const long='word '.repeat(40).trim();
+ assert.equal(lt(long),long.slice(0,110)+'…','a long one is cut at 110 and says so');
+});
+// SW10 (scan-sweep optimize 2026-10-13): On Air's stylesheet carries only rules some screen draws - it ships on every page, the phone's too
+/** The class names desk/src hands to className (JSX attributes, className props, and the consts they name), comments ignored by the parser. */
+function drawnClasses(){
+ const used=new Set(),words=(t)=>t.split(/\s+/).forEach((w)=>w&&used.add(w)),files=[];
+ const walk=(d)=>{for(const f of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,f.name);if(f.isDirectory())walk(p);else if(/\.tsx?$/.test(f.name))files.push(p);}};walk(path.join(root,'src'));
+ for(const f of files){
+  const sf=ts.createSourceFile(f,fs.readFileSync(f,'utf8'),ts.ScriptTarget.Latest,true,f.endsWith('x')?ts.ScriptKind.TSX:ts.ScriptKind.TS);
+  const decl=new Map();(function d(n){if(ts.isVariableDeclaration(n)&&ts.isIdentifier(n.name)&&n.initializer)decl.set(n.name.text,n.initializer);ts.forEachChild(n,d);})(sf);
+  const seen=new Set();
+  const strings=(n)=>{if(!n)return;if(ts.isStringLiteralLike(n))words(n.text);else if(ts.isTemplateExpression(n)){words(n.head.text);n.templateSpans.forEach((s)=>{strings(s.expression);words(s.literal.text);});}
+   else if(ts.isIdentifier(n)&&decl.has(n.text)&&!seen.has(n.text)){seen.add(n.text);strings(decl.get(n.text));}else ts.forEachChild(n,strings);};
+  (function v(n){if((ts.isJsxAttribute(n)&&n.name.getText()==='className')||(ts.isPropertyAssignment(n)&&/className/i.test(n.name.getText())))strings(n.initializer);ts.forEachChild(n,v);})(sf);
+ }
+ return used;
+}
+const deadIn=(css,used)=>[...new Set([...css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/\.([a-zA-Z][\w-]*)/g)].map((m)=>m[1]))].filter((c)=>!used.has(c));
+test('SW10: every class On Air styles is drawn by some screen - no dead rules shipped to the TV and the phone',()=>{
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8'),used=drawnClasses();
+ assert.deepEqual(deadIn(css,used),[],'on-air.css styles classes nothing draws');
+ // the scan bites: a seeded rule nobody draws is found, and the same rule in a comment is not
+ assert.deepEqual(deadIn(css+'\n.sw-seeded-dead { color: red; }',used),['sw-seeded-dead']);
+ assert.deepEqual(deadIn(css+'\n/* .sw-seeded-dead { color: red; } */',used),[]);
+ assert.ok(used.has('rc-tile')&&used.has('band-corner')&&used.has('btn'),'control: classes the screens draw are seen');
+});
+
+// ---- MB-B1: an item left empty is skipped - counted and said apart from the desk's doubt, never a slip, never "all right"
+const SKIPPY=[{verdict:'right',studentAnswer:'4'},{verdict:'right',studentAnswer:'5'},{verdict:'right',studentAnswer:'6'},{verdict:'right',studentAnswer:'7'},{verdict:'unsure',studentAnswer:''}];
+test('MB-B1 recap 1: "4 of 5 right, 1 skipped" - the recap says "4 right, 1 skipped", not "1 the desk was not sure of", and never "all of it right"',()=>{
+ const {rightLine}=require(path.join(root,'src/lib/rules/maths.ts')),{parseDetail,recapRows,recapLine,recapCaption,toLook,slipsOf}=recap();
+ const line=rightLine(SKIPPY);
+ assert.equal(line,'4 of 5 right, 1 skipped');
+ assert.deepEqual(parseDetail('practice',line),{right:4,of:5,skipped:1});
+ const s=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:line}],log:{...evening().log,hints:0,hard:[]}});
+ const rows=recapRows(s,NOW);
+ assert.deepEqual(rows[0].sets,[{right:4,of:5,skipped:1}]);assert.equal(slipsOf(rows[0].sets[0]),0,'no slip');
+ assert.equal(recapLine(rows[0]),'Math Buddy - one set: 4 right, 1 skipped');
+ assert.doesNotMatch(recapLine(rows[0]),/not sure|slip/);
+ assert.doesNotMatch(recapCaption(rows),/all of it right/,'a skipped item is not right');
+ assert.ok(toLook(rows)>=1,'the skipped item is still one to go through together');
+});
+test('MB-B1 recap 2: a set with a slip, a doubt and a skip says all three apart; an all-skipped set; an older line keeps its "not sure"',()=>{
+ const {rightLine}=require(path.join(root,'src/lib/rules/maths.ts')),{parseDetail,recapRows,recapLine}=recap();
+ const mix=[{verdict:'right',studentAnswer:'4'},{verdict:'wrong',studentAnswer:'5'},{verdict:'unsure',studentAnswer:'4/22'},{verdict:'unsure',studentAnswer:' '}];
+ assert.equal(rightLine(mix),'1 of 4 right, 1 not sure, 1 skipped');
+ assert.deepEqual(parseDetail('practice','1 of 4 right, 1 not sure, 1 skipped'),{right:1,of:4,unsure:1,skipped:1});
+ const s=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:rightLine(mix)}]});
+ assert.match(recapLine(recapRows(s,NOW)[0]),/one set: 1 right, 1 slip, 1 the desk was not sure of, 1 skipped;/);
+ const none=[{verdict:'unsure',studentAnswer:''},{verdict:'unsure'}];
+ assert.equal(rightLine(none),'0 of 2 right, 2 skipped');
+ assert.deepEqual(parseDetail('practice','0 of 2 right, 2 skipped'),{right:0,of:2,skipped:2});
+ const all=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'0 of 2 right, 2 skipped'}]});
+ assert.match(recapLine(recapRows(all,NOW)[0]),/one set: 0 right, 2 skipped;/);
+ // counts past the set, out of order, or unparseable give nothing, as before
+ for(const d of ['1 of 2 right, 1 not sure, 1 skipped','1 of 4 right, 1 skipped, 1 not sure','1 of 4 right, skipped','1 of 4 right, 1 skip'])assert.deepEqual(parseDetail('practice',d),{},d);
+ // a line written before skipped existed still reads as it did: its blanks stay in its "not sure"
+ assert.deepEqual(parseDetail('practice','3 of 6 right, 2 not sure'),{right:3,of:6,unsure:2});
+});
+test('MB-B1 recap 3: the TV tile draws a skipped item as the empty answer line, after the slips and the doubt, never a ring',()=>{
+ const {setMarks}=recap();
+ assert.deepEqual(setMarks({right:1,of:4,unsure:1,skipped:1}),['right','wrong','unsure','skipped']);
+ assert.deepEqual(setMarks({right:0,of:2,skipped:2}),['skipped','skipped']);
+ assert.deepEqual(setMarks({right:3,of:6}),['right','right','right','wrong','wrong','wrong'],'an older line: as before');
+ assert.equal(setMarks({right:10,of:20,skipped:5}).length,12,'at most twelve marks a set');
+ const s=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'1 of 4 right, 1 not sure, 1 skipped'}]});
+ assert.deepEqual(marksOf(draw(s,NOW)),[['right:rc-tk','look:rc-ring','unsure:rc-ask','skipped:rc-skip']]);
+ const all=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'0 of 2 right, 2 skipped'}]});
+ assert.deepEqual(marksOf(draw(all,NOW)),[['skipped:rc-skip','skipped:rc-skip']],'an all-skipped set: no ring, no tick');
+});
+
+// MB-B23: the recap names which problems had a hint, by the name the learner knows them - never their text
+const HP=(id,items)=>({id,subject:'maths',title:'Sheet',img:'',w:1,h:1,items:items.map(([n,label,text],i)=>({n,...(label?{label}:{}),text,cx:0,cy:i,band:[i,i],key:`${id}:${n}${label?`:${label}`:''}`}))});
+const SHEET=HP('pA',[[3,null,'2x + 1 = 7'],[5,'a)','x/2 = 4'],[5,'b)','3x - 2 = 10']]);
+const hintTile=(log,pages=[SHEET])=>recap().recapRows(session({pages,log:{started:null,minutes:0,problems:[],hard:[],hints:0,...log}}),NOW)[0];
+test('MB-B23 rows 1: the hinted problems are named in page order, a lettered part with its number, and the second hint by name',()=>{
+ const {hintedLine}=recap();
+ const t=hintTile({problems:['pA:5:b)','pA:3'],hard:['3x - 2 = 10'],hints:3});
+ assert.deepEqual(t.hinted,[{name:'3',second:false},{name:'5b',second:true}]);
+ assert.equal(hintedLine(t),'Hints on 3 and 5b; a second on 5b.');
+ assert.equal(hintedLine(hintTile({problems:['pA:3'],hints:1})),'A hint on 3; none needed a second.');
+ assert.equal(hintedLine(hintTile({problems:['pA:5:a)'],hard:['x/2 = 4'],hints:2})),'Hints on 5a; a second on 5a.');
+ const flat=hintedLine(t)+JSON.stringify(t.hinted);
+ for(const [,, text] of [[3,null,'2x + 1 = 7'],[5,'a)','x/2 = 4'],[5,'b)','3x - 2 = 10']])assert.ok(!flat.includes(text),'never a problem\'s text');
+});
+test('MB-B23 rows 2: an empty evening, an unnameable hint, a page gone and two pages with the same number',()=>{
+ const {hintedLine,problemName}=recap();
+ assert.equal(hintedLine(hintTile({})),'No hints tonight.');
+ assert.deepEqual(hintTile({}).hinted,[]);
+ assert.equal(hintedLine(hintTile({problems:['k1'],hints:1})),'Nothing needed a second hint.','a key that names nothing is counted, never guessed');
+ assert.equal(hintedLine(hintTile({problems:['k1'],hard:['some text'],hints:2})),'1 problem needed a second hint.');
+ assert.equal(hintedLine(hintTile({problems:['gone:4:c)'],hints:1},[])),'A hint on 4c; none needed a second.','a page no longer held: named from its key');
+ const two=hintTile({problems:['pA:3','pB:3'],hard:['y = 2'],hints:3},[SHEET,HP('pB',[[3,null,'y = 2']])]);
+ assert.equal(hintedLine(two),'Hints on 3 on page 1 and 3 on page 2; a second on 3 on page 2.');
+ assert.equal(problemName(5,'(b)'),'5b');assert.equal(problemName(2,'3b'),'3b');assert.equal(problemName(7),'7');assert.equal(problemName(7,'part one'),'7');
+});
+test('MB-B23 rows 3: a long evening names six and says how many more; a second hint past the six is counted',()=>{
+ const {hintedLine}=recap();
+ const page=HP('pL',Array.from({length:9},(_,i)=>[i+1,null,`q${i+1}`]));
+ const t=hintTile({problems:page.items.map((x)=>x.key).reverse(),hard:['q2','q9'],hints:11},[page]);
+ assert.equal(hintedLine(t),'Hints on 1, 2, 3, 4, 5, 6 and 3 more; 2 problems needed a second.');
+ assert.equal(hintedLine(hintTile({problems:page.items.slice(0,7).map((x)=>x.key),hard:['q2'],hints:8},[page])),'Hints on 1, 2, 3, 4, 5, 6 and 1 more; a second on 2.');
+});
+test('MB-B23 rows 4: the names are the seated learner\'s - a learner switch takes the hints away with the pages',()=>{
+ const {reduce}=store(),{hintedLine}=recap();
+ const s=session({profiles:[EMA,{...JAKUB,modules:['maths','english','essay']}],pages:[SHEET],log:{started:null,minutes:0,problems:['pA:3'],hard:[],hints:1}});
+ const j=reduce(s,{type:'learner.set',id:'jakub'});
+ assert.equal(hintedLine(recap().recapRows(j,NOW).find((t)=>t.app==='maths')),'No hints tonight.');
+ const back=reduce(j,{type:'learner.set',id:'ema'});
+ assert.equal(hintedLine(recap().recapRows(back,NOW).find((t)=>t.app==='maths')),'A hint on 3; none needed a second.');
+});
+const lampsOf=(html)=>[...html.matchAll(/<span class="rc-lamp"( data-second="true")?(?: data-page="(\d+)")?><b><\/b><em>([^<]*)(?:<small>.*?<\/small>)?<\/em><\/span>/g)].map((m)=>`${m[3]}${m[2]?` p${m[2]}`:''}${m[1]?'!':''}`);
+test('MB-B23 TV: a lamp per hinted problem with its name beneath, the second-hint lamp ringed, five at most then "k more"',()=>{
+ const one=draw(session({pages:[SHEET],log:{started:null,minutes:0,problems:['pA:5:b)','pA:3'],hard:['3x - 2 = 10'],hints:3}}),NOW);
+ assert.deepEqual(lampsOf(one),['3','5b!']);
+ for(const text of ['2x + 1 = 7','3x - 2 = 10'])assert.ok(!one.includes(text),'never a problem\'s text on the TV');
+ const page=HP('pL',Array.from({length:8},(_,i)=>[i+1,null,`q${i+1}`]));
+ const many=draw(session({pages:[page],log:{started:null,minutes:0,problems:page.items.map((x)=>x.key),hard:[],hints:8}}),NOW);
+ assert.deepEqual(lampsOf(many),['1','2','3','4','5']);
+ assert.match(many,/data-role="recap-hints-more">3 more</);
+ const two=draw(session({pages:[SHEET,HP('pB',[[3,null,'y = 2']])],log:{started:null,minutes:0,problems:['pA:3','pB:3'],hard:[],hints:2}}),NOW);
+ assert.deepEqual(lampsOf(two),['3 p1','3 p2'],'two problems called 3: the page under each');
+ // a log written before the names (no key the session can read): a lamp per hint as before, no label
+ const old=draw(session({log:{started:null,minutes:0,problems:['k1'],hard:['t'],hints:2}}),NOW);
+ assert.deepEqual(lampsOf(old),[]);assert.equal([...old.matchAll(/<b( data-second="true")?><\/b>/g)].length,2);
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8'),em=/\.rc \.rc-lamp em \{[^}]*?(\d+)px/.exec(css);
+ assert.ok(em&&+em[1]>=28,'the name under a lamp is 28px or more');
+});
+test('MB-B23 phone: the Recap tab says which problems had a hint by name, from hintedLine - never the problem\'s text',()=>{
+ const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ const sec=phone.split('screen === "parent"')[1]?.split('<WeekPage')[0]??'';
+ assert.match(sec,/hintedLine\(/,'the parent panel calls hintedLine');
+ assert.doesNotMatch(sec,/log\.hard\.map|Needed a second hint: \{/,'no hinted problem\'s text on the phone');
+ assert.match(sec,/data-role="phone-hinted"/);
+ // tonight's slips: the line slippedLine words (two then "k more", short labels, never a value), only when it names one
+ assert.match(sec,/\{slippedLine\(t\) && <li data-role="phone-slipped">\{slippedLine\(t\)\}<\/li>\}/,'the parent panel draws slippedLine under the hinted line, and nothing when it is null');
+});
+
+// cycle 19: the recap names a step up's slips - the ringed item's number and the slip's short label from rules, never a value
+const PCT={topic:'pct-change',marked:true,stretch:true,items:[
+ {n:1,question:'Increase 80 by 25%.',studentAnswer:'100',verdict:'right',tier:3,stretch:true},
+ {n:2,question:'Increase 200 by 10% then by 20%.',studentAnswer:'260',verdict:'wrong',slip:'pct-added',tier:3,stretch:true},
+ {n:3,question:'After a 20% rise it costs 60. What did it cost before?',studentAnswer:'48',verdict:'wrong',slip:'pct-of-new',tier:3,stretch:true},
+ {n:4,question:'Decrease 50 by 10%.',studentAnswer:'40',verdict:'wrong',slip:'pct-ten-stopped'},
+ {n:5,question:'Increase 30 by 10%.',studentAnswer:'34',verdict:'wrong'}]};
+const pctEvening=(patch={})=>session({practice:PCT,history:[{at:TODAY(17),kind:'practice',label:'Percent increase and decrease',detail:'1 of 5 right'}],...patch});
+// cycle 21: every slip a marked set can name carries a short - the linear, Calculus and school tables, exhaustively, so a
+// slip added later without one fails here; each fits under a ring, has no value, and no two slips one topic can name share one
+test('cycle 21 rules: every slip that can be named on a marked set has a short - lowercase, four words at most, no digit, distinct within its topic',()=>{
+ const S=require(path.join(root,'src/lib/rules/school.ts')),C=require(path.join(root,'src/lib/rules/calc.ts'));
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ // the Calculus shorts sit beside CALC_SLIPS (CALC_SLIP_SHORT), so the frozen Calculus 1 table stays byte for byte
+ const calc=C.CALC_SLIPS.map((x)=>({...x,short:C.CALC_SLIP_SHORT[x.id]}));
+ assert.deepEqual(Object.keys(C.CALC_SLIP_SHORT).sort(),C.CALC_SLIPS.map((x)=>x.id).sort(),'a short for every Calculus slip, and no stray id');
+ const tables=[['linear',M.SLIPS],['calculus',calc],['school',S.SCHOOL_SLIPS]];
+ let n=0;
+ for(const [t,rows] of tables)for(const x of rows){
+  n++;
+  assert.equal(typeof x.short,'string',`${t} ${x.id}: has a short`);
+  assert.ok(x.short.trim()===x.short&&x.short.length>0,`${t} ${x.id}: not blank`);
+  assert.equal(x.short,x.short.toLowerCase(),`${t} ${x.id}`);assert.doesNotMatch(x.short,/\d/,`${t} ${x.id}: no digit`);
+  assert.ok(x.short.split(/\s+/).length<=S.SHORT_WORDS&&x.short.length<=S.SHORT_CHARS,`${t} ${x.id}: "${x.short}" fits`);
+ }
+ assert.ok(n>=80,`all ${n} slips checked`);
+ // every id a topic can name, read the way slip(id, topic) reads it: a school unit's list with its top rung, a calc topic's
+ // shapes (rules/calc slipsFor, calc2's ids included), the linear topics' table
+ const {calcTopics}=require(path.join(root,'src/lib/library/paths.ts'));
+ const topics=new Set([...Object.keys(S.SCHOOL_UNIT_SLIPS),...Object.keys(S.SCHOOL_TOP_SLIPS),'linear-one-step','linear-two-step','linear-both-sides',...calcTopics().map((t)=>t.id)]);
+ for(const topic of topics){
+  const ids=new Set([...M.slipsFor(topic).map((s)=>s.id),...(S.SCHOOL_TOP_SLIPS[topic]??[])]);
+  for(const sh of (calcTopics().find((t)=>t.id===topic)?.shapes??[]))for(const id of C.slipsFor(sh))ids.add(id);
+  assert.ok(ids.size>0,`${topic}: has slips`);
+  const seen=new Map();
+  for(const id of ids){
+   const s=M.slip(id,topic);
+   assert.ok(s&&typeof s.short==='string'&&s.short,`${topic} ${id}: named with a short`);
+   assert.ok(!seen.has(s.short),`${topic}: "${s.short}" is shared by ${seen.get(s.short)} and ${id}`);seen.set(s.short,id);
+  }
+ }
+ assert.equal(M.slip('pct-added','pct-change').short,'added the percentages','carried through rules/maths slip()');
+ assert.equal(M.slip('arithmetic-slip').short,'a number went wrong','a linear slip carries one');
+ assert.equal(M.slip('bounds-swapped').short,'bounds swapped','a Calculus slip carries one');
+});
+test('cycle 19 rows: tonight\'s set names its ringed items by their slip\'s short, in the set\'s order; nothing else',()=>{
+ const {recapRows,slippedOf}=recap();
+ const t=recapRows(pctEvening(),NOW)[0];
+ assert.deepEqual(t.slipped,[{name:'2',slip:'added the percentages'},{name:'3',slip:'percent of the new'},{name:'4',slip:'stopped a step early'}],'every ring with a slip is named; a ring with no slip is not');
+ const flat=JSON.stringify(t);
+ for(const i of PCT.items){assert.ok(!flat.includes(i.question),i.question);assert.ok(!flat.includes(`"${i.studentAnswer}"`),i.studentAnswer);}
+ assert.deepEqual(slippedOf(pctEvening({history:[{at:YESTERDAY,kind:'practice',label:'Percent increase and decrease',detail:'1 of 5 right'}]}),NOW),[],'yesterday\'s set names nothing tonight');
+ assert.deepEqual(slippedOf(pctEvening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'4 of 6 right'}]}),NOW),[],'tonight\'s line is another set\'s');
+ assert.deepEqual(slippedOf(pctEvening({history:[{at:TODAY(17),kind:'practice',label:'pct-change',detail:'1 of 5 right'}]}),NOW).length,3,'a line under the bare id is the set\'s too');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,marked:false}}),NOW),[],'an unmarked set names nothing');
+ const py={topic:'pythagoras',marked:true,items:[{n:1,question:'q',verdict:'wrong',slip:'pyth-no-root'},{n:2,question:'q',verdict:'right',slip:'pyth-sides-added'}]};
+ assert.deepEqual(slippedOf(session({practice:py,history:[{at:TODAY(18),kind:'practice',label:"Pythagoras' theorem",detail:'1 of 2 right'}]}),NOW),[{name:'1',slip:'no square root'}],'a usual Pythagoras item\'s slip is named too; a right item never');
+ assert.deepEqual(recapRows(evening(),NOW)[0].slipped,[{name:'2',slip:'a number went wrong'}],'a linear set\'s arithmetic slip is named too (cycle 21)');
+});
+const slipsOfHtml=(html)=>[...html.matchAll(/<span class="rc-lamp" data-slip="true"><i data-v="look"><svg class="rc-ring"[^>]*>.*?<\/svg><\/i><em>([^<]*)<small>([^<]*)<\/small><\/em><\/span>/g)].map((m)=>`${m[1]} · ${m[2]}`);
+test('cycle 19 TV: under the rail, the pen\'s ring with the item\'s number and the slip\'s short label - two at most, then "k more"; never a value',()=>{
+ const two={...PCT,items:PCT.items.filter((i)=>i.n!==4)};
+ const html=draw(pctEvening({practice:two}),NOW);
+ assert.deepEqual(slipsOfHtml(html),['2 · added the percentages','3 · percent of the new']);
+ assert.doesNotMatch(html,/recap-slips-more/);
+ for(const i of PCT.items){assert.ok(!html.includes(i.question),i.question);}
+ assert.ok(!/>(260|48|100)</.test(html),'no answer drawn');
+ const many=draw(pctEvening(),NOW);
+ assert.deepEqual(slipsOfHtml(many),['2 · added the percentages','3 · percent of the new']);
+ assert.match(many,/data-role="recap-slips-more">1 more</);
+ const four={...PCT,items:[...PCT.items,{n:6,question:'q6',studentAnswer:'1',verdict:'wrong',slip:'pct-added',tier:3,stretch:true}]};
+ assert.match(draw(pctEvening({practice:four}),NOW),/data-role="recap-slips-more">2 more</);
+ assert.deepEqual(slipsOfHtml(draw(evening(),NOW)),['2 · a number went wrong'],'a linear set\'s slip is named too (cycle 21)');
+ const none={...PCT,items:PCT.items.filter((i)=>!i.slip)};
+ assert.doesNotMatch(draw(pctEvening({practice:none}),NOW),/recap-slips/,'no named slip: no row');
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8');
+ const rules=[...css.matchAll(/\.rc \.rc-lamp\[data-slip\][^{]*\{([^}]*)\}/g)].map((m)=>m[1]).join(' ');
+ assert.ok(rules,'the slip label has its own rules');
+ assert.doesNotMatch(rules,/ellipsis|text-overflow|word-break:\s*break-all|nowrap/,'a label is never cut mid-word');
+ for(const px of rules.matchAll(/font[^;]*?(\d+)px/g))assert.ok(+px[1]>=28,`${px[0]}: 28px or more`);
+ assert.match(rules,/font-size: 28px/);
+});
+
+// cycle 22: a marked set carries when it was marked (Practice.markedAt), and the recap dates the set by that stamp; a set
+// marked before the stamp existed is dated by its history line, as cycle 19 did
+test('cycle 22 rows: a stamped set is tonight\'s by its stamp, not by the history line; an unstamped one by the line, as before',()=>{
+ const {slippedOf}=recap();
+ const named=[{name:'2',slip:'added the percentages'},{name:'3',slip:'percent of the new'},{name:'4',slip:'stopped a step early'}];
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:TODAY(17)}}),NOW),named,'stamped tonight: named');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:YESTERDAY}}),NOW),[],'stamped an earlier evening: nothing, though tonight\'s line is under the set\'s topic');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:TODAY(17)},history:[{at:YESTERDAY,kind:'practice',label:'Percent increase and decrease',detail:'1 of 5 right'}]}),NOW),named,'stamped tonight: named, though the last line is yesterday\'s');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:TODAY(17)},history:[{at:TODAY(18),kind:'practice',label:'Two-step equations',detail:'4 of 6 right'}]}),NOW),named,'stamped tonight: named, though the last line is another set\'s');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:TODAY(17)},history:[]}),NOW),named,'stamped tonight: no line needed');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,markedAt:NOW+60000}}),NOW),[],'a stamp after now is not tonight\'s');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,marked:false,markedAt:TODAY(17)}}),NOW),[],'an unmarked set names nothing, stamp or not');
+ // unstamped (an older session on disk): the history line decides, exactly as cycle 19
+ assert.deepEqual(slippedOf(pctEvening(),NOW),named,'unstamped, tonight\'s line: named');
+ assert.deepEqual(slippedOf(pctEvening({history:[{at:YESTERDAY,kind:'practice',label:'Percent increase and decrease',detail:'1 of 5 right'}]}),NOW),[],'unstamped, yesterday\'s line: nothing');
+ // on the TV: an old set's slips drawn under tonight's rail never, tonight's stamped set's even when a later line is another set's
+ assert.doesNotMatch(draw(pctEvening({practice:{...PCT,markedAt:YESTERDAY}}),NOW),/recap-slips/,'an earlier evening\'s set: no slip row');
+ assert.deepEqual(slipsOfHtml(draw(pctEvening({practice:{...PCT,markedAt:TODAY(17)},history:[{at:TODAY(18),kind:'practice',label:'Two-step equations',detail:'4 of 6 right'}]}),NOW)),['2 · added the percentages','3 · percent of the new']);
+});
+test('cycle 22 store: practice.marked stamps the set by the desk\'s clock - seated or away; a set is stamped only when marked, and junk is no stamp',()=>{
+ const {reduce}=store(),real=Date.now;
+ try{
+  Date.now=()=>TODAY(19);
+  const unmarked={...PCT,marked:false,items:PCT.items.map(({verdict,slip,studentAnswer,...i})=>i)};
+  const s=reduce(session({practice:unmarked}),{type:'practice.marked',items:PCT.items});
+  assert.equal(s.practice.marked,true);assert.equal(s.practice.markedAt,TODAY(19),'the seated learner\'s set is stamped');
+  assert.equal(s.history.length,0,'the stamp is the set\'s; the history is untouched');
+  const slot={pages:[],pageIx:0,itemIx:0,reading:false,hint:null,lesson:null,noLesson:false,lessonPaused:false,topic:null,practice:{...unmarked,owner:'jakub'},walkIx:0,tasks:[],log:{problems:[],hints:0,hard:[]}};
+  const a=reduce(session({away:{jakub:slot}}),{type:'practice.marked',items:PCT.items,owner:'jakub'});
+  assert.equal(a.away.jakub.practice.markedAt,TODAY(19),'an away learner\'s set is stamped too');
+  assert.equal(a.practice,null);
+  // a set written through the store's whitelist (the same one session.json is read back through): the stamp only on a
+  // marked set, only as a real time
+  const set=(p)=>reduce(session(),{type:'practice.set',practice:p}).practice;
+  assert.equal(set({...unmarked,markedAt:TODAY(17)}).markedAt,undefined,'a new, unmarked set carries no stamp');
+  assert.equal(set({...PCT,markedAt:TODAY(17)}).markedAt,TODAY(17),'a marked set keeps its stamp');
+  for(const junk of ['2026-09-24',null,NaN,-1,0,Infinity,{}])assert.ok(!('markedAt' in set({...PCT,markedAt:junk})),`${String(junk)}: no stamp`);
+  assert.ok(!('markedAt' in set(PCT)),'an older set with no stamp loads unchanged');
+ }finally{Date.now=real;}
+});
+
+// cycle 23: the parent's words name tonight's slips as the TV's rail does - the same rows (slippedOf), the same cap of two
+test('cycle 23 words: slippedLine names tonight\'s slips by number and short, two then "k more"; none, no line; never a value',()=>{
+ const {recapRows,slippedLine,RECAP_SLIPS}=recap();
+ const maths=(s)=>recapRows(s,NOW).find((t)=>t.app==='maths');
+ assert.equal(RECAP_SLIPS,2,'the TV and the words share one cap');
+ assert.equal(slippedLine(maths(pctEvening())),'Slips tonight: 2 · added the percentages; 3 · percent of the new; and 1 more.');
+ const two={...PCT,items:PCT.items.filter((i)=>i.n!==4)};
+ assert.equal(slippedLine(maths(pctEvening({practice:two}))),'Slips tonight: 2 · added the percentages; 3 · percent of the new.');
+ assert.equal(slippedLine(maths(evening())),'A slip tonight: 2 · a number went wrong.','one slip, said as one');
+ assert.equal(slippedLine(maths(pctEvening({practice:{...PCT,markedAt:YESTERDAY}}))),null,'an earlier evening\'s set: no line');
+ assert.equal(slippedLine(maths(pctEvening({practice:{...PCT,items:PCT.items.filter((i)=>!i.slip)}}))),null,'rings with no slip: no line');
+ const line=slippedLine(maths(pctEvening()));
+ for(const i of PCT.items){assert.ok(!line.includes(i.question),i.question);assert.doesNotMatch(line,new RegExp(`\\b${i.studentAnswer}\\b`),i.studentAnswer);}
 });

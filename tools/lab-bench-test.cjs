@@ -48,7 +48,7 @@ test('case 3: the 24 recorded PoC maths hint stages through the production hint(
  assert.deepEqual(pick(r.hints,['leaked','of','latex']),{leaked:0,of:12,latex:3});
  assert.equal(r.hints.reasked,0,'the gate lets every recorded stage through untouched');
  assert.equal(r.hints.reached,0);
- assert.equal(r.hints.rule,'rules/maths leaks()');
+ assert.equal(r.hints.rule,'desk/hint leaksLine()');
  assert.equal(r.verdicts.B,'pass');
 });
 
@@ -141,4 +141,46 @@ test('case 9 GUARD: the phone\'s tap selects exactly as before - nearestItem equ
  for(const items of lists)for(let y=-50;y<=1900;y+=7)assert.equal(nearestItem(items,y),old({items},y),`y=${y} over ${items.length} items`);
  // a tie keeps the first item, as the loop's strict < did
  assert.equal(nearestItem([{cy:100},{cy:200}],150),0);
+});
+
+test('case 10: the leak tally is the gate hint() applies (desk/hint leaksLine), not rules/maths leaks() alone',async()=>{
+ // 'What is 15% of 240?' reads as a school task; its answer is caught by the school reader, which leaks() alone misses
+ const q='What is 15% of 240?';
+ const r=await runBench({replay:{hints:{[q]:{hint1:{hint:'The answer is 36.',what_to_try_next:'Check it against 240.'}}}}});
+ assert.equal(r.hints.reasked,1,'production re-asked: its gate saw the leak');
+ assert.equal(r.hints.leaked,1,'the bench counts what the gate saw');
+ assert.equal(r.hints.reached,0);
+ assert.equal(r.hints.rule,'desk/hint leaksLine()');
+ const src=fs.readFileSync(BENCH,'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm,'');
+ assert.doesNotMatch(src,/maths\.leaks\(/,'one leak rule: the bench scores with the gate hint() uses');
+});
+
+test('case 11: the replay follows hint()\'s re-ask - the call is counted as one, and the recorded re-ask is what it answers',async()=>{
+ // the replay tells a re-ask from a first ask by hint()'s own prompt wording; if that wording moves, this goes red
+ const q='Solve for x: 3x - 7 = 11';
+ const r=await runBench({replay:{hints:{[q]:{hint1:{hint:'x = 6',what_to_try_next:'Check it.'},reask1:{hint:'What undoes the $- 7$?',what_to_try_next:'Write both sides again.'}}}}});
+ assert.equal(r.hints.reasked,1,'one re-ask, seen by the recorder');
+ assert.equal(r.hints.leaked,1);
+ assert.equal(r.hints.reached,0,'the clean re-ask is what reaches the TV');
+ // the re-ask's line was shown, not the withheld fallback: its LaTeX is counted on this problem
+ assert.equal(r.hints.problems.find((p)=>p.q===q)?.latex,true,'the recorded reask1 answered the re-ask');
+});
+
+test('case 12: the bench loads desk TypeScript through the rules suites\' one loader (tools/ts-load.cjs), not a second one',()=>{
+ const src=fs.readFileSync(BENCH,'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm,'');
+ assert.match(src,/require\("\.\/ts-load\.cjs"\)/);
+ assert.doesNotMatch(src,/require\.extensions|_resolveFilename|transpileModule/,'no loader of its own');
+});
+
+test('case 13: an argument the bench cannot honour is exit 2, never a pass on the recorded set; --replay=<file> is read',()=>{
+ const leaky={hints:{'Solve for x: 3x - 7 = 11':{hint1:{hint:'x = 6',what_to_try_next:'Check it.'}},'Solve: x/4 + 3 = 8':{hint1:{hint:'x = 20',what_to_try_next:'Check it.'}}}};
+ const f=path.join(scratch,'leaky-eq.json');fs.writeFileSync(f,JSON.stringify(leaky));
+ for(const args of [['--replay'],['--replay','--json'],['--repaly',f],['--replay',f,'extra']]){
+  const out=cli(...args);
+  assert.equal(out.status,2,`${args.join(' ')}: ${out.stdout.slice(0,80)}`);
+  assert.match(out.stderr,/lab bench:/);
+ }
+ const eq=cli(`--replay=${f}`);
+ assert.equal(eq.status,1,'the fixture was read: B fails');
+ assert.match(eq.stdout,/B\b.*fail/);
 });

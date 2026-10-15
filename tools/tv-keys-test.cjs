@@ -6,11 +6,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-const opts={compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText,file);
+const {transpile,options:opts}=require('./ts-load.cjs');
 const KEYS=path.join(root,'src/tv/keys.ts'),ROWS=path.join(root,'src/tv/mathsRows.ts');
 // loaded per test, so a missing module fails each case on its own
 const keys=()=>require(KEYS);
@@ -19,7 +15,8 @@ const {ESSAY_TYPES}=require(path.join(root,'src/lib/library/lessons.data.ts'));
 const {profileRows,locate,flat}=require(path.join(root,'src/tv/profileRows.ts'));
 
 const LOCAL={busy:false,table:false,hintInFlight:false};
-const page=(subject='maths')=>({id:'p1',subject,title:'Sheet one',img:'',w:100,h:100,items:[{n:1,key:'k1',text:'x + 1 = 2',band:[0,10]},{n:2,key:'k2',text:'x + 2 = 5',band:[10,20]}]});
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;};
+const page=(subject='maths')=>({id:'p1',subject,day:today(),title:'Sheet one',img:'',w:100,h:100,items:[{n:1,key:'k1',text:'x + 1 = 2',band:[0,10]},{n:2,key:'k2',text:'x + 2 = 5',band:[10,20]}]});
 function session(patch={}){
  return {subject:'maths',screen:'landing',focus:0,view:'band',joined:true,pin:'1234',phoneUrl:'',awaiting:null,
   learner:{id:'ema',name:'Ema'},profiles:[{id:'ema',name:'Ema',type:'high-school',age:16,system:'uk',modules:['maths','english','essay']}],draft:null,
@@ -39,8 +36,10 @@ test('case 1: Tonight has one stop list - continue card, homework, teach, and (a
  const r=tvKey(withCont,'right',LOCAL);
  assert.ok(r.events.every(e=>e.type!=='focus'||e.focus<=3),'Right on the last stop never moves past it');
  assert.equal(focusAfter(withCont,r),3);
- assert.deepEqual(tvKey({...withCont,focus:2},'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'topics',focus:0}]);
- assert.deepEqual(tvKey(session({screen:'tonight',focus:1}),'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'topics',focus:0}]);
+ // a learner inside the path (12): Ema is 16, past the path's end, whose Topics open on the last topic (MB-B19)
+ const young=(p={})=>session({profiles:[{...session().profiles[0],age:12}],...p});
+ assert.deepEqual(tvKey({...young({screen:'tonight',pages:[page()]}),focus:2},'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'topics',focus:0}]);
+ assert.deepEqual(tvKey(young({screen:'tonight',focus:1}),'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'topics',focus:0}]);
  assert.deepEqual(tvKey(session({screen:'tonight',pages:[page()],focus:0}),'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'page.select',pageIx:0},{type:'nav',screen:'page',focus:0}],'the continue card opens the sheet it names');
  const tonight=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8').split('export function Tonight')[1].split('\nexport function')[0];
  assert.match(tonight,/tonightStops\(s\)/,'Tonight renders from the same stop list');
@@ -71,18 +70,21 @@ test('case 2: Select on the lens screen posts ESSAY_TYPES[f], and the keymap hol
  for(const t of ESSAY_TYPES)assert.doesNotMatch(src,new RegExp(`["'\`]${t.id}["'\`]`),`keys.ts spells the ${t.id} lens itself`);
 });
 
+// v2 M1 (2026-10-07) moved this case to a topic with no worked lesson: a generated school unit is now taught first
+// (tools/worked-rules-test.cjs pins that), and a linear topic still asks for its set at once, as this case always pinned.
 test('case 3: Select on a topic asks for a set once, and a failed set gives Select back',async()=>{
  const {tvKey,runStep}=keys();
- const s=session({screen:'topics',focus:1});
+ const L=SYLLABUS.findIndex(t=>t.id==='linear-one-step');assert(L>=0);
+ const s=session({screen:'topics',focus:L});
  const step=tvKey(s,'select',{...LOCAL,busy:false});
- assert.deepEqual(step.events,[{type:'topic.open',topic:SYLLABUS[1].id}]);
- assert.deepEqual(step.calls,[{url:'/api/practice',body:{topic:SYLLABUS[1].id},onFail:{busy:false}}]);
+ assert.deepEqual(step.events,[{type:'topic.open',topic:SYLLABUS[L].id}]);
+ assert.deepEqual(step.calls,[{url:'/api/practice',body:{topic:SYLLABUS[L].id},onFail:{busy:false}}]);
  assert.deepEqual(step.local,{busy:true});
  const busy=tvKey(s,'select',{...LOCAL,busy:true});assert.deepEqual([busy.events,busy.calls],[[],[]],'a second Select while the set is written does nothing');
  let local={...LOCAL};const posted=[],called=[];let during;
  await runStep(step,{post:async e=>{posted.push(e);during=local.busy;},call:async(url,body)=>{called.push([url,body]);return {ok:false,status:500};},apply:p=>{local={...local,...p};}});
  assert.equal(during,true,'the wait is on screen while the set is asked for');
- assert.deepEqual(posted,[{type:'topic.open',topic:SYLLABUS[1].id}]);assert.equal(called.length,1);
+ assert.deepEqual(posted,[{type:'topic.open',topic:SYLLABUS[L].id}]);assert.equal(called.length,1);
  assert.equal(local.busy,false,'a 500 from /api/practice clears the wait');
  local={...LOCAL};await runStep(step,{post:async()=>{},call:async()=>{throw new Error('offline');},apply:p=>{local={...local,...p};}});
  assert.equal(local.busy,false,'a network failure clears the wait too');
@@ -130,7 +132,7 @@ test('case 6: keyOf maps the keyboard to the remote, and Play is the clock excep
 
 test('maths 1: mathsOwns names Math Buddy\'s screens, the shared ones only while maths is on them, and the TV routes them to their own module',()=>{
  const {mathsOwns,lingaOwns,essayOwns,MATHS_SCREENS}=keys();
- assert.deepEqual([...MATHS_SCREENS],['tonight','topics','prepare','practice','sheet','walk','calendar'],'Family W8 adds Get ready for school');
+ assert.deepEqual([...MATHS_SCREENS],['tonight','topics','prepare','practice','sheet','walk','calendar','worked'],'Family W8 adds Get ready for school; v2 M1 the worked lesson');
  for(const screen of SCREENS)for(const subject of ['maths','english','essay']){
   const s=session({screen,subject,pages:[page(subject)]});
   const want=!lingaOwns(s)&&(MATHS_SCREENS.includes(screen)||(['page','hint','units','lesson'].includes(screen)&&subject==='maths'));
@@ -154,9 +156,9 @@ const SIXV=[{n:1,verdict:'strong',note:'clear'},{n:3,verdict:'neutral',note:''},
 const essay=(patch={})=>session({subject:'essay',essay:reading(SIXV),essayAt:null,...patch});
 const at=(s,step)=>{const e=step.events.filter(x=>x.type==='essay.at');return e.length?e.at(-1).n:undefined;};
 
-test('essay 1: essayOwns names exactly the four Essay Master screens, and the TV routes them to their own module',()=>{
+test('essay 1: essayOwns names exactly the Essay Master screens (the lenses, the Paragraph plan and, v2 T2, the Workroom), and the TV routes them to their own module',()=>{
  const {essayOwns,ESSAY_SCREENS}=keys();
- assert.deepEqual([...ESSAY_SCREENS],['essaytype','forensic','playbook','xray']);
+ assert.deepEqual([...ESSAY_SCREENS],['essaytype','essayplan','forensic','playbook','xray','workroom']);
  for(const screen of SCREENS)assert.equal(essayOwns(session({screen,subject:'essay'})),ESSAY_SCREENS.includes(screen),screen);
  const page=fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8');
  assert.match(page,/essayOwns\(s\)/,'page.tsx asks the keymap, not a list of its own');
@@ -167,13 +169,13 @@ test('essay 1: essayOwns names exactly the four Essay Master screens, and the TV
 
 test('essay 2: the lens home is four lenses top to bottom, and Right reaches the last paragraph only when there is one',()=>{
  const {tvKey,lensStops}=keys();
- assert.equal(lensStops(session({screen:'essaytype'})).length,4,'nothing read: no card to reach');
+ assert.equal(lensStops(session({screen:'essaytype'})).length,5,'nothing read: the plan is the fifth stop, no card to reach');
  assert.deepEqual(lensStops(essay({screen:'essaytype'})).at(-1),'last');
  const first=session({screen:'essaytype',subject:'essay',focus:0});
  assert.equal(focusAfter(first,tvKey(first,'down',LOCAL)),1);
  assert.equal(focusAfter(first,tvKey(first,'up',LOCAL)),0,'Up on the first lens stays');
  const bottom=session({screen:'essaytype',subject:'essay',focus:3});
- assert.equal(focusAfter(bottom,tvKey(bottom,'down',LOCAL)),3,'Down on the last lens never reaches the card');
+ assert.equal(focusAfter(bottom,tvKey(bottom,'down',LOCAL)),4,'Down on the last lens reaches the plan, never the card');
  assert.deepEqual(tvKey(bottom,'right',LOCAL).events,[],'no card without a reading');
  const s=essay({screen:'essaytype',focus:2});
  assert.equal(focusAfter(s,tvKey(s,'right',LOCAL)),4);
@@ -271,7 +273,7 @@ test('GUARD: the profile screen moves exactly as its shared rows say',()=>{
 
 test('GUARD: the keymap and the maths rows stay free of the filesystem-backed session modules',()=>{
  for(const file of [KEYS,ROWS]){
-  const out=ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText;
+  const out=transpile(fs.readFileSync(file,'utf8'),opts).outputText;
   assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/,`${path.basename(file)} requires the store at runtime`);
  }
  keys();require(ROWS);
@@ -353,7 +355,7 @@ test('landing 3: the D-pad moves the lamp between the objects, and Select opens 
 
 // ---- landing-B: Select opens what is waiting, through one helper Tonight's continue card and the recap share ----
 const paper={topic:'linear-two-step',items:[{n:1,question:'2x + 3 = 11'},{n:2,question:'5x - 4 = 21'}]};
-const snapped={id:'p1',subject:'maths',title:'Sheet one',img:'',w:100,h:100,items:[{n:1,key:'k1',text:'x + 1 = 2',band:[0,10]}]};
+const snapped={id:'p1',subject:'maths',day:today(),title:'Sheet one',img:'',w:100,h:100,items:[{n:1,key:'k1',text:'x + 1 = 2',band:[0,10]}]};
 const ownParagraph={type:'argument',text:'p',sentences:[{n:1,text:'Cats sleep.'},{n:2,text:'Dogs bark.'}],verdicts:[{n:1,verdict:'supports'},{n:2,verdict:'faulty'}],stats:{},summary:'It argues one way.'};
 const MATHS_STATES=[
  ['a marked set',{practice:marked},[{type:'subject',subject:'maths'},{type:'nav',screen:'sheet',focus:1}]],
@@ -435,7 +437,7 @@ test('landing 6 (S34 T4): a desk with no one at it - every app is on it, empty, 
 });
 
 test('GUARD: the landing rows stay free of the filesystem-backed session modules',()=>{
- const out=ts.transpileModule(fs.readFileSync(LROWS,'utf8'),opts).outputText;
+ const out=transpile(fs.readFileSync(LROWS,'utf8'),opts).outputText;
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);
  rows();assert.ok(!Object.keys(require.cache).some(k=>/session[\\/](store|learners)\.ts$/.test(k)),'loading the landing rows pulled the store in');
 });
@@ -575,25 +577,29 @@ test('W8 2: Get ready for school - Left/Right walk the units (clamped), Select a
  const {tvKey}=keys();
  const {prepareStops}=require(path.join(root,'src/tv/prepareRows.ts'));
  const s=uk12({screen:'prepare',focus:0}),stops=prepareStops(s),N=stops.length;
- assert.equal(N,15,'every school unit is a stop');
+ // a unit with no worked lesson (GR1, MB-B39): the question is the two cells this test pins; the lesson cell has its own test
+ const {hasWorked}=require(path.join(root,'src/lib/library/worked.ts'));
+ const U=stops.findIndex((u)=>!hasWorked(u.id));
+ assert.ok(U>=0,'some school unit has no worked lesson');
+ assert.equal(N,require(path.join(root,'src/lib/library/paths.ts')).PATHS.school.topics.length,'every school unit is a stop');
  assert.deepEqual(tvKey(s,'right',LOCAL).events,[{type:'focus',focus:1}]);
  assert.deepEqual(tvKey(s,'left',LOCAL).events,[],'clamped at the first unit');
  assert.deepEqual(tvKey({...s,focus:N-1},'right',LOCAL).events,[],'clamped at the last unit');
  // the list: Select opens the question, lit on "The usual"; nothing is posted and nothing is called yet
- const sel=tvKey({...s,focus:3},'select',LOCAL);
+ const sel=tvKey({...s,focus:U},'select',LOCAL);
  assert.deepEqual([sel.events,sel.calls,sel.local],[[],[],{prepareAsk:0}]);
  // the question: Left/Right between the two cells, clamped, the unit's focus untouched
  const at0={...LOCAL,prepareAsk:0},at1={...LOCAL,prepareAsk:1};
- assert.deepEqual(tvKey({...s,focus:3},'right',at0).local,{prepareAsk:1});
- assert.deepEqual(tvKey({...s,focus:3},'right',at1).local,{},'clamped at "A step up"');
- assert.deepEqual(tvKey({...s,focus:3},'left',at1).local,{prepareAsk:0});
- assert.deepEqual(tvKey({...s,focus:3},'left',at0).local,{},'clamped at "The usual"');
- for(const k of ['right','left'])assert.deepEqual(tvKey({...s,focus:3},k,at0).events,[],'the unit keeps its place');
+ assert.deepEqual(tvKey({...s,focus:U},'right',at0).local,{prepareAsk:1});
+ assert.deepEqual(tvKey({...s,focus:U},'right',at1).local,{},'clamped at "A step up"');
+ assert.deepEqual(tvKey({...s,focus:U},'left',at1).local,{prepareAsk:0});
+ assert.deepEqual(tvKey({...s,focus:U},'left',at0).local,{},'clamped at "The usual"');
+ for(const k of ['right','left'])assert.deepEqual(tvKey({...s,focus:U},k,at0).events,[],'the unit keeps its place');
  // Back from the question: the list, on the same unit (no focus event, no nav)
- const back=tvKey({...s,focus:3},'back',at1);
+ const back=tvKey({...s,focus:U},'back',at1);
  assert.deepEqual([back.events,back.calls,back.local],[[],[],{prepareAsk:null}]);
  // Select on "The usual" writes the set exactly as Topics does, staying on this screen; on "A step up" with the flag
- const usual=tvKey({...s,focus:3},'select',at0),up=tvKey({...s,focus:3},'select',at1),id=stops[3].id;
+ const usual=tvKey({...s,focus:U},'select',at0),up=tvKey({...s,focus:U},'select',at1),id=stops[U].id;
  assert.deepEqual(usual.events,[{type:'topic.open',topic:id,stay:true}]);
  assert.deepEqual(usual.calls,[{url:'/api/practice',body:{topic:id},onFail:{busy:false}}],'the usual set: the same body as Topics');
  assert.deepEqual(usual.local,{busy:true});
@@ -601,9 +607,9 @@ test('W8 2: Get ready for school - Left/Right walk the units (clamped), Select a
  // while it is written nothing else is asked; Back still closes the question
  for(const busy of [{...at1,busy:true},at1]){
   const run=busy.busy?s:{...s,jobs:{practice:{id:'j',phase:'running',startedAt:1}}};
-  for(const k of ['select','left','right'])assert.deepEqual(tvKey({...run,focus:3},k,busy),{events:[],calls:[],local:{}},`writing: ${k}`);
-  assert.deepEqual(tvKey({...run,focus:3},'back',busy).local,{prepareAsk:null});
-  assert.deepEqual(tvKey({...run,focus:3},'select',{...LOCAL,busy:busy.busy}).local,{},'no question opens while a set is written');
+  for(const k of ['select','left','right'])assert.deepEqual(tvKey({...run,focus:U},k,busy),{events:[],calls:[],local:{}},`writing: ${k}`);
+  assert.deepEqual(tvKey({...run,focus:U},'back',busy).local,{prepareAsk:null});
+  assert.deepEqual(tvKey({...run,focus:U},'select',{...LOCAL,busy:busy.busy}).local,{},'no question opens while a set is written');
  }
  // Up, Menu and Back on the list go home, the lamp on this door (after the continue card when one is up)
  for(const k of ['up','menu','back'])assert.deepEqual(tvKey({...s,focus:5},k,LOCAL).events,[{type:'nav',screen:'tonight',focus:2}],k);
@@ -615,6 +621,70 @@ test('W8 2: Get ready for school - Left/Right walk the units (clamped), Select a
   for(const e of tvKey({...s,focus:f},k,l).events)assert.ok(['focus','nav','topic.open'].includes(e.type),`${k}: ${e.type}`);
 });
 
+test('GR1: Get ready for school offers the worked lesson first (MB-B39)',()=>{
+ const K=keys(),{tvKey,topicStops}=K;
+ const {prepareStops,choicesFor,choiceLine}=require(path.join(root,'src/tv/prepareRows.ts'));
+ const {hasWorked}=require(path.join(root,'src/lib/library/worked.ts'));
+ const s=uk12({screen:'prepare',focus:0}),stops=prepareStops(s);
+ const W=stops.findIndex((u)=>hasWorked(u.id)),U=stops.findIndex((u)=>!hasWorked(u.id)),id=stops[W].id;
+ assert.ok(W>=0&&U>=0);
+ const at=(n)=>({...LOCAL,prepareAsk:n});
+ // Select on a unit with a lesson opens the question lit on the lesson cell; on a unit without, as before
+ const sel=tvKey({...s,focus:W},'select',LOCAL);
+ assert.deepEqual([sel.events,sel.calls,sel.local],[[],[],{prepareAsk:-1}]);
+ assert.deepEqual(tvKey({...s,focus:U},'select',LOCAL).local,{prepareAsk:0});
+ // Right and Left walk -1, 0, 1, clamped at both ends
+ assert.deepEqual(tvKey({...s,focus:W},'right',at(-1)).local,{prepareAsk:0});
+ assert.deepEqual(tvKey({...s,focus:W},'right',at(0)).local,{prepareAsk:1});
+ assert.deepEqual(tvKey({...s,focus:W},'right',at(1)).local,{});
+ assert.deepEqual(tvKey({...s,focus:W},'left',at(1)).local,{prepareAsk:0});
+ assert.deepEqual(tvKey({...s,focus:W},'left',at(0)).local,{prepareAsk:-1});
+ assert.deepEqual(tvKey({...s,focus:W},'left',at(-1)).local,{});
+ assert.deepEqual(tvKey({...s,focus:U},'left',at(0)).local,{},'no lesson cell to the left of a unit without a lesson');
+ assert.deepEqual(tvKey({...s,focus:W},'back',at(-1)).local,{prepareAsk:null});
+ // the cells and the line
+ assert.deepEqual(choicesFor(true).map((c)=>[c.cell,c.t]),[[-1,'See how first'],[0,'The usual'],[1,'A step up']]);
+ assert.equal(choicesFor(true)[0].k,'A worked lesson');
+ assert.deepEqual(choicesFor(false).map((c)=>c.cell),[0,1]);
+ assert.equal(choiceLine(-1),'A short worked example first, then six questions at your usual level.');
+ // Select on the lesson cell teaches exactly as Topics does, and records where it came from
+ const teach=tvKey({...s,focus:W},'select',at(-1)),topics=tvKey({...s,screen:'topics',focus:topicStops(s).findIndex((t)=>t.id===id)},'select',LOCAL);
+ assert.deepEqual(teach.events,[{type:'topic.open',topic:id,stay:true}]);
+ assert.deepEqual(teach.calls,[{url:'/api/worked',body:{topic:id},onFail:{busy:false},onDone:{busy:false}}]);
+ assert.deepEqual(teach.events,topics.events);assert.deepEqual(teach.calls,topics.calls);
+ assert.deepEqual(teach.local,{busy:true,lessonFrom:'prepare'});
+ assert.deepEqual(topics.local,{busy:true},'Topics with no origin leaves Local as it was');
+ // the usual set and a step up, as W8 2 pins them
+ const usual=tvKey({...s,focus:W},'select',at(0)),up=tvKey({...s,focus:W},'select',at(1));
+ assert.deepEqual(usual.events,[{type:'topic.open',topic:id,stay:true}]);
+ assert.deepEqual(usual.calls,[{url:'/api/practice',body:{topic:id},onFail:{busy:false}}]);assert.deepEqual(usual.local,{busy:true});
+ assert.deepEqual(up.calls,[{url:'/api/practice',body:{topic:id,stretch:true},onFail:{busy:false}}]);
+ // while a lesson or a set is written the question asks nothing else; a running teach job counts
+ for(const [run,l] of [[s,{...at(-1),busy:true}],[{...s,jobs:{teach:{id:'j',phase:'running',startedAt:1}}},at(-1)],[{...s,jobs:{teach:{id:'j',phase:'running',startedAt:1}}},at(0)]])
+  for(const k of ['select','left','right'])assert.deepEqual(tvKey({...run,focus:W},k,l),{events:[],calls:[],local:{}},`writing: ${k}`);
+ assert.deepEqual(tvKey({...s,focus:W,jobs:{teach:{id:'j',phase:'running',startedAt:1}}},'select',LOCAL).local,{},'no question opens while a lesson is written');
+ // the lesson: from Get ready for school every way back goes there, on the unit, and clears the origin
+ const lesson={topic:id,title:'T',idea:'x',own:false,steps:[],examples:[]};
+ const ws=(focus)=>({...s,screen:'worked',focus,worked:lesson});
+ const from={...LOCAL,lessonFrom:'prepare'};
+ for(const [focus,k] of [[1,'select'],[0,'back'],[0,'up'],[0,'menu'],[1,'back']]){
+  const r=tvKey(ws(focus),k,from);
+  assert.deepEqual(r.events,[{type:'nav',screen:'prepare',focus:W}],`${focus} ${k}`);assert.deepEqual(r.local,{lessonFrom:null});assert.deepEqual(r.calls,[]);
+ }
+ assert.deepEqual(tvKey(ws(1),'back',{...from,prepareAsk:-1}).local,{lessonFrom:null,prepareAsk:null},'a question left open is closed');
+ // with no origin they go to Topics as today
+ for(const [focus,k] of [[1,'select'],[0,'back'],[0,'up'],[0,'menu']]){
+  const r=tvKey(ws(focus),k,LOCAL);assert.deepEqual([r.events,r.local],[[{type:'nav',screen:'topics',focus:0}],{}],`${focus} ${k}`);
+ }
+ // Try six writes the usual set as today, and clears the origin only when it was set
+ const six=tvKey(ws(0),'select',LOCAL),six2=tvKey(ws(0),'select',from);
+ assert.deepEqual(six.calls,[{url:'/api/practice',body:{topic:id},onFail:{busy:false}}]);
+ assert.deepEqual(six.events,[{type:'topic.open',topic:id}]);assert.deepEqual(six.local,{busy:true});
+ assert.deepEqual([six2.events,six2.calls],[six.events,six.calls]);assert.deepEqual(six2.local,{busy:true,lessonFrom:null});
+ // Topics' own teach clears an origin left over
+ assert.deepEqual(tvKey({...s,screen:'topics',focus:topicStops(s).findIndex((t)=>t.id===id)},'select',from).local,{busy:true,lessonFrom:null});
+});
+
 test('W8 3: "Six more" on a step-up set asks for a step up again; on a usual set exactly as before',()=>{
  const {tvKey}=keys();
  const {sheetStops}=require(path.join(root,'src/tv/sheetRows.ts'));
@@ -624,4 +694,199 @@ test('W8 3: "Six more" on a step-up set asks for a step up again; on a usual set
  assert.deepEqual(tvKey(uk12({screen:'sheet',practice:usual,focus:more}),'select',LOCAL).calls,[{url:'/api/practice',body:{topic:'frac-add-sub'},onFail:{busy:false}}]);
  assert.deepEqual(tvKey(uk12({screen:'sheet',practice:up,focus:more}),'select',LOCAL).calls,[{url:'/api/practice',body:{topic:'frac-add-sub',stretch:true},onFail:{busy:false}}]);
  assert.deepEqual(tvKey(uk12({screen:'sheet',practice:up,focus:more}),'select',LOCAL).events,[{type:'topic.open',topic:'frac-add-sub'}],'Six more opens Topics as before');
+});
+
+// ---- Essay plan slots (challenge essay-master-B) ----
+const planned=(slots,patch={})=>essay({screen:'essayplan',essay:null,essayPlan:{lens:'argument',slots},...patch});
+const W=['Schools should start later.','Research found that teenagers fall asleep later.','A later start fits how they sleep.'];
+
+test('plan case 5: Read it with all three written pushes one analyse call of the learner\'s sentences; with a slot empty it pushes nothing and focuses the first empty one',()=>{
+ const {tvKey,planStops}=keys();
+ const full=planned(W,{focus:3});
+ const r=tvKey(full,'select',LOCAL);
+ assert.deepEqual(r.calls,[{url:'/api/analyse',body:{kind:'essay',text:W.join(' '),type:'argument'}}]);
+ const gap=planned([W[0],'',W[2]],{focus:3});
+ const g=tvKey(gap,'select',LOCAL);
+ assert.deepEqual(g.calls,[],'no model call with a slot empty');
+ assert.equal(focusAfter(gap,g),1,'the first empty slot');
+ assert.equal(planStops(full).length,5,'three slots, Read it, Back');
+ assert.deepEqual(tvKey(planned(W,{focus:4}),'select',LOCAL).events,[{type:'nav',screen:'essaytype',focus:4}],'Back returns to the lens home, on the plan');
+ assert.deepEqual(tvKey(planned(W,{focus:1}),'back',LOCAL).events,[{type:'nav',screen:'essaytype',focus:4}]);
+ const walk=planned(['','',''],{focus:0});
+ assert.equal(focusAfter(walk,tvKey(walk,'down',LOCAL)),1);
+ assert.equal(focusAfter(walk,tvKey(walk,'up',LOCAL)),0,'Up on the first slot stays');
+ const sel=tvKey(planned(['','',''],{focus:1}),'select',LOCAL);
+ assert.equal(sel.events[0].type,'status');assert.deepEqual(sel.calls,[],'Select on a slot asks for nothing: the sentence comes from the phone');
+});
+
+test('plan case 7 (keys): with nothing read the lens home ends in plan, and Select there opens an empty plan on the chosen lens',()=>{
+ const {tvKey,lensStops}=keys();
+ assert.equal(lensStops(session({screen:'essaytype'})).at(-1),'plan');
+ assert.equal(lensStops(essay({screen:'essaytype'})).includes('plan'),false,'a paragraph read: the last card takes the place');
+ const home=session({screen:'essaytype',subject:'essay',focus:4,essayType:'argument'});
+ assert.deepEqual(tvKey(home,'select',LOCAL).events,[{type:'essay.plan',lens:'argument'},{type:'nav',screen:'essayplan',focus:0,from:'essaytype'}]);
+ const bottom=session({screen:'essaytype',subject:'essay',focus:3});
+ assert.equal(focusAfter(bottom,tvKey(bottom,'down',LOCAL)),4,'Down from the last lens reaches the plan');
+ assert.equal(focusAfter(home,tvKey(home,'up',LOCAL)),3,'Up returns to the last lens');
+ assert.deepEqual(tvKey(session({screen:'essaytype',subject:'essay',focus:4}),'select',LOCAL).events[0],{type:'essay.plan',lens:ESSAY_TYPES[0].id},'no lens chosen: the first');
+});
+
+test('HW4: the continue card opens the sheet of tonight, never an older one; no sheet tonight, no card',()=>{
+ const {tvKey,tonightStops}=keys();const {continueCard,tonightsSheet}=require(ROWS);
+ const monday={...page(),id:'mon',day:'2000-1-3'},tonight={...page(),id:'tue',title:'Tuesday sheet'};
+ const old=session({screen:'tonight',pages:[monday]});
+ assert.equal(continueCard(old),null,'a Monday sheet and no sheet today: no card');
+ assert.deepEqual(tonightStops(old),['homework','teach','prepare'],'the D-pad row has no continue stop');
+ const both=session({screen:'tonight',pages:[monday,tonight]});
+ const card=continueCard(both);
+ assert.equal(card.pageIx,tonightsSheet(both).ix,'the same answer the door uses');
+ assert.equal(card.pageIx,1);assert.equal(card.go,'page');
+ assert.deepEqual(tvKey(both,'select',LOCAL).events.find(e=>e.type==='page.select'),{type:'page.select',pageIx:1});
+ const reading=session({screen:'page',pages:[monday,{...tonight,items:[]}],pageIx:1,reading:true});
+ assert.ok(tonightsSheet(reading),'a page being read is the sheet of tonight for the door');
+ assert.equal(continueCard(reading),null,'but with no problems read yet it gets no card');
+ assert.ok(!/where you were/i.test(card.cap),card.cap);assert.ok(!/—/.test(card.cap));
+ const tomorrow=Date.now()+36*3600*1000;
+ assert.equal(continueCard(both,tomorrow),null,'now is a parameter: the same pages a day on offer no card');
+ assert.equal(both.pages.length,2,'older pages stay on the desk');
+});
+test('HW6: a failed read says Try again on the phone for maths and English; an essay page names the paste panel',()=>{
+ const {failedReadLine}=require(path.join(root,'src/tv/pageLines.ts'));
+ const maths=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8');
+ assert.ok(maths.includes('The desk could not read this page. Open Try again on the phone.'));
+ for(const subject of ['maths','english'])assert.equal(failedReadLine(subject),'The desk could not read this page. Open Try again on the phone.',subject);
+ assert.match(failedReadLine('essay'),/Paste or type it on the phone/);
+ for(const subject of ['maths','english','essay'])assert.ok(!/—|snap it again/.test(failedReadLine(subject)),subject);
+ assert.match(fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8'),/failedReadLine\(p\.subject\)/,'the page screen uses it');
+});
+
+test('essay 4 (6c, E4-b): Rewrite on a sentence of a paragraph the desk did not rule puts that paragraph line on the status line; a ruled one says rewriteStatus',()=>{
+ const {tvKey,rewriteStatus}=keys();
+ const piece={paragraphs:2,read:[0],failed:[1]};
+ const sentences=TEXTS.map((text,i)=>({n:i+1,text,words:text.split(' ').length,connectors:[],role:'claim',para:i<3?0:1}));
+ const r={...reading(SIXV),sentences,piece};
+ const f=(essayAt)=>essay({screen:'forensic',focus:0,essay:r,essayAt});
+ assert.deepEqual(tvKey(f(5),'select',LOCAL).events,[{type:'status',text:'Paragraph 2 did not come back. Send it again from the phone.'}],'an unruled sentence');
+ assert.deepEqual(tvKey(f(2),'select',LOCAL).events,[{type:'status',text:rewriteStatus(2)}],'a ruled sentence');
+ assert.equal(at(f(2),tvKey(essay({screen:'forensic',focus:2,essay:r,essayAt:5}),'select',LOCAL)),6,'Next sentence still walks every sentence, unruled ones too');
+});
+
+// ---- MB-B19: a learner past the end of the school path
+const learnerOf=(system,age,extra={})=>session({profiles:[{id:'ema',name:'Ema',type:'high-school',age,system,modules:['maths'],...extra}]});
+const secureRec=(topic)=>({topic,seen:6,right:6,estimate:0.9,secure:true,lastSeen:1,slips:[]});
+
+test('MB-B19 1: past the path\'s end with nothing secure, Topics and Get ready for school open on the last topic, and one line says the path ends',()=>{
+ const {topicsFocus,tvKey}=keys();
+ const PR=require(path.join(root,'src/tv/prepareRows.ts'));
+ const {topicsOf}=require(path.join(root,'src/lib/library/paths.ts'));
+ for(const [system,age] of [['cz',18],['uk',17]]){
+  const s=learnerOf(system,age),topics=topicsOf('school'),last=topics[topics.length-1];
+  assert.equal(topicsFocus(s),topics.length-1,`${system} ${age}: Topics`);
+  const ix=PR.prepareStops(s).findIndex((u)=>u.id===last.id);
+  assert.ok(ix>0);
+  const open=tvKey({...s,screen:'tonight',focus:2},'select',LOCAL);
+  assert.deepEqual(open.events,[{type:'subject',subject:'maths'},{type:'nav',screen:'prepare',focus:ix}],`${system} ${age}: the door`);
+  const line=PR.pathEndsLine(s);
+  assert.equal(line,`This path ends at ${PR.SYS_WORD[system](last.year)}; your year is past it.`);
+  assert.ok(line.split(/\s+/).length<=25);assert.doesNotMatch(line,/2014/);
+  assert.match(line,/^[A-Z][^!?]*\.$/,'one sentence');
+ }
+ assert.match(PR.pathEndsLine(learnerOf('cz',18)),/9\. ročník/);
+});
+
+test('MB-B19 2: past the end with one topic secure, Topics follow the frontier and Prepare still opens on the last topic',()=>{
+ const {topicsFocus,tvKey}=keys();
+ const PR=require(path.join(root,'src/tv/prepareRows.ts'));
+ const {topicsOf,frontierOn}=require(path.join(root,'src/lib/library/paths.ts'));
+ const topics=topicsOf('school'),first=topics[0].id;
+ const s=session({...learnerOf('uk',17),skills:{[first]:secureRec(first)}});
+ const next=frontierOn('school',[first]);
+ assert.equal(topicsFocus(s),topics.findIndex((t)=>t.id===next.id));
+ assert.notEqual(topicsFocus(s),topics.length-1);
+ const ix=PR.prepareStops(s).findIndex((u)=>u.id===topics[topics.length-1].id);
+ assert.deepEqual(tvKey({...s,screen:'tonight',focus:2},'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'prepare',focus:ix}]);
+});
+
+test('MB-B19 3: a younger learner, one with no age and a calc1 learner keep focus 0 and have no line',()=>{
+ const {topicsFocus,tvKey}=keys();
+ const PR=require(path.join(root,'src/tv/prepareRows.ts'));
+ const noAge=session({profiles:[{id:'ema',name:'Ema',type:'high-school',system:'uk',modules:['maths']}]});
+ for(const [name,s] of [['uk 12',learnerOf('uk',12)],['no age',noAge],['calc1',calcW8()]]){
+  assert.equal(topicsFocus(s),0,name);assert.equal(PR.pathEndsLine(s),null,name);assert.equal(PR.pastPathEnd(s),null,name);
+ }
+ for(const s of [learnerOf('uk',12),noAge])
+  assert.deepEqual(tvKey({...s,screen:'tonight',focus:2},'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'prepare',focus:0}]);
+});
+
+// SW7 (scan-sweep optimize 2026-10-13): each spoken line's audio blob is let go when the next one replaces it
+test('SW7: the TV speaks line after line and holds at most one audio blob URL, the one playing',async()=>{
+ const ts=require('./ts-load.cjs').ts();
+ const src=fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8');
+ const a=src.indexOf('useEffect(() => {',src.indexOf('// speak what is new')),e=src.indexOf('}, [s, voice]);',a);
+ assert.ok(a>0&&e>a,'the speak effect is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,e+'}, [s, voice]);'.length),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const live=new Set();let n=0;
+ const URL_={createObjectURL:()=>{const u=`blob:${++n}`;live.add(u);return u;},revokeObjectURL:(u)=>live.delete(u)};
+ class Audio_{constructor(src){this.src=src;this.onended=null;}pause(){}play(){return Promise.resolve();}}
+ const audio={current:null},spoken={current:''};
+ const say=async(line)=>{let effect;new Function('useEffect','s','voice','spokenLine','spoken','call','audio','URL','Audio','speechSynthesis','SpeechSynthesisUtterance',js)(
+  (f)=>{effect=f;},{line},true,(s)=>s.line,spoken,async()=>({ok:true,blob:async()=>({})}),audio,URL_,Audio_,{cancel(){},speak(){}},class{});
+  effect();for(let i=0;i<5;i++)await new Promise((r)=>setImmediate(r));};
+ for(const l of ['one','two','three','four'])await say(l);
+ assert.equal(n,4,'four lines, four blobs');
+ assert.deepEqual([...live],[audio.current.src],'only the line playing still holds its blob');
+ audio.current.onended?.({currentTarget:audio.current});
+ assert.equal(live.size,0,'and it is let go when it ends');
+});
+
+// SW8 (scan-sweep optimize 2026-10-13): the stream's debug trace on window.__desk is bounded - the clock ticks every second
+test('SW8: an evening of session messages leaves a bounded window.__desk.events, newest last',()=>{
+ const ts=require('./ts-load.cjs').ts();
+ const src=fs.readFileSync(path.join(root,'src/tv/useSession.ts'),'utf8');
+ const a=src.indexOf('useEffect(() => {'),e=src.indexOf('}, []);',a);
+ assert.ok(a>0&&e>a,'the stream effect is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,e+'}, []);'.length),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ let es=null;class ES{constructor(){es=this;}close(){}}
+ const win={};let effect;
+ new Function('useEffect','window','EventSource','setS','setConnected','reopen','setTimeout',js)((f)=>{effect=f;},win,ES,()=>{},()=>{},{current:null},()=>{});
+ effect();
+ const N=3*3600;for(let i=0;i<N;i++)es.onmessage({data:`{"tick":${i}}`});
+ const ev=win.__desk.events;
+ assert.ok(ev.length<=500,`three hours of ticks keep ${ev.length} lines, not ${N+1}`);
+ assert.equal(ev.at(-1),`msg ${`{"tick":${N-1}}`.length}`,'the newest line is kept');
+});
+
+// SW13 (scan-sweep optimize 2026-10-13, tv-surface): the D-pad listener is bound once, not swapped on every session message
+test('SW13: 100 session updates leave the TV page with one keydown binding, and a key pressed after them is handled against the newest session',()=>{
+ const ts=require('./ts-load.cjs').ts();
+ const src=fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8');
+ const a=src.indexOf('// ---- D-pad'),r=src.indexOf('removeEventListener("keydown", onKey)',a);
+ assert.ok(a>0&&r>a,'the D-pad effect is where the test expects it');
+ const end=src.slice(r).match(/\}, \[[^\]]*\]\);/);
+ assert.ok(end,'the effect closes with its dependency list');
+ const js=ts.transpileModule(src.slice(a,r+end.index+end[0].length),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ // a minimal hooks driver: refs persist across renders; an effect re-runs (after its cleanup) only when a dependency changed
+ const refs=[],effs=[];let adds=0,removes=0,handler=null;
+ const seen=[];
+ const world={
+  addEventListener:(t,f)=>{adds++;handler=f;},removeEventListener:()=>{removes++;handler=null;},
+  notTheTV:()=>false,lingaOwns:()=>false,keyOf:()=>'play',tvKey:(s)=>{seen.push(s.n);return {events:[]};},
+  landingStops:()=>[],landingAt:()=>0,runStep:async()=>{},matchMedia:()=>({matches:false}),setZoom:()=>{},setTimeout:()=>0,
+  local:{current:{}},zooming:{current:false},post:()=>{},call:()=>{},apply:()=>{},ZOOM_MS:0,
+ };
+ const names=Object.keys(world);
+ const render=(s)=>{
+  let ri=0,ei=0;
+  const useRef=(v)=>{const i=ri++;return refs[i]??(refs[i]={current:v});},useEffect=(f,deps)=>{
+   const i=ei++,e=effs[i]??(effs[i]={deps:null,clean:null});
+   if(e.deps&&deps&&e.deps.length===deps.length&&e.deps.every((d,k)=>Object.is(d,deps[k])))return;
+   e.clean?.();e.deps=deps;e.clean=f()||null;
+  };
+  new Function('useEffect','useRef','s',...names,js)(useEffect,useRef,s,...names.map((n)=>world[n]));
+ };
+ for(let i=0;i<100;i++)render({n:i,screen:'lesson'});
+ assert.equal(adds,1,`100 session messages made ${adds} keydown bindings, not one per message`);
+ assert.equal(adds-removes,1,'and exactly one is live');
+ handler({key:' ',preventDefault(){}});
+ assert.deepEqual(seen,[99],'the key is read against the newest session');
 });

@@ -19,10 +19,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const CALC_FILE=path.join(root,'src/lib/library/calculus1.ts');
 const T=require(path.join(root,'src/maths/typeset.ts'));
 const V=require(path.join(root,'src/lib/desk/verify.ts'));
@@ -169,7 +166,7 @@ function lineReasons(line,kind,tex){
  if(tex&&T.looksTex(line)){
   const cmds=new Set([...line.matchAll(/\\([a-zA-Z]+)/g)].map(m=>m[1]));
   if(ls.some(n=>n.t==='text'&&cmds.has(n.v)))degrades.add('unknown-tex');
-  if(/\\begin\{cases\}/.test(line))degrades.add('cases-one-line');
+  // v2 M4b (2026-10-07): cases is set as a table now (typeset.ts), no longer one line: not a degrade
   if(/(?<!\^\{?)\\circ(?![a-zA-Z])/.test(line))degrades.add('circ-as-degree');
  }
  if(!tex&&/[_^][A-Za-z]{2,}/.test(line))degrades.add('script-one-letter');
@@ -209,7 +206,7 @@ const observe=(ex)=>({render:renderStatus(ex.plain,ex.kind,false),renderTex:ex.t
 // ------------------------------------------------------------------ the corpus itself
 
 test('1: the spine - 22 topics, sessions 1-28 each exactly once, unique ids, a prerequisite DAG, one-sentence blurbs',()=>{
- assert.equal(TOPICS.length,22);
+ assert.equal(TOPICS.length,require(path.join(root,'src/lib/library/paths.ts')).PATHS.calc1.topics.length,'the Calculus 1 path (its one length pin is in tools/maths-paths-test.cjs)');
  assert.deepEqual(CALCULUS_1.nonTopicSessions,[8,9,21,22,28],'the review and midterm sessions');
  const seen=[...TOPICS.flatMap(t=>t.sessions),...CALCULUS_1.nonTopicSessions].sort((a,b)=>a-b);
  assert.deepEqual(seen,Array.from({length:28},(_,i)=>i+1),'sessions 1-28, each once');

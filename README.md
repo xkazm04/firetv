@@ -39,7 +39,7 @@ Chrome (real touch events)          Android TV emulator, API 34, leanback
   phone page itself so `ws://` is same-origin) or *dials out* to a relay. Both are exercised by
   tests. The second exists because a platform may not let an app listen at all — see
   [docs/PLATFORM-RISK.md](docs/PLATFORM-RISK.md).
-- Pairing QR + rotating PIN; a phone with the wrong PIN is refused.
+- Pairing QR + a PIN drawn per launch; a phone with the wrong PIN is refused.
 - Fire TV remote keys drive playback, undo and clear.
 
 ## Layout
@@ -49,7 +49,7 @@ Chrome (real touch events)          Android TV emulator, API 34, leanback
 | `core/` | Pure JVM: annotation schema + codec, timeline, letterbox mapping, pen engine, Catmull-Rom smoothing, hit-testing, undo history, wire protocol, pen conversation, transport plan. No Android imports — 79 unit tests run in seconds with no device. |
 | `tv-app/` | Android app: Media3 player, Compose overlay, embedded Ktor server, QR pairing, D-pad input. |
 | `companion/` | The phone PWA. Single file, copied into the APK's assets at build time so there is one source of truth. |
-| `tools/` | `live-ui-test.mjs` (Playwright → real PWA → real TV → pixel assertions, 28 checks), `relay-test.mjs` + `relay-stub.mjs` (the same APK with no listening socket, 11 checks), `pen-sim.mjs` (headless protocol check), `latency-probe.mjs`. |
+| `tools/` | `live-ui-test.mjs` (Playwright → real PWA → real TV → pixel assertions, 29 checks), `relay-test.mjs` + `relay-stub.mjs` (the same APK with no listening socket, 13 checks), `pen-sim.mjs` (headless protocol check), `latency-probe.mjs`, `tail-diag.mjs` (app stall or link stall), `device.mjs` (which device, which address, the PIN; tested offline by `device-rules-test.cjs`). |
 | `scripts/dev.ps1` | The whole cycle in one command. |
 | `fixtures/` | Reserved for clips; the PoC generates its own synthetic clip with ffmpeg (no copyright exposure). |
 | `vision/` | Local vision-model client and the mark-as-pointer technique. Two files, domain-neutral — see the lessons doc. |

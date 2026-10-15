@@ -1,0 +1,499 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "Ok, \"Find my level\" sounds easy, I'll press it.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Tomáš! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Tomáš! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Tomáš! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I don't understand much; I only know a few words, so I'll say a little in Czech with one English word.",
+          "action": "answer",
+          "args": {
+            "text": "nevím... Minecraft? yes"
+          },
+          "result": "ok",
+          "ms": 7093
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nAbout you · question 2 of 3\nLinga asks\nCool, Minecraft! Do you see English words when you play, like Craft or Build? What do they say?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nCool, Minecraft! Do you see English words when you play, like Craft or Build? What do they say?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Tomáš! You can answer in English or in your own language. Where do you use English in your life?\nYou\nnevím... Minecraft? yes\nLinga\nCool, Minecraft! Do you see English words when you play, like Craft or Build? What do they say?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Cool, Minecraft! Do you see English words when you play, like Craft or Build? What do they say?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I don't understand the whole question, but I know Minecraft words like creeper.",
+          "action": "answer",
+          "args": {
+            "text": "creeper! a... nevím"
+          },
+          "result": "ok",
+          "ms": 7350
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nAbout you · question 3 of 3\nLinga asks\nCreeper! Nice one. Do you know any English words from school, or from videos or games?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nCreeper! Nice one. Do you know any English words from school, or from videos or games?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Tomáš! You can answer in English or in your own language. Where do you use English in your life?\nYou\nnevím... Minecraft? yes\nLinga\nCool, Minecraft! Do you see English words when you play, like Craft or Build? What do they say?\nYou\ncreeper! a... nevím\nLinga\nCreeper! Nice one. Do you know any English words from school, or from videos or games?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Creeper! Nice one. Do you know any English words from school, or from videos or games?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Hmm, school words... I know dog and colours.",
+          "action": "answer",
+          "args": {
+            "text": "dog, red, blue... yes. I like dog"
+          },
+          "result": "ok",
+          "ms": 11963
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nTask 1 · Choose the reply on the TV\nYour friend shows you their dog and says: 'Look at my dog! He is very big.' What do you say?\n01\nMe like dog very big.\n02\nWow, he is very big!\nYour task\nMe like dog very big.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend shows you their dog and says: 'Look at my dog! He is very big.' What do you say?\n[button: Me like dog very big.] [button: Wow, he is very big!] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Dog! Wow, he is very big — that one looks right, I know \"very\" and \"big\".",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 6589
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nTask 2 · Choose the reply on the TV\nYour friend shows you a castle they built in Minecraft. It took them three days to build. What do you say?\n01\nWow, how long did it took you?\n02\nWow, how long did it take you?\nYour task\nWow, how long did it took you?\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend shows you a castle they built in Minecraft. It took them three days to build. What do you say?\n[button: Wow, how long did it took you?] [button: Wow, how long did it take you?] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Hmm, \"took\" or \"take\"... I don't know, I'll just guess the second one.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 5360
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nTask 3 · Listen and answer\nYour task\nWho damaged what the speaker spent all day making?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Who damaged what the speaker spent all day making?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I spent all day building a castle in Minecraft, but my dog walked across it and broke the wall. Now I have to fix it.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Minecraft! Dog! I hear these words, but the rest is too fast.",
+          "action": "answer",
+          "args": {
+            "text": "pes? dog... Minecraft dog"
+          },
+          "result": "ok",
+          "ms": 9125
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nTask 4 · Say it\nYour task\nThink about your last game of Minecraft. What did you build or find, and why was it fun? Tell me in two or three sentences.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nThink about your last game of Minecraft. What did you build or find, and why was it fun? Tell me in two or three sentences.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Think about your last game of Minecraft. What did you build or find, and why was it fun? Tell me in two or three sentences.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Too long and hard, I don't understand, I want to stop.",
+          "action": "dont-know",
+          "args": {},
+          "result": "ok",
+          "ms": 4298
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nTask 5 · Listen and answer\nYour task\nWhat colour was the toy he chased?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What colour was the toy he chased?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yesterday I took my dog to the park. He ran after a big red ball and then he slept under a tree.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Dog and red ball... I heard 'dog' and 'red', I think.",
+          "action": "answer",
+          "args": {
+            "text": "red? dog... red"
+          },
+          "result": "ok",
+          "ms": 9158
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nTomáš\nLinga's read · not a certificate\nA2 · Everyday basics\nWhat next\nSee the conversations Linga picks for this level, or find your level again.\nLinga says\nYou know words like dog, red, blue and Minecraft, and you heard the colour in a listening task. Well done!\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA2\nEveryday basics\nYou know words like dog, red, blue and Minecraft, and you heard the colour in a listening task. Well done!\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise short full sentences, like 'The ball was red' or 'I like dogs.' Say them out loud.\nYou handle short, routine exchanges about familiar things.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYour friend shows you their dog and says: 'Look at my dog! He is very big.' What do you say?\n“Wow, he is very big!”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nYour friend shows you a castle they built in Minecraft. It took them three days to build. What do you say?\n“Wow, how long did it take you?”\nYou picked the reply that fits.\nB1 · Listen and answer · nearly there\nWho damaged what the speaker spent all day making?\n“pes? dog... Minecraft dog”\nYou caught the dog and Minecraft. Next, try a short full sentence, like 'The dog broke the wall.'\nB1 · Say it · not yet\nThink about your last game of Minecraft. What did you build or find, and why was it fun? Tell me in two or three sentences.\nSkipped\nSkipped. That tells Linga something too.\nA2 · Listen and answer · at this level\nWhat colour was the toy he chased?\n“red? dog... red”\nGood listening, you heard the colour! Next time, try a full sentence, like: The ball was red.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "Fajn, A2 mi vyšlo a bylo to o Minecraftu a psech, stačí na dnes.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "A2",
+          "trueBand": "A1",
+          "distance": 1,
+          "source": "check",
+          "confidence": "high",
+          "selfBand": "A1",
+          "summary": "You know words like dog, red, blue and Minecraft, and you heard the colour in a listening task. Well done!",
+          "focus": "Practise short full sentences, like 'The ball was red' or 'I like dogs.' Say them out loud.",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "Your friend shows you their dog and says: 'Look at my dog! He is very big.' What do you say?",
+              "line": "",
+              "options": [
+                "Me like dog very big.",
+                "Wow, he is very big!"
+              ],
+              "response": "Wow, he is very big!",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Wow, he is very big!",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your friend shows you a castle they built in Minecraft. It took them three days to build. What do you say?",
+              "line": "",
+              "options": [
+                "Wow, how long did it took you?",
+                "Wow, how long did it take you?"
+              ],
+              "response": "Wow, how long did it take you?",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Wow, how long did it take you?",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Who damaged what the speaker spent all day making?",
+              "line": "I spent all day building a castle in Minecraft, but my dog walked across it and broke the wall. Now I have to fix it.",
+              "options": [],
+              "response": "pes? dog... Minecraft dog",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "pes? dog... Minecraft dog",
+              "note": "You caught the dog and Minecraft. Next, try a short full sentence, like 'The dog broke the wall.'"
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "Think about your last game of Minecraft. What did you build or find, and why was it fun? Tell me in two or three sentences.",
+              "line": "",
+              "options": [],
+              "response": "",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "",
+              "note": "Skipped. That tells Linga something too."
+            },
+            {
+              "band": "A2",
+              "kind": "listen",
+              "prompt": "What colour was the toy he chased?",
+              "line": "Yesterday I took my dog to the park. He ran after a big red ball and then he slept under a tree.",
+              "options": [],
+              "response": "red? dog... red",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "red? dog... red",
+              "note": "Good listening, you heard the colour! Next time, try a full sentence, like: The ball was red."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 205945,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Verdict screen #10: A2 against trueBand A1, distance 1 (near); not B1+."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "Task 4 (#8): \"Think about your last game of Minecraft. What did you build or find, and why was it fun? Tell me in two or three sentences.\" is about 24 English words. Tasks 1 and 2 prompts are also close to 20 words."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#8 'I don't know' met with \"Skipped. That tells Linga something too.\" #3 and #2 Czech answers were accepted warmly (\"Creeper! Nice one.\"). Nothing humiliating."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No topics were proposed in this journey; the topic list was not reached."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation took place in J1."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moments were shown in J1."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10: Find my level, three questions, five tasks, verdict screen, all inside the app."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 \"A2 · Everyday basics\" vs A1: near, which is within the gate."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#8 Task 4 was too long for him (\"Too long and hard, I don't understand, I want to stop\"). #6 he guessed between 'took' and 'take'."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#8 \"Skipped. That tells Linga something too.\"; #7 partial note \"You caught the dog and Minecraft.\" Czech 'pes' and 'nevím' were accepted."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#10 focus \"like 'The ball was red'\" uses past 'was', beyond an A1 learner who only has 'like' and 'is'. The A2 verdict rests on a 50/50 pick and keyword-fishing \"red? dog... red\", so the 'Well done' summary reads partly as a template."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None. Task 2 pass and task 5 pass are generous, because they rest on a guess and on keyword spotting."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "above": 0,
+            "at": 0,
+            "below": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, personal-data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Task 4 prompt too long for a nine-year-old",
+            "expected": "A prompt of 15 words or fewer, such as 'What do you build in Minecraft?'",
+            "got": "A 24-word, three-part open prompt asking for two or three sentences.",
+            "evidence": "#8 \"Think about your last game of Minecraft. What did you build or find, and why was it fun? Tell me in two or three sentences.\" Tomáš: \"Too long and hard, I don't understand\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "For elementary profiles every task prompt is 15 words or fewer, one question.",
+            "code_hint": "check task generation prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "A2 placement is inflated by guessing and keyword spotting",
+            "expected": "A1 for a child who gets only single words.",
+            "got": "A2, from a 50/50 choice pass and a listening pass on 'red'.",
+            "evidence": "#6 \"I'll just guess the second one\"; #9 \"red? dog... red\" scored pass; #10 \"A2 · Everyday basics\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Two-option choice passes get lower weight, and a lone keyword is scored partial.",
+            "code_hint": "placement scoring"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Next focus uses past tense beyond his level",
+            "expected": "A focus sentence using only 'like' or 'is', such as 'I like dogs.'",
+            "got": "\"The ball was red\" and \"The dog broke the wall\" as models.",
+            "evidence": "#10 focus \"like 'The ball was red' or 'I like dogs.'\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Focus examples match the pre-A2 grammar of the child's actual answers.",
+            "code_hint": "verdict focus prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Skips and Czech answers are met kindly",
+            "expected": "No feeling of failure.",
+            "got": "Warm, non-judging notes.",
+            "evidence": "#8 \"Skipped. That tells Linga something too.\"; #3 \"Creeper! Nice one.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the wording.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Minecraft and dog themes keep a child engaged",
+            "expected": "Content he cares about.",
+            "got": "Tasks and questions were about Minecraft and dogs.",
+            "evidence": "#5 and #6 about a dog and a Minecraft castle; #3 \"Cool, Minecraft!\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep interest-themed tasks.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "Minecraft a psi, to jo! The first questions were okay and I liked \"Creeper! Nice one.\" The dog task I understood. But then the long Minecraft one, \"two or three sentences\", nevím, I wanted to stop, it felt like school. Listening was fast; I only caught dog and red. It said A2 and \"Well done\", which is nice, but I guessed the 'took' one, so I don't quite believe it. Also \"The ball was red\" is too hard for me; I only say \"I like dog\". It didn't make me feel stupid, which matters. Mum would like that it's only a few minutes at home. Shorter tasks, more dogs, and I would use it again."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #8 Task 4 was too long for him (\"Too long and hard, I don't understand, I want to stop\"). #6 he guessed between 'took' and 'take'.",
+          "check": "Every task was one they understood what to do with, including at their weakest."
+        },
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #10 focus \"like 'The ball was red'\" uses past 'was', beyond an A1 learner who only has 'like' and 'is'. The A2 verdict rests on a 50/50 pick and keyword-fishing \"red? dog... red\", so the 'Well done' summary reads partly as a template.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: Task 4 (#8): \"Think about your last game of Minecraft. What did you build or find, and why was it fun? Tell me in two or three sentences.\" is about 24 English words. Tasks 1 and 2 prompts are also close to 20 words."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 11,
+      "fail": 0,
+      "ms": 60913
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 144754
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 31793
+    }
+  }
+}

@@ -8,13 +8,17 @@
 import { randomUUID } from "node:crypto";
 import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
+import type { Again } from "../engines/types";
 import { dispatch, getSession, type Profile, type Screen } from "../session/store";
-import { getLearner, saveEnglish } from "../session/learners";
-import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS, isAdult } from "./curriculum";
+import { getLearner, readLearner, saveEnglish } from "../session/learners";
+import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS } from "./curriculum";
+import { adultAllowed, adultContent } from "../rules/mode";
+import { audienceOf, keywordAudience, topicText } from "./gate";
+import { FOCUS_FALLBACK, focusParts } from "./line";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
-import { ConversationError } from "./errors";
-import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
+import { ConversationError, lingaLine } from "./errors";
+import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, conversationBand, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, playBand, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
 // The right option of a "choose" task. Server memory only: the session reaches every screen.
@@ -34,7 +38,7 @@ const topicSchema = schema({ title: str(48), goal: str(120), why: str(120), skil
 const planSchema = (count: number) => schema({ topics: { type: "array", minItems: 1, maxItems: count, items: topicSchema } });
 
 function who(p: Profile | undefined, adult: boolean): string {
-  return adult ? "an adult" : p?.age ? `age ${p.age}` : "of unspecified age; keep everything appropriate for children";
+  return adult ? "an adult" : p?.mode === "family" && adultAllowed(p) ? "an adult in Family mode; keep everything appropriate for a family audience" : p?.age ? `age ${p.age}` : "of unspecified age; keep everything appropriate for children";
 }
 function checkSystem(p: Profile | undefined, adult: boolean): string {
   return `You are Linga, meeting a learner on a shared television to find their English level before any practice. Warm, brief and curious; never sound like an exam.
@@ -69,8 +73,8 @@ function blank(learnerId: string, stage: LevelCheck["stage"]): LevelCheck {
 }
 
 interface Ctx { profile: Profile; learning: EnglishLearning; adult: boolean; commandId: string; }
-const ask = (system: string, prompt: Record<string, unknown>, shape: Record<string, unknown>, timeoutMs = 90000) =>
-  text<Record<string, unknown>>({ system, prompt: JSON.stringify(prompt), schema: shape, model: "fast", timeoutMs, isolated: true, shorten: true });
+const ask = (system: string, prompt: Record<string, unknown>, shape: Record<string, unknown>, timeoutMs = 90000, after?: Again) =>
+  text<Record<string, unknown>>({ system, prompt: JSON.stringify(prompt), schema: shape, model: "fast", timeoutMs, isolated: true, shorten: true, use: "linga-check" }, after);
 
 /**
  * One model call against the check. Pending while it runs; the result lands only on the same check,
@@ -85,9 +89,19 @@ async function call(k: LevelCheck, token: string, failure: string, work: () => P
     commit(next, stageScreen(next));
     return next;
   } catch (e) {
-    try { const now = current(k, token); commit({ ...now, pending: null, error: failure }, stageScreen(now)); } catch { /* a newer check owns the screen */ }
+    try { const now = current(k, token); commit({ ...now, pending: null, error: lingaLine(e, failure) }, stageScreen(now)); } catch { /* a newer check owns the screen */ }
     throw e;
   }
+}
+
+/**
+ * A focus that quotes the learner must quote words they wrote or said: code checks it, a misquote is replaced. One
+ * more quoted span that no answer holds is a better phrase (K4, line.ts focusParts): kept only when `safe` (the
+ * audience gate) passes it, else the whole focus is replaced, so a phrase that may not reach this learner never does.
+ */
+export function quotedFocus(focus: string, tasks: PlacementTask[], safe: (line: string) => boolean = () => true): string {
+  const parts = focusParts(focus, tasks);
+  return parts.line && !safe(parts.line) ? FOCUS_FALLBACK : parts.focus;
 }
 
 /** Whatever the check is missing next, fetch it: the first question, the next task, the verdict, the topics. */
@@ -118,13 +132,15 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
       });
     }
     return call(k, token, "Linga could not put your level together. Try again.", async () => {
-      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.verdict, note: t.note })), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, specific to what they showed. focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise.` }, summarySchema);
-      const placement: Placement = { at: Date.now(), band: ladder.band, selfBand: k.selfBand, confidence: ladder.confidence, source: "check", summary: line(r.json.summary, 160), focus: line(r.json.focus, 120), tasks: k.tasks };
+      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.skipped ? "skipped" : t.verdict, note: t.note, answer: t.skipped ? "" : t.response.slice(0, 300) })), goal: (ctx.learning.preferences?.goal || k.goal).slice(0, 160), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, specific to what they showed, and where it fits tie it to their goal (goal). focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise; if it points at something the learner wrote, quote those exact words in double quotes from an answer. If you offer a better phrase for those words, put it in a second pair of double quotes after the learner's words.` }, summarySchema);
+      const placement: Placement = { at: Date.now(), band: ladder.band, selfBand: k.selfBand, confidence: ladder.confidence, source: "check", summary: line(r.json.summary, 160), focus: quotedFocus(line(r.json.focus, 120), k.tasks, l => ctx.adult || ![null, "adult"].includes(keywordAudience(l))), tasks: k.tasks };
       return {
         apply: now => {
           const learning = getLearner(now.learnerId).english, prefs = learning.preferences ?? defaultPreferences(ctx.profile);
-          // the live placement is overwritten as before; the check is also appended to the record of checks (W10)
-          saveEnglish(now.learnerId, { ...learning, placement, placements: appendPlacement(learning.placements, placement), preferences: { ...prefs, level: placement.band, goal: prefs.goal || now.goal, interest: prefs.interest || now.interest } });
+          // the live placement is overwritten as before; the check is also appended to the record of checks (W10).
+          // Conversations start at the band the learner spoke when that is lower (S2, conversationBand); the placement's
+          // band stays the check's read
+          saveEnglish(now.learnerId, { ...learning, placement, placements: appendPlacement(learning.placements, placement), preferences: { ...prefs, level: conversationBand(placement), goal: prefs.goal || now.goal, interest: prefs.interest || now.interest } });
           // a finished check can complete a certificate from evidence already on the record (cert.ts); the check's own
           // tasks are never evidence, so they add nothing to it
           const earned = withCertificate(getLearner(now.learnerId).english, placement.at);
@@ -138,35 +154,66 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
   return k;
 }
 
-function allowedAudiences(ctx: Ctx): Audience[] {
+function allowedAudiences(ctx: Omit<Ctx, "commandId">): Audience[] {
   const prefs = ctx.learning.preferences ?? defaultPreferences(ctx.profile);
   return (["all", "older", "adult"] as Audience[]).filter(a => audienceAllowed(ctx.profile, prefs, a));
 }
+const inInterest = " naming it in the title or premise";
+/** What the planning call is asked beyond the learner record: the check's own read, the titles to avoid, the interest gap. */
+interface PlanAsk { count: number; asked?: string; goal: string; interest: string; read: string; avoid: string[]; need: boolean; }
+/**
+ * The planning call's system, request and schema, in one place, so a pitched scene (v2 L3, pitchAsk) is shaped under
+ * exactly the rules a plan topic is, through the same learnerAsked seam.
+ */
+function planAsk(ctx: Omit<Ctx, "commandId">, o: PlanAsk) {
+  const learning = ctx.learning, prefs = learning.preferences ?? defaultPreferences(ctx.profile);
+  // pitched where conversations play (S2): the band the learner spoke, when the check found it lower
+  const band: Band = playBand(learning.placement, prefs.level);
+  const { count, asked, need } = o;
+  const system = `${checkSystem(ctx.profile, ctx.adult)}
+Now you are planning this learner's conversation practice. Each topic is a scene contract a conversation partner will play later: ordinary, safe situations with fictional details. No explicit content, no humiliation, threats or manipulation.`;
+  const request = {
+    step: "plan", count, band, bandGuide: BAND_TUTOR[band],
+    learner: { goal: o.goal, interest: o.interest, read: o.read, focus: learning.placement?.focus ?? "", teachingNotes: learning.notes, mayPractise: allowedAudiences(ctx) },
+    skills: ENGLISH_SKILLS, avoid: o.avoid, ...(asked ? { learnerAsked: asked } : {}),
+    task: `${asked ? "Shape exactly one topic from learnerAsked, keeping what the learner wants to talk about." : `Propose ${count} conversation topic${count > 1 ? "s" : ""} this learner would want to have in English, pitched at ${band}.${count > 1 ? ` Spread them over at least four different skills and put the two closest to their goal first${need ? `, and set at least two in their interest (learner.interest),${inInterest}` : ""}.` : ` Make it different from the topics in avoid.${need ? ` Set it in their interest (learner.interest),${inInterest}.` : ""}`}`}
+Each topic: title (at most 48 characters, plain words the learner would use); goal (what the learner achieves by talking, at most 120); why (one line to the learner saying why this topic is in their plan, at most 120); skill (one id from skills); partner ("Name · role", fictional, at most 40); premise (the scene contract: the situation, the learner's aim, what makes it go well, at most 400); cue (a phrase starter beginning "Try:", at most 90); quiz (a question and two short phrases; one serves the scene's aim, correct is its index).
+audience: "adult" for anything only adults should practise (dating, alcohol, adult workplace conflict); "older" for 15 and over (job interviews, sharp disagreements); otherwise "all". Mark it honestly — the desk filters by age. Only propose audiences listed in mayPractise.`,
+  };
+  return { system, request, schema: planSchema(count) };
+}
+
+/**
+ * The shaping call of a pitched scene (v2 L3): the plan's learnerAsked seam with the premise as the ask, and one line
+ * more that keeps the learner's premise. No rule of the planning system is changed or dropped. The caller makes the
+ * call (conversation.ts, thinking off as every conversation call is) and gates what comes back.
+ */
+export function pitchAsk(profile: Profile, learning: EnglishLearning, adult: boolean, premise: string) {
+  const prefs = learning.preferences ?? defaultPreferences(profile);
+  const a = planAsk({ profile, learning, adult }, { count: 1, asked: premise, goal: prefs.goal, interest: prefs.interest, read: "", avoid: [], need: false });
+  return { ...a, request: { ...a.request, task: `${a.request.task}
+learnerAsked is a scene this learner pitched to play now. Keep their premise as they put it, even an absurd, comedic or high-stakes one, within every rule above. partner is the character they will talk to; why says in one line that this is their own scene.` } };
+}
+
 /** Ask for topics; age filters them before any screen sees one. `swap` replaces that topic; otherwise they are added. */
 async function propose(k: LevelCheck, ctx: Ctx, token: string, count: number, swap: string | null, failure: string, asked?: string): Promise<LevelCheck> {
   const learning = ctx.learning, prefs = learning.preferences ?? defaultPreferences(ctx.profile);
-  const band: Band = learning.placement?.band ?? prefs.level;
   const allowed = allowedAudiences(ctx);
   // The interest the learner gave reaches the plan (S57): known, and no topic kept in the plan carries it, so this
   // answer must. Checked in code (placement.ts touchesInterest) and asked for once more with the gap named; the
   // desk never writes a topic itself, so a second miss keeps the first answer. A topic in the learner's own words is exempt.
   const stems = asked ? [] : interestWords(prefs.interest || k.interest);
   const need = stems.length > 0 && !k.topics.some(t => t.id !== swap && touchesInterest(t, stems));
-  const system = `${checkSystem(ctx.profile, ctx.adult)}
-Now you are planning this learner's conversation practice. Each topic is a scene contract a conversation partner will play later: ordinary, safe situations with fictional details. No explicit content, no humiliation, threats or manipulation.`;
-  const inInterest = " naming it in the title or premise";
-  const request = {
-    step: "plan", count, band, bandGuide: BAND_TUTOR[band],
-    learner: { goal: prefs.goal || k.goal, interest: prefs.interest || k.interest, read: k.read, focus: learning.placement?.focus ?? "", teachingNotes: learning.notes, mayPractise: allowed },
-    skills: ENGLISH_SKILLS, avoid: k.topics.map(t => t.title), ...(asked ? { learnerAsked: asked } : {}),
-    task: `${asked ? "Shape exactly one topic from learnerAsked, keeping what the learner wants to talk about." : `Propose ${count} conversation topic${count > 1 ? "s" : ""} this learner would want to have in English, pitched at ${band}.${count > 1 ? ` Spread them over at least four different skills and put the two closest to their goal first${need ? `, and set at least two in their interest (learner.interest),${inInterest}` : ""}.` : ` Make it different from the topics in avoid.${need ? ` Set it in their interest (learner.interest),${inInterest}.` : ""}`}`}
-Each topic: title (at most 48 characters, plain words the learner would use); goal (what the learner achieves by talking, at most 120); why (one line to the learner saying why this topic is in their plan, at most 120); skill (one id from skills); partner ("Name · role", fictional, at most 40); premise (the scene contract: the situation, the learner's aim, what makes it go well, at most 400); cue (a phrase starter beginning "Try:", at most 90); quiz (a question and two short phrases; one serves the scene's aim, correct is its index).
-audience: "adult" for anything only adults should practise (dating, alcohol, adult workplace conflict); "older" for 15 and over (job interviews, sharp disagreements); otherwise "all". Mark it honestly — the desk filters by age. Only propose audiences listed in mayPractise.`,
-  };
+  const { system, request } = planAsk(ctx, { count, asked, goal: prefs.goal || k.goal, interest: prefs.interest || k.interest, read: k.read, avoid: k.topics.map(t => t.title), need });
   const pick = (json: Record<string, unknown>) => {
     const titles = new Set(k.topics.filter(t => t.id !== swap).map(t => t.title.toLowerCase()));
     return (Array.isArray(json.topics) ? json.topics : [])
       .map(t => cleanTopic({ ...object(t), id: `plan-${randomUUID().slice(0, 8)}` }))
+      // cleanTopic already raised each topic's audience from its words (title, goal, why, partner, premise, cue) and
+      // dropped a never-list topic, so the earlier title/goal/premise re-gate here is folded into it.
+      // A topic in the learner's own words keeps what they asked for: their words are gated too, so a model that tones
+      // a pitch down for a child cannot carry an adult ask past the age filter (gate.ts).
+      .map(t => t && asked ? { ...t, audience: audienceOf(asked, t.audience) ?? "adult" } : t)
       .filter((t): t is PlanTopic => !!t && allowed.includes(t.audience) && !titles.has(t.title.toLowerCase()) && !!titles.add(t.title.toLowerCase()))
       .slice(0, count);
   };
@@ -177,7 +224,8 @@ audience: "adult" for anything only adults should practise (dating, alcohol, adu
       const gap = `Your previous answer had no topic set in the learner's interest (learner.interest): ${fresh.map(t => t.title).join("; ")}. Answer again under the same rules, with ${count > 1 ? "at least two topics" : "the topic"} set in that interest,${inInterest}${count > 1 ? ", still with the two closest to their goal first" : ""}.`;
       console.info("Linga plan: no topic carried the learner's interest; asked once more.");
       try {
-        const again = await ask(system, { ...request, task: `${request.task}\n${gap}` }, planSchema(count), 120000), second = pick(again.json);
+        // asked again inside the first call's deadline, booked as its next try (types.ts Again)
+        const again = await ask(system, { ...request, task: `${request.task}\n${gap}` }, planSchema(count), 120000, r.again), second = pick(again.json);
         ms += again.ms;
         if (second.some(t => touchesInterest(t, stems))) { fresh = second; provider = again.provider; }
         else console.warn("Linga plan: the second answer missed the interest too; the first is kept.");
@@ -196,9 +244,9 @@ export const isCheckAction = (action: string) => action === "level-self" || acti
 
 /** The check's actions. Returns true when it handled the action. */
 export async function checkCommand(action: string, input: Record<string, unknown>, profile: Profile, commandId: string): Promise<boolean> {
-  const s = getSession(), learnerId = profile.id, learning = getLearner(learnerId).english;
+  const s = getSession(), learnerId = profile.id, learning = readLearner(learnerId).english;
   const prefs = learning.preferences ?? defaultPreferences(profile);
-  const ctx: Ctx = { profile, learning, adult: isAdult(profile, prefs), commandId };
+  const ctx: Ctx = { profile, learning, adult: adultContent(profile, prefs), commandId };
   const open = s.check?.learnerId === learnerId ? s.check : null;
   if (open?.commands.includes(commandId)) return true;
   // the table's "reading" row, for every command: the ones that open a check (check-start, plan-propose) are not in the table
@@ -267,8 +315,8 @@ Then your read of everything so far. selfBand: your best estimate of their band 
   if (action === "check-task") {
     const task = k.task;
     if (!task || input.taskId !== task.id) throw new ConversationError("This task has changed. Answer the one on the TV.", 409);
-    const judged = (verdict: PlacementTask["verdict"], response: string, mode: EvidenceMode, quote: string, note: string): PlacementTask =>
-      ({ id: task.id, band: task.band, kind: task.kind, prompt: task.prompt, line: task.line, options: task.options, response, mode, verdict, quote, note, at: Date.now() });
+    const judged = (verdict: PlacementTask["verdict"], response: string, mode: EvidenceMode, quote: string, note: string, skipped = false): PlacementTask =>
+      ({ id: task.id, band: task.band, kind: task.kind, prompt: task.prompt, line: task.line, options: task.options, response, mode, verdict, quote, note, at: Date.now(), ...(skipped ? { skipped: true } : {}) });
     const settle = async (t: PlacementTask, token: string) => {
       keys.delete(task.id);
       const now = current(k);
@@ -276,7 +324,7 @@ Then your read of everything so far. selfBand: your best estimate of their band 
       commit(next, "linga-check");
       await advance(next, ctx, `${token}:next`);
     };
-    if (input.skip === true) { await settle(judged("fail", "", "text", "", "Skipped. That tells Linga something too."), commandId); return true; }
+    if (input.skip === true) { await settle(judged("fail", "", "text", "", "Skipped. That tells Linga something too.", true), commandId); return true; }
     if (task.kind === "choose") {
       const option = input.option, key = keys.get(task.id);
       if (option !== 0 && option !== 1) throw new ConversationError("Choose one of the two replies.");
@@ -301,7 +349,8 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
       }, judgeSchema);
       const answered = r.json.answered as "yes" | "partly" | "no", english = r.json.english as Band | "none", quote = optional(r.json.quote, 240);
       if (!["yes", "partly", "no"].includes(answered) || !(english === "none" || isBand(english)) || !quote || !response.includes(quote)) throw new Error("The judge did not quote the learner accurately.");
-      const t = judged(verdictFor(task, answered, english), response, mode, quote, line(r.json.note, 160));
+      // the judge's two readings are kept beside the verdict (S2): code derives the band the learner spoke from them
+      const t: PlacementTask = { ...judged(verdictFor(task, answered, english), response, mode, quote, line(r.json.note, 160)), answered, english };
       return { apply: now => ({ ...now, task: null, tasks: [...now.tasks, t] }), provider: r.provider, ms: r.ms };
     });
     await advance(next, ctx, `${commandId}:next`);
@@ -332,12 +381,19 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
     const asked = typeof input.text === "string" ? input.text.trim() : "";
     if (!asked) throw new ConversationError("Say what you would like to talk about.");
     if (asked.length > TOPIC_ASK_MAX) throw new ConversationError(`Describe the topic in up to ${TOPIC_ASK_MAX} characters.`);
+    const askedFor = keywordAudience(asked);
+    if (askedFor === null) throw new ConversationError("Linga can't practise that topic. Try another one.");
+    if (!allowedAudiences(ctx).includes(askedFor)) throw new ConversationError("That topic is for older learners. Try another one.");
     await propose(k, ctx, commandId, 1, null, "Linga could not shape that topic. Try again, or say it another way.", asked);
     return true;
   }
   if (action === "plan-agree") {
-    const allowed = allowedAudiences(ctx), topics = k.topics.filter(t => allowed.includes(t.audience));
-    saveEnglish(learnerId, { ...getLearner(learnerId).english, plan: { at: Date.now(), band: learning.placement?.band ?? prefs.level, topics } });
+    const allowed = allowedAudiences(ctx), topics = k.topics.flatMap(t => {
+      // Re-gated at agreement, so a plan kept on disk before the gate cannot carry a topic past it; null refuses it.
+      const audience = audienceOf(topicText(t), t.audience);
+      return audience && allowed.includes(audience) ? [{ ...t, audience }] : [];
+    });
+    saveEnglish(learnerId, { ...getLearner(learnerId).english, plan: { at: Date.now(), band: playBand(learning.placement, prefs.level), topics } });
     commit(null, "linga");
     return true;
   }

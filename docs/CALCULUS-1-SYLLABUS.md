@@ -40,7 +40,7 @@ are our own words and our own mathematics. No example is a real learner's work.
 | 20 | 4.9 | `calc1-antiderivatives` | Antiderivatives |
 | 21, 22 | - | (review, midterm 2) | - |
 | 23 | 5.1 | `calc1-definite-integral` | The definite integral |
-| 24 | 5.2 | `calc1-area-so-far` | The area-so-far function |
+| 24 | 5.2 | `calc1-area-so-far` | The integral with a variable upper limit |
 | 25 | 5.3, 5.4 | `calc1-ftc` | The fundamental theorem and net change |
 | 26 | 5.5 | `calc1-substitution` | The substitution rule |
 | 27 | 6.1, 6.5 | `calc1-area-average` | Areas between curves and average values |
@@ -108,7 +108,7 @@ degraded:
 | `slash` | c02-p1 | `sin(x)/cos(x)` keeps its slash, because the reader stacks over a number, letters or a bracket, but not over a function. |
 | `script-one-letter` | c22-p1 | Plain `f_avg` takes one letter as the subscript: f with subscript a, then v, then g. |
 | `unknown-tex` | c01-p2 | `\mathbb{R}` is set as the word "mathbb" and then R. |
-| `cases-one-line` | c06-q1 | `\begin{cases}` reads as one line, with no rows (a declared design choice, but still a degrade). |
+| `cases-one-line` | (none since 2026-10-07) | `\begin{cases}` read as one line, with no rows. Retired by v2 M4b: cases is set as a table; c06-q1's TeX now renders. |
 | `circ-as-degree` | c01-q1 | `f \circ g` draws the composition ring as a degree sign, °. |
 
 **The pen (found by `maths-calculus-live.cjs --dry`, fixed the same day).** `markLine` leaked raw TeX when the pen's
@@ -136,23 +136,30 @@ path's check: one equation of arithmetic in x. It reads `c13-q2` (`3x^2 - 12 = 0
 (`20 - 2x = 0` at 10), and nothing with a limit, a derivative, an integral, a function name, another letter, ≈ or
 a sentence. That column is a ratchet on the old check, not the Calculus checker.
 
-**What a photographed page reads into.** A task on a snapped page is read in code by `specFromQuestion`. When it
-reads, the hint's leak check knows the answer. When it does not, the desk claims nothing about the task. Measured by
-a one-off script (not committed) that runs `specFromQuestion` on every `question` and `page` example of
-`CALCULUS_1`, plain and TeX:
+**What a photographed page reads into.** A task on a snapped page is read in code by `specFromQuestion`, and since
+v2 M3a a two-part task (the maximum and the minimum of one function on one interval) by `partsFromQuestion`, into
+two extremum specs, only when both are well formed. When it reads, the hint's leak check knows the answer (every
+part's). When it does not, the desk claims nothing about the task. Measured by `tools/calc-word-test.cjs` ('M3a
+corpus', in `test:rules`; it prints this table and pins it), which runs both readers on every `question` and
+`page` example of `CALCULUS_1`, plain and TeX (re-measured 2026-10-08, M3a):
 
-| examples | read into a spec | of which shape |
-|---|---|---|
-| 31 questions (plain) | 13 | derivative 6 (c07-q1, c08-q1, c09-q1, c10-q2, c11-q1, c11-q2), limit 5 (c04-q1, c05-q1, c05-q2, c05-q3, c14-q1), definite-integral 2 (c20-q1, c21-q1) |
-| 33 page lines (plain) | 0 | - |
-| 64 TeX forms of the above | 0 | - (the reader takes plain text only) |
+| examples | read into a spec | read into parts | of which shape |
+|---|---|---|---|
+| 31 questions (plain) | 13 | 0 | derivative 6 (c07-q1, c08-q1, c09-q1, c10-q2, c11-q1, c11-q2), limit 5 (c04-q1, c05-q1, c05-q2, c05-q3, c14-q1), definite-integral 2 (c20-q1, c21-q1) |
+| 33 page lines (plain) | 0 | 0 | - |
+| 64 TeX forms of the above | 0 | 0 | - (the readers take plain text only) |
+
+No question that read before M3a changed its spec. The one multi-part phrasing in the corpus, c13-q1, is read as two
+parts and refused whole: its maximum, 65, is at the end x = 5, and an extremum at an endpoint is not well formed (the
+minimum alone would read; the desk does not claim half a task). The same question on [-3, 3] reads into two parts.
 
 Why the other 18 questions do not read:
 
 | reason | examples |
 |---|---|
-| a word problem: a situation in sentences | c12-q1 (the sphere), c15-q1 (the rectangle) |
-| more than one part, or more than one function | c01-q1 (f and g composed), c06-q1 (a piecewise f, find c), c13-q1 (the maximum and the minimum), c17-q1 (f from f' and f(1)), c18-q1 (write the sum, then its limit), c22-q1 (the area between two curves) |
+| a word problem: a situation in sentences (practice now has code-drawn word problems after these two, below) | c12-q1 (the sphere), c15-q1 (the rectangle) |
+| more than one part, or more than one function | c01-q1 (f and g composed), c06-q1 (a piecewise f, find c), c17-q1 (f from f' and f(1)), c18-q1 (write the sum, then its limit), c22-q1 (the area between two curves) |
+| read as two parts, then refused by `wellFormed` | c13-q1 (the maximum and the minimum): the maximum is at the endpoint 5 |
 | a task that is not one of the nine shapes | c02-q1 and c03-q1 (solve an equation), c03-q2 (log arithmetic, no x), c14-q2 (inflection points) |
 | a letter other than x | c09-q2 (theta), c10-q1 (y, implicit), c19-q1 (t, and g defined by an integral) |
 | a bare equation, with no task words | c13-q2, c15-q2 |
@@ -161,6 +168,16 @@ Why the other 18 questions do not read:
 Of the 33 page lines, 31 are printed statements (a formula, an identity, a result given with its value), so there
 is nothing to answer. The other two are tasks outside the shapes: c01-p1 (sketch a graph) and c03-p1 (find an
 inverse).
+
+**Word problems and multi-part questions in practice (v2 M3a).** A practice set cannot read c12-q1 or c15-q1 off a
+page, but on three topics it carries a question like them that code draws from a seed, with no model call
+(`desk/src/lib/rules/calc-word.ts`): `sphere-rates` on calc1-related-rates (air into a sphere at a steady rate:
+(a) how fast r grows at a given r, (b) how fast the surface area grows then), `rectangle-perimeter` on
+calc1-optimisation (a rectangle of a given perimeter: (a) its largest area, (b) its shortest diagonal) and
+`cubic-max-min` on calc1-extrema (c13-q1's task with both extrema inside the interval). Each part is an ordinary item
+with one spec of the nine shapes, judged by `checkAnswer`; the stem is printed once above the parts. The sweep
+(`tools/calc-word-test.cjs`, 500 seeds a template) counts 0 parts not well formed, 0 problems not fair, 0 worked
+answers not marked right and 0 printed numbers the code did not draw, for all three.
 
 ## The live test
 
@@ -260,7 +277,7 @@ s5 calc1-limit-laws
   c05-p1   page     renders                            | renders                            | none
   c05-p2   page     renders                            | renders                            | none
 s6 calc1-continuity
-  c06-q1   question degrades:too-wide                  | degrades:cases-one-line,too-wide   | none
+  c06-q1   question degrades:too-wide                  | renders                            | none
   c06-w1   working  renders                            | renders                            | none
   c06-c1   caption  renders                            | -                                  | none
   c06-p1   page     renders                            | renders                            | none

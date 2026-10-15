@@ -5,12 +5,16 @@
  * The owner's words: "Having dry certifications as reward system would sound great. Then the topic choice would adjust
  * the certification requirements." So a certificate names a band, and it is issued only when:
  *   1. the LATEST entry of the record of checks (`placements`) is a level check (source "check", never a band picked by
- *      hand) with medium or high confidence; that entry's band is the band certified;
+ *      hand) with HIGH confidence (placement.ts staircase: two strong passes under a real ceiling); that entry's band
+ *      is the band certified. A check read at medium or low confidence certifies nothing, and a band read once cannot
+ *      certify alone: see 5;
  *   2. every required skill is at least "on your own" (rules.ts evidenceProgress, typed evidence counting per D4), where
  *      required = the band's base skills (BASE_SKILLS) plus the skill of every topic the learner agreed in their plan;
  *   3. every required skill has at least one of the learner's own words to show: the quote of an unsupported,
  *      successful, spoken or typed piece of evidence for that skill, checked again here (quoteOk);
- *   4. no certificate already stands for that band with that same set of required skills.
+ *   4. no certificate already stands for that band with that same set of required skills;
+ *   5. at least one piece of the learner's own evidence, of the kind evidenceFor accepts, is dated AFTER the check (its
+ *      `at` is greater than the check's), so the band is corroborated by something said after it was read.
  * The model writes nothing here. It never issues and never words a certificate: a stored quote is the learner's own
  * text, held to be a substring of their reply when it was stored (rules.ts validateObservations) and again here when
  * the reply is still at hand.
@@ -63,10 +67,10 @@ export const TOPICS_KEPT = 8, PLATE_TOPICS = 6;
 const SKILL_IDS = ENGLISH_SKILLS.map(s => s.id);
 const order = (skills: Iterable<SkillId>) => { const set = new Set(skills); return SKILL_IDS.filter(id => set.has(id)); };
 
-/** The band a certificate may name now: the latest entry of the record, when it is a check with medium or high confidence. */
+/** The band a certificate may name now: the latest entry of the record, when it is a check with high confidence. */
 export function certBand(l: EnglishLearning): Band | null {
   const last = (l.placements ?? []).at(-1);
-  return last && last.source === "check" && (last.confidence === "medium" || last.confidence === "high") && isBand(last.band) ? last.band : null;
+  return last && last.source === "check" && last.confidence === "high" && isBand(last.band) ? last.band : null;
 }
 
 /**
@@ -111,10 +115,14 @@ function evidenceFor(l: EnglishLearning, skill: SkillId, words: Record<string, s
 }
 const sameSet = (a: SkillId[], b: SkillId[]) => a.length === b.length && order(a).every((x, i) => x === order(b)[i]);
 
+/** Has the learner a piece of their own evidence, of the kind evidenceFor accepts, dated after the check? Any skill. */
+const corroborated = (l: EnglishLearning, checkAt: number, words: Record<string, string>) =>
+  (l.evidence ?? []).some(e => e.at > checkAt && e.success && !e.supported && COUNTING_MODES.includes(e.mode) && quoteOk(e, words));
+
 /** A new certificate when one is earned now, else null. Pure: the same record, time and replies give the same answer. */
 export function issue(l: EnglishLearning, now: number, words: Record<string, string> = {}): Certificate | null {
   const band = certBand(l), check = (l.placements ?? []).at(-1);
-  if (!band || !check) return null;
+  if (!band || !check || !corroborated(l, check.at, words)) return null;
   const required = requirementFor(l, band);
   if (!required.length) return null;
   if ((l.certificates ?? []).some(c => c.band === band && sameSet(c.skills.map(s => s.skill), required))) return null;
@@ -136,7 +144,7 @@ export function withCertificate(l: EnglishLearning, now: number, words: Record<s
 }
 
 // ---- what a certificate still needs (linga-B): derived at read time, stored nowhere
-/** Why no certificate can be issued on this record: a band picked by hand, a check read with low confidence, or no check at all. */
+/** Why no certificate can be issued on this record: a band picked by hand, a check not read with high confidence ("low" also stands for medium), or no check at all. */
 export type CertBlocker = "self" | "low" | "no-check";
 export interface CertGap {
   /** the band the record names now (the latest entry's), null with no record of a check */
@@ -146,6 +154,8 @@ export interface CertGap {
   shown: SkillId[];
   /** required skills still to show; empty when a blocker stands or the certificate for this band and requirement is already held */
   open: SkillId[];
+  /** present (true) only when nothing is open and no piece of the learner's own evidence is dated after the check yet: then issue() waits for that piece alone */
+  needsNew?: true;
 }
 /**
  * What the certificate still needs, from the record, the plan and the evidence: the same rules issue() holds a
@@ -161,7 +171,8 @@ export function certGap(l: EnglishLearning): CertGap {
   const required = requirementFor(l, band);
   if ((l.certificates ?? []).some(c => c.band === band && sameSet(c.skills.map(s => s.skill), required))) return { band, blocker: null, shown: required, open: [] };
   const shown = required.filter(skill => { const p = progressOf(l, skill); return (p === "independent" || p === "transfer") && !!evidenceFor(l, skill, {}); });
-  return { band, blocker: null, shown, open: required.filter(s => !shown.includes(s)) };
+  const open = required.filter(s => !shown.includes(s));
+  return { band, blocker: null, shown, open, ...(!open.length && !corroborated(l, last.at, {}) ? { needsNew: true as const } : {}) };
 }
 /** The shown skills of a gap, named, with how each was shown (the mode of the evidence the plate would print). */
 export function shownSkills(l: EnglishLearning, gap: CertGap = certGap(l)): Array<{ skill: SkillId; name: string; mode: CertSkill["mode"] }> {

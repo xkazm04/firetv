@@ -2,9 +2,32 @@
  * Math Buddy's pure rows: what the session alone says is open. Shared by the Tonight screen and
  * the D-pad (tv/keys.ts). Types only from the store - the TV never loads the filesystem.
  */
-import type { Screen, Session } from "@/lib/session/store";
+import type { Practice, Screen, Session } from "@/lib/session/store";
+import { STATEMENTS } from "@/lib/library/gcse";
 import { PATHS, learnerPath, topicIn, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { firstToLook } from "@/tv/sheetRows";
+import { slip as slipById } from "@/lib/rules/maths";
+import { SCHOOL_UNIT_SLIPS, topAimLine } from "@/lib/rules/school";
+import { likeTopic } from "@/lib/rules/kinds";
+
+/** The local day a moment falls in, as the evening log and a snapped page are stamped with it (store.ts dayed/stamped, page.reading). */
+export const dayOf = (at: number): string => { const d = new Date(at); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+
+/**
+ * Tonight's sheet: the seated learner's newest maths page snapped today that is being read now or was read with at
+ * least one problem. A page with no day stamp (an older session) is not tonight's; a failed or empty page is not
+ * either. The homework door opens this page, and its caption says so by the same answer; with none, the door asks
+ * for a photo. Older pages stay on the desk.
+ */
+export function tonightsSheet(s: Pick<Session, "pages" | "pageIx" | "reading">, now = Date.now()): { page: Session["pages"][number]; ix: number } | null {
+  const today = dayOf(now);
+  for (let ix = s.pages.length - 1; ix >= 0; ix--) {
+    const page = s.pages[ix];
+    if (page.subject !== "maths" || page.day !== today) continue;
+    if (page.items.length > 0 || (s.reading && s.pages[s.pageIx]?.id === page.id)) return { page, ix };
+  }
+  return null;
+}
 
 /** Where a topic stands on the path: secure (latched), the one in hand, open next, or later. */
 export type TopicState = "secure" | "here" | "next" | "later";
@@ -93,7 +116,7 @@ export type ContinueGo = Extract<Screen, "practice" | "sheet" | "page">;
  * screen says nothing about it.
  */
 export interface Continue { k: string; t: string; d: string; cap: string; go: ContinueGo; pageIx: number; focus: number }
-export function continueCard(s: Session): Continue | null {
+export function continueCard(s: Session, now = Date.now()): Continue | null {
   const name = s.practice ? topicName(s.practice.topic) : "";
   if (s.practice && !s.practice.marked) return {
     k: "Still open", t: "Finish the set", d: `${s.practice.items.length} questions on ${name}, not marked yet.`,
@@ -107,11 +130,12 @@ export function continueCard(s: Session): Continue | null {
       : "The marked set is still on the desk. Enter shows it again, on the first one to look at.",
     go: "sheet", pageIx: 0, focus: firstToLook(s.practice.items),
   }; }
-  const pi = s.pages.findIndex((p) => p.subject === "maths" && p.items.length > 0);
-  if (pi >= 0) { const p = s.pages[pi]; return {
+  // tonight's sheet, by the same answer the door gives; a page still being read, with no problems yet, gets no card
+  const t = tonightsSheet(s, now);
+  if (t && t.page.items.length > 0) { const p = t.page; return {
     k: "On the desk", t: "Back to the sheet", d: `${p.title} · ${p.items.length} problems read.`,
-    cap: "The sheet you snapped is still on the desk. Enter opens it where you were.",
-    go: "page", pageIx: pi, focus: 0,
+    cap: "Tonight's sheet is still on the desk. Enter opens it at the first problem.",
+    go: "page", pageIx: t.ix, focus: 0,
   }; }
   return null;
 }
@@ -136,6 +160,23 @@ function sheetCount(n: number, cap: boolean): string {
   const w = SET_WORDS[n];
   if (!w) return String(n);
   return cap ? w.charAt(0).toUpperCase() + w.slice(1) : w;
+}
+
+/** Words in a line, as the card is counted. */
+const wordCount = (t: string) => t.split(/\s+/).filter(Boolean).length;
+/**
+ * The Sheet's Six more card (math-buddy-A): what the next six are aimed at, said truthfully. A school unit written by code
+ * (rules/school SCHOOL_UNIT_SLIPS) with a live slip on it names the newest one in the desk's own slip words - the set is
+ * drawn so it shows (lib/desk/items makeSchoolItems); a school unit with none makes no claim of aiming; a linear or Calculus
+ * topic keeps the line it had, since the model is only asked there. `slips` is the record's, newest last. At most 25 words.
+ */
+export function moreLine(topicId: string, name: string, slips: readonly string[]): string {
+  if (!Object.prototype.hasOwnProperty.call(SCHOOL_UNIT_SLIPS, topicId)) return `Six new questions on ${name}, aimed at the slips the desk has seen. Work them on paper, like this set.`;
+  const own = SCHOOL_UNIT_SLIPS[topicId], live = slips.filter((id) => own.includes(id));
+  if (!live.length) return `Six new questions on ${name}. Work them on paper, like this set.`;
+  const id = live[live.length - 1], said = slipById(id)?.name ?? humanTopic(id);
+  const lines = [`Six new questions on ${name}, aimed at: ${said}. Work them on paper, like this set.`, `Six new questions on ${name}, aimed at: ${said}. Work them on paper.`, `Six new questions, aimed at: ${said}.`];
+  return lines.find((l) => wordCount(l) <= 25) ?? lines[2];
 }
 
 /**
@@ -223,7 +264,9 @@ export function fitRow(base: number, room: number, widthAt: (px: number) => numb
  * answer, a verdict or a model's words - only the desk's fixed sentences.
  */
 export interface JobLine { phase: "running" | "failed"; text: string }
-type JobsOf = Pick<Session, "jobs" | "practice">;
+type JobsOf = Pick<Session, "jobs" | "practice" | "learner">;
+/** A running job of a learner who left is not the seated learner's to see (P14); a job with no `by` shows as it always did. */
+const theirs = (j: { by?: string }, s: JobsOf) => j.by === undefined || j.by === s.learner?.id;
 /** When a run last moved: its end, or its start while it runs. */
 const at = (j: { startedAt: number; endedAt?: number } | undefined) => (j ? j.endedAt ?? j.startedAt : -Infinity);
 
@@ -232,17 +275,16 @@ export const MARKING = "The desk is marking the set…";
 /** Practice, after a failed mark: how to ask again (the phone's snap is the retry). */
 export const SNAP_AGAIN = "Snap the sheet again and the desk tries again.";
 /**
- * The Practice caption's state: the set is being marked, or the mark failed (its sentence, then that snapping again
- * tries again - the sentence's own "Try again." is dropped, as the snap line says how). A failure belongs to the
+ * The Practice caption's state: the set is being marked, or the mark failed (its sentence as the job says it, then
+ * that snapping again tries again - the job's sentence carries no action of its own: job.ts jobError). A failure belongs to the
  * set it was for: once a newer set has been written it is not shown. Otherwise null, and the caption is unchanged.
  */
 export function markLine(s: JobsOf): JobLine | null {
   const p = s.practice, j = s.jobs?.mark;
   if (!p || p.marked || !j) return null;
-  if (j.phase === "running") return { phase: "running", text: MARKING };
+  if (j.phase === "running") return theirs(j, s) ? { phase: "running", text: MARKING } : null;
   if (j.phase !== "failed" || at(s.jobs?.practice) > at(j)) return null;
-  const said = (j.error ?? "The desk could not mark the set.").replace(/\s*Try again\.\s*$/, "");
-  return { phase: "failed", text: `${said} ${SNAP_AGAIN}` };
+  return { phase: "failed", text: `${j.error ?? "The desk could not mark the set."} ${SNAP_AGAIN}` };
 }
 
 /** The Walk, while the learner's explanation of the open item is being thought over. */
@@ -255,7 +297,7 @@ export const THINKING = "The desk is thinking over what you said…";
 export function explainLine(s: JobsOf, n: number): JobLine | null {
   const j = s.jobs?.explain;
   if (!s.practice?.marked || !j || j.key !== String(n)) return null;
-  if (j.phase === "running") return { phase: "running", text: THINKING };
+  if (j.phase === "running") return theirs(j, s) ? { phase: "running", text: THINKING } : null;
   if (j.phase !== "failed" || at(s.jobs?.mark) > at(j)) return null;
   return { phase: "failed", text: j.error ?? "The desk could not follow that. Try again." };
 }
@@ -288,4 +330,57 @@ export function paperSquare(rows: ReadonlyArray<{ h: number; min: number }>, chr
     if (squares * sq <= room) return sq;
   }
   return sizes[sizes.length - 1];
+}
+
+/** The page item under the lamp: the hint's own problem on the Hint screen, else the item the page has focused. */
+type InHand = Pick<Session, "profiles" | "learner" | "hint" | "pages" | "pageIx" | "itemIx">;
+
+/** The unit Six like this would write for the task in hand (rules/kinds likeTopic, on the learner's path), or null: the pill stays as it was. */
+export function likeUnit(s: InHand): string | null {
+  const text = s.hint?.problem ?? s.pages[s.pageIx]?.items[s.itemIx]?.text;
+  return likeTopic(text, learnerPath(s));
+}
+
+/**
+ * The Hint screen's second pill on a task that reads as a unit (math-buddy-B): 'Six like this' to press, 'Writing six like
+ * it' while that unit's practice job runs (the pill is not pressable then), and after a failed job the job's own sentence
+ * `failed` for the card's quiet line, the pill pressable again. Null when the task reads as no unit.
+ */
+export function likePill(s: Pick<Session, "jobs"> & InHand): { label: string; busy: boolean; failed: string | null } | null {
+  const unit = likeUnit(s);
+  if (!unit) return null;
+  const j = s.jobs?.practice?.key === unit ? s.jobs.practice : undefined;
+  return j?.phase === "running" ? { label: "Writing six like it", busy: true, failed: null }
+    : { label: "Six like this", busy: false, failed: j?.phase === "failed" ? j.error ?? null : null };
+}
+
+/** The Page side card's title for item `n`: 'Number 3 · Add and subtract fractions' when the task reads as a unit on the learner's path, else 'Number 3'. */
+export function itemTitle(n: number, text: string, s: Pick<Session, "profiles" | "learner">): string {
+  const unit = likeTopic(text, learnerPath(s));
+  return unit ? `Number ${n} · ${topicName(unit)}` : `Number ${n}`;
+}
+
+/** The most words the Practice card's aim line may take (MB-B40): the caption slot's budget. */
+export const AIM_WORDS = 25;
+const AIM_HEAD = "Aimed at what the paper lost:";
+const MORE_WORD = ["", "one", "two", "three", "four", "five"];
+const moreOf = (n: number) => (n ? ` and ${MORE_WORD[n] ?? "several"} more` : "");
+/**
+ * What a set opened from a paper's recovery row aims at (MB-B40), for the Practice card: "Aimed at what the paper lost:"
+ * and the lost statements in the GCSE map's own words, as many whole as fit in AIM_WORDS, then "and one more". Null for a
+ * set with no aim, or none the map knows. Statements only: never a question, a mark or a code.
+ * A step up aimed at the slips named on its unit's top rung (cycle 18, Practice.topAim) says so in the same slot, in
+ * rules/school topAimLine's words: "Aimed at: took the percent of the new amount." A paper's aim comes first.
+ */
+export function aimLine(p: (Pick<Practice, "aim"> & Partial<Pick<Practice, "topic" | "topAim">>) | null | undefined): string | null {
+  const said = (p?.aim ?? []).map((c) => STATEMENTS.find((x) => x.code === c)?.can).filter((x): x is string => !!x)
+    .map((x) => x.charAt(0).toLowerCase() + x.slice(1));
+  if (!said.length) return p?.topAim?.length ? topAimLine(p.topic, p.topAim) : null;
+  const kept: string[] = [];
+  for (let i = 0; i < said.length; i++) {
+    const tail = moreOf(said.length - i - 1);
+    if (kept.length && wordCount(`${AIM_HEAD} ${[...kept, said[i]].join("; ")}${tail}`) > AIM_WORDS) break;
+    kept.push(said[i]);
+  }
+  return `${AIM_HEAD} ${kept.join("; ")}${moreOf(said.length - kept.length)}.`;
 }

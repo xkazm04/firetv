@@ -4,11 +4,12 @@
  * npm test in desk/ (directly: node tools/kpi-measure-test.cjs). Fixture checkouts live in a disposable directory,
  * never desk/data — and no fixture here ever names a real node_modules, let alone removes one.
  */
-const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict');
 const {test,after}=require('node:test');
 const {findLearnerBook,learnerEvidence}=require('./kpi-measure.cjs');
 const preflight=require('./worktree-preflight.cjs');
-const scratch=path.resolve(__dirname,'../artifacts/kpi-measure',String(Date.now()));
+// under the OS temp dir and removed at the end, as the uat suites do: a run leaves nothing in the tree
+const scratch=fs.mkdtempSync(path.join(os.tmpdir(),'kpi-measure-'));
 const checkout=(name,book)=>{const dir=path.join(scratch,name);fs.mkdirSync(path.join(dir,'desk/data'),{recursive:true});if(book!==undefined)fs.writeFileSync(path.join(dir,'desk/data/learners.json'),typeof book==='string'?book:JSON.stringify(book));return dir;};
 const ONE={ema:{id:'ema',skills:{},memory:[]}};
 
@@ -49,7 +50,15 @@ test('a book that is not a learner book is no reading either',()=>{
 // The worktree preflight. Every path below is inside the disposable scratch directory: the fixtures' node_modules
 // are three files deep, the only link made points scratch at scratch, and nothing outside scratch is read or written.
 const links=[];
-after(()=>{for(const l of links.reverse()){try{fs.unlinkSync(l);}catch{try{fs.rmdirSync(l);}catch{/* scratch is disposable */}}}});
+// Links first, each by unlink (never a recursive remove through a junction). Scratch is removed only once every link
+// is gone; a link that outlived its unlink keeps scratch on disk rather than risk a remove that walks through it.
+const gone=l=>{try{fs.lstatSync(l);return false;}catch{return true;}};
+after(()=>{
+ for(const l of links.reverse()){try{fs.unlinkSync(l);}catch{try{fs.rmdirSync(l);}catch{/* reported below */}}}
+ const left=links.filter(l=>!gone(l));
+ if(left.length){console.error(`kpi-measure-test: ${left.length} link(s) still in ${scratch}; scratch left in place`);return;}
+ fs.rmSync(scratch,{recursive:true,force:true});
+});
 const install=(name,{typescript=true,other=false}={})=>{
  const dir=path.join(scratch,name),modules=path.join(dir,'desk/node_modules');
  if(typescript){fs.mkdirSync(path.join(modules,'typescript'),{recursive:true});fs.writeFileSync(path.join(modules,'typescript/package.json'),'{"name":"typescript"}');}
@@ -93,13 +102,47 @@ test('a missing desk/node_modules is linked to the donor, and the link is what t
  assert.equal(preflight.usable(dest),true,'tsc and the rules suites find the compiler through it');
  const o=said();assert.equal(preflight.run(r,o),0);
  assert.equal(o.lines.length,1,'one line, not a stack');assert.match(o.lines[0],/^desk\/node_modules was missing — linked it to /);
+ assert.match(o.lines[0],/Unlink it before removing this worktree: `git worktree remove --force` follows the link and empties /,'removing the worktree through the link empties the donor; the one line says so');
  assert.equal(preflight.ensure({env:{},checkout:wt,main:null,levels:1,link:never}).action,'present','a second run is a no-op');
 });
 test('no donor anywhere is one instruction and a non-zero exit, never a stack',()=>{
  const r=preflight.ensure({env:{},checkout:bare('worktree-alone'),main:null,levels:0});
  const o=said();assert.equal(r.action,'unavailable');assert.equal(preflight.run(r,o),1);
- assert.match(r.reason,/no checkout near /);
+ assert.match(r.reason,/no worktree of this repository has a desk\/node_modules with typescript in it/);
  assert.equal(o.lines.length,1,'one line, not a stack');assert.match(o.lines[0],/Run `npm install` in desk\/, then `npm test`\.$/);
+});
+// A donor's code runs under npm test, so by default only what git says is this repository may donate. The crawl up the
+// tree reached C:\Users\Public and the drive root (2026-10-14): directories any local user can plant an install in.
+test('by default no directory is crawled: a sibling with the compiler is not a donor unless levels is asked for',()=>{
+ install('donor-sibling-uninvited');const wt=bare('worktree-no-crawl');
+ assert.equal(preflight.findDonor({env:{},checkout:wt,main:null}),null,'the default walks no parent directory');
+ assert.deepEqual(preflight.donorCandidates({env:{},checkout:wt,main:null}),[],'and names no candidate at all');
+ assert.match(preflight.findDonor({env:{},checkout:wt,main:null,levels:1}).source,/^sibling checkout /,'the crawl is still there when it is asked for');
+});
+test('the worktrees of this repository are the donors, the main one first, this checkout never',()=>{
+ const main=bare('main-without-install'),other=install('worktree-with-install'),wt=bare('worktree-needing-a-donor');
+ const c=preflight.donorCandidates({env:{},checkout:wt,trees:[main,wt,other.dir]});
+ assert.deepEqual(c.map(x=>x.source),['main checkout',`worktree ${path.resolve(other.dir)}`],'main once, then the others in git\'s order, not itself');
+ assert.equal(preflight.findDonor({env:{},checkout:wt,trees:[main,wt,other.dir]}).modules,path.resolve(other.modules),'a main without the compiler is passed over');
+});
+test('worktrees() lists what git lists for a real repository, the main worktree first',()=>{
+ const {spawnSync}=require('node:child_process'),{worktrees}=require('./checkout.cjs');
+ const repo=path.join(scratch,'git-main'),wt=path.join(scratch,'git-linked');fs.mkdirSync(repo,{recursive:true});
+ const git=(...a)=>spawnSync('git',['-c','user.email=t@t','-c','user.name=t',...a],{cwd:repo,encoding:'utf8'});
+ git('init','-q');fs.writeFileSync(path.join(repo,'f'),'x');git('add','f');git('commit','-qm','i');
+ assert.equal(git('worktree','add','-q',wt).status,0,'a linked worktree');
+ const same=(a,b)=>fs.realpathSync(a).toLowerCase()===fs.realpathSync(b).toLowerCase();
+ const listed=worktrees(wt);assert.equal(listed.length,2);assert.ok(same(listed[0],repo),'main first');assert.ok(same(listed[1],wt));
+ assert.deepEqual(worktrees(bare('not-a-repo')),[],'no git here, no worktrees');
+ git('worktree','remove','--force',wt);
+});
+// The gate's typecheck must start the compiler the preflight checked for. A bare `tsc` resolves through node_modules/.bin,
+// which the preflight never looks at: a linked donor without .bin (the main checkout, measured 2026-10-13) passes the
+// preflight in silence and the gate then dies on "tsc is not recognized" in every worktree.
+test('npm test\'s typecheck runs the compiler by the path the preflight and the KPI tool check, never through .bin',()=>{
+ const scripts=JSON.parse(fs.readFileSync(path.join(__dirname,'../desk/package.json'),'utf8')).scripts;
+ assert.match(scripts['test:types'],/^node node_modules\/typescript\/bin\/tsc --noEmit\b/,'the compiler is started by its file, not by a .bin shim');
+ assert.doesNotMatch(scripts['test:types'],/(^|&&\s*)tsc\b/,'no bare tsc');
 });
 test('a real directory in the way is reported, never deleted — an install is the operator\'s, not ours',()=>{
  const half=install('checkout-half-installed',{typescript:false,other:true});install('donor-for-half');
@@ -158,4 +201,26 @@ test('kpi-measure and the preflight resolve the same main checkout, from one sha
   assert.doesNotMatch(code,/function\s+mainCheckout\b/,`${f} keeps no copy of mainCheckout`);
   assert.doesNotMatch(code,/const\s+same\s*=/,`${f} keeps no copy of same`);
  }
+});
+
+// The rules runner gives every suite a timeout (run-rules.cjs RULES_SUITE_TIMEOUT_MS); the KPI tool runs the same Linga
+// suite and must not wait on it for ever either. A suite that never exits is no reading, said so, never a hang.
+test('a Linga suite that never finishes is no reading after the timeout, and says it timed out',()=>{
+ const {lingaChecks}=require('./kpi-measure.cjs');
+ const stuck=path.join(scratch,'stuck-suite.cjs');fs.writeFileSync(stuck,"setInterval(()=>{},1000);\n");
+ const t0=Date.now(),r=lingaChecks({file:stuck,timeout:400});
+ assert.ok(Date.now()-t0<20000,'it returned');
+ assert.strictEqual(r.pass,null);assert.strictEqual(r.fail,null);assert.match(r.note,/timed out after 400 ms/);
+ const done=path.join(scratch,'done-suite.cjs');fs.writeFileSync(done,"console.log('# pass 3');console.log('# fail 0');\n");
+ assert.deepEqual(lingaChecks({file:done,timeout:20000}),{pass:3,fail:0,note:null},'a suite that finishes is read as before');
+});
+test('a typecheck that never finishes is no reading after the timeout, and says it timed out',()=>{
+ const {typecheckErrors}=require('./kpi-measure.cjs');
+ const fake=path.join(scratch,'desk-stuck-tsc');fs.mkdirSync(path.join(fake,'node_modules/typescript/bin'),{recursive:true});
+ fs.writeFileSync(path.join(fake,'node_modules/typescript/bin/tsc'),"setInterval(()=>{},1000);\n");
+ const t0=Date.now(),r=typecheckErrors({deskDir:fake,timeout:400});
+ assert.ok(Date.now()-t0<20000,'it returned');
+ assert.strictEqual(r.errors,null);assert.match(r.note,/timed out after 400 ms/);
+ fs.writeFileSync(path.join(fake,'node_modules/typescript/bin/tsc'),"console.log('a.ts(1,1): error TS2307: Cannot find module x');process.exit(2);\n");
+ assert.deepEqual(typecheckErrors({deskDir:fake,timeout:20000}),{errors:1,unresolved:1,note:null},'a typecheck that finishes is read as before');
 });

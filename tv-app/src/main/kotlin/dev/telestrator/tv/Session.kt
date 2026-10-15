@@ -9,9 +9,13 @@ import dev.telestrator.core.PenEngine
 import dev.telestrator.core.PenMessage
 import dev.telestrator.core.asTransport
 import android.os.SystemClock
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import java.security.SecureRandom
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -28,8 +32,13 @@ class Session(clipId: String, videoAspect: Double) {
     private val _doc = MutableStateFlow(engine.doc)
     val doc: StateFlow<AnnotationDoc> = _doc
 
-    private val _transport = MutableStateFlow<TransportCommand?>(null)
-    val transport: StateFlow<TransportCommand?> = _transport
+    /**
+     * Transport commands for the player, every one in arrival order. A state flow kept only the
+     * newest: a burst (two undos, an undo and a seek, messages a Wi-Fi stall delivered together)
+     * reached the player as its last command alone.
+     */
+    private val _commands = Channel<TransportCommand>(Channel.UNLIMITED)
+    val commands: Flow<TransportCommand> = _commands.receiveAsFlow()
 
     /** Set by the player each frame; read when a pen message arrives so strokes anchor to a time. */
     @Volatile
@@ -67,18 +76,23 @@ class Session(clipId: String, videoAspect: Double) {
     @Volatile
     private var dirty: Boolean = false
 
-    val pin: String = (1000..9999).random().toString()
+    /** Six digits from a cryptographic generator: 900000 values, not guessable from the seed. */
+    val pin: String = (100_000 + PIN_RANDOM.nextInt(900_000)).toString()
 
     fun penConnected(): Int = pens.incrementAndGet()
 
-    fun penDisconnected(): Int = pens.decrementAndGet().coerceAtLeast(0).also { pens.set(it) }
+    /**
+     * One atomic step, never below zero. Decrementing and then writing the clamped value back as a
+     * second step lost every connect or disconnect another pen's thread made in between.
+     */
+    fun penDisconnected(): Int = pens.updateAndGet { (it - 1).coerceAtLeast(0) }
 
     fun accept(msg: PenMessage) {
         // Undo and redo take the planner's road, the remote's and the phone's alike: the ink they
         // touch may be on another frame, and only the planner sees the player (TransportPlan).
         val transport = msg as? PenMessage.Transport ?: msg.asTransport()
         if (transport != null) {
-            _transport.value = TransportCommand(transport.cmd, transport.value, System.nanoTime())
+            _commands.trySend(TransportCommand(transport.cmd, transport.value))
             return
         }
         edit(msg)
@@ -132,5 +146,10 @@ class Session(clipId: String, videoAspect: Double) {
         )
     }
 
-    data class TransportCommand(val cmd: String, val value: Double, val nanos: Long)
+    data class TransportCommand(val cmd: String, val value: Double)
+
+    internal companion object {
+        /** Where the pairing PIN comes from. Not kotlin.random: that is seeded for speed, not secrecy. */
+        val PIN_RANDOM: java.util.Random = SecureRandom()
+    }
 }

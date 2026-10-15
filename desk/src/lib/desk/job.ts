@@ -8,9 +8,12 @@
  * and the old run's events are dropped by id). The free-text `status` line is still written, so the bench
  * bar and the phone keep working; on a failure it is the job's desk sentence alone. The engine's detail can
  * carry raw model output - an answer - so it goes to the server log (kind, run id, detail), never to a screen.
+ * A run writes its done or failure line only while the learner who asked is still seated, so a run that outlives a switch never speaks on the next learner's desk.
  */
+import { RETRYABLE, type JobFailure } from "./failure";
 import { NextResponse } from "next/server";
-import { dispatch, getSession, type JobInput, type JobKind } from "../session/store";
+import { dispatch, getSession, LEARNER_UNREAD_RUN, type Job, type JobInput, type JobKind } from "../session/store";
+import { LearnersUnread } from "../session/learners";
 import { EngineError, type EngineErrorKind } from "../engines/types";
 
 export interface JobRun {
@@ -32,10 +35,12 @@ export interface JobOptions<T> {
    * the route's own request body, minus anything big (a page is held on the session by its id, not its image).
    */
   input?: JobInput;
+  /** The learner the run is for; defaults to the one seated when it starts. The run speaks only while they are seated, and the job records them. */
+  askedBy?: string;
   /** Put the session right before the failure is recorded (e.g. a page stops "reading"). */
   onFail?: (e: unknown) => void;
 }
-export type JobResult<T> = { ok: true; value: T } | { ok: false; status: 409 | 502; error: string };
+export type JobResult<T> = { ok: true; value: T } | { ok: false; status: 409 | 502; error: string; failure?: JobFailure };
 
 /** What each pipeline is, in the desk's words, when it does not come back. */
 const FAILED: Record<JobKind, string> = {
@@ -47,6 +52,7 @@ const FAILED: Record<JobKind, string> = {
   practice: "The desk could not write this set.",
   analyse: "The desk could not read that through.",
   memory: "The desk could not write tonight down.",
+  teach: "The desk could not put the lesson together.",
 };
 /** Why, when the engine says. */
 const WHY: Record<EngineErrorKind, string> = {
@@ -54,17 +60,44 @@ const WHY: Record<EngineErrorKind, string> = {
   unreachable: "The engine behind it is not answering.",
   exit: "The engine behind it stopped part way.",
   shape: "The answer came back in pieces.",
+  cutoff: "The answer ran past its length limit.",
+  declined: "The engine would not answer that one.",
 };
+/** A read that came back with nothing on the page: the job fails with this, and Try again reads the same page again. */
+export const EMPTY_READ = "The desk found nothing to read on that page. Try again.";
 export const BUSY = "The desk is already on it.";
 /** A run whose result no longer fits the desk (another learner sat down, the page went): dropped, not failed. */
 export const MOVED_ON = "The desk has moved on since that was asked.";
 /** POST /api/session/retry with no failed run of that kind. */
 export const NOTHING = "There is nothing to try again.";
+/** A failed run that asking again with the same input would end the same way (failure.ts RETRYABLE). */
+export const NOT_AGAIN = "Asking again would end the same way. Change what was sent, then send it.";
 
-/** The sentence a failed run leaves on the session: never an exception's text or its stack. */
+/** A failure whose reason the desk already has in its own words: a run throws it, and the job carries the sentence as it is. */
+export class DeskSaid extends Error {}
+
+/** Why a run failed, as the value every consumer reads (failure.ts): decided here, once, from the error's class and kind. */
+export function failureOf(e: unknown): JobFailure {
+  if (e instanceof DeskSaid) return "said";
+  if (e instanceof LearnersUnread) return "unread";
+  return e instanceof EngineError ? e.kind : "unknown";
+}
+
+/**
+ * The sentence a failed run leaves on the session: never an exception's text or its stack. It says what failed and,
+ * when the desk knows, why - never what to do next: whether asking again can help is `retry` (failure.ts), and each
+ * surface words its own action (the phone's Try again, the TV's Select or snap line).
+ */
 export function jobError(kind: JobKind, e: unknown): string {
+  if (e instanceof DeskSaid) return e.message;
+  if (e instanceof LearnersUnread) return LEARNER_UNREAD_RUN;
   const why = e instanceof EngineError ? WHY[e.kind] : "";
-  return why ? `${FAILED[kind]} ${why}` : `${FAILED[kind]} Try again.`;
+  return why ? `${FAILED[kind]} ${why}` : FAILED[kind];
+}
+
+/** Whether a job holds its kind against a new run by the seated learner: running, and theirs or nobody's (P11). */
+export function blocksRun(job: Job | undefined, seatedId: string | undefined): boolean {
+  return job?.phase === "running" && (job.by === undefined || job.by === seatedId);
 }
 
 let seq = 0;
@@ -73,32 +106,40 @@ const detail = (e: unknown) => (e instanceof Error ? e.message : String(e)).spli
 
 export async function runJob<T>(kind: JobKind, work: (run: JobRun) => Promise<T>, opts: JobOptions<T> = {}): Promise<JobResult<T>> {
   const now = getSession().jobs?.[kind];
-  if (now?.phase === "running" && !opts.supersedes) return { ok: false, status: 409, error: BUSY };
+  const seatedNow = getSession().learner?.id, asker = opts.askedBy ?? seatedNow;
+  if (blocksRun(now, seatedNow) && !opts.supersedes) return { ok: false, status: 409, error: BUSY };
+  // a run for a learner who left never replaces a running run of the seated learner (P10-a)
+  if (opts.supersedes && asker !== seatedNow && now?.phase === "running" && now.by === seatedNow) return { ok: false, status: 409, error: BUSY };
   const id = runId(kind);
+  const seated = () => getSession().learner?.id === asker;
   const run: JobRun = { id, current: () => getSession().jobs?.[kind]?.id === id };
-  dispatch({ type: "job.start", kind, id, ...(opts.key !== undefined ? { key: opts.key } : {}), ...(opts.input ? { input: opts.input } : {}) });
-  if (opts.start) dispatch({ type: "status", text: opts.start });
+  dispatch({ type: "job.start", kind, id, ...(opts.key !== undefined ? { key: opts.key } : {}), ...(opts.input ? { input: opts.input } : {}), ...(opts.start ? { start: opts.start } : {}), ...(asker !== undefined ? { by: asker } : {}) });
+  if (opts.start && seated()) dispatch({ type: "status", text: opts.start });
   try {
     const value = await work(run);
     if (run.current()) {
       dispatch({ type: "job.done", kind, id });
-      if (opts.done) dispatch({ type: "status", text: opts.done(value) });
+      if (opts.done && seated()) dispatch({ type: "status", text: opts.done(value) });
     }
     return { ok: true, value };
   } catch (e) {
-    const error = jobError(kind, e);
+    const error = jobError(kind, e), failure = failureOf(e);
     // the engine's detail can carry raw model output (an answer): it goes to the server log, never to a screen
     console.error(`desk job failed: ${kind} ${id}: ${detail(e)}`);
     if (run.current()) {
-      try { opts.onFail?.(e); } catch {}
-      dispatch({ type: "job.failed", kind, id, error });
-      dispatch({ type: "status", text: error });
+      // a put-right that breaks never stops the failure being recorded, and its own error reaches the log (never no door)
+      try { opts.onFail?.(e); } catch (f) { console.error(`desk job onFail failed: ${kind} ${id}: ${detail(f)}`); }
+      dispatch({ type: "job.failed", kind, id, error, failure });
+      if (seated()) dispatch({ type: "status", text: error });
     }
-    return { ok: false, status: 502, error };
+    return { ok: false, status: 502, error, failure };
   }
 }
 
-/** The answer a route gives for a run that did not succeed: 409 while one is running, 502 when it failed. */
-export function refused(r: { status: 409 | 502; error: string }): NextResponse {
-  return NextResponse.json({ error: r.error }, { status: r.status });
+/**
+ * The answer a route gives for a run that did not succeed: 409 while one is running, 502 when it failed. A failed run's
+ * body also says why, as a value, and whether asking again can help, so a client branches on those, never on the sentence.
+ */
+export function refused(r: { status: 409 | 502; error: string; failure?: JobFailure }): NextResponse {
+  return NextResponse.json(r.failure ? { error: r.error, failure: r.failure, retry: RETRYABLE[r.failure] } : { error: r.error }, { status: r.status });
 }

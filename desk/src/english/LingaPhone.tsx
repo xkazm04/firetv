@@ -2,13 +2,20 @@
 import { useState } from "react";
 import type { Event, Session } from "@/lib/session/store";
 import { certWords, monthOf, recommendFor } from "@/lib/english/cert";
-import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL } from "@/lib/english/curriculum";
-import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
-import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
+import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL } from "@/lib/english/curriculum";
+import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, conversationBand, isBand, MAX_TASKS, PLAN_MAX, restsLine, TOPIC_ASK_MAX } from "@/lib/english/placement";
+import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement, type Take } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
+import { isPitchId, PITCH_MAX } from "@/lib/english/pitch";
+import { NOTE_LABEL } from "@/lib/english/notes";
+import { currentStep } from "@/lib/english/mission";
 import { accepts, turnState } from "@/lib/english/turn";
+import { runningTake } from "@/lib/english/take";
+import { beatOf, COSTAR_MAX } from "@/lib/english/duet";
+import { LOST_SCENE } from "@/lib/english/lostfound";
 import { activeCheck, helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
+import { LostPicture } from "./LostPicture";
 import { useEnglish } from "./useEnglish";
 
 type Run=(action:string,extra?:Record<string,unknown>)=>Promise<boolean>;
@@ -25,21 +32,24 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
   const [notes,setNotes]=useState(learning.notes.join("\n"));
   const [message,setMessage]=useState("");
   const pending=busy||!!c?.pending;
-  const scene=c?.scene??ENGLISH_SCENES.find(x=>x.id===c?.sceneId);
+  const scene=c?.scene??AUTHORED_SCENES.find(x=>x.id===c?.sceneId);
   const save=async()=>{if(await run("preferences",{preferences:prefs,notes:notes.split("\n").map(n=>n.trim()).filter(Boolean)})){setMessage("Your learning preferences are saved. They apply to your next situation.");setPanel("talk");}};
   const currentQuestion=c?.turns.at(-1)?.text;
   // what the phone may draw beyond its own panel's fixed controls comes from the Linga screen model (lib/english/view.ts)
   const offered=offeredActions(lingaView(s)),offer=(id:string)=>offered.find(a=>a.id===id);
-  const cue=offer("cue"),quiz=offer("quiz"),panelOf=phonePanel(s);
+  // Cut (v2 L3) is offered in Adult mode only, where the learner has a line of their own (view.ts, turn.ts)
+  const cue=offer("cue"),quiz=offer("quiz"),cut=offer("cut"),panelOf=phonePanel(s);
   // where the conversation stands in its turn, and what the server takes there (lib/english/turn.ts)
   const st=c?turnState(c):null,inFlight=st==="preparing"||st==="waiting",refused=(action:string)=>busy||!c||!accepts(c,action);
+  // Take Two (v2 L4): the take running holds the talk panel; on the recap, one Take Two per cut note, as the view offers it
+  const take=c?runningTake(c):null,takeTwo=offered.filter(a=>a.id==="take-two");
   return <div className="pscreen linga-phone">
     <h3>Linga · {s.learner?.name}</h3>
     <div className="linga-buttons"><button className="pbtn" data-secondary={panel!=="talk"} onClick={()=>setPanel("talk")}>Talk</button><button className="pbtn" data-secondary={panel!=="settings"} onClick={()=>{setPrefs(learning.preferences??defaultPreferences(profile));setNotes(learning.notes.join("\n"));setPanel("settings");}}>Set up</button><button className="pbtn" data-secondary={panel!=="map"} onClick={()=>setPanel("map")}>My map</button></div>
     {panel==="settings"&&<>
       <p>Choose what feels useful. English level, imagination and social challenge are separate.</p>
       <label>Your level<select value={isBand(prefs.level)?prefs.level:"A1"} onChange={e=>setPrefs({...prefs,level:e.target.value as Band})}>{BANDS.map(b=><option key={b} value={b}>{b} · {BAND_NAME[b]}</option>)}</select></label>
-      <p className="linga-note">{learning.placement?.source==="check"?`Linga found ${learning.placement.band}. Changing it here makes it your own pick.`:"Not sure? Find your level with Linga from the Talk tab."}</p>
+      <p className="linga-note">{learning.placement?.source==="check"?(conversationBand(learning.placement)!==learning.placement.band?`Linga found ${learning.placement.band}; conversations start at ${conversationBand(learning.placement)}, nearer how you spoke. Either is still Linga's; another level makes it your own pick.`:`Linga found ${learning.placement.band}. Changing it here makes it your own pick.`):"Not sure? Find your level with Linga from the Talk tab."}</p>
       <label>Interests<input value={prefs.interest} maxLength={160} placeholder="Games, music, travel, making things…" onChange={e=>setPrefs({...prefs,interest:e.target.value})}/></label>
       <label>What would you like to practise?<input value={prefs.goal} maxLength={160} placeholder="An interview, meeting people, school…" onChange={e=>setPrefs({...prefs,goal:e.target.value})}/></label>
       <label>Creativity<select value={prefs.creativity} onChange={e=>setPrefs({...prefs,creativity:e.target.value as EnglishPreferences["creativity"]})}><option value="familiar">Familiar situations</option><option value="playful">Playful details</option><option value="surprising">A harmless surprise</option></select></label>
@@ -55,30 +65,34 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
       <p>What you say and what you type both count toward On your own; picking a phrase does not. These are learning indicators.</p>
       {ENGLISH_SKILLS.map(skill=><div className="linga-skill" key={skill.id}><b>{skill.name}</b><small>Progress: {PROGRESS_LABEL[learning.achievements[skill.id]??"not-tried"]}</small><small>{practiceLine(learning.evidence, skill.id, "phone")}</small></div>)}
       <a href={`/english/print?learner=${encodeURIComponent(s.learner?.id ?? "")}`} target="_blank" rel="noreferrer">Open printable learning map</a>
-      <details><summary>Things Linga taught you</summary><div className="linga-transcript">{learning.taught.filter(m=>!(c&&c.phase!=="finished"&&c.review?.id===m.id&&!c.review.used)).slice(-12).reverse().map(m=><p key={m.id}><b>{m.title} · {m.kind==="fix"?"a fix":"a word"}</b>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/>{m.why}{m.reusedAt!==undefined&&<><br/><small>Used again{learning.sessions.find(x=>x.id===m.reusedIn)?` in ${learning.sessions.find(x=>x.id===m.reusedIn)!.title}`:""}: “{m.reusedQuote}”</small></>}</p>)}{!learning.taught.length&&<p>Nothing yet. Linga stops a conversation when one thing is worth keeping.</p>}</div></details>
+      <details><summary>Things Linga taught you</summary><div className="linga-transcript">{learning.taught.filter(m=>!(c&&c.phase!=="finished"&&c.review?.id===m.id&&!c.review.used)).slice(-12).reverse().map(m=><p key={m.id}><b>{m.title} · {m.kind==="fix"?"a fix":m.line?"a line":"a word"}</b>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:m.said?<>“{m.said}”: {m.better}</>:<>“{m.better}”</>}<br/>{m.why}{m.reusedAt!==undefined&&<><br/><small>Used again{learning.sessions.find(x=>x.id===m.reusedIn)?` in ${learning.sessions.find(x=>x.id===m.reusedIn)!.title}`:""}: “{m.reusedQuote}”</small></>}</p>)}{!learning.taught.length&&<p>Nothing yet. Linga stops a conversation when one thing is worth keeping.</p>}</div></details>
       <details><summary>Recent evidence</summary><div className="linga-transcript">{learning.evidence.slice(-12).reverse().map(e=><p key={e.id}><b>{skillName(e.skill)} · {e.mode} · {e.supported?"with support":"without a supplied phrase"}</b>“{e.quote}”<br/>{e.note}</p>)}{!learning.evidence.length&&<p>Nothing recorded yet. Start with a conversation.</p>}</div></details>
     </>}
     {panel==="talk"&&<>
       {panelOf==="check"&&lc?<CheckPanel lc={lc} run={run} busy={busy} hasPlan={!!learning.plan} leave={offered.find(a=>a.run.command?.action==="check-leave")}/>
       :panelOf==="moment"&&c?<MomentPanel c={c} run={run} busy={pending}/>
-      :panelOf==="start"||!c?<StartPanel s={s} learning={learning} run={run} busy={pending} list={!!offer("pick-situation")}/>
+      :panelOf==="start"||!c?<StartPanel s={s} learning={learning} run={run} busy={pending} list={!!offer("pick-situation")} pitch={!!offer("pitch-scene")} takeTwo={takeTwo}/>
+      :take?<TakePanel c={c} take={take} run={run} busy={pending} inFlight={inFlight} end={offer("take-end")}/>
       :<>
-        <p><b>{c.title}</b><br/>{c.goal}</p>
+        <p><b>{c.title}</b><br/>{c.goal}{c.mission&&currentStep(c.mission)&&<><br/>Now: {currentStep(c.mission)}</>}</p>
+        {c.lost&&<LostPicture learnerId={s.learner?.id} episodeId={c.id} partner={c.partner}/>}
         <div className="linga-status" aria-live="polite">{inFlight?"Your partner is preparing a reply…":c.paused?"Paused. Resume when you are ready.":st==="coaching"?c.coaching?.note:currentQuestion||"Preparing your scene…"}</div>
+        {c.duet&&<p className="linga-status" data-role="linga-beat"><b>{c.duet.beat==="costar"?`${c.duet.coStar}'s turn`:`${s.learner?.name??"Your"}'s turn`}</b>{c.duet.held&&<><br/><small>{s.learner?.name} said: “{c.duet.held.text}”</small></>}</p>}
         {c.error&&<p className="linga-error" role="alert">{c.error}</p>}
         {c.paused?<button className="pbtn" data-signal="true" disabled={refused("resume")} onClick={()=>run("resume")}>Resume conversation</button>:st==="coaching"?<>
           <p>One way to try it: “{c.coaching?.after}”</p><button className="pbtn" data-signal="true" disabled={refused("replay")} onClick={()=>run("replay")}>Replay with a new question</button>
         </>:<>
-          {c.cue&&<p><b>{helpOf(c).tag}</b><br/>{c.cue}</p>}
+          {/* L2: in a duet's learner beat the help is the co-star helper, the same rungs and the same cue action, no model call */}
+          {c.duet&&beatOf(c)==="learner"?<CoStarHelper c={c} learner={s.learner?.name??""} cue={cue} busy={busy} run={run}/>:c.cue&&<p><b>{helpOf(c).tag}</b><br/>{c.cue}</p>}
           {c.quizOpen&&scene&&<><p>{scene.quiz.question}</p>{scene.quiz.options.map((x,i)=><button className="pbtn" data-secondary="true" key={x} disabled={refused("choice")} onClick={()=>run("choice",{option:i})}>{x}</button>)}</>}
-          <ReplyBox ready={!!currentQuestion} busy={pending} question={c.turns.at(-1)?.id} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
-            onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt})} note="Recorded as written practice. It counts toward On your own, as speaking does."/>
-          <div className="linga-buttons">{cue&&<button className="pbtn" data-secondary="true" disabled={busy||cue.disabled} onClick={()=>run("cue")}>{cue.label}</button>}{quiz&&<button className="pbtn" data-secondary="true" disabled={busy||quiz.disabled} onClick={()=>run("quiz")}>{quiz.label}</button>}</div>
+          <ReplyBox key={beatOf(c)} ready={!!currentQuestion} busy={pending} question={c.turns.at(-1)?.id} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
+            onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt,...(c.duet?{speaker:beatOf(c)}:{})})} note={c.duet?.beat==="costar"?(c.duet.coStarLearnerId?`${c.duet.coStar}'s line counts on ${c.duet.coStar}'s own map.`:`${c.duet.coStar}'s line keeps the scene going; it is not recorded.`):"Recorded as written practice. It counts toward On your own, as speaking does."}/>
+          <div className="linga-buttons">{cue&&!(c.duet&&beatOf(c)==="learner")&&<button className="pbtn" data-secondary="true" disabled={busy||cue.disabled} onClick={()=>run("cue")}>{cue.label}</button>}{quiz&&<button className="pbtn" data-secondary="true" disabled={busy||quiz.disabled} onClick={()=>run("quiz")}>{quiz.label}</button>}</div>
           <button className="pbtn" data-secondary="true" disabled={refused("coach")} onClick={()=>run("coach")}>Pause & coach</button>
         </>}
-        <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(inFlight?"leave":"repeat")}>{inFlight?"Cancel pending turn":"Repeat audio"}</button><button className="pbtn" data-secondary="true" disabled={refused("finish")} onClick={()=>run("finish")}>Finish rehearsal</button></div>
+        <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(inFlight?"leave":"repeat")}>{inFlight?"Cancel pending turn":"Repeat audio"}</button><button className="pbtn" data-secondary="true" disabled={refused("finish")} onClick={()=>run("finish")}>Finish rehearsal</button>{cut&&<button className="pbtn" data-secondary="true" disabled={busy||cut.disabled} onClick={()=>run("cut")}>Cut · notes on my lines</button>}</div>
         {st==="unprepared"&&<button className="pbtn" onClick={()=>run("start",{sceneId:c.sceneId,replace:true})}>Retry preparing scene</button>}
-        <details><summary>Conversation transcript</summary><div className="linga-transcript">{c.turns.map(t=><p key={t.id} data-role={t.role}><b>{t.role==="learner"?`You · ${t.mode==="speech"?"spoken":"written"}`:c.partner}</b>{t.text}</p>)}</div></details>
+        <details><summary>Conversation transcript</summary><div className="linga-transcript">{c.turns.map(t=><p key={t.id} data-role={t.role}><b>{t.role==="learner"?`${c.duet?s.learner?.name:"You"} · ${t.mode==="speech"?"spoken":"written"}`:t.role==="costar"?c.duet?.coStar??"Co-star":c.partner}</b>{t.text}</p>)}</div></details>
       </>}
       <button className="pbtn" data-secondary="true" onClick={()=>post({type:"subject",subject:"english"}).then(()=>post({type:"nav",screen:"linga"}))}>Linga on the TV</button>
       <button className="pbtn" data-secondary="true" onClick={onSentence}>Help with a sentence</button>
@@ -163,12 +177,12 @@ function VerdictPanel({placement,run,busy,hasPlan}:{placement:Placement;run:Run;
   return <>
     <div className="linga-band"><b>{placement.band}</b><span>{BAND_NAME[placement.band]}</span></div>
     <p>{placement.summary||BAND_CAN[placement.band]}</p>
-    <p className="linga-note">{self?"You chose this level yourself.":`Linga's read from your answers, not a certificate.${placement.confidence==="low"?" Your answers were mixed, so try the check again another day for a firmer read.":placement.confidence==="high"?" Your answers agreed with each other.":""}`}</p>
+    <p className="linga-note">{self?"You chose this level yourself.":`Linga's read from your answers, not a certificate.${" "+restsLine(placement.confidence,placement.tasks)}`}</p>
     {placement.focus&&!self&&<p><b>Next to practise:</b> {placement.focus}</p>}
     {placement.summary&&<p className="linga-note">{BAND_CAN[placement.band]}</p>}
     <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run(hasPlan?"plan-open":"plan-propose")}>See my topics</button>
     <button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>{self?"Find my level with Linga":"Find my level again"}</button>
-    {placement.tasks.length>0&&!self&&<details><summary>What Linga saw</summary><div className="linga-transcript">{placement.tasks.map(t=><p key={t.id}><b>{t.band} · {KIND_WORD[t.kind]} · {VERDICT_WORD[t.verdict]}</b>{t.prompt}<br/>{t.response?`“${t.response}”`:"Skipped"}<br/>{t.note}</p>)}</div></details>}
+    {placement.tasks.length>0&&!self&&<details><summary>What Linga saw</summary><div className="linga-transcript">{placement.tasks.map(t=><p key={t.id}><b>{t.band} · {KIND_WORD[t.kind]} · {t.skipped?"skipped":VERDICT_WORD[t.verdict]}</b>{t.prompt}<br/>{t.response?`“${t.response}”`:"Skipped"}<br/>{t.note}</p>)}</div></details>}
   </>;
 }
 
@@ -182,10 +196,23 @@ function SelfLevel({run,busy,start}:{run:Run;busy:boolean;start:Band}){
 }
 
 /** Linga home on the phone: the same six states the TV decides (lib/english/view.ts). */
-function StartPanel({s,learning,run,busy,list}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean;list:boolean}){
+/** Adult mode (v2 L3): a scene in the learner's own words, as the topic handshake takes one; Linga shapes it and starts it now. */
+function PitchBox({run,busy}:{run:Run;busy:boolean}){
+  const [premise,setPremise]=useState("");
+  return <>
+    <label>Pitch a scene<textarea value={premise} maxLength={PITCH_MAX} placeholder="A dragon opens a bank account, and I translate…" onChange={e=>setPremise(e.target.value)}/><small className="linga-note">{premise.length} of {PITCH_MAX} characters. Linga plays it now; absurd and high-stakes are welcome.</small></label>
+    {premise.trim()&&<button className="pbtn" disabled={busy} onClick={async()=>{if(await run("pitch",{text:premise}))setPremise("");}}>Play this scene</button>}
+  </>;
+}
+
+function StartPanel({s,learning,run:send,busy,list,pitch,takeTwo}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean;list:boolean;pitch:boolean;takeTwo:ViewAction[]}){
   const profile=s.profiles.find(p=>p.id===s.learner?.id),c=s.conversation,prefs=learning.preferences??defaultPreferences(profile);
+  // L2: "Play with someone in the room" - every start below carries the co-star while it is on (duet.ts startDuet checks it)
+  const [duet,setDuet]=useState<{on:boolean;coStar:string;coStarLearnerId:string}>({on:false,coStar:"",coStarLearnerId:""});
+  const duo=duet.on&&(duet.coStar.trim()||duet.coStarLearnerId)?{duet:{coStar:duet.coStar,...(duet.coStarLearnerId?{coStarLearnerId:duet.coStarLearnerId}:{})}}:null;
+  const run:Run=(action,extra)=>send(action,action==="start"&&duo?{...extra,...duo}:extra);
   const next=recommendFor(profile,learning),placement=learning.placement,home=lingaHome(s);
-  const pick=list&&<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label>;
+  const pick=list&&<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).filter(x=>!duo||x.id!==LOST_SCENE).map(x=><option key={x.id} value={x.id}>{x.name}{isPitchId(x.id)?" · your own":""}</option>)}</select></label>;
   const level=placement&&<p className="linga-note">Your level: <b>{placement.band} · {BAND_NAME[placement.band]}</b>{placement.source==="self"?" · self-chosen":""}</p>;
   const planned=<div className="linga-buttons"><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("plan-open")}>My topics</button><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>Find my level again</button></div>;
   let body;
@@ -224,23 +251,93 @@ function StartPanel({s,learning,run,busy,list}:{s:Session;learning:EnglishLearni
       {pick}{planned}
     </>;break;
   }
+  const others=s.profiles.filter(p=>p.id!==s.learner?.id);
+  const together=home!=="check-part-way"&&<div className="linga-duet" data-role="linga-duet">
+    <label className="linga-check"><input type="checkbox" checked={duet.on} disabled={busy} onChange={e=>setDuet({...duet,on:e.target.checked})}/><span>Play with someone in the room</span></label>
+    {duet.on&&<>
+      <label>Your co-star&apos;s name<input value={duet.coStar} maxLength={COSTAR_MAX} placeholder="Mum, Tom, Grandpa…" onChange={e=>setDuet({...duet,coStar:e.target.value})}/></label>
+      {others.length>0&&<label>Or a learner at this desk<select value={duet.coStarLearnerId} onChange={e=>setDuet({...duet,coStarLearnerId:e.target.value})}><option value="">No one: just the name</option>{others.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label>}
+      <p className="linga-note">You take turns on this phone: {s.learner?.name} first, then your co-star. Linga hosts and answers you both. Only a learner chosen here keeps what they say on their own map.{next.id===LOST_SCENE?" The lost jacket is played on your own.":""}</p>
+    </>}
+  </div>;
   return <>
     {c?.phase==="finished"&&<>
       <p className="linga-status">Rehearsal saved. Your map shows the evidence you collected.</p>
       {c.review?.used&&<div className="linga-transcript"><b>Used again tonight</b><p>“{c.review.better}”, taught in {c.review.fromTitle}<br/><small>You said: “{c.review.used}”</small></p></div>}
       {c.review&&!c.review.used&&<div className="linga-transcript"><b>A sentence to take with you</b><p>“{c.review.better}”, from {c.review.fromTitle}</p></div>}
+      {/* K4: the line this room hid, once earned: found in the learner's words, or handed over to take */}
+      {c.line?.text&&c.line.found&&<div className="linga-transcript" data-role="linga-line"><b>You found the line in this room</b><p>“{c.line.text}”<br/><small>You said: “{c.line.found}”</small></p></div>}
+      {c.line?.text&&!c.line.found&&<div className="linga-transcript" data-role="linga-line"><b>A sentence to take with you</b><p>“{c.line.text}”</p></div>}
+      {c.cut&&c.cut.notes.length===0&&c.cut.clean&&<div className="linga-transcript" data-role="linga-cut-clean"><b>{c.cut.clean}</b></div>}
+      {c.cut&&c.cut.notes.length>0&&<div className="linga-transcript" data-role="linga-cut-notes"><b>Notes on your take</b>{c.cut.notes.map((n,i)=>{
+        // Take Two (v2 L4): a held note is struck, an undecided one says so, an open one stays as it was; never a count
+        const t=c.takes?.find(x=>x.note===i),again=t?.turns.find(x=>x.role==="learner"),a=takeTwo.find(x=>x.run.command?.extra?.note===i);
+        return <p key={`${n.turnId}:${n.quote}`}><b>{n.reading?"A reading":NOTE_LABEL[n.kind]}</b>{t?.held===true?<s>“{n.quote}”</s>:<>“{n.quote}”</>}{n.better&&<> → “{n.better}”</>}<br/><small>{n.note}</small>
+          {t&&t.held===null&&<><br/><small>Not decided</small></>}{again&&<><br/><small>Take Two, you said: “{again.text}”</small></>}
+          {a&&<><br/><button className="pbtn" data-secondary="true" disabled={busy||a.disabled} onClick={()=>run("take-two",{note:i})}>{a.label}</button>{a.disabled&&<small className="linga-note" data-role="linga-take-refusal">{a.help}</small>}</>}
+        </p>;})}</div>}
       {(c.moments??[]).length>0&&<div className="linga-transcript"><b>From this rehearsal</b>{c.moments.map(m=><p key={m.id}>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/><small>{m.why}</small></p>)}</div>}
     </>}
     {body}
+    {together}
+    {pitch&&<PitchBox run={run} busy={busy}/>}
   </>;
 }
 
-function MomentPanel({c,run,busy}:{c:Conversation;run:Run;busy:boolean}){
-  const m=c.moment!;
+/**
+ * The co-star helper (L2, duet.ts): during the learner's beat, the rescue ladder of the host's line, one rung at a time,
+ * for the co-star to whisper or read out. It runs the cue action, so no model call, and a starter revealed here makes
+ * the learner's reply supported, as the learner's own tap would.
+ */
+function CoStarHelper({c,learner,cue,busy,run}:{c:Conversation;learner:string;cue?:ViewAction;busy:boolean;run:Run}){
+  const help=helpOf(c);
+  return <details className="linga-helper" data-role="linga-costar-helper" open={!!c.cue}>
+    <summary>Co-star helper</summary>
+    <p className="linga-note">For {c.duet?.coStar}: whisper or read this to {learner||"the learner"}. A way to start counts as help.</p>
+    {c.cue&&<p><b>{help.tag}</b><br/>{c.cue}</p>}
+    {cue&&<button className="pbtn" data-secondary="true" disabled={busy||cue.disabled} onClick={()=>run("cue")}>{cue.label}</button>}
+  </details>;
+}
+
+/**
+ * Take Two (v2 L4) on the phone: the noted quote, the line on the TV, the reply box for the learner's line again, Back to
+ * the notes and Repeat audio (Cancel while the cast answers). A take is practice only: it records nothing.
+ */
+function TakePanel({c,take,run,busy,inFlight,end}:{c:Conversation;take:Take;run:Run;busy:boolean;inFlight:boolean;end?:ViewAction}){
+  const note=c.cut?.notes[take.note],line=take.turns.at(-1);
   return <>
+    <p><b>Take Two · {c.title}</b>{note&&<><br/>Your note: “{note.quote}”{note.better&&<> → “{note.better}”</>}</>}</p>
+    <div className="linga-status" aria-live="polite">{inFlight?"Your partner is preparing a reply…":line?.text}</div>
+    {c.error&&<p className="linga-error" role="alert">{c.error}</p>}
+    <ReplyBox ready={line?.role==="partner"&&accepts(c,"turn")} busy={busy} question={line?.id} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
+      onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt})} note="A take is practice: nothing in it is recorded."/>
+    <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(inFlight?"leave":"repeat")}>{inFlight?"Cancel pending turn":"Repeat audio"}</button>{end&&<button className="pbtn" data-secondary="true" disabled={busy||end.disabled} onClick={()=>run("take-end")}>{end.label}</button>}</div>
+    <details><summary>This take</summary><div className="linga-transcript">{take.turns.map(t=><p key={t.id} data-role={t.role}><b>{t.role==="learner"?"You":c.partner}</b>{t.text}</p>)}</div></details>
+  </>;
+}
+
+/**
+ * A moment on the phone. A fix moment (K2, repair.ts) asks for the learner's line again before it shows the fix: the
+ * reply box takes the try (judged by code, never evidence), the why comes as a clue after a miss, Show me shows the fix,
+ * and Back is always there. A word moment, or a fix shown at once, is the moment as before.
+ */
+function MomentPanel({c,run,busy}:{c:Conversation;run:Run;busy:boolean}){
+  const m=c.moment!,r=m.kind==="fix"?m.repair:undefined;
+  const back=<button className="pbtn" data-signal={!r||!accepts(c,"moment-try")?"true":undefined} data-secondary={r&&accepts(c,"moment-try")?"true":undefined} disabled={busy||!accepts(c,"moment-done")} onClick={()=>run("moment-done")}>Back to the conversation</button>;
+  if(!r)return <>
     <p><b>{m.kind==="fix"?"One thing to fix":"A word for this scene"}</b></p>
     <div className="linga-status">{m.kind==="fix"?<>You said “{m.said}”<br/>Try “{m.better}”</>:<>You wanted to say “{m.said}”<br/>In English: “{m.better}”</>}</div>
     <p>{m.why}</p>
-    <button className="pbtn" data-signal="true" disabled={busy||!accepts(c,"moment-done")} onClick={()=>run("moment-done")}>Back to the conversation</button>
+    {back}
+  </>;
+  const shown=!!m.better&&!r.held;
+  return <>
+    <p><b>{r.held?(r.selfRepaired?"You found it":"You said it"):"One thing to fix"}</b></p>
+    <div className="linga-status" aria-live="polite">{r.held?<>You said <s>“{m.said}”</s><br/>Now: “{r.tried}”</>:shown?<>You said “{m.said}”<br/>Try “{m.better}”</>:<>You said “{m.said}”<br/>{r.lost?"Linga lost this fix when the desk restarted.":"Say it again, your way."}</>}</div>
+    {(r.rung>=1||r.held||r.lost)&&<p>{m.why}</p>}
+    {accepts(c,"moment-try")&&<ReplyBox ready={!busy} busy={busy} question={m.turnId} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
+      onSend={(text,mode,question,attempt)=>run("moment-try",{text,mode,lastTurnId:question,commandId:attempt})} note="A try is practice: it is not recorded as evidence."/>}
+    {accepts(c,"moment-show")&&<button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("moment-show")}>Show me</button>}
+    {back}
   </>;
 }

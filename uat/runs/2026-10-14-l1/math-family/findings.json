@@ -1,0 +1,2468 @@
+{
+  "id": "2026-10-14-l1/math-family",
+  "cert_level": "L1",
+  "module": "Math Buddy",
+  "mode": "Family",
+  "base_commit": "4af251996045d75712159f91d79ea37d7cd027fd",
+  "prior_run": "2026-10-09-maths-l1",
+  "prior_base_commit": "12592a71837af4a41124d8a9ee539fe55032fe75",
+  "scratch": "scripts under the session scratchpad (leak.cjs read2.cjs mark.cjs school.cjs school2.cjs unsure.cjs fuzz.cjs slips.cjs lin.cjs mock.cjs recap2.cjs week.cjs lines.cjs worked.cjs tv.cjs tv2.cjs); none in the repo; desk/data untouched",
+  "characters": [
+    "nela-12",
+    "owen-17",
+    "radka-41"
+  ],
+  "owen_mode": "family (age 17 under 18: modeOf gives family, no Mode row; adult walker has no claim on him)",
+  "counts": {
+    "carried_family_rows": 53,
+    "fixed": 38,
+    "still_open": 15,
+    "uncertain": 1,
+    "new": 7,
+    "strengths": 11
+  },
+  "findings": [
+    {
+      "id": "L1-nela-12-MB1-1",
+      "journey": "MB1",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "Czech sheet notation is not read: the hint loses its code leak check, gets a linear-equations stance, and the picker is asked of a linear library",
+      "expected": "On her sheet as printed in Czech (2/3 · 3/4, 3/4 : 1/2, 2,5 · 0,4, a \"Vypočítej:\" lead, mixed numbers) the task reads as its unit, so every hint line passes leaksSchool, the stance names the unit, and \"Six like this\" or an honest \"no lesson\" follows",
+      "got": "The listed repros now read: '2/3 · 3/4', '3/4 : 1/2', '2,5 · 0,4', 'Vypočítej: 3/4 + 1/6', 'Řeš rovnici ...', 'Solve ...' all give a spec (school or linear) and leaksSchool/leaks catch the answer in digits, English words and Czech number words ('jedenáct dvanáctin'): 14 of 14 repro lines leak=true (scratch leak.cjs). The unit stance is the unit's, not the linear sheet's.",
+      "got_2026_10_09": "specFromQuestion and readQuestion return null (kind \"linear\") for every one of those lines. leakedIn then uses only leaks(), which substitutes into an equation in x and returns false for \"...so the answer is 1/2\" and \"...makes 11/12\". The stance says \"This sheet is a factoring and linear-equations unit\". pickLesson is asked of linear and quadratic videos. Czech number words (\"jedenáct dvanáctin\") are not read by leaksSchool either.",
+      "evidence": [
+        "desk/src/lib/rules/taskText.ts:15,48",
+        "desk/src/lib/rules/kinds.ts:41",
+        "desk/src/lib/rules/school.ts:3316"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB1-1",
+      "backlog": "MB-B2",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "For a cz (and de) learner, read · as ×, : between two fractions as ÷, a decimal comma in a task, a Czech instruction lead (Vypočítej/Sečti/Zkrať...) and Czech number words in leaksSchool; a repro of e1/e2 then shows a spec and leak=true",
+      "ceiling": "Only the instruction verbs in taskText INSTRUCTION are stripped; 'Sečti', 'Odečti', 'Vynásob', 'Zkrať', 'Urči', 'Převeď', 'Rozděl' and 'Kolik je ...' still read as nothing (new row L1-nela-12-MB1-8).",
+      "repro": "scratch leak.cjs",
+      "rank": 27
+    },
+    {
+      "id": "L1-nela-12-MB1-2",
+      "journey": "MB1",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "broken-flow",
+      "severity": "major",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "effort",
+      "title": "The next evening, \"I have homework\" reopens the first sheet ever snapped and never asks for tonight's",
+      "expected": "Each evening the homework door asks for tonight's sheet (or offers an older sheet beside a new snap)",
+      "got": "The homework door opens tonight's sheet only (a page with day == today); an older sheet or a failed read asks for tonight's photo (page.ask). The continue card is the same answer.",
+      "got_2026_10_09": "Pages are never cleared (only the bench's Reset button). The homework door does page.select of the FIRST maths page; the continue card also points at the oldest read page. A new sheet is reachable only through the phone's Capture tab.",
+      "evidence": [
+        "desk/src/tv/mathsRows.ts:21",
+        "desk/src/tv/keys.ts:339-341"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB1-2",
+      "backlog": "MB-B34",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "On a new evening (or once a page is older than today), the homework door issues page.ask; older sheets remain reachable from the page's Left/Right or the continue card",
+      "ceiling": "A sheet snapped just before midnight is yesterday's after midnight; older sheets stay reachable with Left/Right on the page screen.",
+      "rank": 9
+    },
+    {
+      "id": "L1-nela-12-MB1-3",
+      "journey": "MB1",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "minor",
+      "impact": {
+        "frequency": "low",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "clarity",
+      "title": "The withheld hint lines for her units are 31–54 words (C4)",
+      "expected": "Every line she acts on is ≤25 words (A2 English, Mum translating at a glance)",
+      "got": "All 15 SCHOOL_WITHHELD lines are <= 25 words (scratch lines.cjs); the hint also re-asks once on a line over 25 words (hint.ts:48,176).",
+      "got_2026_10_09": "frac-add-sub 31, frac-mul-div 34, frac-equivalent 45, frac-of-amount 33, dec-arith 54 words. These are shown when a hint leaked twice.",
+      "evidence": [
+        "desk/src/lib/rules/school.ts:3356"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB1-3",
+      "backlog": "MB-B6",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Each withheld line is ≤25 words (one method step and \"The answer is yours\")",
+      "ceiling": "hint.ts:176 shows a model line that is only too long after the re-ask (a value rule, not a safety rule), so C4 is not guaranteed for live hints: L2 measures it.",
+      "l2_priority": "Environment precondition: the text engine (claude CLI; CLAUDE_FAST_MODEL for hints) reachable, and a profile of the Character's own system (cz for Nela/Radka, uk for Owen) in an isolated DESK_DATA_DIR.",
+      "rank": 3
+    },
+    {
+      "id": "L1-nela-12-MB1-4",
+      "journey": "MB1",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "senior-quality",
+      "title": "MB-READ 2/5: the page read knows neither her school system, her topic nor her age; item numbers must be integers",
+      "expected": "The read is told cz notation (decimal comma, · and :), the unit in progress and lettered sub-items",
+      "got": "The maths read prompt now carries the school system's notation, the course, age or stage, asks for one-line notation, keeps the printed language and gives a lettered part a label. MB-READ 5/5 (photo, subject, system, course, age or stage).",
+      "got_2026_10_09": "The prompt carries the photo and the subject only. The schema's `number` is an integer, so \"a)\", \"b)\" items have no faithful field.",
+      "evidence": [
+        "desk/src/lib/desk/read.ts:27-45",
+        "desk/src/app/api/read/route.ts:49"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB1-4",
+      "backlog": "MB-B3",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "MB-READ ≥4/5: system and notation, topic, age in the prompt; a string label for lettered items",
+      "ceiling": "What the vision model returns for a Czech sheet, a lettered part or a two-column page is unmeasured until a vision host runs.",
+      "l2_priority": "Environment precondition: vision on local Ollama with the qwen 27B model pulled (uat/env.md, Math Buddy L2). Without that host this resolves uncertain, 'needs Ollama qwen host' - never pass, never refuted.",
+      "rank": 6
+    },
+    {
+      "id": "L1-nela-12-MB1-5",
+      "journey": "MB1",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "senior-quality",
+      "title": "MB-HINT 4/8: the hint sees no method card, none of her working and none of her recorded slips",
+      "expected": "A first hint on a fractions task can lean on the unit's method steps and on her known \"added the tops and the bottoms\" slip",
+      "got": "groundFor puts the notation, the learner's recorded slips on the task's unit and the unit's worked method into the hint prompt. MB-HINT 6/8 on a task a reader reads (H1, H2, H3, H4, H6, H8).",
+      "got_2026_10_09": "H4 (WORKED_METHODS exists for her units but is not passed), H5 (school path not named), H7 and H8 are absent.",
+      "evidence": [
+        "desk/src/lib/desk/hint.ts:122-135",
+        "desk/src/app/api/hint/route.ts:44"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB1-5",
+      "backlog": "MB-B8",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "MB-HINT ≥6/8 for a read school task",
+      "ceiling": "H5 (school path) and H7 (the learner's working) stay absent: a hint is asked before they have answered. On a task no reader reads it is 4/8.",
+      "rank": 6
+    },
+    {
+      "id": "L1-nela-12-MB2-1",
+      "journey": "MB2",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "major",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "trust",
+      "title": "An unsure item's card says \"I got something different for number N\", even when her value is right or the box is blank; the code's own reason is unwired",
+      "expected": "An unsure item says the desk is not sure and why, in the code's words (\"The value is right; the question asks for it in its simplest form.\"), and asks how she got there",
+      "got": "An unsure school item carries the checker's own reason; a blank carries 'Number N has no answer yet.' Repro: '20/22' for 'Write 20/22 in its simplest form.' -> 'The desk is not sure about number 1. The value is right; the question asks for it in its simplest form.'",
+      "got_2026_10_09": "judgeSet writes said = ASK(n) for every unsure item. check() computes `why` and settleSpec drops it. The title says \"The desk is not sure\" while the card implies a different answer.",
+      "evidence": [
+        "desk/src/lib/rules/kinds.ts:149-157",
+        "desk/src/lib/rules/maths.ts:96-98"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB2-1",
+      "backlog": "MB-B1",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "An unsure school item carries check().why (or a short form of it) as its line; ASK is used only where the desk did compute a different value",
+      "ceiling": "A linear item that is unsure still says 'How did you get there?' (no engine reason).",
+      "rank": 12
+    },
+    {
+      "id": "L1-nela-12-MB2-2",
+      "journey": "MB2",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "missing-feature",
+      "severity": "major",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "completion",
+      "title": "Explaining is en-US speech only; there is no typed box while a speech recogniser exists",
+      "expected": "A Czech 12-year-old (A2 English) can explain in Czech, or type it",
+      "got": "The recogniser listens in cs-CZ for a cz profile and a 'Type it' button sits beside hold-to-speak while a recogniser exists.",
+      "got_2026_10_09": "SpeechRecognition lang is hard-coded \"en-US\". The textarea is offered only when the browser has no recogniser. The value examples in explainSchool are English number words.",
+      "evidence": [
+        "desk/src/app/phone/recogniserLang.ts:7",
+        "desk/src/app/phone/ExplainTalk.tsx:38"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB2-2",
+      "backlog": "MB-B18",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The recogniser language follows the profile (cs-CZ for cz), and a \"type it instead\" link is always shown",
+      "ceiling": "How well the browser's Czech recogniser hears a 12-year-old is L2; the typed box's placeholder is English ('What did you do first?').",
+      "l2_priority": "Environment precondition: the text engine (claude CLI; CLAUDE_FAST_MODEL for hints) reachable, and a profile of the Character's own system (cz for Nela/Radka, uk for Owen) in an isolated DESK_DATA_DIR.",
+      "rank": 12
+    },
+    {
+      "id": "L1-nela-12-MB2-3",
+      "journey": "MB2",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "med",
+        "trust_erosion": "low"
+      },
+      "dimension": "senior-quality",
+      "title": "MB-EXPLAIN 3/8: the reply cannot see her written answer, her working or the slip the code found",
+      "expected": "\"Point at the step they should look at again\" uses what she wrote and the code-detected slip",
+      "got": "The explain prompt carries her written answer, her working line by line and the slip's sentence with its line. MB-EXPLAIN 6/8 (X1 X2 X3 X4 X5 X6).",
+      "got_2026_10_09": "The prompt has the question, the transcript, the unit, her memory notes and her age. X2, X3, X5, X7 and X8 are absent.",
+      "evidence": [
+        "desk/src/lib/desk/explain.ts:64-70,229-241"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB2-3",
+      "backlog": "MB-B10",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "MB-EXPLAIN ≥6/8: studentAnswer, studentWorking and the slip name are added (the reply is still checked by leaksSchool)",
+      "ceiling": "X7 (school system) and X8 (history on the topic) are absent.",
+      "rank": 4
+    },
+    {
+      "id": "L1-nela-12-MB2-4",
+      "journey": "MB2",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "confusion",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "clarity",
+      "title": "Questions and worked examples print decimal points and £/€ for a cz learner, while the answers print commas",
+      "expected": "A cz learner sees 14,5 · 0,6 or at least one notation per card; money in Kč or without a currency",
+      "got": "Still open. A cz learner's items print '6.8 × 4.1' and '£23.23 × 5' and '€17.49 - €12.76' (dec-arith: 331 £ and 335 € of 2,000 specs, 0 Kč), while the answer is expected as '27,88' and '£116,15'. The worked lesson prints the same pair: question '56.18 - 5.1', answer '51,08' (scratch worked.cjs).",
+      "got_2026_10_09": "question(spec) takes no system: \"Work out 38.2 - 18.38.\" is answered \"19,82\", and \"Work out £12.12 × 5.\" is answered \"£60,60\".",
+      "evidence": [
+        "desk/src/lib/rules/school.ts:1089 (question(spec) takes no system)",
+        "desk/src/lib/rules/school.ts:146 (UNITS has no Kč)"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB2-4",
+      "backlog": "MB-B4",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Questions are printed in the learner's system (decimal comma for cz/de), and the reader still reads them back",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 6
+    },
+    {
+      "id": "L1-nela-12-MB2-5",
+      "journey": "MB2",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "clarity",
+      "title": "The walk card's slip lines for her units run 26–32 words (C4)",
+      "expected": "≤25 words",
+      "got": "All 53 SCHOOL_SLIPS lines are <= 25 words (max 25).",
+      "got_2026_10_09": "dec-point-product 32, dec-lined-up 29, wrong-factor 28, dec-point-dropped 27, added-same 27, one-part-only 27, of-upside-down 26",
+      "evidence": [
+        "desk/src/lib/rules/school.ts:1208"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB2-5",
+      "backlog": "MB-B6",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Every SCHOOL_SLIPS.says ≤25 words (a test pins it)",
+      "ceiling": "Slip lines say what the slip is in a sentence; they stay English only.",
+      "rank": 6
+    },
+    {
+      "id": "L1-nela-12-MB2-6",
+      "journey": "MB2",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "senior-quality",
+      "title": "Add and subtract fractions, tier 2, uses elevenths with common bottoms up to 132; 6. ročník level needs a teacher's read",
+      "expected": "A 6. ročník set: common bottoms a child of 12 finds by hand",
+      "got": "Printed denominators are still <= 12 (max 12 over 2,000 frac-add-sub specs), so C8 holds literally, and no mixed-number operand appears. Tier 2 still draws pairs like 4/11 - 1/12 (common bottom 132), and a worked answer prints the improper fraction '3/2' where a 6. ročník sheet writes a mixed number. No teacher has signed the range.",
+      "got_2026_10_09": "Common denominators: median 12, p90 66, max 132; 23% of items over 36; 43/100 sets have two or more. Printed denominators ≤12, so C8 holds literally.",
+      "evidence": [
+        "desk/src/lib/rules/school.ts:2280 (gen)"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB2-6",
+      "backlog": "MB-B37",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "A teacher signs off the tier-2 denominator range for cz 6. ročník",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 6
+    },
+    {
+      "id": "L1-nela-12-MB2-7",
+      "journey": "MB2",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "senior-quality",
+      "title": "Unsimplified sums are ticked right, while the worked lesson teaches \"then simplify\"",
+      "expected": "The marking and the lesson agree on whether 6/4 is finished (a Czech teacher usually asks for základní tvar)",
+      "got": "Still open. The doubled, unsimplified form of every add/subtract answer is ticked right: 300 of 300 (scratch school.cjs), while the lesson's last step is 'Add or take away the tops, then simplify'.",
+      "got_2026_10_09": "\"6/4\" for 4/5 + 7/10 and \"2/24\" for 11/12 - 5/6 are right (the question does not ask for simplest form). The worked step 3 says \"Add or take away the tops, then simplify\".",
+      "evidence": [
+        "desk/src/lib/library/worked.ts:15 ('then simplify')",
+        "desk/src/lib/rules/school.ts (simplest only when the spec asks)"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB2-7",
+      "backlog": "MB-B42 (concept-doc)",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Owner ruling: either the add/sub questions say \"simplest form\" (unsure, not wrong, for 6/4), or the lesson drops \"then simplify\"",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 6
+    },
+    {
+      "id": "L1-nela-12-MB5-1",
+      "journey": "MB5",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "The recap says \"Good evening's work - all of it right.\" on an evening where nothing was marked",
+      "expected": "An evening of homework hints (or a Linga talk) is described as what it was (\"1 sheet, 3 hints, nothing checked yet\"); \"all of it right\" only when marked items were all right",
+      "got": "'All of it right' is said only when a set was marked and none is wrong or unsure. Repro (scratch recap2.cjs): homework + 3 hints, nothing marked -> 'Worked through with 3 hints; nothing was marked.'; Linga only -> 'One conversation in English; nothing to mark.'",
+      "got_2026_10_09": "toLook counts only set slips and essay sentences, so with no set recapCaption falls to \"all of it right\" (TV recap and phone). Branches: all empty -> \"A quiet evening.\" (correct); n>0 -> \"N to look at\" (correct); a set all right -> correct; homework and hints only -> WRONG; a Linga talk only -> WRONG; an essay with 0 to fix -> correct.",
+      "evidence": [
+        "desk/src/tv/recapRows.ts:109-118",
+        "desk/src/tv/recapRows.ts:132"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB5-1",
+      "backlog": "MB-B11",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "recapCaption says \"all of it right\" only when at least one item was marked and none is wrong or unsure; a hints-only evening gets its own sentence",
+      "ceiling": "The caption is a count in words; it cannot say which problems were hard.",
+      "rank": 27
+    },
+    {
+      "id": "L1-nela-12-MB5-2",
+      "journey": "MB5",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "trust",
+      "title": "The evening log never resets: hint counts, \"Needed a second hint\" and the memory's hint count carry every earlier evening",
+      "expected": "The recap and the memory count tonight only",
+      "got": "The evening log carries its local day and is cleared by the first event of a later day (away slots too). Repro: evening 1 (3 hints, 1 second), next day focus event then End -> 'A quiet evening.', log.hints 0.",
+      "got_2026_10_09": "log.hints, log.problems and log.hard are reset only by fresh() (the bench Reset). session.end leaves them. The second evening's recap reads \"1 hint\" and lists yesterday's problem before any work. The memory prompt says \"Hints asked for: N\" cumulative, and its evening key changes with it.",
+      "evidence": [
+        "desk/src/lib/session/store.ts:618-623"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB5-2",
+      "backlog": "MB-B12",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The log is per evening (reset at the first event of a new day, or at session.end once the recap is read), with a repro of e5 showing 0 hints on evening 2",
+      "ceiling": "session.end is exempt from the clearing (store.ts:620): a day-2 evening whose very first event is End session still shows yesterday's hints (new row L1-nela-12-MB5-7).",
+      "rank": 18
+    },
+    {
+      "id": "L1-nela-12-MB5-3",
+      "journey": "MB5",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "missing-feature",
+      "severity": "major",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "completion",
+      "title": "The week page cannot see homework evenings (\"Nothing this week.\" after three sheets)",
+      "expected": "\"A page for the week shows the pattern\", including sheets snapped and hints needed",
+      "got": "Homework reads and typed papers write digest entries; the Sunday page says them. Repro (scratch week.cjs): 3 sheets, 6 hints, 1 paper -> 'Three homework sheets, 6 hints, 2 needed a second.' and 'One practice paper typed in.'",
+      "got_2026_10_09": "sundayPage reads only the digest. Homework reads write a history line, never a digest entry.",
+      "evidence": [
+        "desk/src/lib/rules/week.ts:177-179",
+        "desk/src/lib/rules/digest.ts:43,45",
+        "desk/src/app/api/read/route.ts:55-59"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB5-3",
+      "backlog": "MB-B14",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Homework evenings (sheets, problems, second hints) reach the digest and the week page as counts",
+      "ceiling": "Counts only; never a problem, and not per child beyond the seated learner's digest.",
+      "rank": 12
+    },
+    {
+      "id": "L1-nela-12-MB5-4",
+      "journey": "MB5",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "confusion",
+      "severity": "minor",
+      "impact": {
+        "frequency": "low",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "clarity",
+      "title": "The school system defaults silently to UK, and the row's blurb does not say it decides how 0,5 is read",
+      "expected": "The parent knows the system row decides the decimal comma",
+      "got": "Still open. DEFAULT_SYSTEM is 'uk' and the cz blurb is still 'Progress is shown against Czech ročníky.' (scratch tv2.cjs): it does not say the row decides how 0,5 is read.",
+      "got_2026_10_09": "Blurb: \"Progress is shown against Czech ročníky.\" With the row skipped, \"£22,74\" is unsure (\"cannot read this as one number\") and the card says \"I got something different\".",
+      "evidence": [
+        "desk/src/tv/profileRows.ts:24,26",
+        "desk/src/tv/profileRows.ts (file unchanged since 08149848)"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB5-4",
+      "backlog": "MB-B21",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The blurb names the number format (\"0,5 is a half\"), or Save asks for a system",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 6
+    },
+    {
+      "id": "L1-nela-12-MB5-5",
+      "journey": "MB5",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "minor",
+      "impact": {
+        "frequency": "low",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "senior-quality",
+      "title": "A 12-year-old in 6. ročník is taken for 7. ročník (schoolYear ignores the cut-off)",
+      "expected": "The school year the learner is in, or one the parent can set",
+      "got": "Still open and now documented as 'our own reading ... ignores the birthday cut-off': learnerYear({age 12, cz}) = 7 (scratch tv2.cjs), so a 6. ročník learner is taken for 7. ročník; no effect on her fractions units today.",
+      "got_2026_10_09": "learnerYear(age 12, cz) = 7. It sets baselineMix; no effect on her fractions units today (cz 5–6), but it would give \"standard\" instead of \"easier\" on a 7. ročník unit.",
+      "evidence": [
+        "desk/src/lib/library/syllabus.ts:296-304",
+        "desk/src/lib/rules/stretch.ts:63"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB5-5",
+      "backlog": "MB-B21",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "A school-year pick on the profile, or the cut-off applied",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 3
+    },
+    {
+      "id": "L1-owen-17-MB2-1",
+      "journey": "MB2",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "False tick: a typed mixed number on a linear item is read as a product, so a wrong \"1 3/4\" for x = 3/4 is ticked right",
+      "expected": "A mixed number a b/c typed for a linear equation is read as a + b/c (1 3/4 = 7/4), or is \"not sure\"; a wrong value is never ticked right.",
+      "got": "A typed mixed number on a linear item is a + b/c on every route. Repro: '4x + 2 = 5': '1 3/4' -> wrong, '3/4' -> right; '1 1/2' for x = 1/2 -> wrong; 'x + 4 = 10': '2 3' -> unsure. Sweep: 6,720 correct forms (integer, fraction, mixed number, decimal) of 4,000 random equations all ticked, 20,108 wrong forms 0 ticked (scratch lin.cjs).",
+      "got_2026_10_09": "cleanValue keeps \"1 3/4\"; substitute() evaluates it with the equation grammar, where a bare unary is implicit multiplication, so 1 3/4 = 3/4. \"1 3/4\" for 4x + 2 = 5 (truth 3/4; the classic sign slip gives 7/4) is ticked right; so are \"1 1/2\" for 1/2, \"1 2/3\" for 2/3, \"-1 1/2\" for -1/2 and the junk \"2 3\" for x = 6. The typed second go ticks them too.",
+      "evidence": [
+        "desk/src/lib/desk/verify.ts:155-177",
+        "desk/src/lib/rules/kinds.ts:123-124"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB2-1",
+      "backlog": "MB-B26",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Every linear-item answer that reads as a mixed number (a b/c, -a b/c) is judged as a + b/c, or is unsure; two bare numbers separated by a space are unsure. A test pins 4x + 2 = 5 with \"1 3/4\" -> wrong and 7 - 2x = 3x + 1 with \"1 1/5\" -> right, on the typed, second-go and photo paths.",
+      "ceiling": "Photo marking of a linear sheet is still the model's own value of x (see L1-owen-17-MB2-7).",
+      "rank": 18
+    },
+    {
+      "id": "L1-owen-17-MB2-2",
+      "journey": "MB2",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "major",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "trust",
+      "title": "False ring: a correct mixed-number root (\"1 1/5\" for x = 6/5, \"-1 1/2\" for -3/2) is ringed wrong on a linear item",
+      "expected": "An equivalent form of the root (6/5 = 1.2 = 1 1/5) is right, as UK mark schemes accept it (oe).",
+      "got": "'1 1/5' for 7 - 2x = 3x + 1 and '-1 1/2' for 2x + 7 = 4 are ticked right (scratch mark.cjs, lin.cjs: 0 of 6,720 correct forms ringed).",
+      "got_2026_10_09": "\"1 1/5\" evaluates as 1 × 1/5 = 0.2, fails substitution and is marked wrong; same for \"-1 1/2\" on 2x + 7 = 4.",
+      "evidence": [
+        "desk/src/lib/desk/verify.ts:155-177"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB2-2",
+      "backlog": "MB-B26",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Same fix as owen-17-MB2-1; false rings on the linear battery = 0.",
+      "ceiling": "Typed route only.",
+      "rank": 12
+    },
+    {
+      "id": "L1-owen-17-MB2-3",
+      "journey": "MB2",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "missing-feature",
+      "severity": "major",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "senior-quality",
+      "title": "Fraction sets never practise the forms his mock tested: no mixed-number operands, no word problems; \"A step up\" only shifts the tier mix",
+      "expected": "A Foundation resitter who lost marks on 2 1/3 + 1 3/4 and a fraction-division word problem gets six Foundation-level questions on that, including mixed numbers.",
+      "got": "Still open (recurrence 2, not built). 0 of 2,000 frac-add-sub specs and 0 of 2,000 frac-mul-div specs carry a mixed-number operand; every printed denominator is 2..12; 'A step up' still changes the 3+3 tier mix, not the content (scratch school.cjs).",
+      "got_2026_10_09": "frac-add-sub and frac-mul-div draw proper fractions with denominators 2..12 only; 0 of 8,000 generated specs carry a mixed number; tier-1 items like \"5/8 - 1/2\" are KS3. A step up changes the 3+3 mix to 2+4 of the same content. Walker's set-fit read: ~3/6 at his level.",
+      "evidence": [
+        "desk/src/lib/rules/stretch.ts:36-39",
+        "desk/src/lib/rules/school.ts:2240-2256"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB2-3",
+      "backlog": "MB-B20",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "For a learner whose school year is past the unit (or on a step up), the fraction generators include mixed-number operands and at least one in-context item; set fit judged >= 5/6 for a Foundation resitter.",
+      "recurrence": 2,
+      "severity_2026_10_09": "major",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 9
+    },
+    {
+      "id": "L1-owen-17-MB2-4",
+      "journey": "MB2",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "major",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "clarity",
+      "title": "Slip lines on the walk run 26-37 words: line length 0.54 against >= 0.9",
+      "expected": ">= 90% of the TV lines he acts on are <= 25 words (rubric line length); Owen says \"that's long\" past two lines.",
+      "got": "Line length 106 of 107 measured fixed TV lines <= 25 words = 0.991 against 0.542 before (scratch lines.cjs: 53 slip lines, 15 withheld, 17 blurbs, choice lines, captions, 14 lesson ideas). The one over is the equivalent-fractions lesson idea at 28 words.",
+      "got_2026_10_09": "32 of 59 measured lines are <= 25 words; 27 SCHOOL_SLIPS lines are 26-37 words (pct-times-whole 37, rate-wrong-way 37, conv-ten-times 35).",
+      "evidence": [
+        "desk/src/lib/rules/school.ts:1208",
+        "desk/src/lib/rules/school.ts:3356"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB2-4",
+      "backlog": "MB-B6",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Every slip line the walk shows is <= 25 words (split the \"what happened\" from the \"what to do\" if needed); line-length share >= 0.9.",
+      "ceiling": "Model-written hint lines are only re-asked once for length (hint.ts:176).",
+      "rank": 9
+    },
+    {
+      "id": "L1-owen-17-MB2-5",
+      "journey": "MB2",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "confusion",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "clarity",
+      "title": "UK-habit answers read \"not sure\": £ on a euro item, \"cm squared\", \"sq cm\", \"pounds\"",
+      "expected": "A UK learner's money items are in pounds; \"20 cm squared\" / \"sq cm\" read as cm2.",
+      "got": "Still open. A typed '£' on a € item is unsure; '31.5 cm squared', '31.5 sq cm' and '31.5 square cm' are unsure (only 'cm2' and 'square centimetres' are right); money units are not system-aware (331 £, 335 € per 2,000 dec-arith specs on a UK learner) (scratch school2.cjs). Unsure, never wrong.",
+      "got_2026_10_09": "Money generators are not system-aware ({€:1693, £:1643, $:201} over 10,000 specs); \"£538.20\" on a € item -> unsure (different unit); \"20 cm squared\", \"20 sq cm\", \"273.60 pounds\" -> unsure. Unsure rate on his five realistic sheets 5/30 (within 0.2).",
+      "evidence": [
+        "desk/src/lib/rules/school.ts:146 (UNITS)",
+        "desk/src/lib/rules/school.ts:1089"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB2-5",
+      "backlog": "MB-B4",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "For system uk, money items use £; \"cm squared\"/\"sq cm\"/\"square cm\" read as cm2.",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 6
+    },
+    {
+      "id": "L1-owen-17-MB2-6",
+      "journey": "MB2",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "confusion",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "clarity",
+      "title": "The unsure line says \"I got something different for number N\" for a rounded right answer and for a blank",
+      "expected": "An unsure item says the desk is not sure (rounded, unit, blank) without implying wrong.",
+      "got": "A rounded right answer, an unreadable one and a blank each carry their own line (engine reason, 'cannot read this as one number', 'has no answer yet'); 'I got something different' is kept for a wrong linear item only, where it is true.",
+      "got_2026_10_09": "ASK(n) is the one line for every unsure item: \"1.33\" for 4/3, a blank answer and \"£538.20\" on a € item all read \"I got something different\".",
+      "evidence": [
+        "desk/src/lib/rules/kinds.ts:149-157"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB2-6",
+      "backlog": "MB-B1",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The unsure line names why in desk words, with no value (\"the desk could not tell from a rounded answer\", \"no answer here yet\").",
+      "ceiling": "Linear unsure items keep the generic question.",
+      "rank": 6
+    },
+    {
+      "id": "L1-owen-17-MB2-7",
+      "journey": "MB2",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "major",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "trust",
+      "title": "Photo marking (the default \"Snap the sheet\") rests on what vision reads; the linear photo prompt asks for \"a plain number or simple fraction\"",
+      "expected": "Handwritten answers read exactly as written (>= 0.9); no false tick on the photo path.",
+      "got": "Unchanged in code: the school prompt copies the answer verbatim (mixed numbers included) and code decides; the linear prompt still asks for 'a plain number or simple fraction' and the model's own solution. With mixed numbers now a + b/c in code the typed route is right; what the model writes from a photo is not checkable at L1.",
+      "got_2026_10_09": "Not measurable at L1. School sheets: the read-only prompt asks for answers verbatim (mixed numbers included) and code marks them. Linear sheets: the prompt asks the model to report the value as a plain number or fraction, which may convert \"1 3/4\" to 7/4 (masking -1) or pass it through (triggering -1).",
+      "evidence": [
+        "desk/src/lib/desk/mark.ts:162-173 (linearPrompt)",
+        "desk/src/lib/desk/mark.ts:146-160 (schoolPrompt)"
+      ],
+      "code_check": "n-a",
+      "verdict": "uncertain",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB2-7",
+      "backlog": "MB-B17",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "L2: handwriting read >= 0.9 and 0 false ticks over snapped school and linear sheets, including mixed-number answers.",
+      "recurrence": 1,
+      "severity_2026_10_09": "major",
+      "l2_priority": "Environment precondition: vision on local Ollama with the qwen 27B model pulled (uat/env.md, Math Buddy L2). Without that host this resolves uncertain, 'needs Ollama qwen host' - never pass, never refuted.",
+      "rank": 12
+    },
+    {
+      "id": "L1-owen-17-MB2-8",
+      "journey": "MB2",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "missing-feature",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "completion",
+      "title": "Get ready for school (the road his paper sends him down) skips the worked lesson",
+      "expected": "Where the desk has a worked lesson, he sees it before the set (journey definition of done).",
+      "got": "A unit with a worked lesson opens its question on 'See how first', lit; Select teaches, 'Try six' writes the set, Back returns to the same unit.",
+      "got_2026_10_09": "Topics teaches first (hasWorked -> o.teach); prepare writes the set straight away. From paper -> Back -> prepare he never meets the lesson.",
+      "evidence": [
+        "desk/src/tv/keys.ts:513-529",
+        "desk/src/tv/prepareRows.ts:57-65"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB2-8",
+      "backlog": "MB-B39",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "From the recovery route, a topic with a worked lesson offers it (one press, skippable) before the set.",
+      "ceiling": "14 of 17 school units have a worked lesson; the three linear-equation units (his A17 rows) have none (new row L1-owen-17-MB2-11).",
+      "rank": 6
+    },
+    {
+      "id": "L1-owen-17-MB2-9",
+      "journey": "MB2",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "senior-quality",
+      "title": "An explain reply never sees his answer or the slip code found (MB-EXPLAIN 3/8)",
+      "expected": "The reply that points at the step knows what he wrote and which slip code detected.",
+      "got": "As L1-nela-12-MB2-3: his written answer, working and the detected slip reach the prompt; 6/8.",
+      "got_2026_10_09": "The explainSchool / explain prompts carry the question, the transcript and the age voice only (+ memory notes): not the typed answer, the detected slip, the school system or the topic history.",
+      "evidence": [
+        "desk/src/lib/desk/explain.ts:64-70,229-241"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB2-9",
+      "backlog": "MB-B10",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "X2 and X3 reach the explain prompt; MB-EXPLAIN >= 5/8.",
+      "ceiling": "School system and topic history absent.",
+      "rank": 6
+    },
+    {
+      "id": "L1-owen-17-MB4-1",
+      "journey": "MB4",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "senior-quality",
+      "title": "One broad statement spreads a loss over 3 topics: the list shows decimals rows he never lost marks on and holds 14 of the 17 desk topics",
+      "expected": "The ranked list is the priority a resit lecturer would draw from the question-level analysis: the topics the questions tested, each loss counted where it was lost, a short list.",
+      "got": "A question's lost marks are shared in whole marks across the destinations its codes reach, so the rows add up: on a 25-question mock (typed 31 of 87; the 80-mark cap leaves out the last row and the paper is 28 of 80) the 14 topic rows sum 39 and the 4 off-desk statements 13 = 52 lost; 0 breaches of topics + off-desk + unmapped = lost over 2,000 random papers (scratch mock.cjs).",
+      "got_2026_10_09": "N2 (fraction questions 8, 21) -> Add and subtract fractions, Multiply and divide fractions AND Add, subtract and multiply decimals, each \"4 marks lost · From 8, 21\"; R9 -> three percent/decimal rows; A17 -> one-step, two-step and both-sides. 14 rows sum to 44 \"marks lost\" for 24 marks lost on desk-mapped questions. Picking N8 instead of N2 for the same question drops the decimals row.",
+      "evidence": [
+        "desk/src/lib/rules/recovery.ts:195-232",
+        "desk/src/tv/paperRows.ts:20-36"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB4-1",
+      "backlog": "MB-B5",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "A topic row shows only what its questions tested: a statement that touches several units is split by what the question practised (or the learner confirms the unit), and the rows' losses never add up to more than the paper lost; Owen's mock yields <= 8 rows, none for decimals.",
+      "ceiling": "A topic's 'N lost' is an apportioned share, not a count of marks lost on that topic, and nothing on the TV says so (new row L1-owen-17-MB4-10).",
+      "rank": 18
+    },
+    {
+      "id": "L1-owen-17-MB4-2",
+      "journey": "MB4",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "missing-feature",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "completion",
+      "title": "10 of 13 off-desk statements (20 marks, incl. quadratics and rearranging) appear only as \"and 10 more\", named nowhere",
+      "expected": "C1: no statement is dropped without being listed under \"Not on the desk yet\".",
+      "got": "Every off-desk statement is walked by name after the topics, the score card says '13 of 52 lost marks are not on the desk yet.' and the aside says '4 statements the desk has no topic for, after the topics.' Nothing is 'and 10 more'.",
+      "got_2026_10_09": "The card shows 3 statements then \"and 10 more\"; the D-pad walks topic rows only; no other screen lists them. 74 of 97 statements have no desk topic, so a real Foundation paper nearly always overflows.",
+      "evidence": [
+        "desk/src/tv/keys.ts:534-545",
+        "desk/src/tv/paperRows.ts:39-72",
+        "desk/src/maths/MathsTV.tsx:707-723"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB4-2",
+      "backlog": "MB-B13",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Every off-desk statement is reachable by name on the TV (a walkable second column or a page), most lost first.",
+      "ceiling": "A statement the desk has no topic for cannot be practised (primes, simultaneous equations, area under a graph); Select there does nothing.",
+      "rank": 18
+    },
+    {
+      "id": "L1-owen-17-MB4-3",
+      "journey": "MB4",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "broken-flow",
+      "severity": "major",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "effort",
+      "title": "No step from a recovery row to its practice: Select does nothing, Back lands on Equivalent fractions, the caption does not say how",
+      "expected": "From the first topic on the list, a set on that topic in a few presses (C5), the way named on screen.",
+      "got": "Select on a recovery row opens Get ready for school on that unit with the question open (lit on 'See how first' when the unit has a lesson); Back or Menu land on that unit.",
+      "got_2026_10_09": "The paper handler moves focus only; Back/Menu -> prepare focus 0; he must find the topic again among 17 cards (5 presses for his top topic, up to 17 when the top topic is Probability). C5 passes (3 screens) with friction.",
+      "evidence": [
+        "desk/src/tv/keys.ts:534-545"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB4-3",
+      "backlog": "MB-B9",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Select on a recovery row opens The usual / A step up for that topic (or prepare focused on it); presses from list to set <= 3.",
+      "ceiling": "The set that follows is the generic unit set (L1-radka-41-MB4-9).",
+      "rank": 9
+    },
+    {
+      "id": "L1-owen-17-MB4-4",
+      "journey": "MB4",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "minor",
+      "impact": {
+        "frequency": "low",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "senior-quality",
+      "title": "A beyond-Foundation statement is not demoted inside the off card and takes one of its 3 visible slots",
+      "expected": "C4: a statement beyond Foundation is flagged and never at the top of his list.",
+      "got": "Among equal losses a Foundation statement sorts before a flagged one, and the flag reads 'a harder statement'; all off-desk statements are reachable by D-pad.",
+      "got_2026_10_09": "notOnDesk sorts by lost, then spec order: A15 (foundation false, \"beyond a Foundation paper\") sits 2nd of 3 visible, above A19 simultaneous equations (same 4 marks), pushing A5/A18 into \"and 10 more\". The topic list itself can never hold one (C4 passes there).",
+      "evidence": [
+        "desk/src/lib/rules/recovery.ts:246-247",
+        "desk/src/maths/MathsTV.tsx:719"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB4-4",
+      "backlog": "MB-B13",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Among equal losses a Foundation statement comes before a flagged one; a flagged statement never takes a visible slot ahead of a Foundation statement with the same loss.",
+      "ceiling": "A higher-tier statement still sorts by marks lost first.",
+      "rank": 6
+    },
+    {
+      "id": "L1-owen-17-MB4-5",
+      "journey": "MB4",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "confusion",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "effort",
+      "title": "The statement picker: 97 checkboxes per row, no search, percentages under \"Ratio, proportion and rates of change\", three fraction statements whose choice changes the rows",
+      "expected": "C3: he finds what each question tests in about 30 s from the can-text alone.",
+      "got": "Each row's picker has a 'Find by words' box that narrows the 97 statements and opens the matching area; picks the box hides stay picked.",
+      "got_2026_10_09": "Each of 31 rows opens a <details> of 97 statements in 6 spec areas; R9 (percentages) is under Ratio; N2/N8/N12 all fit a fraction question and lead to different rows (N2 adds a decimals row).",
+      "evidence": [
+        "desk/src/lib/rules/paperEntry.ts:60-67",
+        "desk/src/app/phone/PaperPanel.tsx:25-42"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB4-5",
+      "backlog": "MB-B7",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "A search/filter by word, or a short \"what this paper usually tests\" list; a pick that leads to more than one unit says which.",
+      "ceiling": "The list is still 97 GCSE statements by area, and percentages stay under 'Ratio, proportion and rates of change'. Three fraction statements (N2, N8, N12) still lead to different rows.",
+      "rank": 6
+    },
+    {
+      "id": "L1-owen-17-MB4-6",
+      "journey": "MB4",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "broken-flow",
+      "severity": "minor",
+      "impact": {
+        "frequency": "low",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "effort",
+      "title": "31 typed paper rows live only in React state: a phone reload or tab discard loses them",
+      "expected": "A 15-minute entry survives the phone sleeping.",
+      "got": "Still open. paperRows is useState, so a phone reload or tab discard before Send loses the typed rows. Backlog MB-B22 records the App Master's ruling RP5 that a draft kept on the phone stays open.",
+      "got_2026_10_09": "paperRows is useState on the phone page; only the PIN is kept in localStorage.",
+      "evidence": [
+        "desk/src/app/phone/page.tsx:62"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB4-6",
+      "backlog": "MB-B22 (ruling RP5)",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The draft paper persists on the phone until sent.",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 6
+    },
+    {
+      "id": "L1-owen-17-MB4-7",
+      "journey": "MB4",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "trust",
+      "title": "Get ready for school labels a 17-year-old's topics \"Year 5\" to \"Year 9\"",
+      "expected": "No screen treats a Foundation resitter like a Year 7 (pet peeve).",
+      "got": "For a UK 17-year-old (expectedOn 17 of 17) the Prepare door says 'This path ends at Year 9; your year is past it.' and the cards print no year (scratch tv.cjs).",
+      "got_2026_10_09": "Every prepare card prints SYS_WORD uk \"Year N\" from the topic's syllabus year (5-9); his first topic reads \"Year 6\".",
+      "evidence": [
+        "desk/src/tv/prepareRows.ts:78-93",
+        "desk/src/maths/MathsTV.tsx (Prepare cards print no year past the path's end)"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB4-7",
+      "backlog": "MB-B19",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "For a learner whose school year is past the unit's, the card omits the year (or says \"foundations\").",
+      "ceiling": "He still starts on the school path's last unit, not on a Foundation-resit path.",
+      "rank": 6
+    },
+    {
+      "id": "L1-radka-41-MB1-1",
+      "journey": "MB1",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "The hint's leak backstop is blind on Czech-printed items and Czech notation",
+      "expected": "Every hint line for a snapped item passes a code check that catches a stated answer, whatever language or notation the sheet is printed in (C1).",
+      "got": "As L1-nela-12-MB1-1: '2/3 · 9/4', '0,3 × 0,4', 'Řeš rovnici 3(x - 2) = 2x + 5', 'Solve 3(x - 2) = 2x + 5' now read and their answers leak=true.",
+      "got_2026_10_09": "readQuestion parses neither 'Řeš rovnici 3(x - 2) = 2x + 5' nor 'Vypočítej: 3/4 + 1/6 =' nor '2/3 · 9/4 =' nor '0,3 × 0,4' nor 'Solve 3(x - 2) = 2x + 5' (no colon). The general leaks() then passes 'So x = 11.', 'The answer is 11/12.' and 'The answer is 0,12.' On these items the system prompt also tells the model the sheet is 'a factoring and linear-equations unit'.",
+      "evidence": [
+        "desk/src/lib/rules/taskText.ts:15,48",
+        "desk/src/lib/rules/kinds.ts:41"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB1-1",
+      "backlog": "MB-B2",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "readQuestion/equationOf read an item after stripping a leading instruction in cz/en ('Řeš (rovnici)', 'Vypočítej', 'Solve' with or without a colon), and the school reader accepts '·' and the learner's decimal comma (school system passed in). A suite row per form proves leaks() catches 'x = 11' / '11/12' / '0,12' on each.",
+      "ceiling": "Czech instruction verbs outside the list still read as nothing (new row L1-radka-41-MB1-6).",
+      "rank": 18
+    },
+    {
+      "id": "L1-radka-41-MB1-2",
+      "journey": "MB1",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "A homework night with hints and nothing marked ends on 'Good evening's work - all of it right.'",
+      "expected": "The recap tells a parent the truth: what was worked on and what needed a second hint; it never says 'right' about work nobody checked (C5, senior bar).",
+      "got": "As L1-nela-12-MB5-1: a homework night with hints and nothing marked ends on 'Worked through with 3 hints; nothing was marked.' on the TV and the phone line says '3 hints, 1 needed a second'.",
+      "got_2026_10_09": "recapCaption counts only marked sets' slips; with 0 sets and N hints it returns 'Good evening's work - all of it right.' on the TV and on the phone's Recap tab.",
+      "evidence": [
+        "desk/src/tv/recapRows.ts:109-118"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB1-2",
+      "backlog": "MB-B11",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "With no marked set tonight, the caption says what was done without a verdict (e.g. 'A sheet worked through with 3 hints; nothing was marked.'); 'all of it right' only when at least one set was marked and every item is right. A recapRows test pins the homework-only branch.",
+      "ceiling": "A count in words, not which problems.",
+      "rank": 27
+    },
+    {
+      "id": "L1-radka-41-MB1-3",
+      "journey": "MB1",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "major",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "senior-quality",
+      "title": "MB-HINT 4/8: no school system, no course, no working, no slips; a fixed wrong-unit stance",
+      "expected": "A hint for a cz 6. ročník decimals or fractions item is written knowing the unit, the notation and what she got wrong before (H4, H5, H7, H8).",
+      "got": "A task no reader reads gets a neutral stance that names no unit (hint.ts:98); a unit task names its unit; the notation, slips and method reach the prompt. MB-HINT 6/8 (read) or 4/8 (unread).",
+      "got_2026_10_09": "Only the problem, the previous hint, an optional asked question and the age reach the prompt. For an item the readers do not parse, the stance names 'a factoring and linear-equations unit'.",
+      "evidence": [
+        "desk/src/lib/desk/hint.ts:91-102,122-135"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB1-3",
+      "backlog": "MB-B8",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The hint call receives the learner's school system (notation) and recorded slips for the item's unit; an unread item gets a neutral stance, not 'factoring and linear-equations'.",
+      "ceiling": "H5 and H7 absent.",
+      "rank": 9
+    },
+    {
+      "id": "L1-radka-41-MB1-4",
+      "journey": "MB1",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "major",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "completion",
+      "title": "MB-READ 2/5: the page read knows nothing of the school system, the age or the topic",
+      "expected": "A Czech sheet ('0,5', '·', 'a) b) c)' sub-items, Czech instructions) is read as printed, with the numbering kept.",
+      "got": "As L1-nela-12-MB1-4: MB-READ 5/5.",
+      "got_2026_10_09": "The vision prompt carries only the photo and the subject; the schema needs an integer item number, so lettered sub-items have no slot.",
+      "evidence": [
+        "desk/src/lib/desk/read.ts:37-45"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB1-4",
+      "backlog": "MB-B3",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The read prompt names the learner's notation (decimal comma, '·') and accepts a lettered part label; page read rate >= 0.9 on three Czech worksheets.",
+      "ceiling": "Vision behaviour unmeasured.",
+      "l2_priority": "Environment precondition: vision on local Ollama with the qwen 27B model pulled (uat/env.md, Math Buddy L2). Without that host this resolves uncertain, 'needs Ollama qwen host' - never pass, never refuted.",
+      "rank": 12
+    },
+    {
+      "id": "L1-radka-41-MB4-1",
+      "journey": "MB4",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "'No marks were lost' when the lost marks sit on questions with no statement picked",
+      "expected": "The recovery never says less was lost than she typed; lost marks on unmapped questions are stated (C2, recovery fidelity).",
+      "got": "Mock typed with no statement picked: score card '21 of 48 marks · 27 marks lost'; caption '27 marks were lost on questions that name no statement. Pick what each one tests on the phone.'; the topic list says '27 marks sit on questions that name no statement.' 'No marks were lost' appears only when none were (scratch mock.cjs).",
+      "got_2026_10_09": "A 22/50 mock typed without statement picks: score card '22 of 50 marks · 28 marks lost', topic list 'No marks were lost.', caption 'No marks were lost on this paper. Type another on the phone any time.' The same happens whenever every lost mark is on unmapped rows.",
+      "evidence": [
+        "desk/src/tv/paperRows.ts:100-118"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB4-1",
+      "backlog": "MB-B15",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "When unmapped questions lost marks, the list and caption say e.g. '28 marks lost on 16 questions with no statement picked: pick what they test on the phone to see topics.' A paperRows test covers all-unmapped and mapped-full + unmapped-lost.",
+      "ceiling": "The desk cannot tell her which statement a question tests.",
+      "rank": 18
+    },
+    {
+      "id": "L1-radka-41-MB4-2",
+      "journey": "MB4",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "senior-quality",
+      "title": "Full-loss fan-out and the prerequisite pull open a 9th-grader's mock on 'One-step equations · 2 lost', with rows adding up to 30 of 28",
+      "expected": "The list names the real weak topics of that mock, biggest loss first, and its numbers add up to the paper (C2, senior bar).",
+      "got": "Shares make the rows add up (27 of 27 on her 16-question mock). The prerequisite pull stays by design and is now said: 'Start with X, the base for Y, where most marks went.' An expression question (A4) is 'not on the desk yet', not a share of an equations unit (RP7).",
+      "got_2026_10_09": "Q6 (A17, 2 lost) counts in full on one-step, two-step and both-sides equations. N2 and R9 fan out to three topics each. The prerequisite rule puts 'One-step equations' (2) above 'Equations with brackets...' (6). Expression questions (A4, výrazy) land on the equations unit. The topic rows add up to 30 against 28 lost.",
+      "evidence": [
+        "desk/src/lib/rules/recovery.ts:195-232",
+        "desk/src/tv/paperRows.ts:90-107"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB4-2",
+      "backlog": "MB-B5",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "An item's loss is shared, not copied, across the topics it touches (the rows add up to the paper's loss); the caption names the biggest loss and says separately which base unit comes first; A4 no longer maps expression questions onto an equations unit. A senior teacher signs off the order on two real CERMAT-style mocks.",
+      "ceiling": "A 9th-grader's mock still goes through the desk's school path and UK statement wording, and each topic's number is a share.",
+      "rank": 18
+    },
+    {
+      "id": "L1-radka-41-MB4-3",
+      "journey": "MB4",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "broken-flow",
+      "severity": "major",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "effort",
+      "title": "No Select on the recovery list: 7 presses to the first topic's set, via a screen that does not know the paper",
+      "expected": "From the list she reaches a practice set on the first topic in a few presses (D4).",
+      "got": "Select on a recovery row opens that unit's question: paper -> Select (1 press) -> Select (2) is the set or the lesson.",
+      "got_2026_10_09": "The paper key handler has no Select. Back goes to Get ready for school with Equivalent fractions lit and no mark of the paper's topics: Back + Right x4 + Select + Select = 7 to One-step equations, 9 to the biggest loss, 18 to Pythagoras. She must remember the topic's name.",
+      "evidence": [
+        "desk/src/tv/keys.ts:534-545"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB4-3",
+      "backlog": "MB-B9",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "Select on a lit recovery row asks The usual / A step up and writes that unit's set (as Prepare does): 2 presses from the list.",
+      "ceiling": "Same as L1-owen-17-MB4-3.",
+      "rank": 9
+    },
+    {
+      "id": "L1-radka-41-MB4-4",
+      "journey": "MB4",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "confusion",
+      "severity": "major",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "clarity",
+      "title": "97 GCSE-worded statements, 41 with specialist or UK-curriculum terms, to map a CERMAT mock",
+      "expected": "Every statement is understandable to a non-specialist parent in English and maps to a CERMAT-style task (C4).",
+      "got": "Still open in substance. The panel offers only the GCSE Foundation statements in UK wording ('HCF, LCM', 'reciprocals', 'standard form', 'loci', 'trapezia'; 30 of 97 match a jargon test, 11 are 'a harder statement'); the new 'Find by words' box makes a statement findable, not understandable. No CERMAT list exists (scope: the plan's Math Buddy Family brief is GCSE Foundation for 14-16).",
+      "got_2026_10_09": "The pick list is the GCSE Foundation map in UK wording: 'HCF, LCM', 'reciprocals', 'standard form', 'identity', 'loci', 'trapezia', 'frequency trees'... 11 are marked '(beyond a Foundation paper)'. Up to 3 picks per question, 16 times.",
+      "evidence": [
+        "desk/src/app/phone/PaperPanel.tsx:25-42",
+        "desk/src/lib/library/gcse.ts:30-138"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB4-4",
+      "backlog": "MB-B7 (owner)",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "For a cz learner the panel offers task-shaped statements a parent recognises (e.g. 'simplify an expression with brackets', 'a construction with ruler and compasses'), mapped to the same codes; no 'Foundation paper' wording.",
+      "recurrence": 2,
+      "severity_2026_10_09": "major",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "scope_note": "Out-of-segment default bias: Radka's mock is a Czech entrance exam. The plan builds GCSE Foundation for 14-16 (b. Math Buddy, Family); a CERMAT list is not a planned slice. Routed to concept-doc, not a defect against the planned product.",
+      "rank": 9
+    },
+    {
+      "id": "L1-radka-41-MB4-5",
+      "journey": "MB4",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "confusion",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "clarity",
+      "title": "A blank 'Scored' (a zero) is refused as 'not a whole number'; dropped rows silently change the TV total",
+      "expected": "A zero can be left blank or is asked for in plain words; the TV says when its total differs from the paper's printed total.",
+      "got": "An empty Scored box says 'Type 0 if nothing was scored.' (scratch mock.cjs); the TV score card says how many typed questions the phone left out.",
+      "got_2026_10_09": "'Question 3 is left out: The marks scored are not a whole number.' for an empty field. Dropped rows are not stored (addPaper keeps items + unmapped), so the TV's 'N of M marks' differs from the paper with no note on the TV.",
+      "evidence": [
+        "desk/src/lib/rules/paperEntry.ts:32-38",
+        "desk/src/tv/paperRows.ts:62-67"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB4-5",
+      "backlog": "MB-B22",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "An empty Scored reads as 'Type 0 if nothing was scored'; the TV score card says 'k questions left out on the phone' when the stored paper is smaller than the rows typed.",
+      "ceiling": "A dropped row is still not stored; the TV total is of what was kept.",
+      "rank": 6
+    },
+    {
+      "id": "L1-radka-41-MB4-6",
+      "journey": "MB4",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "trust",
+      "title": "GCSE tier facts presented as facts about her paper: 'beyond a Foundation paper', 6-mark and 80-mark caps",
+      "expected": "Nothing names an exam or its rules that the desk cannot back for this paper (C6).",
+      "got": "The flag reads 'a harder statement', not 'beyond a Foundation paper'; no user-facing string in maths/, tv/, app/phone/ or rules/recovery names GCSE, 1MA1, Edexcel, a grade or a prediction (grep). The drop reasons still say 'at most 6 marks for one question' and 'at most 80 marks for one paper' as the desk's own limits.",
+      "got_2026_10_09": "'No question on this paper is worth more than 6 marks', 'This question takes the paper past 80 marks', '(beyond a Foundation paper)' on the phone and TV, shown to a parent typing a 50-point CERMAT mock.",
+      "evidence": [
+        "desk/src/app/phone/PaperPanel.tsx:36",
+        "desk/src/maths/MathsTV.tsx:719"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB4-6",
+      "backlog": "MB-B7",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The caps are worded as the desk's limits ('The desk takes questions of up to 6 marks') and 'Foundation' is not shown to a cz learner.",
+      "ceiling": "The 6- and 80-mark limits are GCSE facts presented as the desk's limits; a 50-point mock never hits them.",
+      "rank": 6
+    },
+    {
+      "id": "L1-radka-41-MB4-7",
+      "journey": "MB4",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "confusion",
+      "severity": "minor",
+      "impact": {
+        "frequency": "low",
+        "reachability": "med",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "'Secure on the desk' printed beside a topic that lost marks on the paper",
+      "expected": "The list never calls a topic secure against the marks she typed (C2).",
+      "got": "A topic the learner's record calls secure reads 'Worth a recheck' beside its lost marks, not 'Secure on the desk'.",
+      "got_2026_10_09": "A topic the learner's record calls secure stays in the list (ruling 2) with the tag 'Secure on the desk' beside 'N marks lost'. To a parent, the desk contradicts itself.",
+      "evidence": [
+        "desk/src/maths/MathsTV.tsx:736"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB4-7",
+      "backlog": "MB-B24",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The tag says what to do with the disagreement ('The desk had this as secure; the paper says otherwise') or is replaced by a plain 'worth a recheck'.",
+      "ceiling": "It stays in the list (ruling 2) so a parent sees the desk's record disagree with the paper.",
+      "rank": 6
+    },
+    {
+      "id": "L1-radka-41-MB4-8",
+      "journey": "MB4",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "confusion",
+      "severity": "minor",
+      "impact": {
+        "frequency": "low",
+        "reachability": "med",
+        "trust_erosion": "med"
+      },
+      "dimension": "clarity",
+      "title": "The Paper panel never names whose record the paper goes to",
+      "expected": "With two children, the panel says 'This paper goes on Simon's record'.",
+      "got": "The heading reads 'A paper Nela sat' and the button 'Send 16 questions to Nela's record'.",
+      "got_2026_10_09": "'A paper you sat' with no name; Send stores it on whoever is seated on the TV. Only the phone's top bar shows the name.",
+      "evidence": [
+        "desk/src/app/phone/PaperPanel.tsx:15-16,45"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB4-8",
+      "backlog": "MB-B43",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The panel's heading and Send button name the seated learner.",
+      "ceiling": "Names the seated learner, not a choice.",
+      "rank": 4
+    },
+    {
+      "id": "L1-radka-41-MB4-9",
+      "journey": "MB4",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "missing-feature",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "missing",
+      "title": "The set the recovery leads to never sees the paper (MB-SET 2/7 for the equations units)",
+      "expected": "'Get me practising that first': the set aims at the kind of question the marks were lost on (Q6 the aim).",
+      "got": "Still open. The linear (equations) sets are model-written from the topic, slips and memory (MB-SET 2/7); code sets aim at recorded slips; neither reads the paper. grep 'paper' in items.ts and stretch.ts: 0 hits.",
+      "got_2026_10_09": "Equations sets are model-written from the topic, slips and memory only; code sets aim at recorded slips. Neither reads the paper. Age, school system and stretch do not reach the equations prompt.",
+      "evidence": [
+        "desk/src/lib/desk/items.ts:70-100,136-143",
+        "desk/src/app/api/practice/route.ts"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB4-9",
+      "backlog": "MB-B40",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "A set opened from the recovery carries the paper's lost statements as its aim; the equations prompt receives age and school system.",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "Environment precondition: the text engine (claude CLI; CLAUDE_FAST_MODEL for hints) reachable, and a profile of the Character's own system (cz for Nela/Radka, uk for Owen) in an isolated DESK_DATA_DIR.",
+      "rank": 6
+    },
+    {
+      "id": "L1-radka-41-MB5-1",
+      "journey": "MB5",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "broken-flow",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "The recap's hints, 'Needed a second hint' list and minutes are never reset: a night with nothing done reads as yesterday's",
+      "expected": "Each evening's recap covers that evening only (C5).",
+      "got": "As L1-nela-12-MB5-2.",
+      "got_2026_10_09": "session.end only stops the timer; the log is reset only by 'reset' (the bench bar's Reset session button, not on the remote). The next day, with nothing done, the maths tile is not empty, the phone says 'Math Buddy - 1 hint' plus the old second-hint problem, and the TV says 'Good evening's work - all of it right.' The phone Recap tab opens whenever log.problems is non-empty. The memory prompt receives the same inflated hintsUsed.",
+      "evidence": [
+        "desk/src/lib/session/store.ts:618-623"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB5-1",
+      "backlog": "MB-B12",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The log (problems, hints, hard, minutes, started) is cleared at the start of a new day or after the recap is left, for every learner slot; a reducer test runs two evenings and asserts the second recap is 'A quiet evening.'",
+      "ceiling": "End session as the first event of a later day shows yesterday's log (new row L1-radka-41-MB5-10).",
+      "rank": 27
+    },
+    {
+      "id": "L1-radka-41-MB5-2",
+      "journey": "MB5",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "missing-feature",
+      "severity": "blocker",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "completion",
+      "title": "The Sunday page ignores homework evenings and papers: a week of homework help reads 'Nothing this week.'",
+      "expected": "A page for the week shows the pattern, including evenings of homework with hints (D3).",
+      "got": "As L1-nela-12-MB5-3.",
+      "got_2026_10_09": "Digest entries are written only for a marked set, a Linga conversation and an Essay reading. A homework read with hints, or a paper typed in, writes none.",
+      "evidence": [
+        "desk/src/lib/rules/week.ts:177-179",
+        "desk/src/lib/rules/digest.ts:43,45"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB5-2",
+      "backlog": "MB-B14",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "A homework session (pages read, hints, second hints) and a paper entered each write a digest entry; the Sunday page has a line for them ('Two homework sheets, 5 hints, 2 needed a second.').",
+      "ceiling": "Seated learner only.",
+      "rank": 18
+    },
+    {
+      "id": "L1-radka-41-MB5-4",
+      "journey": "MB5",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "confusion",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "effort",
+      "title": "Setting up a child takes 24 remote presses past 'Calculus 2' and 'Back'; the system silently defaults to UK",
+      "expected": "First evening without a manual and without configuring on a TV with a remote (D1, pet peeve).",
+      "got": "Still open (file unchanged since before the base commit): system defaults to UK, blurb silent on the number format; the 24-press count was not re-measured.",
+      "got_2026_10_09": "Landing -> Save for elementary/14/Czech Republic: 24 presses (22 for age 12). The draft opens as High school. Down from Interests lands on 'Calculus 2', then 'Back'. The school system defaults to United Kingdom.",
+      "evidence": [
+        "desk/src/tv/profileRows.ts:24-31,71-82"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB5-4",
+      "backlog": "MB-B21",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The picks can be made on the phone (where the name is typed), or the TV rows start on the likely value (age row near the type's middle; course row skipped when the school path is the only sensible one).",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 6
+    },
+    {
+      "id": "L1-radka-41-MB5-5",
+      "journey": "MB5",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "quality-gap",
+      "severity": "minor",
+      "impact": {
+        "frequency": "high",
+        "reachability": "med",
+        "trust_erosion": "low"
+      },
+      "dimension": "senior-quality",
+      "title": "Code-written questions print UK decimal points and £/€ to a cz learner whose answers are expected with a comma",
+      "expected": "A Czech learner's set prints 28,85 and Kč, as a Czech teacher would.",
+      "got": "Same as L1-nela-12-MB2-4: questions print points and £/€ to a cz learner, answers expected with a comma.",
+      "got_2026_10_09": "'Work out £28.85 + £23.19.', 'Find 87% of £120.' Expected answers '£52,04', '£104,40'. question(spec) takes no school system.",
+      "evidence": [
+        "desk/src/lib/rules/school.ts:1089"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB5-5",
+      "backlog": "MB-B4",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "question(spec, system) prints the learner's decimal mark and a local currency for cz/de.",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 6
+    },
+    {
+      "id": "L1-radka-41-MB5-6",
+      "journey": "MB5",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "trust",
+      "title": "A skipped (blank) typed answer is shown as 'The desk is not sure' and counted as the desk's doubt",
+      "expected": "'Not sure' means the desk could not decide; a question the child skipped is shown as skipped (C7).",
+      "got": "Narrowed, still open. A blank typed answer's card now reads 'Number N has no answer yet.' (maths.ts:98) but its title is still 'The desk is not sure' (MathsTV.tsx:840) and rightLine counts a blank in 'N not sure', so the recap says '1 the desk was not sure of' for a skipped question.",
+      "got_2026_10_09": "The phone says 'Leave one empty if you skipped it'; a blank is marked unsure, shown as 'The desk is not sure' with 'Tell the desk on the phone how you got there', and the recap says '1 the desk was not sure of'.",
+      "evidence": [
+        "desk/src/lib/rules/maths.ts:218-221 (rightLine)",
+        "desk/src/maths/MathsTV.tsx:840"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB5-6",
+      "backlog": "MB-B1 (blank half)",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "A blank typed answer is its own state ('skipped'), drawn and counted apart from the desk's doubt.",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 6
+    },
+    {
+      "id": "L1-radka-41-MB5-7",
+      "journey": "MB5",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "missing-feature",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "missing",
+      "title": "The recap and the week cover only the child seated now",
+      "expected": "C5: what each child did that evening.",
+      "got": "Still open. recapRows reads the seated learner's history and log only; the other child's evening sits in `away`. Per-learner blocks stay open in backlog (delivery 13-ii).",
+      "got_2026_10_09": "recapRows, the phone Recap and the week read the seated learner's session fields and record; the other child's evening sits in `away` until they are seated again.",
+      "evidence": [
+        "desk/src/tv/recapRows.ts:46-62",
+        "desk/src/lib/session/store.ts:379-386"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB5-7",
+      "backlog": "MB-B23",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The phone Recap lists every learner with work tonight, one block each.",
+      "recurrence": 2,
+      "severity_2026_10_09": "minor",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "rank": 6
+    },
+    {
+      "id": "L1-radka-41-MB5-8",
+      "journey": "MB5",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "trust",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "trust",
+      "title": "The digest records notSure but the Sunday page never shows it (present-but-unwired)",
+      "expected": "The week says '4 of 6 right, 1 the desk was not sure of'.",
+      "got": "The unit line reads 'Add and subtract fractions: 4 of 6 right, 1 not sure, last set.' (scratch week.cjs); notSure has a reader.",
+      "got_2026_10_09": "'One-step equations: 4 of 6 right, last set.' The notSure field has 0 readers outside rules/digest.ts.",
+      "evidence": [
+        "desk/src/lib/rules/week.ts:245"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "fixed",
+      "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB5-8",
+      "backlog": "MB-B14",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199",
+        "level": "L1 (code landed only: not reachable-checked, not job-verified)"
+      },
+      "suggested_acceptance": "The unit line names the not-sure count when it is above 0.",
+      "ceiling": "Last set only.",
+      "rank": 6
+    },
+    {
+      "id": "L1-nela-12-MB1-8",
+      "journey": "MB1",
+      "character": "nela-12",
+      "type": "quality-gap",
+      "severity": "major",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "The leak backstop still reads nothing on common Czech instruction verbs and word problems: 'Sečti', 'Odečti', 'Vynásob', 'Zkrať', 'Urči', 'Převeď', 'Rozděl', 'Kolik je 3/4 z 20?'",
+      "expected": "Every task a 6. ročník fractions sheet prints is read into its unit, so the hint's code check (leaksSchool) runs on it, the stance names the unit and 'Six like this' is offered.",
+      "got": "readQuestion(q,'cz') gives kind 'linear', no spec, for 'Sečti 3/4 a 1/6', 'Odečti 1/2 od 3/4', 'Vynásob 2/3 a 3/4', 'Zkrať zlomek 18/24', 'Převeď 0,75 na zlomek', 'Urči 3/4 z 20', 'Rozděl 60 v poměru 2:3', 'Kolik je 3/4 z 20?', 'Sečti 2 1/2 a 1/4' (scratch read2.cjs: 9 of 21 Czech phrasings unread; the bare and 'Vypočítej/Spočítej' forms read). The general leaks() then lets 'Then you get 15.' and '3/4 of 20 is 15' through on 'Kolik je 3/4 z 20?' (it catches only 'The answer is 15.'), and a mixed-number answer 'So 2 3/4.' passes on '2 1/2 + 1/4'. The read prompt keeps the page's language (read.ts:44), so these lines reach the hint verbatim. The lesson pick is also asked of the linear library for them (hint/route.ts:57).",
+      "evidence": [
+        "desk/src/lib/rules/taskText.ts:15-20 (INSTRUCTION list)",
+        "desk/src/lib/rules/kinds.ts:41",
+        "desk/src/lib/rules/maths.ts (leaks on an unread item)",
+        "desk/src/lib/desk/read.ts:45",
+        "desk/src/app/api/hint/route.ts:67-68",
+        "repro: scratch read2.cjs, leak.cjs"
+      ],
+      "code_check": "present-broken",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "recurrence": 2,
+      "scope_note": "The residual of MB-B2 (blocker, fixed for the listed verbs); recurrence counts the class, not the verb list.",
+      "suggested_acceptance": "readQuestion reads the verbs and shapes a Czech worksheet prints for fractions, decimals, percent and ratio (a repro over 'Sečti/Odečti/Vynásob/Vyděl/Zkrať/Urči/Převeď/Rozděl' and 'Kolik je ... z ...?') into a school spec, or a task no reader reads is checked by a general rule that refuses a line stating a result.",
+      "l2_priority": "Environment precondition: the text engine (claude CLI; CLAUDE_FAST_MODEL for hints) reachable, and a profile of the Character's own system (cz for Nela/Radka, uk for Owen) in an isolated DESK_DATA_DIR. Ask 3 hints on 'Kolik je 3/4 z 20?' and 'Zkrať zlomek 18/24' and count lines that state or complete the result; the live model usually obeys the prompt, so the number is the point.",
+      "cert_level": "L1",
+      "rank": 18
+    },
+    {
+      "id": "L1-radka-41-MB1-6",
+      "journey": "MB1",
+      "character": "radka-41",
+      "type": "quality-gap",
+      "severity": "major",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "Same gap seen from the parent: on a Czech sheet's 'Sečti / Zkrať / Kolik je ...' lines nothing but the prompt stops a hint giving the result",
+      "expected": "'The desk never just hands over the answer' holds for every line of Nela's sheet, not only the ones that start with Vypočítej.",
+      "got": "As L1-nela-12-MB1-8. Radka cannot tell which lines are guarded: a guarded and an unguarded line look the same on the TV.",
+      "evidence": [
+        "see L1-nela-12-MB1-8",
+        "desk/src/lib/rules/taskText.ts:15-20"
+      ],
+      "code_check": "present-broken",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "recurrence": 2,
+      "suggested_acceptance": "As L1-nela-12-MB1-8.",
+      "l2_priority": "Environment precondition: the text engine (claude CLI; CLAUDE_FAST_MODEL for hints) reachable, and a profile of the Character's own system (cz for Nela/Radka, uk for Owen) in an isolated DESK_DATA_DIR.",
+      "cert_level": "L1",
+      "rank": 18
+    },
+    {
+      "id": "L1-nela-12-MB5-7",
+      "journey": "MB5",
+      "character": "nela-12",
+      "type": "broken-flow",
+      "severity": "minor",
+      "impact": {
+        "frequency": "low",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "End session as the first event of a new day still reads yesterday's hints: the day-clearing skips session.end",
+      "expected": "A recap at the end of an evening with nothing done says 'A quiet evening.'",
+      "got": "dayed() returns early for e.type === 'session.end' (store.ts:620), so a day-2 evening whose first event is Menu on the landing keeps day 1's log. Repro (scratch recap2.cjs): evening 1: 3 hints, 1 second hint; next day, only End session -> 'Worked through with 3 hints; nothing was marked.', log.hints 3. With any other event first -> 'A quiet evening.' The phone's Recap tab, opened on day 2 before any event, also draws yesterday's hints.",
+      "evidence": [
+        "desk/src/lib/session/store.ts:618-623",
+        "desk/src/tv/recapRows.ts:59 (hints read from s.log, not day-filtered)",
+        "desk/src/app/phone/page.tsx:718",
+        "repro: scratch recap2.cjs"
+      ],
+      "code_check": "present-broken",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "recurrence": 1,
+      "scope_note": "Residual of the fixed MB-B12 (blocker); narrow because most evenings start with another event.",
+      "suggested_acceptance": "recapRows counts hints only from a log whose day is today (or dayed() runs for session.end too, clearing before it stamps endedAt); the repro then reads 'A quiet evening.'",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "cert_level": "L1",
+      "rank": 9
+    },
+    {
+      "id": "L1-radka-41-MB5-10",
+      "journey": "MB5",
+      "character": "radka-41",
+      "type": "broken-flow",
+      "severity": "minor",
+      "impact": {
+        "frequency": "low",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "A parent who ends a day with nothing done is shown yesterday's hints and 'needed a second hint' (End session first)",
+      "expected": "A night with nothing done reads as nothing done.",
+      "got": "As L1-nela-12-MB5-7.",
+      "evidence": [
+        "see L1-nela-12-MB5-7"
+      ],
+      "code_check": "present-broken",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "recurrence": 1,
+      "suggested_acceptance": "As L1-nela-12-MB5-7.",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "cert_level": "L1",
+      "rank": 9
+    },
+    {
+      "id": "L1-radka-41-MB4-11",
+      "journey": "MB4",
+      "character": "radka-41",
+      "type": "confusion",
+      "severity": "major",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "trust",
+      "title": "A topic's 'N marks lost · From 2, 3, 8, 21' is a share of those questions' marks, and nothing on the TV says so: adding the questions up gives a bigger number",
+      "expected": "The parent can check a row against the paper she typed, or is told the number is a share.",
+      "got": "recovery() shares a question's lost marks across the destinations its codes reach (floor(L/n), the first L mod n get one more) so the rows sum to the paper's loss. Radka's 16-question mock (scratch rad.cjs): 'Add and subtract fractions: 4 lost · From 6, 10, 14', while those three questions lost 2 + 2 + 4 = 8 marks on the paper (the same on Owen's mock: 4 lost · From 2, 3, 8, 21, against 1 + 3 + 2 + 2 = 8); 'A percent of an amount' and 'Percent increase and decrease' get 1 each from a 4-mark loss on one question. paperCaption, offCountLine and the row say nothing about sharing (grep 'shared' in MathsTV.tsx and paperRows.ts: 0). The totals are right; a row is not a count she can verify. The statement that gave each share exists (RecoveryTopic.codes, recovery.ts:63) and has 0 readers under tv/ or maths/: paperView drops it (paperRows.ts:33), so the row cannot even say which statement it came from (wiring audit: present-but-unwired).",
+      "evidence": [
+        "desk/src/lib/rules/recovery.ts:195-232",
+        "desk/src/maths/MathsTV.tsx:729-737",
+        "desk/src/tv/paperRows.ts:33 (codes dropped)",
+        "repro: scratch mock.cjs; grep -rn \".codes\" desk/src/tv desk/src/maths -> 0"
+      ],
+      "code_check": "present-but-missed",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "recurrence": 1,
+      "scope_note": "The cost of the MB-B5 fix; the invariant is the point of it and stays.",
+      "suggested_acceptance": "The score card or a caption line says that a question that tests several topics gives each a share of its lost marks; or the row's 'From' lists each question with its own loss, or shows the statement (RecoveryTopic.codes) behind the share.",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "cert_level": "L1",
+      "rank": 18
+    },
+    {
+      "id": "L1-owen-17-MB4-10",
+      "journey": "MB4",
+      "character": "owen-17",
+      "type": "confusion",
+      "severity": "major",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "med"
+      },
+      "dimension": "trust",
+      "title": "His row 'Add and subtract fractions: 4 lost' does not match the questions it names (they lost 8): the TV never says the number is a share",
+      "expected": "'You lost most of your marks on these three things' is a count he can believe.",
+      "got": "As L1-radka-41-MB4-11, on his own mock.",
+      "evidence": [
+        "see L1-radka-41-MB4-11"
+      ],
+      "code_check": "present-but-missed",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "recurrence": 1,
+      "suggested_acceptance": "As L1-radka-41-MB4-11.",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "cert_level": "L1",
+      "rank": 18
+    },
+    {
+      "id": "L1-owen-17-MB2-11",
+      "journey": "MB2",
+      "character": "owen-17",
+      "type": "missing-feature",
+      "severity": "minor",
+      "impact": {
+        "frequency": "med",
+        "reachability": "high",
+        "trust_erosion": "low"
+      },
+      "dimension": "missing",
+      "title": "The three linear-equation units (the rows an equations loss leads to) have no worked lesson: 'See how first' is offered on 14 of 17 school units",
+      "expected": "From a recovery row on equations he gets the same 'See how first' then six that a fractions row gives.",
+      "got": "hasWorked is true for 14 of 17 school topics; linear-one-step, linear-two-step and linear-both-sides have none (scratch worked.cjs), so Select goes straight to a set written by the model (MB-SET 2/7).",
+      "evidence": [
+        "desk/src/lib/library/worked.ts:9",
+        "desk/src/tv/keys.ts:528",
+        "repro: scratch worked.cjs"
+      ],
+      "code_check": "confirmed-absent",
+      "verdict": "confirmed",
+      "resolution": "open",
+      "recurrence": 1,
+      "scope_note": "Plan row 9 (M1) built worked lessons for the school units it listed; equations lessons are not a planned slice. Reported so the ceiling is visible, not as a defect against M1.",
+      "suggested_acceptance": "A worked lesson for the three equation units, authored in library/worked.ts with code-drawn examples (the M1 shape), or the Prepare card says 'no lesson yet' in its own words.",
+      "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
+      "cert_level": "L1",
+      "rank": 6
+    },
+    {
+      "id": "L1-nela-12-MB1-6",
+      "journey": "MB1",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "strength",
+      "severity": "n-a",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "Two presses from Tonight to a first hint; 106 of 107 measured fixed TV lines are <= 25 words",
+      "got": "Select on the homework door opens tonight's sheet (or asks for it), Select on an item asks the hint; the phone follows by itself. Lines: 0.991 share <= 25 words (scratch lines.cjs).",
+      "evidence": [
+        "desk/src/tv/keys.ts:339-341",
+        "desk/src/tv/keys.ts:391",
+        "repro: scratch lines.cjs"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "n-a",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199"
+      }
+    },
+    {
+      "id": "L1-nela-12-MB1-7",
+      "journey": "MB1",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "strength",
+      "severity": "n-a",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "On a read task the leak check catches the answer in digits, English words, decimal comma and Czech number words",
+      "got": "14 of 14 answer-giving lines on read Czech-printed items are caught, including 'To je jedenáct dvanáctin.', 'It makes eleven twelfths.' and 'The answer is 0,12.' (scratch leak.cjs).",
+      "evidence": [
+        "desk/src/lib/rules/school.ts:2143",
+        "repro: scratch leak.cjs"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "n-a",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199"
+      }
+    },
+    {
+      "id": "L1-nela-12-MB2-8",
+      "journey": "MB2",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "strength",
+      "severity": "n-a",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "Typed marking under cz: 0 false ticks and 0 false rings over 4,800 correct and 13,712 mutated answers; the two real slips named by code",
+      "got": "Correct cz answers: 4,800 of 4,800 ticked over 6 units x 400 seeds x 2 tiers (frac-equivalent, frac-add-sub, frac-mul-div, frac-of-amount, dec-arith, dec-convert); 13,712 one-digit mutations over 13 units: 0 ticked, 0 equal values ringed; 22,884 code-written slip answers over 14 units: 0 ticked, 22,721 named by their own id, 163 unsure. suites school-marking 67/67, school-rules 87/87 pass.",
+      "evidence": [
+        "desk/src/lib/rules/school.ts:1673",
+        "repro: scratch school.cjs, fuzz.cjs, slips.cjs"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "n-a",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199"
+      }
+    },
+    {
+      "id": "L1-nela-12-MB2-9",
+      "journey": "MB2",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "strength",
+      "severity": "n-a",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "The second go is code-judged, once, with no value shown and nothing recorded",
+      "got": "suite maths-second 6/6 pass; unchanged logic.",
+      "evidence": [
+        "desk/src/lib/rules/maths.ts (secondGo)",
+        "repro: tools/maths-second-test.cjs"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "n-a",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199"
+      }
+    },
+    {
+      "id": "L1-nela-12-MB5-6",
+      "journey": "MB5",
+      "character": "nela-12",
+      "cert_level": "L1",
+      "type": "strength",
+      "severity": "n-a",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "Setup is D-pad plus one name on the phone, with no Mode row under 18; recap lines and the week page are counts",
+      "got": "profileRows for an elementary 12 has type, age, system, interests, path and Save/Back only (scratch tv.cjs).",
+      "evidence": [
+        "desk/src/tv/profileRows.ts",
+        "desk/src/lib/rules/mode.ts:36-47"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "n-a",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199"
+      }
+    },
+    {
+      "id": "L1-owen-17-MB2-10",
+      "journey": "MB2",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "strength",
+      "severity": "n-a",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "Linear typed marking is exact on mixed numbers, fractions and decimals; school units 0 false ticks, 0 false rings",
+      "got": "6,720 of 6,720 correct forms ticked and 0 of 20,108 wrong forms ticked over 4,000 random equations (scratch lin.cjs); school units as L1-nela-12-MB2-8.",
+      "evidence": [
+        "desk/src/lib/desk/verify.ts:155-177",
+        "repro: scratch lin.cjs"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "n-a",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199"
+      }
+    },
+    {
+      "id": "L1-owen-17-MB4-8",
+      "journey": "MB4",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "strength",
+      "severity": "n-a",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "The paper total is exact, the rows add up to the paper, validation never guesses and nothing claims a board, a grade or a pass",
+      "got": "topics + off-desk + unmapped = totals.lost in 2,000 of 2,000 random papers; no user-facing string names GCSE, 1MA1, Edexcel, a grade or a prediction (grep); suite recovery-rules 11/11, maths-tv 73/73, phone-panel 98/98 pass.",
+      "evidence": [
+        "desk/src/lib/rules/recovery.ts:207-248",
+        "repro: scratch mock.cjs"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "n-a",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199"
+      }
+    },
+    {
+      "id": "L1-owen-17-MB4-9",
+      "journey": "MB4",
+      "character": "owen-17",
+      "cert_level": "L1",
+      "type": "strength",
+      "severity": "n-a",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "What the desk cannot practise is named, counted and flagged, never forced onto a topic",
+      "got": "'13 of 52 lost marks are not on the desk yet.' plus every statement walked by name; a harder statement is flagged and sorts after a Foundation one of equal loss.",
+      "evidence": [
+        "desk/src/tv/paperRows.ts:53-72",
+        "desk/src/maths/MathsTV.tsx:707-723"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "n-a",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199"
+      }
+    },
+    {
+      "id": "L1-radka-41-MB1-5",
+      "journey": "MB1",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "strength",
+      "severity": "n-a",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "Two presses to a first hint; the two-step ladder and 'No lesson' are said plainly",
+      "got": "Tonight door -> page -> item Select; stage 2 only after stage 1; a unit task has no library lesson and says so.",
+      "evidence": [
+        "desk/src/tv/keys.ts:393-402",
+        "desk/src/app/api/hint/route.ts:67-68"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "n-a",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199"
+      }
+    },
+    {
+      "id": "L1-radka-41-MB4-10",
+      "journey": "MB4",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "strength",
+      "severity": "n-a",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "One validation that never guesses, drops explained live, exact totals, no board name",
+      "got": "A blank Scored says 'Type 0 if nothing was scored.'; the Paper panel names whose record; totals exact (21 of 48 on her 16-question mock).",
+      "evidence": [
+        "desk/src/lib/rules/paperEntry.ts:27-45",
+        "desk/src/app/phone/PaperPanel.tsx:15-16"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "n-a",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199"
+      }
+    },
+    {
+      "id": "L1-radka-41-MB5-9",
+      "journey": "MB5",
+      "character": "radka-41",
+      "cert_level": "L1",
+      "type": "strength",
+      "severity": "n-a",
+      "impact": {
+        "frequency": "high",
+        "reachability": "high",
+        "trust_erosion": "high"
+      },
+      "dimension": "trust",
+      "title": "Typed marking is code and honest for cz; 'not sure' is visible; the Sunday page is short, plain and now sees homework, papers and not-sure counts",
+      "got": "Sunday page for 3 sheets, 1 paper and one set: 'Three homework sheets, 6 hints, 2 needed a second.' / 'Add and subtract fractions: 4 of 6 right, 1 not sure, last set.' / 'One practice paper typed in.'; the empty week says 'Nothing this week.' only when empty.",
+      "evidence": [
+        "desk/src/lib/rules/week.ts:158-270",
+        "repro: scratch week.cjs"
+      ],
+      "code_check": "n-a",
+      "verdict": "confirmed",
+      "resolution": "n-a",
+      "recertified": {
+        "at": "2026-10-14",
+        "base": "12592a71",
+        "head": "4af25199"
+      }
+    }
+  ]
+}

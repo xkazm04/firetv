@@ -63,4 +63,15 @@ class HealthBodyTest {
         assertFalse("pin" in parse(body).keys, "health body has a pin key: $body")
         assertFalse(pin in body, "health body carries the PIN: $body")
     }
+
+    @Test
+    fun `dropped messages are reported per reason, and an empty map is an empty object`() {
+        val quiet = parse(healthBody(reading())).getValue("dropped").jsonObject
+        assertEquals(0, quiet.size)
+
+        val h = parse(healthBody(reading().copy(dropped = mapOf("shape-tap" to 2, "pen-short-point" to 1))))
+        val dropped = h.getValue("dropped").jsonObject
+        assertEquals("2", dropped.getValue("shape-tap").jsonPrimitive.content)
+        assertEquals("1", dropped.getValue("pen-short-point").jsonPrimitive.content)
+    }
 }

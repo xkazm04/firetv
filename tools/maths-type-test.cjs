@@ -8,11 +8,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
-require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
+require('./ts-load.cjs');
 const T=require(path.join(root,'src/maths/typeset.ts'));
 const W=require(path.join(root,'src/maths/working.ts'));
 /** A line as the TV sets it (MathText, server-rendered): what the stacked scripts, limits and root indices look like. */
@@ -179,6 +175,10 @@ test('10 (pen case 8): no prose ordinal places the pen or earns a tick, the card
  // ticks before a located slip only on the lines the desk could read as arithmetic
  assert.deepEqual(W.working({...base,studentWorking:'3x = 18\nx = -6',verdict:'wrong',slipAt:{line:1}}).ticks,[true,false]);
  assert.deepEqual(W.working({...base,studentWorking:'take 7 from both sides\n3x = 4\nx = 4/3',verdict:'wrong',slipAt:{line:1}}).ticks,[false,false,false]);
+ // MB-B36: a cz learner's Calculus line in Czech names is ticked where the chain holds, as the server read it
+ const czItem={n:1,question:'Derivujte: y = tg(x^2)',spec:{shape:'derivative',f:'tan(x^2)'},studentWorking:"y' = (tg(x^2))'\n= 1/cos^2(x^2)",studentAnswer:'1/cos^2(x^2)',verdict:'wrong',slipAt:{line:1}};
+ assert.deepEqual(W.working(czItem,'cz').ticks,[true,false]);
+ assert.deepEqual(W.working(czItem).ticks,[false,false],'with no system the tg line is not read, so not ticked');
  const TODAY={
   'undo-wrong-order':'Undone in the wrong order','sign-lost-moving':'Sign lost crossing the equals','divided-one-term':'Only one term divided',
   'bracket-first-term-only':'Bracket on the first term only','collect-x-wrong-sign':'x-terms gathered with the wrong sign',
@@ -422,4 +422,60 @@ test('12 (answer line per course): a Calculus item with no working shows its ans
   assert.deepEqual(w.lines,['3'],verdict);assert.ok(w.lines.every(l=>!/x\s*=/.test(l)),`${verdict}: ${JSON.stringify(w.lines)}`);
  }
  assert.deepEqual(W.working({n:1,question:'3x - 7 = 11',studentWorking:'',studentAnswer:'6',verdict:'right'}).lines,['x = 6']);
+});
+
+// ---- v2 M4b (2026-10-07): environments set as rows and columns ----
+test('M4b: cases, the matrices and aligned are tables of typeset cells, with their delimiters',()=>{
+ const one=(s)=>{const n=T.parseMath(s);const t=[];T.walk(n,x=>{if(x.t==='table')t.push(x);});return {n,t};};
+ let r=one('f(x) = \\begin{cases} x^2 & x < 0 \\\\ \\sqrt{x} & x \\ge 0 \\end{cases}');
+ assert.equal(r.t.length,1);assert.equal(r.t[0].env,'cases');assert.equal(r.t[0].open,'{');assert.equal(r.t[0].close,undefined);
+ assert.equal(r.t[0].rows.length,2);assert.equal(r.t[0].rows[0].length,2);assert.equal(T.flatten(r.t[0].rows[1][0]),'√(x)');
+ assert.equal(T.isTall(r.n),true,'a table takes three squares');
+ r=one('\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}');assert.deepEqual([r.t[0].open,r.t[0].close],['(',')']);assert.equal(T.flatten(r.n),'(1 2; 3 4)');
+ r=one('\\begin{bmatrix} a & b & c \\\\ d & e & f \\\\ g & h & i \\\\ \\end{bmatrix}');assert.equal(r.t[0].rows.length,3,'a trailing \\\\ is not a fourth row');assert.equal(r.t[0].rows[2].length,3);
+ r=one('\\begin{vmatrix} 1 & \\frac{1}{2} \\\\ 0 & 1 \\end{vmatrix}');assert.deepEqual([r.t[0].open,r.t[0].close],['|','|']);assert.equal(r.t[0].rows[0][1][0].t,'frac','a cell holds any typesetting');
+ r=one('\\begin{aligned} y &= x^2 \\\\ &= x \\cdot x \\end{aligned}');assert.equal(r.t[0].env,'aligned');assert.equal(r.t[0].rows.length,2);
+ r=one('\\begin{cases} \\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix} & a \\\\ 0 & b \\end{cases}');assert.equal(r.t.length,2,'a matrix inside cases');assert.equal(r.t[0].rows.length,2,'its rows do not split the outer table');
+ r=one('\\begin{matrix} \\{1\\} & 2 \\end{matrix}');assert.equal(r.t[0].rows[0].length,2);
+});
+test('M4b: an environment the desk does not set as a table reads as it always did; a missing \\end does not throw',()=>{
+ assert.equal(T.flatten(T.parseMath('\\begin{weird} x \\end{weird}')),' x ');
+ assert.doesNotThrow(()=>T.parseMath('\\begin{pmatrix} 1 & 2'));
+ assert.equal(T.parseMath('\\begin{pmatrix} 1 & 2').some(n=>n.t==='table'),false,'no end: not a table');
+});
+test('M4b: a table renders as a grid with drawn delimiters, in both voices',()=>{
+ for(const voice of ['print','hand']){
+  const h=html('A = \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}',voice);
+  assert.match(h,/data-role="maths-table"/);assert.match(h,/data-env="bmatrix"/);assert.match(h,/grid-template-columns:repeat\(2, auto\)/);
+  assert.equal((h.match(/class="mtab-d /g)||[]).length,2,'two delimiters');assert.equal((h.match(/class="mtab-c"/g)||[]).length,4);
+ }
+ assert.equal((html('\\begin{cases} 1 & a \\\\ 2 & b \\end{cases}').match(/class="mtab-d /g)||[]).length,1,'cases: a brace on the left only');
+});
+test('M4c: a Calculus paper ticks the lines the chain checker says hold, leaves a line it cannot tell bare, and the school and linear papers are unchanged',()=>{
+ const calc={n:1,question:'Find the derivative of x^2 sin x',spec:{shape:'derivative',f:'x^2 sin x'},studentAnswer:'2x cos x',verdict:'wrong'};
+ const lines="f(x) = x^2 sin x\nuse the product rule\nf'(x) = 2x sin x + x^2 cos x\nf'(x) = 2x cos x";
+ const w=W.working({...calc,studentWorking:lines,slipAt:{line:3}});
+ assert.deepEqual(w.ticks,[true,false,true,false],'line 0 and line 2 hold; the line in words is bare; the pen line is not ticked');
+ assert.equal(w.at,3);assert.equal(w.placed,'slipAt');
+ const first=W.working({...calc,studentWorking:"f(x) = x^2 sin x\nf'(x) = 2x cos x",slipAt:{line:1}});
+ assert.deepEqual(first.ticks,[true,false]);
+ const bare=W.working({...calc,studentWorking:'use the product rule\nthen differentiate\n2x cos x',slipAt:{line:2}});
+ assert.deepEqual(bare.ticks,[false,false,false],'lines the chain cannot tell get no tick');
+ const noChain=W.working({...calc,studentWorking:"f(x) = x^2 sin x\nf'(x) = 2x sin x + x^2 cos x"});
+ assert.deepEqual(noChain.ticks,[false,false],'no chain pen: the paper behaves as it did (pen on the answer line, no tick)');assert.equal(noChain.placed,'answer');
+ const right=W.working({...calc,verdict:'right',studentWorking:lines});
+ assert.deepEqual(right.ticks,[false,false,false,true],'a right Calculus item still ticks its answer line only');
+ // school and linear papers: the arithmetic ticks, exactly as before
+ const lin={n:2,question:'3x + 7 = 11',studentAnswer:'6',verdict:'wrong'};
+ assert.deepEqual(W.working({...lin,studentWorking:'3x = 18\nx = -6',slipAt:{line:1}}).ticks,[true,false]);
+ const school={n:3,question:'Work out 3/4 + 1/6',spec:{shape:'compute',expr:'3/4 + 1/6'},studentAnswer:'5/10',verdict:'wrong'};
+ assert.deepEqual(W.working({...school,studentWorking:'3/4 = 9/12\n1/6 = 2/12\n9/12 + 2/12 = 5/10',slipAt:{line:2}}).ticks,[true,true,false]);
+});
+
+test('MB-B4: a cz question sets Kč as one upright word and keeps the decimal comma inside the number line',()=>{
+ const n=T.parseMath('Work out 12,12\u00a0Kč × 5.');
+ assert.ok(n.some((x)=>x.t==='text'&&x.v==='Kč'),'Kč is a word');
+ assert.ok(!n.some((x)=>x.t==='var'&&x.v==='K'),'never the variable K');
+ assert.equal(flat('Work out 38,2 - 18,38.'),'Work out 38,2−18,38.');
+ assert.ok(T.parseMath('Kčx').some((x)=>x.t!=='text'||x.v!=='Kč'),'a longer run is not the crown');
 });

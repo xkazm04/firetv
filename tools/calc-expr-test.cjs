@@ -10,10 +10,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const E=require(path.join(root,'src/lib/rules/calc-expr.ts'));
 const V=require(path.join(root,'src/lib/desk/verify.ts'));
 
@@ -72,6 +69,7 @@ const S3=Math.sqrt(3),EDGE=[
  ['acos x',0.5,Math.acos(0.5)],['arccos(x)',0.5,Math.acos(0.5)],['atan x',0.5,Math.atan(0.5)],['arctanx',0.5,Math.atan(0.5)],
  ['sinh x',0.5,Math.sinh(0.5)],['coshx',0.5,Math.cosh(0.5)],['tanh(x)',0.5,Math.tanh(0.5)],['ln x',2,Math.log(2)],
  ['lnx',2,Math.log(2)],['log x',2,Math.log(2)],['log_2(x)',8,3],['log_2 x',8,3],['log₂(x)',8,3],['log_(10) x',1000,3],
+ ['log10(x)',100,2],['log10 x',1000,3],['log2(x)',8,3],['log2 x',8,3],['log10(x^2)',10,2],['log2(x)+1',8,4],['log(x)',Math.E,1],['ln(x)',Math.E,1],['log x',100,Math.log(100)],
  ['exp(x)',1,Math.E],['exp x',1,Math.E],['sqrt x',9,3],['sqrt(x+7)',9,4],['√x',9,3],['√(x+7)',9,4],['2√x',9,6],
  ['cbrt x',-8,-2],['∛x',27,3],['abs(x)',-3,3],['|x|',-3,3],['|x - 5|',2,3],['2pi',0,2*Math.PI],['2π',0,2*Math.PI],['pi x',2,2*Math.PI],
  ['3e^x',1,3*Math.E],['e',0,Math.E],['x(x+1)',2,6],['(x+1)(x-1)',3,8],['2sin(x)',0.5,2*Math.sin(0.5)],['2 sin x',0.5,2*Math.sin(0.5)],
@@ -232,6 +230,15 @@ test('11: sameFunction and sameUpToConstant - irrational samples, defined-ness o
  assert.equal(sf('x^2/2 + C','x^2/2'),true,'the constant is not a value');
  assert.equal(su('-cos(x)','1 - cos(x)'),true);assert.equal(su('sin(x)^2','-cos(x)^2'),true);
  assert.equal(su('x^2','x^2 + x'),false);assert.equal(su('ln(x)','ln(3x)'),true);
+ // D2: agreesWhereBoth(answer, truth) compares one way - only where both are defined; sameFunction keeps its two-way meaning
+ const ab=(a,b)=>E.agreesWhereBoth(c(a),c(b));
+ assert.equal(sf('-1/(1-x)','-1/(1-x) + 0*ln(1-x)'),false,'sameFunction: defined-ness differs on a positive sample');
+ assert.equal(ab('-1/(1-x)','-1/(1-x) + 0*ln(1-x)'),true,'one way: the answer may be defined where the truth is not');
+ assert.equal(ab('-1/(1-x) + 0*ln(1-x)','-1/(1-x)'),true,'and undefined where the truth is defined: undefinedWhereTrue says that');
+ assert.equal(E.undefinedWhereTrue(c('-1/(1-x) + 0*ln(1-x)'),c('-1/(1-x)')),true);
+ assert.equal(ab('ln(x)','ln(-x)'),false,'no sample where both are defined: fewer than SAME_MIN compare');
+ assert.equal(ab('1/(x-1)','1/(x-1) + 0*ln(x-4)'),false,'one sample (sqrt 23) where both are defined is fewer than SAME_MIN');
+ for(const [a,b] of [['(x^2 - 4)/(x - 2)','x + 2'],['ln(x^2)','2ln(x)'],['2sin(x)cos(x)','sin(2x)'],['x^3','x^3 + 0.001']])assert.equal(ab(a,b),sf(a,b),`${a} ~ ${b}: one way agrees whenever two way does`);
 });
 
 test('12: toTex - the typesetter\'s TeX for an expression',()=>{

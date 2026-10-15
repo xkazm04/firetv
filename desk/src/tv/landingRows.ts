@@ -12,6 +12,7 @@ import { BAND_NAME } from "@/lib/english/placement";
 import { onModules } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
+import { summaryLine } from "@/lib/rules/essay";
 
 /** The three apps, left to right on the desk. A profile shows only the ones it has on, in this order. */
 export const LANDING_MODULES = ["maths", "english", "essay"] as const satisfies readonly Subject[];
@@ -145,7 +146,7 @@ export function essayWaiting(s: Session): EssayWaiting {
   if (!last) return { app: "essay", kind: "none", at: null, lens: null, lensName: null, estimate: 0, rail: null, read: 0, secure: 0,
     line: BLURB_ONE.essay, empty: "Nothing read" };
   const lensName = last.name;
-  const line = own?.summary ? firstSentence(own.summary) : entry ? `${entry.label} lens · ${entry.detail}.` : `${lensName} lens, last read.`;
+  const line = own?.sentences.length ? firstSentence(summaryLine(own)) : entry ? `${entry.label} lens · ${entry.detail}.` : `${lensName} lens, last read.`;
   return { app: "essay", kind: "last", at: last.lastAt, lens: last.id, lensName, estimate: Math.max(0, Math.min(1, last.estimate)),
     rail, read: totals.read, secure: totals.secure, line, empty: null };
 }

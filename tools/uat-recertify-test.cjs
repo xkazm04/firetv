@@ -5,7 +5,7 @@
  *
  * Reads the committed runs under uat/runs/ as fixtures and never writes there: every write goes to a copy in the OS
  * temp dir, and the suite asserts the committed files are byte-identical at the end. All three model roles are
- * stubbed: the tutor at the registry, the Character and judge by replacing codexText in the require cache. No codex.
+ * stubbed: the tutor at the registry, the Character, judge and synthesis by replacing the driver's claude seam (claude.call). No claude is launched.
  */
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), crypto = require('node:crypto'), assert = require('node:assert/strict');
 const { test, after } = require('node:test');
@@ -15,10 +15,11 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'uat-recertify-'));
 process.env.DESK_DATA_DIR = path.join(tmp, 'desk-data');
 
 // the committed runs, hashed now and again at the end: the suite must leave them untouched
-const digest = () => {
+const digest = (dir = RUNS) => {
   const h = crypto.createHash('sha256');
-  for (const run of fs.readdirSync(RUNS).sort()) for (const f of fs.readdirSync(path.join(RUNS, run)).sort()) {
-    const p = path.join(RUNS, run, f);
+  // a plain file beside the runs (OPEN.md) is not a run
+  for (const run of fs.readdirSync(dir).sort().filter(r => fs.statSync(path.join(dir, r)).isDirectory())) for (const f of fs.readdirSync(path.join(dir, run)).sort()) {
+    const p = path.join(dir, run, f);
     if (fs.statSync(p).isFile()) h.update(`${run}/${f}\0`).update(fs.readFileSync(p));
   }
   return h.digest('hex');
@@ -27,17 +28,17 @@ const before = digest();
 
 // the driver's require hooks (@/ into desk/src, TS and TSX through desk's typescript), then the three roles stubbed
 require(path.resolve(__dirname, '../uat/driver/surface.cjs')).install();
-const calls = { tutor: 0, codex: 0 }, judgeReplies = [];
+const calls = { tutor: 0, claude: 0 }, judgeReplies = [];
 const registry = require(path.join(root, 'src/lib/engines/registry.ts'));
 registry.useProvider('text', { name: 'stub', run: async () => { calls.tutor++; throw new Error('no tutor call in this suite'); } });
-const codex = require(path.join(root, 'src/lib/engines/codex.ts'));
-codex.codexCli.run = async () => { throw new Error('codex must never be launched by this suite'); };
+const claudeText = require(path.join(root, 'src/lib/engines/text.ts'));
+claudeText.claudeCli.run = async () => { throw new Error('claude must never be launched by this suite'); };
 const seen = [];
-// a queued judge reply goes through the engine's own shape rule (shape.ts answer()), as codex's answer does live:
+// a queued judge reply goes through the engine's own shape rule (shape.ts answer()), as claude's answer does live:
 // an answer the request's shape rejects throws here exactly as it would in a run
 const shape = require(path.join(root, 'src/lib/engines/shape.ts'));
-codex.codexText = async req => {
-  calls.codex++; seen.push(req);
+require(DRIVER).claude.call = async req => {
+  calls.claude++; seen.push(req);
   if (req.schema?.required?.includes('verdict') && judgeReplies.length) { const reply = judgeReplies.shift(); return shape.answer({ name: 'stub', run: async () => ({ raw: JSON.stringify(reply), provider: 'stub' }) }, req); }
   throw new Error('stub: no reply queued for this call');
 };
@@ -253,7 +254,7 @@ test('case 7a (guard): a well-formed prior[] answer, one row per id, is taken as
   const rec = priorRecord(IDS), jd = await judgedAs(rec)([row('P-1', 'not-seen'), row('P-2', 'recurs', 0), row('P-3', 'not-evaluable')]);
   assert.deepEqual(statusesOf(IDS, jd), { 'P-1': 'not-seen', 'P-2': 'recurs', 'P-3': 'not-evaluable' });
   assert.equal(R().priorStatuses(IDS, jd.prior)['P-2'].finding, 0);
-  assert.equal(D().judgeRequest(rec, CTX).schema.properties.prior.minItems, 3, 'codex is asked for one row per id');
+  assert.equal(D().judgeRequest(rec, CTX).schema.properties.prior.minItems, 3, 'the judge is asked for one row per id');
   assert.equal(D().judgeRequest(rec, CTX).schema.properties.prior.maxItems, 3);
 });
 test('case 7: prior[] is checked in code: a missing, duplicated or unknown id, or no array at all, is not-evaluable for that id and never throws the pair', async () => {
@@ -302,6 +303,37 @@ test('case 9: report.md\'s Metrics section holds one bullet per registry metric,
   assert.deepEqual(bullets, [...registry, 'reliability', 'driver coverage'], 'one bullet per registry metric, then the two the driver measures');
   assert.ok(section.includes('- **moment recall:** 2/8 (25%)'), section);
   assert.ok(section.includes('- **moment precision:** 1/2 (50%)'), section);
+});
+
+// ---- fault injection: a kill mid-write must leave the old findings.json whole
+/** fs.writeFileSync that tears any write aimed at a findings.json (or its temp sibling): half the bytes land, then it throws. */
+function tearFindingsWrites(fn) {
+  const real = fs.writeFileSync, torn = [];
+  fs.writeFileSync = (file, data, ...rest) => {
+    if (String(file).includes('findings.json')) { real(file, String(data).slice(0, Math.floor(String(data).length / 2)), ...rest); torn.push(String(file)); throw new Error('killed mid-write'); }
+    return real(file, data, ...rest);
+  };
+  return Promise.resolve().then(fn).then(() => ({ torn, threw: false }), () => ({ torn, threw: true })).finally(() => { fs.writeFileSync = real; });
+}
+test('fault 1: writeBack() killed mid-write leaves the original findings.json parseable and unstamped', async () => {
+  const run = copyRun(BEGINNERS), file = path.join(run, 'findings.json'), original = fs.readFileSync(file, 'utf8');
+  const open = readJson(file).filter(f => f.resolution === 'open' && f.type !== 'strength');
+  assert.ok(open.length > 0, 'the fixture has an open finding to stamp');
+  const statuses = { [open[0].id]: { status: 'not-seen', evidence: 'x', finding: -1 } };
+  const r = await tearFindingsWrites(() => R().writeBack(run, 'fault', statuses));
+  assert.ok(r.threw && r.torn.length === 1, 'the stub tore the write');
+  assert.doesNotThrow(() => JSON.parse(fs.readFileSync(file, 'utf8')), 'findings.json still parses');
+  assert.equal(fs.readFileSync(file, 'utf8'), original, 'and is the old record, byte for byte');
+});
+test('fault 2: synthesize() killed mid-write leaves an existing findings.json parseable and unchanged', async () => {
+  const dir = path.join(tmp, `fault-${crypto.randomUUID().slice(0, 8)}`); fs.mkdirSync(dir, { recursive: true });
+  const file = path.join(dir, 'findings.json'), original = JSON.stringify([{ id: 'OLD-1', type: 'gap' }], null, 2);
+  fs.writeFileSync(file, original);
+  const committed = readJson(path.join(RUNS, BEGINNERS, 'tomas-9.json')), j = committed.journeys.find(x => x.id === 'J3');
+  const result = { ...committed, journeys: [j], calls: {} };
+  const r = await tearFindingsWrites(() => D().synthesize(dir, 'fault', [result], [], 0));
+  assert.ok(r.threw && r.torn.length === 1, 'the stub tore the write');
+  assert.equal(fs.readFileSync(file, 'utf8'), original, 'the old record is whole');
 });
 
 // ================================================================ the product between the two runs (uat/driver/product.cjs)
@@ -354,4 +386,67 @@ test('product case 7: a verdict drop on an unchanged product is confounded as no
   const md3 = fs.readFileSync(R().renderRecertify(bare.prior, bare.rerun), 'utf8');
   assert.ok(sectionOf(md3, 'Confounded - do not read as a regression').includes('product not recorded'), sectionOf(md3, 'Confounded - do not read as a regression'));
   assert.ok(/tomas-9 J4 verdict conditional -> fail/.test(sectionOf(md3, 'Regressed')), 'an unknown product does not excuse a drop');
+});
+
+test('instrument case: a recertify across the codex -> claude move names the engine change as a confound, never a regression, a product change or a fix', () => {
+  // the claude-era instrument as the driver writes it; INSTRUMENT above is the codex-era one (efforts, a gpt model)
+  const CLAUDE = { ...R().instrumentOf({ model: 'claude-cli/sonnet', judgeScreenCap: 900, roles: { character: { engine: 'claude-cli', model: 'best', thinking: false }, judge: { engine: 'claude-cli', model: 'best', thinking: true } } }), driver: INSTRUMENT.driver };
+  assert.equal(CLAUDE.efforts, undefined, 'a claude-era instrument records roles, not codex efforts');
+  const pair = droppedPair(stamp(63), stamp(63, [4, 9]));   // the product moved too: only the engine change can excuse the drop
+  fs.writeFileSync(path.join(pair.rerun, 'run.json'), JSON.stringify({ instrument: CLAUDE, product: stamp(63, [4, 9]) }));
+  const cf = R().confounds(pair.prior, pair.rerun).confounds.filter(c => c.kind === 'instrument');
+  assert.equal(cf.length, 1, JSON.stringify(cf));
+  assert.match(cf[0].text, /model gpt-6-astra -> claude-cli\/sonnet/);
+  assert.match(cf[0].text, /efforts\.judge high -> \(none\)/);
+  assert.match(cf[0].text, /roles\.judge\.thinking \(none\) -> true/);
+  const md = fs.readFileSync(R().renderRecertify(pair.prior, pair.rerun), 'utf8');
+  assert.match(sectionOf(md, 'Regressed'), /None\./, 'a verdict drop across the engine move is not a regression');
+  const conf = sectionOf(md, 'Confounded - do not read as a regression');
+  assert.ok(/the instrument changed: .*model gpt-6-astra -> claude-cli\/sonnet/.test(conf), conf);
+  assert.ok(/tomas-9 J4 verdict conditional -> fail.*instrument changed/.test(conf), conf);
+  assert.equal(conf.includes('run-to-run noise'), false, 'and the moved product is not blamed or excused');
+  assert.match(sectionOf(md, 'Fixed (LT evidence)'), /The instrument changed between these runs/, 'the Fixed section warns that nothing there is a fix across an engine change');
+  // the same engine on both sides says none of this
+  const same = droppedPair(stamp(63), stamp(63, [4, 9]));
+  assert.equal(fs.readFileSync(R().renderRecertify(same.prior, same.rerun), 'utf8').includes('The instrument changed between these runs'), false);
+});
+
+test('W7-3: the runs digest skips a plain file such as OPEN.md and still sees a change inside a run', () => {
+  const runs = path.join(tmp, `plain-${crypto.randomUUID().slice(0, 8)}`);
+  fs.mkdirSync(path.join(runs, 'a-run'), { recursive: true });
+  fs.writeFileSync(path.join(runs, 'a-run', 'findings.json'), '[]');
+  fs.writeFileSync(path.join(runs, 'OPEN.md'), '# Open\n');
+  const one = digest(runs);
+  fs.writeFileSync(path.join(runs, 'a-run', 'findings.json'), '[1]');
+  assert.notEqual(digest(runs), one);
+});
+
+test('a rerun whose Character file was torn mid-write still stamps the originating run: its planned rows are not-evaluable, nothing throws', () => {
+  const prior = copyRun(BEGINNERS), rerun = path.join(prior, 'recert-1');
+  fs.mkdirSync(rerun, { recursive: true });
+  fs.writeFileSync(path.join(rerun, 'run.json'), JSON.stringify({ id: R().runId(rerun), recertify: BEGINNERS, pairs: { 'tomas-9': ['J3'] } }));
+  fs.writeFileSync(path.join(rerun, 'tomas-9.json'), '{"character":"tomas-9","journeys":[{"id":"J3"');   // the child died while saving
+  fs.writeFileSync(path.join(rerun, 'findings.json'), '[]');
+  const open = R().openFindings(prior, 'tomas-9', 'J3').map(f => f.id);
+  assert.ok(open.length > 0, 'the fixture pair has open rows');
+  const out = R().finish(prior, rerun);
+  assert.equal(out.notEvaluable, open.length);
+  assert.equal(out.fixed, 0);
+  const rows = Object.fromEntries(readJson(path.join(prior, 'findings.json')).map(f => [f.id, f]));
+  for (const id of open) { assert.equal(rows[id].recertify_status, 'not-evaluable'); assert.equal(rows[id].resolution, 'open'); }
+  assert.ok(fs.existsSync(out.file), 'recertify.md is written');
+});
+
+test('the instrument hashes every driver file there is, derived from the directory, so a new driver file cannot run unrecorded', () => {
+  const real = R().instrumentOf({ model: 'm', judgeScreenCap: 1 }).driver;
+  const onDisk = fs.readdirSync(path.dirname(RECERTIFY)).filter(f => f.endsWith('.cjs')).sort();
+  assert.deepEqual(Object.keys(real).sort(), onDisk, 'every .cjs under uat/driver is hashed');
+  const dir = path.join(tmp, `driver-${crypto.randomUUID().slice(0, 8)}`); fs.mkdirSync(dir, { recursive: true });
+  for (const f of onDisk) fs.copyFileSync(path.join(path.dirname(RECERTIFY), f), path.join(dir, f));
+  fs.writeFileSync(path.join(dir, 'judge-prompts.cjs'), 'module.exports = {};\n');
+  fs.writeFileSync(path.join(dir, 'notes.md'), 'not code');
+  const seeded = R().instrumentOf({ model: 'm', judgeScreenCap: 1, dir }).driver;
+  assert.ok('judge-prompts.cjs' in seeded, 'a driver file added later is in the instrument');
+  assert.ok(!('notes.md' in seeded), 'only .cjs files are the driver');
+  assert.equal(seeded['verdict.cjs'], real['verdict.cjs'], 'the same file hashes the same');
 });

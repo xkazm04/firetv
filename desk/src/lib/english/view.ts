@@ -10,9 +10,20 @@
 import type { Screen, Session } from "../session/store";
 import { checkAccepts, checkAt, isCheckCommand, ownerOf } from "./activity";
 import { certGap, dayMonth, plateOf, recommendFor, shownSkills, unseenCertificate } from "./cert";
-import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL } from "./curriculum";
-import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, easyBand, isBand, MAX_TASKS, PLAN_MAX, shift } from "./placement";
-import { accepts, turnState } from "./turn";
+import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL, taughtAllowed } from "./curriculum";
+import { ownedPhrases, quoteOf, repliesOf, stripOf } from "./own";
+import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, conversationBand, easyBand, isBand, MAX_TASKS, PLAN_MAX, playBand, restsLine, shift, spokenBand, spokenTasks } from "./placement";
+import { currentStep, missionDone } from "./mission";
+import { isPitchId } from "./pitch";
+import { NOTE_LABEL } from "./notes";
+import { CHECK_TITLE, focusParts } from "./line";
+import { modeOf } from "../rules/mode";
+import { accepts, refusal, turnState } from "./turn";
+import { runningTake, takeSpent } from "./take";
+import { lostLine, type LostTask } from "./lostfound";
+import { showOpen } from "./repair";
+import { slipStands } from "./slip";
+import { beatCaption, beatOf, duetAgain } from "./duet";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
 
 /**
@@ -46,6 +57,8 @@ export const VIEW_ACTION_IDS = [
   "start-situation", "next-situation", "previous-chapter", "next-chapter",
   // the conversation, the moment, the coach and the recap
   "resume", "finish", "retry-scene", "cue", "quiz", "pick-phrase", "coach", "replay", "back", "learning-map",
+  // a fix moment (K2): the withheld fix shown on request; the learner's try is the phone's answer
+  "show-me",
   // the menu
   "menu-back", "my-level", "my-topics", "phone-setup", "sentence-help",
   // the certificate (Family W10): home's door to a new one, the menu's, the plate and the list of them
@@ -54,6 +67,12 @@ export const VIEW_ACTION_IDS = [
   "menu", "repeat",
   // the phone: a typed or spoken answer, and the pickers that take a value
   "answer", "pick-situation", "pick-band", "add-topic",
+  // Adult mode (v2 L3): a scene pitched in the learner's own words on the phone
+  "pitch-scene",
+  // Adult mode (v2 L3): Cut ends a take with up to three notes, and the recap's tape walks them one pin at a time
+  "cut", "note",
+  // Adult mode (v2 L4): Take Two of one cut note, from the phone's recap, and Back to the notes inside the take
+  "take-two", "take-end",
 ] as const;
 export type ActionId = typeof VIEW_ACTION_IDS[number];
 
@@ -79,27 +98,53 @@ export interface ViewRun {
 }
 export interface ViewAction { id: ActionId; label: string; help: string; run: ViewRun; disabled?: boolean; needs?: Need; }
 /** What takes a typed or spoken answer on this screen: the phone's reply box, the PC test bar, the driver's "answer". */
-export interface Answer { id: "answer"; action: "check-answer" | "check-task" | "plan-goal" | "turn"; label: string; lastTurnId?: string; taskId?: string; }
+/** On a fix moment (K2) the answer is a try, "moment-try", and lastTurnId is the learner turn the moment is on. */
+export interface Answer { id: "answer"; action: "check-answer" | "check-task" | "plan-goal" | "turn" | "moment-try"; label: string; lastTurnId?: string; taskId?: string;
+  /** in a duet (L2, duet.ts): whose beat the reply box takes, sent with the turn */
+  speaker?: "learner" | "costar"; }
 /** The line the TV speaks. A new key plays it again; blocked keeps it silent. */
 export interface Spoken { line: string; key: string; blocked: boolean; slow: boolean; speaker: string; }
 export interface Recap { title: string; replies: number; spoken: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
 export type Hero =
-  | { kind: "intro"; kicker: string; title: string; subtitle: string; art: ArtKey; nameTag: string }
-  | { kind: "ladder"; kicker: string; title: string; band: Band; note: string }
+  /** `yours` (L1): the learner's owned phrases on home, no count and no digit; Family draws them as Open Door objects, Adult as a progress line (X2) */
+  | { kind: "intro"; kicker: string; title: string; subtitle: string; art: ArtKey; nameTag: string; yours?: { phrases: string[]; style: "objects" | "list" } }
+  /** `spoke`: a second mark, the band the learner's say answers showed, when conversations start below `band` (S2) */
+  | { kind: "ladder"; kicker: string; title: string; band: Band; note: string; spoke?: Band }
   | { kind: "message"; kicker: string; text: string; note: string }
   | { kind: "heading"; kicker: string; title: string }
   | { kind: "choices"; kicker: string; prompt: string; options: string[]; small: boolean }
   | { kind: "topics"; kicker: string; title: string; topics: Array<{ id: string; title: string; skill: string; why: string; art: SceneArt }>; selected: number }
   | { kind: "scene"; kicker: string; title: string; who: string; said: string; subtitle: string; art: string; small: boolean;
       /** the scene's partner, for the name tag; its cue as a sentence to take with you; its picture; the level and length */
-      partner: string; sentence: string; illustration: SceneArt; band: Band; minutes: string }
+      partner: string; sentence: string; illustration: SceneArt; band: Band; minutes: string;
+      /** the scene's mission, when it has one: the subtitle is then its current step (mission.ts), and the TV's data line reads "Now" */
+      steps?: Array<{ text: string; state: Dot }>;
+      /** a scene this learner pitched (v2 L3): the situation card says it is their own */
+      own?: boolean;
+      /** inside Take Two (v2 L4): the subtitle is the noted quote, and the TV's data line reads "Take Two of" */
+      take?: boolean;
+      /** the lost-property table (L3, lostfound.ts), its public half: the corridor draws it */
+      lost?: LostTask }
   | { kind: "track"; kicker: string; title: string; progress: Progress; subtitle: string; illustration: ArtKey;
       /** on the recap: the taught phrase this scene invited and the learner did not use, to take with them */
-      sentence?: string }
-  | { kind: "comparison"; before: { kicker: string; quote: string }; after: { kicker: string; quote: string }; note: string;
+      sentence?: string;
+      /** the scene that taught it, so the sentence is not read as one the learner said tonight */
+      from?: string }
+  | { kind: "comparison"; before: { kicker: string; quote: string;
+      /** a fix the learner repaired (K2): the excerpt of the quote struck through, the slip they found; never a count */
+      struck?: string }; after: { kicker: string; quote: string }; note: string;
       /** the picture in the arch when it is not the coach's; the data line under the picture */
-      art?: ArtKey; data?: string }
+      art?: ArtKey; data?: string;
+      /** a fix still withheld (K2): the after slot is an empty frame, waiting for the learner's line */
+      open?: boolean
+      /** the overline when it is not the screen's tag: "Yours now" (L1) */
+      kicker?: string }
   | { kind: "menu"; kicker: string; title: string; entries: string[]; selected: number }
+  /** the recap of a take ended by Cut (v2 L3): the notes as a tape strip, one pin each, the focused pin's note in the caption slot.
+   * A pin whose note had its Take Two (v2 L4) carries a mark: held (its quote struck), open, or undecided ("Not decided");
+   * the branch is that take drawn from its pin: the partner line it forked at, and the learner's line again. Never a count. */
+  | { kind: "tape"; kicker: string; title: string; pins: Array<{ label: string; quote: string; better: string; note: string; mark?: TakeMark }>; selected: number; data: string;
+      branch?: { pin: number; partner: string; from: string; again: string } }
   /** a certificate as a dry plate (cert.ts plateOf): the band, the chosen topics, each skill with spoken or written, one quote.
    * With none held it is the plate in outline (cert.ts certGap): the skills shown so far, and `open`, the skills still to show, as empty slots. */
   | { kind: "cert"; kicker: string; title: string; band: Band; issued: string; topics: string[];
@@ -107,6 +152,12 @@ export type Hero =
   /** every certificate held, newest first, one door each */
   | { kind: "certs"; kicker: string; title: string; entries: string[]; selected: number }
   | { kind: "plain"; title: string };
+/** The owned phrase whose latch tonight's use set (L1): its second use was in this conversation. */
+const yoursTonight = (owned: ReturnType<typeof ownedPhrases>, id: string, conversationId: string) => owned.find(o => o.id === id && o.uses[1].conversationId === conversationId) ?? null;
+/** A cut note after its Take Two: held (struck), open (not held), or undecided (code could not tell). */
+export type TakeMark = "held" | "open" | "undecided";
+export const markOf = (held: boolean | null): TakeMark => held === true ? "held" : held === false ? "open" : "undecided";
+
 export interface LingaView {
   /** the TV's data-view: "menu", the picker's "linga-verdict", else the session screen */
   screen: string;
@@ -204,8 +255,11 @@ function answerOf(s: Session, lc: LevelCheck | null, c: Conversation | null): An
     if (lc.stage === "plan" && lc.askGoal) return { id: "answer", action: "plan-goal", label: "Say what to practise" };
   }
   // The phone keeps its reply box during the recognition quiz, and a turn is accepted there: the turn table decides.
-  const said = c?.turns.at(-1);
-  if (panel === "talk" && c && accepts(c, "turn") && said?.role === "partner") return { id: "answer", action: "turn", label: `Reply to ${c.partner}`, lastTurnId: said.id };
+  const said = c ? (runningTake(c)?.turns ?? c.turns).at(-1) : undefined;
+  // a fix moment (K2) takes the learner's try in the same box, while it takes one; never a turn
+  if (panel === "moment" && c?.moment && accepts(c, "moment-try")) return { id: "answer", action: "moment-try", label: c.moment.repair?.rung === 2 ? "Say it once more" : "Say it again", lastTurnId: c.moment.turnId };
+  const beat = c ? beatOf(c) : "learner";
+  if (panel === "talk" && c && accepts(c, "turn", undefined, undefined, beat) && said?.role === "partner") return { id: "answer", action: "turn", label: beat === "costar" && c.duet ? `${c.duet.coStar} replies to ${c.partner}` : `Reply to ${c.partner}`, lastTurnId: said.id, ...(c.duet ? { speaker: beat } : {}) };
   return null;
 }
 
@@ -213,15 +267,22 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   const ui: LingaUi = { ...NO_UI, ...Object.fromEntries(Object.entries(input).filter(([k, v]) => k in NO_UI && v !== undefined)) };
   const { menu, picking, sceneIndex, chapter } = ui;
   const p = s.profiles.find(p => p.id === s.learner?.id), l = s.englishLearning, prefs = l.preferences ?? defaultPreferences(p);
-  const level: Band = l.placement?.band ?? (isBand(prefs.level) ? prefs.level : "A1");
+  // the band Linga plays at: the placement's, or the lower band the learner spoke at (S2)
+  const level: Band = playBand(l.placement, isBand(prefs.level) ? prefs.level : "A1");
   const scenes = eligibleScenes(p, prefs, l), recommended = recommendFor(p, l), c = s.conversation;
   const lc = activeCheck(s), placement = lc?.placement ?? l.placement;
   const isHome = s.screen === "linga" || s.screen === "tonight", onCheck = CHECK_SCREENS.includes(s.screen);
-  const last = c?.turns.at(-1), asked = lc?.turns.at(-1);
+  // inside Take Two (v2 L4) the line on screen and on the speaker is the take's own last line
+  const take = c ? runningTake(c) : null, last = (take?.turns ?? c?.turns)?.at(-1), asked = lc?.turns.at(-1);
   const waiting = !!input.busy || (onCheck ? !!lc?.pending : !!c?.pending);
   /** where the conversation stands in its turn (turn.ts), and whether a conversation command is refused there */
   const st = c ? turnState(c) : null, inFlight = st === "preparing" || st === "waiting";
   const refused = (action: string) => !c || !accepts(c, action);
+  // Cut (v2 L3): Adult mode only, where the learner has a line of their own (turn.ts reads the mode for it)
+  const mode = modeOf(p, prefs), hasLine = !!c?.turns.some(t => t.role === "learner"), cutting = mode === "adult" && hasLine && !c?.duet;
+  // L1: the phrases this learner owns and may see now (an adult scene's only where adult content is on), quotes checked in code
+  const owned = ownedPhrases(l, taughtAllowed(p, prefs, l), repliesOf(c));
+  const cutAction = () => act("cut", "Cut", "End this take. Linga gives up to three notes, each quoting your own words.", cmd("cut"), { disabled: waiting || !c || !accepts(c, "cut", mode) });
   const spoken: Spoken = s.screen === "linga-check" && lc
     ? { line: lc.stage === "about" ? (asked?.role === "tutor" ? asked.text : "") : lc.task?.kind === "listen" ? lc.task.line : lc.task?.kind === "say" ? lc.task.prompt : "", key: `${lc.id}:${asked?.id}:${lc.task?.id}:${lc.audioNonce}`, blocked: !!lc.pending, slow: easyBand(lc.task?.band ?? "A2"), speaker: "Linga" }
     : { line: c?.phase === "coaching" ? c.coaching?.note ?? "" : last?.role === "partner" ? last.text : "", key: `${c?.id}:${c?.phase}:${last?.id}:${c?.audioNonce}`, blocked: !c || c.capture || inFlight || st === "paused" || st === "finished", slow: easyBand(c && isBand(c.preferences.level) ? c.preferences.level : "A1"), speaker: "Partner" };
@@ -284,6 +345,11 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
         actions = [act("start-talking", "Start talking", caption, cmd("start", { sceneId: recommended.id, replace: true })), chooseSituation("Choose a goal and practise it in a conversation.")];
         break;
     }
+    // L1: the phrases this learner owns, a small strip under home's words where the learner has a journey to show (not over a
+    // conversation or a check left part way, nor before a level). Family draws Open Door objects; Adult a plain progress line (X2).
+    const strip = stripOf(owned);
+    if (strip.length && hero.kind === "intro" && (home === "next-topic" || home === "plan-done" || home === "no-plan"))
+      hero = { ...hero, yours: { phrases: strip, style: mode === "adult" ? "list" : "objects" } };
     // A certificate issued and not opened yet (cert.ts): it is home's first door, the one Enter runs, until it is
     // opened; the state's own first door stays beside it. Not over a conversation or a check left part way.
     const fresh = unseenCertificate(l);
@@ -320,12 +386,19 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     }
   } else if (s.screen === "linga-verdict" && placement) {
     const b = placement.band, self = placement.source === "self";
+    // S2: when the say answers showed a lower band, conversations start there. The picture carries both bands (the
+    // kicker names them, the ladder marks them); the caption names the band conversations start at. No other figure.
+    const start = conversationBand(placement), spoke = start !== b ? spokenBand(placement.tasks) : null;
+    const said = spoke && spokenTasks(placement.tasks).every(t => t.mode === "text") ? "wrote" : "spoke";
     tag = "Your level"; title = `${b} · ${BAND_NAME[b]}`;
-    hero = { kind: "ladder", kicker: self ? "Self-chosen" : "Linga's read · not a certificate", title, band: b, note: placement.summary || BAND_CAN[b] };
-    caption = self ? "This is the level you picked." : "See the conversations Linga picks for this level, or find your level again."; captionTag = self ? "Your pick" : "What next";
+    hero = { kind: "ladder", kicker: self ? "Self-chosen" : spoke ? `Understood ${b} · ${said} ${spoke} · not a certificate` : "Linga's read · not a certificate", title, band: b, note: placement.summary || BAND_CAN[b], ...(spoke ? { spoke } : {}) };
+    // K4 (P17): the words the read rests on, quoted from the learner's own answers in code (line.ts focusParts), lead the caption
+    const quote = self ? undefined : focusParts(placement.focus, placement.tasks).quote;
+    const starts = spoke ? `Conversations start at ${start}, ${start === spoke ? `where your ${said === "wrote" ? "written" : "spoken"} answers were` : "one step below the level you understood"}.` : "";
+    caption = self ? "This is the level you picked." : quote ? `Your words: “${quote}”.${starts ? ` ${starts}` : ""}` : starts || "See the conversations Linga picks for this level, or find your level again."; captionTag = self ? "Your pick" : quote ? "Your words" : "What next";
     actions = [act("see-topics", "See my topics", "Linga picks conversations for this level. Swap any you don't want.", cmd(l.plan && lc?.stage !== "verdict" ? "plan-open" : "plan-propose")), act("check-again", self ? "Find my level with Linga" : "Find my level again", "Three questions and a few short tasks, about seven minutes.", cmd("check-start")), act("pick-level", "Pick it myself", "Choose a level from A1 to C2 yourself.", pickAt(b))];
     if (placement.focus && !self) details.push(`On the phone, next to practise: ${placement.focus}`);
-    if (!self && placement.confidence !== "medium") details.push(`On the phone: ${placement.confidence === "low" ? "your answers were mixed, so try the check again another day for a firmer read" : "your answers agreed with each other"}.`);
+    if (!self) details.push(`On the phone: ${restsLine(placement.confidence, placement.tasks)}`);
   } else if (s.screen === "linga-plan" && lc && lc.askGoal) {
     tag = `Your topics · ${level}`;
     hero = { kind: "message", kicker: "Before Linga picks your topics", text: "What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.", note: "" };
@@ -342,7 +415,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const i = sceneIndex % scenes.length, scene = scenes[i];
     tag = `Situation ${i + 1} of ${scenes.length}`; title = scene.name; caption = scene.goal;
     hero = { kind: "scene", kicker: `${scene.partner} · ${scene.minutes} minutes`, title, who: "", said: "", subtitle: skillName(scene.skill), art: scene.id, small: false,
-      partner: scene.partner, sentence: sentenceOf(scene.cue), illustration: artOf(scene.id, scene.skill), band: level, minutes: scene.minutes };
+      partner: scene.partner, sentence: sentenceOf(scene.cue), illustration: artOf(scene.id, scene.skill), band: level, minutes: scene.minutes, ...(isPitchId(scene.id) ? { own: true } : {}) };
     actions = [act("start-situation", "Start this situation", scene.goal, cmd("start", { sceneId: scene.id, replace: true })), act("next-situation", "Next situation", `${scenes[(i + 1) % scenes.length].name}.`, { ui: { sceneIndex: (i + 1) % scenes.length } })];
   } else if (s.screen === "linga-cert") {
     // the plate (Family W10): what cert.ts issued, in words; no count, no score, no digit but the band's
@@ -354,7 +427,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       // The plate in outline (linga-B): what is shown so far, and what is still to have as empty slots; no number. A band picked by hand, or a check read with low confidence, has no slots: a certificate rests on a level check.
       const open = gap.open.map(skillName);
       title = `${gap.band} ${BAND_NAME[gap.band]}`; captionTag = "What it needs";
-      caption = gap.blocker === "self" ? "A certificate rests on a level check you take with Linga." : gap.blocker === "low" ? "Your last check was a mixed read, so take it again another day for a firmer one." : open.length ? "Each empty slot is a conversation still to have." : "Linga issues it when you next finish a conversation.";
+      caption = gap.blocker === "self" ? "A certificate rests on a level check you take with Linga." : gap.blocker === "low" ? "Your last check was not firm enough, so take it again another day for a firmer one." : open.length ? "Each empty slot is a conversation still to have." : "Linga issues it when you next finish a conversation.";
       hero = { kind: "cert", kicker: "Certificate", title, band: gap.band, issued: gap.blocker ? "" : "Not issued yet", topics: [], skills: shownSkills(l, gap).map(({ name, mode }) => ({ name, mode })), quote: null, open };
       actions = [...(gap.blocker ? [act("find-level", "Find my level", caption, cmd("check-start"))] : []), back(caption)];
     } else if (!cert) {
@@ -381,32 +454,95 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     // Next first (the map opens on chapter 1, where Previous wraps to 8); each caption names the chapter it goes to, not its goal, which reads as this chapter's
     actions = [act("next-chapter", "Next chapter", `${ENGLISH_SKILLS[(chapter + 1) % 8].name}.`, { ui: { chapter: (chapter + 1) % 8 } }), act("previous-chapter", "Previous chapter", `${ENGLISH_SKILLS[(chapter + 7) % 8].name}.`, { ui: { chapter: (chapter + 7) % 8 } })];
   } else if (c && s.screen === "linga-moment" && c.moment) {
-    const m = c.moment; tag = "A moment";
-    hero = { kind: "comparison", before: { kicker: m.kind === "fix" ? "You said" : "You wanted to say", quote: m.said }, after: { kicker: m.kind === "fix" ? "Try" : "In English", quote: m.better }, note: m.why };
-    caption = "Then carry on from where the scene stopped."; captionTag = m.kind === "fix" ? "One thing to fix" : "A word for this scene";
-    actions = [act("back", "Back to the conversation", "Carry on from where the scene stopped.", cmd("moment-done"), { disabled: refused("moment-done") })];
+    const m = c.moment, r = m.kind === "fix" ? m.repair : undefined; tag = "A moment";
+    const back = act("back", "Back to the conversation", "Carry on from where the scene stopped.", cmd("moment-done"), { disabled: refused("moment-done") });
+    if (!r) {
+      hero = { kind: "comparison", before: { kicker: m.kind === "fix" ? "You said" : "You wanted to say", quote: m.said }, after: { kicker: m.kind === "fix" ? "Try" : "In English", quote: m.better }, note: m.why };
+      caption = "Then carry on from where the scene stopped."; captionTag = m.kind === "fix" ? "One thing to fix" : "A word for this scene";
+      actions = [back];
+    } else {
+      // K2 (repair.ts): the learner looks for the fix first. The slip stays; the after slot is an empty frame until a try
+      // holds (the slip struck, their own line in the slot) or the fix is shown. The why is the clue. A picture, no count.
+      const shown = !!m.better && !r.held, open = !r.held && !shown;
+      hero = { kind: "comparison", before: { kicker: "You said", quote: m.said, ...(r.held ? { struck: (m.slip && slipStands(m.said, m.slip)) || m.said } : {}) },
+        after: r.held ? { kicker: r.selfRepaired ? "You found it" : "You said it", quote: r.tried ?? "" } : shown ? { kicker: "Try", quote: m.better } : { kicker: "Your line", quote: "" },
+        note: r.rung >= 1 || r.held || r.lost ? m.why : "", ...(open ? { open: true } : {}) };
+      captionTag = r.held ? (r.selfRepaired ? "Your own fix" : "Fixed") : r.lost ? "One thing to fix" : shown ? "The fix" : r.rung === 1 ? "A clue" : "One thing to fix";
+      caption = r.lost ? "Linga lost this fix when the desk restarted. Carry on from where the scene stopped."
+        : r.held ? "Then carry on from where the scene stopped."
+        : r.spent ? "Then carry on from where the scene stopped."
+        : shown ? "Say it once more on your phone, or carry on."
+        : "Say it again on your phone, your way. Or ask Linga to show you.";
+      actions = [...(showOpen(m) ? [act("show-me", "Show me", "See Linga's fix. You can say it once more after.", cmd("moment-show"), { disabled: refused("moment-show") })] : []), back];
+    }
   } else if (c && s.screen === "linga-coach" && c.coaching) {
     tag = "One useful change";
     hero = { kind: "comparison", before: { kicker: "You said", quote: c.coaching.before }, after: { kicker: "One way to try it", quote: c.coaching.after }, note: c.coaching.note };
     caption = "Replay the moment with a new question, or finish for today."; captionTag = "Coach";
     actions = [act("replay", "Replay the moment", "Try the same intention with a new question. The first retry is supported practice.", cmd("replay"), { disabled: refused("replay") }), act("finish", "Finish for today", "Save this rehearsal and see what you practised.", cmd("finish"), { disabled: refused("finish") })];
+  } else if (c && take && s.screen === "linga-talk") {
+    // Take Two (v2 L4): the partner's line again, then the cast's; the learner answers on the phone. Nothing else of the
+    // scene is offered here (turn.ts): no help, quiz, coach, Cut, pause or finish. Back to the notes ends the take. A take that
+    // has had its cast turns (takeSpent) stays here with the cast's last line spoken, until Back to the notes.
+    const scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId)!, note = c.cut?.notes[take.note];
+    const said = last?.role === "partner" ? last.text : "", again = take.turns.some(t => t.role === "learner");
+    const over = takeSpent(take);
+    tag = "Take Two"; captionTag = inFlight ? "Preparing" : over ? "Take done" : "Your line again";
+    caption = over ? "That was the take. Go back to the notes when you are ready." : inFlight ? "Take a moment. Your partner is preparing the next turn." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : again ? "Carry on on your phone, or go back to the notes." : "Say your line again on your phone.";
+    hero = { kind: "scene", kicker: `Take Two · ${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: note ? `“${note.quote}”` : "", art: c.sceneId, small: true, take: true,
+      partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes };
+    actions = [inFlight ? act("cancel", "Cancel", "Cancel the reply on its way. The take stays where it was.", cmd("leave"), { disabled: refused("leave") })
+      : act("take-end", "Back to the notes", "End this take and go back to the notes on your take.", cmd("take-end"), { disabled: refused("take-end") })];
   } else if (c && s.screen === "linga-recap") {
     tag = "Your rehearsal"; title = "Take it somewhere new";
     const attempts = c.turns.filter(t => t.role === "learner"), spokenCount = attempts.filter(t => t.mode === "speech").length, moments = c.moments ?? [];
     recap = { title: c.title, replies: attempts.length, spoken: spokenCount, moments: moments.map(({ kind, said, better, why }) => ({ kind, said, better, why })) };
     const counts = `${spokenCount} spoken · ${attempts.length - spokenCount} written replies${moments.length ? ` · ${moments.length} ${moments.length === 1 ? "moment" : "moments"} to keep` : ""}`;
-    const rv = c.review;
+    const rv = c.review, notes = c.cut?.notes ?? [], ln = c.line?.text ? c.line : null;
     caption = attempts.length ? `Next, try ${recommended.name.toLowerCase()}. Your notes and learning map are on the phone.` : "You explored the scene. Try a reply next time; no progress was recorded.";
-    if (rv?.used) {
+    if (notes.length) {
+      // Cut (v2 L3): the take's notes as a tape strip. Three pins at most and one caption slot: the focused pin's note,
+      // one sentence. Each pin is the learner's own words, quoted exactly (notes.ts); a reading says it is one.
+      const at = s.focus >= 0 && s.focus < notes.length ? s.focus : 0, label = (i: number) => notes[i].reading ? "A reading" : NOTE_LABEL[notes[i].kind];
+      title = notes.length === 1 ? "A note on your take" : "Notes on your take";
+      caption = notes[at].note; captionTag = s.focus >= notes.length ? "What next" : label(at);
+      // Take Two (v2 L4): a note that had its take is marked on its pin, and the take is drawn as a branch from its pin:
+      // the focused pin's take, or else the latest one. The verdict is the picture: a struck quote, never a count.
+      const takes = c.takes ?? [], taken = (i: number) => takes.find(t => t.note === i), shown = taken(at) ?? takes.at(-1);
+      const branch = shown && { pin: shown.note, partner: c.partner, from: shown.turns[0]?.text ?? "", again: shown.turns.find(t => t.role === "learner")?.text ?? "" };
+      hero = { kind: "tape", kicker: `Cut · ${c.title}`, title, pins: notes.map((n, i) => { const t = taken(i); return { label: label(i), quote: n.quote, better: n.better ?? "", note: n.note, ...(t ? { mark: markOf(t.held) } : {}) }; }), selected: s.focus < notes.length ? s.focus : -1, data: counts, ...(branch ? { branch } : {}) };
+    } else if (rv?.used && yoursTonight(owned, rv.id, c.id)) {
+      // L1: tonight's use made it the learner's own. The picture is their two quotes, the earlier scene's and tonight's,
+      // under "Yours now"; no count and no data line, so no digit (the counts are on the phone).
+      const own = yoursTonight(owned, rv.id, c.id)!, first = own.uses[0], tonight = quoteOf(rv.used, own.uses[1].quote, repliesOf(c)[c.id]);
+      title = "Yours now";
+      hero = { kind: "comparison", kicker: "Yours now", before: { kicker: `You said it · ${/\d/.test(first.scene) ? "an earlier scene" : first.scene}`, quote: first.quote }, after: { kicker: "And tonight", quote: tonight }, note: "", art: "done" };
+      caption = "On your own, in two scenes on two days. It stays yours.";
+    } else if (rv?.used) {
       // What Linga taught in an earlier scene, beside the learner's own words tonight: the verdict is the picture.
       title = "It came back";
       hero = { kind: "comparison", before: { kicker: `Linga taught · ${rv.fromTitle}`, quote: rv.better }, after: { kicker: "You said it tonight", quote: rv.used }, note: "", art: "done", data: counts };
       caption = `You used it without help. Next, try ${recommended.name.toLowerCase()}.`;
-    } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better } : {}) };
+    } else if (ln?.found && !moments.some(m => m.kind === "fix")) {
+      // K4: the line this room hid, beside the learner's own words that found it. A fix moment keeps the slot.
+      title = "You found it";
+      hero = { kind: "comparison", before: { kicker: ln.source === "check" ? `From ${CHECK_TITLE.toLowerCase()}` : "The line in this room", quote: ln.text! }, after: { kicker: "You said it tonight", quote: ln.found }, note: "", art: "done", data: counts };
+      caption = `You found it without help. Next, try ${recommended.name.toLowerCase()}.`;
+    } else if (c.coaching || moments.length) {
+      // One thing learned tonight, as the picture. A coaching change carries no time, so when the order is unknown it wins.
+      const m = moments.at(-1), co = c.coaching;
+      hero = co
+        ? { kind: "comparison", before: { kicker: "You said", quote: co.before }, after: { kicker: "One way to try it", quote: co.after }, note: co.note, art: "done", data: counts }
+        : { kind: "comparison", before: { kicker: m!.kind === "fix" ? "You said" : "You wanted to say", quote: m!.said }, after: { kicker: m!.kind === "fix" ? "Try" : "In English", quote: m!.better }, note: m!.why, art: "done", data: counts };
+    } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better, from: rv.fromTitle.slice(0, 40) } : ln && !ln.found ? { sentence: ln.text!, ...(ln.source === "check" ? { from: CHECK_TITLE.toLowerCase() } : {}) } : {}) };
+    // a line the hero does not carry is still the learner's to take, on the phone
+    if (ln && hero.kind !== "track" && !(hero.kind === "comparison" && hero.before.quote === ln.text)) details.push(ln.found ? `On the phone, the line in this room: "${ln.text}". You said: "${ln.found}"` : `On the phone, a sentence to take with you: "${ln.text}"`);
     actions = [chooseSituation("Choose a fresh context for your next conversation.", "Another situation"), act("learning-map", "Learning map", "See saved evidence for each ability; printing is on the phone.", go("linga-map"))];
+    // the tape's pins come first: Left and Right walk them, and each one's note is its caption
+    if (notes.length) actions = [...notes.map((n, i) => act("note", `Note ${i + 1}`, n.note, { focus: i })), ...actions];
   } else if (c) {
     tag = c.phase === "replay" ? "Try it again" : "Conversation";
-    const scene = c.scene ?? ENGLISH_SCENES.find(x => x.id === c.sceneId)!;
+    const scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId)!;
     const said = last?.role === "partner" ? last.text : "", hasReply = c.turns.some(t => t.role === "learner");
     caption = inFlight ? "Take a moment. Your partner is preparing the next turn." : st === "paused" ? "The scene is paused. Resume when you are ready." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : c.cue || (said ? "Answer on your phone: speak or type." : "Preparing a situation that fits your goal.");
     const help = helpOf(c);
@@ -416,19 +552,29 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (c.review?.used && c.review.usedTurn === lastLearner?.id && st === "your-turn" && !c.cue && !c.capture) {
       caption = `“${c.review.better}”, from ${c.review.fromTitle}. Now answer on your phone.`; captionTag = "Used again";
     }
+    // a duet (L2, duet.ts): whose turn it is, in the caption slot
+    const beat = st === "your-turn" && captionTag !== "Used again" ? beatCaption(c, s.learner?.name ?? "") : null;
+    if (beat) { caption = beat.text; captionTag = beat.tag; }
     if (c.quizOpen) {
       hero = { kind: "choices", kicker: "A little support · recognition practice", prompt: scene.quiz.question, options: [...scene.quiz.options], small: true };
       actions = scene.quiz.options.map((x, i) => act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") }));
     } else {
-      hero = { kind: "scene", kicker: `${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: said ? c.goal : "", art: c.sceneId, small: true,
-        partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes };
+      hero = { kind: "scene", kicker: `${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: said ? (c.mission ? currentStep(c.mission) ?? "Mission done" : c.goal) : "", art: c.sceneId, small: true,
+        ...(c.mission ? { steps: c.mission.steps.map((text, i) => ({ text, state: (i < c.mission!.reached.length ? "done" : i === c.mission!.reached.length ? "current" : "open") as Dot })) } : {}),
+        partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes, ...(c.lost ? { lost: c.lost } : {}) };
       const quiz = act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") });
       const second = hasReply ? act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting || refused("coach") }) : quiz;
       // At the top of the ladder the help button gives way to the recognition fallback.
       const first = inFlight ? act("cancel", "Cancel & go back", "Cancel the pending reply and keep the conversation for later.", cmd("leave"), { disabled: refused("leave") }) : help.offered ? act("cue", help.label, help.help, cmd("cue"), { disabled: refused("cue") }) : second === quiz ? null : quiz;
-      actions = st === "unprepared" ? [act("retry-scene", "Retry the scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true })), chooseSituation("Choose a different situation.", "Choose another")]
-        : st === "paused" ? [act("resume", "Resume", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }), act("finish", "Finish rehearsal", "End here and keep your learning evidence.", cmd("finish"), { disabled: refused("finish") })]
-        : [...(first ? [first] : []), second];
+      actions = st === "unprepared" ? [act("retry-scene", "Retry the scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true, ...duetAgain(c) })), chooseSituation("Choose a different situation.", "Choose another")]
+        : st === "paused" ? [act("resume", "Resume", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }), act("finish", "Finish rehearsal", "End here and keep your learning evidence.", cmd("finish"), { disabled: refused("finish") }), ...(cutting ? [cutAction()] : [])]
+        : [...(first ? [first] : []), second, ...(cutting && !c.quizOpen ? [cutAction()] : [])];
+      // The mission is done: the way on is the primary action, and the child may still keep talking (turn.ts takes a turn).
+      if (c.mission && missionDone(c.mission) && st === "your-turn") {
+        const done = "Mission done. See what you did tonight.";
+        actions = [act("finish", "See what you did", done, cmd("finish"), { disabled: refused("finish") }), ...actions.slice(0, 1)];
+        if (!c.cue && !c.capture && captionTag !== "Used again") caption = done;
+      }
     }
   } else { caption = "Choose a situation to begin."; actions = [chooseSituation(caption)]; }
 
@@ -490,6 +636,13 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     start.forEach(onPhone);
     onPhone(act("pick-situation", "Choose a situation from the phone's list", "Start any situation from the phone's list.", cmd("start", { replace: true }), { needs: "sceneId" }));
     if (s.screen === "linga-scenes" && !menu && !picking) details.push(`On the phone, every situation:\n${scenes.map(x => `  [${x.id}] ${x.name} — ${x.goal}`).join("\n")}`);
+    // Adult mode only (v2 L3): a scene in the learner's own words, shaped and started at once (conversation.ts "pitch")
+    if (modeOf(p, prefs) === "adult") phone.push(act("pitch-scene", "Pitch a scene in your own words on the phone", "Linga shapes the scene you describe and starts it now.", cmd("pitch"), { needs: "text" }));
+    // Take Two (v2 L4), Adult mode: one per note of a take ended by Cut; a refused one is drawn disabled, with its reason
+    if (c?.phase === "finished" && c.cut?.notes.length && mode === "adult") c.cut.notes.forEach((n, i) => {
+      const ok = accepts(c, "take-two", mode, i);
+      phone.push(act("take-two", `Take Two · note ${i + 1}`, ok ? `Play “${n.quote}” again, from the line before it.` : refusal(c, "take-two", mode, i), cmd("take-two", { note: i }), { disabled: waiting || !ok }));
+    });
     if (h === "no-placement") onPhone(act("pick-band", "Pick my level on the phone (A1 to C2)", "Use a level from A1 to C2 you choose yourself.", cmd("level-self"), { needs: "band" }));
   }
   if (panel === "check" && lc) {
@@ -513,22 +666,29 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     }
     if (lc.stage !== "verdict") onPhone(lc.stage === "plan" ? act("not-now", "Not now", "Leave for now. Linga asks again when you come back to your topics.", cmd("check-leave")) : stopCheck);
   }
+  if (panel === "moment" && c && showOpen(c.moment)) onPhone(act("show-me", "Show me", "See Linga's fix. You can say it once more after.", cmd("moment-show"), { disabled: refused("moment-show") }));
   if (panel === "moment" && c) onPhone(act("back", "Back to the conversation", "Carry on from where the scene stopped.", cmd("moment-done"), { disabled: refused("moment-done") }));
   // the phone's live conversation: Resume while the learner paused, the coach's replay, else the reply helpers
-  if (panel === "talk" && c) {
+  if (panel === "talk" && c && take) {
+    // inside Take Two: Back to the notes, and Repeat audio or Cancel; the reply box takes the line (answerOf)
+    onPhone(act("take-end", "Back to the notes", "End this take and go back to the notes on your take.", cmd("take-end"), { disabled: refused("take-end") }));
+    onPhone(inFlight ? act("cancel", "Cancel pending turn", "Cancel the reply on its way. The take stays where it was.", cmd("leave"), { disabled: refused("leave") })
+      : act("repeat", "Repeat audio", "Hear the last line again.", cmd("repeat"), { disabled: refused("repeat") }));
+  } else if (panel === "talk" && c) {
     if (c.paused) onPhone(act("resume", "Resume conversation", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }));
     else if (st === "coaching") onPhone(act("replay", "Replay with a new question", "Try the same intention with a new question. The first retry is supported practice.", cmd("replay"), { disabled: refused("replay") }));
     else {
-      const help = helpOf(c), scene = c.scene ?? ENGLISH_SCENES.find(x => x.id === c.sceneId);
+      const help = helpOf(c), scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId);
       if (help.offered) onPhone(act("cue", help.label, help.help, cmd("cue"), { disabled: waiting || refused("cue") }));
       onPhone(act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") }));
       if (c.quizOpen && scene) scene.quiz.options.forEach((x, i) => onPhone(act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") })));
       onPhone(act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting || refused("coach") }));
     }
+    if (cutting && st !== "coaching") onPhone(cutAction());
     onPhone(inFlight ? act("cancel", "Cancel pending turn", "Cancel the pending reply and keep the conversation for later.", cmd("leave"), { disabled: refused("leave") })
       : act("repeat", "Repeat audio", "Hear the last line again.", cmd("repeat"), { disabled: refused("repeat") }));
     onPhone(act("finish", "Finish rehearsal (phone)", "End this scene and save a recap.", cmd("finish"), { disabled: refused("finish") }));
-    if (st === "unprepared") onPhone(act("retry-scene", "Retry preparing scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true })));
+    if (st === "unprepared") onPhone(act("retry-scene", "Retry preparing scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true, ...duetAgain(c) })));
   }
 
   // a check action the table (activity.ts) would refuse is drawn disabled, wherever it is offered
@@ -545,6 +705,12 @@ export function progressDots(s: Session): Dot[] | null {
   const lc = activeCheck(s), l = s.englishLearning, home = s.screen === "linga" || s.screen === "tonight";
   const marks = (total: number, done: number): Dot[] => Array.from({ length: total }, (_, i) => i < done ? "done" : i === done ? "current" : "open");
   const state = home ? lingaHome(s) : null;
+  // a scene's mission (mission.ts): on the talk, moment, coach and recap screens; the recap shows how far the scene went
+  const m = s.conversation?.mission;
+  if (m && ["linga-talk", "linga-moment", "linga-coach", "linga-recap"].includes(s.screen)) {
+    const reached = Math.min(m.reached.length, m.steps.length);
+    return m.steps.map((_, i): Dot => i < reached ? "done" : i === reached && s.screen !== "linga-recap" ? "current" : "open");
+  }
   if (lc && (s.screen === "linga-check" || state === "check-part-way") && (lc.stage === "about" || lc.stage === "tasks"))
     return lc.stage === "about" ? marks(ABOUT_QUESTIONS, Math.min(lc.turns.filter(t => t.role === "learner").length, ABOUT_QUESTIONS)) : marks(MAX_TASKS, Math.min(lc.tasks.length, MAX_TASKS));
   const topics = l.plan?.topics ?? [];
@@ -555,6 +721,9 @@ export function progressDots(s: Session): Dot[] | null {
   return null;
 }
 
+/** A Take Two mark in words, for a reader who cannot see the struck quote. */
+const TAKE_MARK_WORDS: Record<TakeMark, string> = { held: "held, the quote struck through", open: "still open", undecided: "not decided" };
+
 /** Every action a person at the desk can take on this view: the TV row, the footer and the phone. */
 export function offeredActions(v: LingaView): ViewAction[] { return [...v.actions, ...v.footer, ...v.phone]; }
 
@@ -564,16 +733,18 @@ export function viewText(v: LingaView): string {
   const spoken = v.spoken.line && !v.spoken.blocked ? v.spoken.line : "";
   const said = (text: string, who: string) => text === spoken ? `${who} says (spoken on the TV, written on the phone): "${text}"` : `On screen: "${text}"`;
   switch (h.kind) {
-    case "intro": out.push(`${h.kicker}${h.subtitle ? ` · ${h.subtitle}` : ""}`); break;
-    case "ladder": out.push(h.kicker, `Ladder A1 A2 B1 B2 C1 C2, marker on ${h.band}.`, ...(h.note ? [`Linga says: ${h.note}`] : [])); break;
+    case "intro": out.push(`${h.kicker}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.yours ? [`${h.yours.style === "list" ? "Phrases you own" : "Yours"}: ${h.yours.phrases.map(x => `"${x}"`).join(" · ")}`] : [])); break;
+    case "ladder": out.push(h.kicker, `Ladder A1 A2 B1 B2 C1 C2, marker on ${h.band}${h.spoke ? `, second mark on ${h.spoke}` : ""}.`, ...(h.note ? [`Linga says: ${h.note}`] : [])); break;
     case "message": out.push(h.kicker, ...(h.text ? [said(h.text, v.spoken.speaker)] : []), ...(h.note ? [`The words, now shown: ${h.note}`] : [])); break;
     case "heading": out.push(h.kicker, h.title); break;
     case "choices": out.push(h.kicker, h.prompt, ...h.options.map((x, i) => `  option ${i}: ${x}`)); break;
     case "topics": out.push(h.kicker, ...h.topics.map(t => `  [${t.id}] ${t.title} — ${t.skill}\n      why: ${t.why}`)); break;
-    case "scene": out.push(h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `Goal: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`); break;
+    case "scene": out.push(...(h.own ? ["Your own scene"] : []), h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : []), ...(h.lost ? [lostLine(h.lost)] : [])); break;
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
-    case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
+    case "comparison": out.push(...(h.kicker ? [h.kicker] : []), `${h.before.kicker}: "${h.before.quote}"${h.before.struck ? `, "${h.before.struck}" struck through` : ""}`, h.open ? `${h.after.kicker}: an empty frame, waiting for your line` : `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
+    case "tape": out.push(h.kicker, h.title, ...h.pins.map((x, i) => `  pin ${i + 1} · ${x.label}: "${x.quote}"${x.better ? ` → "${x.better}"` : ""}\n      note: ${x.note}${x.mark ? `\n      Take Two: ${TAKE_MARK_WORDS[x.mark]}` : ""}`),
+      ...(h.branch ? [`  Take Two of pin ${h.branch.pin + 1}, a branch from it: ${h.branch.partner} says "${h.branch.from}"${h.branch.again ? `; you again: "${h.branch.again}"` : ""}`] : []), h.data); break;
     case "cert": out.push(h.kicker, ...(h.issued ? [`${h.issued}.`] : []), ...(h.topics.length ? [`Your topics: ${h.topics.join(", ")}`] : []), ...(h.skills.length ? [`Shown on your own: ${h.skills.map(x => `${x.name} (${x.mode})`).join(", ")}`] : []), ...(h.open?.length ? [`Still to show, empty slots: ${h.open.join(", ")}`] : []), ...(h.quote ? [`In your own words, ${h.quote.skill}: "${h.quote.text}"`] : [])); break;
     case "certs": out.push(`${h.kicker} · ${h.title}`); break;
     case "plain": out.push(h.title); break;

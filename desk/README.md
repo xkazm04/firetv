@@ -32,6 +32,50 @@ npm run measure          # the KPI readings, as numbers (--json for a machine)
   in about two seconds and with no model call. Add `?live=1` to run text, vision (needs `data/sample.jpg`), embed and speak for real,
   side by side. The TV may ask; a paired phone gets 403.
 
+- **/api/texts** — the seated learner's own texts, kept with versions (`src/lib/session/texts.ts`; adult plan A6). Phone or
+  PC; every call acts on the learner at the desk, never on an id the client sends. One file per piece under
+  `DESK_DATA_DIR/texts/<learner>/`, never in `learners.json`; `DELETE ?all=1` removes the learner's folder (the twin's
+  state with it). Caps: a version 100 KB, 20 versions, 50 pieces, refused with a sentence. `{docx: base64}` keeps the text
+  of a Word file (`src/lib/rules/docx.ts`, no dependency); the file itself is not kept.
+- **/drop** — the PC page (v2 P4): the same join code as a phone, a big keyboard and real files (.txt, .md, .docx up to
+  150 KB). Keep a message, an email or an essay; see the shelf; review your twin; download its Twin Card.
+- **/api/twin** — the twin (v2 T2): GET from a phone or PC is the portrait (per channel: pieces, born, level words, the
+  exemplars with an include box); GET from the TV, or POST `{open: true}`, puts the Workroom on the TV (titles, counts,
+  change marks and level words, never a sentence); POST `{exclude, on}` leaves a piece out of the exemplars.
+- **/api/twin/card** — the Twin Card 1.0 download (`docs/standards/twin-card/1.0/`), phone or PC only, Adult mode only,
+  once a channel is born (three pieces). Built by code (`src/lib/twin/card.ts`): RFC 8785 + SHA-256 per part.
+
+## Trying the twin (Adult mode, v2 batch 4)
+
+No model is needed for any of this: keeping pieces, the portrait, the Workroom and the card are all code. (The Claude
+CLI is needed only if you also want Essay Master's lens readings of a piece.)
+
+1. In `desk/`: `npm install`, then `npm run dev`. The terminal prints `TV: http://<ip>:3000/tv?key=...`.
+2. **The TV:** open that address in a browser window at 1920×1080 (or the Fire TV's browser). Arrows move, Enter
+   selects, Backspace is Back, M is Menu.
+3. **A phone to name the learner:** in a second window (or a phone on the same Wi-Fi) open `http://<ip>:3000/phone`
+   and type the 4-digit code the TV shows.
+4. **An adult profile:** on the TV, the learner chip, then **Add a learner**; type the name on the phone; on the TV pick
+   *Type of student* **Other**, then *Mode* **Adult (18+)** (the row appears only when Adult is allowed: type Other, or
+   an age of 18 or more), then **Save**. That pick is the one 18+ confirmation.
+5. **The PC page:** on a computer open `http://<ip>:3000/drop` and join with the same code. Pick **Message (chat)** or
+   **Email**, paste something you wrote (or choose a .txt/.md/.docx file), **Keep it**. The first time, accept the
+   notice (your texts stay on this desk; Claude reads them only when you ask for a reading).
+6. **Keep three** of one kind (three messages, or three emails). Under *Your twin* the channel turns **born** and
+   shows how you write in level words (formality, warmth, humour, energy, length, directness, expressiveness, detail).
+   Untick any exemplar you would not share; it stays listed so it can go back.
+7. **Download your Twin Card** (`<name>.twin.json`). Any tool that reads Twin Card 1.0 can load it; it validates
+   against `docs/standards/twin-card/1.0/twin-card.schema.json`.
+8. **The TV stage:** **Show the Workroom on the TV** on the PC page, or open Essay Master from the TV landing: an adult
+   lands in the Workroom. Up/Down walk your pieces (format, version, paragraphs, and change pips once a piece has a
+   second version: *Open* it from the shelf, edit, keep it again), Right goes to **The lenses**, Back returns to the
+   desk. The TV never shows your sentences.
+9. **Forget it all:** the shelf's *Delete everything I kept* removes the pieces, the twin's state and the notice.
+
+The twin probe (`node ../tools/twin-probe.cjs`, needs the Claude CLI) is the twin's kill test, simulated: eight
+synthetic writers, and for each the twin's draft against the plain model's, scored by the style meter and a blind
+judge. `--stub` runs the plumbing without a model.
+
 ## Linga conversations
 
 Eight authored situations cover introductions, interests, a children's adventure, teamwork,
@@ -86,11 +130,10 @@ prompt that shipped before, byte for byte; a known age of 13 or under gets short
 around the same rules (the withholding clauses are shared constants, never copied). The young voice is validated for
 ages 11-13 only, and a Calculus learner is not age-voiced. Tone is not test-decidable: a person reads it (`tools/voice-rules-test.cjs`).
 
-**Mode** (`src/lib/rules/mode.ts`, Family mode W4). A profile is in `family` or `adult` mode, and the mode is derived: `modeOf(profile, prefs?)` says
-"adult" exactly when the learner is 18 or over (or type "other" with the adult box ticked) and "family" in every other case. `Profile.mode` is optional
-and normally unset, which means "derived"; only an explicit "family" is honoured, at any age. Adult mode is not reachable yet: no screen sets the
-field, a `profile.draft` patch cannot set "adult", and a stored "adult" is ignored until the Adult build adds its gate. Nothing a learner sees
-changes: `audienceAllowed` is untouched (`tools/mode-rules-test.cjs`).
+**Mode** (`src/lib/rules/mode.ts`, Family mode W4; v2 A5). A profile is in `family` or `adult` mode. `modeOf(profile, prefs?)` says
+"adult" for a learner of 18 or over, or type "other" with Adult picked on the profile's Mode row (the one 18+ confirmation, V2-O3).
+The Mode row shows only when Adult is allowed (`adultAllowed`); a draft under 18 loses "adult" on every edit. Adult mode opens
+Essay Master on the Workroom and makes the Twin Card downloadable (`tools/mode-rules-test.cjs`, `tools/twin-rules-test.cjs`).
 
 ## Where things are
 

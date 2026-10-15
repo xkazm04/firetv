@@ -9,10 +9,11 @@ import { useSession, call } from "@/tv/useSession";
 import type { Event, Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
 import { EssayTV } from "@/essay/EssayTV";
-import { essayOwns, keyOf, landingAt, landingStops, lingaOwns, mathsOwns, runStep, tvKey, LOCAL, type LandingStop, type Local } from "@/tv/keys";
+import { essayOwns, keyOf, landingAt, landingStops, lingaOwns, mathsOwns, paperOwns, runStep, tvKey, LOCAL, type LandingStop, type Local } from "@/tv/keys";
 import { LandingTV, ZOOM_MS } from "@/landing/LandingTV";
 import { MathsTV } from "@/maths/MathsTV";
 import { LingaTV } from "@/english/LingaTV";
+import { spokenLine } from "@/lib/desk/spoken";
 import { LingaTestBar } from "@/english/LingaTestBar";
 
 /**
@@ -68,7 +69,7 @@ export default function TV() {
     try { if (q === "tv" || q === "desk") localStorage.setItem("desk-display", q); setDisplay(localStorage.getItem("desk-display") === "desk" ? "desk" : "tv"); }
     catch { setDisplay(q === "desk" ? "desk" : "tv"); }
   }, []);
-  const toggleDisplay = () => setDisplay((d) => { const n = d === "desk" ? "tv" : "desk"; try { localStorage.setItem("desk-display", n); } catch {} return n; });
+  const toggleDisplay = () => setDisplay((d) => { const n = d === "desk" ? "tv" : "desk"; try { localStorage.setItem("desk-display", n); } catch { /* storage is blocked: the choice holds for this page only */ } return n; });
   /** The stage this screen is drawn on. The landing is one picture with nothing more to fit, so it keeps the TV's. */
   const shown: Display = s?.screen === "landing" ? "tv" : display;
 
@@ -83,16 +84,19 @@ export default function TV() {
     fit(); const ro = new ResizeObserver(fit); if (frame.current) ro.observe(frame.current); return () => ro.disconnect();
   }, [s?.screen, shown]);
 
-  // speak what is new: the hint, the explanation, the verdict
+  // speak what is new: the hint, the explanation, the verdict. Each line's blob is let go when it ends or the next
+  // line replaces it (as english/useEnglishAudio.ts does), so an evening of lines holds one, not hundreds.
   useEffect(() => {
     if (!s || !voice) return;
-    const line = s.screen === "hint" ? (s.hint?.stage === 2 ? s.hint.hint2?.hint : s.hint?.hint1?.hint) : s.screen === "sentence" ? s.english?.explanation : s.screen === "forensic" ? s.essay?.summary : s.screen === "walk" ? s.practice?.items[s.walkIx]?.said : s.screen === "break" ? "Time for a break." : "";
+    const line = spokenLine(s);
     if (!line || line === spoken.current) return;
     spoken.current = line;
     (async () => {
       try { const r = await call("/api/speak", { text: line }); if (!r.ok) throw new Error(); const blob = await r.blob();
-        audio.current?.pause(); audio.current = new Audio(URL.createObjectURL(blob)); await audio.current.play(); }
-      catch { try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(line)); } catch {} }
+        const old = audio.current; old?.pause(); if (old?.src.startsWith("blob:")) URL.revokeObjectURL(old.src);
+        const next = new Audio(URL.createObjectURL(blob)); next.onended = () => URL.revokeObjectURL(next.src);
+        audio.current = next; await next.play(); }
+      catch { try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(line)); } catch (e) { console.warn("desk TV: neither the voice nor the browser could say the line; it stays on screen", e); } }
     })();
   }, [s, voice]);
 
@@ -116,8 +120,11 @@ export default function TV() {
   useEffect(() => { if (s?.screen !== "landing" && zooming.current) { zooming.current = false; setZoom(null); } }, [s?.screen]);
 
   // ---- D-pad: the keymap is tv/keys.ts; this is only its executor ----
+  // the session changes on every message (the clock ticks): the handler reads the newest one through a ref, so the listener is bound once
+  const sNow = useRef(s); sNow.current = s;
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      const s = sNow.current;
       if (!s || notTheTV(s) || lingaOwns(s)) return;
       const k = keyOf(e.key); if (!k) return;
       e.preventDefault();
@@ -127,7 +134,7 @@ export default function TV() {
       if (stop && step.events.some((x) => x.type === "nav")) {
         const cut = matchMedia("(prefers-reduced-motion: reduce)").matches;
         zooming.current = true; setZoom(stop);
-        setTimeout(() => { void runStep(step, { post, call, apply }).catch(() => {}); }, cut ? 0 : ZOOM_MS);
+        setTimeout(() => { void runStep(step, { post, call, apply }).catch((e) => console.error("desk TV: a landing step failed", e)); }, cut ? 0 : ZOOM_MS);
         // a post that never lands must not leave the desk frozen behind the zoom
         setTimeout(() => { if (zooming.current) { zooming.current = false; setZoom(null); } }, 4000);
         return;
@@ -135,7 +142,7 @@ export default function TV() {
       void runStep(step, { post, call, apply });
     };
     addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey);
-  }, [s, post, apply]);
+  }, [post, apply]);
 
   return (
     <div className="bench" ref={bench}>
@@ -147,14 +154,14 @@ export default function TV() {
         <button onClick={() => post({ type: "reset" })}>Reset session</button>
         <button onClick={() => post({ type: "join" })}>Fake phone</button>
         <button aria-pressed={display === "desk"} onClick={toggleDisplay} title="A 2880×1620 stage for a PC monitor; off is the 1920×1080 TV">Desk display</button>
-        <button onClick={() => void bench.current?.requestFullscreen().catch(() => {})} title="The stage alone; Esc leaves">Fullscreen</button>
+        <button onClick={() => void bench.current?.requestFullscreen().catch(() => { /* the browser refused: the operator's bench stays windowed */ })} title="The stage alone; Esc leaves">Fullscreen</button>
         <span className="status">{connected ? "" : "reconnecting… "}{s?.status}</span>
       </div>
       {testBar && s && lingaOwns(s) && <LingaTestBar s={s} />}
       <div className="frame" ref={frame}>
         <div className="stage" ref={stage} tabIndex={0} data-display={shown}>
           {/* The landing (the desk), Essay Master (Specimen) and Math Buddy (Lamplight) draw the whole stage, no On Air grid or band; each keeps the 5% margins itself */}
-          {s && notTheTV(s) ? <NotThisTV /> : s && s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && mathsOwns(s) ? <MathsTV s={s} busy={loc.busy} ask={loc.prepareAsk} /> : <>
+          {s && notTheTV(s) ? <NotThisTV /> : s && s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && (mathsOwns(s) || paperOwns(s)) ? <MathsTV s={s} busy={loc.busy} ask={loc.prepareAsk} /> : <>
             <div className="grid" />
             <div className="safe">{s ? lingaOwns(s) ? <LingaTV s={s} post={postOnly} voice={voice}/> : <ScreenFor s={s} /> : null}</div>
           </>}

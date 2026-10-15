@@ -24,7 +24,6 @@
 .band { position: absolute; background: linear-gradient(180deg, var(--signal), var(--signal-2)); }
 .band::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(180deg, rgba(255,255,255,.05) 0 2px, transparent 2px 6px); }
 .band-left { left: -200px; top: 0; width: 760px; height: var(--stage-h); clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%); }
-.band-left-thin { left: -200px; top: 0; width: 520px; height: var(--stage-h); clip-path: polygon(0 0, 100% 0, 72% 100%, 0 100%); }
 .band-right { right: -200px; top: 0; width: 700px; height: var(--stage-h); clip-path: polygon(40% 0, 100% 0, 100% 100%, 0 100%); }
 .band-rule { left: 0; top: 0; width: var(--stage-w); height: 16px; }
 .band-wedge { left: 0; bottom: 0; width: 900px; height: 260px; clip-path: polygon(0 0, 100% 100%, 0 100%); }
@@ -72,7 +71,6 @@
 .btn[data-chosen="true"][data-focused="true"] { color: var(--ink); border-color: #fff; }
 .btn[data-chosen="true"][data-focused="true"]::before { color: var(--pick, var(--signal)); }
 .actions { position: absolute; left: 0; bottom: 96px; display: flex; gap: 24px; }
-.row-focus[data-focused="true"] { background: #fff; color: var(--ink); transform: skewX(-4deg); box-shadow: 10px 10px 0 var(--signal); }
 
 /* ---- guide (the picker pattern) ---- */
 .guide { display: flex; flex-direction: column; }
@@ -114,119 +112,20 @@
 .sent { font-size: 92px; font-weight: 500; line-height: 1.25; letter-spacing: -.01em; }
 .tok { position: relative; display: inline-block; }
 .tok[data-k="tense"] { border-bottom: 10px solid var(--signal); } .tok[data-k="marker"] { border-bottom: 10px solid var(--english); }
-.tok::after { content: attr(data-l); position: absolute; left: 0; top: 100%; margin-top: 16px; font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+.tok::after { content: attr(data-l); position: absolute; left: 0; top: 100%; margin-top: 16px; font-family: var(--display); font-size: 28px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
 .tok[data-k="tense"]::after { color: var(--tint); } .tok[data-k="marker"]::after { color: var(--english); }
-
-/* ---- forensic (essay) ---- */
-.extract { font-size: 38px; line-height: 1.55; max-width: 60ch; }
-.extract mark { background: transparent; color: inherit; padding: 2px 0; }
-.extract mark[data-v="strong"] { box-shadow: inset 0 -14px 0 rgba(143,211,161,.35); }
-.extract mark[data-v="faulty"] { box-shadow: inset 0 -14px 0 rgba(226,61,40,.45); }
-.notes { display: flex; flex-direction: column; gap: 22px; }
-.notes .n { display: grid; grid-template-columns: 14px 1fr; gap: 18px; align-items: start; }
-.notes .n i { display: block; height: 100%; min-height: 40px; } .notes .n[data-v="strong"] i { background: var(--essay); } .notes .n[data-v="faulty"] i { background: var(--signal); }
-.notes .n b { display: block; font-family: var(--display); font-size: 28px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
-.notes .n span { font-size: 26px; color: var(--mute); line-height: 1.3; }
 
 /* ---- rule card ---- */
 .rule { display: grid; grid-template-columns: auto 1fr; gap: 10px 28px; font-size: 30px; border: 2px solid var(--line); padding: 24px 28px; max-width: 46ch; }
 .rule dt { font-family: var(--display); font-size: 26px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); padding-top: 4px; }
 .rule dd { margin: 0; } .rule .warn { grid-column: 1 / -1; color: var(--tint); }
 
-/* ---- calendar ---- */
-.cal { display: grid; grid-template-columns: 120px repeat(5, 1fr); gap: 12px; }
-.cal .wk { font-family: var(--display); font-size: 26px; letter-spacing: .08em; color: var(--mute); align-self: center; }
-.cal .cell { min-height: 150px; border: 2px solid var(--line); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
-.cal .cell .t { font-size: 26px; font-weight: 500; line-height: 1.2; } .cal .cell .s { margin-top: auto; font-family: var(--display); font-size: 22px; letter-spacing: .1em; text-transform: uppercase; }
-.cal .cell[data-state="done"] { border-color: rgba(143,211,161,.5); } .cal .cell[data-state="done"] .s { color: var(--essay); }
-.cal .cell[data-state="next"] .s { color: var(--tint); } .cal .cell[data-state="locked"] { opacity: .45; }
-.cal .cell[data-focused="true"] { background: #fff; color: var(--ink); border-color: #fff; transform: skewX(-3deg); box-shadow: 10px 10px 0 var(--signal); }
-.cal .cell[data-focused="true"] .s { color: var(--signal); }
-
 /* ---- motion: cuts, not fades ---- */
-.wipe { animation: wipe .28s steps(6) both; } @keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-@media (prefers-reduced-motion: reduce) { .wipe { animation: none; } .btn, .row-focus, .read .img { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .btn, .read .img { transition: none; } }
 
-/* ================= Math Buddy: topics, practice, walk ================= */
-
-/* ---- four more bands, one per screen, none repeating a placement above ---- */
-/* topics: the corner the syllabus hangs from */
+/* ---- the learner switcher's band: the corner its card row stands under ---- */
 .band-corner { right: -200px; top: -54px; width: 980px; height: 340px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
-/* practice: the spine that splits the two columns of questions, and stops where they stop */
-.band-spine { left: 858px; top: -54px; width: 14px; height: 660px; }
-/* walk: a gauge down the left edge — its height is how far through the marked set we are,
-   its colour is the verdict of the item on screen. A band with a job. */
-.band-gauge { left: -96px; top: -54px; width: 26px; height: var(--stage-h);
-  background: linear-gradient(to top, var(--signal) 0 var(--fill, 0%), rgba(255,255,255,.10) var(--fill, 0%) 100%); }
-.band-gauge[data-v="right"] { background: linear-gradient(to top, #fff 0 var(--fill, 0%), rgba(255,255,255,.10) var(--fill, 0%) 100%); }
-.band-gauge[data-v="unsure"] { background: linear-gradient(to top, rgba(255,255,255,.34) 0 var(--fill, 0%), rgba(255,255,255,.10) var(--fill, 0%) 100%); }
-
-/* sheet: a shelf across the stage that the marked set's tiles stand on - the edge of the picture */
-.band-shelf { left: -96px; top: 436px; width: var(--stage-w); height: 18px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-
-/* ---- sheet: the marked set as one picture - a tile per item, the tile IS its verdict mark.
-   Right is a white rule, look again a red block, not sure a dashed outline: the .verdict grammar, per item. ---- */
-.tiles { position: absolute; left: 0; right: 0; top: 176px; display: grid; gap: 28px; align-items: end; }
-.tile { height: 236px; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; padding: 0 26px 22px; font-family: var(--display); text-transform: uppercase; transition: transform .1s; }
-.tile .n { font-size: 120px; font-weight: 800; line-height: .9; font-variant-numeric: tabular-nums; }
-.tile .w { font-size: 30px; font-weight: 800; letter-spacing: .1em; }
-.tile[data-v="right"] { color: #fff; border-bottom: 8px solid #fff; }
-.tile[data-v="wrong"] { color: #fff; background: linear-gradient(180deg, var(--signal), var(--signal-2)); }
-.tile[data-v="unsure"] { color: var(--mute); border: 3px dashed rgba(255,255,255,.34); }
-.tile[data-focused="true"] { transform: skewX(-6deg) scale(1.04); box-shadow: 14px 14px 0 var(--signal); }
-.tile[data-focused="true"][data-v="right"], .tile[data-focused="true"][data-v="unsure"] { background: #fff; color: var(--ink); border-color: #fff; }
-.tile[data-focused="true"][data-v="wrong"] { box-shadow: 14px 14px 0 #fff; }
-@media (prefers-reduced-motion: reduce) { .tile { transition: none; } }
-
-/* ---- practice: six questions as a poster, nothing focusable ---- */
-.qs { display: grid; grid-template-columns: 1fr 1fr; gap: 58px 130px; }
-.qs .q { display: grid; grid-template-columns: 74px 1fr; align-items: baseline; gap: 20px; }
-.qs .q .n { font-family: var(--display); font-size: 46px; font-weight: 800; color: var(--maths); font-variant-numeric: tabular-nums; line-height: 1; }
-.qs .q .x { font-size: 56px; font-weight: 500; line-height: 1.1; }
-
-/* ---- walk: the verdict as a graphic. Right is quiet, wrong carries the red,
-   unsure is deliberately not a verdict at all. ---- */
-.verdict { display: inline-block; font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
-.verdict[data-v="right"] { font-size: 72px; color: #fff; border-bottom: 6px solid #fff; padding-bottom: 6px; }
-.verdict[data-v="wrong"] { font-size: 72px; color: #fff; background: linear-gradient(180deg, var(--signal), var(--signal-2)); padding: 12px 30px; }
-.verdict[data-v="unsure"] { font-size: 52px; font-weight: 600; color: var(--mute); border: 3px dashed var(--line); padding: 14px 28px; }
-.wrote { font-size: 64px; font-weight: 500; font-variant-numeric: tabular-nums; }
-.slipname { font-family: var(--display); font-size: 30px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--tint); }
-
-/* ---- M0 · the path, as one picture: a node per topic, and where the learner stands ---- */
-.path { position: relative; }
-.path .above { position: relative; height: 74px; }
-/* the expected mark: a thin red tick over the track, and the only red on this screen after the band */
-.path .tick { position: absolute; bottom: 0; width: 4px; height: 34px; background: var(--signal); transform: translateX(-50%); }
-.path .tick b { position: absolute; bottom: 42px; left: 50%; transform: translateX(-50%); white-space: nowrap;
-  font-family: var(--display); font-size: 22px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--signal); }
-.path .nodes { position: relative; height: 68px; display: grid; }
-.path .nodes .trk { position: absolute; top: 33px; height: 2px; background: var(--line); }
-.path .nodes .trk[data-walked="true"] { background: #fff; }
-.path .nodes .cell { display: grid; place-items: center; position: relative; }
-.path .sq { display: block; width: 38px; height: 38px; background: #fff; }
-.path .sq[data-s="here"] { width: 60px; height: 60px; background: transparent; box-shadow: inset 0 0 0 4px #fff; }
-.path .sq[data-s="later"] { width: 28px; height: 28px; background: var(--ink-2); box-shadow: inset 0 0 0 2px var(--line); }
-.path .names { display: grid; margin-top: 18px; }
-.path .names span { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--mute); text-align: center; line-height: 1.1; padding: 0 12px; }
-.path .names span[data-s="secure"], .path .names span[data-s="here"] { color: #fff; }
-.path .verdict-line { margin-top: 30px; font-family: var(--display); font-size: 44px; font-weight: 800;
-  text-transform: uppercase; letter-spacing: .06em; }
-
-/* ---- M0 · the last sheets: a title and a day, nothing else ---- */
-.sheets { display: flex; flex-direction: column; max-width: 1240px; }
-.sheets .s { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 40px; padding: 16px 0; border-bottom: 1px solid var(--line); }
-.sheets .s .t { font-size: 32px; font-weight: 500; line-height: 1.15; }
-.sheets .s .w { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); font-variant-numeric: tabular-nums; }
-/* Essay Master's lens cards: the measured estimate as a bar under one label */
-.lens { margin-top: 18px; display: flex; flex-direction: column; gap: 8px; }
-.lens .w { font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); font-variant-numeric: tabular-nums; }
-.lens .w[data-secure="true"] { color: var(--essay); }
-.lens .track { height: 10px; background: var(--line); }
-.lens .track i { display: block; height: 100%; background: var(--essay); }
-.card[data-focused="true"] .lens .w { color: #3A3F47; } .card[data-focused="true"] .lens .w[data-secure="true"] { color: var(--signal); }
-.card[data-focused="true"] .lens .track { background: rgba(20,22,26,.12); } .card[data-focused="true"] .lens .track i { background: var(--signal); }
+/* an empty list's one word */
 .nothing { font-family: var(--display); font-size: 48px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); }
 
 /* ---- T12 · the recap: tonight as one picture. The shell is On Air (title, caption, the desk button); each tile
@@ -248,16 +147,33 @@
 .rc .rc-mb .rc-none { font-family: var(--mb-hand); font-size: 56px; color: var(--mb-blue); }
 .rc .rc-set { display: flex; flex-wrap: wrap; gap: 8px 6px; }
 .rc .rc-set i { display: block; width: 56px; height: 48px; }
-.rc .rc-tk, .rc .rc-ring, .rc .rc-ask { width: 56px; height: 48px; overflow: visible; }
-.rc .rc-tk path, .rc .rc-ring path, .rc .rc-ask path { fill: none; stroke: var(--mb-pen); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.rc .rc-tk, .rc .rc-ring, .rc .rc-ask, .rc .rc-skip { width: 56px; height: 48px; overflow: visible; }
+.rc .rc-tk path, .rc .rc-ring path, .rc .rc-ask path, .rc .rc-skip path { fill: none; stroke: var(--mb-pen); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
 .rc .rc-ask path { stroke: #5B78B8; stroke-width: 4; stroke-dasharray: 7 8; } /* not sure: the paper's unsure blue (maths-lamplight .mb-box), dashed */
+.rc .rc-skip path { stroke: rgba(39, 48, 74, .55); stroke-width: 5; } /* skipped (MB-B1): the empty answer line in pencil grey, no ring */
 .rc .rc-pages { display: flex; gap: 12px; }
 .rc .rc-page { width: 52px; height: 66px; }
 .rc .rc-page path:first-child { fill: var(--mb-paper-lo); stroke: var(--mb-ink); stroke-width: 2.5; stroke-linejoin: round; }
 .rc .rc-page path:last-child { fill: none; stroke: var(--mb-ink); stroke-width: 2.5; stroke-linecap: round; opacity: .55; }
 .rc .rc-lamps { display: flex; flex-wrap: wrap; gap: 20px; padding-left: 6px; }
 .rc .rc-lamps b { width: 40px; height: 40px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--mb-amber-lo), var(--mb-amber-2) 70%); box-shadow: 0 0 14px rgba(255, 177, 61, .55); }
-.rc .rc-lamps b[data-second] { box-shadow: 0 0 0 4px var(--mb-paper), 0 0 0 8px var(--mb-pen); }
+.rc .rc-lamps b[data-second], .rc .rc-lamp[data-second] b { box-shadow: 0 0 0 4px var(--mb-paper), 0 0 0 8px var(--mb-pen); }
+/* MB-B23: a lamp per hinted problem, the problem's name under it in the learner's hand; the page only when two share a name */
+.rc .rc-lamps:has(.rc-lamp) { align-items: flex-start; gap: 14px 22px; }
+.rc .rc-lamp { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 64px; }
+.rc .rc-lamp em { display: flex; flex-direction: column; align-items: center; font: 600 32px/1 var(--mb-hand, inherit); font-style: normal; color: var(--mb-ink); }
+.rc .rc-lamp em small { display: flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 28px; color: var(--mb-blue); }
+.rc .rc-lamp em small .rc-page { width: 24px; height: 30px; }
+.rc .rc-lamps .rc-earlier { align-self: center; }
+/* cycle 19: a named slip under the set's rail - the pen's ring, then the item's number in the hand and the slip's short
+   label (rules/school `short`, four words at most) at 28 px, one to a line; the label wraps between words, never inside one */
+.rc .rc-lamps:has([data-slip]) { flex-direction: column; align-items: flex-start; gap: 10px; }
+.rc .rc-lamp[data-slip] { flex-direction: row; align-items: center; gap: 12px; min-width: 0; max-width: 100%; }
+.rc .rc-lamp[data-slip] i { display: block; flex: none; width: 56px; height: 48px; }
+.rc .rc-lamp[data-slip] em { display: block; min-width: 0; text-align: left; line-height: 1.1; overflow-wrap: normal; word-break: normal; }
+.rc .rc-lamp[data-slip] em small { display: inline; margin: 0; font-size: 28px; color: var(--mb-pen); }
+.rc .rc-lamp[data-slip] em small::before { content: " \00B7  "; color: var(--mb-ink); }
+.rc .rc-lamps:has([data-slip]) .rc-earlier { align-self: flex-start; }
 /* Linga: the cream card, the plum arch, a mark per conversation sized by its replies */
 .rc .rc-lg { background: #FFF9EC; border: 2px solid #D6C5AF; border-radius: 16px; color: #261F29; }
 .rc .rc-lg .lo-mark { display: flex; align-items: center; gap: 14px; font: 700 44px/1 Georgia, "Times New Roman", serif; letter-spacing: -1.6px; }
@@ -265,6 +181,7 @@
 .rc .rc-door { position: relative; flex: 1; margin: 28px 24px 0; border: 10px solid #6A3946; border-bottom: 0; border-radius: 240px 240px 0 0;
   background: radial-gradient(420px 300px at 50% 100%, #F6D0A2, #EADFCE 70%); box-shadow: 0 16px 0 -2px #5D3548; display: flex; }
 .rc .rc-lg .rc-none { font-family: Georgia, "Times New Roman", serif; font-style: italic; color: #775F5D; margin-bottom: 70px; }
+.rc .rc-lg .rc-earlier { margin-top: 18px; text-align: center; font: italic 30px/1 Georgia, "Times New Roman", serif; letter-spacing: 0; color: #775F5D; }
 .rc .rc-talks { margin: auto auto 34px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 16px; padding: 0 24px; }
 .rc .rc-talks b { width: var(--rc-d); height: var(--rc-d); border-radius: 50%; background: #41273D; color: #FFF8E8; display: grid; place-items: center;
   font: 700 32px/1 Georgia, "Times New Roman", serif; box-shadow: 0 6px 0 #6E283C; }
@@ -275,6 +192,8 @@
 .rc .rc-em .em-wm { font-size: 40px; }
 .rc .rc-reads { margin-top: 56px; display: flex; flex-direction: column; gap: 48px; }
 .rc .rc-lens { font: 600 32px/1 var(--em-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--em-mute); }
+.rc .rc-earlier { font: 600 26px/1 var(--em-mono); letter-spacing: .08em; color: var(--em-mute); }
+.rc .rc-mb .rc-earlier { font: 600 30px/1 var(--mb-hand, inherit); letter-spacing: 0; color: var(--mb-blue); }
 .rc .rc-rail { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 16px 14px; }
 .rc .rc-rail i { display: block; color: rgba(238, 233, 224, .5); }
 .rc .rc-rail i[data-against] { color: var(--em-cit); }

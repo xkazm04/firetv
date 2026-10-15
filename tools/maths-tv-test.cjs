@@ -2,15 +2,14 @@
  * Math Buddy's television, the pure parts (desk/src/maths/prose.ts, desk/src/tv/mathsRows.ts): the desk's sentences
  * re-spell maths without changing it, the topic path takes "Secure" only from the learner's latched record, and a
  * line too long for the paper is fitted to it. Run with npm test in desk/ (directly: node tools/maths-tv-test.cjs).
- * Pure: no store, no route, no model, no browser.
+ * Pure, except one case that runs the reducer and a stubbed text provider on a temp data dir: no route, no live model, no browser.
  */
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
-const {test}=require('node:test');
+const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
+// the settled-reply case below runs explainItem, which writes the learner record: a temp data dir, never desk/data
+process.env.DESK_DATA_DIR=path.join(require('node:os').tmpdir(),`desk-maths-tv-${process.pid}-${Date.now()}`);
 // loaded per test, so a missing module fails each case on its own
 const P=()=>require(path.join(root,'src/maths/prose.ts'));
 const T=()=>require(path.join(root,'src/maths/typeset.ts'));
@@ -288,8 +287,10 @@ test('jobs 1: while the set is being marked Practice says so; a failed mark show
  assert.equal(bad.phase,'failed');
  assert.ok(bad.text.startsWith('The desk could not mark the set. It took too long.'),`the job's own sentence first: ${bad.text}`);
  assert.match(bad.text,/[Ss]nap(ping)? the sheet again/,'and that snapping again tries again');
- const plain=markLine({practice:unmarked,jobs:{mark:job('failed',{error:'The desk could not mark the set. Try again.'})}});
- assert.doesNotMatch(plain.text,/Try again\..*Snap/,'"Try again." is not said twice: the snap line says how');
+ const plain=markLine({practice:unmarked,jobs:{mark:job('failed',{error:'The desk could not mark the set.'})}});
+ assert.equal(plain.text,'The desk could not mark the set. '+R().SNAP_AGAIN,'the sentence of the job, then the snap line, nothing rewritten');
+ const said=markLine({practice:unmarked,jobs:{mark:job('failed',{error:'The page was blank. Try again.'})}});
+ assert.ok(said.text.startsWith('The page was blank. Try again. '),'the TV never edits the words of the job: no wording is matched');
  assert.equal(markLine({practice:unmarked,jobs:{mark:job('done')}}),null,'a done mark: unchanged');
 });
 
@@ -312,6 +313,17 @@ test('jobs 3: while an explanation runs the open item shows the desk thinking; a
  assert.deepEqual(bad,{phase:'failed',text:'The desk could not follow that. It took too long.'},'the job\'s own sentence, nothing added');
  assert.equal(explainLine({practice:markedSet,jobs:{explain:job('done',{key:'1'})}},1),null);
  assert.equal(explainLine({practice:markedSet,jobs:{explain:job('failed',{key:'1',error:'x'}),mark:{id:'m',phase:'done',startedAt:2500,endedAt:3000}}},1),null,'a failure from a set marked before this one is not shown');
+});
+
+test('jobs 3b (P14): a running mark or explanation of the learner who left is not shown to the seated learner; their own and a job with no by are',()=>{
+ const {markLine,explainLine,MARKING,THINKING}=R();
+ const B={id:'bea',name:'Bea'};
+ assert.equal(markLine({learner:B,practice:unmarked,jobs:{mark:job('running',{by:'adam'})}}),null,'the mark of A is running, B has an unmarked set');
+ assert.equal(explainLine({learner:B,practice:markedSet,jobs:{explain:job('running',{key:'1',by:'adam'})}},1),null,'the explain of A is running on item 1, B is on item 1');
+ assert.equal(markLine({learner:B,practice:unmarked,jobs:{mark:job('running',{by:'bea'})}}).text,MARKING,'the own mark of B');
+ assert.equal(explainLine({learner:B,practice:markedSet,jobs:{explain:job('running',{key:'1',by:'bea'})}},1).text,THINKING,'the own explain of B');
+ assert.equal(markLine({learner:B,practice:unmarked,jobs:{mark:job('running')}}).text,MARKING,'no by: as today');
+ assert.equal(explainLine({learner:B,practice:markedSet,jobs:{explain:job('running',{key:'1'})}},1).text,THINKING,'no by: as today');
 });
 
 test('jobs 4: MathsTV draws the two states from tv/mathsRows.ts in the desk\'s voice, and adds no stop',()=>{
@@ -406,6 +418,9 @@ const CALC=[{id:'ada',name:'Ada',type:'other',modules:['maths'],mathPath:'calc1'
 /** A session on a path: the learner at the desk and their skills. */
 const onPath=(profiles,skills,topic=null)=>({skills,topic,practice:null,profiles,learner:{id:profiles[0].id,name:profiles[0].name}});
 const calcIds=()=>require(path.join(root,'src/lib/library/paths.ts')).topicsOf('calc1').map(t=>t.id);
+/** The path lengths, derived (the one pin per path is in tools/maths-paths-test.cjs). */
+const nSchool=()=>require(path.join(root,'src/lib/library/paths.ts')).PATHS.school.topics.length;
+const nCalc=()=>require(path.join(root,'src/lib/library/paths.ts')).PATHS.calc1.topics.length;
 
 test('path 1: on the calc1 path the states are the Calculus topics - a latched calc1-functions opens the topics whose only prereq it is',()=>{
  const {topicStates,stateWord}=R();
@@ -423,8 +438,8 @@ test('path 1: on the calc1 path the states are the Calculus topics - a latched c
 test('path 2: a record off the learner\'s path is ignored - calc1 on a school profile, school on a calc1 profile',()=>{
  const {topicStates}=R();
  const school=topicStates(onPath(SCHOOL,{'calc1-functions':rec('calc1-functions',0.9,true)}));
- const SCHOOL_IDS=['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides'];
- assert.deepEqual(Object.keys(school),SCHOOL_IDS,'W5b: fractions first; W7: four fractions units; W7 batch 2: decimals and percent after one-step; W7 batch 3: ratio and rates, geometry and data');
+ const SCHOOL_IDS=['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides','pythagoras','probability'];
+ assert.deepEqual(Object.keys(school),SCHOOL_IDS,'W5b: fractions first; W7: four fractions units; W7 batch 2: decimals and percent after one-step; W7 batch 3: ratio and rates, geometry and data; v2 M2b: Pythagoras and probability last');
  assert.equal(school['linear-one-step'],'next');assert.equal(school['frac-equivalent'],'next');assert.equal(school['frac-of-amount'],'next');
  // W7: add and subtract, and multiply and divide, need equivalent fractions first, so they wait
  assert.equal(school['frac-add-sub'],'later');assert.equal(school['frac-mul-div'],'later');assert.ok(!('calc1-functions' in school));
@@ -450,10 +465,10 @@ test('path 3: a topic is named by its path (topicIn), humanised only when no pat
 });
 
 test('path 4: Tonight\'s title counts the learner\'s path - "N of 22", every topic, or the path from the first step',()=>{
- const {secureTitle,pathFirst,pathSecure}=R();
- assert.equal(secureTitle(0,22,pathFirst('calc1')),'Calculus 1, from the first step');
- assert.equal(secureTitle(7,22,pathFirst('calc1')),'7 of 22 topics secure');
- assert.equal(secureTitle(22,22,pathFirst('calc1')),'Every topic on the path is secure');
+ const {secureTitle,pathFirst,pathSecure}=R();const NC=nCalc(),NS=nSchool();
+ assert.equal(secureTitle(0,NC,pathFirst('calc1')),'Calculus 1, from the first step');
+ assert.equal(secureTitle(7,NC,pathFirst('calc1')),`7 of ${NC} topics secure`);
+ assert.equal(secureTitle(NC,NC,pathFirst('calc1')),'Every topic on the path is secure');
  assert.equal(pathFirst('school'),'School maths','the school path reads by its own name, not its first topic (owner decision 2026-09-29; renamed in W5b, D5)');
  const rows=fs.readFileSync(path.join(root,'src/tv/mathsRows.ts'),'utf8');
  const at=rows.indexOf('export function pathFirst');
@@ -463,10 +478,10 @@ test('path 4: Tonight\'s title counts the learner\'s path - "N of 22", every top
  assert.match(said,/path's own name/,'the comment says what the function returns');
  const seven=Object.fromEntries(calcIds().slice(0,7).map(id=>[id,rec(id,0.9,true)]));
  const title=(s)=>{const p=pathSecure(s);return secureTitle(p.secure.length,p.topics.length,p.first);};
- assert.equal(title(onPath(CALC,{...seven,'linear-one-step':rec('linear-one-step',0.9,true)})),'7 of 22 topics secure','a school record is not one of the 22');
+ assert.equal(title(onPath(CALC,{...seven,'linear-one-step':rec('linear-one-step',0.9,true)})),`7 of ${NC} topics secure`,`a school record is not one of the ${NC}`);
  assert.equal(title(onPath(CALC,{})),'Calculus 1, from the first step');
  assert.equal(title(onPath(SCHOOL,seven)),'School maths, from the first step','calc1 records on a school profile count for nothing');
- assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),'One of 15 topics secure','W7 batch 3: the school path has fifteen topics');
+ assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),`One of ${NS} topics secure`,'v2 M2b: the school path has seventeen topics (fifteen since W7 batch 3)');
  assert.equal(title({skills:{}}),'School maths, from the first step','no learner: the school path');
 });
 
@@ -533,11 +548,11 @@ test('W8 prepare 1: the units grouped by strand - strands in the order the path 
  assert.deepEqual(g.map((x)=>x.strand),['Fractions','Equations','Decimals and percent','Ratio and rates','Geometry and data']);
  assert.deepEqual(g.map((x)=>x.units.map((u)=>u.id)),[
   ['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div'],['linear-one-step','linear-two-step','linear-both-sides'],
-  ['dec-arith','dec-convert','pct-of-amount','pct-change'],['ratio-share','unit-rate'],['area','mean-range']]);
+  ['dec-arith','dec-convert','pct-of-amount','pct-change'],['ratio-share','unit-rate'],['area','mean-range','pythagoras','probability']]);
  const ids=prepareStops(onW8({})).map((u)=>u.id);
  assert.deepEqual([...ids].sort(),P.topicsOf('school').map((t)=>t.id).sort(),'every school unit, once');
  assert.deepEqual(prepareGroups(onW8({mathPath:'calc1',type:'other',age:19})),[]);assert.deepEqual(prepareStops(onW8({mathPath:'calc1'})),[]);
- assert.equal(prepareStops({skills:{}}).length,15,'no learner: the school path');
+ assert.equal(prepareStops({skills:{}}).length,nSchool(),'no learner: the school path');
 });
 
 test('W8 prepare 2: each unit carries the learner\'s own year word - Grade, Year, ročník, Klasse - from its year in their system',()=>{
@@ -555,23 +570,23 @@ test('W8 prepare 2: each unit carries the learner\'s own year word - Grade, Year
 
 test('W8 prepare 3: the scroller pans like the Topics ruler - the focused card under the lamp, neither end showing a gap, strands apart',()=>{
  const {prepareGroups,prepareModel,WINDOW,CARD,CARD_GAP,GROUP_GAP,EDGE}=PR();
- const g=prepareGroups(onW8({}));
+ const g=prepareGroups(onW8({})),NS=nSchool();
  const m0=prepareModel(g,0);
- assert.equal(m0.cards.length,15);assert.equal(m0.offset,0);assert.deepEqual(m0.more,{l:false,r:true});
- assert.equal(m0.cards[0].x,EDGE);assert.ok(m0.trackWidth>WINDOW,'fifteen cards pan');
+ assert.equal(m0.cards.length,NS);assert.equal(m0.offset,0);assert.deepEqual(m0.more,{l:false,r:true});
+ assert.equal(m0.cards[0].x,EDGE);assert.ok(m0.trackWidth>WINDOW,'seventeen cards pan');
  // a strand break is wider than a card gap; strand headings span their cards
  assert.equal(m0.cards[4].x-(m0.cards[3].x+CARD),GROUP_GAP,'Fractions to Equations');assert.equal(m0.cards[2].x-(m0.cards[1].x+CARD),CARD_GAP);
  m0.strands.forEach((s,i)=>{const cs=m0.cards.filter((c)=>c.group===i);assert.equal(s.x,cs[0].x);assert.equal(s.w,cs.at(-1).x+CARD-cs[0].x);});
- for(let f=0;f<15;f++){
+ for(let f=0;f<NS;f++){
   const m=prepareModel(g,f),c=m.cards[f];
   assert.ok(m.offset>=0&&m.offset<=m.trackWidth-WINDOW,`${f}: clamped`);
   assert.ok(c.x-m.offset>=0&&c.x+c.w-m.offset<=WINDOW,`${f}: the focused card is on the stage`);
   if(m.offset>0&&m.offset<m.trackWidth-WINDOW)assert.equal(c.x+c.w/2-m.offset,WINDOW/2,`${f}: under the lamp`);
  }
- const last=prepareModel(g,14);assert.equal(last.offset,last.trackWidth-WINDOW);assert.deepEqual(last.more,{l:true,r:false});
+ const last=prepareModel(g,NS-1);assert.equal(last.offset,last.trackWidth-WINDOW);assert.deepEqual(last.more,{l:true,r:false});
  // a strand heading: at its strand's start, or - when the strand starts off the stage - kept past the left fade while it fits over its cards
  const {FADE,HEAD_CH}=PR();
- for(let f=0;f<15;f++){const m=prepareModel(g,f);for(const s of m.strands){
+ for(let f=0;f<NS;f++){const m=prepareModel(g,f);for(const s of m.strands){
   assert.ok(s.labelX>=s.x&&s.labelX<=s.x+s.w,`${f} ${s.strand}: over its cards`);
   if(m.offset===0)assert.equal(s.labelX,s.x);
   else if(s.x<m.offset+FADE&&s.x+s.w-s.strand.length*HEAD_CH>=m.offset+FADE)assert.equal(s.labelX,m.offset+FADE,`${f} ${s.strand}: kept on the stage`);
@@ -581,13 +596,25 @@ test('W8 prepare 3: the scroller pans like the Topics ruler - the focused card u
 });
 
 test('W8 prepare 4: the words - one sentence per caption slot, 25 words or fewer, no digit, no em dash, no points; two cells, "The usual" first',()=>{
- const {PREPARE_CHOICES,PREPARE_DOOR,choiceLine}=PR();
+ const {PREPARE_CHOICES,PREPARE_DOOR,TOP_RUNG_LINE,TOP_RUNG_LINES,choiceLine}=PR();
  assert.deepEqual(PREPARE_CHOICES.map((c)=>c.t),['The usual','A step up']);
- for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1),...PREPARE_CHOICES.flatMap((c)=>[c.t,c.k])]){
+ const tops=Object.values(TOP_RUNG_LINES);
+ for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1),TOP_RUNG_LINE,...tops,...PREPARE_CHOICES.flatMap((c)=>[c.t,c.k])]){
   assert.ok(wordsOf(line)<=25,line);assert.doesNotMatch(line,/[0-9]|—|point|score|%/i,line);
  }
- for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1)])assert.match(line,/^[A-Z][^.!?]*\.$/,`one sentence: ${line}`);
+ for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1),TOP_RUNG_LINE,...tops])assert.match(line,/^[A-Z][^.!?]*\.$/,`one sentence: ${line}`);
  assert.notEqual(choiceLine(0),choiceLine(1));
+ // MB-B20: on a unit with a top rung the step up says what it adds and that it is still school level; elsewhere, and for the usual set, as before
+ for(const id of ['frac-add-sub','frac-mul-div']){assert.equal(choiceLine(1,id),TOP_RUNG_LINE);assert.equal(choiceLine(0,id),choiceLine(0));}
+ assert.match(TOP_RUNG_LINE,/mixed numbers/i);assert.match(TOP_RUNG_LINE,/word problem/i);assert.match(TOP_RUNG_LINE,/still school level/);
+ // every unit with a top rung has its own sentence, and each names a word problem and says it is still school level
+ const S=require(path.join(root,'src/lib/rules/school.ts'));
+ assert.deepEqual(Object.keys(TOP_RUNG_LINES).sort(),Object.keys(S.TOP_TIER_GENERATORS).sort());
+ for(const [id,line] of Object.entries(TOP_RUNG_LINES)){assert.equal(choiceLine(1,id),line);assert.equal(choiceLine(0,id),choiceLine(0));assert.match(line,/word problem/i,id);assert.match(line,/still school level/,id);}
+ assert.match(choiceLine(1,'pct-change'),/reverse/i);assert.match(choiceLine(1,'pct-change'),/repeated/i);
+ assert.match(choiceLine(1,'pythagoras'),/decimals/i);assert.match(choiceLine(1,'pythagoras'),/rounded/i);
+ assert.match(choiceLine(1,'probability'),/combined events/i);assert.match(choiceLine(1,'probability'),/without replacement/i);
+ for(const id of ['ratio-share','frac-equivalent','linear-one-step',undefined])assert.equal(choiceLine(1,id),choiceLine(1),String(id));
 });
 
 test('W8 ruler 1: stretchSecure reads the latched step-up record alone, on the learner\'s path - whatever the usual record says',()=>{
@@ -608,7 +635,7 @@ test('W8 ruler 2: the strip carries each strand\'s share of step-up-secure topic
  const P=require(path.join(root,'src/lib/library/paths.ts'));
  const SCHOOL=P.topicsOf('school'),st=Object.fromEntries(SCHOOL.map((t)=>[t.id,t.id==='frac-add-sub'?'secure':'later']));
  const plain=RR.stripModel(SCHOOL,st,true),up=RR.stripModel(SCHOOL,st,true,(id)=>['area','ratio-share','unit-rate','frac-equivalent'].includes(id));
- assert.deepEqual(up.segments.map((g)=>[g.name,g.stretch,g.stretchShare]),[['Fractions',1,0.25],['Equations',0,0],['Decimals and percent',0,0],['Ratio and rates',2,1],['Geometry and data',1,0.5],['Equations',0,0]]);
+ assert.deepEqual(up.segments.map((g)=>[g.name,g.stretch,g.stretchShare]),[['Fractions',1,0.25],['Equations',0,0],['Decimals and percent',0,0],['Ratio and rates',2,1],['Geometry and data',1,0.5],['Equations',0,0],['Geometry and data',0,0]]);
  assert.deepEqual(plain.segments.map((g)=>[g.stretch,g.stretchShare]),plain.segments.map(()=>[0,0]),'no step-up record: nothing to draw');
  const strip=(m)=>m.segments.map(({stretch,stretchShare,...rest})=>rest);
  assert.deepEqual(strip(up),strip(plain),'the bars, their ink, labels and the needle are the usual record\'s alone');assert.deepEqual(up.needle,plain.needle);
@@ -616,9 +643,9 @@ test('W8 ruler 2: the strip carries each strand\'s share of step-up-secure topic
 
 // ---------------------------------------------------------------- 8. the second go (challenge-2026-10-05 math-buddy-B): the ring wears a tick, drawn as a picture
 
-require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
 // next/font runs only under Next: the face module answers with its class names
 for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){const file=path.join(root,'src',f),m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
+after(()=>{clearInterval(globalThis.__desk?.ticker);require('node:fs').rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
 const SECOND_Q=['x+3=7','x-5=2','3x=18','x/2=4','x+1=10','5x=35'];
 /** The marked sheet as the TV is given it: items 2 and 4 are ringed; `second` is item 2's second go (or none). */
 function secondSession(second,screen='sheet',extra={}){
@@ -685,4 +712,510 @@ test('second 4: the stylesheet draws the tick and the second ring, and adds no t
  for(const rule of css.match(/[^{}]*\[data-second[^{}]*\{[^}]*\}/g)??[]){
   const m=/font-size:\s*(\d+)px/.exec(rule);assert.ok(!m||Number(m[1])>=28,`a second-go rule sets text under the floor: ${rule.trim()}`);
  }
+});
+
+// ---------------------------------------------------------------- M3a: a word problem on the paper (the stem once, its parts by letter)
+
+const esc=(t)=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
+/** A calc1 set of one single item and a word problem's two parts (items 2 and 3); marked: 1 right, 2(a) right, 2(b) wrong with the pen on its line 1. */
+function wordSession(template,screen,marked){
+ const W=require(path.join(root,'src/lib/rules/calc-word.ts'));
+ const w=W.drawWord(template,1),[a]=W.workedWord(template,1);
+ const single={n:1,question:'Find f\'(2) for f(x) = x^3.',spec:{shape:'derivative-at',f:'x^3',at:2}};
+ const [pa,pb]=W.wordItems(w,2);
+ const items=marked?[{...single,studentAnswer:'12',verdict:'right',said:'Number 1 is right.'},{...pa,studentAnswer:a,verdict:'right',said:'Number 2 is right.'},
+  {...pb,studentAnswer:'1',studentWorking:'first line\nsecond line',verdict:'wrong',said:'I got something different for number 3. How did you get there?',slipAt:{line:1}}]:[single,pa,pb];
+ return {w,s:secondSession(null,screen,{practice:{topic:w.topic,marked,items},topic:w.topic,walkIx:2,focus:2})};
+}
+const count=(html,needle)=>html.split(needle).length-1;
+
+test('M3a 1: the Practice paper prints a word problem\'s stem once, as prose in the wrapping row, and its parts labelled (a) and (b), each a wrapped line',()=>{
+ const P=require(path.join(root,'src/maths/prose.ts'));
+ for(const t of ['sphere-rates','rectangle-perimeter','cubic-max-min']){
+  const {w,s}=wordSession(t,'practice',false);
+  const html=drawMaths('PracticeScreen',s);
+  assert.equal(count(html,esc(P.prose(w.stem))),1,`${t}: the stem once, through prose()`);
+  assert.equal(count(html,'<div class="mb-row q wrap" data-role="maths-stem">'),1,`${t}: in the wrapping row`);
+  assert.equal(count(html,'data-role="maths-part"'),2,`${t}: two part lines`);
+  for(const p of w.parts)assert.ok(html.includes(esc(P.prose(p.line))),`${t}: (${p.part}) printed as prose`);
+  assert.match(html,/<section class="mb-item" data-stem="2"><div class="num">2<\/div>/,`${t}: the stem carries the question's number`);
+  assert.match(html,/<section class="mb-item" data-part="a"><div class="num">\(a\)<\/div>/);assert.match(html,/<section class="mb-item" data-part="b"><div class="num">\(b\)<\/div>/);
+  // the nowrap question row holds the single item only: no sentence of the story is set in it
+  assert.equal(count(html,'<div class="mb-row q"'),1,`${t}: one nowrap question row, the single item's`);
+  assert.ok(html.indexOf('data-role="maths-stem"')<html.indexOf('data-part="a"'),'the stem sits above its parts');
+ }
+});
+
+test('M3a 2: the marked paper - each part its own answer line, tick and pen; the tally names 2a and 2b; the card names 2(b); a story draws no graph, the cubic does',()=>{
+ for(const t of ['rectangle-perimeter','cubic-max-min']){
+  const sheet=wordSession(t,'sheet',true),walk=wordSession(t,'walk',true);
+  const sh=drawMaths('Sheet',sheet.s),wk=drawMaths('Walk',walk.s);
+  for(const html of [sh,wk]){
+   assert.equal(count(html,'data-role="maths-stem"'),1,`${t}: the stem once`);
+   assert.ok(numOf(html,'\\(a\\)')&&numOf(html,'\\(b\\)'),`${t}: the parts by their letters`);
+   assert.match(numOf(html,'\\(b\\)').inner,/class="nr"/,`${t}: the wrong part's letter is ringed`);
+   assert.doesNotMatch(numOf(html,'\\(a\\)').inner,/class="nr"/,`${t}: the right part's is not`);
+   assert.ok(html.includes('<span>2a</span>')&&html.includes('<span>2b</span>')&&html.includes('<span>1</span>'),`${t}: the tally names the parts`);
+  }
+  // the right part's line is ticked on the folded sheet, on its own row
+  assert.match(sh,/data-part="a"[^>]*>[\s\S]*?data-role="maths-part"[\s\S]*?data-role="maths-tick"/,`${t}: part (a) ticked`);
+  // the walk is on part (b): its card names it as the paper does; the stored line is left alone
+  assert.match(cardOf(wk),/number 2\(b\)\. How did you get there\?/);
+  assert.match(wk,/Number 2\(b\) needs another <em>look<\/em>/);
+  assert.equal(walk.s.practice.items[2].said,'I got something different for number 3. How did you get there?');
+  // the pen sits in part (b)'s working: the open item shows its lines with the margin arrow
+  assert.match(wk,/data-part="b"[^>]*data-open="true"|data-open="true"[^>]*data-part="b"/,`${t}: part (b) is open under the lamp`);
+  assert.equal(wk.includes('data-role="maths-plot"'),t==='cubic-max-min',`${t}: a graph only where the stem prints the function`);
+ }
+});
+
+test('M3a 3: a set with no parts draws as before - numbers, nowrap rows, no stem, no part, the card says "Number 2"',()=>{
+ const items=[1,2,3].map((n)=>({n,question:`Find f'(${n}) for f(x) = x^3.`,spec:{shape:'derivative-at',f:'x^3',at:n}}));
+ const s=secondSession(null,'practice',{practice:{topic:'calc1-related-rates',marked:false,items},topic:'calc1-related-rates'});
+ const html=drawMaths('PracticeScreen',s);
+ assert.equal(count(html,'<div class="mb-row q"'),3);
+ for(const n of [1,2,3])assert.match(html,new RegExp(`<section class="mb-item"><div class="num">${n}</div><div class="mb-row q"`));
+ for(const r of ['maths-stem','maths-part','data-part','data-stem'])assert.equal(html.includes(r),false,r);
+ const walk=drawMaths('Walk',secondSession('wrong','walk'));
+ assert.equal(walk.includes('data-part'),false);assert.match(walk,/<span>2<\/span>/);
+});
+
+// ---------------------------------------------------------------- v2 M5b: the recovery list (screen "paper")
+
+const PAPER=()=>require(path.join(root,'src/tv/paperRows.ts'));
+const REC=()=>require(path.join(root,'src/lib/rules/recovery.ts'));
+const STM=()=>require(path.join(root,'src/lib/library/gcse.ts'));
+/** The session the paper screen is drawn from: the learner's cleaned paper (what the record keeps) and their skills. */
+function paperSession(raw,skills={},focus=0){
+ const c=raw===null?null:(()=>{const x=REC().cleanPaper(raw);return {at:1,items:x.items,unmapped:x.unmapped};})();
+ return {...secondSession(null,'paper'),focus,practice:null,paper:c,skills};
+}
+const it=(q,marks,outOf,codes)=>({q,marks,outOf,codes});
+
+test('paper 1: the list is in recovery()\'s order - a prerequisite pulled ahead of a heavier loss - and is never re-sorted',()=>{
+ const {paperView}=PAPER(),{recovery}=REC(),{STATEMENTS}=STM();
+ // find a paper whose recovery order is NOT plain most-lost-first, so this row means something
+ let found=null;
+ const codes=STATEMENTS.filter(x=>x.touches.length).map(x=>x.code);
+ outer:for(const a of codes)for(const b of codes){
+  if(a===b)continue;const raw=[it('1',0,2,[a]),it('2',0,5,[b])];const r=recovery(raw);
+  const byLost=[...r.topics].sort((x,y)=>y.lost-x.lost).map(t=>t.id).join();
+  if(r.topics.map(t=>t.id).join()!==byLost){found=raw;break outer;}
+ }
+ assert.ok(found,'some pair of statements pulls a prerequisite forward');
+ const v=paperView(paperSession(found));
+ assert.deepEqual(v.topics.map(t=>t.id),recovery(found).topics.map(t=>t.id),'the view is recovery()\'s order');
+ assert.deepEqual(v.topics.map(t=>t.lost),recovery(found).topics.map(t=>t.lost));
+ const html=drawMaths('PaperScreen',paperSession(found));
+ const ids=[...html.matchAll(/data-id="([^"]+)"/g)].map(m=>m[1]);
+ assert.deepEqual(ids,v.topics.slice(0,ids.length).map(t=>t.id),'the screen draws them in that order');
+});
+
+test('paper 2b (UD-8): a topic whose lost marks are a share of a multi-topic question says "shared"; a whole loss does not',()=>{
+ const {paperView}=PAPER();
+ const shared=paperView(paperSession([it('7',0,2,['N12','N2']),it('9',0,2,['A1'])]));
+ const sh=shared.topics.find(x=>x.id==='pct-of-amount');
+ assert.ok(sh&&sh.shared===true,'N12 shares question 7 with another place');
+ const {STATEMENTS}=STM(),{reachOf}=REC();
+ const one=STATEMENTS.find(x=>{const r=reachOf([x.code]);return r.topics.length===1&&r.off.length===0;});
+ assert.ok(one,'a statement that reaches exactly one topic');
+ const whole=paperView(paperSession([it('7',0,2,[one.code])]));
+ assert.equal(whole.topics[0].shared,false,'a whole loss is not shared');
+ const html=drawMaths('PaperScreen',paperSession([it('7',0,2,['N12','N2']),it('9',0,2,['A1'])])).replace(/<[^>]*>/g,'');
+ assert.match(html,/1 mark lost, shared/);
+ assert.doesNotMatch(drawMaths('PaperScreen',paperSession([it('7',0,2,[one.code])])).replace(/<[^>]*>/g,''),/shared/);
+});
+
+test('paper 2: each topic shows its lost marks and the questions behind it; the paper shows its marks, out of and lost',()=>{
+ const {paperView,scoreLine}=PAPER();
+ const raw=[it('5(b)',1,3,['N12']),it('7',0,2,['N12','N2']),it('9',4,4,['A1'])];
+ const v=paperView(paperSession(raw));
+ const t=v.topics.find(x=>x.id==='pct-of-amount');
+ assert.ok(t,'N12 leads to a topic on the path');assert.equal(t.lost,2,'5(b) and 7 each give it 1 mark of their 2 lost');assert.equal(t.from,'5(b), 7');
+ assert.deepEqual([v.marks,v.outOf,v.lost],[5,9,4]);
+ const html=drawMaths('PaperScreen',paperSession(raw));
+ assert.match(html,/2 marks lost/);assert.match(html,/From 5\(b\), 7/);
+ assert.ok(html.includes(scoreLine(v))&&/5 of 9 marks · 4 marks lost/.test(html.replace(/<[^>]*>/g,'')),'the paper\'s marks, out of and lost');
+ assert.equal(v.topics.some(x=>x.from.includes('9')),false,'a full-marks question adds nothing');
+});
+
+test('paper 3: a topic the desk calls secure stays in the list, marked "Worth a recheck" beside it - never dropped (ruling 2)',()=>{
+ const {paperView}=PAPER();
+ const raw=[it('1',0,3,['N12'])];
+ const plain=paperView(paperSession(raw)),sec=paperView(paperSession(raw,{'pct-of-amount':{topic:'pct-of-amount',secure:true}}));
+ assert.deepEqual(sec.topics.map(t=>t.id),plain.topics.map(t=>t.id),'the same list');
+ assert.equal(plain.topics.find(t=>t.id==='pct-of-amount').secure,false);
+ assert.equal(sec.topics.find(t=>t.id==='pct-of-amount').secure,true);
+ const html=drawMaths('PaperScreen',paperSession(raw,{'pct-of-amount':{topic:'pct-of-amount',secure:true}}));
+ assert.equal((html.match(/data-role="maths-paper-secure"/g)??[]).length,1,'marked once, beside the topic');
+ assert.match(html,/data-id="pct-of-amount"[^>]*>[\s\S]*?Worth a recheck/);
+ assert.equal(html.includes('Secure on the desk'),false,'the old pill text is gone');
+ assert.equal(drawMaths('PaperScreen',paperSession(raw)).includes('maths-paper-secure'),false);
+});
+
+test('paper 4: what the desk has no topic for is apart, under "Not on the desk yet", with its can text - and a statement past Foundation is flagged, not hidden',()=>{
+ const {paperView}=PAPER(),{STATEMENTS}=STM();
+ const off=STATEMENTS.find(x=>!x.touches.length&&x.foundation),beyond=STATEMENTS.find(x=>!x.touches.length&&!x.foundation);
+ assert.ok(off&&beyond);
+ const raw=[it('1',0,2,[off.code]),it('2',1,3,[beyond.code]),it('3',0,1,['N12'])];
+ const v=paperView(paperSession(raw));
+ assert.ok(v.off.some(o=>o.can===off.can&&o.lost===2&&o.from==='1'&&!o.beyond));
+ assert.ok(v.off.some(o=>o.can===beyond.can&&o.beyond));
+ assert.equal(v.topics.some(t=>t.name===off.can),false,'never linked to a topic');
+ const html=drawMaths('PaperScreen',paperSession(raw)),page=drawMaths('PaperScreen',paperSession(raw,{},v.topics.length));
+ const at=html.indexOf('data-role="maths-paper-off"');
+ assert.ok(at>0&&html.slice(at).includes('Not on the desk yet'),'its own block, headed plainly');
+ const esc=(x)=>x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+ assert.ok(page.slice(page.indexOf('maths-paper-offrows')).includes(esc(off.can)),'RP3: the can text is on the off-desk page');
+ assert.match(page,/a harder statement/);assert.doesNotMatch(html+page,/Foundation/,'the drawn paper names no tier');
+ assert.equal(html.slice(html.indexOf('maths-paper-topics'),at).includes(esc(off.can)),false,'not among the topics');
+ assert.equal(page.includes('data-id="'+v.topics[0].id+'"'),false,'no topic row on the off-desk page');
+ assert.equal(drawMaths('PaperScreen',paperSession([it('3',0,1,['N12'])])).includes('maths-paper-off'),false,'no block when nothing is off the desk');
+});
+
+test('paper 5: no paper - the screen asks for the marks on the phone, and a paper with no loss says so',()=>{
+ const {paperView,paperCaption}=PAPER();
+ const none=drawMaths('PaperScreen',paperSession(null));
+ assert.match(none,/data-role="maths-paper-empty"/);assert.match(none,/Type the marks of a paper you sat on the phone/);
+ assert.equal(paperView(paperSession(null)).empty,true);
+ const full=paperView(paperSession([it('1',3,3,['N12'])]));
+ assert.equal(full.topics.length,0);assert.match(paperCaption(full),/No marks were lost/);
+ assert.match(drawMaths('PaperScreen',paperSession([it('1',3,3,['N12'])])),/No marks were lost/);
+});
+
+test('paper 5b: a paper that lost marks on questions naming no statement never says no marks were lost',()=>{
+ const {paperView,paperCaption}=PAPER(),{STATEMENTS}=STM();
+ const mapped=STATEMENTS.find(x=>x.touches.length);
+ const flat=(h)=>h.replace(/<[^>]*>/g,' ');
+ // (a) typed with no picks, 22 of 50
+ const a=[3,2,2,2,2,2,2,3,3,1].map((m,i)=>it(String(i+1),m,5,[]));
+ const va=paperView(paperSession(a));
+ assert.equal(va.lost,28);assert.equal(va.topics.length+va.off.length,0);
+ const ha=flat(drawMaths('PaperScreen',paperSession(a)));
+ assert.doesNotMatch(paperCaption(va),/No marks were lost/);assert.doesNotMatch(ha,/No marks were lost/);
+ assert.match(paperCaption(va),/28 marks were lost/);assert.match(ha,/28 marks sit on questions that name no statement/);
+ // (b) one mapped question with full marks, one unmapped that lost marks
+ const b=[it('1',3,3,[mapped.code]),it('2',0,2,[])];
+ const vb=paperView(paperSession(b));
+ assert.equal(vb.lost,2);
+ assert.doesNotMatch(paperCaption(vb),/No marks were lost/);assert.match(paperCaption(vb),/2 marks were lost/);
+ assert.doesNotMatch(flat(drawMaths('PaperScreen',paperSession(b))),/No marks were lost/);
+ // one mark reads in the singular
+ const vc=paperView(paperSession([it('1',1,2,[])]));
+ assert.match(paperCaption(vc),/^1 mark was lost on a question/);
+ assert.match(flat(drawMaths('PaperScreen',paperSession([it('1',1,2,[])]))),/1 mark sits on a question that names no statement/);
+ // (c) the control stays
+ assert.match(paperCaption(paperView(paperSession([it('1',3,3,[mapped.code]) ]))),/No marks were lost/);
+});
+
+test('paper 6: no string the recovery screen renders names the board, over a sweep of papers',()=>{
+ const {paperView,paperCaption}=PAPER(),{STATEMENTS}=STM();
+ const BAD=/GCSE|1MA1/i;
+ const papers=STATEMENTS.map((x,i)=>[it(String(i+1),0,2,[x.code])]);
+ papers.push(STATEMENTS.slice(0,40).map((x,i)=>it(String(i+1),i%3,2,[x.code,STATEMENTS[(i*7)%STATEMENTS.length].code])));
+ papers.push([it('1',2,2,['N1'])],[]);
+ for(const raw of papers){
+  const s=paperSession(raw),v=paperView(s);
+  const text=drawMaths('PaperScreen',s).replace(/<[^>]*>/g,' ')+paperCaption(v);
+  assert.doesNotMatch(text,BAD,JSON.stringify(raw).slice(0,80));
+  if(v.off.length)assert.doesNotMatch(drawMaths('PaperScreen',paperSession(raw,{},v.topics.length)).replace(/<[^>]*>/g,' '),BAD,'off-desk page '+JSON.stringify(raw).slice(0,80));
+ }
+ assert.doesNotMatch(drawMaths('PaperScreen',paperSession(null)).replace(/<[^>]*>/g,' '),BAD);
+});
+
+test('RP2 caption: a first row that is not the biggest loss names the base and the biggest; every caption is short',()=>{
+ const {paperView,paperCaption,paperBiggest}=PAPER(),{STATEMENTS}=STM();
+ const words=t=>t.trim().split(/\s+/).length;
+ const v=paperView(paperSession([it('1',2,3,['N1']),it('2',0,4,['R7']),it('3',0,2,['G16'])]));
+ assert.equal(paperCaption(v),'Start with Equivalent fractions, the base for Unit rates and direct proportion, where most marks went.');
+ // the first row is the biggest: the old caption stays
+ const w=paperView(paperSession([it('1',0,4,['N1']),it('2',2,3,['R7'])]));
+ assert.equal(w.topics[0].lost,Math.max(...w.topics.map(t=>t.lost)));
+ assert.match(paperCaption(w),/^Start with [^,]+\. The list runs from the biggest loss/);
+ // a sweep: the caption is 25 words or fewer, has no em dash, and a biggest row exists whenever the first is not the biggest
+ const codes=STATEMENTS.filter(x=>x.touches.length).map(x=>x.code);
+ let seed=5;const rnd=n=>((seed=(seed*1103515245+12345)%2147483648)%n);let two=0;
+ for(let k=0;k<400;k++){
+  const raw=Array.from({length:1+rnd(8)},(_,i)=>{const o=1+rnd(6);return it(String(i+1),rnd(o+1),o,Array.from({length:1+rnd(3)},()=>codes[rnd(codes.length)]));});
+  const pv=paperView(paperSession(raw)),c=paperCaption(pv);
+  assert.ok(words(c)<=25,c);assert.ok(!c.includes('\u2014'),c);
+  if(pv.topics.length&&pv.topics[0].lost<Math.max(...pv.topics.map(t=>t.lost))){assert.ok(paperBiggest(pv),'a biggest row exists: '+JSON.stringify(raw));assert.match(c,/^Start with .+, the base for .+, where most marks went\.$/);two++;}
+ }
+ assert.ok(two>0,'the sweep meets the two-name caption');
+});
+
+test('paper 7: the list shows five topics around the lamp and says when more lie either side',()=>{
+ const {paperWindow}=PAPER();
+ assert.deepEqual(paperWindow(3,0,5),{from:0,to:3,up:false,down:false});
+ assert.deepEqual(paperWindow(12,0,5),{from:0,to:5,up:false,down:true});
+ assert.deepEqual(paperWindow(12,6,5),{from:4,to:9,up:true,down:true});
+ assert.deepEqual(paperWindow(12,11,5),{from:7,to:12,up:true,down:false});
+ assert.deepEqual(paperWindow(0,0,5),{from:0,to:0,up:false,down:false});
+});
+
+test('paper 8: the D-pad - Down on Get ready for school opens the list, Right walks it, Back returns; the screen is Math Buddy\'s to draw',()=>{
+ const K=require(path.join(root,'src/tv/keys.ts'));
+ const base=secondSession(null,'prepare',{practice:null,profiles:[{id:'ema',name:'Ema',type:'elementary',age:12,system:'uk',modules:['maths']}],focus:0});
+ const navs=(st)=>st.events.filter(e=>e.type==='nav');
+ assert.deepEqual(K.tvKey(base,'down',K.LOCAL).events,[],'Down on the units list still does nothing');
+ const p=paperSession([it('1',0,2,['N12']),it('2',0,3,['N2'])],{},0);
+ assert.ok(PAPER().paperView(p).topics.length>=2);
+ assert.equal(K.tvKey(p,'right',K.LOCAL).events.find(e=>e.type==='focus')?.focus,1);
+ assert.deepEqual(navs(K.tvKey(p,'back',K.LOCAL)).map(e=>e.screen),['prepare']);
+ assert.equal(K.paperOwns(p),true);assert.equal(K.mathsOwns(p),false,'MATHS_SCREENS is unchanged');
+ assert.match(fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8'),/mathsOwns\(s\) \|\| paperOwns\(s\)\) \? <MathsTV/,'the TV page hands it to Math Buddy');
+});
+
+test('RP1: Select on a recovery row opens Get ready for school on its unit with the question open; Back and Menu land on that unit (MB-B9)',()=>{
+ const K=require(path.join(root,'src/tv/keys.ts'));
+ const {prepareStops}=require(path.join(root,'src/tv/prepareRows.ts')),{hasWorked}=require(path.join(root,'src/lib/library/worked.ts'));
+ const {STATEMENTS}=STM(),{paperView}=PAPER();
+ const prof=[{id:'ema',name:'Ema',type:'elementary',age:12,system:'uk',modules:['maths']}];
+ const mk=(raw,focus=0,extra={})=>({...paperSession(raw,{},focus),profiles:prof,...extra});
+ // find a paper whose topics are all on the school path and include a unit with a worked lesson and one without
+ const codes=STATEMENTS.filter(x=>x.touches.length).map(x=>x.code);
+ let raw=null;
+ outer:for(const a of codes)for(const b of codes){
+  if(a===b)continue;const r=[it('1',0,2,[a]),it('2',0,5,[b])];const p=mk(r);
+  const ids=paperView(p).topics.map(t=>t.id),st=prepareStops(p);
+  if(ids.length<2||!ids.every(id=>st.some(u=>u.id===id)))continue;
+  const w=ids.map(hasWorked);
+  if(w.includes(true)&&w.includes(false)){raw=r;break outer;}
+ }
+ assert.ok(raw,'some paper has a unit with a worked lesson and one without');
+ const p=mk(raw),topics=paperView(p).topics,stops=prepareStops(p);
+ const navs=(r)=>r.events;
+ for(let f=0;f<topics.length;f++){
+  const id=topics[f].id,ix=stops.findIndex(u=>u.id===id),pf={...p,focus:f};
+  assert.ok(ix>=0);
+  const sel=K.tvKey(pf,'select',K.LOCAL);
+  assert.deepEqual(sel.events,[{type:'nav',screen:'prepare',focus:ix,aim:id}],`select ${f}: the unit goes as the paper's aim (MB-B40)`);
+  assert.deepEqual(sel.local,{prepareAsk:hasWorked(id)?-1:0});assert.deepEqual(sel.calls,[]);
+  for(const k of ['back','menu']){
+   const r=K.tvKey(pf,k,K.LOCAL);
+   assert.deepEqual(navs(r),[{type:'nav',screen:'prepare',focus:ix}],`${k} ${f}`);assert.deepEqual(r.local,{prepareAsk:null});
+  }
+  // the set is within 3 presses of the list
+  const at={...p,screen:'prepare',focus:ix};let l={...K.LOCAL,...sel.local};
+  if(hasWorked(id)){const r=K.tvKey(at,'right',l);l={...l,...r.local};}
+  const go=K.tvKey(at,'select',l);
+  assert.equal(go.calls.length,1,`one call for ${id}`);
+  assert.equal(go.calls[0].url,'/api/practice');assert.equal(go.calls[0].body.topic,id);
+ }
+ // while a set is written Select still goes to the unit, with no question
+ const busy=K.tvKey({...p,focus:0},'select',{...K.LOCAL,busy:true});
+ assert.deepEqual(busy.events,[{type:'nav',screen:'prepare',focus:stops.findIndex(u=>u.id===topics[0].id),aim:topics[0].id}]);
+ assert.deepEqual(busy.local,{prepareAsk:null});
+ // a paper with no topics: Select does nothing, Back still goes to the first unit
+ const none=mk([it('1',2,2,['N12'])]);
+ assert.equal(paperView(none).topics.length,0);
+ assert.deepEqual(K.tvKey(none,'select',K.LOCAL).events,[]);
+ assert.deepEqual(K.tvKey(none,'back',K.LOCAL).events,[{type:'nav',screen:'prepare',focus:0}]);
+});
+
+// ---------------------------------------------------------------- RP3: every off-desk statement is walked by name (MB-B13)
+
+/** A paper with topics (the first codes that reach a desk topic) and off-desk statements (Foundation first, then flagged). */
+function rp3Paper(){
+ const {STATEMENTS}=STM();
+ const on=STATEMENTS.filter(x=>x.touches.length).slice(0,3),off=[...STATEMENTS.filter(x=>!x.touches.length&&x.foundation).slice(0,7),...STATEMENTS.filter(x=>!x.touches.length&&!x.foundation).slice(0,2)];
+ return [...on.map((x,i)=>it(String(i+1),0,2,[x.code])),...off.map((x,i)=>it(String(i+10),0,1+(i%3),[x.code]))];
+}
+const escH=(x)=>x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const flat3=(h)=>h.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ');
+
+test('RP3 a: one walk - the topics, then the off-desk statements; Select does nothing on a statement; Back and Menu go to the first unit',()=>{
+ const K=require(path.join(root,'src/tv/keys.ts')),{paperView,paperStopCount}=PAPER();
+ const prof=[{id:'ema',name:'Ema',type:'elementary',age:12,system:'uk',modules:['maths']}];
+ const mk=(f)=>({...paperSession(rp3Paper(),{},f),profiles:prof});
+ const v=paperView(mk(0)),t=v.topics.length,n=t+v.off.length;
+ assert.ok(t>=2&&v.off.length>=6);assert.equal(paperStopCount(mk(0)),n);
+ const foc=(r)=>r.events.find(e=>e.type==='focus')?.focus;
+ for(const k of ['right','down'])assert.equal(foc(K.tvKey(mk(t-1),k,K.LOCAL)),t,'forward from the last topic: '+k);
+ for(const k of ['left','up'])assert.equal(foc(K.tvKey(mk(t),k,K.LOCAL)),t-1,'back from the first statement: '+k);
+ assert.equal(K.tvKey(mk(n-1),'down',K.LOCAL).events.find(e=>e.type==='focus'),undefined,'Down on the last stop stays');
+ assert.equal(foc(K.tvKey(mk(n-2),'down',K.LOCAL)),n-1);
+ for(let f=t;f<n;f++){
+  const sel=K.tvKey(mk(f),'select',K.LOCAL);
+  assert.deepEqual(sel.events,[]);assert.deepEqual(sel.calls,[]);assert.deepEqual(sel.local,{},'local unchanged');
+  for(const k of ['back','menu']){const r=K.tvKey(mk(f),k,K.LOCAL);assert.deepEqual(r.events,[{type:'nav',screen:'prepare',focus:0}],k);assert.deepEqual(r.local,{prepareAsk:null});}
+ }
+});
+
+test('RP3 b: every off-desk statement is reachable by name on its own page; the topic rows are not drawn there; no "and n more"',()=>{
+ const {paperView}=PAPER();
+ const raw=rp3Paper(),v=paperView(paperSession(raw)),t=v.topics.length;
+ for(let f=0;f<t+v.off.length;f++){
+  const h=drawMaths('PaperScreen',paperSession(raw,{},f));
+  assert.doesNotMatch(flat3(h),/and [0-9]+ more/,'focus '+f);
+  if(f<t)continue;
+  const j=f-t,at=h.indexOf('data-role="maths-paper-offrows"');
+  assert.ok(at>0,'the off-desk page at '+f);
+  const rows=h.slice(at,h.indexOf('<aside'));
+  const lit=rows.match(/<div class="mb-prow mb-poffrow" data-focused="true"[^>]*>.*?<\/div>/s);
+  assert.ok(lit&&lit[0].includes(escH(v.off[j].can)),'the lit row names statement '+j);
+  for(const tp of v.topics)assert.equal(h.includes('data-id="'+tp.id+'"'),false,'no topic row on the off-desk page');
+  assert.equal(h.includes('maths-paper-topics'),false);
+  assert.match(h,/data-role="maths-title"[^>]*>.*Not on the desk yet/s);
+ }
+ assert.ok(drawMaths('PaperScreen',paperSession(raw,{},0)).includes('maths-paper-topics'),'on a topic the topic window shows');
+ // no topic rows at all: focus 0 is the first statement, so the page shows at once
+ assert.ok(drawMaths('PaperScreen',paperSession([it('1',0,2,['A19'])])).includes('maths-paper-offrows'));
+});
+
+test('RP3 c: the off-desk rows follow notOnDesk order, and the A19 / A15 tie draws A19 first',()=>{
+ const {paperView,paperWindow}=PAPER(),{STATEMENTS}=STM();
+ const h=drawMaths('PaperScreen',paperSession([it('1',0,4,['A15']),it('2',0,4,['A19'])]));
+ const a=h.indexOf(escH(STATEMENTS.find(x=>x.code==='A19').can)),b=h.indexOf(escH(STATEMENTS.find(x=>x.code==='A15').can));
+ assert.ok(a>0&&b>a,'A19 above A15');
+ assert.match(flat3(h),/From 2 .* From 1 · a harder statement/);
+ const v=paperView(paperSession(rp3Paper())),t=v.topics.length;
+ const hh=drawMaths('PaperScreen',paperSession(rp3Paper(),{},t+2));
+ const w=paperWindow(v.off.length,2,5);
+ let last=-1;for(let j=w.from;j<w.to;j++){const i=hh.indexOf(escH(v.off[j].can));assert.ok(i>last,'row '+j+' in order');last=i;}
+});
+
+test('RP3 d: the score card counts the lost marks that are not on the desk yet; the off card summarises',()=>{
+ const {offCountLine,offSummary,paperView}=PAPER();
+ const line=(raw)=>{const h=drawMaths('PaperScreen',paperSession(raw)),at=h.indexOf('data-role="maths-paper-score"'),e=h.indexOf('data-role="maths-paper-off"',at);return {h,score:flat3(h.slice(at,e>at?e:h.length)),has:h.includes('maths-paper-offcount')};};
+ let r=line([it('1',0,3,['A19']),it('2',0,2,['N12'])]);
+ assert.ok(r.has&&r.score.includes('3 of 5 lost marks are not on the desk yet.'));
+ r=line([it('1',0,2,['A19']),it('2',0,3,['A15'])]);assert.ok(r.score.includes('5 of 5 lost marks are not on the desk yet.'));
+ r=line([it('1',1,2,['A19']),it('2',0,2,['N12'])]);assert.ok(r.score.includes('1 of 3 lost marks is not on the desk yet.'));
+ r=line([it('1',1,2,['A19'])]);assert.ok(r.score.includes('The one lost mark is not on the desk yet.'));
+ r=line([it('1',0,2,['N12'])]);assert.equal(r.has,false);assert.doesNotMatch(r.score,/not on the desk yet/);
+ assert.equal(offCountLine(paperView(paperSession([it('1',0,2,['N12'])]))),null);
+ assert.equal(offSummary(paperView(paperSession([it('1',0,2,['N12']),it('2',0,2,['A19']),it('3',0,1,['A15'])]))),'2 statements the desk has no topic for, after the topics.');
+ assert.equal(offSummary(paperView(paperSession([it('1',0,2,['N12']),it('2',0,2,['A19'])]))),'1 statement the desk has no topic for, after the topics.');
+ assert.equal(offSummary(paperView(paperSession([it('2',0,2,['A19']),it('3',0,1,['A15'])]))),'2 statements the desk has no topic for.');
+ assert.equal(offSummary(paperView(paperSession([it('2',0,2,['A19']),it('3',2,2,['N12'])]))),'1 statement the desk has no topic for.');
+ const h=drawMaths('PaperScreen',paperSession([it('1',0,2,['N12']),it('2',0,2,['A19'])])),card=h.slice(h.indexOf('data-role="maths-paper-off"'));
+ assert.ok(flat3(card).includes('1 statement the desk has no topic for, after the topics.'));
+ assert.equal(card.includes(escH(STM().STATEMENTS.find(x=>x.code==='A19').can)),false,'the card no longer lists statements');
+});
+
+test('RP3 e: every statement with no touches fits two lines of the off-desk row; the CSS carries the numbers',()=>{
+ const {OFF_NAME_PX,OFF_NAME_ROOM,OFF_CH}=PAPER(),{STATEMENTS}=STM(),{wrapLabel}=require(path.join(root,'src/tv/rulerRows.ts'));
+ assert.equal(OFF_CH,0.55*OFF_NAME_PX);
+ const bad=STATEMENTS.filter(x=>!x.touches.length&&!wrapLabel(x.can,OFF_NAME_ROOM,OFF_CH,2)).map(x=>x.code);
+ assert.deepEqual(bad,[]);
+ const css=fs.readFileSync(path.join(root,'src/design/maths-lamplight.css'),'utf8');
+ assert.match(css,new RegExp('\\.mb-poffrow \\.nm \\{[^}]*font-size: '+OFF_NAME_PX+'px'));
+});
+
+test('RP3 f: every new string is 25 words or fewer and has no em dash',()=>{
+ const {offCountLine,offSummary,paperView}=PAPER();
+ const papers=[rp3Paper(),[it('1',0,2,['A19'])],[it('1',1,2,['A19'])],[it('1',1,2,['A19']),it('2',0,2,['N12'])],[it('1',0,2,['N12'])]];
+ for(const raw of papers){const v=paperView(paperSession(raw));for(const t of [offCountLine(v),offSummary(v)]){if(t===null)continue;assert.ok(t.trim().split(/\s+/).length<=25,t);assert.ok(!t.includes(String.fromCharCode(8212)),t);}}
+});
+
+test('M5b step 4: the slip card says its line through deskLine - the same text for a single item and for a part',()=>{
+ const src=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8');
+ assert.match(src,/const said = deskLine\(items, ix,/);
+ assert.doesNotMatch(src,/namedLine/);
+ const {deskLine,namedLine,itemName}=require(path.join(root,'src/lib/rules/calc-word.ts'));
+ const parts=[{n:1},{n:2,stem:'A story.',part:'a'},{n:3,stem:'A story.',part:'b'}];
+ for(let i=0;i<parts.length;i++){const line=`Number ${parts[i].n} is right. I got something different for number ${parts[i].n}.`;
+  assert.equal(deskLine(parts,i,line),namedLine(line,parts[i].n,itemName(parts,i)),'the same text, by construction');}
+});
+
+test('MK10: the drawn card of an unsure part gives the desk\'s reason under the part\'s name, never "something different"; a blank part has no answer yet',()=>{
+ const W=require(path.join(root,'src/lib/rules/calc-word.ts')),K=require(path.join(root,'src/lib/rules/kinds.ts'));
+ const w=W.drawWord('rectangle-perimeter',1),[a]=W.workedWord('rectangle-perimeter',1);
+ const single={n:1,question:'Find f\'(2) for f(x) = x^3.',spec:{shape:'derivative-at',f:'x^3',at:2}};
+ const [pa,pb]=W.wordItems(w,2);
+ const judged=(bAnswer)=>K.judgeSet({topic:w.topic,items:[single,pa,pb]},[{n:1,studentAnswer:'12'},{n:2,studentAnswer:a},{n:3,studentAnswer:bAnswer}],{topic:w.topic,system:'uk',typed:true}).items;
+ for(const [ans,line] of [['???',(it)=>it.said],['',()=>'Number 3 has no answer yet.']]){
+  const items=judged(ans);
+  assert.equal(items[2].verdict,'unsure');assert.equal(items[2].said,line(items[2]));
+  const s=secondSession(null,'walk',{practice:{topic:w.topic,marked:true,items},topic:w.topic,walkIx:2,focus:2});
+  const card=cardOf(drawMaths('Walk',s));
+  assert.doesNotMatch(card,/something different/);
+  if(ans)assert.match(card,/The desk is not sure about number 2\(b\)\. /);else assert.match(card,/Number 2\(b\) has no answer yet\./);
+  assert.equal(s.practice.items[2].said,line(items[2]),'the stored line is left alone');
+ }
+});
+
+test('heard 1: the drawn card of an item the desk settled from a spoken value opens with what the desk heard',async()=>{
+ const reg=require(path.join(root,'src/lib/engines/registry.ts'));require(path.join(root,'src/lib/engines/text.ts'));
+ const X=require(path.join(root,'src/lib/desk/explain.ts')),{reduce}=require(path.join(root,'src/lib/session/store.ts'));
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'Look again at the step where the 1 moved.',slip:'unclear',value:'4'})})});
+ try{
+  const base=secondSession(null,'walk');
+  const item={n:2,question:'2x + 3 = 11',studentAnswer:'',verdict:'unsure'};
+  const x=await X.explainItem(item,'I took three off and halved it and got four','linear-two-step','tv-heard',()=>true,12);
+  assert.equal(x.settled.verdict,'right');
+  // the route stores it the way it does: practice.settle with the reply
+  const s=reduce({...base,practice:{...base.practice,items:base.practice.items.map((it)=>it.n===2?item:it)}},{type:'practice.settle',n:2,reply:x.reply,verdict:x.settled.verdict,slip:x.settled.slip,said:x.settled.said});
+  const card=words(cardOf(drawMaths('Walk',{...s,walkIx:1}))).join(' ');
+  assert.match(card,/The desk heard 4\./,'the drawn card names the value the desk took');
+ }finally{reg.resetProviders();}
+});
+
+test('MB-B19 4: past the path\'s end the Prepare cards print no year and the lede carries the path-ends line; a younger learner is unchanged',()=>{
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),{createElement}=require(path.join(root,'node_modules/react'));
+ const M=require(path.join(root,'src/maths/MathsTV.tsx'));
+ const mk=(age)=>({...secondSession(null,'prepare',{focus:0,practice:null}),profiles:[{id:'ema',name:'Ema',type:'high-school',age,system:'uk',modules:['maths']}]});
+ const draw=(s)=>renderToStaticMarkup(createElement(M.Prepare,{s,focus:s.focus,busy:false,ask:null}));
+ const old=draw(mk(17)),young=draw(mk(12));
+ assert.doesNotMatch(old,/class="yr"/);assert.match(old,/data-role="maths-prepare-ends"[^>]*>This path ends at Year \d+; your year is past it\.</);
+ assert.match(young,/class="yr">Year \d+</);assert.doesNotMatch(young,/maths-prepare-ends/);
+ const tonight=renderToStaticMarkup(createElement(M.Tonight,{s:{...mk(17),screen:'tonight'},focus:2}));
+ assert.match(tonight,/This path ends at Year \d+/);assert.doesNotMatch(tonight,/Pick what school is teaching next/);
+});
+
+test('RP6 left out: the score card says how many typed questions the phone left out, and says nothing when none were',()=>{
+ const {paperView,leftOutLine}=PAPER();
+ const raw=[it('5(b)',1,3,['N12']),it('9',4,4,['A1'])];
+ const two='2 questions were left out on the phone, so they are not in this score.',one='1 question was left out on the phone, so it is not in this score.';
+ const withN=(n)=>{const s=paperSession(raw);s.paper={...s.paper,leftOut:n};return s;};
+ assert.equal(leftOutLine(paperView(withN(2))),two);
+ assert.equal(leftOutLine(paperView(withN(1))),one);
+ assert.equal(leftOutLine(paperView(withN(0))),null);
+ assert.equal(leftOutLine(paperView(paperSession(raw))),null,'a paper without the field');
+ assert.equal(paperView(paperSession(null)).leftOut,0);
+ const html=drawMaths('PaperScreen',withN(2));
+ assert.ok(html.includes('data-role="maths-paper-leftout"')&&html.includes(two));
+ assert.equal(drawMaths('PaperScreen',paperSession(raw)).includes('maths-paper-leftout'),false);
+ for(const t of [one,two]){
+  assert.ok(t.trim().split(/\s+/).length<=25,'25 words or fewer');
+  assert.ok(!t.includes(String.fromCharCode(8212))&&!t.includes(String.fromCharCode(8211)),'no em or en dash');
+ }
+});
+
+// ---- MB-B1: an item left empty draws as skipped - its own word and mark, no ring, never the desk's "not sure"
+test('MB-B1 TV: the Sheet, the Walk and the Continue card draw a skipped item as skipped, apart from a not-sure one; an old stored blank draws the same',()=>{
+ const Mth=require(path.join(root,'src/lib/rules/maths.ts'));
+ const items=[
+  {n:1,question:'x + 2 = 6',studentAnswer:'4',studentWorking:'',verdict:'right',said:Mth.RIGHT(1)},
+  {n:2,question:'x + 3 = 5',studentAnswer:'5',studentWorking:'',verdict:'wrong',slip:'sign-lost-moving',said:'Check the sign.'},
+  {n:3,question:'x + 4 = 9',studentAnswer:'4/22',studentWorking:'',verdict:'unsure',said:Mth.NOT_SURE(3)},
+  {n:4,question:'x + 5 = 9',studentAnswer:'',studentWorking:'',verdict:'unsure',said:Mth.BLANK(4)},
+  {n:5,question:'x + 6 = 9',verdict:'unsure',said:Mth.NOT_SURE(5)}, // an older stored blank: no answer field at all
+ ];
+ const base=secondSession(null,'sheet',{practice:{topic:'linear-one-step',marked:true,items}});
+ const sheet=drawMaths('Sheet',{...base,focus:0});
+ assert.deepEqual(tags(sheet,'mb-tm').map((t)=>/data-v="(\w+)"/.exec(t)[1]),['right','wrong','unsure','skipped','skipped'],'the top bar: the mark each item reads as');
+ const items4=[...sheet.matchAll(/<section class="mb-item" data-v="(\w+)"[\s\S]*?<\/section>/g)];
+ assert.deepEqual(items4.map((m)=>m[1]),['right','wrong','unsure','skipped','skipped']);
+ const [,w,u,k,old]=items4.map((m)=>m[0]);
+ assert.match(w,/class="nr"/,'a slip wears the ring');assert.match(u,/class="nr"/,'the desk\'s doubt keeps its ring, as before');
+ for(const x of [k,old]){assert.doesNotMatch(x,/class="nr"/,'no ring on a skipped item');assert.match(x,/class="lookword">skipped</);assert.doesNotMatch(x,/not sure|look again/);}
+ assert.match(u,/class="lookword">not sure</);
+ // the Walk's card on the skipped item: its own kicker, title and arrow line, the stored line kept
+ const walk=drawMaths('Walk',{...base,screen:'walk',walkIx:3,focus:3});
+ const side=walk.slice(walk.indexOf('<aside class="mb-side"'),walk.indexOf('</aside>'));
+ assert.match(side,/Skipped/);assert.match(side,/Number 4 was <em>skipped<\/em>/);assert.match(side,/Number 4 has no answer yet\./);assert.match(side,/Work it on paper, then tell the desk on the phone what you got\./);
+ assert.doesNotMatch(side,/not sure|something different|needs another look/i);
+ // the not-sure one still reads as the desk's doubt
+ const walkU=drawMaths('Walk',{...base,screen:'walk',walkIx:2,focus:2});
+ const sideU=walkU.slice(walkU.indexOf('<aside class="mb-side"'),walkU.indexOf('</aside>'));
+ assert.match(sideU,/The desk is not sure/);assert.doesNotMatch(sideU,/skipped/i);
+ // the Continue card on Tonight: the box's word and the tally, per mark
+ const tonight=drawMaths('Tonight',{...base,screen:'tonight',focus:0});
+ const boxes=tonight.split('<div class="mb-box" ').slice(1).map((c)=>`${/^data-v="(\w+)"/.exec(c)[1]}:${/<span class="la">([^<]*)<\/span>/.exec(c)?.[1]??'tick'}`);
+ assert.deepEqual(boxes,['right:tick','wrong:look again','unsure:not sure','skipped:skipped','skipped:skipped'],'a skipped box says skipped, not not sure');
+ // an all-skipped set: every mark is skipped, no ring anywhere on the paper
+ const none=drawMaths('Sheet',{...secondSession(null,'sheet',{practice:{topic:'linear-one-step',marked:true,items:items.slice(3)}}),focus:0});
+ assert.deepEqual(tags(none,'mb-tm').map((t)=>/data-v="(\w+)"/.exec(t)[1]),['skipped','skipped']);assert.doesNotMatch(none,/class="nr"/);
 });

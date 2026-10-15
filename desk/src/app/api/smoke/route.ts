@@ -8,13 +8,14 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { engineCheck } from "@/lib/engines/health";
 import { roleFrom } from "@/lib/session/pairing";
+import { dataDir } from "@/lib/dataDir";
 
 export const dynamic = "force-dynamic";
 export async function GET(req: Request) {
   const role = roleFrom(req);
   if (role !== null && role !== "tv") return Response.json({ error: "The engine check is for the TV." }, { status: 403 });
   const live = new URL(req.url).searchParams.get("live") === "1";
-  const sampleFile = path.join(process.env.DESK_DATA_DIR || path.join(process.cwd(), "data"), "sample.jpg");
+  const sampleFile = path.join(dataDir(), "sample.jpg");
   const sample = live && existsSync(sampleFile) ? readFileSync(sampleFile).toString("base64") : undefined;
   return Response.json({ live, engines: await engineCheck({ live, sample }) });
 }

@@ -5,18 +5,27 @@
  * beside session.json in the same data dir and is only ever written by the functions below,
  * none of which the reducer calls. A skill that has gone secure never goes back.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { emptyEnglish, type EnglishLearning } from "../english/types";
 import { cleanEnglish } from "../english/rules";
 import { DIGEST_CAP, cleanDigest, type DigestEntry } from "../rules/digest";
+import { stepSlips } from "../rules/slips";
+import { cleanPaper, type PaperItem } from "../rules/recovery";
+import { dataDir } from "../dataDir";
 
 export interface SkillRecord {
   topic: string; seen: number; right: number;
   estimate: number;         // 0..1
   secure: boolean;          // once true, NEVER set false again
   lastSeen: number;         // ms epoch
-  slips: string[];          // slip ids seen for this learner+topic, deduped, newest last
+  slips: string[];          // slip ids seen for this learner+topic, deduped, newest last; a slip the child stops making is rubbed out (rules/slips)
+  /**
+   * For a live slip held at least once, the usual right attempts on items that show it since it was last made (rules/slips
+   * stepSlips); three rub it out. Only ids still in `slips`, whole numbers >= 0; absent when no live slip has a count, and on
+   * a learners.json written before it existed.
+   */
+  held?: Record<string, number>;
   /**
    * The step-up record (Family W8): moved ONLY by attempts on items of a set asked for as "a step up" (rules/stretch), by
    * the same rule as the record above - the estimate 30% of the way toward each outcome, secure latched at 0.85 with four
@@ -47,26 +56,62 @@ export interface HistoryEntry {
 
 const KINDS: HistoryEntry["kind"][] = ["homework", "practice", "writing", "lesson"];
 
+/**
+ * A paper the learner sat, as kept (v2 M5b): the cleaned paper (rules/recovery cleanPaper: `items` with a known statement
+ * code, `unmapped` without) and the date it was entered. The recovery is recomputed from it, never stored.
+ */
+export interface StoredPaper {
+  at: number; items: PaperItem[]; unmapped: PaperItem[];
+  /** the typed rows cleanPaper left out when the paper was entered; present only when above 0 */
+  leftOut?: number;
+}
+/** The papers kept per learner: the newest few. */
+export const PAPERS_CAP = 5;
+
 export interface Learner {
   id: string;
   english: EnglishLearning;
   skills: Record<string, SkillRecord>;
   /** the same record, one per Essay Master lens (structure, argument, evidence, language) — kept apart so no maths count ever includes a lens */
   writing: Record<string, SkillRecord>;
-  memory: string[];         // plain sentences the model reads, newest last, capped at 40
+  memory: MemoryNote[];     // the desk's notes on the learner, newest last, capped at 40 (MEMORY_CAP)
+  /** How many older notes the cap has dropped, so a prompt can say the list is not everything (agent-memory: loss-site-inventory). Absent at none. */
+  memoryDropped?: number;
   history: HistoryEntry[];  // what happened, newest last, capped at 20
   /**
-   * The week, recorded (Family W9, rules/digest): one dated entry per marked set, finished Linga conversation and Essay
-   * reading - ids from closed lists and counts only, never text - newest last, capped at DIGEST_CAP. A separate list from
+   * The week, recorded (Family W9, rules/digest): one dated entry per marked set, finished Linga conversation, Essay
+   * reading, homework sheet read and paper typed in - ids from closed lists and counts only, never text - newest last,
+   * capped at DIGEST_CAP. A separate list from
    * the history (whose cap and pin are unchanged); the Sunday page (rules/week) is its only reader, and it is never
    * hydrated into the session (no screen is sent it). A learners.json written before W9 loads with none.
    */
   digest: DigestEntry[];
+  /** The papers entered (v2 M5b), newest last, capped at PAPERS_CAP; absent until the first paper, and on a learners.json written before it. */
+  papers?: StoredPaper[];
+}
+
+/**
+ * One note the desk wrote about a learner (agent-memory: observation-clock): the sentence, when it was written, and
+ * which writer wrote it - the nightly memory writer (lib/desk/memory.ts), or "legacy" for a note kept as a bare string
+ * before notes were dated (at null: its age is unknown, never guessed). A note is the desk's own observation, which no
+ * person has confirmed; a prompt that reads it back says so.
+ */
+export interface MemoryNote { text: string; at: number | null; source: "nightly" | "legacy" }
+
+/** Notes as they are kept: a bare string (written before notes were dated) reads as a legacy note; anything else is dropped. */
+export function cleanNotes(raw: unknown): MemoryNote[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((m): MemoryNote[] => {
+    if (typeof m === "string") return m.trim() ? [{ text: m, at: null, source: "legacy" }] : [];
+    if (!m || typeof m !== "object") return [];
+    const o = m as Record<string, unknown>;
+    if (typeof o.text !== "string" || !o.text.trim()) return [];
+    return [{ text: o.text, at: typeof o.at === "number" && Number.isFinite(o.at) ? o.at : null, source: o.source === "nightly" ? "nightly" : "legacy" }];
+  }).slice(-MEMORY_CAP);
 }
 
 // the same data dir the session store uses — derived the same way, not hard-coded
-const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
-const FILE = path.join(DATA, "learners.json");
+const FILE = () => path.join(dataDir(), "learners.json");
 
 const MEMORY_CAP = 40;
 const HISTORY_CAP = 20;
@@ -95,8 +140,8 @@ function tell(line: string): void {
 function readBook(): Book | null {
   let text: string;
   try {
-    if (!existsSync(FILE)) return {};
-    text = readFileSync(FILE, "utf8");
+    if (!existsSync(FILE())) return {};
+    text = readFileSync(FILE(), "utf8");
   } catch (e) {
     if ((e as NodeJS.ErrnoException)?.code === "ENOENT") return {};
     tell(`learners.json could not be read, so it will not be written over: ${why(e)}`);
@@ -118,16 +163,34 @@ function readAll(): Book {
   return readBook() ?? {};
 }
 
-/** Put one learner into the book on disk - never over a file that could not be read. A failure is logged. */
-function writeLearner(id: string, l: Learner): void {
-  const book = readBook();
-  if (!book) { console.error(`learners.json left as it is: ${id}'s change was not saved`); return; }
-  book[id] = l;
-  try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(book)); }
-  catch (e) { console.error(`learners.json could not be written: ${id}'s change was not saved: ${why(e)}`); }
+/**
+ * The one way learners.json is written: the JSON goes to a temp file beside it, then renames over it, so a crash
+ * mid-write leaves the old file whole, never a partial one. A failure removes the temp file and throws.
+ */
+function writeBook(book: Book): void {
+  const tmp = path.join(dataDir(), `learners.json.${process.pid}.${Date.now().toString(36)}.tmp`);
+  try {
+    mkdirSync(dataDir(), { recursive: true });
+    writeFileSync(tmp, JSON.stringify(book));
+    renameSync(tmp, FILE());
+  } catch (e) {
+    try { rmSync(tmp, { force: true }); } catch { /* best effort: the write's own failure is thrown just below */ }
+    throw new Error(`learners.json could not be written, so progress was not saved: ${why(e)}`);
+  }
 }
 
-function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, writing: {}, memory: [], history: [], digest: [] }; }
+/** The failure of a write or a read-through that found learners.json unreadable (P7-a): a retry cannot succeed while the file stays so, and job.ts says it in one desk sentence. */
+export class LearnersUnread extends Error {}
+
+/** Put one learner into the book on disk - never over a file that could not be read. Throws when it cannot. */
+function writeLearner(id: string, l: Learner): void {
+  const book = readBook();
+  if (!book) throw new LearnersUnread("learners.json could not be read, so progress was not saved over it");
+  book[id] = l;
+  writeBook(book);
+}
+
+export function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, writing: {}, memory: [], history: [], digest: [] }; }
 
 /** A finite whole number of at least 0, else 0. */
 const count = (v: unknown) => { const n = Number(v); return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0; };
@@ -149,6 +212,17 @@ function cleanStretch(raw: unknown): StretchRecord | undefined {
   };
 }
 
+/** A held count kept only as a whole number >= 0 for an id still in `slips`; anything else is dropped. Undefined when none is kept. */
+function cleanHeld(raw: unknown, slips: readonly string[]): Record<string, number> | undefined {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined;
+  const out: Record<string, number> = {};
+  for (const id of slips) {
+    const n = Object.prototype.hasOwnProperty.call(raw, id) ? (raw as Record<string, unknown>)[id] : undefined;
+    if (typeof n === "number" && Number.isInteger(n) && n >= 0) out[id] = n;
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
 function cleanSkills(raw: unknown): Record<string, SkillRecord> {
   const skills: Record<string, SkillRecord> = {};
   const src = (raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {}) as Record<string, Partial<SkillRecord>>;
@@ -156,18 +230,44 @@ function cleanSkills(raw: unknown): Record<string, SkillRecord> {
     const r = src[k] ?? {};
     // the whitelist: a field not named here is dropped on read (the step-up record is named since Family W8)
     const stretch = cleanStretch(r.stretch);
+    const slips = Array.isArray(r.slips) ? r.slips.filter((s): s is string => typeof s === "string") : [];
+    const held = cleanHeld(r.held, slips);
+    // the counts by cleanStretch's rule: whole, at least 0, and right never above seen
+    const seen = count(r.seen);
     skills[k] = {
       topic: typeof r.topic === "string" ? r.topic : k,
-      seen: Number(r.seen) || 0,
-      right: Number(r.right) || 0,
+      seen,
+      right: Math.min(seen, count(r.right)),
       estimate: Number.isFinite(Number(r.estimate)) ? Math.min(1, Math.max(0, Number(r.estimate))) : 0,
       secure: r.secure === true,
-      lastSeen: Number(r.lastSeen) || 0,
-      slips: Array.isArray(r.slips) ? r.slips.filter((s): s is string => typeof s === "string") : [],
+      lastSeen: count(r.lastSeen),
+      slips,
+      ...(held ? { held } : {}),
       ...(stretch ? { stretch } : {}),
     };
   }
   return skills;
+}
+
+/**
+ * A stored paper as the desk trusts it: it must read back CLEANLY through cleanPaper - every item kept, no code dropped,
+ * the same items and unmapped items as stored - and carry a date. Anything else is no paper at all, never a guess.
+ */
+export function cleanStoredPaper(raw: unknown): StoredPaper | null {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  const { at, items, unmapped, leftOut } = raw as Record<string, unknown>;
+  if (typeof at !== "number" || !Number.isFinite(at) || at < 0 || !Array.isArray(items) || !Array.isArray(unmapped)) return null;
+  const c = cleanPaper([...items, ...unmapped]);
+  if (c.dropped.length || c.droppedCodes.length || !c.items.length && !c.unmapped.length) return null;
+  const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+  if (!same(c.items, items) || !same(c.unmapped, unmapped)) return null;
+  // the count is a note beside the marks, never part of them: a bad value is left off and the paper is still kept
+  const note = typeof leftOut === "number" && Number.isSafeInteger(leftOut) && leftOut > 0 ? { leftOut } : {};
+  return { at, items: c.items, unmapped: c.unmapped, ...note };
+}
+/** The stored papers that read back cleanly, in order, at most the newest PAPERS_CAP. */
+function cleanPapers(raw: unknown): StoredPaper[] {
+  return (Array.isArray(raw) ? raw : []).map(cleanStoredPaper).filter((p): p is StoredPaper => !!p).slice(-PAPERS_CAP);
 }
 
 /** Normalise whatever was on disk into a shape the rest of the module can trust. */
@@ -186,9 +286,12 @@ function clean(id: string, l: unknown): Learner {
       label: String(h.label), detail: typeof h.detail === "string" ? h.detail : "",
       ...(typeof h.ref === "string" && h.ref ? { ref: h.ref } : {}),
     }));
-  return { id, english: cleanEnglish(o.english), skills, writing, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history: capped(history),
+  const papers = cleanPapers(o.papers);
+  return { id, english: cleanEnglish(o.english), skills, writing, memory: cleanNotes(o.memory), ...(typeof o.memoryDropped === "number" && o.memoryDropped > 0 ? { memoryDropped: Math.floor(o.memoryDropped) } : {}), history: capped(history),
     // the week's digest, whitelisted entry by entry (rules/digest cleanDigest); none on a file written before it existed
-    digest: cleanDigest(o.digest) };
+    digest: cleanDigest(o.digest),
+    // the papers entered, each read back through cleanPaper (a malformed one is none); the field is absent with none, as on a file written before M5b
+    ...(papers.length ? { papers } : {}) };
 }
 
 /**
@@ -210,17 +313,38 @@ export function getLearner(id: string): Learner {
   return book[id] ? clean(id, book[id]) : blank(id);
 }
 
-export function saveLearner(l: Learner): void {
-  writeLearner(l.id, { ...l, memory: l.memory.slice(-MEMORY_CAP), history: capped(l.history ?? []), digest: (l.digest ?? []).slice(-DIGEST_CAP) });
+/** The learner for a reader that must tell an unreadable learners.json from an empty one (WD14): it throws on the first, reads the second as an empty book. */
+/**
+ * What a prompt may recall about a learner: the learner, or null when learners.json cannot be read. A prompt that
+ * only reads (explain notes, a set's slips, a hint's slips) leaves that part out and carries RECALL_UNREAD instead, so
+ * the model is never told an unreadable record is an empty one (agent-memory: durable-store-failure-posture). A path
+ * that writes the learner afterwards reads with readLearner and fails before its model call.
+ */
+export function recallLearner(id: string): Learner | null {
+  try { return readLearner(id); } catch (e) { if (e instanceof LearnersUnread) return null; throw e; }
+}
+/** What a prompt says in place of a learner's record it could not read: unavailable, never empty. */
+export const RECALL_UNREAD = "The desk's record of this student could not be read just now. Assume nothing about their past work, either way.";
+
+export function readLearner(id: string): Learner {
+  const book = readBook();
+  if (book === null) throw new LearnersUnread("learners.json could not be read");
+  return book[id] ? clean(id, book[id]) : blank(id);
 }
 
-/** English commits report a disk failure instead of claiming progress was saved - an unreadable learners.json too. */
+export function saveLearner(l: Learner): void {
+  // the cap drops the oldest notes; how many is kept, so the list can say it is not everything
+  const dropped = Math.max(0, l.memory.length - MEMORY_CAP) + (l.memoryDropped ?? 0);
+  writeLearner(l.id, { ...l, memory: l.memory.slice(-MEMORY_CAP), ...(dropped ? { memoryDropped: dropped } : {}), history: capped(l.history ?? []), digest: (l.digest ?? []).slice(-DIGEST_CAP), ...(l.papers?.length ? { papers: l.papers.slice(-PAPERS_CAP) } : {}) });
+}
+
+/** English commits (and saveLearner, the same way) report a disk failure instead of claiming progress was saved - an unreadable learners.json too. */
 export function saveEnglish(id: string, english: EnglishLearning): void {
   const book = readBook();
-  if (!book) throw new Error("learners.json could not be read, so progress was not saved over it");
-  book[id] = { ...getLearner(id), english };
-  mkdirSync(DATA, { recursive: true });
-  writeFileSync(FILE, JSON.stringify(book));
+  if (!book) throw new LearnersUnread("learners.json could not be read, so progress was not saved over it");
+  // the learner from the book just read (getLearner would read and parse the file a second time)
+  book[id] = { ...(book[id] ? clean(id, book[id]) : blank(id)), english };
+  writeBook(book);
 }
 
 /**
@@ -228,7 +352,7 @@ export function saveEnglish(id: string, english: EnglishLearning): void {
  * `tier` as code set it. The record is chosen by `stretch` alone - a step-up set holds tier-1 items too, and each of its
  * attempts counts toward the step-up record - so the tier is carried for the caller's sake and never read as a lever.
  */
-export interface AttemptSet { stretch?: boolean; tier?: 1 | 2 }
+export interface AttemptSet { stretch?: boolean; tier?: 1 | 2 | 3; /** the slips the item shows (school items only): a usual right attempt counts toward rubbing them out */ shows?: string[] }
 
 /**
  * One attempt at one topic. The estimate moves 30% of the way toward the outcome (1 right,
@@ -238,12 +362,16 @@ export interface AttemptSet { stretch?: boolean; tier?: 1 | 2 }
  * attempt leaves the step-up record exactly as it was. A slip seen at step-up is not added to the usual slips.
  */
 export function recordAttempt(id: string, topic: string, right: boolean, slip?: string, set: AttemptSet = {}): SkillRecord {
-  const l = getLearner(id);
-  const before = l.skills[topic];
-  const rec = set.stretch === true ? stretchStep(before, topic, right) : step(before, topic, right, slip);
-  l.skills[topic] = rec;
+  const l = withAttempt(getLearner(id), topic, right, slip, set);
   saveLearner(l);
-  return rec;
+  return l.skills[topic];
+}
+
+/** The learner with one attempt on `topic` applied; nothing is saved (WD10: a caller applies several changes, then saves once). */
+export function withAttempt(l: Learner, topic: string, right: boolean, slip?: string, set: AttemptSet = {}): Learner {
+  const before = l.skills[topic];
+  const rec = set.stretch === true ? stretchStep(before, topic, right) : step(before, topic, right, slip, set.shows);
+  return { ...l, skills: { ...l.skills, [topic]: rec } };
 }
 
 /** A step-up attempt: the step-up record moved by `step`'s own rule; the usual fields as they were (zero when there were none). */
@@ -261,42 +389,43 @@ function stretchStep(before: SkillRecord | undefined, topic: string, right: bool
  */
 export function recordWriting(id: string, lens: string, sentences: number, faulty: number): SkillRecord | null {
   if (!lens || !(sentences > 0)) return null;
-  const l = getLearner(id);
-  const rec = step(l.writing[lens], lens, faulty / sentences < WRITING_CLEAN_BELOW);
-  l.writing[lens] = rec;
+  const l = withWriting(getLearner(id), lens, sentences, faulty);
   saveLearner(l);
-  return rec;
+  return l.writing[lens];
 }
 
-function step(before: SkillRecord | undefined, topic: string, right: boolean, slip?: string): SkillRecord {
+/** The learner with one reading through `lens` applied as an attempt; nothing is saved. A reading with no lens or no sentences changes nothing. */
+export function withWriting(l: Learner, lens: string, sentences: number, faulty: number): Learner {
+  if (!lens || !(sentences > 0)) return l;
+  return { ...l, writing: { ...l.writing, [lens]: step(l.writing[lens], lens, faulty / sentences < WRITING_CLEAN_BELOW) } };
+}
+
+function step(before: SkillRecord | undefined, topic: string, right: boolean, slip?: string, shows?: readonly string[]): SkillRecord {
   const prev: SkillRecord = before ?? { topic, seen: 0, right: 0, estimate: 0, secure: false, lastSeen: 0, slips: [] };
   const estimate = Math.min(1, Math.max(0, prev.estimate + RATE * ((right ? 1 : 0) - prev.estimate)));
   const seen = prev.seen + 1;
-  const slips = slip ? [...prev.slips.filter((s) => s !== slip), slip] : prev.slips;
+  // a slip is set down when made and rubbed out when it stops (rules/slips); only a usual attempt on a school item moves a count
+  const { slips, held } = stepSlips({ slips: prev.slips, held: prev.held }, { right, slip, shows });
   return {
     topic, seen, right: prev.right + (right ? 1 : 0), estimate,
     // latched: once secure, always secure
     secure: prev.secure || (estimate >= SECURE_AT && seen >= SECURE_SEEN),
-    lastSeen: Date.now(), slips,
+    lastSeen: Date.now(), slips, ...(held ? { held } : {}),
     // a usual attempt carries the step-up record over untouched (Family W8)
     ...(prev.stretch ? { stretch: prev.stretch } : {}),
   };
 }
 
-export function addMemory(id: string, line: string): void {
-  const t = (line ?? "").trim();
-  if (!t) return;
-  const l = getLearner(id);
-  l.memory = [...l.memory, t].slice(-MEMORY_CAP);
-  saveLearner(l);
-}
-
 /** One thing that happened, appended. Newest last; the oldest fall off the end, except a lesson's watched line (capped). */
 export function addHistory(id: string, e: HistoryEntry): void {
   if (!e || !e.label?.trim()) return;
-  const l = getLearner(id);
-  l.history = capped([...l.history, { ...e, label: e.label.trim(), detail: (e.detail ?? "").trim() }]);
-  saveLearner(l);
+  saveLearner(withHistory(getLearner(id), e));
+}
+
+/** The learner with one history line appended; nothing is saved. A line with no label changes nothing. */
+export function withHistory(l: Learner, e: HistoryEntry): Learner {
+  if (!e || !e.label?.trim()) return l;
+  return { ...l, history: capped([...l.history, { ...e, label: e.label.trim(), detail: (e.detail ?? "").trim() }]) };
 }
 
 /**
@@ -306,12 +435,56 @@ export function addHistory(id: string, e: HistoryEntry): void {
 export function addDigest(id: string, e: DigestEntry): void {
   const [clean] = cleanDigest([e]);
   if (!clean) return;
-  const l = getLearner(id);
-  l.digest = [...l.digest, clean].slice(-DIGEST_CAP);
+  saveLearner(withDigest(getLearner(id), e));
+}
+
+/** The learner with one digest entry appended, cleaned and capped; nothing is saved. An entry it cannot trust changes nothing. */
+export function withDigest(l: Learner, e: DigestEntry): Learner {
+  const [clean] = cleanDigest([e]);
+  if (!clean) return l;
+  return { ...l, digest: [...l.digest, clean].slice(-DIGEST_CAP) };
+}
+
+/** The local day an instant falls in (rules/week reads evenings the same way, so a DST change never splits one). */
+const localDay = (at: number) => { const d = new Date(at); return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; };
+
+/**
+ * Hints counted onto the homework sheet they were asked on (MB-B14): the learner's latest homework entry of the same local
+ * day is restated in place - `hints` more hints, `second` more problems that needed a second - in one save, cleaned by
+ * the digest's whitelist. One entry per sheet, never one per hint (DIGEST_CAP would push a busy week's start out). False,
+ * and nothing written, when there is nothing to add or no sheet was read that day: a hint on a page read on an earlier
+ * day is not on the Sunday page. Throws when the file cannot be written.
+ */
+export function addHints(id: string, hints: number, second: number, now = Date.now()): boolean {
+  if (!(hints > 0) && !(second > 0)) return false;
+  const l = readLearner(id), day = localDay(now);
+  const i = l.digest.findLastIndex((d) => d.kind === "homework" && localDay(d.at) === day), d = l.digest[i];
+  if (d?.kind !== "homework") return false;
+  const [clean] = cleanDigest([{ ...d, hints: d.hints + Math.max(0, hints), second: d.second + Math.max(0, second) }]);
+  if (!clean) return false;
+  l.digest = l.digest.map((x, j) => (j === i ? clean : x));
   saveLearner(l);
+  return true;
 }
 
 export function secureTopics(id: string): string[] {
   const l = getLearner(id);
   return Object.values(l.skills).filter((r) => r.secure).map((r) => r.topic);
+}
+
+/**
+ * A paper typed on the phone, kept (v2 M5b): the raw rows go through cleanPaper (the one validation) and what it keeps is
+ * stored with the date, and the week's digest is told in the same save (MB-B14): the questions kept, never a mark or a
+ * score. Null, and nothing written, when no row survives. Throws when the file cannot be written.
+ */
+export function addPaper(id: string, raw: unknown, now = Date.now()): StoredPaper | null {
+  const c = cleanPaper(raw);
+  if (!c.items.length && !c.unmapped.length) return null;
+  const paper: StoredPaper = { at: now, items: c.items, unmapped: c.unmapped, ...(c.dropped.length > 0 ? { leftOut: c.dropped.length } : {}) };
+  const l = getLearner(id);
+  l.papers = [...(l.papers ?? []), paper].slice(-PAPERS_CAP);
+  const [entry] = cleanDigest([{ at: now, kind: "paper", questions: c.items.length + c.unmapped.length }]);
+  if (entry) l.digest = [...l.digest, entry].slice(-DIGEST_CAP);
+  saveLearner(l);
+  return paper;
 }

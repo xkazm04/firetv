@@ -3,8 +3,8 @@
 **Read from the code on 2026-09-29** (branch `perfect/2026-09-29-calculus` at `02da1c2`; the tests table also
 covers `a7ef54e`). A learner in Math Buddy is
 on one Math course, a **path**: the school path, **School maths** (four fractions units since Family W7 batch 1, linear
-equations, the decimals and percent strand since W7 batch 2, and ratio and rates and geometry and data since W7
-batch 3: fifteen topics, with school-year bands), or Calculus 1 (a
+equations, the decimals and percent strand since W7 batch 2, ratio and rates and geometry and data since W7
+batch 3, and Pythagoras' theorem and the probability of an event since v2 M2b: seventeen topics, with school-year bands), or Calculus 1 (a
 university first course, with no school year). This page says what a path is, why Calculus is one, how a Calculus
 item is decided in code, how the answer is withheld, and what it takes to add another path. Every number on it was
 measured from the code or a test run named beside it. To recheck a line, open the file it cites.
@@ -28,28 +28,35 @@ The Calculus 1 course itself (its source, its 22 topics, the reader baseline and
 
 ## 1. What a path is
 
-`MathPath` is `"school" | "calc1"`. `PATHS` holds one `PathInfo` per path: an id, a name, a one-sentence blurb,
-`school` (true when its topics carry a school year) and its topics, in order. Each `PathTopic` has an id, a name, a
-strand, a blurb, its prerequisites (earlier topics of the same path) and, on the school path only, a lesson id and a
-`year` per school system.
+`MathPath` is `"school" | "calc1" | "calc2"`. `PATHS` holds one `PathInfo` per path: an id, a name, a one-sentence blurb,
+`school` (true when its topics carry a school year), `judge` and its topics, in order. `judge` (`PathJudge`, v2 M3b-1)
+says how the path's items are judged: `'school'` (a unit with a code generator is a school item, any other topic a
+linear one) or `'calc'` (every topic is a Calculus item on its own shapes). Each `PathTopic` has an id, a name, a
+strand, a blurb, its prerequisites (earlier topics of the same path), on the school path only a lesson id and a `year`
+per school system, and on a path judged `'calc'` only its practice `shapes` (the spine's own list) and, where the spine
+names one, a structural `requires` (MB-B30): `calc1-chain` requires `'composition'`, so a set on it keeps only a spec
+whose function has a chain factor to show (`rules/calc` `meetsRequirement`, read off the same composition sites as the
+forgot-chain check; sin(x) and (x + 1)^3 are not compositions there). A spec that fails it is dropped like a malformed
+one, the second round asks for what is missing, and a set still short ships what it kept, as any short set does.
 
-| path | name | topics | `school` | built from |
-|---|---|---|---|---|
-| `school` | School maths | 15 in five strands, six bars (Fractions, Equations, Decimals and percent, Ratio and rates, Geometry and data, Equations) | true | `SYLLABUS`: Equivalent fractions, A fraction of an amount (W7), Add and subtract fractions (W5b), Multiply and divide fractions (W7), One-step equations, Add, subtract and multiply decimals, Fractions, decimals and percent, A percent of an amount, Percent increase and decrease (W7 batch 2), Ratio and sharing, Unit rates and direct proportion, Area of rectangles, triangles and composite shapes, Mean and range (W7 batch 3), then two-step equations and equations with brackets and x on both sides, with their US/UK/CZ/DE years |
-| `calc1` | Calculus 1 | 22 in six strands | false | `CALC1_SPINE`; no topic has a year |
+| path | name | topics | `school` | `judge` | built from |
+|---|---|---|---|---|---|
+| `school` | School maths | 17 in five strands, seven bars (Fractions, Equations, Decimals and percent, Ratio and rates, Geometry and data, Equations, Geometry and data) | true | `'school'` | `SYLLABUS`: Equivalent fractions, A fraction of an amount (W7), Add and subtract fractions (W5b), Multiply and divide fractions (W7), One-step equations, Add, subtract and multiply decimals, Fractions, decimals and percent, A percent of an amount, Percent increase and decrease (W7 batch 2), Ratio and sharing, Unit rates and direct proportion, Area of rectangles, triangles and composite shapes, Mean and range (W7 batch 3), then two-step equations and equations with brackets and x on both sides, then Pythagoras' theorem and Probability of an event (v2 M2b, section 2f), with their US/UK/CZ/DE years |
+| `calc1` | Calculus 1 | 22 in six strands | false | `'calc'` | `CALC1_SPINE`; no topic has a year |
+| `calc2` | Calculus 2 | 7 in two strands (v2 M3b-2: by parts, trigonometric integrals, trigonometric substitution, partial fractions, choosing a technique; v2 M3b-3b: `calc2-approx`, approximate integration, Stewart 9e 7.7, OpenStax Volume 2 3.6; v2 M3b-3c: `calc2-sequences`, sequences, Stewart 9e 11.1, OpenStax Volume 2 5.1) | false | `'calc'` | `CALC2_SPINE`; no topic has a year, and `calc2-approx` carries the first Calculus 2 shape, `approx-integral`, and `calc2-sequences` the second, `sequence-limit` (both in `rules/calc2.ts`), while the other five use the two integral shapes |
 
 Topic ids are unique across both paths (`tools/maths-paths-test.cjs` test 1: 37 ids, none in two paths), so
 `topicIn(id)` finds a topic without knowing the path, and `pathOfTopic(id)` names the path it is on.
 
-**Where a learner's path lives.** `Profile.mathPath` in `store.ts`, optional. `pathOf(profile)` reads it: only the
-string `"calc1"` is Calculus, and anything else, including nothing, is the school path, which is the default.
-`pathChecked` drops any other value when `session.json` loads and when a `profile.draft` arrives, so a junk path
+**Where a learner's path lives.** `Profile.mathPath` in `store.ts`, optional. `pathOf(profile)` reads it: a key of
+`PATHS` (`isPath`, never an inherited one such as `toString`) is that path, and anything else, including nothing, is
+the school path, which is the default. `pathChecked` drops any value that is not a key of `PATHS` when `session.json` loads and when a `profile.draft` arrives, so a junk path
 never reaches a screen (`tools/maths-course-test.cjs` test 1). `learnerPath(session)` is the path of the learner at
 the desk, or the school path when no one is seated.
 
-**How the D-pad chooses it.** The profile screen has a **Maths course** row (`profileRows`, `COURSES = ["school",
-"calc1"]`) while Maths is among the draft's interests. Its two cells are the paths' names, School maths and
-Calculus 1. Select posts `profile.draft {mathPath}`, and Save keeps it. Menu on a learner copies `mathPath` into the
+**How the D-pad chooses it.** The profile screen has a **Maths course** row (`profileRows`, `COURSES`: the keys of
+`PATHS` in their declared order, today `school`, `calc1`, then `calc2`) while Maths is among the draft's interests. Its three cells are the paths' names, School maths,
+Calculus 1 and Calculus 2. Select posts `profile.draft {mathPath}`, and Save keeps it. Menu on a learner copies `mathPath` into the
 draft with the other fields. Turning Maths off hides the row but leaves the draft's `mathPath` as it was.
 
 **What "first-class" means here.** No screen or pipeline reads a global topic list for Calculus. Each one asks
@@ -120,7 +127,10 @@ linear equations, because it is met first.
   profile has none), so `0,75` is three quarters in cz and de and unsure in us and uk. Unsure asks and records
   nothing. The slip is only the one code detects from the spec's operands; the unit's closed list is
   `SCHOOL_UNIT_SLIPS` (`tops-and-bottoms`, `top-not-scaled`, `tops-one-bottom`, `wrong-direction`), served by
-  `slipsFor` with `SCHOOL_SLIPS`' own words. A school item has no pen position.
+  `slipsFor` with `SCHOOL_SLIPS`' own words. A school item has no pen position. A school attempt carries the slips its
+  spec shows (`slipShows`, pinned to `check`); the slip record is no longer append-only: three usual right answers on
+  items that show a live slip rub it out (`rules/slips.ts`, an optional `held` count per live slip in `learners.json`),
+  and Six more on a school unit is drawn so at least three of six show the live slips (`moreLine` names the newest).
 - **Hints.** `hint.ts` also reads the task with `specFromQuestion` from `rules/school.ts` ('3/4 + 1/6', 'Work out
   3/4 - 1/6', 'Add 3/4 and 1/6', 'Subtract 1/6 from 3/4', a practice item's printed question; null for anything it
   cannot read with one meaning: whole numbers, decimals, mixed numbers, three terms, words, an x). When it reads, both
@@ -274,6 +284,45 @@ record with nothing seen, which every screen reads as not started. `cleanSkills`
 `right` at most `seen`, the estimate in 0..1, `secure` only when `true`) and drops junk; an older learners.json loads
 unchanged. The history line and the recap are the same as for a usual set ("5 of 6 right", never a point). The TV
 draws a latched step-up record as a second ink line (`docs/DESIGN-MATH-BUDDY.md`), never as a number.
+
+### 2f. Beyond the equations: Pythagoras' theorem and the probability of an event (v2 M2b)
+
+Two units join the school path after the equations with brackets, both in the "Geometry and data" strand (which now
+appears twice, as Equations does): **Pythagoras' theorem** (`pythagoras`) and **Probability of an event** (`probability`).
+Each is its own shape, set and marked by code with no model call, and passed a kill test before it joined
+(`tools/gcse-units-test.cjs`: 500 seeds a tier, tiers 1 and 2, systems uk us cz de, counting specs not well formed,
+specs not fair, worked answers `check` does not mark right, and per slip the seeds where it is reachable and detected;
+all zero and all detected, section j of the v2 plan has the table). The units are mapped, in `lib/library/gcse.ts`, to the
+Foundation-tier statements G20 (the Pythagoras part only) and P3, P4, P7; that map is unverified and no screen says more
+than "mapped to" (owner decision X5).
+
+| unit (id) | shape (`rules/school.ts`) | generator | tier 1 | tier 2 | closed slips (`SCHOOL_UNIT_SLIPS`) |
+|---|---|---|---|---|---|
+| Pythagoras' theorem (`pythagoras`) | `pythagoras` "longest 6 8" (the shorter sides given) or "shorter 10 6" (the longest and a shorter side given), `unit` mm, cm or m; all three sides whole, at most 100; the truth is a bigint integer square root | `genPythagoras` | the longest side from the two shorter, the longest at most 50 | a shorter side from the longest and the other shorter, the longest at most 100 | `pyth-sides-added`, `pyth-no-root`, `pyth-squares-added` (a shorter side only) |
+| Probability of an event (`probability`) | `probability` "bag red 3, blue 5, green 2 ask red" (also "ask not red", "ask red or blue"; two to four colours from nine, at most 20 counters) or "complement red 0.35" / "complement red 35%"; no unit; 0 and 1 are not well formed | `genProbability` | a named colour of a bag of two to four colours | by the seed: NOT a colour, either of two colours, or the complement of a stated decimal or percent | `prob-count-alone`, `prob-part-over-rest`, `prob-one-over-colours`, `prob-own` (a NOT question or a stated probability) |
+
+- **Verdicts.** Pythagoras: the number alone or with its own length unit is right in any equal form; another unit, a
+  percent, a ratio and words are unsure. Probability: any equal value is right, a fraction (unsimplified too), a decimal in
+  the system's mark, a percent; a ratio (5:10), words ("3 out of 10") and a unit are unsure; a value outside 0 to 1 is
+  wrong. A slip is used only where its value differs from the answer and from every other slip (three equal colours: one
+  over the colours IS the answer; a bag of 3 red and 1 blue: the count and the part over the rest are both 3).
+- **A slip dropped.** "Squares added instead of subtracted" for a shorter side, with the root taken, is irrational on every
+  item and has no exact value; only the unrooted value (c squared plus b squared) is listed.
+- **Leak check.** The side or probability in any form; the squares, their sum or difference, the counts and the total are
+  steps and pass; "1 less the event's probability" and "the two events added" are the method and pass, their results are
+  refused.
+- **Task reader.** "A right-angled triangle has shorter sides 6 cm and 8 cm. Find the longest side." (also "longest side 10
+  cm and a shorter side 6 cm ... Find the other shorter side"), "A bag has 3 red, 5 blue and 2 green counters. Find the
+  probability that one taken at random is red." (also "is not red", "is red or blue"), "The probability that a spinner lands
+  on red is 0.35. What is the probability it does not land on red?".
+- **On the TV.** The sentences are longer than the earlier rows (about 80 to 110 characters): the sheet fits them down to
+  the 28 px floor and wraps a row that is still too wide (the owner's captures are owed). The typesetter keeps a hyphen
+  between two words ("right-angled") as a hyphen.
+- **Years** (from memory, a teacher checks): Pythagoras US 8, UK 9, CZ 8, DE 8, none held later than usual; probability US
+  8 (usually 7), UK 9 (usually 8), CZ 9, DE 8 (usually 7): held later in three systems to keep the list from going down.
+  A UK 13-year-old's SCHOOL tick now stands after all 17; a 12-year-old's after 14 (US, UK, CZ) or 15 (DE).
+- **The ruler.** Seventeen topics make the strip seven bars (370, 189, 369, 189, 185, 189, 185 px): three bars are held
+  at 189 px by their labels, every label whole in at most two lines ("Decimals and / percent" is two lines now).
 
 ## 3. The spec model
 
@@ -448,7 +497,7 @@ because it is the fallback. No test pins this case.
 ## 7. The TV
 
 - **Profile.** The Maths course row appears after "Interested in" while Maths is on. Its cells are **School
-  maths** and **Calculus 1**, and the chosen cell is `pathOf(draft)`, so a new learner has School maths
+  maths**, **Calculus 1** and **Calculus 2**, and the chosen cell is `pathOf(draft)`, so a new learner has School maths
   chosen. The one caption under the rows is the focused cell's label and its path's blurb, for example "Calculus 1"
   over "A university first course in calculus, from functions and limits through derivatives to integrals."
 - **Topics.** The stops are the learner's path. "Teach me something" opens Topics at the **frontier**
@@ -500,14 +549,18 @@ provider registry, and data directories are disposable, under the OS temp dir.
 
 | file | what it pins |
 |---|---|
-| `tools/maths-paths-test.cjs` | 22 + 15 topics with unique ids; the school path is `SYLLABUS`; each path's prerequisites form a DAG; every Calculus topic has one of the nine shapes (the list is repeated in the test, the contract with `calc.ts`); the spine carries no examples or answers; `pathOf`, `topicIn`, `nextOn`, `expectedOn` (null on a course), `learnerPath`; client-safe imports |
+| `tools/maths-paths-test.cjs` | 22 + 15 topics with unique ids; the school path is `SYLLABUS`; each path's prerequisites form a DAG; every Calculus topic has one of the nine shapes (the list is repeated in the test, the contract with `calc.ts`); the spine carries no examples or answers; `pathOf`, `topicIn`, `nextOn`, `expectedOn` (null on a course), `learnerPath`; client-safe imports; the judge (v2 M3b-1, tests 13-19): every path has one, and `kindOfTopic`, the slips, the set's shapes, the hint's stance, voice and lesson skip, the course `explain` names, the store's path check and `COURSES` agree with the record; no quoted `'calc1'` outside the three library files |
 | `tools/calc-expr-test.cjs` | the engine's reading rules; formula strings copied from the corpus (at least 80, asserted); at least 40 edge cases; the numerics' stated tolerances; time budgets |
 | `tools/calc-rules-test.cjs` | `checkAnswer` on every shape; the named tolerances; `wellFormed` and its reasons; `question()` typesets; `leaksCalc`; the slip vocabulary; a sweep of all 22 topics; no answer field; never throws (3,000 mutations) |
 | `tools/calc-hint-test.cjs` | `specFromQuestion` reads back every printed question, plus a table of page phrasings (some must stay null); the fixed sentences; hint re-ask and fallback; the stance by path; no lesson pick on calc1 |
 | `tools/calc-practice-test.cjs` | specs in, six checked items out, easy to hard; no truth on any item or view; the schema and prompt ask only for specs; a second round; all-bad rounds fail and keep the old set |
 | `tools/calc-marking-test.cjs` | calc1 slip lists; marking by `checkAnswer` on each shape; the model's verdict is never read or used as a fallback; explanation settling and leak replacement; the evening note's topic name |
+| `tools/calc-word-test.cjs` | v2 M3a: the sweep of the three word templates (500 seeds each; specs not well formed, problems not fair, worked answers not right, printed numbers not drawn - all 0, the table printed); controls; a right working on a part rings nothing; the corpus table of what reads into a spec and into parts |
 | `tools/calc-course-test.cjs` | the whole course as one flow through the real routes (practice, mark, explain, hint). For each of the 22 topics: a code-printed set, a page marked by `checkAnswer` while the stub volunteers a false "right", an unsure item settled by explanation, a hint re-asked then withheld, and four evenings latching the topic secure, until Tonight says every topic is secure. After every step the TV, phone and guest views carry no answer, truth or `zero` key. The school path runs beside it, unchanged |
-| `tools/maths-course-test.cjs` | `mathPath` kept and junk dropped; `topic.open` focus; Topics walks the path; the frontier; Menu-edit; the Maths course row; set names on the landing and the phone |
+| `tools/maths-course-test.cjs` | `mathPath` kept and junk dropped; `topic.open` focus; Topics walks the path; the frontier; Menu-edit; the Maths course row (three cells since v2 M3b-2); a calc2 learner saved and surviving a load; set names on the landing and the phone |
+| `tools/calc2-path-test.cjs` | v2 M3b-2, the Calculus 2 path: the five-topic spine (Stewart 9e 7.1-7.5, OpenStax Volume 2 3.1-3.5, the two integral shapes, prerequisites on earlier calc2 topics only); the record (judged `'calc'`, no school year, no lessons); 20 hand-worked fixtures that are well formed and that `checkAnswer` marks right, wrong, and as the named `lost-constant` and `sign` slips; a stubbed set judged Calculus whose prompt asks only for the topic's shapes; Calculus 1's set prompt and stance pinned whole and Calculus 2 naming Calculus II and its methods; the quoted `'calc2'` only in `paths.ts` and `calculus2.spine.ts` (six topics since v2 M3b-3b: the `calc2-approx` fixtures, T_5 and S_4 on 1/x over [1, 2], and the methods phrase naming the three rules; seven since v2 M3b-3c: the `calc2-sequences` fixtures, n/(n+1) right 1 and 2^n/n^3 right infinity, and the methods phrase ending with limits of sequences) |
+| `tools/calc2-sequence-test.cjs` | v2 M3b-3c, the limit of a sequence: the base (Calculus 1 reads none of the four printed sequence questions as a Calculus 1 shape; `limitInf` gives the probe values of seven fixtures and `dne` for cos(pi x), sin(pi x)+1 and (-1)^x); `sequence-limit` by Stewart 11.1's hand values (n/(n+1) at 1, ln(n)/n at 0, (1+1/n)^n at e, (n^2+1)/(2n^2) at 1/2, 2^n/n^3 at infinity): right, wrong, sign, unsure, a parity row against Calculus 1's `limit` at `inf` over 7 fixtures and 30 answers, refused (the three `dne` specs, a term not finite at a whole n, a constant, +C, a result key), the printers in n (`toPlain`, `toTex(e, 'n')`; `toTex(e)` unchanged), the printed question, the reader (every fixture, four page texts, sin and tan kept, an n inside a letter run left), the leak rule and its parity with Calculus 1, no chain, the dispatch; a stubbed calc2-sequences set; `f` kept on the screen |
+| `tools/calc2-approx-test.cjs` | v2 M3b-3b, approximate integration: the frozen set requests (`tools/calc-sets-frozen.json`, 27 topics, written at the base) equal byte for byte; `approx-integral` by Stewart 7.7's hand values (T_5 0.6956349, M_5 0.6919079, S_4 0.6932540 on 1/x over [1, 2]; T_4 of x^2 over [0, 2] 2.75): right, wrong (the exact integral, another rule, off in the fourth place), absolute (22 on [0, 4]), sign, unsure, degenerate, refused, the printed question, the reader (six page phrasings), the leak rule, no chain for a calc2 spec, the dispatch; a stubbed calc2-approx set; `pieces` and `rule` kept on the screen |
 | `tools/maths-ruler-test.cjs` | the ruler model's formulas at the school path's fifteen topics (six strands) and its panning Topics ruler; the Calculus panning ruler; the strip, every label whole in at most two lines |
 | `tools/maths-tv-test.cjs` | topic states by path (a record off the path is ignored), `topicName`, the Tonight title by path; also the captions' prose, the paper's fit and the job lines |
 | `tools/maths-calculus-test.cjs` | the reader baseline over the corpus, a ratchet on declared statuses; test 7: every generated fractions question renders with two stacked fractions; test 7b: the W7 generators' questions render, fractions and the gap stacked, every number and unit kept; test 7c: the W7 batch-2 generators' questions render, every number, point, % and unit kept; test 7d: the W7 batch-3 generators' questions render or fit a row at 34 px or more (estimated), every number, ratio and unit kept |
@@ -541,23 +594,26 @@ stubbed replies.
 
 ## 9. How to add a path
 
-Take Calculus 2 as the example. Today most of the Calculus wiring is keyed to the id `calc1`, so a second course
-path is partly data and partly generalising those keys.
+Calculus 2 is the example, and it now exists (v2 M3b-2: integration techniques, `calculus2.spine.ts`). Since v2 M3b-1 the Calculus wiring asks the path's record (`judge`), not the id
+`calc1`, so a second course path on the nine shapes is data.
 
 1. **The spine.** Add `desk/src/lib/library/<course>.spine.ts` as plain data with no import. Give each topic an
    id unique across every path, a name, a strand, a one-sentence blurb, prerequisites that point only at earlier
    topics, and at least one `CalcShape`.
-2. **`paths.ts`.** Add the id to `MathPath` and a `PATHS` entry with its name, blurb and `school: false`.
+2. **`paths.ts`.** Add the id to `MathPath` and a `PATHS` entry with its name, blurb, `school: false` and
+   `judge: "calc"`, its `calcWords` (the course name the set's prompt uses, the name and the methods the hint's stance uses; v2 M3b-2 ruling 6) and its topics each carrying the spine's `shapes`.
    `school: true` would make `expectedOn` call `expectedIndex`, which counts `SYLLABUS` topics. A second
    school-year path is a design change.
-3. **The profile.** Allow the id in `pathChecked` in `store.ts`, which accepts only `school` and `calc1` and drops
-   anything else. Add it to `COURSES` in `profileRows.ts`, which gives the Maths course row a third cell. `pathOf`
-   also knows only `calc1`.
-4. **Generalise what reads `calc1` by name:**
-   - `items.ts` `makeItems` (`pathOfTopic(...) === "calc1"`) and `shapesOf` (reads `CALC1_SPINE`);
-   - `rules/maths.ts` `isCalcTopic` and `CALC_AS_SLIPS` (read `CALC1_SPINE`);
-   - `hint.ts` `stanceOf`, and the lesson skip in `api/hint/route.ts`;
-   - `explain.ts` (names `PATHS.calc1`).
+3. **The profile.** Nothing to add: `pathChecked` in `store.ts` and `pathOf` accept any key of `PATHS`, and
+   `COURSES` in `profileRows.ts` is the keys of `PATHS` in order, so the Maths course row gets a third cell by
+   itself. That cell is a screen change: capture it (calc2's captures are owed, v2 M3b-2 ruling 5).
+4. **The judge (done in v2 M3b-1; a new path sets its `judge`).** Every site that decided Calculus by the string
+   `calc1` asks the record: `kindOfTopic` (`rules/kinds.ts`, which `makeItems` follows), `shapesOf` (`items.ts`,
+   through `shapesOfTopic`), `isCalcTopic` and `CALC_AS_SLIPS` (`rules/maths.ts`, over `calcTopics()`, every path
+   judged `'calc'`), the hint's stance and voice (`hint.ts`, `judgeOf`), the lesson skip (`api/hint/route.ts`) and
+   the course `explain.ts` names (the topic's own path). The quoted `'calc1'` appears in `desk/src` only in
+   `paths.ts`, `calculus1.ts` and `calculus1.spine.ts`; `tools/maths-paths-test.cjs` test 19 sweeps for it, and
+   tests 13-18 check every site against the record for every topic of every path.
 
    Marking and explaining branch on `item.spec`, so they need no change.
 5. **The shapes.** If every question fits the nine shapes, the rest is data. A new shape touches every one of
@@ -575,7 +631,8 @@ path is partly data and partly generalising those keys.
 7. **The test tables.** Update the counts in `maths-paths-test.cjs` (22, 3, 25) and the tables in
    `calc-rules-test.cjs` (checks, well-formed specs, the sweep). `calc-hint-test.cjs` follows them. The fixtures in
    `calc-practice-test.cjs` and `calc-marking-test.cjs` need one per shape (marking test 2 asserts it). Update
-   `maths-course-test.cjs`, and `maths-calculus-live.cjs` `--path`, which accepts only `calc1`.
+   `maths-course-test.cjs`. `maths-calculus-live.cjs` `--path` takes every path judged `'calc'` (an unknown path is refused first); calc2 has no example corpus, so it walks the rulers only.
+   The pins that name a path (the key list, the length, the junk list of `mathPath` values) are edited by hand: `maths-paths-test.cjs` tests 1, 12, 14 and 18, `maths-course-test.cjs` test 6 (M3b-2's edits are listed in the plan's log).
 8. **The docs.** This page, [DESIGN-MATH-BUDDY.md](DESIGN-MATH-BUDDY.md), and
    [STUDY-DESK-SCREENS.md](STUDY-DESK-SCREENS.md).
 
@@ -587,15 +644,84 @@ path is partly data and partly generalising those keys.
 - it needs a second variable. The engine reads x only, so a sequence in n, or a series, is not readable;
 - it needs a new tolerance rule, or an answer stored anywhere.
 
-Calculus 2's integrals, limits in x and derivatives fit the existing shapes. Its sequences and series do not.
+Calculus 2's integration techniques fit the existing shapes (built). Its sequences and series do not: the M3b-3 card
+(section 10) keeps n out of the engine by printing it from families and from a function in x.
 Linear algebra needs a different engine altogether.
 
 ## 10. Honest limits
 
-- **Word problems and multi-part questions are not practice items.** A spec is one shape with one answer. Related
-  rates, optimisation in words, "the absolute maximum and minimum", and "find c so that f is continuous" have no
-  spec, and `specFromQuestion` returns null for them. Of the corpus's 31 printed questions, 13 read into a spec
-  ([CALCULUS-1-SYLLABUS.md](CALCULUS-1-SYLLABUS.md) has the table).
+- **Word problems and multi-part questions are practice items only where code draws them** (v2 M3a). A set on
+  calc1-related-rates, calc1-optimisation or calc1-extrema ends with one question in parts drawn by code from a seed
+  (`lib/rules/calc-word.ts`: `sphere-rates`, `rectangle-perimeter`, `cubic-max-min`). Each part is an ordinary item:
+  one spec of the nine shapes, one answer, judged by `checkAnswer`. The model still writes only single specs. Three
+  templates are all there are, so no other topic and no other situation gets a word problem. A part's answer is a
+  number: written with its unit it does not read, and a rounded decimal is 'unsure', as on any item. On a page,
+  `specFromQuestion` reads no word problem, and `partsFromQuestion` reads one phrasing, the maximum and the minimum
+  of f on [a, b], only when both are inside the interval. "Find c so that f is continuous" still has no spec. Of the
+  corpus's 31 printed questions, 13 read into a spec and none into parts: c13-q1's maximum is at an end
+  ([CALCULUS-1-SYLLABUS.md](CALCULUS-1-SYLLABUS.md) has the table, printed by `tools/calc-word-test.cjs`).
+- **Calculus 2 is integration techniques, approximate integration and sequences, and has no lessons** (v2 M3b-2, M3b-3b, M3b-3c). It has seven topics (by parts, trigonometric
+  integrals, trigonometric substitution, partial fractions, choosing a technique; Stewart 9e 7.1-7.5, OpenStax Volume 2
+  3.1-3.5; approximate integration, 7.7 and 3.6, on `approx-integral`; and sequences, 11.1 and 5.1, on `sequence-limit`), the first five on `antiderivative` and `definite-integral`; its prerequisites point only at earlier Calculus 2 topics, so
+  Calculus 1 is not a prerequisite the desk checks. It has no lessons (ruling 4), no example corpus and no word templates.
+  Listed out: volumes, arc length and surface area (6.2, 6.3, 8.1, 8.2: applications of integration, not the techniques
+  the owner picked). Moved to M3b-3 as candidate shapes: improper integrals (7.8; a value or a 'diverges' verdict) and
+  approximate integration (7.7; a rule applied with n steps; built in M3b-3b). The M3b-3 card names their truth,
+  comparison, leak rule and prompt. Follow-up: a technique slip
+  (parts, substitution, partial fractions) needs slips keyed by topic; `CALC_AS_SLIPS` tags a slip by shape, so a new
+  antiderivative slip would join every Calculus 1 antiderivative topic's list, a Calculus 1 change. Calculus 2 topics use
+  the existing antiderivative and definite-integral slips (ruling 10).
+  Sources (ruling 14, checked against openstax.org on 2026-10-09): OpenStax Volume 2 3.1-3.4 match calc2-parts,
+  calc2-trig-integrals, calc2-trig-sub and calc2-partial-fractions. OpenStax 3.5 is "Other Strategies for Integration", on
+  tables of integrals and computer algebra (Stewart 7.6's matter), so it only partly matches calc2-strategy, and Stewart 9e
+  7.5 is that topic's source of record. The spine still lists 3.5 beside 7.5 (its pins are unchanged).
+- **Series are not built yet, and some sequences and series cannot be** (v2 M3b-3 step A, 2026-10-09; sequence limits were built in M3b-3c; the card is in
+  the plan's M3b section, rows 39-46). The expression engine reads x only: `n` and `!` do not read (`calc-expr.ts` lines
+  139 and 148), so `(-1)^n`, `n!` and `r^n` have no reading. The card keeps it that way. A sequence's limit is a
+  function in x printed with n, judged by `limitInf` with a second run along x·√2. A series' sum, a convergence verdict
+  and an improper integral come from families whose parameters are whole numbers or fractions, printed from a template
+  and decided by a textbook rule (the geometric ratio, the p-series exponent, the degree gap, the ratio and root tests;
+  Stewart 9e 11.2-11.6, OpenStax Volume 2 5.2-5.6). Approximate integration (7.7) is a rule applied with n subintervals
+  to a function in x. Six build slices wait for the App Master's ruling. **Not buildable**, with the reason:
+  - a series or a sequence term written freely in n: the engine cannot read it, and the desk has no rule that decides an
+    arbitrary term's sum or convergence;
+  - a sequence with no real extension, such as (-1)^n/n or n!/n^n: Stewart's theorem that a_n = f(n) shares f's limit
+    needs f defined on the reals;
+  - the sum of a series outside the geometric and telescoping families: partial sums cannot separate a slowly convergent
+    series from a divergent one;
+  - an improper integral of a free integrand: `integrate` returns null on an infinite bound (`calc-expr.ts` line 478), and
+    the partial integrals of 1/x^1.01 (which converges to 100) and 1/x (which diverges) were 4.50 and 4.61 at t = 100, and
+    8.80 and 9.21 at t = 1e4, measured (so ∫_0^∞ x e^(-x) dx and ∫ 1/(1+x^2) over the whole line are out);
+  - power series (Stewart 11.8-11.11): the interval of convergence is a set answer with two endpoint verdicts, a power
+    series is a function with no closed form to sample, and a Taylor polynomial needs higher derivatives that
+    `derivativeAt` does not give.
+  The descope goes to the owner, who picked sequences and series.
+- **Approximate integration has a leak residual and no plot on the TV** (v2 M3b-3b, 2026-10-09). `approx-integral` (the trapezoid, midpoint
+  or Simpson's rule with n = 2 to 10 pieces, `rules/calc2.ts`) is marked to four decimal places: a decimal is right within 5e-5 of the
+  value, absolutely, and any other form (a fraction, a constant) within 1e-6, relative; there is no 'unsure' band. The leak rule reads
+  a line as leaking when it states a number within 5e-5 of the value or its negation, so **a hint that rounds the value to fewer than
+  four places does not leak by this rule** (T_5 is 0.6956349, so "about 0.696" passes). The degenerate rule refuses a spec whose value
+  is within 1e-4 of the exact integral or of another rule's value with the same pieces, so Simpson's rule on a cubic or less, and the
+  trapezoid and midpoint rules on a line, are never set; S_10 of 1/x on [1, 2] is refused and S_4, T_5 and M_5 are kept. A calc2 item
+  draws **no plot on the TV** (`MathsTV.tsx` keeps its own check on Calculus 1's shapes), and its working lines are not ticked
+  (`chainChecks` returns null for a calc2 spec); the TV captures of a `calc2-approx` item are owed to the owner. The page reader
+  (`specFromQuestion`) reads the desk's own question and five other phrasings of it, after Calculus 1's reading, which is unchanged.
+- **A sequence's limit has a reader residual and no plot on the TV** (v2 M3b-3c, 2026-10-09). `sequence-limit` (`rules/calc2.ts`, topic `calc2-sequences`) takes f in x, prints it in n
+  (`Find lim_(n->infinity) a_n, where a_n = n/(n + 1).`), and judges as Calculus 1 judges a limit at infinity (exact 1e-6, a rounded decimal 5e-3,
+  inf, infinity or ∞ with a sign, 'dne' wrong), because the comparison is copied and a parity row holds the two equal. The truth is `limitInf`, so a
+  term whose real extension has no limit (cos(pi n), sin(pi n)+1, (-1)^n) is refused as 'The limit does not exist.', and a term that is not
+  finite at some whole n from 1 to 100 (1/(n-2), ln(n-1)) is refused. The engine's own limits show: sqrt(n+1)-sqrt(n) reads as 'does not exist' by
+  cancellation and 2^(n+1)/3^n as 'not defined' by overflow, so neither is set. **The page reader renames only an n that stands between
+  non-letters**, so `ln(n)`, `sin(n)` and `tan(n)` read as functions; an n inside a letter run (`pin`, `en`) is left as it is and that term does not read
+  (the question is not claimed). A calc2 item draws **no plot on the TV** and its working lines are not ticked; the TV captures of a
+  `calc2-sequences` item are owed to the owner. Not buildable stays as listed above: free terms in n, sequences with no real extension
+  ((-1)^n/n, n!/n^n), no `n` word and no postfix `!` in the engine.
+- **A limit at infinity is read on two lattices** (fixed 2026-10-09, M3b-3h; measured before as whole numbers only). `limitInf`
+  reads f at x = 10^k and again at x = sqrt(2)*10^k, and keeps the first reading only when the two agree (calc-expr.ts, ruling 25).
+  `cos(pi*x)`, `sin(pi*x)+1` and `cos(2*pi*x)` at infinity are refused as 'The limit does not exist.', and a working line that claims
+  1 for them is no longer ticked. The residual: a function aliased on both lattices would still pass; none is known in the grammar.
+  What M3b-3c inherits: a sequence whose whole-number values converge while its real extension does not (cos(2 pi n) = 1) is
+  refused, never marked.
 - **Only the nine shapes.** Inflection points, inverses, equations to solve, implicit differentiation, Riemann sums
   and area functions in t are not shapes.
 - **The reader's quality on real handwriting is unmeasured.** Marking tests stub the vision model. No real photo of

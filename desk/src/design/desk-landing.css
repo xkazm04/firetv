@@ -22,6 +22,9 @@
 }
 .pp *, .pp *::before, .pp *::after { box-sizing: border-box; }
 
+/* words only a screen reader needs (the label the eye takes from the picture); the same shape as linga.css .lo-sr */
+.pp .pp-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
 /* ----- arrival: the mark draws itself, the world opens out of it ----- */
 .pp .pp-intro { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse at 50% 45%, #fbf3e2, #f0e2c6); animation: pp-fade-out .22s 1.24s forwards; }
 .pp .pp-ibox { position: absolute; left: 0; right: 0; top: 250px; text-align: center; animation: pp-ibox-out .34s .7s ease-in forwards; }

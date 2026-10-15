@@ -6,18 +6,22 @@
  * list from here, so the screen that draws `data-focused` and the key that moves it share one list.
  * Types only from the store: the TV never loads the filesystem-backed session modules.
  */
+import { hasWorked } from "@/lib/library/worked";
+import { modeOf } from "@/lib/rules/mode";
+import { turnState } from "@/lib/english/turn";
 import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
-import { rewriteState } from "@/lib/rules/essay";
+import { planSlots, planText, rewriteState, rewriteUnruledLine } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { PATHS, frontierOn, learnerPath, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { lessonStates } from "@/lib/library/watched";
 import { profileRows, locate, flat } from "@/tv/profileRows";
-import { continueCard } from "@/tv/mathsRows";
+import { continueCard, likeUnit, tonightsSheet } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
 import { LANDING_REST, essayWaiting, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
-import { prepareStops } from "@/tv/prepareRows";
+import { pastPathEnd, prepareStops } from "@/tv/prepareRows";
+import { paperStopCount, paperView } from "@/tv/paperRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
 export type Key = "up" | "down" | "left" | "right" | "select" | "back" | "menu" | "play";
@@ -29,17 +33,19 @@ export function keyOf(k: string): Key | null { return KEYBOARD.get(k) ?? null; }
 
 /**
  * What the TV holds for itself, outside the session: the practice wait, the forensic table, a hint on its way, and on
- * Get ready for school the two-cell question after Select on a unit (`prepareAsk`: null while the list is walked, else
- * the lit cell - 0 "The usual", 1 "A step up"; tv/prepareRows PREPARE_CHOICES). Absent is null.
+ * Get ready for school the question after Select on a unit (`prepareAsk`: null while the list is walked, else the lit
+ * cell - -1 "See how first" (a unit with a worked lesson only), 0 "The usual", 1 "A step up"; tv/prepareRows
+ * PREPARE_CHOICES, LESSON_CHOICE). `lessonFrom` says the worked lesson on screen was opened from Get ready for school,
+ * so its Back goes there and not to Topics. Absent is null.
  */
-export interface Local { busy: boolean; table: boolean; hintInFlight: boolean; prepareAsk?: 0 | 1 | null }
+export interface Local { busy: boolean; table: boolean; hintInFlight: boolean; prepareAsk?: -1 | 0 | 1 | null; lessonFrom?: "prepare" | null }
 export const LOCAL: Local = { busy: false, table: false, hintInFlight: false, prepareAsk: null };
 /** A POST the key fires after its events. `onFail` is applied on a non-ok answer or a network error, `onDone` on an ok one. */
 export interface Call { url: string; body: Record<string, unknown>; onFail?: Partial<Local>; onDone?: Partial<Local> }
 export interface Step { events: Event[]; calls: Call[]; local: Partial<Local> }
 
 /** Essay Master draws its own screens (essay/EssayTV.tsx, the Specimen design); the On Air shell steps aside for them. */
-export const ESSAY_SCREENS = ["essaytype", "forensic", "playbook", "xray"] as const satisfies readonly Screen[];
+export const ESSAY_SCREENS = ["essaytype", "essayplan", "forensic", "playbook", "xray", "workroom"] as const satisfies readonly Screen[];
 export function essayOwns(s: Session): boolean { return (ESSAY_SCREENS as readonly Screen[]).includes(s.screen); }
 
 /** Linga draws and drives its own screens (english/LingaTV.tsx); the TV's map stays out of them. */
@@ -48,7 +54,7 @@ export function lingaOwns(s: Session): boolean {
 }
 
 /** Math Buddy's own screens, whatever the subject says: its home and the practice loop, and the calendar of its lessons. */
-export const MATHS_SCREENS = ["tonight", "topics", "prepare", "practice", "sheet", "walk", "calendar"] as const satisfies readonly Screen[];
+export const MATHS_SCREENS = ["tonight", "topics", "prepare", "practice", "sheet", "walk", "calendar", "worked"] as const satisfies readonly Screen[];
 /**
  * Math Buddy draws its screens (maths/MathsTV.tsx, the Lamplight design): its own, and the screens it shares
  * with the other modules while maths is what is on them - a maths page and its hint, the maths units and lesson.
@@ -61,6 +67,23 @@ export function mathsOwns(s: Session): boolean {
   if (s.screen === "units" || s.screen === "lesson") return s.subject === "maths";
   return false;
 }
+
+/**
+ * The recovery from a paper (v2 M5b) is Math Buddy's, drawn by maths/MathsTV.tsx, but it is not one of `MATHS_SCREENS`
+ * (that list is pinned): the TV page asks this beside `mathsOwns`.
+ */
+export function paperOwns(s: Pick<Session, "screen">): boolean { return s.screen === "paper"; }
+
+/** Is the learner at the desk in Adult mode (rules/mode)? */
+export function isAdultHere(s: Pick<Session, "profiles" | "learner" | "englishLearning">): boolean {
+  const p = s.profiles.find((x) => x.id === s.learner?.id);
+  return modeOf(p, s.englishLearning?.preferences ?? undefined) === "adult";
+}
+/** The Workroom's stops: each piece, top to bottom, then the one action. */
+export function workroomStops(s: Pick<Session, "workroom">): (string)[] { return [...(s.workroom?.pieces ?? []).map((p) => p.id), "lenses"]; }
+
+/** The worked lesson's actions, left to right (v2 M1). */
+export const WORKED_STOPS = ["try", "back"] as const;
 
 // ---- the stop lists: one per screen, drawn by the module screens and walked by tvKey ----
 const clampIx = (n: number, f: number) => Math.max(0, Math.min(n - 1, f));
@@ -90,6 +113,20 @@ export function tonightStops(s: Session): TonightStop[] {
 /** Who is at the desk: every profile, then "add a learner". */
 export function learnerStops(s: Session): Array<Profile | "add"> { return [...s.profiles, "add"]; }
 /**
+ * What a switch of learner ends (P4, P4-a): the seated learner's Linga scene, level check and running reading, named.
+ * A finished scene is not named, a paused one and a Take Two in progress are. A running reading is the Sentence reading
+ * for key english and the Essay Master reading for any other key. One line for the switcher, or null when nothing of
+ * those is running or the card is the seated learner's own. `to` is the
+ * focused learner's name; the phone, which has no card, passes null and the line says "someone else".
+ */
+export function switchEndsLine(s: Session, to: Profile | null): string | null {
+  if (!s.learner || to?.id === s.learner.id) return null;
+  const ends = [s.conversation && turnState(s.conversation) !== "finished" ? "the Linga scene" : "", s.check ? "the level check" : "", s.jobs?.analyse?.phase === "running" ? (s.jobs.analyse.key === "english" ? "the Sentence reading" : "the Essay Master reading") : ""].filter(Boolean);
+  if (!ends.length) return null;
+  const list = ends.length > 1 ? ends.slice(0, -1).join(", ") + " and " + ends[ends.length - 1] : ends[0];
+  return `Switching to ${to ? to.name : "someone else"} ends ${list} for ${s.learner.name}.`;
+}
+/**
  * A module's lessons on file; a maths lesson only on its own path (a lesson with no path is the school path's).
  * Calculus 1 has no lesson library, so on that path Math Buddy's list is empty and its screens say so.
  */
@@ -105,9 +142,25 @@ export function unitsFocus(s: Session): number { return Math.max(0, lessonStates
 export const TONIGHT_MENU = "Lessons";
 /** The lenses, straight from the library, top to bottom. */
 export const LENS_STOPS = ESSAY_TYPES;
-/** Essay Master's home: the four lenses, then the last paragraph's card (Right) when a paragraph has been read. */
-export type LensStop = (typeof ESSAY_TYPES)[number] | "last";
-export function lensStops(s: Session): LensStop[] { return s.essay ? [...LENS_STOPS, "last"] : [...LENS_STOPS]; }
+/**
+ * Essay Master's home: the four lenses, then the last paragraph's card (Right) when a paragraph has been read - or, with
+ * nothing read yet, the way to start from the pattern (Down from the last lens): the plan.
+ */
+export type LensStop = (typeof ESSAY_TYPES)[number] | "last" | "plan";
+export function lensStops(s: Session): LensStop[] { return s.essay ? [...LENS_STOPS, "last"] : [...LENS_STOPS, "plan"]; }
+
+/** The plan screen's stops, top to bottom: one per slot, then Read it and Back. Select on a slot asks for the sentence on the phone. */
+export type PlanStop = "slot" | "read" | "back";
+export function planStops(s: Session): PlanStop[] { return [...(s.essayPlan?.slots ?? []).map((): PlanStop => "slot"), "read", "back"]; }
+/** The slot the phone writes: the one the caret is on, else the first empty one (the caret is on Read it or Back), else the last. */
+export function planAt(s: Session): number {
+  const slots = s.essayPlan?.slots ?? [];
+  if (s.focus >= 0 && s.focus < slots.length) return s.focus;
+  const open = slots.findIndex((x) => !x);
+  return open < 0 ? Math.max(0, slots.length - 1) : open;
+}
+/** What Select on a slot says: the one thing to do next, on the phone. */
+export function planStatus(i: number): string { const sl = planSlots(PLAYBOOK.find((p) => p.id === "para") ?? PLAYBOOK[0])[i]; return sl ? `say or type slot ${i + 1}, ${sl.label}, on the phone` : "say or type the sentence on the phone"; }
 /** The lens the paragraph on the desk was read through, as a stop; the first lens when there is none. */
 export function readingLens(s: Session): number { return Math.max(0, LENS_STOPS.findIndex((t) => t.id === s.essay?.type)); }
 /** The playbook's four structures, straight from the library, top to bottom. */
@@ -135,6 +188,8 @@ export function focusAfterRewrite(a: EssayAnalysis, n: number, focus: number): n
 }
 /** What Rewrite on my phone puts on the status line; the page inks the move while it is the status. */
 export const rewriteStatus = (n: number) => `sentence ${n}: rewrite it in your own words on the phone's Essay tab, then analyse again`;
+/** The YouTube IFrame API's postMessage form of Play/Pause: what the lesson screens send the embed when lessonPaused flips. */
+export const playerCommand = (paused: boolean): string => JSON.stringify({ event: "command", func: paused ? "pauseVideo" : "playVideo", args: "" });
 export const HINT_STOPS = ["stuck", "lesson"] as const;
 export const SENTENCE_STOPS = ["again", "unit"] as const;
 /** The recap: one tile per app on the desk, then back to the desk (tv/recapRows.ts). */
@@ -151,7 +206,15 @@ export function topicStops(s: Pick<Session, "profiles" | "learner">): readonly P
 export function topicsFocus(s: Pick<Session, "profiles" | "learner" | "skills">): number {
   const path = learnerPath(s), done = Object.values(s.skills ?? {}).filter((r) => r?.secure).map((r) => r.topic);
   const next = done.length ? frontierOn(path, done) : undefined;
-  return next ? Math.max(0, topicsOf(path).findIndex((t) => t.id === next.id)) : 0;
+  if (next) return Math.max(0, topicsOf(path).findIndex((t) => t.id === next.id));
+  // a learner past the path's end with nothing secure opens on its last topic, not the first step
+  const last = done.length ? null : pastPathEnd(s);
+  return last ? Math.max(0, topicsOf(path).findIndex((t) => t.id === last.id)) : 0;
+}
+/** Where Get ready for school opens: the first unit, or for a learner past the path's end the stop of its last topic. */
+function prepareDoorFocus(s: Pick<Session, "profiles" | "learner">): number {
+  const last = pastPathEnd(s);
+  return last ? Math.max(0, prepareStops(s).findIndex((u) => u.id === last.id)) : 0;
 }
 /** The walk has one action, on its last item: back to the sheet. */
 export function walkStops(s: Session): Array<"sheet"> { const n = s.practice?.items.length ?? 0; return n && s.walkIx === n - 1 ? ["sheet"] : []; }
@@ -183,6 +246,19 @@ class Out implements Step {
     this.calls.push({ url: "/api/practice", body: opts.stretch ? { topic, stretch: true } : { topic }, onFail: { busy: false } });
     this.local.busy = true;
   }
+  /**
+   * Ask for a worked lesson (v2 M1) unless one is already being written: the topic opens, the lesson lands on `worked`.
+   * `origin` says where it was asked from (Get ready for school); it is kept in Local so the lesson's Back returns there.
+   * Asked from Topics (no origin) it clears an origin left over. Local is written only when the value changes.
+   */
+  teach(local: Local, topic: string, origin?: "prepare") {
+    if (local.busy || running(this.s, "teach")) return;
+    if (origin && local.lessonFrom !== origin) this.local.lessonFrom = origin;
+    else if (!origin && local.lessonFrom) this.local.lessonFrom = null;
+    this.ev({ type: "topic.open", topic, stay: true });
+    this.calls.push({ url: "/api/worked", body: { topic }, onFail: { busy: false }, onDone: { busy: false } });
+    this.local.busy = true;
+  }
   /** Ask for a hint unless one is already on its way (here, or as a running job): each one is a model call and counts in the log. */
   hint(local: Local, body: Record<string, unknown>) {
     if (local.hintInFlight || running(this.s, "hint")) return;
@@ -212,6 +288,8 @@ function openWaiting(s: Session, app: Subject, o: Out) {
   if (cont?.go === "page") { o.ev({ type: "page.select", pageIx: cont.pageIx }); o.nav("page"); }
   else if (cont) o.nav(cont.go, cont.focus);
   else if (app === "essay" && ownReading(s)) { o.ev({ type: "essay.at", n: null }); o.nav("forensic"); }
+  // Adult mode opens Essay Master on the Workroom (v2 T2): the desk puts the summary on the TV, never the text
+  else if (app === "essay" && isAdultHere(s)) o.calls.push({ url: "/api/twin", body: { open: true } });
   else if (app === "essay") o.nav(MODULE_HOME.essay, Math.max(0, LENS_STOPS.findIndex((t) => t.id === essayWaiting(s).lens)));
   else o.nav(MODULE_HOME[app]);
 }
@@ -257,9 +335,10 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (at === "continue" && continueCard(s)) openWaiting(s, "maths", o);
     else if (at === "teach") o.nav("topics", topicsFocus(s));
     // Get ready for school opens on its list, the question closed
-    else if (at === "prepare") { o.local.prepareAsk = null; o.nav("prepare", 0); }
-    else { const pi = s.pages.findIndex((p) => p.subject === "maths");
-      if (pi >= 0) { o.ev({ type: "page.select", pageIx: pi }); o.nav("page"); } else o.ev({ type: "page.ask", subject: "maths" }); }
+    else if (at === "prepare") { o.local.prepareAsk = null; o.nav("prepare", prepareDoorFocus(s)); }
+    // tonight's sheet opens; anything else (nothing, an older sheet, a failed read) asks for tonight's photo
+    else { const sheet = tonightsSheet(s);
+      if (sheet) { o.ev({ type: "page.select", pageIx: sheet.ix }); o.nav("page"); } else o.ev({ type: "page.ask", subject: "maths" }); }
   },
   learner: (s, k, _, o) => {
     const stops = learnerStops(s), at = stopAt(stops, s.focus);
@@ -270,13 +349,14 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "menu" && at && at !== "add") { o.ev({ type: "profile.draft", patch: { id: at.id, name: at.name, type: at.type, age: at.age, system: at.system, modules: at.modules, mathPath: at.mathPath, mode: at.mode } }); o.nav("profile"); }
   },
   profile: (s, k, _, o) => {
-    // rows of picks (type, age when a school type, school system, interests, the Maths course when Maths is on, actions); Up/Down keep the column
+    // rows of picks (type, age when a school type, mode, school system, interests, the Maths course when Maths is on, actions); Up/Down keep the column
     const rows = profileRows(s.draft), at = locate(rows, s.focus), cell = rows[at.r].cells[at.c];
     if (k === "right") o.focus(flat(rows, at.r, at.c + 1)); if (k === "left") o.focus(flat(rows, at.r, at.c - 1));
     if (k === "down" && at.r < rows.length - 1) o.focus(flat(rows, at.r + 1, at.c)); if (k === "up" && at.r > 0) o.focus(flat(rows, at.r - 1, at.c));
     if (k === "select") {
       if (cell.kind === "type" && cell.type) o.ev({ type: "profile.draft", patch: { type: cell.type } });
       else if (cell.kind === "age") o.ev({ type: "profile.draft", patch: { age: cell.age } });
+      else if (cell.kind === "mode" && cell.mode) o.ev({ type: "profile.draft", patch: { mode: cell.mode } });
       else if (cell.kind === "system" && cell.system) o.ev({ type: "profile.draft", patch: { system: cell.system } });
       else if (cell.kind === "path" && cell.path) o.ev({ type: "profile.draft", patch: { mathPath: cell.path } });
       else if (cell.kind === "interest" && cell.sub) { const m = cell.sub, on = s.draft?.modules ?? []; o.ev({ type: "profile.draft", patch: { modules: on.includes(m) ? on.filter((x) => x !== m) : [...on, m] } }); }
@@ -313,7 +393,11 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   hint: (s, k, local, o) => {
     const at = stopAt(HINT_STOPS, s.focus);
     if (k === "left") o.move(HINT_STOPS.length, -1); if (k === "right") o.move(HINT_STOPS.length, 1);
-    if (k === "select") { if (at === "stuck" && s.hint?.stage === 1) o.hint(local, { stage: 2 }); if (at === "lesson" && s.lesson) o.nav("lesson"); }
+    if (k === "select") { if (at === "stuck" && s.hint?.stage === 1) o.hint(local, { stage: 2 }); if (at === "lesson") {
+        // a task that reads as a school unit has no lesson in the library: the stop is Six like this, a set on that unit, the hint kept on screen
+        const unit = likeUnit(s);
+        if (unit) o.set(local, unit, { stay: true }); else if (s.lesson) o.nav("lesson");
+      } }
     if (k === "back") o.nav("page");
   },
   lesson: (s, k, _, o) => {
@@ -335,12 +419,38 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (at === "last") {
       if (k === "left") o.focus(readingLens(s));
       if (k === "select") { o.ev({ type: "essay.at", n: null }); o.nav("forensic"); }
-    } else {
+    } else if (at === "plan") {
+      if (k === "up") o.focus(LENS_STOPS.length - 1);
+      if (k === "select") { const lens = LENS_STOPS.find((t) => t.id === s.essayType) ?? LENS_STOPS[0]; o.ev({ type: "essay.plan", lens: lens.id }); o.nav("essayplan", 0, "essaytype"); }
+    } else if (at) {
+      if (k === "down" && stops.includes("plan") && stops.indexOf(at) === LENS_STOPS.length - 1) { o.focus(stops.indexOf("plan")); return; }
       if (k === "down") o.move(LENS_STOPS.length, 1); if (k === "up") o.move(LENS_STOPS.length, -1);
       if (k === "right" && stops.includes("last")) o.focus(stops.indexOf("last"));
       if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen — paste or dictate the paragraph on the phone` }); }
     }
     if (k === "menu") o.nav("playbook", 0, "essaytype");
+    if (k === "back") o.nav("landing", landingFocus(s, "essay"));
+  },
+  // the Paragraph's slots, written on the phone: Up/Down walk the slots, then Read it and Back; Read it reads only when all three are written
+  essayplan: (s, k, _, o) => {
+    const plan = s.essayPlan, stops = planStops(s), at = stopAt(stops, s.focus);
+    if (k === "back") { o.nav("essaytype", LENS_STOPS.length); return; }
+    if (k === "menu") { o.nav("playbook", PLAYBOOK.findIndex((p) => p.id === "para"), "essaytype"); return; }
+    if (k === "down") o.move(stops.length, 1); if (k === "up") o.move(stops.length, -1);
+    if (k !== "select") return;
+    if (at === "back") o.nav("essaytype", LENS_STOPS.length);
+    if (at === "slot") o.ev({ type: "status", text: planStatus(s.focus) });
+    if (at === "read" && plan && !running(s, "analyse")) {
+      const open = plan.slots.findIndex((x) => !x);
+      if (open >= 0) o.focus(open); else o.calls.push({ url: "/api/analyse", body: { kind: "essay", text: planText(plan), type: plan.lens } });
+    }
+  },
+  // the Workroom (v2 T2, Adult mode): Up/Down the pieces, Right to the actions (the lenses), Back to the desk
+  workroom: (s, k, _, o) => {
+    const stops = workroomStops(s), at = stopAt(stops, s.focus);
+    if (k === "down") o.move(stops.length, 1); if (k === "up") o.move(stops.length, -1);
+    if (k === "right" || k === "left") o.focus(at === "lenses" ? 0 : stops.indexOf("lenses"));
+    if ((k === "select" && at === "lenses") || k === "menu") o.nav("essaytype", 0);
     if (k === "back") o.nav("landing", landingFocus(s, "essay"));
   },
   // one sentence at a time: Up/Down walk the paragraph, Left/Right the actions; Menu is the table, where Up/Down still walk
@@ -355,7 +465,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "right") o.move(FORENSIC_STOPS.length, 1); if (k === "left") o.move(FORENSIC_STOPS.length, -1);
     if (k !== "select") return;
     const at = stopAt(FORENSIC_STOPS, s.focus);
-    if (at === "rewrite") o.ev({ type: "status", text: rewriteStatus(a.sentences[i].n) });
+    if (at === "rewrite") o.ev({ type: "status", text: rewriteUnruledLine(a, a.sentences[i].n) ?? rewriteStatus(a.sentences[i].n) });
     if (at === "why") o.nav("playbook", PLAYBOOK_STOPS.indexOf(playFor(a.type)), "forensic");
     if (at === "next") go((i + 1) % n);
     if (at === "back") o.nav("essaytype", readingLens(s));
@@ -373,27 +483,66 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     // nothing is locked here: Select starts whatever is focused. Menu and Up go home, where the path lives.
     if (k === "up" || k === "menu") o.nav("tonight");
-    if (k === "select") { const t = stopAt(stops, s.focus); if (t) o.set(local, t.id); }
+    // a school unit with a worked lesson (v2 M1) is taught first; the others go straight to a set, as before
+    if (k === "select") { const t = stopAt(stops, s.focus); if (t && hasWorked(t.id)) o.teach(local, t.id); else if (t) o.set(local, t.id); }
     if (k === "back") o.nav("tonight");
   },
+  // the worked lesson (v2 M1): two actions, Try six (the usual set on this unit) and Back to the topics - or, when the lesson
+  // was opened from Get ready for school (`lessonFrom`), Back to that door on the same unit, the question closed
+  worked: (s, k, local, o) => {
+    const stops = WORKED_STOPS;
+    if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
+    const at = stopAt(stops, s.focus);
+    if (k === "select" && at === "try" && s.worked) {
+      const asked = o.calls.length;
+      o.set(local, s.worked.topic);
+      if (o.calls.length > asked && local.lessonFrom) o.local.lessonFrom = null;
+    }
+    if ((k === "select" && at === "back") || k === "back" || k === "up" || k === "menu") {
+      if (local.lessonFrom === "prepare") {
+        o.local.lessonFrom = null;
+        if (typeof local.prepareAsk === "number") o.local.prepareAsk = null;
+        o.nav("prepare", Math.max(0, prepareStops(s).findIndex((u) => u.id === s.worked?.topic)));
+      } else o.nav("topics");
+    }
+  },
   // Get ready for school (Family W8): Left/Right walk the units strand by strand; Select asks "The usual" or "A step up"
-  // (two cells, "The usual" lit), Left/Right between them, Select writes the set as Topics does - staying here while it is
+  // (two cells, "The usual" lit; a unit with a worked lesson has "See how first" before them, lit, and Select on it opens
+  // the lesson as Topics does), Left/Right between them, Select writes the set as Topics does - staying here while it is
   // written - and Back closes the question on the same unit. Up, Menu or Back on the list go home, the lamp on this door.
   prepare: (s, k, local, o) => {
     const stops = prepareStops(s), unit = stopAt(stops, s.focus);
     const writing = local.busy || running(s, "practice");
     const ask = local.prepareAsk;
-    if (ask === 0 || ask === 1) {
+    if (ask === -1 || ask === 0 || ask === 1) {
       if (k === "back") { o.local.prepareAsk = null; return; }
-      if (writing) return;
+      if (writing || running(s, "teach")) return;
       if (k === "left" && ask > 0) o.local.prepareAsk = 0;
-      if (k === "right" && ask < 1) o.local.prepareAsk = 1;
-      if (k === "select" && unit) o.set(local, unit.id, { stretch: ask === 1, stay: true });
+      if (k === "left" && ask === 0 && unit && hasWorked(unit.id)) o.local.prepareAsk = -1;
+      if (k === "right" && ask < 1) o.local.prepareAsk = ask === -1 ? 0 : 1;
+      if (k === "select" && unit) { if (ask === -1) o.teach(local, unit.id, "prepare"); else o.set(local, unit.id, { stretch: ask === 1, stay: true }); }
       return;
     }
     if (k === "up" || k === "menu" || k === "back") { o.nav("tonight", Math.max(0, tonightStops(s).indexOf("prepare"))); return; }
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
-    if (k === "select" && unit && !writing) o.local.prepareAsk = 0;
+    if (k === "select" && unit && !writing && !running(s, "teach")) o.local.prepareAsk = hasWorked(unit.id) ? -1 : 0;
+  },
+  // the recovery from a paper (v2 M5b), opened from the phone's Paper panel: Up/Down or Left/Right walk the topics.
+  // Then the off-desk statements, one walk (Select there does nothing; Back and Menu go to the first unit).
+  // Select on a topic opens Get ready for school on that unit with its question open, as Select there would (or just on
+  // the unit while a set or lesson is written), carrying the unit as the paper's aim (MB-B40). Back or Menu land on that unit, or the first when the list is empty.
+  paper: (s, k, local, o) => {
+    const n = paperStopCount(s);
+    if (k === "down" || k === "right") o.move(n, 1); if (k === "up" || k === "left") o.move(n, -1);
+    const topics = paperView(s).topics, t = s.focus < topics.length ? stopAt(topics, s.focus) : undefined;
+    const ix = t ? prepareStops(s).findIndex((u) => u.id === t.id) : -1;
+    if (k === "select" && t && ix >= 0) {
+      const writing = local.busy || running(s, "practice") || running(s, "teach");
+      o.local.prepareAsk = writing ? null : hasWorked(t.id) ? -1 : 0;
+      // the unit goes with it as the paper's aim (MB-B40): the set asked for on it is aimed at what this paper lost
+      o.ev({ type: "nav", screen: "prepare", focus: ix, aim: t.id });
+    }
+    if (k === "back" || k === "menu") { o.local.prepareAsk = null; o.nav("prepare", Math.max(0, ix)); }
   },
   // the set on paper is parked, not thrown away: Tonight's continue card puts it back
   practice: (_, k, __, o) => { if (k === "back") o.nav("tonight"); },

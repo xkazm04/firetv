@@ -5,13 +5,17 @@
  *
  *   surface()                       -> the repo-relative, sorted desk/src files the driver loads (derived, not listed)
  *   stampOf(repo, files, git?)      -> { commit, dirty, files: { path: git blob sha } } of the working tree now
+ *   blobsNow(repo, files, git?)     -> { path: git blob sha } of the files the working tree holds now (a missing path is absent)
  *   seenOf(run, opts)               -> { commit, files, source: 'run.json' | 'git' } for a run, or null (unknown)
- *   changedBetween(seen, now)       -> { changed: [path], total } between two file -> blob maps
+ *   changedBetween(seen, now)       -> { changed: [path], oneSided: [path], total } between two file -> blob maps
  *
  * The load set is whatever require.cache holds under desk/src after the driver's entry modules load and one Linga
  * screen renders (surface.cjs install(), the modules linga-text.cjs reads), measured in a child process on a scratch
  * DESK_DATA_DIR so nothing here touches desk/data. A run without a stamp is read from git: the commit that first added
  * its findings.json, with that commit's blobs of the same files. A run with neither is unknown, never current.
+ * The rule for "now": a run with its own stamp is compared over the files that stamp holds (blobsNow of the stamp's own
+ * list, so an Essay or Math run is judged by its module's files); a run without one is compared over the load set above.
+ * A stamped file the tree no longer has is held by one side only and never ages a row.
  * `git` is a runner `(args, { input }) -> stdout` bound to a repo; tests inject one. Nothing here calls a model.
  */
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), { spawnSync } = require('node:child_process');
@@ -65,12 +69,18 @@ function blobsAt(git, commit, files) {
   }
   return out;
 }
+/** { path: git blob sha } of `files` in the working tree now. One git call; a path the tree lacks is absent (git fails on it). */
+function blobsNow(repo, files, git = gitOf(repo)) {
+  const here = files.filter(f => fs.existsSync(path.join(repo, f)));
+  if (!here.length) return {};
+  const now = lines(git(['hash-object', '--stdin-paths'], { input: here.join('\n') }));
+  if (now.length !== here.length) throw new Error(`git hash-object returned ${now.length} blobs for ${here.length} files`);
+  return Object.fromEntries(here.map((f, i) => [f, now[i]]));
+}
 /** The working tree's stamp: HEAD, whether any of the files differs from HEAD, and each file's git blob now. */
 function stampOf(repo, files, git = gitOf(repo)) {
   const commit = git(['rev-parse', 'HEAD']).trim();
-  const now = lines(git(['hash-object', '--stdin-paths'], { input: files.join('\n') }));
-  if (now.length !== files.length) throw new Error(`git hash-object returned ${now.length} blobs for ${files.length} files`);
-  const blobs = Object.fromEntries(files.map((f, i) => [f, now[i]])), head = blobsAt(git, commit, files);
+  const blobs = blobsNow(repo, files, git), head = blobsAt(git, commit, files);
   return { commit, dirty: files.some(f => head[f] !== blobs[f]), files: blobs };
 }
 
@@ -93,10 +103,13 @@ function seenOf(run, { repo, git = repo && gitOf(repo), files = [], cache = new 
   } catch { return null; }
 }
 
-/** The paths whose blob differs between two maps (a path only one side has counts), and how many paths in all. */
+/**
+ * The paths that both maps hold and whose blob differs (changed: the only ones that age a row), the paths only one side
+ * holds (oneSided: a file the other side never saw, so nothing there to compare), and how many paths in all.
+ */
 function changedBetween(seen, now) {
-  const all = [...new Set([...Object.keys(seen), ...Object.keys(now)])].sort();
-  return { changed: all.filter(f => seen[f] !== now[f]), total: all.length };
+  const all = [...new Set([...Object.keys(seen), ...Object.keys(now)])].sort(), both = f => f in seen && f in now;
+  return { changed: all.filter(f => both(f) && seen[f] !== now[f]), oneSided: all.filter(f => !both(f)), total: all.length };
 }
 
 if (require.main === module && process.argv[2] === '--surface') {
@@ -104,4 +117,4 @@ if (require.main === module && process.argv[2] === '--surface') {
   process.stdout.write(out, () => process.exit(0));
 }
 
-module.exports = { surface, stampOf, seenOf, changedBetween, gitOf, blobsAt, REPO };
+module.exports = { surface, stampOf, blobsNow, seenOf, changedBetween, gitOf, blobsAt, REPO };

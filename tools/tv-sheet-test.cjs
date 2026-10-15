@@ -7,11 +7,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-const opts={compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText,file);
+const {transpile,options:opts}=require('./ts-load.cjs');
 process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(os.tmpdir(),'desk-tv-sheet-'));
 after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
 // loaded per test, so a missing module fails each case on its own
@@ -130,11 +126,11 @@ test('case 7: Back from the unmarked poster parks the set, and "Still open" is r
 // ---- S82: only this learner's. Math Buddy's work is stamped with its learner; another learner at the desk gets a clean desk ----
 const landing=()=>require(path.join(root,'src/tv/landingRows.ts'));
 const TWO=[{id:'ema',name:'Ema',type:'high-school',age:16,system:'uk',modules:['maths','english','essay']},{id:'tom',name:'Tom',type:'high-school',age:15,system:'uk',modules:['maths']}];
-const PAGE_EMA={id:'maths-100',subject:'maths',title:'Algebra - Exercise 4.2',img:'',w:1,h:1,items:[{n:1,text:'2x+3=11',cx:0,cy:0,band:[0,1],key:'k1'}],owner:'ema'};
+const PAGE_EMA={id:'maths-100',subject:'maths',day:(()=>{const d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;})(),title:'Algebra - Exercise 4.2',img:'',w:1,h:1,items:[{n:1,text:'2x+3=11',cx:0,cy:0,band:[0,1],key:'k1'}],owner:'ema'};
 const HINT_EMA={key:'k1',problem:'2x+3=11',stage:1,hint1:{hint:'Undo the +3 first.',next:'What is left?'},hint2:null,askedQ:'',owner:'ema'};
 function emaEvening(patch={}){
  return session({profiles:TWO,screen:'sheet',focus:1,topic:'linear-one-step',practice:{...marked(['right','wrong','right','unsure','right','right']),owner:'ema'},
-  pages:[PAGE_EMA],hint:HINT_EMA,log:{started:1,minutes:12,problems:['k1'],hard:[],hints:1},...patch});
+  pages:[PAGE_EMA],hint:HINT_EMA,log:{started:Date.now(),minutes:12,problems:['k1'],hard:[],hints:1},...patch});
 }
 
 test('case 8 (S82): a set owned by Ema is not on Tom\'s landing, Tonight or sheet; switching back gives her all of it untouched',()=>{
@@ -230,7 +226,7 @@ test('GUARD: a marked set in the real store carries no answer or solution anywhe
 });
 
 test('extra: the sheet rows stay free of the filesystem-backed session modules',()=>{
- const out=ts.transpileModule(fs.readFileSync(path.join(root,'src/tv/sheetRows.ts'),'utf8'),opts).outputText;
+ const out=transpile(fs.readFileSync(path.join(root,'src/tv/sheetRows.ts'),'utf8'),opts).outputText;
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);
 });
 
@@ -321,4 +317,48 @@ test('GUARD case 8 (second go): with item 2 fixed, Tonight\'s Marked hero still 
  const p=withSecond(['right','wrong','right','wrong','right','right'],[null,'right']);
  const card=continueCard(session({screen:'tonight',topic:'linear-one-step',practice:p}));
  assert.match(card.d,/4 of 6 right/,'the same count a first-attempt reading gives');
+});
+
+test('M3a: the parts of a word problem are tiles and stops like any item - one per part, no stem and no part line on a tile; the store keeps the parts',()=>{
+ const {sheetTiles,sheetStops,firstToLook}=rows();
+ const W=require(path.join(root,'src/lib/rules/calc-word.ts'));
+ const w=W.drawWord('sphere-rates',3);
+ const items=[{n:1,question:"Find f'(2) for f(x) = x^3.",spec:{shape:'derivative-at',f:'x^3',at:2},verdict:'right'},...W.wordItems(w,2).map((it,i)=>({...it,verdict:i?'wrong':'right'}))];
+ const p={topic:w.topic,marked:true,items};
+ assert.deepEqual(sheetTiles(p),[{n:1,verdict:'right'},{n:2,verdict:'right'},{n:3,verdict:'wrong'}]);
+ const flat=JSON.stringify(sheetTiles(p));assert.ok(!flat.includes(w.stem)&&!w.parts.some((x)=>flat.includes(x.line)),'no stem and no part line on a tile');
+ assert.deepEqual(sheetStops(p),['item0','item1','item2','more','away'],'a part is a stop of its own');
+ assert.equal(firstToLook(items),2,'part (b) is the first to look at');
+ // the real reducer lands the marked set with its parts, and every view keeps the stem and the letters
+ const s=after_(session({practice:{...p,marked:false,items:items.map(({verdict,...x})=>x)}}),[{type:'practice.marked',items}]);
+ assert.deepEqual(s.practice.items.map((i)=>[i.part??null,i.stem===w.stem]),[[null,false],['a',true],['b',true]]);
+ assert.equal(s.screen,'sheet');
+});
+
+test('HF3: a learner holds at most PAGES_KEPT pages, the newest, in order; the page being read is never the one dropped; a read in place adds nothing',()=>{
+ const {PAGES_KEPT}=store();assert.equal(PAGES_KEPT,8);
+ const photo='data:image/jpeg;base64,'+'A'.repeat(1000);
+ const snap=(i)=>({type:'page.reading',page:{id:`maths-${i}`,subject:'maths',title:`P${i}`,img:photo,w:100,h:100}});
+ const item=(i)=>({n:1,text:'x',cx:0,cy:0,band:[0,10],key:`maths-${i}:1`});
+ const bare=JSON.stringify(session()).length;
+ let s=session();
+ for(let i=1;i<=20;i++){s=after_(s,[snap(i),{type:'page.read',id:`maths-${i}`,items:[item(i)],readMs:1,provider:'t'}]);}
+ assert.deepEqual(s.pages.map((p)=>p.id),[13,14,15,16,17,18,19,20].map((i)=>`maths-${i}`),'the newest 8, in order');
+ assert.equal(s.pageIx,7,'pageIx is on the newest page');assert.equal(s.pages[7].items.length,1);
+ assert.ok(JSON.stringify(s).length<bare+8*(photo.length+600),'the session is bounded by 8 photos');
+ const again=after_(s,[snap(15)]);
+ assert.equal(again.pages.length,8);assert.equal(again.pages[0].id,'maths-13','a read in place drops nothing');assert.equal(again.pageIx,2);
+ // a page for a dropped id has nothing to land on
+ const late=after_(s,[{type:'page.read',id:'maths-1',items:[item(1)],readMs:1,provider:'t'}]);assert.equal(late.pages.length,8);
+});
+test('HF3: an away learner who sits down and reads obeys the same cap',()=>{
+ const photo='data:image/jpeg;base64,AAAA';
+ const pages=Array.from({length:8},(_,i)=>({id:`old-${i}`,subject:'maths',title:'o',img:photo,w:100,h:100,items:[],owner:'ana'}));
+ const s0=session({profiles:[{id:'ema',name:'Ema',type:'high-school',age:16,system:'uk',modules:['maths']},{id:'ana',name:'Ana',type:'high-school',age:16,system:'uk',modules:['maths']}],
+  away:{ana:{pages,pageIx:7,itemIx:0,reading:false,hint:null,lesson:null,noLesson:false,lessonPaused:false,topic:null,practice:null,walkIx:0,log:{problems:[],hints:0,hard:[]},tasks:[]}}});
+ let s=after_(s0,[{type:'learner.set',id:'ana'}]);
+ assert.equal(s.pages.length,8);
+ for(let i=0;i<3;i++)s=after_(s,[{type:'page.reading',page:{id:`new-${i}`,subject:'maths',title:'n',img:photo,w:100,h:100}}]);
+ assert.deepEqual(s.pages.map((p)=>p.id),['old-3','old-4','old-5','old-6','old-7','new-0','new-1','new-2']);
+ assert.equal(s.pageIx,7);
 });

@@ -1,0 +1,157 @@
+{
+  "timings": [
+    {
+      "action": "level-self",
+      "ms": 324,
+      "initialStatus": 200,
+      "status": 200,
+      "sendToLineMs": null,
+      "lineToVoiceMs": null,
+      "voiceStatus": null,
+      "reason": "seating a level gives no partner line"
+    },
+    {
+      "action": "start",
+      "ms": 8547,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 8460,
+      "sendToLineMs": 8553,
+      "lineToVoiceMs": 1817,
+      "voiceStatus": "Partner speaking"
+    },
+    {
+      "action": "turn",
+      "ms": 8555,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 8343,
+      "sendToLineMs": 8562,
+      "lineToVoiceMs": 79,
+      "voiceStatus": "Partner speaking"
+    },
+    {
+      "action": "turn",
+      "ms": 8281,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 8218,
+      "sendToLineMs": null,
+      "lineToVoiceMs": null,
+      "voiceStatus": null,
+      "reason": "the partner line did not change within 120 s"
+    },
+    {
+      "action": "moment-done",
+      "ms": 47,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 8218,
+      "sendToLineMs": null,
+      "lineToVoiceMs": null,
+      "voiceStatus": null,
+      "reason": "taking a moment gives no new partner line"
+    },
+    {
+      "action": "coach",
+      "ms": 10471,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 10405,
+      "sendToLineMs": null,
+      "lineToVoiceMs": null,
+      "voiceStatus": null,
+      "reason": "a coaching note is not a partner line"
+    },
+    {
+      "action": "replay",
+      "ms": 8576,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 8526,
+      "sendToLineMs": 8579,
+      "lineToVoiceMs": 62,
+      "voiceStatus": "Partner speaking"
+    },
+    {
+      "action": "finish",
+      "ms": 118,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 8526,
+      "sendToLineMs": null,
+      "lineToVoiceMs": null,
+      "voiceStatus": null,
+      "reason": "finishing ends the scene: no new partner line"
+    }
+  ],
+  "turnTiming": {
+    "ms": {
+      "n": 8,
+      "median": 8414,
+      "max": 10471
+    },
+    "sendToLineMs": {
+      "n": 3,
+      "median": 8562,
+      "max": 8579
+    },
+    "modelMs": {
+      "n": 7,
+      "median": 8460,
+      "max": 10405
+    },
+    "lineToVoiceMs": {
+      "n": 3,
+      "median": 79,
+      "max": 1817
+    }
+  },
+  "moments": [
+    {
+      "after": "typed reply",
+      "fired": false
+    },
+    {
+      "after": "spoken reply",
+      "fired": true,
+      "kind": "fix",
+      "said": "Where you saw the rover last time?",
+      "better": "Where did you see the rover last time?",
+      "why": "For a question about the past, use \"did\" before the subject."
+    }
+  ],
+  "entrances": [
+    {
+      "entrance": "maths",
+      "click": false,
+      "ms": 605,
+      "reached": true
+    },
+    {
+      "entrance": "essay",
+      "click": false,
+      "ms": 647,
+      "reached": true
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "E2 level: no placement offers the level check, not a scene; A2 seated with level-self through the UI",
+    "E3 scene: Choose a situation, The missing moon rover, started",
+    "E4 real model: typed and spoken replies; typed turn stored as text, spoken as speech and supported",
+    "E4 moments: taken with Back to the conversation if one fired, recorded either way",
+    "picked phrase stored as choice evidence",
+    "real model: coach, replay, finish",
+    "MH-4 one tap: tick pre-checked after Stop, spoken reply sent with one tap",
+    "simulated speech: capture, transcript confirmation, supported modality",
+    "E8 turn timing: ms, modelMs, sendToLineMs, lineToVoiceMs (the footer event, not heard audio)",
+    "E9 age-restricted API rejected (403)",
+    "TV/phone session sync",
+    "D-pad entry/menu/back",
+    "eight-chapter actual evidence print",
+    "mobile width",
+    "Math and Essay entrances"
+  ],
+  "speechLimit": "Recognition events are simulated; no physical microphone or room audio tested. Voice is the TV footer event, not heard audio."
+}

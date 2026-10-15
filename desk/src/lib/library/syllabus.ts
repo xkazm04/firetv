@@ -33,6 +33,13 @@
  * every system's year is fixed, so all four take US 7, UK 8, CZ 7, DE 6 - the one place where the strands stay whole
  * bars (earlier, mean and range would come before the decimals it needs; after two-step equations the Equations strand
  * would split again and no year would be earlier). Each unit's comment says where that is later or earlier than usual.
+ *
+ * v2 M2b adds the first two units beyond the school path's old end, both with generators: "Pythagoras' theorem" and
+ * "Probability of an event", seventeen topics, after the equations with brackets, both in the "Geometry and data" strand
+ * (which now appears twice, as Equations does: the bar after the equations is a second "Geometry and data" bar). The
+ * topics are mapped to Foundation-tier statements in lib/library/gcse.ts, a map that is unverified and makes no claim
+ * (owner decision X5). Years are written from memory and a teacher must check them; where a usual year is held later
+ * to keep the list from going down, the comment on the unit says so. None has a lessonId.
  */
 import type { SchoolSystem } from "@/lib/session/store";
 
@@ -53,7 +60,7 @@ export const SYLLABUS: Topic[] = [
     id: "frac-equivalent",
     name: "Equivalent fractions",
     strand: "Fractions",
-    blurb: "Multiplying or dividing the top and the bottom by the same number gives an equal fraction, which is how you fill in a missing number or simplify to lowest terms.",
+    blurb: "Multiplying or dividing top and bottom by the same number gives an equal fraction, which fills in a missing number or simplifies to lowest terms.",
     // from memory, unchecked: a maths teacher reads these four before release. US Grade 4 (equivalence), UK Year 5
     // (simplifying by common factors is often Year 6 there). CZ and DE: rozšiřování a krácení / Erweitern und Kürzen is
     // often taught a year later (6. ročník, Klasse 6), but add and subtract fractions sits at CZ 5 and DE 5 after it,
@@ -66,7 +73,7 @@ export const SYLLABUS: Topic[] = [
     id: "frac-of-amount",
     name: "A fraction of an amount",
     strand: "Fractions",
-    blurb: "To find a fraction of an amount you divide by the bottom to get a single part, then multiply by the top to take that many parts.",
+    blurb: "For a fraction of an amount, divide by the bottom for a single part, then multiply by the top to take that many parts.",
     // from memory, unchecked: a maths teacher reads these four before release. US Grade 5 (a fraction times a whole
     // number), UK Year 5 (often met in Year 4 as fractions of a quantity; Year 5 keeps it after equivalent fractions),
     // CZ 5. ročník (zlomek z čísla), DE Klasse 5 (Bruchteile von Größen, often Klasse 6; kept at 5 like the unit before).
@@ -78,7 +85,7 @@ export const SYLLABUS: Topic[] = [
     id: "frac-add-sub",
     name: "Add and subtract fractions",
     strand: "Fractions",
-    blurb: "Two fractions need the same bottom before they can be combined, so you rewrite each over a common one and then add or take away the tops.",
+    blurb: "Fractions need the same bottom before they combine, so rewrite each over a common one, then add or take away the tops.",
     // from memory, unchecked: a maths teacher reads these four before release
     bands: { us: "Grade 5", uk: "Year 6", cz: "5. ročník", de: "Klasse 5 (varies by Bundesland)" },
     year: { us: 5, uk: 6, cz: 5, de: 5 },
@@ -90,7 +97,7 @@ export const SYLLABUS: Topic[] = [
     name: "Multiply and divide fractions",
     strand: "Fractions",
     // one sentence, one main clause (W7 batch 3: the old wording read as two sentences joined by "and")
-    blurb: "Fractions are multiplied top by top and bottom by bottom, which is also how you divide once the fraction you divide by is turned upside down.",
+    blurb: "Fractions multiply top by top and bottom by bottom, which is also how you divide once the fraction you divide by is turned upside down.",
     // from memory, unchecked: a maths teacher reads these four before release. US Grade 6 (dividing a fraction by a
     // fraction; multiplying is Grade 5), UK Year 7 (Year 6 multiplies and divides by a whole number). CZ: násobení a
     // dělení zlomků is usually 7. ročník, and DE: Multiplizieren und Dividieren von Brüchen usually Klasse 6, but
@@ -119,7 +126,7 @@ export const SYLLABUS: Topic[] = [
     id: "dec-arith",
     name: "Add, subtract and multiply decimals",
     strand: "Decimals and percent",
-    blurb: "Decimals are added and taken away with their points lined up, and multiplied as whole numbers before the point goes back in by counting the places.",
+    blurb: "Decimals are added and taken away with points lined up, and multiplied as whole numbers before the point goes back by counting places.",
     // from memory, unchecked: a maths teacher reads these four before release. US: adding and multiplying to hundredths is
     // Grade 5, fluency with the column methods Grade 6 (kept at 6: one-step equations before it are US 6). UK: adding
     // decimals is Year 5, a decimal times a decimal Year 7 (KS3); the unit multiplies, so Year 7 (also held by one-step at
@@ -132,7 +139,7 @@ export const SYLLABUS: Topic[] = [
     id: "dec-convert",
     name: "Fractions, decimals and percent",
     strand: "Decimals and percent",
-    blurb: "A fraction, a decimal and a percentage can name the same number, and you move between them by dividing the top by the bottom or by counting hundredths.",
+    blurb: "A fraction, a decimal and a percentage can name the same number, and you move between them by dividing top by bottom or counting hundredths.",
     // from memory, unchecked: a maths teacher reads these four before release. US Grade 6 (percent as a rate per hundred;
     // terminating decimal expansions are Grade 7). UK: fraction, decimal and percentage equivalents are Year 6, but the
     // unit sits after one-step equations at UK 7, so Year 7 (KS3 revisits them) - later than usual. CZ: zlomky and
@@ -147,7 +154,7 @@ export const SYLLABUS: Topic[] = [
     id: "pct-of-amount",
     name: "A percent of an amount",
     strand: "Decimals and percent",
-    blurb: "A percentage of an amount is that many hundredths of it, which you find by building up from ten percent or by multiplying by the percentage as a decimal.",
+    blurb: "A percentage of an amount is that many hundredths, found by building up from ten percent or multiplying by the percentage as a decimal.",
     // from memory, unchecked: a maths teacher reads these four before release. US Grade 6 (percent of a quantity). UK: Year
     // 6 in the national curriculum; after one-step equations at UK 7 it is Year 7 - later than usual. CZ: procenta, 7.
     // ročník. DE: Prozentrechnung is usually Klasse 7; held by two-step equations at DE 6 after it, so Klasse 6 - a year
@@ -176,7 +183,7 @@ export const SYLLABUS: Topic[] = [
     id: "ratio-share",
     name: "Ratio and sharing",
     strand: "Ratio and rates",
-    blurb: "A ratio compares amounts in equal parts, which you simplify by dividing both numbers by the same number and share out by first finding the size of a single part.",
+    blurb: "A ratio compares amounts in equal parts, simplified by dividing both numbers by the same number and shared out by first finding a single part.",
     // from memory, unchecked: a maths teacher reads these four before release. US: ratio reasoning is Grade 6; held at 7 by
     // percent change (US 7) before it - a year later than usual. UK: unequal sharing is met in Year 6, dividing in a ratio
     // is KS3 (Year 7-8 schemes); held at 8 by percent change (UK 8). CZ: poměr, 7. ročník. DE: Verhältnisse and dividing in a
@@ -204,7 +211,7 @@ export const SYLLABUS: Topic[] = [
     id: "area",
     name: "Area of rectangles, triangles and composite shapes",
     strand: "Geometry and data",
-    blurb: "The area of a shape is the space inside it, found as length times width for a rectangle, half of base times height for a triangle and the sum of the parts for a shape made of rectangles.",
+    blurb: "Area is the space inside a shape: length times width for a rectangle, half base times height for a triangle, and joined rectangles added.",
     // from memory, unchecked: a maths teacher reads these four before release. US: triangles and composite figures are
     // Grade 6 (rectangles earlier); held at 7 by percent change - a year later than usual. UK: the area of a triangle is
     // Year 6 and rectilinear shapes Year 5-6; held at 8 by percent change (UK 8) - two years later than usual, though KS3
@@ -219,7 +226,7 @@ export const SYLLABUS: Topic[] = [
     id: "mean-range",
     name: "Mean and range",
     strand: "Geometry and data",
-    blurb: "A list of numbers is summed up by its mean, the total shared equally among them, and by its range, the gap from the smallest to the largest.",
+    blurb: "A list of numbers is summed up by its mean, the total shared equally, and its range, the gap from smallest to largest.",
     // from memory, unchecked: a maths teacher reads these four before release. US: the mean and measures of spread are
     // Grade 6; held at 7 by percent change - a year later than usual. UK: the mean is Year 6, the range KS3 (Year 7); held
     // at 8 by percent change - later than usual. CZ: aritmetický průměr is met in 6. ročník with decimals; 7. ročník here,
@@ -248,6 +255,31 @@ export const SYLLABUS: Topic[] = [
     year: { us: 8, uk: 9, cz: 8, de: 7 },
     prereq: ["linear-two-step"],
     lessonId: "bAerID24QJ0",
+  },
+  {
+    id: "pythagoras",
+    name: "Pythagoras' theorem",
+    strand: "Geometry and data",
+    blurb: "In a right-angled triangle the longest side squared equals the other two squared and added, which finds a missing side from the other two.",
+    // from memory, unchecked: a teacher reads these four before release. US Grade 8 (the theorem and its use for a missing
+    // side), UK Year 9 (often Year 8 or 10), CZ 8. ročník (Pythagorova věta), DE Klasse 8 (Satz des Pythagoras, Klasse 8 or 9
+    // by Bundesland). All four sit at or after equations with brackets (8 / 9 / 8 / 7), so none is held later than usual.
+    bands: { us: "Grade 8", uk: "Year 9", cz: "8. ročník", de: "Klasse 8–9 (varies by Bundesland)" },
+    year: { us: 8, uk: 9, cz: 8, de: 8 },
+    prereq: ["area"],
+  },
+  {
+    id: "probability",
+    name: "Probability of an event",
+    strand: "Geometry and data",
+    blurb: "Probability is the ways an event can happen over all equally likely outcomes, and its chance of not happening is the rest of the whole.",
+    // from memory, unchecked: a teacher reads these four before release. HELD LATER THAN USUAL in three systems to keep the
+    // list from going down after Pythagoras (8 / 9 / 8 / 8): US Grade 8 (usually Grade 7), UK Year 9 (usually Year 8; the
+    // Foundation single-event work is Year 10 to 11), DE Klasse 8 (usually Klasse 7, often earlier in Bundesland courses).
+    // CZ 9. ročník is the usual year (pravděpodobnost), not held.
+    bands: { us: "Grade 8", uk: "Year 9", cz: "9. ročník", de: "Klasse 8 (varies by Bundesland)" },
+    year: { us: 8, uk: 9, cz: 9, de: 8 },
+    prereq: ["frac-equivalent", "dec-convert"],
   },
 ];
 

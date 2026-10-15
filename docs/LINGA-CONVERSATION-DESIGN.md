@@ -56,6 +56,8 @@ Placement is a provisional 3–5 minute conversation: an easy opening, one follo
 | Debrief | A small visual path: tried → with help → on your own → used elsewhere | Private evidence, phrase notes, and next recommendation; distinguish today's example from accumulated progress |
 | Next visit | A new setting calls for an earlier skill | Spaced review, not just a continuation of yesterday's story |
 
+A scene's steps are decided in `desk/src/lib/english/mission.ts`: two or three goals per scene (authored on the built-in scenes, generated for a plan topic), each reached only when the model's claim quotes the learner's own reply (two words or more), in order, one step per reply. A step writes no evidence and touches no credit or progress; it lights a dot on the TV and nothing more.
+
 Design starting points: 6–8 minutes for younger children, 10–12 for teens, 10–15 for adults; user can end or extend at a natural boundary. Aim for most active practice time in conversation and replay. Quizzes occupy at most a short rescue or contrast moment, not a compulsory block in every episode. These are pilot defaults, not research-derived optimal timings.
 
 ### Five example episodes
@@ -185,4 +187,41 @@ Pilot with elementary learners and guardians, teens, and adults including beginn
 
 Release gates: no spoken-credit from taps or copied model phrases; uncertain audio cannot lower skill state; interruptions do not lose turns; retries do not double-count evidence; one learner's notes cannot enter another's session; age-restricted scenarios cannot be selected for children; generated partner speech stays within the scene and readable caption budget; progress survives a normal reset. Validate noisy-room speech and real device response times before increasing scenario breadth.
 
+The credit rules behind that gate are enforced in code, in `desk/src/lib/english/credit.ts`: a formula (a yes, a thanks, a greeting) earns nothing, each skill's quote must have its shape (a repair asks to repeat or clarify, a request asks for something, the rest need three words), and a quote that repeats four or more consecutive words the scene already showed is stored as supported. The prompt is no longer the only guard; the lists are data a teacher can widen.
+
 The central design question for testing is concrete: **Does replaying one meaningful moment help people speak more independently the next time?**
+
+## Open questions (09-15 drain)
+
+Raised by the five 2026-09-15 LT runs (codex played and judged them, so they are leads). Each question has a backlog id in `docs/BACKLOG.md` and its evidence in `docs/uat-insights/`. No question is answered here.
+
+**LG-4 · The independent retry after coaching.** Every Character tested in J4, across three runs, finished without trying the coached thing again unaided: *"Then let me try by myself! It stopped after three answers."* (Tomáš, 9). Today replay asks a *new* question and marks the reply supported. Take Two re-asks the same line, but only in Adult mode, only from Cut notes, and it writes nothing.
+- In Family mode, is the retry Take Two from a coaching note, or a later partner line that re-asks the coached target with the help hidden?
+- Does an unaided retry write evidence (on your own) when it lands, and does a miss write anything?
+- How many retries before the scene moves on, so that a beginner is not drilled?
+- The coach sometimes works on an older answer than the one the learner is stuck on (hypothesis, unverified). Does coaching always take the latest reply?
+
+**LG-15 · What a learner with no mistakes takes home.** Jana (C1) and Lukáš (B2) finished rehearsals with nothing to keep: *"Give me one register distinction or a sharper alternative I wouldn't have reached myself."* Moments are for errors and for words reached for in another language. Cut's notes rule out "a valid alternative, a style choice".
+- Should a word moment at B2+ offer a register choice, an idiom the scene wants, or a sharper alternative, and how is it kept from inventing a mistake?
+- Should it be a stop, or a line on the recap only?
+- What does the TV recap show when there is no moment and no reviewed phrase? Today it shows progress stones and counts.
+
+**LG-21 · Interest the date partner may show an adult.** Lukáš asked to practise showing interest respectfully. The partner answered "I'll keep things friendly" three times. The adult rule says "never flirt explicitly … Decline warmly", and the scene says it is "not a personal relationship".
+- Inside the adult date scene, what may the partner reciprocate: polite interest and compliments on what was said, never attraction to the learner?
+- Does a refusal vary and move the scene on, rather than repeat?
+- Where does this line sit against LG-20, the code check for minors, so that loosening it for adults cannot reach a child?
+
+**LG-23 · How often a scene stops to teach, and for whom.** Six Characters found the stops too many: *"stopping the whole conversation twice in four replies? Let me finish talking."* (Ondřej, 16). Adéla and Petra found 2.5 per ten turns right. Klára's own criterion passed while the rubric's density target failed. Today there is one rate (B1+: one stop in any three turns, four a rehearsal; A1–A2: one in four, two), and the preference is on or off.
+- Is there a third preference, *save fixes for the end*, that lists fixes on the recap instead of stopping?
+- Should a stop be kept for meaning-blurring errors, with everything else held for the recap, whatever the preference?
+- Should *Not now* on a moment lower that learner's rate, and does that rate persist across scenes?
+- How does this trade against LG-24, following up a repeated error without adding a stop?
+
+## Open questions (10-09 drain)
+
+Raised by the three 2026-10-09 browser runs of `tools/linga-ui-test.cjs`. They are L2 on the claude CLI (`claude-cli/haiku`), with one scripted learner (Mia, A2, *The missing moon rover*) and the builder's reading; the owner's reading is owed. Each question has a backlog id in `docs/BACKLOG.md` and its evidence in `docs/uat-insights/2026-10-09-linga-*.md`. No question is answered here.
+
+**LG-27 · Whether the partner names the learner's next question.** In every run, Pip's second line told the learner what to ask next: *"Can you ask me where I saw it last?"*. At that moment the TV already shows the mission step, *"Find out where Pip saw it"*. Run 1's reading called it the partner doing its job ("hands the next question back, as the scene's goal asks"). Runs 2 and 3 read it as the step given away.
+- At A1–A2, is naming the question scaffolding that a child needs, or does it do the step for them? Does the answer change with age, or between Family and Adult mode?
+- If the partner may name it, should a learner who then asks it in the partner's words reach the step, or reach it as supported?
+- Should the partner draw the question out instead (*"I saw it somewhere… what could you ask me?"*), and after how many turns without it may it say the question outright?

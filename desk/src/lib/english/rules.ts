@@ -1,6 +1,8 @@
 import { ENGLISH_SKILLS, PROGRESS_ORDER } from "./curriculum";
 import { cleanCertificates, cleanSeen } from "./cert";
+import { creditOf } from "./credit";
 import { cleanPlacement, cleanPlacements, cleanPlan, cleanTaught, isBand } from "./placement";
+import { cleanPitches } from "./pitch";
 import { emptyEnglish, type EnglishEvidence, type EnglishLearning, type EnglishPreferences, type Progress, type SkillId } from "./types";
 
 const obj = (v: unknown): Record<string, unknown> => v && typeof v === "object" && !Array.isArray(v) ? v as Record<string, unknown> : {};
@@ -26,6 +28,9 @@ export function cleanEnglish(value: unknown): EnglishLearning {
   result.seenIds = cleanSeen(v.seenIds, result.certificates);
   result.plan = cleanPlan(v.plan);
   result.taught = cleanTaught(v.taught);
+  // optional (v2 L3): only a record that holds a pitch carries the field
+  const pitches = cleanPitches(v.pitches);
+  if (pitches.length) result.pitches = pitches;
   result.sessions = Array.isArray(v.sessions) ? v.sessions.filter((s): s is EnglishLearning["sessions"][number] => {const x=obj(s);return typeof x.id === "string" && typeof x.sceneId === "string" && typeof x.title === "string" && typeof x.at === "number" && typeof x.turns === "number";}).slice(-30) : [];
   return result;
 }
@@ -58,8 +63,8 @@ export function mergeEvidence(learning: EnglishLearning, entries: EnglishEvidenc
   return {...learning,evidence,achievements};
 }
 /** Model assertions must refer to this exact submitted response and an allowed ability. */
-export function validateObservations(value: unknown, context: Omit<EnglishEvidence,"id"|"skill"|"success"|"quote"|"note"> & { text: string; skills: SkillId[] }): EnglishEvidence[] {
+export function validateObservations(value: unknown, context: Omit<EnglishEvidence,"id"|"skill"|"success"|"quote"|"note"> & { text: string; skills: SkillId[]; shown?: string[] }): EnglishEvidence[] {
   if(!Array.isArray(value))return [];
   const seen=new Set<string>();
-  return value.slice(0,2).flatMap(item=>{const e=obj(item);if(!isSkill(e.skill)||!context.skills.includes(e.skill)||seen.has(e.skill)||e.confidence!=="clear"||typeof e.success!=="boolean"||typeof e.quote!=="string"||!e.quote.trim()||!context.text.includes(e.quote)||e.quote.length>240||typeof e.note!=="string"||e.note.length>180)return [];seen.add(e.skill);return [{id:`${context.turnId}:${e.skill}`,episodeId:context.episodeId,turnId:context.turnId,sceneId:context.sceneId,at:context.at,mode:context.mode,supported:context.supported,skill:e.skill,success:e.success,quote:e.quote,note:e.note}];});
+  return value.slice(0,2).flatMap(item=>{const e=obj(item);if(!isSkill(e.skill)||!context.skills.includes(e.skill)||seen.has(e.skill)||e.confidence!=="clear"||typeof e.success!=="boolean"||typeof e.quote!=="string"||!e.quote.trim()||!context.text.includes(e.quote)||e.quote.length>240||typeof e.note!=="string"||e.note.length>180)return [];const credit=creditOf(e.quote,e.skill,context.shown??[]);if(credit==="none")return [];seen.add(e.skill);return [{id:`${context.turnId}:${e.skill}`,episodeId:context.episodeId,turnId:context.turnId,sceneId:context.sceneId,at:context.at,mode:context.mode,supported:context.supported||credit==="helped",skill:e.skill,success:e.success,quote:e.quote,note:e.note}];});
 }

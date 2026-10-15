@@ -7,10 +7,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after,afterEach}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const data=path.join(os.tmpdir(),`desk-jobs-${Date.now()}`);process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 
 const src=(f)=>path.join(root,'src',f);
@@ -60,6 +57,35 @@ test('case 1: a practice set that fails is a failed job with a desk-worded error
  assert.equal(ok.status,200);
  assert.equal(store.getSession().jobs.practice.phase,'done');assert.equal(store.getSession().jobs.practice.error,undefined);
  assert.equal(store.getSession().practice.items.length,6);
+});
+
+// ---- architect 2026-10-15 (error-handling: taxonomy-design, structured-propagation): why a run failed travels as a value
+test('case F1: a failed run carries its failure and whether asking again can help - on the job, in the 502 body, and at the retry route',async()=>{
+ const {EngineError}=require(src('lib/engines/types.ts'));
+ const {NOT_AGAIN}=require(src('lib/desk/job.ts'));
+ onPage();
+ stubText({items:()=>{throw new EngineError('declined','stub','no');}});
+ const bad=await post('practice',{topic:'linear-one-step'});
+ assert.equal(bad.status,502);
+ const body=await bad.json();deskWorded(body.error);
+ assert.deepEqual([body.failure,body.retry],['declined',false],'the body says why, as a value, beside the sentence');
+ const job=store.getSession().jobs.practice;
+ assert.deepEqual([job.phase,job.failure,job.retry],['failed','declined',false]);
+ const again=await retry({kind:'practice'});
+ assert.equal(again.status,409,'a refusal is not asked again with the same input');
+ assert.equal((await again.json()).error,NOT_AGAIN);
+ stubText({items:()=>{throw new EngineError('timeout','stub','slow');}});
+ const slow=await post('practice',{topic:'linear-one-step'});
+ assert.deepEqual([(await slow.json()).failure,store.getSession().jobs.practice.retry],['timeout',true],'a slow engine can answer next time: Try again is offered');
+ stubText({items:()=>({items:STATED})});
+ const ok=await retry({kind:'practice'});
+ assert.equal(ok.status,200,'and the retry route asks it again');
+});
+test('case F2: the phone and both TV hint lines offer Try again only where the job says asking again can help',()=>{
+ const phone=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
+ assert.match(phone,/const failed = \(kind: JobKind\) => \{[^\n]*j\.retry !== false/,'the phone panels read job.retry');
+ assert.match(phone,/const readAgain = [^\n]*retry !== false/);
+ for(const f of ['tv/screens.tsx','maths/MathsTV.tsx'])assert.match(fs.readFileSync(src(f),'utf8'),/hj\.retry === false \? "[Nn]o hint for this one/,`${f} words a hint that will not change`);
 });
 
 test('case 2: two hints at once for one item: the second is refused with 409, and one hint is counted',async()=>{
@@ -184,6 +210,39 @@ test('retry: a hint that failed is asked again for the same item and the same qu
  const s=store.getSession();
  assert.equal(s.hint.key,'k2','the item that failed, not the one now focused');assert.equal(s.hint.askedQ,'What do I do first?');
  assert(prompt.includes('What do I do first?'));assert.equal(s.jobs.hint.phase,'done');
+});
+
+test('retry: a lesson (teach) that failed is asked again for the same topic through /api/worked',async()=>{
+ blank();
+ const W=require(src('lib/desk/worked.ts'));const real=W.teachTopic;
+ let topics=[];
+ try{
+  W.teachTopic=async(topic,...rest)=>{topics.push(topic);if(topics.length===1)throw new Error('boom');return real(topic,...rest);};
+  stubText({other:()=>({idea:'It is about sharing equally.'})});
+  const r1=await post('worked',{topic:'frac-equivalent'});assert.equal(r1.status,502);
+  assert.equal(store.getSession().jobs.teach.phase,'failed');
+  const again=await retry({kind:'teach'});
+  assert.equal(again.status,200,'the lesson is asked again, not refused with nothing to try again');
+  assert.deepEqual(topics,['frac-equivalent','frac-equivalent'],'the same topic, held on the job');
+  assert.equal(store.getSession().jobs.teach.phase,'done');
+ }finally{W.teachTopic=real;}
+});
+
+test('size caps: a 100k-character Linga sentence and a 30 MB photo are refused in desk words - no job, no engine call',async()=>{
+ blank();let calls=0;
+ stubText({other:()=>{calls++;return {};}});stubVision(()=>{calls++;return READ3;});
+ const long=await post('analyse',{kind:'english',sentence:'a'.repeat(100000)});
+ assert.equal(long.status,400);deskWorded((await long.json()).error);
+ assert.equal(store.getSession().jobs.analyse,undefined,'no analyse job started');
+ const big=await post('read',{...SNAP,image:'data:image/jpeg;base64,'+'A'.repeat(30*1024*1024)});
+ assert.equal(big.status,400);deskWorded((await big.json()).error);
+ assert.equal(store.getSession().pages.length,0,'no page kept');assert.equal(store.getSession().jobs.read,undefined,'no read job started');
+ assert.equal(calls,0,'no engine reached');
+ // what the phone sends (1280 px JPEG) and an ordinary sentence still go through
+ stubText({other:()=>({})});
+ assert.notEqual((await post('analyse',{kind:'english',sentence:'a'.repeat(900)})).status,400,'a long but ordinary sentence is read');
+ stubVision(()=>READ3);
+ assert.equal((await post('read',{...SNAP,image:'data:image/jpeg;base64,'+'A'.repeat(6*1024*1024)})).status,200,'a 6 MB photo, above what the phone makes, is read');
 });
 
 test('retry: with nothing failed there is nothing to retry, and no engine is called',async()=>{
@@ -427,11 +486,11 @@ test('mark case 2: a normal mark lands as before; marking the same set again is 
  let seen=0;stubVision(()=>{seen++;return MARKS;});
  const r=await post('mark',PHOTO);
  assert.equal(r.status,200);const b=await r.json();
- assert.deepEqual([b.right,b.wrong,b.unsure],[4,1,1]);
+ assert.deepEqual([b.right,b.wrong,b.unsure,b.skipped],[4,1,0,1],'MB-B1: number 3 was read empty, so it is skipped, not one the desk could not call');
  let s=store.getSession();assert.equal(s.practice.marked,true);assert.equal(s.screen,'sheet');
  assert.deepEqual(s.practice.items.map((i)=>i.verdict),['right','wrong','unsure','right','right','right']);
- assert.equal(record('jobs-scratch').lines,was.lines+1,'one history line');assert.equal(s.history.at(-1).detail,'4 of 6 right, 1 not sure');
- assert.equal(s.status,'4 right, 1 to look at, 1 to talk through');
+ assert.equal(record('jobs-scratch').lines,was.lines+1,'one history line');assert.equal(s.history.at(-1).detail,'4 of 6 right, 1 skipped');
+ assert.equal(s.status,'4 right, 1 to look at, 1 skipped');
  const after=record('jobs-scratch');
  const again=await post('mark',PHOTO);
  assert.equal(again.status,409);deskWorded((await again.json()).error);
@@ -469,6 +528,430 @@ test('status case 1: a hint whose engine answered raw text fails with the desk s
  assert.match(line,/\bhint\b/);assert.match(line,/x = 6 is the answer/,'the detail is kept for the server log');
 });
 
+
+// ---- HW2: the homework door opens tonight's sheet, never the oldest page on the desk ----
+test('HW2: the door opens a maths page snapped tonight with problems; yesterday\'s, a failed one and an unstamped one ask for a photo',()=>{
+ const {tvKey,LOCAL}=require(src('tv/keys.ts'));const {tonightsSheet,dayOf}=require(src('tv/mathsRows.ts'));const {tonightStops}=require(src('tv/keys.ts'));
+ const door=(s)=>tvKey({...s,screen:'tonight',focus:tonightStops({...s,screen:'tonight'}).indexOf('homework')},'select',LOCAL).events;
+ const asks=[{type:'subject',subject:'maths'},{type:'page.ask',subject:'maths'}];
+ onPage();
+ let s=store.getSession();
+ assert.equal(s.pages[0].day,dayOf(Date.now()),'a page is stamped with the day it was snapped');
+ assert.equal(tonightsSheet(s)?.ix,0);
+ assert.deepEqual(door(s).slice(0,2),[{type:'subject',subject:'maths'},{type:'page.select',pageIx:0}],'tonight\'s page with problems: the door opens it');
+ const old={...s.pages[0],id:'old',day:'2000-1-1'},bare={...s.pages[0],id:'bare',day:undefined};
+ assert.deepEqual(door({...s,pages:[old]}),[...asks],'yesterday\'s page and nothing tonight: the door asks');
+ assert.deepEqual(door({...s,pages:[bare]}),asks,'a page with no day stamp is not tonight\'s');
+ const failed={...s.pages[0],id:'f',items:[],provider:'error'};
+ assert.deepEqual(door({...s,pages:[old,failed]}),asks,'tonight\'s failed page: the door asks');
+ const pi=door({...s,pages:[failed,old,s.pages[0]]}).find(e=>e.type==='page.select');
+ assert.equal(pi.pageIx,2,'the newest page with problems, not the oldest');
+});
+
+test('HW2: a learner\'s first sheet tonight is not titled page N+1',()=>{
+ const phone=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
+ assert.match(phone,/p\.subject === sub && p\.day === today/,'the title counts only tonight\'s pages of the subject');
+ onPage();
+ const {dayOf}=require(src('tv/mathsRows.ts'));
+ const s=store.getSession();const today=dayOf(Date.now());
+ const count=(pages)=>pages.filter(p=>p.subject==='maths'&&p.day===today).length;
+ assert.equal(count([{...s.pages[0],day:'2000-1-1'}]),0,'an older page does not make tonight\'s first sheet "page 2"');
+ assert.equal(count(s.pages),1);
+});
+test('HW2: the door and its caption use the one predicate',()=>{
+ const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8'),keys=fs.readFileSync(src('tv/keys.ts'),'utf8');
+ assert.match(tv.split('function doorCaption')[1].split('\n}')[0],/tonightsSheet\(s\)/);
+ assert.match(keys,/tonightsSheet\(s\)/);
+ assert.doesNotMatch(keys,/s\.pages\.findIndex\(\(p\) => p\.subject === "maths"\)/,'the oldest-page lookup is gone');
+});
+
+// ---- HW3: a read with zero problems is a failed job, retried in place ----
+test('HW3: a read that comes back with zero items ends failed with the desk\'s reason; a retry keeps the page and writes no history line',async()=>{
+ blank();
+ const {EMPTY_READ}=require(src('lib/desk/job.ts'));const learners=require(src('lib/session/learners.ts'));
+ const lines=()=>(learners.getLearner('jobs-scratch')?.history??[]).filter((h)=>h.kind==='homework').length;
+ const before=lines();
+ stubVision(()=>({items:[]}));
+ const r=await post('read',SNAP);
+ assert.equal(r.status,502);assert.equal((await r.json()).error,EMPTY_READ);deskWorded(EMPTY_READ);
+ let s=store.getSession();
+ assert.equal(s.jobs.read.phase,'failed');assert.equal(s.jobs.read.error,EMPTY_READ);
+ assert.equal(s.pages.length,1);assert.equal(s.pages[0].items.length,0);assert.equal(s.pages[0].provider,'error');assert.equal(s.reading,false);
+ assert.equal(lines(),before,'no homework history line for an empty read');
+ const id=s.pages[0].id;
+ const again=await retry({kind:'read'});
+ assert.notEqual(again.status,409,'a retry is accepted');assert.equal(again.status,502,'and the empty read fails again');
+ s=store.getSession();assert.equal(s.pages.length,1,'the page count is kept');assert.equal(s.pages[0].id,id,'the page id is kept');assert.equal(lines(),before);
+ stubVision(()=>READ3);
+ assert.equal((await retry({kind:'read'})).status,200);
+ s=store.getSession();assert.equal(s.pages.length,1);assert.equal(s.pages[0].items.length,3);assert.equal(lines(),before+1,'the read that found problems is written down');
+});
+test('HW3: an empty read fails for English and Essay too, and the TV and the phone point to Try again',async()=>{
+ for(const subject of ['english','essay']){
+  blank();stubVision(()=>({items:[]}));
+  assert.equal((await post('read',{...SNAP,subject})).status,502,subject);
+  assert.equal(store.getSession().jobs.read.phase,'failed',subject);
+ }
+ const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8');
+ assert.match(tv,/Open Try again on the phone/);assert.doesNotMatch(tv,/Snap it again on the phone/);
+ const {panelFor,follow}=require(src('app/phone/panelFor.ts'));
+ const page={...PAGE,items:[],provider:'error'};
+ const failed={screen:'page',joined:true,subject:'maths',awaiting:null,practice:null,pages:[page],pageIx:0,jobs:{read:{id:'j',kind:'read',phase:'failed',key:page.id,error:'x',startedAt:0,input:{id:page.id}}}};
+ assert.equal(panelFor(failed),'capture','the capture panel carries that read\'s Try again');
+ const cue=follow(undefined,failed,{panel:'join',role:'student',busy:false});
+ assert.equal(cue.key,`page:retry:${page.id}`);assert.equal(cue.to,'capture','a phone arriving on a failed read lands where Try again is, and opensCamera is off there');
+ const ph=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
+ assert.match(ph,/screen === "capture" && !readAgain/,'the camera stays off while Try again is offered');
+});
+
+// ---- robustness-2 / craft-7: readPage itself, vision stubbed; the shared reader for maths, English and Essay ----
+const {readPage}=require(src('lib/desk/read.ts'));
+const readOf=(items,subject='maths',w=1000,h=2000)=>{stubVision(()=>({items}));return readPage('AAAA',subject,w,h);};
+const row=(number,text,x,y)=>({number,text,x,y});
+test('robustness-2: an item with a position that is not a finite number is dropped; out-of-range and pixel positions stay inside the page',async()=>{
+ const r=await readOf([row(1,'a',0.5,0.3),row(2,'b',NaN,0.5),row(3,'c',0.5,Infinity),row(5,'e',-0.4,1.7),row(6,'f',640,1300),row(7,'g',0.5,0.01)]);
+ assert.deepEqual(r.items.map(i=>i.n),[1,5,6,7]);
+ for(const i of r.items){assert(i.cx>=0&&i.cx<=1000,`cx ${i.cx}`);assert(i.cy>=0&&i.cy<=2000,`cy ${i.cy}`);assert(i.band[0]>=0&&i.band[1]<=2000&&i.band[0]<=i.band[1],`band ${i.band}`);}
+ const p=r.items.find(i=>i.n===6);assert.deepEqual([p.cx,p.cy],[1000,2000],'a pixel position is clamped to the page edge');
+});
+test('robustness-2: a two-column sheet with distinct numbers keeps 1, 2, 3',async()=>{
+ const r=await readOf([row(2,'two',0.7,0.1),row(1,'one',0.2,0.6),row(3,'three',0.2,0.1)]);
+ assert.deepEqual(r.items.map(i=>i.text),['one','two','three'],'printed number first, never height alone');
+});
+test('HW5: a number that repeats with no label means sections that restart; the old pin\'s repeat half reads in the HW5 order',async()=>{
+ // OLD (printed number, ties stable): one, two, two again, three. NEW (sections): two, three | one, two again
+ const r=await readOf([row(2,'two',0.7,0.1),row(1,'one',0.2,0.6),row(3,'three',0.2,0.1),row(2,'two again',0.7,0.2)]);
+ assert.deepEqual(r.items.map(i=>i.text),['two','three','one','two again']);
+ assert.deepEqual(r.items.map(i=>i.key.replace(/^.*?:/,'')),['2','3','1','2#2'],'itemKey still gives the second 2 its #2');
+});
+const shuffle=(rows,order)=>order.map((k)=>rows.find((r)=>r.text===k));
+test('HW5: two stacked sections numbered 1 to 3 read A1 A2 A3 B1 B2 B3, given in any order, for maths, English and Essay',async()=>{
+ const rows=[row(1,'A1',0.3,0.1),row(2,'A2',0.3,0.2),row(3,'A3',0.3,0.3),row(1,'B1',0.3,0.5),row(2,'B2',0.3,0.6),row(3,'B3',0.3,0.7)];
+ for(const subject of ['maths','english','essay'])for(const order of [['B1','A2','B3','A1','B2','A3'],['A1','B1','A2','B2','A3','B3'],['B3','B2','B1','A3','A2','A1']]){
+  const r=await readOf(shuffle(rows,order),subject,1000,1000);
+  assert.deepEqual(r.items.map(i=>i.text),['A1','A2','A3','B1','B2','B3'],`${subject}: ${order}`);
+ }
+ const r=await readOf(rows,'maths',1000,1000);
+ assert.deepEqual(r.items.map(i=>i.key.replace(/^.*?:/,'')),['1','2','3','1#2','2#2','3#2'],'keys come from itemKey');
+});
+test('HW5: lettered parts split by the label, and a page of 1a 1b 2 alone is not split',async()=>{
+ const lab=(number,label,text,y)=>({number,label,text,x:0.3,y});
+ const r=await readOf([lab(1,'a','S1a',0.1),lab(1,'b','S1b',0.2),row(2,'S2',0.3,0.3),lab(1,'b','T1b',0.6),lab(1,'a','T1a',0.5)],'maths',1000,1000);
+ assert.deepEqual(r.items.map(i=>i.text),['S1a','S1b','S2','T1a','T1b']);
+ const one=await readOf([row(2,'S2',0.3,0.3),lab(1,'b','S1b',0.2),lab(1,'a','S1a',0.1)],'maths',1000,1000);
+ assert.deepEqual(one.items.map(i=>i.text),['S1a','S1b','S2'],'no repeat: the printed sort');
+});
+test('HW5: an Essay page whose items all carry the same number reads top to bottom',async()=>{
+ const r=await readOf([row(1,'third',0.5,0.8),row(1,'first',0.5,0.1),row(1,'second',0.5,0.45)],'essay',1000,1000);
+ assert.deepEqual(r.items.map(i=>i.text),['first','second','third']);
+});
+test('HW5: one band is the band of its first item, read left to right; an equal x puts the upper item first',()=>{
+ const {orderItems}=require(src('lib/desk/read.ts'));
+ const it=(n,t,cx,cy)=>({n,t,cx,cy,band:[cy-50,cy+50]});
+ // 1 and 2 sit in one band (cy 100 and 140): the right one is higher on the page, but the band reads left to right
+ const o=orderItems([it(1,'right',500,100),it(1,'left',100,140),it(1,'low',100,400)]);
+ assert.deepEqual(o.map(i=>i.t),['left','right','low']);
+ const tie=orderItems([it(1,'lower',100,140),it(1,'upper',100,100)]);
+ assert.deepEqual(tie.map(i=>i.t),['upper','lower']);
+ assert.equal(orderItems([]).length,0);
+});
+test('robustness-2: w or h of 0 is refused with a 400 in the desk\'s words, no page is added',async()=>{
+ blank();
+ for(const bad of [{w:0},{h:0},{w:-5},{w:'x'}]){
+  const r=await post('read',{...SNAP,...bad});assert.equal(r.status,400,JSON.stringify(bad));deskWorded((await r.json()).error);
+ }
+ assert.equal(store.getSession().pages.length,0);
+});
+test('craft-7: the English and Essay reads order and band like the maths one',async()=>{
+ for(const subject of ['english','essay']){
+  const r=await readOf([row(2,'second',0.5,0.9),row(1,'first',0.5,0.02)],subject,100,100);
+  assert.deepEqual(r.items.map(i=>i.n),[1,2],subject);
+  const half=subject==='essay'?9:4.5;
+  assert.deepEqual(r.items[0].band,[0,Math.round(0.02*100+half)],`${subject}: the band is clamped at the top`);
+  assert.deepEqual(r.items[1].band,[Math.round(90-half),Math.min(100,Math.round(90+half))],subject);
+ }
+});
+
+test('craft-2: an item\'s key is its page and printed number, not its text; two items with the same text get two identities and a hint retry on the second reaches the second',async()=>{
+ blank();
+ stubVision(()=>({items:[row(1,'2x+3=11',0.5,0.2),row(2,'2x+3=11',0.5,0.5),row(3,'x-5=2',0.5,0.8)]}));
+ assert.equal((await post('read',SNAP)).status,200);
+ let s=store.getSession();const [a,b,c]=s.pages[0].items;
+ assert.equal(a.fingerprint,b.fingerprint,'the content fingerprint is the normalised text');
+ assert.notEqual(a.key,b.key);assert.equal(new Set([a.key,b.key,c.key]).size,3);
+ assert.equal(a.key,`${s.pages[0].id}:1`);
+ const {itemKey}=require(src('lib/desk/read.ts'));const seen=new Map();
+ assert.deepEqual([itemKey('p',1,seen),itemKey('p',1,seen),itemKey('p',2,seen)],['p:1','p:1#2','p:2'],'a repeated number takes a suffix');
+ // a hint on the second twin, failed, then asked again: the retry match reaches the second item
+ stubText({hint:()=>{throw new Error('boom');}});
+ store.dispatch({type:'item',itemIx:1});
+ assert.equal((await post('hint',{askedQ:'',itemIx:1})).status,502);
+ assert.equal(store.getSession().jobs.hint.key,b.key);
+ let asked='';stubText({hint:(req)=>{asked=req.prompt;return {hint:'Undo the +3.',what_to_try_next:'Subtract 3.'};},lesson:()=>({lesson:'none',why:'x'})});
+ assert.equal((await retry({kind:'hint'})).status,200);await drain();
+ s=store.getSession();assert.equal(s.hint.key,b.key,'the second twin, not the first');assert.equal(s.jobs.hint.phase,'done');
+ // a session that already holds items keeps the keys it stored them with
+ store.dispatch({type:'page.read',id:s.pages[0].id,items:[{...a,key:'k-old'}],readMs:1,provider:'t'});
+ assert.equal(store.getSession().pages[0].items[0].key,'k-old');
+});
+
+test('robustness-3: a read for a subject the desk does not have is refused with a 400; a page that is gone is a 409 in the desk\'s words',async()=>{
+ blank();let asked=0;stubVision(()=>{asked++;return READ3;});
+ for(const subject of ['history','',7]){const r=await post('read',{...SNAP,subject});assert.equal(r.status,400,String(subject));deskWorded((await r.json()).error);}
+ assert.equal(asked,0,'no vision call for a subject the desk does not have');assert.equal(store.getSession().pages.length,0);
+ blank();asked=0;
+ const gone=await post('read',{id:'maths-gone'});assert.equal(gone.status,409);assert.equal((await gone.json()).error,'That page is no longer on the desk.');
+ assert.equal(store.getSession().pages.length,0);
+});
+
+test('value-4 / craft-5: the reading caption says the read is one call, not that problems arrive as they are read',()=>{
+ const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8');
+ assert.doesNotMatch(tv,/as they are read/);assert.match(tv,/Reading the page… the problems appear here all at once when it is read\./);
+});
+
+test('MB-B3: the maths read prompt carries the cz learner\'s system, notation, course and age; English and Essay prompts are byte-for-byte what they were; a label rides on the item',async()=>{
+ const OLD=(what)=>`This is a photo of a printed page. Transcribe every numbered item exactly as printed: ${what}. `+
+  `For each item give its number, its text, and the position of its centre as fractions of the image (x: 0 = left edge, 1 = right edge; y: 0 = top, 1 = bottom). `+
+  `Keep the printed numbering. Do not solve anything and do not add items that are not there.`;
+ let seen=null;const spy=(items)=>reg.useProvider('vision',{name:'stub',run:async(req)=>{seen=req;return {raw:{items}};}});
+ spy([]);await readPage('AAAA','english',100,100,'p1');
+ assert.equal(seen.prompt,OLD('the exercise sentences, with their blanks (______) and the word in brackets'));assert.equal(seen.schema.properties.items.items.properties.label,undefined);
+ await readPage('AAAA','essay',100,100,'p1',{system:'cz',age:15});
+ assert.equal(seen.prompt,OLD('each paragraph as one item'),'a profile never reaches the Essay prompt');
+ await readPage('AAAA','maths',100,100,'p1',{system:'cz',path:'school',age:15,stage:'High school'});
+ const p=seen.prompt;
+ assert(p.startsWith(OLD('the maths problems, with all symbols and exponents (write exponents with ^, e.g. x^2)')),'the maths prompt keeps its old text first');
+ for(const bit of ['Czech Republic','decimal comma','colon','tg and cotg','log (or lg) for the base-10 logarithm with ln for the natural one','School maths','15 years old','lim_(x->a)','a/b with brackets','no LaTeX','printed in'])assert(p.includes(bit),bit);
+ assert(!/High school/.test(p),'the age leads; the stage is the fallback');
+ assert.equal(seen.schema.properties.items.items.properties.label.type,'string');assert(!seen.schema.properties.items.items.required.includes('label'),'the label is optional');
+ await readPage('AAAA','maths',100,100,'p1',{path:'calc1',stage:'Other'});assert(/Their stage is Other\./.test(seen.prompt)&&!/years old/.test(seen.prompt));
+ // lettered parts: n stays the printed number, the label names the part, and the key carries it
+ stubVision(()=>({items:[{number:3,text:'b part',x:0.5,y:0.6,label:'3b'},{number:3,text:'a part',x:0.5,y:0.3,label:'3a'},{number:4,text:'plain',x:0.5,y:0.9}]}));
+ const r=await readPage('AAAA','maths',100,100,'p1');
+ assert.deepEqual(r.items.map(i=>[i.n,i.label]),[[3,'3a'],[3,'3b'],[4,undefined]],'number, then label');
+ assert.deepEqual(r.items.map(i=>i.key),['p1:3:3a','p1:3:3b','p1:4']);
+ const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8');assert.match(tv,/\{x\.label \?\? x\.n\}/);assert.match(tv,/it\.label \?\? it\.n/);
+});
+test('MB-B3: the read route hands the seated learner\'s profile to the maths read only',async()=>{
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'jobs-cz',name:'Cz',type:'high-school',age:16,system:'cz'}});store.dispatch({type:'profile.save'});
+ let prompt='';reg.useProvider('vision',{name:'stub',run:async(req)=>{prompt=req.prompt;return {raw:READ3};}});
+ assert.equal((await post('read',SNAP)).status,200);
+ assert(prompt.includes('Czech Republic')&&prompt.includes('16 years old')&&prompt.includes('School maths'),prompt);
+ prompt='';assert.equal((await post('read',{...SNAP,subject:'english'})).status,200);
+ assert(!/Czech|years old|School maths/.test(prompt),'the English read is told nothing about the learner');
+});
+
+// ---- HF1: a partial read says so ----
+test('HF1: missingNumbers names the printed numbers a read left out, run by run; unknown is not complete',()=>{
+ const {missingNumbers}=require(src('lib/desk/read.ts'));
+ const ns=(...a)=>a.map((n)=>typeof n==='number'?{n}:{n:parseInt(n),label:n});
+ assert.deepEqual(missingNumbers(ns(1,2,3,5)),[4]);
+ assert.deepEqual(missingNumbers(ns(1,2,3,4)),[]);
+ assert.deepEqual(missingNumbers(ns(1,2,3,1,2,4)),[3],'a repeated number starts a new run');
+ assert.deepEqual(missingNumbers(ns(7,8,9)),[],'a continuation sheet has no gap before it');
+ assert.deepEqual(missingNumbers(ns(1,'2a','2b',3)),[],'lettered parts count once');
+ assert.equal(missingNumbers([{n:1},{n:Infinity},{n:3}]),null);
+ assert.equal(missingNumbers([{n:1},{n:2.5}]),null);
+});
+test('HF1: the read route carries the missing numbers on the page, the answer, the done line and the log; a complete page carries an empty list',async()=>{
+ blank();
+ const row=(number,y)=>({number,text:`item ${number}`,y,x:0.5});
+ stubVision(()=>({items:[row(1,0.1),row(2,0.3),row(3,0.5),row(5,0.8)]}));
+ const warned=[];const w=console.warn;console.warn=(...a)=>warned.push(a.join(' '));
+ let r;try{r=await post('read',SNAP);}finally{console.warn=w;}
+ assert.equal(r.status,200);const j=await r.json();
+ assert.equal(j.items,4);assert.deepEqual(j.missing,[4]);
+ const s=store.getSession();
+ assert.deepEqual(s.pages[0].missing,[4]);assert.equal(s.jobs.read.phase,'done');
+ assert(/Number 4 was not read/.test(s.status),s.status);assert(warned.some((l)=>l.includes('4')),'a server log line names it');
+ const {missingLine}=require(src('tv/pageLines.ts'));
+ assert.equal(missingLine([4]),'Number 4 was not read. Take a new photo of the page on the phone.');
+ assert.match(missingLine([4,7,9]),/^Numbers 4, 7 and 9 were not read\./);
+ assert.match(missingLine([4,7,9,11,12]),/^Numbers 4, 7, 9 and 2 more were not read\./);
+ assert.match(missingLine([4,7]),/^Numbers 4 and 7 were not read\./);
+ for(const l of [missingLine([4]),missingLine([1,2,3,4])])assert(!/[—–-]/.test(l)&&!/Try again/.test(l),l);
+ const tv=fs.readFileSync(src('tv/screens.tsx'),'utf8');assert.match(tv,/p\.missing\?\.length \? missingLine\(p\.missing\)/);
+ blank();stubVision(()=>({items:[row(1,0.1),row(2,0.3),row(3,0.5)]}));
+ const ok=await (await post('read',SNAP)).json();assert.deepEqual(ok.missing,[]);assert.deepEqual(store.getSession().pages[0].missing,[]);
+ blank();stubVision(()=>({items:[row(1,0.1),{...row(2,0.3),number:0}]}));
+ assert.equal((await (await post('read',SNAP)).json()).missing,null,'unknown is kept distinct');
+ assert.equal(store.getSession().pages[0].missing,null);
+});
+
+test('HF1b: the Math Buddy page screen says the missing numbers, after the hint captions and before the lamp caption',()=>{
+ const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8');
+ assert.match(tv,/import \{ missingLine \} from "@\/tv\/pageLines"/);
+ const at=tv.indexOf('export function PageScreen');assert(at>=0);
+ const end=tv.indexOf('export function',at+10);const slice=tv.slice(at,end<0?undefined:end);
+ const branch='p.missing?.length ? missingLine(p.missing)';assert(slice.includes(branch));
+ const b=slice.indexOf(branch);
+ for(const before of ['Reading the page','could not read this page','Thinking about a hint','No hint that time'])assert(slice.indexOf(before)>=0&&slice.indexOf(before)<b,before);
+ assert(slice.indexOf('is under the lamp')>b);
+});
+
+// ---- HF2: a good read is kept when the learner file cannot be written ----
+test('HF2: with the learner file unwritable a read of 2 items is kept: 200, saved false, the items on the page, the job done, READ_NOT_SAVED said',async()=>{
+ blank();
+ const {READ_NOT_SAVED}=store;
+ const file=path.join(data,'learners.json');const had=fs.existsSync(file)?fs.readFileSync(file):null;
+ fs.writeFileSync(file,'not a book');
+ stubVision(()=>({items:[{number:1,text:'2x+3=11',y:0.2,x:0.5},{number:2,text:'x-5=2',y:0.6,x:0.5}]}));
+ const errs=[];const e0=console.error;console.error=(...a)=>errs.push(a.join(' '));
+ let r;try{r=await post('read',SNAP);}finally{console.error=e0;if(had)fs.writeFileSync(file,had);else fs.rmSync(file,{force:true});}
+ assert.equal(r.status,200);const j=await r.json();assert.equal(j.saved,false);assert.equal(j.items,2);
+ const s=store.getSession();
+ assert.equal(s.pages.length,1);assert.equal(s.pages[0].items.length,2);assert.equal(s.reading,false);
+ assert.equal(s.jobs.read.phase,'done');assert.notEqual(s.jobs.read.phase,'failed');
+ assert.equal(s.status,READ_NOT_SAVED);deskWorded(READ_NOT_SAVED);
+ assert(errs.some((l)=>/learner file/.test(l)),'the error is logged');
+});
+
+// ---- HF4: session.json is published through a temp file, and a write that fails is said ----
+const SJ=()=>path.join(data,'session.json');
+const jam=()=>{fs.rmSync(SJ(),{recursive:true,force:true});fs.mkdirSync(SJ());fs.writeFileSync(path.join(SJ(),'x'),'x');};
+const unjam=()=>{if(fs.existsSync(SJ())&&fs.statSync(SJ()).isDirectory())fs.rmSync(SJ(),{recursive:true,force:true});};
+const tmps=()=>fs.readdirSync(data).filter((n)=>/^session.json..*.tmp$/.test(n));
+const catchErrors=()=>{const errs=[];const e0=console.error;console.error=(...a)=>errs.push(a.join(' '));return {errs,done:()=>{console.error=e0;}};};
+test('HF4: with session.json unwritable a read of 2 items is kept: 200, saved false, done, READ_NOT_KEPT said, one log line, no tmp left, one recovery line',async()=>{
+ blank();
+ const {READ_NOT_KEPT}=store;deskWorded(READ_NOT_KEPT);
+ assert.equal(READ_NOT_KEPT,'That page was read, but the desk could not save it, so it will be gone if the desk restarts.');
+ jam();
+ stubVision(()=>({items:[{number:1,text:'2x+3=11',y:0.2,x:0.5},{number:2,text:'x-5=2',y:0.6,x:0.5}]}));
+ const c=catchErrors();let r,j;
+ try{
+  r=await post('read',SNAP);j=await r.json();assert.equal(store.getSession().status,READ_NOT_KEPT);
+  store.dispatch({type:'status',text:'a'});store.dispatch({type:'status',text:'b'});store.dispatch({type:'status',text:'c'});
+  const bad=c.errs.filter((l)=>/session.json/.test(l));
+  assert.equal(bad.length,1,'one line while writes keep failing: '+JSON.stringify(c.errs));
+  assert.equal(store.sessionSaved(),false);
+  assert.deepEqual(tmps(),[],'no temp file is left');
+  unjam();
+  store.dispatch({type:'status',text:'d'});store.dispatch({type:'status',text:'e'});
+  const back=c.errs.filter((l)=>/written again/.test(l));
+  assert.equal(back.length,1,'one recovery line');
+  assert.equal(store.sessionSaved(),true);
+ }finally{c.done();unjam();}
+ assert.equal(r.status,200);assert.equal(j.saved,false);assert.equal(j.items,2);
+ const s=store.getSession();
+ assert.equal(s.pages.length,1);assert.equal(s.pages[0].items.length,2);
+ assert.equal(s.jobs.read.phase,'done');
+ assert(JSON.parse(fs.readFileSync(SJ(),'utf8')).pages,'session.json parses');
+});
+test('HF4: with the learner file and session.json both failing, READ_NOT_SAVED is said',async()=>{
+ blank();
+ const {READ_NOT_SAVED}=store;
+ const file=path.join(data,'learners.json');const had=fs.existsSync(file)?fs.readFileSync(file):null;
+ fs.writeFileSync(file,'not a book');jam();
+ stubVision(()=>({items:[{number:1,text:'2x+3=11',y:0.2,x:0.5}]}));
+ const c=catchErrors();let r;
+ try{r=await post('read',SNAP);}finally{c.done();unjam();if(had)fs.writeFileSync(file,had);else fs.rmSync(file,{force:true});}
+ assert.equal(r.status,200);assert.equal((await r.json()).saved,false);
+ assert.equal(store.getSession().status,READ_NOT_SAVED);
+ store.dispatch({type:'status',text:'back'});
+});
+// ---- HF5: a printed number is model output; the missing list has a ceiling ----
+test('HF5: missingNumbers has a ceiling of MISSING_SPAN, a run or a list past it is unknown',()=>{
+ const {missingNumbers,MISSING_SPAN}=require(src('lib/desk/read.ts'));
+ assert.equal(MISSING_SPAN,100);
+ const it=(...ns)=>ns.map((n)=>({n}));
+ const t0=Date.now();assert.equal(missingNumbers(it(1,1000000)),null);assert(Date.now()-t0<200,'returns at once');
+ assert.deepEqual(missingNumbers(it(1,101)),Array.from({length:99},(_,i)=>i+2));
+ assert.equal(missingNumbers(it(1,102)),null);
+ // two runs (a repeated number starts a new one): gaps of 60 + 41 = 101 are unknown, 60 + 40 = 100 is the list
+ assert.equal(missingNumbers(it(1,62,1,43)),null);
+ assert.equal(missingNumbers(it(1,62,1,42)).length,100);
+ assert.deepEqual(missingNumbers(it(1,2,3)),[]);assert.deepEqual(missingNumbers(it(1,3)),[2]);
+});
+test('HF5: a read with printed numbers 1 and 1000000 answers 200 with missing null, no missing line, no warn listing numbers',async()=>{
+ blank();
+ stubVision(()=>({items:[{number:1,text:'2x+3=11',y:0.2,x:0.5},{number:1000000,text:'x-5=2',y:0.6,x:0.5}]}));
+ const warns=[];const w0=console.warn;console.warn=(...a)=>warns.push(a.join(' '));
+ let r;try{r=await post('read',SNAP);}finally{console.warn=w0;}
+ assert.equal(r.status,200);const j=await r.json();assert.equal(j.missing,null);
+ assert(!/left out printed numbers/.test(store.getSession().status||''));
+ assert.deepEqual(warns.filter((l)=>/printed numbers/.test(l)),[]);
+});
+
+test('case 6b (WD10): tonight\'s memory lines are written in ONE save - a write that fails keeps all of them or none, never some',async()=>{
+ const {writeMemory}=require(src('lib/desk/memory.ts'));const L=require(src('lib/session/learners.ts'));
+ const LINES=['They undo the constant first.','They check by substituting.','They like one step at a time.'];
+ stubText({other:()=>({lines:LINES})});
+ const real=fs.renameSync;let writes=0,failOn=0;
+ fs.renameSync=(a,b)=>{if(path.basename(b)==='learners.json'){writes++;if(writes===failOn)throw new Error('disk full');}return real(a,b);};
+ try{
+  const had=L.getLearner('jobs-memory-a').memory.length;
+  assert.deepEqual(await writeMemory('jobs-memory-a',{topic:'linear-one-step',hintsUsed:2}),LINES);
+  assert.equal(writes,1,'three lines, one write of learners.json');
+  assert.equal(L.getLearner('jobs-memory-a').memory.length,had+3);
+  writes=0;failOn=2;
+  await writeMemory('jobs-memory-b',{topic:'linear-one-step',hintsUsed:2}).catch(()=>null);
+  const kept=L.getLearner('jobs-memory-b').memory.length;
+  assert(kept===0||kept===3,`a failed write kept ${kept} of 3 lines: a Try again would write the kept ones twice`);
+ }finally{fs.renameSync=real;}
+});
+
+test('a memory line the notes already hold - or said twice tonight - is not written again',async()=>{
+ const {writeMemory}=require(src('lib/desk/memory.ts'));const L=require(src('lib/session/learners.ts'));
+ stubText({other:()=>({lines:['They undo the constant first.','They like one step at a time.']})});
+ const first=await writeMemory('jobs-memory-dup',{topic:'linear-one-step',hintsUsed:2});
+ assert.deepEqual(first,['They undo the constant first.','They like one step at a time.']);
+ stubText({other:()=>({lines:['  they UNDO the   constant first. ','They check by substituting.','They check by  substituting.']})});
+ const second=await writeMemory('jobs-memory-dup',{topic:'linear-one-step',hintsUsed:2});
+ assert.deepEqual(second,['They check by substituting.'],'only what tonight added is returned');
+ const kept=L.getLearner('jobs-memory-dup').memory;
+ assert.deepEqual(kept.map((n)=>n.text),['They undo the constant first.','They like one step at a time.','They check by substituting.']);
+ assert.ok(kept.every((n)=>n.source==='nightly'&&typeof n.at==='number'),'each note is dated and names its writer');
+});
+
+test('case 6d: a snap whose title is not text is read under the desk\'s own title - the learner file is written, and no "could not write" is said',async()=>{
+ blank();stubVision(()=>({items:[{number:1,text:'2x+3=11',y:0.3,x:0.5}]}));
+ const L=require(src('lib/session/learners.ts'));
+ for(const title of [42,{t:'x'},null]){
+  const had=L.getLearner('jobs-scratch').history.length;
+  const r=await post('read',{...SNAP,title});const j=await r.json();
+  assert.equal(r.status,200);assert.equal(j.saved,true,`title ${JSON.stringify(title)}: the read was saved`);
+  assert.equal(store.getSession().pages.at(-1).title,'Page');
+  assert.equal(L.getLearner('jobs-scratch').history.length,had+1,'one history line');assert.equal(L.getLearner('jobs-scratch').history.at(-1).label,'Page');
+ }
+});
+
+test('case 6e: a hint question that is not text, or longer than the cap, is a 400 in desk words before any job - never truncated, never kept; the cap itself is asked',async()=>{
+ const {HINT_QUESTION_MAX}=require(src('lib/rules/maths.ts'));
+ assert.equal(typeof HINT_QUESTION_MAX,'number');
+ let asked=0;stubText({hint:()=>{asked++;return {hint:'Undo the +3 first.',what_to_try_next:'Write what is left.'};},lesson:()=>({lesson:'none',why:'x'})});
+ for(const askedQ of ['x'.repeat(HINT_QUESTION_MAX+1),42,{q:'why'},['why']]){
+  onPage();
+  const r=await post('hint',{askedQ});assert.equal(r.status,400,JSON.stringify(askedQ).slice(0,40));deskWorded((await r.json()).error);
+  const s=store.getSession();assert.equal(s.jobs?.hint,undefined,'no hint job');assert.equal(s.hint??null,null,'nothing kept');
+ }
+ assert.equal(asked,0,'no model call');
+ onPage();assert.equal((await post('hint',{askedQ:'w'.repeat(HINT_QUESTION_MAX)})).status,200,'the cap itself is asked');await drain();
+ assert.equal(store.getSession().hint.askedQ.length,HINT_QUESTION_MAX);
+});
+
+test('case 6f: a JSON null, a list, a string or a number as the body is answered by every pipeline route here - never a throw (a 500); a refusal is in desk words',async()=>{
+ stubText({hint:()=>({hint:'Undo the +3 first.',what_to_try_next:'Write what is left.'}),lesson:()=>({lesson:'none',why:'x'})});
+ for(const name of ['read','hint','explain','mark','practice','analyse','session/retry'])for(const body of ['null','[]','"x"','7']){
+  onPage();
+  let r;try{r=await route(name).POST(new Request(`http://desk/api/${name}`,{method:'POST',body}));}catch(e){assert.fail(`${name} ${body}: threw ${e.constructor.name}`);}
+  await drain();
+  // a hint with no fields is the hint for the focused item, as an empty body always was
+  if(name==='hint'){assert.equal(r.status,200,`${name} ${body}`);continue;}
+  assert(r.status>=400&&r.status<500,`${name} ${body}: ${r.status}`);deskWorded((await r.json()).error);
+ }
+});
+
+test('case 6c: an onFail that throws still records the failure, and its own error reaches the server log (one door, never none)',async()=>{
+ onPage();
+ const {runJob}=require(src('lib/desk/job.ts'));
+ const errs=[],e0=console.error;console.error=(...a)=>errs.push(a.join(' '));
+ let r;try{r=await runJob('practice',async()=>{throw new Error('engine down');},{onFail:()=>{throw new Error('put-right broke');}});}finally{console.error=e0;}
+ assert.equal(r.ok,false);assert.equal(store.getSession().jobs.practice.phase,'failed');deskWorded(store.getSession().jobs.practice.error);
+ assert.equal(errs.filter((l)=>/onFail/.test(l)&&/put-right broke/.test(l)&&/practice/.test(l)).length,1,JSON.stringify(errs));
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
@@ -479,4 +962,17 @@ test('case 7: a job saved as running is not running after the desk restarts',()=
  assert(job,'the saved job is still on record');assert.notEqual(job.phase,'running');
  assert.equal(job.phase,'failed');deskWorded(job.error);assert.equal(store.getSession().reading,false);
  assert.deepEqual(job.input,{id:PAGE.id},'the run keeps what it was asked with, so the phone can offer Try again');
+});
+
+// ---- HF4: load() says why a session.json that exists was not used (after case 7: it swaps the store module too) ----
+test('HF4: load() logs once for a session.json that is not JSON or fails the shape check, and not at all for no file',()=>{
+ const reload=(content)=>{
+  clearInterval(globalThis.__desk.ticker);delete globalThis.__desk;delete require.cache[storeFile];
+  if(content===null)fs.rmSync(SJ(),{force:true});else fs.writeFileSync(SJ(),content);
+  const c=catchErrors();try{store=require(storeFile);}finally{c.done();}
+  return c.errs.filter((l)=>/session.json/.test(l));
+ };
+ const a=reload('{not json');assert.equal(a.length,1,JSON.stringify(a));assert.equal(store.getSession().learner,null);
+ const b=reload(JSON.stringify({profiles:'nope',learner:null}));assert.equal(b.length,1,JSON.stringify(b));assert.match(b[0],/shape check/);assert.equal(store.getSession().learner,null);
+ const n=reload(null);assert.deepEqual(n,[]);
 });

@@ -135,7 +135,7 @@ whatever should glow.
 
 ## Who sees which situation
 
-Eleven situations are built in, and age decides which of them a learner is offered (`audienceAllowed`, `lib/english/curriculum.ts`);
+Eleven situations are built in, and age and mode decide which of them a learner is offered (`audienceAllowed`, `lib/english/curriculum.ts`; Family mode hides the adult-audience scenes at any age, through `adultContent` in `rules/mode.ts`);
 English level never does. Five are for everyone; two are for 15 and over; one is for adults only; the three school
 situations are for a learner under 18 (or, with no age set, an elementary or high-school profile) and never for
 type Other or for an adult. Model-written plan topics may not be school situations in Phase 1. So a 12-year-old is
@@ -178,3 +178,96 @@ It isn't On Air: no charcoal, no red diagonal band, no condensed caps, no skew, 
 storybook either: text never sits on the picture except the name tag, and the picture never becomes a
 background. It isn't a dashboard: no tiles, no numbers without a picture. It isn't a slide: the arch changes
 the world on every screen, but the door stays where it is.
+
+## The collection (v2 R1, 2026-10-07)
+
+Keys in the footer of Linga's home and map (never inside a scene): **a key for every skill used on your own**
+("independent"), and **a golden key** once it was used elsewhere too ("transfer"). The Open Door's own object, in plum
+and the warm amber. It is derived from the achievements code already decides (`lib/rules/collect.ts`); a phrase picked or
+a helped reply never earns one. Never counted, Family mode only. `data-role="linga-collection"`; `english/LingaKeys.tsx`.
+
+## The Cambridge map (v2 L1, 2026-10-07)
+
+Owner decisions V2, L1, L2 and S3: Cambridge alignment is the goal; A2 Key for Schools and B1 Preliminary for Schools
+first; Speaking first; practice mode only. `lib/english/cambridge.ts` holds both Speaking papers (the parts, the language
+functions as descriptors, the assessment criteria and topic areas) in the host's own words, each mapped onto Linga's
+eight skills. `tools/cambridge-coverage.cjs [age]` reports which descriptors an authored scene practises for a learner
+of that age.
+
+Honest limits:
+- The table is transcribed from knowledge of the public 2020-format handbooks and is **unverified** (`VERIFIED = false`)
+  until a person checks it against them.
+- Coverage is counted at skill level, so it is generous. A2 Key at age 12 reads 15 of 16 (94%), but the "photograph"
+  and "longer answer" functions are only covered by the weekend chat. The task-shaped practice of L2 is what makes the
+  mapping real.
+- Real gaps today, for an 11-13-year-old: **no authored scene narrates the past** (the interview is 15+), and none
+  practises feelings (B1).
+- No screen may name Cambridge while `claimAllowed()` is false (verified, and A2 Key coverage at least 90%: the plan's
+  kill criterion). A test enforces it.
+
+## The Company: a pitched scene (v2 L3, Adult mode, 2026-10-07)
+
+Owner decisions L3 (wild but non-explicit) and the v2 plan's L3 card. In Adult mode only (`modeOf`, `lib/rules/mode.ts`),
+the phone's Linga start panel has a **Pitch a scene** field (at most 400 characters, as the topic handshake's "add a
+topic in your own words"; no microphone, as there is none there). **Play this scene** sends it: code refuses first,
+with no model call, any other mode and a premise on the never-list (`gate.ts`); one shaping call turns it into a
+scene contract that keeps the premise, absurd, comedic or high-stakes; the topic's words and the premise are gated
+again, the stricter audience wins, and anything this learner may not practise is refused in one sentence, never toned
+down. The scene starts at once, over the one that was running. Pitched scenes are kept (the newest 12) and lead the
+situations after the plan's topics; on `linga-scenes` their card's kicker begins **Your own scene**, and the phone's
+list says "your own". A profile back in Family is never offered one. Nothing loosens here: rude characters and
+in-character insults (C3) and 18+ romance and nightlife (C4) are v2 L5, behind the red-team.
+
+## The Company: Cut and three notes (v2 L3, Adult mode, 2026-10-07)
+
+Owner decision L4 (Cut & Take Two), its first half. In Adult mode, once the learner has a line of their own, **Cut**
+stands on the TV row of `linga-talk` (beside the help and the coach, and beside Resume and Finish when paused) and on
+the phone. It is refused, with no model call, in Family mode, before a reply, over a reply in flight, a moment or the
+coach (`turn.ts`). One call reads this take's learner lines and proposes up to three notes; code keeps a note only when
+its quote is the learner's own words character for character, from that very turn, one sentence, not a quote another
+note already took, and calls it **form** only where the tense rule finds a conflict (otherwise it is labelled **A
+reading**) (`notes.ts`). With one kept, the take ends as Finish ends it, and `linga-recap` shows the **tape**: up to three
+pins in a row (the row of doors the topics use), each the learner's quote with its kind and the better wording, and one
+caption slot holding the focused pin's note, one sentence at the caption's type. Left and Right walk the pins, then
+Another situation and Learning map. A call that fails or keeps no note makes up nothing: the scene stays as it was with
+its error line, and Cut can be pressed again. Notes write no evidence and move no skill. They stay on the conversation
+with their turn ids, for Take Two (v2 L4). The tape's styling uses the topics' classes as they are; a tape-specific
+style in `design/linga.css`, and the capture at 1920 x 1080 and 1280 x 720, are owed.
+
+## The Company: Take Two (v2 L4, Adult mode, 2026-10-08)
+
+Owner decision L4 (Cut & Take Two), its second half. On the recap of a take ended by Cut, the phone lists the notes
+with a **Take Two · note n** button under each (Adult mode only). It is drawn disabled, with the reason under it, where
+the turn table refuses it (`turn.ts`): a note that already had its take, a take already running, a reply in flight;
+the server also refuses Family mode, a take with no Cut and a note out of range, each with a plain sentence and no
+model call. Take Two forks inside the same conversation, never through a new scene: `linga-talk` shows the partner
+line just before the noted turn again (its stored text, no call; the audio plays again by a new `audioNonce`), the
+kicker reads **Take Two**, and the data line under the line reads **Take Two of** the noted quote. The learner says
+their line again on the phone; the cast answers at most twice (one fast, thinking-off call each, `conversation.ts`),
+and then the take is spent: it stays on the talk screen with the cast's last line shown and spoken, and only **Back to
+the notes** and Repeat audio are offered (no reply box, no microphone). **Back to the notes** (the TV row, the phone, or
+Back on the remote) ends a take, spent or not, and lands on the recap. Inside a take nothing else of the scene is offered: no help, quiz, coach, Cut, pause or finish, and
+no moment stops it; while the cast answers, Cancel only cancels that reply.
+
+Whether the note held is code's (`take.ts heldOf`), decided on the learner's first line of the take, and never a
+guess: a form note by the tense rule on the sentences that carry the noted time marker; a word note when the quoted
+words are gone and the better phrase is said; a meaning note when the better phrase is said; anything else, a register
+note included, is not decided. On the recap's tape a held note's quote is **struck through**, an open one stays as it
+was, and an undecided one says **Not decided**; the take is drawn as a **branch** under the tape from its pin (the
+focused pin's take, else the latest): the partner line it forked at, then **You again** and the learner's line. No
+count anywhere ("2 of 3 held" is never printed). A take is never evidence: it writes nothing to the learner record (no
+evidence, session, digest, certificate, review reuse or collectible), and the first take's lines and notes are never
+rewritten. The branch borrows the data line's style; a branch style in `design/linga.css` and the captures (the
+branch, a struck note and an open one, at 1920 x 1080 and 1280 x 720; the phone recap at 390 px) are owed.
+
+**The self-repair moment** (K2, `lib/english/repair.ts`; the owner's ruling on LG-4, the withhold option). A **fix**
+moment asks for the learner's line before it shows the fix. `linga-moment` keeps the comparison: the before slot shows
+what they said, and the after slot is an **empty plum frame** (`.lo-card.lo-open`, dashed like every slot still to
+fill) while the fix is withheld. The fix itself is not on the session: it waits in server memory, like an unrevealed
+rescue rung. The learner says or types the line again on the phone's reply box; code judges it with no model call
+(the slip's words gone and the fix's words said). The rungs climb one per miss: **say it again**, then the why as **a
+clue** (A1-A2 learners start here), then the fix shown, then one more try. **Show me** and **Back to the conversation**
+are always offered. A try that holds strikes the slip in the before slot (Take Two's struck mark) and puts the
+learner's own line in the after slot: **You found it** when the fix was never shown. A picture, no count. A **word**
+moment (a missing English word) shows its English at once, as before. The captures (the empty frame, the clue, a held
+self-repair, at 1920 x 1080 and 1280 x 720; the phone's moment panel at 390 px) are owed.

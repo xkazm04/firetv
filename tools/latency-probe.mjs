@@ -8,11 +8,9 @@
  * Usage: node latency-probe.mjs [--host <ip>:8765] [--seconds 6] [--pin <PIN>]
  */
 import WebSocket from 'ws';
-import { pairingPin, TV_HOST } from './device.mjs';
+import { pairingPin, parseArgs, TV_HOST } from './device.mjs';
 
-const args = Object.fromEntries(
-  process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
-);
+const args = parseArgs();
 const host = args.host ?? TV_HOST;
 const seconds = Number(args.seconds ?? 6);
 // --idle measures the same socket with no pen traffic, to separate transport jitter from
@@ -44,7 +42,9 @@ ws.on('message', (raw) => {
   }
 });
 
-const pct = (a, p) => a[Math.min(a.length - 1, Math.floor((a.length * p) / 100))];
+// NaN, not undefined, for an empty sample: a TV that answers no probe still gets its FAIL line
+// (as tail-diag already prints it) instead of a TypeError from the formatter.
+const pct = (a, p) => (a.length ? a[Math.min(a.length - 1, Math.floor((a.length * p) / 100))] : NaN);
 
 ws.on('open', () => {
   ws.send(JSON.stringify({ type: 'hello', pin, clientId: 'latency-probe' }));
@@ -95,13 +95,13 @@ ws.on('open', () => {
       console.log(`\n  pen load     ${sentPenMsgs} messages / ${sentPoints} points over ${seconds}s ` +
         `(${(sentPenMsgs / seconds).toFixed(0)} msg/s)`);
       console.log(`  probes       ${rtts.length} answered, ${lost} unanswered`);
-      console.log(`  rtt  min  ${f(rtts[0])} ms`);
+      console.log(`  rtt  min  ${f(pct(rtts, 0))} ms`);
       console.log(`  rtt  p50  ${f(pct(rtts, 50))} ms`);
       console.log(`  rtt  p95  ${f(pct(rtts, 95))} ms`);
-      console.log(`  rtt  max  ${f(rtts.at(-1))} ms`);
+      console.log(`  rtt  max  ${f(pct(rtts, 100))} ms`);
 
       // Half the 35 ms typical budget from design doc 3.4, since this covers only one leg.
-      const ok = lost === 0 && pct(rtts, 95) < 25;
+      const ok = rtts.length > 0 && lost === 0 && pct(rtts, 95) < 25;
       console.log(`\n  ${ok ? 'PASS' : 'FAIL'} (p95 under 25 ms, no dropped probes)`);
       ws.close();
       process.exit(ok ? 0 : 1);

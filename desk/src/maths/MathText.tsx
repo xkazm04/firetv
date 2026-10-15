@@ -74,6 +74,20 @@ function node(n: MNode, voice: Voice, st: St, key: string): ReactNode {
       );
       break;
     case "grp": el = <span className="mg">{nodes(n.body, voice, st, key + "g")}</span>; break;
+    case "table": {
+      // v2 M4b: rows and columns, the delimiters drawn as tall as the table (cases: a brace on the left only)
+      const cols = Math.max(1, ...n.rows.map((r) => r.length));
+      el = (
+        <span className="mtab" data-role="maths-table" data-env={n.env}>
+          {n.open && <Delim d={n.open} side="l" />}
+          <span className="mtab-g" style={{ gridTemplateColumns: `repeat(${cols}, auto)` }} data-align={n.env === "aligned" || n.env === "align" ? "rl" : n.env === "cases" ? "ll" : "c"}>
+            {n.rows.flatMap((r, ri) => Array.from({ length: cols }, (_, ci) => <span key={`${ri}-${ci}`} className="mtab-c">{r[ci] ? nodes(r[ci], voice, { prev: null }, `${key}t${ri}-${ci}`) : null}</span>))}
+          </span>
+          {n.close && <Delim d={n.close} side="r" />}
+        </span>
+      );
+      break;
+    }
     case "sqrt":
       el = (
         <span className="msq">
@@ -158,6 +172,21 @@ class Safe extends Component<{ raw: string; voice: Voice; children: ReactNode },
   static getDerivedStateFromError() { return { failed: true }; }
   componentDidUpdate(prev: { raw: string }) { if (prev.raw !== this.props.raw && this.state.failed) this.setState({ failed: false }); }
   render() { return this.state.failed ? <span className="mt">{this.props.raw}</span> : this.props.children; }
+}
+
+/** A delimiter drawn as tall as its table (v2 M4b): a brace, a parenthesis, a bracket or a bar, as a stretched stroke. */
+const DELIM_PATH: Record<string, string> = {
+  "{": "M9 2 C4 2 5 8 5 20 L5 40 C5 47 3 50 1 50 C3 50 5 53 5 60 L5 80 C5 92 4 98 9 98",
+  "(": "M8 2 C1 25 1 75 8 98", "[": "M8 2 L3 2 L3 98 L8 98", "|": "M5 2 L5 98",
+};
+/** A closing delimiter is its opener, mirrored. */
+const MIRROR: Record<string, string> = { ")": "(", "]": "[", "}": "{" };
+function Delim({ d, side }: { d: string; side: "l" | "r" }) {
+  return (
+    <svg className={`mtab-d ${side}`} viewBox="0 0 10 100" preserveAspectRatio="none" aria-hidden="true" style={side === "r" && d !== "|" ? { transform: "scaleX(-1)" } : undefined}>
+      <path d={DELIM_PATH[MIRROR[d] ?? d] ?? DELIM_PATH["|"]} vectorEffect="non-scaling-stroke" />
+    </svg>
+  );
 }
 
 export interface MathTextProps {

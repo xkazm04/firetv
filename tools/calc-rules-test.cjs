@@ -8,10 +8,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const C=require(path.join(root,'src/lib/rules/calc.ts'));
 const T=require(path.join(root,'src/maths/typeset.ts'));
 const {CALCULUS_1}=require(path.join(root,'src/lib/library/calculus1.ts'));
@@ -50,8 +47,8 @@ const NW={shape:'newton-step',f:'x^2 - 2',x0:1,steps:1};
 const CHECKS=[
  [D,'3x^2 + 2x','right'],[D,'2x + 3x^2','right'],[D,"f'(x) = 3x^2 + 2x",'right'],[D,'x(3x + 2)','right'],[D,'3x² + 2x','right'],
  [D,'-3x^2 - 2x','wrong','sign'],[D,'3x^2 + x','wrong'],[D,'3x^2','wrong'],[D,'','unsure'],[D,'banana','unsure'],[D,'3x^2 + 2x + C','wrong'],
- [{shape:'derivative',f:'sin(3x)'},'3cos(3x)','right'],[{shape:'derivative',f:'sin(3x)'},'cos(3x)','wrong'],[{shape:'derivative',f:'sin(3x)'},'-3cos(3x)','wrong','sign'],
- [{shape:'derivative',f:'e^(2x)'},'2e^(2x)','right'],[{shape:'derivative',f:'e^(2x)'},'2e²ˣ','right'],[{shape:'derivative',f:'e^(2x)'},'e^(2x)','wrong'],
+ [{shape:'derivative',f:'sin(3x)'},'3cos(3x)','right'],[{shape:'derivative',f:'sin(3x)'},'cos(3x)','wrong','forgot-chain'],[{shape:'derivative',f:'sin(3x)'},'-3cos(3x)','wrong','sign'],
+ [{shape:'derivative',f:'e^(2x)'},'2e^(2x)','right'],[{shape:'derivative',f:'e^(2x)'},'2e²ˣ','right'],[{shape:'derivative',f:'e^(2x)'},'e^(2x)','wrong','forgot-chain'],
  [{shape:'derivative',f:'ln(x)/x'},'(1 - ln(x))/x^2','right'],[{shape:'derivative',f:'cbrt(1 + x^2)'},'2x/(3(1 + x^2)^(2/3))','right'],
  [{shape:'derivative',f:'x^2 e^x sin(x)'},'2x e^x sin(x) + x^2 e^x sin(x) + x^2 e^x cos(x)','right'],[{shape:'derivative',f:'(x^2 + 1)/(x - 1)'},'(x^2 - 2x - 1)/(x - 1)^2','right'],
  [{shape:'derivative',f:'(x^2 + 1)/(x - 1)'},'(-x^2 + 2x + 1)/(x - 1)^2','wrong','sign'],
@@ -61,17 +58,18 @@ const CHECKS=[
  [EVS,'sqrt(2)/2','right'],[EVS,'1/sqrt(2)','right'],[EVS,'√2/2','right'],[EVS,'0.7071','unsure'],[EVS,'-sqrt(2)/2','wrong','sign'],
  [AD,'x^2/2 + C','right'],[AD,'x^2/2','wrong','lost-constant'],[AD,'0.5x^2 + c','right'],[AD,'-x^2/2 + C','wrong','sign'],[AD,'x^2 + C','wrong'],[AD,'x^2/2 + 5','wrong','lost-constant'],
  [AD,'','unsure'],[AD,"F(x) = x^2/2 + C",'right'],[AD,'x^2/2 +','unsure'],
- [{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4ln(x) + C','right'],[{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4ln|x| + C','right'],[{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4 ln(x)','wrong','lost-constant'],
+ [{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4ln(x) + C','unsure'],[{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4ln|x| + C','right'],[{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4 ln(x)','wrong','lost-constant'],
  [{shape:'antiderivative',f:'cos(x)'},'sin(x) + C','right'],[{shape:'antiderivative',f:'cos(x)'},'-sin(x) + C','wrong','sign'],[{shape:'antiderivative',f:'cos(x)'},'sin x','wrong','lost-constant'],
  [{shape:'antiderivative',f:'2x (x^2 + 1)^3'},'(x^2 + 1)^4/4 + C','right'],[{shape:'antiderivative',f:'2x (x^2 + 1)^3'},'(x^2 + 1)^4 + C','wrong'],
- [DI,'1/3','right'],[DI,'0.333','right'],[DI,'0.3','wrong'],[DI,'-1/3','wrong','sign'],[DI,'1/2','wrong'],[DI,'','unsure'],
+ // [DI,'0.3']: OLD wrong -> NEW unsure (D2 R1a: 0.3 is 1/3 correctly rounded, one significant figure)
+ [DI,'1/3','right'],[DI,'0.333','right'],[DI,'0.3','unsure'],[DI,'-1/3','wrong','sign'],[DI,'1/2','wrong'],[DI,'','unsure'],
  [{shape:'definite-integral',f:'2x + 1/sqrt(x)',a:1,b:4},'17','right'],[{shape:'definite-integral',f:'sin(x)',a:0,b:'pi'},'2','right'],
  [{shape:'definite-integral',f:'sin(x)',a:0,b:'pi'},'-2','wrong','sign'],[{shape:'definite-integral',f:'x^2',a:1,b:0},'-1/3','right'],
  [LS,'1','right'],[LS,'0','wrong'],[LS,'-1','wrong','sign'],[LS,'inf','wrong'],[LS,'dne','wrong'],[LS,'1.0','right'],
  [{shape:'limit',f:'(x^2 - 4)/(x - 2)',at:2},'4','right'],[{shape:'limit',f:'(x^2 - 4)/(x - 2)',at:2},'4.00','right'],
  [LI,'inf','right'],[LI,'infinity','right'],[LI,'∞','right'],[LI,'+∞','right'],[LI,'-inf','wrong','sign'],[LI,'100000','wrong'],[LI,'Infinity','right'],
  [{shape:'limit',f:'1/x',at:0,side:'-'},'-infinity','right'],[{shape:'limit',f:'1/x',at:0,side:'-'},'infinity','wrong','sign'],
- [{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'e','right'],[{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'2.718','right'],[{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'2.7','wrong'],
+ [{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'e','right'],[{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'2.718','right'],[{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'2.7','right'],
  [{shape:'limit',f:'(3x^2 - x)/(2x^2 + 5)',at:'inf'},'3/2','right'],[{shape:'limit',f:'(3x^2 - x)/(2x^2 + 5)',at:'inf'},'1.5','right'],
  [{shape:'limit',f:'(e^x - 1 - x)/x^2',at:0},'1/2','right'],[{shape:'limit',f:'(sqrt(x + 1) - 2)/(x - 3)',at:3},'1/4','right'],
  [CP,'2','right'],[CP,'x = 2','right'],[CP,'-2','wrong','sign'],[CP,'3','wrong'],[CP,'2.0001','unsure'],
@@ -389,4 +387,316 @@ test('9: never throws - every public function on malformed and randomly mutated 
  if(failures.length)console.log(`# ${failures.filter(f=>f.includes(') threw ')).length} throws, ${failures.length} failures in all`);
  if(failures.length)console.log(failures.slice(0,15).map(f=>`# FAIL ${f}`).join('\n'));
  assert.deepEqual(failures.slice(0,15),[],`${failures.length} failures`);
+});
+
+// ------------------------------------------------------------------ MB-B16, the Calculus half: two factors, or a product split across words
+test('MB-B16 leaksCalc: a line naming both factors of the answer, or the answer as a product split across words, leaks; one factor alone passes',()=>{
+ const CH={shape:'derivative',f:'sin(x^2)'};                 // cos(x^2) * 2x
+ const SUBST={shape:'antiderivative',f:'x e^(x^2)'};         // (1/2)e^(x^2) + C
+ const rows=[
+  [CH,'Differentiate the outside to get cos(x^2), then multiply by 2x, the derivative of the inside.',true],
+  [CH,'Multiply cos(x^2) by 2x.',true],
+  [SUBST,'Substitute u = x^2 … = (1/2)e^u + C.',true],
+  [CH,'Use the chain rule: differentiate the outside, then multiply by the derivative of the inside.',false],
+  [CH,'The inside function is x^2.',false],
+  [CH,'The outer derivative is cos(x^2).',false],
+  [CH,'The derivative of the inside is 2x.',false],
+  [SUBST,'Let u = x^2, then du = 2x dx.',false],
+  [SUBST,'Substitute u = x^2.',false],
+  [SUBST,'Try a substitution for the inside of the exponent.',false],
+ ];
+ const bad=rows.filter(([s,l,want])=>C.leaksCalc(s,l)!==want).map(([s,l,want])=>`${s.f}: ${l} should ${want?'':'not '}leak`);
+ assert.deepEqual(bad,[]);
+});
+
+// ------------------------------------------------------------------ HL3: a function-shape answer said in words
+test('HL3 leaksCalc: the derivative of x^3 + x^2 said in words leaks; the item\'s own function said in words passes',()=>{
+ const rows=[
+  [D,'three x squared plus two x',true],
+  [D,'The derivative is three x squared plus two x.',true],
+  [D,'It is 3 x to the power of 2 plus 2 x.',true],
+  [D,'x cubed plus x squared',false],
+  [D,'Differentiate x cubed plus x squared term by term.',false],
+  [D,'Bring each power down and lower it by one.',false],
+  [{shape:'derivative',f:'x^2'},'two times x',true],
+  [{shape:'derivative',f:'x^2'},'x squared is the function you start from',false],
+ ];
+ const bad=rows.filter(([s,l,want])=>C.leaksCalc(s,l)!==want).map(([s,l,want])=>`${s.f}: ${l} should ${want?'':'not '}leak`);
+ assert.deepEqual(bad,[]);
+});
+
+test('D2-1 (R1a): a correct rounding of a limit or an integral at its own decimals is never wrong - right with two significant figures, not sure with fewer',()=>{
+ const lim=(f)=>({shape:'limit',f,at:0}),v=(spec,a)=>C.checkAnswer(spec,a);
+ const L38=lim('3/8 + x'),L13=lim('1/3 + x'),L32=lim('1/32 + x'),LE={shape:'limit',f:'(1 + 1/x)^x',at:'inf'},L3={shape:'limit',f:'sin(3x)/x',at:0};
+ const I38={shape:'definite-integral',f:'3x/4',a:0,b:1};
+ // must-address 2: the halfway 3/8 rounded at two places is right, as a limit and as an integral
+ for(const spec of [L38,I38])for(const a of ['0.38','0.37','0.375','0.3750'])assert.equal(v(spec,a).verdict,'right',`3/8: ${a}`);
+ for(const a of ['2.7','2.72','2.718'])assert.equal(v(LE,a).verdict,'right',`e: ${a}`);
+ assert.equal(v(L3,'3.0').verdict,'right');
+ // fewer than two significant figures: not sure, with the rounded line
+ for(const [spec,a] of [[L13,'0.3'],[L32,'0.0'],[L38,'0.4'],[I38,'0.4']]){const r=v(spec,a);assert.equal(r.verdict,'unsure',`${spec.f} ${a}`);assert.match(r.why,/rounded decimal/);}
+ // not a correct rounding: today's path
+ assert.equal(v(LE,'2.8').verdict,'wrong');assert.equal(v(L3,'2.999').verdict,'unsure');assert.equal(v(L38,'0.39').verdict,'wrong');
+ // the leak check refuses every decimal the judge now calls right
+ assert.equal(C.leaksCalc(L38,'It comes to 0.38.'),true);assert.equal(C.leaksCalc(I38,'about 0.38'),true);
+ assert.equal(C.leaksCalc(LE,'roughly 2.7'),true);assert.equal(C.leaksCalc(L38,'minus 0.38'),true);
+ assert.equal(C.leaksCalc(L38,'it is near 0.39'),false,'a decimal that is not a rounding is not the answer');
+});
+
+test('D2-1: the two judges (calc.ts judgeNumber, calc2.ts judgeLimit) give the same verdict on a fixed grid of truths and decimals',()=>{
+ // f in x with the limit at infinity as truth; the same f as a Calculus 1 limit at inf and as a sequence limit
+ const truths=['3/8 + 1/x','1/3 + 1/x','1/32 + 1/x','(1 + 1/x)^x','3 + 1/x','1/2 + 1/x','107/40 + 1/x','62/5 + 1/x','-3/8 + 1/x','1/x','2/3 + 1/x','1/8 + 1/x'];
+ const decimals=['0.38','0.37','0.375','0.4','0.39','0.3','0.33','0.333','0.334','0.0','0.03','0.031','0.032','2.7','2.72','2.718','2.71','2.8','3.0','3.00','2.999','3.01','0.5','0.50','0.4996','0.502','2.67','2.68','2.671','2.675','-0.38','-0.375','-0.4','12.4','12.0','12.40','0.1','0.13','0.12','0.67','0.6667','0.7','0.00','-0.0','.38','.5'];
+ const diff=[];
+ for(const f of truths)for(const a of decimals){
+  const one=C.checkAnswer({shape:'limit',f,at:'inf'},a),two=C.checkAnswer({shape:'sequence-limit',f},a);
+  if(one.verdict!==two.verdict||one.slip!==two.slip)diff.push(`${f} ${a}: ${one.verdict}/${two.verdict}`);
+ }
+ assert.deepEqual(diff,[]);
+ // the grid is not trivial: each verdict occurs
+ const seen=new Set(truths.flatMap((f)=>decimals.map((a)=>C.checkAnswer({shape:'sequence-limit',f},a).verdict)));
+ assert.deepEqual([...seen].sort(),['right','unsure','wrong']);
+});
+
+test('MB-B27: an antiderivative undefined where the integrand is defined is not sure, with a domain line; the absolute value is right',()=>{
+ const S={shape:'antiderivative',f:'1/x'},dom=/not defined everywhere/;
+ for(const a of ['ln x + C','ln(x) + C','ln(x)+C']){const r=C.checkAnswer(S,a);assert.equal(r.verdict,'unsure',a);assert.match(r.why,dom);assert.ok(!/abs|absolute|\|/.test(r.why)&&!/ln/.test(r.why),'the line names neither the absolute value nor the answer');}
+ for(const a of ['ln|x| + C','ln(abs(x)) + C'])assert.equal(C.checkAnswer(S,a).verdict,'right',a);
+ // one direction only: an answer defined where the truth is not stays right
+ assert.equal(C.checkAnswer({shape:'derivative',f:'ln(x)'},'1/x').verdict,'right');
+ // an answer that is wrong anyway is still wrong, not softened to unsure
+ assert.equal(C.checkAnswer(S,'ln x').verdict,'wrong');
+ assert.equal(C.checkAnswer(S,'-ln|x| + C').slip,'sign');
+});
+
+test('D2-2: one-direction defined-ness - an answer defined where the truth is not is right, one undefined where the truth is defined is not sure',()=>{
+ const D=(f)=>({shape:'derivative',f}),A=(f)=>({shape:'antiderivative',f}),dom=/not defined everywhere/;
+ const v=(spec,a)=>{const r=C.checkAnswer(spec,a);return r.verdict+(r.slip?'/'+r.slip:'');};
+ // must-address 1: the right derivatives of ln(1-x), ln(2-x), ln(4-x^2) were wrong (their truths are undefined at samples where the answer is defined)
+ for(const [f,a] of [['ln(1-x)','-1/(1-x)'],['ln(1-x)','1/(x-1)'],['ln(2-x)','-1/(2-x)'],['ln(4-x^2)','-2x/(4-x^2)'],['ln(x-2)','1/(x-2)']])assert.equal(v(D(f),a),'right',`d/dx ${f}: ${a}`);
+ assert.equal(v(D('ln(1-x)'),'1/(1-x)'),'wrong/sign','the negation is the sign slip, one way too');
+ assert.equal(v(D('ln(1-x)'),'1/(1-x)^2'),'wrong');
+ // an antiderivative undefined where the integrand is defined: not sure, with the domain line
+ for(const [f,a] of [['1/(1-x)','-ln(1-x) + C'],['1/(x-2)','ln(x-2) + C'],['1/x','ln(x) + C']]){const r=C.checkAnswer(A(f),a);assert.equal(r.verdict,'unsure',`int ${f}: ${a}`);assert.match(r.why,dom);}
+ for(const [f,a] of [['1/x','ln|x| + C'],['1/(1-x)','-ln|1-x| + C'],['1/(x-2)','ln|x-2| + C']])assert.equal(v(A(f),a),'right',`int ${f}: ${a}`);
+ assert.equal(v(A('1/(1-x)'),'-ln(1-x)'),'wrong/lost-constant');
+ // the accepted ceiling: the gap of ln(x+4) lies left of every sample (SAMPLES spans about -3.32 to 4.80), so it reads right
+ assert.equal(v(A('1/(x+4)'),'ln(x+4) + C'),'right','named limit: a gap outside every sample is not seen');
+ // leaks stay at least as strict: an answer the judge calls right, stated in a hint, is refused
+ assert.equal(C.leaksCalc(D('ln(1-x)'),'The derivative is -1/(1-x).'),true);
+ assert.equal(C.leaksCalc(D('ln(4-x^2)'),'so it comes to -2x/(4-x^2)'),true);
+ assert.equal(C.leaksCalc(A('1/(x+4)'),'it is ln(x+4) + C'),true);
+});
+
+test('MB-B28: a decimal for a limit or a definite integral is right only as the exact value correctly rounded at its own written precision',()=>{
+ const L3={shape:'limit',f:'sin(3x)/x',at:0},LH={shape:'limit',f:'(x^2 + 1)/(2x^2 + 3)',at:'inf'},LE={shape:'limit',f:'(1 + 1/x)^x',at:'inf'};
+ const IE={shape:'definite-integral',f:'e^x/2',a:0,b:1},NINE={shape:'definite-integral',f:'x^2',a:0,b:3};
+ const v=(spec,a)=>C.checkAnswer(spec,a).verdict;
+ for(const [spec,a] of [[L3,'3'],[L3,'3.00'],[L3,'3.0'],[LH,'0.5'],[LH,'0.50'],[LE,'2.718'],[LE,'2.72'],[LE,'2.7183'],[IE,'0.859'],[IE,'0.86'],[IE,'0.8591'],[NINE,'9.00']])assert.equal(v(spec,a),'right',`${spec.f} ${a}`);
+ for(const a of ['2.999','3.01','3.014','2.986','2.9996','3.0004'])assert.equal(v(L3,a),'unsure',`3: ${a}`);
+ for(const a of ['0.4996','0.498','0.502','0.4975'])assert.equal(v(LH,a),'unsure',`1/2: ${a}`);
+ for(const a of ['2.717','2.71'])assert.equal(v(LE,a),'unsure',`e: ${a}`);
+ for(const a of ['8.99','9.04'])assert.equal(v(NINE,a),'unsure',`9: ${a}`);
+ assert.match(C.checkAnswer(L3,'3.01').why,/rounded decimal/);
+ // OLD wrong -> NEW right (D2 R1a): 2.7 is e correctly rounded at one decimal, two significant figures
+ assert.equal(v(LE,'2.7'),'right','2.7 for e is a correct rounding');assert.equal(v(LE,'2.8'),'wrong');
+ // halfway: either neighbour is right
+ const HALFWAY={shape:'definite-integral',f:'5.35x',a:0,b:1};   // 2.675
+ assert.equal(v(HALFWAY,'2.67'),'right');assert.equal(v(HALFWAY,'2.68'),'right');assert.equal(v(HALFWAY,'2.671'),'unsure');
+ // exact answers and the exact shapes are unchanged
+ assert.equal(v(LE,'e'),'right');assert.equal(v(LH,'1/2'),'right');assert.equal(v(IE,'(e - 1)/2'),'right');
+ assert.equal(v({shape:'derivative-at',f:'x^2',at:6},'12.01'),'unsure');
+});
+
+test('MK4: a cz or de learner\'s one-number answer with a decimal comma reads as its point form; uk, us and no system leave it unsure',()=>{
+ const E={shape:'limit',f:'(1 + 1/x)^x',at:'inf'},I13={shape:'definite-integral',f:'x^2',a:0,b:1},L38={shape:'limit',f:'3/8 + x',at:0};
+ const D={shape:'derivative-at',f:'x^3',at:0.5},SEQ={shape:'sequence-limit',f:'(1 + 1/x)^x'},AP={shape:'approx-integral',f:'1/x',a:1,b:2,pieces:5,rule:'trapezoid'};
+ const v=(spec,a,sys)=>{const r=C.checkAnswer(spec,a,sys);return r.verdict+(r.slip?'/'+r.slip:'');};
+ const cases=[[E,'2,718','2.718'],[E,'-2,718','-2.718'],[E,'2,8','2.8'],[E,'2,7','2.7'],[I13,'0,333','0.333'],[L38,'0,38','0.38'],[D,'0,75','0.75'],[D,'0,7','0.7'],[SEQ,'2,718','2.718'],[SEQ,'2,8','2.8'],[AP,'0,6956','0.6956'],[AP,'0,69','0.69']];
+ for(const [spec,comma,point] of cases){
+  for(const sys of ['cz','de'])assert.equal(v(spec,comma,sys),v(spec,point),`${spec.f} ${comma} ${sys}`);
+  for(const sys of ['uk','us',undefined])assert.equal(v(spec,comma,sys),'unsure',`${spec.f} ${comma} ${sys}`);
+ }
+ assert.equal(v(E,'2,718','cz'),'right');assert.equal(v(E,'2,7','cz'),'right');
+ assert.equal(v(I13,'0,3','cz'),'unsure');assert.equal(v(L38,'0,38','cz'),'right');assert.equal(v(D,'0,75','cz'),'right');
+ assert.equal(v(AP,'0,6956','cz'),'right');assert.equal(v(SEQ,'2,718','cz'),'right');
+ // a comma that is not a lone decimal is never read
+ for(const [spec,a] of [[E,'2,718,1'],[E,'1, 2'],[D,'2,5x']])assert.equal(v(spec,a,'cz'),v(spec,a),`${a} is not read`);
+});
+
+test('MB-B36: a cz or de Calculus answer reads the decimal comma, tg, cotg, arctg, arccotg and a constant other than C; uk, us and no system leave each unsure',()=>{
+ const v=(spec,a,sys)=>{const r=C.checkAnswer(spec,a,sys);return r.verdict+(r.slip?'/'+r.slip:'');};
+ const TAN={shape:'derivative',f:'tan(x)'},COT={shape:'derivative',f:'cot(x)'},ATAN={shape:'antiderivative',f:'1/(1+x^2)'},ACOT={shape:'antiderivative',f:'-1/(1+x^2)'};
+ const EX2={shape:'antiderivative',f:'x*e^(x^2)'},X={shape:'antiderivative',f:'x'},LH={shape:'limit',f:'sin(x)/(2x)',at:0},IE={shape:'definite-integral',f:'e^x',a:0,b:1};
+ const DTG={shape:'derivative',f:'x^2'};
+ const rows=[
+  // the decimal comma, in a number and inside a function
+  [LH,'0,5','right'],[IE,'1,718','right'],[IE,'1,72','right'],[IE,'1,8','wrong'],[X,'0,5x^2 + C','right'],[X,'0,5x^2','wrong/lost-constant'],
+  // the Czech function names, bracketed, bare and glued, with a power
+  [TAN,'tg(x)^2+1','right'],[TAN,'1/cos(x)^2','right'],[TAN,'tg^2 x + 1','right'],[{shape:'antiderivative',f:'sec(x)^2'},'tgx + C','right'],[COT,'-1/sin(x)^2','right'],[COT,'-(1 + cotg(x)^2)','right'],[COT,'-cotg^2 x - 1','right'],
+  [ATAN,'arctg(x) + C','right'],[ATAN,'arctg x + C','right'],[ATAN,'arctg x','wrong/lost-constant'],[ATAN,'-arctg(x) + C','wrong/sign'],
+  [ACOT,'arccotg(x) + C','right'],[ACOT,'arccotg x + C','right'],[ACOT,'-arctg(x) + C','right'],[ATAN,'arccotg(x) + C','wrong/sign'],
+  [{shape:'derivative',f:'atan(x^2)'},'2x/(1+x^4)','right'],
+  // the arbitrary constant by another letter
+  [EX2,'e^(x^2)/2 + K','right'],[EX2,'e^(x^2)/2 + C1','right'],[EX2,'e^(x^2)/2 + C_1','right'],[EX2,'e^(x^2)/2 + C₁','right'],[EX2,'e^(x^2)/2 + k','right'],[EX2,'e^(x^2)/2 + c','right'],[EX2,'e^(x^2)/2 - K','right'],
+  [DTG,'2x + K','wrong'],[EX2,'K + e^(x^2)/2','unsure'],[EX2,'e^(x^2)/2 + K x','unsure'],
+ ];
+ for(const [spec,a,want] of rows){
+  for(const sys of ['cz','de'])assert.equal(v(spec,a,sys),want,`${spec.shape} ${spec.f} '${a}' ${sys}`);
+ }
+ // uk, us and no system: every one of these Czech forms stays as it was (unsure), and the English forms are untouched
+ for(const [spec,a] of rows.filter(([,a])=>/,\d|tg|K|k\b|C_?1|C₁/.test(a))){
+  for(const sys of ['uk','us',undefined])assert.equal(v(spec,a,sys),'unsure',`${spec.f} '${a}' ${sys} stays unsure`);
+ }
+ // arccotg in a learner's answer: its value is pi/2 - arctan (range 0..pi), so arccotg(-1) is 3pi/4
+ assert.equal(v({shape:'evaluate',f:'3pi/4 + 0*x',at:0},'arccotg(-1)','cz'),'right');
+ // a comma that is not a decimal between digits is not read
+ for(const [spec,a] of [[X,'0, 5x^2 + C'],[X,'0,5,1x^2 + C']])assert.equal(v(spec,a,'cz'),'unsure',`${a} is not read`);
+});
+
+test('MB-B36 log: in cz a bare log is base 10 and lg too; in de lg is base 10 and a bare log stays natural; ln is natural everywhere; uk, us and none as before',()=>{
+ const v=(spec,a,sys)=>{const r=C.checkAnswer(spec,a,sys);return r.verdict+(r.slip?'/'+r.slip:'');};
+ const TWO={shape:'evaluate',f:'2+0*x',at:0},THREE={shape:'evaluate',f:'3+0*x',at:0},A10={shape:'antiderivative',f:'1/(x*ln(10))'},AN={shape:'antiderivative',f:'1/x'};
+ const D10={shape:'derivative',f:'log_10(x)'},DLN={shape:'derivative',f:'ln(x^2)'};
+ // [spec, answer, cz, de, uk/us/none]
+ const rows=[
+  [TWO,'log 100','right','wrong','wrong'],[TWO,'log(100)','right','wrong','wrong'],
+  // digits glued to log are its base (calc-expr: log10 is log_10), in every system: 'log100' has no argument
+  [TWO,'log100','unsure','unsure','unsure'],
+  [TWO,'lg 100','right','right','unsure'],[TWO,'lg(100)','right','right','unsure'],[TWO,'lg100','right','right','unsure'],[TWO,'LG 100','right','right','unsure'],
+  [A10,'log|x| + C','right','wrong','wrong'],[A10,'logx + C','unsure','wrong','wrong'],[A10,'lg|x| + C','right','right','unsure'],[A10,'ln|x|/ln 10 + C','right','right','right'],
+  [AN,'ln|x| + C','right','right','right'],[AN,'log|x| + C','wrong','right','right'],
+  [D10,'1/(x ln 10)','right','right','right'],[D10,'1/(x log 10)','wrong','right','right'],[DLN,'2/x','right','right','right'],
+  // a log with its own base keeps it in every system
+  [THREE,'log_2 8','right','right','right'],[THREE,'log2(8)','right','right','right'],[THREE,'log₂ 8','right','right','right'],[TWO,'log_10 100','right','right','right'],
+ ];
+ for(const [spec,a,cz,de,rest] of rows){
+  assert.equal(v(spec,a,'cz'),cz,`${spec.f} '${a}' cz`);assert.equal(v(spec,a,'de'),de,`${spec.f} '${a}' de`);
+  for(const sys of ['uk','us',undefined])assert.equal(v(spec,a,sys),rest,`${spec.f} '${a}' ${sys}`);
+ }
+ // a word with the letters log or lg in it is not a log
+ assert.equal(v(TWO,'dialog 100','cz'),'unsure');assert.equal(v(TWO,'algx','cz'),'unsure');
+ // the spec is read by its meaning, never its text: an engine 'log(x)' in a spec is natural, so a cz 'ln' answer is right
+ assert.equal(v({shape:'derivative',f:'log(x)'},'1/x','cz'),'right');assert.equal(v({shape:'evaluate',f:'log(x)',at:100},'ln 100','cz'),'right');
+ assert.equal(v({shape:'evaluate',f:'log(x)',at:100},'log 100','cz'),'wrong','the cz learner\'s log 100 is 2, not ln 100');
+ // calc2 reads the same table
+ assert.equal(v({shape:'approx-integral',rule:'midpoint',f:'1/x',a:1,b:2,pieces:4},'ln 2','cz'),v({shape:'approx-integral',rule:'midpoint',f:'1/x',a:1,b:2,pieces:4},'ln 2','uk'));
+});
+
+test('MB-B36 log: a Calculus question printed for cz or de shows the natural log as ln; uk, us and none print as before',()=>{
+ for(const spec of [{shape:'derivative',f:'log(x^2+1)'},{shape:'antiderivative',f:'log(x)'},{shape:'evaluate',f:'x*log(x)',at:'log(4)'},{shape:'limit',f:'log(1+x)/x',at:0},{shape:'critical-point',f:'x - log(x)',on:[0.5,3]}]){
+  const base=C.question(spec);assert.ok(base,`${spec.f} prints`);
+  for(const sys of ['uk','us',undefined])assert.deepEqual(C.question(spec,sys),base,`${spec.f} ${sys} as before`);
+  for(const sys of ['cz','de']){
+   const q=C.question(spec,sys);
+   assert.ok(!/(?<![a-z\\])log/.test(q.plain)&&!/\\log/.test(q.tex),`${spec.f} ${sys}: ${q.plain} | ${q.tex}`);
+   assert.equal(q.plain,base.plain.replace(/log/g,'ln'),`${spec.f} ${sys}: only the name changes`);
+  }
+ }
+ // a log with a base, and a spec with no log, print the same in every system
+ for(const spec of [{shape:'derivative',f:'log_2(x)'},{shape:'derivative',f:'x^2 + sin(x)'}])assert.deepEqual(C.question(spec,'cz'),C.question(spec),spec.f);
+});
+
+test('MB-B36: a cz or de Calculus task with tg, cotg, arctg or arccotg reads as its spec; uk leaves it unread',()=>{
+ const E=require(path.join(root,'src/lib/rules/calc-expr.ts'));
+ const same=(a,b)=>{const ea=E.compile(a),eb=E.compile(b);return [0.3,0.7,1.2].every(x=>Math.abs(ea.at(x)-eb.at(x))<1e-9);};
+ for(const [text,f] of [['Derivujte: y = arctg(x)','atan(x)'],['Derivujte: y = tg(2x)','tan(2x)'],['Derivujte: y = x·cotg x','x*cot(x)'],['Derivujte: y = arccotg(x^2)','pi/2 - atan(x^2)']]){
+  for(const sys of ['cz','de']){const s=C.specFromQuestion(text,sys);assert.ok(s&&s.shape==='derivative',`${text} ${sys}`);assert.ok(same(s.f,f),`${text} ${sys}: ${s.f}`);}
+  for(const sys of ['uk','us',undefined])assert.equal(C.specFromQuestion(text,sys),null,`${text} ${sys} stays unread`);
+ }
+ // a Czech word with the letters tg in it is not a function name
+ assert.equal(C.specFromQuestion('Derivujte: y = atgx',  'cz'),null);
+});
+
+test('MB-B36 log: a cz task reads a bare log and lg as base 10, a de task lg only; uk, us and none read the text as before',()=>{
+ const E=require(path.join(root,'src/lib/rules/calc-expr.ts'));
+ const same=(a,b)=>{const ea=E.compile(a),eb=E.compile(b);return [0.3,0.7,1.2,5].every(x=>Math.abs(ea.at(x)-eb.at(x))<1e-9);};
+ const LOG10='log(x)/log(10)',LN='log(x)';
+ // [text, cz, de, uk/us/none] - the function each reads, null where it reads nothing
+ const rows=[
+  ['Derivujte: y = log x',LOG10,LN,LN],['Differentiate f(x) = log(x)',LOG10,LN,LN],['Find f(100) for f(x) = log(x)',LOG10,LN,LN],
+  ['Find the integral of log(x)',LOG10,LN,LN],['Derivujte: y = lg x',LOG10,LOG10,null],['Derivujte: y = LG(x)',LOG10,LOG10,null],
+  // a log with its own base keeps it, and ln is natural, everywhere
+  ['Differentiate f(x) = log_2(x)','log(x)/log(2)','log(x)/log(2)','log(x)/log(2)'],['Differentiate f(x) = ln(x)',LN,LN,LN],
+ ];
+ for(const [text,cz,de,rest] of rows){
+  for(const [sys,want] of [['cz',cz],['de',de],['uk',rest],['us',rest],[undefined,rest]]){
+   const s=C.specFromQuestion(text,sys);
+   if(want===null){assert.equal(s,null,`${text} ${sys} stays unread`);continue;}
+   assert.ok(s,`${text} ${sys} reads`);assert.ok(same(s.f,want),`${text} ${sys}: ${s.f}`);
+  }
+  // uk, us and none: byte for byte the spec the text read before (no system at all)
+  for(const sys of ['uk','us'])assert.deepEqual(C.specFromQuestion(text,sys),C.specFromQuestion(text),`${text} ${sys} as before`);
+ }
+ // the decimal comma still reads as a point around a cz log, and the cz learner's answer is judged in the same base
+ const at=C.specFromQuestion('Find f(1,5) for f(x) = log x','cz');
+ assert.equal(at.at,1.5);assert.ok(same(at.f,LOG10),at.f);
+ const ev=C.specFromQuestion('Find f(100) for f(x) = log(x)','cz');
+ assert.equal(C.checkAnswer(ev,'2','cz').verdict,'right','the cz page\'s log 100 is 2');
+ assert.equal(C.checkAnswer(ev,'log 100','cz').verdict,'right');
+ assert.equal(C.checkAnswer(C.specFromQuestion('Find f(100) for f(x) = log(x)','uk'),'2','uk').verdict,'wrong','uk keeps the natural log');
+ // a word with the letters log in it is not a log
+ assert.equal(C.specFromQuestion('Derivujte: y = dialog x','cz'),C.specFromQuestion('Derivujte: y = dialog x'));
+ // the printed question carries the base, so the screen says which log it is
+ const q=C.question(C.specFromQuestion('Differentiate f(x) = log(x)','cz'),'cz');
+ assert.ok(q&&/log_\(?10/.test(q.plain)&&!/(?<![a-z\\])log(?![_\d])/.test(q.plain),q&&q.plain);
+});
+
+test('MK14: a long right answer is taken whole (MB-B32)',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ const QUOTIENT='(2x*cos(x^2)*(x^3+1)-3x^2*sin(x^2))/(x^3+1)^2';
+ assert.equal(QUOTIENT.length,45);
+ assert.equal(M.typedAnswersProblem([QUOTIENT,'1'.repeat(120)],2),null,'45 and 120 characters are taken whole');
+ assert.match(M.typedAnswersProblem([QUOTIENT,'1'.repeat(121)],2),/longer than 120 characters/,'121 is refused, never cut');
+ assert.equal(C.checkAnswer({shape:'derivative',f:'sin(x^2)/(x^3+1)'},QUOTIENT).verdict,'right','the quotient-rule derivative is right');
+});
+
+test('MB-B38: a typed derivative with the chain factor dropped is wrong with slip forgot-chain, decided in code; a right answer never gets it',()=>{
+ const v=(f,a)=>{const r=C.checkAnswer({shape:'derivative',f},a);return r.verdict+(r.slip?'/'+r.slip:'');};
+ // the dropped inner factor, on every composition the desk reads: fn(inner), base^(inner), (inner)^n
+ for(const [f,a] of [['sin(x^2)','cos(x^2)'],['e^(3x)','e^(3x)'],['exp(x^2)','exp(x^2)'],['(x^2 + 1)^3','3(x^2 + 1)^2'],['sqrt(x^2 + 1)','1/(2sqrt(x^2 + 1))'],
+  ['ln(x^2 + 1)','1/(x^2 + 1)'],['sin(2x)','cos(2x)'],['3sin(2x)','3cos(2x)'],['sin(x)^2','2sin(x)'],['cos(x^3)','-sin(x^3)'],
+  ['sin(x^2) + x^3','cos(x^2) + 3x^2'],['sin(x^2) + cos(3x)','cos(x^2) - sin(3x)'],['sin(cos(x^2))','cos(cos(x^2))'],['x*sin(x^2)','sin(x^2) + x cos(x^2)']])
+  assert.equal(v(f,a),'wrong/forgot-chain',`${a} for d/dx ${f}`);
+ // the right answers stay right
+ for(const [f,a] of [['sin(x^2)','2x cos(x^2)'],['e^(3x)','3e^(3x)'],['(x^2 + 1)^3','6x(x^2 + 1)^2'],['ln(x^2 + 1)','2x/(x^2 + 1)'],['sin(x)^2','2sin(x)cos(x)'],
+  ['sin(x^2) + x^3','2x cos(x^2) + 3x^2'],['x*sin(x^2)','sin(x^2) + 2x^2 cos(x^2)'],['sin(x + 1)','cos(x + 1)'],['e^x','e^x'],['sin(x)','cos(x)'],['x^3 + x^2','3x^2 + 2x'],['(x - 3)^4','4(x - 3)^3']])
+  assert.equal(v(f,a),'right',`${a} for d/dx ${f}`);
+ // no composition, an identity inside, or an inside whose derivative is 1: no chain to forget, so never the chain slip
+ for(const [f,a] of [['sin(x)','sin(x)'],['x^3 + x^2','3x^2'],['sin(x + 1)','cos(x)'],['e^x','x e^(x - 1)'],['ln(x)','ln(x)'],['sin(x^2)','2x'],['sin(x^2)','-cos(x^2)'],['sin(x^2)','cos(2x)']])
+  assert.equal(v(f,a),'wrong',`${a} for d/dx ${f}`);
+ // the sign slip still comes first: an inside with derivative -1 negates the derivative
+ assert.equal(v('sin(-x)','cos(-x)'),'wrong/sign');
+ assert.equal(v('sin(x^2)','-2x cos(x^2)'),'wrong/sign');
+ // a +C is the extra-constant line, not the chain slip
+ assert.equal(v('sin(x^2)','cos(x^2) + C'),'wrong');
+ // the why never carries a value
+ assert.doesNotMatch(C.checkAnswer({shape:'derivative',f:'sin(x^2)'},'cos(x^2)').why,/\d|x/);
+});
+
+test('MB-B38: the forgot-chain verdict reaches the phone and TV line on calc1-chain in the slip\'s own words, with no value',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ const s=M.settleSpec(3,{shape:'derivative',f:'sin(x^2)'},'cos(x^2)',null,'calc1-chain');
+ assert.equal(s.verdict,'wrong');assert.equal(s.slip,'forgot-chain');
+ assert.equal(s.said,C.CALC_SLIPS.find(x=>x.id==='forgot-chain').says);
+ assert.ok(s.said.split(/\s+/).length<=25,'25 words or fewer');
+ assert.doesNotMatch(s.said,/\d|x\^|cos|sin|2x/,'never the answer or the missing factor');
+ // a model pick never overrides code's own slip, and a right answer carries none
+ assert.equal(M.settleSpec(3,{shape:'derivative',f:'sin(x^2)'},'cos(x^2)','arithmetic-slip','calc1-chain').slip,'forgot-chain');
+ const r=M.settleSpec(3,{shape:'derivative',f:'sin(x^2)'},'2x cos(x^2)','forgot-chain','calc1-chain');
+ assert.equal(r.verdict,'right');assert.equal(r.slip,undefined);
+});
+
+test('MB-B30: a composition is read by the same sites the forgot-chain check uses - an outside function of an inside that is neither x nor x + c',()=>{
+ for(const f of ['sin(x^2)','(2x + 1)^3','e^(3x)','sqrt(1 + x^2)','ln(x^2 + 1)','cos(x)^2','3sin(2x) + x','x^2 e^(-x)','tan(5x)','2^(x^2)'])assert.equal(C.isComposition(f),true,f);
+ // no inside at all, an inside of x, an inside of x + c (no chain factor to show), a product or quotient of plain pieces
+ for(const f of ['x^3 + 2x','sin(x)','e^x','ln(x)','sqrt(x)','(x + 1)^3','sin(x + pi/4)','(x^2 + 1)(x - 3)','x/(x^2 + 1)','x sin(x)','x^^2',''])assert.equal(C.isComposition(f),false,f);
+ // a requirement on a spec: none passes anything, composition reads the spec's function, an unknown name passes nothing
+ assert.deepEqual([...C.CALC_REQUIREMENTS],['composition']);
+ assert.equal(C.meetsRequirement({shape:'derivative',f:'x^2'}),true);
+ assert.equal(C.meetsRequirement({shape:'derivative',f:'sin(x^2)'},'composition'),true);
+ assert.equal(C.meetsRequirement({shape:'derivative',f:'x^2 + 1'},'composition'),false);
+ assert.equal(C.meetsRequirement({shape:'derivative-at',f:'(3x - 1)^4',at:1},'composition'),true);
+ assert.equal(C.meetsRequirement({shape:'derivative',f:'sin(x^2)'},'nope'),false);
+ assert.equal(C.meetsRequirement(null,'composition'),false);
 });

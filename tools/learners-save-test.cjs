@@ -1,0 +1,240 @@
+/**
+ * learners.json is written atomically, and saveLearner fails the way saveEnglish does (idea f9a735ed).
+ * Run with npm test in desk/ (directly: node tools/learners-save-test.cjs). No model is called. The data directory is
+ * disposable, under the OS temp dir; never desk/data.
+ */
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict');
+const {test,after}=require('node:test');
+const root=path.resolve(__dirname,'../desk');
+require('./ts-load.cjs');
+const base=path.join(os.tmpdir(),`desk-learners-save-${process.pid}-${Date.now()}`);
+const data=path.join(base,'data');
+process.env.DESK_DATA_DIR=data;
+assert.ok(!path.resolve(data).startsWith(path.resolve(root,'data')),'never desk/data');
+fs.mkdirSync(data,{recursive:true});
+const L=require(path.join(root,'src/lib/session/learners.ts'));
+const FILE=path.join(data,'learners.json');
+const quiet=(f)=>{const e=console.error;console.error=()=>{};try{return f();}finally{console.error=e;}};
+const temps=()=>fs.readdirSync(data).filter((f)=>f!=='learners.json');
+after(()=>{if(globalThis.__desk)clearInterval(globalThis.__desk.ticker);fs.rmSync(base,{recursive:true,force:true});});
+
+test('a save writes a valid book and leaves no temp file behind',()=>{
+  const note={text:'likes fractions',at:1700000000000,source:'nightly'};
+  const l=L.getLearner('ann');l.memory=[note];
+  L.saveLearner(l);
+  const book=JSON.parse(fs.readFileSync(FILE,'utf8'));
+  assert.deepEqual(book.ann.memory,[note],'a note is kept with its date and its writer');
+  L.recordAttempt('bob','frac-add-sub',true);
+  assert.deepEqual(Object.keys(JSON.parse(fs.readFileSync(FILE,'utf8'))).sort(),['ann','bob']);
+  L.saveEnglish('ann',L.getLearner('ann').english);
+  assert.deepEqual(temps(),[]);
+});
+
+test('notes: a save over the cap keeps the newest and counts what it dropped; a prompt reads each with its age, as the desk\'s unchecked notes',()=>{
+  const l=L.getLearner('capped');l.memory=Array.from({length:43},(_,i)=>({text:`note ${i}`,at:i,source:'nightly'}));
+  L.saveLearner(l);
+  const r=L.getLearner('capped');
+  assert.equal(r.memory.length,40);assert.equal(r.memory[0].text,'note 3','the oldest go');assert.equal(r.memoryDropped,3,'and how many is kept');
+  const M=require(path.join(root,'src/lib/desk/memory.ts')),A=require(path.join(root,'src/lib/prompt/assemble.ts'));
+  const now=Date.UTC(2026,9,15),day=24*60*60*1000;
+  const p=A.assemble('t',{system:[A.say('s','S')],prompt:M.notesPart({memory:[{text:'Old one.',at:null,source:'legacy'},{text:'Skips the "last" line.',at:now-3*day,source:'nightly'}],memoryDropped:2},now)}).prompt;
+  assert.match(p,/written by the desk, not checked by anyone/,'framed as notes, never as knowledge');
+  assert.ok(p.includes('1. "Old one."  (undated)'),'a legacy note\'s age is unknown, never guessed');
+  assert.ok(p.includes('2. "Skips the \\"last\\" line."  (3 days ago)'),'quoted as data, with its age');
+  assert.match(p,/2 older notes were dropped to keep this list short\./);
+  assert.equal(A.assemble('t',{prompt:M.notesPart({memory:[]},now)}).prompt,'','no notes, no heading');
+  assert.equal(M.ageOf(now-day,now),'(yesterday)');assert.equal(M.ageOf(now-20*day,now),'(2 weeks ago)');
+});
+test('a failed write leaves the previous learners.json byte-identical and saveLearner throws',()=>{
+  const before=fs.readFileSync(FILE);
+  // the rename fails (as a locked or read-only target does on Windows)
+  const real=fs.renameSync;fs.renameSync=()=>{throw Object.assign(new Error('EPERM: simulated'),{code:'EPERM'});};
+  try{
+    const l=L.getLearner('ann');l.memory=[{text:'changed',at:1,source:'nightly'}];
+    assert.throws(()=>L.saveLearner(l),/could not be written, so progress was not saved/);
+    assert.throws(()=>L.saveEnglish('ann',l.english),/could not be written/);
+    assert.throws(()=>L.recordAttempt('ann','frac-add-sub',true),/could not be written/);
+  }finally{fs.renameSync=real;}
+  assert.ok(before.equals(fs.readFileSync(FILE)),'learners.json byte-identical');
+  assert.deepEqual(temps(),[],'the temp file is removed');
+});
+
+test('a data dir that is a regular file makes saveLearner throw',()=>{
+  const code=`
+    process.env.DESK_DATA_DIR=${JSON.stringify(path.join(base,'blocker','sub'))};
+    const fs=require('node:fs'),ts=require(${JSON.stringify(path.join(root,'node_modules/typescript'))});
+    require.extensions['.ts']=(m,f)=>m._compile(ts.transpileModule(fs.readFileSync(f,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,f);
+    const L=require(${JSON.stringify(path.join(root,'src/lib/session/learners.ts'))});
+    try{L.saveLearner(L.getLearner('x'));console.log('NOTHROW');}catch(e){console.log('THREW '+e.message);}`;
+  fs.writeFileSync(path.join(base,'blocker'),'a file, not a dir');
+  const out=require('node:child_process').spawnSync(process.execPath,['-e',code],{encoding:'utf8'});
+  assert.match(out.stdout,/^THREW learners\.json could not be written/,out.stdout+out.stderr);
+  assert.equal(fs.readFileSync(path.join(base,'blocker'),'utf8'),'a file, not a dir');
+});
+
+test('an unreadable learners.json makes saveLearner throw and is left as it is',()=>{
+  const junk='{"ann": not json';
+  fs.writeFileSync(FILE,junk);
+  quiet(()=>{
+    assert.throws(()=>L.saveLearner(L.getLearner('ann')),/could not be read, so progress was not saved/);
+    assert.throws(()=>L.saveEnglish('ann',L.getLearner('ann').english),/could not be read/);
+    assert.throws(()=>L.recordAttempt('ann','frac-add-sub',true),/could not be read/);
+  });
+  assert.equal(fs.readFileSync(FILE,'utf8'),junk);
+  assert.deepEqual(temps(),[]);
+});
+
+// ---------------------------------------------------------------- v2 M5b: the papers a learner sat
+
+const RAW=[{q:'1',marks:1,outOf:3,codes:['N2']},{q:'2(a)',marks:2,outOf:2,codes:['A1']},{q:'3',marks:0,outOf:4,codes:['ZZ9']},{q:'bad',marks:'x',outOf:2,codes:['N1']}];
+
+test('papers 1: a paper round-trips - the cleaned paper and its date, kept on the learner, the recovery not stored',()=>{
+  fs.writeFileSync(FILE,'{}');
+  const p=L.addPaper('pam',RAW,1234);
+  assert.equal(p.at,1234);
+  assert.deepEqual(p.items.map(x=>x.q),['1','2(a)']);
+  assert.deepEqual(p.unmapped.map(x=>x.q),['3'],'an item with only an unknown code is kept apart');
+  const back=L.getLearner('pam');
+  assert.deepEqual(back.papers,[p]);
+  const stored=JSON.parse(fs.readFileSync(FILE,'utf8')).pam.papers;
+  assert.deepEqual(Object.keys(stored[0]).sort(),['at','items','leftOut','unmapped'],'the paper, its date and the count left out; no recovery beside them');
+  assert.equal(p.leftOut,1);
+  assert.equal(L.addPaper('pam',[{q:'x',marks:9,outOf:1,codes:[]}]),null,'a paper with no surviving row is not kept');
+  assert.equal(L.getLearner('pam').papers.length,1);
+  for(let i=0;i<7;i++)L.addPaper('pam',RAW,2000+i);
+  assert.equal(L.getLearner('pam').papers.length,L.PAPERS_CAP,'the newest few are kept');
+  assert.deepEqual(L.getLearner('pam').papers.at(-1).at,2006);
+});
+
+test('papers 2: a malformed stored paper is read as none, never guessed',()=>{
+  const good={at:5,items:[{q:'1',marks:1,outOf:3,codes:['N2']}],unmapped:[]};
+  const bad=[
+    {at:5,items:[{q:'1',marks:4,outOf:3,codes:['N2']}],unmapped:[]},            // marks over out of
+    {at:5,items:[{q:'1',marks:1,outOf:3,codes:['NOPE']}],unmapped:[]},           // an unknown code
+    {at:5,items:[{q:'1',marks:1,outOf:3,codes:[]}],unmapped:[]},                 // an item with no code is not an item
+    {at:5,items:[{q:'1',marks:1,outOf:3,codes:['N2']},{q:'1',marks:0,outOf:1,codes:['N1']}],unmapped:[]}, // a repeated label
+    {at:5,items:[{q:'1',marks:1,outOf:3,codes:['N2','N2']}],unmapped:[]},        // a code twice: not what cleanPaper keeps
+    {at:5,items:[],unmapped:[]},                                                 // nothing
+    {items:good.items,unmapped:[]},{at:'5',items:good.items,unmapped:[]},{at:5,items:'x',unmapped:[]},'junk',7,null,[],
+  ];
+  fs.writeFileSync(FILE,JSON.stringify({ann:{id:'ann',papers:[...bad,good]}}));
+  const l=L.getLearner('ann');
+  assert.deepEqual(l.papers,[good],'only the paper that reads back cleanly stays');
+  fs.writeFileSync(FILE,JSON.stringify({ann:{id:'ann',papers:'not a list'}}));
+  assert.equal(L.getLearner('ann').papers,undefined);
+});
+
+test('papers 3: an older record without the field reads exactly as before',()=>{
+  const old={id:'old',skills:{},writing:{},memory:['a'],history:[],digest:[]};
+  fs.writeFileSync(FILE,JSON.stringify({old}));
+  const l=L.getLearner('old');
+  assert.equal('papers' in l,false,'no field until a paper is entered');
+  const rest=l;
+  assert.deepEqual(rest.memory,[{text:'a',at:null,source:'legacy'}],'a note kept as a bare string reads as an undated legacy note');
+  assert.deepEqual(Object.keys(rest).sort(),['digest','english','history','id','memory','skills','writing']);
+  L.saveLearner({...l,memory:[...l.memory,{text:'b',at:2,source:'nightly'}]});
+  assert.deepEqual(L.getLearner('old').memory.map((n)=>[n.text,n.source]),[['a','legacy'],['b','nightly']]);
+  assert.equal('papers' in L.getLearner('old'),false);
+});
+
+test('papers 4: a paper typed on the phone goes through the session door - kept cleaned on the learner, the TV on its list, nothing kept for a paper with no row',()=>{
+  fs.writeFileSync(FILE,'{}');
+  const S=require(path.join(root,'src/lib/session/store.ts'));
+  S.dispatch({type:'reset'});
+  S.dispatch({type:'paper.enter',rows:RAW});
+  assert.equal(S.getSession().screen==='paper',false,'no one at the desk: nothing is kept for no one');
+  S.dispatch({type:'profile.draft',patch:{id:'mia',name:'Mia',type:'elementary',age:12,system:'uk',modules:['maths'],}});S.dispatch({type:'profile.save'});
+  assert.equal(S.getSession().learner.id,'mia');
+  S.dispatch({type:'paper.enter',rows:[{q:'x',marks:9,outOf:1,codes:[]}]});
+  assert.notEqual(S.getSession().screen,'paper','a paper with no row left is not kept, and the TV stays put');
+  assert.match(S.getSession().status,/kept no question/);
+  assert.equal(L.getLearner('mia').papers,undefined);
+  S.dispatch({type:'paper.enter',rows:RAW});
+  const s=S.getSession();
+  assert.equal(s.screen,'paper');
+  assert.deepEqual(s.paper.items.map(x=>x.q),['1','2(a)']);
+  assert.equal(s.paper.leftOut,1);
+  assert.deepEqual(s.paper,L.getLearner('mia').papers.at(-1),'the session carries the learner\'s latest paper');
+  assert.equal(JSON.stringify(s).includes('"topics"'),false,'the recovery is recomputed, never stored or sent');
+});
+
+test('papers 5 (RP6): the count of typed rows left out is kept only when above 0, and a bad stored count is left off while the paper stays',()=>{
+  fs.writeFileSync(FILE,'{}');
+  const clean=L.addPaper('rae',[{q:'1',marks:1,outOf:3,codes:['N2']}],10);
+  assert.equal('leftOut' in clean,false,'a paper of good rows has no leftOut key');
+  assert.equal('leftOut' in JSON.parse(fs.readFileSync(FILE,'utf8')).rae.papers[0],false);
+  const good={at:5,items:[{q:'1',marks:1,outOf:3,codes:['N2']}],unmapped:[]};
+  fs.writeFileSync(FILE,JSON.stringify({ann:{id:'ann',papers:[{...good,leftOut:2}]}}));
+  assert.equal(L.getLearner('ann').papers[0].leftOut,2,'a stored count reads back');
+  for(const bad of [-1,2.5,'3',0,null]){
+    fs.writeFileSync(FILE,JSON.stringify({ann:{id:'ann',papers:[{...good,leftOut:bad}]}}));
+    const papers=L.getLearner('ann').papers;
+    assert.equal(papers.length,1,`a paper with leftOut ${JSON.stringify(bad)} is still kept`);
+    assert.equal('leftOut' in papers[0],false,`leftOut ${JSON.stringify(bad)} is left off`);
+  }
+});
+
+test('papers 5: a paper the disk could not take is reported as not saved, never as a paper with no row; nothing is kept and the TV stays put (ruling 11)',()=>{
+  fs.writeFileSync(FILE,'{}');
+  const S=require(path.join(root,'src/lib/session/store.ts'));
+  S.dispatch({type:'reset'});
+  S.dispatch({type:'profile.draft',patch:{id:'noa',name:'Noa',type:'elementary',age:12,system:'uk',modules:['maths'],}});S.dispatch({type:'profile.save'});
+  assert.equal(S.getSession().learner.id,'noa');
+  const screen=S.getSession().screen,before=fs.readFileSync(FILE);
+  const real=fs.renameSync;fs.renameSync=()=>{throw Object.assign(new Error('EPERM: simulated'),{code:'EPERM'});};
+  try{quiet(()=>S.dispatch({type:'paper.enter',rows:RAW}));}finally{fs.renameSync=real;}
+  const s=S.getSession();
+  assert.equal(s.status,S.PAPER_NOT_SAVED);
+  assert.match(s.status,/not saved/);
+  assert.doesNotMatch(s.status,/kept no question/,'the rows were fine: the disk failed');
+  assert.notEqual(S.PAPER_NOT_SAVED,S.PAPER_NO_ROW);
+  assert.equal(s.screen,screen,'the TV stays put');
+  assert.ok(before.equals(fs.readFileSync(FILE)),'learners.json byte-identical');
+  assert.equal(L.getLearner('noa').papers,undefined,'no paper is kept');
+  assert.deepEqual(temps().filter((f)=>f.endsWith('.tmp')),[],'the temp file is removed');
+});
+
+test('papers 6 (MB-B14): a typed paper writes one paper entry in the same save - the questions kept, no mark, no score - and the page names it',()=>{
+  fs.writeFileSync(FILE,'{}');
+  const p=L.addPaper('pia',RAW,1700000000000);
+  const l=L.getLearner('pia');
+  assert.deepEqual(l.digest,[{at:1700000000000,kind:'paper',questions:p.items.length+p.unmapped.length}],'counts the kept rows, items plus unmapped');
+  assert.equal(JSON.stringify(l.digest).match(/marks|outOf|score|N2/),null,'no mark and no score on the digest');
+  // the same save: a disk that refuses the paper refuses its entry too
+  const real=fs.renameSync;fs.renameSync=()=>{throw Object.assign(new Error('EPERM: simulated'),{code:'EPERM'});};
+  try{assert.throws(()=>L.addPaper('pia',RAW,1700000000001));}finally{fs.renameSync=real;}
+  assert.equal(L.getLearner('pia').digest.length,1);
+  // a typed paper alone, through the session door: the page names it and is not empty
+  const S=require(path.join(root,'src/lib/session/store.ts'));
+  S.dispatch({type:'reset'});
+  S.dispatch({type:'profile.draft',patch:{id:'pax',name:'Pax',type:'elementary',age:12,system:'uk',modules:['maths']}});S.dispatch({type:'profile.save'});
+  S.dispatch({type:'paper.enter',rows:RAW});
+  assert.deepEqual(S.getSession().week.map((x)=>x.text),['Pax worked on one evening.','Math Buddy','One practice paper typed in.','One thing to try together','Ask them to teach you one thing they learned this week.']);
+});
+
+// scan-sweep optimize 2026-10-13 (session): the usual record's counts are read by the step-up record's rule
+test('OPT-6: a skill record read from disk keeps whole counts of at least 0 and right never above seen - the rule cleanStretch already applies',()=>{
+  const book={opt6:{id:'opt6',skills:{
+    a:{topic:'a',seen:-3,right:9,estimate:0.5,lastSeen:'x',slips:[]},
+    b:{topic:'b',seen:2.7,right:'abc',estimate:0.5,lastSeen:-5,slips:[]},
+    c:{topic:'c',seen:'7',right:4,estimate:0.5,lastSeen:1700000000000,slips:[],stretch:{seen:-3,right:9,estimate:0.5,secure:false,lastSeen:'x'}},
+  },writing:{w:{topic:'w',seen:-1,right:2,estimate:0.2,lastSeen:0,slips:[]}}}};
+  fs.writeFileSync(FILE,JSON.stringify(book));
+  const l=L.getLearner('opt6'),ok=(r,name)=>{
+    for(const k of ['seen','right','lastSeen'])assert.ok(Number.isInteger(r[k])&&r[k]>=0,`${name}.${k} = ${r[k]}: a whole count of at least 0`);
+    assert.ok(r.right<=r.seen,`${name}: right ${r.right} is not above seen ${r.seen}`);
+  };
+  for(const k of ['a','b','c'])ok(l.skills[k],k);ok(l.skills.c.stretch,'c.stretch');ok(l.writing.w,'writing.w');
+  assert.deepEqual([l.skills.c.seen,l.skills.c.right,l.skills.c.lastSeen],[7,4,1700000000000],'a good record reads as it was');
+  fs.rmSync(FILE,{force:true});
+});
+test('OPT-10: saveEnglish reads learners.json once - the book it writes into is the book it merges from',()=>{
+  fs.writeFileSync(FILE,JSON.stringify({o10:{id:'o10',skills:{},writing:{},memory:['kept'],history:[],digest:[]}}));
+  const real=fs.readFileSync;let reads=0;
+  const en=L.getLearner('o10').english;
+  fs.readFileSync=function(p,...a){if(String(p)===FILE)reads++;return real.call(this,p,...a);};
+  try{L.saveEnglish('o10',en);}finally{fs.readFileSync=real;}
+  assert.equal(reads,1,`saveEnglish read learners.json ${reads} times`);
+  assert.deepEqual(L.getLearner('o10').memory.map((n)=>n.text),['kept'],'the rest of the learner is kept');
+  fs.rmSync(FILE,{force:true});
+});

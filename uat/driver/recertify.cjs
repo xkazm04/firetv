@@ -27,12 +27,14 @@ const dirOf = run => path.isAbsolute(run) ? run : path.join(RUNS, run);
 /** A run's id: its directory name, or `<originating>/recert-<k>` for a rerun. */
 const runId = run => { const d = dirOf(run), b = path.basename(d); return /^recert-\d+$/.test(b) ? `${path.basename(path.dirname(d))}/${b}` : b; };
 const readJson = p => JSON.parse(fs.readFileSync(p, 'utf8'));
-const NOT_RESULTS = new Set(['findings.json', 'run.json']);
+// one reader of a run's per-Character files and one open rule, shared with the ledger: a file a dying child tore is
+// left out (its planned pairs are then not-evaluable in finish()), never a throw that loses every stamp of the rerun
+const LG = require('./ledger.cjs');
 /** The per-Character result files of a run. */
-const results = run => fs.readdirSync(dirOf(run)).filter(f => f.endsWith('.json') && !NOT_RESULTS.has(f)).sort().map(f => readJson(path.join(dirOf(run), f))).filter(r => r && r.character && Array.isArray(r.journeys));
+const results = run => LG.resultsOf(dirOf(run));
 const findings = run => readJson(path.join(dirOf(run), 'findings.json'));
 const runJson = run => { try { return readJson(path.join(dirOf(run), 'run.json')); } catch { return null; } };
-const isOpen = f => f.type !== 'strength' && f.resolution === 'open';
+const isOpen = LG.isOpen;
 const jn = j => Number(String(j).replace(/\D/g, '')) || 0;
 
 // ---------------------------------------------------------------- plan
@@ -170,6 +172,16 @@ function priorStatuses(ids, rows = [], { endedBy } = {}) {
   return out;
 }
 /**
+ * Replaces a run record whole or not at all: the bytes go to a temp file in the same directory, then rename over the record,
+ * so a process killed mid-write leaves the old findings.json, never half of the new one.
+ */
+function writeAtomic(file, data) {
+  const tmp = `${file}.${process.pid}.tmp`;
+  try { fs.writeFileSync(tmp, data); fs.renameSync(tmp, file); }
+  catch (e) { try { fs.rmSync(tmp, { force: true }); } catch { /* the temp is scratch */ } throw e; }
+}
+
+/**
  * Stamps the originating findings.json. not-seen -> resolution 'fixed' (LT evidence; never 'resolved-verified');
  * recurs -> stays open, recurrence + 1; not-evaluable -> stays open. Every stamped row names the rerun.
  */
@@ -183,7 +195,7 @@ function writeBack(prior, id, statuses) {
     else if (s.status === 'recurs') { f.recurrence = (f.recurrence ?? 1) + 1; if (s.as) f.recurred_as = s.as; count.recurs++; }
     else count.notEvaluable++;
   }
-  fs.writeFileSync(file, JSON.stringify(rows, null, 2));
+  writeAtomic(file, JSON.stringify(rows, null, 2));
   return count;
 }
 
@@ -243,6 +255,7 @@ function renderRecertify(prior, rerun) {
     `Rerun: \`${id}\`: ${A.map(r => `${r.character} ${r.journeys.map(j => j.id).join(', ')}`).join(' · ') || 'no Character finished'}. Only the pairs with open findings were rerun; each judge was shown that pair's open finding ids and answered each one.`, '',
     `**Level reached: LT only.** The skill keeps \`resolved-verified\` for live L2 evidence, so a finding the rerun no longer shows is \`fixed\` in \`${P}/findings.json\`, with \`recertify_run\` and \`recertify_evidence\`. Rerun finding ids are positional, so they are written \`${id}/<id>\`.`, '',
     '## Fixed (LT evidence)', '',
+    ...(cf.confounds.some(c => c.kind === 'instrument') ? ['**The instrument changed between these runs (see Confounded below).** A gap not seen here may be the new engine, not a fix: read nothing below as a fix until L2 or a rerun on the same instrument shows it.', ''] : []),
     ...table('| Finding | Title | Rerun evidence | Run pair |', fixed.map(f => `| ${f.id} | ${cell(f.title)} | ${cell(f.recertify_evidence)} | ${pair} |`)), '',
     '## Still open', '',
     ...table('| Finding | Status | Title | Rerun evidence | Run pair |', still.map(f => `| ${f.id} | ${f.recertify_status === 'recurs' ? `recurs (recurrence ${f.recurrence}${f.recurred_as ? `, as ${q(f.recurred_as)}` : ''})` : 'not-evaluable'} | ${cell(f.title)} | ${cell(f.recertify_evidence)} | ${pair} |`)), '',
@@ -320,13 +333,16 @@ function finishLedger(rerun, { runs = RUNS } = {}) {
 }
 
 /** What produced a run: every run writes this into run.json so a driver change cannot pass for a product change. */
-function instrumentOf({ model, judgeScreenCap }) {
-  const sha = f => crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname, f))).digest('hex').slice(0, 16);
+function instrumentOf({ model, judgeScreenCap, roles, dir = __dirname }) {
+  const sha = f => crypto.createHash('sha256').update(fs.readFileSync(path.join(dir, f))).digest('hex').slice(0, 16);
   return {
     model, judgeScreenCap,
-    efforts: { tutor: process.env.UAT_CODEX_EFFORT || 'medium', character: process.env.UAT_CODEX_EFFORT || 'medium', judge: process.env.UAT_JUDGE_EFFORT || 'high' },
-    driver: Object.fromEntries(['linga-text.cjs', 'surface.cjs', 'recertify.cjs', 'verdict.cjs', 'ledger.cjs', 'metrics.cjs', 'product.cjs'].map(f => [f, sha(f)])),
+    // each role's engine, model and thinking setting (claude-cli era); runs before 2026-10-09 recorded `efforts` (codex) instead,
+    // so a recertify across the move reads as an instrument change, never as a product change or a fix
+    ...(roles ? { roles } : {}),
+    // every .cjs in the driver directory, read from it rather than listed, so a driver file added later is hashed too
+    driver: Object.fromEntries(fs.readdirSync(dir).filter(f => f.endsWith('.cjs')).sort().map(f => [f, sha(f)])),
   };
 }
 
-module.exports = { RUNS, runId, results, plan, openFindings, ratio, rollUp, metricDelta, confounds, priorStatuses, writeBack, nextRerun, renderRecertify, finish, planLedger, finishLedger, instrumentOf, START_SHIFT };
+module.exports = { RUNS, runId, results, plan, openFindings, ratio, rollUp, metricDelta, confounds, priorStatuses, writeBack, writeAtomic, nextRerun, renderRecertify, finish, planLedger, finishLedger, instrumentOf, START_SHIFT };

@@ -1,7 +1,7 @@
 /**
  * Prints every one of the project's KPI readings. Run with `npm run measure` in desk/ (directly: node tools/kpi-measure.cjs).
- * Read-only: the suites it shells out to use their own scratch data dir, tsc runs with --noEmit and no build info,
- * and nothing here writes. `--json` prints the same readings as one JSON object, for a back-measurement that has to be compared.
+ * Writes nothing itself and never touches desk/data: tsc runs with --noEmit and no build info, and the one suite it shells
+ * out to (linga-rules-test) sets its own DESK_DATA_DIR, which it leaves behind as artifacts/linga-rules/<ms>/. `--json` prints the same readings as one JSON object, for a back-measurement that has to be compared.
  * A reading it could not take is null and says why — never a 0, because a 0 recorded as a measurement is a claim.
  */
 const fs = require("node:fs"), path = require("node:path"), { spawnSync } = require("node:child_process");
@@ -67,8 +67,11 @@ function coveredBy(sources, modulePath) {
 }
 
 // KPI 1 — Linga conversation-loop checks passing. The suite is the gate; parse its own count, never our own.
-function lingaChecks() {
-  const r = spawnSync(process.execPath, [path.join(__dirname, "linga-rules-test.cjs")], { encoding: "utf8" });
+// The same bound the rules runner gives every suite (run-rules.cjs RULES_SUITE_TIMEOUT_MS): a suite that never exits is no reading, not a hang.
+const SUITE_TIMEOUT = Number(process.env.RULES_SUITE_TIMEOUT_MS) > 0 ? Number(process.env.RULES_SUITE_TIMEOUT_MS) : 600000;
+function lingaChecks({ file = path.join(__dirname, "linga-rules-test.cjs"), timeout = SUITE_TIMEOUT } = {}) {
+  const r = spawnSync(process.execPath, [file], { encoding: "utf8", timeout, killSignal: "SIGKILL" });
+  if (r.error && r.error.code === "ETIMEDOUT") return { pass: null, fail: null, note: `suite timed out after ${timeout} ms` };
   const out = `${r.stdout || ""}${r.stderr || ""}`;
   const num = k => { const m = out.match(new RegExp(`^\\D*${k} (\\d+)$`, "m")); return m ? Number(m[1]) : null; };
   const pass = num("pass"), fail = num("fail");
@@ -87,20 +90,24 @@ const ESSAY_CORE = ["src/lib/rules/essay.ts", "src/lib/desk/essay.ts"];
 /**
  * Stage 6 as it landed: a writing episode is a history entry of kind "writing", and the essay reading
  * is what appends it. Both halves must hold — a kind nothing writes, or a write of a kind the record drops, is not persistence.
+ * Both shapes count: addHistory(<id>, {kind: "writing"}), which saves by itself, and withHistory(<learner>, {kind: "writing"}) when essay.ts also calls saveLearner(.
  */
 function writingPersisted(deskDir = desk) {
   const read = f => { try { return fs.readFileSync(path.join(deskDir, f), "utf8"); } catch { return ""; } };
   const entry = read("src/lib/session/learners.ts").match(/export interface HistoryEntry \{[^}]*\}/);
   const kindDeclared = Boolean(entry && /\bkind\s*:[^;\n]*"writing"/.test(entry[0]));
-  const essayWrites = /addHistory\(\s*\w+\s*,\s*\{[^}]*\bkind\s*:\s*"writing"/.test(read("src/lib/desk/essay.ts"));
+  const src = read("src/lib/desk/essay.ts");
+  const m = /\b(addHistory|withHistory)\(\s*[\w.]+(?:\([^()]*\))?\s*,\s*\{[^}]*\bkind\s*:\s*"writing"/.exec(src);
+  const essayWrites = Boolean(m && (m[1] === "addHistory" || /\bsaveLearner\(/.test(src)));
   return { persisted: kindDeclared && essayWrites, kindDeclared, essayWrites };
 }
 
 // KPI 4 — TypeScript typecheck errors in desk/, from desk's own compiler. No compiler, no reading.
-function typecheckErrors() {
-  const tsc = path.join(desk, "node_modules/typescript/bin/tsc");
+function typecheckErrors({ deskDir = desk, timeout = SUITE_TIMEOUT } = {}) {
+  const tsc = path.join(deskDir, "node_modules/typescript/bin/tsc");
   if (!fs.existsSync(tsc)) return { errors: null, unresolved: null, note: "desk/node_modules has no typescript — run npm install in desk/ (in a worktree, link the operator's copy)" };
-  const r = spawnSync(process.execPath, [tsc, "--noEmit", "--incremental", "false", "-p", path.join(desk, "tsconfig.json")], { cwd: desk, encoding: "utf8" });
+  const r = spawnSync(process.execPath, [tsc, "--noEmit", "--incremental", "false", "-p", path.join(deskDir, "tsconfig.json")], { cwd: deskDir, encoding: "utf8", timeout, killSignal: "SIGKILL" });
+  if (r.error && r.error.code === "ETIMEDOUT") return { errors: null, unresolved: null, note: `tsc timed out after ${timeout} ms` };
   const out = `${r.stdout || ""}${r.stderr || ""}`;
   if (r.status !== 0 && !/error TS\d+/.test(out)) return { errors: null, unresolved: null, note: `tsc exited ${r.status} without a diagnostic` };
   const lines = out.split(/\r?\n/).filter(l => /error TS\d+/.test(l));
@@ -213,5 +220,5 @@ function print(r, asJson) {
   }
 }
 
-module.exports = { findLearnerBook, learnerEvidence, writingPersisted, testSources, coveredBy, stripComments, mainCheckout, same };
+module.exports = { findLearnerBook, learnerEvidence, writingPersisted, testSources, coveredBy, stripComments, lingaChecks, typecheckErrors, mainCheckout, same };
 if (require.main === module) print(measure(), process.argv.includes("--json"));

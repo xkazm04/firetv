@@ -2,14 +2,17 @@
  * Makes the gate runnable in a checkout that was provisioned without desk/node_modules — an autopilot worktree.
  * Runs as desk/'s `pretest`, before `npm test`. It changes nothing about what the gate checks: with a usable
  * desk/node_modules already there it prints nothing and exits 0. Without one it links desk/node_modules to the
- * desk/node_modules of a checkout nearby (a junction on Windows, a directory symlink elsewhere), so tsc and the
+ * desk/node_modules of another worktree of this repository (a junction on Windows, a directory symlink elsewhere),
+ * or of DESK_NODE_MODULES, so tsc and the
  * rules suites resolve modules the way they do in the operator's checkout. No donor, or a real directory in the
  * way, is one line telling the human to run `npm install` in desk/ and a non-zero exit — never an unreadable stack.
  * Read-only towards every donor: it creates a link, and never writes into or deletes anything it did not create.
+ * The link it leaves is not: `git worktree remove --force` (and rm -rf) follow it and empty the donor's install
+ * (git 2.43 on Windows, measured 2026-10-14), so the line it prints says to unlink first.
  */
 const fs = require("node:fs"), path = require("node:path");
 // The main worktree is the operator's checkout; an autopilot worktree is cut from it and it is the likeliest donor.
-const { mainCheckout, same } = require("./checkout.cjs");
+const { worktrees, mainCheckout, same } = require("./checkout.cjs");
 const root = path.resolve(__dirname, "..");
 
 /** The compiler both halves of the gate need: tsc --noEmit is desk's own, and the rules suites require() it to transpile. */
@@ -28,14 +31,24 @@ function occupant(dest) {
 }
 
 /**
- * Where a donor install could be, nearest first: DESK_NODE_MODULES when set, then the main checkout, then every
- * sibling checkout of this one and of its parents, `levels` directories up. Candidates only — none is read yet.
+ * Where a donor install could be, nearest first: DESK_NODE_MODULES when set, then the main checkout, then the other
+ * worktrees of this repository as git lists them. Candidates only — none is read yet.
+ *
+ * A donor's code runs: npm test starts tsc and the rules suites out of whatever install is linked. So the default
+ * trusts only what git says belongs to this repository, never a directory crawl. A crawl of sibling directories up
+ * the tree reached C:\Users\Public and the drive root (2026-10-14), places any local user can write a
+ * desk/node_modules/typescript into. `levels` > 0 still adds siblings of this checkout and its parents, for the
+ * suite's scratch fixtures and for an operator who passes it deliberately; nothing in the gate does. `main: null`
+ * means no git here, so there are no worktrees either.
  */
-function donorCandidates({ env = process.env, checkout = root, main = mainCheckout(checkout), levels = 3 } = {}) {
+function donorCandidates({ env = process.env, checkout = root, main, trees, levels = 0 } = {}) {
   const out = [];
-  const add = (modules, source) => { if (modules && !same(modules, path.join(checkout, "desk/node_modules"))) out.push({ modules: path.resolve(modules), source }); };
+  const add = (modules, source) => { if (modules && !same(modules, path.join(checkout, "desk/node_modules")) && !out.some(o => same(o.modules, modules))) out.push({ modules: path.resolve(modules), source }); };
   if (env.DESK_NODE_MODULES) { add(env.DESK_NODE_MODULES, "DESK_NODE_MODULES"); return out; }
-  if (main && !same(main, checkout)) add(path.join(main, "desk/node_modules"), "main checkout");
+  const listed = trees ?? (main === null ? [] : worktrees(checkout));
+  const head = main === undefined ? listed[0] ?? null : main;
+  if (head && !same(head, checkout)) add(path.join(head, "desk/node_modules"), "main checkout");
+  for (const t of listed) if (!same(t, checkout)) add(path.join(t, "desk/node_modules"), `worktree ${t}`);
   let dir = path.dirname(path.resolve(checkout));
   for (let i = 0; i < levels; i++) {
     let entries = [];
@@ -56,13 +69,14 @@ function findDonor(options = {}) {
  * Link desk/node_modules to a donor, or say why it cannot. Never removes a real install: only a link (ours or
  * broken, which unlink removes without touching what it points at) or an empty directory is cleared out of the way.
  */
-function ensure({ env = process.env, checkout = root, main, levels, link = linkDir } = {}) {
+function ensure({ env = process.env, checkout = root, main, trees, levels, link = linkDir } = {}) {
   const dest = path.join(checkout, "desk/node_modules");
   if (usable(dest)) return { action: "present", dest };
   const sitting = occupant(dest);
   if (sitting.kind === "directory" || sitting.kind === "file") return { action: "blocked", dest, reason: `${dest} is there but has no typescript in it` };
-  const donor = findDonor({ env, checkout, ...(main === undefined ? {} : { main }), ...(levels === undefined ? {} : { levels }) });
-  if (!donor) return { action: "unavailable", dest, reason: `no checkout near ${checkout} has a desk/node_modules with typescript in it` };
+  const donor = findDonor({ env, checkout, main, trees, levels });
+  if (!donor) return { action: "unavailable", dest, reason: env.DESK_NODE_MODULES ? `DESK_NODE_MODULES (${env.DESK_NODE_MODULES}) has no typescript in it`
+    : `no worktree of this repository has a desk/node_modules with typescript in it (DESK_NODE_MODULES can name another install)` };
   if (sitting.kind === "link") { try { fs.unlinkSync(dest); } catch { try { fs.rmdirSync(dest); } catch { /* the link outlives us; the create below will say so */ } } }
   if (sitting.kind === "empty") { try { fs.rmdirSync(dest); } catch { /* likewise */ } }
   try {
@@ -78,7 +92,7 @@ function linkDir(from, to) { fs.symlinkSync(from, to, process.platform === "win3
 /** One line at most, and only when something happened. Anything it cannot fix is one instruction, then exit 1. */
 function run(result = ensure(), out = console) {
   if (result.action === "present") return 0;
-  if (result.action === "linked") { out.log(`desk/node_modules was missing — linked it to ${result.donor.modules} (${result.donor.source}). Remove the link and run \`npm install\` in desk/ for an install of its own.`); return 0; }
+  if (result.action === "linked") { out.log(`desk/node_modules was missing — linked it to ${result.donor.modules} (${result.donor.source}). Remove the link and run \`npm install\` in desk/ for an install of its own. Unlink it before removing this worktree: \`git worktree remove --force\` follows the link and empties ${result.donor.modules}.`); return 0; }
   out.error(`desk/node_modules cannot run the gate: ${result.reason}. Run \`npm install\` in desk/, then \`npm test\`.`);
   return 1;
 }

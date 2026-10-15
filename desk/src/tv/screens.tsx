@@ -6,14 +6,16 @@
  * Essay Master theirs. Each takes the session and a `focus` index and draws itself from its stop list in
  * tv/keys.ts - the same list the D-pad there walks, so a stop is added or moved in one place.
  */
-import { useEffect, useState } from "react";
+import { failedReadLine, missingLine } from "@/tv/pageLines";
+import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import type { Profile, Session } from "@/lib/session/store";
 import { fmt } from "./useSession";
-import { stopAt, learnerStops, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
+import { playerCommand, stopAt, learnerStops, switchEndsLine, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
 import { lessonStates } from "@/lib/library/watched";
 import { pathOf } from "@/lib/library/paths";
-import { recapRows, recapCaption, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
+import { recapRows, recapCaption, railOf, setMarks, RECAP_READINGS, RECAP_SLIPS, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
+import type { Mark } from "@/lib/rules/marks";
 import { MathsMark, EssayBrand, EssayArrow } from "./marks";
 import { MATHS_FONTS } from "@/maths/fonts";
 import { Mark as LingaMark } from "@/english/OpenDoor";
@@ -22,6 +24,7 @@ import { ESSAY_FONTS } from "@/essay/fonts";
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
 import { BRAND, TYPE_WORDS, profileRows, locate, onModules } from "@/tv/profileRows";
+import { modeOf } from "@/lib/rules/mode";
 const NAME = BRAND;
 
 function Rail({ s }: { s: Session }) {
@@ -33,9 +36,6 @@ function Rail({ s }: { s: Session }) {
     </aside>
   );
 }
-const Clock = ({ s, right }: { s: Session; right?: boolean }) => (
-  <div className="clock" style={{ position: "absolute", top: 0, ...(right ? { right: 0, textAlign: "right" } : { left: 0 }) }} data-phase={s.timer.phase}>{fmt(s.timer.left)}<small>{s.timer.running ? "On the clock" : "Paused"}</small></div>
-);
 
 // ---- T0 ----
 /** The moment after pairing: the phone is on the desk. One picture, one instruction, one action. */
@@ -58,7 +58,7 @@ export function Pair({ s }: { s: Session }) {
   const url = s.phoneUrl + "?pin=" + s.pin;
   // qrcode's browser build draws the code; generated here so the store stays free of UI.
   const [svg, setSvg] = useState("");
-  useEffect(() => { let live = true; QRCode.toString(url, { type: "svg", margin: 1 }).then((x) => { if (live) setSvg(x); }).catch(() => {}); return () => { live = false; }; }, [url]);
+  useEffect(() => { let live = true; QRCode.toString(url, { type: "svg", margin: 1 }).then((x) => { if (live) setSvg(x); }).catch((e) => console.error("desk TV: the pairing QR could not be drawn; the code is still shown to type", e)); return () => { live = false; }; }, [url]);
   return (<>
     <div className="band band-rule" />
     <div className="content-full" style={{ display: "grid", placeItems: "center", textAlign: "center" }}>
@@ -118,7 +118,7 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
   const ovScale = H / p.h;
   // what the pipelines behind this page are doing, in the caption: a read that failed, a hint on its way or not coming
   const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
-  const pageLine = read?.phase === "failed" ? "could not read this page — snap it again" : hj?.phase === "running" ? "thinking about a hint…" : hj?.phase === "failed" ? "no hint that time — Select to try again" : undefined;
+  const pageLine = read?.phase === "failed" ? failedReadLine(p.subject) : hj?.phase === "running" ? "thinking about a hint…" : hj?.phase === "failed" ? (hj.retry === false ? "no hint for this one" : "no hint that time — Select to try again") : p.missing?.length ? missingLine(p.missing) : undefined;
   return (<>
     <div className="band band-rule" />
     <main className="content-full">
@@ -137,13 +137,13 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
         {(s.reading || pageLine) && <div className="cap" style={{ position: "absolute", left: 30, bottom: 24, zIndex: 2 }}>{s.reading ? "reading the page…" : pageLine}</div>}
       </div>
       {it && !s.reading && (
-        <div className="lt" style={{ marginTop: 24, maxWidth: 1728 }}><div className="tag">{p.subject === "essay" ? `¶ ${it.n}` : `Item ${it.n}`}</div><div className="txt" style={{ fontSize: 36 }}>{p.subject === "essay" ? it.text.slice(0, 110) + "…" : shown(it.text)}</div></div>
+        <div className="lt" style={{ marginTop: 24, maxWidth: 1728 }}><div className="tag">{p.subject === "essay" ? `¶ ${it.n}` : `Item ${it.n}`}</div><div className="txt" style={{ fontSize: 36 }}>{p.subject === "essay" ? it.text.slice(0, 110) + (it.text.length > 110 ? "…" : "") : shown(it.text)}</div></div>
       )}
       <div className="strip" style={{ position: "absolute", left: 0, bottom: 0 }}>
         {s.pages.map((pg, i) => <div key={pg.id} className="thumb" data-current={i === s.pageIx} style={{ backgroundImage: `url(${pg.img})` }} />)}
       </div>
       <div className="ticker" style={{ left: 120 * s.pages.length + 40 }}>
-        <span>{p.items.length} items</span><i>·</i><span>{p.readMs ? `read in ${(p.readMs / 1000).toFixed(0)} s` : read?.phase === "failed" ? "not read" : "reading"}</span><i>·</i><span>{hj?.phase === "failed" ? "Select to try again" : "Select for a hint"}</span><i>·</i><span>Menu for the overview</span>
+        <span>{p.items.length} items</span><i>·</i><span>{p.readMs ? `read in ${(p.readMs / 1000).toFixed(0)} s` : read?.phase === "failed" ? "not read" : "reading"}</span><i>·</i><span>{hj?.phase === "failed" && hj.retry !== false ? "Select to try again" : "Select for a hint"}</span><i>·</i><span>Menu for the overview</span>
       </div>
     </main>
   </>);
@@ -151,7 +151,16 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
 
 // ---- T4 Hint ----
 export function HintScreen({ s, focus }: { s: Session; focus: number }) {
-  const h = s.hint; if (!h) return null;
+  const h = s.hint;
+  // nothing to explain (the hint was cleared under the screen): one ask, not a blank stage
+  if (!h) return (<>
+    <div className="band band-left" />
+    <main className="content-full">
+      <div className="eyebrow" style={{ marginTop: 40 }}>{NAME[s.subject]} · hint</div>
+      <div className="title" style={{ marginTop: 50 }}>No hint yet</div>
+      <div style={{ position: "absolute", left: 0, bottom: 216 }}><span className="cap">Back</span><div className="cap-text">Press Back to return to the page, then Select on an item for a hint.</div></div>
+    </main>
+  </>);
   const hh = h.stage === 2 ? h.hint2 : h.hint1;
   const p = s.pages[s.pageIx];
   const at = stopAt(HINT_STOPS, focus);
@@ -187,8 +196,21 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
 
 // ---- T5 Lesson ----
 export function LessonScreen({ s }: { s: Session }) {
-  const l = s.lesson; if (!l) return null;
-  const src = l.youtube ? `https://www.youtube-nocookie.com/embed/${l.youtube}?start=${l.t}&autoplay=1&rel=0&modestbranding=1` : null;
+  const l = s.lesson;
+  // Play/Pause is the desk's flag; the embed only obeys what it is told (enablejsapi + postMessage), so tell it on every flip
+  const frame = useRef<HTMLIFrameElement>(null);
+  const paused = s.lessonPaused;
+  useEffect(() => { frame.current?.contentWindow?.postMessage(playerCommand(paused), "*"); }, [paused]);
+  // no lesson open (cleared under the screen): one ask, not a blank stage
+  if (!l) return (<>
+    <div className="band band-wedge" />
+    <main className="content-full">
+      <div className="eyebrow" data-ch={s.subject} style={{ marginTop: 40 }}>{NAME[s.subject]} · lesson</div>
+      <div className="title" style={{ marginTop: 50 }}>No lesson open</div>
+      <div style={{ position: "absolute", left: 0, bottom: 216 }}><span className="cap">Back</span><div className="cap-text">Press Back to return.</div></div>
+    </main>
+  </>);
+  const src = l.youtube ? `https://www.youtube-nocookie.com/embed/${l.youtube}?start=${l.t}&autoplay=1&rel=0&modestbranding=1&enablejsapi=1` : null;
   return (<>
     <div className="band band-wedge" />
     <main className="content-full">
@@ -196,14 +218,15 @@ export function LessonScreen({ s }: { s: Session }) {
       <div className="headline" style={{ fontFamily: "var(--display)", fontWeight: 800, textTransform: "uppercase", fontSize: 56 }}>{l.title}</div>
       <div className="body" style={{ marginTop: 10, color: "var(--mute)" }}>{shown(l.why)}</div>
       <div style={{ position: "absolute", left: 0, top: 200, width: 1120, height: 630, background: "#000" }}>
-        {src ? <iframe src={src} width={1120} height={630} allow="autoplay; encrypted-media" style={{ border: 0 }} title={l.title} />
+        {src ? <iframe ref={frame} src={src} width={1120} height={630} allow="autoplay; encrypted-media" style={{ border: 0 }} title={l.title} onLoad={() => { if (paused) frame.current?.contentWindow?.postMessage(playerCommand(true), "*"); }} />
              : <div className="body" style={{ padding: 40, color: "var(--mute)" }}>This unit has no video yet — its theory screen is the lesson. Press Menu.</div>}
       </div>
       <div style={{ position: "absolute", left: 1160, top: 200, width: 568 }}>
         <span className="cap">The part that matters · {fmt(l.t)}</span>
         <div className="body" style={{ marginTop: 16, color: "var(--mute)", fontSize: 28, lineHeight: 1.45 }}>{l.text.slice(0, 520)}{l.text.length > 520 ? "…" : ""}</div>
       </div>
-      <div className="ticker"><span>{s.lessonPaused ? "paused — circle on the phone to ask about this frame" : "playing"}</span><i>·</i><span>Space pauses</span><i>·</i><span>Back returns</span></div>
+      {/* facts only: the remote's own button, and no ask the phone cannot answer (no phone panel circles a lesson frame) */}
+      <div className="ticker"><span>{s.lessonPaused ? "paused" : "playing"}</span><i>·</i><span>{s.lessonPaused ? "Play resumes" : "Play pauses"}</span><i>·</i><span>Back returns</span></div>
     </main>
   </>);
 }
@@ -292,7 +315,8 @@ export function BreakScreen({ s }: { s: Session }) {
 // ---- T12 Recap: tonight, done ----
 /**
  * The whole evening as one picture (tv/recapRows.ts): a tile per app on the desk, each in its own app's language -
- * Math Buddy's sheet with a tick for each right answer, the pen's ring for each slip and a dashed ring for each item
+ * Math Buddy's sheet with a tick for each right answer, the pen's ring for each slip (a step up's and Pythagoras' named slips
+ * again under the rail, the ring with the item's number and the slip's short label) and a dashed ring for each item
  * the desk was not sure of (lines that do not say how many draw none), a page per sheet read and
  * a lamp per hint (ringed when it took a second); Linga's card with a plum mark per conversation, sized by its
  * replies; Essay Master's black card with an arrow per sentence read, the ones to fix turned round in citron.
@@ -329,41 +353,78 @@ const PEN_TICK = <svg className="rc-tk" viewBox="0 0 46 40" aria-hidden="true"><
 const PEN_RING = <svg className="rc-ring" viewBox="0 0 46 40" aria-hidden="true"><path d="M27 4 C42 4 45 15 43 23 C40 35 16 39 7 30 C0 23 4 8 18 5 C22 4 26 4 30 6" /></svg>;
 /** Lamplight's unsure mark: no tick and no slip, the pen's ring dashed in the paper's "not sure" blue. */
 const PEN_ASK = <svg className="rc-ask" viewBox="0 0 46 40" aria-hidden="true"><path d="M27 4 C42 4 45 15 43 23 C40 35 16 39 7 30 C0 23 4 8 18 5 C22 4 26 4 30 6" /></svg>;
+/** MB-B1: an item left empty - the empty answer line, neither a slip's ring nor the desk's dashed doubt. */
+const PEN_SKIP = <svg className="rc-skip" viewBox="0 0 46 40" aria-hidden="true"><path d="M8 32 H38" /></svg>;
+/** Each mark's pen on the recap's paper, keyed by Mark (rules/marks): a slip keeps its old data-v, "look". */
+const RECAP_PEN: Record<Mark, { v: string; pen: React.ReactNode }> = {
+  right: { v: "right", pen: PEN_TICK }, wrong: { v: "look", pen: PEN_RING }, unsure: { v: "unsure", pen: PEN_ASK }, skipped: { v: "skipped", pen: PEN_SKIP },
+};
 const PAGE = <svg className="rc-page" viewBox="0 0 40 50" aria-hidden="true"><path d="M3 3h24l10 10v34H3z" /><path d="M9 20h20M9 28h20M9 36h14" /></svg>;
+/** The one small line under a tile that drew its last three: how many came before them. Nothing when none did. */
+function Earlier({ n }: { n: number }) {
+  return n > 0 ? <div className="rc-earlier" data-role="recap-earlier">{n} earlier</div> : null;
+}
+/** The end of a row of named lamps or slips that drew its first few: how many it left out. Nothing when none. */
+function More({ n, role }: { n: number; role: string }) {
+  return n > 0 ? <div className="rc-earlier" data-role={role}>{n} more</div> : null;
+}
+/** The most hinted problems the tile names with a lamp each (one row on the sheet); the rest are "k more" (MB-B23). */
+const RECAP_LAMPS = 5;
+/**
+ * The most named slips the tile draws under the set's rail (cycle 19): the pen's ring, the item's number and the slip's
+ * short label from rules, one to a line (a label wraps between its words, never inside one); the rest are "k more".
+ * Two (recapRows RECAP_SLIPS, the phone's slip line's cap too), because a line is the sheet's width and the rails above
+ * it come first.
+ */
 function RecapMaths({ t }: { t: MathsTile }) {
-  const lamps = Array.from({ length: Math.min(t.hints, 12) }, (_, i) => i < t.second);
+  // a lamp per hinted problem, its name beneath, ringed when it needed a second; a log with no nameable key draws a lamp per hint as before
+  const named = t.hinted.some((x) => x.name !== null), lamps = named ? [] : Array.from({ length: Math.min(t.hints, 12) }, (_, i) => i < t.second);
+  const lit = t.hinted.slice(0, RECAP_LAMPS), more = t.hinted.length - lit.length;
   return (<>
     <div className="rc-head"><MathsMark /><div className="mb-word">Math <em>Buddy</em></div></div>
     <div className="rc-sheet">
       {t.empty ? <div className="rc-none">{t.empty}</div> : <>
-        {t.sets.slice(-3).map((x, k) => (
-          <div key={k} className="rc-set" data-role="recap-set">{Array.from({ length: Math.min(x.of, 12) }, (_, i) => { const v = i < x.right ? "right" : i >= x.of - (x.unsure ?? 0) ? "unsure" : "look"; return <i key={i} data-v={v}>{v === "right" ? PEN_TICK : v === "unsure" ? PEN_ASK : PEN_RING}</i>; })}</div>
+        {t.sets.slice(-RECAP_READINGS).map((x, k) => (
+          <div key={k} className="rc-set" data-role="recap-set">{setMarks(x).map((m, i) => <i key={i} data-v={RECAP_PEN[m].v}>{RECAP_PEN[m].pen}</i>)}</div>
         ))}
+        <Earlier n={t.sets.length - RECAP_READINGS} />
+        {t.slipped.length > 0 && <div className="rc-lamps" data-role="recap-slips">{t.slipped.slice(0, RECAP_SLIPS).map((x, i) => (
+          <span key={i} className="rc-lamp" data-slip="true"><i data-v="look">{PEN_RING}</i><em>{x.name}<small>{x.slip}</small></em></span>
+        ))}<More n={t.slipped.length - RECAP_SLIPS} role="recap-slips-more" /></div>}
         {t.pages > 0 && <div className="rc-pages" data-role="recap-pages">{Array.from({ length: Math.min(t.pages, 8) }, (_, i) => <i key={i}>{PAGE}</i>)}</div>}
         {lamps.length > 0 && <div className="rc-lamps" data-role="recap-hints">{lamps.map((two, i) => <b key={i} data-second={two || undefined} />)}</div>}
+        {named && <div className="rc-lamps" data-role="recap-hints">{lit.map((x, i) => (
+          <span key={i} className="rc-lamp" data-second={x.second || undefined} data-page={x.page}><b /><em>{x.name ?? ""}{x.page && <small>{PAGE}{x.page}</small>}</em></span>
+        ))}<More n={more} role="recap-hints-more" /></div>}
       </>}
     </div>
   </>);
 }
+/** The most conversations the Linga card draws; the ones before them are counted under it, as the other two tiles do. */
+const RECAP_TALKS = 5;
 function RecapLinga({ t }: { t: LingaTile }) {
   return (<>
     <div className="rc-head"><LingaMark /></div>
     <div className="rc-door">
       {t.empty ? <div className="rc-none">{t.empty}</div>
-        : <div className="rc-talks">{t.talks.slice(-5).map((n, i) => <b key={i} data-role="recap-talk" style={{ "--rc-d": `${Math.round(48 + Math.min(n, 14) * 8)}px` } as React.CSSProperties}>{n}</b>)}</div>}
+        : <div className="rc-talks">{t.talks.slice(-RECAP_TALKS).map((n, i) => <b key={i} data-role="recap-talk" style={{ "--rc-d": `${Math.round(48 + Math.min(n, 14) * 8)}px` } as React.CSSProperties}>{n}</b>)}</div>}
     </div>
+    {!t.empty && <Earlier n={t.talks.length - RECAP_TALKS} />}
   </>);
 }
 function RecapEssay({ t }: { t: EssayTile }) {
   return (<>
     <div className="rc-head"><EssayBrand /></div>
     {t.empty ? <div className="rc-none">{t.empty}</div>
-      : <div className="rc-reads">{t.readings.slice(-3).map((r, k) => (
-        <div key={k} className="rc-read" data-role="recap-reading">
-          <div className="rc-lens">{r.lens}</div>
-          <div className="rc-rail">{Array.from({ length: Math.min(r.of, 12) }, (_, i) => { const back = i >= r.of - r.against; return <i key={i} data-against={back || undefined}><EssayArrow len={72} h={34} against={back} color="currentColor" /></i>; })}</div>
-        </div>
-      ))}</div>}
+      : <div className="rc-reads">{t.readings.slice(-RECAP_READINGS).map((r, k) => {
+        const rail = railOf(r.of, r.against);
+        return (
+          <div key={k} className="rc-read" data-role="recap-reading">
+            <div className="rc-lens">{r.lens}</div>
+            <div className="rc-rail">{Array.from({ length: rail.arrows }, (_, i) => { const back = i >= rail.arrows - rail.back; return <i key={i} data-against={back || undefined}><EssayArrow len={72} h={34} against={back} color="currentColor" /></i>; })}</div>
+          </div>
+        );
+      })}<Earlier n={t.readings.length - RECAP_READINGS} /></div>}
   </>);
 }
 
@@ -401,7 +462,7 @@ export function Learner({ s, focus }: { s: Session; focus: number }) {
       </div>
       <div style={{ marginTop: 44 }}>
         {at
-          ? <><span className="cap">{TYPE_WORDS[at.type]}</span><div className="cap-text">{picksLine(at)} {at.id === s.learner?.id ? "Enter goes back to the desk" : "Enter to sit at this desk"}, Menu to change the picks.</div></>
+          ? <><span className="cap">{TYPE_WORDS[at.type]}</span><div className="cap-text">{picksLine(at)} {at.id === s.learner?.id ? "Enter goes back to the desk" : "Enter to sit at this desk"}, Menu to change the picks.{switchEndsLine(s, at) && <> <b>{switchEndsLine(s, at)}</b></>}</div></>
           : <><span className="cap">New learner</span><div className="cap-text">The TV takes the picks, the phone takes the name.</div></>}
       </div>
     </main>
@@ -409,13 +470,13 @@ export function Learner({ s, focus }: { s: Session; focus: number }) {
 }
 
 // ---- S2 Profile · the picks on the TV, the name on the phone ----
-/** Focus walks profileRows (tv/profileRows.ts): the type, the age for a school type, the school system, the interests, the Maths course while Maths is on, the actions. */
+/** Focus walks profileRows (tv/profileRows.ts): the type, the age for a school type, the mode, the school system, the interests, the Maths course while Maths is on, the actions. */
 export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
   const d = s.draft;
   const editing = !!d && s.profiles.some((p) => p.id === d.id);
   const name = d?.name.trim() ?? "";
   const rows = profileRows(d), at = locate(rows, focus), cell = rows[at.r].cells[at.c];
-  const chosen = (c: (typeof cell)) => (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "system" && d?.system === c.system) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub)) || (c.kind === "path" && pathOf(d) === c.path);
+  const chosen = (c: (typeof cell)) => (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "mode" && modeOf(d ?? undefined) === c.mode) || (c.kind === "system" && d?.system === c.system) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub)) || (c.kind === "path" && pathOf(d) === c.path);
   return (<>
     <div className="band band-right" />
     <main className="content-full">
@@ -425,11 +486,11 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
       {/* the rows take their width from the picks, so their rules stop short of the band */}
       <div className="guide" style={{ marginTop: 16, width: "fit-content" }}>
         {rows.slice(0, -1).map((row, r) => (
-          <div key={row.title} className="row" style={{ gridTemplateColumns: "220px auto", padding: "6px 0" }}>
+          <div key={row.title} className="row" style={{ gridTemplateColumns: "220px auto", padding: rows.length > 6 ? "2px 0" : "6px 0" }}>
             <div className="u">{row.title}</div>
             <div style={{ display: "flex", gap: row.cells.length > 3 ? 12 : 20 }}>
               {row.cells.map((c, i) => (
-                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", padding: "14px 20px", ...(c.sub ? { "--pick": `var(--${c.sub})` } as React.CSSProperties : null) }} data-chosen={chosen(c)}>{c.label}</button>
+                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", padding: rows.length > 6 ? "10px 18px" : "14px 20px", ...(c.sub ? { "--pick": `var(--${c.sub})` } as React.CSSProperties : null) }} data-chosen={chosen(c)}>{c.label}</button>
               ))}
             </div>
           </div>
@@ -440,7 +501,8 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
         <span className="cap">{cell.label}</span>
         <div className="cap-text">{cell.blurb}</div>
       </div>}
-      <div className="actions">
+      {/* in the flow, under the caption: pinned to the bottom (on-air .actions) a two-line caption ran into them (2026-10-07 capture) */}
+      <div className="actions" style={{ position: "static", marginTop: 24 }}>
         <button className="btn" data-focused={cell.kind === "save"} data-disabled={!name}>Save</button>
         <button className="btn" data-focused={cell.kind === "back"}>Back</button>
       </div>

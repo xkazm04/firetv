@@ -12,6 +12,8 @@ import { EngineError, type EmbedRequest, type EngineResult, type Provider } from
 
 const HOST = (process.env.OLLAMA_HOST || "http://127.0.0.1:11434").replace(/\/$/, "");
 const MODEL = process.env.OLLAMA_EMBED_MODEL || "nomic-embed-text";
+/** The model that places the vectors: a vector cache written under another model is not reused (library/lessons). */
+export const EMBED_MODEL = MODEL;
 
 export const ollamaEmbed: Provider<EmbedRequest, unknown> = {
   name: "ollama",
@@ -28,13 +30,15 @@ export const ollamaEmbed: Provider<EmbedRequest, unknown> = {
 
 register("embed", [ollamaEmbed], () => "ollama");
 
-/** One vector per text, in order, or EngineError("shape"). */
+/** One vector per text, in order, all of one length, or EngineError("shape"): a ragged pair would score NaN in cosine(). */
 export async function embed(req: EmbedRequest): Promise<EngineResult<number[][]>> {
-  const { answer: a, provider: name, ms } = await call("embed", provider("embed"), req);
-  const v = a.raw;
-  if (!Array.isArray(v) || v.length !== req.texts.length || !v.every((x) => Array.isArray(x) && x.length && x.every((n) => typeof n === "number")))
-    throw new EngineError("shape", name, `${name} did not answer with ${req.texts.length} vector(s).`, "");
-  return { json: v as number[][], provider: name, ms };
+  // checked inside call(), so a ragged answer is booked as the shape failure it is (call.ts accept)
+  const { answer: a, provider: name, ms } = await call("embed", provider("embed"), req, 1, undefined, (got, said) => {
+    const v = got.raw, dim = Array.isArray(v) && Array.isArray(v[0]) ? v[0].length : 0;
+    if (!Array.isArray(v) || v.length !== req.texts.length || !v.every((x) => Array.isArray(x) && x.length && x.length === dim && x.every((n) => typeof n === "number")))
+      throw new EngineError("shape", said, `${said} did not answer with ${req.texts.length} vector(s).`, "");
+  });
+  return { json: a.raw as number[][], provider: name, ms };
 }
 
 export function cosine(a: number[], b: number[]) {

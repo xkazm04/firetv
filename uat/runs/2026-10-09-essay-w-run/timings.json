@@ -1,0 +1,59 @@
+[
+  {
+    "step": "W1-done",
+    "verdict": "pass"
+  },
+  {
+    "step": "W2",
+    "enterToEssaytypeMs": 744,
+    "zoomMs": 560,
+    "exceededZoom": true
+  },
+  {
+    "step": "W2-done",
+    "verdict": "pass"
+  },
+  {
+    "step": "W3",
+    "analyseMs": 27551,
+    "provider": "claude-cli/sonnet",
+    "lens": "evidence",
+    "sentences": 5
+  },
+  {
+    "step": "W3-done",
+    "verdict": "pass"
+  },
+  {
+    "step": "W4-done",
+    "verdict": "pass"
+  },
+  {
+    "step": "W5",
+    "rewriteMs": 23057,
+    "provider": "claude-cli/sonnet",
+    "before": "faulty",
+    "after": "strong",
+    "othersKept": true
+  },
+  {
+    "step": "W5-done",
+    "verdict": "pass"
+  },
+  {
+    "step": "W6",
+    "endSessionMs": 1896
+  },
+  {
+    "step": "W6-done",
+    "verdict": "pass"
+  },
+  {
+    "step": "W7-done",
+    "verdict": "pass"
+  },
+  {
+    "step": "W8-done",
+    "verdict": "pass"
+  }
+]

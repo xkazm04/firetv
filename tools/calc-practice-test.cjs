@@ -10,10 +10,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after,afterEach}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const data=path.join(os.tmpdir(),`desk-calc-practice-${Date.now()}`);process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 
 const src=(f)=>path.join(root,'src',f);
@@ -238,4 +235,162 @@ test('8: the shape lines tell the model how to pick a spec the desk will keep',(
  assert.match(line('newton-step'),/clearly away from the root/,'a start near the root gives iterates that agree');
  assert.match(line('extremum'),/well inside/,'the turning point sits well inside the interval, not near an end');
  assert.match(line('critical-point'),/exactly one turning point.*well inside/,'one turning point, well inside');
+});
+
+// ------------------------------------------------------------------ M3a: a word problem in parts, drawn by code, last in the set
+
+const W=require(src('lib/rules/calc-word.ts'));
+const WORD_TOPICS=['calc1-related-rates','calc1-extrema','calc1-optimisation'];
+
+test('M3a 1: asked with word, a set on the three topics ends with a code-drawn word problem - its parts counted toward six, the model asked exactly as before, the single items in their order',async()=>{
+ seat();
+ for(const topic of WORD_TOPICS){
+  const fx=FIX.find((x)=>x.topic===topic);
+  stub({specs:nine(fx)});const plain=await makeItems(topic,LEARNER);const before=seen[0];
+  stub({specs:nine(fx)});const made=await makeItems(topic,LEARNER,6,{word:11});
+  assert.equal(seen.length,1,`${topic}: one model call, as before`);
+  for(const k of ['system','prompt','model','thinking'])assert.deepEqual(seen[0][k],before[k],`${topic}: the ${k} is unchanged`);
+  assert.deepEqual(seen[0].schema,before.schema,`${topic}: still n + 3 specs asked for`);
+  const w=W.drawWord(W.wordTemplateFor(topic).id,11);
+  assert.equal(made.items.length,6,`${topic}: six items`);
+  assert.deepEqual(made.items.slice(0,4),plain.items.slice(0,4),`${topic}: the first four single items, as the set without the word problem has them`);
+  assert.deepEqual(made.items.slice(4),W.wordItems(w,5),`${topic}: then the word problem's two parts, items 5 and 6`);
+  assert.deepEqual(made.items.map((i)=>i.n),[1,2,3,4,5,6]);
+  for(const it of made.items.slice(4)){
+   assert.ok(C.wellFormed(it.spec).ok&&shapesOf(topic).includes(it.spec.shape),`${topic}: a part is one of the topic's shapes`);
+   for(const t of [it.stem,...made.items.slice(4).map((x)=>x.question)])assert.equal(C.leaksCalc(it.spec,t),false,`${topic}: "${t}" gives (${it.part}) away`);
+  }
+  const keys=keysIn(made.items);for(const k of ['answer','solution','truth','value','worked'])assert.equal(keys.includes(k),false,`${topic}: a ${k} key`);
+ }
+});
+
+test('M3a 2: no word problem without the ask, on a topic with no template, with too few items for a single one, or with no single item kept',async()=>{
+ seat();
+ const fx=FIX.find((x)=>x.topic==='calc1-extrema');
+ stub({specs:nine(fx)});assert.equal((await makeItems('calc1-extrema',LEARNER)).items.some((i)=>i.stem),false,'not asked');
+ stub({specs:nine(fx)});assert.equal((await makeItems('calc1-extrema',LEARNER,6,{word:false})).items.some((i)=>i.stem),false,'asked not to');
+ stub({specs:nine(FIX[2])});const rules=await makeItems('calc1-rules',LEARNER,6,{word:3});
+ assert.equal(rules.items.length,6);assert.equal(rules.items.some((i)=>i.stem||i.part),false,'calc1-rules has no word template');
+ stub({specs:nine(fx)});const two=await makeItems('calc1-extrema',LEARNER,2,{word:3});
+ assert.equal(two.items.some((i)=>i.stem),false,'two items leave no room for a single item beside two parts');
+ // the model kept nothing: no set at all, and no word problem alone
+ const bad=fx.bad;stub({specs:bad},{specs:bad});
+ const none=await makeItems('calc1-extrema',LEARNER,6,{word:3});
+ assert.deepEqual(none.items,[]);
+ // a short model round: the singles it has, then the parts
+ stub({specs:[fx.good[0],fx.good[1]]},{specs:[]});
+ const short=await makeItems('calc1-extrema',LEARNER,6,{word:3});
+ assert.deepEqual(short.items.map((i)=>i.part??null),[null,null,'a','b']);assert.deepEqual(short.items.map((i)=>i.n),[1,2,3,4]);
+ // a step up is flagged on every item, the parts too
+ stub({specs:nine(fx)});const up=await makeItems('calc1-extrema',LEARNER,6,{word:3,stretch:true});
+ assert.ok(up.items.length===6&&up.items.every((i)=>i.stretch===true));
+});
+
+test('M3a 3: the route writes the word problem onto the desk; the TV, the phone and the saved session keep its stem and letters and no view gives a part away',async()=>{
+ seat();
+ const fx=FIX.find((x)=>x.topic==='calc1-optimisation');
+ stub({specs:nine(fx)});
+ const r=await post({topic:fx.topic});
+ assert.equal(r.status,200);
+ const s=store.getSession(),items=s.practice.items;
+ assert.equal(items.length,6);
+ assert.deepEqual(items.map((i)=>i.part??null),[null,null,null,null,'a','b']);
+ assert.ok(items[4].stem&&items[4].stem===items[5].stem);
+ assert.ok(/^A rectangle has a perimeter of \d+ metres\./.test(items[4].stem),items[4].stem);
+ const saved=JSON.parse(fs.readFileSync(path.join(data,'session.json'),'utf8'));
+ for(const [where,v] of [['tv',view(s,'tv')],['phone',view(s,'phone')],['session.json',saved]]){
+  assert.deepEqual(v.practice.items.map((i)=>i.part??null),[null,null,null,null,'a','b'],where);
+  const lines=stringsIn({practice:v.practice,jobs:v.jobs,status:v.status});
+  for(const it of items)for(const line of lines)assert.equal(C.leaksCalc(it.spec,line),false,`${where}: "${line}" states the result of ${it.question}`);
+ }
+ // a topic with no template: the route's set is as before
+ stub({specs:nine(FIX[8])});assert.equal((await post({topic:FIX[8].topic})).status,200);
+ assert.equal(store.getSession().practice.items.some((i)=>i.stem),false);
+});
+
+test('M3a 4: the route asks for the word problem unless the body says word: false (or 0) - which no screen sends',async()=>{
+ seat();
+ const fx=FIX.find((x)=>x.topic==='calc1-related-rates');
+ for(const [body,parts] of [[{topic:fx.topic},2],[{topic:fx.topic,word:true},2],[{topic:fx.topic,word:'no'},2],[{topic:fx.topic,word:false},0],[{topic:fx.topic,word:0},0]]){
+  stub({specs:nine(fx)});
+  assert.equal((await post(body)).status,200,JSON.stringify(body));
+  const items=store.getSession().practice.items;
+  assert.equal(items.filter((i)=>i.part).length,parts,JSON.stringify(body));
+  assert.equal(items.length,6);
+ }
+ // no screen or phone code sends word
+ for(const f of ['tv/keys.ts','tv/screens.tsx','maths/MathsTV.tsx','app/phone/page.tsx'])assert.doesNotMatch(fs.readFileSync(src(f),'utf8'),/word:\s*(false|0)/,f);
+});
+
+// ------------------------------------------------------------------ MB-B30: a chain-rule set is compositions only
+
+const P=require(src('lib/library/paths.ts'));
+const COMPOSITE=[S('derivative','sin(x^2)',{},1),S('derivative','(2x + 1)^3',{},1),S('derivative','e^(3x)',{},2),S('derivative','sqrt(1 + x^2)',{},3),S('derivative','ln(x^2 + 1)',{},4),S('derivative','cos(x)^2',{},5)];
+const PLAIN=[S('derivative','x^3 + 2x',{},1),S('derivative','(x^2 + 1)(x - 3)',{},2),S('derivative','x/(x^2 + 1)',{},3),S('derivative','(x + 1)^3',{},2)];
+
+test('MB-B30 1: calc1-chain names the composition requirement on its definition, and it is one rules/calc checks; no other topic names one',()=>{
+ assert.equal(CALC1_SPINE.find((t)=>t.id==='calc1-chain').requires,'composition');
+ assert.equal(P.requirementOfTopic('calc1-chain'),'composition');
+ for(const t of CALC1_SPINE.filter((x)=>x.id!=='calc1-chain')){assert.equal('requires' in t,false,t.id);assert.equal(P.requirementOfTopic(t.id),undefined,t.id);}
+ for(const t of P.calcTopics())if(t.requires)assert.ok(C.CALC_REQUIREMENTS.includes(t.requires),`${t.id}: ${t.requires}`);
+ assert.equal(P.requirementOfTopic('linear-one-step'),undefined,'a school topic names none');
+});
+
+test('MB-B30 2: a stubbed reply mixing compositions and plain functions on calc1-chain makes a set of the compositions only, easy to hard',async()=>{
+ seat();
+ stub({specs:[PLAIN[0],COMPOSITE[0],COMPOSITE[1],PLAIN[1],COMPOSITE[2],COMPOSITE[3],PLAIN[2],COMPOSITE[4],COMPOSITE[5]]});
+ const made=await makeItems('calc1-chain',LEARNER,6,{word:false});
+ assert.equal(seen.length,1,'six compositions in the first round: one call');
+ assert.deepEqual(made.items.map((i)=>i.question),byEase(COMPOSITE).map(questionOf));
+ for(const it of made.items)assert.ok(C.isComposition(it.spec.f),it.question);
+});
+
+test('MB-B30 3: a first round short of compositions asks again, and a set still short after two rounds ships what it kept, exactly as a malformed drop does',async()=>{
+ seat();
+ stub({specs:[...PLAIN,COMPOSITE[0],COMPOSITE[1],COMPOSITE[2]]},{specs:[PLAIN[0],COMPOSITE[3],COMPOSITE[4],COMPOSITE[5]]});
+ const made=await makeItems('calc1-chain',LEARNER,6,{word:false});
+ assert.equal(made.tries,2);assert.equal(seen[1].schema.properties.specs.maxItems,6,'n - have + 3');
+ for(const c of COMPOSITE.slice(0,3))assert.ok(seen[1].prompt.includes(questionOf(c)),`round two avoids ${questionOf(c)}`);
+ assert.deepEqual(made.items.map((i)=>i.question),byEase(COMPOSITE).map(questionOf));
+ // plain functions only, twice: no set at all, the route's 502 path
+ stub({specs:PLAIN},{specs:PLAIN});
+ assert.equal((await post({topic:'calc1-chain'})).status,502);
+ // two compositions in two rounds: the set holds the two, as any short set does
+ stub({specs:[...PLAIN,COMPOSITE[0]]},{specs:[PLAIN[1],COMPOSITE[1]]});
+ assert.deepEqual((await makeItems('calc1-chain',LEARNER,6,{word:false})).items.map((i)=>i.question),[COMPOSITE[0],COMPOSITE[1]].map(questionOf));
+});
+
+test('MB-B30 4: a topic with no requirement keeps a plain function and is not asked for compositions; calc1-chain is asked for them, from its own requires field',async()=>{
+ seat();
+ stub({specs:[...PLAIN.slice(0,3),S('derivative','5x^2 - 3x + 7',{},1),S('derivative','3x^4 - x^2',{},2),S('derivative','x^5',{},3)]});
+ assert.equal((await makeItems('calc1-rules',LEARNER,6,{word:false})).items.length,6,'calc1-rules keeps plain derivatives');
+ assert.doesNotMatch(seen[0].prompt,/composition/i,'no requirement, no line');
+ stub({specs:COMPOSITE});await makeItems('calc1-chain',LEARNER,6,{word:false});
+ const line='- Every function must be a composition: one function inside another, such as sin(x^2), (2x + 1)^3 or e^(3x), with an inside that is neither x nor x plus a number.';
+ assert.ok(seen[0].prompt.includes(`\n${line}\n`),'the requirement is asked for as a rule line');
+ // data-driven: every topic whose definition names the requirement is asked for it, and no other
+ for(const t of CALC1_SPINE){stub({specs:[]});try{await makeItems(t.id,LEARNER,3,{word:false});}catch{}assert.equal(seen[0].prompt.includes(line),t.requires==='composition',t.id);}
+ // the line only asks: the examples it gives are compositions by code's own check, and the one it rules out is not
+ for(const f of ['sin(x^2)','(2x + 1)^3','e^(3x)'])assert.ok(C.isComposition(f),f);assert.equal(C.isComposition('(x + 1)^3'),false);
+});
+
+test('cycle 13: every Calculus set carries the learner\'s age, school year and system as they are known, and nothing when none is',async()=>{
+ const ask=async(patch,who)=>{
+  store.dispatch({type:'reset'});
+  store.dispatch({type:'profile.draft',patch:{id:'calc-who',name:'Who',modules:['maths'],mathPath:'calc1',...patch}});store.dispatch({type:'profile.save'});
+  stub({specs:COMPOSITE});await makeItems('calc1-chain','calc-who',6,{word:false,...who});return seen[0].prompt;
+ };
+ const head='Topic: The chain rule and implicit differentiation\nThe chain rule differentiates a function inside a function, and implicit differentiation applies it to y as a function of x.\n\n';
+ const y=require(src('lib/rules/stretch.ts')).learnerYear({age:17,system:'cz'});
+ assert.ok((await ask({type:'high-school',age:17,system:'cz'},{age:17,system:'cz'})).startsWith(head+`The student is 17, in ${y}. ročník of a Czech school. Pitch the questions there.\n\n`));
+ assert.ok((await ask({type:'other',system:'de'},{system:'de'})).startsWith(head+'The student studies in Germany.\n\nThe desk has recorded'));
+ assert.ok((await ask({type:'high-school',age:16},{age:16})).startsWith(head+'The student is 16. Pitch the questions there.\n\n'));
+ const none=await ask({type:'other'},{});
+ assert.ok(none.startsWith(head+'The desk has recorded'),'no age and no system: no section');
+ assert.doesNotMatch(none,/student is|studies in|unknown/i);
+ // the route reads the seated profile: a learner at school brings an age and a system to the set
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'calc-route',name:'Route',type:'high-school',age:17,system:'cz',modules:['maths'],mathPath:'calc1'}});store.dispatch({type:'profile.save'});
+ stub({specs:COMPOSITE});assert.equal((await post({topic:'calc1-chain',word:false})).status,200);
+ assert.ok(seen[0].prompt.includes(`The student is 17, in ${y}. ročník of a Czech school.`),'the route passes the seated learner');
 });

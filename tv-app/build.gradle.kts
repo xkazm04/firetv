@@ -37,6 +37,11 @@ android {
     buildFeatures {
         compose = true
     }
+    // The shell's own logic (threading in Session, the pairing address, resource encoding) is
+    // tested on the JVM, like core; anything that needs the device stays in androidTest.
+    testOptions {
+        unitTests.all { it.useJUnitPlatform() }
+    }
     packaging {
         resources.excludes += setOf(
             "META-INF/INDEX.LIST",
@@ -76,6 +81,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.zxing.core)
+
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.espresso.core)

@@ -35,7 +35,9 @@ look again. Never the answer.
 4. **Ticks are claims, so they are earned.** A tick follows a line only when the marking vouches for it: the
    answer line of a right item (the substitution checked the value, or on a Calculus item `checkAnswer` did), and
    the lines before a slip the data places. An unsure item gets no tick and no mark, just a dashed ring and "not
-   sure".
+   sure". A skipped item (its answer left empty, MB-B1: `rules/marks` reads it off an unsure verdict with no answer)
+   is neither: no tick, no ring, an empty answer line and "skipped" in pencil grey, counted apart everywhere ("4 of 5
+   right, 1 skipped"), and never "all of it right".
 5. **One lamp, one thing in its light.** The item in hand sits under the lamp (the paper pans to it); the rest of
    the set is dimmed or folded. Exactly one element looks focused: the amber door, the amber pill, the lifted
    sheet, the ringed topic on the ruler, or the item on the paper with its OK chip.
@@ -155,8 +157,20 @@ which the verdict is about, is marked and nothing else is claimed. The rulebook'
 pen or earns a tick; the taped card says "Look where the pen is." when the pen was placed from the working. The
 line split (`workingLines`) and the slip names are one rule each, in `rules/maths`.
 
-**A Calculus item has no pen position.** `locate` reads linear lines only, so marking a Calculus set
-([MATH-COURSE-PATHS.md](MATH-COURSE-PATHS.md)) writes no `slipAt`. A wrong Calculus item takes the third step: the
+**A Calculus item is located by the chain checker (M4c).** `locate` reads linear lines only, so a Calculus set
+([MATH-COURSE-PATHS.md](MATH-COURSE-PATHS.md)) is located by `rules/chain` instead: the item's working lines are read
+from its own spec (`tagLines`; line 0 follows the spec's function, a line whose relation the tagger cannot tell, or a
+line in words, is null and never blamed) and each line is checked numerically against the line before it. The
+tagger reads the notation a learner writes (MB-B29): `(B)'` is the derivative of B, worked out exactly from B; a
+`u = g(x)` line binds u for the lines after it and asserts nothing, while `u' = ...` is checked as the derivative of
+g; `lim A = lim B` asks only that the two limits agree (L'Hopital's B is not A). A value after a function is never
+"the same function" (MB3-14): on a definite integral it is F(b) - F(a), on an evaluate or derivative-at item the
+value at the item's point, and otherwise null; a first line written with a leading `=` is tagged by the relation
+that holds to the spec's function (itself, or its derivative), and is null when neither does. A wrong
+item with working gets `slipAt` at the FIRST line the chain rings (`judgeItem`, the existing field, no new one); the
+verdict stays `checkAnswer`'s. `working.ts` ticks a Calculus line before the pen only where the chain says it
+holds (it computes the same chain; the school and linear lines keep the arithmetic tick); a null line gets neither
+tick nor pen. If no line is rung the chain places nothing and the item takes the third step: the
 answer line gets the wavy underline, and the card says "Look at ..." with the slip's place in words. The slip's
 title is its Calculus name, for example "The constant left off" or "The inside not differentiated". A right one
 ticks its answer line. With no working, the shared line split draws the answer alone: on the school path a bare
@@ -168,6 +182,23 @@ school system) and has no pen position either: a wrong one gets the wavy underli
 from the unit's closed list ("Added the tops and the bottoms", "The top not scaled with the bottom", "Added the tops,
 kept one bottom", "Subtracted the wrong way round") only when code detected it, and otherwise the desk asks. An answer
 the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal) is the dashed ring, "not sure".
+A wrong item with no slip says its checker's own fixed reason when it has one ("A derivative has no arbitrary
+constant in it."); only a plain disagreement asks "I got something different for number N" (MB-B1).
+A top-rung percent change (MB-B20) names its own two slips, never the forward list's (`SCHOOL_TOP_SLIPS`, offered to
+no model): "Took the percent of the new amount" ("The percentage was taken of the amount after the change, but it is a
+percentage of the amount before. Divide back to the original.") on the amount before a change, and "Added the
+percentages together" ("The percentages were added into one change. Each change is a percentage of the amount there is
+by then, so apply them one after another.") on two changes or the years. Neither carries a value, and a step-up
+attempt still moves no slip on the ruler. A top-rung probability item names its own two the same way: "Added the
+chances instead of multiplying" ("The chances were added. For both things to happen, multiply the chance of each, so
+the answer is smaller than either chance.") on two independent events, and "Put the first one back" ("The first pick
+was treated as put back. It is kept out, so the second pick has fewer to choose from.") on two picks without
+replacement; at least one of two dice names none. A top-rung Pythagoras item keeps the unit's own words (they already fit
+a rounded side, so they stay on the unit's list): "Added the squares for a shorter side" on the squares added, as written
+or rooted, and "Stopped before the square root" on the squares combined. Each is named by the right answer's own rule: the
+slip's value as written, or that value correctly rounded at the answer's written places, trailing zeros counted (45.9 or
+45.94 for 2.5 and 6.3, not 46.0). A slip that rounds to the right answer at the places asked is never named, and an
+answer two slips give names none (1.9 for 1.1 and 0.8).
 
 **A typed set** (Family W6) is marked by the same code from the strings the learner typed on the phone instead of strings a model read from a photo (`markTyped` in `desk/src/lib/desk/mark.ts`, `POST /api/mark` with `answers`): one string per question, a school or Calculus item by `settleSpec` under the seated learner's system, a linear item by the substitution rule when the desk can solve the equation itself. A blank or unreadable answer is "not sure", never wrong, exactly as a photographed empty answer is. There is no working and no pen position, so a wrong typed item gets the wavy underline on its answer line. No vision call and no model call is made; the history line and the learner record are the ones a photographed sheet writes.
 
@@ -189,12 +220,21 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   side, so they stack as rows (art 112 px, text beside it, the lit one slides left instead of up). Left/Right walk
   them in stop order either way. Each door's caption is one sentence.
 - **Get ready for school** (Family W8, `Prepare`, `desk/src/tv/prepareRows.ts`) - the units as cards (Fraunces 38,
-  four lines at most, the year word below in Manrope 30 amber) under strand headings (20 px uppercase labels with a
+  four lines at most, the year word below in Manrope 30 amber; a learner past the end of the school path gets no year word) under strand headings (20 px uppercase labels with a
   rule under them), on a track that pans under the lamp like the Topics ruler, a heading kept on the stage past the
   left fade. The lit card is amber and lifts; its glow stays inside the window. Nothing of the path is drawn here. The
   question is two cells (Fraunces 48 with a 21 px label above: "Your level" / "The usual", "More of the harder ones" /
   "A step up"); while it is open the unit is held (an amber outline, not lit) and the rest of the cards dim, so the lit
-  cell is the one thing lit. `maths-prepare`, `maths-choice`.
+  cell is the one thing lit. The sentence under the lit "A step up" on a fractions unit with a top rung (MB-B20: Add and
+  subtract fractions, Multiply and divide fractions) says what the step up adds and names its level: "Mixed numbers and
+  a word problem join the harder ones, still school level, and a secure step up draws a second line." (`TOP_RUNG_LINE`).
+  Percent increase and decrease, Pythagoras' theorem and Probability of an event have a top rung too (MB-B20), each with
+  its own sentence (`TOP_RUNG_LINES`): "Reverse and repeated percentage changes and a word problem join the harder ones,
+  still school level, and a secure step up draws a second line.", "Sides with decimals, answers rounded and a word
+  problem join the harder ones, still school level, and a secure step up draws a second line." and "Combined events,
+  picking without replacement and a word problem join the harder ones, still school level, and a secure step up draws a
+  second line." Every other unit keeps its sentence.
+  `maths-prepare`, `maths-choice`.
 - **The second ink line** (Family W8, the step-up) - a unit whose step-up record has latched (`SkillRecord.stretch` in
   `desk/src/lib/session/learners.ts`, `stretchSecure` in `desk/src/tv/mathsRows.ts`) gets a second, thinner line
   (6 px, `--mb-sky`, a 1.5 px navy edge so it reads on the boxwood) under its groove on the ruler, 6 px below the ink
@@ -204,6 +244,16 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   the records say, so a unit whose usual record is not secure can carry it (the learner stretched first), and the
   groove, the word under the topic and Tonight's "N of M topics secure" stay about the usual record. Static: it does
   not grow in. `.mb-ink2`, `data-role="maths-stretch"`.
+- **How a scratch leaves the ruler** (challenge-2026-10-07 math-buddy-A). A slip is set down when the child makes it and
+  rubbed out when they stop, decided in code (`desk/src/lib/rules/slips.ts`, applied in `session/learners.ts`). On a
+  school unit each marked attempt carries the slips its item *shows* (`slipShows` in `rules/school.ts`, pinned to the
+  desk's own `check`); the third usual right answer on items that show a live slip, counted since it was last made,
+  rubs it out of `skills[topic].slips` and its pencil scratch leaves the ruler. Making it again starts the count over
+  and puts it back as the newest. A right answer on an item where it cannot show moves nothing, a step-up attempt moves
+  neither slips nor counts, and a linear or Calculus topic never rubs a slip out. The ruler draws the **newest** four
+  live scratches (`data-slips`). **Six more** on a school unit is drawn in code so at least three of six would show
+  the learner's live slips (`makeSchoolItems` with an aim), and its card names the newest one in the desk's slip words
+  (`moreLine` in `tv/mathsRows.ts`); with no live slip it claims no aim. A picture, not a number: no count is drawn.
 - **The ruler** - the topic path as a boxwood ruler: secure topics inked navy, an in-progress one hatched to its
   estimate, unseen ones a dashed groove, slips as pencil scratches. The learner's name on a lamp-lit needle at the
   frontier (`rulerFrontier` in `desk/src/tv/rulerRows.ts`: on the school path the first topic not secure after the
@@ -217,16 +267,17 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   (`learnerPath` in `desk/src/lib/library/paths.ts`): the school path draws each topic's school year and the SCHOOL
   tick; a course path (Calculus 1) has no school year, so it draws no year word, no SCHOOL tick and no gap line
   (`expectedOn` is null). The learner picks the path on the profile's Maths course row (the shell's profile
-  screen). Every screen names a set by its path's name for it (`topicName`), never a spelled-out id. Teach me
+  screen; three cells since v2 M3b-2: School maths, Calculus 1, Calculus 2, laid out as the interests row is, `220px auto` with the cells flowing; its captures are owed). Every screen names a set by its path's name for it (`topicName`), never a spelled-out id. Teach me
   something opens Topics at the learner's **frontier** (`topicsFocus` in `desk/src/tv/keys.ts`, `frontierOn` in
   `paths.ts`: the needle's rule on the school path, the first topic not latched secure whose prerequisites all are on
   a course), and at the first stop when nothing is secure or nothing is left.
   Where each box, tick, strand label and needle goes is `rulerModel` in `desk/src/tv/rulerRows.ts`; the school path,
-  **School maths** (fifteen topics since Family W7 batch 3: the four fractions units, One-step equations, the four
+  **School maths** (seventeen topics since v2 M2b, fifteen since Family W7 batch 3: the four fractions units, One-step equations, the four
   decimals and percent units - Add, subtract and multiply decimals; Fractions, decimals and percent; A percent of an
   amount; Percent increase and decrease - Ratio and sharing and Unit rates and direct proportion ("Ratio and rates"),
   Area of rectangles, triangles and composite shapes and Mean and range ("Geometry and data"), then the other two
-  linear-equation topics: six bars, Equations twice), is drawn on Tonight as the **strip** below, and **pans** on the
+  linear-equation topics, then Pythagoras' theorem and Probability of an event (v2 M2b, a second "Geometry and data" bar):
+  seven bars, Equations twice and Geometry and data twice), is drawn on Tonight as the **strip** below, and **pans** on the
   big Topics ruler, since a 112 px slot is under the 288 px minimum: the focused topic takes the 640 px slot and its
   name is whole at 44 px (measured on every stop at 1920 x 1080 and 1280 x 720, `tools/school-units3-live.cjs`). On a
   panning school ruler the SCHOOL tick is drawn only while it is on the stage, its pill turned inward within 90 px of
@@ -254,14 +305,36 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   on smaller squares (48 down to 36 px, `paperSquare`) until all of it is on screen. On a snapped Page every problem
   keeps clear of the lit item's OK · Hint badge. `maths-sheet`.
 - **Hand and print lines** - `maths-hand`, `maths-print`, fractions `maths-frac`, ticks `maths-tick`.
-- **Tally** - the set as six hand-drawn numbers in the top bar: ticked, ringed, dashed when unsure; the current one
-  lit.
+- **Tally** - the set as six hand-drawn numbers in the top bar: ticked, ringed, dashed when unsure, an empty pencil
+  line under the number when skipped (MB-B1); the current one lit.
+- **Recap lamps** (MB-B23) - on the shell's recap, Math Buddy's tile draws a lamp per problem that had a hint tonight,
+  its name under it in the hand at 32 px as the learner knows it from the paper ("3", "5b"), a small page icon and the
+  page number at 28 px only when two hinted problems share a name; a lamp that needed a second hint is ringed in pen.
+  Five lamps, then "k more". Never the problem's text: the name is the verdict, the caption slot keeps its one sentence.
+  A log with no key the desk can name draws a lamp per hint, unnamed, as before. `tv/recapRows` `hintedOf`.
+- **Recap slips** (cycle 19) - under the set rails, tonight's set's named slips, one to a line: the pen's ring, the
+  item's number in the hand at 32 px, a dot, and the slip's short label in pen at 28 px ("2 · added the percentages").
+  The short is decided in rules (rules/school `short`: lowercase, four words and 24 characters at most, no value) and
+  every slip carries one - the school units', the linear and the Calculus tables alike (cycle 21), no two on one topic
+  the same, English only like the titles; a ring with no slip stays on the rail unlabelled. Two, then
+  "k more". A label wraps between its words, never inside one, and is never cut by CSS. Only the set on the desk, and only when
+  it was marked tonight: the set carries when it was marked (cycle 22, `Practice.markedAt`, stamped by the one
+  `practice.marked`), so an earlier evening's set names nothing even under a practice line from tonight; a set marked
+  before the stamp is dated by its last practice line being tonight's and under its topic. `tv/recapRows` `slippedOf`.
 - **Taped card** - a cream card with a strip of amber tape: the one caption slot beside the paper. On the hint:
   the learner's question from the phone in the blue hand (`maths-said`), HINT with two pips, the hint, and the next
   step in the pen-dark hand. A hint on a Calculus page is written in a first-year Calculus I stance when the learner
   is on the calc1 path. It is checked against the task's own answer whenever the task reads into a Calculus spec.
   When it gives the answer away twice, the card shows the shape's fixed sentence instead, for example "Find the
-  derivative as a function first, then put the point in. The value is yours to work out." On the calc1 path there
+  derivative as a function first, then put the point in. The value is yours to work out." A top-rung percent change
+  (MB-B20) has its own, since the unit's teaches the forward change: "The amount given already includes the change, so
+  divide back to the original. The answer is yours to work out." for the amount before a change, and "Apply each change
+  in turn to the amount you have now, not to the starting amount. The answer is yours to work out." for two changes or
+  the years (`TOP_WITHHELD`). A top-rung probability item has its own too, since the unit's speaks of one draw from a
+  bag: "Find the chance of each part on its own, then multiply them together. The answer is yours to work out." for two
+  events, "At least happens unless neither does: find the chance of neither, then take it from a whole. The answer is
+  yours to work out." for at least one of two dice, and "Nothing taken is put back, so the next pick has fewer to choose
+  from. Multiply both chances. The answer is yours to work out." for two picks without replacement. On the calc1 path there
   is no lesson to show, so the lesson pill says "No lesson for this". On the sheet and walk: THE DESK SAYS / THE
   DESK REPLIED over the desk's line (`maths-said`) and "Look at ..." from the rulebook. `maths-hint`.
 - **Slip name** - Fraunces 54 with its last word in amber italic. `maths-slip`.
@@ -274,13 +347,13 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
 | screen | composition |
 |---|---|
 | Tonight | top bar; the sheet on the desk + kicker, title, detail, OK Open (or the first-evening title and blank sheet); two doors, three on the school path (Get ready for school, W8); the caption; the ruler (a path of more than eight topics: the strand strip, with a step-up line under a bar where units' step-ups have latched) |
-| Get ready for school | top bar with the crumb; "What is school *doing?*"; the lit unit's strand and blurb, or the two cells and the lit cell's sentence; the units as cards by strand, each with the learner's year word, panning under the lamp |
+| Get ready for school | top bar with the crumb; "What is school *doing?*"; the lit unit's strand and blurb, or the two cells and the lit cell's sentence; the units as cards by strand, each with the learner's year word (none past the end of the school path, where the lede adds a line saying the path ends), panning under the lamp |
 | Topics | "Pick a *topic*"; the strand and blurb (or Preparing / Not written); the ruler, larger, each topic on the learner's path a stop, the lamp opening on the frontier (a long path pans under the lamp, chevrons at the edges) |
 | Practice | the paper headed with the topic's name on its path, with the six questions in print (on Calculus 1, questions the desk printed itself from its specs: "Differentiate f(x) = ...", "Find lim_(x->0) ..."; on a school unit, six the desk wrote itself with no model call, three at tier 1 then three at tier 2: "Work out 3/4 + 1/6.", "Fill in the missing number: 3/4 = ?/12." with the gap '?' stacked over 12 at the fraction size, "Write 18/24 in its simplest form.", "Find 3/5 of 40 kg.", "Work out 3/4 ÷ 1/2.", the fractions stacked); the side: "Work these on *paper*" and the taped card |
 | Sheet | the tally; the marked set on the paper, each item folded to its question and the line the pen is on, the focused one lit with OK Open; the side: kind, slip name, taped card; pills Six more ("Six more on" the topic's name), Put the sheet away |
 | Walk | the same paper with one item open: every line of working, ticks, the mark, later lines faded; the side card; Back to the sheet on the last item |
-| Page | the snapped sheet as paper, its OCR'd problems in print, the one under the lamp lifted with OK Hint; the side: problem count, read time, the real photo with the band; Menu shows the photo whole |
-| Hint | the problem on the paper, lines left for the learner's own working; the taped card with hint 1 then hint 2; pills Still stuck, Show me the lesson (on the calc1 path, "No lesson for this") |
+| Page | the snapped sheet as paper, its OCR'd problems in print, the one under the lamp lifted with OK Hint; the side: the problem's number, with its unit when the task reads as a school unit on the learner's path ("Number 3 · Add and subtract fractions"), problem count, read time, the real photo with the band; Menu shows the photo whole |
+| Hint | the problem on the paper, lines left for the learner's own working; the taped card with hint 1 then hint 2; pills Still stuck, Show me the lesson (on the calc1 path, "No lesson for this"); on a task that reads as a school unit with a code generator, on the learner's path, the second pill is "Six like this" ("Writing six like it" while the set is written, the hint kept on the card; a failed set puts the job's own sentence on the card): one press writes six on that unit by code, and the set reaches the record and the ruler (math-buddy-B) |
 | Lesson | the video in a lamp-lit wooden frame; the side: the part that matters, the concepts, why |
 | Units, Calendar | a contents page on the paper; a planner of index cards (done ticked in pen, next taped, later dashed). Both list the learner's path's lessons only; on a path with none (Calculus 1) each shows its title and one caption, "No lessons for Calculus 1 yet. The desk explains a step when you ask.", with nothing to focus |
 
@@ -289,3 +362,231 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
 Not On Air: no charcoal, no red band, no condensed caps, no ticker, no rail. Not a textbook: the working is the
 learner's hand, not typeset solutions. Not a marker's red pen: the pen names a place and a kind, never the right
 answer, and never a position the data does not hold. Not a dashboard: no percentages; a set is ticks and rings.
+
+## The collection (v2 R1, 2026-10-07)
+
+Owner decisions V1 (D3 reversed), X1 and S1: rewards are a collection drawn in Lamplight's own world, earned only by
+latches the desk already keeps (`lib/rules/collect.ts`). On Tonight, a shelf beside the wordmark holds **a lit lamp for
+every topic latched secure**, and **a star over the lamp** when that topic's step-up record is latched too (the extra
+mile). The twelve most recent are shown, oldest on the left. Never a number, never for volume, never lost. Adult mode
+shows no shelf (X2: progress, not a game). `data-role="maths-collection"`; `maths/MathsCollection.tsx`.
+
+## The worked lesson (v2 M1, 2026-10-07)
+
+"Teach me something" now teaches before it practises. Select on a generated school unit (the twelve with a generator) opens
+`worked`, a new screen. **The paper** holds three worked examples: questions from the unit's own generator, and answers in
+the desk's pen. Each answer is built from the spec's truth (`rules/school` `workedAnswer`) and shown only when `check`
+marks it right for the learner's school system, so it uses a decimal comma in cz/de, money to the cent, and the unit
+kept. **The taped card** holds the idea and three method steps (`library/worked.ts`, authored, words only). The idea may be
+reworded by the model in the learner's voice (fast, thinking off); its words are kept only with no digit, at most three
+sentences and 320 characters, else the authored idea stands. **Try six** writes the usual set; **Back to the topics**
+returns. The linear and Calculus topics still go straight to their set. Measured over 19,200 generated items (12 units,
+both tiers, four systems, 200 seeds): every one has a worked answer `check` confirms. Route `/api/worked`, job kind
+`teach`.
+
+**Questions in the learner's own numbers (MB-B4, 2026-10-14).** A code-written question (practice set and worked
+lesson alike) is printed for the seated profile's school system: `rules/school` `question(spec, system)`. In cz and de
+every decimal takes the decimal comma ("Work out 38,2 - 18,38.") and a percent stands after a no-break space ("34 %"),
+as Czech typesetting writes them (registry: localization czech, typography-and-spacing). Money is the learner's own: the
+generators' euros, pounds and dollars become Kč in cz, € in de and £ in uk (the numbers are not retuned, so a Kč amount
+reads small), and in cz and de the sign stands after the amount with a no-break space ("12,12 Kč × 5", "4,35 € +
+2,80 €"); uk keeps "£12.12 × 5". A us profile, or a profile with no system, gets the set exactly as before. The reader
+takes "Kč" (and "korun") as a unit, and "cm squared", "sq cm" and "square cm" as cm2; "liber" stays unsure (money or
+weight). Every printed question still reads back to its own spec, and code still marks the answer. The TV sets "Kč" as
+one upright word, never the variable K.
+
+**Calculus answers in Czech notation (MB-B36, 2026-10-14).** In cz and de `checkAnswer` reads a Calculus answer as a
+Czech school writes it (`rules/calc-read` `czechAnswer`): a decimal comma between digits is a point in any answer
+("0,5x^2 + C", not only a lone "2,718"), tg, cotg, arctg and arccotg are tan, cot, arctan and arccot (arccotg u is
+pi/2 - arctan u, values in (0, pi)), and a trailing "+ K", "+ k", "+ C1", "+ C_1" or "+ C₁" is the arbitrary constant. A
+printed task with those names reads into its spec the same way ("Derivujte: y = arctg(x)"). A comma that is not between
+two digits ("0, 5", "1,2,3") is not read, and an arccotg whose argument is neither bracketed nor a bare x or number stays
+unread: the desk is not sure rather than guessing. A uk, us or unset profile reads every answer exactly as before.
+The working is read the same way (2026-10-15): `chainChecks` and `chainPen` take the learner's system (`judgeItem`
+passes `ctx.system`, the TV's `working` the profile's), and in cz or de each working line goes through the same
+`czechAnswer` before the tagger, so "y' = (tg(x^2))'" then "= 1/cos^2(x^2)" puts the pen on the second line, and the
+paper ticks the first. One table reads answers, tasks and working (registry: localization czech,
+terminology-and-loanwords, one concept one rendering). A cz line "x = 1,2" is the decimal 1.2, never a list of two
+roots.
+
+The base-10 log (2026-10-15). A Czech school writes `log` for base 10 and `ln` for the natural log; the engine reads a
+bare `log` as natural (Stewart). `czechAnswer` now takes the system: in cz a bare `log` and `lg` are base 10, in de only
+`lg` is (DIN 1302, ISO 80000-2), and in both `ln` is natural and a log with its own base ("log_2", "log2", "log₂") keeps
+it. A German school writes base 10 as lg or log_10, while German university analysis writes `log` for ln, so no reading
+of a bare `log` is safe there: de keeps it natural, as before. The one table reads answers and working alike, so a cz
+"y' = log(x^2)'" then "= 1/(x^2 ln 10)" puts the pen on the second line. The spec is compared by its meaning, never its
+text: a model's spec "log(x)" stays natural, and a question printed for a cz or de learner (`question(spec, system)`,
+which the Calculus set passes) shows that natural log as `ln`, so the screen never says `log` for a function the cz
+learner reads differently; the read and hint prompts name log/lg for base 10 and ln for natural in the notation line.
+uk, us and no system read and print exactly as before. A task read from a page goes through the same table first
+(2026-10-15): `specFromQuestion` and `partsFromQuestion` hand `readTask` the text with its logs in the system's base
+(`calc-read` `systemLogs`, the table `czechAnswer` reads by), so a cz "Derivujte: y = log x" is log_(10) x even though
+the raw text would parse as the natural log, and a de "y = lg x" reads where it read nothing before. Only the log names
+change before readTask, so its as-written-first order - kept so a text read today is read as it was (MB-B2) - still
+decides the decimal comma ("f(1,5)" is f(1.5)) and anything else. The spec then carries the base, and the question
+prints it ("log_(10)(x)"), so the screen names which log it is.
+
+## Calculus graphs (v2 M4a, 2026-10-07)
+
+A Calculus item open on `walk` shows its graph under the card (`maths/plotting.ts`, `maths/Plot.tsx`, `data-role="maths-plot"`),
+on paper in Lamplight's hand: the axes in faint ink, the curve in ink, a tangent dashed in the desk's pen at the point a
+derivative-at item asks about, the area washed in amber between a definite integral's bounds, a dot at the point an
+evaluate or limit item is about. The window per shape comes from `plotFor`. The y range is the 5th-95th percentile,
+padded, and it includes y = 0 when that is near. A pole is never bridged. The tangent's slope is `derivativeAt`, the same
+numeric derivative the marking uses. A graph shows what the desk computed; it never marks.
+
+## A word problem on the paper (v2 M3a, 2026-10-08)
+
+A Calculus set on related rates, optimisation or maxima and minima may end with a question in parts that code drew
+(`lib/rules/calc-word.ts`): a situation in sentences, then (a) and (b). Each part is an ordinary item of the set, with its
+own spec, mark and record; the paper only groups them.
+- The stem is printed once, above its parts, beside the question's number (`data-stem`). It goes through `prose()` into
+  the wrapping row (`mb-row q wrap`, `data-role="maths-stem"`) and is never set in the nowrap question row, where a
+  sentence runs past the paper.
+- Each part is its own row under the stem. Its number box reads (a), (b) (`data-part`), its line is prose in the wrapping
+  row (`data-role="maths-part"`), and it has its own answer line, tick, ring and pen, exactly as a single item has.
+- The tally in the top bar names a part with its question's number and letter together (5a), so it fits the mark. The
+  card names it as the paper does ("Number 5(b) needs another look"); the stored line keeps its item number.
+- A part whose function the stem does not print, as in a story, shows no graph under the card, because the curve would be
+  one the learner never saw. The cubic of "the maximum and the minimum" prints its function and keeps its graph.
+- A story's working names its function by a capital letter (A for an area). The chain checker reads `A = x(14 - x)` as
+  that function, so a right first line is never rung. On the two integral shapes a capital letter is still an
+  antiderivative.
+- A set with no parts draws exactly as before. Nothing is counted on screen that was not counted before.
+
+## Tables in the typesetter (v2 M4b, 2026-10-07)
+
+The custom typesetter (`maths/typeset.ts`, `MathText.tsx`) now lays out `cases`, `matrix`, `pmatrix`, `bmatrix`,
+`vmatrix`, `aligned`, `align` and `array` as rows and columns (`{ t: "table" }`). Before, these were read as one line.
+- Cells are typeset like any other text.
+- Brackets are drawn as strokes that stretch to the table's height, so they work in both the print and hand voices.
+- `cases` has a brace on the left only; `aligned` sets its columns right then left around the `&`.
+- An environment the desk does not set as a table reads as it always did, and an unclosed one never throws.
+- A table counts as tall (three squares of paper).
+
+KaTeX stays deferred ([concept](concepts/KATEX-TYPESETTING.md)).
+
+## A paper you sat (v2 M5b, 2026-10-08)
+
+The recovery from a failed paper has its own screen (`paper`, `PaperScreen`), on the wide lamp (`data-lamp="wide"`).
+Typed entry is the door that ships; the photo path is M5c's.
+- Left, the topics where marks were lost, in the order `recovery()` gives them (the base of the biggest loss first) and
+  never re-sorted: five rows at a time (`mb-prow`, 104 px, the lit row amber-ruled), a number, the topic's name, "N marks
+  lost" in amber, "From 5(b), 7" under it. A topic the desk calls secure keeps its row and wears a "Worth a recheck"
+  pill (`data-role="maths-paper-secure"`): the desk had the topic as secure, and the paper lost marks on it. The paper
+  decides, the desk only says what it knows.
+- Right, two cards. The paper's: the marks scored large, "of 80", "N of M marks - K marks lost", and, when some lost marks
+  sit on statements with no topic, one line at the card's small size (`maths-paper-offcount`): "N of M lost marks are not on
+  the desk yet.", "1 of M lost marks is not on the desk yet.", or "The one lost mark is not on the desk yet." When the phone left typed rows out of the paper, a second small line
+  (`maths-paper-leftout`) follows it: "1 question was left out on the phone, so it is not in this score." or "K questions
+  were left out on the phone, so they are not in this score."; it is absent when none were left out. Under it, only
+  when there is something to say, **Not on the desk yet** (`mb-poff`): a count ("k statements the desk has no topic for,
+  after the topics.", without "after the topics" when the paper has no topic row) and the line for questions that named no
+  statement. It no longer lists statements; the lamp walks them.
+- The off-desk page (RP3, 2026-10-11, MB-B13). While the lamp is on an off-desk statement the left column shows
+  `maths-paper-offrows` instead of the topic rows, and the title reads "Not on the desk yet". Five rows around the lamp
+  with the same chevrons, 104 px each: its number in the off-desk list, the can text whole (up to two lines), "N marks lost"
+  in amber and "From 1, 3" under it ("From 2 · a harder statement" for a statement past Foundation). The off-desk order is
+  most lost first; among equal losses a Foundation statement comes before a flagged one, then the spec order. Fit: the name is
+  26 px in 732 px of room (1100 less 4 border, 48 padding, 56 number, 40 gaps and a 220 px lost/From column), at 0.55 of
+  the size a character, so all 75 statements with no touches wrap whole into two lines (`OFF_NAME_PX`, `OFF_NAME_ROOM`,
+  `OFF_CH` in `tv/paperRows.ts`). With no topic row, focus 0 is the first statement.
+- The rows add up (RP2, 2026-10-11). A question's lost marks are shared in whole marks across what its codes reach: the
+  school-path topics each statement touches, in order, or the statement itself when it touches none. With L lost marks and
+  n places each gets L div n, and the first L mod n get one more. A place that gets 0 is left out. So the topic rows, the
+  Not on the desk rows and the questions with no statement add up to the marks the paper lost.
+- Expressions are not equations (RP7, 2026-10-12). A4 (simplify and manipulate expressions) touches no desk topic. So a question on it is a Not on the desk yet row, not a share of Equations with brackets and x on both sides. A question keyed A4 and A17 shares its lost marks over A4 and the three equations topics.
+- The caption (the screen's one caption slot, 930 px) starts the learner at the first topic. When the first row is not the
+  biggest loss it reads "Start with <first>, the base for <biggest>, where most marks went.", the biggest being the earliest
+  row with the most lost that needs the first as a base; otherwise it names the first row and says the list runs from the
+  biggest loss. With no paper the screen asks
+  for the marks on the phone. The screens say "a paper", "your paper": nothing says the board's name while its claim is off.
+- The D-pad is one walk: the topic rows in `recovery()` order, then the off-desk statements. Left/Up go back one stop and
+  Right/Down forward one, clamped over all stops. Select on a topic opens Get ready for school on that unit with its question
+  open (a set is two presses from the list, three when the unit has a worked lesson); Select on a statement does nothing.
+  Back or Menu land on a topic's unit, or on the first unit from a statement. The list is opened from the
+  phone (the Paper panel sends the paper, or shows the last one); Get ready for school's own keys are unchanged.
+- The set aims at what the paper lost (MB-B40, 2026-10-15). Select on a topic row carries that unit into the session as
+  the paper's aim (`Session.paperAim`, the `nav` event's `aim`). A set asked for on that unit while Get ready for school is
+  open (The usual or A step up, also after its worked lesson) is aimed at the statements that gave the topic its lost marks
+  (`aimOf` in `lib/rules/recovery.ts`): on an equations unit the model's prompt gets them in the map's own words
+  (`aimBlock` in `lib/desk/items.ts`), and the code still checks every
+  answer; a code-written unit is steered where a statement picks some of a tier's forms (cycle 14, below). The set carries
+  the codes it was written for (`Practice.aim`), and the Practice screen's taped card opens with one line, at most 25 words (`aimLine` in
+  `tv/mathsRows.ts`, `maths-practice-aim`, 30 px, pen-red over a dashed rule): "Aimed at what the paper lost: solve linear
+  equations in one unknown, including the unknown on both sides." The aim is a statement, never the question, its marks
+  or a code. It is gone on any other screen, a new paper, a learner switch, a new evening and once the set is written; a
+  set opened any other way carries no aim section. Six more on the sheet is not aimed.
+- Code-written sets steer toward what the paper lost (cycle 14, 2026-10-15). `lib/rules/school.ts` holds the map, decided
+  in code with no model: `SCHOOL_UNIT_FORMS` lists the forms a unit's generator draws at tiers 1 and 2 (read off a spec by
+  `formOf`, pinned to the generators' own draws), `STATEMENT_FORMS` which of them a statement is about (dec-convert: N10
+  the fraction-decimal conversions, R9 the ones with a percent; ratio-share: R4 simplifying a ratio; area: G16 the
+  triangle, G17 two rectangles joined), and `paperSteer` steers a tier only when the lost statements pick SOME of its
+  forms. A steered set is the slip aim's own draw (`aimedSchoolDraw` in `lib/desk/items.ts`): half the six from the aimed
+  forms, the rung's tier mix and six distinct questions kept, tier 3 never aimed; a paper that steers comes before the
+  learner's slips. A statement that is its whole unit (N2 on the fraction units, R9 on percent change, S4, G20, the
+  probability statements) or a whole tier (R5 sharing) steers nothing: the set is the usual draw, byte for byte, and the
+  card says no aim. So "Aimed at what the paper lost: ratio notation, including simplest form" stands over a set that
+  simplifies three ratios; over adding fractions from an N2 paper there is no line.
+- A step up aims at its named slips (cycle 18, 2026-10-15). A slip named on a top-rung item steers the next step up on
+  that unit, not only labels it. `lib/rules/school.ts` holds the map, in code: `SCHOOL_TOP_FORMS` lists the kinds a top
+  rung draws (read off a spec by `topFormOf`, pinned to the rung's own draws), `TOP_SLIP_FORMS` which kinds each slip
+  happens on (took the percent of the new amount: the amount before a change; added the percentages: two changes or the
+  years; added the chances: the three kinds with two independent events; put the first one back: the two draws; added
+  the squares for a shorter side: a shorter side), and `topSteer` aims only when they pick SOME of the rung's kinds - the
+  root not taken shows on every Pythagoras kind, so it aims nothing. The slips are read from the set the session holds
+  (`topSlipsOf`: the seated learner's own set on the unit, a tier-3 item settled wrong) - a Pythagoras id the unit shares
+  with tiers 1 and 2 counts only on a tier-3 item - and the learner record, the ruler and Six more's slip aim are
+  untouched. The aim takes the tier-3 slot that is not the word problem: the set's first word problem stays as drawn,
+  and the other tier-3 item, when it is of another kind, is drawn again as a bare item of an aimed kind
+  (`makeSchoolItems` with `topSlips`). Tiers 1 and 2, usual or aimed, never move, and a learner with no such slip gets
+  every set byte for byte. When the aim changed the draw the set carries the slips (`Practice.topAim`) and the Practice
+  card's aim line says so in the slip's own name, in the same slot as a paper's aim (`topAimLine` in
+  `lib/rules/school.ts`, through `aimLine`): "Aimed at: took the percent of the new amount.", "Aimed at: put the first
+  one back." A name, never a value; a draw the aim left as it was claims nothing.
+- Every model-written set knows who it is for (cycle 13, 2026-10-15). The equations and the Calculus prompt both carry
+  one learner section after the topic (`learnerBlock` in `lib/desk/items.ts`): "The student is 14, in Year 10 of school in
+  England. Pitch the questions there.", the age alone, or "The student studies in Germany." for a learner the desk knows
+  only a system for (an age is read only for a learner at school); nothing known, no section. A Calculus topic whose
+  definition names a requirement (the spine's `requires`, today calc1-chain's composition) adds one rule line asking for
+  it; code still keeps only the specs `meetsRequirement` passes. No screen changes.
+- The slip card (`SlipSide`) now says its line through `deskLine`, the one place a part is named as the paper names it;
+  the text is the same as before for every item.
+- A paper whose rows were fine but could not be written to the learner file says so (v2 M5c, ruling 11): "That paper
+  was not saved: ...", never "The desk kept no question from that paper.", which is kept for a paper with no row left.
+  Either way nothing is kept and the TV stays where it was.
+
+## The photo path's reader and its probe (v2 M5c, 2026-10-08)
+
+**The photo path is not offered.** Typed entry stays the door until the probe below, run live on the owner's PC, maps at
+least 85% of items to the right unit (the M5 kill row, ruling 1). A stubbed or simulated pass never ships it. Nothing
+on the phone or the TV changed in M5c: no route, no event, no button reads the reader yet.
+- **The reader** (`desk/src/lib/desk/paperRead.ts`, `readPaper`): one vision call per photo, beside `read.ts`. The model
+  lists each question or part that has a mark beside it: the label as printed ('5(b)'), the marks the marker wrote, what
+  it is out of, and at most 3 statement codes chosen from a list in the prompt (each statement's code with its can
+  text), by the question's own words. It is asked to copy numbers and never to add, count, total or compare marks, and
+  the prompt names no board. The rows come back raw; `cleanPaper` decides what stands, exactly as for typed rows.
+- **The probe** (`tools/paper-probe.cjs`): 20 marked papers generated from a fixed seed. Each is an answer key (real
+  statement codes within the caps: parts like 3(a) and 3(b), items naming two statements, at least three items the desk
+  has no topic for, one past Foundation) and an A4 SVG of it: the question numbers and stems in print, the allocation
+  in brackets at the right, the marker's "2/3" in red beside it with a tick or a cross. The stems are a written pool; no
+  stem shares a run of four words with the can text of a code it keys, so a right code is read from the question, not
+  copied from the list. Live, each SVG becomes a PNG (sharp), is read, cleaned and scored.
+- **The score** (`desk/src/lib/rules/paperScore.ts`, pure): an item is mapped when the read has its label and the read
+  codes reach the same desk topics and the same not-on-the-desk statements as the key's, found by `recovery()` itself
+  (so R7 for R10 is still the same unit). The figure is mapped items over key items across the 20 papers. Labels read,
+  marks read exactly, codes read exactly, rows dropped and extra items are reported beside it and decide nothing; a pass
+  with marks read under 85% goes to the owner as a question, because the recovery list weighs topics by lost marks.
+- **What a pass would mean:** the papers are clean renders, not phone photos of handwriting, so a live pass is an upper
+  bound on a real photo. When it passes, the door (a Snap on the Paper panel feeding the same `paper.enter`) is its own
+  slice, with its captures.
+
+
+## Open questions (10-09 L1 drain)
+
+From `docs/uat-insights/2026-10-09-maths-l1.md` (five Characters read the surface in code, no model call, no vision call). Rulings applied and not open: R1 (a decimal for a limit or a definite integral is right only as a correct rounding of the exact value at its own written precision, otherwise "not sure" and asks for the exact value; `lib/rules/calc.ts:53-61`), R2 ("ln x + C" is not right for the antiderivative of 1/x) and R5 (Czech in Math Buddy is in scope: Czech school units and the maturita).
+
+1. **The paper map.** "A paper you sat" maps questions onto 97 statements in GCSE Foundation wording (an owner decision). Radka (a parent with a CERMAT mock) and Vojtěch (a maturita paper) meet it as UK exam language, and 75 of the 97 statements have no desk topic. The backlog builds the wording and the way in (an area-level choice first, Czech task-shaped statements, no "Foundation paper" words for a cz learner). Whether the desk grows a Czech or a maturita statement map of its own is the open decision.
+2. **Marking a learner's own sheet.** The page route reads and hints; `/api/mark` marks only the desk's own sets. Matyáš's first job is "which of my ten did I get wrong and where". Two parents ask the opposite of the desk: that it never claim a check nobody made. Should a snapped page whose items read as Calculus specs be markable from a photo of working, by the same code judge, with items that do not read being "not sure"? It waits on the vision host.
+3. **Unsimplified answers.** "6/4" for 4/5 + 7/10 is ticked right because the question does not ask for simplest form, while the worked lesson teaches "then simplify". Either the add and subtract questions say "simplest form", or the lesson drops the step. A right value is right, and a teacher who wants lowest terms marks it down.
+4. **A path past 9. ročník.** The path ends at 9. ročník and no maturita path exists by design, yet an 18-year-old is welcomed to "what school is teaching next" and handed school-level sets as "a step up". The backlog builds the honest ceiling (a caption, the opening focus, the year labels). Whether to build content beyond the path is a scope decision.

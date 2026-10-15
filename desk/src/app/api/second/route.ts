@@ -10,6 +10,7 @@ import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { secondGo } from "@/lib/desk/mark";
 import { TYPED_ANSWER_MAX, secondProblem } from "@/lib/rules/maths";
 import { learnerSystem } from "@/lib/rules/school";
+import { itemName } from "@/lib/rules/calc-word";
 
 export const dynamic = "force-dynamic";
 const NO_BODY = "The desk did not get your answer. Type it again.";
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
   const item = practice.items.find((it) => it.n === body.n);
   if (!item) return NextResponse.json({ error: "That item is not on the desk any more." }, { status: 400 });
   // one go, on a wrong item only: the rule is the rulebook's (rules/maths secondProblem)
-  const problem = secondProblem(item);
+  const problem = secondProblem(item, itemName(practice.items, practice.items.indexOf(item)));
   if (problem) return NextResponse.json({ error: problem }, { status: 409 });
   if (typeof body.answer !== "string") return NextResponse.json({ error: NO_BODY }, { status: 400 });
   if (!body.answer.trim()) return NextResponse.json({ error: BLANK }, { status: 400 });

@@ -7,8 +7,8 @@
  *
  * Reads the committed runs under uat/runs/ as fixtures and never writes there: every write goes to a copy in the OS
  * temp dir, and the suite asserts the committed tree is byte-identical at the end (no OPEN.md appears in it either).
- * No model call: the tutor is stubbed at the registry, codexText is replaced in the require cache (the judge answers
- * from a queue through the engine's own shape rule; anything else throws), the codex launcher throws, and the one
+ * No model call: the tutor is stubbed at the registry, the driver's claude seam is replaced (the judge answers
+ * from a queue through the engine's own shape rule; anything else throws), claudeCli.run throws, and the one
  * spawned CLI runs with an empty PATH.
  */
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), crypto = require('node:crypto'), assert = require('node:assert/strict');
@@ -35,14 +35,14 @@ const digest = () => {
 const before = digest();
 
 require(path.join(UAT, 'driver/surface.cjs')).install();
-const calls = { tutor: 0, codex: 0 }, judgeReplies = [], seen = [];
+const calls = { tutor: 0, claude: 0 }, judgeReplies = [], seen = [];
 const registry = require(path.join(root, 'src/lib/engines/registry.ts'));
 registry.useProvider('text', { name: 'stub', run: async () => { calls.tutor++; throw new Error('no tutor call in this suite'); } });
-const codex = require(path.join(root, 'src/lib/engines/codex.ts'));
-codex.codexCli.run = async () => { throw new Error('codex must never be launched by this suite'); };
+const claudeText = require(path.join(root, 'src/lib/engines/text.ts'));
+claudeText.claudeCli.run = async () => { throw new Error('claude must never be launched by this suite'); };
 const shape = require(path.join(root, 'src/lib/engines/shape.ts'));
-codex.codexText = async req => {
-  calls.codex++; seen.push(req);
+require(DRIVER).claude.call = async req => {
+  calls.claude++; seen.push(req);
   if (req.schema?.required?.includes('verdict') && judgeReplies.length) { const reply = judgeReplies.shift(); return shape.answer({ name: 'stub', run: async () => ({ raw: JSON.stringify(reply), provider: 'stub' }) }, req); }
   throw new Error('stub: no model call in this suite');
 };
@@ -61,7 +61,7 @@ const FIVE = [LT, J1B, RECERT, BEGINNERS, GOAL];
 /** A copy of every committed run's top-level files, under the same run names, in the OS temp dir. */
 function copyRuns() {
   const dst = path.join(tmp, `runs-${crypto.randomUUID().slice(0, 8)}`);
-  for (const run of fs.readdirSync(RUNS)) {
+  for (const run of fs.readdirSync(RUNS).filter(d => d.startsWith('2026-09-15-'))) {   // the five codex-era fixtures; a later run (the claude-era smoke) is not one of them
     const src = path.join(RUNS, run);
     if (!fs.statSync(src).isDirectory()) continue;
     fs.mkdirSync(path.join(dst, run), { recursive: true });
@@ -138,8 +138,8 @@ test('case 4: --recertify with no run asks the judge about all 13 of the pair\'s
   // the command line: no run after --recertify is the ledger; a run after it is today's per-run recertify
   const runs = copyRuns(), ids = ['tomas-9', 'petra-38'];
   assert.deepEqual(D().parseArgs(['--recertify'], { runs, characters: ids }).mode, 'ledger');
-  assert.deepEqual(D().parseArgs(['--recertify', 'tomas-9'], { runs, characters: ids }), { mode: 'ledger', only: ['tomas-9'], runs, journeys: null, run: null, recertify: null });
-  assert.deepEqual(D().parseArgs(['--recertify', BEGINNERS, 'tomas-9'], { runs, characters: ids }), { mode: 'recertify', only: ['tomas-9'], runs, journeys: null, run: null, recertify: BEGINNERS });
+  assert.deepEqual(D().parseArgs(['--recertify', 'tomas-9'], { runs, characters: ids }), { mode: 'ledger', only: ['tomas-9'], runs, journeys: null, run: null, recertify: null, parallel: 3 });
+  assert.deepEqual(D().parseArgs(['--recertify', BEGINNERS, 'tomas-9'], { runs, characters: ids }), { mode: 'recertify', only: ['tomas-9'], runs, journeys: null, run: null, recertify: BEGINNERS, parallel: 3 });
   assert.equal(D().parseArgs(['--status', '--runs', runs], { characters: ids }).mode, 'status');
 
   const p = R().planLedger(L().ledger(runs), { characters: ['tomas-9'] }), shown = p.prior['tomas-9'].J4;
@@ -222,7 +222,10 @@ test('case 6: statusOf() renders the operator view; --status prints it and write
   const runs = copyRuns(), led = L().ledger(runs), md = L().statusOf(led);
   assert.ok(md.split('\n').includes('186 open in 36 pairs across 5 runs'), md.slice(0, 400));
   assert.ok(md.includes('node uat/driver/linga-text.cjs --recertify'));
-  assert.ok(md.split('\n').includes('drained 0 of 5 runs'), 'no docs/uat-insights/<run>.md exists');
+  // an insights home with no <run>.md in it drains nothing; the real home, docs/uat-insights/, holds all five
+  const none = path.join(tmp, 'no-insights'); fs.mkdirSync(none, { recursive: true });
+  assert.ok(L().statusOf(led, { insights: none }).split('\n').includes('drained 0 of 5 runs'), 'an empty insights home');
+  assert.ok(md.split('\n').includes('drained 5 of 5 runs'), 'docs/uat-insights/ holds the five 2026-09-15 drains');
   const sections = md.split('\n').filter(l => l.startsWith('## '));
   assert.equal(sections.length, 36);
   const tops = sections.map(s => Number(s.match(/top rank (\d+)/)[1]));
@@ -237,12 +240,12 @@ test('case 6: statusOf() renders the operator view; --status prints it and write
   }
   assert.ok(rows.find(l => l.startsWith(`- \`${LT}/LT-tomas-9-J3-3\``)).includes(`unasked since ${RECERT}`));
 
-  // the command, in process with codexText counting: no model call, OPEN.md beside the runs
-  const n = calls.codex, out = D().statusCommand({ runs });
-  assert.equal(calls.codex, n, 'no model call');
+  // the command, in process with the claude seam counting: no model call, OPEN.md beside the runs
+  const n = calls.claude, out = D().statusCommand({ runs });
+  assert.equal(calls.claude, n, 'no model call');
   assert.equal(out.file, path.join(runs, 'OPEN.md'));
   assert.equal(fs.readFileSync(out.file, 'utf8'), md);
-  // and from the command line, with no PATH so no codex could start
+  // and from the command line, with no PATH so no claude could start
   fs.rmSync(out.file);
   const empty = path.join(tmp, 'no-path'); fs.mkdirSync(empty, { recursive: true });
   const env = Object.fromEntries(Object.entries(process.env).filter(([k]) => k.toUpperCase() !== 'PATH'));
@@ -356,7 +359,7 @@ test('product case 6: OPEN.md leads with the split and every aged row ends with 
   const files = P().surface(), N = files.length;
   const current = { commit: 'c'.repeat(40), dirty: false, files: Object.fromEntries(files.map((f, i) => [f, `${String(i).padStart(40, '0')}`])) };
   const SAME = 3; // three files are byte-identical to the 15 Sep ones
-  const old = f => files.indexOf(f) < SAME ? current.files[f] : `old${files.indexOf(f)}`.padEnd(40, '0');
+  const old = f => files.indexOf(f) < SAME ? current.files[f] : `abc${files.indexOf(f)}`.padEnd(40, '0');
   const asked = [];
   const stub = args => {
     asked.push(args[0]);
@@ -381,8 +384,105 @@ test('product case 6: OPEN.md leads with the split and every aged row ends with 
   const now = lines2.find(l => l.includes('seen just now'));
   assert.ok(now && !now.includes('product:'), now);
   // --status: files only, no model call, OPEN.md written beside the runs and carrying the split
-  const n = calls.codex, out = D().statusCommand({ runs, product: opts });
-  assert.equal(calls.codex, n, 'no model call');
+  const n = calls.claude, out = D().statusCommand({ runs, product: opts });
+  assert.equal(calls.claude, n, 'no model call');
   assert.equal(fs.readFileSync(out.file, 'utf8'), md2);
   assert.ok(asked.every(a => a === 'log' || a === 'ls-tree'));
+});
+
+test('W7-1: OPEN.md files each open row under its own module, and only Linga carries the --recertify line', () => {
+  const runs = path.join(tmp, `modules-${crypto.randomUUID().slice(0, 8)}`);
+  writeRun(runs, 'R', [
+    finding({ id: 'F-L', character: 'tomas-9', journey: 'J2', title: 'linga row' }),
+    finding({ id: 'F-E', character: 'daniel-15', journey: 'EM3', title: 'essay row' }),
+    finding({ id: 'F-M', character: 'nela-12', journey: 'MB2', title: 'math row' }),
+  ]);
+  const md = L().statusOf(L().ledger(runs)), lines = md.split('\n');
+  const part = name => { const i = lines.indexOf(`# ${name}`); assert.ok(i >= 0, `a section for ${name}`); const j = lines.findIndex((l, k) => k > i && /^# /.test(l)); return lines.slice(i, j < 0 ? undefined : j); };
+  const lin = part('Linga'), ess = part('Essay Master'), mat = part('Math Buddy');
+  assert.ok(lin.some(l => l.includes('linga row')) && !lin.some(l => l.includes('essay row') || l.includes('math row')), lin.join('\n'));
+  assert.ok(ess.some(l => l.includes('essay row')) && !ess.some(l => l.includes('linga row') || l.includes('math row')), ess.join('\n'));
+  assert.ok(mat.some(l => l.includes('math row')) && !mat.some(l => l.includes('linga row') || l.includes('essay row')), mat.join('\n'));
+  for (const s of [lin, ess, mat]) assert.ok(s.includes('1 open in 1 pairs across 1 runs'), s.join('\n'));
+  assert.ok(lin.some(l => l.includes('node uat/driver/linga-text.cjs --recertify')));
+  for (const s of [ess, mat]) {
+    assert.ok(!s.some(l => l.includes('--recertify')), 'the driver reruns Linga only');
+    assert.ok(s.some(l => l.includes('L1 re-walk through the /uat skill')), s.join('\n'));
+  }
+  assert.ok(!lines[0].includes('Linga'), 'the title no longer names Linga alone');
+  // a module with no open row has no section
+  assert.ok(!L().statusOf(L().ledger((() => { const r = path.join(tmp, `lonly-${crypto.randomUUID().slice(0, 8)}`); writeRun(r, 'R', [finding()]); return r; })())).includes('# Essay Master'));
+});
+
+test('W7-2: a path only one side holds does not age a row; it is counted apart', () => {
+  const d = P().changedBetween({ 'desk/src/a.ts': 'x1', 'desk/src/gone.ts': 'g' }, { 'desk/src/a.ts': 'x1', 'desk/src/new.ts': 'n' });
+  assert.deepEqual(d.changed, [], 'no path both sides hold differs');
+  assert.deepEqual(d.oneSided, ['desk/src/gone.ts', 'desk/src/new.ts']);
+  assert.equal(d.total, 3);
+  assert.deepEqual(P().changedBetween({ 'desk/src/a.ts': 'x1' }, { 'desk/src/a.ts': 'x2' }).changed, ['desk/src/a.ts'], 'a shared path with another blob still ages');
+  // in the ledger: the stamp holds one file the load set lacks, and the load set holds one the stamp lacks
+  const dir = path.join(tmp, `w72-${crypto.randomUUID().slice(0, 8)}`), runs = path.join(dir, 'uat/runs');
+  const current = { commit: 'beef', dirty: false, files: { 'desk/src/a.ts': 'x1', 'desk/src/new.ts': 'n' } };
+  writeRun(runs, 'A', [finding()], { started: '2026-10-01T00:00:00.000Z', product: { commit: 'c0ffee', dirty: false, files: { 'desk/src/a.ts': 'x1', 'desk/src/gone.ts': 'g' } } });
+  const led = L().ledger(runs, { repo: dir, git: () => '', files: Object.keys(current.files), current }), g = led.open[0];
+  assert.equal(g.productState, 'current');
+  assert.deepEqual(g.changed, []);
+  assert.deepEqual(g.oneSided, ['desk/src/gone.ts'], 'new.ts is the load set only: a stamped run is not compared over it');
+  assert.deepEqual(led.product.counts, { current: 1, aged: 0, unknown: 0 });
+  assert.ok(L().statusOf(led).split('\n').find(l => l.includes('a gap')).endsWith(' · 1 paths held by one side only'));
+});
+
+test('W7c-1: a stamped run is compared over its own files; a module-only file ages the row, a missing one does not', () => {
+  const dir = path.join(tmp, `w7c-${crypto.randomUUID().slice(0, 8)}`), runs = path.join(dir, 'uat/runs');
+  const same = { 'desk/src/a.ts': 'x1', 'desk/src/b.ts': 'x2' };
+  // the injected load set (the Linga set) holds a.ts and b.ts only; the Essay stamp also holds Workroom.tsx, which differs now
+  const current = { commit: 'beef', dirty: false, files: { ...same, 'desk/src/essay/Workroom.tsx': 'new' } };
+  const loadSet = Object.keys(same);
+  writeRun(runs, 'A-essay', [finding({ id: 'E-1', journey: 'EM2', title: 'an essay gap' })], { started: '2026-10-01T00:00:00.000Z', product: { commit: 'c0ffee', dirty: false, files: { ...same, 'desk/src/essay/Workroom.tsx': 'old' } } });
+  writeRun(runs, 'B-linga', [finding({ id: 'L-1', journey: 'J3', title: 'a linga gap' })], { started: '2026-10-02T00:00:00.000Z', product: { commit: 'c0ffee', dirty: false, files: { ...same } } });
+  writeRun(runs, 'C-gone', [finding({ id: 'G-1', journey: 'MB1', title: 'a math gap' })], { started: '2026-10-03T00:00:00.000Z', product: { commit: 'c0ffee', dirty: false, files: { ...same, 'desk/src/lib/desk/gone.ts': 'g' } } });
+  const led = L().ledger(runs, { repo: dir, git: () => '', files: loadSet, current }), by = t => led.open.find(g => g.title === t);
+  const e = by('an essay gap'), l = by('a linga gap'), m = by('a math gap');
+  assert.equal(e.productState, 'aged');
+  assert.deepEqual(e.changed, ['desk/src/essay/Workroom.tsx']);
+  assert.equal(e.productFiles, 3);
+  assert.equal(l.productState, 'current');
+  assert.deepEqual(l.changed, []);
+  assert.equal(m.productState, 'current', 'a stamped path missing now does not age the row');
+  assert.deepEqual(m.oneSided, ['desk/src/lib/desk/gone.ts']);
+  assert.equal(m.productFiles, 2);
+  assert.deepEqual(led.product.counts, { current: 2, aged: 1, unknown: 0 });
+});
+
+test('a run whose findings.json cannot be read is named in the ledger and on OPEN.md, never read as a run with nothing open', () => {
+  const runs = path.join(tmp, `unreadable-${crypto.randomUUID().slice(0, 8)}`);
+  writeRun(runs, 'A-good', [finding({ title: 'a readable gap' })], { started: '2026-10-01T00:00:00.000Z' });
+  writeRun(runs, 'B-torn', [finding()], { started: '2026-10-02T00:00:00.000Z' });
+  fs.writeFileSync(path.join(runs, 'B-torn', 'findings.json'), '[{"id":"F-1","type":"quality-gap"');   // a write cut short
+  writeRun(runs, 'C-object', [], { started: '2026-10-03T00:00:00.000Z' });
+  fs.writeFileSync(path.join(runs, 'C-object', 'findings.json'), '{"not":"a list"}');
+  const led = L().ledger(runs);
+  assert.equal(led.open.length, 1, 'the readable run still counts');
+  assert.deepEqual(led.unreadable.map(u => u.run), ['B-torn', 'C-object']);
+  const lines = L().statusOf(led).split('\n');
+  for (const run of ['B-torn', 'C-object']) assert.ok(lines.some(l => l.startsWith('unreadable:') && l.includes(`${run}/findings.json`)), `OPEN.md names ${run}: ${lines.slice(0, 8).join(' | ')}`);
+  assert.deepEqual(L().ledger(copyRuns()).unreadable, [], 'the committed runs are all readable');
+});
+
+test('--run naming a run that already has findings.json is refused before anything is spawned; a new name is taken', () => {
+  const runs = path.join(tmp, `taken-${crypto.randomUUID().slice(0, 8)}`);
+  writeRun(runs, '2026-10-01-lt', [finding()], { started: '2026-10-01T00:00:00.000Z' });
+  assert.throws(() => D().parseArgs(['--run', '2026-10-01-lt', '--runs', runs], { characters: [] }), /2026-10-01-lt already holds findings\.json/);
+  assert.equal(D().parseArgs(['--run', '2026-10-02-lt', '--runs', runs], { characters: [] }).run, '2026-10-02-lt');
+  fs.mkdirSync(path.join(runs, 'empty-lt'));
+  assert.equal(D().parseArgs(['--run', 'empty-lt', '--runs', runs], { characters: [] }).run, 'empty-lt', 'a directory with no record yet is free');
+  assert.equal(D().parseArgs(['--status', '--run', '2026-10-01-lt', '--runs', runs], { characters: [] }).mode, 'status', '--status writes no run');
+});
+
+test('OPEN.md says how many rows are open in total, and says 0 when nothing is, instead of printing no count at all', () => {
+  const runs = path.join(tmp, `none-open-${crypto.randomUUID().slice(0, 8)}`);
+  writeRun(runs, 'A', [finding({ resolution: 'fixed' }), finding({ id: 'F-2', type: 'strength', resolution: 'n-a' })], { started: '2026-10-01T00:00:00.000Z' });
+  const lines = L().statusOf(L().ledger(runs)).split('\n');
+  assert.ok(lines.includes('0 open across 1 run: nothing to recertify'), lines.slice(0, 6).join(' | '));
+  assert.ok(L().statusOf(L().ledger(copyRuns())).split('\n').includes('186 open across 5 runs'));
 });

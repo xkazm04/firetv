@@ -6,19 +6,60 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
-process.env.DESK_DATA_DIR=path.resolve(__dirname,'../artifacts/essay-rules',String(Date.now()));
+require('./ts-load.cjs');
+process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(require('node:os').tmpdir(),'desk-essay-rules-'));
 const {splitSentences,paragraphStats}=require(path.join(root,'src/lib/rules/essay.ts'));
 const engine=require(path.join(root,'src/lib/engines/text.ts'));
-let answer,seen=[];engine.text=(req)=>{seen.push(req);return answer(req);};
-const {analyseEssay}=require(path.join(root,'src/lib/desk/essay.ts'));
+/**
+ * The model observes, code rules (rules/essay decideVerdicts). Most fixtures below were written when the model gave the
+ * verdict, and still say what they want in those words: this turns each wanted verdict into the observation that makes the
+ * rule decide it for that lens and sentence, so the stubs speak the new schema and the assertions stay as they were.
+ * Only a reply with a `verdicts` list is turned; a reply with `observations` goes through untouched (the cases that pin
+ * the rule send observations directly, with a legacy `verdict` beside them to show it is ignored).
+ */
+const WANTED={
+ structure:{faulty:{job:'link'},strong:{job:'evidence'},neutral:{job:'context'}},
+ argument:{faulty:{side:'wanders'},strong:{side:'pushes'},neutral:{side:'neutral'}},
+ evidence:{faulty:{support:'opinion'},strong:{support:'checkable'},neutral:{support:'context'}},
+};
+// the sentences a fixture did not name, answered neutral only so the reading is whole: analyseEssay below leaves their entries out of the verdicts
+const filler=new Set();
+const asObservations=(req,r)=>{
+ if(!r||!r.json||!('verdicts' in r.json)||!req.schema?.properties?.observations)return r;
+ const lens=(/Lens for this reading: (\w+)/.exec(req.system)||[])[1]?.toLowerCase();
+ const text=new Map([...req.prompt.matchAll(/^(\d+)\. (.*?) {2}\[\d+ words/gm)].map(m=>[Number(m[1]),m[2]]));
+ const {verdicts,...rest}=r.json;
+ const field=(e)=>{
+  if(lens==='language'){const w=(text.get(e.n)||'').match(/[A-Za-z']+/)?.[0]||'';return e.verdict==='faulty'?{issues:[{kind:'vague',word:w}]}:['strong','neutral'].includes(e.verdict)?{issues:[]}:{issues:'unreadable'};}
+  return WANTED[lens]?.[e.verdict]||{bogus:true};
+ };
+ const observations=Array.isArray(verdicts)?verdicts.map(e=>{
+  if(!e||typeof e!=='object')return e;
+  const {verdict,...keep}=e;
+  return {...keep,...field(e)};
+ }):verdicts;
+ // E7: a reading must answer every sentence it judges, so a fixture that names only some gets a neutral observation for the rest
+ if(req.use==='essay-read'&&Array.isArray(observations)){
+  const para=/Judge only paragraph \d+ of \d+: sentences (\d+) to (\d+)/.exec(req.prompt);
+  for(const [n] of text){
+   if(para&&(n<Number(para[1])||n>Number(para[2])))continue;
+   if(!observations.some(o=>o&&o.n===n)){observations.push({n,note:'ok',...field({verdict:'neutral'})});filler.add(n);}
+  }
+ }
+ return {...r,json:{...rest,observations}};
+};
+let answer,seen=[];engine.text=(req)=>{seen.push(req);return Promise.resolve(answer(req)).then(r=>asObservations(req,r));};
+const {NOT_EVERY_SENTENCE}=require(path.join(root,'src/lib/desk/essay.ts'));
+const deskEssayModule=require(path.join(root,'src/lib/desk/essay.ts'));
+const analyseEssay=async(...args)=>{filler.clear();const a=await deskEssayModule.analyseEssay(...args);return {...a,verdicts:a.verdicts.filter(v=>!filler.has(v.n))};};
 const {getLearner,addHistory,recordWriting,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
 const {lensStandings,writingTotals}=require(path.join(root,'src/tv/writingRows.ts'));
 const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
-after(()=>clearInterval(globalThis.__desk.ticker));
+after(()=>{clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
+test('GUARD: the disposable data directory is under the OS temp dir, never inside the tree (repo law)',()=>{
+ const rel=path.relative(require('node:os').tmpdir(),process.env.DESK_DATA_DIR);
+ assert.ok(rel&&!rel.startsWith('..')&&!path.isAbsolute(rel),process.env.DESK_DATA_DIR);
+});
 const reply=(json)=>async()=>({json,provider:'test',ms:1});
 
 const THREE='The school day starts too early. Research found that teenagers fall asleep later. Therefore the start should move.';
@@ -93,6 +134,16 @@ test('line breaks collapse, so a pasted paragraph is measured as one paragraph',
  assert.deepEqual(s.map(x=>x.text),['The first point.','The second point spans lines.']);
  assert.deepEqual(s.map(x=>x.words),[3,5],'words are counted after the whitespace collapses');
 });
+test('UD-19: below ENGLISH_MIN_WORDS a Czech-majority reading is not English; a short English one still is',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ for(const t of ['Je škola důležitá?','Škola začíná','Žáci nemají rádi úkoly, protože jsou pro ně příliš dlouhé a nudné, ale učitelé je stejně dávají.'])assert.equal(R.paragraphIsEnglish(t),false,t);
+ for(const t of ['Hello there','Slavoj Žižek','Is school important?'])assert.equal(R.paragraphIsEnglish(t),true,t);
+});
+test('UD-18: LINK needs a word boundary: Some children walk to school is a claim, So it goes is a link',()=>{
+ assert.equal(splitSentences('Some children walk to school.')[0].role,'claim');
+ assert.equal(splitSentences('Therefore, children should walk.')[0].role,'link');
+ assert.equal(splitSentences('So children should walk.')[0].role,'link');
+});
 test('roles and connectors are counted from the text, and the stats add up',()=>{
  const s=splitSentences(THREE);
  assert.deepEqual(s.map(x=>x.role),['claim','evidence','link']);
@@ -110,7 +161,7 @@ test('the paragraph reaches the model numbered from one, with every sentence pre
  const lines=seen[0].prompt.split('\n').filter(l=>/^\d+\. /.test(l));
  assert.deepEqual(lines.map(l=>Number(l.split('.')[0])),[1,2,3]);
  assert.match(seen[0].prompt,/3 sentences/);
- assert.match(lines[1],/^2\. Research found that teenagers fall asleep later\. {2}\[7 words, first-pass role: evidence\]$/);
+ assert.match(lines[1],/^2\. "Research found that teenagers fall asleep later\." {2}\[7 words, first-pass role: evidence\]$/,'the sentence quoted as data, the desk\'s note beside it');
 });
 test('a verdict can only land on a sentence number that exists',async()=>{
  answer=reply({verdicts:[
@@ -123,7 +174,7 @@ test('a verdict can only land on a sentence number that exists',async()=>{
  ],summary:'A clear paragraph.'});
  const a=await analyseEssay(THREE,'structure','essay-anon');
  assert.deepEqual(a.verdicts.map(v=>v.n),[1,3],'0 and length+1 are both off the end; only 1..3 survive');
- assert.equal(a.sentences.length,3);assert.equal(a.summary,'A clear paragraph.');assert.equal(a.type,'structure');
+ assert.equal(a.sentences.length,3);assert.equal(a.summary,'1 of 3 sentences to fix. Start with sentence 3: '+a.verdicts[1].note,'E9: the summary is code\'s line, never the model\'s');assert.equal(a.type,'structure');
  assert.equal(a.text,THREE,'the learner\'s own text is returned unchanged, not the collapsed one');
 });
 test('a single-sentence paragraph admits verdict 1 and nothing else',async()=>{
@@ -133,9 +184,9 @@ test('a single-sentence paragraph admits verdict 1 and nothing else',async()=>{
 });
 test('verdicts the model malformed never reach the screen, and never throw',async()=>{
  for(const verdicts of [undefined,null,'not an array',[{n:'1',verdict:'strong',note:'a string number'}],[{verdict:'strong',note:'no number at all'}]]){
-  answer=reply({verdicts,summary:'s'});
-  const a=await analyseEssay(THREE,'language','essay-anon');
-  assert.deepEqual(a.verdicts,[],JSON.stringify(verdicts));
+  answer=obsReply(verdicts);
+  // E7: an answer no sentence of which can be read is a reading of no sentence, so it fails and counts nothing
+  await assert.rejects(analyseEssay(THREE,'language','essay-anon'),{message:NOT_EVERY_SENTENCE},JSON.stringify(verdicts));
  }
 });
 // ---- the fix: how to rephrase a faulty sentence, as a named move and a pattern with [slots] - never the sentence rewritten ----
@@ -145,7 +196,7 @@ test('a faulty verdict keeps a valid fix, trimmed, and the verdict itself is unt
  answer=reply({verdicts:[{n:4,verdict:'faulty',note:'This argues the other side.',fix:{move:'  Concede,  then turn it back ',pattern:' Although [the other side],\n [why your claim still holds]. '}}],summary:'s'});
  const a=await analyseEssay(SIX,'argument','essay-fix');
  assert.equal(a.sentences.length,6);
- assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'This argues the other side.',fix:CONCEDE}],'whitespace collapses; move and pattern survive as given');
+ assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'This sentence wanders from the side the paragraph takes.',fix:CONCEDE}],'whitespace collapses; move and pattern survive as given');
 });
 test('a fix on a strong or neutral verdict is dropped, and the verdict stays',async()=>{
  answer=reply({verdicts:[{n:1,verdict:'strong',note:'clear side',fix:CONCEDE},{n:3,verdict:'neutral',note:'',fix:CONCEDE},{n:4,verdict:'faulty',note:'other side',fix:CONCEDE}],summary:'s'});
@@ -162,7 +213,7 @@ test('a fix without a [slot] is dropped - a rewritten sentence is not a pattern'
   const a=await analyseEssay(SIX,'argument','essay-fix');
   assert.equal(a.verdicts.length,1,'the verdict is never lost with its fix');
   assert.equal(a.verdicts[0].fix,undefined,pattern);
-  assert.equal(a.verdicts[0].note,'other side');
+  assert.equal(a.verdicts[0].note,'This sentence wanders from the side the paragraph takes.','a faulty verdict speaks the check line, not the model note');
  }
 });
 test('a pattern that is the learner\'s sentence around a slot, or mostly words, is dropped',async()=>{
@@ -182,7 +233,7 @@ test('a malformed fix never reaches the screen and never throws',async()=>{
   {move:CONCEDE.move,pattern:'Although ['+'x'.repeat(55)+'], ['+'y'.repeat(55)+'], and ['+'z'.repeat(55)+'].'}]){
   answer=reply({verdicts:[{n:4,verdict:'faulty',note:'x',fix}],summary:'s'});
   const a=await analyseEssay(SIX,'argument','essay-fix');
-  assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'x'}],JSON.stringify(fix));
+  assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'This sentence wanders from the side the paragraph takes.'}],JSON.stringify(fix));
  }
 });
 test('cleanFix is the one rule: the TV and the engine read the same shape',()=>{
@@ -211,8 +262,8 @@ test('the model is asked for a fix only on a faulty verdict, as a move and a slo
  assert.match(system,/never their sentence rewritten/);
  assert.match(system,/\[slot\]/);
  assert.match(system,/No fix on strong or neutral verdicts/);
- const item=schema.properties.verdicts.items;
- assert.deepEqual(item.required,['n','verdict','note'],'fix is optional: a model that omits it still answers inside the schema');
+ const item=schema.properties.observations.items;
+ assert.deepEqual(item.required,['n','note','side'],'the deciding field of the lens is required; fix is optional: a model that omits it still answers inside the schema');
  assert.deepEqual(item.properties.fix.required,['move','pattern']);
  assert.equal(item.properties.fix.properties.pattern.maxLength,undefined,'no length limit in the schema: an over-long fix loses the fix, not the reading');
 });
@@ -403,6 +454,19 @@ test('the Writing KPI sees stage 6 as it landed: a "writing" history kind that t
  put('src/lib/session/learners.ts',learners);put('src/lib/desk/essay.ts',essay.replace(/kind: "writing"/,'kind: "practice"'));
  assert.deepEqual(kpi.writingPersisted(fake),{persisted:false,kindDeclared:true,essayWrites:false},'a kind nothing appends is not persistence either');
 });
+test('WD10a: the Writing KPI accepts the one-save withHistory shape and refuses an applier that is never saved',()=>{
+ const fake=path.join(process.env.DESK_DATA_DIR,'fake-desk-wd10a'),put=(f,t)=>{fs.mkdirSync(path.dirname(path.join(fake,f)),{recursive:true});fs.writeFileSync(path.join(fake,f),t);};
+ const learners=fs.readFileSync(path.join(root,'src/lib/session/learners.ts'),'utf8'),essay=fs.readFileSync(path.join(root,'src/lib/desk/essay.ts'),'utf8');
+ put('src/lib/session/learners.ts',learners);
+ put('src/lib/desk/essay.ts','export function record(learnerId, lens) {\n  addHistory(learnerId, { at: Date.now(), kind: "writing", label: lens.name, detail: "" });\n}\n');
+ assert.equal(kpi.writingPersisted(fake).essayWrites,true,'the old addHistory shape still counts');
+ put('src/lib/desk/essay.ts',essay.split('saveLearner(').join('noSave('));
+ const unsaved=kpi.writingPersisted(fake);
+ assert.equal(unsaved.essayWrites,false,'a withHistory applier that is never saved is not persistence');
+ assert.equal(unsaved.persisted,false);
+ put('src/lib/desk/essay.ts',essay);
+ assert.equal(kpi.writingPersisted(fake).essayWrites,true,'the current essay.ts counts');
+});
 test('the Writing KPI counts a learner with a writing episode, from the book a real reading wrote',()=>{
  const file=path.join(process.env.DESK_DATA_DIR,'learners.json');
  const r=kpi.learnerEvidence({file,source:'DESK_DATA_DIR',tried:[file]});
@@ -473,12 +537,12 @@ test('rewrite case 3: reviseSentence re-judges sentence n alone, in its paragrap
  const v2=a.verdicts.find(v=>v.n===2);
  assert.equal(v2.verdict,'strong');assert.equal(v2.note,'It names its source now.');
  assert.deepEqual(v2.was,{text:OLD2,verdict:'faulty'},'verdict 2 remembers the sentence it replaced');
- assert.equal(a.sentences[1].text,STUDY);assert.equal(a.summary,before.summary);assert.equal(a.type,'evidence');
+ assert.equal(a.sentences[1].text,STUDY);assert.equal(a.summary,'0 of 3 sentences to fix.','E9-5: the summary is restated from the verdicts as they now stand');assert.equal(RE.summaryLine(a),a.summary);assert.equal(a.type,'evidence');
  const {system,prompt}=seen[0];
  assert.match(system,/sentence 2 alone/i,'the model is asked for sentence 2 alone');
  assert.match(system,/Lens for this reading: Evidence/);
  assert.match(system,/Never rewrite their sentences/);
- for(const [k,x] of a.sentences.entries())assert.ok(prompt.includes(`${k+1}. ${x.text}`),`the whole numbered paragraph: ${x.n}`);
+ for(const [k,x] of a.sentences.entries())assert.ok(prompt.includes(`${k+1}. ${JSON.stringify(x.text)}`),`the whole numbered paragraph: ${x.n}`);
  assert.ok(prompt.includes(playFor('evidence').move),'the move the page taught (the playbook, when the verdict had no fix of its own)');
  assert.ok(prompt.includes(OLD2),'the sentence before the rewrite');
  // a verdict with its own fix: that move is the one asked about, and it rides on `was` so the TV can ink it
@@ -504,7 +568,7 @@ test('rewrite case 4: a rewrite judged still faulty keeps a fix only when it pas
  answer=reply({verdicts:[{n:2,verdict:'faulty',note:'Which study?',fix:COPY}]});
  const a=await reviseSentence(R3(),2,STUDY);
  const v=a.verdicts.find(x=>x.n===2);
- assert.equal(v.verdict,'faulty');assert.equal(v.note,'Which study?');
+ assert.equal(v.verdict,'faulty');assert.equal(v.note,'This only asserts; nothing here is checkable.','the check line, not the model note');
  assert.equal(v.fix,undefined,'four of the rewrite\'s own words in the pattern: the fix is dropped, the verdict stays');
  const {cleanFix}=rules();assert.deepEqual(cleanFix(COPY,OLD2),COPY,'against the old sentence the same pattern would have passed');
  const FAIR={move:'Name the source',pattern:'According to [who], [what they found].'};
@@ -534,6 +598,25 @@ test('rewrite case 5: POST /api/analyse kind rewrite lands on the desk as essay.
  assert.equal(getLearner(id).history.length,history,'a rewrite is not another paragraph read');
  assert.equal(JSON.stringify(getLearner(id).writing),writing,'and not another attempt on the lens');
  assert.equal(s.history.length,history);
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+});
+
+test('recap M1: a rewrite restates the reading\'s own history line - one reading, "1 of 5 to fix" and "1 fixed"',async()=>{
+ const {recapRows,recapLine}=require(path.join(root,'src/tv/recapRows.ts'));
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+ const id=getSession().learner.id,FIVE='The school day starts too early. Research found that teenagers fall asleep later. Teenagers are just lazy. A 2019 study measured their sleep. Therefore the start should move.';
+ answer=faults([2,3]);
+ const first=await analyseEssay(FIVE,'evidence',id);dispatch({type:'essay.set',analysis:first});
+ const essayLines=()=>getLearner(id).history.filter(h=>h.kind==='writing'),was=essayLines().length;
+ const tile=()=>({...recapRows(getSession(),Date.now()).find(t=>t.app==='essay')}),last=()=>{const t=tile();return {...t,readings:t.readings.slice(-1)};};
+ assert.deepEqual(last().readings.map(r=>[r.against,r.of,r.fixed]),[[2,5,undefined]],'read: 2 of 5');
+ answer=reply({verdicts:[{n:2,verdict:'strong',note:'It names its source now.'}]});
+ assert.equal((await analyse({kind:'rewrite',n:2,text:STUDY})).status,200);
+ assert.equal(essayLines().length,was,'the history holds one essay line for the reading');
+ assert.equal(essayLines().at(-1).detail,'1 of 5 sentences to fix, 1 fixed');
+ assert.deepEqual(last().readings.map(r=>[r.against,r.of,r.fixed]),[[1,5,1]],'1 of 5 and 1 fixed');
+ assert.match(recapLine(last()),/1 of 5 sentences to fix, 1 fixed tonight/);
+ assert.equal(getSession().history.filter(h=>h.kind==='writing').length,was,'the session reads the restated line');
  dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
 });
 
@@ -699,7 +782,35 @@ test('the analyse route asks essayTooLong before it starts a run, on the essay b
  assert.ok(at>0,'the route checks the cap');
  assert.ok(at>src.indexOf('body.kind === "rewrite"'),'after the english and rewrite branches, so those are not capped');
  assert.ok(at<src.indexOf('runJob("analyse", async () => {\n    dispatch({ type: "essay.type"'),'before the essay run starts');
- assert.match(src.slice(at,at+200),/status: 400/);
+ // changed by E3-b: the refusal now goes through refusedWithLine, which answers 400 and says the line on the status line
+ assert.match(src.slice(at,at+200),/refusedWithLine\(tooLong\)/);
+ assert.match(src,/function refusedWithLine[\s\S]{0,200}status: 400/);
+});
+test('the analyse route refuses a body that is not a reading - not JSON, null, no kind, an unknown kind, no text - with a 400 in desk words: no run, no failed job, no model call',async()=>{
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+ const asked=seen.length;answer=()=>{throw new Error('no model may be asked');};
+ const raw=(body)=>require(path.join(root,'src/app/api/analyse/route.ts')).POST(new Request('http://desk/api/analyse',{method:'POST',body}));
+ for(const body of ['not json','null','[]','{}','{"kind":"bogus","text":"A paragraph."}','{"kind":"english"}','{"kind":"english","sentence":42}','{"kind":"english","sentence":"   "}','{"kind":"essay","type":"evidence"}','{"kind":"essay","text":42,"type":"evidence"}','{"kind":"essay","text":"  ","type":"evidence"}']){
+  let r;try{r=await raw(body);}catch(e){assert.fail(`${body}: the route threw ${e.constructor.name} (a 500)`);}
+  assert.equal(r.status,400,body);deskWorded((await r.json()).error);
+  assert.equal(getSession().jobs?.analyse,undefined,`${body}: no analyse job was started`);
+ }
+ assert.equal(seen.length,asked,'no model call');
+});
+test('a piece sent to be kept while a reading is running is refused BUSY before it is kept: no piece on the shelf for a reading that never ran',async()=>{
+ const texts=require(path.join(root,'src/lib/session/texts.ts'));
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});texts.markNoticed('ema');
+ let open;const gate=new Promise((r)=>{open=r;});answer=async()=>{await gate;throw new Error('held');};
+ const first=analyse({kind:'essay',text:'Schools should start later. Teenagers sleep late.',type:'evidence'});
+ for(let i=0;i<50&&getSession().jobs?.analyse?.phase!=='running';i++)await new Promise((r)=>setImmediate(r));
+ assert.equal(getSession().jobs?.analyse?.phase,'running');
+ const had=texts.listPieces('ema').length;
+ for(let k=0;k<2;k++){
+  const r=await analyse({kind:'piece',text:'First paragraph is here and it is in English.\n\nSecond paragraph is also English text.',type:'evidence',keep:true});
+  assert.equal(r.status,409);deskWorded((await r.json()).error);
+ }
+ assert.equal(texts.listPieces('ema').length,had,'two refused sends kept no piece');
+ open();await first;
 });
 test('the phone page: no essay in the capture picker, no essay sample, the file picker takes .txt and .md, and it uses the pure rules',()=>{
  const src=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
@@ -729,10 +840,789 @@ test('seat case 6: a reading that finishes after the desk was handed to another 
  assert.equal(s.essay,null,'nothing of Ema\'s on Jakub\'s desk');
  assert.equal(s.essayType,null);
  assert.equal(s.screen,'landing','the TV stays on the landing');
- assert.equal(s.away.ema.essay.summary,'Ema\'s reading.');
+ assert.match(s.away.ema.essay.summary,/^1 of 3 sentences to fix\. Start with sentence 2: /);
  assert.equal(s.away.ema.essayType,'evidence');
  assert.equal(getLearner('ema').history.length,before+1,'her history holds the one reading');
  dispatch({type:'learner.set',id:'ema'});
- assert.equal(getSession().essay.summary,'Ema\'s reading.');
+ assert.match(getSession().essay.summary,/^1 of 3 sentences to fix\. Start with sentence 2: /);
  dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+});
+
+// ---- Essay plan slots (challenge essay-master-B): the Paragraph's three slots, filled in the learner's own words ----
+const PLAN=()=>require(path.join(root,'src/lib/rules/essay.ts'));
+const {PLAYBOOK:PB}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+const PARA=PB.find(p=>p.id==='para');
+const CLAIM='Schools should start later.',EVID='Research found that teenagers fall asleep two hours later.',LINK='A later start fits how they sleep.';
+const plan3=(...slots)=>({lens:'structure',slots:[...slots,...Array(3-slots.length).fill('')]});
+
+test('plan case 1: planSlots derives the slots and their roles from the pattern, never a hand list',()=>{
+ const {planSlots}=PLAN();
+ assert.deepEqual(planSlots(PARA),[{label:'Your claim',role:'claim'},{label:'the evidence',role:'evidence'},{label:'the link back',role:'link'}]);
+ const turned=planSlots({pattern:'This shows [the link back]. [Your claim]. For example, [the evidence].'});
+ assert.deepEqual(turned.map(x=>x.role),['link','claim','evidence'],'a reordered pattern gives the new order');
+ assert.deepEqual(turned.map(x=>x.label),['the link back','Your claim','the evidence']);
+ assert.deepEqual(planSlots({pattern:'no slots here.'}),[]);
+});
+
+test('plan case 2: planFill refuses a blank, two sentences, a leftover bracket and an over-long text, and leaves the plan unchanged',()=>{
+ const {planFill,ESSAY_PARAGRAPH_MAX_CHARS}=PLAN();
+ const p=plan3(CLAIM),before=JSON.stringify(p);
+ const long='A'+'a'.repeat(ESSAY_PARAGRAPH_MAX_CHARS)+'.';
+ for(const [text,re] of [['   ',/first/i],['It is early. It is dark.',/2 sentences/],['The [evidence] goes here.',/bracket/i],[long,/too long/i],['no capital and no stop',/capital|full stop/i]]){
+  const r=planFill(p,1,text);assert.equal(r.ok,false,text.slice(0,30));assert.match(r.error,re,text.slice(0,30));
+ }
+ assert.equal(planFill(p,7,CLAIM).ok,false,'no such slot');
+ assert.equal(JSON.stringify(p),before,'the plan passed in is never changed');
+ const ok=planFill(p,1,'  '+EVID.replace(' that ',' that   ')+' ');
+ assert.equal(ok.ok,true);assert.deepEqual(ok.plan.slots,[CLAIM,EVID,''],'stored as written, spaces normalised');
+ assert.equal(ok.plan.lens,'structure');
+});
+
+test('plan case 3: planFit comments on a role mismatch and never blocks the ink',()=>{
+ const {planSlots,planFill,planFit}=PLAN();
+ const slots=planSlots(PARA);
+ assert.equal(planFit(slots,0,EVID),'That reads as evidence. This slot wants your claim: the side you take.');
+ assert.equal(planFit(slots,1,EVID),null);
+ assert.equal(planFit(slots,0,CLAIM),null);
+ assert.equal(planFill(plan3(),0,EVID).ok,true,'the slot inks because it is written, whatever the comment says');
+ assert.equal(planFit(slots,9,EVID),null);
+});
+
+test('plan case 4: a phone-posted essay.slot fills the slot, moves focus to the first empty one, and a refusal changes nothing',()=>{
+ dispatch({type:'reset'});
+ dispatch({type:'essay.slot',i:0,text:CLAIM});
+ assert.equal(getSession().essayPlan,undefined,'no learner: nothing is written for no one');
+ dispatch({type:'learner.set',id:'ema'});
+ dispatch({type:'essay.slot',i:0,text:CLAIM});
+ assert.equal(getSession().essayPlan,undefined,'no plan open: nothing to fill');
+ dispatch({type:'essay.plan',lens:'evidence'});dispatch({type:'nav',screen:'essayplan',focus:0});
+ assert.deepEqual(getSession().essayPlan,{lens:'evidence',slots:['','','']});
+ dispatch({type:'essay.slot',i:1,text:EVID});
+ let s=getSession();
+ assert.deepEqual(s.essayPlan.slots,['',EVID,'']);assert.equal(s.focus,0,'focus on the first empty slot');
+ const kept=JSON.stringify(s.essayPlan);
+ dispatch({type:'essay.slot',i:2,text:'Two. Sentences.'});dispatch({type:'essay.slot',i:2,text:'[the link back]'});
+ assert.equal(JSON.stringify(getSession().essayPlan),kept,'a refused text leaves essayPlan untouched');
+ dispatch({type:'essay.slot',i:0,text:CLAIM});
+ assert.equal(getSession().focus,2);
+ dispatch({type:'essay.slot',i:2,text:LINK});
+ assert.equal(getSession().focus,3,'all written: focus on Read it');
+ const route=fs.readFileSync(path.join(root,'src/app/api/session/route.ts'),'utf8');
+ assert.doesNotMatch(route.split('SERVER_ONLY')[1].split('};')[0],/essay\.slot|essay\.plan/,'the phone may post a slot');
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+});
+
+test('plan case 6: planText is the learner\'s sentences only and splits back into exactly the slots',()=>{
+ const {planText,splitSentences}=PLAN();
+ const p=plan3(CLAIM,EVID,LINK),t=planText(p);
+ assert.equal(t,[CLAIM,EVID,LINK].join(' '));
+ assert.doesNotMatch(t,/For example,|This shows/);
+ assert.deepEqual(splitSentences(t).map(x=>x.text),p.slots);
+ assert.equal(planText(plan3(CLAIM,'',LINK)),CLAIM+' '+LINK,'an empty slot adds nothing');
+ const own=plan3(CLAIM,'For example, sleep studies agree.',LINK);
+ assert.match(planText(own),/^Schools should start later\. For example, sleep studies agree\./,'a frame word the learner wrote stays');
+});
+
+// ---- the reading core keeps paragraphs (adult plan D1; v2 decisions 2026-10-07 E1) ----
+{
+const R=require(path.join(root,'src/lib/rules/essay.ts'));
+const PIECE='# Sleep and school\n\nThe school day starts too early. Research found that teenagers fall asleep later.\n\nA later start would help.\nTherefore the start should move.\n\nIn conclusion, the bell should ring at nine.';
+test('D1: a one-paragraph text reads exactly as before: no para field, same numbers and texts',()=>{
+ const s=splitSentences(THREE);
+ assert(s.every(x=>!('para' in x)),'a single paragraph carries no para');
+ assert.deepEqual(s.map(x=>x.text),['The school day starts too early.','Research found that teenagers fall asleep later.','Therefore the start should move.']);
+ assert.deepEqual(splitSentences('One line.\nSame paragraph, next line.').map(x=>x.para),[undefined,undefined],'a single line break is not a new paragraph');
+ assert.equal(R.numberedLines(s).includes('Paragraph'),false,'the prompt for one paragraph is unchanged');
+});
+test('D1: a piece keeps its paragraphs; numbering runs on; no sentence crosses a break',()=>{
+ const s=splitSentences(PIECE);
+ assert.deepEqual(s.map(x=>x.n),[1,2,3,4,5,6]);
+ assert.deepEqual(s.map(x=>x.para),[0,1,1,2,2,3]);
+ assert.equal(s[0].text,'# Sleep and school','a heading is its own paragraph, never fused to the first sentence');
+ assert.equal(R.paragraphCount(s),4);
+ assert.equal(R.joinSentences(s),'# Sleep and school\n\nThe school day starts too early. Research found that teenagers fall asleep later.\n\nA later start would help. Therefore the start should move.\n\nIn conclusion, the bell should ring at nine.');
+ const lines=R.numberedLines(s);
+ assert.match(lines,/^Paragraph 1:\n1\. # Sleep/);assert.match(lines,/\n\nParagraph 2:\n2\. The school day/);assert.match(lines,/\nParagraph 4:\n6\. In conclusion/);
+ // before D1, a paragraph that ended with no full stop ran into the next one
+ assert.deepEqual(splitSentences('No full stop here\n\nNext paragraph starts.').map(x=>x.text),['No full stop here','Next paragraph starts.']);
+});
+test('D1: three paragraphs keep their breaks through a rewrite; a rewrite still must stay one sentence',()=>{
+ const reading={text:PIECE,type:'structure',sentences:splitSentences(PIECE),stats:{},verdicts:[],summary:''};
+ const r=R.revise(reading,4,'A start at nine would let them sleep.');
+ assert(r.ok,r.error);
+ assert.deepEqual(r.reading.sentences.map(x=>x.para),[0,1,1,2,2,3],'the rewritten sentence keeps its paragraph');
+ assert.equal(r.reading.text.split('\n\n').length,4,'the breaks survive the rebuild');
+ assert.equal(r.reading.sentences[3].text,'A start at nine would let them sleep.');
+ const twice=R.revise(r.reading,6,'The bell should ring at nine instead.');
+ assert(twice.ok);assert.equal(twice.reading.text.split('\n\n').length,4,'and a second rewrite');
+ assert.equal(R.revise(reading,2,'two. Sentences here.').ok,false);
+ assert.equal(R.revise(reading,5,'and so the start should move.').ok,false,'inside a paragraph a lowercase start would fuse with the sentence before it, as before D1');
+});
+test('D1: a piece is read with paragraphs named in the prompt; verdicts still anchor by number',async()=>{
+ seen=[];answer=reply({verdicts:[{n:6,verdict:'faulty',note:'Restates.'},{n:9,verdict:'faulty',note:'none'}],summary:'ok'});
+ const a=await analyseEssay(PIECE,'structure','ema',15);
+ assert.match(seen.at(-1).prompt,/piece, 4 paragraphs/);assert.match(seen.at(-1).prompt,/Paragraph 3:/);
+ assert.deepEqual(a.verdicts.map(v=>v.n),[6],'a number past the end is dropped, as before');
+ assert.deepEqual(a.sentences.map(x=>x.para),[0,1,1,2,2,3]);
+});
+}
+
+// ---- the model observes, code rules (challenge essay-master-A): every verdict is decided in rules/essay ----
+// These send observations directly. Where a legacy `verdict` rides beside one it is there to show it is ignored.
+const obsReply=(observations)=>reply({observations,summary:'s'});
+// the deciding field that reads as neutral on each lens: a whole answer for a fixture that only needs the request
+const FULL_FIELD={structure:{job:'none'},argument:{side:'neutral'},evidence:{support:'context'},language:{issues:[]}};
+const verdictsOf=(a)=>a.verdicts.map(v=>[v.n,v.verdict]);
+
+test('essay-master-A case 1: Structure - only the FIRST unsupported claim is faulty; a claim with a marked evidence sentence after it is strong; the legacy verdict is ignored',async()=>{
+ answer=obsReply([1,2,3].map(n=>({n,job:'claim',verdict:'strong'})));
+ const a=await analyseEssay('Homework is pointless. Teachers give too much. It ruins evenings.','structure','oa-1');
+ assert.deepEqual(verdictsOf(a),[[1,'faulty'],[2,'neutral'],[3,'neutral']],'one unsupported claim is named, the rest are not piled on');
+ answer=obsReply([{n:1,job:'claim',verdict:'faulty'},{n:2,job:'evidence',supports:1,verdict:'faulty'},{n:3,job:'claim',verdict:'faulty'}]);
+ // E1: the evidence now names claim 1 (supports:1); without the link claim 1 would be neutral, never strong by position
+ const b=await analyseEssay('Homework is pointless. Research found that pupils lose sleep. It ruins evenings.','structure','oa-1');
+ assert.deepEqual(verdictsOf(b),[[1,'strong'],[2,'strong'],[3,'faulty']],'claim 1 has marked evidence after it; claim 3 is the first without');
+ answer=obsReply([{n:1,job:'claim'},{n:2,job:'evidence'}]);
+ const c=await analyseEssay('Homework is pointless. Teachers give too much.','structure','oa-1');
+ assert.deepEqual(verdictsOf(c),[[1,'faulty'],[2,'neutral']],'evidence with no EVIDENCE marker does not support a claim');
+ assert.equal(a.verdicts[0].note,'This claim has no evidence after it that a reader can check.','no note from the model: the failed check\'s own line');
+});
+test('essay-master-A case 2: Argument - a turn the model claims is refused unless the sentence holds a contrast connector',async()=>{
+ answer=obsReply([{n:1,side:'against',turnsBack:true,note:'x'}]);
+ const a=await analyseEssay('Some people say early starts build discipline.','argument','oa-2');
+ assert.deepEqual(verdictsOf(a),[[1,'faulty']],'no contrast connector, so no turn');
+ const b=await analyseEssay('Some say early starts build discipline, but tired pupils learn less.','argument','oa-2');
+ assert.deepEqual(verdictsOf(b),[[1,'strong']]);
+ answer=obsReply([{n:1,side:'against',turnsBack:false,note:'x'}]);
+ assert.deepEqual(verdictsOf(await analyseEssay('Some say early starts build discipline, but tired pupils learn less.','argument','oa-2')),[[1,'faulty']],'a connector alone is not a turn the model saw');
+});
+test('essay-master-A case 3: Language - a vague word must be in the sentence; length is counted by code',async()=>{
+ const {LONG_SENTENCE_WORDS}=rules();
+ answer=obsReply([{n:1,issues:[{kind:'vague',word:'important'}],note:'vague'}]);
+ const a=await analyseEssay('Sleep matters.','language','oa-3');
+ assert.deepEqual(verdictsOf(a),[[1,'neutral']],'the word is not in the sentence: the issue is dropped');
+ const long=`The ${Array(LONG_SENTENCE_WORDS-1).fill('long').join(' ')} end.`;
+ assert.equal(splitSentences(long)[0].words,LONG_SENTENCE_WORDS+1,'a 36-word sentence');
+ answer=obsReply([{n:1,issues:[],note:'long'}]);
+ const b=await analyseEssay(long,'language','oa-3');
+ assert.deepEqual(verdictsOf(b),[[1,'faulty']],'no observed issue, faulty by length alone');
+ assert.match(b.verdicts[0].note,/36 words/);
+ const edge=`The ${Array(LONG_SENTENCE_WORDS-2).fill('long').join(' ')} end.`;
+ assert.equal((await analyseEssay(edge,'language','oa-3')).verdicts.filter(v=>v.verdict==='faulty').length,0,'exactly at the limit is fine');
+ answer=obsReply([{n:1,issues:[{kind:'vague',word:'important'}],note:''}]);
+ const c=await analyseEssay('Sleep is important.','language','oa-3');
+ assert.deepEqual(verdictsOf(c),[[1,'faulty']]);
+ assert.match(c.verdicts[0].note,/important/,'an empty note becomes the failed check\'s line');
+});
+test('essay-master-A case 4: Evidence - checkable is strong only with an EVIDENCE marker or a number; an opinion with nothing checkable after it is faulty',async()=>{
+ answer=obsReply([{n:1,support:'checkable',note:'x'}]);
+ assert.deepEqual(verdictsOf(await analyseEssay('Teenagers are just lazy.','evidence','oa-4')),[[1,'neutral']],'never strong without a marker');
+ answer=obsReply([{n:1,support:'checkable',note:'x'}]);
+ assert.deepEqual(verdictsOf(await analyseEssay('Research found that teenagers fall asleep later.','evidence','oa-4')),[[1,'strong']]);
+ answer=obsReply([{n:1,support:'opinion',note:'x'}]);
+ assert.deepEqual(verdictsOf(await analyseEssay('Teenagers are just lazy.','evidence','oa-4')),[[1,'faulty']]);
+ answer=obsReply([{n:1,support:'opinion',note:'x'},{n:2,support:'checkable',note:'y'}]);
+ assert.deepEqual(verdictsOf(await analyseEssay('Teenagers are just lazy. A 2019 study measured their sleep.','evidence','oa-4')),[[1,'neutral'],[2,'strong']],'an opinion with checkable support after it is not left bare');
+});
+test('essay-master-A case 5: a rewrite is decided by the same rule - the move stays hatched until the check passes',async()=>{
+ const {reviseSentence}=deskEssay();
+ const text='Homework is pointless. Some people say early starts build discipline. Pupils need their evenings.';
+ const s=splitSentences(text);
+ const reading={text,type:'argument',sentences:s,stats:paragraphStats(s),verdicts:[{n:2,verdict:'faulty',note:'No turn.'}],summary:'s',provider:'test'};
+ answer=obsReply([{n:2,verdict:'strong',side:'against',turnsBack:false,note:'x'}]);
+ const still=await reviseSentence(reading,2,'Some say early starts build discipline.');
+ assert.equal(still.verdicts.find(v=>v.n===2).verdict,'faulty','the stub said strong; the observation decides');
+ assert.equal(rules().rewriteState(still.verdicts.find(v=>v.n===2)),'still');
+ answer=obsReply([{n:2,verdict:'faulty',side:'against',turnsBack:true,note:'ok'}]);
+ const holds=await reviseSentence(reading,2,'Although some say early starts build discipline, pupils need their evenings.');
+ assert.equal(holds.verdicts.find(v=>v.n===2).verdict,'strong');
+ assert.equal(rules().rewriteState(holds.verdicts.find(v=>v.n===2)),'holds');
+ // a missing or unreadable observation for sentence n still fails the run: it never becomes a neutral 'holds'
+ for(const observations of [[],[{n:1,side:'pushes'}],[{n:2,note:'x'}],[{n:2,side:'great'}],'nope',undefined]){
+  answer=obsReply(observations);
+  await assert.rejects(reviseSentence(reading,2,'Some say early starts build discipline.'),/no observation/,JSON.stringify(observations));
+ }
+});
+test('essay-master-A case 6: the learner record counts code\'s verdicts, not the legacy ones',async()=>{
+ answer=obsReply([{n:1,side:'wanders',verdict:'strong'},{n:2,side:'wanders',verdict:'strong'},{n:3,side:'pushes',verdict:'strong'}]);
+ const a=await analyseEssay(THREE,'argument','oa-6');
+ assert.deepEqual(verdictsOf(a),[[1,'faulty'],[2,'faulty'],[3,'strong']]);
+ const l=getLearner('oa-6');
+ assert.equal(l.history.at(-1).detail,'2 of 3 sentences to fix');
+ assert.equal(l.writing.argument.right,0,'two of three faulty is not under a quarter');
+ assert.deepEqual({...l.digest.at(-1),at:0},{at:0,kind:'essay',lens:'argument',sentences:3,faulty:2,paragraphs:1});
+});
+test('essay-master-A case 7: the prompt no longer asks for a verdict; the withholding rules are still in it verbatim',async()=>{
+ const {NEVER_REWRITE,PATTERN_RULE}=deskEssay();
+ for(const lens of ['structure','argument','evidence','language']){
+  seen=[];answer=obsReply([1,2,3].map(n=>({n,note:'x',...FULL_FIELD[lens]})));
+  await analyseEssay(THREE,lens,'oa-7');
+  const {system,schema}=seen[0];
+  assert.doesNotMatch(system,/'faulty' for a real problem/);
+  assert.doesNotMatch(system,/one verdict per sentence/i);
+  assert.ok(system.includes(NEVER_REWRITE)&&system.includes(PATTERN_RULE),`${lens}: NEVER_REWRITE and PATTERN_RULE verbatim`);
+  assert.equal(schema.properties.verdicts,undefined,'the schema has no verdicts list');
+  const item=schema.properties.observations.items;
+  assert.equal('verdict' in item.properties,false,`${lens}: no verdict property on a sentence`);
+  assert.equal(JSON.stringify(schema).includes('"verdict"'),false);
+ }
+ seen=[];answer=obsReply([{n:2,support:'checkable'}]);
+ const {reviseSentence}=deskEssay();
+ await reviseSentence(R3(),2,STUDY);
+ assert.doesNotMatch(seen[0].system,/'strong' if it now does its job/);
+ assert.equal('verdict' in seen[0].schema.properties.observations.items.properties,false);
+});
+test('essay-master-A case 8 (GUARD): observations that cannot be read are neutral, never throw, and a fix rides only on a code-faulty sentence',async()=>{
+ const junk=[
+  [{n:9,job:'claim'},{n:0,job:'claim'},{n:-1,job:'claim'},{n:'1',job:'claim'},{job:'claim'},null,'x',7],
+  'not an array',undefined,null,{n:1},
+ ];
+ for(const observations of junk){
+  answer=obsReply(observations);
+  // E7: observations the desk cannot read leave every sentence unanswered: the reading fails and counts nothing
+  await assert.rejects(analyseEssay(THREE,'structure','oa-8'),{message:NOT_EVERY_SENTENCE},JSON.stringify(observations));
+ }
+ for(const [lens,bad] of [['structure',{job:'boss'}],['argument',{side:'sideways'}],['evidence',{support:'vibes'}],['language',{issues:'many'}]]){
+  // E7: an unknown value is an unreadable sentence, and a reading with one fails whole; the same value on a rewrite already did
+  answer=obsReply([1,2,3].map(n=>({n,...(n===1?bad:FULL_FIELD[lens]),note:'x',fix:CONCEDE})));
+  await assert.rejects(analyseEssay(THREE,lens,'oa-8'),{message:NOT_EVERY_SENTENCE},`${lens}: an unknown value leaves its sentence unanswered`);
+ }
+ // a fix on a sentence code rules neutral or strong is dropped; on a faulty one it stays
+ answer=obsReply([{n:1,side:'pushes',fix:CONCEDE,note:'a'},{n:2,side:'wanders',fix:CONCEDE,note:'b'},{n:3,side:'neutral',fix:CONCEDE,note:'c'}]);
+ const b=await analyseEssay(THREE,'argument','oa-8');
+ assert.deepEqual(b.verdicts.map(v=>[v.n,v.verdict,'fix' in v]),[[1,'strong',false],[2,'faulty',true],[3,'neutral',false]]);
+});
+test('a note never carries a verdict label: the verdict is code\'s',async()=>{
+ const one=async(lens,o)=>{answer=obsReply([{n:1,...o}]);const a=await analyseEssay('Sleep matters a lot.',lens,'oa-label');return [a.verdicts[0].verdict,a.verdicts[0].note];};
+ assert.deepEqual(await one('evidence',{support:'context',note:'Strong: a named place, year, start times and 34 minutes make this easy to check.'}),['neutral','A named place, year, start times and 34 minutes make this easy to check.']);
+ for(const [said,kept] of [['faulty - it says x','It says x'],['NEUTRAL — y','Y'],['Weak: z','Z'],['ok: w','W']])
+  assert.deepEqual(await one('argument',{side:'pushes',note:said}),['strong',kept],said);
+ assert.deepEqual(await one('argument',{side:'wanders',note:'Strong:'}),['faulty','This sentence wanders from the side the paragraph takes.']);
+ assert.deepEqual(await one('argument',{side:'pushes',note:'Strong:'}),['strong','']);
+ for(const note of ['Strongly worded, but no source.','Good use of a number.','Strong evidence: the study names its year.','This is a strong claim.','Fine-grained detail would help.'])
+  assert.equal((await one('argument',{side:'pushes',note}))[1],note,note);
+ const {reviseSentence}=deskEssay();
+ answer=obsReply([{n:2,support:'checkable',note:'Strong: names the study.'}]);
+ const r=await reviseSentence(R3(),2,STUDY);
+ assert.equal(r.verdicts.find(v=>v.n===2).note,'Names the study.');
+});
+
+// ---- E1 (council rulings 2026-10-09 section 6): under Structure an evidence observation names the claim it backs ----
+const RE=require(path.join(root,'src/lib/rules/essay.ts'));
+const UNI='School uniforms are good. In 2019 a study found 70% of pupils saved time. Uniforms also look smart.';
+const uniOf=(obs,text=UNI)=>{const ss=RE.splitSentences(text);return RE.decideVerdicts('structure',ss,new Set(ss.map(s=>s.n)),obs);};
+const uniPairs=(obs,text)=>uniOf(obs,text).map(v=>[v.n,v.verdict]);
+const claimEvClaim=(supports)=>[{n:1,job:'claim'},{n:2,job:'evidence',...(supports===undefined?{}:{supports})},{n:3,job:'claim'}];
+test('E1-a: the evidence names the claim it backs; the planted claim before it is the faulty one',()=>{
+ assert.deepEqual(uniPairs(claimEvClaim(3)),[[1,'faulty'],[2,'strong'],[3,'strong']],'supports 3: claim 3 strong, claim 1 faulty');
+ assert.deepEqual(uniPairs(claimEvClaim(1)),[[1,'strong'],[2,'strong'],[3,'faulty']],'supports 1: claim 1 strong, claim 3 faulty');
+ assert.equal(uniOf(claimEvClaim(3)).find(v=>v.n===1).note,'This claim has no evidence after it that a reader can check.','the faulty line is today\'s check line');
+});
+test('E1-a: with no link the claim before the evidence is neutral, never strong by position',()=>{
+ assert.deepEqual(uniPairs(claimEvClaim()),[[1,'neutral'],[2,'strong'],[3,'faulty']]);
+});
+test('E1-a: a supports that names the evidence itself, a context sentence or a number outside the reading is no link',()=>{
+ const same=uniPairs(claimEvClaim());
+ for(const bad of [2,99,0,-1,1.5,'1','3',null,true]) assert.deepEqual(uniPairs(claimEvClaim(bad)),same,`supports ${JSON.stringify(bad)} is no link`);
+ const ctx=[{n:1,job:'claim'},{n:2,job:'evidence',supports:3},{n:3,job:'context'}];
+ assert.deepEqual(uniPairs(ctx),[[1,'neutral'],[2,'strong'],[3,'neutral']],'sentence 3 is context, not a claim: no link');
+ for(const v of uniOf(claimEvClaim(2))) assert.equal('supports' in v,false,'no kept link on a refused one');
+});
+test('E1-a: three bare claims are as before (repro2 J): 1 faulty, 2 and 3 neutral',()=>{
+ assert.deepEqual(uniPairs([1,2,3].map(n=>({n,job:'claim'}))),[[1,'faulty'],[2,'neutral'],[3,'neutral']]);
+});
+test('E1-a: a claim named by a strong claim is strong, one level only; one named by a claim that is not strong is not',()=>{
+ const T='Schools should change. Homework is pointless. In 2019 a study found 70% of pupils lose sleep.';
+ assert.deepEqual(uniPairs([{n:1,job:'claim'},{n:2,job:'claim',supports:1},{n:3,job:'evidence',supports:2}],T),[[1,'strong'],[2,'strong'],[3,'strong']]);
+ assert.deepEqual(uniPairs([{n:1,job:'claim'},{n:2,job:'claim',supports:1},{n:3,job:'evidence'}],T),[[1,'faulty'],[2,'neutral'],[3,'strong']],'claim 2 is not strong, so claim 1 is not strong through it');
+ const L='Schools should change. Homework is pointless. Tests are unfair. In 2019 a study found 70% of pupils lose sleep.';
+ assert.deepEqual(uniPairs([{n:1,job:'claim'},{n:2,job:'claim',supports:1},{n:3,job:'claim',supports:2},{n:4,job:'evidence',supports:3}],L),
+  [[1,'faulty'],[2,'strong'],[3,'strong'],[4,'strong']],'no chains: 2 is named by strong claim 3, but 1 is named only by 2, which is strong one level down');
+});
+test('E1-b: a verdict keeps the link its observation carried, only an accepted one',()=>{
+ const v=uniOf(claimEvClaim(3));
+ assert.equal(v.find(x=>x.n===2).supports,3);
+ assert.equal(v.find(x=>x.n===1).supports,undefined);
+ assert.equal('supports' in uniOf([{n:1,job:'claim'},{n:2,job:'claim',supports:1},{n:3,job:'context'}]).find(x=>x.n===1),false);
+ assert.equal(uniOf([{n:1,job:'claim'},{n:2,job:'claim',supports:1},{n:3,job:'context'}]).find(x=>x.n===2).supports,1,'a claim backing an earlier claim keeps its link');
+});
+test('E1-b: a Structure rewrite of a claim is ruled against the kept links of the first reading',()=>{
+ const ss=RE.splitSentences(UNI), first=uniOf(claimEvClaim(1));
+ const ctx=RE.contextObservations('structure',ss,1,first);
+ assert.deepEqual(ctx.find(o=>o.n===2),{n:2,job:'evidence',supports:1},'the kept link rides with its job');
+ const ruled=(c)=>RE.decideVerdicts('structure',ss,new Set([1]),[{n:1,job:'claim'},...c]).find(v=>v.n===1).verdict;
+ assert.equal(ruled(ctx),'strong','the evidence named claim 1 in the first reading, so the rewrite stays strong');
+ assert.equal(ruled(RE.contextObservations('structure',ss,1)),'neutral','without a kept link the context evidence backs nothing code can see');
+ assert.equal(ruled(RE.contextObservations('structure',ss,1,uniOf(claimEvClaim(3)))),'faulty','a link kept to another claim does not back this one: the evidence is known to back claim 3');
+ assert.deepEqual(RE.contextObservations('evidence',ss,1),[{n:2,support:'checkable'}],'other lenses are unchanged');
+});
+test('E1-b: reviseSentence rules a Structure rewrite against the links the first reading kept (wired through the reading\'s verdicts)',async()=>{
+ const {reviseSentence}=deskEssay(),ss=splitSentences(UNI);
+ const reading=(verdicts)=>({text:UNI,type:'structure',sentences:ss,stats:paragraphStats(ss),verdicts,summary:'s',provider:'test'});
+ const kept=uniOf(claimEvClaim(1));
+ answer=obsReply([{n:1,job:'claim',note:'Clearer.'}]);
+ const a=await reviseSentence(reading(kept),1,'School uniforms are a good idea.');
+ assert.equal(a.verdicts.find(v=>v.n===1).verdict,'strong','the evidence named claim 1 in the first reading');
+ assert.equal(a.verdicts.find(v=>v.n===2).supports,1,'the other verdicts, and their links, are kept');
+ const b=await reviseSentence(reading(kept.map(({supports,...v})=>v)),1,'School uniforms are a good idea.');
+ assert.equal(b.verdicts.find(v=>v.n===1).verdict,'neutral','with no kept link the evidence backs nothing code can see');
+ const schema=seen.at(-1).schema.properties.observations.items.properties;
+ assert.deepEqual(schema.supports,{type:'integer'},'the Structure observation can carry supports');
+ assert.match(seen.at(-1).system,/add supports: the number of the claim it backs/);
+});
+
+// ---- EM-B21 (council rulings 2026-10-09 section 6, E3): a sentence may open with any capital, not only A-Z ----
+test('EM-B21: splitSentences splits before a capital outside A-Z and before an opening low quote; English text is unchanged',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ assert.equal(R.splitSentences('Školy začínají brzy. Žáci jsou unavení. Émile Zola disagreed. So we wait.').length,4,'2 on the base');
+ assert.equal(R.splitSentences('Many critics praise the novel. Émile Zola disagreed with them.').length,2);
+ assert.equal(R.splitSentences('Řekl to dnes. „Ne,“ odpověděla.').length,2,'a low opening quote begins a sentence');
+ assert.equal(R.splitSentences('It rained. then we left. Émile agreed.').length,2,'a lower-case opener still does not split');
+ assert.equal(R.splitSentences('Dr. Šimek agreed.').length,1,'the abbreviation join is unchanged');
+});
+test('EM-B21: planFill accepts an opening capital outside A-Z and still refuses a lower-case opening',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const plan={lens:'structure',slots:['','','']};
+ for(const t of ['Školy by neměly telefony úplně zakazovat.','Žáci se tak učí sebekázni.','Česká školní inspekce v roce 2023 uvedla, že 45 % škol zakazuje telefony.','„Ne,“ řekla učitelka.'])assert.equal(R.planFill(plan,0,t).ok,true,t);
+ const low=R.planFill(plan,0,'školy by neměly telefony zakazovat.');assert.equal(low.ok,false);assert.match(low.error,/Start it with a capital/);
+});
+
+// ---- E3-a (council rulings 2026-10-09 section 6): one pure rule says, with no model, whether a paragraph reads as English ----
+const CZ_R4='Telefony by ve škole měly zůstat povolené. Někteří učitelé tvrdí, že rozptylují, avšak bez nich se žáci nenaučí sebekázni. Proto je lepší je regulovat.';
+const CZ_R7='Telefony by ve škole měly zůstat povolené. Podle výzkumu Univerzity Karlovy se žáci s jasnými pravidly soustředí lépe. To ukazuje, že zákaz není nutný.';
+const CZ_R4_PLAIN='Telefony by ve skole mely zustat povolene. Nekteri ucitele tvrdi, ze rozptyluji, avsak bez nich se zaci nenauci sebekazni. Proto je lepsi je regulovat.';
+test('E3-a: the rule says not English for the Czech paragraphs of the L1 run (R4, R7, R4 without diacritics)',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ for(const [k,t] of [['R4',CZ_R4],['R7',CZ_R7],['R4 without diacritics',CZ_R4_PLAIN]])assert.equal(R.paragraphIsEnglish(t),false,k);
+ assert.equal(R.NOT_ENGLISH_LINE,'Essay Master reads English writing. This paragraph is not in English, so the desk did not read it.');
+});
+test('E3-a: the rule says English for accented names inside English, for a short paragraph, and for empty or odd input',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ for(const t of ['Many critics praise the novel. Émile Zola disagreed with them.','Slavoj Žižek would call that ideology. Most of my classmates would not agree.','Hello there',''])assert.equal(R.paragraphIsEnglish(t),true,JSON.stringify(t));
+ for(const t of [undefined,null,42,{}])assert.equal(R.paragraphIsEnglish(t),true,String(t));
+});
+test('E3-a: every English paragraph the two essay suites use reads as English; floors set on this corpus',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const corpus=[THREE,SIX,FIVE,STUDY,CLAIM,EVID,LINK,UNI,'The school day starts too early. Research found that teenagers fall asleep later.','A later start would help. Therefore the start should move.','In conclusion, the bell should ring at nine.',
+  'Schools start too early. Teenagers are tired.','Research found that teens sleep later. This is bad.','Therefore school should start at nine.',
+  'Phones should be banned in class. They distract everyone.','A 2020 study found 40% of lessons were interrupted. This shows phones cost time.','In conclusion, phones should be banned. Teachers agree.',
+  'Homework is pointless. Pupils are busy.','One good sentence. And another one.','Many critics praise the novel. Émile Zola disagreed with them.','Slavoj Žižek would call that ideology. Most of my classmates would not agree.'];
+ let low=1,high=0;
+ for(const t of corpus){const r=R.englishReading(t);if(r.words>=R.ENGLISH_MIN_WORDS){low=Math.min(low,r.english);}high=Math.max(high,r.czech);assert.equal(R.paragraphIsEnglish(t),true,t.slice(0,40));}
+ console.log(`# E3-a corpus: ${corpus.length} English paragraphs, lowest English share ${low.toFixed(2)}, highest Czech signal ${high.toFixed(2)}; floors english<${R.ENGLISH_FLOOR}, czech>=${R.CZECH_FLOOR}, words>=${R.ENGLISH_MIN_WORDS}`);
+ const cz=[CZ_R4,CZ_R7,CZ_R4_PLAIN].map(R.englishReading);
+ assert(Math.max(...cz.map(r=>r.english))<R.ENGLISH_FLOOR,'every Czech text is under the English floor; the lowest English text (below the floor too) is kept English by the Czech signal, the two floors act together');
+ assert(Math.min(...cz.map(r=>r.czech))>=R.CZECH_FLOOR&&high<R.CZECH_FLOOR,'the Czech floor sits between the English corpus and the Czech texts');
+});
+
+// ---- E4, E4-a (council rulings 2026-10-09 section 6): a paragraph the desk did not rule is said and drawn as such ----
+test('E4-a: paragraphState gives one state per paragraph: pending while the piece is read, then read, not-read (failed) or not-english',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const P=(read,failed=[],notEnglish)=>({paragraphs:4,read,failed,...(notEnglish?{notEnglish}:{})});
+ for(const para of [0,1,2,3])assert.equal(R.paragraphState(P([0]),para),'pending','being read: every paragraph is pending, the one back included');
+ assert.equal(R.paragraphState(P([0],[1],[2]),3),'pending','one paragraph still out');
+ const done=P([0,3],[1],[2]);
+ assert.deepEqual([0,1,2,3].map(k=>R.paragraphState(done,k)),['read','not-read','not-english','read']);
+ assert.equal(R.paragraphState(undefined,0),'read','a one-paragraph reading has no piece and is drawn as read');
+ assert.equal(R.paragraphPending(done,1),false,'a failed paragraph is never pending once the piece is done (E4)');
+ assert.equal(R.paragraphPending(P([0]),0),true);
+});
+test('E4-a: the forensic caption is a rule: a sentence of a paragraph that was not ruled gets "Not read" and the paragraph\'s line, never Neutral',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const done={paragraphs:3,read:[0],failed:[1],notEnglish:[2]};
+ assert.deepEqual(R.unruledCaption(done,1),{label:'Not read',text:'Paragraph 2 did not come back. Send it again from the phone.'});
+ assert.deepEqual(R.unruledCaption(done,2),{label:'Not read',text:'Paragraph 3 is not in English, so the desk did not read it.'});
+ assert.equal(R.unruledCaption(done,0),null);
+ assert.equal(R.unruledCaption({paragraphs:3,read:[0],failed:[]},1),null,'while the piece is read nothing is "not read" yet');
+ assert.equal(R.unruledCaption(undefined,0),null);
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ assert.match(tv,/unruledCaption\(/,'the page asks the rule');
+ assert.equal((tv.match(/data-state=\{/g)||[]).length,2,'the map and the rail carry a data attribute naming the state');
+ assert.equal((tv.match(/paragraphState\(/g)||[]).length,2);
+});
+test('E4-a: ruledSentences leaves out the sentences of failed and not-English paragraphs; unruledLines names them in paragraph order',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const ss=R.splitSentences('One here. Two here.\n\nThree here.\n\nFour here. Five here.');
+ const piece={paragraphs:3,read:[0],failed:[2],notEnglish:[1]};
+ assert.deepEqual(R.ruledSentences(ss,piece).map(s=>s.n),[1,2]);
+ assert.deepEqual(R.unruledLines(piece),['Paragraph 2 is not in English, so the desk did not read it.','Paragraph 3 did not come back. Send it again from the phone.']);
+ assert.deepEqual(R.ruledSentences(ss,undefined).map(s=>s.n),[1,2,3,4,5]);
+});
+
+// ---- E2-b (council rulings 2026-10-09 section 6): one rule says whether a piece is still being read ----
+test('E2-b: pieceBeingRead is true while read, failed and not-English paragraphs number fewer than the paragraphs; the reading line counts the paragraphs back plus one, at most N',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const P=(read,failed=[],notEnglish)=>({paragraphs:4,read,failed,...(notEnglish?{notEnglish}:{})});
+ assert.equal(R.pieceBeingRead(undefined),false,'no piece, nothing is being read');
+ assert.equal(R.pieceBeingRead(P([])),true);
+ assert.equal(R.pieceBeingRead(P([0],[1])),true);
+ assert.equal(R.pieceBeingRead(P([0],[1],[2])),true,'three of four are back');
+ assert.equal(R.pieceBeingRead(P([0,3],[1],[2])),false,'read + failed + not English make four');
+ assert.equal(R.pieceBeingRead(P([0,1,2,3])),false);
+ assert.equal(R.pieceReadingLine(P([])),'Reading paragraph 1 of 4.');
+ assert.equal(R.pieceReadingLine(P([0],[1],[2])),'Reading paragraph 4 of 4.');
+ assert.equal(R.pieceReadingLine({paragraphs:2,read:[0,1],failed:[]}),'Reading paragraph 2 of 2.','at most N');
+ assert.equal(R.REWRITE_WHILE_READING,'The desk is still reading your piece. Rewrite a sentence once every paragraph is read.');
+ for(const [file,n] of [['app/api/analyse/route.ts',1],['app/phone/page.tsx',1],['essay/EssayTV.tsx',1]]){
+  const src=fs.readFileSync(path.join(root,'src',file),'utf8');
+  assert((src.match(/pieceBeingRead\(/g)||[]).length>=n,file+' asks the rule');
+ }
+});
+
+test('E4-b: rewriteUnruledLine gives the paragraph\'s not-read or not-English line for a sentence of an unruled paragraph, and null otherwise',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const piece={paragraphs:3,read:[0],failed:[1],notEnglish:[2]};
+ const reading={piece,sentences:[{n:1,para:0},{n:2,para:1},{n:3,para:2}]};
+ assert.equal(R.rewriteUnruledLine(reading,2),'Paragraph 2 did not come back. Send it again from the phone.');
+ assert.equal(R.rewriteUnruledLine(reading,3),'Paragraph 3 is not in English, so the desk did not read it.');
+ assert.equal(R.rewriteUnruledLine(reading,1),null,'a read paragraph');
+ assert.equal(R.rewriteUnruledLine({sentences:reading.sentences},2),null,'a reading with no piece');
+ assert.equal(R.rewriteUnruledLine(reading,9),null,'an n the reading does not have');
+ assert.equal(R.rewriteUnruledLine(null,1),null);
+});
+
+test('E4-c: the rail draws a paragraph that was not ruled from the stylesheet (data-state not-read and not-english, opacity .4), not from an inline opacity',()=>{
+ const css=fs.readFileSync(path.join(root,'src/design/essay-specimen.css'),'utf8');
+ assert.match(css,/\.em-r\[data-state="not-read"\][^{]*\{[^}]*opacity:\s*\.4\b/);
+ assert.match(css,/\.em-r\[data-state="not-english"\][^{]*\{[^}]*opacity:\s*\.4\b/);
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ assert.doesNotMatch(tv,/opacity:\s*0?\.4/,'no inline opacity on the rail row');
+ assert.equal((tv.match(/data-state=\{/g)||[]).length,2,'the data-state count stays 2');
+});
+
+// ---- E3-c: the stage says a refusal line the desk gave before any run, labelled 'Not read'
+const ER=require(path.join(root,'src/lib/rules/essay.ts'));
+const KEYS=require(path.join(root,'src/tv/keys.ts'));
+const LINE_ENGLISH='Essay Master reads English writing. This paragraph is not in English, so the desk did not read it.';
+const LINE_LONG='That paragraph is too long to read in one go. Split it in two and send one part at a time (up to 4000 characters).';
+const LINE_EMPTY='There is nothing to read. Write or send a piece first.';
+const LINE_PIECE_BIG='That piece is too long to read in one go. Keep it under 100 KB.';
+const LINE_PARAS='That is 31 paragraphs. The desk reads up to 30 at a time: send it in parts.';
+const LINE_PARA_LONG='Paragraph 2 is too long to read in one go. Split it in two (up to 4000 characters each).';
+const bigPara='a'.repeat(4001);
+const refusals=()=>[
+ ['not english',ER.NOT_ENGLISH_LINE],
+ ['too long',ER.essayTooLong(bigPara)],
+ ['empty piece',ER.pieceProblem('')],
+ ['piece too big',ER.pieceProblem('a '.repeat(ER.PIECE_MAX_CHARS))],
+ ['too many paragraphs',ER.pieceProblem(Array.from({length:ER.PIECE_PARAGRAPHS_MAX+1},(_,i)=>`Paragraph ${i}.`).join('\n\n'))],
+ ['a paragraph over the cap',ER.pieceProblem('Short one.\n\n'+bigPara)],
+];
+test('E3-c guard: the refusal lines are byte for byte what they were at 3b97c46d',()=>{
+ const got=refusals().map(r=>r[1]);
+ assert.deepEqual(got,[LINE_ENGLISH,LINE_LONG,LINE_EMPTY,LINE_PIECE_BIG,LINE_PARAS,LINE_PARA_LONG]);
+});
+test('E3-c: refusalCaption captions a refusal dispatched as one, and reads no wording',()=>{
+ for(const [n,l] of refusals()){
+  assert.deepEqual(ER.refusalCaption({status:l,essayRefused:l}),{label:'Not read',text:l},n);
+  assert.equal(ER.refusalCaption({status:l}),null,n+': the same words, not dispatched as a refusal, are not one');
+  assert.equal(ER.refusalCaption({status:'something later',essayRefused:l}),null,n+': a later status ends it');
+ }
+ assert.deepEqual(ER.refusalCaption({status:'That is 7 paragraphs and change.',essayRefused:'That is 7 paragraphs and change.'}),{label:'Not read',text:'That is 7 paragraphs and change.'},'a new refusal line needs no recogniser');
+ for(const x of [KEYS.planStatus(0),KEYS.rewriteStatus(2),'structure lens chosen \u2014 paste or dictate the paragraph on the phone','reading your paragraph \u2014 structure lens…','reading your piece, 3 paragraphs \u2014 argument lens…','',null,undefined,42])
+  assert.equal(ER.refusalCaption({status:x}),null,String(x));
+});
+test('E3-c: the analyse route dispatches an essay refusal as one; the English sentence refusal and a plain status are not',async()=>{
+ const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+ const res=await analyse({kind:'piece',text:''});assert.equal(res.status,400);
+ assert.deepEqual(ER.refusalCaption(getSession()),{label:'Not read',text:ER.pieceProblem('')});
+ dispatch({type:'status',text:'structure lens chosen'});assert.equal(getSession().essayRefused,undefined);assert.equal(ER.refusalCaption(getSession()),null);
+ const long=await analyse({kind:'english',sentence:'word '.repeat(2000)});
+ assert.equal(long.status,400,'the sentence is over the cap');assert.match(getSession().status,/Send one sentence at a time/);
+ assert.equal(getSession().essayRefused,undefined,'an English sentence refusal is not an essay refusal');
+});
+{
+ for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){
+  const file=path.join(root,'src',f),m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
+}
+function drawEssay(name,s){
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),{createElement}=require(path.join(root,'node_modules/react'));
+ const E=require(path.join(root,'src/essay/EssayTV.tsx'));
+ return renderToStaticMarkup(createElement(E[name],{s,focus:-1}));
+}
+const capOf=(html)=>{const m=/<div class="em-cap[^"]*"><div class="em-lbl">([^<]*)<\/div><p>([^<]*)<\/p>/.exec(html);return m&&{label:m[1],text:m[2]};};
+test('E3-c: EssayType and EssayPlan caption a refusal line, a running job still wins, a plan status is unchanged',()=>{
+ const {getSession}=require(path.join(root,'src/lib/session/store.ts'));
+ const base=getSession();
+ for(const name of ['EssayType','EssayPlan']){
+  const s={...base,jobs:{},status:ER.NOT_ENGLISH_LINE,essayRefused:ER.NOT_ENGLISH_LINE};
+  assert.deepEqual(capOf(drawEssay(name,s)),{label:'Not read',text:ER.NOT_ENGLISH_LINE},name);
+  const running={...s,jobs:{analyse:{id:'j',phase:'running',startedAt:Date.now(),key:'essay'}}};
+  assert.equal(capOf(drawEssay(name,running)).label,'Reading',name);
+ }
+ const plain=capOf(drawEssay('EssayPlan',{...base,jobs:{},status:''}));
+ assert.deepEqual(capOf(drawEssay('EssayPlan',{...base,jobs:{},status:KEYS.planStatus(0)})),plain);
+});
+
+// ---- essay full r1 rework, part 1: E5 the Evidence lens rules an opinion by a link the model names; E6 the words under a faulty verdict are code's ----
+const EV_A='Schools should start later in the morning. Uniforms also make students less creative. Research found that teenagers who start at 8:45 sleep 34 minutes more. Therefore a later start would help students learn.';
+const UNBACKED='No checkable sentence here backs this opinion.',OPINION='This only asserts; nothing here is checkable.';
+const evRule=(text,obs)=>{const ss=RE.splitSentences(text);return RE.decideVerdicts('evidence',ss,new Set(ss.map(s=>s.n)),obs);};
+const evObs=(backs)=>[{n:1,support:'opinion'},{n:2,support:'opinion'},{n:3,support:'checkable',...(backs===undefined?{}:{backs})},{n:4,support:'opinion'}];
+test('E5-1: the Evidence lens rules an opinion by the link a checkable sentence names, not by its position',()=>{
+ const v=evRule(EV_A,evObs(1));
+ assert.deepEqual(v.map(x=>[x.n,x.verdict]),[[1,'neutral'],[2,'faulty'],[3,'strong'],[4,'neutral']]);
+ assert.equal(v[1].note,UNBACKED);
+ assert.equal(v.find(x=>x.verdict==='faulty').n,2,'sentence 2 is the first faulty sentence');
+ assert.equal(v[2].supports,1,'the accepted link rides on the verdict as supports');
+});
+test('E5-2: a paragraph whose checkable sentence names no opinion marks nothing',()=>{
+ const v=evRule(EV_A,evObs());
+ assert.deepEqual(v.map(x=>[x.n,x.verdict]),[[1,'neutral'],[2,'neutral'],[3,'strong'],[4,'neutral']]);
+ assert.ok(!v.some(x=>x.verdict==='faulty'));
+});
+test('E5-3: a paragraph with no marked checkable sentence marks every opinion',()=>{
+ const t='Schools start too early. Uniforms hurt creativity. Nobody likes homework.';
+ const v=evRule(t,[1,2,3].map(n=>({n,support:'opinion'})));
+ assert.deepEqual(v.map(x=>[x.verdict,x.note]),[1,2,3].map(()=>['faulty',OPINION]));
+});
+test('E5-4: a backs that names the sentence itself, a context or checkable sentence, a number outside the paragraph or another paragraph is no link',()=>{
+ const none=(obs,text=EV_A)=>assert.ok(!evRule(text,obs).some(x=>x.verdict==='faulty'||x.supports!==undefined),JSON.stringify(obs));
+ none([{n:1,support:'opinion'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:3},{n:4,support:'opinion'}]);
+ none([{n:1,support:'context'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:1},{n:4,support:'opinion'}]);
+ none([{n:1,support:'checkable'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:1},{n:4,support:'opinion'}]);
+ none(evObs(9));none(evObs(1.5));none(evObs('1'));
+ const two='Schools start too early. Uniforms hurt creativity.\n\nResearch found that 34 minutes more sleep helps. Homework is dull.';
+ const cross=evRule(two,[{n:1,support:'opinion'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:1},{n:4,support:'opinion'}]);
+ assert.deepEqual(cross.map(x=>[x.n,x.verdict,x.supports]),[[1,'faulty',undefined],[2,'faulty',undefined],[3,'strong',undefined],[4,'neutral',undefined]],'no link across paragraphs: paragraph 1 has no marked checkable sentence, paragraph 2 has one with no link');
+ const bad=evRule(EV_A,[{n:1,support:'opinion'},{n:2,support:'opinion'},{n:3,support:'opinion',backs:1},{n:4,support:'opinion'}]);
+ assert.ok(bad.every(x=>x.verdict==='faulty'&&x.supports===undefined),'an opinion sentence carries no link');
+});
+test('E5-5: a piece of two paragraphs has its own first unbacked opinion in each',()=>{
+ const t='Schools start too early. Uniforms hurt creativity. Research found that 34 minutes more sleep helps.\n\nHomework is dull. Phones are bad. A study measured 20% more focus without them.';
+ const ss=RE.splitSentences(t);assert.deepEqual(ss.map(s=>s.para),[0,0,0,1,1,1]);
+ const obs=[{n:1,support:'opinion'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:1},{n:4,support:'opinion'},{n:5,support:'opinion'},{n:6,support:'checkable',backs:4}];
+ const v=RE.decideVerdicts('evidence',ss,new Set(ss.map(s=>s.n)),obs);
+ assert.deepEqual(v.filter(x=>x.verdict==='faulty').map(x=>x.n),[2,5]);
+ assert.deepEqual(v.filter(x=>x.verdict==='faulty').map(x=>x.note),[UNBACKED,UNBACKED]);
+});
+test('E5 (c): a marked checkable sentence with no link between an opinion and the next opinion makes that opinion neutral; later unbacked opinions are neutral',()=>{
+ const t='Schools start too early. Research found that 34 minutes more sleep helps. Uniforms hurt creativity. Phones are bad. A study measured 20% more focus without them. Homework is dull. Therefore it all holds.';
+ const ss=RE.splitSentences(t);
+ const obs=[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'opinion'},{n:4,support:'opinion'},{n:5,support:'checkable'},{n:6,support:'opinion'},{n:7,support:'opinion'}];
+ const v=RE.decideVerdicts('evidence',ss,new Set(ss.map(s=>s.n)),obs);
+ assert.deepEqual(v.map(x=>[x.n,x.verdict]),[[1,'neutral'],[2,'strong'],[3,'faulty'],[4,'neutral'],[5,'strong'],[6,'neutral'],[7,'neutral']],'3 is the first unbacked; 4 is blind to what 5 backs; later ones are neutral');
+});
+test('E5-6: a rewrite of the backed opinion stays backed through the kept link, and the schema and prompt ask for backs',()=>{
+ const ss=RE.splitSentences(EV_A),first=RE.decideVerdicts('evidence',ss,new Set([1,2,3,4]),evObs(1));
+ const ctx=RE.contextObservations('evidence',ss,1,first);
+ assert.deepEqual(ctx.find(o=>o.n===3),{n:3,support:'checkable',backs:1},'the kept link rides with the sentence');
+ assert.equal(ctx.find(o=>o.n===4),undefined);
+ const ruled=RE.decideVerdicts('evidence',ss,new Set([1]),[{n:1,support:'opinion'},...ctx]).find(v=>v.n===1);
+ assert.equal(ruled.verdict,'neutral','backed through the kept link');
+ const src=fs.readFileSync(path.join(root,'src/lib/desk/essay.ts'),'utf8');
+ assert.match(src,/evidence: \{ support: \{ type: "string", enum: \[\.\.\.SUPPORTS\] \}, backs: \{ type: "integer" \} \}/);
+ assert.match(src,/For a checkable sentence that backs an opinion in the same paragraph, add backs: the number of that opinion\./);
+});
+test('UD-12: a rewrite that is still only an opinion is not ruled neutral by a context that lost its opinions',()=>{
+ const t='Schools start too early. Research found that 34 minutes more sleep helps. A survey found 80% of pupils walk to school.';
+ const ss=RE.splitSentences(t),first=RE.decideVerdicts('evidence',ss,new Set([1,2,3]),[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'checkable'}]);
+ assert.deepEqual(first.map(v=>v.verdict),['neutral','strong','strong']);
+ const next=ss.map(s=>s.n===3?{...s,text:'Walking is just much nicer for everybody.'}:s);
+ const ctx=RE.contextObservations('evidence',next,3,first);
+ assert.deepEqual(ctx.find(o=>o.n===1),{n:1,support:'opinion'},'the opinion the reading ruled comes back as an opinion');
+ const ruled=RE.decideVerdicts('evidence',next,new Set([3]),[{n:3,support:'opinion'},...ctx]).find(v=>v.n===3);
+ assert.notEqual(ruled.verdict,'neutral','an opinion with no checkable sentence behind it does not hold');
+ assert.equal(RE.rewriteState({...ruled,was:{text:ss[2].text,verdict:'strong'}}),'still');
+});
+const BODY='Schools should start later in the morning.';
+const noteOf=(lens,text,o)=>{const ss=RE.splitSentences(text);return RE.decideVerdicts(lens,ss,new Set(ss.map(s=>s.n)),o.map(x=>({note:'Great use of evidence.',...x})));};
+test('E6-1: under a faulty verdict the note is the failed check line, never the model note',()=>{
+ const praise='Great use of evidence.';
+ const cases=[
+  ['structure',BODY,[{n:1,job:'claim'}],'This claim has no evidence after it that a reader can check.'],
+  ['structure','Therefore it holds.',[{n:1,job:'link'}],'This links back to nothing: no evidence comes before it.'],
+  ['argument',BODY,[{n:1,side:'wanders'}],'This sentence wanders from the side the paragraph takes.'],
+  ['argument',BODY,[{n:1,side:'against',turnsBack:false}],"It takes the other side but never turns back: a turn needs a word like 'but' or 'although'."],
+  ['evidence',BODY,[{n:1,support:'opinion'}],OPINION],
+  ['language','It is a bad thing to do.',[{n:1,issues:[{kind:'vague',word:'bad'}]}],"'bad' is doing too little here; say what you mean."],
+  ['language','It is a good thing to do, a good thing.',[{n:1,issues:[{kind:'repeated',word:'good'}]}],"'good' is used again here; say it once or find another word."],
+  ['language',Array(37).fill('word').join(' ')+'.',[{n:1,issues:[]}],'This sentence runs to 37 words; split it.'],
+ ];
+ for(const [lens,text,obs,line] of cases){
+  const v=noteOf(lens,text,obs);
+  assert.equal(v.length,1);assert.equal(v[0].verdict,'faulty',lens+' '+line);
+  assert.equal(v[0].note,line);assert.notEqual(v[0].note,praise);
+ }
+ assert.equal(noteOf('evidence',EV_A,evObs(1)).find(x=>x.verdict==='faulty').note,UNBACKED);
+});
+test('E6-1 guard: every faulty verdict of every lens carries a check line, and none keeps the model note',()=>{
+ const spread=[
+  ['structure',EV_A,[{n:1,job:'claim'},{n:2,job:'claim'},{n:3,job:'evidence'},{n:4,job:'link'}]],
+  ['structure','Therefore it holds. Schools start early.',[{n:1,job:'link'},{n:2,job:'claim'}]],
+  ['argument',EV_A,[{n:1,side:'wanders'},{n:2,side:'against'},{n:3,side:'against',turnsBack:true},{n:4,side:'pushes'}]],
+  ['evidence',EV_A,evObs(1)],['evidence',EV_A,[{n:1,support:'opinion'},{n:2,support:'opinion'}]],
+  ['language','It is bad. It is good good.',[{n:1,issues:[{kind:'vague',word:'bad'}]},{n:2,issues:[{kind:'repeated',word:'good'}]}]],
+ ];
+ let faulty=0;
+ for(const [lens,text,obs] of spread){
+  for(const x of noteOf(lens,text,obs).filter(x=>x.verdict==='faulty')){faulty++;assert.ok(x.note.trim(),`${lens} ${x.n}: a faulty verdict has a check line`);assert.notEqual(x.note,'Great use of evidence.');}
+ }
+ assert.ok(faulty>=6,'the spread reaches the faulty paths');
+});
+test('E6-2: strong and neutral verdicts keep the model note',()=>{
+ const v=noteOf('argument','Schools should start later. Uniforms are cheap. Sleep matters.',[{n:1,side:'pushes'},{n:2,side:'neutral'},{n:3,side:'pushes',note:'Clear.'}]);
+ assert.deepEqual(v.map(x=>[x.verdict,x.note]),[['strong','Great use of evidence.'],['neutral','Great use of evidence.'],['strong','Clear.']]);
+});
+test('E6-3 (changed by E9): summaryLine is code\'s line from the verdicts alone, for one paragraph, a piece and an empty reading',()=>{
+ const sl=RE.summaryLine,s3=[{n:1},{n:2},{n:3}],f=(n)=>Array.from({length:n},(_,i)=>({n:i+1,verdict:'faulty',note:'x'}));
+ assert.equal(sl({sentences:s3,verdicts:f(2),summary:'Good start.'}),'2 of 3 sentences to fix. Start with sentence 1: x','the model summary is never read');
+ assert.equal(sl({sentences:[{n:1}],verdicts:[{n:1,verdict:'faulty',note:''}],summary:'Tighten it.'}),'1 of 1 sentence to fix. Start with sentence 1.','an empty note leaves no colon');
+ assert.equal(sl({sentences:s3,verdicts:[],summary:'Great.'}),'0 of 3 sentences to fix.','none to fix: the head alone');
+ assert.equal(sl({sentences:s3,verdicts:[{n:3,verdict:'faulty',note:'c'},{n:2,verdict:'faulty',note:'b'}]}),'2 of 3 sentences to fix. Start with sentence 2: b','the first faulty sentence in sentence order');
+ const pc=[{n:1,para:0},{n:2,para:0},{n:3,para:1}];
+ assert.equal(sl({sentences:pc,verdicts:[{n:3,verdict:'faulty',note:'c'}],summary:'Model.',piece:{paragraphs:2,read:[0,1],failed:[]}}),'1 of 3 sentences to fix across 2 paragraphs. Start with paragraph 2, sentence 3: c');
+ assert.equal(sl({sentences:pc,verdicts:[],summary:'Model.',piece:{paragraphs:2,read:[0,1],failed:[]}}),'0 of 3 sentences to fix across 2 paragraphs.');
+ assert.equal(sl({sentences:pc,verdicts:[],summary:'Model.',piece:{paragraphs:2,read:[0],failed:[]}}),'Reading paragraph 2 of 2.','E2-b is unchanged');
+ assert.equal(sl({sentences:[],verdicts:[],summary:'In short.'}),'','no sentences: nothing');
+ assert.equal(sl({summary:'In short.'}),'');
+});
+test('E6-4: the TV caption and the spoken line both draw summaryLine',()=>{
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8'),sp=fs.readFileSync(path.join(root,'src/lib/desk/spoken.ts'),'utf8');
+ assert.match(tv,/label: `Last verdict[^\n]*text: summaryLine\(a\)/);
+ assert.match(sp,/summaryLine\(s\.essay\)/);
+ const {spokenLine}=require(path.join(root,'src/lib/desk/spoken.ts'));
+ assert.equal(spokenLine({screen:'forensic',essay:{sentences:[{n:1},{n:2}],verdicts:[{n:1,verdict:'faulty',note:'x'}],summary:'Fine.'}}),'1 of 2 sentences to fix. Start with sentence 1: x');
+});
+
+// ---- E7 (essay full r1 craft-1): a reading that leaves a judged sentence unanswered fails and records nothing ----
+test('E7-1: unanswered() names the judged sentences with no readable observation, ascending, first observation wins',()=>{
+ const {unanswered}=rules();
+ const ok={structure:{job:'claim'},argument:{side:'pushes'},evidence:{support:'checkable'},language:{issues:[]}};
+ const bad={structure:{job:'boss'},argument:{side:'sideways'},evidence:{support:'vibes'},language:{issues:'many'}};
+ const judged=new Set([3,1,2]);
+ for(const lens of Object.keys(ok)){
+  assert.deepEqual(unanswered(lens,judged,[]),[1,2,3],`${lens}: nothing answered`);
+  assert.deepEqual(unanswered(lens,judged,undefined),[1,2,3],`${lens}: not a list`);
+  assert.deepEqual(unanswered(lens,judged,[{n:1,...ok[lens]},{n:3,...ok[lens]}]),[2],`${lens}: 1 and 3 answered`);
+  assert.deepEqual(unanswered(lens,judged,[{n:1,...ok[lens]},{n:2,...ok[lens]},{n:3,...ok[lens]}]),[],`${lens}: all answered`);
+  assert.deepEqual(unanswered(lens,judged,[{n:1,...bad[lens]},{n:1,...ok[lens]},{n:2,...ok[lens]},{n:3,...ok[lens]}]),[1],`${lens}: the first observation for 1 is unreadable, a later readable one does not rescue it`);
+  assert.deepEqual(unanswered(lens,judged,[{n:1,...ok[lens]},{n:2,...ok[lens]},{n:9,...ok[lens]}]),[3],`${lens}: an observation outside judged does not count`);
+  assert.deepEqual(unanswered(lens,judged,[{n:'1',...ok[lens]},null,'x',{...ok[lens]}]),[1,2,3],`${lens}: no numeric n is no answer`);
+ }
+});
+const e7Snapshot=(id)=>JSON.stringify(getLearner(id));
+const E7_THREE='Homework should be shorter. Everyone agrees. Studies of sleep show teenagers need nine hours.';
+test('E7-2: a reading that answers only sentences 2 and 3 fails with NOT_EVERY_SENTENCE and records nothing',async()=>{
+ const id='e7-partial',before=e7Snapshot(id);
+ answer=obsReply([{n:2,support:'opinion',note:'no evidence'},{n:3,support:'context',note:'ok'}]);
+ const log=console.error,lines=[];console.error=(...a)=>lines.push(a.join(' '));
+ try{await assert.rejects(analyseEssay(E7_THREE,'evidence',id),(e)=>e.constructor.name==='DeskSaid'&&e.message===NOT_EVERY_SENTENCE);}finally{console.error=log;}
+ assert.equal(e7Snapshot(id),before,'the history, the writing estimate and the digest are unchanged');
+ assert.equal(lines.length,1,'one server line');assert.match(lines[0],/evidence/);assert.match(lines[0],/\b1\b/);
+ assert.ok(!lines[0].includes('Homework')&&!lines[0].includes('no evidence'),'no sentence text and no note in the line');
+});
+test('E7-3: observations: [] is not a clean reading - it fails and records nothing',async()=>{
+ const id='e7-empty',before=e7Snapshot(id);
+ for(const lens of ['structure','argument','evidence','language']){
+  answer=obsReply([]);
+  const log=console.error;console.error=()=>{};
+  try{await assert.rejects(analyseEssay(E7_THREE,lens,id),{message:NOT_EVERY_SENTENCE},lens);}finally{console.error=log;}
+ }
+ assert.equal(e7Snapshot(id),before);
+});
+test('E7-6 (guard): a full answer records exactly as before',async()=>{
+ const id='e7-full';
+ answer=obsReply([{n:1,support:'context',note:'ok'},{n:2,support:'opinion',note:'no evidence'},{n:3,support:'context',note:'ok'}]);
+ const a=await analyseEssay(E7_THREE,'evidence',id);
+ assert.deepEqual(a.verdicts.map(v=>[v.n,v.verdict]),[[1,'neutral'],[2,'faulty'],[3,'neutral']]);
+ const l=getLearner(id);
+ assert.equal(l.history.at(-1).detail,'1 of 3 sentences to fix');assert.equal(l.writing.evidence.seen,1);
+});
+test('E7-7: the request makes full coverage reachable - each lens requires its own deciding field beside n and note',async()=>{
+ const src=fs.readFileSync(path.join(root,'src/lib/desk/essay.ts'),'utf8');
+ assert.match(src,/const DECIDING[^=]*=\s*\{\s*structure: "job", argument: "side", evidence: "support", language: "issues"\s*\}/);
+ assert.match(src,/required: \["n", "note", DECIDING\[lens\.id\]\]/);
+ // the lens maps are keyed by the lens ids (a lens with no fields does not compile), so no lens falls back to Structure's
+ for(const map of ['DECIDING','OBSERVED','OBSERVE'])assert.match(src,new RegExp(`const ${map}: Record<AnalysisType,`),map);
+ assert.doesNotMatch(src,/\?\? (DECIDING|OBSERVED|OBSERVE)\.structure/);
+ assert.match(src,/give issues: \[\]/);assert.match(src,/Give one observation for every sentence you are asked to judge\./);
+ for(const [lens,field] of [['structure','job'],['argument','side'],['evidence','support'],['language','issues']]){
+  seen=[];answer=obsReply([1,2,3].map(n=>({n,note:'x',...FULL_FIELD[lens]})));
+  await analyseEssay(E7_THREE,lens,'e7-schema');
+  assert.deepEqual(seen[0].schema.properties.observations.items.required,['n','note',field],`${lens}: the deciding field is required`);
+ }
+});
+
+// ---- E8 (essay full r1 robustness-1): a failed save after a rewrite is logged and said; the rewrite still succeeds ----
+/** Fail the learners.json writes only (the rename over the book throws EPERM); returns the restore. Never desk/data. */
+function failLearnerWrites(){
+ const real=fs.renameSync;
+ fs.renameSync=function(from,to,...rest){
+  if(String(to).endsWith('learners.json'))throw Object.assign(new Error(`EPERM: operation not permitted, rename '${from}' -> '${to}'`),{code:'EPERM'});
+  return real.call(this,from,to,...rest);
+ };
+ return ()=>{fs.renameSync=real;};
+}
+const E8_FIVE='The school day starts too early. Research found that teenagers fall asleep later. Teenagers are just lazy. A 2019 study measured their sleep. Therefore the start should move.';
+async function e8Read(){
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+ const id=getSession().learner.id;
+ answer=faults([2,3]);
+ const first=await analyseEssay(E8_FIVE,'evidence',id);dispatch({type:'essay.set',analysis:first});
+ return id;
+}
+const e8Rewrite=async()=>{
+ answer=reply({verdicts:[{n:2,verdict:'strong',note:'It names its source now.'}]});
+ const errs=[],e0=console.error;console.error=(...a)=>errs.push(a.join(' '));
+ try{const r=await analyse({kind:'rewrite',n:2,text:STUDY});return {r,errs};}finally{console.error=e0;}
+};
+test('E8-1: a rewrite whose save fails answers 200, shows the new verdict, says REWRITE_NOT_SAVED and logs one line',async()=>{
+ const {REWRITE_NOT_SAVED}=deskEssay();deskWorded(REWRITE_NOT_SAVED);
+ const id=await e8Read();const line=getLearner(id).history.at(-1).detail;
+ const restore=failLearnerWrites();let out;try{out=await e8Rewrite();}finally{restore();}
+ assert.equal(out.r.status,200);
+ assert.equal(getSession().essay.verdicts.find(v=>v.n===2).verdict,'strong','the new verdict is on the desk');
+ assert.equal(getSession().status,REWRITE_NOT_SAVED);assert.equal(getSession().jobs.analyse.phase,'done');
+ assert.equal(out.errs.length,1,'one server line');assert.match(out.errs[0],/rewrite/);assert.ok(!out.errs[0].includes('study')&&!out.errs[0].includes('teenagers'),'no learner text');
+ assert.equal(getLearner(id).history.at(-1).detail,line,'the file still holds the old count');
+});
+test('E8-2: a rewrite with learners.json unreadable answers 200 and says LEARNER_UNREAD_RUN',async()=>{
+ const {LEARNER_UNREAD_RUN}=require(path.join(root,'src/lib/session/store.ts'));
+ const id=await e8Read();
+ const file=path.join(process.env.DESK_DATA_DIR,'learners.json');const had=fs.existsSync(file)?fs.readFileSync(file):null;
+ fs.writeFileSync(file,'not a book');
+ let out;try{out=await e8Rewrite();}finally{if(had)fs.writeFileSync(file,had);else fs.rmSync(file,{force:true});}
+ assert.equal(out.r.status,200);assert.equal(getSession().status,LEARNER_UNREAD_RUN);
+ assert.equal(getSession().essay.verdicts.find(v=>v.n===2).verdict,'strong');
+ assert.equal(out.errs.filter(l=>/essay rewrite/.test(l)).length,1,'one line for the save of the rewrite; other readers of the book log their own');
+});
+test('E8-4 (guard): with the file writable a rewrite says today\'s status and logs nothing',async()=>{
+ const {REWRITE_NOT_SAVED}=deskEssay();
+ const id=await e8Read();const out=await e8Rewrite();
+ assert.equal(out.r.status,200);assert.equal(getSession().status,'sentence 2 holds now');assert.notEqual(getSession().status,REWRITE_NOT_SAVED);
+ assert.equal(out.errs.length,0,'no log line');assert.equal(getLearner(id).history.at(-1).detail,'1 of 5 sentences to fix, 1 fixed');
+});
+test('E8-5: reviseSentence with no callback and a failing save still resolves',async()=>{
+ const {reviseSentence}=deskEssay();
+ const id=await e8Read();
+ answer=reply({verdicts:[{n:2,verdict:'strong',note:'ok'}]});
+ const restore=failLearnerWrites(),e0=console.error;console.error=()=>{};
+ try{const a=await reviseSentence(getSession().essay,2,STUDY,undefined,id);assert.equal(a.verdicts.find(v=>v.n===2).verdict,'strong');}finally{console.error=e0;restore();}
+});
+
+// ---- E9 (essay full r2, craft-2): code writes the summary from the verdicts it decided; the model is not asked for one ----
+test('E9-1: a Structure paragraph code rules 2 of 2 faulty is summarised by code, whatever the model said (a, summaryLine and the spoken line)',async()=>{
+ const TWO='Schools should start later. Therefore the start should move.';
+ answer=reply({verdicts:[{n:1,verdict:'faulty',note:'x'},{n:2,verdict:'faulty',note:'y'}],summary:'Excellent work, this paragraph is clear and convincing.'});
+ const a=await analyseEssay(TWO,'structure','essay-anon');
+ assert.deepEqual(a.verdicts.map(v=>v.verdict),['faulty','faulty']);
+ const want='2 of 2 sentences to fix. Start with sentence 1: '+a.verdicts[0].note;
+ const {spokenLine}=require(path.join(root,'src/lib/desk/spoken.ts'));
+ assert.equal(a.summary,want);assert.equal(RE.summaryLine(a),want);assert.equal(spokenLine({screen:'forensic',essay:a}),want);
+ for(const t of [a.summary,RE.summaryLine(a),spokenLine({screen:'forensic',essay:a})])assert.doesNotMatch(t,/Excellent/);
+});
+test('E9-3: the essay-read request asks for no summary: no summary property in the schema, no summary sentence in the system text',async()=>{
+ seen=[];answer=reply({verdicts:[{n:1,verdict:'faulty',note:'x'},{n:2,verdict:'neutral',note:'y'}],summary:'s'});
+ await analyseEssay('Schools should start later. Therefore the start should move.','structure','essay-anon');
+ assert.equal(seen.length,1);
+ assert.ok(!('summary' in seen[0].schema.properties),'no summary property');
+ assert.ok(!seen[0].schema.required.includes('summary'),'and none required');
+ assert.doesNotMatch(seen[0].system,/summary sentence/);assert.match(seen[0].system,/Plain text, to be read aloud\./);
+});
+test('E9-7: desk/essay.ts no longer parses a summary or asks for one',()=>{
+ const src=fs.readFileSync(path.join(root,'src/lib/desk/essay.ts'),'utf8');
+ assert.doesNotMatch(src,/Start with paragraph \(\d\+\)/,'the kept-summary regex is gone');
+ assert.doesNotMatch(src,/summary sentence/);assert.doesNotMatch(src,/summaries/);
 });

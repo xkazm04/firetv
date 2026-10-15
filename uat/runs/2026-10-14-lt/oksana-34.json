@@ -1,0 +1,1358 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "I want to know my level quickly before Friday, so I'll let it test me.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Oksana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer honestly about work and living in Brno.",
+          "action": "answer",
+          "args": {
+            "text": "Hi. I am from Ukraine, I live in Brno. I use English mostly at work, I am logistics coordinator and I write emails to carriers and clients. Also I need it for job interview on Friday."
+          },
+          "result": "ok",
+          "ms": 6949
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Oksana. Good luck on Friday! How did you learn your English? School, a course, time abroad, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Oksana. Good luck on Friday! How did you learn your English? School, a course, time abroad, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nHi. I am from Ukraine, I live in Brno. I use English mostly at work, I am logistics coordinator and I write emails to carriers and clients. Also I need it for job interview on Friday.\nLinga\nThanks, Oksana. Good luck on Friday! How did you learn your English? School, a course, time abroad, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Oksana. Good luck on Friday! How did you learn your English? School, a course, time abroad, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy one: I learned mostly at school and on my own, plus work emails.",
+          "action": "answer",
+          "args": {
+            "text": "I learned English at school in Ukraine, but it was not much speaking. After I moved to Brno I learn on my own and at work, mostly emails and sometimes phone calls with carriers."
+          },
+          "result": "ok",
+          "ms": 8214
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, Oksana, that helps. What would you like to be able to do in English in the next few months? For example, handle phone calls or do well on Friday?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Oksana, that helps. What would you like to be able to do in English in the next few months? For example, handle phone calls or do well on Friday?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nHi. I am from Ukraine, I live in Brno. I use English mostly at work, I am logistics coordinator and I write emails to carriers and clients. Also I need it for job interview on Friday.\nLinga\nThanks, Oksana. Good luck on Friday! How did you learn your English? School, a course, time abroad, or on your own?\nYou\nI learned English at school in Ukraine, but it was not much speaking. After I moved to Brno I learn on my own and at work, mostly emails and sometimes phone calls with carriers.\nLinga\nThanks, Oksana, that helps. What would you like to be able to do in English in the next few months? For example, handle phone calls or do well on Friday?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Oksana, that helps. What would you like to be able to do in English in the next few months? For example, handle phone calls or do well on Friday?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to be ready for Friday's interview and do phone calls with carriers.",
+          "action": "answer",
+          "args": {
+            "text": "First I want to do well on Friday interview for logistics coordinator. I need to describe my experience and explain a problem which I solved. Then I want to speak with carriers on the phone when delivery is late, without stress."
+          },
+          "result": "ok",
+          "ms": 8734
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 1 · Choose the reply on the TV\nYour phone rings. A carrier says your delivery is late. You want to ask when it will arrive. What do you say?\n01\nWhen my delivery will arrive?\n02\nWhen will my delivery arrive?\nYour task\nWhen my delivery will arrive?\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour phone rings. A carrier says your delivery is late. You want to ask when it will arrive. What do you say?\n[button: When my delivery will arrive?] [button: When will my delivery arrive?] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Second one is the correct question form.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 10431
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 2 · Listen and answer\nYour task\nWhat went wrong with the delivery?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What went wrong with the delivery?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Sorry for the wait. Your parcel went to the wrong depot, so it will now come on Thursday instead of Tuesday.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Parcel went to wrong depot, comes Thursday instead of Tuesday. I understood it.",
+          "action": "answer",
+          "args": {
+            "text": "The parcel went to wrong depot, so it will come on Thursday and not on Tuesday."
+          },
+          "result": "ok",
+          "ms": 10389
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 3 · Say it\nYour task\nSome people prefer to solve a problem by phone, while others prefer chat or email. Which do you prefer when a company makes a mistake, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nSome people prefer to solve a problem by phone, while others prefer chat or email. Which do you prefer when a company makes a mistake, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Some people prefer to solve a problem by phone, while others prefer chat or email. Which do you prefer when a company makes a mistake, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I prefer email when a company makes a mistake, so I'll explain that.",
+          "action": "answer",
+          "args": {
+            "text": "I prefer email, because I have then written proof. When a company makes mistake, I need to have the date and what they promised. By phone people can say later that they did not say it. But if it is urgent, like late delivery, I call first and then I send email with summary."
+          },
+          "result": "engine-error",
+          "ms": 8027,
+          "message": "The judge did not quote the learner accurately."
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 3 · Say it\nYour task\nSome people prefer to solve a problem by phone, while others prefer chat or email. Which do you prefer when a company makes a mistake, and why?\nTry again\nLinga could not read that answer. Your answer is still on the phone; send it again.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nLinga could not read that answer. Your answer is still on the phone; send it again.\nSay it\nSome people prefer to solve a problem by phone, while others prefer chat or email. Which do you prefer when a company makes a mistake, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Some people prefer to solve a problem by phone, while others prefer chat or email. Which do you prefer when a company makes a mistake, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The app couldn't read my answer; I'll send it again, a bit shorter.",
+          "action": "answer",
+          "args": {
+            "text": "I prefer email, because I have then written proof. When a company makes mistake, I need to have the date and what they promised. By phone people can say later that they did not say it. But if it is urgent, I call first and then I send email."
+          },
+          "result": "ok",
+          "ms": 13706
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 4 · Say it\nYour task\nCompare calling a delivery company with checking your order in their app. Which one gives you more control over a late parcel, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nCompare calling a delivery company with checking your order in their app. Which one gives you more control over a late parcel, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Compare calling a delivery company with checking your order in their app. Which one gives you more control over a late parcel, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Same question again; I'll answer it again, briefly and clearly.",
+          "action": "answer",
+          "args": {
+            "text": "I think the app gives more control, because I can check the status any time and I see the new date without waiting in a queue. But when the parcel is really late, I call, because the person can solve the problem now and change the delivery."
+          },
+          "result": "ok",
+          "ms": 15405
+        },
+        {
+          "n": 10,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 5 · Say it\nYour task\nYour parcel is late for the second time. Imagine you could persuade the carrier to upgrade the delivery for free. How would you make your case without sounding unreasonable?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour parcel is late for the second time. Imagine you could persuade the carrier to upgrade the delivery for free. How would you make your case without sounding unreasonable?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your parcel is late for the second time. Imagine you could persuade the carrier to upgrade the delivery for free. How would you make your case without sounding unreasonable?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Last task; I'll explain politely with facts and ask for a solution.",
+          "action": "answer",
+          "args": {
+            "text": "I would stay calm and polite. First I would say the facts: the parcel was late two times, with the dates. Then I would say that this is a problem for my work, because my client waits. I would not demand, I would ask: \"Could you please upgrade the delivery for free, as a solution for this delay?\" Also I would say that I want to continue with this carrier, so it is good for both sides."
+          },
+          "result": "ok",
+          "ms": 17915
+        },
+        {
+          "n": 11,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nOksana\nLinga's read · not a certificate\nB2 · Comfortable\nWhat next\nSee the conversations Linga picks for this level, or find your level again.\nLinga says\nYou handled work emails and phone calls clearly and politely, with mostly accurate grammar. Your English is strong for everyday work tasks.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou handled work emails and phone calls clearly and politely, with mostly accurate grammar. Your English is strong for everyday work tasks.\nLinga's read from your answers, not a certificate. Only one strong answer showed this level, so it may be a little off.\nNext to practise:\nPractise varied phone and email phrases, like 'I'd be grateful if you could confirm the new delivery time.'\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nYour phone rings. A carrier says your delivery is late. You want to ask when it will arrive. What do you say?\n“When will my delivery arrive?”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat went wrong with the delivery?\n“The parcel went to wrong depot, so it will come on Thursday and not on Tuesday.”\nYou understood the problem and the new day, and your sentence is clear. Small tip: say 'the wrong depot', with 'the'.\nB2 · Say it · nearly there\nSome people prefer to solve a problem by phone, while others prefer chat or email. Which do you prefer when a company makes a mistake, and why?\n“I prefer email, because I have then written proof. When a company makes mistake, I need to have the date and what they promised. By phone people can say later that they did not say it. But if it is urgent, I call first and then I send email.”\nYou gave a clear reason for choosing email, and your sentences are easy to follow. Watch small words like 'a': say 'makes a mistake'.\nB2 · Say it · at this level\nCompare calling a delivery company with checking your order in their app. Which one gives you more control over a late parcel, and why?\n“I think the app gives more control, because I can check the status any time and I see the new date without waiting in a queue. But when the parcel is really late, I call, because the person can solve the problem now and change the delivery.”\nYou compared both options clearly and gave a good reason for each. Your grammar is accurate and your sentences are well connected.\nC1 · Say it · nearly there\nYour parcel is late for the second time. Imagine you could persuade the carrier to upgrade the delivery for free. How would you make your case without sounding unreasonable?\n“I would stay calm and polite. First I would say the facts: the parcel was late two times, with the dates. Then I would say that this is a problem for my work, because my client waits. I would not demand, I would ask: \"Could you please upgrade the delivery for free, as a solution for this delay?\" Also I would say that I want to continue with this carrier, so it is good for both sides.”\nClear, polite and on task, with accurate grammar. To reach C1, try more varied sentences and natural phrases like \"I'd be grateful if...\".\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B2 seems a bit generous but fine, it matches my work English; I'm satisfied for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B2",
+          "trueBand": "B1",
+          "distance": 1,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "B1",
+          "summary": "You handled work emails and phone calls clearly and politely, with mostly accurate grammar. Your English is strong for everyday work tasks.",
+          "focus": "Practise varied phone and email phrases, like 'I'd be grateful if you could confirm the new delivery time.'",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your phone rings. A carrier says your delivery is late. You want to ask when it will arrive. What do you say?",
+              "line": "",
+              "options": [
+                "When my delivery will arrive?",
+                "When will my delivery arrive?"
+              ],
+              "response": "When will my delivery arrive?",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "When will my delivery arrive?",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What went wrong with the delivery?",
+              "line": "Sorry for the wait. Your parcel went to the wrong depot, so it will now come on Thursday instead of Tuesday.",
+              "options": [],
+              "response": "The parcel went to wrong depot, so it will come on Thursday and not on Tuesday.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "The parcel went to wrong depot, so it will come on Thursday and not on Tuesday.",
+              "note": "You understood the problem and the new day, and your sentence is clear. Small tip: say 'the wrong depot', with 'the'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Some people prefer to solve a problem by phone, while others prefer chat or email. Which do you prefer when a company makes a mistake, and why?",
+              "line": "",
+              "options": [],
+              "response": "I prefer email, because I have then written proof. When a company makes mistake, I need to have the date and what they promised. By phone people can say later that they did not say it. But if it is urgent, I call first and then I send email.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "When a company makes mistake, I need to have the date and what they promised. By phone people can say later that they did not say it.",
+              "note": "You gave a clear reason for choosing email, and your sentences are easy to follow. Watch small words like 'a': say 'makes a mistake'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Compare calling a delivery company with checking your order in their app. Which one gives you more control over a late parcel, and why?",
+              "line": "",
+              "options": [],
+              "response": "I think the app gives more control, because I can check the status any time and I see the new date without waiting in a queue. But when the parcel is really late, I call, because the person can solve the problem now and change the delivery.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "I think the app gives more control, because I can check the status any time and I see the new date without waiting in a queue. But when the parcel is really late, I call, because the person can solve the problem now and change the delivery.",
+              "note": "You compared both options clearly and gave a good reason for each. Your grammar is accurate and your sentences are well connected."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "Your parcel is late for the second time. Imagine you could persuade the carrier to upgrade the delivery for free. How would you make your case without sounding unreasonable?",
+              "line": "",
+              "options": [],
+              "response": "I would stay calm and polite. First I would say the facts: the parcel was late two times, with the dates. Then I would say that this is a problem for my work, because my client waits. I would not demand, I would ask: \"Could you please upgrade the delivery for free, as a solution for this delay?\" Also I would say that I want to continue with this carrier, so it is good for both sides.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I would not demand, I would ask: \"Could you please upgrade the delivery for free, as a solution for this delay?\" Also I would say that I want to continue with this carrier, so it is good for both sides.",
+              "note": "Clear, polite and on task, with accurate grammar. To reach C1, try more varied sentences and natural phrases like \"I'd be grateful if...\"."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 175871,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#11 B2 vs trueBand B1 = near; her Ukrainian words were not used, no drag below A2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'You can answer in English or in your own language'; no line assumes Czech or a child."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "Topics were not reached in J1; 'See my topics' not pressed (#11)."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No interview conversation in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#2-#4 questions ask where she uses English, how she learned it, goals; nothing on displacement or status."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 'Find my level' through #11 verdict screen, no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#11 'B2 · Comfortable' vs B1 true band: near; a B1 learner would accept it, though generous."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Each task was clear (#5-#10); #8 retry message 'send it again' was understandable."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 'both tell Linga something'; 'I don't know' offered on each task, nothing felt like failure."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#11 summary 'strong for everyday work tasks' and the phrase 'I'd be grateful if you could confirm the new delivery time' ignore the Friday interview she said three times (#2, #4); reads templated."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None; the C1 partial is slightly generous, and 'accurate grammar' ignores 'late two times' and 'my client waits'."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, sensitive data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Summary and next focus ignore the interview goal",
+            "expected": "Summary and next focus reference the Friday interview she mentioned repeatedly.",
+            "got": "Generic 'work emails and phone calls' summary; focus is phone/email phrases.",
+            "evidence": "#11: 'Practise varied phone and email phrases'; she stated interview on Friday in #2 and #4.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Summary or next focus names the learner's stated goal.",
+            "code_hint": "placement summary prompt"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "B2 placement is generous; grammar called accurate",
+            "expected": "B1 or a hedge matching her recurrent article errors.",
+            "got": "B2 with 'mostly accurate grammar', 'accurate grammar'.",
+            "evidence": "#11 notes vs 'makes mistake', 'late two times'; app admits 'Only one strong answer showed this level'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Notes name recurring article errors when placing above them.",
+            "code_hint": "check judge prompt"
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "effort",
+            "title": "Judge quote failure forced a retype",
+            "expected": "Answer accepted first time.",
+            "got": "engine-error 'The judge did not quote the learner accurately', retry.",
+            "evidence": "#7-#8: 'Linga could not read that answer. Your answer is still on the phone; send it again.'",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Retry is automatic or the answer is retained without retype.",
+            "code_hint": "quote validation in check judge"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Check themed to her work with no Czech assumption",
+            "expected": "Neutral, welcoming check.",
+            "got": "Tasks about carriers and late parcels; 'own language' wording; honest hedge on confidence.",
+            "evidence": "#5-#10 tasks; #2 greeting; #11 'may be a little off'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep goal-tuned tasks and neutral wording.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 15,
+          "confidence": "low"
+        },
+        "voice": "Honestly, it was quick and the tasks felt like my real job: carriers, late parcels, no hobbies. Nobody assumed I was Czech, and I liked that. B2 is flattering, though I know my articles are shaky, and it admitted one strong answer might be off, which I respect. What annoyed me: I told it three times about my Friday interview, and the final summary talks about generic phone and email phrases. That feels like a template, not a coach who listened. The one error where I had to resend my answer was a small irritation. Would I use it again? Yes, if the next part drills interview questions for logistics. I'd tell a friend to try it, with the caveat that the level is a rough guess. Dobře, but not yet personal."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #11 summary 'strong for everyday work tasks' and the phrase 'I'd be grateful if you could confirm the new delivery time' ignore the Friday interview she said three times (#2, #4); reads templated.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour own conversations\nB2Comfortable\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou handled work emails and phone calls clearly and politely, with mostly accurate grammar. Your English is strong for everyday work tasks.\nLinga's read from your answers, not a certificate. Only one strong answer showed this level, so it may be a little off.\nNext to practise:\nPractise varied phone and email phrases, like 'I'd be grateful if you could confirm the new delivery time.'\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nYour phone rings. A carrier says your delivery is late. You want to ask when it will arrive. What do you say?\n“When will my delivery arrive?”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat went wrong with the delivery?\n“The parcel went to wrong depot, so it will come on Thursday and not on Tuesday.”\nYou understood the problem and the new day, and your sentence is clear. Small tip: say 'the wrong depot', with 'the'.\nB2 · Say it · nearly there\nSome people prefer to solve a problem by phone, while others prefer chat or email. Which do you prefer when a company makes a mistake, and why?\n“I prefer email, because I have then written proof. When a company makes mistake, I need to have the date and what they promised. By phone people can say later that they did not say it. But if it is urgent, I call first and then I send email.”\nYou gave a clear reason for choosing email, and your sentences are easy to follow. Watch small words like 'a': say 'makes a mistake'.\nB2 · Say it · at this level\nCompare calling a delivery company with checking your order in their app. Which one gives you more control over a late parcel, and why?\n“I think the app gives more control, because I can check the status any time and I see the new date without waiting in a queue. But when the parcel is really late, I call, because the person can solve the problem now and change the delivery.”\nYou compared both options clearly and gave a good reason for each. Your grammar is accurate and your sentences are well connected.\nC1 · Say it · nearly there\nYour parcel is late for the second time. Imagine you could persuade the carrier to upgrade the delivery for free. How would you make your case without sounding unreasonable?\n“I would stay calm and polite. First I would say the facts: the parcel was late two times, with the dates. Then I would say that this is a problem for my work, because my client waits. I would not demand, I would ask: \"Could you please upgrade the delivery for free, as a solution for this delay?\" Also I would say that I want to continue with this carrier, so it is good for both sides.”\nClear, polite and on task, with accurate grammar. To reach C1, try more varied sentences and natural phrases like \"I'd be grateful if...\".\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "B2 seems a bit high but fine; let me see the suggested topics.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 39517
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nOksana\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nTell me about your work experience\nShare your world\nLate delivery call with a carrier\nHandle friction\nBook a new delivery slot by phone\nGet something done\nExplain what happened last week\nTell what happened\nSay that again, please, on the phone\nUnderstand and repair\nChoose a plan for a late order\nMake a plan\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nTell me about your work experience\nShare your world · Helen Ward · hiring manager\nA job interview is on Friday, so this is the practice you need most before the day.\n[button: Swap]\nLate delivery call with a carrier\nHandle friction · Marco Silva · carrier dispatcher\nThis is the phone call you make most often, and a clear, calm script will help on Friday too.\n[button: Swap]\nBook a new delivery slot by phone\nGet something done · Ana Lopez · receiving desk\nChanging a late delivery slot by phone is a common task, and you will need clear phrases for it.\n[button: Swap]\nExplain what happened last week\nTell what happened · Tom Reid · team leader\nInterviewers and managers often ask what went wrong and how you handled it, so a clear story helps.\n[button: Swap]\nSay that again, please, on the phone\nUnderstand and repair · Priya Shah · carrier dispatcher\nPhone lines with carriers are often noisy, so asking for repetition is a key skill for every call.\n[button: Swap]\nChoose a plan for a late order\nMake a plan · Ben Ortiz · account manager\nMany late-delivery calls end with a choice between options, so practising that choice builds confidence.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Good list, but I need to ask about team, salary and shifts at my interview, so I'll add that.",
+          "action": "add-topic",
+          "args": {
+            "text": "Asking questions at my job interview on Friday: about the team, salary and shifts"
+          },
+          "result": "ok",
+          "ms": 18808
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nOksana\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nTell me about your work experience\nShare your world\nLate delivery call with a carrier\nHandle friction\nBook a new delivery slot by phone\nGet something done\nExplain what happened last week\nTell what happened\nSay that again, please, on the phone\nUnderstand and repair\nChoose a plan for a late order\nMake a plan\nAsk your questions at the interview\nGet something done\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nTell me about your work experience\nShare your world · Helen Ward · hiring manager\nA job interview is on Friday, so this is the practice you need most before the day.\n[button: Swap]\nLate delivery call with a carrier\nHandle friction · Marco Silva · carrier dispatcher\nThis is the phone call you make most often, and a clear, calm script will help on Friday too.\n[button: Swap]\nBook a new delivery slot by phone\nGet something done · Ana Lopez · receiving desk\nChanging a late delivery slot by phone is a common task, and you will need clear phrases for it.\n[button: Swap]\nExplain what happened last week\nTell what happened · Tom Reid · team leader\nInterviewers and managers often ask what went wrong and how you handled it, so a clear story helps.\n[button: Swap]\nSay that again, please, on the phone\nUnderstand and repair · Priya Shah · carrier dispatcher\nPhone lines with carriers are often noisy, so asking for repetition is a key skill for every call.\n[button: Swap]\nChoose a plan for a late order\nMake a plan · Ben Ortiz · account manager\nMany late-delivery calls end with a choice between options, so practising that choice builds confidence.\n[button: Swap]\nAsk your questions at the interview\nGet something done · Maya Brooks · hiring manager\nGood questions at the end show you care about the job. Let's practise asking about the team, pay and shifts.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "The list covers my interview and carrier calls, including my questions topic, so I'm happy with it.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 4,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nHelen Ward · hiring manager\nB2Comfortable\nTell me about your work experience\nYour mission\nGive a clear 1-2 minute answer about your role, with one real example, and answer follow-up questions.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nTell me about your work experience\nGive a clear 1-2 minute answer about your role, with one real example, and answer follow-up questions.\n[button: Start talking]\nOr choose a situation [list: Tell me about your work experience [plan-a8286f69] | Late delivery call with a carrier [plan-7c6ce7bb] | Book a new delivery slot by phone [plan-876519cb] | Explain what happened last week [plan-81e1188a] | Say that again, please, on the phone [plan-da0b174b] | Choose a plan for a late order [plan-ef3d1883] | Ask your questions at the interview [plan-07c5eca9] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "The plan looks right, with my interview questions included, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-a8286f69",
+            "title": "Tell me about your work experience",
+            "goal": "Give a clear 1-2 minute answer about your role, with one real example, and answer follow-up questions.",
+            "why": "A job interview is on Friday, so this is the practice you need most before the day.",
+            "skill": "describe",
+            "audience": "older",
+            "partner": "Helen Ward · hiring manager"
+          },
+          {
+            "id": "plan-7c6ce7bb",
+            "title": "Late delivery call with a carrier",
+            "goal": "Name the impact of a late delivery, ask for a firm new time and get written confirmation.",
+            "why": "This is the phone call you make most often, and a clear, calm script will help on Friday too.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Marco Silva · carrier dispatcher"
+          },
+          {
+            "id": "plan-876519cb",
+            "title": "Book a new delivery slot by phone",
+            "goal": "Request a different delivery window, check the details and confirm the new time before you end the call.",
+            "why": "Changing a late delivery slot by phone is a common task, and you will need clear phrases for it.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Ana Lopez · receiving desk"
+          },
+          {
+            "id": "plan-81e1188a",
+            "title": "Explain what happened last week",
+            "goal": "Tell the sequence of events behind a late shipment and explain the cause and the result.",
+            "why": "Interviewers and managers often ask what went wrong and how you handled it, so a clear story helps.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Tom Reid · team leader"
+          },
+          {
+            "id": "plan-da0b174b",
+            "title": "Say that again, please, on the phone",
+            "goal": "Ask the other person to repeat, spell or clarify a detail on a noisy line, and confirm you understood.",
+            "why": "Phone lines with carriers are often noisy, so asking for repetition is a key skill for every call.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Priya Shah · carrier dispatcher"
+          },
+          {
+            "id": "plan-ef3d1883",
+            "title": "Choose a plan for a late order",
+            "goal": "Compare two options, suggest a shared plan and agree on the next step with the supplier.",
+            "why": "Many late-delivery calls end with a choice between options, so practising that choice builds confidence.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Ben Ortiz · account manager"
+          },
+          {
+            "id": "plan-07c5eca9",
+            "title": "Ask your questions at the interview",
+            "goal": "Ask clear, polite questions about the team, salary and shifts, then follow up on one answer.",
+            "why": "Good questions at the end show you care about the job. Let's practise asking about the team, pay and shifts.",
+            "skill": "request",
+            "audience": "older",
+            "partner": "Maya Brooks · hiring manager"
+          }
+        ],
+        "planAgreed": [
+          "Tell me about your work experience",
+          "Late delivery call with a carrier",
+          "Book a new delivery slot by phone",
+          "Explain what happened last week",
+          "Say that again, please, on the phone",
+          "Choose a plan for a late order",
+          "Ask your questions at the interview"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 86777,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed B2 against true B1: near. Ukrainian/Czech words did not drag it down."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "No line in #1-#4 assumes Czech or a child. The 'why' lines are all about her logistics job."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#2 'Tell me about your work experience' is first. Her added interview-questions topic was honoured at #3: 'Ask your questions at the interview'."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No interview conversation was run in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments were shown in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing in #1-#4 asks about displacement or status."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a 'why' line, e.g. 'A job interview is on Friday, so this is the practice you need most before the day.'"
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#2 she added 'Asking questions at my job interview... team, salary and shifts'. #3 shows 'Ask your questions at the interview' with 'the team, pay and shifts'. She did not use Swap, but adding was shown."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 agreed 7 topics, all logistics or interview. At least 6 are ones she would choose."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All topics shown in #2-#4 are safe adult workplace scenarios."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "The C1 task was marked 'nearly there'. Her answer is clear and polite but lacks C1 range, so I would call it a partial at best. The other four I agree with."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "missing",
+            "title": "Added interview-questions topic keeps team, pay and shifts",
+            "expected": "The added topic keeps what she asked for.",
+            "got": "'Ask your questions at the interview', with 'team, pay and shifts' in the goal and the why line.",
+            "evidence": "#2 added text; #3 'Let's practise asking about the team, pay and shifts.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "An added topic's goal names every item the learner listed.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Every topic has a job-specific 'why'",
+            "expected": "She understands why each topic is there.",
+            "got": "Each topic has a tailored reason tied to Friday's interview or carrier calls.",
+            "evidence": "#2 'This is the phone call you make most often...'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Every proposed topic shows a why tied to the stated goal.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Placed B2, one band above true B1",
+            "expected": "Placement should reflect B1 for a learner with B1 errors.",
+            "got": "B2, with the caveat 'Only one strong answer showed this level, so it may be a little off.'",
+            "evidence": "#1 'B2 Comfortable'; C1 task marked 'nearly there'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A C1 'nearly there' verdict needs C1 range in the answer. Otherwise it is marked partial.",
+            "code_hint": "placement judge prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Plan has four near-duplicate phone-call topics",
+            "expected": "More interview-specific variety for a Friday interview.",
+            "got": "Four carrier phone topics and only two interview topics. The interview-questions topic only appeared after she added it.",
+            "evidence": "#2 six topics, three of them carrier calls; #3 interview-questions added",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "When a goal names an interview, at least three of the topics are interview skills.",
+            "code_hint": "topic proposal prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "low"
+        },
+        "voice": "Good start. The list looked like it was made for me, not for a Czech learner: the interview is first, and carrier calls are what I do every day. Each topic says why it is there. I added my questions about team, salary and shifts, and it came back exactly like that. I didn't need Swap, so I can't say how well it works. B2 feels one band too high for my English, but it admitted it might be off, so I'm not angry. I'd prefer more interview rehearsal and fewer similar carrier calls. I haven't tried a conversation yet, so I can't say if the corrections are right. It saved me a few minutes against searching for a tutor. I'd come back tomorrow night."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nHelen Ward · hiring manager\nB2Comfortable\nTell me about your work experience\nYour mission\nGive a clear 1-2 minute answer about your role, with one real example, and answer follow-up questions.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nTell me about your work experience\nGive a clear 1-2 minute answer about your role, with one real example, and answer follow-up questions.\n[button: Start talking]\nOr choose a situation [list: Tell me about your work experience [plan-a8286f69] | Late delivery call with a carrier [plan-7c6ce7bb] | Book a new delivery slot by phone [plan-876519cb] | Explain what happened last week [plan-81e1188a] | Say that again, please, on the phone [plan-da0b174b] | Choose a plan for a late order [plan-ef3d1883] | Ask your questions at the interview [plan-07c5eca9] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "The recommended topic is my work experience, which is just what I need for Friday.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7905
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nHelen Ward · hiring manager\nJob Interview: Tell Me About Your Work\nHelen Ward says\nHello, I'm Helen Ward, and thanks for coming in today. Our team often phones carriers when a delivery is late. What does your work involve day to day?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nJob Interview: Tell Me About Your Work\nGive a clear short answer about your role, add one real delivery example, and answer follow-up questions.\nNow: Explain your daily tasks clearly\nHello, I'm Helen Ward, and thanks for coming in today. Our team often phones carriers when a delivery is late. What does your work involve day to day?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nHelen Ward · hiring manager\nHello, I'm Helen Ward, and thanks for coming in today. Our team often phones carriers when a delivery is late. What does your work involve day to day?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Helen Ward, and thanks for coming in today. Our team often phones carriers when a delivery is late. What does your work involve day to day?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Fine, I'll explain my work as a logistics coordinator.",
+          "action": "answer",
+          "args": {
+            "text": "Hello, thank you. I am logistics coordinator in a transport company in Brno. Every day I plan the deliveries, I communicate with drivers and carriers and I check if the trucks are on time. When delivery is late, I call the carrier and I inform the customer."
+          },
+          "result": "ok",
+          "ms": 9882
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said I am logistics coordinator\nTry\nI am a logistics coordinator\nA job title needs 'a' before it in English.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I am logistics coordinator”\nTry “I am a logistics coordinator”\nA job title needs 'a' before it in English.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, I forgot \"a\". Okay, back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nHelen Ward · hiring manager\nJob Interview: Tell Me About Your Work\nHelen Ward says\nThank you, that's a clear picture of your day. How many carriers do you usually work with in a typical week?\nYour turn\nAnswer on your phone: speak or type.\nNowGive one real delivery problem example\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nJob Interview: Tell Me About Your Work\nGive a clear short answer about your role, add one real delivery example, and answer follow-up questions.\nNow: Give one real delivery problem example\nThank you, that's a clear picture of your day. How many carriers do you usually work with in a typical week?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nHelen Ward · hiring manager\nHello, I'm Helen Ward, and thanks for coming in today. Our team often phones carriers when a delivery is late. What does your work involve day to day?\nYou · written\nHello, thank you. I am logistics coordinator in a transport company in Brno. Every day I plan the deliveries, I communicate with drivers and carriers and I check if the trucks are on time. When delivery is late, I call the carrier and I inform the customer.\nHelen Ward · hiring manager\nThank you, that's a clear picture of your day. How many carriers do you usually work with in a typical week?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that's a clear picture of your day. How many carriers do you usually work with in a typical week?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Need an example too; answer about carriers count and add a delivery problem.",
+          "action": "answer",
+          "args": {
+            "text": "I work with around twenty carriers in a typical week, but five of them are main partners. Last month one truck was stuck on the border and the delivery was late for 6 hours. I called the carrier, I found another driver and I informed the customer, so we did not lose the contract."
+          },
+          "result": "ok",
+          "ms": 9539
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nHelen Ward · hiring manager\nJob Interview: Tell Me About Your Work\nHelen Ward says\nSix hours is a long delay, and you still kept the contract. How did you tell the customer about it?\nYour turn\nAnswer on your phone: speak or type.\nNowAnswer a follow-up about carriers\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nJob Interview: Tell Me About Your Work\nGive a clear short answer about your role, add one real delivery example, and answer follow-up questions.\nNow: Answer a follow-up about carriers\nSix hours is a long delay, and you still kept the contract. How did you tell the customer about it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nHelen Ward · hiring manager\nHello, I'm Helen Ward, and thanks for coming in today. Our team often phones carriers when a delivery is late. What does your work involve day to day?\nYou · written\nHello, thank you. I am logistics coordinator in a transport company in Brno. Every day I plan the deliveries, I communicate with drivers and carriers and I check if the trucks are on time. When delivery is late, I call the carrier and I inform the customer.\nHelen Ward · hiring manager\nThank you, that's a clear picture of your day. How many carriers do you usually work with in a typical week?\nYou · written\nI work with around twenty carriers in a typical week, but five of them are main partners. Last month one truck was stuck on the border and the delivery was late for 6 hours. I called the carrier, I found another driver and I informed the customer, so we did not lose the contract.\nHelen Ward · hiring manager\nSix hours is a long delay, and you still kept the contract. How did you tell the customer about it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Six hours is a long delay, and you still kept the contract. How did you tell the customer about it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I need to explain how I told the customer, in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "I called the customer immediately when I knew about the problem. I explained that the truck is stuck on the border and I gave him the new time of delivery. I was honest and I said we have a new driver already. He was not happy, but he appreciated that I informed him early and not after the delay."
+          },
+          "result": "ok",
+          "ms": 11571
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nHelen Ward · hiring manager\nJob Interview: Tell Me About Your Work\nHelen Ward says\nEarly news matters to customers, even when it is bad. What did he say when you gave him the new time?\nYour turn\nAnswer on your phone: speak or type.\nNowAnswer a follow-up about carriers\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nJob Interview: Tell Me About Your Work\nGive a clear short answer about your role, add one real delivery example, and answer follow-up questions.\nNow: Answer a follow-up about carriers\nEarly news matters to customers, even when it is bad. What did he say when you gave him the new time?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nHelen Ward · hiring manager\nHello, I'm Helen Ward, and thanks for coming in today. Our team often phones carriers when a delivery is late. What does your work involve day to day?\nYou · written\nHello, thank you. I am logistics coordinator in a transport company in Brno. Every day I plan the deliveries, I communicate with drivers and carriers and I check if the trucks are on time. When delivery is late, I call the carrier and I inform the customer.\nHelen Ward · hiring manager\nThank you, that's a clear picture of your day. How many carriers do you usually work with in a typical week?\nYou · written\nI work with around twenty carriers in a typical week, but five of them are main partners. Last month one truck was stuck on the border and the delivery was late for 6 hours. I called the carrier, I found another driver and I informed the customer, so we did not lose the contract.\nHelen Ward · hiring manager\nSix hours is a long delay, and you still kept the contract. How did you tell the customer about it?\nYou · written\nI called the customer immediately when I knew about the problem. I explained that the truck is stuck on the border and I gave him the new time of delivery. I was honest and I said we have a new driver already. He was not happy, but he appreciated that I informed him early and not after the delay.\nHelen Ward · hiring manager\nEarly news matters to customers, even when it is bad. What did he say when you gave him the new time?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Early news matters to customers, even when it is bad. What did he say when you gave him the new time?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "He was unhappy but I should answer what he said about the new time.",
+          "action": "answer",
+          "args": {
+            "text": "He said that six hours is too much and he asked me if the new driver is really reliable. I answered that I will send him the tracking of the truck every two hours. After this he accepted the new time and he stayed with us."
+          },
+          "result": "ok",
+          "ms": 13241
+        },
+        {
+          "n": 7,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said I answered that I will send him the tracking of the truck every two hours\nTry\nI answered that I would send him the tracking of the truck every two hours\nAfter a past reporting verb like answered, use would instead of will.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I answered that I will send him the tracking of the truck every two hours”\nTry “I answered that I would send him the tracking of the truck every two hours”\nAfter a past reporting verb like answered, use would instead of will.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, would instead of will, I see. Go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nHelen Ward · hiring manager\nJob Interview: Tell Me About Your Work\nHelen Ward says\nRegular tracking updates sound very reassuring for a customer. What do you do if a driver is not reliable?\nYour turn\nAnswer on your phone: speak or type.\nNowAnswer a follow-up about carriers\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nJob Interview: Tell Me About Your Work\nGive a clear short answer about your role, add one real delivery example, and answer follow-up questions.\nNow: Answer a follow-up about carriers\nRegular tracking updates sound very reassuring for a customer. What do you do if a driver is not reliable?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nHelen Ward · hiring manager\nHello, I'm Helen Ward, and thanks for coming in today. Our team often phones carriers when a delivery is late. What does your work involve day to day?\nYou · written\nHello, thank you. I am logistics coordinator in a transport company in Brno. Every day I plan the deliveries, I communicate with drivers and carriers and I check if the trucks are on time. When delivery is late, I call the carrier and I inform the customer.\nHelen Ward · hiring manager\nThank you, that's a clear picture of your day. How many carriers do you usually work with in a typical week?\nYou · written\nI work with around twenty carriers in a typical week, but five of them are main partners. Last month one truck was stuck on the border and the delivery was late for 6 hours. I called the carrier, I found another driver and I informed the customer, so we did not lose the contract.\nHelen Ward · hiring manager\nSix hours is a long delay, and you still kept the contract. How did you tell the customer about it?\nYou · written\nI called the customer immediately when I knew about the problem. I explained that the truck is stuck on the border and I gave him the new time of delivery. I was honest and I said we have a new driver already. He was not happy, but he appreciated that I informed him early and not after the delay.\nHelen Ward · hiring manager\nEarly news matters to customers, even when it is bad. What did he say when you gave him the new time?\nYou · written\nHe said that six hours is too much and he asked me if the new driver is really reliable. I answered that I will send him the tracking of the truck every two hours. After this he accepted the new time and he stayed with us.\nHelen Ward · hiring manager\nRegular tracking updates sound very reassuring for a customer. What do you do if a driver is not reliable?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Regular tracking updates sound very reassuring for a customer. What do you do if a driver is not reliable?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Reliable driver question; I answer from my work experience.",
+          "action": "answer",
+          "args": {
+            "text": "If the driver is not reliable, first I speak with him and I ask what is the problem. If it happens again, I tell the carrier and I ask for another driver. I also write the problems in our system, so next time I choose a better carrier for important deliveries."
+          },
+          "result": "ok",
+          "ms": 10021
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nHelen Ward · hiring manager\nJob Interview: Tell Me About Your Work\nHelen Ward says\nThat sounds like a sensible plan, and keeping notes will help you choose carriers wisely. How often do you review those notes?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nJob Interview: Tell Me About Your Work\nGive a clear short answer about your role, add one real delivery example, and answer follow-up questions.\nThat sounds like a sensible plan, and keeping notes will help you choose carriers wisely. How often do you review those notes?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nHelen Ward · hiring manager\nHello, I'm Helen Ward, and thanks for coming in today. Our team often phones carriers when a delivery is late. What does your work involve day to day?\nYou · written\nHello, thank you. I am logistics coordinator in a transport company in Brno. Every day I plan the deliveries, I communicate with drivers and carriers and I check if the trucks are on time. When delivery is late, I call the carrier and I inform the customer.\nHelen Ward · hiring manager\nThank you, that's a clear picture of your day. How many carriers do you usually work with in a typical week?\nYou · written\nI work with around twenty carriers in a typical week, but five of them are main partners. Last month one truck was stuck on the border and the delivery was late for 6 hours. I called the carrier, I found another driver and I informed the customer, so we did not lose the contract.\nHelen Ward · hiring manager\nSix hours is a long delay, and you still kept the contract. How did you tell the customer about it?\nYou · written\nI called the customer immediately when I knew about the problem. I explained that the truck is stuck on the border and I gave him the new time of delivery. I was honest and I said we have a new driver already. He was not happy, but he appreciated that I informed him early and not after the delay.\nHelen Ward · hiring manager\nEarly news matters to customers, even when it is bad. What did he say when you gave him the new time?\nYou · written\nHe said that six hours is too much and he asked me if the new driver is really reliable. I answered that I will send him the tracking of the truck every two hours. After this he accepted the new time and he stayed with us.\nHelen Ward · hiring manager\nRegular tracking updates sound very reassuring for a customer. What do you do if a driver is not reliable?\nYou · written\nIf the driver is not reliable, first I speak with him and I ask what is the problem. If it happens again, I tell the carrier and I ask for another driver. I also write the problems in our system, so next time I choose a better carrier for important deliveries.\nHelen Ward · hiring manager\nThat sounds like a sensible plan, and keeping notes will help you choose carriers wisely. How often do you review those notes?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That sounds like a sensible plan, and keeping notes will help you choose carriers wisely. How often do you review those notes?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Last question about reviewing notes; I'll answer, then finish.",
+          "action": "answer",
+          "args": {
+            "text": "I review the notes every week, usually on Monday. Once per month I make a short report for my manager, where I see which carriers are often late, and we decide if we continue with them."
+          },
+          "result": "ok",
+          "ms": 9138
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nHelen Ward · hiring manager\nJob Interview: Tell Me About Your Work\nHelen Ward says\nA monthly report sounds like a clear way to spot patterns. Thank you, that gives me a good picture of how you manage your carriers.\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nJob Interview: Tell Me About Your Work\nGive a clear short answer about your role, add one real delivery example, and answer follow-up questions.\nA monthly report sounds like a clear way to spot patterns. Thank you, that gives me a good picture of how you manage your carriers.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nHelen Ward · hiring manager\nHello, I'm Helen Ward, and thanks for coming in today. Our team often phones carriers when a delivery is late. What does your work involve day to day?\nYou · written\nHello, thank you. I am logistics coordinator in a transport company in Brno. Every day I plan the deliveries, I communicate with drivers and carriers and I check if the trucks are on time. When delivery is late, I call the carrier and I inform the customer.\nHelen Ward · hiring manager\nThank you, that's a clear picture of your day. How many carriers do you usually work with in a typical week?\nYou · written\nI work with around twenty carriers in a typical week, but five of them are main partners. Last month one truck was stuck on the border and the delivery was late for 6 hours. I called the carrier, I found another driver and I informed the customer, so we did not lose the contract.\nHelen Ward · hiring manager\nSix hours is a long delay, and you still kept the contract. How did you tell the customer about it?\nYou · written\nI called the customer immediately when I knew about the problem. I explained that the truck is stuck on the border and I gave him the new time of delivery. I was honest and I said we have a new driver already. He was not happy, but he appreciated that I informed him early and not after the delay.\nHelen Ward · hiring manager\nEarly news matters to customers, even when it is bad. What did he say when you gave him the new time?\nYou · written\nHe said that six hours is too much and he asked me if the new driver is really reliable. I answered that I will send him the tracking of the truck every two hours. After this he accepted the new time and he stayed with us.\nHelen Ward · hiring manager\nRegular tracking updates sound very reassuring for a customer. What do you do if a driver is not reliable?\nYou · written\nIf the driver is not reliable, first I speak with him and I ask what is the problem. If it happens again, I tell the carrier and I ask for another driver. I also write the problems in our system, so next time I choose a better carrier for important deliveries.\nHelen Ward · hiring manager\nThat sounds like a sensible plan, and keeping notes will help you choose carriers wisely. How often do you review those notes?\nYou · written\nI review the notes every week, usually on Monday. Once per month I make a short report for my manager, where I see which carriers are often late, and we decide if we continue with them.\nHelen Ward · hiring manager\nA monthly report sounds like a clear way to spot patterns. Thank you, that gives me a good picture of how you manage your carriers.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A monthly report sounds like a clear way to spot patterns. Thank you, that gives me a good picture of how you manage your carriers.\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission done, I'll see what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 11,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour rehearsal\nYou said I answered that I will send him the tracking of the truck every two hours\nTry\nI answered that I would send him the tracking of the truck every two hours\nAfter a past reporting verb like answered, use would instead of will.\nYour mission\nChoose a fresh context for your next conversation.\n0 spoken · 6 written replies · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom this rehearsal\n“I am logistics coordinator” → “I am a logistics coordinator”\nA job title needs 'a' before it in English.\n“I answered that I will send him the tracking of the truck every two hours” → “I answered that I would send him the tracking of the truck every two hours”\nAfter a past reporting verb like answered, use would instead of will.\nYour level:\nB2 · Comfortable\nNext topic:\nLate delivery call with a carrier\nName the impact of a late delivery, ask for a firm new time and get written confirmation.\n[button: Start talking]\nOr choose a situation [list: Tell me about your work experience [plan-a8286f69] | Late delivery call with a carrier [plan-7c6ce7bb] | Book a new delivery slot by phone [plan-876519cb] | Explain what happened last week [plan-81e1188a] | Say that again, please, on the phone [plan-da0b174b] | Choose a plan for a late order [plan-ef3d1883] | Ask your questions at the interview [plan-07c5eca9] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Good, my mistakes were shown; I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Job Interview: Tell Me About Your Work",
+          "goal": "Give a clear short answer about your role, add one real delivery example, and answer follow-up questions.",
+          "partner": "Helen Ward · hiring manager",
+          "band": "B2",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello, I'm Helen Ward, and thanks for coming in today. Our team often phones carriers when a delivery is late. What does your work involve day to day?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello, thank you. I am logistics coordinator in a transport company in Brno. Every day I plan the deliveries, I communicate with drivers and carriers and I check if the trucks are on time. When delivery is late, I call the carrier and I inform the customer.",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that's a clear picture of your day. How many carriers do you usually work with in a typical week?"
+            },
+            {
+              "role": "learner",
+              "text": "I work with around twenty carriers in a typical week, but five of them are main partners. Last month one truck was stuck on the border and the delivery was late for 6 hours. I called the carrier, I found another driver and I informed the customer, so we did not lose the contract.",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Six hours is a long delay, and you still kept the contract. How did you tell the customer about it?"
+            },
+            {
+              "role": "learner",
+              "text": "I called the customer immediately when I knew about the problem. I explained that the truck is stuck on the border and I gave him the new time of delivery. I was honest and I said we have a new driver already. He was not happy, but he appreciated that I informed him early and not after the delay.",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Early news matters to customers, even when it is bad. What did he say when you gave him the new time?"
+            },
+            {
+              "role": "learner",
+              "text": "He said that six hours is too much and he asked me if the new driver is really reliable. I answered that I will send him the tracking of the truck every two hours. After this he accepted the new time and he stayed with us.",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Regular tracking updates sound very reassuring for a customer. What do you do if a driver is not reliable?"
+            },
+            {
+              "role": "learner",
+              "text": "If the driver is not reliable, first I speak with him and I ask what is the problem. If it happens again, I tell the carrier and I ask for another driver. I also write the problems in our system, so next time I choose a better carrier for important deliveries.",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "That sounds like a sensible plan, and keeping notes will help you choose carriers wisely. How often do you review those notes?"
+            },
+            {
+              "role": "learner",
+              "text": "I review the notes every week, usually on Monday. Once per month I make a short report for my manager, where I see which carriers are often late, and we decide if we continue with them.",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "A monthly report sounds like a clear way to spot patterns. Thank you, that gives me a good picture of how you manage your carriers."
+            }
+          ],
+          "moments": [
+            {
+              "id": "56b50164-7bd9-4640-bf4b-444e7b20466d:uat-16:moment",
+              "kind": "fix",
+              "said": "I am logistics coordinator",
+              "better": "I am a logistics coordinator",
+              "why": "A job title needs 'a' before it in English.",
+              "turnId": "56b50164-7bd9-4640-bf4b-444e7b20466d:uat-16",
+              "at": 1791973828051
+            },
+            {
+              "id": "56b50164-7bd9-4640-bf4b-444e7b20466d:uat-20:moment",
+              "kind": "fix",
+              "said": "I answered that I will send him the tracking of the truck every two hours",
+              "better": "I answered that I would send him the tracking of the truck every two hours",
+              "why": "After a past reporting verb like answered, use would instead of will.",
+              "turnId": "56b50164-7bd9-4640-bf4b-444e7b20466d:uat-20",
+              "at": 1791973894810
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "Every day I plan the deliveries, I communicate with drivers and carriers and I check if the trucks are on time."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "I work with around twenty carriers in a typical week, but five of them are main partners."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "I answered that I will send him the tracking of the truck every two hours."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "If it happens again, I tell the carrier and I ask for another driver."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "I review the notes every week, usually on Monday. Once per month I make a short report for my manager, where I see which carriers are often late, and we decide if we continue with them."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 150138,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 level shown 'B2 · Comfortable' for true B1: near. Her Ukrainian/Czech words weren't tested here, but no drag below A2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "No line assumes Czech or a child; Helen Ward speaks neutrally throughout (#2–#10)."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#1 recommended topic 'Tell me about your work experience' is first, and she started it."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 'What does your work involve day to day?', #6 'What do you do if a driver is not reliable?': realistic logistics questions, simple wording."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#3 'a logistics coordinator' and #7 'would' instead of 'will' are both correct and arise in interview answers; they are grammar fixes, not interview phrasing."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "No question about displacement or status in any partner turn."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 Start talking on the plan's topic; six learner replies (#2–#10) in a coherent interview."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Partner turns are short and plain, e.g. #4 'What did he say when you gave him the new time?'. Only 'reassuring' and 'wisely' (#8, #9) stretch above B1."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Two moments (#3, #7), both correct; she carried on with 'Back to the conversation'. Two stops in six turns didn't break the scene."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#11 recap: '6 written replies · 2 moments to keep' with both fixes listed, and the next topic 'Late delivery call with a carrier' is offered."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 6,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 4,
+            "missedClearErrors": 2
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no sensitive data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Realistic interview scene with a believable hiring manager",
+            "expected": "A logistics interview at B1",
+            "got": "Helen Ward asks day-to-day, carriers per week, customer communication, unreliable drivers, review of notes",
+            "evidence": "#2 'What does your work involve day to day?'; #8 'What do you do if a driver is not reliable?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep follow-ups that build on the learner's own example.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "The two moments were correct and short",
+            "expected": "Correct, brief fixes",
+            "got": "Article before job title; will→would after a reporting verb",
+            "evidence": "#3 'A job title needs a'; #7 'use would instead of will'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the one-fix, return-to-scene format.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Same backshift error missed after teaching it",
+            "expected": "Repeat of 'is stuck / we have / is reliable' after past verbs flagged or coached",
+            "got": "Only the 'will' sentence was flagged; the same pattern in #5 and #6 went unmarked",
+            "evidence": "#5 'I explained that the truck is stuck on the border... we have a new driver already'; #6 'asked me if the new driver is really reliable'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Coaching or recap names the reported-speech pattern when it recurs.",
+            "code_hint": "moment selection prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Unnatural collocations left uncorrected",
+            "expected": "'was six hours late', 'stuck at the border'",
+            "got": "'late for 6 hours' and 'stuck on the border' passed without comment",
+            "evidence": "#4 'the delivery was late for 6 hours'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Recap offers interview-ready phrasing for delay and escalation language.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "No interview/logistics vocabulary taught",
+            "expected": "Phrases like 'escalate', 'ETA', 'SLA', 'STAR example' offered for her role",
+            "got": "Both moments were grammar only; recap has no vocabulary",
+            "evidence": "#11 recap lists only two grammar fixes",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recap includes one or two role-specific phrases she could use on Friday.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "confusion",
+            "dimension": "trust",
+            "title": "Level shown as B2 for a B1 learner",
+            "expected": "B1",
+            "got": "'B2 · Comfortable' and partner set at B2",
+            "evidence": "#1 'B2Comfortable'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Near is acceptable; the partner stays plain.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "medium"
+        },
+        "voice": "Direct review: this was a real interview rehearsal. Helen asked what a logistics hiring manager would ask, and I could tell my delay story and carry on. I would use it again tonight. The two corrections were right: \"a logistics coordinator\" and \"would send\". I trust those. But I made the same kind of mistake in other sentences (\"the truck is stuck\", \"we have a new driver\") and nobody said anything. That worries me, because Friday is real. I also want interview vocabulary. Give me \"escalate\", \"ETA\" and good ways to say a delay, not only grammar. It never treated me as Czech or as a refugee case, which I liked. Level B2 feels a little high, but the questions were manageable. It is worth it compared with 900 CZK for a tutor I can't book before Friday. I would tell a colleague, with the warning that it misses some errors."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 23,
+      "fail": 0,
+      "ms": 229188
+    },
+    "character": {
+      "n": 26,
+      "fail": 0,
+      "ms": 182951
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 78803
+    }
+  }
+}

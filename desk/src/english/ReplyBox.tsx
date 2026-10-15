@@ -12,8 +12,16 @@ type SpeechWindow=Window&{SpeechRecognition?:new()=>Recognition;webkitSpeechReco
 
 /**
  * Speak or type one reply, read it back, send it. Nothing is sent unseen, and a spoken reply is
- * only sent as speech once the learner has confirmed the words. Used by the conversation and the level check.
+ * only sent as speech while the learner's confirmation tick is on. The tick stays visible and can be
+ * unticked, but it is shown already ticked once the transcript shows, so a spoken reply goes with one tap
+ * (owner decision 2026-10-07, MH-4). Used by the conversation and the level check.
  */
+export interface ReplyState{mode:"speech"|"text";confirmed:boolean;sendable:boolean}
+/** The state a finished capture leaves: words heard are pre-ticked and sendable as speech; silence leaves nothing to send. */
+export function afterCapture(words:string):ReplyState{const has=!!words.trim();return{mode:"speech",confirmed:has,sendable:has};}
+/** The state an edit leaves: a typed reply, never confirmed as speech. */
+export function afterEdit(words:string):ReplyState{return{mode:"text",confirmed:false,sendable:!!words.trim()};}
+
 export function ReplyBox({ready,busy,question,onSend,onCapture,stopWhen,note}:{
   ready:boolean;busy:boolean;
   /** the id of what is being answered; a draft started against an older question is sent against that one */
@@ -28,7 +36,7 @@ export function ReplyBox({ready,busy,question,onSend,onCapture,stopWhen,note}:{
   const [listening,setListening]=useState(false),[micAvailable,setMicAvailable]=useState(false),[micReason,setMicReason]=useState("");
   const [message,setMessage]=useState("");
   const recognition=useRef<Recognition|null>(null),timer=useRef<ReturnType<typeof setTimeout>|null>(null),mounted=useRef(true);
-  const asked=useRef<string|undefined>(undefined),attempt=useRef("");
+  const asked=useRef<string|undefined>(undefined),attempt=useRef(""),heard=useRef("");
   useEffect(()=>{
     mounted.current=true;
     const w=window as SpeechWindow;
@@ -49,9 +57,10 @@ export function ReplyBox({ready,busy,question,onSend,onCapture,stopWhen,note}:{
     if(!Ctor)return;
     const rec=new Ctor();recognition.current=rec;rec.lang="en-US";rec.continuous=true;rec.interimResults=true;
     asked.current=question;attempt.current="";setDraft("");setMode("speech");setConfirmed(false);setListening(true);
-    rec.onresult=e=>{if(!mounted.current)return;setDraft(Array.from(e.results).map(r=>r[0].transcript).join(" ").trim().slice(0,1200));};
+    heard.current="";
+    rec.onresult=e=>{if(!mounted.current)return;const words=Array.from(e.results).map(r=>r[0].transcript).join(" ").trim().slice(0,1200);heard.current=words;setDraft(words);};
     rec.onerror=e=>{if(mounted.current)setMessage(e.error==="not-allowed"?"Microphone permission was denied. You can enable it in your browser, or type a reply.":"The browser could not hear that reliably. Please retry or type your reply.");};
-    rec.onend=()=>{if(timer.current)clearTimeout(timer.current);recognition.current=null;if(mounted.current){setListening(false);void onCapture?.(false);}};
+    rec.onend=()=>{if(timer.current)clearTimeout(timer.current);recognition.current=null;if(mounted.current){setListening(false);setConfirmed(afterCapture(heard.current).confirmed);void onCapture?.(false);}};
     try{rec.start();timer.current=setTimeout(()=>rec.stop(),45000);}catch{recognition.current=null;setListening(false);setMessage("The microphone could not start. Type your reply or try again.");void onCapture?.(false);}
   };
   const send=async()=>{

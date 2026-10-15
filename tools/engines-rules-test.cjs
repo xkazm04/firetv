@@ -7,10 +7,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after,afterEach}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const data=path.join(os.tmpdir(),`eng-${Date.now()}`);process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 after(()=>fs.rmSync(data,{recursive:true,force:true}));
 
@@ -125,14 +122,14 @@ test('case 10: a break that is not a length overrun is not re-asked: the first r
  assert.equal(plain.length,1,'no re-ask without shorten');
 });
 
-test('case 11: a second answer that still fails, or a re-ask that errors, ends in the original rejection',async()=>{
+test('case 11: a second answer that still fails ends in the original rejection; a re-ask that errors ends as that error (architect 2026-10-15: never relabelled as shape)',async()=>{
  const {text}=load('engines/text.ts');
  const long={topics:[{why:'x'.repeat(25),skill:'ask'}]};
  const prompts=stubSeq(long,{topics:[{why:'y'.repeat(30),skill:'ask'},{why:'z'.repeat(40),skill:'tell'}]});
  await assert.rejects(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true}),(e)=>{isShape('topics[0].why')(e);assert.match(e.message,/25 characters, at most 20/);assert.doesNotMatch(e.message,/30 characters|topics\[1\]/);return true;});
  assert.equal(prompts.length,2,'at most one extra call');
  const again=stubSeq(long,new (engineError())('timeout','stub','too slow'));
- await assert.rejects(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true}),(e)=>{isShape('topics[0].why')(e);assert.match(e.message,/25 characters/);return true;});
+ await assert.rejects(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true}),(e)=>{assert(e instanceof engineError());assert.equal(e.kind,'timeout','the re-ask timed out, and the caller is told so, as the ledger row for try 2 says');return true;});
  assert.equal(again.length,2);
 });
 
@@ -208,13 +205,54 @@ test('case 16: deadlineFor takes the request, else the kind\'s default, floored 
  assert.equal(deadlineFor('text',load('engines/codex.ts').codexCli,{timeoutMs:90000}),240000,'codex floor survives the move');
 });
 
-test('case 17: a shorten re-ask that never settles ends in the first shape rejection, after exactly two provider calls',async()=>{
+test('case 17: a shorten re-ask that never settles ends as a timeout within the ONE deadline both attempts share, after exactly two provider calls',async()=>{
  let calls=0;
  reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1)return {raw:{topics:[{why:'x'.repeat(25),skill:'ask'}]}};return new Promise(()=>{});}});
  const {text}=load('engines/text.ts');
- await assert.rejects(within(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true,timeoutMs:30})),(e)=>{isShape('topics[0].why')(e);assert.match(e.message,/25 characters/);return true;});
+ const t0=Date.now();
+ await assert.rejects(within(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true,timeoutMs:1000}),3000),(e)=>{assert(e instanceof engineError());assert.equal(e.kind,'timeout');return true;});
  assert.equal(calls,2);
+ // a fresh deadline for the re-ask would end near 2000; the bound sits halfway, wide of any loop stall
+ assert(Date.now()-t0<1500,`both attempts end inside the one 1000 ms deadline (plus scheduling), took ${Date.now()-t0} ms`);
 });
+test('case 17b: the re-ask gets what is left of the first deadline, not a fresh one',async()=>{
+ let calls=0;
+ reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1){await new Promise(r=>setTimeout(r,600));return {raw:{topics:[{why:'x'.repeat(25),skill:'ask'}]}};}return new Promise(()=>{});}});
+ const {text}=load('engines/text.ts');
+ const t0=Date.now();
+ await assert.rejects(within(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true,timeoutMs:1000}),3000),(e)=>e instanceof engineError()&&e.kind==='timeout');
+ const took=Date.now()-t0;
+ assert.equal(calls,2);
+ // the old seam ends at 600 + a fresh 1000 = 1600; the bound sits halfway, wide of any loop stall (a lazy require, a ledger write)
+ assert(took<1300,`ended inside the one 1000 ms deadline (plus scheduling), not 600 + a fresh 1000: took ${took} ms`);
+});
+test('case 17d: a caller\'s re-ask handed the first answer\'s ticket ends inside that call\'s deadline, not a fresh one',async()=>{
+ let calls=0;
+ reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1){await new Promise(r=>setTimeout(r,600));return {raw:ANSWER.text};}return new Promise(()=>{});}});
+ const {text}=load('engines/text.ts');
+ const t0=Date.now();
+ const first=await text({system:'s',prompt:'p',timeoutMs:1000});
+ assert.equal(first.again.try,2);assert(Math.abs(first.again.deadlineAt-(t0+1000))<100,'the ticket names the first call\'s own deadline');
+ await assert.rejects(within(text({system:'s',prompt:'p again',timeoutMs:1000},first.again),3000),(e)=>e instanceof engineError()&&e.kind==='timeout');
+ const took=Date.now()-t0;
+ assert.equal(calls,2);
+ // the old seam ends at 600 + a fresh 1000 = 1600; the bound sits halfway, wide of any loop stall
+ assert(took<1300,`the turn ended inside the one 1000 ms deadline (plus scheduling), not 600 + a fresh 1000: took ${took} ms`);
+});
+test('case 17e: a re-ask whose ticket has no time left is not started: timeout, and the provider is never called',async()=>{
+ let calls=0;
+ reg().useProvider('text',{name:'stub',run:async()=>{calls++;return {raw:ANSWER.text};}});
+ const {text}=load('engines/text.ts');
+ await assert.rejects(text({system:'s',prompt:'p'},{deadlineAt:Date.now()-1,try:2}),(e)=>e instanceof engineError()&&e.kind==='timeout');
+ assert.equal(calls,0);
+});
+test('case 17c: the re-ask is chosen from the code validate() sets, not from its wording',()=>{
+ const {validate,onlyTooLong}=load('engines/shape.ts');
+ const b=validate({why:'x'.repeat(25)},{type:'object',properties:{why:{type:'string',maxLength:20}}});
+ assert.equal(b[0][2],'long');assert(onlyTooLong(b));
+ assert(!onlyTooLong([['why','25 characters, at most 20']]),'the same words without the code are not a long break');
+});
+
 
 test('GUARD case 18: a stub that answers at once resolves with its provider and ms for all five kinds',async()=>{
  for(const k of KINDS){
@@ -231,12 +269,15 @@ const health=()=>load('engines/health.ts');
 after(()=>{if(globalThis.__desk&&globalThis.__desk.ticker)clearInterval(globalThis.__desk.ticker);});
 const nap=(ms)=>new Promise((r)=>setTimeout(r,ms));
 const LIVE={text:{ok:'yes'},vision:{title:'t'},embed:[[1]],speak:Buffer.from('x'),listen:{text:'hi'}};
-/** A stub for every kind with a probe and a run, both counted; `over[kind]` replaces fields (probe: null drops it). */
+/**
+ * A stub for every kind with a probe and a run, both counted; `over[kind]` replaces fields (probe: null drops it).
+ * `n.peak` is the most runs in flight at once: side by side is a count, never a wall-clock race a loaded machine loses.
+ */
 const stubAll=(over={},delay=0)=>{
- const n={run:{},probe:{}};
+ const n={run:{},probe:{},live:0,peak:0};
  for(const k of KINDS){
   n.run[k]=0;n.probe[k]=0;
-  const p={name:'stub',run:async()=>{n.run[k]++;if(delay)await nap(delay);return {raw:LIVE[k]};},probe:async()=>{n.probe[k]++;return {ok:true,say:'fine'};},...(over[k]||{})};
+  const p={name:'stub',run:async()=>{n.run[k]++;n.live++;n.peak=Math.max(n.peak,n.live);try{if(delay)await nap(delay);}finally{n.live--;}return {raw:LIVE[k]};},probe:async()=>{n.probe[k]++;return {ok:true,say:'fine'};},...(over[k]||{})};
   if(over[k]&&over[k].probe===null)delete p.probe;
   reg().useProvider(k,p);
  }
@@ -252,13 +293,17 @@ test('case 19: the status asks each kind\'s active provider for its probe: five 
 });
 
 test('case 20: a probe that never answers is one not-ok row at the budget; the others are unaffected and the round is parallel',async()=>{
- stubAll({listen:{probe:()=>new Promise(()=>{})}});
+ // a probe answers only once all five probes have started: asked one at a time, the first waits past the 30 ms budget
+ let started=0,open;const allIn=new Promise((r)=>{open=r;});
+ const arrive=()=>{if(++started===5)open();};
+ const held=async()=>{arrive();if(await Promise.race([allIn.then(()=>true),nap(200).then(()=>false)]))return {ok:true,say:'fine'};return {ok:false,say:'asked alone'};};
+ stubAll({text:{probe:held},vision:{probe:held},embed:{probe:held},speak:{probe:held},listen:{probe:()=>{arrive();return new Promise(()=>{});}}});
  const t0=Date.now();
  const rows=await health().engineStatus(30);
  assert(Date.now()-t0<500,`returned in ${Date.now()-t0} ms`);
  const listen=rows.find(r=>r.kind==='listen');
  assert.equal(listen.ok,false);assert.match(listen.say,/did not answer/);
- for(const r of rows.filter(r=>r.kind!=='listen'))assert.equal(r.ok,true,r.kind);
+ for(const r of rows.filter(r=>r.kind!=='listen'))assert.equal(r.ok,true,`${r.kind}: answered, so all five probes were in flight at once (${r.say})`);
 });
 
 test('case 21: a provider with no probe is ok:null and says how to find out; never ok:true on no evidence',async()=>{
@@ -288,10 +333,8 @@ test('case 22: the real ollama probes read /api/tags: a missing model says what 
 
 test('case 23: a live check runs text, vision, embed and speak side by side, listen as a probe; a failure is a typed row with no engine text',async()=>{
  const n=stubAll({},40);
- const t0=Date.now();
  const r=await health().engineCheck({live:true,sample:'aGk='});
- const took=Date.now()-t0;
- assert(took<120,`parallel: ${took} ms (the serial sum is 160)`);
+ assert.equal(n.peak,4,`side by side: text, vision, embed and speak all in flight at once (peak ${n.peak}; one at a time is 1)`);
  assert.deepEqual(r.map(x=>x.kind),['text','vision','embed','speak','listen']);
  for(const k of ['text','vision','embed','speak']){assert.equal(n.run[k],1,`${k} ran`);const row=r.find(x=>x.kind===k);assert.equal(row.ok,true,k);assert.equal(row.provider,'stub',k);assert(row.ms>=30,`${k} reports the engine's ms (${row.ms})`);}
  assert.equal(n.run.listen,0,'listen is not run');assert.equal(n.probe.listen,1);
@@ -332,4 +375,162 @@ test('case 24: GET /api/smoke is a probe round for the TV and in-process callers
  assert.equal(body.live,true);assert.equal(body.engines.length,5);
  for(const k of ['text','vision','embed','speak'])assert.equal(n.run[k],1,`${k} ran live`);
  assert.equal(n.run.listen,0);
+});
+
+// ---- HINT-1 HL4 / HL5: the lesson library's vectors and the pick's menu check
+const LESSON2='bAerID24QJ0';
+const freshLessons=()=>{
+ for(const k of Object.keys(require.cache))if(/library.lessons\.ts$|desk.pick\.ts$/.test(k))delete require.cache[k];
+ fs.rmSync(path.join(data,'embeddings.json'),{force:true});
+ fs.writeFileSync(path.join(data,'lessons',`${LESSON2}.en.vtt`),['WEBVTT\n',cue(0,'linear equations'),cue(50,'distribute first'),cue(100,'collect like terms')].join('\n'));
+ return load('library/lessons.ts');
+};
+/** An embed stub: a window's vector is a unit vector by position, a query's is the unit vector at `want`. */
+const embedStub=(want,log)=>reg().useProvider('embed',{name:'stub',run:async({texts})=>{log.push(texts.length);return {raw:texts.length===1?[[0,0,0,1].map((_,i)=>i===want?1:0)]:texts.map((_,i)=>[0,0,0,1].map((__,j)=>j===i?1:0))};}});
+
+test('HL4 case 1: one failed embed call is not remembered - the next call asks the engine again and finds the nearest window',async()=>{
+ const L=freshLessons();const log=[];let fail=true;
+ reg().useProvider('embed',{name:'stub',run:async({texts})=>{log.push(texts.length);if(fail){fail=false;throw new Error('ollama is down');}return {raw:texts.length===1?[[0,0,1,0]]:texts.map((_,i)=>[0,0,0,0].map((__,j)=>j===i?1:0))};}});
+ await assert.rejects(L.bestWindow(LESSON,'q'),/ollama is down/);
+ assert.equal(fs.existsSync(path.join(data,'embeddings.json')),false,'a failed build caches nothing');
+ const w=L.lessonWindows(LESSON);
+ const b=await L.bestWindow(LESSON,'q');
+ assert.equal(b.t,w[2].t);assert.notEqual(b.t,0,'not 0:00');
+ const b2=await L.bestWindow(LESSON2,'q');assert.ok(b2&&b2.score>0,'another lesson works too');
+});
+
+test('HL4 case 2: a truncated embeddings.json is rebuilt, and the pick works',async()=>{
+ const L=freshLessons();const log=[];embedStub(2,log);
+ fs.writeFileSync(path.join(data,'embeddings.json'),'{"v":2,"model":"nomic-emb');
+ const w=L.lessonWindows(LESSON);
+ assert.equal((await L.bestWindow(LESSON,'q')).t,w[2].t);
+ assert.ok(log.length>0,'the engine was asked');
+ JSON.parse(fs.readFileSync(path.join(data,'embeddings.json'),'utf8'));
+ assert.deepEqual(fs.readdirSync(data).filter((n)=>n.endsWith('.tmp')),[],'no temp file is left');
+});
+
+test('HL4 case 3: a cache written under another model, or for other text, or of the wrong length, is rebuilt',async()=>{
+ let L=freshLessons();let log=[];embedStub(1,log);
+ await L.bestWindow(LESSON,'q');const f=path.join(data,'embeddings.json');
+ const good=JSON.parse(fs.readFileSync(f,'utf8'));assert.equal(good.model,load('engines/embed.ts').EMBED_MODEL);
+ const reload=()=>{for(const k of Object.keys(require.cache))if(/library.lessons\.ts$/.test(k))delete require.cache[k];log.length=0;return load('library/lessons.ts');};
+ // another model
+ fs.writeFileSync(f,JSON.stringify({...good,model:'some-other-model'}));
+ L=reload();await L.bestWindow(LESSON,'q');assert.ok(log.length>0,'another model: rebuilt');
+ // a changed digest
+ const g2=JSON.parse(fs.readFileSync(f,'utf8'));g2.lessons[LESSON].digest='stale';fs.writeFileSync(f,JSON.stringify(g2));
+ L=reload();await L.bestWindow(LESSON,'q');assert.ok(log.length>1,'a changed digest: that lesson is embedded again');
+ // a vector of the wrong length is never used
+ const g3=JSON.parse(fs.readFileSync(f,'utf8'));g3.lessons[LESSON].vectors=g3.lessons[LESSON].vectors.slice(0,1);fs.writeFileSync(f,JSON.stringify(g3));
+ L=reload();const w=L.lessonWindows(LESSON);assert.equal((await L.bestWindow(LESSON,'q')).t,w[1].t);
+ assert.equal(JSON.parse(fs.readFileSync(f,'utf8')).lessons[LESSON].vectors.length,w.length);
+});
+
+test('HL4 case 4: two concurrent calls embed once',async()=>{
+ const L=freshLessons();const log=[];embedStub(0,log);
+ const [a,b]=await Promise.all([L.ensureVectors(),L.ensureVectors()]);
+ assert.equal(a,b);
+ const windows=L.lessonWindows(LESSON).length?2:0; // two lessons have transcripts here
+ assert.equal(log.length,windows,'one embed call per lesson, shared by both callers');
+});
+
+test('HL5 case 1: the pick accepts only an id from the subject\'s menu',async()=>{
+ const {pickLesson}=freshLessons()&&load('desk/pick.ts');
+ stubText({lesson:'en-6',why:'chosen because ...'});
+ assert.equal(await pickLesson('maths','Solve for x: 3x - 7 = 11'),null,'an english id for a maths problem');
+ for(const bad of ['none',42,null,['bAerID24QJ0']]){stubText({lesson:bad,why:'x'});
+  const r=await pickLesson('maths','Solve for x: 3x - 7 = 11').catch((e)=>e);
+  assert.ok(r===null||r instanceof Error,`${JSON.stringify(bad)} is no lesson`);}
+ reg().useProvider('embed',{name:'stub',run:async({texts})=>({raw:texts.map(()=>[1,0])})});
+ stubText({lesson:` ${LESSON} `,why:'chosen because ...'});
+ assert.equal((await pickLesson('maths','Solve for x: 3x - 7 = 11')).id,LESSON,'a menu id still returns its lesson');
+});
+
+// ---- scan-sweep optimize 2026-10-13: the schema rule and its neighbours agree
+test('sweep case 1: fit() counts characters as the schema check does: a reply at its maxLength with an emoji passes both',()=>{
+ const {fit,validate,str}=load('engines/shape.ts');
+ const reply='a'.repeat(229)+'\u{1F600}'; // 230 characters, 231 UTF-16 units
+ assert.deepEqual(validate(reply,str(230)),[],'the schema check accepts it');
+ assert.equal(fit(reply,230,()=>new Error('does not fit')),reply,'fit accepts what the schema accepted');
+ assert.throws(()=>fit('a'.repeat(230)+'\u{1F600}',230,()=>new Error('does not fit')),/does not fit/,'one character over is still refused');
+});
+
+test('sweep case 2: findBinary finds what a spawn without a shell would start: on Windows an npm sh shim with no extension is not installed',()=>{
+ const {findBinary}=load('engines/types.ts');
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'eng-bin-'));const prior=process.env.PATH,priorW=process.env.Path;
+ try{
+  fs.writeFileSync(path.join(dir,'deskshim'),'#!/bin/sh\necho hi\n');
+  fs.writeFileSync(path.join(dir,'deskreal.exe'),'');
+  process.env.PATH=dir;if(priorW!==undefined)process.env.Path=dir;
+  assert.equal(findBinary('deskreal'),path.join(dir,'deskreal.exe'),'a bare name finds its .exe');
+  assert.equal(findBinary('deskreal.exe'),path.join(dir,'deskreal.exe'),'a name with its extension is found as it is');
+  if(process.platform==='win32')assert.equal(findBinary('deskshim'),null,'spawn("deskshim") is ENOENT on Windows, so the probe must not say installed');
+  else assert.equal(findBinary('deskshim'),path.join(dir,'deskshim'));
+ }finally{process.env.PATH=prior;if(priorW!==undefined)process.env.Path=priorW;fs.rmSync(dir,{recursive:true,force:true});}
+});
+
+test('sweep case 3: a transcriber is "on this machine" only at a loopback host; another host on the network is not local',async()=>{
+ const L=load('engines/listen.ts'),real=globalThis.fetch,prior=process.env.STT_URL;
+ try{
+  globalThis.fetch=async()=>new Response('{}',{status:200});
+  for(const u of ['http://localhost:8080','http://127.0.0.1:8080/','http://[::1]:8080']){process.env.STT_URL=u;assert.equal((await L.listenStatus()).local,true,u);}
+  for(const u of ['http://192.168.1.20:8080','https://stt.example.com']){
+   process.env.STT_URL=u;const s=await L.listenStatus();
+   assert.equal(s.local,false,`${u}: not on this machine`);
+   const p=await reg().provider('listen').probe();
+   assert.doesNotMatch(p.say,/this machine/,`${u}: the engine check does not say "on this machine"`);
+  }
+ }finally{globalThis.fetch=real;if(prior===undefined)delete process.env.STT_URL;else process.env.STT_URL=prior;}
+});
+
+test('sweep case 4: the validator checks minimum and maximum, the two number keywords the desk writes (items.ts difficulty and pieces)',()=>{
+ const {validate}=load('engines/shape.ts');
+ const difficulty={type:'integer',minimum:1,maximum:5};
+ assert.deepEqual(validate(3,difficulty),[]);assert.deepEqual(validate(1,difficulty),[]);assert.deepEqual(validate(5,difficulty),[]);
+ assert.equal(validate(9,difficulty).length,1,'over the maximum');assert.equal(validate(0,difficulty).length,1,'under the minimum');
+ assert.deepEqual(validate({pieces:12},{type:'object',properties:{pieces:{type:'integer',minimum:2,maximum:10}}})[0][0],'pieces','the path names the field');
+});
+
+test('sweep case 5: embed() holds one answer\'s vectors to one length; a ragged answer is a shape EngineError, never a NaN score later',async()=>{
+ const {embed,cosine}=load('engines/embed.ts');
+ assert(Number.isNaN(cosine([1,0,0],[1,0])),'a ragged pair scores NaN, which is why the engine refuses it');
+ reg().useProvider('embed',{name:'stub',run:async()=>({raw:[[1,0,0],[1,0]]})});
+ await assert.rejects(embed({texts:['a','b']}),isShape(''));
+ reg().useProvider('embed',{name:'stub',run:async()=>({raw:[[1,0],[0,1]]})});
+ assert.deepEqual((await embed({texts:['a','b']})).json,[[1,0],[0,1]]);
+});
+
+test('UD-22: after the one re-ask, a string still over its maxLength is cut at a word boundary; type and unbroken-run failures still fail',async()=>{
+ const {text}=load('engines/text.ts');
+ const S={type:'object',additionalProperties:false,properties:{premise:{type:'string',maxLength:400,minLength:1},skill:{type:'string',enum:['ask','tell']}},required:['premise','skill']};
+ const words='A teammate missed a deadline and you need to say what changed. '.repeat(9);
+ const prompts=stubSeq({premise:words,skill:'ask'},{premise:words,skill:'ask'});
+ const r=await text({system:'s',prompt:'p',schema:S,isolated:true,shorten:true});
+ assert.equal(prompts.length,2,'still exactly one re-ask');
+ assert(r.json.premise.length<=400&&r.json.premise.length>340,`cut near the limit: ${r.json.premise.length}`);
+ assert(words.startsWith(r.json.premise)&&/[a-z.]$/.test(r.json.premise)&&/\s/.test(words[r.json.premise.length]),'a prefix that ends on a whole word');
+ // a second answer broken another way is not repaired
+ stubSeq({premise:words,skill:'ask'},{premise:words,skill:'sing'});
+ await assert.rejects(text({system:'s',prompt:'p',schema:S,isolated:true,shorten:true}),isShape('premise'));
+ // no boundary to cut at: the rejection stands
+ stubSeq({premise:'x'.repeat(450),skill:'ask'},{premise:'x'.repeat(450),skill:'ask'});
+ await assert.rejects(text({system:'s',prompt:'p',schema:S,isolated:true,shorten:true}),isShape('premise'));
+});
+
+test('sweep case 6: vision retries without think only for a 400 (the key rejected); a 404 or 500 is one POST and ends in that status',async()=>{
+ const {ollamaVision}=load('engines/vision.ts'),real=globalThis.fetch;
+ const ctx={signal:new AbortController().signal},req={imageBase64:'aGk=',prompt:'p'};
+ const run=async(statuses)=>{
+  const posts=[];
+  globalThis.fetch=async(url,init)=>{const b=JSON.parse(init.body);posts.push('think' in b);const s=statuses[Math.min(posts.length-1,statuses.length-1)];
+   return s===200?{ok:true,status:200,json:async()=>({message:{content:'{}'}}),text:async()=>''}:{ok:false,status:s,text:async()=>`status ${s}`};};
+  const out=await ollamaVision.run(req,ctx).then(()=>'ok',(e)=>e.message);
+  return {posts,out};
+ };
+ try{
+  const a=await run([404]);assert.equal(a.posts.length,1,'404: one POST');assert.match(a.out,/404/);
+  const b=await run([500]);assert.equal(b.posts.length,1,'500: one POST');assert.match(b.out,/500/);
+  const c=await run([400,200]);assert.deepEqual(c.posts,[true,false],'400: think:false first, then the body without think');assert.equal(c.out,'ok');
+  const d=await run([400,404]);assert.equal(d.posts.length,2);assert.match(d.out,/404/);
+ }finally{globalThis.fetch=real;}
 });

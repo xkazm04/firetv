@@ -40,6 +40,11 @@ export interface CalcSpineTopic {
   prereq: string[];
   /** The practice shapes this topic may use - at least one. */
   shapes: CalcShape[];
+  /**
+   * A structural requirement every practice spec of this topic must meet, checked in code (rules/calc meetsRequirement,
+   * one of CALC_REQUIREMENTS): 'composition' - the function is a function inside a function. Absent on most topics.
+   */
+  requires?: "composition";
 }
 
 export const CALC1_SPINE: CalcSpineTopic[] = [
@@ -112,6 +117,7 @@ export const CALC1_SPINE: CalcSpineTopic[] = [
     blurb: "The chain rule differentiates a function inside a function, and implicit differentiation applies it to y as a function of x.",
     prereq: ["calc1-rules"],
     shapes: ["derivative"],
+    requires: "composition",
   },
   {
     id: "calc1-log-derivative", sessions: [13], sections: ["3.6", "3.7", "3.8"],
@@ -171,7 +177,7 @@ export const CALC1_SPINE: CalcSpineTopic[] = [
   },
   {
     id: "calc1-area-so-far", sessions: [24], sections: ["5.2"],
-    name: "The area-so-far function", strand: "Integrals",
+    name: "The integral with a variable upper limit", strand: "Integrals",
     blurb: "Letting the upper limit of an integral move turns the area under a curve into a function of that limit.",
     prereq: ["calc1-definite-integral"],
     shapes: ["definite-integral"],

@@ -5,54 +5,70 @@
  * work happens in the route handlers and lands as further events. Kept on globalThis so Next's
  * dev reloads do not lose the desk mid-session; persisted as JSON on every change.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { networkInterfaces } from "node:os";
-import { AGE_RANGE } from "@/tv/profileRows";
+import { RETRYABLE, type JobFailure } from "../desk/failure";
+import type { Workroom } from "../twin/workroom";
+import { randomInt } from "node:crypto";
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { lanHost } from "./lan";
+import { dataDir } from "../dataDir";
+import { AGE_RANGE, SYSTEMS } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
+import { dayOf } from "@/tv/mathsRows";
 import { focusAfterRewrite } from "@/tv/keys";
 import path from "node:path";
-import { addHistory, getLearner, saveLearner, type HistoryEntry, type SkillRecord } from "./learners";
-import { learnerPath, topicIn, topicsOf, type MathPath } from "../library/paths";
-import { LESSONS } from "../library/lessons.data";
+import { addHints, addHistory, addPaper, blank, getLearner, readLearner, saveLearner, type HistoryEntry, type SkillRecord, type StoredPaper } from "./learners";
+import { isPath, learnerPath, topicIn, topicsOf, type MathPath } from "../library/paths";
+import { LESSONS, PLAYBOOK } from "../library/lessons.data";
 import { watchDue, type Watch } from "../library/watched";
 import type { RuleCard } from "../rules/english";
 import { restatedLine, slipsFor } from "../rules/maths";
 import { mathsEntry } from "../rules/digest";
-import { sundayPage, sundayWords, type WeekLine } from "../rules/week";
+import { WEEK_UNREAD, sundayPage, sundayWords, type WeekLine } from "../rules/week";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
-import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
-import type { Fix, Sentence, Was } from "../rules/essay";
-import type { Mode } from "../rules/mode";
+import { isCalc2Spec, type Calc2Spec } from "../rules/calc2";
+import { isPartLabel, type PartLabel } from "../rules/calc-word";
+import { SCHOOL_SHAPES, TOP_SLIP_FORMS, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
+import { planFill, planSlots, type Fix, type Plan, type Sentence, type Was } from "../rules/essay";
+import { adultAllowed, type Mode } from "../rules/mode";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
+import { STATEMENTS } from "../library/gcse";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "essayplan" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "paper" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs" | "worked" | "workroom";
 
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
 export type SchoolSystem = "us" | "uk" | "cz" | "de";
-/** `mathPath`: the Math course the learner is on (library/paths.ts) - absent is the school path. */
 /**
- * `mode`: the explicit family/adult choice (rules/mode.ts, Family W4). Optional and usually absent: unset means the mode
- * is derived (modeOf). Phase 1 honours only "family"; a stored "adult" is kept on disk but modeOf ignores it until the
- * Adult build (slice A5) adds its gate.
+ * `mathPath`: the Math course the learner is on (library/paths.ts) - absent is the school path.
+ * `mode`: the explicit family/adult choice (rules/mode.ts, Family W4; the gate since slice A5). Optional and usually absent:
+ * unset means the mode is derived (modeOf). A stored "adult" counts only while rules/mode adultAllowed holds (18+).
  */
 export interface Profile { id: string; name: string; type: StudentType; age?: number; system?: SchoolSystem; modules: Subject[]; mathPath?: MathPath; mode?: Mode; }
-/** Only 'school' and 'calc1' are paths: any other mathPath (a draft patch, an older or hand-edited session.json) is dropped. */
+/** Only a key of PATHS (library/paths isPath) is a path: any other mathPath (a draft patch, an older or hand-edited session.json) is dropped. */
 function pathChecked<T extends { mathPath?: unknown }>(p: T): T {
-  if (p.mathPath === undefined || p.mathPath === "school" || p.mathPath === "calc1") return p;
+  if (p.mathPath === undefined || isPath(p.mathPath)) return p;
   const q = { ...p }; delete q.mathPath; return q;
 }
 /**
  * Only "family" and "adult" are modes: any other `mode` (junk in a draft patch, a hand-edited session.json) is dropped, so the
- * profile is back to the derived default. `allowAdult` is false for a profile.draft patch: nothing may set Adult in Phase 1
- * (no screen reaches it, and the parent gate is built with the Adult build), so a patch may set only "family". session.json
- * load passes true: a stored "adult" is kept as data, and modeOf does not honour it.
+ * profile is back to the derived default. `allowAdult` false drops "adult" too. A profile.draft patch may set "adult" since
+ * slice A5, and the merged draft then passes adultGated; session.json load keeps a stored "adult" as data and modeOf
+ * honours it only while the gate holds.
  */
 export function modeChecked<T extends { mode?: unknown }>(p: T, allowAdult = true): T {
   if (p.mode === undefined || p.mode === "family" || (allowAdult && p.mode === "adult")) return p;
   const q = { ...p }; delete q.mode; return q;
+}
+/**
+ * A draft that may not be Adult (under 18, or a school type with no age) loses "adult": the gate is re-checked on every
+ * edit. A refused adult falls back to a "family" the draft already held, never erasing it.
+ */
+function adultGated(p: Profile, before?: Profile | null, savedMinor = false): Profile {
+  if (p.mode !== "adult" || (adultAllowed(p) && !savedMinor)) return p;
+  const q = { ...p }; delete q.mode;
+  return before?.mode === "family" ? { ...q, mode: "family" } : q;
 }
 /**
  * A practice topic's name as the desk writes it, on whichever path it belongs to: topicIn(id)?.name ?? id. For every
@@ -63,13 +79,13 @@ export const topicLabel = (id: string): string => topicIn(id)?.name ?? id;
 const labelOf = (label: string, topic: string) => label === topicLabel(topic) || label === topic;
 
 
-export interface PageItem { n: number; text: string; cx: number; cy: number; band: [number, number]; key: string; }
+export interface PageItem { n: number; /** a lettered part's own name on the page: 'a)', '3b' (n stays the printed number) */ label?: string; text: string; cx: number; cy: number; band: [number, number]; key: string; /** the normalised text, a content fingerprint: the key is the item's identity (page id + printed number), not its text */ fingerprint?: string; }
 /**
  * `owner` on a page, a set, a hint and a lesson is the learner it was made for (principle 3: only this learner's), stamped
  * when it is made - by the route that asked, else by the reducer from the learner at the desk. Older sessions have none:
  * settleOwners gives each the learner the desk's own record names.
  */
-export interface Page { id: string; subject: Subject; title: string; img: string; w: number; h: number; items: PageItem[]; readMs?: number; provider?: string; owner?: string; }
+export interface Page { id: string; subject: Subject; title: string; img: string; w: number; h: number; items: PageItem[]; readMs?: number; provider?: string; owner?: string; day?: string; /** the printed numbers the read left out: empty when complete, null when unknown, absent when never checked */ missing?: number[] | null; }
 export interface Task { id: string; sub: Subject; name: string; min: number; done: boolean; }
 export interface Hint { key: string; problem: string; stage: 1 | 2; hint1: { hint: string; next: string } | null; hint2: { hint: string; next: string } | null; askedQ: string; rule?: RuleCard; provider?: string; ms?: number; owner?: string; }
 export interface LessonPick { id: string; title: string; t: number; text: string; why: string; youtube?: string; owner?: string; }
@@ -104,14 +120,21 @@ export interface PracticeItem {
    * question does not already print - no result. Which engine reads it is decided by `spec.shape` alone: a Calculus
    * shape is never read by school code, a school shape never by Calculus code.
    */
-  spec?: CalcSpec | SchoolSpec;
-  /** A school item's tier (1 or 2), as the generator that wrote it was asked for: computed by code, never a model's number. */
-  tier?: 1 | 2;
+  spec?: CalcSpec | Calc2Spec | SchoolSpec;
+  /** A school item's tier (1 or 2; 3 the top rung of a step up, MB-B20), as the generator that wrote it was asked for: computed by code, never a model's number. */
+  tier?: 1 | 2 | 3;
   /**
    * Set by code when the set was asked for as "a step up" (Family W8, rules/stretch): marking records this item's attempt
    * on the step-up record only (lib/session/learners.ts `stretch`), never on the usual one. Absent is a usual item.
    */
   stretch?: true;
+  /**
+   * A part of a multi-part Calculus question (v2 M3a, rules/calc-word): the parts are consecutive items, each with its own
+   * number, spec and printed line (`question`), judged as any item. Every part carries the same `stem` - the situation,
+   * written by code and printed once above the parts - and its letter. Neither holds a value a part's answer needs.
+   */
+  stem?: string;
+  part?: PartLabel;
 }
 /**
  * `nth`: which occurrence of `span` in the line is meant (0 = the first, as maths/typeset `spanStarts` counts
@@ -127,11 +150,33 @@ const slipAtOf = (x: unknown): SlipAt | undefined => {
   if (Number.isInteger(o.nth) && o.nth! >= 0) at.nth = o.nth;
   return at;
 };
+/**
+ * A worked lesson (v2 M1, lib/desk/worked.ts): the idea (the model's words when `own`, else the authored one), the three
+ * method steps, and examples written and answered by code. `owner` is the learner it was written for.
+ */
+export interface Worked { topic: string; title: string; idea: string; own: boolean; steps: string[]; examples: { question: string; answer: string; tier: 1 | 2 | 3 }[]; owner?: string; }
 /** `stretch`: the set was asked for as "a step up" (Family W8); every item carries the same flag. Absent is a usual set. */
-export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; stretch?: true; }
+export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; stretch?: true;
+  /** The statements (gcse.ts codes) a set opened from a paper's recovery row is aimed at (MB-B40); absent on any other set. */
+  aim?: string[];
+  /**
+   * The slips a step up's tier-3 draw was aimed at (cycle 18, rules/school TOP_SLIP_FORMS ids of the set's unit), only when
+   * the aim changed the draw; absent on any other set.
+   */
+  topAim?: string[];
+  /**
+   * When the set was marked (cycle 22, ms since the epoch, the clock history lines are dated by): stamped by the one
+   * practice.marked that marks it, so the recap can tell tonight's set from an older one. Kept only on a marked set; absent
+   * on a set marked before the stamp, which the recap dates by its history line instead.
+   */
+  markedAt?: number; }
 
+/** The statement codes a set may be aimed at (MB-B40): the GCSE map's own, nothing else. */
+const STATEMENT_CODES = new Set(STATEMENTS.map((x) => x.code));
+/** The screens the paper's aim lasts across (MB-B40): Get ready for school and the worked lesson it opens. */
+const AIM_KEEPS = new Set<Screen>(["prepare", "worked"]);
 /** A spec's own parameters, by name: the ones its question prints. `zero` (the result, for a symmetry item) is not one. */
-const SPEC_KEYS = ["f", "at", "a", "b", "side", "on", "kind", "x0", "steps"] as const;
+const SPEC_KEYS = ["f", "at", "a", "b", "side", "on", "kind", "x0", "steps", "pieces", "rule"] as const;
 /**
  * A school spec's own parameters (rules/school.ts SchoolSpec): the expression, the form and unit asked for, the sign flag,
  * and the form a conversion asks for (`to`, Family W7 batch 2: "Write 3/8 as a decimal").
@@ -143,7 +188,7 @@ const plainValue = (v: unknown) => typeof v === "string" || (typeof v === "numbe
  * Dispatched on `shape`: a Calculus shape keeps SPEC_KEYS, a school shape keeps SCHOOL_SPEC_KEYS and must still be
  * well formed by rules/school (a spec that is not is dropped, so no school code ever reads one it cannot judge).
  */
-function specShown(x: unknown): CalcSpec | SchoolSpec | undefined {
+function specShown(x: unknown): CalcSpec | Calc2Spec | SchoolSpec | undefined {
   const o = x as Record<string, unknown> | null;
   if (!o || typeof o !== "object") return undefined;
   if ((SCHOOL_SHAPES as readonly unknown[]).includes(o.shape)) {
@@ -151,7 +196,7 @@ function specShown(x: unknown): CalcSpec | SchoolSpec | undefined {
     for (const k of SCHOOL_SPEC_KEYS) if (o[k] !== undefined) out[k] = o[k];
     return schoolWellFormed(out).ok ? (out as SchoolSpec) : undefined;
   }
-  if (!(CALC_SHAPES as readonly unknown[]).includes(o.shape)) return undefined;
+  if (!(CALC_SHAPES as readonly unknown[]).includes(o.shape) && !isCalc2Spec({ shape: o.shape })) return undefined;
   const out: Record<string, unknown> = { shape: o.shape };
   for (const k of SPEC_KEYS) {
     const v = o[k];
@@ -160,8 +205,10 @@ function specShown(x: unknown): CalcSpec | SchoolSpec | undefined {
   }
   return out as unknown as CalcSpec;
 }
+/** The longest stem a part may carry: a few sentences of a situation. */
+const STEM_MAX = 400;
 /** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
-function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, second, spec, tier, stretch }: PracticeItem): PracticeItem {
+function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, second, spec, tier, stretch, stem, part }: PracticeItem): PracticeItem {
   const item: PracticeItem = { n, question };
   if (studentAnswer !== undefined) item.studentAnswer = studentAnswer;
   if (studentWorking !== undefined) item.studentWorking = studentWorking;
@@ -175,16 +222,25 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
   if (verdict === "wrong" && (second === "right" || second === "wrong")) item.second = second;
   const sp = specShown(spec);
   if (sp) item.spec = sp;
-  if (sp && (tier === 1 || tier === 2)) item.tier = tier;
+  if (sp && (tier === 1 || tier === 2 || tier === 3)) item.tier = tier;
   // the step-up flag is code's own and only ever true: anything else on an event or an older file is a usual item
   if (stretch === true) item.stretch = true;
+  // a part keeps its stem and letter together, or neither (junk on an event or an older file is a single item)
+  if (isPartLabel(part) && typeof stem === "string" && stem.trim() && stem.length <= STEM_MAX) { item.stem = stem; item.part = part; }
   return item;
 }
 /** A set as a screen may see it: its items `shown`, and the step-up flag kept only when it is true. */
 const shownPractice = (p: Practice | null | undefined): Practice | null => {
   if (!p) return null;
-  const { stretch, ...rest } = p;
-  return { ...rest, items: (p.items ?? []).map(shown), ...(stretch === true ? { stretch: true as const } : {}) };
+  const { stretch, aim, topAim, markedAt, ...rest } = p;
+  // an aim is kept only as statement codes the desk knows (MB-B40): never text, never a question
+  const aimed = Array.isArray(aim) ? aim.filter((c): c is string => typeof c === "string" && STATEMENT_CODES.has(c)) : [];
+  // a step up's slip aim only as slip ids its unit's top rung names (cycle 18), on a step up
+  const by = Object.prototype.hasOwnProperty.call(TOP_SLIP_FORMS, p.topic) ? TOP_SLIP_FORMS[p.topic] : {};
+  const topAimed = stretch === true && Array.isArray(topAim) ? [...new Set(topAim.filter((c): c is string => typeof c === "string" && Object.prototype.hasOwnProperty.call(by, c)))] : [];
+  return { ...rest, items: (p.items ?? []).map(shown), ...(stretch === true ? { stretch: true as const } : {}), ...(aimed.length ? { aim: aimed } : {}), ...(topAimed.length ? { topAim: topAimed } : {}),
+    // the marking stamp only on a marked set, and only as a real time (cycle 22): junk on an older file is no stamp
+    ...(p.marked === true && typeof markedAt === "number" && Number.isFinite(markedAt) && markedAt > 0 ? { markedAt } : {}) };
 };
 /**
  * The homework pipelines (lib/desk/job.ts runs each one). One record per kind: the latest run of that kind,
@@ -193,11 +249,11 @@ const shownPractice = (p: Practice | null | undefined): Practice | null => {
  * `key` is what the run is about (the topic of a practice set, the item key of a hint and of its lesson pick);
  * `error` is a sentence the desk would say, never an exception's text.
  */
-export type JobKind = "read" | "hint" | "lesson" | "explain" | "mark" | "practice" | "analyse" | "memory";
+export type JobKind = "read" | "hint" | "lesson" | "explain" | "mark" | "practice" | "analyse" | "memory" | "teach";
 export type JobPhase = "running" | "done" | "failed";
 /** What a run was asked with, held so a failed run can be asked again in place (POST /api/session/retry). Never an answer, never an image. */
 export type JobInput = Record<string, string | number>;
-export interface Job { id: string; phase: JobPhase; startedAt: number; endedAt?: number; key?: string; error?: string; input?: JobInput; }
+export interface Job { id: string; phase: JobPhase; startedAt: number; endedAt?: number; key?: string; error?: string; /** Why a failed run failed, as a value (lib/desk/failure.ts), and whether asking again can end differently: what Try again is offered on. A job saved before they existed has neither, and is offered as before. */ failure?: JobFailure; retry?: boolean; input?: JobInput; /** The status line the run set when it started (P8): a switch that drops the run clears it while it still reads this. */ start?: string; /** The learner the run is for (P11): a running job of a learner who is not seated does not block the seated one, and its failure leaves no retry. A job without one behaves as it always did. */ by?: string; }
 export type Jobs = Partial<Record<JobKind, Job>>;
 /** Said for a run the desk was restarted in the middle of. */
 export const INTERRUPTED = "The desk was restarted before this finished. Ask again.";
@@ -215,9 +271,14 @@ function settled(jobs: unknown): Jobs {
 /**
  * One sentence's reading. `fix` (the move and a slotted pattern) only ever rides on a faulty verdict; older sessions have none.
  * `was` is set only by a rewrite of this sentence (essay.revised): the sentence as first read, its verdict and the fix it was taught.
+ * `supports` (Structure) is the claim this sentence backs, set only for a link code accepted; a rewrite is ruled against it.
  */
-export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; was?: Was; }
-export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; }
+export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; was?: Was; supports?: number; }
+/**
+ * `piece` (v2 E1) is set on a whole-piece reading: how many paragraphs, which have been read and which failed (0-based),
+ * and the text store's id when the learner kept it. A one-paragraph reading has none.
+ */
+export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; piece?: { paragraphs: number; read: number[]; failed: number[]; notEnglish?: number[]; observed?: Record<string, unknown>[]; pieceId?: string }; }
 
 /** The learner sitting at the desk: a profile's id and name. */
 export interface AtDesk { id: string; name: string }
@@ -238,11 +299,24 @@ export interface Session {
   english: EnglishAnalysis | null; essay: EssayAnalysis | null; essayType: string | null;
   /** The sentence (its number) the forensic page is about; null for the default, the first faulty one. */
   essayAt?: number | null;
+  /** The paragraph being written from the Paragraph pattern, one sentence per slot (rules/essay Plan); absent until a plan is opened. */
+  essayPlan?: Plan;
   englishLearning: EnglishLearning; conversation: Conversation | null;
   /** finding the level and agreeing the topics, while it is under way */
   check: LevelCheck | null;
   /** the open maths topic, the practice set on it, and where the walk has got to */
   topic: string | null; practice: Practice | null; walkIx: number;
+  /**
+   * The unit a paper's recovery row opened Get ready for school on (MB-B40, by Select there: tv/keys paper). A set asked
+   * for on that unit while Get ready for school is open is aimed at the paper's lost statements (api/practice). It lasts
+   * while Get ready for school and its worked lesson are open; any other screen, a new paper, a learner switch, a new
+   * evening and the set itself clear it.
+   */
+  paperAim?: string | null;
+  /** The worked lesson on the desk (v2 M1); cleared when another learner sits down. */
+  worked?: Worked | null;
+  /** The Workroom as the TV may see it (v2 T2, lib/twin/workroom.ts): titles, counts, marks, level words; never text. */
+  workroom?: Workroom | null;
   /** the current learner's measured skills, hydrated at the dispatch boundary from data/learners.json */
   skills: Record<string, SkillRecord>;
   /** the same measured record per Essay Master lens, hydrated the same way */
@@ -255,6 +329,12 @@ export interface Session {
    * itself never does - and only to a phone (lib/session/pairing.ts view). Null with no one seated.
    */
   week?: WeekLine[] | null;
+  /**
+   * The seated learner's latest paper (v2 M5b): the cleaned paper and its date, hydrated at the dispatch boundary from their
+   * record. The TV recomputes the recovery from it (rules/recovery); the recovery itself is never stored or sent. Absent with
+   * none, and never sent to a guest.
+   */
+  paper?: StoredPaper | null;
   /** the pipelines' runs, one per kind; see Job */
   jobs: Jobs;
   /**
@@ -262,7 +342,9 @@ export interface Session {
    * (lib/session/pairing.ts view); the seated learner's own is in the fields above.
    */
   away?: Record<string, MathsSlot>;
-  status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null };
+  /** The essay refusal the analyse route said before any run (rules/essay.ts refusalCaption): the status it set, kept as a value so no screen decodes the sentence. A later status that is not this one is not a refusal. */
+  essayRefused?: string;
+  status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null; /** the local day the log was first written: it is one evening's, see dayed */ day?: string; /** when the evening was last ended (session.end): the phone's recap shows for an evening ended since local midnight */ endedAt?: number };
   updatedAt: number;
   /** Who this copy was drawn for (lib/session/pairing.ts view): never stored, set only on what a route sends. */
   viewer?: "tv" | "phone" | "guest";
@@ -271,19 +353,23 @@ export interface Session {
 export type Event =
   | { type: "linga.changed"; conversation?: Conversation | null; check?: LevelCheck | null; screen?: Screen; focus?: number }
   // a join carries the code the phone was given; the session route checks it (lib/session/pairing.ts), the reducer does not
-  | { type: "join"; code?: string } | { type: "leave" } | { type: "nav"; screen: Screen; focus?: number; from?: Screen } | { type: "focus"; focus: number }
+  | { type: "join"; code?: string } | { type: "leave" } | { type: "nav"; screen: Screen; focus?: number; from?: Screen; aim?: string } | { type: "focus"; focus: number }
   | { type: "subject"; subject: Subject }
   | { type: "learner.set"; id: string }
   | { type: "profile.draft"; patch: Partial<Profile> } | { type: "profile.save" } | { type: "profile.discard" }
-  | { type: "page.reading"; page: Omit<Page, "items"> } | { type: "page.read"; id: string; items: PageItem[]; readMs: number; provider: string }
+  | { type: "page.reading"; page: Omit<Page, "items"> } | { type: "page.read"; id: string; items: PageItem[]; readMs: number; provider: string; missing?: number[] | null }
   | { type: "page.ask"; subject: Subject } | { type: "page.unask" }
   | { type: "page.select"; pageIx: number; itemIx?: number } | { type: "item"; itemIx: number } | { type: "view"; view: "band" | "overview" }
   | { type: "hint.set"; hint: Hint } | { type: "hint.stage"; stage: 1 | 2; owner?: string }
   | { type: "lesson.set"; lesson: LessonPick | null; key?: string } | { type: "lesson.pause"; paused: boolean }
   // raised by the desk's own clock when the lesson on screen has played long enough (watchDue); never posted by a screen
   | { type: "lesson.watched" }
-  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string; owner?: string } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
+  | { type: "english.set"; analysis: EnglishAnalysis; owner?: string } | { type: "essay.type"; essayType: string; owner?: string } | { type: "worked.set"; worked: Worked; owner?: string } | { type: "workroom.set"; workroom: Workroom; open?: boolean } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.progress"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
+  // the plan: the TV opens one on a lens; the phone posts one sentence for a slot (validated here, by rules/essay planFill)
+  | { type: "essay.clear"; owner?: string } | { type: "essay.plan"; lens: string } | { type: "essay.slot"; i: number; text: string }
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
+  // a paper typed on the phone (v2 M5b): the rows are as typed - the desk's own cleanPaper decides what stands (dispatch keeps it)
+  | { type: "paper.enter"; rows: unknown }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
   // `stay`: the set is asked for from Get ready for school (Family W8), whose screen stays put while it is written
@@ -292,16 +378,56 @@ export type Event =
   | { type: "walk"; ix: number } | { type: "practice.clear" }
   | { type: "practice.second"; n: number; verdict: "right" | "wrong" }
   | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string; slipAt?: SlipAt }
-  | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
-  | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" };
+  | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string; by?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string; failure?: JobFailure }
+  | { type: "status"; text: string; essayRefused?: boolean } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" };
 
-const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
-const FILE = path.join(DATA, "session.json");
+/**
+ * The one door for what a screen or phone posts (api/session POST, after the server-only refusals): for each client-postable
+ * type, a check per field. A type that is not here, or a field that fails its check, is refused with a sentence before the
+ * reducer sees it. Ranges are the reducer's (a focus or a walk index may be -1 or past the end); this checks the kind of value.
+ * paper.enter's rows are unchecked on purpose: the desk's own cleanPaper decides what stands.
+ */
+const SCREENS: Record<Screen, true> = { landing: true, pair: true, joined: true, tonight: true, units: true, calendar: true, page: true, hint: true, lesson: true, sentence: true, headtohead: true, essaytype: true, essayplan: true, forensic: true, playbook: true, xray: true, break: true, recap: true, learner: true, profile: true, topics: true, prepare: true, paper: true, practice: true, sheet: true, walk: true, linga: true, "linga-scenes": true, "linga-map": true, "linga-talk": true, "linga-coach": true, "linga-recap": true, "linga-check": true, "linga-verdict": true, "linga-plan": true, "linga-moment": true, "linga-cert": true, "linga-certs": true, worked: true, workroom: true };
+type Field = (v: unknown) => boolean;
+const f = {
+  str: ((v) => typeof v === "string") as Field,
+  name: ((v) => typeof v === "string" && v.trim().length > 0) as Field,
+  int: ((v) => Number.isInteger(v)) as Field,
+  num: ((v) => typeof v === "number" && Number.isFinite(v)) as Field,
+  bool: ((v) => typeof v === "boolean") as Field,
+  screen: ((v) => typeof v === "string" && Object.hasOwn(SCREENS, v)) as Field,
+  subject: ((v) => v === "maths" || v === "english" || v === "essay") as Field,
+  object: ((v) => !!v && typeof v === "object" && !Array.isArray(v)) as Field,
+};
+const maybe = (c: Field): Field => (v) => v === undefined || c(v);
+const lessonPick: Field = (v) => v === null || (f.object(v) && ["id", "title", "text", "why"].every((k) => f.str((v as Record<string, unknown>)[k])) && f.num((v as Record<string, unknown>).t) && maybe(f.str)((v as Record<string, unknown>).youtube));
+const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { type: K }>, "type">]-?: Field } } = {
+  join: { code: maybe(f.str) }, leave: {}, nav: { screen: f.screen, focus: maybe(f.int), from: maybe(f.screen), aim: maybe(f.str) }, focus: { focus: f.int }, subject: { subject: f.subject },
+  "learner.set": { id: f.name }, "profile.draft": { patch: f.object }, "profile.save": {}, "profile.discard": {},
+  "page.ask": { subject: f.subject }, "page.unask": {}, "page.select": { pageIx: f.int, itemIx: maybe(f.int) }, item: { itemIx: f.int }, view: { view: (v) => v === "band" || v === "overview" },
+  "lesson.set": { lesson: lessonPick, key: maybe(f.str) }, "lesson.pause": { paused: f.bool },
+  "essay.type": { essayType: f.str, owner: maybe(f.str) }, "essay.at": { n: (v) => v === null || f.int(v) }, "essay.clear": { owner: maybe(f.str) }, "essay.plan": { lens: f.str }, "essay.slot": { i: f.int, text: f.str },
+  "paper.enter": { rows: () => true },
+  "task.add": { name: f.name, sub: f.subject, min: f.num }, "task.done": { id: f.str, done: f.bool },
+  "timer.start": {}, "timer.pause": {}, "timer.tick": { seconds: f.num }, "timer.skipbreak": {},
+  "topic.open": { topic: f.str, stay: maybe(f.bool) }, walk: { ix: f.int }, "practice.clear": {},
+  status: { text: f.str, essayRefused: maybe(f.bool) }, "session.end": {}, reset: {},
+};
+/** Why a posted event is refused, or null when it may go to the reducer. */
+export function badPost(e: unknown): string | null {
+  const type = (e as { type?: unknown } | null)?.type;
+  if (typeof type !== "string" || !Object.hasOwn(SHAPES, type)) return "The desk does not know that kind of request.";
+  const shape = SHAPES[type as Event["type"]] as Record<string, Field>;
+  for (const [k, ok] of Object.entries(shape)) if (!ok((e as Record<string, unknown>)[k])) return `The desk could not use ${type}: ${k} is not what it expects.`;
+  return null;
+}
+
+const FILE = () => path.join(dataDir(), "session.json");
 
 /** Where the phone lives on this network — a fact of the server, so the session carries it. */
 function phoneUrl(): string {
-  const ip = Object.values(networkInterfaces()).flat().find((n) => n && n.family === "IPv4" && !n.internal)?.address ?? "localhost";
-  return `http://${ip}:${process.env.PORT ?? "3000"}/phone`;
+  const ip = lanHost();
+  return `${process.env.DESK_HTTPS === "1" ? "https" : "http"}://${ip}:${process.env.PORT ?? "3000"}/phone`;
 }
 
 /**
@@ -318,12 +444,14 @@ export interface MathsSlot {
   tasks: Task[];
   /** Essay Master's: the paragraph on the desk, the lens chosen for it, and the sentence the forensic page is on. Optional so a slot saved before they existed still loads. */
   essay?: EssayAnalysis | null; essayType?: string | null; essayAt?: number | null;
+  /** The plan on the desk; optional so a slot saved before it existed still loads. */
+  essayPlan?: Plan;
 }
-const emptySlot = (): MathsSlot => ({ pages: [], pageIx: 0, itemIx: 0, reading: false, hint: null, lesson: null, noLesson: false, lessonPaused: false, topic: null, practice: null, walkIx: 0, log: { problems: [], hints: 0, hard: [] }, tasks: [], essay: null, essayType: null, essayAt: null });
+const emptySlot = (): MathsSlot => ({ pages: [], pageIx: 0, itemIx: 0, reading: false, hint: null, lesson: null, noLesson: false, lessonPaused: false, topic: null, practice: null, walkIx: 0, log: { problems: [], hints: 0, hard: [] }, tasks: [], essay: null, essayType: null, essayAt: null, essayPlan: undefined });
 const slotOf = (s: Session): MathsSlot => ({ pages: s.pages, pageIx: s.pageIx, itemIx: s.itemIx, reading: s.reading, hint: s.hint, lesson: s.lesson, noLesson: s.noLesson, lessonPaused: s.lessonPaused,
   topic: s.topic, practice: s.practice, walkIx: s.walkIx, log: { problems: s.log.problems, hints: s.log.hints, hard: s.log.hard }, tasks: s.tasks ?? [],
-  essay: s.essay ?? null, essayType: s.essayType ?? null, essayAt: s.essayAt ?? null });
-const emptyOf = (x: MathsSlot) => !x.pages.length && !x.practice && !x.hint && !x.lesson && !x.topic && !x.log.hints && !x.log.problems.length && !x.tasks?.length && !x.essay && !x.essayType;
+  essay: s.essay ?? null, essayType: s.essayType ?? null, essayAt: s.essayAt ?? null, essayPlan: s.essayPlan });
+const emptyOf = (x: MathsSlot) => !x.pages.length && !x.practice && !x.hint && !x.lesson && !x.topic && !x.log.hints && !x.log.problems.length && !x.tasks?.length && !x.essay && !x.essayType && !x.essayPlan?.slots.some(Boolean);
 /** A slot onto the session's fields; the log keeps the desk's clock (minutes, started), which is the evening's, not a learner's. */
 function withSlot(n: Session, x: MathsSlot): void { const { log, ...rest } = x; Object.assign(n, rest); n.log = { ...n.log, ...log }; }
 /** Who sits down: the learner leaving takes their work to `away`, the learner arriving gets theirs back (or a clean desk). */
@@ -373,7 +501,7 @@ export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry
   const at = s.learner.id, cur = s.pages[s.pageIx]?.id;
   if (s.pages.every((p) => p.owner === at) && (!s.practice || s.practice.owner === at) && (!s.hint || s.hint.owner === at) && (!s.lesson || s.lesson.owner === at)) return s;
   const hist = new Map<string, HistoryEntry[]>();
-  const lines = (id: string) => { if (!hist.has(id)) { let h: HistoryEntry[] = []; try { h = historyOf(id) ?? []; } catch {} hist.set(id, h); } return hist.get(id)!; };
+  const lines = (id: string) => { if (!hist.has(id)) { let h: HistoryEntry[] = []; try { h = historyOf(id) ?? []; } catch { /* read as no history: the only reader that throws (boot, readable) has set learnersUnread, and the status says it */ } hist.set(id, h); } return hist.get(id)!; };
   const ids = s.profiles.map((p) => p.id);
   const snapped = (p: Page) => Number(/-(\d+)$/.exec(p.id)?.[1] ?? 0);
   const readBy = (p: Page) => { let best: [string, number] | null = null;
@@ -409,9 +537,11 @@ export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry
   return n;
 }
 
+/** The code on the TV: four digits, drawn with node:crypto. */
+const drawPin = () => String(randomInt(1000, 10000));
 export function fresh(): Session {
   return {
-    pin: String(1000 + Math.floor(Math.random() * 9000)), joined: false, phoneUrl: phoneUrl(), learner: null,
+    pin: drawPin(), joined: false, phoneUrl: phoneUrl(), learner: null,
     // the demo profiles are on the switcher, but a fresh desk seats no one: the place card asks whose desk it is
     profiles: [
       { id: "ema", name: "Ema", type: "high-school", age: 16, modules: ["maths", "english", "essay"] },
@@ -437,14 +567,108 @@ export function fresh(): Session {
  * is dropped, and an app asked for is the learner switcher first - who is at the desk is the first question.
  */
 const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "page.read", "page.ask", "page.select", "item", "hint.set", "hint.stage", "lesson.set",
-  "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle", "practice.second",
-  "walk", "practice.clear", "session.end"]);
+  "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "essay.clear", "essay.plan", "essay.slot", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle", "practice.second",
+  "walk", "practice.clear", "paper.enter", "session.end",
+  // tonight's list and the lesson's pause are a learner's (MathsSlot tasks, lessonPaused): seat() replaces them on the first sit-down
+  "task.add", "task.done", "lesson.pause"]);
 /** What a route answers when work is asked for and no one is at the desk to own it. */
 export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's desk (Down to Choose who).";
+/** The status when a paper's rows were fine but the learner file could not be written (App Master ruling 11): the disk failed, not the rows. */
+export const PAPER_NOT_SAVED = "That paper was not saved: the desk could not write it to the learner file, so progress was not saved. Send it again.";
+/** The most pages a learner holds, in the session and in each away slot (HF3): every page carries its photo, and every event rewrites the whole session. A new page past it drops the oldest whole. */
+export const PAGES_KEPT = 8;
+/** The status when a page was read but the learner file could not be written (HF2): the page is on the desk, tonight's record and the week do not have it. */
+export const READ_NOT_SAVED = "That page was read, but the desk could not write it to the learner file, so tonight's record and the week do not have it.";
+/** The status when a page was read but session.json could not be written (HF4): the page is on the desk, and it is gone if the desk restarts. */
+export const READ_NOT_KEPT = "That page was read, but the desk could not save it, so it will be gone if the desk restarts.";
+/** The status when an answer was settled but the learner file could not be written (WD9): the item is settled on the desk, tonight's record and the week still show the old count. */
+export const SETTLE_NOT_SAVED = "That answer was settled, but the desk could not write it to the learner file, so tonight's record and the week still show the old count.";
+/** The status when a hint was shown but the learner file could not count it (WD12): the hint is on the desk, the week will not show it. */
+export const HINT_NOT_COUNTED = "Here is the hint, but the desk could not count it in the learner file, so the week will not show it.";
+/** The status when a learner file cannot be read on a switch (WD14a): the new learner's progress is not shown, and the previous learner's is never kept in its place. */
+export const LEARNER_UNREAD = "The learner file could not be read just now, so this learner's progress is not shown.";
+/** The sentence of a run that failed because the learner file could not be read (P7-a): trying again cannot work while the file stays unreadable. */
+export const LEARNER_UNREAD_RUN = "The learner file could not be read just now, so this was not saved.";
+/** The status when no row of a paper survived cleanPaper: the rows are the problem, and the phone shows each drop. */
+export const PAPER_NO_ROW = "The desk kept no question from that paper.";
+/** The status when session.json could not be used and was put aside (P1): the desk started fresh, and the old file is kept beside it. */
+export const SESSION_UNREAD = "The desk could not read its saved session, so it started fresh.";
+/** What a profile patch or draft is refused for (P1, P5): each sentence follows the refusal's own opening in the status. */
+export const PROFILE_TYPE_UNKNOWN = "That school type is not one the desk knows.";
+export const PROFILE_SYSTEM_UNKNOWN = "That school system is not one the desk knows.";
+export const PROFILE_MODULES_UNKNOWN = "Those subjects are not ones the desk knows.";
+export const PROFILE_NAME_TEXT = "A name must be text.";
+/**
+ * The longest name a profile takes. A guest may type the name (pairing.ts guestMay), the draft rides in every message to
+ * every screen and the saved profile in session.json, so a name is bounded where it is checked, for every caller.
+ */
+export const PROFILE_NAME_MAX = 40;
+export const PROFILE_NAME_LONG = `A name must be at most ${PROFILE_NAME_MAX} letters.`;
+export const PROFILE_AGE_WHOLE = "An age must be a whole number.";
+export const PROFILE_ID_KEPT = "A profile keeps the id it was made with.";
+const DRAFT_REFUSED = "The desk did not take that change to the profile. ";
+const SAVE_REFUSED = "The desk did not save that profile. ";
+const SUBJECTS: Subject[] = ["maths", "english", "essay"];
+/** The first thing wrong with the fields a patch (or a whole draft) carries, as a sentence, or null. A field the patch does not carry is not checked; an age outside its type's range is not a problem, the reducer deletes it. */
+export function profileProblem(patch: Partial<Profile>): string | null {
+  if (patch.type !== undefined && !(typeof patch.type === "string" && Object.hasOwn(AGE_RANGE, patch.type))) return PROFILE_TYPE_UNKNOWN;
+  if (patch.system !== undefined && !SYSTEMS.includes(patch.system)) return PROFILE_SYSTEM_UNKNOWN;
+  if (patch.modules !== undefined && !(Array.isArray(patch.modules) && patch.modules.every((m) => SUBJECTS.includes(m)) && new Set(patch.modules).size === patch.modules.length)) return PROFILE_MODULES_UNKNOWN;
+  if (patch.name !== undefined && typeof patch.name !== "string") return PROFILE_NAME_TEXT;
+  if (patch.name !== undefined && patch.name.length > PROFILE_NAME_MAX) return PROFILE_NAME_LONG;
+  if (patch.age !== undefined && !(typeof patch.age === "number" && Number.isInteger(patch.age))) return PROFILE_AGE_WHOLE;
+  return null;
+}
+/** A profile id no profile on the desk holds: "p" and the millisecond, with a "-k" suffix when two are made in one millisecond. */
+function newProfileId(s: Session): string {
+  const base = "p" + Date.now();
+  let id = base;
+  for (let k = 2; s.profiles.some((p) => p.id === id); k++) id = `${base}-${k}`;
+  return id;
+}
+/** The learner at the desk changed: what belonged to the one who left is cleared, and so are the failed runs and the analyse run in flight (a failed read is not the next learner's to retry; a late reading is dropped by its id). */
+function switchedFrom(s: Session, n: Session): void {
+  n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null; if (s.paperAim) n.paperAim = null;
+  const jobs = { ...(s.jobs ?? {}) } as Jobs;
+  for (const k of Object.keys(jobs) as JobKind[]) {
+    const j = jobs[k];
+    if (j?.phase === "failed" || (k === "analyse" && j?.phase === "running")) { if (j.phase === "failed" && j.error !== undefined && n.status === j.error) n.status = ""; if (j.phase === "running" && j.start !== undefined && n.status === j.start) n.status = ""; delete jobs[k]; }
+    // a run that survives the switch keeps its job, but its start line was the learner who left's
+    else if (j?.phase === "running" && j.start !== undefined && n.status === j.start) n.status = "";
+  }
+  n.jobs = jobs;
+}
 /** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */
 export const UNSEATED_SCREENS = new Set<Screen>(["landing", "pair", "joined", "learner", "profile"]);
 
-export function reduce(s: Session, e: Event): Session {
+/** Whether a log holds any of the evening's work: a problem, a hint or a hard one. */
+const loggedIn = (l: { problems: string[]; hints: number; hard: string[] }) => !!(l.problems.length || l.hints || l.hard.length);
+
+/**
+ * The evening log (problems, hints, hard, minutes, started) belongs to one evening: stamped with the server's local day
+ * when it is first written, and cleared by the first event of a later day - the seated learner's and every away slot's.
+ * session.end on the same day clears nothing, because the recap still reads the log it ends; one ending a later day
+ * clears the old log first (UD-13). A log from before the stamp is dated by
+ * the day its timer started.
+ */
+function dayed(s: Session, e: Event, now = Date.now()): Session {
+  const today = dayOf(now), was = s.log.day ?? (s.log.started ? dayOf(s.log.started) : undefined);
+  if (!was || was === today) return s;
+  const away = s.away ? Object.fromEntries(Object.entries(s.away).map(([k, x]) => [k, { ...x, log: { problems: [], hints: 0, hard: [] } }])) : undefined;
+  return { ...s, log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, ...(away ? { away } : {}), ...(s.paperAim ? { paperAim: null } : {}) };
+}
+function stamped(n: Session, now = Date.now()): Session {
+  if (n.log.day || !(loggedIn(n.log) || n.log.minutes || n.log.started || Object.values(n.away ?? {}).some((x) => loggedIn(x.log)))) return n;
+  return { ...n, log: { ...n.log, day: dayOf(now) } };
+}
+
+/** The seconds one timer.tick may carry: a posted event is JSON, so a string, a negative or a huge number can arrive. */
+const TICK_MAX = 60;
+const tickOk = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v) && v > 0 && v <= TICK_MAX;
+
+export function reduce(s: Session, e: Event): Session { return stamped(step(dayed(s, e), e)); }
+
+function step(s: Session, e: Event): Session {
   if (!s.learner && NEEDS_LEARNER.has(e.type)) return s;
   const n: Session = { ...s, updatedAt: Date.now() }, me = s.learner?.id ?? "";
   switch (e.type) {
@@ -455,27 +679,46 @@ export function reduce(s: Session, e: Event): Session {
       if (waiting && s.screen !== "profile") { n.screen = "joined"; n.focus = 0; } break; }
     // a phone forgetting the desk drops its own cookie (the session route); the desk itself does not change
     case "leave": return s;
+    // the code on the TV turns over once a phone has joined with it (the session route raises this): a new pin, never the one just used
+    case "pin.turn": { let pin = drawPin(); while (pin === s.pin) pin = drawPin(); n.pin = pin; break; }
     // the landing with no stop named: the lamp rests on what was left (tv/landingRows.ts LANDING_REST)
     case "nav": if (!s.learner && !UNSEATED_SCREENS.has(e.screen)) { n.screen = "learner"; n.focus = 0; n.back = "landing"; break; }
-      n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from; break;
+      n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from;
+      // the paper's aim (MB-B40): set by the recovery row's Select, kept between Get ready for school and its lesson, else gone
+      { const aim = e.aim && e.screen === "prepare" ? e.aim : AIM_KEEPS.has(s.screen) && AIM_KEEPS.has(e.screen) ? s.paperAim ?? null : null;
+        if (aim !== (s.paperAim ?? null)) n.paperAim = aim; } break;
     case "focus": n.focus = e.focus; break;
     // a learner chosen or saved goes to the desk, not to one app: the lamp rests on what that learner left, among their own apps
-    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) { n.conversation = null; n.check = null; n.english = null; } seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
-    case "profile.draft": { const d: Profile = pathChecked({ ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...modeChecked(e.patch, false) });
-      const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = d; break; }
-    case "profile.save": { const d = s.draft; if (!d || !d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
+    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) switchedFrom(s, n); seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
+    case "profile.draft": { const patch: Partial<Profile> = e.patch && typeof e.patch === "object" ? e.patch : {};
+      const bad = profileProblem(patch); if (bad) { n.status = DRAFT_REFUSED + bad; break; }
+      if (s.draft && patch.id !== undefined && patch.id !== s.draft.id) { n.status = DRAFT_REFUSED + PROFILE_ID_KEPT; break; }
+      // no draft open: an id naming a profile starts an edit of it, any other id a new draft, and no id a new draft with an id of the desk's making
+      const named = !s.draft && typeof patch.id === "string" && patch.id ? patch.id : undefined;
+      const base: Profile = s.draft ?? s.profiles.find((p) => p.id === named) ?? { id: named ?? newProfileId(s), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] };
+      const d: Profile = pathChecked({ ...base, ...modeChecked(patch), id: base.id });
+      // the age first (a type change may clear it), then the Adult gate on what is left
+      // Other has no range, so a known age is kept as a fact (UD-1); a school type still drops an age outside its range
+      const r = AGE_RANGE[d.type]; if (r && d.age !== undefined && (d.age < r[0] || d.age > r[1])) delete d.age;
+      // a saved profile's age under 18 still gates Adult when the draft has lost its age to a type walk: only an age of 18+ typed in lifts it
+      const saved = s.profiles.find((p) => p.id === d.id);
+      n.draft = adultGated(d, s.draft, d.age === undefined && saved?.age !== undefined && saved.age < 18); break; }
+    case "profile.save": { const d = s.draft; if (!d) break;
+      const bad = profileProblem(d); if (bad) { n.status = SAVE_REFUSED + bad; break; }
+      if (!d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
       n.profiles = has ? s.profiles.map((p) => (p.id === d.id ? d : p)) : [...s.profiles, d];
-      n.conversation = null; seat(s, n, d.id); n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "landing"; n.focus = LANDING_REST; break; }
+      if (d.id !== s.learner?.id) switchedFrom(s, n); seat(s, n, d.id); n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "landing"; n.focus = LANDING_REST; break; }
     case "profile.discard": n.draft = null; n.screen = "learner"; n.focus = 0; break;
     case "subject": n.subject = e.subject; break;
     case "page.reading": { const ix = s.pages.findIndex((p) => p.id === e.page.id);
-      const page: Page = { ...e.page, items: [], owner: e.page.owner ?? me }; n.pages = ix >= 0 ? s.pages.map((p, i) => (i === ix ? page : p)) : [...s.pages, page];
+      // `day` is the local day it was snapped, kept when the same page is read again in place (an older page without one stays without)
+      const page: Page = { ...e.page, items: [], owner: e.page.owner ?? me, ...(ix >= 0 ? (s.pages[ix].day ? { day: s.pages[ix].day } : {}) : { day: dayOf(Date.now()) }) }; n.pages = ix >= 0 ? s.pages.map((p, i) => (i === ix ? page : p)) : [...s.pages, page].slice(-PAGES_KEPT);
       n.pageIx = ix >= 0 ? ix : n.pages.length - 1; n.itemIx = 0; n.reading = true; n.screen = "page"; n.subject = e.page.subject; n.awaiting = null; break; }
     // the desk asks for a page and stays where it is; the phone answers with page.reading
     case "page.ask": n.awaiting = e.subject; n.subject = e.subject; break;
     case "page.unask": n.awaiting = null; break;
     // a read that ends after its learner left lands on their page in `away`
-    case "page.read": { const read = (p: Page) => (p.id === e.id ? { ...p, items: e.items, readMs: e.readMs, provider: e.provider } : p);
+    case "page.read": { const read = (p: Page) => (p.id === e.id ? { ...p, items: e.items, readMs: e.readMs, provider: e.provider, ...(e.missing !== undefined ? { missing: e.missing } : {}) } : p);
       const who = s.pages.some((p) => p.id === e.id) ? null : awayWith(s, (x) => x.pages.some((p) => p.id === e.id));
       if (who) { toAway(s, n, who, (x) => ({ ...x, pages: x.pages.map(read), reading: false })); break; }
       n.pages = s.pages.map(read); n.reading = false; break; }
@@ -493,28 +736,49 @@ export function reduce(s: Session, e: Event): Session {
     // a pick made for one hint never lands on another; a lesson chosen on the TV (no key) always does
     case "lesson.set": if (e.key !== undefined && e.key !== s.hint?.key) { const who = awayWith(s, (x) => x.hint?.key === e.key); if (!who) return s;
         toAway(s, n, who, (x) => ({ ...x, lesson: e.lesson && { ...e.lesson, owner: who }, noLesson: !e.lesson })); break; }
-      n.lesson = e.lesson && { ...e.lesson, owner: s.hint?.owner ?? me }; n.noLesson = !e.lesson;
+      // a lesson a screen chose (no key) is one the library holds, and plays the library's own video under its own title:
+      // a posted id or video the library does not hold never reaches the TV's player
+      if (e.key === undefined && e.lesson) { const lib = LESSONS.find((x) => x.id === e.lesson!.id); if (!lib) return s;
+        n.lesson = { ...e.lesson, title: lib.title, t: Number.isFinite(e.lesson.t) && e.lesson.t >= 0 ? e.lesson.t : 0, owner: s.hint?.owner ?? me };
+        if (lib.youtube) n.lesson.youtube = lib.youtube; else delete n.lesson.youtube; }
+      else n.lesson = e.lesson && { ...e.lesson, owner: s.hint?.owner ?? me };
+      n.noLesson = !e.lesson;
       // a new lesson opens playing (the embed autoplays): the last one's Pause is not this one's
       if (e.lesson && e.lesson.id !== s.lesson?.id) n.lessonPaused = false; break;
     case "lesson.watched": if (s.watch && watchDue(s.watch, Date.now())) n.watch = { ...s.watch, logged: true }; break;
-    case "job.start": n.jobs = { ...s.jobs, [e.kind]: { id: e.id, phase: "running", startedAt: Date.now(), ...(e.key !== undefined ? { key: e.key } : {}), ...(e.input ? { input: e.input } : {}) } }; break;
+    case "job.start": n.jobs = { ...s.jobs, [e.kind]: { id: e.id, phase: "running", startedAt: Date.now(), ...(e.key !== undefined ? { key: e.key } : {}), ...(e.input ? { input: e.input } : {}), ...(e.start !== undefined ? { start: e.start } : {}), ...(e.by !== undefined ? { by: e.by } : {}) } }; break;
     case "job.done": case "job.failed": { const j = s.jobs?.[e.kind]; if (!j || j.id !== e.id) return s;
-      n.jobs = { ...s.jobs, [e.kind]: e.type === "job.done" ? { ...j, phase: "done", endedAt: Date.now() } : { ...j, phase: "failed", endedAt: Date.now(), error: e.error } };
+      // a failure that lands for a learner who is not seated leaves no failed job: it is not the next learner to retry (P11)
+      if (e.type === "job.failed" && j.by !== undefined && j.by !== me) { n.jobs = { ...s.jobs }; delete n.jobs[e.kind]; break; }
+      n.jobs = { ...s.jobs, [e.kind]: e.type === "job.done" ? { ...j, phase: "done", endedAt: Date.now() } : { ...j, phase: "failed", endedAt: Date.now(), error: e.error, ...(e.failure ? { failure: e.failure, retry: RETRYABLE[e.failure] } : {}) } };
       // a lesson pick that failed for the hint on screen ends the wait the same way "no lesson" does
       if (e.type === "job.failed" && e.kind === "lesson" && j.key === s.hint?.key) { n.lesson = null; n.noLesson = true; }
       break; }
     case "lesson.pause": n.lessonPaused = e.paused; break;
-    case "english.set": n.english = e.analysis; n.screen = "sentence"; n.subject = "english"; n.focus = 0; break;
+    // a reading is the learner's who asked: one that lands after they left is dropped, and the session stays as it is
+    case "english.set": if (e.owner && e.owner !== me) { console.error("desk session: a sentence reading for a learner who left the desk was dropped"); return s; }
+      n.english = e.analysis; n.screen = "sentence"; n.subject = "english"; n.focus = 0; break;
     // a paragraph (and its lens) is the learner's who asked: a reading that lands after they left goes to their slot, and the TV stays put
     case "essay.type": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essayType: e.essayType })); break; }
       n.essayType = e.essayType; break;
     // a new reading opens on its first faulty sentence; essay.at walks the paragraph (a number it does not have is the default)
     case "essay.set": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essay: e.analysis, essayAt: null })); break; }
       n.essay = e.analysis; n.essayAt = null; n.screen = "forensic"; n.subject = "essay"; n.focus = 0; break;
+    // a piece's later paragraphs (v2 E1): the reading grows where the learner is, without moving the screen or the sentence
+    case "essay.progress": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essay: e.analysis })); break; }
+      if (s.essay?.text !== e.analysis.text) break; n.essay = e.analysis; break;
     // one sentence rewritten in place (POST /api/analyse kind 'rewrite'): the TV stays on it, on its forensic page;
     // a rewrite that holds, with another sentence still faulty, hands focus to Next sentence (tv/keys focusAfterRewrite)
     case "essay.revised": n.essay = e.analysis; n.essayAt = e.analysis.sentences.some((x) => x.n === e.n) ? e.n : null; n.subject = "essay";
       n.focus = focusAfterRewrite(e.analysis, e.n, s.screen === "forensic" ? s.focus : 0); n.screen = "forensic"; break;
+    // the plan opens empty on a lens (a plan with sentences in it keeps them: the learner's words are never thrown away by pressing OK again)
+    case "essay.plan": n.essayPlan = s.essayPlan?.slots.some(Boolean) ? { ...s.essayPlan, lens: e.lens } : { lens: e.lens, slots: planSlots(PLAYBOOK.find((p) => p.id === "para") ?? PLAYBOOK[0]).map(() => "") };
+      n.essayType = e.lens; n.subject = "essay"; break;
+    // a refused sentence changes nothing but the status line; a written one moves the caret to the first empty slot (or Read it)
+    case "essay.slot": { if (!s.essayPlan) break; const r = planFill(s.essayPlan, e.i, e.text); if (!r.ok) { n.status = r.error; break; }
+      n.essayPlan = r.plan; if (s.screen === "essayplan") { const open = r.plan.slots.findIndex((x) => !x); n.focus = open < 0 ? r.plan.slots.length : open; } break; }
+    case "essay.clear": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essay: null, essayAt: null })); break; }
+      n.essay = null; n.essayAt = null; if (n.screen === "forensic") n.screen = "landing"; break;
     case "essay.at": n.essayAt = e.n !== null && s.essay?.sentences.some((x) => x.n === e.n) ? e.n : null; break;
     // an id no task anywhere on the desk has (this learner's list, and every learner's in `away`), so a tick that names
     // one learner's task can never land on another's - even two added in the same millisecond, across a learner switch
@@ -523,18 +787,25 @@ export function reduce(s: Session, e: Event): Session {
     case "task.done": n.tasks = s.tasks.map((t) => (t.id === e.id ? { ...t, done: e.done } : t)); break;
     case "timer.start": n.timer = { ...s.timer, running: true }; if (!s.log.started) n.log = { ...s.log, started: Date.now() }; break;
     case "timer.pause": n.timer = { ...s.timer, running: false }; break;
-    case "timer.tick": { if (!s.timer.running) break; const left = Math.max(0, s.timer.left - e.seconds); const t = { ...s.timer, left };
+    // a tick is the desk's second (the ticker) or the TV's fast minute (59): anything but a number from 1 to 60 moves nothing
+    case "timer.tick": { if (!s.timer.running || !tickOk(e.seconds)) break; const left = Math.max(0, s.timer.left - e.seconds); const t = { ...s.timer, left };
       if (t.phase === "work") n.log = { ...s.log, minutes: s.log.minutes + e.seconds / 60 };
       if (left === 0) { if (t.phase === "work") { t.phase = "break"; t.left = 5 * 60; t.before = s.screen; n.screen = "break"; } else { t.phase = "work"; t.left = 25 * 60; n.screen = t.before ?? "page"; } }
       n.timer = t; break; }
     case "timer.skipbreak": n.timer = { ...s.timer, phase: "work", left: 25 * 60 }; n.screen = s.timer.before ?? "page"; break;
+    // the paper is kept by dispatch (the reducer writes no file); the TV is then on its recovery list
+    case "paper.enter": n.subject = "maths"; n.screen = "paper"; n.focus = 0; if (s.paperAim) n.paperAim = null; break;
+    // a worked lesson lands for the learner who asked, and only while they are at the desk
+    case "worked.set": if (e.owner && e.owner !== me) break; n.worked = { ...e.worked, owner: e.owner ?? me }; n.topic = e.worked.topic; n.subject = "maths"; n.screen = "worked"; n.focus = 0; break;
+    // the Workroom summary for the learner at the desk; `open` also puts it on the TV
+    case "workroom.set": if (e.workroom.owner !== me) break; n.workroom = e.workroom; if (e.open) { n.screen = "workroom"; n.subject = "essay"; n.focus = 0; } break;
     // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for; the focus is the topic's
     // place on the learner's own path (a topic of the other path, or an unknown id, is the first stop)
     case "topic.open": n.topic = e.topic; n.subject = "maths"; if (e.stay) break; n.screen = "topics"; n.focus = Math.max(0, topicsOf(learnerPath(s)).findIndex((t) => t.id === e.topic)); break;
-    case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? me }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
+    case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? me }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; if (s.paperAim) n.paperAim = null; break;
     // a marked set lands on the sheet - all six verdicts at once - focused on the first item to look at
-    case "practice.marked": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => (x.practice ? { ...x, practice: { ...x.practice, items: e.items.map(shown), marked: true }, walkIx: 0 } : null)); break; }
-      if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = "sheet"; n.focus = firstToLook(n.practice.items); } break;
+    case "practice.marked": { const markedAt = Date.now(); if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => (x.practice ? { ...x, practice: { ...x.practice, items: e.items.map(shown), marked: true, markedAt }, walkIx: 0 } : null)); break; }
+      if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true, markedAt }; n.walkIx = 0; n.screen = "sheet"; n.focus = firstToLook(n.practice.items); } break; }
     // an explanation: the reply always lands on its item; a verdict only on an item still unsure (a settled item stays settled);
     // on an item already wrong, a slip with no verdict renames it - from the topic's vocabulary only, verdict and pen untouched
     case "practice.settle": if (s.practice) { const topic = s.practice.topic; n.practice = { ...s.practice, items: s.practice.items.map((it) => it.n !== e.n ? it
@@ -547,12 +818,12 @@ export function reduce(s: Session, e: Event): Session {
       n.practice = { ...s.practice, items: s.practice.items.map((x) => (x.n === e.n ? shown({ ...x, second: e.verdict }) : x)) }; break; }
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
-    case "status": n.status = e.text; break;
-    case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; break;
+    case "status": n.status = e.text; n.essayRefused = e.essayRefused ? e.text : undefined; break;
+    case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.log = { ...s.log, endedAt: Date.now() }; break;
     case "reset": return fresh();
   }
   // a set being written is for the learner who asked: another learner at the desk supersedes it, and its late result is dropped by id
-  if (n.learner?.id !== s.learner?.id && s.jobs?.practice?.phase === "running") { n.jobs = { ...s.jobs }; delete n.jobs.practice; }
+  if (n.learner?.id !== s.learner?.id && s.jobs?.practice?.phase === "running") { n.jobs = { ...n.jobs }; delete n.jobs.practice; if (s.jobs.practice.start !== undefined && n.status === s.jobs.practice.start) n.status = ""; }
   const w = watchOf(n.watch ?? null, n, n.updatedAt);
   if (w !== (n.watch ?? null)) n.watch = w;
   return n;
@@ -584,15 +855,99 @@ function logWatched(w: Watch): void {
 
 // ---- the singleton, HMR-proof ----
 type Sub = (s: Session) => void;
-interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; }
+interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; /** whether the last practice.settle restate of the learner file landed (WD9); a missing value reads as landed */ settled?: boolean; /** whether the last hint count write landed (WD12); a missing value reads as counted */ counted?: boolean; /** where an unusable session.json is still to be put aside: the load could not rename it, so no save may write over it until it is */ aside?: string; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && (j?.learner === null || j?.learner?.id) && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return settleOwners({ ...fresh(), ...j, profiles: j.profiles.map((p: Profile) => modeChecked(pathChecked(p))), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch {} return fresh(); }
+function load(): Session {
+  if (!existsSync(FILE())) return fresh();
+  let raw: string;
+  try { raw = readFileSync(FILE(), "utf8"); } catch (e) { return setAside(`it could not be read (${e instanceof Error ? e.message : e})`); }
+  let j: any, bad: string | null = null;
+  try {
+    j = JSON.parse(raw);
+    bad = !Array.isArray(j?.profiles) ? "profiles is not a list" : !(j?.learner === null || j?.learner?.id) ? "learner is neither null nor a learner with an id" : null;
+    if (bad) bad = `it failed the shape check (${bad})`;
+  } catch (e) { bad = `it could not be read (${e instanceof Error ? e.message : e})`; }
+  if (bad) return setAside(bad);
+  try {
+    const log = "log" in j ? keptLog(j.log) : undefined;
+    return settleOwners({ ...fresh(), ...j, ...(log === undefined ? {} : { log }), profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
+  } catch (e) { return setAside(`its repair failed (${e instanceof Error ? e.message : e})`); }
+}
+/** The name an unusable session.json still has to be put aside as, when load() could not rename it; the store takes it over at startup. */
+let unplaced: string | undefined;
+const strings = (v: unknown) => Array.isArray(v) && v.every((x) => typeof x === "string");
+const count = (v: unknown) => typeof v === "number" && Number.isFinite(v);
+/** The fields of a saved log whose type is wrong, by name; `evening` also checks minutes, started, day and endedAt. */
+function badLogFields(l: Record<string, unknown>, evening: boolean): string[] {
+  const out: string[] = [];
+  if (!strings(l.problems)) out.push("problems");
+  if (!count(l.hints)) out.push("hints");
+  if (!strings(l.hard)) out.push("hard");
+  if (evening) {
+    if (!count(l.minutes)) out.push("minutes");
+    if (!(l.started === null || count(l.started))) out.push("started");
+    if (l.day !== undefined && typeof l.day !== "string") out.push("day");
+    if (l.endedAt !== undefined && !count(l.endedAt)) out.push("endedAt");
+  }
+  return out;
+}
+/** The evening log as saved: a log that is not an object starts empty, and each field of one with the wrong type takes the fresh value (day and endedAt are dropped); one line says which. */
+function keptLog(raw: unknown): Session["log"] {
+  const base = fresh().log;
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) { console.error("desk session: session.json log was not an object, so the evening log starts empty; the rest of the file is kept"); return base; }
+  const l = raw as Record<string, unknown>, bad = badLogFields(l, true);
+  if (!bad.length) return l as Session["log"];
+  const out: Record<string, unknown> = { ...l };
+  for (const f of bad) { if (f === "day" || f === "endedAt") delete out[f]; else out[f] = (base as any)[f]; }
+  console.error(`desk session: session.json log field${bad.length > 1 ? "s" : ""} ${bad.join(", ")} had the wrong type, so ${bad.length > 1 ? "they take" : "it takes"} the fresh value; the rest of the file is kept`);
+  return out as Session["log"];
+}
+/** An unusable session.json is renamed beside itself (kept, never deleted) and the desk starts fresh with SESSION_UNREAD; one log line says why and where it went. */
+function setAside(why: string): Session {
+  const to = `${FILE()}.bad-${Date.now().toString(36)}`;
+  let where: string;
+  try { renameSync(FILE(), to); where = `put aside as ${path.basename(to)}`; } catch (e) { unplaced = to; where = `not put aside, the rename failed (${e instanceof Error ? e.message : e}), and no save will write over it until it is`; }
+  console.error(`desk session: session.json was not used, ${why}; ${where}; starting fresh`);
+  return { ...fresh(), status: SESSION_UNREAD };
+}
+/** A saved profile list as the desk keeps it: a profile with no usable id, a repeated id, a name that is not text or a type the desk does not know is dropped (and said); the rest of its fields are repaired. */
+function keptProfiles(list: unknown[]): Profile[] {
+  const out: Profile[] = [];
+  list.forEach((raw, ix) => {
+    const p = raw as Partial<Profile> | null;
+    const at = typeof p?.id === "string" && p.id ? `"${p.id}"` : `at index ${ix}`;
+    const drop = (why: string) => { console.error(`desk session: session.json profile ${at} was dropped, ${why}`); };
+    if (!p || typeof p !== "object") return drop("it is not a profile");
+    if (typeof p.id !== "string" || !p.id) return drop("it has no id");
+    if (out.some((x) => x.id === p.id)) return drop("its id repeats an earlier profile's");
+    if (typeof p.name !== "string") return drop("its name is not text");
+    if (typeof p.type !== "string" || !Object.hasOwn(AGE_RANGE, p.type)) return drop("its type is not one the desk knows");
+    const q: Profile = { ...(p as Profile) };
+    q.modules = Array.isArray(q.modules) ? Array.from(new Set((q.modules as Subject[]).filter((m) => SUBJECTS.includes(m)))) : [...SUBJECTS];
+    const r = AGE_RANGE[q.type];
+    if (q.age !== undefined && !(r && typeof q.age === "number" && Number.isInteger(q.age) && q.age >= r[0] && q.age <= r[1])) delete q.age;
+    if (q.system !== undefined && !SYSTEMS.includes(q.system)) delete q.system;
+    out.push(modeChecked(pathChecked(q)));
+  });
+  return out;
+}
 /** The away learners' work as saved: an answer that reached the file stops here too, and a read under way ended with the desk. */
 function awayShown(a: unknown): Record<string, MathsSlot> | undefined {
   if (!a || typeof a !== "object") return undefined;
-  return Object.fromEntries(Object.entries(a as Record<string, MathsSlot>).map(([k, x]) => [k, { ...emptySlot(), ...x, practice: shownPractice(x.practice), reading: false }]));
+  const out: Record<string, MathsSlot> = {};
+  for (const [k, x] of Object.entries(a as Record<string, MathsSlot>)) {
+    if (!x || typeof x !== "object" || Array.isArray(x)) { console.error(`desk session: session.json away slot "${k}" was dropped, it is not an object`); continue; }
+    const slot: MathsSlot = { ...emptySlot(), ...x, practice: shownPractice(x.practice), reading: false };
+    const lg = (x as any).log as unknown, empty = emptySlot().log;
+    if (!("log" in x)) { /* an old slot with no log keeps the empty one */ }
+    else if (!lg || typeof lg !== "object" || Array.isArray(lg)) { console.error(`desk session: session.json away slot "${k}" log was not an object, so it starts empty`); slot.log = empty; }
+    else { const bad = badLogFields(lg as Record<string, unknown>, false); if (bad.length) { console.error(`desk session: session.json away slot "${k}" log field${bad.length > 1 ? "s" : ""} ${bad.join(", ")} had the wrong type, so ${bad.length > 1 ? "they start" : "it starts"} empty`); slot.log = { ...(lg as object), ...Object.fromEntries(bad.map((f) => [f, (empty as any)[f]])) } as MathsSlot["log"]; } }
+    for (const f of ["pages", "tasks"] as const) if (!Array.isArray(slot[f])) { console.error(`desk session: session.json away slot "${k}" field ${f} was not a list, so it starts empty`); (slot as any)[f] = []; }
+    out[k] = slot;
+  }
+  return out;
 }
-if (!g.__desk) g.__desk = { session: load(), subs: new Set(), ticker: null };
+if (!g.__desk) { const session = load(); g.__desk = { session, subs: new Set(), ticker: null, ...(unplaced ? { aside: unplaced } : {}) }; }
 const store = g.__desk;
 // HMR can retain a session created before this feature was installed.
 if (!store.session.englishLearning) store.session.englishLearning = store.session.learner ? getLearner(store.session.learner.id).english : emptyEnglish();
@@ -600,9 +955,15 @@ if (store.session.conversation === undefined) store.session.conversation = null;
 if (store.session.check === undefined) store.session.check = null;
 if (!store.session.jobs) store.session.jobs = {};
 // ...and one whose Math Buddy work has no owner yet (settleOwners)
-try { store.session = settleOwners(store.session, (id) => getLearner(id).history); } catch {}
+// the startup reads go through readLearner: an unreadable learners.json is said once, in one sentence, never read as an empty book
+let learnersUnread = false;
+const readable = (id: string) => { try { return readLearner(id); } catch (err) { learnersUnread = true; throw err; } };
+try { store.session = settleOwners(store.session, (id) => readable(id).history); } catch (e) { console.error("desk session: the work's owners could not be settled at start:", e instanceof Error ? e.message : e); }
 // the Sunday page is drawn fresh for whoever is seated, never taken from the file
-try { store.session = { ...store.session, week: weekOf(store.session) }; } catch {}
+store.session = { ...store.session, week: weekRead(store.session) };
+// the learner's latest paper (v2 M5b), read back through cleanPaper from their record, never taken from the saved session
+try { store.session = { ...store.session, paper: store.session.learner ? readable(store.session.learner.id).papers?.at(-1) ?? null : null }; } catch { store.session = { ...store.session, paper: null }; }
+if (learnersUnread) store.session = { ...store.session, status: LEARNER_UNREAD };
 if (!store.ticker) store.ticker = setInterval(() => {
   if (store.session.timer.running) dispatch({ type: "timer.tick", seconds: 1 });
   if (watchDue(store.session.watch, Date.now())) dispatch({ type: "lesson.watched" });
@@ -616,7 +977,7 @@ export function getSession() { return store.session; }
  * at the desk. The reducer stays pure: the file read happens here, at the boundary that already
  * writes to disk and pushes to subscribers.
  */
-const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set", "lesson.watched"]);
+const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set", "essay.progress", "essay.revised", "lesson.watched", "paper.enter"]);
 
 /**
  * A settled item changes its set's count: the line marking wrote (the last practice line, this topic, this n)
@@ -637,6 +998,22 @@ function restateMarked(s: Session): void {
 }
 
 /**
+ * What one hint event added to its owner's evening log, as the reducer counted it (MB-B14): every hint.set is one hint,
+ * and a problem counts once toward "needed a second" when it first joins the log's hard list (hint.stage 2). The owner
+ * is the hint's (it may be a learner who left the desk: toAway), else the learner seated. The log before is read as the
+ * reducer saw it, after a new evening's clearing (dayed). Null when the event added nothing.
+ */
+function hintsAdded(was: Session, now: Session, e: Event): { owner: string; hints: number; second: number } | null {
+  if (e.type !== "hint.set" && e.type !== "hint.stage") return null;
+  const owner = (e.type === "hint.set" ? e.hint.owner : e.owner) ?? was.learner?.id;
+  if (!owner) return null;
+  const logOf = (s: Session) => (s.learner?.id === owner ? s.log : s.away?.[owner]?.log) ?? { hints: 0, hard: [] };
+  const a = logOf(now), b = logOf(dayed(was, e));
+  const hints = Math.max(0, a.hints - b.hints), second = Math.max(0, a.hard.length - b.hard.length);
+  return hints || second ? { owner, hints, second } : null;
+}
+
+/**
  * The Sunday page's lines for the learner at the desk, from their own record (rules/week, no model): null with no one
  * seated. Read at the boundary, like the history: after an event that can change the record or who is seated, and when
  * a session ends. The page is a household convenience on the phone's Parent tab, not a locked view (Phase 1 has no
@@ -645,22 +1022,112 @@ function restateMarked(s: Session): void {
 export function weekOf(s: Session, now = Date.now()): WeekLine[] | null {
   const id = s.learner?.id;
   if (!id) return null;
-  return sundayWords(sundayPage(getLearner(id), s.profiles.find((p) => p.id === id), now));
+  return sundayWords(sundayPage(readLearner(id), s.profiles.find((p) => p.id === id), now));
+}
+
+/**
+ * weekOf as the session holds it: a page that could not be read is logged and said in one authored line (WEEK_UNREAD) -
+ * never null, which the phone draws as the empty week, and never the lines held before, which after a switch are another
+ * learner's page.
+ */
+function weekRead(s: Session): WeekLine[] | null {
+  try { return weekOf(s); } catch (err) {
+    console.error("The week could not be read:", err instanceof Error ? err.message : err);
+    return [{ section: "week", text: WEEK_UNREAD }];
+  }
+}
+
+let rehydrateTold = "";
+/** A rehydrate that failed goes to the server log once per distinct failure (WD13), the way learners.ts tell does: the same failure on every event would flood it. */
+function tellRehydrate(why: string): void {
+  if (why !== rehydrateTold) console.error("The learner file could not be read onto the desk, so the session keeps what it held:", why);
+  rehydrateTold = why;
 }
 
 export function dispatch(e: Event): Session {
-  const was = store.session.watch;
+  if (e.type === "paper.enter") {
+    // the one validation (rules/recovery cleanPaper) decides what is kept; a paper with no row left is not kept, and the TV stays put.
+    // A paper addPaper could not write is reported as not saved (ruling 11), never as a paper with no row left; the TV stays put too.
+    const id = store.session.learner?.id;
+    let kept: StoredPaper | null = null, failed = false;
+    if (id) try { kept = addPaper(id, e.rows); } catch (err) { failed = true; console.error("A paper could not be saved:", err instanceof Error ? err.message : err); }
+    if (!kept) {
+      store.session = { ...store.session, status: !id ? NOBODY_AT_DESK : failed ? PAPER_NOT_SAVED : PAPER_NO_ROW, updatedAt: Date.now() };
+      notify();
+      return store.session;
+    }
+  }
+  const was = store.session.watch, before = store.session;
   store.session = reduce(store.session, e);
-  if (e.type === "practice.settle" && e.verdict) try { restateMarked(store.session); } catch {}
+  // a hint is counted onto its owner's homework sheet of the day (MB-B14), never one digest entry per hint
+  const added = hintsAdded(before, store.session, e);
+  let hinted = false;
+  if (e.type === "hint.set") store.counted = true;
+  if (added) try { hinted = addHints(added.owner, added.hints, added.second); } catch (err) { store.counted = false; console.error("A hint could not be counted on the week:", err instanceof Error ? err.message : err); }
+  // a settle is a learner's action, so a failed restate is logged once per event, never by the timer; whether it landed is kept for the explain route (WD9)
+  if (e.type === "practice.settle") {
+    store.settled = true;
+    if (e.verdict) try { restateMarked(store.session); } catch (err) { store.settled = false; console.error("A settled answer could not be restated on the learner file:", err instanceof Error ? err.message : err); }
+  }
   const w = store.session.watch;
-  if (e.type === "lesson.watched" && w?.logged && !was?.logged) try { logWatched(w); } catch {}
+  // the line is what Units and the calendar tick by: a write that fails is said, as a failed hint count or settle is
+  if (e.type === "lesson.watched" && w?.logged && !was?.logged) try { logWatched(w); } catch (err) { console.error("A watched lesson could not be written to the learner file, so Units will not tick it:", err instanceof Error ? err.message : err); }
   if (REHYDRATE.has(e.type)) {
     const id = store.session.learner?.id;
-    if (id) try { const l = getLearner(id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english }; } catch {}
+    if (id) try {
+      const l = readLearner(id);
+      store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory.map((n) => n.text), history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null, ...(store.session.status === LEARNER_UNREAD ? { status: "" } : {}) };
+      rehydrateTold = "";
+    } catch (err) {
+      tellRehydrate(err instanceof Error ? err.message : String(err));
+      // the same learner keeps its own records (WD13); a learner switched to never shows the previous learner's (WD14a)
+      if (before.learner?.id !== id) {
+        const b = blank(id);
+        store.session = { ...store.session, skills: b.skills, writing: b.writing, memory: b.memory.map((n) => n.text), history: b.history, englishLearning: b.english, paper: null, status: LEARNER_UNREAD };
+      }
+    }
   }
-  if (REHYDRATE.has(e.type) || e.type === "session.end") try { store.session = { ...store.session, week: weekOf(store.session) }; } catch {}
-  try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(store.session)); } catch {}
-  store.subs.forEach((fn) => { try { fn(store.session); } catch {} });
+  if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) store.session = { ...store.session, week: weekRead(store.session) };
+  writeSession();
+  notify();
   return store.session;
 }
+/**
+ * The one way session.json is written: a temp file beside it, then a rename over it, so a crash mid-write leaves the old
+ * file whole (the way learners.ts writeBook does). Whether it landed is kept for the read route (HF4). The log speaks on a
+ * change only, so the timer's once-a-second event cannot flood it.
+ */
+function writeSession(): void {
+  // a session.json the load could not put aside is not ours to overwrite: try the rename again first, and write only once it has landed
+  if (store.aside) {
+    if (!existsSync(FILE())) store.aside = undefined;
+    else {
+      try { renameSync(FILE(), store.aside); console.error(`desk session: session.json was put aside as ${path.basename(store.aside)}`); store.aside = undefined; }
+      catch (e) {
+        if (store.saved !== false) console.error("desk session: session.json could not be put aside, so the session will not be written over it:", e instanceof Error ? e.message : e);
+        store.saved = false; return;
+      }
+    }
+  }
+  const tmp = path.join(dataDir(), `session.json.${process.pid}.${Date.now().toString(36)}.tmp`);
+  try {
+    mkdirSync(dataDir(), { recursive: true });
+    writeFileSync(tmp, JSON.stringify(store.session));
+    renameSync(tmp, FILE());
+    if (store.saved === false) console.error("desk session: session.json is being written again");
+    store.saved = true;
+  } catch (e) {
+    try { rmSync(tmp, { force: true }); } catch { /* best effort: the write's own failure is logged just below */ }
+    if (store.saved !== false) console.error("desk session: session.json could not be written, so the session will not survive a restart:", e instanceof Error ? e.message : e);
+    store.saved = false;
+  }
+}
+/** Whether the last practice.settle restate landed (WD9); a settle with no verdict, or none yet, reads as landed. */
+export function settleSaved(): boolean { return store.settled !== false; }
+/** Whether the last hint count write landed (WD12); a hint with no sheet to count onto, or none yet, reads as counted. */
+export function hintCounted(): boolean { return store.counted !== false; }
+/** Whether the last session.json write landed (HF4). */
+export function sessionSaved(): boolean { return store.saved !== false; }
+/** Hand the session to every subscriber. One that throws does not stop the others, and is said: a stream's own send catches what it expects (session/stream route). */
+function notify() { store.subs.forEach((fn) => { try { fn(store.session); } catch (e) { console.error("desk session: a subscriber threw:", e instanceof Error ? e.message : e); } }); }
 export function subscribe(fn: Sub) { store.subs.add(fn); return () => store.subs.delete(fn); }

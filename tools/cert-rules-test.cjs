@@ -15,10 +15,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const data=path.join(os.tmpdir(),`desk-cert-rules-${process.pid}-${Date.now()}`);process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 assert(!path.resolve(data).startsWith(path.resolve(root,'data')),'never desk/data');
 
@@ -229,7 +226,7 @@ test('cert 4: never from a band picked by hand, a low-confidence check, or an ol
  assert.equal(C.issue(earned({placements:[check('A2','low')]}),1),null,'low confidence');
  assert.equal(C.issue(earned({placements:[]}),1),null,'no record of a check');
  assert.equal(C.issue(earned({placements:[check('B1','high',1),check('A2','low',2)]}),1),null,'an older B1 does not certify when the latest check is low');
- const stepDown=C.issue(earned({placements:[check('B1','high',1),check('A2','medium',2)]}),1);
+ const stepDown=C.issue(earned({placements:[check('B1','high',1),check('A2','high',2)]}),1);
  assert.equal(stepDown.band,'A2','the latest check names the band, never an older stronger one');
  // a live placement from before W10 is not in the record, so it cannot certify (no back-fill)
  const old=earned({placements:[]});old.placement={at:1,band:'A2',selfBand:null,confidence:'high',source:'check',summary:'',focus:'',tasks:[]};
@@ -326,15 +323,27 @@ test('cert 10: finishing a conversation issues it, checked against tonight\'s re
  const blocked=await run(true);
  assert.equal(blocked.certificates.length,0,'a quote not in the reply as sent issues nothing');
 });
-test('cert 11: a level check that completes can issue from evidence already held; a band picked by hand never does',async()=>{
+test('cert 11: a level check that completes issues nothing from evidence it predates (PC6); a band picked by hand never does',async()=>{
  prime(mergeEvidence({...emptyEnglish()},evidenceFor(C.BASE_SKILLS.B1)));
  await command('level-self',{band:'B1'});
  assert.equal(getLearner(PROFILE_ID).english.certificates.length,0,'self: never');
  await runCheck();
  const l=getLearner(PROFILE_ID).english;
  assert.equal(l.placements.at(-1).source,'check');
- assert.equal(l.certificates.length,1);assert.equal(l.certificates[0].band,l.placements.at(-1).band);
- assert.equal(l.certificates[0].checkAt,l.placements.at(-1).at);
+ assert.equal(l.certificates.length,0,'the evidence all predates the check');
+});
+test('cert 23: only a high check certifies, and only with a piece of the learner own evidence dated after it (PC6)',()=>{
+ const band='B1',plan=['describe'],need=[...C.BASE_SKILLS[band],...plan];
+ const late=evidenceFor(need,{at:9000});
+ const learner=(confidence,at,evs)=>earned({band,plan,placements:[check(band,confidence,at)],ev:evs});
+ assert.equal(C.issue(learner('medium',5000,late),1),null,'a medium check issues nothing');
+ assert.equal(C.certGap(learner('medium',5000,late)).blocker,'low','and blocks the way a low one does');
+ assert(C.issue(learner('high',5000,late),1),'high with later evidence issues (a guard)');
+ assert.equal(C.issue(learner('high',20000,late),1),null,'high, but all the evidence predates the check');
+ assert.deepEqual(C.certGap(learner('high',20000,late)),{band,blocker:null,shown:C.requirementFor(learner('high',20000,late),band),open:[],needsNew:true},'certGap names the missing evidence');
+ const mixed=mergeEvidence({...emptyEnglish(),placements:[check(band,'high',20000)],plan:earned({band,plan}).plan},late.map((e,i)=>i===0?{...e,at:30000}:e));
+ assert(C.issue(mixed,1),'the same record with one piece after the check issues a certificate');
+ assert.equal(C.certGap(mixed).needsNew,undefined);
 });
 test('cert 12: opening marks it seen in seenIds and never edits the certificate; home offers the door once per new certificate',async()=>{
  const got=C.withCertificate(earned({plan:['describe']}),Date.UTC(2026,8,30));
@@ -423,10 +432,10 @@ test('cert 15: the phone\'s My map says the certificate in words (band, topics, 
 const {recommendScene,planScenes,ENGLISH_SCENES}=require(src('lib/english/curriculum.ts'));
 /** the next scene as the desk now picks it; before linga-B this is the plain recommendation (so the GUARD case is green before) */
 const nextScene=(p,l)=>C.recommendFor?C.recommendFor(p,l):recommendScene(p,l);
-const PLACED=(band,confidence='medium',source='check')=>({at:5000,band,selfBand:null,confidence,source,summary:'',focus:'',tasks:[]});
+const PLACED=(band,confidence='high',source='check')=>({at:5000,band,selfBand:null,confidence,source,summary:'',focus:'',tasks:[]});
 const sessionsFor=(topics)=>topics.map((t,i)=>({id:`s${i}`,sceneId:t.id,title:t.title,at:20000+i,turns:5}));
 /** B1, a medium-confidence check, a six-topic plan over contact, request, describe, narrate, describe, request (all started), those four skills on their own */
-function gapLearner({started=6,band='B1',confidence='medium',source='check'}={}){
+function gapLearner({started=6,band='B1',confidence='high',source='check'}={}){
  const plan=['contact','request','describe','narrate','describe','request'];
  const l=earned({band,plan,placements:[{at:5000,band,confidence,source,summary:'You get by.'}],ev:evidenceFor(['contact','request','describe','narrate'])});
  return {...l,placement:PLACED(band,confidence,source),sessions:sessionsFor(l.plan.topics.slice(0,started))};
@@ -502,4 +511,33 @@ test('cert 22: the plan-done home\'s "Talk again" starts a scene for an open ski
  const scene=[...planScenes(l),...ENGLISH_SCENES].find(x=>x.id===again.run.command.extra.sceneId);
  assert(scene&&C.certGap&&C.certGap(l).open.includes(scene.skill),`talk again starts ${scene&&scene.id}`);
  assert.equal(v.caption,scene.goal);
+});
+test('cert 24 (PC6-b): a high check with nothing of the learner own after it, and skills still open, gets no needsNew',()=>{
+ const band='B1',plan=['describe'],need=[...C.BASE_SKILLS[band],...plan];
+ const l=earned({band,plan,placements:[check(band,'high',20000)],ev:evidenceFor(need.slice(0,2),{at:9000})});
+ assert.equal(C.issue(l,1),null,'nothing issues');
+ const gap=C.certGap(l);
+ assert.equal(gap.blocker,null);
+ assert(gap.open.length>0,'skills are still open');
+ assert.equal(gap.needsNew,undefined,'needsNew is for the record that waits only for a piece after the check');
+});
+test('cert 25 (PC6-b): needsNew agrees with issue() on 288 records; a gap with no blocker, nothing open and no needsNew issues',()=>{
+ const B2=C.BASE_SKILLS.B2,A2=C.BASE_SKILLS.A2,bad=[];let n=0;
+ for(const confidence of ['high','medium','low'])for(const source of ['check','self'])for(const timing of ['none','before','after','mixed'])for(const shown of [0,1,'all'])for(const holds of [false,true])for(const plan of [false,true]){
+  const planSkills=plan?['describe']:[],band=plan?'B2':'A2',req=plan?[...B2,...planSkills]:A2;
+  const skills=shown==='all'?req:shown===1?[req[0]]:[],at=timing==='after'?10000:1000;
+  const mk=(checkAt)=>({...check(band,confidence,checkAt),source});
+  let l=earned({band,plan:planSkills,placements:[mk(5000)],ev:timing==='none'||!skills.length?[]:evidenceFor(skills,{at})});
+  if(timing==='mixed'&&skills.length)l=mergeEvidence(l,[ev({id:'late',skill:skills[0],mode:'text',quote:LINES[skills[0]],at:9000})]);
+  if(holds){const h=C.issue({...l,placements:[mk(0)]},1);if(h)l={...l,certificates:[h]};}
+  n++;
+  const gap=C.certGap(l),iss=C.issue(l,90000);
+  const older=C.issue({...l,placements:[{...l.placements.at(-1),at:-1}]},90000);
+  const waitsOnlyNew=iss===null&&!!older,sig=`conf=${confidence} src=${source} timing=${timing} shown=${shown} held=${holds} plan=${plan}`;
+  if(!!gap.needsNew!==waitsOnlyNew)bad.push(`${sig}: needsNew=${!!gap.needsNew} waitsOnlyForNew=${waitsOnlyNew} open=${gap.open.length} blocker=${gap.blocker}`);
+  if(!gap.blocker&&!gap.open.length&&!gap.needsNew&&!holds&&iss===null)bad.push(`${sig}: gap says ready, issue null`);
+ }
+ assert.equal(n,288);
+ console.log(`cert 25: ${n} records, ${bad.length} disagreements`);
+ assert.deepEqual(bad,[]);
 });

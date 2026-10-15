@@ -14,16 +14,20 @@ export function useSession() {
   const reopen = useRef<() => void>(() => {});
   useEffect(() => {
     let es: EventSource | null = null, dead = false;
-    const dbg = (window as unknown as { __desk: Record<string, unknown> }).__desk = { events: [] as string[] };
+    // the stream's trace for a person at the devtools (window.__desk.events): the last TRACE_MAX lines, since the clock
+    // alone sends a message a second and an evening would otherwise keep every one
+    const TRACE_MAX = 200;
+    const dbg = (window as unknown as { __desk: { events: string[] } }).__desk = { events: [] as string[] };
+    const trace = (line: string) => { dbg.events.push(line); if (dbg.events.length > TRACE_MAX) dbg.events.splice(0, dbg.events.length - TRACE_MAX); };
     const open = () => {
       es = new EventSource("/api/session/stream");
-      dbg.events.push("open " + Date.now());
-      es.onmessage = (m) => { dbg.events.push("msg " + m.data.length); try { setS(JSON.parse(m.data)); setConnected(true); } catch (e) { dbg.events.push("parse " + String(e)); } };
-      es.onerror = () => { dbg.events.push("error rs=" + es?.readyState); setConnected(false); es?.close(); if (!dead) setTimeout(open, 1500); };
+      trace("open " + Date.now());
+      es.onmessage = (m) => { trace("msg " + m.data.length); try { setS(JSON.parse(m.data)); setConnected(true); } catch (e) { trace("parse " + String(e)); } };
+      es.onerror = () => { trace("error rs=" + es?.readyState); setConnected(false); es?.close(); if (!dead) setTimeout(open, 1500); };
     };
-    reopen.current = () => { if (dead) return; dbg.events.push("reconnect"); es?.close(); open(); };
+    reopen.current = () => { if (dead) return; trace("reconnect"); es?.close(); open(); };
     open();
-    return () => { dead = true; dbg.events.push("cleanup"); es?.close(); };
+    return () => { dead = true; trace("cleanup"); es?.close(); };
   }, []);
   const post = useRef(async (e: Event): Promise<Response> => fetch("/api/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(e) }));
   const reconnect = useRef(() => reopen.current());

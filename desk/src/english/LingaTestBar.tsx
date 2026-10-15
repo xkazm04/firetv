@@ -16,7 +16,7 @@ type Target = { action: string; extra: Record<string, string>; label: string } |
 function target(s: Session): Target {
   const a = lingaView(s).answer;
   if (!a) return null;
-  return { action: a.action, extra: { ...(a.lastTurnId ? { lastTurnId: a.lastTurnId } : {}), ...(a.taskId ? { taskId: a.taskId } : {}) }, label: a.label };
+  return { action: a.action, extra: { ...(a.lastTurnId ? { lastTurnId: a.lastTurnId } : {}), ...(a.taskId ? { taskId: a.taskId } : {}), ...(a.speaker ? { speaker: a.speaker } : {}) }, label: a.label };
 }
 
 interface Recognition { lang: string; continuous: boolean; interimResults: boolean; onresult: ((e: { results: ArrayLike<{ [i: number]: { transcript: string } }> }) => void) | null; onerror: ((e: { error: string }) => void) | null; onend: (() => void) | null; start: () => void; stop: () => void; }

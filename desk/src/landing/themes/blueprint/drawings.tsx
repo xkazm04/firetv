@@ -111,7 +111,6 @@ export function maths(S: { n: number } | null): Drawing {
 // ------------------------------------------------------------------ LINGA
 export function english(kind: "none" | "resume" | "next" | "last", cefr: string | null, tonight: boolean): Drawing {
   const t = new Pen("l");
-  const G = 500;
   const cons: ReactNode[] = [], wash: ReactNode[] = [], base: ReactNode[] = [], idle: ReactNode[] = [];
   const ri = cefr ? "A1A2B1B2C1C2".indexOf(cefr) / 2 : -1;
   cons.push(t.CCI(300, 300, 274), t.CCI(300, 300, 206), t.CL(16, 300, 584, 300), t.CL(300, 16, 300, 584));

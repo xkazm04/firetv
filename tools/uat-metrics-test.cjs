@@ -113,3 +113,10 @@ test('case 7: every metric row of the rubric is a registry metric or a named dri
   // and the other way: every registry series names a rubric row
   for (const s of M().series()) assert.ok(rows.includes(s.rubric), `series ${s.id} names rubric row "${s.rubric}" that the rubric lacks`);
 });
+
+test('--journeys naming a journey no file defines is refused before a Character is spawned, never an empty run that exits 0', () => {
+  const texts = ['J1', 'J3'].map(id => `# ${id}\n\n\`\`\`json\n${JSON.stringify({ id, title: id, budget: 3, gates: [] })}\n\`\`\`\n`);
+  assert.throws(() => D().parseArgs(['--journeys', 'J1,J7'], { characters: [], journeyTexts: texts }), /--journeys J7.*Known: J1, J3/);
+  assert.deepEqual(D().parseArgs(['--journeys', 'J3,J1'], { characters: [], journeyTexts: texts }).journeys, ['J3', 'J1']);
+  assert.doesNotThrow(() => D().parseArgs(['--journeys', 'J1,J2,J3,J4,J5'], { characters: [] }), 'the committed journeys J1-J5 are all known');
+});

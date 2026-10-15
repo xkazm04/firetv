@@ -9,20 +9,29 @@
  * (grid, band, rail, safe box) steps aside: this root is the whole 1920 x 1080 stage and keeps the 5% margins
  * itself. Stable `data-role` hooks (maths-*) name the parts a host checks.
  */
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import type { Page, PracticeItem, Session } from "@/lib/session/store";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import type { Page, PracticeItem, SchoolSystem, Session } from "@/lib/session/store";
 import { PATHS, expectedOn, learnerPath, topicIn, topicsOf } from "@/lib/library/paths";
 import { LESSONS } from "@/lib/library/lessons.data";
+import { hasWorked } from "@/lib/library/worked";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
+import { markOf, type Mark as ItemMark } from "@/lib/rules/marks";
 import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
-import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
-import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
-import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
+import { MathsCollection } from "./MathsCollection";
+import { Plot } from "./Plot";
+import { CALC_SHAPES, type CalcSpec } from "@/lib/rules/calc";
+import { deskLine, itemName, partPlace, type PartPlace } from "@/lib/rules/calc-word";
+const isCalcSpec = (spec: unknown): spec is CalcSpec => !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
+import { aimLine, calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, tonightsSheet, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { playerCommand, running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
+import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, pastPathEnd, pathEndsLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
+import { leftOutLine, lostLabel, lostWord, offCountLine, offSummary, paperCaption, paperNone, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
+import { missingLine } from "@/tv/pageLines";
 import { MathsMark as Mark } from "@/tv/marks";
 import { MATHS_FONTS } from "./fonts";
 import { MathText, Tick } from "./MathText";
@@ -32,18 +41,19 @@ import { KIND_WORD, lookAt, working } from "./working";
 
 /**
  * The root every Math Buddy screen is drawn in. `busy` is the TV's own wait for a practice set; `ask` the lit cell of Get
- * ready for school's two-cell question (tv/keys Local `prepareAsk`: null while its list is walked).
+ * ready for school's question (tv/keys Local `prepareAsk`: null while its list is walked).
  */
-export function MathsTV({ s, busy, ask = null }: { s: Session; busy: boolean; ask?: 0 | 1 | null }) {
+export function MathsTV({ s, busy, ask = null }: { s: Session; busy: boolean; ask?: -1 | 0 | 1 | null }) {
   const f = s.focus;
   const blank = s.screen === "tonight" && !continueCard(s);
-  const lamp = ["sheet", "walk", "page", "hint", "practice", "units"].includes(s.screen) ? "paper" : blank ? "blank" : s.screen === "topics" || s.screen === "prepare" || s.screen === "calendar" ? "wide" : "desk";
+  const lamp = ["sheet", "walk", "page", "hint", "practice", "units", "worked"].includes(s.screen) ? "paper" : blank ? "blank" : s.screen === "topics" || s.screen === "prepare" || s.screen === "paper" || s.screen === "calendar" ? "wide" : "desk";
   return (
     <div className={`maths-tv ${MATHS_FONTS}`} data-screen={s.screen} data-lamp={lamp}>
       <div className="mb-lamp" aria-hidden="true"><i /></div>
       {s.screen === "tonight" ? <Tonight s={s} focus={f} />
         : s.screen === "topics" ? <Topics s={s} focus={f} busy={busy} />
         : s.screen === "prepare" ? <Prepare s={s} focus={f} busy={busy} ask={ask} />
+        : s.screen === "paper" ? <PaperScreen s={s} focus={f} />
         : s.screen === "practice" ? <PracticeScreen s={s} />
         : s.screen === "sheet" ? <Sheet s={s} focus={f} />
         : s.screen === "walk" ? <Walk s={s} focus={f} />
@@ -52,6 +62,7 @@ export function MathsTV({ s, busy, ask = null }: { s: Session; busy: boolean; as
         : s.screen === "lesson" ? <LessonScreen s={s} />
         : s.screen === "units" ? <Units s={s} focus={f} />
         : s.screen === "calendar" ? <Calendar s={s} focus={f} />
+        : s.screen === "worked" ? <WorkedScreen s={s} focus={f} />
         : null}
     </div>
   );
@@ -90,6 +101,8 @@ const KIND_ICON: Record<string, ReactNode> = {
   line: <svg viewBox="0 0 52 40"><path d="M4 18 H48" opacity=".5" /><path d="M4 30 C 10 24, 16 36, 22 30 S 34 24, 40 30 S 46 34, 49 29" /></svg>,
   right: <svg viewBox="0 0 52 40"><path d="M10 21 L22 33 L44 7" /></svg>,
   unsure: <svg viewBox="0 0 52 40"><path d="M18 12 C 18 4, 34 4, 34 12 C 34 18, 26 19, 26 25" /><path d="M26 33 V34" /></svg>,
+  // MB-B1: an item left empty - the empty answer line, dashed
+  skipped: <svg viewBox="0 0 52 40"><path d="M6 30 H46" strokeDasharray="7 6" /></svg>,
   six: <svg viewBox="0 0 52 40"><path d="M8 6 H22 V14 H8 Z M30 6 H44 V14 H30 Z M8 18 H22 V26 H8 Z M30 18 H44 V26 H30 Z M8 30 H22 V38 H8 Z M30 30 H44 V38 H30 Z" /></svg>,
 };
 
@@ -111,13 +124,14 @@ function Chips({ s, clock = true, phone = true, learner = true, menu }: { s: Ses
     </div>
   );
 }
-function Top({ s, crumb, right }: { s: Session; crumb?: string; right?: ReactNode }) {
+function Top({ s, crumb, right, shelf }: { s: Session; crumb?: string; right?: ReactNode; shelf?: ReactNode }) {
   return (
     <header className="mb-top">
       <div className="mb-brand">
         <Mark />
         <div className="mb-word">Math <em>Buddy</em></div>
         {crumb && <div className="mb-crumb"><span className="sep" /><span className="tp">{crumb}</span></div>}
+        {shelf}
       </div>
       {right ?? <Chips s={s} />}
     </header>
@@ -246,6 +260,19 @@ function PrintRow({ text, tick, wrap }: { text: string; tick?: boolean; wrap?: b
   return <div className={`mb-row q${wrap ? " wrap" : ""}`} data-tall={isTall(parseMath(text))}><span className="rin"><MathText text={text} voice="print" />{tick && <Tick />}</span></div>;
 }
 
+/**
+ * A sentence on the paper, printed as prose (v2 M3a): a word problem's stem and its part lines go through prose() into the
+ * wrapping row, never into the nowrap question row, where a sentence runs past the paper.
+ */
+function ProseRow({ text, tick, role }: { text: string; tick?: boolean; role: "maths-stem" | "maths-part" }) {
+  return <div className="mb-row q wrap" data-role={role}><span className="rin"><span className="mx print">{prose(text)}</span>{tick && <Tick />}</span></div>;
+}
+
+/** A multi-part question's stem, once, above its parts: the question's number and the situation in words. */
+function Stem({ at, text }: { at: PartPlace; text: string }) {
+  return <section className="mb-item" data-stem={at.q}><div className="num">{at.q}</div><ProseRow text={text} role="maths-stem" /></section>;
+}
+
 // ---------------------------------------------------------------- the ruler: the topic path
 
 /**
@@ -297,13 +324,14 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
     {topics.map((t, i) => {
       const sk = skills[t.id], box = m.topics[i];
       const state = sk?.secure ? "secure" : usualSeen(s, t.id) ? "prog" : "unseen";
-      const slips = (sk?.slips ?? []).slice(0, 4);
+      // the NEWEST four live slips: a slip the child stops making is rubbed out (rules/slips), and the fifth is never hidden behind four old ones
+      const slips = (sk?.slips ?? []).slice(-4);
       return (
         <div key={t.id} className="mb-topic" data-s={state} data-focused={focus === i || undefined} data-busy={(busy && focus === i) || undefined} style={{ left: box.x, width: box.w }}>
           <div className="mb-groove">{state !== "unseen" && <div className="fill" style={state === "prog" ? { width: `${Math.max(8, Math.min(100, (sk?.estimate ?? 0) * 100))}%` } : undefined} />}</div>
           {/* the step-up picture (Family W8): a second, thinner ink line under the groove once the step-up record latches */}
           {up.has(t.id) && <div className="mb-ink2" data-role="maths-stretch" />}
-          {slips.length > 0 && <div className="mb-slips" aria-label={`${slips.length} slips seen`}>{slips.map((x) => <span key={x}>{SLIP_MARK}</span>)}</div>}
+          {slips.length > 0 && <div className="mb-slips" data-slips={slips.join(" ")} aria-label={`${slips.length} slips seen`}>{slips.map((x) => <span key={x}>{SLIP_MARK}</span>)}</div>}
           {/* on a panning ruler the name is laid out at its box's final width at once, so the fit never measures a box mid-slide */}
           <div className="mb-tl" style={m.pan ? { right: "auto", width: box.w - 24 } : undefined}><div className="mb-tn">{t.name}</div>{t.year && <div className="mb-ty">{SYS_WORD[sys](t.year)}</div>}{big && <div className="mb-st">{stateWord(s, t.id, st)}</div>}</div>
         </div>
@@ -403,9 +431,9 @@ const DOORS: Array<{ id: Door; k: string; t: string }> = [
 ];
 function doorCaption(s: Session, door: Door): string {
   if (door === "teach") return "Pick a topic and the desk writes six questions to work on paper, then marks them from a photo.";
-  if (door === "prepare") return PREPARE_DOOR;
+  if (door === "prepare") return pathEndsLine(s) ?? PREPARE_DOOR;
   if (s.awaiting === "maths") return "Waiting for the Math Buddy page. Snap it on the phone — it appears here.";
-  if (s.pages.some((p) => p.subject === "maths")) return "The sheet is already on the desk. Enter opens it, one problem at a time.";
+  if (tonightsSheet(s)) return "The sheet is already on the desk. Enter opens it, one problem at a time.";
   return "Snap the sheet on the phone and the desk reads it, one problem at a time — hints, never the answer.";
 }
 
@@ -452,6 +480,18 @@ const Pencil = ({ style }: { style?: React.CSSProperties }) => (
 const TALLY_TICK = <svg viewBox="0 0 40 40"><path d="M6 21 L16 31 L35 8" stroke="#FFB13D" strokeWidth="4.5" /></svg>;
 const TALLY_RING = <svg viewBox="0 0 40 40"><path d="M10 12 C 16 4, 32 5, 35 16 C 38 28, 26 36, 16 34 C 6 32, 3 20, 9 12 C 12 9, 15 8, 18 8" stroke="#D9741A" strokeWidth="4" /></svg>;
 const TALLY_ASK = <svg viewBox="0 0 40 40"><path d="M10 12 C 16 4, 32 5, 35 16 C 38 28, 26 36, 16 34 C 6 32, 3 20, 9 12" stroke="#8FB8FF" strokeWidth="3.5" strokeDasharray="5 5" /></svg>;
+/** MB-B1: an item left empty - a short empty answer line, no ring: not a slip and not the desk's doubt. */
+const TALLY_SKIP = <svg viewBox="0 0 40 40"><path d="M8 30 H32" stroke="#8A93AD" strokeWidth="4" /></svg>;
+/**
+ * What each mark (rules/marks) draws on the paper: the folded word, the Continue card's tally, and whether the number
+ * wears the pen's ring. Keyed by Mark, so a fifth mark is a compile error here, not a ring on a blank.
+ */
+const MARK_DRAW: Record<ItemMark, { look: string | null; tally: ReactNode; ring: boolean }> = {
+  right: { look: null, tally: TALLY_TICK, ring: false },
+  wrong: { look: "look again", tally: TALLY_RING, ring: true },
+  unsure: { look: "not sure", tally: TALLY_ASK, ring: true },
+  skipped: { look: "skipped", tally: TALLY_SKIP, ring: false },
+};
 const RING_BOX = <svg className="ring" viewBox="0 0 200 110" preserveAspectRatio="none" aria-hidden="true"><path d="M18 30 C 40 6, 150 4, 186 26 C 204 44, 190 90, 120 100 C 60 106, 10 96, 8 62 C 6 44, 16 32, 34 24" /></svg>;
 const TICK_BOX = <svg className="tk" viewBox="0 0 60 50" aria-hidden="true"><path d="M6 27 L22 42 L54 6" /></svg>;
 
@@ -477,17 +517,17 @@ function Hero({ s, cont, focused }: { s: Session; cont: Continue; focused: boole
     sheet = (
       <div className="mb-sheet top"><div className="mb-tab" style={{ left: 40 }}>{cont.k}</div><div className="margin" />{head(name)}
         <div className="mb-boxes">{p.items.slice(0, 6).map((it, i) => {
-          const v = it.verdict ?? "unsure";
+          const v = markOf(it);
           return (
             <div key={it.n} className="mb-box" data-v={v} data-look={i === first || undefined}>
               <span className="qx"><MathText text={it.question} voice="hand" />{v === "wrong" && RING_BOX}</span>
-              {v === "right" ? TICK_BOX : <span className="la">{v === "wrong" ? "look again" : "not sure"}</span>}
+              {v === "right" ? TICK_BOX : <span className="la">{MARK_DRAW[v].look}</span>}
             </div>
           );
         })}</div>
       </div>
     );
-    detail = <span className="tally" aria-label={cont.d}>{p.items.map((it) => <span key={it.n}>{it.verdict === "right" ? TALLY_TICK : it.verdict === "wrong" ? TALLY_RING : TALLY_ASK}</span>)}</span>;
+    detail = <span className="tally" aria-label={cont.d}>{p.items.map((it) => <span key={it.n}>{MARK_DRAW[markOf(it)].tally}</span>)}</span>;
   } else if (cont.go === "practice" && p) {
     sheet = (
       <div className="mb-sheet top"><div className="mb-tab" style={{ left: 40 }}>{cont.k}</div><div className="margin" />{head(topicName(p.topic))}
@@ -539,7 +579,7 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
   const door: Door = at === "teach" || at === "prepare" ? at : "homework";
   const title = secureTitle(secure.length, topics.length, first);
   return (<>
-    <Top s={s} right={<Chips s={s} menu={TONIGHT_MENU} />} />
+    <Top s={s} right={<Chips s={s} menu={TONIGHT_MENU} />} shelf={<MathsCollection s={s} />} />
     {cont ? <Hero s={s} cont={cont} focused={at === "continue"} /> : <><h1 className="mb-title" data-role="maths-title"><Amber text={title} /></h1><BlankHero s={s} /></>}
     <div className={`mb-doors${cont ? "" : " wide"}${doors.length > 2 ? " three" : ""}`} data-dim={at !== "continue" || undefined}>
       {doors.map((d) => (
@@ -601,16 +641,17 @@ function Stepped() {
  * needle, no SCHOOL tick. A scroller under the lamp like the Topics ruler (tv/prepareRows `prepareModel`); Select on a unit
  * asks "The usual" or "A step up" (`ask`, the lit cell) and writes the set through the same /api/practice route as Topics.
  */
-export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: number; busy: boolean; ask: 0 | 1 | null }) {
+export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: number; busy: boolean; ask: -1 | 0 | 1 | null }) {
   const groups = prepareGroups(s);
   const stops = groups.flatMap((g) => g.units);
   const me = s.profiles.find((p) => p.id === s.learner?.id);
   const sys = systemOf(me);
-  const busy = asked || running(s, "practice");
+  const past = !!pastPathEnd(s), ends = pathEndsLine(s);
+  const busy = asked || running(s, "practice") || running(s, "teach");
   const at = stopAt(stops, focus);
   const ix = at ? stops.indexOf(at) : 0;
   const m = prepareModel(groups, ix);
-  const asking = ask === 0 || ask === 1;
+  const asking = ask === -1 || ask === 0 || ask === 1;
   const failed = busy || !at ? null : practiceFailed(s, at.id);
   const [step, setStep] = useState(0);
   useEffect(() => { if (!busy) { setStep(0); return; } const t = setInterval(() => setStep((x) => Math.min(PREP.length - 1, x + 1)), 2600); return () => clearInterval(t); }, [busy]);
@@ -622,16 +663,17 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
       {asking ? <>
         <div className="mb-kick">{busy ? <>{KIND_ICON.six}Preparing · {at.name}</> : at.name}</div>
         <div className="mb-choice" data-role="maths-choice">
-          {PREPARE_CHOICES.map((c, i) => (
-            <div key={c.id} className="mb-cell2" data-id={c.id} data-focused={!busy && ask === i} data-dim={(busy && ask !== i) || undefined}>
+          {choicesFor(hasWorked(at.id)).map((c) => (
+            <div key={c.id} className="mb-cell2" data-id={c.id} data-focused={!busy && ask === c.cell} data-dim={(busy && ask !== c.cell) || undefined}>
               <span className="k">{c.k}</span><span className="t">{c.t}</span>
             </div>
           ))}
         </div>
-        <p>{busy ? PREP[step] : failed ?? choiceLine(ask)}</p>
+        <p>{busy ? (ask === -1 ? LESSON_WRITING : PREP[step]) : failed ?? choiceLine(ask, at.id)}</p>
       </> : <>
         <div className="mb-kick">{at.strand} · six questions a set</div>
         <p>{at.blurb}</p>
+        {ends && <p data-role="maths-prepare-ends">{ends}</p>}
       </>}
     </div>
     <div className="mb-prep" data-role="maths-prepare" data-asking={asking || undefined}>
@@ -643,7 +685,7 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
             return (
               <div key={c.id} className="mb-unit2" data-focused={(!asking && i === ix) || undefined} data-held={(asking && i === ix) || undefined} style={{ left: c.x, width: c.w }}>
                 <div className="nm">{u.name}</div>
-                {u.year && <div className="yr">{SYS_WORD[sys](u.year)}</div>}
+                {u.year && !past && <div className="yr">{SYS_WORD[sys](u.year)}</div>}
               </div>
             );
           })}
@@ -652,6 +694,88 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
       {m.more.l && <div className="mb-rchev l" data-role="maths-more"><Chev dir="l" on /></div>}
       {m.more.r && <div className="mb-rchev r" data-role="maths-more"><Chev dir="r" on /></div>}
     </div>
+  </>);
+}
+
+// ---------------------------------------------------------------- M5b A paper you sat: where the marks were lost
+
+/** How many topic rows the list shows at once; the lamp walks the rest. */
+const PAPER_ROWS = 5;
+
+/**
+ * The recovery from a paper (v2 M5b): the topics where marks were lost, in the order rules/recovery gives them (biggest
+ * loss first, each after the base it needs), with the questions behind each; a topic the desk calls secure stays in the
+ * list and is marked beside it. What the desk has no topic for is apart, under "Not on the desk yet". The marks are typed
+ * on the phone (Type the marks of a paper you sat on the phone) - the paper is the learner's own record, read back.
+ */
+export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
+  const v = paperView(s);
+  const w = paperWindow(v.topics.length, focus, PAPER_ROWS);
+  const lamp = Math.min(Math.max(0, focus), Math.max(0, v.topics.length - 1));
+  const offAt = Math.min(Math.max(0, focus), v.topics.length + v.off.length - 1) - v.topics.length;
+  const onOff = !v.empty && v.off.length > 0 && offAt >= 0;
+  const ow = paperWindow(v.off.length, offAt, PAPER_ROWS);
+  const count = offCountLine(v);
+  const left = leftOutLine(v);
+  return (<>
+    <Top s={s} crumb="A paper you sat" />
+    <h1 className="mb-title" data-role="maths-title"><Amber text={v.empty ? "A paper you sat" : onOff ? "Not on the desk yet" : "Where the marks went"} /></h1>
+    {v.empty ? <div className="mb-lede" data-role="maths-paper-empty"><div className="mb-kick">No paper yet</div><p>Type the marks of a paper you sat on the phone.</p></div> : (
+      <div className="mb-paperrec" data-role="maths-paper">
+        {onOff ? (
+          <div className="mb-ptopics" data-role="maths-paper-offrows">
+            {v.off.slice(ow.from, ow.to).map((o, i) => {
+              const ix = ow.from + i;
+              return (
+                <div key={o.can} className="mb-prow mb-poffrow" data-focused={ix === offAt || undefined}>
+                  <span className="n">{ix + 1}</span>
+                  <span className="nm">{o.can}</span>
+                  <span className="lost">{lostLabel(o.lost, o.shared)}</span>
+                  <span className="from">From {o.from}{o.beyond ? " · a harder statement" : ""}</span>
+                </div>
+              );
+            })}
+            {ow.up && <div className="mb-rchev u" data-role="maths-more"><Chev dir="l" on /></div>}
+            {ow.down && <div className="mb-rchev d" data-role="maths-more"><Chev dir="r" on /></div>}
+          </div>
+        ) : (
+        <div className="mb-ptopics" data-role="maths-paper-topics">
+          {v.topics.slice(w.from, w.to).map((t, i) => {
+            const ix = w.from + i;
+            return (
+              <div key={t.id} className="mb-prow" data-focused={ix === lamp || undefined} data-secure={t.secure || undefined} data-id={t.id}>
+                <span className="n">{ix + 1}</span>
+                <span className="nm">{t.name}</span>
+                <span className="lost">{lostLabel(t.lost, t.shared)}</span>
+                <span className="from">From {t.from}</span>
+                {t.secure && <span className="sec" data-role="maths-paper-secure">Worth a recheck</span>}
+              </div>
+            );
+          })}
+          {!v.topics.length && <div className="mb-prow mb-pnone">{paperNone(v)}</div>}
+          {w.up && <div className="mb-rchev u" data-role="maths-more"><Chev dir="l" on /></div>}
+          {w.down && <div className="mb-rchev d" data-role="maths-more"><Chev dir="r" on /></div>}
+        </div>
+        )}
+        <aside className="mb-pside">
+          <div className="mb-pscore" data-role="maths-paper-score">
+            <div className="mb-kick">Your paper</div>
+            <div className="big">{v.marks} <small>of {v.outOf}</small></div>
+            <div className="sub">{scoreLine(v)}</div>
+            {count && <div className="off" data-role="maths-paper-offcount">{count}</div>}
+            {left && <div className="off" data-role="maths-paper-leftout">{left}</div>}
+          </div>
+          {(v.off.length > 0 || v.unmapped > 0) && (
+            <div className="mb-poff" data-role="maths-paper-off">
+              <div className="mb-kick">Not on the desk yet</div>
+              {v.off.length > 0 && <div className="o"><span className="m">{offSummary(v)}</span></div>}
+              {v.unmapped > 0 && <div className="o"><span className="m">{v.unmapped === 1 ? "1 question" : `${v.unmapped} questions`} named no statement, so sit on no topic</span></div>}
+            </div>
+          )}
+        </aside>
+      </div>
+    )}
+    <Caption text={paperCaption(v)} top={930} />
   </>);
 }
 
@@ -669,14 +793,19 @@ export function PracticeScreen({ s }: { s: Session }) {
   if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No set on the desk" /></h1></>;
   const name = topicName(p.topic);
   const job = markLine(s);
+  // a set opened from a paper's recovery row says what it aims at, in the caption slot (MB-B40); any other set, nothing
+  const aim = aimLine(p);
   return (<>
     <Top s={s} crumb={name} />
     <div className="mb-practice" ref={pan}>
       <div className="mb-paper" data-role="maths-sheet">
         <header className="mb-sheethead"><span className="st">{name}</span><span className="who">{s.learner?.name}</span></header>
-        {p.items.map((it) => (
-          <section key={it.n} className="mb-item"><div className="num">{it.n}</div><PrintRow text={it.question} /></section>
-        ))}
+        {p.items.map((it, i) => {
+          // a part of a multi-part question (v2 M3a): the stem once, above its first part; the part by its letter, wrapped
+          const at = partPlace(p.items, i);
+          if (!at) return <section key={it.n} className="mb-item"><div className="num">{it.n}</div><PrintRow text={it.question} /></section>;
+          return <Fragment key={it.n}>{at.first && <Stem at={at} text={it.stem ?? ""} />}<section className="mb-item" data-part={at.label}><div className="num">({at.label})</div><ProseRow text={it.question} role="maths-part" /></section></Fragment>;
+        })}
       </div>
     </div>
     <aside className="mb-side">
@@ -684,6 +813,7 @@ export function PracticeScreen({ s }: { s: Session }) {
       <div className="mb-stitle" data-role="maths-title">Work these on <em>paper</em></div>
       <div className="mb-card" data-role="maths-hint">
         <div className="hl"><span className="mb-lab">What to do</span></div>
+        {aim && <div className="aim" data-role="maths-practice-aim">{aim}</div>}
         <div className="ht">Work {workWhat(p.items.length)} on paper, then snap the whole sheet with the phone. The desk marks it and walks you through it here.</div>
         {job ? <JobNote job={job} /> : <div className="nx">{ARROW}<span>{s.joined ? "The phone is waiting for the sheet or your answers." : `Pair the phone first · PIN ${s.pin}`}</span></div>}
       </div>
@@ -698,48 +828,65 @@ const slipName = (id: string) => slipById(id)?.name ?? humanTopic(id);
 
 const TALLY_R = <svg viewBox="0 0 58 62" aria-hidden="true"><path d="M36 40 L42 47 L56 28" /></svg>;
 const TALLY_W = <svg viewBox="0 0 58 62" aria-hidden="true"><path d="M18 20 C 22 10, 42 10, 46 22 C 50 36, 40 52, 28 50 C 16 49, 11 38, 13 26 C 14 22, 17 19, 22 17" /></svg>;
-/** The set as six numbers in the top bar: ticked, ringed, or dashed when the desk is not sure; the one in hand lit. */
+/** A tally mark's name: the item's number, or a part's question number and letter run together (5a), to fit the mark. */
+const tallyName = (items: PracticeItem[], i: number) => { const at = partPlace(items, i); return at ? `${at.q}${at.label}` : String(items[i].n); };
+const TALLY_S = <svg viewBox="0 0 58 62" aria-hidden="true"><path d="M14 52 H44" /></svg>;
+/** The top bar's mark per ItemMark: a tick, a ring (dashed by CSS when the desk is not sure), an empty line when skipped. */
+const TOP_TALLY: Record<ItemMark, ReactNode> = { right: TALLY_R, wrong: TALLY_W, unsure: TALLY_W, skipped: TALLY_S };
+/** The set as six numbers in the top bar: ticked, ringed, dashed when the desk is not sure, underlined empty when skipped; the one in hand lit. */
 function Tally({ items, cur }: { items: PracticeItem[]; cur: number | null }) {
   return (
     <div className="mb-tally" aria-label="the set">
-      {items.map((it, i) => { const v = it.verdict ?? "unsure"; return (
-        <div key={it.n} className="mb-tm" data-v={v} data-second={it.second} data-cur={i === cur || undefined}>{v === "right" ? TALLY_R : TALLY_W}{it.second === "right" ? TALLY_R : it.second === "wrong" ? TALLY_W : null}<span>{it.n}</span></div>
+      {items.map((it, i) => { const v = markOf(it); return (
+        <div key={it.n} className="mb-tm" data-v={v} data-second={it.second} data-cur={i === cur || undefined}>{TOP_TALLY[v]}{it.second === "right" ? TALLY_R : it.second === "wrong" ? TALLY_W : null}<span>{tallyName(items, i)}</span></div>
       ); })}
     </div>
   );
 }
 
 /** The side of the paper: the kind of mark, the slip's name, and the taped card - the screen's one caption slot. */
-function SlipSide({ it, points, job }: { it: PracticeItem; points?: string; job?: JobLine | null }) {
-  const v = it.verdict ?? "unsure", w = working(it);
-  const kind = v === "right" ? "right" : v === "unsure" ? "unsure" : w.mark?.kind ?? "line";
-  const word = v === "right" ? "Right" : v === "unsure" ? "Not sure" : KIND_WORD[kind as keyof typeof KIND_WORD];
-  const said = it.reply ?? it.said ?? (v === "right" ? `Number ${it.n} is right.` : "The desk has no comment on this one.");
-  const next = v === "wrong" ? secondLine(it) ?? lookAt(it, points) : v === "unsure" ? "Tell the desk on the phone how you got there." : null;
+function SlipSide({ items, ix, points, job }: { items: PracticeItem[]; ix: number; points?: string; job?: JobLine | null }) {
+  const it = items[ix], name = itemName(items, ix);
+  const v = markOf(it), w = working(it);
+  const kind = v === "wrong" ? w.mark?.kind ?? "line" : v;
+  // a part is named as the paper names it, 5(b) (v2 M3a); a single item's name is its number, so its lines are as before
+  const nm = name;
+  // the kicker, the title and the arrow line per mark (rules/marks): keyed by ItemMark, so no mark falls through to a slip's words
+  const SIDE: Record<ItemMark, () => { word: string; title: string; next: string | null }> = {
+    right: () => ({ word: "Right", title: `Number ${nm} came back right`, next: null }),
+    wrong: () => ({ word: KIND_WORD[kind as keyof typeof KIND_WORD], title: it.slip ? slipName(it.slip) : `Number ${nm} needs another look`, next: secondLine(it) ?? lookAt(it, points) }),
+    unsure: () => ({ word: "Not sure", title: "The desk is not sure", next: "Tell the desk on the phone how you got there." }),
+    skipped: () => ({ word: "Skipped", title: `Number ${nm} was skipped`, next: "Work it on paper, then tell the desk on the phone what you got." }),
+  };
+  const { word, title, next } = SIDE[v]();
+  const said = deskLine(items, ix, it.reply ?? it.said ?? (v === "right" ? `Number ${it.n} is right.` : "The desk has no comment on this one."));
   return (
     <aside className="mb-side" key={`${it.n}-${v}`}>
       <div className="mb-khead"><div className="mb-kick">{KIND_ICON[kind]}{word}</div></div>
       <div className="mb-stitle" data-role="maths-slip">
-        <Amber text={v === "right" ? `Number ${it.n} came back right` : v === "unsure" ? "The desk is not sure" : it.slip ? slipName(it.slip) : `Number ${it.n} needs another look`} />
+        <Amber text={title} />
       </div>
       <div className="mb-card" data-role="maths-hint">
         <div className="hl"><span className="mb-lab">{it.reply ? "The desk replied" : "The desk says"}</span></div>
         <div className="ht" data-role="maths-said">{prose(said)}</div>
         {job ? <JobNote job={job} /> : next && <div className="nx">{ARROW}<span>{prose(next)}</span></div>}
       </div>
+      {/* v2 M4a: a Calculus item shows its graph under the card - the tangent at the point, the area between the bounds */}
+      {/* a part whose function the stem does not print (a story's, v2 M3a) draws no graph: a curve the learner never saw */}
+      {isCalcSpec(it.spec) && (it.stem === undefined || it.stem.includes(it.spec.f)) && <Plot spec={it.spec} />}
     </aside>
   );
 }
 
 /** An item on the marked paper. Open: the question and every line of working; folded: the question, and the line the pen is on. */
-function MarkedItem({ it, open, focused, cur, dim, okLabel }: { it: PracticeItem; open: boolean; focused?: boolean; cur?: boolean; dim?: boolean; okLabel?: string }) {
-  const v = it.verdict ?? "unsure";
-  const w = working(it);
+function MarkedItem({ it, at, open, focused, cur, dim, okLabel, sys }: { it: PracticeItem; at?: PartPlace | null; open: boolean; focused?: boolean; cur?: boolean; dim?: boolean; okLabel?: string; sys?: SchoolSystem }) {
+  const v = markOf(it);
+  const w = working(it, sys);
   const rows: ReactNode[] = [];
   if (v === "right") {
     if (open) w.lines.forEach((l, k) => rows.push(<HandRow key={k} line={l} tick={w.ticks[k]} />));
   } else if (!w.lines.length) {
-    rows.push(<div key="none" className="mb-row w"><span className="rin"><span className="mx hand" data-role="maths-hand"><span className="mt">nothing on the line</span></span><span className="lookword">{v === "wrong" ? "look again" : "not sure"}</span></span></div>);
+    rows.push(<div key="none" className="mb-row w"><span className="rin"><span className="mx hand" data-role="maths-hand"><span className="mt">nothing on the line</span></span><span className="lookword">{MARK_DRAW[v].look}</span></span></div>);
   } else if (open) {
     w.lines.forEach((l, k) => rows.push(<HandRow key={k} line={l} mark={k === w.at ? w.mark : null} tick={w.ticks[k]} after={w.at !== null && k > w.at} arrow={k === w.at} />));
   } else {
@@ -747,14 +894,14 @@ function MarkedItem({ it, open, focused, cur, dim, okLabel }: { it: PracticeItem
     rows.push(
       <div key="pen" className="mb-row w" data-tall={isTall(parseMath(w.lines[k]))}>
         {w.at !== null && <MarginArrow />}
-        <span className="rin"><MathText text={w.lines[k]} voice="hand" mark={k === w.at ? w.mark : null} />{v === "unsure" && <span className="lookword">not sure</span>}</span>
+        <span className="rin"><MathText text={w.lines[k]} voice="hand" mark={k === w.at ? w.mark : null} />{v !== "wrong" && <span className="lookword">{MARK_DRAW[v].look}</span>}</span>
       </div>,
     );
   }
   return (
-    <section className="mb-item" data-v={v} data-open={open || undefined} data-focused={focused || undefined} data-cur={cur || undefined} data-dim={dim || undefined}>
-      <div className="num" data-second={it.second}>{it.n}{v !== "right" && <NumRing />}{it.second === "wrong" && <NumRing again />}{it.second === "right" && <Tick className="second" />}</div>
-      <PrintRow text={it.question} tick={v === "right" && !open} />
+    <section className="mb-item" data-v={v} data-open={open || undefined} data-focused={focused || undefined} data-cur={cur || undefined} data-dim={dim || undefined} data-part={at?.label}>
+      <div className="num" data-second={it.second}>{at ? `(${at.label})` : it.n}{MARK_DRAW[v].ring && <NumRing />}{it.second === "wrong" && <NumRing again />}{it.second === "right" && <Tick className="second" />}</div>
+      {at ? <ProseRow text={it.question} tick={v === "right" && !open} role="maths-part" /> : <PrintRow text={it.question} tick={v === "right" && !open} />}
       {rows}
       {focused && okLabel && <div className="ok"><b>OK</b><span className="mb-lab">{okLabel}</span></div>}
     </section>
@@ -776,22 +923,23 @@ export function Sheet({ s, focus }: { s: Session; focus: number }) {
   const right = tiles.filter((x) => x.verdict === "right").length, fixed = tiles.filter((x) => x.second === "right").length, look = lookCount(p.items);
   const tile = ix === null ? undefined : tiles[ix];
   const curIx = ix ?? Math.min(tiles.length - 1, Math.max(0, firstToLook(p.items)));
+  const sys = systemOf(s.profiles.find((q) => q.id === s.learner?.id));
   return (<>
     <Top s={s} crumb={name} right={<div className="mb-status"><Tally items={p.items} cur={ix} /><Chips s={s} phone={false} clock={false} /></div>} />
     <div className="mb-win">
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
           <header className="mb-sheethead"><span className="st" data-role="maths-title">{sheetHead(look, tiles.length)}</span><span className="who">{s.learner?.name}</span></header>
-          {p.items.map((it, i) => <MarkedItem key={it.n} it={it} open={false} focused={ix === i} cur={i === curIx} okLabel="Open" />)}
+          {p.items.map((it, i) => { const at = partPlace(p.items, i); return <Fragment key={it.n}>{at?.first && <Stem at={at} text={it.stem ?? ""} />}<MarkedItem it={it} at={at} open={false} focused={ix === i} cur={i === curIx} okLabel="Open" sys={sys} /></Fragment>; })}
         </div>
       </div>
     </div>
-    {tile && ix !== null ? <SlipSide it={p.items[ix]} points={p.items[ix].slip ? slipById(p.items[ix].slip!)?.points : undefined} /> : (
+    {tile && ix !== null ? <SlipSide items={p.items} ix={ix} points={p.items[ix].slip ? slipById(p.items[ix].slip!)?.points : undefined} /> : (
       <aside className="mb-side" key={String(at)}>
         <div className="mb-khead"><div className="mb-kick">{at === "more" ? <>{KIND_ICON.six}Six more</> : <>Put away</>}</div></div>
         <div className="mb-stitle" data-role="maths-slip"><Amber text={at === "more" ? `Six more on ${name}` : "The set leaves the desk"} /></div>
         <div className="mb-card" data-role="maths-hint">
-          <div className="ht" data-role="maths-said">{at === "more" ? `Six new questions on ${name}, aimed at the slips the desk has seen. Work them on paper, like this set.` : "The set leaves the desk. What it showed is already in your record."}</div>
+          <div className="ht" data-role="maths-said">{at === "more" ? moreLine(p.topic, name, s.skills?.[p.topic]?.slips ?? []) : "The set leaves the desk. What it showed is already in your record."}</div>
         </div>
       </aside>
     )}
@@ -816,17 +964,18 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
   const name = topicName(p.topic);
   const last = s.walkIx === p.items.length - 1;
   const sl = it.slip ? slipById(it.slip) : undefined;
+  const sys = systemOf(s.profiles.find((q) => q.id === s.learner?.id));
   return (<>
     <Top s={s} crumb={name} right={<div className="mb-status"><Tally items={p.items} cur={s.walkIx} /><Chips s={s} phone={false} clock={false} /></div>} />
     <div className="mb-win">
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
           <header className="mb-sheethead"><span className="st" data-role="maths-title">{name}</span><span className="who">{s.learner?.name}</span></header>
-          {p.items.map((x, i) => <MarkedItem key={x.n} it={x} open={i === s.walkIx} focused={i === s.walkIx && !last} cur={i === s.walkIx} dim={i !== s.walkIx} />)}
+          {p.items.map((x, i) => { const at = partPlace(p.items, i); return <Fragment key={x.n}>{at?.first && <Stem at={at} text={x.stem ?? ""} />}<MarkedItem it={x} at={at} open={i === s.walkIx} focused={i === s.walkIx && !last} cur={i === s.walkIx} dim={i !== s.walkIx} sys={sys} /></Fragment>; })}
         </div>
       </div>
     </div>
-    <SlipSide it={it} points={sl?.points} job={explainLine(s, it.n)} />
+    <SlipSide items={p.items} ix={s.walkIx} points={sl?.points} job={explainLine(s, it.n)} />
     <div className="mb-acts">
       {last && <Act icon={ICON.back} label="Back to the sheet" focused={stopAt(walkStops(s), focus) === "sheet"} primary />}
       <div className="mb-updn"><Chev dir="l" on={s.walkIx > 0} /><span>{it.n} of {p.items.length}</span><Chev dir="r" on={!last} /></div>
@@ -842,11 +991,12 @@ export function PageScreen({ s }: { s: Session }) {
   const pan = usePaper(`${s.pageIx}|${s.itemIx}|${p?.items.length}|${s.view}`);
   if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No page yet" /></h1></>;
   const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
-  const line = s.reading ? "Reading the page… the problems appear here as they are read."
-    : read?.phase === "failed" ? "The desk could not read this page. Snap it again on the phone."
+  const line = s.reading ? "Reading the page… the problems appear here all at once when it is read."
+    : read?.phase === "failed" ? "The desk could not read this page. Open Try again on the phone."
     : hj?.phase === "running" ? "Thinking about a hint for this one…"
-    : hj?.phase === "failed" ? "No hint that time. Select to try again."
-    : it ? `Number ${it.n} is under the lamp. Select for a hint — the next step, never the answer.` : "Nothing on this page could be read as a problem.";
+    : hj?.phase === "failed" ? (hj.retry === false ? "No hint for this one." : "No hint that time. Select to try again.")
+    : p.missing?.length ? missingLine(p.missing)
+    : it ? `Number ${it.label ?? it.n} is under the lamp. Select for a hint — the next step, never the answer.` : "Nothing on this page could be read as a problem.";
   const band = (scale: number) => it ? { top: it.band[0] * scale, height: Math.max(8, (it.band[1] - it.band[0]) * scale) } : null;
   const menu = <div className="mb-status"><div className="mb-chip" data-role="maths-chip"><span className="mb-lab" style={{ marginLeft: 14 }}>Menu</span>{s.view === "band" ? "The photo" : "The problems"}</div><Chips s={s} learner={false} /></div>;
   if (s.view === "overview") {
@@ -871,7 +1021,7 @@ export function PageScreen({ s }: { s: Session }) {
           {s.reading && <div className="mb-reading" />}
           {p.items.map((x, i) => (
             <section key={x.key} className="mb-item" data-focused={(i === s.itemIx && !s.reading) || undefined} data-cur={i === s.itemIx || undefined}>
-              <div className="num">{x.n}</div>
+              <div className="num">{x.label ?? x.n}</div>
               <PrintRow text={x.text} wrap />
               {i === s.itemIx && !s.reading && <div className="ok"><b>OK</b><span className="mb-lab">Hint</span></div>}
             </section>
@@ -882,7 +1032,7 @@ export function PageScreen({ s }: { s: Session }) {
     </div>
     <aside className="mb-side">
       <div className="mb-khead"><div className="mb-kick">The sheet you snapped</div></div>
-      <div className="mb-stitle"><Amber text={it ? `Number ${it.n}` : p.title} /></div>
+      <div className="mb-stitle"><Amber text={it ? itemTitle(it.n, it.text, s) : p.title} /></div>
       <div className="mb-facts">
         <span><b>{p.items.length}</b> problems</span>
         <span>{p.readMs ? <>read in <b>{Math.max(1, Math.round(p.readMs / 1000))} s</b></> : read?.phase === "failed" ? "not read" : "reading"}</span>
@@ -908,6 +1058,7 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
   const at = stopAt(HINT_STOPS, focus);
   const pick = s.jobs?.lesson?.key === h.key ? s.jobs.lesson : undefined;
   const pickFailed = pick?.phase === "failed" ? pick.error ?? "" : null;
+  const like = likePill(s);
   const noLesson = s.noLesson ? (pickFailed ? `${pickFailed} The hint is all there is this time.` : "No lesson in tonight’s library covers this one. The hint is all there is — and that is fine.") : null;
   return (<>
     <Top s={s} crumb={n !== undefined ? `Number ${n}` : p?.title} right={<Chips s={s} learner={false} />} />
@@ -929,12 +1080,13 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
         <div className="hl"><span className="mb-lab">Hint</span><span className="pips"><i className="on" /><i className={h.stage === 2 ? "on" : undefined} /></span></div>
         <div className="ht">{hh ? prose(hh.hint) : "…"}</div>
         {hh?.next && <div className="nx">{ARROW}<span>{prose(hh.next)}</span></div>}
-        {noLesson && <div className="quiet">{noLesson}</div>}
+        {like ? like.failed && <div className="quiet">{like.failed}</div> : noLesson && <div className="quiet">{noLesson}</div>}
       </div>
     </aside>
     <div className="mb-acts">
       <Act icon={ICON.hint} label={h.stage === 2 ? "That’s both hints" : "Still stuck"} focused={at === "stuck"} primary pips={[h.stage, 2]} disabled={h.stage === 2} />
-      <Act icon={ICON.lesson} label={s.lesson ? "Show me the lesson" : pickFailed !== null ? "No lesson this time" : s.noLesson ? "No lesson for this" : "Finding the lesson…"} focused={at === "lesson"} disabled={!s.lesson} />
+      {like ? <Act icon={ICON.six} label={like.label} focused={at === "lesson"} disabled={like.busy} />
+        : <Act icon={ICON.lesson} label={s.lesson ? "Show me the lesson" : pickFailed !== null ? "No lesson this time" : s.noLesson ? "No lesson for this" : "Finding the lesson…"} focused={at === "lesson"} disabled={!s.lesson} />}
     </div>
   </>);
 }
@@ -943,8 +1095,12 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
 
 export function LessonScreen({ s }: { s: Session }) {
   const l = s.lesson;
+  // Play/Pause is the desk's flag; the embed only obeys what it is told (enablejsapi + postMessage), so tell it on every flip
+  const frame = useRef<HTMLIFrameElement>(null);
+  const paused = s.lessonPaused;
+  useEffect(() => { frame.current?.contentWindow?.postMessage(playerCommand(paused), "*"); }, [paused]);
   if (!l) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No lesson open" /></h1></>;
-  const src = l.youtube ? `https://www.youtube-nocookie.com/embed/${l.youtube}?start=${l.t}&autoplay=1&rel=0&modestbranding=1` : null;
+  const src = l.youtube ? `https://www.youtube-nocookie.com/embed/${l.youtube}?start=${l.t}&autoplay=1&rel=0&modestbranding=1&enablejsapi=1` : null;
   // Concepts are labels: the library entry's own when there is one (a hint's pick carries a transcript chunk in
   // `text`; the library's lesson pick carries the concepts joined by " · "). Over four words is not a concept.
   const concepts = (LESSONS.find((x) => x.id === l.id)?.concepts ?? l.text.split(" · "))
@@ -953,10 +1109,10 @@ export function LessonScreen({ s }: { s: Session }) {
   return (<>
     <Top s={s} crumb="The lesson" right={<Chips s={s} learner={false} phone={false} />} />
     <div className="mb-screen" data-role="maths-sheet">
-      {src ? <iframe src={src} width={1120} height={630} allow="autoplay; encrypted-media" title={l.title} />
+      {src ? <iframe ref={frame} src={src} width={1120} height={630} allow="autoplay; encrypted-media" title={l.title} onLoad={() => { if (paused) frame.current?.contentWindow?.postMessage(playerCommand(true), "*"); }} />
         : <div className="none">This unit has no video yet — its theory screen is the lesson.</div>}
     </div>
-    <div className="mb-paused">{s.lessonPaused ? PAUSE : PLAY}<span>{s.lessonPaused ? "Paused — circle on the phone to ask about this frame" : "Playing · Space pauses · Back returns"}</span></div>
+    <div className="mb-paused">{s.lessonPaused ? PAUSE : PLAY}<span>{s.lessonPaused ? "Paused · Play resumes · Back returns" : "Playing · Play pauses · Back returns"}</span></div>
     <aside className="mb-lesson-side">
       <div className="mb-kick">The part that matters · {fmt(l.t)}</div>
       <div className="mb-stitle" data-role="maths-title"><Amber text={l.title} /></div>
@@ -1032,5 +1188,44 @@ export function Calendar({ s, focus }: { s: Session; focus: number }) {
       ])}
     </div>
     <Caption text={`${done ? `${done} of ${list.length} lessons watched` : "No lesson watched yet"}. Select opens the lesson; Back returns to the units.`} top={960} />
+  </>);
+}
+
+// ---------------------------------------------------------------- v2 M1 · a worked lesson before the set
+
+/**
+ * The idea and three steps on the taped card; three worked examples on the paper, each answered in the desk's pen. Every
+ * number on this screen is code's: the questions from the unit's generator, the answers from rules/school workedAnswer
+ * (marked right by `check` before they are shown). Try six writes the usual set on this unit; Back returns to the topics.
+ */
+function WorkedScreen({ s, focus }: { s: Session; focus: number }) {
+  const w = s.worked;
+  const at = stopAt(WORKED_STOPS, focus);
+  if (!w) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="The lesson is on its way" /></h1></>;
+  return (<>
+    <Top s={s} crumb={w.title} />
+    <div className="mb-practice mb-worked">
+      <div className="mb-paper" data-role="maths-worked">
+        <header className="mb-sheethead"><span className="st">Worked examples</span><span className="who">{s.learner?.name}</span></header>
+        {w.examples.map((ex, i) => (
+          <section key={i} className="mb-item" data-role="maths-worked-example" data-tier={ex.tier}>
+            <div className="num">{i + 1}</div>
+            <div className="mb-wk"><PrintRow text={ex.question} wrap /><div className="mb-wans"><span className="eq">=</span><MathText text={ex.answer} voice="hand" /></div></div>
+          </section>
+        ))}
+      </div>
+    </div>
+    <aside className="mb-side">
+      <div className="mb-khead"><div className="mb-kick">{KIND_ICON.six}Before the set</div></div>
+      <div className="mb-stitle" data-role="maths-title">The <em>idea</em></div>
+      <div className="mb-card" data-role="maths-idea" data-own={w.own}>
+        <div className="ht">{w.idea}</div>
+        <ol className="mb-steps">{w.steps.map((st) => <li key={st}>{st}</li>)}</ol>
+      </div>
+    </aside>
+    <div className="mb-acts">
+      <Act icon={ICON.six} label="Try six" focused={at === "try"} primary />
+      <Act icon={ICON.back} label="Back to the topics" focused={at === "back"} />
+    </div>
   </>);
 }

@@ -9,11 +9,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-const opts={compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText,file);
+require('./ts-load.cjs');
 const data=path.join(os.tmpdir(),`desk-course-${Date.now()}`);process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 fs.mkdirSync(data,{recursive:true});
 // a desk saved with one junk mathPath and one real one: load() keeps only 'school' and 'calc1'
@@ -21,6 +17,7 @@ fs.writeFileSync(path.join(data,'session.json'),JSON.stringify({learner:null,pro
  {id:'course-junk',name:'Junk',type:'other',modules:['maths'],mathPath:'algebra-2'},
  {id:'course-calc',name:'Calc',type:'other',modules:['maths'],mathPath:'calc1'},
  {id:'course-school',name:'School',type:'high-school',age:16,modules:['maths'],mathPath:'school'},
+ {id:'course-calc2',name:'Calc Two',type:'other',modules:['maths'],mathPath:'calc2'},
 ]}));
 
 const src=(f)=>path.join(root,'src',f);
@@ -32,8 +29,12 @@ const keys=()=>require(src('tv/keys.ts'));
 const {profileRows,locate,flat}=require(src('tv/profileRows.ts'));
 after(()=>{clearInterval(globalThis.__desk.ticker);fs.rmSync(data,{recursive:true,force:true});});
 
+/** The profiles as the desk loaded them from session.json, taken before any row changes the session (row 10). */
+const LOADED=store.getSession().profiles.map((p)=>({...p}));
 const LOCAL={busy:false,table:false,hintInFlight:false};
 const CALC=P.topicsOf('calc1');
+/** The path lengths, derived (the one pin per path is in tools/maths-paths-test.cjs). */
+const N_CALC=P.PATHS.calc1.topics.length,N_SCHOOL=P.PATHS.school.topics.length;
 const CALC_P={id:'calc-a',name:'Calc A',type:'other',modules:['maths'],mathPath:'calc1'};
 const SCHOOL_P={id:'school-a',name:'School A',type:'high-school',age:16,system:'uk',modules:['maths','english','essay']};
 /** A plain session (no store) with one learner at the desk. */
@@ -80,25 +81,25 @@ test('2: topic.open for calc1-chain on a calc1 learner focuses index 9; a school
 });
 
 // ---- the keys walk the learner's path ----
-test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the last, Select opens it), 15 on the school path',()=>{
+test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the last, Select opens it), 17 on the school path',()=>{
  const {tvKey,topicStops,TOPIC_STOPS}=keys();
  assert.equal(TOPIC_STOPS,SYLLABUS,'TOPIC_STOPS stays the school syllabus for the existing tests');
  let s=session(CALC_P,{screen:'topics',focus:0});
  assert.deepEqual(topicStops(s).map((t)=>t.id),CALC.map((t)=>t.id));
- assert.equal(topicStops(s).length,22);
- for(let i=0;i<21;i++){const f=focusAfter(s,tvKey(s,'right',LOCAL));assert.equal(f,i+1,`Right ${i+1}`);s={...s,focus:f};}
- assert.equal(focusAfter(s,tvKey(s,'right',LOCAL)),21,'Right on the last stop stays');
+ assert.equal(topicStops(s).length,N_CALC);
+ for(let i=0;i<N_CALC-1;i++){const f=focusAfter(s,tvKey(s,'right',LOCAL));assert.equal(f,i+1,`Right ${i+1}`);s={...s,focus:f};}
+ assert.equal(focusAfter(s,tvKey(s,'right',LOCAL)),N_CALC-1,'Right on the last stop stays');
  const sel=tvKey(s,'select',LOCAL);
  assert.deepEqual(sel.events,[{type:'topic.open',topic:'calc1-area-average'}]);
  assert.deepEqual(sel.calls.map((c)=>c.body),[{topic:'calc1-area-average'}]);
  let sc=session(SCHOOL_P,{screen:'topics',focus:0});
  // W5b: 'Add and subtract fractions' joined the school path first; W7 batch 1 added three more fractions units; W7 batch 2
- // the four decimals and percent units; W7 batch 3 ratio and rates and geometry and data: 15 stops
- assert.equal(topicStops(sc).length,15,'a school learner has 15 stops');
- for(let i=0;i<16;i++)sc={...sc,focus:focusAfter(sc,tvKey(sc,'right',LOCAL))};
- assert.equal(sc.focus,14);
- assert.deepEqual(tvKey(sc,'select',LOCAL).events,[{type:'topic.open',topic:SYLLABUS[14].id}]);
- assert.equal(topicStops(session({...SCHOOL_P,mathPath:undefined})).length,15,'no mathPath is the school path');
+ // the four decimals and percent units; W7 batch 3 ratio and rates and geometry and data: 15 stops; v2 M2b Pythagoras and probability: 17
+ assert.equal(topicStops(sc).length,N_SCHOOL,`a school learner has ${N_SCHOOL} stops`);
+ for(let i=0;i<N_SCHOOL+1;i++)sc={...sc,focus:focusAfter(sc,tvKey(sc,'right',LOCAL))};
+ assert.equal(sc.focus,N_SCHOOL-1);
+ assert.deepEqual(tvKey(sc,'select',LOCAL).events,[{type:'topic.open',topic:SYLLABUS[N_SCHOOL-1].id,stay:true}],'the last stop is now a unit with a generator: Select writes its set and stays on Topics');
+ assert.equal(topicStops(session({...SCHOOL_P,mathPath:undefined})).length,N_SCHOOL,'no mathPath is the school path');
 });
 
 test('4: "Teach me something" opens Topics at the frontier - 0, 7 and 22 secure on Calculus 1; 0 with nothing secure on school',()=>{
@@ -109,7 +110,7 @@ test('4: "Teach me something" opens Topics at the frontier - 0, 7 and 22 secure 
  assert.deepEqual(teach(CALC_P,secure(CALC.slice(0,7).map((t)=>t.id))),to(7),'the first seven latched: the eighth');
  assert.equal(CALC[7].id,'calc1-rules');
  assert.deepEqual(teach(CALC_P,secure(CALC.map((t)=>t.id))),to(0),'every topic secure: back to the first');
- assert.deepEqual(teach(SCHOOL_P,{}),to(0),'the school path with empty skills still sees focus 0');
+ assert.deepEqual(teach({...SCHOOL_P,age:12},{}),to(0),'the school path with empty skills still sees focus 0');
  assert.deepEqual(teach(SCHOOL_P,secure([SYLLABUS[0].id])),to(1),'the school path has a frontier too');
  // a record not latched is not secure; a record on the other path is not read
  const notLatched={[CALC[0].id]:{...secure([CALC[0].id])[CALC[0].id],secure:false}};
@@ -129,12 +130,12 @@ test('5: Menu-edit of an existing learner copies mathPath with the other fields'
  assert.equal(d.profiles.find((p)=>p.id==='calc-a').mathPath,'calc1','editing does not silently reset the path');
 });
 
-test('6: the profile has a Maths course row only with Maths on - two cells, the PATHS names and blurbs - and its cell posts the patch',()=>{
+test('6: the profile has a Maths course row only with Maths on - three cells, the PATHS names and blurbs - and its cell posts the patch',()=>{
  const {tvKey}=keys();
  const on={id:'n',name:'',type:'high-school',age:16,system:'uk',modules:['maths']};
  const rows=profileRows(on),r=rows.findIndex((x)=>x.title==='Maths course');
  assert.ok(r>=0,'the row is there with Maths on');
- assert.deepEqual(rows[r].cells.map((c)=>[c.kind,c.label,c.blurb,c.path]),[['path','School maths',P.PATHS.school.blurb,'school'],['path','Calculus 1',P.PATHS.calc1.blurb,'calc1']]);
+ assert.deepEqual(rows[r].cells.map((c)=>[c.kind,c.label,c.blurb,c.path]),[['path','School maths',P.PATHS.school.blurb,'school'],['path','Calculus 1',P.PATHS.calc1.blurb,'calc1'],['path','Calculus 2',P.PATHS.calc2.blurb,'calc2']]);
  assert.equal(profileRows({...on,modules:['english','essay']}).some((x)=>x.title==='Maths course'),false,'no row with Maths off');
  assert.equal(profileRows(null).some((x)=>x.title==='Maths course'),true,'a fresh draft has every module on, Maths too');
  const f=flat(rows,r,1),s=session(SCHOOL_P,{screen:'profile',draft:on,focus:f});
@@ -167,10 +168,10 @@ test('7: settleOwners and restateMarked name a calc topic by its name (and the s
   store.dispatch({type:'profile.draft',patch:{...CALC_P,id:'restate-calc'}});store.dispatch({type:'profile.save'});
   const items=Array.from({length:6},(_,i)=>({n:i+1,question:`Differentiate f(x) = x^${i+2}.`}));
   store.dispatch({type:'practice.set',practice:{topic:'calc1-chain',items,marked:false}});
-  store.dispatch({type:'practice.marked',items:items.map((it,i)=>({...it,verdict:i===0?'right':'unsure'}))});
+  store.dispatch({type:'practice.marked',items:items.map((it,i)=>({...it,verdict:i===0?'right':'unsure'}))}); // unsure with no answer: skipped (MB-B1)
   learners.addHistory('restate-calc',{at:Date.now(),kind:'practice',label,detail:'1 of 6 right, 5 not sure'});
   store.dispatch({type:'practice.settle',n:2,reply:'Right.',verdict:'right'});
-  assert.equal(learners.getLearner('restate-calc').history.findLast((h)=>h.kind==='practice').detail,'2 of 6 right, 4 not sure',`label ${label}`);
+  assert.equal(learners.getLearner('restate-calc').history.findLast((h)=>h.kind==='practice').detail,'2 of 6 right, 4 skipped',`label ${label}`);
  }
 });
 
@@ -202,4 +203,22 @@ test('GUARD 9: keys.ts and mathsRows.ts import the store and learners for types 
  const seed='// import { getSession } from "@/lib/session/store";\nimport { getSession } from "@/lib/session/store";';
  assert.equal([...stripComments(seed).matchAll(/^\s*import\s+(?!type\b)([^;]*?)from\s+["']([^"']+)["']/gm)].filter((m)=>/session\/(store|learners)$/.test(m[2])).length,1);
  assert.equal([...stripComments('// import { x } from "@/lib/session/store";').matchAll(/^\s*import\s+(?!type\b)([^;]*?)from\s+["']([^"']+)["']/gm)].length,0);
+});
+
+// ---- v2 M3b-2: the Calculus 2 path ----
+test('10: a learner on calc2 is saved with the path, seated on it, and survives a load',()=>{
+ const s=seated({id:'calc-two',name:'Calc Two',type:'other',modules:['maths'],mathPath:'calc2'});
+ assert.equal(s.profiles.find((p)=>p.id==='calc-two').mathPath,'calc2','saved with the learner');
+ assert.equal(P.learnerPath(s),'calc2','the seated learner is on Calculus 2');
+ assert.equal(LOADED.find((p)=>p.id==='course-calc2').mathPath,'calc2','calc2 survives the load');
+});
+
+test('11: the Maths course row has three cells, calc2 third, and its cell posts the calc2 patch',()=>{
+ const {tvKey}=keys();
+ const on={id:'n2',name:'',type:'high-school',age:16,system:'uk',modules:['maths']};
+ const rows=profileRows(on),r=rows.findIndex((x)=>x.title==='Maths course');
+ assert.equal(rows[r].cells.length,3);
+ assert.deepEqual(rows[r].cells.map((c)=>c.path),['school','calc1','calc2']);
+ const s=session(SCHOOL_P,{screen:'profile',draft:on,focus:flat(rows,r,2)});
+ assert.deepEqual(tvKey(s,'select',LOCAL).events,[{type:'profile.draft',patch:{mathPath:'calc2'}}]);
 });

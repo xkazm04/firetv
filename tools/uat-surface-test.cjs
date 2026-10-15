@@ -10,10 +10,7 @@ const data = fs.mkdtempSync(path.join(os.tmpdir(), 'uat-surface-'));
 process.env.DESK_DATA_DIR = data;
 const surface = () => require(SURFACE);
 // the same require hooks the driver uses: @/ into desk/src, TS and TSX through desk's typescript
-let ts; try { ts = require(path.join(root, 'node_modules/typescript')); } catch { console.error('Run `npm install` in desk/ first.'); process.exit(1); }
-const Module = require('node:module'), resolve = Module._resolveFilename;
-Module._resolveFilename = function (id, ...rest) { return resolve.call(this, id.startsWith('@/') ? path.join(root, 'src', id.slice(2)) : id, ...rest); };
-require.extensions['.ts'] ??= (mod, file) => mod._compile(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, file);
+require('./ts-load.cjs');
 
 let modelCalls = 0;
 const registry = require(path.join(root, 'src/lib/engines/registry.ts'));
@@ -278,4 +275,34 @@ test('case 6: the judge reads a long screen whole, or with the cut named, never 
   assert.equal(got, five, '5,000 characters reach the judge whole');
   const long = 'y'.repeat(JUDGE_SCREEN_CAP + 1234);
   assert.match(judgePayload(record(long)).steps[0].shown, /\[\.\.\. 1234 more characters not shown\]$/);
+});
+
+test('GUARD: the catalogue walks every Linga screen the session store declares, read from its Screen type, not a copy that can fall behind', () => {
+  const lingaScreensOf = src => { const m = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').match(/export type Screen\s*=([^;]+);/); assert.ok(m, 'store.ts declares type Screen'); return [...m[1].matchAll(/"([^"]+)"/g)].map(x => x[1]).filter(s => /^linga(-|$)/.test(s)).sort(); };
+  const store = fs.readFileSync(path.join(root, 'src/lib/session/store.ts'), 'utf8');
+  const declared = lingaScreensOf(store);
+  assert.ok(declared.length >= 12, `store.ts declares the Linga screens (${declared.length})`);
+  assert.deepEqual([...surface().LINGA_SCREENS].sort(), declared, 'surface.cjs walks exactly the declared Linga screens');
+  // the seeded control: a screen added to the type and not to the walk is caught
+  const seeded = lingaScreensOf(store.replace('"linga" |', '"linga" | "linga-seeded" |'));
+  assert.notDeepEqual([...surface().LINGA_SCREENS].sort(), seeded);
+});
+
+test('UD-23: a swap decision names its topic by id or by label; a param that matches nothing picks nothing, never list[0]', () => {
+  const S = surface();
+  const swap = (id, label) => ({ id: 'swap-topic', label, run: { command: { action: 'plan-swap', extra: { topicId: id } } } });
+  const sf = { offered: [swap('t1', 'Ordering food'), swap('t2', 'Booking a room'), { id: 'find-level', label: 'Find my level', run: { command: { action: 'x' } } }] };
+  assert.equal(S.pick(sf, { action: 'swap-topic', topicId: 't2' }).label, 'Booking a room', 'by id');
+  assert.equal(S.pick(sf, { action: 'swap-topic', topicId: 'Booking a room' }).label, 'Booking a room', 'by label');
+  assert.equal(S.pick(sf, { action: 'swap-topic', topicId: 'No such topic' }), null, 'no match is null');
+  assert.equal(S.pick(sf, { action: 'swap-topic', topicId: '' }), null, 'empty param is null');
+  assert.equal(S.pick(sf, { action: 'find-level' }).id, 'find-level', 'a single entry needs no param');
+});
+
+test('UD-24: "done" is honoured whether or not it is offered; anything else must be offered', () => {
+  const S = surface();
+  const sf = { offered: [{ id: 'find-level', label: 'Find my level', run: {} }] };
+  assert.equal(S.gate(sf, { action: 'done' }), 'done');
+  assert.equal(S.gate(sf, { action: 'find-level' }), 'ok');
+  assert.equal(S.gate(sf, { action: 'pick-level' }), 'not-offered');
 });

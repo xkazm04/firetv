@@ -5,9 +5,11 @@
  *
  * The core enforces the deadline itself and does not rely on a provider honouring the signal, so a stub, a
  * wrapper that drops the second argument, or a provider that forgot still ends in an EngineError("timeout").
+ * Every call, whichever way it ends, leaves one row in the usage ledger (meter.ts); a row never changes how the call ends.
  * Anything a provider throws that is not an EngineError becomes EngineError("exit") with the first line of its
  * message, so the contract in types.ts holds for every provider and lib/desk/job.ts can word the failure.
  */
+import { meter } from "./meter";
 import { EngineError, type EngineKind, type Provider, type ProviderAnswer } from "./types";
 
 /** The default deadline per kind, in ms; a request's timeoutMs replaces it, a provider's deadlineMs floors it. */
@@ -23,21 +25,34 @@ export interface Called<R> { answer: ProviderAnswer<R>; provider: string; ms: nu
 
 const firstLine = (e: unknown) => String((e as { message?: unknown } | null)?.message ?? e).split(/\r?\n/)[0].trim() || "The engine failed.";
 
-/** Run one provider under its deadline. Resolves with its answer, or rejects with an EngineError, always. */
-export async function call<Req extends { timeoutMs?: number }, R>(kind: EngineKind, p: Provider<Req, R>, req: Req): Promise<Called<R>> {
+/**
+ * Run one provider under its deadline. Resolves with its answer, or rejects with an EngineError, always. `budgetMs`,
+ * when set, is the deadline itself: what is left of an earlier attempt's (shape.ts re-ask), so attempts share one.
+ * `accept`, when set, judges the answer before the ledger row is written (shape.ts holds it to the schema there), so a
+ * malformed answer is booked as the shape failure it is, with the spend it cost - never as ok.
+ */
+export async function call<Req extends { timeoutMs?: number; use?: string; fingerprint?: string }, R>(kind: EngineKind, p: Provider<Req, R>, req: Req, attempt = 1, budgetMs?: number, accept?: (answer: ProviderAnswer<R>, provider: string) => void): Promise<Called<R>> {
   const started = Date.now(), ctl = new AbortController();
   let timer: ReturnType<typeof setTimeout> | undefined;
   const late = new Promise<never>((_, reject) => {
-    timer = setTimeout(() => { ctl.abort(); reject(new EngineError("timeout", p.name, `The ${kind} engine took too long. Please retry.`)); }, deadlineFor(kind, p, req));
+    timer = setTimeout(() => { ctl.abort(); reject(new EngineError("timeout", p.name, `The ${kind} engine took too long. Please retry.`)); }, budgetMs ?? deadlineFor(kind, p, req));
   });
   // A provider that settles after the deadline has already lost the race; its late rejection is not an unhandled one.
   const ran = Promise.resolve().then(() => p.run(req, { signal: ctl.signal }));
-  ran.catch(() => {});
+  ran.catch(() => { /* its outcome is read below, in the race; this only keeps a late loser from being unhandled */ });
+  let got: ProviderAnswer<R> | undefined;
   try {
     const answer = await Promise.race([ran, late]);
-    return { answer, provider: answer.provider ?? p.name, ms: Date.now() - started };
+    got = answer;
+    const provider = answer.provider ?? p.name, ms = Date.now() - started;
+    accept?.(answer, provider);
+    meter({ kind, use: req.use, prompt: req.fingerprint, provider, try: attempt, ok: true, error: null, ms, startedAt: started, usage: answer.usage });
+    return { answer, provider, ms };
   } catch (e) {
-    throw e instanceof EngineError ? e : new EngineError("exit", p.name, firstLine(e));
+    const err = e instanceof EngineError ? e : new EngineError("exit", p.name, firstLine(e));
+    // the spend is booked before the error propagates: what the provider said it used, on its answer or on its error
+    meter({ kind, use: req.use, prompt: req.fingerprint, provider: err.provider || p.name, try: attempt, ok: false, error: err.kind, ms: Date.now() - started, startedAt: started, usage: err.usage ?? got?.usage });
+    throw err;
   } finally {
     clearTimeout(timer);
   }

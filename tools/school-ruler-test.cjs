@@ -19,12 +19,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-const opts={module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:opts}).outputText,file);
-require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{...opts,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
+require('./ts-load.cjs');
 process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(os.tmpdir(),'desk-school-ruler-'));
 after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
 // next/font runs only under Next: here each face module answers with its class names (as tools/tv-recap-test.cjs does)
@@ -59,7 +54,8 @@ function seated({age=12,system='uk',type='elementary',mathPath}={}){
 test('1: the school frontier is the first topic not secure after the last secure one - the same on the ruler, the strip and Topics',()=>{
  // W7 batch 3: fifteen topics - four fractions units, one-step equations, the four decimals and percent units, ratio and
  // rates, geometry and data, then the other two linear topics (pinned here and in maths-rules-test, maths-paths-test)
- assert.deepEqual(ids(SCHOOL),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides']);
+ // v2 M2b: Pythagoras' theorem and probability after them, seventeen
+ assert.deepEqual(ids(SCHOOL),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides','pythagoras','probability']);
  // [secure ids, frontierOn id (undefined: none left), the ruler's topic, Teach me something's focus]
  const CASES=[
   [[],E,0,0,'a fresh learner starts on equivalent fractions'],
@@ -74,8 +70,10 @@ test('1: the school frontier is the first topic not secure after the last secure
   [[MR],TWO,13,13,'mean and range secure alone: on to two-step equations'],
   [[ONE,TWO],BOTH,14,14,'a learner who had two-step equations before W7 batch 2 keeps their place after it'],
   [[E,O,F,MD,ONE,TWO],BOTH,14,14],
-  [ids(SCHOOL),undefined,14,0,'everything secure: the needle at the end, Topics on the first stop'],
-  [[BOTH],undefined,14,0,'the last topic secure: nothing after it'],
+  [ids(SCHOOL),undefined,SCHOOL.length-1,0,'everything secure: the needle at the end, Topics on the first stop (v2 M2b: the ruler\'s last topic is index 16, was 14)'],
+  [[BOTH],'pythagoras',15,15,'v2 M2b: equations with brackets secure: on to Pythagoras (was: the last topic, nothing after it)'],
+  [['probability'],undefined,SCHOOL.length-1,0,'the last topic secure: nothing after it'],
+  [['pythagoras'],'probability',16,16,'Pythagoras secure: on to probability'],
   [[F,TWO],BOTH,14,14,'a gap before the last secure topic does not pull the needle back'],
  ];
  for(const [secure,next,ruler,focus,why] of CASES){
@@ -143,12 +141,12 @@ test('4: on the TV, for a 12-year-old in each school system: the SCHOOL tick is 
    assert.doesNotMatch(html,/mb-gapline/,`${system} ${screen}: no gap line (D2: no placement in Phase 1)`);
    if(screen==='tonight'){
     // fifteen topics are past STRIP_AFTER: Tonight draws one bar per strand, the tick and the needle on it
-    assert.match(html,/class="mb-ruler strip"/,`${system}: Tonight's ruler is the strand strip`);assert.equal((html.match(/class="mb-seg"/g)||[]).length,6,'six bars');
+    assert.match(html,/class="mb-ruler strip"/,`${system}: Tonight's ruler is the strand strip`);assert.equal((html.match(/class="mb-seg"/g)||[]).length,7,'seven bars (v2 M2b: a second Geometry and data bar; six before)');
     assert.doesNotMatch(html,/…/,`${system}: every strand label whole`);
     const strip=RR.stripModel(SCHOOL,stripStates([ONE]),true),flag=RR.stripFlag(strip,exp);
     assert.match(html,/class="mb-flag"[^>]*>.*?<div class="mc">School<\/div>/,`${system} tonight: the SCHOOL tick is drawn (D2)`);
     assert.equal(leftOf(html,'mb-flag'),flag.x,`${system} tonight: the tick after ${exp} topics`);
-    assert.equal(/class="mb-flag" data-end="true"/.test(html),system==='de',`${system}: the pill turned inward only at the strip's end`);
+    assert.equal(/class="mb-flag" data-end="true"/.test(html),false,`${system}: the pill is turned inward only at the strip's end, and v2 M2b moved the end past a 12-year-old (de's pill was turned at fifteen of fifteen)`);
     assert.equal(leftOf(html,'mb-marker'),strip.needle.x,`${system} tonight: the needle at the decimals, not at fractions`);
     assert.equal(strip.needle.index,5);assert.doesNotMatch(html,/data-pan="true"/);
    }else{
@@ -158,7 +156,7 @@ test('4: on the TV, for a 12-year-old in each school system: the SCHOOL tick is 
     const at=RR.flagX(m,exp),seen=RR.flagOnStage(m,at).seen;
     assert.equal(/class="mb-flag"/.test(html),seen,`${system} topics: the tick drawn only on the stage`);assert.equal(seen,false);
     assert.equal(leftOf(html,'mb-marker'),1466,`${system} topics: the needle at the start of the decimals, not at fractions`);
-    for(const t of SCHOOL)assert.ok(html.includes(t.name),`${t.name} is on the ruler`);
+    for(const t of SCHOOL)assert.ok(html.includes(t.name.replace(/'/g,'&#x27;')),`${t.name} is on the ruler`);
    }
   }
  }
@@ -200,38 +198,42 @@ test('4b: the focused name is fitted whole on the big ruler whether it pans or n
  assert.ok(SCHOOL.length>RR.STRIP_AFTER,'W7 batch 2: past eight topics Tonight draws the strand strip, not a box per topic');
 });
 
-test('5: the first evening\'s title is the path\'s own name, and a learner with one-step equations secure counts one of fifteen',()=>{
+test('5: the first evening\'s title is the path\'s own name, and a learner with one-step equations secure counts one of seventeen',()=>{
  assert.match(draw({...seated(),screen:'tonight',focus:0,skills:{}}),/School maths, from the first/);
- assert.match(draw({...seated(),screen:'tonight',focus:0,skills:skillsOf([ONE])}),/One of 15 topics/);
+ assert.match(draw({...seated(),screen:'tonight',focus:0,skills:skillsOf([ONE])}),new RegExp(`One of ${SCHOOL.length} topics`));
 });
 
-test('6: the strand strip at fifteen topics - six bars (Equations twice), every label whole in at most two lines, each inked by its share of secure topics, the needle at the frontier, the SCHOOL tick by stripFlag',()=>{
+test('6: the strand strip at seventeen topics - seven bars (Equations twice, Geometry and data twice), every label whole in at most two lines, each inked by its share of secure topics, the needle at the frontier, the SCHOOL tick by stripFlag',()=>{
  const S0=RR.stripModel(SCHOOL,stripStates([]),true);
- assert.deepEqual(S0.segments.map((g)=>[g.name,g.count]),[['Fractions',4],['Equations',1],['Decimals and percent',4],['Ratio and rates',2],['Geometry and data',2],['Equations',2]]);
+ assert.deepEqual(S0.segments.map((g)=>[g.name,g.count]),[['Fractions',4],['Equations',1],['Decimals and percent',4],['Ratio and rates',2],['Geometry and data',2],['Equations',2],['Geometry and data',2]]);
  // widths share the 1676 px by topic count, whole pixels, and tile the strip - except the one-topic Equations bar, which
- // takes the 189 px its label needs whole (W7 batch 3: at 112 px by its share it read "Equati…"), the rest sharing what is left
+ // takes the 189 px its label needs whole (W7 batch 3: at 112 px by its share it read "Equati…"), the rest sharing what is left.
+ // v2 M2b: at seventeen topics the two-topic Equations bar and the Ratio and rates bar fall under their labels' need too (189 px,
+ // 'Equations' whole), so three bars are held at 189 px and the other four share what is left; the Geometry and data bars take 185 px
  assert.equal(S0.segments.reduce((a,g)=>a+g.w,0),1728-52);
  const one=S0.segments[1];assert.equal(one.w,Math.ceil(RR.labelNeed('Equations',RR.STRIP_CH))+RR.STRIP_INSET,'the one-topic bar is as wide as its label');assert.equal(one.w,189);
- S0.segments.forEach((g,i)=>{assert.ok(g.w>=RR.MIN_SEG,`${g.name} at least ${RR.MIN_SEG} px`);if(i!==1)assert.ok(Math.abs(g.w-(1676-189)*g.count/14)<=1,`${g.name} ${g.w} px for ${g.count} of the other 14`);if(i)assert.equal(g.x,S0.segments[i-1].x+S0.segments[i-1].w);});
+ assert.deepEqual(S0.segments.map((g)=>g.w),[370,189,369,189,185,189,185],'measured: the labels\' floors hold, the rest share what is left');
+ S0.segments.forEach((g,i)=>{assert.ok(g.w>=RR.MIN_SEG,`${g.name} at least ${RR.MIN_SEG} px`);assert.ok(g.w>=Math.ceil(RR.labelNeed(g.name,RR.STRIP_CH))+RR.STRIP_INSET,`${g.name}: room for its label`);if(i)assert.equal(g.x,S0.segments[i-1].x+S0.segments[i-1].w);});
  for(const g of S0.segments){
   assert.equal(g.label,g.name,`${g.name}: whole, never clamped`);assert.equal(g.lines.join(' '),g.name);assert.ok(g.lines.length<=RR.STRIP_LINES);
   for(const l of g.lines)assert.ok(l.length*RR.STRIP_CH<=g.labelW,`${g.name}: "${l}" fits ${g.labelW} px`);
  }
- assert.deepEqual(S0.segments.map((g)=>g.lines),[['Fractions'],['Equations'],['Decimals and percent'],['Ratio and','rates'],['Geometry','and data'],['Equations']]);
+ assert.deepEqual(S0.segments.map((g)=>g.lines),[['Fractions'],['Equations'],['Decimals and','percent'],['Ratio and','rates'],['Geometry','and data'],['Equations'],['Geometry','and data']]);
  // inked by share: fractions all secure and one-step; the conversion alone of the four; nothing after
  const S1=RR.stripModel(SCHOOL,stripStates([E,O,F,MD,ONE,DC]),true);
- assert.deepEqual(S1.segments.map((g)=>g.share),[1,1,0.25,0,0,0]);
+ assert.deepEqual(S1.segments.map((g)=>g.share),[1,1,0.25,0,0,0,0]);
  assert.equal(S1.needle.index,7,'the frontier after the last secure (the conversion): a percent of an amount');
  assert.equal(S1.needle.x,S1.segments[2].x+S1.segments[2].w*2/4,'two of four into the decimals and percent bar');
- const S2=RR.stripModel(SCHOOL,stripStates(ids(SCHOOL)),true);assert.deepEqual([S2.needle.index,S2.needle.at,S2.needle.x],[15,'end',26+1676]);
- const S4=RR.stripModel(SCHOOL,stripStates([PC,RS]),true);assert.deepEqual(S4.segments.map((g)=>g.share),[0,0,0.25,0.5,0,0]);
+ const S2=RR.stripModel(SCHOOL,stripStates(ids(SCHOOL)),true);assert.deepEqual([S2.needle.index,S2.needle.at,S2.needle.x],[SCHOOL.length,'end',26+1676]);
+ const S4=RR.stripModel(SCHOOL,stripStates([PC,RS]),true);assert.deepEqual(S4.segments.map((g)=>g.share),[0,0,0.25,0.5,0,0,0]);
  assert.equal(S4.needle.index,10,'ratio secure: unit rates');assert.equal(S4.needle.x,S4.segments[3].x+S4.segments[3].w/2,'half way into the ratio and rates bar');
  const S3=RR.stripModel(SCHOOL,stripStates([ONE]),true);assert.equal(S3.needle.x,S3.segments[2].x,'one-step secure: the needle at the start of the decimals bar');
  // stripAt: before topic k, in the bar that holds it; the end past the last
- for(let k=0;k<=15;k++){const x=RR.stripAt(S0,k);if(k<15){const idx=[0,0,0,0,1,2,2,2,2,3,3,4,4,5,5][k],g=S0.segments[idx],before=[0,4,5,9,11,13][idx];assert.equal(x,g.x+g.w*(k-before)/g.count,`k ${k}`);}else assert.equal(x,26+1676);}
- // the tick for a 12-year-old in each system; de's is at the end, its pill turned inward; none is cut at either end
- for(const [sys,exp,edge] of [['us',14,null],['uk',14,null],['cz',14,null],['de',15,'r']]){
-  const f=RR.stripFlag(S0,P.expectedOn('school',sys,12));assert.equal(f.x,RR.stripAt(S0,exp),sys);assert.equal(f.edge,edge,`${sys}: the pill turned only at the end`);
+ for(let k=0;k<=SCHOOL.length;k++){const x=RR.stripAt(S0,k);if(k<SCHOOL.length){const idx=[0,0,0,0,1,2,2,2,2,3,3,4,4,5,5,6,6][k],g=S0.segments[idx],before=[0,4,5,9,11,13,15][idx];assert.equal(x,g.x+g.w*(k-before)/g.count,`k ${k}`);}else assert.equal(x,26+1676);}
+ // the tick for a 12-year-old in each system (v2 M2b: de's, after 15 of 17, is no longer at the end); a 13-year-old in uk is past all
+ // seventeen, so the tick is at the end with its pill turned inward; none is cut at either end
+ for(const [sys,exp,edge,age] of [['us',14,null,12],['uk',14,null,12],['cz',14,null,12],['de',15,null,12],['uk',SCHOOL.length,'r',13]]){
+  const f=RR.stripFlag(S0,P.expectedOn('school',sys,age));assert.equal(f.x,RR.stripAt(S0,exp),sys);assert.equal(f.edge,edge,`${sys}: the pill turned only at the end`);
  }
  assert.deepEqual(RR.stripFlag(S0,0),{x:26,edge:'l'},'a tick at the start turns right');assert.deepEqual(RR.stripFlag(S0,-1),{x:26,edge:'l'});assert.equal(RR.stripFlag(S0,99).edge,'r');
  // the Calculus strip is unchanged by the refactor: the needle rule reads stripAt too
@@ -272,7 +274,7 @@ test('W8 2: Get ready for school lists the units by strand with the learner\'s o
   assert.match(html,/data-role="maths-prepare"/,system);
   const heads=[...html.matchAll(/class="mb-pstrand"[^>]*><span[^>]*>([^<]*)</g)].map((m)=>m[1]);
   assert.deepEqual(heads,['Fractions','Equations','Decimals and percent','Ratio and rates','Geometry and data'],`${system}: strands in order`);
-  const cards=[...html.matchAll(/class="mb-unit2"[^>]*><div class="nm">([^<]*)<\/div><div class="yr">([^<]*)</g)].map((m)=>[m[1],m[2]]);
+  const cards=[...html.matchAll(/class="mb-unit2"[^>]*><div class="nm">([^<]*)<\/div><div class="yr">([^<]*)</g)].map((m)=>[m[1].replace(/&#x27;/g,"'"),m[2]]);
   const units=PR.prepareStops(s);
   assert.deepEqual(cards.map((c)=>c[0]),units.map((u)=>u.name),`${system}: every unit, strand by strand`);
   cards.forEach(([name,yr],i)=>{assert.equal(yr,PR.SYS_WORD[system](units[i].year),`${system} ${name}`);assert.ok(yr.includes(W[system]));});
@@ -283,14 +285,42 @@ test('W8 2: Get ready for school lists the units by strand with the learner\'s o
   assert.match(html,new RegExp(`data-focused="true"[^>]*><div class="nm">${units[4].name}<`),'the lamp on the focused unit');
  }
  // the question: two cells, "The usual" lit, the unit held and not lit; then "A step up"
- const s={...seated({system:'uk'}),screen:'prepare',focus:2,skills:{}};
+ const {hasWorked}=require(src('lib/library/worked.ts'));
+ const s0={...seated({system:'uk'}),screen:'prepare',focus:0,skills:{}};
+ const plain=PR.prepareStops(s0).findIndex((u)=>!hasWorked(u.id));
+ const s={...seated({system:'uk'}),screen:'prepare',focus:plain,skills:{}};
  for(const ask of [0,1]){
-  const html=drawW8(s,ask),name=PR.prepareStops(s)[2].name;
+  const html=drawW8(s,ask),name=PR.prepareStops(s)[plain].name;
   assert.equal(count(html,/class="mb-cell2"/g),2);assert.equal(count(html,/data-focused="true"/g),1,'one thing lit: the cell');
   assert.match(html,new RegExp(`class="mb-cell2" data-id="${ask?'stretch':'usual'}" data-focused="true"`));
   assert.match(html,new RegExp(`data-held="true"[^>]*><div class="nm">${name}<`),'the unit is held under the question');
-  assert.ok(html.includes(PR.choiceLine(ask)),'the lit cell\'s sentence');
+  assert.ok(html.includes(PR.choiceLine(ask,PR.prepareStops(s)[plain].id)),'the lit cell\'s sentence (MB-B20: the unit\'s own step-up line)');
   assert.doesNotMatch(textOf(html.split('class="mb-lede')[1].split('data-role="maths-prepare"')[0]),/[0-9]/,'no number anywhere on the question');
+ }
+ // MB-B20: a step up on a unit with a top rung (fractions, percent change, Pythagoras, probability) says what it adds and that it is still school level, with no number
+ for(const id of ['frac-add-sub','frac-mul-div','pct-change','pythagoras','probability']){
+  const at=PR.prepareStops(s0).findIndex((u)=>u.id===id);assert.ok(at>=0,id);
+  const st={...seated({system:'uk'}),screen:'prepare',focus:at,skills:{}},cells=PR.choicesFor(hasWorked(id)).length;
+  const html=drawW8(st,1);
+  assert.ok(html.includes(PR.TOP_RUNG_LINES[id]),`${id}: the top rung's own sentence under A step up`);
+  assert.ok(drawW8(st,0).includes(PR.choiceLine(0)),`${id}: the usual set's sentence is unchanged`);
+  assert.equal(count(html,/class="mb-cell2"/g),cells);
+  // (an escaped apostrophe, "Pythagoras&#x27; theorem", is the unit's name, not a number)
+  assert.doesNotMatch(textOf(html.split('class="mb-lede')[1].split('data-role="maths-prepare"')[0]).replace(/&#x?[0-9a-f]+;/gi,"'"),/[0-9]/,'no number anywhere on the question');
+ }
+ // a unit with a worked lesson: three cells, "See how first" first, the lit one follows the ask
+ const lessonAt=PR.prepareStops(s0).findIndex((u)=>hasWorked(u.id));
+ const sw={...seated({system:'uk'}),screen:'prepare',focus:lessonAt,skills:{}};
+ for(const ask of [-1,0,1]){
+  const html=drawW8(sw,ask),name=PR.prepareStops(sw)[lessonAt].name,lit=ask<0?'lesson':ask?'stretch':'usual';
+  assert.equal(count(html,/class="mb-cell2"/g),3);
+  assert.deepEqual([...html.matchAll(/class="mb-cell2" data-id="(\w+)"/g)].map((m)=>m[1]),['lesson','usual','stretch']);
+  assert.equal(count(html,/data-focused="true"/g),1,'one thing lit: the cell');
+  assert.match(html,new RegExp(`class="mb-cell2" data-id="${lit}" data-focused="true"`));
+  assert.match(html,new RegExp(`data-held="true"[^>]*><div class="nm">${name}<`),'the unit is held under the question');
+  assert.ok(html.includes(PR.choiceLine(ask,PR.prepareStops(sw)[lessonAt].id)),'the lit cell\'s sentence (MB-B20: the unit\'s own step-up line)');
+  assert.doesNotMatch(textOf(html.split('class="mb-lede')[1].split('data-role="maths-prepare"')[0]),/[0-9]/,'no number anywhere on the question');
+  if(ask<0){assert.ok(html.includes(PR.LESSON_CHOICE.t));assert.ok(html.includes(PR.LESSON_CHOICE.k));}
  }
  // a Calculus learner has no units here (and no door to reach it)
  const calc=draw({...seated({type:'other',age:19,mathPath:'calc1'}),screen:'prepare',focus:0,skills:{}});
@@ -318,10 +348,10 @@ test('W8 3: the second ink line is drawn exactly for a latched step-up record - 
  const t=draw({...seated({system:'uk'}),screen:'tonight',focus:0,skills});
  const segs=t.split('class="mb-seg"').slice(1);
  const ink=segs.map((g)=>{const m=/class="mb-ink2" data-role="maths-stretch" style="right:auto;width:calc\(\(100% - 24px\) \* ([\d.]+)\)"/.exec(g);return m?Number(m[1]):0;});
- assert.deepEqual(ink,[0,0,0,0.5,0.5,0],'Ratio and rates: ratio latched, unit rates not; Geometry and data: area');
+ assert.deepEqual(ink,[0,0,0,0.5,0.5,0,0],'Ratio and rates: ratio latched, unit rates not; Geometry and data: area (v2 M2b: seven bars, the second Geometry and data bar none)');
  // never a digit in the mark's own text, and the Tonight title counts the usual records only
  for(const html of [t,onArea])for(const m of html.matchAll(/data-role="maths-stretch"[^>]*>([\s\S]*?)<\/(?:div|span)>/g))assert.doesNotMatch(textOf(m[1]),/[0-9]/);
- assert.match(t,/Two of 15 topics <em>secure/,'add and subtract and ratio: the usual records');
+ assert.match(t,new RegExp(`Two of ${SCHOOL.length} topics <em>secure`),'add and subtract and ratio: the usual records');
  // static: no animation on the line, and reduced motion stills everything else
  const css=fs.readFileSync(src('design/maths-lamplight.css'),'utf8');
  const rules=[...css.matchAll(/([^{}]*mb-ink2[^{}]*)\{([^}]*)\}/g)];

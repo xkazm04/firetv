@@ -10,10 +10,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const S=require(path.join(root,'src/lib/rules/school.ts'));
 const T=require(path.join(root,'src/maths/typeset.ts'));
 
@@ -472,18 +469,44 @@ const W7_SLIPS={};
 const B2_UNITS=['dec-arith','dec-convert','pct-of-amount','pct-change'];
 /** The W7 batch 3 units, after them (ratio, rates, area, mean and range). */
 const B3_UNITS=['ratio-share','unit-rate','area','mean-range'];
+/** The v2 M2b units beyond the school path (tables at the end of this file). */
+const M2B_UNITS=['pythagoras','probability'];
 test(`W7 SPELLINGS equivalent fractions: ${EQ_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('EQ_SPELLINGS equivalent fractions',EQ_SPELLINGS,'frac-equivalent'));});
 test(`W7 SPELLINGS a fraction of an amount: ${OF_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('OF_SPELLINGS a fraction of an amount',OF_SPELLINGS,'frac-of-amount'));});
 test(`W7 SPELLINGS multiply and divide fractions: ${MD_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('MD_SPELLINGS multiply and divide fractions',MD_SPELLINGS,'frac-mul-div'));});
 test('W7 SLIPS: every slip on the closed list belongs to exactly one unit, carries no value, and every unit\'s list is detected',()=>{
  const units=Object.keys(S.SCHOOL_UNIT_SLIPS);
  // W7 batch 2 adds the decimals and percent units, batch 3 the last four, each with its own closed list (tables at the end of this file)
- assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent','frac-mul-div','frac-of-amount',...B2_UNITS,...B3_UNITS].sort());
+ assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent','frac-mul-div','frac-of-amount',...B2_UNITS,...B3_UNITS,...M2B_UNITS].sort());
  const listed=units.flatMap((u)=>S.SCHOOL_UNIT_SLIPS[u]);
  assert.equal(new Set(listed).size,listed.length,'no slip id is on two units');
- assert.deepEqual([...listed].sort(),S.SCHOOL_SLIPS.map((s)=>s.id).sort(),'the closed list is exactly the units\' lists');
- for (const s of S.SCHOOL_SLIPS){assert.doesNotMatch(s.name+s.says+s.points,/\d/,s.id);assert.match(s.says,/^[A-Z][^]*\.$/,s.id);}
+ // MB-B20: a top rung's own slips (SCHOOL_TOP_SLIPS) are on no unit's list, and on no other top rung's
+ const top=Object.values(S.SCHOOL_TOP_SLIPS).flat();
+ assert.equal(new Set([...listed,...top]).size,listed.length+top.length,'no top-rung slip is on a unit\'s list or two top rungs');
+ assert.deepEqual([...listed,...top].sort(),S.SCHOOL_SLIPS.map((s)=>s.id).sort(),'the closed list is exactly the units\' lists and the top rungs\'');
+ for (const s of S.SCHOOL_SLIPS){assert.doesNotMatch(s.name+s.says+s.points,/\d/,s.id);assert.match(s.says,/^[A-Z][^]*\.$/,s.id);const n=s.says.trim().split(/\s+/).length;assert.ok(n<=25,`${s.id}: says is ${n} words, 25 or fewer`);}
  for (const u of units){const order=S.SCHOOL_SLIPS.map((s)=>s.id).filter((id)=>S.SCHOOL_UNIT_SLIPS[u].includes(id));assert.deepEqual([...S.SCHOOL_UNIT_SLIPS[u]],order,`${u}: in SCHOOL_SLIPS order`);}
+});
+
+test('MB-B6 WITHHELD: every withheld hint line is 25 words or fewer and holds no digit',()=>{
+ for (const [k,v] of Object.entries(S.SCHOOL_WITHHELD)){const n=v.trim().split(/\s+/).length;assert.ok(n<=25,`${k}: withheld line is ${n} words, 25 or fewer`);assert.doesNotMatch(v,/\d/,k);}
+});
+
+test('SL2-a WITHHELD: five withheld lines name the step they used to miss, for every item kind their unit sets',()=>{
+ const W=S.SCHOOL_WITHHELD;
+ assert.match(W['dec-arith'],/(put|place|count)[^.]*(point|decimal place|places)/i,'dec-arith puts the point back');
+ assert.match(W['dec-arith'],/multipl/i,'dec-arith multiplies');
+ assert.match(W['pythagoras'],/add/i,'pythagoras adds for the longest');assert.match(W['pythagoras'],/subtract|take away/i,'pythagoras subtracts for a shorter side');
+ assert.match(W['ratio-share'],/common factor/i,'ratio-share simplifies by a common factor');assert.match(W['ratio-share'],/scale both/i,'ratio-share scales both parts');assert.match(W['ratio-share'],/divide by the parts' total/i,'ratio-share shares by the total of the parts');
+ assert.match(W['area'],/rectangle/i);assert.match(W['area'],/triangle/i);assert.match(W['area'],/add/i,'area adds the parts');
+ assert.match(W['dec-convert'],/divide[^.]*top[^.]*bottom/i,'dec-convert divides top by bottom');assert.match(W['dec-convert'],/place value/i);assert.match(W['dec-convert'],/simplif/i);assert.match(W['dec-convert'],/percent/i);
+ for (const k of ['dec-arith','pythagoras','ratio-share','area','dec-convert']) assert.match(W[k],/ The answer is yours to work out\.$/,k);
+});
+
+test('SL2-b WITHHELD: dec-arith names taking away and ratio-share names the share finish',()=>{
+ const W=S.SCHOOL_WITHHELD;
+ assert.match(W['dec-arith'],/line up[^.]*add or (subtract|take away)/i,'dec-arith lines up for adding or subtracting');
+ assert.match(W['ratio-share'],/divide[^.]*total[^.]*(times|multipl)[^.]*each part/i,'ratio-share divides by the total, times each part');
 });
 
 // ------------------------------------------------------------------ W7 wellFormed and question
@@ -1180,7 +1203,7 @@ const B3_SPELLINGS={
   [RS2,'3:5','uk','right'],[RS2,'5:3','uk','wrong','ratio-swapped'],[RS2,'6:10','uk','unsure'],[RS2,'3:4','uk','wrong'],[RS2,'1:5','uk','wrong'],
   [RS3,'2:5','uk','right'],[RS3,'2 : 5','de','right'],[RS3,'5:2','uk','wrong','ratio-swapped'],[RS3,'4:10','uk','unsure'],
   // 60 shared in 2:3 = 24 and 36, in that order: the other order listed with 'and' is unsure, written as a ratio it is wrong
-  [RH1,'24 and 36','uk','right'],[RH1,'24:36','uk','right'],[RH1,'24 : 36','uk','right'],[RH1,'24 & 36','uk','right'],[RH1,'24 and 36.','uk','right'],[RH1,'24.0 and 36','uk','right'],
+  [RH1,'24 and 36','uk','right'],[RH1,'c = 24:36','uk','right'],[RH1,'a = 24 and b = 36','uk','right'],[RH1,'24:36','uk','right'],[RH1,'24 : 36','uk','right'],[RH1,'24 & 36','uk','right'],[RH1,'24 and 36.','uk','right'],[RH1,'24.0 and 36','uk','right'],
   [RH1,'36 and 24','uk','unsure'],[RH1,'36:24','uk','wrong','ratio-swapped'],
   [RH1,'30 and 20','uk','wrong','ratio-split-each'],[RH1,'20 and 30','uk','wrong','ratio-split-each'],[RH1,'2 and 3','uk','wrong','ratio-as-amounts'],[RH1,'2:3','uk','wrong','ratio-as-amounts'],
   [RH1,'120 and 180','uk','wrong','ratio-by-difference'],[RH1,'12 and 48','uk','wrong'],[RH1,'25 and 35','uk','wrong'],
@@ -1237,7 +1260,7 @@ const B3_SPELLINGS={
   // is unsure, never wrong - the desk does not teach units by marking them wrong; a bare number that differs is wrong
   [AR1,'28','uk','right'],[AR1,'28 cm2','uk','right'],[AR1,'28cm2','uk','right'],[AR1,'28 cm^2','uk','right'],[AR1,'28 cm²','uk','right'],[AR1,'28 square centimetres','uk','right'],[AR1,'x = 28','uk','right'],[AR1,'28.0','uk','right'],
   [AR1,'28 cm','uk','unsure'],[AR1,'28 m2','uk','unsure'],[AR1,'28 m','uk','unsure'],[AR1,'0.28 m2','uk','unsure'],[AR1,'28%','uk','unsure'],[AR1,'twenty-eight','uk','unsure'],[AR1,'','uk','unsure'],
-  [AR1,'28 cm3','uk','unsure'],[AR1,'28 square cm','uk','unsure'],[AR1,'22 cm','uk','unsure'],
+  [AR1,'28 cm3','uk','unsure'],[AR1,'28 square cm','uk','right'],[AR1,'22 cm','uk','unsure'],
   [AR1,'11','uk','wrong','area-added-sides'],[AR1,'22','uk','wrong','area-added-sides'],[AR1,'14','uk','wrong'],[AR1,'27','uk','wrong'],[AR1,'29','uk','wrong'],
   // 12 m by 9 m = 108 m2
   [AR2,'108','uk','right'],[AR2,'108 m2','uk','right'],[AR2,'108 m²','uk','right'],[AR2,'108 square metres','uk','right'],[AR2,'108 cm2','uk','unsure'],[AR2,'42 m','uk','unsure'],
@@ -1583,4 +1606,506 @@ test('W7c typeset: a square unit typed flat after an amount prints with its powe
  const sq=(line)=>{const out=[];T.walk(T.parseMath(line),(x)=>{if(x.t==='text'&&x.sup)out.push(`${x.v}^${T.flatten(x.sup)}`);});return out;};
  for (const [line,want] of [['28 cm2',['cm^2']],['12 m2',['m^2']],['7.5 cm2',['cm^2']],['28 cm^2',['cm^2']],['28 cm²',['cm^2']],['8 cm3',['cm^3']],['28 cm2.',['cm^2']],['x = 28 cm2',['cm^2']]]) assert.deepEqual(sq(line),want,line);
  for (const line of ['cm2','2 cm23','3 m 2','28 cm 2','28 cm25']) assert.deepEqual(sq(line),[],line);
+});
+
+// ------------------------------------------------------------------ v2 M2b: the units beyond the school path - Pythagoras' theorem
+// Each expected verdict worked by hand first (the answer and each slip's value are in the comments). The unit is not on the path
+// yet: the sweep (tools/gcse-units-test.cjs) decides whether it ships.
+const py=(expr,unit='cm')=>({shape:'pythagoras',expr,unit});
+const PA=py('longest 6 8');        // 10 cm. sides added 14; squares added, no root 100
+const PB=py('shorter 10 6');       // 8 cm. sides added 16; squares taken away, no root 64; squares added 136
+const PC=py('longest 5 12','mm');  // 13 mm. added 17; no root 169
+const PD=py('shorter 13 5','m');   // 12 m. added 18; no root 144; squares added 194
+const PE=py('longest 9 12');       // 15 cm. added 21; no root 225
+const PF=py('shorter 17 8');       // 15 cm. added 25; no root 225; squares added 353
+const PG=py('longest 30 40','m');  // 50 m. added 70; no root 2500
+const PH=py('shorter 25 7');       // 24 cm. added 32; no root 576; squares added 674
+const PYTH_SPELLINGS=[
+ // 6 and 8 -> 10: the number alone or with its own length unit is right, in any equal form
+ [PA,'10','uk','right'],[PA,'10 cm','uk','right'],[PA,'10cm','uk','right'],[PA,'10 centimetres','uk','right'],[PA,'x = 10','uk','right'],[PA,'10.0','us','right'],[PA,'10,0','cz','right'],[PA,'= 10','de','right'],[PA,'20/2','uk','right'],[PA,'10.','uk','right'],
+ [PA,'14','uk','wrong','pyth-sides-added'],[PA,'14 cm','uk','wrong','pyth-sides-added'],[PA,'100','uk','wrong','pyth-no-root'],[PA,'100 cm','uk','wrong','pyth-no-root'],
+ [PA,'9','uk','wrong'],[PA,'11','uk','wrong'],[PA,'-10','uk','wrong'],[PA,'9.9','uk','wrong'],[PA,'6','uk','wrong'],[PA,'48','uk','wrong'],[PA,'28','uk','wrong'],
+ [PA,'10 m','uk','unsure'],[PA,'10 mm','uk','unsure'],[PA,'100 cm2','uk','unsure'],[PA,'10%','uk','unsure'],[PA,'5:10','uk','unsure'],[PA,'ten','uk','unsure'],[PA,'','uk','unsure'],[PA,'about 10','uk','unsure'],[PA,'10,0','uk','unsure'],[PA,'√100','uk','unsure'],[PA,'10 or 14','uk','unsure'],
+ // 10 and 6 -> a shorter side 8
+ [PB,'8','uk','right'],[PB,'8 cm','uk','right'],[PB,'8.0','uk','right'],[PB,'8,0','de','right'],[PB,'16','uk','wrong','pyth-sides-added'],[PB,'64','uk','wrong','pyth-no-root'],[PB,'136','uk','wrong','pyth-squares-added'],
+ [PB,'10','uk','wrong'],[PB,'4','uk','wrong'],[PB,'8 m','uk','unsure'],[PB,'80%','uk','unsure'],
+ // 5 mm and 12 mm -> 13 mm
+ [PC,'13','uk','right'],[PC,'13 mm','uk','right'],[PC,'13 millimetres','uk','right'],[PC,'13 cm','uk','unsure'],[PC,'17','uk','wrong','pyth-sides-added'],[PC,'169','uk','wrong','pyth-no-root'],[PC,'12','uk','wrong'],
+ // the longest side 13 m and a shorter side 5 m -> 12 m
+ [PD,'12','uk','right'],[PD,'12 m','uk','right'],[PD,'12 metres','uk','right'],[PD,'12 metre','uk','right'],[PD,'12 km','uk','unsure'],[PD,'18','uk','wrong','pyth-sides-added'],[PD,'144','uk','wrong','pyth-no-root'],[PD,'194','uk','wrong','pyth-squares-added'],[PD,'8','uk','wrong'],
+ // 9 and 12 -> 15
+ [PE,'15','uk','right'],[PE,'15 cm','uk','right'],[PE,'21','uk','wrong','pyth-sides-added'],[PE,'225','uk','wrong','pyth-no-root'],[PE,'3','uk','wrong'],
+ // 17 and 8 -> 15: the unrooted c² - b² is 225
+ [PF,'15','uk','right'],[PF,'25','uk','wrong','pyth-sides-added'],[PF,'225','uk','wrong','pyth-no-root'],[PF,'353','uk','wrong','pyth-squares-added'],[PF,'15.5','uk','wrong'],
+ // 30 m and 40 m -> 50 m; 2500 written with a thousands mark
+ [PG,'50','uk','right'],[PG,'50 m','uk','right'],[PG,'70','uk','wrong','pyth-sides-added'],[PG,'2500','uk','wrong','pyth-no-root'],[PG,'2,500','uk','wrong','pyth-no-root'],[PG,'2 500','cz','wrong','pyth-no-root'],[PG,'2500 m2','uk','unsure'],
+ // 25 and 7 -> 24
+ [PH,'24','uk','right'],[PH,'32','uk','wrong','pyth-sides-added'],[PH,'576','uk','wrong','pyth-no-root'],[PH,'674','uk','wrong','pyth-squares-added'],[PH,'25','uk','wrong'],
+];
+const PX=py('longest 16 30','mm');  // 34 mm. squares 256 + 900 = 1156 (X1a)
+const PYTH_LEAKS=[
+ [PA,'The answer is 10 cm.'],[PA,'It is 10.'],[PA,'Ten centimetres.'],[PA,'The square root of 100 is 10.'],[PA,'So the longest side is 10'],[PA,'√100 = 10'],[PA,'20 ÷ 2'],[PA,'Half of 20.'],[PA,'5 × 2'],[PA,'10.0 cm'],[PA,'It comes to 1000%.'],
+ [PB,'The missing side is 8.'],[PB,'Eight centimetres.'],[PB,'It is 8 cm.'],[PB,'16 ÷ 2'],[PB,'The square root of 64 is 8.'],
+ [PC,'It is 13 mm.'],[PC,'Thirteen.'],[PD,'It is 12 metres.'],[PD,'The root of 144 is 12.'],[PE,'It is 15.'],[PG,'The longest side is 50 m.'],[PH,'The other side is 24 cm.'],
+ // X1a: the squared total under a root, or beside a root instruction, leaks
+ [PX,'The longest side is the square root of 1156.'],[PX,'the root of 1156'],[PX,'√1156'],[PX,'√ 1156'],[PX,'odmocnina z 1156'],[PX,'c² = 16² + 30² = 1156, teď odmocni.'],[PA,'36 + 64 = 100, now take the square root.'],
+ [PB,'Take the square root of 64.'],[PB,'100 - 36 = 64, then root it.'],
+];
+const PYTH_LEGIT=[
+ [PA,'Square both shorter sides.'],[PA,'Square 6 and 8 and add them.'],[PA,'6 × 6 = 36'],[PA,'8 × 8 = 64'],[PA,'36 + 64 = 100'],[PA,'Then take the square root of the total.'],[PA,'Add the squares of the two shorter sides.'],
+ [PA,'The longest side is opposite the right angle.'],[PA,'Your answer is in cm.'],[PA,'The longest side is longer than both of the others.'],[PA,'Adding 6 and 8 does not use the squares.'],[PA,'The sum of the squares is 100.'],
+ [PB,'Square the longest side and the shorter side.'],[PB,'10 × 10 = 100'],[PB,'6 × 6 = 36'],[PB,'100 - 36 = 64'],[PB,'Take the square of the shorter side away from the square of the longest.'],[PB,'The missing side is shorter than the longest side, 10 cm.'],
+ [PC,'5 × 5 = 25'],[PC,'12 × 12 = 144'],[PC,'25 + 144 = 169'],[PC,'Your answer is in mm.'],
+ [PD,'13 × 13 = 169'],[PD,'5 × 5 = 25'],[PD,'169 - 25 = 144'],[PD,'Your answer is in metres.'],
+ [PE,'9 × 9 = 81'],[PE,'12 × 12 = 144'],[PE,'81 + 144 = 225'],[PH,'25 × 25 = 625'],[PH,'7 × 7 = 49'],[PH,'625 - 49 = 576'],
+ // X1a: the squared total on its own stays legitimate (App Master ruling, supersedes MB-B16's refusal of it)
+ [PX,'c squared is 1156.'],[PX,'The sum of the squares is 1156.'],[PX,'256 + 900 = 1156'],[PX,'Square both shorter sides.'],[PX,'Then take the square root of the total.'],[PB,'The squares leave 64.'],
+];
+const PYTH_PRINTS=[
+ [PA,'A right-angled triangle has shorter sides 6 cm and 8 cm. Find the longest side.'],
+ [PB,'A right-angled triangle has longest side 10 cm and a shorter side 6 cm. Find the other shorter side.'],
+ [PC,'A right-angled triangle has shorter sides 5 mm and 12 mm. Find the longest side.'],
+ [PD,'A right-angled triangle has longest side 13 metres and a shorter side 5 metres. Find the other shorter side.'],
+ [PG,'A right-angled triangle has shorter sides 30 metres and 40 metres. Find the longest side.'],
+];
+const PYTH_BAD=[
+ [py('longest 6 7'),'not a whole number'],[py('shorter 10 7'),'not a whole number'],[py('shorter 6 10'),'not longer'],[py('shorter 6 6'),'not longer'],[py('longest 75 100'),'longer than a school question'],[py('shorter 101 20'),'longer than a school question'],
+ [py('longest 6 8','kg'),'mm, cm or metres'],[py('longest 6 8','cm2'),'mm, cm or metres'],[py('longest 6 8','km'),'mm, cm or metres'],[{shape:'pythagoras',expr:'longest 6 8'},'mm, cm or metres'],
+ [py('longest 0 8'),'cannot read'],[py('longest 6.0 8'),'cannot read'],[py('longest 6 8 10'),'cannot read'],[py('hypotenuse 6 8'),'cannot read'],[py('longest 06 8'),'cannot read'],[py('longest 1000 8'),'cannot read'],
+ [{...PA,answer:10},'no answer field'],[{...PA,form:'decimal'},'does not take'],[{...PA,to:'decimal'},'does not take'],
+];
+/** The slip values a hand-worked reference gives for a Pythagoras spec: integers throughout (Math.round on a root is checked by squaring). */
+function pyRef(s){
+ const m=/^(longest|shorter) (\d+) (\d+)$/.exec(s.expr);if(!m||s.shape!=='pythagoras')return null;
+ const x=+m[2],y=+m[3],root=(n)=>{const r=Math.round(Math.sqrt(n));assert.equal(r*r,n,`${s.expr}: a whole root`);return r;};
+ if(m[1]==='longest'){const t=root(x*x+y*y);return {find:'longest',x,y,truth:t,slips:{'pyth-sides-added':x+y,'pyth-no-root':x*x+y*y},nums:[x,y]};}
+ const t=root(x*x-y*y);return {find:'shorter',x,y,truth:t,slips:{'pyth-sides-added':x+y,'pyth-no-root':x*x-y*y,'pyth-squares-added':x*x+y*y},nums:[x,y]};
+}
+test(`M2b SPELLINGS Pythagoras: ${PYTH_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{spellings('PYTH_SPELLINGS',PYTH_SPELLINGS,'pythagoras');});
+test(`M2b LEAKS Pythagoras: ${PYTH_LEAKS.length} hints that give the answer away are refused; ${PYTH_LEGIT.length} legit hints pass`,()=>{
+ const missed=PYTH_LEAKS.filter(([s,h])=>!S.leaksSchool(s,h)).map(([s,h])=>`${s.expr} | ${h}`);
+ const flagged=PYTH_LEGIT.filter(([s,h])=>S.leaksSchool(s,h)).map(([s,h])=>`${s.expr} | ${h}`);
+ console.log(`# M2b LEAKS Pythagoras: ${PYTH_LEAKS.length} (missed ${missed.length}), LEGIT ${PYTH_LEGIT.length} (flagged ${flagged.length})`);
+ assert.deepEqual(missed,[]);assert.deepEqual(flagged,[]);
+ for (const [s] of [...PYTH_LEAKS,...PYTH_LEGIT]) assert.equal(S.unitOf(s),'pythagoras');
+});
+test('M2b question and wellFormed Pythagoras: one plain sentence, the hyphen kept through the typesetter, never the answer, read back to its spec; poor questions refused with a reason',()=>{
+ for (const [s,plain] of PYTH_PRINTS){
+  assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
+  const q=S.question(s);assert.equal(q.plain,plain);assert.ok(!S.leaksSchool(s,q.plain),`the question itself is not a leak: ${q.plain}`);
+  for (const line of [q.plain,q.tex]){
+   const flat=T.flatten(T.parseMath(line));
+   assert.ok(flat.includes('right-angled'),`${line}: the hyphen is a hyphen, not a minus: ${flat}`);
+   for (const d of s.expr.match(/\d+/g)) assert.ok(flat.includes(d),`${line} keeps ${d}`);
+   assert.ok(/ (cm|mm|metres)\b/.test(flat),`${line} keeps its unit: ${flat}`);
+  }
+  assert.deepEqual(S.specFromQuestion(q.plain),s,`${q.plain} reads back to its spec`);
+ }
+ for (const [s,why] of PYTH_BAD){const w=S.wellFormed(s);assert.equal(w.ok,false,JSON.stringify(s));assert.ok(w.why.includes(why),`${JSON.stringify(s)}: ${w.why}`);}
+ for (const t of ['A right-angled triangle has shorter sides 6 cm and 8 m. Find the longest side.','A right-angled triangle has shorter sides 6 and 8. Find the longest side.','A right-angled triangle has shorter sides 6 cm and 7 cm. Find the longest side.',
+  'A right-angled triangle has shorter sides 6.5 cm and 8 cm. Find the longest side.','A triangle has shorter sides 6 cm and 8 cm. Find the longest side.','A right-angled triangle has shorter sides 6 cm and 8 cm. Find the hypotenuse.',
+  'A right-angled triangle has longest side 6 cm and a shorter side 10 cm. Find the other shorter side.','Find the longest side of a right-angled triangle with shorter sides 6 cm and 8 cm.','A ladder 10 m long leans against a wall. How high up does it reach?'])
+  assert.equal(S.specFromQuestion(t),null,t);
+ assert.deepEqual(S.specFromQuestion('A right angled triangle has shorter sides 6 centimetres and 8 centimetres. Find the longest side.'),PA,'right angled, centimetres');
+ assert.deepEqual(S.specFromQuestion('a right-angled triangle has longest side 10 cm and one shorter side 6 cm. find the other shorter side'),PB,'one shorter side, lower case');
+});
+test('M2b GENERATOR Pythagoras: seeds 1..300 for tiers 1 and 2 give well-formed, distinct items of the documented tier, judged right by a reference, every slip reachable',()=>{
+ const counts={},units=new Set(),slipsSeen={};
+ for (const tier of [1,2]){
+  const seen=new Set();
+  for (let seed=1;seed<=300;seed++){
+   const s=S.genPythagoras(seed,tier);
+   assert.ok(s,`seed ${seed} tier ${tier}`);assert.deepEqual(S.genPythagoras(seed,tier),s,'same seed, same spec');
+   assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));assert.equal(S.unitOf(s),'pythagoras');
+   const r=pyRef(s);assert.ok(r,JSON.stringify(s));units.add(s.unit);assert.ok(['mm','cm','m'].includes(s.unit));
+   if(tier===1)assert.ok(r.find==='longest'&&r.truth<=50,`tier 1: the longest side from the two shorter, at most 50: ${s.expr}`);
+   else assert.ok(r.find==='shorter'&&r.x<=100&&r.y<r.x,`tier 2: a shorter side: ${s.expr}`);
+   assert.ok(!r.nums.includes(r.truth),'the question does not print its answer');
+   const q=S.question(s).plain;
+   for (const sys of S.SCHOOL_SYSTEMS){
+    assert.equal(S.check(s,String(r.truth),sys).verdict,'right',`${q} = ${r.truth} (${sys})`);
+    assert.equal(S.check(s,String(r.truth+1),sys).verdict,'wrong',`${q} != ${r.truth+1} (${sys})`);
+    for (const [id,v] of Object.entries(r.slips)){const got=S.check(s,String(v),sys);assert.deepEqual([got.verdict,got.slip],['wrong',id],`${q}: ${v} is ${id} (${sys})`);slipsSeen[id]=(slipsSeen[id]||0)+1;}
+   }
+   assert.ok(S.leaksSchool(s,`The answer is ${r.truth}.`),`the answer leaks: ${q}`);assert.ok(!S.leaksSchool(s,q),`the question does not: ${q}`);assert.ok(!S.leaksSchool(s,S.withheldSchool(s)),'the withheld line leaks nothing');
+   assert.deepEqual(S.specFromQuestion(q),s,`${q} reads back to its spec`);
+   assert.ok(T.flatten(T.parseMath(q)).includes('right-angled'));
+   seen.add(JSON.stringify(s));
+  }
+  counts[tier]=seen.size;
+ }
+ console.log(`# M2b GENERATOR Pythagoras distinct specs over seeds 1..300: tier 1 ${counts[1]}, tier 2 ${counts[2]}; units ${[...units].sort()}`);
+ assert.ok(counts[1]>=60&&counts[2]>=150,'seeds spread');
+ assert.deepEqual([...units].sort(),['cm','m','mm']);
+ assert.deepEqual(Object.keys(slipsSeen).sort(),[...S.SCHOOL_UNIT_SLIPS.pythagoras].sort());
+ for (const bad of [-1,1.5,NaN,'1',null,undefined,2**32]) assert.equal(S.genPythagoras(bad,1),null);
+ for (const bad of [0,3,'1',null,1.5]) assert.equal(S.genPythagoras(1,bad),null);
+});
+test('M2b Pythagoras: the unit has a withheld line with no digit or number word, its slips carry no value, and nothing here is on the path or in the generators yet',()=>{
+ const line=S.SCHOOL_WITHHELD.pythagoras;assert.ok(line&&!/\d/.test(line));
+ assert.equal(S.withheldSchool(PA),line);assert.equal(S.withheldSchool(PH),line);
+ for (const id of S.SCHOOL_UNIT_SLIPS.pythagoras){const sl=S.SCHOOL_SLIPS.find((x)=>x.id===id);assert.ok(sl&&!/\d/.test(sl.name+sl.says+sl.points)&&/^[A-Z][^]*\.$/.test(sl.says),id);}
+ for (const sh of ['pythagoras']) assert.ok(S.SCHOOL_SHAPES.includes(sh));
+ assert.equal(S.slipValue(PA,'pyth-sides-added'),'14');assert.equal(S.slipValue(PA,'pyth-no-root'),'100');assert.equal(S.slipValue(PA,'pyth-squares-added'),null,'a longest-side item shows no squares-added slip');
+ assert.equal(S.slipValue(PB,'pyth-squares-added'),'136');assert.equal(S.slipValue(PB,'area-no-half'),null,'another unit\'s slip');
+ assert.equal(S.slipValue(py('longest 6 7'),'pyth-no-root'),null,'a spec that is not well formed shows nothing');
+ assert.ok(Object.keys(S.GCSE_GENERATORS).includes('pythagoras'));
+});
+test('M2b PURITY Pythagoras: random strings through check and leaksSchool never throw and give the same answer twice',()=>{
+ let seed=2024;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
+ const alphabet=['0','1','2','4','6','8','.',',',' ','%','/','-','x','=','cm','m','mm','cm2','metres','√','²','^2',':','and','or','The answer is ','square root of '];
+ for (let i=0;i<300;i++){
+  let s='';const len=Math.floor(rnd()*14);for(let k=0;k<len;k++)s+=alphabet[Math.floor(rnd()*alphabet.length)];
+  for (const sp of [PA,PB,PC,PD]){
+   for (const sys of S.SCHOOL_SYSTEMS){const v=S.check(sp,s,sys);assert.ok(['right','wrong','unsure'].includes(v.verdict));assert.deepEqual(S.check(sp,s,sys),v);}
+   const l=S.leaksSchool(sp,s);assert.equal(typeof l,'boolean');assert.equal(S.leaksSchool(sp,s),l);
+  }
+  const got=S.specFromQuestion(s);assert.ok(got===null||S.wellFormed(got).ok);
+ }
+});
+test('M2b typeset: a hyphen between two words stays a hyphen, and a minus between numbers or letters is still a minus',()=>{
+ const kinds=(line)=>T.parseMath(line).filter((x)=>x.t==='bin'||x.v==='-').map((x)=>`${x.t}:${x.v}`);
+ assert.deepEqual(kinds('A right-angled triangle'),['ord:-']);assert.deepEqual(kinds('well-known and right-angled'),['ord:-','ord:-']);
+ assert.deepEqual(kinds('6 - 4'),['bin:−']);assert.deepEqual(kinds('x-y'),['bin:−']);assert.deepEqual(kinds('x - 4'),['bin:−']);assert.deepEqual(kinds('right - angled'),['bin:−']);
+ assert.equal(T.flatten(T.parseMath('A right-angled triangle')),'A right-angled triangle');
+});
+
+// ------------------------------------------------------------------ v2 M2b: the probability of an event (a single experiment)
+const pb=(expr)=>({shape:'probability',expr});
+const QA=pb('bag red 3, blue 5, green 2 ask red');          // 3/10. count 3; part over rest 3/7; one over the colours 1/3
+const QB=pb('bag red 3, blue 5, green 2 ask not red');      // 7/10. count 7; part over rest 7/3; one over the colours 1/3; the event's own 3/10
+const QC=pb('bag red 3, blue 5, green 2 ask red or blue');  // 8/10 = 4/5. count 8; part over rest 8/2 = 4; one over the colours 1/3
+const QD=pb('complement red 0.35');                         // 0.65 = 13/20. the event's own 0.35
+const QE=pb('complement blue 35%');                         // 65%. the event's own 35%
+const QF=pb('bag red 3, blue 7 ask red');                   // 3/10. count 3; part over rest 3/7; one over the colours 1/2
+const QG=pb('bag red 4, blue 4, green 4 ask red');          // 1/3: one over the colours IS the answer, so that slip is not used. count 4; part over rest 4/8 = 1/2
+const QH=pb('bag red 1, blue 3, yellow 4, white 2 ask yellow'); // 4/10 = 2/5. count 4; part over rest 4/6 = 2/3; one over the colours 1/4
+const QI=pb('bag red 5, blue 3 ask not red');               // 3/8. count 3; part over rest 3/5; one over the colours 1/2; the event's own 5/8
+const QJ=pb('bag red 3, blue 1 ask red');                   // 3/4. count 3 and part over rest 3/1 are the same value: neither is used. one over the colours 1/2
+const QK=pb('complement green 5%');                         // 95%. the event's own 5%
+const QL=pb('complement pink 0.05');                        // 0.95
+const QM=pb('complement red 0.4');                          // 0.6. the event's own 0.4
+const PROB_SPELLINGS=[
+ // 3/10: any equal fraction (unsimplified too), decimal in the system's mark, or percent
+ [QA,'3/10','uk','right'],[QA,'6/20','uk','right'],[QA,'30/100','uk','right'],[QA,'3 / 10','uk','right'],[QA,'0.3','uk','right'],[QA,'0.30','us','right'],[QA,'0,3','cz','right'],[QA,'0,3','de','right'],[QA,'30%','uk','right'],[QA,'30 %','us','right'],[QA,'30 percent','uk','right'],[QA,'x = 3/10','uk','right'],[QA,'= 0.3','uk','right'],
+ [QA,'3','uk','wrong','prob-count-alone'],[QA,'3/7','uk','wrong','prob-part-over-rest'],[QA,'1/3','uk','wrong','prob-one-over-colours'],[QA,'0.33','uk','wrong','prob-one-over-colours'],[QA,'33%','uk','wrong','prob-one-over-colours'],
+ [QA,'7/10','uk','wrong'],[QA,'0.7','uk','wrong'],[QA,'30','uk','wrong'],[QA,'1.3','uk','wrong'],[QA,'-0.3','uk','wrong'],[QA,'13/10','uk','wrong'],[QA,'1 3/10','uk','wrong'],[QA,'300%','uk','wrong','prob-count-alone'],[QA,'0.31','uk','wrong'],
+ [QA,'3:10','uk','unsure'],[QA,'3:7','uk','unsure'],[QA,'5:10','uk','unsure'],[QA,'3 out of 10','uk','unsure'],[QA,'3 in 10','uk','unsure'],[QA,'three tenths','uk','unsure'],[QA,'','uk','unsure'],[QA,'0,3','uk','unsure'],[QA,'0.3 cm','uk','unsure'],[QA,'about 0.3','uk','unsure'],[QA,'3/10 or 7/10','uk','unsure'],
+ // not red: 7/10
+ [QB,'7/10','uk','right'],[QB,'0.7','uk','right'],[QB,'70%','uk','right'],[QB,'14/20','uk','right'],[QB,'0,7','cz','right'],[QB,'7','uk','wrong','prob-count-alone'],[QB,'7/3','uk','wrong','prob-part-over-rest'],[QB,'1/3','uk','wrong','prob-one-over-colours'],[QB,'3/10','uk','wrong','prob-own'],[QB,'0.3','uk','wrong','prob-own'],[QB,'30%','uk','wrong','prob-own'],[QB,'0.07','uk','wrong'],[QB,'7:10','uk','unsure'],
+ // red or blue: 4/5
+ [QC,'4/5','uk','right'],[QC,'8/10','uk','right'],[QC,'0.8','uk','right'],[QC,'80%','uk','right'],[QC,'3/10 + 5/10','uk','unsure'],[QC,'8','uk','wrong','prob-count-alone'],[QC,'4','uk','wrong','prob-part-over-rest'],[QC,'1/3','uk','wrong','prob-one-over-colours'],[QC,'0.5','uk','wrong'],[QC,'8:10','uk','unsure'],
+ // the complement of a stated 0.35
+ [QD,'0.65','uk','right'],[QD,'13/20','uk','right'],[QD,'65/100','uk','right'],[QD,'65%','uk','right'],[QD,'0,65','de','right'],[QD,'0.35','uk','wrong','prob-own'],[QD,'35%','uk','wrong','prob-own'],[QD,'7/20','uk','wrong','prob-own'],[QD,'0.6','uk','unsure'],[QD,'0.75','uk','wrong'],[QD,'1.35','uk','wrong'],[QD,'65','uk','wrong'],
+ // the complement of a stated 35%
+ [QE,'65%','uk','right'],[QE,'0.65','uk','right'],[QE,'13/20','uk','right'],[QE,'35%','uk','wrong','prob-own'],[QE,'0.35','uk','wrong','prob-own'],[QE,'65','uk','wrong'],
+ // two colours, 3 red and 7 blue
+ [QF,'3/10','uk','right'],[QF,'0.3','uk','right'],[QF,'3','uk','wrong','prob-count-alone'],[QF,'3/7','uk','wrong','prob-part-over-rest'],[QF,'1/2','uk','wrong','prob-one-over-colours'],[QF,'0.5','uk','wrong','prob-one-over-colours'],[QF,'50%','uk','wrong','prob-one-over-colours'],
+ // three equal colours: 1/3 is the answer, not a slip
+ [QG,'1/3','uk','right'],[QG,'4/12','uk','right'],[QG,'4','uk','wrong','prob-count-alone'],[QG,'1/2','uk','wrong','prob-part-over-rest'],[QG,'0.33','uk','unsure'],[QG,'33%','uk','unsure'],[QG,'0.3333','uk','unsure'],[QG,'0.35','uk','wrong'],
+ // four colours, yellow 4 of 10
+ [QH,'2/5','uk','right'],[QH,'4/10','uk','right'],[QH,'0.4','uk','right'],[QH,'40%','uk','right'],[QH,'4','uk','wrong','prob-count-alone'],[QH,'2/3','uk','wrong','prob-part-over-rest'],[QH,'1/4','uk','wrong','prob-one-over-colours'],[QH,'0.25','uk','wrong','prob-one-over-colours'],[QH,'25%','uk','wrong','prob-one-over-colours'],
+ // not red, two colours, 3 of 8 blue
+ [QI,'3/8','uk','right'],[QI,'0.375','uk','right'],[QI,'37.5%','uk','right'],[QI,'3','uk','wrong','prob-count-alone'],[QI,'3/5','uk','wrong','prob-part-over-rest'],[QI,'0.6','uk','wrong','prob-part-over-rest'],[QI,'1/2','uk','wrong','prob-one-over-colours'],[QI,'5/8','uk','wrong','prob-own'],[QI,'0.625','uk','wrong','prob-own'],[QI,'0.38','uk','unsure'],
+ // 3 red and 1 blue: 3 is the count AND the part over the rest, so neither names a slip
+ [QJ,'3/4','uk','right'],[QJ,'0.75','uk','right'],[QJ,'75%','uk','right'],[QJ,'3','uk','wrong'],[QJ,'3/1','uk','wrong'],[QJ,'1/2','uk','wrong','prob-one-over-colours'],[QJ,'1/4','uk','wrong'],
+ // small stated probabilities
+ [QK,'95%','uk','right'],[QK,'0.95','uk','right'],[QK,'19/20','uk','right'],[QK,'5%','uk','wrong','prob-own'],[QK,'0.05','uk','wrong','prob-own'],[QL,'0.95','uk','right'],[QL,'0.05','uk','wrong','prob-own'],[QL,'95%','uk','right'],
+ [QM,'0.6','uk','right'],[QM,'3/5','uk','right'],[QM,'60%','uk','right'],[QM,'0.4','uk','wrong','prob-own'],[QM,'2/5','uk','wrong','prob-own'],
+];
+const PROB_LEAKS=[
+ [QA,'It is 3/10.'],[QA,'30%'],[QA,'3 out of 10'],[QA,'3 over 10'],[QA,'0.3'],[QA,'Three tenths.'],[QA,'3 ÷ 10'],[QA,'The chance is 6/20.'],[QA,'It is 30 out of 100.'],[QA,'Nought point three.'],
+ [QB,'7 out of 10'],[QB,'The answer is 7/10.'],[QB,'1 - 3/10 = 7/10'],[QB,'70%'],[QB,'0.7'],[QB,'Seven tenths.'],
+ [QC,'8 out of 10'],[QC,'4/5'],[QC,'80%'],[QC,'3/10 + 5/10 = 8/10'],[QC,'It is 0.8.'],
+ [QD,'The answer is 0.65'],[QD,'1 - 0.35 = 0.65'],[QD,'65%'],[QD,'13/20'],[QD,'65 out of 100'],
+ [QE,'65%'],[QE,'100% - 35% = 65%'],[QE,'It is 0.65.'],[QH,'It is 2/5.'],[QH,'40%'],[QH,'4 out of 10'],[QI,'3 out of 8'],[QI,'0.375'],
+];
+const PROB_LEGIT=[
+ [QA,'Count the red counters: there are 3.'],[QA,'There are 10 counters in all.'],[QA,'Count all the counters first.'],[QA,'Divide the red counters by all the counters.'],[QA,'A probability is a number from 0 to 1.'],[QA,'Write it as a fraction, a decimal or a percent.'],[QA,'3 + 5 + 2 = 10'],[QA,'The bottom is the number of counters in all.'],[QA,'Do not compare the red counters with the other counters.'],
+ [QB,'1 - 3/10'],[QB,'Count the counters that are not red.'],[QB,'The probability of red is 3/10.'],[QB,'Take the probability of red away from 1.'],[QB,'3 + 5 + 2 = 10'],[QB,'5 + 2 = 7'],
+ [QC,'3/10 + 5/10'],[QC,'Add the red and the blue counters first.'],[QC,'3 + 5 = 8'],[QC,'There are 10 counters in all.'],[QC,'The probability of red is 3/10 and of blue 5/10.'],
+ [QD,'1 - 0.35'],[QD,'Take it away from 1.'],[QD,'The two probabilities add up to 1.'],[QD,'It is the chance that it does not happen.'],[QD,'Not red and red together make a whole.'],
+ [QE,'100% - 35%'],[QE,'The two percentages add up to 100%.'],[QE,'Take 35% away from the whole.'],
+ [QH,'Count the counters in all: 1 + 3 + 4 + 2 = 10.'],[QH,'There are 4 yellow counters.'],[QI,'There are 8 counters in all.'],[QI,'5 + 3 = 8'],
+];
+const PROB_PRINTS=[
+ [QA,'A bag has 3 red, 5 blue and 2 green counters. Find the probability that one taken at random is red.'],
+ [QB,'A bag has 3 red, 5 blue and 2 green counters. Find the probability that one taken at random is not red.'],
+ [QC,'A bag has 3 red, 5 blue and 2 green counters. Find the probability that one taken at random is red or blue.'],
+ [QD,'The probability that a spinner lands on red is 0.35. What is the probability it does not land on red?'],
+ [QE,'The probability that a spinner lands on blue is 35%. What is the probability it does not land on blue?'],
+ [QF,'A bag has 3 red and 7 blue counters. Find the probability that one taken at random is red.'],
+ [QH,'A bag has 1 red, 3 blue, 4 yellow and 2 white counters. Find the probability that one taken at random is yellow.'],
+ [QL,'The probability that a spinner lands on pink is 0.05. What is the probability it does not land on pink?'],
+];
+const PROB_BAD=[
+ [pb('bag red 3, blue 5 ask red or blue'),'nothing or a whole'],[pb('bag red 3, blue 5 ask not green'),'not in the bag'],[pb('bag red 3, blue 5 ask green'),'not in the bag'],[pb('bag red 3, blue 5 ask red or green'),'not in the bag'],[pb('bag red 3, blue 5 ask red or red'),'two different colours'],
+ [pb('bag red 10, blue 11 ask red'),'at most twenty'],[pb('bag red 3, red 4 ask red'),'two to four different colours'],[pb('bag red 3, blue 5, green 2, pink 4, black 1 ask red'),'cannot read'],[pb('bag red 3 ask red'),'cannot read'],[pb('bag red 0, blue 5 ask red'),'cannot read'],
+ [pb('bag red 3, grey 5 ask red'),'cannot read'],[pb('bag red 3, blue 5 ask'),'cannot read'],[pb('bag red 3, blue 5 ask red and blue'),'cannot read'],[pb('bag red 03, blue 5 ask red'),'cannot read'],[pb('bag red 3, blue 5 ask red then blue'),'cannot read'],
+ [pb('complement red 0.5'),'print its own answer'],[pb('complement red 50%'),'print its own answer'],[pb('complement red 0.40'),'does not end in a zero'],[pb('complement red 1'),'cannot read'],[pb('complement red 100%'),'cannot read'],[pb('complement red 0'),'cannot read'],[pb('complement red 1.5'),'cannot read'],
+ [pb('complement red 0.355'),'cannot read'],[pb('complement red 35'),'cannot read'],[pb('complement grey 0.35'),'cannot read'],[pb('complement 0.35'),'cannot read'],
+ [{...QA,unit:'cm'},'does not take'],[{...QA,form:'decimal'},'does not take'],[{...QA,answer:'3/10'},'no answer field'],[{...QA,to:'decimal'},'does not take'],
+];
+/** What a hand-worked reference says of a probability spec, as 'n/d' strings: the truth, one off, and each slip (an id left out when its value is the answer's or another slip's). */
+function probRef(s){
+ if(s.shape!=='probability')return null;
+ let m=/^complement (\w+) (?:0\.(\d+)|(\d+)%)$/.exec(s.expr);
+ if(m){const v=m[3]!==undefined?+m[3]:+m[2].padEnd(2,'0');return {kind:'comp',v,truth:`${100-v}/100`,off:`${101-v}/100`,slips:{'prob-own':`${v}/100`},nums:[v],colours:null};}
+ m=/^bag ((?:\w+ \d+)(?:, \w+ \d+){1,3}) ask (?:(\w+)|not (\w+)|(\w+) or (\w+))$/.exec(s.expr);if(!m)return null;
+ const bag=m[1].split(', ').map((x)=>x.split(' ')),cnt=Object.fromEntries(bag.map(([c,n])=>[c,+n])),tot=bag.reduce((a,[,n])=>a+ +n,0),k=bag.length;
+ const mode=m[2]?'colour':m[3]?'not':'or',ask=m[2]?[m[2]]:m[3]?[m[3]]:[m[4],m[5]],ev=ask.reduce((a,c)=>a+cnt[c],0),asked=mode==='not'?tot-ev:ev;
+ const val=(str)=>{const [a,b]=str.split('/').map(Number);return b===undefined?a:a/b;};
+ const truth=`${asked}/${tot}`,cands={'prob-count-alone':`${asked}`,'prob-part-over-rest':`${asked}/${tot-asked}`,'prob-one-over-colours':`1/${k}`};
+ if(mode==='not')cands['prob-own']=`${ev}/${tot}`;
+ const slips={};
+ for(const [id,str] of Object.entries(cands)){const v=val(str);if(Math.abs(v-val(truth))>1e-12&&!Object.entries(cands).some(([id2,s2])=>id2!==id&&Math.abs(val(s2)-v)<1e-12))slips[id]=str;}
+ return {kind:mode,tot,k,truth,off:`${asked+1}/${tot}`,slips,nums:[...bag.map(([,n])=>+n)],colours:bag.map(([c])=>c)};
+}
+test(`M2b SPELLINGS probability: ${PROB_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{spellings('PROB_SPELLINGS',PROB_SPELLINGS,'probability');});
+test(`M2b LEAKS probability: ${PROB_LEAKS.length} hints that give the answer away are refused; ${PROB_LEGIT.length} legit hints pass`,()=>{
+ const missed=PROB_LEAKS.filter(([s,h])=>!S.leaksSchool(s,h)).map(([s,h])=>`${s.expr} | ${h}`);
+ const flagged=PROB_LEGIT.filter(([s,h])=>S.leaksSchool(s,h)).map(([s,h])=>`${s.expr} | ${h}`);
+ console.log(`# M2b LEAKS probability: ${PROB_LEAKS.length} (missed ${missed.length}), LEGIT ${PROB_LEGIT.length} (flagged ${flagged.length})`);
+ assert.deepEqual(missed,[]);assert.deepEqual(flagged,[]);
+ for (const [s] of [...PROB_LEAKS,...PROB_LEGIT]) assert.equal(S.unitOf(s),'probability');
+});
+test('M2b question and wellFormed probability: one plain sentence, every number and colour kept through the typesetter, never the answer, read back to its spec; poor questions refused with a reason',()=>{
+ for (const [s,plain] of PROB_PRINTS){
+  assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
+  const q=S.question(s);assert.equal(q.plain,plain);assert.ok(!S.leaksSchool(s,q.plain),`the question itself is not a leak: ${q.plain}`);
+  for (const line of [q.plain,q.tex]){
+   let fr=0;T.walk(T.parseMath(line),(x)=>{if(x.t==='frac')fr++;});assert.equal(fr,0,`${line}: nothing is stacked`);
+   const flat=T.flatten(T.parseMath(line));
+   for (const d of s.expr.match(/\d+(?:\.\d+)?/g)) assert.ok(flat.includes(d),`${line} keeps ${d}: ${flat}`);
+   for (const c of s.expr.match(/\b(?:red|blue|green|yellow|white|black|orange|purple|pink)\b/g)) assert.ok(flat.includes(c),`${line} keeps ${c}: ${flat}`);
+   if(s.expr.includes('%'))assert.ok(flat.includes('%'),`${line} keeps its percent sign: ${flat}`);
+  }
+  assert.deepEqual(S.specFromQuestion(q.plain),s,`${q.plain} reads back to its spec`);
+ }
+ for (const [s,why] of PROB_BAD){const w=S.wellFormed(s);assert.equal(w.ok,false,JSON.stringify(s));assert.ok(w.why.includes(why),`${JSON.stringify(s)}: ${w.why}`);}
+ for (const t of ['A bag has 3 red, 5 blue and 2 green counters. Find the probability that two taken at random are red.','A bag has 3 red, 5 blue and 2 green counters. Find the probability that one taken at random is grey.',
+  'A bag has 3 red and 5 blue counters. One is taken and not put back. Find the probability that the next one is red.','A bag has three red and five blue counters. Find the probability that one taken at random is red.',
+  'A bag has 3 red counters. Find the probability that one taken at random is red.','A bag has 3 red and 5 blue counters. Find the probability that one taken at random is red or blue.',
+  'A bag has 3 red, 5 blue and 2 green counters. What is the chance of red?','The probability that a spinner lands on red is 0.35. What is the probability it does not land on blue?',
+  'The probability that a spinner lands on red is 0.5. What is the probability it does not land on red?','The probability that a spinner lands on red is 35. What is the probability it does not land on red?',
+  'The probability that a spinner lands on red is 3/10. What is the probability it does not land on red?','The probability that a spinner lands on red is 1.35. What is the probability it does not land on red?',
+  'A bag has 11 red, 5 blue and 5 green counters. Find the probability that one taken at random is red.'])
+  assert.equal(S.specFromQuestion(t),null,t);
+ assert.deepEqual(S.specFromQuestion('a bag has 3 red and 7 blue counters.  find the probability that one taken at random is red'),QF,'lower case, two spaces');
+});
+test('M2b GENERATOR probability: seeds 1..300 for tiers 1 and 2 give well-formed, distinct items of the documented tier, judged right by a reference, every slip of the kind reachable',()=>{
+ const counts={},kinds={1:{},2:{}},forms={},slipsSeen={},colourCounts={};
+ for (const tier of [1,2]){
+  const seen=new Set();
+  for (let seed=1;seed<=300;seed++){
+   const s=S.genProbability(seed,tier);
+   assert.ok(s,`seed ${seed} tier ${tier}`);assert.deepEqual(S.genProbability(seed,tier),s,'same seed, same spec');
+   assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));assert.equal(S.unitOf(s),'probability');assert.equal(s.unit,undefined);
+   const r=probRef(s);assert.ok(r,JSON.stringify(s));kinds[tier][r.kind]=(kinds[tier][r.kind]||0)+1;
+   const [tn,td]=r.truth.split('/').map(Number);assert.ok(tn>0&&tn<td,`never nothing or a whole: ${s.expr}`);
+   if(r.kind==='comp'){assert.equal(tier,2);assert.ok(r.v%5===0&&r.v>=5&&r.v<=95&&r.v!==50,s.expr);forms[s.expr.includes('%')?'percent':'decimal']=1;assert.notEqual(r.v,100-r.v);}
+   else{
+    assert.ok(r.tot<=20&&r.tot>=5&&r.k>=(tier===1?2:3)&&r.k<=4,`a bag of ${r.k} colours, ${r.tot} counters: ${s.expr}`);assert.ok(r.nums.every((n)=>n>=1&&n<=8),s.expr);
+    colourCounts[r.k]=(colourCounts[r.k]||0)+1;
+    if(tier===1)assert.equal(r.kind,'colour');else assert.ok(r.kind==='not'||r.kind==='or',s.expr);
+    if(tier===2)assert.ok(r.k>=3,'tier 2 bags hold three or four colours');
+   }
+   assert.equal(Object.keys(r.slips).length,{colour:3,not:4,or:3,comp:1}[r.kind],`every slip of the kind is reachable: ${s.expr}`);
+   const q=S.question(s).plain;
+   for (const sys of S.SCHOOL_SYSTEMS){
+    assert.equal(S.check(s,r.truth,sys).verdict,'right',`${q} = ${r.truth} (${sys})`);
+    assert.equal(S.check(s,r.off,sys).verdict,'wrong',`${q} != ${r.off} (${sys})`);
+    for (const [id,v] of Object.entries(r.slips)){const got=S.check(s,v,sys);assert.deepEqual([got.verdict,got.slip],['wrong',id],`${q}: ${v} is ${id} (${sys})`);slipsSeen[id]=(slipsSeen[id]||0)+1;}
+   }
+   assert.ok(S.leaksSchool(s,`The answer is ${r.truth}.`),`the answer leaks: ${q}`);assert.ok(!S.leaksSchool(s,q),`the question does not: ${q}`);assert.ok(!S.leaksSchool(s,S.withheldSchool(s)),'the withheld line leaks nothing');
+   assert.deepEqual(S.specFromQuestion(q),s,`${q} reads back to its spec`);
+   seen.add(JSON.stringify(s));
+  }
+  counts[tier]=seen.size;
+ }
+ console.log(`# M2b GENERATOR probability distinct specs over seeds 1..300: tier 1 ${counts[1]}, tier 2 ${counts[2]}; tier 2 kinds ${JSON.stringify(kinds[2])}; forms ${Object.keys(forms)}; colours ${JSON.stringify(colourCounts)}`);
+ assert.ok(counts[1]>=250&&counts[2]>=250,'seeds spread');
+ assert.deepEqual(Object.keys(kinds[2]).sort(),['comp','not','or']);assert.deepEqual(Object.keys(forms).sort(),['decimal','percent']);
+ for (const kd of Object.values(kinds[2])) assert.ok(kd>=90,'the three tier-2 kinds mix in thirds');
+ assert.deepEqual(Object.keys(slipsSeen).sort(),[...S.SCHOOL_UNIT_SLIPS.probability].sort());
+ for (const bad of [-1,1.5,NaN,'1',null,undefined,2**32]) assert.equal(S.genProbability(bad,1),null);
+ for (const bad of [0,3,'1',null,1.5]) assert.equal(S.genProbability(1,bad),null);
+});
+test('M2b probability: the unit has a withheld line with no digit or number word, its slips carry no value, and it is not in the generators yet',()=>{
+ const line=S.SCHOOL_WITHHELD.probability;assert.ok(line&&!/\d/.test(line));
+ for (const s of [QA,QB,QC,QD]) assert.equal(S.withheldSchool(s),line);
+ assert.notEqual(line,S.SCHOOL_WITHHELD.pythagoras);
+ for (const id of S.SCHOOL_UNIT_SLIPS.probability){const sl=S.SCHOOL_SLIPS.find((x)=>x.id===id);assert.ok(sl&&!/\d/.test(sl.name+sl.says+sl.points)&&/^[A-Z][^]*\.$/.test(sl.says),id);}
+ assert.ok(S.SCHOOL_SHAPES.includes('probability'));
+ assert.equal(S.slipValue(QA,'prob-count-alone'),'3');assert.equal(S.slipValue(QA,'prob-part-over-rest'),'3/7');assert.equal(S.slipValue(QA,'prob-own'),null,'an event question shows no own-probability slip');
+ assert.equal(S.slipValue(QB,'prob-own'),'0.3');assert.equal(S.slipValue(QD,'prob-own'),'0.35');assert.equal(S.slipValue(QD,'prob-count-alone'),null);
+ assert.equal(S.slipValue(QG,'prob-one-over-colours'),null,'three equal colours: one over the colours is the answer');assert.equal(S.slipValue(QJ,'prob-count-alone'),null,'the count and the part over the rest are one value: neither is used');
+ assert.equal(S.slipValue(pb('bag red 3, blue 5 ask red or blue'),'prob-count-alone'),null,'a spec that is not well formed shows nothing');
+ assert.deepEqual(Object.keys(S.GCSE_GENERATORS).sort(),['probability','pythagoras']);
+ assert.deepEqual(S.PROB_COLOURS.length,9);
+});
+test('M2b PURITY probability: random strings through check and leaksSchool never throw and give the same answer twice',()=>{
+ let seed=4242;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
+ const alphabet=['0','1','2','3','5','7','.',',',' ','%','/','-',':','=','x','out of','in','and','or','percent','The answer is ','three','tenths','1/2','0.5'];
+ for (let i=0;i<300;i++){
+  let s='';const len=Math.floor(rnd()*14);for(let k=0;k<len;k++)s+=alphabet[Math.floor(rnd()*alphabet.length)];
+  for (const sp of [QA,QB,QC,QD,QE]){
+   for (const sys of S.SCHOOL_SYSTEMS){const v=S.check(sp,s,sys);assert.ok(['right','wrong','unsure'].includes(v.verdict));assert.deepEqual(S.check(sp,s,sys),v);}
+   const l=S.leaksSchool(sp,s);assert.equal(typeof l,'boolean');assert.equal(S.leaksSchool(sp,s),l);
+  }
+  const got=S.specFromQuestion(s);assert.ok(got===null||S.wellFormed(got).ok);
+ }
+});
+
+// ------------------------------------------------------------------ X1b / X1c: number words, read by the leak checks only
+const QW=pb('bag red 3, blue 10 ask red');   // 3/13
+test('X1b number words: Czech fraction words leak on a 3/13 item, with and without diacritics; a clean Czech line passes',()=>{
+ for (const h of ['Pravdepodobnost je tri trinactiny.','Pravděpodobnost je tři třináctiny.','Je to tri trinactiny.','Pravděpodobnost je 3 třináctiny.','Probability is three thirteenths.'])
+  assert.equal(S.leaksSchool(QW,h),true,h);
+ for (const h of ['Spočítej všechny kuličky v pytlíku.','Nejdřív spočítej červené kuličky: jsou tři.','V pytlíku je třináct kuliček.','Pravděpodobnost je podíl červených kuliček a všech kuliček.'])
+  assert.equal(S.leaksSchool(QW,h),false,h);
+});
+test('X1b number words: the closed table reads Czech cardinals, tens, genders and fraction words',()=>{
+ const N=require(path.join(root,'src/lib/rules/numberWords.ts'));
+ const rows=[['jedna',"1"],['jeden',"1"],['jedno',"1"],['dva',"2"],['dvě',"2"],['dve',"2"],['čtyři',"4"],['dvacet',"20"],['dvacet jedna',"21"],['devadesát',"90"],['tři čtvrtiny',"3/4"],['tri ctvrtiny',"3/4"],
+  ['dvě třetiny',"2/3"],['pět šestin',"5/6"],['sedm dvacetin',"7/20"],['polovina',"1/2"],['jedna třetina',"1/3"],['Čtvrtina',"1/4"]];
+ for (const [w,f] of rows) assert.equal(N.figuresOfCzech(w),f,w);
+ assert.equal(N.figuresOfCzech('Draw a diagram first.'),'Draw a diagram first.');
+ assert.equal(N.EN_CARD.twenty,20);assert.equal(N.EN_ORD.twentieth,20);
+});
+test('X1c number words: three quarters, tři čtvrtiny and tri ctvrtiny given as the answer to a 3/4 item settle nothing',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ for (const sys of ['uk','cz'])for (const w of ['three quarters','tři čtvrtiny','tri ctvrtiny','3 čtvrtiny','three-quarters']){
+  assert.equal(S.check(C,w,sys).verdict,'unsure',`${sys}: ${w}`);
+  const j=M.settleSpec(1,C,w,undefined,'t',sys);assert.ok(j===null||j.verdict==='unsure',`${sys}: ${w} settleSpec`);
+ }
+});
+
+// ------------------------------------------------------------------ X5: a spoken value settles only when the learner said it
+test('X5 figuresOfEnglish: one row per form',()=>{
+ const N=require(path.join(root,'src/lib/rules/numberWords.ts'));
+ const rows=[['I got four','I got 4'],['thirty-five','35'],['thirty five','35'],['eleven twelfths','11/12'],['3 quarters','3/4'],['a quarter','1/4'],['one third','1/3'],['half','1/2'],['nought','0'],
+  ['seven point one five','7.15'],['nought point five','0.5'],['two halves','2/2'],['Draw a diagram first.','Draw a diagram first.']];
+ for (const [w,f] of rows) assert.equal(N.figuresOfEnglish(w),f,`figuresOfEnglish: ${w}`);
+});
+test('X5 saidIn: a value the learner said is heard',()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const rows=[['I got four','4'],['eleven twelfths','11/12'],['jedenáct dvanáctin','11/12'],['one and five twelfths','1 5/12'],['nula celá pět','0,5'],['seven point one five','7.15'],
+  ['seven euros fifteen','€7.15'],['I made it thirty-five percent','35%'],['two to three','2:3'],['I got twenty-four and the other thirty-six','24 and 36'],
+  ['minus three','-3'],['six x plus two','6x + 2'],['x squared','x^2'],['two lots of three x plus one','2(3x+1)'],['I got sine x plus C','sin x + C'],['I got x + C','x + C']];
+ for (const [t,v] of rows) assert.equal(V.saidIn(v,t),true,`heard: ${t} / ${v}`);
+});
+test('X5b saidIn: a function name is heard only as a whole word, not inside another word',()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const no=[['nevím','e^x'],['I do not know, I just used the rule','e^x + C'],['I picked it from the list','pi'],['I stand by it','tan x + C'],['it cost me a lot','cos x + C'],['I was using it','sin x + C'],['I logged it','ln x + C'],['they are rooted','sqrt(x)']];
+ for (const [t,v] of no) assert.equal(V.saidIn(v,t),false,`X5b not heard inside a word: ${t} / ${v}`);
+ const yes=[['I got e to the x plus C','e^x + C'],['pi over 4','pi/4'],['natural log of seven over two','ln(7)/2'],['the square root of x','sqrt(x)'],['minus cos x plus C','-cos x + C'],['I got e^x + C','e^x + C']];
+ for (const [t,v] of yes) assert.equal(V.saidIn(v,t),true,`X5b heard as a word: ${t} / ${v}`);
+});
+test('X5b saidIn: an area unit is heard when the learner says square centimetres or square metres',()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const yes=[['twenty-eight square centimetres','28 cm2'],['28 čtverečních centimetrů','28 cm2'],['twenty-eight square metres','28 m²'],['twenty-eight sq cm','28 cm^2'],['twenty-eight centimetres squared','28 cm2'],['28 cm2','28 cm2']];
+ for (const [t,v] of yes) assert.equal(V.saidIn(v,t),true,`X5b area heard: ${t} / ${v}`);
+ const no=[['twenty-eight centimetres','28 cm2'],['twenty square centimetres','28 cm2'],['I got fourteen square centimetres','2'],['I took the square root','2']];
+ for (const [t,v] of no) assert.equal(V.saidIn(v,t),false,`X5b area not heard: ${t} / ${v}`);
+});
+test('X5 saidIn: a value the learner did not say fails closed',()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const rows=[['nevím, nějak jsem to odečetla','7/12','R2'],['I got five','4','R18'],['three','-3','minus'],['','4','empty transcript'],['I got four','','empty value'],
+  ['I got cos x','sin x + C','function'],['x plus C','x + C','spoken letters'],['seven','7/12','one side of a fraction']];
+ for (const [t,v,why] of rows) assert.equal(V.saidIn(v,t),false,`not heard (${why}): ${t} / ${v}`);
+ assert.equal(V.EXPLAIN_TRANSCRIPT_MAX,1000);
+});
+test('X6 saidIn: a value is not heard out of order or away from the answer',()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const rows=[['I took five sixths and one quarter and then I got lost','1/6','R2c'],['I took five sixths and one quarter and then I got lost','1/4','R2c'],['I got eleven twelfths','12/11','order'],
+  ['two x plus three equals eleven, I got five','3','before the cue'],['two x plus three equals eleven, I got five','11','before the cue'],
+  ['three quarters plus one sixth, I am not sure','3/6','pieced'],['three quarters plus one sixth, I am not sure','1/6','pieced'],['I am not sure, maybe e','e^x','letter x'],
+  ['what is two plus three','5','read from the question'],['I got stuck on the second one','2','a cue with no figure after it'],['seven plus two, then I got five','7','runs only before the last cue']];
+ for (const [t,v,why] of rows) assert.equal(V.saidIn(v,t),false,`X6 not heard (${why}): ${t} / ${v}`);
+});
+test("X6 saidIn: the learner's own answer is heard",()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const rows=[['two x plus three equals eleven, I got five','5'],['three quarters plus one sixth, I got eleven twelfths','11/12'],['vyšlo mi jedenáct dvanáctin','11/12'],['the answer is x squared','x^2'],
+  ['I got three x squared plus two x plus C','3x^2 + 2x + C'],['twelve plus three, my answer is fifteen','15'],['vychází mi sedm','7']];
+ for (const [t,v] of rows) assert.equal(V.saidIn(v,t),true,`X6 heard: ${t} / ${v}`);
+ assert.ok(V.ANSWER_CUES.includes('got')&&V.ANSWER_CUES.includes('vychazi')&&!V.ANSWER_CUES.includes('is')&&!V.ANSWER_CUES.includes('equals'));
+});
+
+test('MK13: a right answer written with its name is read (MB-B25)',()=>{
+ const R=(w,sys='uk')=>S.readNumber(w,sys);
+ const reads=[['c = 34 mm','uk',34,1,'integer','mm'],['c = 34','uk',34,1,'integer'],['C=34','uk',34,1,'integer'],['b = 40 cm','uk',40,1,'integer','cm'],
+  ['P = 3/13','uk',3,13,'fraction'],['P(A) = 3/13','uk',3,13,'fraction'],['p(red)=1/4','uk',1,4,'fraction']];
+ for (const [w,sys,n,d,form,unit] of reads){
+  const got=R(w,sys);
+  assert.ok(got&&got.kind==='number'&&got.value.n===n&&got.value.d===d&&got.form===form&&(got.unit??null)===(unit??null),`reads ${w}: ${JSON.stringify(got)}`);
+ }
+ for (const w of ['ab = 5','AB = 13 cm','|AB| = 13','v1 = 5','c = a = 5','y = 2x + 3','P() = 1/2','P(A)(B) = 1/2']) assert.equal(R(w),null,`unsure ${w}`);
+ for (const w of ['c = 10','c = 10 cm','C = 10cm']) assert.equal(S.check(PA,w,'uk').verdict,'right',`PA ${w}`);
+ for (const w of ['P = 3/10','P(A) = 3/10','p(red) = 0.3']) assert.equal(S.check(QA,w,'uk').verdict,'right',`QA ${w}`);
+ assert.equal(S.check(S1,'c = 9/12','uk').verdict,'unsure');
+ assert.equal(S.check(S1,'c = 3/4','uk').verdict,'right');
+});
+
+// ------------------------------------------------------------------ MB-B4: a question in the learner's own decimals and money
+test('MB-B4 question(spec, system): a comma system prints the decimal comma; us and uk print the point as before',()=>{
+ const D=cs('38.2 - 18.38');
+ assert.equal(S.question(D,'cz').plain,'Work out 38,2 - 18,38.');
+ assert.equal(S.question(D,'de').plain,'Work out 38,2 - 18,38.');
+ assert.equal(S.question(D,'cz').tex,'\\text{Work out } 38{,}2 - 18{,}38.');
+ for (const sys of ['uk','us',undefined,'xx']) assert.equal(S.question(D,sys).plain,'Work out 38.2 - 18.38.',String(sys));
+ // a percent stands after a no-break space in cz and de (34 %), the decimal comma in it too
+ assert.equal(S.question({shape:'percent-of',expr:'12.5% of 80'},'cz').plain,'Find 12,5\u00a0% of 80.');
+ assert.equal(S.question({shape:'percent-of',expr:'12.5% of 80'},'uk').plain,'Find 12.5% of 80.');
+ assert.equal(S.question({shape:'probability',expr:'complement red 0.35'},'cz').plain,'The probability that a spinner lands on red is 0,35. What is the probability it does not land on red?');
+});
+test('MB-B4 question(spec, system): money in Kč after the amount with a no-break space; € after it in a comma system; £ before it in uk',()=>{
+ const K=cs('12.12 × 5',{unit:'Kč'}),P=cs('12.12 × 5',{unit:'£'}),E=cs('4.35 + 2.80',{unit:'€'});
+ assert.equal(S.question(K,'cz').plain,'Work out 12,12\u00a0Kč × 5.');
+ assert.equal(S.question(K,'cz').tex,'\\text{Work out } 12{,}12~\\text{Kč} \\times 5.');
+ assert.equal(S.question(P,'uk').plain,'Work out £12.12 × 5.');
+ assert.equal(S.question(E,'de').plain,'Work out 4,35\u00a0€ + 2,80\u00a0€.');
+ assert.equal(S.question(E,'uk').plain,'Work out €4.35 + €2.80.');
+ assert.equal(S.question({shape:'percent-change',expr:'increase 400 by 34%',unit:'Kč'},'cz').plain,'Increase 400\u00a0Kč by 34\u00a0%.');
+ assert.equal(S.question({shape:'rate',expr:'5 pens cost 3.50, 8',unit:'Kč'},'cz').plain,'5 pens cost 3,50\u00a0Kč. What do 8 pens cost?');
+ assert.equal(S.question({shape:'ratio',expr:'60 in 2:3',unit:'Kč'},'cz').plain,'Share 60\u00a0Kč in the ratio 2:3.');
+ assert.equal(S.question({shape:'fraction-of',expr:'3/4 of 60',unit:'Kč'},'cz').plain,'Find 3/4 of 60\u00a0Kč.');
+ assert.ok(S.wellFormed({shape:'rate',expr:'5 pens cost 3.50, 8',unit:'Kč'}).ok,'a cost in Kč is a rate the desk sets');
+});
+test("MB-B4 generators: money is the system's own (Kč cz, € de, £ uk), us and no system as drawn; every printed question reads back to its spec",()=>{
+ const own={cz:'Kč',de:'€',uk:'£'};
+ for (const sys of ['cz','de','uk','us']) for (const [id,g] of Object.entries(S.SCHOOL_GENERATORS)) for (const tier of [1,2]) for (let seed=0;seed<60;seed++){
+  const spec=g(seed,tier,sys),drawn=g(seed,tier);
+  if (!spec) continue;
+  assert.ok(S.wellFormed(spec).ok,`${sys} ${id} well formed`);
+  assert.equal(spec.expr,drawn.expr,`${sys} ${id}: the numbers are the generator's`);
+  if (own[sys] && ['€','£','$'].includes(drawn.unit)) assert.equal(spec.unit,own[sys],`${sys} ${id} ${drawn.unit}`);
+  else assert.equal(spec.unit,drawn.unit,`${sys} ${id} unit as drawn`);
+  const q=S.question(spec,sys);
+  if (sys==='cz'||sys==='de') assert.ok(!/\d\.\d/.test(q.plain),`${sys} no decimal point: ${q.plain}`);
+  assert.deepEqual(S.specFromQuestion(q.plain,sys),spec,`${sys}: ${q.plain} reads back`);
+  // the leak check reads the system-free print (items.ts): the same numbers, no comma or no-break space to split at
+  assert.equal(S.leaksSchool(spec,S.question(spec).plain),false,`${sys}: ${q.plain} does not state its answer`);
+  if (S.workedAnswer(drawn,'uk')) assert.ok(S.workedAnswer(spec,sys),`${sys}: ${q.plain} has a worked answer check marks right`);
+ }
+});
+test('MB-B4 readNumber and check: Kč is a unit; cm squared, sq cm and square cm are cm2; liber stays unsure',()=>{
+ const r=S.readNumber('536 Kč','cz');assert.ok(r&&r.value.n===536&&r.unit==='Kč');
+ assert.equal(S.readNumber('60,60\u00a0Kč','cz').unit,'Kč');assert.equal(S.readNumber('12 korun','cz').unit,'Kč');
+ assert.equal(S.readNumber('536 liber','cz'),null);
+ for (const w of ['28 cm squared','28 sq cm','28 square cm','28 cm2']) assert.equal(S.readNumber(w,'uk').unit,'cm2',w);
+ for (const w of ['28 m squared','28 sq m','28 square m']) assert.equal(S.readNumber(w,'uk').unit,'m2',w);
+ const AR={shape:'area',expr:'rectangle 7 by 4',unit:'cm2'};
+ for (const w of ['28 cm squared','28 sq cm','28 square cm']) assert.equal(S.check(AR,w,'uk').verdict,'right',w);
+ assert.equal(S.check(AR,'28 cm','uk').verdict,'unsure');
+ const K=cs('12.12 × 5',{unit:'Kč'});
+ for (const w of ['60,60 Kč','60,6 Kč','60,60\u00a0Kč','60,60']) assert.equal(S.check(K,w,'cz').verdict,'right',w);
+ assert.equal(S.check(K,'60,60 €','cz').verdict,'unsure','another currency is unsure, never converted');
+ assert.equal(S.workedAnswer(K,'cz'),'60,60\u00a0Kč');
+ assert.equal(S.workedAnswer(cs('12.12 × 5',{unit:'£'}),'uk'),'£60.60');
+ // the readers take a sign after the amount as worksheets print it
+ assert.deepEqual(S.specFromQuestion('Work out 4,35 Kč + 2,80 Kč.','cz'),cs('4.35 + 2.80',{unit:'Kč'}));
+ assert.deepEqual(S.specFromQuestion('Work out 3.45 € × 4.','de'),cs('3.45 × 4',{unit:'€'}));
+ assert.deepEqual(S.specFromQuestion('Work out €4.35 + €2.80.'),cs('4.35 + 2.80',{unit:'€'}));
+ assert.deepEqual(S.specFromQuestion('5 pens cost 3,50 Kč. What do 8 pens cost?','cz'),{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'Kč'});
 });

@@ -2,6 +2,7 @@ package dev.telestrator.tv.transport
 
 import android.content.Context
 import android.util.Log
+import dev.telestrator.core.PairingUrl
 import io.ktor.http.ContentType
 import io.ktor.server.application.call
 import io.ktor.server.application.install
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.net.BindException
 import java.net.Inet4Address
+import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.NetworkInterface
@@ -67,7 +69,11 @@ class LanTransport(
     private val _failure = MutableStateFlow<String?>(null)
     override val failure: StateFlow<String?> = _failure
 
-    override fun pairingUrl(): String = "http://${lanAddress()}:$port/?pin=$pin"
+    /**
+     * Null while the TV has no LAN address (Wi-Fi down or not yet joined): the card then says it is
+     * connecting, and the once-a-second poll puts the real address up as soon as there is one.
+     */
+    override fun pairingUrl(): String? = lanAddress()?.let { PairingUrl.of("http://$it:$port/", pin) }
 
     override fun start(scope: CoroutineScope, onPen: suspend (PenChannel) -> Unit) {
         val html = context.assets.open("companion/index.html").use { it.readBytes().decodeToString() }
@@ -83,7 +89,7 @@ class LanTransport(
         // engine's parent context is what makes that failure ours to handle.
         val engineFailures = CoroutineExceptionHandler { _, e ->
             if (e.isBindFailure()) Log.w(TAG, "port $port busy") else Log.e(TAG, "pen server failed", e)
-            _failure.value = e.message ?: e.toString()
+            _failure.value = failureMessage(e, port)
         }
 
         scope.launch(Dispatchers.IO) {
@@ -123,13 +129,13 @@ class LanTransport(
                 val cause = started.exceptionOrNull()
                 if (cause?.isBindFailure() != true) {
                     Log.e(TAG, "pen server failed to start", cause)
-                    _failure.value = cause?.message ?: "pen server failed to start"
+                    _failure.value = failureMessage(cause, port)
                     return@launch
                 }
                 Log.w(TAG, "port $port busy, retrying (${attempt + 1}/$BIND_ATTEMPTS)")
                 delay(BIND_RETRY_MS)
             }
-            _failure.value = "port $port is in use by something else"
+            _failure.value = portInUse(port)
             Log.e(TAG, "giving up: port $port is already in use")
         }
     }
@@ -139,14 +145,29 @@ class LanTransport(
         server = null
     }
 
-    /** First non-loopback IPv4 address; what goes into the QR code. */
-    private fun lanAddress(): String =
-        runCatching {
-            NetworkInterface.getNetworkInterfaces().toList()
-                .filter { it.isUp && !it.isLoopback }
-                .flatMap { it.inetAddresses.toList() }
-                .filterIsInstance<Inet4Address>()
-                .firstOrNull { !it.isLoopbackAddress }
-                ?.hostAddress
-        }.getOrNull() ?: "127.0.0.1"
+    /** What goes into the QR code. */
+    private fun lanAddress(): String? =
+        lanIpv4(
+            runCatching {
+                NetworkInterface.getNetworkInterfaces().toList()
+                    .filter { it.isUp && !it.isLoopback }
+                    .flatMap { it.inetAddresses.toList() }
+            }.getOrDefault(emptyList()),
+        )
 }
+
+/**
+ * First non-loopback IPv4 address among [addresses], or null when there is none. Never loopback:
+ * 127.0.0.1 in the QR would send the phone to itself, behind an invitation that looks valid.
+ */
+internal fun lanIpv4(addresses: List<InetAddress>): String? =
+    addresses.filterIsInstance<Inet4Address>().firstOrNull { !it.isLoopbackAddress }?.hostAddress
+
+/**
+ * What the pairing card says when the pen server cannot start ([PenTransport.failure]): one
+ * sentence a viewer can act on. The exception itself goes to the log, never to the television.
+ */
+internal fun failureMessage(e: Throwable?, port: Int): String =
+    if (e?.isBindFailure() == true) portInUse(port) else "The pen server could not start. Restart the app."
+
+private fun portInUse(port: Int) = "port $port is in use by something else"

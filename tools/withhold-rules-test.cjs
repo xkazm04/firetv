@@ -9,12 +9,9 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after,afterEach}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(os.tmpdir(),'desk-withhold-'));delete process.env.DESK_TEXT_ENGINE;
-after(()=>fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true}));
+after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
 
 const load=(f)=>require(path.join(root,'src/lib',f));
 const reg=load('engines/registry.ts');
@@ -107,16 +104,17 @@ test('case 5: expression items leak by form - an equivalent product or polynomia
 test('case 6 GUARD: the 24 recorded real maths hint stages pass the gate - 0 flagged, 0 re-asks',async()=>{
  const recorded=Object.entries(corpus.hints).filter(([,h])=>h.subject==='math');
  assert.equal(recorded.length,12);
- let flagged=0,calls=0;
+ let flagged=0,calls=0,tooLong=0;
  for(const [key,h] of recorded){
   const text=(page.items.find((i)=>i.key===key)??{text:h.q}).text;
-  for(const st of [h.hint1,h.hint2])for(const f of [st.hint,st.what_to_try_next])if(maths.leaks(text,f))flagged++;
+  for(const st of [h.hint1,h.hint2]){for(const f of [st.hint,st.what_to_try_next])if(maths.leaks(text,f))flagged++;if([st.hint,st.what_to_try_next].some((f)=>f.trim().split(/\s+/).length>25))tooLong++;}
   stub(h.hint1);const a=await hint('maths',text,{});calls+=seen.length;
   stub(h.hint2);const b=await hint('maths',text,{previous:a.hint});calls+=seen.length;
   assert.deepEqual([a.hint,a.next,b.hint,b.next],[h.hint1.hint,h.hint1.what_to_try_next,h.hint2.hint,h.hint2.what_to_try_next],key);
  }
  assert.equal(flagged,0,'the PoC judged 0/12 leaked (STUDY-DESK-POC-RESULTS.md:66)');
- assert.equal(calls,24,'no re-asks');
+ // MB-B33: a line over 25 words is re-asked once (the stub answers the same line, which is then shown); no stage is re-asked for a leak
+ assert.equal(calls,24+tooLong,'no leak re-asks; one length re-ask per stage over 25 words');
 });
 
 test('case 7 GUARD: method numbers are not answers, and a clean hint is still exactly one prompt',async()=>{
@@ -237,4 +235,110 @@ test('case 15: a line with "constructor" or "toString" in it is read as words - 
  for(const l of ['the constructor - 3 is not it','Constructor - 3','toString - 3','the valueOf - 3'])assert.equal(maths.leaks('x+5=2',l),false,`x+5=2 | ${l}`);
  assert.equal(maths.leaks('x+5=2','the constructor says minus 3'),true,'a real leak beside the word is still caught');
  assert.equal(maths.leaks('x+5=2','Look at the constructor of the line.'),false);
+});
+
+test('case 16: the lesson picker\'s "why" passes the hint path\'s own leak check (leaksLine) - word problems, cz notation and Calculus included; the route hands it the learner\'s system',async()=>{
+ const {pickLesson}=load('desk/pick.ts');
+ const {leaksLine}=load('desk/hint.ts');
+ const {readQuestion}=load('rules/kinds.ts');
+ const {LESSONS}=load('library/lessons.ts');
+ const lesson=LESSONS.find((l)=>l.id==='bAerID24QJ0');
+ const built=`Chosen because your problem needs this lesson's method: ${lesson.concepts[0]}.`;
+ const specsOf=(p,sys)=>{const r=readQuestion(p,sys);return {calc:r.calc??null,school:r.school??null,parts:r.parts??null};};
+ const WORD='Sara has some sweets. She gives away 7 and has 12 left. How many did she start with?';
+ const CZ='Řeš rovnici: 0,5x + 2 = 7';
+ const DER='Find the derivative of f(x) = x^2 at x = 3.';
+ const probes=[
+  {problem:WORD,sys:undefined,leak:'The answer is 19.',clean:'Chosen because your problem needs you to work backwards from what is left.'},
+  {problem:CZ,sys:'cz',leak:'Chosen because x = 10 here.',clean:'Chosen because your problem needs the same step on both sides.'},
+  {problem:DER,sys:undefined,leak:'The answer is 6.',clean:'Chosen because your problem needs the power rule.'},
+ ];
+ for(const {problem,sys,leak,clean} of probes){
+  const specs=specsOf(problem,sys);
+  assert.equal(leaksLine(problem,specs,leak,sys),true,`leaksLine flags: ${leak}`);
+  stub({lesson:lesson.id,why:leak});
+  const p=await pickLesson('maths',problem,sys);
+  assert.equal(seen.length,1,'one model call, no re-ask');
+  assert.equal(p.why,built,problem);
+  assert.equal(leaksLine(problem,specs,p.why,sys),false,p.why);
+  assert.equal(leaksLine(problem,specs,clean,sys),false,`rules flag the method-only line: ${clean}`);
+  stub({lesson:lesson.id,why:clean});
+  assert.equal((await pickLesson('maths',problem,sys)).why,clean,'a method-only why passes unchanged');
+  // agreement: the verdict on the why is whether pickLesson replaced it
+  for(const why of [leak,clean]){
+   stub({lesson:lesson.id,why});
+   assert.equal((await pickLesson('maths',problem,sys)).why!==why,leaksLine(problem,specs,why,sys),`agreement: ${why}`);
+  }
+ }
+ // the route passes the system: a cz learner, the cz item, the leaking why -> the session's lesson why is the built line
+ const store=load('session/store.ts');
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'hl13-cz',name:'Cz',type:'high-school',age:16,system:'cz'}});store.dispatch({type:'profile.save'});
+ const pg={id:'hl13-page',subject:'maths',title:'Sheet',img:'',w:100,h:100};
+ store.dispatch({type:'page.reading',page:pg});store.dispatch({type:'page.read',id:pg.id,items:[{n:1,text:CZ,cx:0,cy:0,band:[0,10],key:'k1'}],readMs:1,provider:'test'});
+ reg.useProvider('text',{name:'stub',run:async(req)=>{
+  if(Object.keys(req.schema?.properties??{}).includes('lesson'))return {raw:JSON.stringify({lesson:lesson.id,why:'Chosen because x = 10 here.'})};
+  return {raw:JSON.stringify({hint:'Undo the + 2 first.',what_to_try_next:'Write the two sides one under the other.'})};
+ }});
+ const res=await require(path.join(root,'src/app/api/hint/route.ts')).POST(new Request('http://desk/api/hint',{method:'POST',body:'{}'}));
+ assert.equal(res.status,200);
+ for(let i=0;i<40;i++)await new Promise((r)=>setImmediate(r));
+ assert.equal(store.getSession().lesson?.why,built,'the route handed pickLesson the cz system');
+});
+
+test('case 17: the explain reply passes the hint path\'s one leak rule (leaksLine) - over the school units, Calculus shapes and the lab\'s equations, no line passes explainItem that leaksLine stops',async()=>{
+ const X=load('desk/explain.ts'),{makeSchoolItems}=load('desk/items.ts'),S=load('rules/school.ts'),C=load('rules/calc.ts'),{kindOfSpec}=load('rules/kinds.ts'),{leaksLine}=load('desk/hint.ts');
+ const L=load('session/learners.ts');
+ const ONES=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'],TENS=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+ const word=(a)=>{if(!/^\d+$/.test(a))return null;const n=Number(a);if(n>99)return null;return n<20?ONES[n]:TENS[Math.floor(n/10)]+(n%10?'-'+ONES[n%10]:'');};
+ /** One answer in the forms a tutor line states it: figures, words, cz notation (decimal comma). */
+ const linesFor=(a)=>{const out=[`The answer is ${a}.`,`So you get ${a} here.`,`It works out to ${a}`,`Your result should be ${a}.`];
+  const w=word(a);if(w)out.push(`The answer is ${w}.`,`So it comes to ${w}.`);
+  if(/\./.test(a)){const c=a.replace('.',',');out.push(`Výsledek je ${c}.`,`The answer is ${c}.`);}
+  out.push(`x = ${a}`,`you end up with ${a} in total`,`the result: ${a}`,`${a}`);
+  const neg=a.startsWith('-')?a.slice(1):null;if(neg){out.push(`minus ${word(neg)??neg}`,`negative ${neg}`,`${a.replace('-','−')}`);}
+  const fr=a.match(/^(-?\d+)\/(\d+)$/);if(fr)out.push(`${fr[1]} over ${fr[2]}`,`${word(fr[1])??fr[1]} over ${word(fr[2])??fr[2]}`);
+  const pc=a.match(/^(\d+(?:\.\d+)?)%?$/);if(pc)out.push(`${pc[1]} percent`,`${pc[1]}%`);
+  const hl=a.match(/^(\d+)\.5$/);if(hl)out.push(`${word(hl[1])??hl[1]} and a half`);
+  const w2=a.split(/[\s:,]+/).filter(Boolean);if(w2.length>1)out.push(w2.join(' and '));
+  return out;};
+ const corpus=[];
+ for(const topic of Object.keys(S.SCHOOL_GENERATORS)){
+  const {items}=makeSchoolItems(topic,6,12345);
+  for(const it of items){const a=S.workedAnswer(it.spec);if(a)corpus.push({topic,item:{n:it.n,question:it.question,spec:it.spec,verdict:'unsure'},answer:a});}
+ }
+ const CALC=[[{shape:'evaluate',f:'x^2+1',at:3},'10'],[{shape:'derivative-at',f:'x^3',at:2},'12'],[{shape:'definite-integral',f:'x^2',a:0,b:3},'9'],[{shape:'limit',f:'(x^2-1)/(x-1)',at:1},'2'],[{shape:'critical-point',f:'x^2-4*x',on:[0,5]},'2'],[{shape:'derivative',f:'x^3'},'3x^2'],[{shape:'antiderivative',f:'2*x'},'x^2 + C']];
+ for(const [spec,a] of CALC){const q=C.question(spec);if(q)corpus.push({topic:'calc1-rules',item:{n:1,question:q.plain,spec,verdict:'unsure'},answer:a});}
+ for(const n of EQUATIONS)corpus.push({topic:'linear-two-step',item:{n:1,question:item(n).text,verdict:'unsure'},answer:ANSWERS[n]});
+ assert.ok(corpus.length>=40,`a corpus worth counting: ${corpus.length}`);
+ let lines=0,differ=[],statE=0,statL=0;
+ for(const {topic,item:it,answer} of corpus){
+  const k=kindOfSpec(it.spec),specs={calc:k==='calc'?it.spec:null,school:k==='school'?it.spec:null,parts:null};
+  for(const line of linesFor(answer)){
+   lines++;
+   stub({reply:line,slip:'unclear',value:''});
+   const r=await X.explainItem(it,'I did it in my head',topic,'hl17-scratch',()=>false,12);
+   const passedExplain=r.reply===line||r.reply.includes(line);
+   statE+=passedExplain?0:1;statL+=leaksLine(it.question,specs,line)?1:0;
+   if(passedExplain&&leaksLine(it.question,specs,line))differ.push(`${topic} | ${it.question} | ${line}`);
+  }
+ }
+assert.equal(statE,statL,`explainItem stops ${statE} of ${lines} lines, leaksLine ${statL}`);
+ assert.ok(lines>=150,`lines counted: ${lines}`);
+ assert.deepEqual(differ,[],`${differ.length} of ${lines} lines pass explainItem that leaksLine stops: ${differ.slice(0,5).join(' // ')}`);
+});
+
+test('case 18: a single factor root named alone leaks on a factor item (8 phrasings x 4 items), and method talk about the same numbers stays clean',()=>{
+ // [item, the two roots as the equation or the brackets give them]
+ const ITEMS=[['Solve for x:  x² − 7x + 12 = 0',[3,4]],['Factor completely: x² + 7x + 12',[-3,-4]],['x² + 7x + 12 = 0',[-3,-4]],['Factor: x² + x − 12',[3,-4]]];
+ const WORD={3:'three',4:'four'};
+ const bracket=(r)=>`x ${r<0?'+':'−'} ${Math.abs(r)}`;
+ const phrasings=([a,b])=>[`one of the numbers is ${a}`,`one number is ${a}`,`one root is ${b}`,`one bracket is ${bracket(b)}`,`one of them is ${a}`,`one solution is x = ${b}`,`the first number is ${WORD[Math.abs(a)]}`,`one of the factors is (${bracket(a)})`];
+ let caught=0,total=0;const missed=[];
+ for(const [q,roots] of ITEMS)for(const l of phrasings(roots)){total++;if(maths.leaks(q,l))caught++;else missed.push(`${q} | ${l}`);}
+ assert.equal(total,32);
+ assert.deepEqual(missed,[],`${caught}/${total} single-root phrasings caught`);
+ // method talk about the same numbers is not the answer
+ const CLEAN=['What multiplies to 12?','Which two numbers multiply to 12 and add to 7?','One number has to be positive and the other negative, so look at the signs.','The first thing to do is look at the 12.','One thing to notice is 12 is the last term.','The first pair to try is 2 and 6.','The first pair to try is 1 and 12, then 2 and 6.','Another way is to try the factor pairs of 12.','Your clues are 12 and 7.'];
+ for(const [q] of ITEMS)for(const l of CLEAN)assert.equal(maths.leaks(q,l),false,`${q} | ${l}`);
 });

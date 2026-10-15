@@ -1,0 +1,1116 @@
+{
+  "character": "martin-45",
+  "name": "Martin",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nMartin\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "My English is basically C1, so let's test it quickly and find my level.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Martin! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Martin! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Martin! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I use English daily at work, let me say it with confidence.",
+          "action": "answer",
+          "args": {
+            "text": "I use English every day in my work. I am engineering manager in manufacturing company since 2015 and I have meetings with suppliers and with our director from USA. My English is basically C1, so I think we can go quickly."
+          },
+          "result": "ok",
+          "ms": 12708
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Martin, that's really helpful! How did you learn your English? School, a course, time abroad, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Martin, that's really helpful! How did you learn your English? School, a course, time abroad, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Martin! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English every day in my work. I am engineering manager in manufacturing company since 2015 and I have meetings with suppliers and with our director from USA. My English is basically C1, so I think we can go quickly.\nLinga\nThanks, Martin, that's really helpful! How did you learn your English? School, a course, time abroad, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Martin, that's really helpful! How did you learn your English? School, a course, time abroad, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer quickly and keep it moving.",
+          "action": "answer",
+          "args": {
+            "text": "I learned English mostly at school and then on my own. At university I was reading technical documentation in English and later I was working with foreign suppliers, so I learned it in practice. I did also one course in company, but it was too easy for me."
+          },
+          "result": "ok",
+          "ms": 6368
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, that helps a lot. What do you want to do better in English? For example, meetings, emails, or phone calls with your director?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, that helps a lot. What do you want to do better in English? For example, meetings, emails, or phone calls with your director?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Martin! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English every day in my work. I am engineering manager in manufacturing company since 2015 and I have meetings with suppliers and with our director from USA. My English is basically C1, so I think we can go quickly.\nLinga\nThanks, Martin, that's really helpful! How did you learn your English? School, a course, time abroad, or on your own?\nYou\nI learned English mostly at school and then on my own. At university I was reading technical documentation in English and later I was working with foreign suppliers, so I learned it in practice. I did also one course in company, but it was too easy for me.\nLinga\nThanks, that helps a lot. What do you want to do better in English? For example, meetings, emails, or phone calls with your director?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, that helps a lot. What do you want to do better in English? For example, meetings, emails, or phone calls with your director?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Finally something useful: I want meetings and supplier negotiations.",
+          "action": "answer",
+          "args": {
+            "text": "I want to do better in running meetings, negotiating deadlines with our suppliers and presenting quality problems to the management. Also I need small talk with our US director and to disagree politely, because sometimes I am too direct. Emails are not problem for me."
+          },
+          "result": "ok",
+          "ms": 18477
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nTask 1 · Listen and answer\nYour task\nWhy does the speaker say they cannot agree to the new date?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Why does the speaker say they cannot agree to the new date?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I see your point, but we cannot change the deadline. The supplier needs two more weeks to fix the parts.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy: supplier needs two more weeks to fix the parts.",
+          "action": "answer",
+          "args": {
+            "text": "Because the supplier needs two more weeks for fix the parts, so they cannot change the deadline."
+          },
+          "result": "ok",
+          "ms": 9088
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nTask 2 · Say it\nYour task\nYour team has two suppliers for the same packaging. One is cheaper but often late, the other costs more and is always on time. Which would you choose for a big product launch, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour team has two suppliers for the same packaging. One is cheaper but often late, the other costs more and is always on time. Which would you choose for a big product launch, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your team has two suppliers for the same packaging. One is cheaper but often late, the other costs more and is always on time. Which would you choose for a big product launch, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one: reliable supplier, I explain with business reasons.",
+          "action": "answer",
+          "args": {
+            "text": "I would choose the supplier which is more expensive but always on time. For a big product launch the deadline is the most important thing, because if the packaging is late, we lose the market window and the stakeholders will be very unhappy. The extra cost is smaller than the cost of a delay. Also I would ask the cheaper supplier to be second source for the next products, but not for the launch."
+          },
+          "result": "ok",
+          "ms": 9689
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nTask 3 · Say it\nYour task\nYour US director wants the launch date moved up two weeks, but your supplier says it can't be done. Tell the director how you'd politely push back and suggest an alternative.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour US director wants the launch date moved up two weeks, but your supplier says it can't be done. Tell the director how you'd politely push back and suggest an alternative.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your US director wants the launch date moved up two weeks, but your supplier says it can't be done. Tell the director how you'd politely push back and suggest an alternative.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good, a real business task; I'll answer confidently.",
+          "action": "answer",
+          "args": {
+            "text": "I understand that the launch is important for us, but I must be honest with you, the supplier told me that two weeks earlier is not possible without a quality risk. I don't want that we deliver a product with problems. My suggestion is this: we can do a partial launch at the original date for the key customers, and the supplier will prioritize the first batch. Then we make the full launch after. I think this solution is more better than to risk the quality. What do you think?"
+          },
+          "result": "ok",
+          "ms": 10350
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nTask 4 · Say it\nYour task\nYour US director wants to start every meeting with a short coffee chat. You think it wastes time. Say what you think, and give one reason for your opinion.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour US director wants to start every meeting with a short coffee chat. You think it wastes time. Say what you think, and give one reason for your opinion.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your US director wants to start every meeting with a short coffee chat. You think it wastes time. Say what you think, and give one reason for your opinion.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I think the coffee chat wastes time, and I have a clear reason.",
+          "action": "answer",
+          "args": {
+            "text": "I think the coffee chat at the start of every meeting is not very efficient. We have many stakeholders and the agenda is full, so every meeting is longer about ten minutes. My reason is that people are busy and we don't have time for this, it is better to make the small talk after the meeting, when we finish all decisions."
+          },
+          "result": "ok",
+          "ms": 15657
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nTask 5 · Say it\nYour task\nYour US director wants all supplier deadlines agreed by email. You think a phone call works better. Compare the two and say which you prefer, with one reason.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour US director wants all supplier deadlines agreed by email. You think a phone call works better. Compare the two and say which you prefer, with one reason.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your US director wants all supplier deadlines agreed by email. You think a phone call works better. Compare the two and say which you prefer, with one reason.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, I have a clear opinion: phone call is better.",
+          "action": "answer",
+          "args": {
+            "text": "I prefer the phone call. Email is good for the record, but with a supplier the deadline is often negotiation and by phone we can solve the problem immediately. In email we are waiting one day for every answer and there is a risk of misunderstanding. After the call I can send short confirmation by email, so the director has his documentation too."
+          },
+          "result": "ok",
+          "ms": 10694
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nMartin\nLinga's read · not a certificate\nB2 · Comfortable\nWhat next\nSee the conversations Linga picks for this level, or find your level again.\nLinga says\nYou speak clear, natural English at work, and you explain your reasons well. Your ideas come through even when grammar slips.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou speak clear, natural English at work, and you explain your reasons well. Your ideas come through even when grammar slips.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise comparisons and polite push-back in meetings, for example: 'Option B is better because it saves time.'\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhy does the speaker say they cannot agree to the new date?\n“Because the supplier needs two more weeks for fix the parts, so they cannot change the deadline.”\nYou got the reason right: the supplier needs more time. Small slips: say 'to fix', and drop 'so' after 'Because'.\nB2 · Say it · at this level\nYour team has two suppliers for the same packaging. One is cheaper but often late, the other costs more and is always on time. Which would you choose for a big product launch, and why?\n“I would choose the supplier which is more expensive but always on time. For a big product launch the deadline is the most important thing, because if the packaging is late, we lose the market window and the stakeholders will be very unhappy. The extra cost is smaller than the cost of a delay. Also I would ask the cheaper supplier to be second source for the next products, but not for the launch.”\nClear answer with good sentence control and useful reasons. Only a small slip, like a missing article, and your meaning was always clear.\nC1 · Say it · not yet\nYour US director wants the launch date moved up two weeks, but your supplier says it can't be done. Tell the director how you'd politely push back and suggest an alternative.\n“I understand that the launch is important for us, but I must be honest with you, the supplier told me that two weeks earlier is not possible without a quality risk. I don't want that we deliver a product with problems. My suggestion is this: we can do a partial launch at the original date for the key customers, and the supplier will prioritize the first batch. Then we make the full launch after. I think this solution is more better than to risk the quality. What do you think?”\nYour polite push-back and your alternative came through clearly. Work on comparisons: say 'better', not 'more better'.\nB2 · Say it · nearly there\nYour US director wants to start every meeting with a short coffee chat. You think it wastes time. Say what you think, and give one reason for your opinion.\n“I think the coffee chat at the start of every meeting is not very efficient. We have many stakeholders and the agenda is full, so every meeting is longer about ten minutes. My reason is that people are busy and we don't have time for this, it is better to make the small talk after the meeting, when we finish all decisions.”\nClear opinion and a good work reason. Comparisons like 'longer by about ten minutes' held the English back a little.\nB2 · Say it · at this level\nYour US director wants all supplier deadlines agreed by email. You think a phone call works better. Compare the two and say which you prefer, with one reason.\n“I prefer the phone call. Email is good for the record, but with a supplier the deadline is often negotiation and by phone we can solve the problem immediately. In email we are waiting one day for every answer and there is a risk of misunderstanding. After the call I can send short confirmation by email, so the director has his documentation too.”\nYour answer is clear and gives a reason for your choice. Your English is natural, with only small slips that never blur the meaning.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B2, not C1 as I expected, but it seems fair; I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B2",
+          "trueBand": "B1",
+          "distance": 1,
+          "source": "check",
+          "confidence": "high",
+          "selfBand": "B2",
+          "summary": "You speak clear, natural English at work, and you explain your reasons well. Your ideas come through even when grammar slips.",
+          "focus": "Practise comparisons and polite push-back in meetings, for example: 'Option B is better because it saves time.'",
+          "tasks": [
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Why does the speaker say they cannot agree to the new date?",
+              "line": "I see your point, but we cannot change the deadline. The supplier needs two more weeks to fix the parts.",
+              "options": [],
+              "response": "Because the supplier needs two more weeks for fix the parts, so they cannot change the deadline.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Because the supplier needs two more weeks for fix the parts, so they cannot change the deadline.",
+              "note": "You got the reason right: the supplier needs more time. Small slips: say 'to fix', and drop 'so' after 'Because'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your team has two suppliers for the same packaging. One is cheaper but often late, the other costs more and is always on time. Which would you choose for a big product launch, and why?",
+              "line": "",
+              "options": [],
+              "response": "I would choose the supplier which is more expensive but always on time. For a big product launch the deadline is the most important thing, because if the packaging is late, we lose the market window and the stakeholders will be very unhappy. The extra cost is smaller than the cost of a delay. Also I would ask the cheaper supplier to be second source for the next products, but not for the launch.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "if the packaging is late, we lose the market window and the stakeholders will be very unhappy. The extra cost is smaller than the cost of a delay.",
+              "note": "Clear answer with good sentence control and useful reasons. Only a small slip, like a missing article, and your meaning was always clear."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "Your US director wants the launch date moved up two weeks, but your supplier says it can't be done. Tell the director how you'd politely push back and suggest an alternative.",
+              "line": "",
+              "options": [],
+              "response": "I understand that the launch is important for us, but I must be honest with you, the supplier told me that two weeks earlier is not possible without a quality risk. I don't want that we deliver a product with problems. My suggestion is this: we can do a partial launch at the original date for the key customers, and the supplier will prioritize the first batch. Then we make the full launch after. I think this solution is more better than to risk the quality. What do you think?",
+              "mode": "speech",
+              "verdict": "fail",
+              "quote": "I think this solution is more better than to risk the quality.",
+              "note": "Your polite push-back and your alternative came through clearly. Work on comparisons: say 'better', not 'more better'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your US director wants to start every meeting with a short coffee chat. You think it wastes time. Say what you think, and give one reason for your opinion.",
+              "line": "",
+              "options": [],
+              "response": "I think the coffee chat at the start of every meeting is not very efficient. We have many stakeholders and the agenda is full, so every meeting is longer about ten minutes. My reason is that people are busy and we don't have time for this, it is better to make the small talk after the meeting, when we finish all decisions.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "so every meeting is longer about ten minutes. My reason is that people are busy and we don't have time for this, it is better to make the small talk after the meeting, when we finish all decisions.",
+              "note": "Clear opinion and a good work reason. Comparisons like 'longer by about ten minutes' held the English back a little."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your US director wants all supplier deadlines agreed by email. You think a phone call works better. Compare the two and say which you prefer, with one reason.",
+              "line": "",
+              "options": [],
+              "response": "I prefer the phone call. Email is good for the record, but with a supplier the deadline is often negotiation and by phone we can solve the problem immediately. In email we are waiting one day for every answer and there is a risk of misunderstanding. After the call I can send short confirmation by email, so the director has his documentation too.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I prefer the phone call. Email is good for the record, but with a supplier the deadline is often negotiation and by phone we can solve the problem immediately.",
+              "note": "Your answer is clear and gives a reason for your choice. Your English is natural, with only small slips that never blur the meaning."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 160483,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Placement B2 vs trueBand B1, distance 1 (near), not C1 despite his claim (#2)."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Focus 'Practise comparisons and polite push-back in meetings' ties to #7 'more better' and push-back answer; task note shows the evidence (#10)."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#10 note on C1 task: \"Work on comparisons: say 'better', not 'more better'.\" Targets a named recurring error."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "'to fix' not 'for fix', 'more better', missing article ('a second source') and 'longer by about ten minutes' are all valid corrections; nothing correct was changed."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No topic list was shown in this journey; he stopped at the verdict (#10)."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "Martin never asked 'why is that wrong?' in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 'Find my level' through #10 verdict screen, no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "B2 vs B1 is near; he reacts at #10 'B2, not C1 as I expected, but it seems fair'."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Every task read clearly (#5-#9) and he answered each without confusion."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "He never used 'I don't know' and no task made him feel he failed; the fail on the C1 task was framed gently (#10)."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 summary 'you explain your reasons well' and focus on comparisons and push-back in meetings fit his answers, though somewhat generic."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 5 (#9): in-app pass, but 'the deadline is often negotiation', 'we are waiting', 'send short confirmation' are repeated slips; a strict examiner would give partial."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "above": 0,
+            "at": 0,
+            "below": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Meeting-shaped tasks with evidence shown",
+            "expected": "Tasks that match his job and a verdict he can inspect",
+            "got": "Supplier, director and email-versus-phone tasks; 'What Linga saw' shows each answer with a note",
+            "evidence": "#6-#10: tasks on suppliers, launch date, coffee chat; verdict lists his quoted answers with notes.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep workplace-situation tasks and the per-task evidence list.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Fossilised errors passed over silently",
+            "expected": "Notes naming 'since 2015' with present, 'I don't want that we deliver', 'we are waiting'",
+            "got": "Only 'more better' and minor slips named; others ignored and the task 5 pass says 'only small slips'",
+            "evidence": "#2 'I am engineering manager ... since 2015' got no note. #9 passed despite 'is often negotiation', 'send short confirmation'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The verdict names at least two recurring error patterns from the answers, including tense with 'since'.",
+            "code_hint": "placement task judging prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "B2 placement is generous for a B1 speaker",
+            "expected": "B1 with evidence of systematic errors",
+            "got": "B2 'Your answers agreed with each other', high confidence, summary stresses ease and omits recurring accuracy errors",
+            "evidence": "#10 summary: 'Your ideas come through even when grammar slips.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Summary names a concrete accuracy gap that separates B1/B2 from C1.",
+            "code_hint": "placement summary prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "medium"
+        },
+        "voice": "Fine, B2, not the C1 I told you, but it did not feel arbitrary. The tasks were what I do every day: supplier deadlines, the director, push-back. Nothing babyish, nothing slow, and I finished in about seven minutes instead of a written test plus an oral part. It showed my own sentences, and 'more better' was fair, I admit. What I miss is more bite. I wrote 'since 2015' with a present tense and 'I don't want that we deliver', and nobody mentioned them. I suspect my director would notice those. The summary is also a bit soft: 'grammar slips' tells me nothing I can fix. I'd use it again before a call if it called out my repeated mistakes by name. I'd tell a colleague it's quick and credible, but not yet sharp."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nMartin\nA way into English\nYour own conversations\nB2Comfortable\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou speak clear, natural English at work, and you explain your reasons well. Your ideas come through even when grammar slips.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise comparisons and polite push-back in meetings, for example: 'Option B is better because it saves time.'\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhy does the speaker say they cannot agree to the new date?\n“Because the supplier needs two more weeks for fix the parts, so they cannot change the deadline.”\nYou got the reason right: the supplier needs more time. Small slips: say 'to fix', and drop 'so' after 'Because'.\nB2 · Say it · at this level\nYour team has two suppliers for the same packaging. One is cheaper but often late, the other costs more and is always on time. Which would you choose for a big product launch, and why?\n“I would choose the supplier which is more expensive but always on time. For a big product launch the deadline is the most important thing, because if the packaging is late, we lose the market window and the stakeholders will be very unhappy. The extra cost is smaller than the cost of a delay. Also I would ask the cheaper supplier to be second source for the next products, but not for the launch.”\nClear answer with good sentence control and useful reasons. Only a small slip, like a missing article, and your meaning was always clear.\nC1 · Say it · not yet\nYour US director wants the launch date moved up two weeks, but your supplier says it can't be done. Tell the director how you'd politely push back and suggest an alternative.\n“I understand that the launch is important for us, but I must be honest with you, the supplier told me that two weeks earlier is not possible without a quality risk. I don't want that we deliver a product with problems. My suggestion is this: we can do a partial launch at the original date for the key customers, and the supplier will prioritize the first batch. Then we make the full launch after. I think this solution is more better than to risk the quality. What do you think?”\nYour polite push-back and your alternative came through clearly. Work on comparisons: say 'better', not 'more better'.\nB2 · Say it · nearly there\nYour US director wants to start every meeting with a short coffee chat. You think it wastes time. Say what you think, and give one reason for your opinion.\n“I think the coffee chat at the start of every meeting is not very efficient. We have many stakeholders and the agenda is full, so every meeting is longer about ten minutes. My reason is that people are busy and we don't have time for this, it is better to make the small talk after the meeting, when we finish all decisions.”\nClear opinion and a good work reason. Comparisons like 'longer by about ten minutes' held the English back a little.\nB2 · Say it · at this level\nYour US director wants all supplier deadlines agreed by email. You think a phone call works better. Compare the two and say which you prefer, with one reason.\n“I prefer the phone call. Email is good for the record, but with a supplier the deadline is often negotiation and by phone we can solve the problem immediately. In email we are waiting one day for every answer and there is a risk of misunderstanding. After the call I can send short confirmation by email, so the director has his documentation too.”\nYour answer is clear and gives a reason for your choice. Your English is natural, with only small slips that never blur the meaning.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Finally, let me see what topics it picked for me; I want meetings and suppliers, not TV shows.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 33771
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nMartin\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nRunning a short team meeting\nMake a plan\nAsking a supplier to move a deadline\nHandle friction\nPresenting a quality problem to management\nTell what happened\nSmall talk with our US director\nMake contact\nDisagreeing politely in a planning call\nConnect with people\nChoosing between two suppliers\nGet something done\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nRunning a short team meeting\nMake a plan · Priya Nair · team lead\nRunning meetings is your main goal, so this is the first topic in your plan.\n[button: Swap]\nAsking a supplier to move a deadline\nHandle friction · Anna Lind · supplier manager\nNegotiating deadlines with suppliers is your second goal, so practise it early.\n[button: Swap]\nPresenting a quality problem to management\nTell what happened · Tom Reyes · quality director\nPresenting quality problems to management is part of your job, so this scene fits your plan.\n[button: Swap]\nSmall talk with our US director\nMake contact · Karen Doyle · US regional director\nYou want easy small talk with your US director, so this is one of your interests.\n[button: Swap]\nDisagreeing politely in a planning call\nConnect with people · Dan Okafor · US product director\nYou asked to practise polite push-back, so this scene is built for that.\n[button: Swap]\nChoosing between two suppliers\nGet something done · Lena Brooks · packaging sales rep\nComparing options and explaining your choice is a key part of your focus.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "The topics match my work, so I'll agree to them.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 3,
+          "screen": "linga",
+          "shown": "TV\nLinga\nMartin\nPriya Nair · team lead\nB2Comfortable\nRunning a short team meeting\nYour mission\nOpen a meeting, keep to the agenda and reach a clear decision.\nMake a plan\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nRunning a short team meeting\nOpen a meeting, keep to the agenda and reach a clear decision.\n[button: Start talking]\nOr choose a situation [list: Running a short team meeting [plan-604b4424] | Asking a supplier to move a deadline [plan-be16cda9] | Presenting a quality problem to management [plan-561afa69] | Small talk with our US director [plan-0156ac97] | Disagreeing politely in a planning call [plan-756bd8f3] | Choosing between two suppliers [plan-2491dcda] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "The topics look right for my work, so that's enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-604b4424",
+            "title": "Running a short team meeting",
+            "goal": "Open a meeting, keep to the agenda and reach a clear decision.",
+            "why": "Running meetings is your main goal, so this is the first topic in your plan.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Priya Nair · team lead"
+          },
+          {
+            "id": "plan-be16cda9",
+            "title": "Asking a supplier to move a deadline",
+            "goal": "Ask for a later delivery date and agree a clear new deadline.",
+            "why": "Negotiating deadlines with suppliers is your second goal, so practise it early.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Anna Lind · supplier manager"
+          },
+          {
+            "id": "plan-561afa69",
+            "title": "Presenting a quality problem to management",
+            "goal": "Explain what went wrong, what happened next and what you did about it.",
+            "why": "Presenting quality problems to management is part of your job, so this scene fits your plan.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Tom Reyes · quality director"
+          },
+          {
+            "id": "plan-0156ac97",
+            "title": "Small talk with our US director",
+            "goal": "Start and keep a friendly chat about weekends, travel and work.",
+            "why": "You want easy small talk with your US director, so this is one of your interests.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Karen Doyle · US regional director"
+          },
+          {
+            "id": "plan-756bd8f3",
+            "title": "Disagreeing politely in a planning call",
+            "goal": "Disagree respectfully with a plan and offer a better option.",
+            "why": "You asked to practise polite push-back, so this scene is built for that.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Dan Okafor · US product director"
+          },
+          {
+            "id": "plan-2491dcda",
+            "title": "Choosing between two suppliers",
+            "goal": "Compare two supplier offers, choose one and confirm the order details.",
+            "why": "Comparing options and explaining your choice is a key part of your focus.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Lena Brooks · packaging sales rep"
+          }
+        ],
+        "planAgreed": [
+          "Running a short team meeting",
+          "Asking a supplier to move a deadline",
+          "Presenting a quality problem to management",
+          "Small talk with our US director",
+          "Disagreeing politely in a planning call",
+          "Choosing between two suppliers"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 50769,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed B2 'Comfortable'; true band B1, so near, not C1/C2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 'You speak clear, natural English at work... Your ideas come through even when grammar slips' plus per-task notes ('say \"better\", not \"more better\"') name what his answers did."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#1 'Work on comparisons: say \"better\", not \"more better\"' targets a recurring error."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 'say \"to fix\", and drop \"so\" after \"Because\"' and 'more better' are correct; no correct phrase was 'corrected'."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#2 all six topics are work situations: team meeting, supplier deadline, quality problem, US director small talk, polite disagreement, supplier choice."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "He never asked why anything was wrong in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a 'why' line, e.g. 'Negotiating deadlines with suppliers is your second goal, so practise it early.'"
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#2 Swap buttons and 'Add a topic in your own words' were shown but never used; the walker agreed at once, so a swap and an added topic keeping its brief were not shown."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#2-3 planAgreed holds all six topics, all work-relevant to Martin."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 all six audience 'all' and workplace-safe; no swaps happened, so nothing unsafe appeared."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks judged in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult or unsafe content, no personal data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Plan is fully meeting-shaped, each topic with a reason",
+            "expected": "Topics fit a manager's goals with reasons",
+            "got": "Six workplace scenes with named partners and why-lines",
+            "evidence": "#2 'Presenting quality problems to management is part of your job, so this scene fits your plan.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep goal-linked why-lines.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Swap and add-your-own were not exercised",
+            "expected": "Swap a topic, add one in own words, and see it keep the brief",
+            "got": "Agreed immediately; D2 unproven",
+            "evidence": "#2 action 'agree' with Swap buttons and the 'Add a topic' box unused",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Walker swaps one topic and adds a custom topic, then checks it keeps the request.",
+            "code_hint": ""
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "B2 placement of a B1 speaker may flatter him",
+            "expected": "Evidence he cannot argue with for B1",
+            "got": "B2 'Comfortable', mostly praise despite 'more better', missing articles",
+            "evidence": "#1 'Your English is natural, with only small slips that never blur the meaning.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Summary names recurring errors alongside the band.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "Fine, the topics are what I'd pick: meetings, suppliers, the US director, no baby stuff. Each one tells me why it's there, which I like. But I didn't test the swap or write my own, so I can't say it listens. The level says B2, which suits me, though I suspect it's generous; it flagged \"more better\" and that was fair. I'd use it again before a call if it kept to this business focus. Worth telling a colleague once I've seen it handle my own topic properly."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #2 Swap buttons and 'Add a topic in your own words' were shown but never used; the walker agreed at once, so a swap and an added topic keeping its brief were not shown.",
+          "check": "They can swap what they don't want and add one in their own words, and the added topic keeps what they asked for."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nMartin\nPriya Nair · team lead\nB2Comfortable\nRunning a short team meeting\nYour mission\nOpen a meeting, keep to the agenda and reach a clear decision.\nMake a plan\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nRunning a short team meeting\nOpen a meeting, keep to the agenda and reach a clear decision.\n[button: Start talking]\nOr choose a situation [list: Running a short team meeting [plan-604b4424] | Asking a supplier to move a deadline [plan-be16cda9] | Presenting a quality problem to management [plan-561afa69] | Small talk with our US director [plan-0156ac97] | Disagreeing politely in a planning call [plan-756bd8f3] | Choosing between two suppliers [plan-2491dcda] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Good, a meeting topic, that's exactly my work; let's start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8022
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nPriya Nair · team lead\nRunning a short team meeting: choosing a workshop venue\nPriya Nair says\nGood morning, everyone, thanks for joining. We have two venue options for next month's workshop. Shall we check the agenda first, or start with the venue?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nRunning a short team meeting: choosing a workshop venue\nOpen the meeting, check the agenda and agree on a venue decision.\nNow: Confirm the agenda and order of items\nGood morning, everyone, thanks for joining. We have two venue options for next month's workshop. Shall we check the agenda first, or start with the venue?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya Nair · team lead\nGood morning, everyone, thanks for joining. We have two venue options for next month's workshop. Shall we check the agenda first, or start with the venue?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, everyone, thanks for joining. We have two venue options for next month's workshop. Shall we check the agenda first, or start with the venue?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Easy, let's run this meeting my way.",
+          "action": "answer",
+          "args": {
+            "text": "Good morning Priya. I think we should start with the agenda shortly, because we was discussing about this venue already last week, and then we go to the decision. My English is basically C1, so we can speak normally."
+          },
+          "result": "ok",
+          "ms": 9826
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said we was discussing about this venue\nTry\nwe were discussing this venue\nAfter 'we', use 'were'. 'Discuss' takes no 'about'.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “we was discussing about this venue”\nTry “we were discussing this venue”\nAfter 'we', use 'were'. 'Discuss' takes no 'about'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I know that, let's continue with the meeting.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nPriya Nair · team lead\nRunning a short team meeting: choosing a workshop venue\nPriya Nair says\nGood idea, let's go through the agenda first, then decide on the venue. Is there anything else you want to add to the list?\nYour turn\nAnswer on your phone: speak or type.\nNowCompare the hotel and the downtown space\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nRunning a short team meeting: choosing a workshop venue\nOpen the meeting, check the agenda and agree on a venue decision.\nNow: Compare the hotel and the downtown space\nGood idea, let's go through the agenda first, then decide on the venue. Is there anything else you want to add to the list?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya Nair · team lead\nGood morning, everyone, thanks for joining. We have two venue options for next month's workshop. Shall we check the agenda first, or start with the venue?\nYou · spoken\nGood morning Priya. I think we should start with the agenda shortly, because we was discussing about this venue already last week, and then we go to the decision. My English is basically C1, so we can speak normally.\nPriya Nair · team lead\nGood idea, let's go through the agenda first, then decide on the venue. Is there anything else you want to add to the list?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good idea, let's go through the agenda first, then decide on the venue. Is there anything else you want to add to the list?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, now I add something business-like about comparing the options and budget.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I want to add the budget and the transport for people. The hotel is more cheaper, but the downtown space is more better for our suppliers, because they don't need to travel so long. Also we must make a decision about the catering until Friday."
+          },
+          "result": "ok",
+          "ms": 11220
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nPriya Nair · team lead\nRunning a short team meeting: choosing a workshop venue\nPriya Nair says\nGood points. The downtown space saves the suppliers a lot of travel, but the hotel costs less. Shall we add catering to the agenda and decide by Friday?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nRunning a short team meeting: choosing a workshop venue\nOpen the meeting, check the agenda and agree on a venue decision.\nNow: Agree on one venue and the next step\nGood points. The downtown space saves the suppliers a lot of travel, but the hotel costs less. Shall we add catering to the agenda and decide by Friday?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya Nair · team lead\nGood morning, everyone, thanks for joining. We have two venue options for next month's workshop. Shall we check the agenda first, or start with the venue?\nYou · spoken\nGood morning Priya. I think we should start with the agenda shortly, because we was discussing about this venue already last week, and then we go to the decision. My English is basically C1, so we can speak normally.\nPriya Nair · team lead\nGood idea, let's go through the agenda first, then decide on the venue. Is there anything else you want to add to the list?\nYou · spoken\nYes, I want to add the budget and the transport for people. The hotel is more cheaper, but the downtown space is more better for our suppliers, because they don't need to travel so long. Also we must make a decision about the catering until Friday.\nPriya Nair · team lead\nGood points. The downtown space saves the suppliers a lot of travel, but the hotel costs less. Shall we add catering to the agenda and decide by Friday?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good points. The downtown space saves the suppliers a lot of travel, but the hotel costs less. Shall we add catering to the agenda and decide by Friday?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Fine, I'll agree on the hotel or downtown and set the Friday deadline.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, of course, we can add the catering to the agenda. I propose we choose the downtown space, because the suppliers is the most important stakeholder for this workshop, and the extra cost is not so big. I will check the final price with the hotel and the downtown manager, and I send you the comparison until Thursday, so we can decide on Friday."
+          },
+          "result": "ok",
+          "ms": 11534
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nPriya Nair · team lead\nRunning a short team meeting: choosing a workshop venue\nPriya Nair says\nAgreed, downtown it is. You send the comparison by Thursday, and we decide on Friday. Thanks for checking the final prices.\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nRunning a short team meeting: choosing a workshop venue\nOpen the meeting, check the agenda and agree on a venue decision.\nAgreed, downtown it is. You send the comparison by Thursday, and we decide on Friday. Thanks for checking the final prices.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya Nair · team lead\nGood morning, everyone, thanks for joining. We have two venue options for next month's workshop. Shall we check the agenda first, or start with the venue?\nYou · spoken\nGood morning Priya. I think we should start with the agenda shortly, because we was discussing about this venue already last week, and then we go to the decision. My English is basically C1, so we can speak normally.\nPriya Nair · team lead\nGood idea, let's go through the agenda first, then decide on the venue. Is there anything else you want to add to the list?\nYou · spoken\nYes, I want to add the budget and the transport for people. The hotel is more cheaper, but the downtown space is more better for our suppliers, because they don't need to travel so long. Also we must make a decision about the catering until Friday.\nPriya Nair · team lead\nGood points. The downtown space saves the suppliers a lot of travel, but the hotel costs less. Shall we add catering to the agenda and decide by Friday?\nYou · spoken\nYes, of course, we can add the catering to the agenda. I propose we choose the downtown space, because the suppliers is the most important stakeholder for this workshop, and the extra cost is not so big. I will check the final price with the hotel and the downtown manager, and I send you the comparison until Thursday, so we can decide on Friday.\nPriya Nair · team lead\nAgreed, downtown it is. You send the comparison by Thursday, and we decide on Friday. Thanks for checking the final prices.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Agreed, downtown it is. You send the comparison by Thursday, and we decide on Friday. Thanks for checking the final prices.\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission is done, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 7,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nMartin\nA way into English\nYour rehearsal\nYou said we was discussing about this venue\nTry\nwe were discussing this venue\nAfter 'we', use 'were'. 'Discuss' takes no 'about'.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom this rehearsal\n“we was discussing about this venue” → “we were discussing this venue”\nAfter 'we', use 'were'. 'Discuss' takes no 'about'.\nYour level:\nB2 · Comfortable\nNext topic:\nAsking a supplier to move a deadline\nAsk for a later delivery date and agree a clear new deadline.\n[button: Start talking]\nOr choose a situation [list: Running a short team meeting [plan-604b4424] | Asking a supplier to move a deadline [plan-be16cda9] | Presenting a quality problem to management [plan-561afa69] | Small talk with our US director [plan-0156ac97] | Disagreeing politely in a planning call [plan-756bd8f3] | Choosing between two suppliers [plan-2491dcda] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Got my correction, \"were discussing\", fine. That's enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Running a short team meeting: choosing a workshop venue",
+          "goal": "Open the meeting, check the agenda and agree on a venue decision.",
+          "partner": "Priya Nair · team lead",
+          "band": "B2",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Good morning, everyone, thanks for joining. We have two venue options for next month's workshop. Shall we check the agenda first, or start with the venue?"
+            },
+            {
+              "role": "learner",
+              "text": "Good morning Priya. I think we should start with the agenda shortly, because we was discussing about this venue already last week, and then we go to the decision. My English is basically C1, so we can speak normally.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Good idea, let's go through the agenda first, then decide on the venue. Is there anything else you want to add to the list?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I want to add the budget and the transport for people. The hotel is more cheaper, but the downtown space is more better for our suppliers, because they don't need to travel so long. Also we must make a decision about the catering until Friday.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Good points. The downtown space saves the suppliers a lot of travel, but the hotel costs less. Shall we add catering to the agenda and decide by Friday?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, of course, we can add the catering to the agenda. I propose we choose the downtown space, because the suppliers is the most important stakeholder for this workshop, and the extra cost is not so big. I will check the final price with the hotel and the downtown manager, and I send you the comparison until Thursday, so we can decide on Friday.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Agreed, downtown it is. You send the comparison by Thursday, and we decide on Friday. Thanks for checking the final prices."
+            }
+          ],
+          "moments": [
+            {
+              "id": "525cc268-8ea8-47c3-84f5-29d7907ebe46:uat-14:moment",
+              "kind": "fix",
+              "said": "we was discussing about this venue",
+              "better": "we were discussing this venue",
+              "why": "After 'we', use 'were'. 'Discuss' takes no 'about'.",
+              "turnId": "525cc268-8ea8-47c3-84f5-29d7907ebe46:uat-14",
+              "at": 1791973481821
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I think we should start with the agenda shortly"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "the downtown space is more better for our suppliers, because they don't need to travel so long"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I propose we choose the downtown space, because the suppliers is the most important stakeholder for this workshop, and the extra cost is not so big."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 83897,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 shows level \"B2 · Comfortable\" against true B1: near, not C1."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "J3 shows no placement verdict or summary; only the level label at #1 and #7."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3 moment: \"we was discussing about this venue\" → \"we were discussing this venue\" hits was/were and discuss about."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#3 the only correction is accurate: 'we were', and 'discuss' takes no 'about'. Nothing correct was flagged."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 the six plan topics are all workplace: meeting, supplier deadline, quality problem, US director, planning call, supplier choice."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "Martin never asked why in this journey; the answer in #3 was a short rule."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 starts the recommended meeting; #2, #4 and #5 give three long replies and the scene ends."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Four partner turns, e.g. #4 \"Good idea, let's go through the agenda first\": plain meeting English, at B1/B2, neither babyish nor hard."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 is the only moment (1 of 1 correct), about one in three learner turns. It is accurate, but \"more better\" and \"suppliers is\" were not stopped."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#7 recap: \"3 spoken · 0 written replies · 1 moment to keep\" with the were/discuss note and a next topic."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 2
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no injected text, no sensitive data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Fossilised errors went uncorrected",
+            "expected": "The partner stops or coaches on 'more cheaper', 'more better', 'suppliers is' and 'I send ... until Thursday'.",
+            "got": "Only turn 1 got a moment. Turns 2 and 3 had clear errors and drew no moment, and the recap lists one item.",
+            "evidence": "#4 \"more cheaper ... more better\"; #5 \"the suppliers is\", \"I send you the comparison until Thursday\"; #7 \"1 moment to keep\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A recap or coaching note names each recurring error the learner made, at least the ones repeated across turns.",
+            "code_hint": "moment detection / as-needed correction rule"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Precise, short, correct moment",
+            "expected": "A correction that is right and explained briefly.",
+            "got": "\"After 'we', use 'were'. 'Discuss' takes no 'about'.\"",
+            "evidence": "#3 moment text; it hit two of his fossilised errors in one line.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep one-line rule moments.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Workplace-meeting plan and natural pitch",
+            "expected": "Meeting-shaped topics at his level.",
+            "got": "All six plan topics are workplace; the partner replied naturally and agreed a Friday deadline.",
+            "evidence": "#1 topic list; #6 \"Agreed, downtown it is.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep plan topics tied to his job.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "trust",
+            "title": "B2 label despite visible B1 errors",
+            "expected": "A level he can accept with evidence.",
+            "got": "The B2 'Comfortable' label stays on screen while he repeats basic errors, which may reinforce his claim.",
+            "evidence": "#7 \"Your level: B2 · Comfortable\" after the errors in #4 and #5.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The recap shows evidence linking the level to what he actually said.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 40,
+          "confidence": "low"
+        },
+        "voice": "Fine, it's a proper meeting, not a toy. I ran the venue decision, Priya kept pace, and nobody slowed me down. \"We were discussing this venue\" is correct and the reason was short, so I trust it. But I said \"more better\" and \"the suppliers is\" and heard nothing. The recap shows one note. My director would catch more than that. Still B2 \"Comfortable\", so I feel basically C1 confirmed, which is maybe not honest. I'd use it before a call if it called out all my repeated mistakes, not just one. Right now it's pleasant, but too gentle. I'd mention it to a colleague, with that caveat."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 19,
+      "fail": 0,
+      "ms": 167293
+    },
+    "character": {
+      "n": 20,
+      "fail": 0,
+      "ms": 127446
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 87885
+    }
+  }
+}

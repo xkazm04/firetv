@@ -6,10 +6,13 @@
  * no gap line - only the units and the learner's own school-year word for each. Select on a unit asks "The usual" or
  * "A step up" (rules/stretch sets how hard each is) and writes the set the way Topics does.
  *
- * Pure: types, and the path data (client-safe library data), are all it imports - never the store or the filesystem.
+ * Pure: types, the path data (client-safe library data) and which units have a top rung (rules/school, pure) are all it
+ * imports - never the store or the filesystem.
  */
 import type { SchoolSystem, Session } from "@/lib/session/store";
-import { PATHS, learnerPath, topicsOf, type PathTopic } from "@/lib/library/paths";
+import { PATHS, expectedOn, learnerPath, topicsOf, type PathTopic } from "@/lib/library/paths";
+import { systemOf } from "@/tv/profileRows";
+import { topGeneratorFor } from "@/lib/rules/school";
 
 /** A topic's school year as the learner's school system says it. Handed a year, never a topic: a course topic has none. */
 export const SYS_WORD: Record<SchoolSystem, (y: NonNullable<PathTopic["year"]>) => string> = {
@@ -43,14 +46,42 @@ export function prepareStops(s: OnPath): PathTopic[] {
   return prepareGroups(s).flatMap((g) => g.units);
 }
 
-/** The two cells Select on a unit asks between: the usual set, or a step up (rules/stretch). "The usual" is first and lit first. */
+/** The two cells Select on a unit asks between: the usual set, or a step up (rules/stretch). They are cells 0 and 1. */
 export const PREPARE_CHOICES = [
   { id: "usual", t: "The usual", k: "Your level" },
   { id: "stretch", t: "A step up", k: "More of the harder ones" },
 ] as const;
 
-/** The one sentence under the two cells, for the lit one. */
-export function choiceLine(cell: number): string {
+/** The third cell, cell -1, before the two: a unit with a worked lesson offers the lesson first, lit when the question opens. */
+export const LESSON_CHOICE = { id: "lesson", t: "See how first", k: "A worked lesson" } as const;
+
+/** The cells a unit's question shows, left to right, with the number each one is lit by (tv/keys `prepareAsk`). */
+export function choicesFor(worked: boolean): { cell: -1 | 0 | 1; id: string; t: string; k: string }[] {
+  const two = PREPARE_CHOICES.map((c, i) => ({ cell: i as 0 | 1, ...c }));
+  return worked ? [{ cell: -1 as const, ...LESSON_CHOICE }, ...two] : two;
+}
+
+/** What is shown, instead of the choice line, while the worked lesson is being written. */
+export const LESSON_WRITING = "Writing the worked lesson.";
+
+/**
+ * The step up's sentence on the two fractions units with a top rung (MB-B20: mixed numbers and a word problem join the set).
+ * It names what is new and says it is still school level, so a learner past the unit's year is not told it is more than it is.
+ */
+export const TOP_RUNG_LINE = "Mixed numbers and a word problem join the harder ones, still school level, and a secure step up draws a second line.";
+/** The step up's sentence by unit with a top rung (MB-B20): each names what its rung adds. A top unit with none keeps the usual step-up sentence. */
+export const TOP_RUNG_LINES: Readonly<Record<string, string>> = {
+  "frac-add-sub": TOP_RUNG_LINE,
+  "frac-mul-div": TOP_RUNG_LINE,
+  "pct-change": "Reverse and repeated percentage changes and a word problem join the harder ones, still school level, and a secure step up draws a second line.",
+  "pythagoras": "Sides with decimals, answers rounded and a word problem join the harder ones, still school level, and a secure step up draws a second line.",
+  "probability": "Combined events, picking without replacement and a word problem join the harder ones, still school level, and a secure step up draws a second line.",
+};
+
+/** The one sentence under the cells, for the lit one; `topic` the unit asked about (a top-rung unit says what its step up adds). */
+export function choiceLine(cell: number, topic?: string): string {
+  if (cell === -1) return "A short worked example first, then six questions at your usual level.";
+  if (cell === 1 && topGeneratorFor(topic) && Object.prototype.hasOwnProperty.call(TOP_RUNG_LINES, topic as string)) return TOP_RUNG_LINES[topic as string];
   return cell === 1
     ? "Six questions with more of the harder kind, and a secure step up draws a second line on its topic."
     : "Six questions at your usual level, marked by the desk when you snap or type your answers.";
@@ -58,6 +89,28 @@ export function choiceLine(cell: number): string {
 
 /** Tonight's caption on the Get ready for school door. */
 export const PREPARE_DOOR = "Pick what school is teaching next and practise it before the lesson.";
+
+/**
+ * The path's last topic when the learner is past the end of the school path, else null: on the school path, with an age
+ * on the profile (the Topics ruler's test), and a school year (expectedOn) that equals the path's length.
+ */
+export function pastPathEnd(s: Pick<Session, "profiles" | "learner">): PathTopic | null {
+  const path = learnerPath(s);
+  if (!PATHS[path].school) return null;
+  const me = s.profiles?.find((p) => p.id === s.learner?.id);
+  const age = me && me.type !== "other" ? me.age : undefined;
+  if (age === undefined) return null;
+  const topics = topicsOf(path);
+  return topics.length && expectedOn(path, systemOf(me), age) === topics.length ? topics[topics.length - 1] : null;
+}
+
+/** The line that says the path ends, for a learner past its end; null for everyone else. */
+export function pathEndsLine(s: Pick<Session, "profiles" | "learner">): string | null {
+  const last = pastPathEnd(s);
+  if (!last?.year) return null;
+  const me = s.profiles?.find((p) => p.id === s.learner?.id);
+  return `This path ends at ${SYS_WORD[systemOf(me)](last.year)}; your year is past it.`;
+}
 
 // ---------------------------------------------------------------- the scroller: cards under the lamp
 

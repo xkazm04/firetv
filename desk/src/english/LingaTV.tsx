@@ -1,15 +1,18 @@
 "use client";
+import { LingaKeys } from "./LingaKeys";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Event, Screen, Session } from "@/lib/session/store";
-import { ENGLISH_SCENES } from "@/lib/english/curriculum";
+import { AUTHORED_SCENES } from "@/lib/english/curriculum";
 import { ownerOf } from "@/lib/english/activity";
 import { accepts } from "@/lib/english/turn";
+import { runningTake } from "@/lib/english/take";
 import { activeCheck, artOf, lingaView, NO_UI, progressDots, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
 import { landingFocus } from "@/tv/landingRows";
 import { useEnglish } from "./useEnglish";
 import { useEnglishAudio } from "./useEnglishAudio";
 import { ART } from "./art";
-import { Arch, Arrow, BandSteps, Caption, DataLine, Dots, Kicker, Learner, Mark, OnYourPhone, Plate, SentenceCard, Stones } from "./OpenDoor";
+import { Corridor } from "./art/Corridor";
+import { Arch, Arrow, BandSteps, Caption, DataLine, Dots, Kicker, Learner, Mark, OnYourPhone, Plate, SentenceCard, Stones, Yours } from "./OpenDoor";
 
 const CHECK_SCREENS:Screen[]=["linga-check","linga-verdict","linga-plan"];
 /** Actions whose next step is speaking on the phone: they carry the phone badge. */
@@ -50,7 +53,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
         else if(picking){patch({picking:null});post({type:"focus",focus:0});}
         else if(home)post({type:"nav",screen:"landing",focus:landingFocus(s,"english")});
         else if(s.screen==="linga-check"&&lc)cmd("check-leave");
-        else if(c&&s.screen==="linga-talk")cmd("leave");
+        else if(c&&s.screen==="linga-talk")cmd(runningTake(c)&&!c.pending?"take-end":"leave");
         else if(c&&s.screen==="linga-moment")cmd("moment-done");
         else{patch({menu:false});post({type:"nav",screen:"linga",focus:0});}
         return;
@@ -64,7 +67,8 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     addEventListener("keydown",handler);return()=>removeEventListener("keydown",handler);
   });
   const h=v.hero;
-  const layout:Layout=menu||h.kind==="certs"?"menu":h.kind==="ladder"?"ladder":h.kind==="topics"?"plan":"door";
+  // the Cut recap's tape (v2 L3) is a row of pins, as the topics are a row of doors
+  const layout:Layout=menu||h.kind==="certs"?"menu":h.kind==="ladder"?"ladder":h.kind==="topics"||h.kind==="tape"?"plan":"door";
   /** The topics screen shows only the focused action: one "Swap this topic" per topic would be a wall of buttons. */
   const single=layout==="plan"&&actions.length>2;
   /** A choice has no primary: every option is the same kind of button. */
@@ -90,7 +94,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
   return <div className="linga-tv" data-view={v.screen} data-layout={layout} data-hero={h.kind} data-fit={fit||undefined}>
     <header className="lo-top"><Mark/><Learner name={s.learner?.name ?? ""} up={home&&!menu&&!picking}/></header>
     {layout==="door"&&<>
-      {art&&<Arch art={art} tag={tag} speaker={s.screen==="linga-talk"}/>}
+      {art&&<Arch art={art} tag={tag} speaker={s.screen==="linga-talk"}>{art==="lost"&&h.kind==="scene"&&h.lost?<Corridor lost={h.lost}/>:undefined}</Arch>}
       <section className="lo-panel" ref={panel}><div className="lo-body"><Body v={v} s={s} caption={caption}/></div>{nav}</section>
     </>}
     {layout==="ladder"&&h.kind==="ladder"&&<>
@@ -98,7 +102,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       {/* the card and the steps share one column: a longer sentence lowers the steps instead of covering them */}
       <div className="lo-stage">
         {h.note&&<SentenceCard className={`lo-note-card${h.note.length>110?" lo-wide":""}`} label="Linga says" text={h.note} role="linga-note"/>}
-        <BandSteps band={h.band}/>
+        <BandSteps band={h.band} spoke={h.spoke}/>
       </div>
       {nav}
     </>}
@@ -109,12 +113,28 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       </div>;}):[0,1,2,3].map(i=><div key={i} className="lo-topic lo-ghost" aria-hidden="true"><div className="lo-mini"/></div>)}</div>
       {nav}
     </>}
+    {layout==="plan"&&h.kind==="tape"&&<>
+      <section className="lo-head"><Kicker text={h.kicker}/><Title text={h.title}/>{caption}</section>
+      {/* three pins at most, the learner's own words on each; the focused pin's note is the one caption above */}
+      {/* Take Two (v2 L4): a held note's quote is struck, an open one stays as it was, an undecided one says so; no count */}
+      <div className="lo-doors linga-topics linga-tape" data-role="linga-tape" data-count={h.pins.length} data-selecting={h.selected>=0}>{h.pins.map((x,i)=><div key={i} className="lo-topic" data-selected={i===h.selected} data-mark={x.mark}>
+        <small>{x.label}</small><b>{x.mark==="held"?<s data-role="linga-struck">“{x.quote}”</s>:<>“{x.quote}”</>}</b>{x.better&&<small>{x.better}</small>}{x.mark==="undecided"&&<small>Not decided</small>}
+      </div>)}</div>
+      {/* the take, drawn as a branch from its pin: the line it forked at, then the learner's line again */}
+      {h.branch&&<div className="linga-branch" data-role="linga-branch" data-pin={h.branch.pin}>
+        <DataLine><span className="lo-data-key">Take Two · {h.pins[h.branch.pin]?.label}</span>{h.branch.partner.split(" · ")[0]}: “{h.branch.from}”</DataLine>
+        {h.branch.again&&<DataLine><span className="lo-data-key">You again</span>“{h.branch.again}”</DataLine>}
+      </div>}
+      <DataLine>{h.data}</DataLine>
+      {nav}
+    </>}
     {layout==="menu"&&(h.kind==="menu"||h.kind==="certs")&&<>
       <section className="lo-head"><Kicker text={h.kicker}/><Title text={h.title}/>{caption}</section>
       {nav}
     </>}
     <footer className="lo-footer linga-footer">
       {v.tag&&<span className="lo-where">{v.tag}</span>}
+      <LingaKeys s={s}/>
       {dots&&<Dots dots={dots}/>}
       <span className="lo-status">{status}</span>
       <button onClick={()=>go(menuKey)}>{menuKey.label}</button>{repeat&&<button onClick={()=>go(repeat)}>{repeat.label}</button>}
@@ -135,7 +155,7 @@ function artFor(h:Hero,s:Session):ArtKey{
     case "heading":return "check";
     case "choices":{
       if(s.screen!=="linga-talk"||!c)return "check";
-      return artOf(c.sceneId,c.scene?.skill??ENGLISH_SCENES.find(x=>x.id===c.sceneId)?.skill??c.focusSkill);
+      return artOf(c.sceneId,c.scene?.skill??AUTHORED_SCENES.find(x=>x.id===c.sceneId)?.skill??c.focusSkill);
     }
     default:return "start";
   }
@@ -144,6 +164,13 @@ function artFor(h:Hero,s:Session):ArtKey{
 /** The conversation's goal under a partner's line, when the line leaves it room; the screen then starts one type step down (linga.css, data-fit). */
 function talkGoal(h:Hero):string|null{return h.kind==="scene"&&h.said&&h.subtitle&&h.said.length<=140?h.subtitle:null;}
 
+/** A quote with one excerpt struck through, as Take Two strikes a held note: the picture of a slip the learner fixed. */
+function struck(quote:string,part?:string):React.ReactNode{
+  const at=part?quote.indexOf(part):-1;
+  if(!part||at<0)return quote;
+  return <>{quote.slice(0,at)}<s data-role="linga-struck">{part}</s>{quote.slice(at+part.length)}</>;
+}
+
 /** A title in Georgia, one size smaller for each step in length so it never takes a third line. */
 function Title({text}:{text:string}){return <h1 className="lo-title" data-role="linga-title" data-size={text.length<=34?"l":text.length<=50?"m":"s"}>{text}</h1>;}
 
@@ -151,7 +178,8 @@ function Title({text}:{text:string}){return <h1 className="lo-title" data-role="
 function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
   const h=v.hero,focus=s.focus;
   switch(h.kind){
-    case "intro":return <><Kicker text={h.kicker}/><Title text={h.title}/>{caption}{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}</>;
+    // L1: the phrases the learner owns, a small strip under home's words (Open Door objects; Adult, a progress line)
+    case "intro":return <><Kicker text={h.kicker}/><Title text={h.title}/>{caption}{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{h.yours&&<Yours phrases={h.yours.phrases} style={h.yours.style}/>}</>;
     case "message":{
       const label=s.screen==="linga-check"&&activeCheck(s)?.stage==="tasks"?"Your task":"Linga asks";
       return <><Kicker text={h.kicker}/>{h.text&&<SentenceCard className={`lo-said linga-message${h.note?" lo-compact":""}`} label={label} text={h.text} role="linga-said"/>}{h.note&&<SentenceCard className="lo-compact" label="The words" text={h.note}/>}{caption}</>;
@@ -160,16 +188,18 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
     case "choices":return <><Kicker text={h.kicker}/><h1 className="lo-prompt" data-role="linga-title">{h.prompt}</h1>
       <div className="lo-choices linga-choices">{h.options.map((x,i)=><div key={x} data-selected={focus===i}><small>0{i+1}</small>{x}</div>)}</div>{caption}</>;
     case "scene":{
-      if(s.screen==="linga-scenes")return <><Kicker band={h.band} text={`${h.subtitle} · ${h.minutes} min`}/><Title text={h.title}/>{caption}<SentenceCard label="A sentence to take with you" text={h.sentence}/></>;
+      // a scene the learner pitched (v2 L3) is marked as their own on its card
+      if(s.screen==="linga-scenes")return <><Kicker band={h.band} text={`${h.own?"Your own scene · ":""}${h.subtitle} · ${h.minutes} min`}/><Title text={h.title}/>{caption}<SentenceCard label="A sentence to take with you" text={h.sentence}/></>;
       const kicker=h.kicker.endsWith(` · ${h.partner}`)?h.kicker.slice(0,-(h.partner.length+3)):h.kicker;
       const goal=talkGoal(h);
-      return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{goal&&<DataLine><span className="lo-data-key">Goal</span>{goal}</DataLine>}</>;
+      return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{goal&&<DataLine><span className="lo-data-key">{h.take?"Take Two of":h.kind==="scene"&&h.steps?"Now":"Goal"}</span>{goal}</DataLine>}</>;
     }
     // On the recap, the phrase this scene invited and the learner has yet to use stands where the title would be.
-    case "track":return <><Kicker text={h.kicker}/>{h.sentence?<SentenceCard className="lo-compact" label="A sentence to take with you" text={h.sentence}/>:<Title text={h.title}/>}<Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;
-    case "comparison":return <><Kicker text={v.tag}/><div className="lo-compare linga-comparison">
-      <div className="lo-before"><span>{h.before.kicker}</span><q>{h.before.quote}</q></div>
-      <SentenceCard label={h.after.kicker} text={h.after.quote}/>
+    case "track":return <><Kicker text={h.kicker}/>{h.sentence?<SentenceCard className="lo-compact" label={h.from?`From ${h.from}`:"A sentence to take with you"} text={h.sentence}/>:<Title text={h.title}/>}<Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;
+    // a fix moment (K2): the slip the learner repaired is struck (Take Two's mark), and a fix still withheld leaves the after slot an empty frame
+    case "comparison":return <><Kicker text={h.kicker??v.tag}/><div className="lo-compare linga-comparison">
+      <div className="lo-before"><span>{h.before.kicker}</span><q>{struck(h.before.quote,h.before.struck)}</q></div>
+      <SentenceCard className={h.open?"lo-open":""} role={h.open?"linga-open":undefined} label={h.after.kicker} text={h.after.quote}/>
     </div>{h.note&&<div className="lo-note">{h.note}</div>}{caption}{h.data&&<DataLine>{h.data}</DataLine>}</>;
     // the certificate: the band and its name, the caption's one sentence, then the plate (OpenDoor Plate)
     case "cert":return <><Kicker text={h.kicker}/><Title text={h.title}/>{caption}{(h.topics.length>0||h.skills.length>0||(h.open?.length??0)>0||h.quote)&&<Plate topics={h.topics} skills={h.skills} quote={h.quote} open={h.open}/>}</>;

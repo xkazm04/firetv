@@ -1,5 +1,5 @@
 /**
- * The slip vocabulary for linear equations - and, through rules/calc CALC_SLIPS, for the calc1 topics, and through
+ * The slip vocabulary for linear equations - and, through rules/calc CALC_SLIPS, for the topics of a path judged 'calc', and through
  * rules/school SCHOOL_SLIPS, for the school units that have them (Family W5b and W7: every school unit, fractions to mean and range) - decided in code.
  *
  * Same discipline as rules/english.ts: the table is the closed set the model is allowed to
@@ -7,48 +7,56 @@
  * the next step, or the answer — the student produces those, or there was no point asking.
  *
  * It also holds the settle rule marking and explanation share, and the check that a reply leaks nothing.
- * It imports rules/calc, rules/school and the calc1 spine (all pure, client-safe) and nothing session-backed.
+ * It imports rules/calc, rules/school and library/paths (all pure, client-safe) and nothing session-backed.
  */
+import { readTask } from "./taskText";
 import { evaluate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SlipAt } from "../session/store";
 import { spanStarts } from "../../maths/typeset";
-import { CALC_SHAPES, CALC_SLIPS, checkAnswer, slipsFor as calcSlipsFor } from "./calc";
-import { CALC1_SPINE } from "../library/calculus1.spine";
-import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec } from "./school";
+import { isCalc2Spec } from "./calc2";
+import { leaksMaturita, readsMaturita } from "./maturita";
+import { EN_CARD, figuresOfCzech, fold } from "./numberWords";
+import { CALC_SHAPES, CALC_SLIP_SHORT, CALC_SLIPS, checkAnswer, partsFromQuestion as calcPartsOf, slipsFor as calcSlipsFor, specFromQuestion as calcSpecOf } from "./calc";
+import { calcTopics, judgeOfTopic } from "../library/paths";
+import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_TOP_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec, specFromQuestion as schoolSpecOf } from "./school";
 import type { SchoolSystem } from "../session/store";
+import { DISAGREES, markCounts, type Markable } from "./marks";
 
-/** `name` is what the TV sets as the slip's title; `says` is the desk's line; `points` the place in words. */
-export interface Slip { id: string; topics: string[]; says: string; points: string; name: string; }
+/**
+ * `name` is what the TV sets as the slip's title; `short` its label on the recap's ring (every slip carries one: lowercase,
+ * rules/school SHORT_WORDS and SHORT_CHARS at most, no value, distinct within a topic); `says` is the desk's line; `points` the place in words.
+ */
+export interface Slip { id: string; topics: string[]; says: string; points: string; name: string; short: string; }
 
 const ONE = "linear-one-step";
 const TWO = "linear-two-step";
 const BOTH = "linear-both-sides";
 
 export const SLIPS: Slip[] = [
-  { id: "undo-wrong-order", topics: [TWO, BOTH], says: "You undid the multiplication before the addition. Look at the order the two operations were done to x, and undo them the other way round.", points: "the second line", name: "Undone in the wrong order" },
-  { id: "sign-lost-moving", topics: [ONE, TWO, BOTH], says: "A term changed sides but kept its sign. Check what happened to that term as it crossed the equals sign.", points: "the line where the term moved", name: "Sign lost crossing the equals" },
-  { id: "divided-one-term", topics: [TWO, BOTH], says: "You divided only part of that side. Everything on the side has to be divided, not just the term next to x.", points: "the left-hand side", name: "Only one term divided" },
-  { id: "bracket-first-term-only", topics: [BOTH], says: "The bracket was expanded onto the first term only. The number outside multiplies every term inside.", points: "the expanded bracket", name: "Bracket on the first term only" },
-  { id: "collect-x-wrong-sign", topics: [BOTH], says: "The x-terms were collected with the wrong sign. Check the sign of the x-term you moved across.", points: "the line where the x-terms met", name: "x-terms gathered with the wrong sign" },
-  { id: "multiplied-not-divided", topics: [ONE, TWO], says: "You multiplied where the operation needed undoing by dividing. Look at what is being done to x on that line.", points: "the last line", name: "Multiplied instead of divided" },
-  { id: "added-not-subtracted", topics: [ONE, TWO], says: "The same operation was done again instead of being undone. Read what is attached to x and ask what reverses it.", points: "the first line of working", name: "Done again instead of undone" },
-  { id: "one-side-only", topics: [ONE, TWO, BOTH], says: "The step was done to one side and not the other. Whatever you do to one side has to happen to both.", points: "the right-hand side", name: "Done to one side only" },
-  { id: "arithmetic-slip", topics: [ONE, TWO, BOTH], says: "The method is right but a number came out wrong. Re-do just the arithmetic on that line.", points: "the line you are on", name: "A number came out wrong" },
-  { id: "negative-mishandled", topics: [TWO, BOTH], says: "A negative was dropped somewhere in that step. Track the minus sign through the line.", points: "the line with the negative", name: "A minus sign dropped" },
-  { id: "fraction-not-cleared", topics: [TWO, BOTH], says: "The fraction was left in place instead of being undone. Look at what the x is being divided by.", points: "the left-hand side", name: "The fraction left in place" },
-  { id: "answer-not-checked", topics: [ONE, TWO, BOTH], says: "The working stops before the check. Put your value back into the original equation and see whether the two sides agree.", points: "the original equation", name: "The answer not checked" },
+  { id: "undo-wrong-order", topics: [TWO, BOTH], says: "You undid the multiplication before the addition. Look at the order the two operations were done to x, and undo them the other way round.", points: "the second line", name: "Undone in the wrong order", short: "undone in wrong order" },
+  { id: "sign-lost-moving", topics: [ONE, TWO, BOTH], says: "A term changed sides but kept its sign. Check what happened to that term as it crossed the equals sign.", points: "the line where the term moved", name: "Sign lost crossing the equals", short: "sign lost crossing over" },
+  { id: "divided-one-term", topics: [TWO, BOTH], says: "You divided only part of that side. Everything on the side has to be divided, not just the term next to x.", points: "the left-hand side", name: "Only one term divided", short: "only one term divided" },
+  { id: "bracket-first-term-only", topics: [BOTH], says: "The bracket was expanded onto the first term only. The number outside multiplies every term inside.", points: "the expanded bracket", name: "Bracket on the first term only", short: "bracket on one term" },
+  { id: "collect-x-wrong-sign", topics: [BOTH], says: "The x-terms were collected with the wrong sign. Check the sign of the x-term you moved across.", points: "the line where the x-terms met", name: "x-terms gathered with the wrong sign", short: "wrong sign on x-terms" },
+  { id: "multiplied-not-divided", topics: [ONE, TWO], says: "You multiplied where the operation needed undoing by dividing. Look at what is being done to x on that line.", points: "the last line", name: "Multiplied instead of divided", short: "multiplied not divided" },
+  { id: "added-not-subtracted", topics: [ONE, TWO], says: "The same operation was done again instead of being undone. Read what is attached to x and ask what reverses it.", points: "the first line of working", name: "Done again instead of undone", short: "done again not undone" },
+  { id: "one-side-only", topics: [ONE, TWO, BOTH], says: "The step was done to one side and not the other. Whatever you do to one side has to happen to both.", points: "the right-hand side", name: "Done to one side only", short: "done to one side" },
+  { id: "arithmetic-slip", topics: [ONE, TWO, BOTH], says: "The method is right but a number came out wrong. Re-do just the arithmetic on that line.", points: "the line you are on", name: "A number came out wrong", short: "a number went wrong" },
+  { id: "negative-mishandled", topics: [TWO, BOTH], says: "A negative was dropped somewhere in that step. Track the minus sign through the line.", points: "the line with the negative", name: "A minus sign dropped", short: "a minus sign dropped" },
+  { id: "fraction-not-cleared", topics: [TWO, BOTH], says: "The fraction was left in place instead of being undone. Look at what the x is being divided by.", points: "the left-hand side", name: "The fraction left in place", short: "fraction left in place" },
+  { id: "answer-not-checked", topics: [ONE, TWO, BOTH], says: "The working stops before the check. Put your value back into the original equation and see whether the two sides agree.", points: "the original equation", name: "The answer not checked", short: "answer not checked" },
 ];
 
 /**
- * The Calculus slips (rules/calc CALC_SLIPS) as Slips, each tagged with the calc1 topics whose practice shapes it
- * applies to (calculus1.spine: a topic's shapes; rules/calc slipsFor(shape), unioned over them). Their words are
+ * The Calculus slips (rules/calc CALC_SLIPS) as Slips, each tagged with the topics of every path judged 'calc' whose
+ * practice shapes it applies to (library/paths calcTopics: a topic's shapes; rules/calc slipsFor(shape), unioned over them). Their words are
  * rules/calc's own; like the school table, none carries a value.
  */
 const CALC_AS_SLIPS: Slip[] = CALC_SLIPS.map((c) => ({
-  id: c.id, says: c.says, points: c.points, name: c.name,
-  topics: CALC1_SPINE.filter((t) => t.shapes.some((sh) => calcSlipsFor(sh).includes(c.id))).map((t) => t.id),
+  id: c.id, says: c.says, points: c.points, name: c.name, short: CALC_SLIP_SHORT[c.id],
+  topics: calcTopics().filter((t) => (t.shapes ?? []).some((sh) => calcSlipsFor(sh).includes(c.id))).map((t) => t.id),
 }));
-const isCalcTopic = (topicId: string) => CALC1_SPINE.some((t) => t.id === topicId);
+const isCalcTopic = (topicId: string) => judgeOfTopic(topicId) === "calc";
 
 /**
  * The school units' slips (rules/school SCHOOL_SLIPS, Family W5b) as Slips, each tagged with the units whose closed
@@ -56,7 +64,7 @@ const isCalcTopic = (topicId: string) => CALC1_SPINE.some((t) => t.id === topicI
  * from the spec's own operands (rules/school check), never picked by a model.
  */
 const SCHOOL_AS_SLIPS: Slip[] = SCHOOL_SLIPS.map((c) => ({
-  id: c.id, says: c.says, points: c.points, name: c.name,
+  id: c.id, says: c.says, points: c.points, name: c.name, short: c.short,
   topics: Object.keys(SCHOOL_UNIT_SLIPS).filter((u) => SCHOOL_UNIT_SLIPS[u].includes(c.id)),
 }));
 
@@ -71,12 +79,21 @@ export function slip(id: string, topicId?: string): Slip | undefined {
 }
 
 /**
- * The closed list for a topic: the linear table for a linear id, the Calculus slips of its shapes for a calc1 id, the
+ * The closed list for a topic: the linear table for a linear id, the Calculus slips of its shapes for a topic of a path judged 'calc', the
  * unit's own list for a school unit (SCHOOL_UNIT_SLIPS). Nothing outside a topic's list can be named on its items.
  */
 export function slipsFor(topicId: string): Slip[] {
   if (isCalcTopic(topicId)) return CALC_AS_SLIPS.filter((s) => s.topics.includes(topicId));
   return [...SLIPS, ...SCHOOL_AS_SLIPS].filter((s) => s.topics.includes(topicId));
+}
+
+/**
+ * MB-B20: the slips only a school unit's top rung shows (rules/school SCHOOL_TOP_SLIPS), in its words; none for any other
+ * topic. Off `slipsFor` on purpose: a model is never offered them, and only the school check names one (`settled`).
+ */
+function topSlipsFor(topicId: string): Slip[] {
+  const ids = Object.prototype.hasOwnProperty.call(SCHOOL_TOP_SLIPS, topicId) ? SCHOOL_TOP_SLIPS[topicId] : [];
+  return SCHOOL_AS_SLIPS.filter((s) => ids.includes(s.id));
 }
 
 /** The list the prompt carries: one slip per line, id then what the desk would say. */
@@ -89,12 +106,35 @@ export function slipVocabulary(topicId: string): string {
 export const RIGHT = (n: number) => `Number ${n} is right.`;
 export const ASK = (n: number) => `I got something different for number ${n}. How did you get there?`;
 
+/** The desk's line on an item it is not sure of: why, in the engine's own fixed words (never a value), or a question when it has no reason. */
+export const NOT_SURE = (n: number, why?: string) => `The desk is not sure about number ${n}. ${why || "How did you get there?"}`;
+/** The desk's line on an item with no answer. */
+export const BLANK = (n: number) => `Number ${n} has no answer yet.`;
+
 /** A value as a learner or a marker writes it: `x = 9` is `9`. */
 export const cleanValue = (s: unknown) => (typeof s === "string" ? s.trim().replace(/^x\s*=\s*/i, "") : "");
 
 /** Typed answers (Family W6): the most a set may carry, and the longest one answer may be. Refused past either, never cut. */
 export const TYPED_ANSWERS_MAX = 12;
-export const TYPED_ANSWER_MAX = 40;
+/** 120 holds a quotient-rule derivative; the readers' own limits keep a longer answer unsure, never wrong. */
+export const TYPED_ANSWER_MAX = 120;
+/**
+ * The most a snapped page may weigh, as the data URL the phone posts. The phone draws every photo at 1280 px wide as JPEG 0.85
+ * (phone/page.tsx toJpeg): a full portrait page of fine print is well under 6 MB as text, so 12 MB leaves room and stops the rest.
+ */
+export const READ_IMAGE_MAX = 12 * 1024 * 1024;
+/** Why a photo is refused before any run, in the desk's words; null when it can be read. */
+export function readImageProblem(image: unknown): string | null {
+  return typeof image === "string" && image.length > READ_IMAGE_MAX ? "That photo is too big for the desk to read. Snap the page again, closer or in better light." : null;
+}
+/** The longest question the hint route takes with a hint (the explain transcript's cap, X5): a longer one is refused, never cut. */
+export const HINT_QUESTION_MAX = 1000;
+/** Why a hint question is refused before any run, in the desk's words; null when it can be asked (absent is no question). */
+export function hintQuestionProblem(q: unknown): string | null {
+  if (q === undefined || q === null) return null;
+  if (typeof q !== "string") return "The desk did not get your question as text. Type it again.";
+  return q.length > HINT_QUESTION_MAX ? `That question is longer than ${HINT_QUESTION_MAX} characters. Shorten it and ask again.` : null;
+}
 
 /**
  * Are these the typed answers to a set of `n` questions? A plain sentence when not, null when they are: a list of
@@ -106,6 +146,7 @@ export function typedAnswersProblem(answers: unknown, n: number): string | null 
   if (answers.length > TYPED_ANSWERS_MAX) return `That is more than ${TYPED_ANSWERS_MAX} answers, and no set is that long. Send one for each question.`;
   if (answers.some((a) => typeof a !== "string")) return "One of the answers was not text. Type them again.";
   if (answers.length !== n) return `This set has ${n} questions and ${answers.length} answers came. Send one for each question.`;
+  if ((answers as string[]).every((a) => !a.trim())) return "Every answer is empty. Type at least one and send again.";
   const long = (answers as string[]).findIndex((a) => a.length > TYPED_ANSWER_MAX);
   if (long >= 0) return `Answer ${long + 1} is longer than ${TYPED_ANSWER_MAX} characters. Shorten it and send again.`;
   return null;
@@ -115,33 +156,36 @@ export function typedAnswersProblem(answers: unknown, n: number): string | null 
  * The ONE typed second go (route /api/second): may this item take it? null when it may - a wrong item that has not had its go.
  * Otherwise the plain desk sentence for why not. One go, so it can never be guess-and-check; and never a value in the sentence.
  */
-export function secondProblem(item: Pick<PracticeItem, "n" | "verdict" | "second">): string | null {
+export function secondProblem(item: Pick<PracticeItem, "n" | "verdict" | "second">, name: string = String(item.n)): string | null {
   if (item.verdict === "wrong" && !item.second) return null;
-  if (item.verdict === "wrong") return `Number ${item.n} has had its second go. Look at where the pen is, or try a new set.`;
-  if (item.verdict === "right") return `Number ${item.n} came back right, so it needs no second go.`;
-  return `The desk is not sure about number ${item.n} yet. Tell it how you got there first.`;
+  if (item.verdict === "wrong") return `Number ${name} has had its second go. Look at where the pen is, or try a new set.`;
+  if (item.verdict === "right") return `Number ${name} came back right, so it needs no second go.`;
+  return `The desk is not sure about number ${name} yet. Tell it how you got there first.`;
 }
 
 export interface Settled { verdict: "right" | "wrong"; slip?: string; said: string; slipAt?: SlipAt; }
 
 /**
  * The verdict the substitution gave, and the line that goes with it. A slip survives only on a wrong
- * item and only from this topic's closed vocabulary; a wrong item with no slip asks. Never a value.
+ * item and only from this topic's closed vocabulary, or (MB-B20, `byCode`: the school check named it) from its top
+ * rung's. A wrong item with no slip says its checker's own reason (`why`, a fixed sentence: "A derivative has no arbitrary constant in it.") when it has one beyond the plain
+ * disagreement (rules/marks DISAGREES), and asks how the learner got there when it has none (MB-B1). Never a value.
  */
-export function settled(n: number, right: boolean, slipId: unknown, topicId: string): Settled {
+export function settled(n: number, right: boolean, slipId: unknown, topicId: string, why?: string, byCode = false): Settled {
   const id = typeof slipId === "string" ? slipId.trim() : "";
-  const own = right ? undefined : slipsFor(topicId).find((s) => s.id === id);
-  return { verdict: right ? "right" : "wrong", slip: own?.id, said: right ? RIGHT(n) : own ? own.says : ASK(n) };
+  const own = right ? undefined : slipsFor(topicId).find((s) => s.id === id) ?? (byCode ? topSlipsFor(topicId) : []).find((s) => s.id === id);
+  const reason = typeof why === "string" && why.trim() && why !== DISAGREES ? why.trim() : "";
+  return { verdict: right ? "right" : "wrong", slip: own?.id, said: right ? RIGHT(n) : own ? own.says : reason || ASK(n) };
 }
 
-/** Is this a Calculus spec by its shape? A school spec never is (the shape lists share no name). */
+/** Is this a Calculus spec by its shape - a Calculus 1 shape or a Calculus 2 one (rules/calc2.ts)? A school spec never is (the shape lists share no name). */
 export const isCalcSpec = (spec: unknown): boolean =>
-  !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
+  !!spec && typeof spec === "object" && ((CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape) || isCalc2Spec(spec));
 
 /**
  * Settle an item with a spec from an answer as written or said, dispatched on the spec's shape - never both engines:
  *   - a Calculus spec: rules/calc checkAnswer decides, from the spec alone. The slip is checkAnswer's own where it names
- *     one (sign, lost-constant), else the pick offered;
+ *     one (sign, lost-constant, forgot-chain), else the pick offered;
  *   - a school spec (Family W5b): rules/school check(spec, answer, system) decides, reading the answer by the learner's
  *     school system (`system`, the desk's default UK when not given: '0,5' is a half in cz and de, unsure in us and
  *     uk). The slip is ONLY the one code detected from the spec's operands: a pick offered is ignored.
@@ -150,15 +194,21 @@ export const isCalcSpec = (spec: unknown): boolean =>
  * No pen position: `locate` reads linear lines only. A spec of neither kind settles nothing.
  */
 export function settleSpec(n: number, spec: unknown, answer: unknown, slipId: unknown, topicId: string, system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM): Settled | null {
+  const j = judgeSpec(n, spec, answer, slipId, topicId, system);
+  return j.verdict === "unsure" ? null : j;
+}
+
+/** settleSpec with the reason kept: the settled verdict, or `unsure` with the engine's own sentence (none for a spec of neither kind). */
+export function judgeSpec(n: number, spec: unknown, answer: unknown, slipId: unknown, topicId: string, system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM): Settled | { verdict: "unsure"; why?: string } {
   if (isSchoolSpec(spec)) {
     const v = schoolCheck(spec, typeof answer === "string" ? answer : "", system);
-    if (v.verdict === "unsure") return null;
-    return settled(n, v.verdict === "right", v.slip, topicId);
+    if (v.verdict === "unsure") return { verdict: "unsure", why: v.why };
+    return settled(n, v.verdict === "right", v.slip, topicId, v.why, true);
   }
-  if (!isCalcSpec(spec)) return null;
-  const c = checkAnswer(spec, typeof answer === "string" ? answer : "");
-  if (c.verdict === "unsure") return null;
-  return settled(n, c.verdict === "right", c.slip ?? slipId, topicId);
+  if (!isCalcSpec(spec)) return { verdict: "unsure" };
+  const c = checkAnswer(spec, typeof answer === "string" ? answer : "", system);
+  if (c.verdict === "unsure") return { verdict: "unsure", why: c.why };
+  return settled(n, c.verdict === "right", c.slip ?? slipId, topicId, c.why);
 }
 
 /**
@@ -176,30 +226,27 @@ export function settle(item: { n: number; question: string } & Pick<PracticeItem
 }
 
 /**
- * The set's line in the learner's history: "k of n right", and ", u not sure" when the desk could not decide u of
- * them (Lamplight's dashed ring: an unsure item is neither a tick nor a slip, and the recap draws it as one).
- * Counted from the verdicts the substitution set on the items, never from a model's word. With no unsure item
- * the line is the old "k of n right" exactly, so older lines and newer ones read alike. Marking writes it; a
- * settle restates it from the same verdicts - a recount, not a count-up, so an item settled twice is still one item.
+ * The set's line in the learner's history: "k of n right", ", u not sure" when the desk could not decide u of them
+ * (Lamplight's dashed ring: an unsure item is neither a tick nor a slip, and the recap draws it as one), and
+ * ", s skipped" when s were left empty (MB-B1: the child's choice, not the desk's doubt; rules/marks reads it).
+ * Counted from the marks the items read as, never from a model's word. With nothing unsure or skipped the line is
+ * the old "k of n right" exactly, so older lines and newer ones read alike. Marking writes it; a settle restates it
+ * from the same marks - a recount, not a count-up, so an item settled twice is still one item.
  */
-export const rightLine = (items: readonly { verdict?: string }[]) => {
-  const u = items.filter((i) => i.verdict !== "right" && i.verdict !== "wrong").length; // unsure, or no verdict: never drawn as a slip
-  return `${items.filter((i) => i.verdict === "right").length} of ${items.length} right${u ? `, ${u} not sure` : ""}`;
+export const rightLine = (items: readonly Markable[]) => {
+  const c = markCounts(items); // unsure, or no verdict: never drawn as a slip; skipped: never drawn as doubt
+  return `${c.right} of ${items.length} right${c.unsure ? `, ${c.unsure} not sure` : ""}${c.skipped ? `, ${c.skipped} skipped` : ""}`;
 };
 
-/** The restated line for a history entry that is this set's line (same n, either form), or null when it is not. */
-export function restatedLine(detail: string, items: readonly { verdict?: string }[]): string | null {
-  const m = /^\d+ of (\d+) right(?:, \d+ not sure)?$/.exec(detail);
+/** The restated line for a history entry that is this set's line (same n, any of its forms), or null when it is not. */
+export function restatedLine(detail: string, items: readonly Markable[]): string | null {
+  const m = /^\d+ of (\d+) right(?:, \d+ not sure)?(?:, \d+ skipped)?$/.exec(detail);
   return m && Number(m[1]) === items.length ? rightLine(items) : null;
 }
 
 /** Every number written in a line: 7, -3, 3.5, 7/2. */
 const NUMBERS = /[-−]?\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?/g;
-const WORDS: Record<string, string> = {
-  zero: "0", one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10",
-  eleven: "11", twelve: "12", thirteen: "13", fourteen: "14", fifteen: "15", sixteen: "16", seventeen: "17", eighteen: "18",
-  nineteen: "19", twenty: "20", thirty: "30", forty: "40", fifty: "50", sixty: "60", seventy: "70", eighty: "80", ninety: "90",
-};
+const WORDS: Record<string, string> = Object.fromEntries(Object.entries(EN_CARD).map(([w, n]) => [w, String(n)]));
 /** A number word, a tens word with its unit ('twenty-one', 'twenty one') read first so it is never 20 then 1. */
 const NUMBER_WORD = /\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:(?:-|\s+)(one|two|three|four|five|six|seven|eight|nine)\b)?|\b([a-z]+)\b/g;
 
@@ -209,7 +256,7 @@ const NUMBER_WORD = /\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?
  * ('x = - 3') joined to it - only where no number, x or bracket stands before it, so 'x - 3' stays a subtraction.
  * A word is a number only as WORDS' own key: 'constructor' is a word, never Object's function spliced in as text.
  */
-const said = (line: string) => line.toLowerCase().replace(/[−–—‐‑]/g, "-")
+const said = (line: string) => figuresOfCzech(line.toLowerCase()).replace(/[−–—‐‑]/g, "-")
   .replace(NUMBER_WORD, (w, tens: string | undefined, unit: string | undefined, word: string | undefined) =>
     tens ? String(Number(WORDS[tens]) + (unit ? Number(WORDS[unit]) : 0)) : Object.hasOwn(WORDS, word!) ? WORDS[word!] : w)
   .replace(/(\d+)\s+and\s+a\s+half\b/g, "$1.5")
@@ -228,15 +275,44 @@ const decimalComma = (line: string) => line.replace(/(?<!\d,|[\d.])(\d+),(\d+)(?
  * gives it ('Solve for x:  3x − 7 = 11' is its equation, `equationOf`), and an expression item leaks by form as
  * well (`leaksByForm`): the lab's oracle (vision/poc_hints.py) derived, not hand-listed.
  */
-export function leaks(question: string, line: string): boolean {
+export function leaks(question: string, line: string, system?: SchoolSystem): boolean {
   if (typeof line !== "string" || !line) return false;
-  const eq = equationOf(question) ?? question;
+  const eq = equationOf(question, system) ?? question;
   const found = [...(decimalComma(said(line)).match(NUMBERS) ?? [])];
   // "12-7" reads as -7 here, so a signed number is checked with and without its sign
   return found.map((v) => v.replace(/\s+/g, "").replace(/^−/, "-"))
     .some((v) => verify(eq, v) || (v.startsWith("-") && verify(eq, v.slice(1))))
-    || leaksByForm(question, line);
+    || leaksByForm(question, line, system)
+    || unreadLeaks(question, line, system)
+    || leaksMaturita(question, decimalComma(said(line)));
 }
+
+// ---- the stricter fallback: an item no reader reads (MB-B2) ----
+/**
+ * A solution said as one: a lone letter = a number ('x = 11', 'Takže x = 11.'), or 'the answer is <number>' / 'výsledek je <number>'.
+ * Not '3x = 180' (a letter beside a figure is an equation), and not 'y = 2x + 1' (a number that goes on into an expression).
+ */
+const SOLUTION = new RegExp(
+  String.raw`(?<![\w)\]^.+*/-])(?<![+*/^-]\s)[a-z]\s*=\s*-?\s*\d+(?:[.,]\d+)?(?:\/\d+)?(?![\w(^]|\s*[-+*/^×÷]\s*[\d(a-z])` +
+  String.raw`|(?:answer|result|solution|vysledek|odpoved|reseni)\s*(?:is|are|je|jsou|=|:)?\s*-?\s*\d`,
+);
+
+/** Does the item read as nothing: no equation, no expression, no Calculus or school spec, no parts? */
+function readsAsNothing(question: string, system?: SchoolSystem): boolean {
+  return !equationOf(question, system) && !expressionOf(question, system) && !calcSpecOf(question, system) && !calcPartsOf(question, system) && !schoolSpecOf(question, system) && !readsMaturita(question);
+}
+
+/**
+ * The fallback for an item nothing reads (a word problem, a sheet in a notation the readers do not know). No spec says what
+ * the answer is, so a line is refused for what it states: a solution, a letter = a number or 'the answer is <number>'. The
+ * wider half of the ruling - any number the item's own text lacks - refused 5 of the 24 recorded real hint stages, past the
+ * 3 the brief allows, and is not built. Only for an item that reads as nothing; the rest of the leak rule never reaches it.
+ */
+export function unreadLeaks(question: string, line: string, system?: SchoolSystem): boolean {
+  if (typeof question !== "string" || typeof line !== "string" || !line || !readsAsNothing(question, system)) return false;
+  return SOLUTION.test(fold(decimalComma(said(line))));
+}
+
 
 // ---- the pen: where the learner's working broke, found in code from their own lines ----
 /**
@@ -368,18 +444,24 @@ const afterLabel = (text: string) => {
  * The one single-variable equation an item asks about, as printed: 'Solve for x:  3x − 7 = 11' is '3x − 7 = 11'.
  * A system, a word problem or a slope item has none (null) - no oracle, so the desk claims nothing about it.
  */
-export function equationOf(itemText: unknown): string | null {
+function equationOnce(itemText: unknown): string | null {
   if (typeof itemText !== "string") return null;
   const e = afterLabel(itemText);
   return /x/i.test(e) && readsAsArithmetic(e) ? e : null;
 }
 
+/** The one equation an item asks about; `system` reads a decimal comma, and a leading instruction ('Řeš rovnici', 'Solve') is set aside (MB-B2). */
+export const equationOf = (itemText: unknown, system?: SchoolSystem): string | null => readTask(itemText, system, equationOnce);
+
 /** The one-variable expression an item works on ('Factor completely:  x² + 7x + 12'), or null. */
-export function expressionOf(itemText: unknown): string | null {
+function expressionOnce(itemText: unknown): string | null {
   if (typeof itemText !== "string") return null;
   const e = afterLabel(itemText);
   return e && !e.includes("=") && /x/i.test(e) && evaluate(e, 0.37) !== null ? e : null;
 }
+
+/** The one-variable expression an item works on, read as equationOf reads (MB-B2). */
+export const expressionOf = (itemText: unknown, system?: SchoolSystem): string | null => readTask(itemText, system, expressionOnce);
 
 /** How a line is written, for comparison: no spaces, ² as ^2, one minus. */
 const compact = (s: string) => s.toLowerCase().replace(/\s+/g, "").replace(/²/g, "^2").replace(/[−–—‐‑]/g, "-");
@@ -410,9 +492,9 @@ function linearRoot(c: string): number | null {
  * reordered or quoted, and its own brackets are not the answer; nor is the method's pair ('multiplies to 12 and adds
  * to 7'), nor an expand item's own numbers.
  */
-export function leaksByForm(question: string, line: string): boolean {
+export function leaksByForm(question: string, line: string, system?: SchoolSystem): boolean {
   if (typeof question !== "string" || typeof line !== "string" || !line) return false;
-  const eq = equationOf(question), ex = eq ? null : expressionOf(question);
+  const eq = equationOf(question, system), ex = eq ? null : expressionOf(question, system);
   if (!eq && !ex) return false;
   const own = compact(question), masked = maskWords(line);
   const answers = (r: number) => (eq ? holds(sidesOf(eq)!, r) === true : (() => { const v = evaluate(ex!, r); return v !== null && close(v, 0); })());
@@ -424,6 +506,12 @@ export function leaksByForm(question: string, line: string): boolean {
   if (eq || isSum(ex!)) {
     const root = (n: string) => { const v = evaluate(n, 0); return v !== null && (answers(v) || answers(-v)); };
     for (const m of spoken(line).matchAll(PAIR)) if (root(m[1]) && root(m[2])) return true;
+    // one root named alone as the answer ("one of the numbers is 3", "one root is x = -4", "one bracket is x + 4"): half the answer
+    for (const m of line.matchAll(/\b(?:one|first|second|other|another)\b[^.?!;:]{0,40}?\b(?:is|are|equals?)\b(.*)/gi)) {
+      const t = spoken(m[1]), n = t.match(/^\s*(?:x\s*=\s*)?(-?\d+(?:\.\d+)?)(?![\d\/]|\.\d)/), b = t.match(/^\s*\(?\s*(x\s*[+-]\s*\d+)\s*\)?/);
+      if (n && root(n[1])) return true;
+      if (b && !own.includes(compact(b[0])) && linearRoot(b[1]) !== null && answers(linearRoot(b[1])!)) return true;
+    }
   }
   if (ex) for (const f of masked.split(/[|,;:!?"“”‘’'$=\{}]|\.(?!\d)/)) {
     const frag = f.trim();
@@ -436,9 +524,9 @@ export function leaksByForm(question: string, line: string): boolean {
  * The line the TV shows and speaks when the model's hint gave the answer away twice: written here, never by a model,
  * per kind of item. It points at the method and carries no number - nothing on it can be the answer.
  */
-export function withheldLine(itemText: string): string {
-  if (equationOf(itemText)) return "Undo what is done to x, step by step, the same on both sides. The value of x is yours to find.";
-  if (expressionOf(itemText) && /^\s*factor/i.test(itemText)) return "Look for a pair of numbers that multiply to the last term and add to the middle coefficient. Finding them is yours.";
-  if (expressionOf(itemText) && /^\s*expand/i.test(itemText)) return "Multiply every term in the first bracket by every term in the second, then collect the like terms.";
+export function withheldLine(itemText: string, system?: SchoolSystem): string {
+  if (equationOf(itemText, system)) return "Undo what is done to x, step by step, the same on both sides. The value of x is yours to find.";
+  if (expressionOf(itemText, system) && /^\s*factor/i.test(itemText)) return "Look for a pair of numbers that multiply to the last term and add to the middle coefficient. Finding them is yours.";
+  if (expressionOf(itemText, system) && /^\s*expand/i.test(itemText)) return "Multiply every term in the first bracket by every term in the second, then collect the like terms.";
   return "Go back to the last step you are sure of and take the next. The answer stays yours to find.";
 }

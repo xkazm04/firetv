@@ -7,6 +7,11 @@ throwaway script run against the real modules on 2026-09-30, not committed. "1u"
 template with its test rows, a twist deck, a format card, a habit detector with its fixture table). Sizes S and M are
 relative, not measured; nothing here is L (anything L was split).
 
+> **2026-10-07: superseded for ordering by [STUDY-DESK-V2-PLAN.md](STUDY-DESK-V2-PLAN.md).** The owner answered O1 (18+),
+> O3 (loosen for confirmed 18+) and O5 (yes, as proof), and retired Field Work (A3, B2-B7) for the owner's own adult Math
+> direction ([decisions](STUDY-DESK-V2-OWNER-DECISIONS-2026-10-07.md)). The slice cards below stay the spec where the v2
+> plan names them.
+
 ## a. How to use this file
 
 1. Every session starts by reading [ADULT-MODE-TAKE-TWO.md](ADULT-MODE-TAKE-TWO.md), then this file's status table
@@ -21,15 +26,15 @@ relative, not measured; nothing here is L (anything L was split).
 
 | # | Id | Slice | Size | Depends on | Status | Branch | Commit | Date |
 |---|---|---|---|---|---|---|---|---|
-| 1 | A1 | Linga: pitch a scene, played now (+ mode read, keyword gate) | M | - | not started | | | |
-| 2 | A2 | Linga: Cut and three notes | M | A1 | not started | | | |
+| 1 | A1 | Linga: pitch a scene, played now (+ mode read, keyword gate) | M | - | done: keyword gate (v2 G1, af47204); pitch a scene (v2 L3, built locally on main, captures owed) | autopilot/accepted-idea-delivery-9d230b69 | d29111c9, 83445c98 | 2026-10-07 |
+| 2 | A2 | Linga: Cut and three notes | M | A1 | done as v2 L3 (built locally on main; captures and the company sim's live run owed) | autopilot/accepted-idea-delivery-9d230b69 | c3649e60, 123ea27c, aa5ac64d | 2026-10-07 |
 | 3 | A3 | Math: Field Work, the first job | M | A1 (mode.ts) | not started | | | |
 | 4 | A4 | Essay: style meter and the twin probe (riskiest test) | M | - | not started | | | |
-| 5 | C1 | Linga: Take Two | M | A2 | not started | | | |
-| 6 | B1 | Math: the chain checker and the 100-chain fixture | S | - | not started | | | |
-| 7 | A5 | Platform: the mode switch and the Adult gate | M | A1, O1 | not started; `Profile.mode`, `modeOf` and its sanitising are on main from Family W4, A5 adds only the gate and the switch | | | |
-| 8 | A6 | Platform: learner text store, delete, curtain, phone file | M | A5 | not started | | | |
-| 9 | D1 | Essay: the reading core keeps paragraphs | M | - | not started | | | |
+| 5 | C1 | Linga: Take Two | M | A2 | done as v2 L4 (built locally on main; a take is never evidence, heldOf 41 rows; captures and one live take owed) | autopilot/accepted-idea-delivery-9ca5af6e | fc9a1433, 23e11639, b2870aab | 2026-10-08 |
+| 6 | B1 | Math: the chain checker and the 100-chain fixture | S | - | done as v2 M4c (built locally on main; kill test passed: 0 of 50 clean rung, 50 of 50 slips at their own line) | autopilot/accepted-idea-delivery-857aadd8 | 1a00ec08, aaaee240, 1e33a656 | 2026-10-07 |
+| 7 | A5 | Platform: the mode switch and the Adult gate | M | A1, O1 | done (v2 P1; adopted W4; O1 = 18+) | claude/trusting-franklin-a8g19w | b160c50 | 2026-10-07 |
+| 8 | A6 | Platform: learner text store, delete, curtain, phone file | M | A5 | store and route done (v2 P2); phone, curtain and notice not started (v2 P3) | claude/trusting-franklin-a8g19w | e9271eb | 2026-10-07 |
+| 9 | D1 | Essay: the reading core keeps paragraphs | M | - | done (v2 E0) | claude/trusting-franklin-a8g19w | 307d2ec | 2026-10-07 |
 | 10 | D2 | Essay: the Workroom, a whole piece | M | A6, D1 | not started | | | |
 | 11 | B2 | Math: jobs for the derivative strand | M | A3 | not started | | | |
 | 12 | A8 | Platform: voice on the LAN, a voice per speaker | M | - | not started | | | |
@@ -39,7 +44,7 @@ relative, not measured; nothing here is L (anything L was split).
 | 16 | B3 | Math: jobs for applications of derivatives | M | B2 | not started | | | |
 | 17 | C3 | Linga: genres, twist decks, Kind and Real | M | A1 | not started | | | |
 | 18 | D4 | Essay: the format lens, first format card | S | D2 | not started | | | |
-| 19 | D5 | Essay: habit detectors | M | D1 | not started | | | |
+| 19 | D5 | Essay: habit detectors | M | D1 | done as v2 T3 (built locally on main; 6 of 6 detectors pass the zero-false-positive gate; precision table in the v2 log) | autopilot/accepted-idea-delivery-23b57e2b | 267694f5, 79da4106 | 2026-10-08 |
 | 20 | B4 | Math: jobs for the other 12 topics (two batches) | M | B2 | not started | | | |
 | 21 | B5 | Math: Beyond and the course map | M | B2 | not started | | | |
 | 22 | B6 | Math: the mock paper, sealed and re-sat | M | A3 | not started | | | |
@@ -160,6 +165,7 @@ and not re-verified.
   It holds: `Profile.mode?: "family" | "adult"` and `modeChecked` in `store.ts` (junk dropped on load; a `profile.draft` patch may set only "family"), `modeOf(p, prefs?)` and `isAdult` in `lib/rules/mode.ts`, `mode` in the `tv/keys.ts` edit copy list, and `tools/mode-rules-test.cjs`. `modeOf` does NOT honour a stored "adult" yet, and `audienceAllowed` is not re-expressed through it. Its spec after owner decision D1 was: `Profile.mode?: "family" | "adult"`, `modeOf(p)` in
   `lib/rules/mode.ts`, a `profile.draft` patch cannot set mode, the edit copy list at `tv/keys.ts:242` keeps it, age
   default (Family under 18, and for "other" until confirmed), no parent code.
+  v2 P6 closes the gap between audience and mode: `audienceAllowed`'s adult row, the tutor prompt and the level check read `adultContent` (= `modeOf === "adult"`), so Family hides adult scenes at any age (commit c5a6e081).
 - **W4 is merged now, so A1 imports the existing `modeOf` and does not create `lib/rules/mode.ts` (line 189 below is superseded); the paragraph that follows applies only if that changes.**
 - **If W4 is not merged when Adult starts**: A1 creates only the read, `lib/rules/mode.ts` `modeOf(p, prefs)`, with
   W4's names and W4's age default and no stored field. Every adult door reads it. A5 then either adopts merged W4 or
@@ -239,7 +245,7 @@ screen doc (`docs/STUDY-DESK-SCREENS.md` and the module's `docs/DESIGN-*.md`) up
 - Accept: gate; TV capture of a take (the branch, the struck or open note).
 - Cost: +2-3 calls per take. Authoring: 0u.
 - Could go wrong: "held" by containment rewards parroting; the note stays a reading unless a rule or phrase stands behind it, and a take is never evidence.
-- Done: [ ] gate [ ] capture [ ] docs.
+- Done: [x] gate [ ] capture [x] docs. (Built as v2 L4, amended: the take's lines never reach the evidence, not "stored as supported"; see the v2 plan, row 21 and its log.)
 
 **B1. Math: the chain checker and the 100-chain fixture** (S)
 - Goal: a pure checker that rings the first line of calculus working that stops holding, measured on 50 clean and 50 planted chains before any screen uses it.

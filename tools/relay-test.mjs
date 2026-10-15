@@ -15,17 +15,14 @@
  */
 import { chromium } from 'playwright';
 import { spawn } from 'node:child_process';
-import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
-import { PNG } from 'pngjs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import WebSocket from 'ws';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-import { makeAdb, TV_HOST, hostAddressForDevice, pinFromLogcat } from './device.mjs';
-const args = Object.fromEntries(
-  process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
-);
+import { countInk, makeAdb, tvScreenshot, TV_HOST, IS_TUNNELLED, hostAddressForDevice, parseArgs, PHONE, pinFromLogcat } from './device.mjs';
+const args = parseArgs();
 const PORT = Number(args.port ?? 9787);
 // How the TV addresses this machine. The emulator has a fixed host alias; a Stick on Wi-Fi has to
 // be handed this machine's LAN address, or it dials into its own loopback and nothing happens.
@@ -41,26 +38,7 @@ const adb = (...a) => adbBin(...a).toString();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const relayHealth = async () => (await fetch(`http://127.0.0.1:${PORT}/health`)).json();
 
-function tvScreenshot(name) {
-  adb('shell', 'screencap', '-p', '/sdcard/_relay.png');
-  const dest = path.join(OUT, name);
-  adb('pull', '/sdcard/_relay.png', dest);
-  return PNG.sync.read(readFileSync(dest));
-}
-
-const isInk = (r, g, b) => r > 230 && g > 185 && g < 232 && b < 70;
-function countInk(png) {
-  const { width, height, data } = png;
-  let n = 0;
-  for (let y = 0; y < height * 0.94; y++) {
-    for (let x = 0; x < width; x++) {
-      if (x > width * 0.74 && y < height * 0.44) continue;
-      const i = (width * y + x) << 2;
-      if (isInk(data[i], data[i + 1], data[i + 2])) n++;
-    }
-  }
-  return n;
-}
+const tvShot = (name) => tvScreenshot(adbBin, '/sdcard/_relay.png', path.join(OUT, name)).png;
 
 const checks = [];
 function check(name, ok, detail = '') {
@@ -189,12 +167,7 @@ const run = async () => {
   await sleep(LATE_PHONE_MS);
   check('the TV is still dialled in after the phone window that used to close', (await relayHealth()).tvConnected);
   const browser = await chromium.launch();
-  const context = await browser.newContext({
-    viewport: { width: 412, height: 915 },
-    deviceScaleFactor: 2,
-    isMobile: true,
-    hasTouch: true,
-  });
+  const context = await browser.newContext(PHONE);
   const page = await context.newPage();
   const consoleErrors = [];
   page.on('pageerror', (e) => consoleErrors.push(String(e)));
@@ -217,7 +190,7 @@ const run = async () => {
 
   adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_DOWN'); // clear
   await sleep(800);
-  const inkBefore = countInk(tvScreenshot('relay-00-clean.png'));
+  const inkBefore = countInk(tvShot('relay-00-clean.png'));
 
   const pad = await page.locator('#pad').boundingBox();
   const cdp = await context.newCDPSession(page);
@@ -240,7 +213,7 @@ const run = async () => {
   h = await relayHealth();
   check('a stroke drawn on the phone reaches the TV over the relay', h.annotationCount >= 1, `ink=${h.annotationCount}`);
 
-  const inkAfter = countInk(tvScreenshot('relay-01-drawn.png'));
+  const inkAfter = countInk(tvShot('relay-01-drawn.png'));
   check('and is rendered in the TV framebuffer', inkAfter > inkBefore + 1500, `ink px ${inkBefore} -> ${inkAfter}`);
 
   check('no uncaught errors on the phone page', consoleErrors.length === 0, consoleErrors.join('; '));
@@ -262,11 +235,18 @@ const run = async () => {
   const rtt = await measureRelayRtt(pin);
   if (rtt) {
     console.log(`\n  relay round-trip: p50 ${rtt.p50.toFixed(1)} ms, p95 ${rtt.p95.toFixed(1)} ms over ${rtt.n} probes`);
-    console.log('  This is NOT comparable to the LAN probe and is NOT the production cost. The');
-    console.log('  relay here is a process on this same machine, so the number measures protocol');
-    console.log('  overhead and nothing else - it will read faster than the LAN path, which goes');
-    console.log('  through an adb tunnel. A hosted relay adds two internet legs: budget +100-200 ms');
-    console.log('  and re-measure against the deployed relay before trusting freehand on this path.');
+    console.log('  This is NOT the production cost: the relay here is a process on this machine.');
+    if (IS_TUNNELLED) {
+      // Emulator: TV, relay and probe share one host, so only protocol overhead is left to measure.
+      console.log('  With the TV on this host too, the number is protocol overhead and nothing else -');
+      console.log('  it will read faster than the LAN probe, which goes through an adb tunnel.');
+    } else {
+      // Hardware: relay -> Stick crosses the same Wi-Fi the LAN probe does, plus one extra hop.
+      console.log(`  The relay -> TV leg crosses this network to ${TV_HOST.split(':')[0]}, so the number is the LAN`);
+      console.log('  path plus one local hop - compare it with latency-probe on the same Wi-Fi.');
+    }
+    console.log('  A hosted relay adds two internet legs: budget +100-200 ms and re-measure against');
+    console.log('  the deployed relay before trusting freehand on this path.');
     // Asserts only that the extra hop introduces no pathological cost of its own.
     check('relay adds no protocol-level overhead of its own', rtt.p95 < 120, `p95 ${rtt.p95.toFixed(1)} ms`);
   } else {
@@ -274,15 +254,23 @@ const run = async () => {
   }
 };
 
+let crashed = false;
 run()
   .catch((e) => {
     console.error('relay-test crashed:', e);
+    crashed = true;
     checks.push({ name: 'relay test completed', ok: false, detail: String(e) });
   })
   .finally(async () => {
     relay?.kill();
-    // Put the app back the way the rest of the harness expects to find it.
-    restoreLanTransport();
+    // Put the app back the way the rest of the harness expects to find it. With adb gone this
+    // throws too, and an uncaught throw here would skip the result file below and leave the
+    // previous run's in artifacts/ - so it is recorded as a check instead.
+    try {
+      restoreLanTransport();
+    } catch (e) {
+      check('the app is put back on the LAN transport', false, e.message);
+    }
 
     const failed = checks.filter((c) => !c.ok);
     writeFileSync(
@@ -290,5 +278,7 @@ run()
       JSON.stringify({ when: new Date().toISOString(), checks }, null, 2)
     );
     console.log(`\n${checks.length - failed.length}/${checks.length} checks passed.`);
-    process.exit(failed.length ? 1 : 0);
+    // 3 when the run itself crashed, as live-ui-test does: the harness could not finish, which is
+    // not the same as a check that failed.
+    process.exit(crashed ? 3 : failed.length ? 1 : 0);
   });

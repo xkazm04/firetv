@@ -2,9 +2,9 @@
 /**
  * The lab bench: the lab's corpus (tools/lab-corpus.cjs) run through the PRODUCTION read, hint and lesson-pick
  * modules - desk's readPage, hint and pickLesson through the engines registry, never a copy - and scored with the
- * lab's rules: equations_intact (vision/poc_ocr.py), the one leak rule (rules/maths leaks(), which hint() already
- * gates on), the right/none tally against vision/poc_retrieval.py ACCEPT. One measure is new: `selects`, whether
- * the phone's tap at an item's TRUE centre selects that item, given the centres the model reported - judged with
+ * lab's rules: equations_intact (vision/poc_ocr.py), the leak gate hint() itself applies (desk/hint leaksLine:
+ * rules/maths leaks() plus the Calculus and school readers' own checks), the right/none tally against
+ * vision/poc_retrieval.py ACCEPT. One measure is new: `selects`, whether the phone's tap at an item's TRUE centre selects that item, given the centres the model reported - judged with
  * the phone's own rule, nearestItem() in desk/src/lib/desk/select.ts. It prints the lab baseline beside this run
  * and a verdict per PoC kill criterion (STUDY-DESK-POC-RESULTS.md:7-9), and exits 1 on a fail.
  *
@@ -19,7 +19,7 @@
  * directory under the OS temp dir (lessons.ts would write embeddings.json into desk/data otherwise); with no
  * lesson transcripts there, pickLesson scores the lesson id and never embeds. No Python runs here.
  */
-const fs = require("node:fs"), os = require("node:os"), path = require("node:path"), crypto = require("node:crypto"), Module = require("node:module");
+const fs = require("node:fs"), os = require("node:os"), path = require("node:path"), crypto = require("node:crypto");
 const corpus = require("./lab-corpus.cjs");
 
 const DESK = path.resolve(__dirname, "../desk");
@@ -37,20 +37,14 @@ function pinData() {
   return dataDir;
 }
 let mods = null;
-/** desk's TypeScript, transpiled with desk's own compiler (the loader of the rules suites). */
+/** desk's TypeScript, transpiled with desk's own compiler through the rules suites' one loader (its disk cache too). */
 function desk() {
   if (mods) return mods;
   pinData();
-  let ts;
-  try { ts = require(path.join(DESK, "node_modules/typescript")); }
-  catch { throw new Error("The bench transpiles desk TypeScript with desk's own compiler. Run `npm install` in desk/ first."); }
-  const resolve = Module._resolveFilename;
-  Module._resolveFilename = function (id, ...args) { return resolve.call(this, id.startsWith("@/") ? path.join(DESK, "src", id.slice(2)) : id, ...args); };
-  if (!require.extensions[".ts"]) require.extensions[".ts"] = (mod, file) => mod._compile(ts.transpileModule(fs.readFileSync(file, "utf8"),
-    { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, file);
+  require("./ts-load.cjs");
   const load = (f) => require(path.join(DESK, "src/lib", f));
   mods = { reg: load("engines/registry.ts"), read: load("desk/read.ts"), hint: load("desk/hint.ts"), pick: load("desk/pick.ts"),
-    select: load("desk/select.ts"), maths: load("rules/maths.ts") };
+    select: load("desk/select.ts"), kinds: load("rules/kinds.ts") };
   return mods;
 }
 
@@ -90,7 +84,12 @@ function answers(over) {
   return a;
 }
 const md5 = (b64) => crypto.createHash("md5").update(Buffer.from(b64, "base64")).digest("hex");
-const problemOf = (prompt) => (/^Problem:[ \t]*\n?([^\n]*)/m.exec(prompt || "") || [])[1]?.trim();
+// the problem as the prompt carries it: quoted data since lib/prompt/assemble.ts (`Problem: "2x+3=11"`), read back as text
+const problemOf = (prompt) => {
+  const raw = (/^Problem:[ \t]*\n?([^\n]*)/m.exec(prompt || "") || [])[1]?.trim();
+  if (!raw || !raw.startsWith('"')) return raw;
+  try { return JSON.parse(raw); } catch { return raw; }
+};
 function replayProviders(a) {
   const pages = Object.fromEntries(Object.values(corpus.pages).map((p) => [p.md5, p.subject]));
   const vision = { name: "replay", async run(req) {
@@ -118,8 +117,9 @@ function replayProviders(a) {
 }
 /** What the model said on each text call, whichever provider answered - the leak tally scores the model, not the gate. */
 function recording(inner, calls) {
-  return { name: inner.name, async run(req) {
-    const out = await inner.run(req);
+  // ctx carries the deadline's abort signal: a wrapper that drops it leaves a timed-out CLI running and spending (engines/call.ts)
+  return { name: inner.name, deadlineMs: inner.deadlineMs, async run(req, ctx) {
+    const out = await inner.run(req, ctx);
     let said = out.raw;
     if (typeof said === "string") { try { said = JSON.parse(said.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "")); } catch { said = { hint: said, what_to_try_next: "" }; } }
     calls.push({ q: problemOf(req.prompt), reask: /gave the answer away/.test(req.prompt), said: said || {} });
@@ -159,13 +159,16 @@ async function benchHints(m, providers, calls) {
   for (const p of corpus.problems) {
     calls.length = 0;
     const row = { q: p.q };
+    // the gate hint() applies to this item: the item read as hint() reads it, then leaksLine over that spec
+    const read = m.kinds.readQuestion(p.q), spec = { calc: read.calc ?? null, school: read.school ?? null, parts: read.parts ?? null };
+    const leaks = (s) => m.hint.leaksLine(p.q, spec, String(s || ""));
     try {
       const h1 = await m.hint.hint("maths", p.q, {});
       const h2 = await m.hint.hint("maths", p.q, { previous: h1.hint });
       providers.text = h2.provider;
       const shown = [h1.hint, h1.next, h2.hint, h2.next];
-      row.leaked = calls.some((c) => m.maths.leaks(p.q, String(c.said.hint || "")) || m.maths.leaks(p.q, String(c.said.what_to_try_next || "")));
-      row.reached = shown.some((s) => m.maths.leaks(p.q, s));
+      row.leaked = calls.some((c) => leaks(c.said.hint) || leaks(c.said.what_to_try_next));
+      row.reached = shown.some(leaks);
       row.reasked = calls.some((c) => c.reask);
       row.latex = shown.some(latex);
     } catch (e) { row.error = String(e.message || e); }
@@ -173,7 +176,7 @@ async function benchHints(m, providers, calls) {
   }
   const n = (k) => rows.filter((r) => r[k]).length;
   return { leaked: n("leaked"), of: rows.length, latex: n("latex"), reasked: n("reasked"), reached: n("reached"), errors: n("error"),
-    rule: "rules/maths leaks()", problems: rows.filter((r) => r.leaked || r.reached || r.reasked || r.latex || r.error), seconds: (Date.now() - t0) / 1000 };
+    rule: "desk/hint leaksLine()", problems: rows.filter((r) => r.leaked || r.reached || r.reasked || r.latex || r.error), seconds: (Date.now() - t0) / 1000 };
 }
 
 async function benchRetrieval(m, providers) {
@@ -259,14 +262,24 @@ function table(r) {
 }
 
 async function main(argv) {
-  const json = argv.includes("--json"), live = argv.includes("--live");
-  const at = argv.indexOf("--replay");
-  let replay = true;
-  if (at >= 0 && argv[at + 1] && !argv[at + 1].startsWith("--")) {
-    try { replay = JSON.parse(fs.readFileSync(argv[at + 1], "utf8")); }
-    catch (e) { console.error(`lab bench: cannot read the replay file ${argv[at + 1]}: ${e.message}`); return 2; }
+  // every argument is one the bench honours, or the run is refused: a fixture it never read must not score as a pass
+  let json = false, live = false, file = null, replayArg = false;
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--json") json = true;
+    else if (a === "--live") live = true;
+    else if (a === "--replay" || a.startsWith("--replay=")) {
+      replayArg = true;
+      file = a === "--replay" ? (argv[i + 1] && !argv[i + 1].startsWith("--") ? argv[++i] : null) : a.slice("--replay=".length);
+      if (!file) { console.error("lab bench: --replay needs a file (--replay <file.json>); with no flag the bench replays the recorded set."); return 2; }
+    } else { console.error(`lab bench: unknown argument ${a} (use --json, --live, --replay <file.json>).`); return 2; }
   }
-  if (live && at >= 0) { console.error("lab bench: --live and --replay are two different runs; pick one."); return 2; }
+  if (live && replayArg) { console.error("lab bench: --live and --replay are two different runs; pick one."); return 2; }
+  let replay = true;
+  if (file) {
+    try { replay = JSON.parse(fs.readFileSync(file, "utf8")); }
+    catch (e) { console.error(`lab bench: cannot read the replay file ${file}: ${e.message}`); return 2; }
+  }
   const r = await runBench({ replay, live });
   if (json) { const { read, hints, retrieval, baseline, verdicts: v, providers } = r; console.log(JSON.stringify({ read, hints, retrieval, baseline, verdicts: v, providers }, null, 1)); }
   else console.log(table(r));

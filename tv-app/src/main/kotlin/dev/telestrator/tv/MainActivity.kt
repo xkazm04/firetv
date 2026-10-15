@@ -37,6 +37,7 @@ import androidx.media3.ui.PlayerView
 import androidx.tv.material3.Text
 import androidx.lifecycle.lifecycleScope
 import dev.telestrator.core.LinkEvent
+import dev.telestrator.core.PairingUrl
 import dev.telestrator.core.PenMessage
 import dev.telestrator.core.PlayerAction
 import dev.telestrator.core.TransportPlan
@@ -117,7 +118,7 @@ class MainActivity : ComponentActivity() {
         val phoneUrl = intent?.getStringExtra("phone_url") ?: DEFAULT_RELAY_PHONE
         return RelayTransport(
             relayWsUrl = relayUrl,
-            phoneUrl = "$phoneUrl?pin=${session.pin}",
+            phoneUrl = PairingUrl.of(phoneUrl, session.pin),
         )
     }
 
@@ -159,7 +160,6 @@ class MainActivity : ComponentActivity() {
 private fun TelestratorScreen(session: Session, transport: PenTransport, clipUri: Uri) {
     val context = LocalContext.current
     val doc by session.doc.collectAsState()
-    val command by session.transport.collectAsState()
     val peeking by peekingState(session)
     var tMs by remember { mutableLongStateOf(0L) }
     var paused by remember { mutableStateOf(false) }
@@ -190,32 +190,34 @@ private fun TelestratorScreen(session: Session, transport: PenTransport, clipUri
     }
 
     // What a command means is decided in core (TransportPlan, JVM-tested); this only reads the
-    // player and carries the actions out in order.
-    LaunchedEffect(command) {
-        val t = command ?: return@LaunchedEffect
-        val positionMs = player.currentPosition
-        val actions = TransportPlan.plan(
-            cmd = t.cmd,
-            value = t.value,
-            positionMs = positionMs,
-            durationMs = player.duration.coerceAtLeast(0),
-            playing = player.isPlaying,
-            doc = session.doc.value,
-            undoAtMs = session.undoAt(positionMs),
-            redoAtMs = session.redoAt(positionMs),
-        )
-        for (action in actions) {
-            when (action) {
-                PlayerAction.Play -> player.play()
-                PlayerAction.Pause -> player.pause()
-                is PlayerAction.SeekTo -> player.seekTo(action.positionMs)
-                is PlayerAction.SetRate -> {
-                    val r = action.rate.toFloat()
-                    player.playbackParameters = PlaybackParameters(r)
-                    session.rate = action.rate
-                    rate = r
+    // player and carries the actions out in order. Every command is planned against the player as
+    // the one before it left it, so a burst of two undos is two undos.
+    LaunchedEffect(Unit) {
+        session.commands.collect { t ->
+            val positionMs = player.currentPosition
+            val actions = TransportPlan.plan(
+                cmd = t.cmd,
+                value = t.value,
+                positionMs = positionMs,
+                durationMs = player.duration.coerceAtLeast(0),
+                playing = player.isPlaying,
+                doc = session.doc.value,
+                undoAtMs = session.undoAt(positionMs),
+                redoAtMs = session.redoAt(positionMs),
+            )
+            for (action in actions) {
+                when (action) {
+                    PlayerAction.Play -> player.play()
+                    PlayerAction.Pause -> player.pause()
+                    is PlayerAction.SeekTo -> player.seekTo(action.positionMs)
+                    is PlayerAction.SetRate -> {
+                        val r = action.rate.toFloat()
+                        player.playbackParameters = PlaybackParameters(r)
+                        session.rate = action.rate
+                        rate = r
+                    }
+                    is PlayerAction.Edit -> session.edit(action.message)
                 }
-                is PlayerAction.Edit -> session.edit(action.message)
             }
         }
     }

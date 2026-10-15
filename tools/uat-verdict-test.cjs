@@ -7,8 +7,8 @@
  *
  * Reads the committed runs under uat/runs/ as fixtures and never writes there: every write goes to the OS temp dir,
  * and the suite asserts the committed files are byte-identical at the end. No model call: the tutor is stubbed at
- * the registry, codexText is replaced in the require cache (the judge answers from a queue, through the engine's own
- * shape rule; anything else, the synthesis included, throws), and the codex process launcher throws.
+ * the registry, the driver's claude seam is replaced (the judge answers from a queue, through the engine's own
+ * shape rule; anything else, the synthesis included, throws), and claudeCli.run throws.
  */
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), crypto = require('node:crypto'), assert = require('node:assert/strict');
 const { test, after } = require('node:test');
@@ -17,10 +17,11 @@ const VERDICT = path.join(UAT, 'driver/verdict.cjs'), RECERTIFY = path.join(UAT,
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'uat-verdict-'));
 process.env.DESK_DATA_DIR = path.join(tmp, 'desk-data');
 
-const digest = () => {
+const digest = (dir = RUNS) => {
   const h = crypto.createHash('sha256');
-  for (const run of fs.readdirSync(RUNS).sort()) for (const f of fs.readdirSync(path.join(RUNS, run)).sort()) {
-    const p = path.join(RUNS, run, f);
+  // a plain file beside the runs (OPEN.md) is not a run
+  for (const run of fs.readdirSync(dir).sort().filter(r => fs.statSync(path.join(dir, r)).isDirectory())) for (const f of fs.readdirSync(path.join(dir, run)).sort()) {
+    const p = path.join(dir, run, f);
     if (fs.statSync(p).isFile()) h.update(`${run}/${f}\0`).update(fs.readFileSync(p));
   }
   return h.digest('hex');
@@ -31,10 +32,10 @@ require(path.join(UAT, 'driver/surface.cjs')).install();
 const calls = { tutor: 0, synthesis: 0 }, judgeReplies = [];
 const registry = require(path.join(root, 'src/lib/engines/registry.ts'));
 registry.useProvider('text', { name: 'stub', run: async () => { calls.tutor++; throw new Error('no tutor call in this suite'); } });
-const codex = require(path.join(root, 'src/lib/engines/codex.ts'));
-codex.codexCli.run = async () => { throw new Error('codex must never be launched by this suite'); };
+const claudeText = require(path.join(root, 'src/lib/engines/text.ts'));
+claudeText.claudeCli.run = async () => { throw new Error('claude must never be launched by this suite'); };
 const shape = require(path.join(root, 'src/lib/engines/shape.ts'));
-codex.codexText = async req => {
+require(DRIVER).claude.call = async req => {
   if (req.schema?.required?.includes('verdict') && judgeReplies.length) { const reply = judgeReplies.shift(); return shape.answer({ name: 'stub', run: async () => ({ raw: JSON.stringify(reply), provider: 'stub' }) }, req); }
   calls.synthesis++;
   throw new Error('stub: no model call in this suite');
@@ -147,7 +148,7 @@ test('case 5: how the journey ended decides first; a D row answered twice, left 
     assert.ok(v.why.some(w => w.kind === 'ended' && w.text.includes(`ended ${how} before done`)), JSON.stringify(v.why));
   }
   for (const how of ['setup-failed', 'character-model-failure']) assert.equal(V().verdictOf(recordOf('J4', ok, { endedBy: how }), ctx).verdict, 'not-reached', how);
-  const unjudged = V().verdictOf(recordOf('J4', null, { judgeError: 'codex timed out' }), ctx);
+  const unjudged = V().verdictOf(recordOf('J4', null, { judgeError: 'claude timed out' }), ctx);
   assert.equal(unjudged.verdict, 'not-reached'); assert.equal(unjudged.judgeVerdict, null); assert.ok(unjudged.why.length);
   const rows = ok.done;
   const cases = {
@@ -171,7 +172,7 @@ test('case 5: how the journey ended decides first; a D row answered twice, left 
 });
 
 // ---- case 6
-const RUN_IDS = fs.readdirSync(RUNS).filter(d => fs.existsSync(path.join(RUNS, d, 'findings.json'))).sort();
+const RUN_IDS = fs.readdirSync(RUNS).filter(d => d.startsWith('2026-09-15-') && fs.existsSync(path.join(RUNS, d, 'findings.json'))).sort();
 const resultsOf = run => fs.readdirSync(path.join(RUNS, run)).filter(f => f.endsWith('.json') && f !== 'findings.json' && f !== 'run.json').sort().map(f => readJson(path.join(RUNS, run, f)));
 test('case 6: over the 84 judged journeys on disk the code agrees with the judge on 42, every other verdict names its reasons, and report.md prints both', async () => {
   let judged = 0, agree = 0, unexplained = 0;
@@ -253,4 +254,58 @@ test('case 8 (guard): a judge reply with no done[] is taken by the engine\'s sha
   assert.equal(rec.judgeError, undefined);
   assert.equal(rec.judge.verdict, 'pass');
   assert.equal(rec.verdict, 'conditional', 'asked for done[] and given none: not-evaluable, never pass');
+});
+
+test('the driver is on the claude CLI only: no codexText, no DESK_TEXT_ENGINE set to codex, the child env drops it, the parent refuses it', () => {
+  const src = fs.readFileSync(DRIVER, 'utf8');
+  assert.equal(src.includes('codexText'), false, 'the driver source names codexText');
+  assert.equal(/DESK_TEXT_ENGINE['"]?\s*(?::|=(?!=))\s*['"]codex['"]/.test(src), false, "the driver source sets DESK_TEXT_ENGINE to 'codex'");
+  assert.equal(D().childEnv({ DESK_TEXT_ENGINE: 'codex', KEEP: '1' }).DESK_TEXT_ENGINE, undefined, 'a Character child gets no DESK_TEXT_ENGINE');
+  assert.equal(D().childEnv({ DESK_TEXT_ENGINE: 'codex', KEEP: '1' }).KEEP, '1');
+  assert.throws(() => D().refuseCodexEngine({ DESK_TEXT_ENGINE: 'codex' }), /claude CLI/);
+  assert.doesNotThrow(() => D().refuseCodexEngine({}));
+  assert.ok(src.indexOf('refuseCodexEngine();') < src.indexOf('spawn(process.execPath'), 'parent() refuses before it spawns');
+  // the roles: Character thinking off, judge thinking on, both best
+  assert.deepEqual(D().ROLES, { character: { model: 'best', thinking: false }, judge: { model: 'best', thinking: true } });
+  const req = D().judgeRequest(recordOf('J4'), ctxOf('petra-38', 'J4'));
+  assert.equal(req.model, 'best'); assert.equal(req.thinking, true); assert.equal(req.effort, undefined);
+  assert.deepEqual(D().parseArgs(['--parallel', '2'], { characters: [] }).parallel, 2);
+  assert.equal(D().parseArgs([], { characters: [] }).parallel, 3);
+  assert.throws(() => D().parseArgs(['--parallel', '0'], { characters: [] }), /--parallel/);
+});
+
+test('W7-3: the runs digest skips a plain file such as OPEN.md and still sees a change inside a run', () => {
+  const runs = path.join(tmp, `plain-${crypto.randomUUID().slice(0, 8)}`);
+  fs.mkdirSync(path.join(runs, 'a-run'), { recursive: true });
+  fs.writeFileSync(path.join(runs, 'a-run', 'findings.json'), '[]');
+  fs.writeFileSync(path.join(runs, 'OPEN.md'), '# Open\n');
+  const one = digest(runs);
+  fs.writeFileSync(path.join(runs, 'a-run', 'findings.json'), '[1]');
+  assert.notEqual(digest(runs), one);
+});
+
+test('W7-6: SUMMARY.md prints a panel verdict and a value ledger the model sent as one-element arrays as plain text', async () => {
+  const driver = require(DRIVER), call = driver.claude.call, dir = path.join(tmp, 'synth-array'), run = RUN_IDS[0];
+  fs.mkdirSync(dir, { recursive: true });
+  driver.claude.call = async () => ({ provider: 'stub', json: { themes: [], backlog: [], conflicts: [], strengths: [], ceilings: [], panelVerdict: ['The panel says ship it.'], valueLedger: ['Saves ten minutes a week.', 'Costs none.'] } });
+  try { await D().synthesize(dir, run, resultsOf(run), [], 0); } finally { driver.claude.call = call; }
+  const md = fs.readFileSync(path.join(dir, 'SUMMARY.md'), 'utf8');
+  const lines = md.split('\n');
+  assert.ok(lines.includes('The panel says ship it.'), md);
+  assert.ok(lines.includes('Saves ten minutes a week. Costs none.'), md);
+  assert.ok(!md.includes("['"), 'no array printed raw');
+});
+
+test('a Character process that exits non-zero is a crash even when it saved its file first; its journeys so far are kept', () => {
+  const dir = path.join(tmp, `collect-${crypto.randomUUID().slice(0, 8)}`); fs.mkdirSync(dir, { recursive: true });
+  const saved = id => fs.writeFileSync(path.join(dir, `${id}.json`), JSON.stringify({ character: id, name: id, journeys: [{ id: 'J1', steps: [], setup: [], facts: {}, endedBy: 'done', ms: 0 }], calls: {} }));
+  saved('a-1'); saved('b-2');   // b-2 saved after J1, then died in J2
+  const cast = ['a-1', 'b-2', 'c-3'].map(id => ({ sim: { id, name: id } }));
+  const rs = D().collectResults(dir, cast, [0, 1, null]);
+  assert.equal(rs[0].crashed, undefined, 'exit 0 with its file is a finished Character');
+  assert.equal(rs[1].crashed, true, 'exit 1 is a crash although its file reads');
+  assert.equal(rs[1].exit, 1);
+  assert.deepEqual(rs[1].journeys.map(j => j.id), ['J1'], 'the journeys it finished are kept');
+  assert.equal(rs[2].crashed, true, 'no file is a crash');
+  assert.deepEqual(rs[2].journeys, []);
 });

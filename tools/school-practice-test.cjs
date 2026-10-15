@@ -12,10 +12,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after,afterEach}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const data=path.join(os.tmpdir(),`desk-school-practice-${process.pid}-${Date.now()}`);process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 
 const src=(f)=>path.join(root,'src',f);
@@ -217,7 +214,8 @@ test('6: the store cleans a school spec by its own rules - an answer key stops, 
  for(const bad of [{shape:'compute',expr:'3/4 +'},{shape:'compute',expr:'3/0 + 1/2'},{shape:'compute',expr:'1/2 - 3/4'},{shape:'compute',expr:'3/4 + 1/6',form:'fancy'},{shape:'compute',expr:'3/4 + 1/6',unit:'parsec'},{shape:'compute',expr:'3/4 + 1/6',allowNegative:false},{shape:'compute'},{shape:'percent',expr:'25% of 80'}]){
   const it=put(bad);assert.equal(it.spec,undefined,JSON.stringify(bad));assert.equal(it.tier,undefined,'no spec, no tier');
  }
- assert.equal(put({shape:'compute',expr:'3/4 + 1/6'},{tier:3}).tier,undefined,'a tier is 1 or 2');
+ assert.equal(put({shape:'compute',expr:'3/4 + 1/6'},{tier:4}).tier,undefined,'a tier is 1, 2 or 3 (MB-B20: 3 is the top rung of a step up)');
+ assert.equal(put({shape:'compute',expr:'1 3/4 + 2/3'},{tier:3}).tier,3,'the top rung tier is kept');
  assert.equal(put({shape:'compute',expr:'3/4 + 1/6'},{tier:'2'}).tier,undefined);
  // the Calculus spec keeps exactly what it kept before W5b
  const calc={shape:'limit',f:'sin(3x)/x',at:0,side:'+',answer:'3'};
@@ -311,8 +309,8 @@ test('W7 5b: the new shapes survive the store - practice.set, practice.marked, p
 });
 
 // ------------------------------------------------------------------ W7: the three units on the path, and the route that writes their sets
-test('W7 1: the school path has fifteen topics since W7 batch 3 - four fractions units, one-step, the decimals and percent strand, ratio and rates, geometry and data, the other two linear topics - each batch-1 unit with a generator, a one-sentence blurb, honest prerequisites and no lesson',()=>{
- assert.deepEqual(P.topicsOf('school').map((t)=>t.id),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides']);
+test('W7 1: the school path has seventeen topics since v2 M2b (fifteen since W7 batch 3) - four fractions units, one-step, the decimals and percent strand, ratio and rates, geometry and data, the other two linear topics - each batch-1 unit with a generator, a one-sentence blurb, honest prerequisites and no lesson',()=>{
+ assert.deepEqual(P.topicsOf('school').map((t)=>t.id),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides','pythagoras','probability']);
  const want={
   'frac-equivalent':['Equivalent fractions',[],{us:4,uk:5,cz:5,de:5}],
   'frac-of-amount':['A fraction of an amount',[],{us:5,uk:5,cz:5,de:5}],
@@ -326,7 +324,7 @@ test('W7 1: the school path has fifteen topics since W7 batch 3 - four fractions
   assert.equal(P.pathOfTopic(id),'school');assert.equal(typeof S.generatorFor(id),'function');
   assert.equal(SYLLABUS.find((x)=>x.id===id).bands.us.startsWith('Grade '),true);
  }
- assert.equal(P.PATHS.school.blurb,'School maths from equivalent fractions to equations with brackets and x on both sides.');
+ assert.equal(P.PATHS.school.blurb,'School maths from equivalent fractions through equations to Pythagoras\' theorem and the probability of an event.');
 });
 
 // ------------------------------------------------------------------ Family W7 batch 2: decimals and percent, written by code
@@ -559,11 +557,71 @@ test('W7c 1: the four batch-3 units are on the school path after the percent uni
   for(const p of prereq)assert.ok(order.indexOf(p)<order.indexOf(id),`${id} needs ${p}, which comes earlier`);
  }
  // the multiply-and-divide blurb is one sentence with one main clause (batch 1's read as two joined by "and")
- assert.equal(P.topicIn('frac-mul-div').blurb,'Fractions are multiplied top by top and bottom by bottom, which is also how you divide once the fraction you divide by is turned upside down.');
+ assert.equal(P.topicIn('frac-mul-div').blurb,'Fractions multiply top by top and bottom by bottom, which is also how you divide once the fraction you divide by is turned upside down.');
+ // SL3: every school blurb is 25 words or fewer and still names its method steps
+ for(const t of P.topicsOf('school'))assert.ok(t.blurb.trim().split(/\s+/).length<=25,`${t.id}: blurb is 25 words or fewer`);
+ for(const [id,res] of [['area',[/rectangle/i,/triangle/i,/add/i]],['probability',[/equally likely/i,/not happen/i]],['dec-arith',[/lined? up/i,/tak(e|en) away|subtract/i,/count/i,/multipl/i]],['ratio-share',[/single part/i]]])
+  for(const r of res)assert.match(P.topicIn(id).blurb,r,`${id}: blurb keeps ${r}`);
  for(const t of P.topicsOf('school'))assert.match(t.blurb,/^[A-Z][^.!?]*[.!?]$/,`${t.id}: one sentence`);
  // the unit a reader says a spec belongs to is the topic on the path, so the hint's stance and the history line name it
  for(const [spec,id] of [[{shape:'ratio',expr:'60 in 2:3'},'ratio-share'],[{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'€'},'unit-rate'],[{shape:'area',expr:'rectangle 7 by 4',unit:'cm2'},'area'],[{shape:'stat',expr:'mean 4, 7, 9, 10'},'mean-range']])
   assert.equal(P.topicIn(S.unitOf(spec)).id,id);
  // every school unit has a generator now: the path's only topics left to the model are the three linear ones
  assert.deepEqual(order.filter((id)=>!S.generatorFor(id)),['linear-one-step','linear-two-step','linear-both-sides']);
+});
+
+// ------------------------------------------------------------------ v2 M2b: Pythagoras' theorem and the probability of an event join the path
+test('M2b 1: the path grows by two units after the equations - their names, strand, years (from memory, a teacher checks), honest prerequisites, no lesson, a generator, a worked method and an act; no learner-visible string names the exam',()=>{
+ const {hasWorked,WORKED_METHODS}=require(src('lib/library/worked.ts'));
+ const {DO_IT}=require(src('lib/rules/week.ts'));
+ const order=P.topicsOf('school').map((t)=>t.id);
+ assert.deepEqual(order.slice(-3),['linear-both-sides','pythagoras','probability']);
+ const want={
+  'pythagoras':["Pythagoras' theorem",['area'],{us:8,uk:9,cz:8,de:8}],
+  'probability':['Probability of an event',['frac-equivalent','dec-convert'],{us:8,uk:9,cz:9,de:8}],
+ };
+ for(const [id,[name,prereq,year]] of Object.entries(want)){
+  const t=P.topicIn(id),row=SYLLABUS.find((x)=>x.id===id);
+  assert.equal(t.name,name);assert.equal(t.strand,'Geometry and data');assert.deepEqual(t.prereq,prereq,`${id}: prerequisites`);assert.deepEqual(t.year,year,`${id}: years`);
+  assert.ok(!('lessonId' in t),`${id}: no lesson in the library`);
+  assert.ok(row.bands.us.startsWith('Grade ')&&row.bands.uk.startsWith('Year ')&&/ročník/.test(row.bands.cz)&&/^Klasse/.test(row.bands.de),`${id}: bands`);
+  assert.match(t.blurb,/^[A-Z][^.!?]*[.!?]$/,`${id}: one sentence`);assert.doesNotMatch(t.blurb,/\d/,`${id}: no number in the blurb`);
+  assert.equal(P.pathOfTopic(id),'school');assert.equal(typeof S.generatorFor(id),'function');assert.ok(S.SCHOOL_UNIT_SLIPS[id].length>=3);
+  assert.ok(hasWorked(id));assert.equal(WORKED_METHODS[id].steps.length,3);assert.ok(DO_IT[id]);
+  assert.doesNotMatch([t.name,t.blurb,...Object.values(row.bands),WORKED_METHODS[id].idea,...WORKED_METHODS[id].steps,DO_IT[id],S.SCHOOL_WITHHELD[id]].join(' '),/GCSE|1MA1|Edexcel|certified/i,`${id}: no exam named`);
+  // a set is written by code: six distinct questions over the two tiers, none naming the exam, each its unit's own, every spec well formed
+  for(const seed of [0,1,7,99,0xffffffff]){
+   const set=makeSchoolItems(id,6,seed);
+   assert.equal(set.provider,'code');assert.equal(set.items.length,6,`${id} seed ${seed}`);
+   assert.equal(new Set(set.items.map((i)=>i.question)).size,6,'six distinct questions');
+   assert.deepEqual(set.items.map((i)=>i.tier),[1,1,1,2,2,2]);
+   for(const it of set.items){assert.equal(S.unitOf(it.spec),id);assert.deepEqual(S.wellFormed(it.spec),{ok:true});assert.doesNotMatch(it.question,/GCSE|1MA1|Edexcel/i);assert.equal(S.check(it.spec,S.workedAnswer(it.spec,'uk'),'uk').verdict,'right');}
+  }
+ }
+ // every generated unit but the three linear ones is on the path with its generator, as before
+ assert.deepEqual(order.filter((id)=>!S.generatorFor(id)),['linear-one-step','linear-two-step','linear-both-sides']);
+ assert.equal(Object.keys(S.SCHOOL_GENERATORS).length,14);
+ // the gap years: probability is held later than usual in us, uk and de, to keep the list from going down (the unit's comment says so)
+ const prob=SYLLABUS.find((x)=>x.id==='probability'),pyth=SYLLABUS.find((x)=>x.id==='pythagoras'),both=SYLLABUS.find((x)=>x.id==='linear-both-sides');
+ for(const k of ['us','uk','cz','de']){assert.ok(pyth.year[k]>=both.year[k]&&prob.year[k]>=pyth.year[k],`${k}: the list never goes down`);}
+ const src2=fs.readFileSync(src('lib/library/syllabus.ts'),'utf8');
+ assert.match(src2,/HELD LATER THAN USUAL in three systems/);assert.match(src2,/a teacher reads these four before release/);
+});
+
+test('MB-B4: a set for a cz learner prints the decimal comma and Kč; the uk set prints £; no system prints the set as before',async()=>{
+ noModel();
+ const cz=makeSchoolItems('dec-arith',6,3,'standard',false,[],'cz'),uk=makeSchoolItems('dec-arith',6,3,'standard',false,[],'uk'),none=makeSchoolItems('dec-arith',6,3);
+ assert.equal(cz.items.length,6);assert.equal(uk.items.length,6);
+ for (const it of cz.items){assert.ok(!/\d\.\d/.test(it.question)&&!/[£€$]/.test(it.question),it.question);assert.deepEqual(S.specFromQuestion(it.question,'cz'),it.spec);}
+ assert.ok(cz.items.some((it)=>/\d,\d\d\u00a0Kč/.test(it.question)),'a money item in Kč');
+ for (const it of uk.items) assert.ok(!/[€$]|Kč/.test(it.question),it.question);
+ assert.ok(uk.items.some((it)=>/£\d/.test(it.question)),'a money item in £');
+ assert.deepEqual(none.items.map((i)=>i.spec.expr),uk.items.map((i)=>i.spec.expr),'the numbers are the same set');
+ // makeItems threads the asked system (the practice route passes the seated profile's)
+ const made=await makeItems('pct-change',LEARNER,6,{system:'cz'});
+ assert.ok(made.items.length>0);
+ for (const it of made.items) assert.ok(!/\d\.\d/.test(it.question)&&!/[£€$]/.test(it.question),it.question);
+ // every unit's set is full in every system: the decimal comma and '63 %' never read as the answer given away
+ for (const sys of ['cz','de','uk','us']) for (const id of Object.keys(S.SCHOOL_GENERATORS)) for (const seed of [1,2,3]) assert.equal(makeSchoolItems(id,6,seed,'standard',false,[],sys).items.length,6,`${sys} ${id} ${seed}`);
+ assert.equal(seen.length,0,'no engine call');
 });

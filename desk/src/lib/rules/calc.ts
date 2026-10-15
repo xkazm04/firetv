@@ -12,9 +12,13 @@
  * (`CALC_SLIPS`, `slipsFor`): the model never decides a verdict; on an item code already judged wrong it may only
  * pick a slip id from its shape's list, as the linear pipeline does (rules/maths.ts settled()).
  *
- * Pure: imports only calc-expr.ts - no engine, no session store, no TV module.
+ * Pure: imports only calc-expr.ts, calc-read.ts and calc2.ts - no engine, no session store, no TV module. A spec of a
+ * Calculus 2 shape (rules/calc2.ts) is sent to calc2.ts on the first line of each public function below.
  */
-import { compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, sameFunction, SAMPLES, toTex, type Expr, type Limit } from "./calc-expr";
+import { commaSystem, readTask, type SchoolSystem } from "./taskText";
+import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
+import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, systemLogs, withinRel } from "./calc-read";
+import { agreesWhereBoth, compile, derivativeAt, evalNode, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit, type Node } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
 
@@ -44,7 +48,10 @@ export const CALC_SHAPES: readonly CalcShape[] = ["evaluate", "derivative", "der
  * (a fraction, sqrt(2)/2, pi/4, ln 2), `rounded` for one written as a decimal (0.333).
  *   - evaluate, derivative-at, critical-point, extremum: exact shapes - the truth is computed to 1e-9 or better, so a
  *     right exact answer agrees far inside 1e-6; a decimal is held to the same line (the item asks for the value).
- *   - definite-integral, limit: exact 1e-6 as above; a learner who rounds to three figures lands within 5e-3.
+ *   - definite-integral, limit: exact 1e-6 as above. A decimal that is the exact value correctly rounded at the decimals
+ *     it is written to is never wrong: right with two significant figures or more (2.7 and 2.718 for e, 0.38 for 3/8, 3.0
+ *     for 3), 'unsure' with fewer (0.3 for 1/3). Any other decimal inside `rounded` 5e-3 is 'unsure' (a calculator
+ *     estimate at x = 0.01 is not the limit). A false tick is a blocker (MB-B28); the rule is calc-read's decimalCall (D2 R1a).
  *   - newton-step: 5e-3 either way - an iterate is usually worked on a calculator and written rounded.
  */
 export const TOLERANCE: Readonly<Record<Exclude<CalcShape, "derivative" | "antiderivative">, { exact: number; rounded: number }>> = {
@@ -82,11 +89,13 @@ const WHY = {
   sign: "It has the right size but the opposite sign.",
   lostConstant: "It differentiates back to the integrand, but an antiderivative needs its arbitrary constant.",
   extraConstant: "A derivative has no arbitrary constant in it.",
+  chain: "It differentiates the outside but not the inside.",
   empty: "There is no answer to check.",
   unreadable: "The desk cannot read this answer as mathematics, and it does not guess.",
   notNumber: "The answer should be a number, and this one depends on x.",
   notFinite: "This answer has no finite value to compare.",
   rounded: "This is a rounded decimal; the desk asks for the exact value.",
+  domain: "Your answer is not defined everywhere the function is. Check where it holds.",
   noCompare: "The desk cannot compare this answer where the question's function is defined.",
   badSpec: "The desk cannot work this question out for itself, so it does not judge the answer.",
 } as const;
@@ -276,6 +285,7 @@ function read(spec: unknown): Read {
  * at the shape's tolerance. A spec with an answer field is refused: the desk works the answer out itself.
  */
 export function wellFormed(spec: unknown): { ok: true } | { ok: false; why: string } {
+  if (isCalc2Spec(spec)) return calc2WellFormed(spec);
   const r = read(spec);
   return r.ok ? { ok: true } : { ok: false, why: r.why };
 }
@@ -328,9 +338,17 @@ function printable(spec: unknown): { s: CalcSpec; f: Expr } | null {
  * 'Differentiate f(x) = 3x^2 + 2x.', 'Find lim_(x->0) sin(3x)/x.', 'Evaluate int_0^3 2x dx.', 'Find the critical point
  * of f(x) = x^2 - 4x + 1 on [0, 5].' Null when the spec is malformed (printable): a malformed spec reaches here from
  * a model, a session file or a page reader, and it is a null, never a throw. It never carries the answer: the spec
- * has none, and the only numbers printed are the spec's own parameters.
+ * has none, and the only numbers printed are the spec's own parameters. For a comma-system learner (cz, de) the spec's
+ * bare log - the engine's natural log - prints as ln (calc-read naturalAsLn), so a cz learner never reads base 10 into
+ * it; any other system, or none, prints exactly as before.
  */
-export function question(spec: unknown): { plain: string; tex: string } | null {
+export function question(spec: unknown, system?: SchoolSystem): { plain: string; tex: string } | null {
+  if (commaSystem(system) && spec && typeof spec === "object") {
+    // a comma-system learner reads a bare log as base 10 (calc-read czechAnswer): the engine's natural log prints as ln
+    const ln = Object.fromEntries(Object.entries(spec).map(([k, v]) => [k, typeof v === "string" ? naturalAsLn(v) : Array.isArray(v) ? v.map((x) => (typeof x === "string" ? naturalAsLn(x) : x)) : v]));
+    return question(ln);
+  }
+  if (isCalc2Spec(spec)) return calc2Question(spec);
   const p = printable(spec);
   if (!p) return null;
   const { s, f } = p;
@@ -374,26 +392,16 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
 
 export interface CalcVerdict { verdict: "right" | "wrong" | "unsure"; slip?: string; why: string; }
 
-/** The answer as written, without a leading 'f(x) =', 'x =', "y' =" or 'lim =' and without a closing full stop. */
-const cleanAnswer = (a: string) => {
-  let s = a.trim();
-  const eq = s.lastIndexOf("=");
-  if (eq >= 0) s = s.slice(eq + 1).trim();
-  return s.replace(/\.$/, "").trim();
-};
-/** An infinity as a learner writes it: inf, infinity, ∞, with an optional sign. */
-const infinityOf = (s: string): 1 | -1 | null => {
-  const m = /^([+\-−]?)\s*(inf|infinity|∞)$/i.exec(s.replace(/\s+/g, " ").trim());
-  return m ? (m[1] === "-" || m[1] === "−" ? -1 : 1) : null;
-};
-const DNE = /^(dne|does not exist|no limit|undefined)$/i;
-/** A plain decimal numeral (0.333, 16.0, .5): the learner rounded. */
-const isDecimal = (s: string) => /^[+\-−]?(\d+\.\d*|\.\d+)$/.test(s.replace(/\s+/g, ""));
-const withinRel = (u: number, v: number, tol: number) => Math.abs(u - v) <= tol * Math.max(1, Math.abs(v));
-
 const verdict = (v: CalcVerdict["verdict"], why: string, slip?: string): CalcVerdict => (slip ? { verdict: v, slip, why } : { verdict: v, why });
 
-function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, decimal: boolean): CalcVerdict {
+/** decimalCall's word as a verdict. */
+const called = (c: ReturnType<typeof decimalCall>): CalcVerdict =>
+  c === "right" ? verdict("right", WHY.right) : c === "rounded" ? verdict("unsure", WHY.rounded) : c === "sign" ? verdict("wrong", WHY.sign, "sign") : verdict("wrong", WHY.wrong);
+
+function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, written: string): CalcVerdict {
+  const decimal = isDecimal(written);
+  // a limit or an integral: a decimal is decided by the one rule calc2's sequence limit also calls (MB-B28, D2 R1a)
+  if (decimal && (shape === "limit" || shape === "definite-integral")) return called(decimalCall(written, s, truth, { ...TOLERANCE[shape], close: ROUNDED_CLOSE }));
   const tol = decimal ? TOLERANCE[shape].rounded : TOLERANCE[shape].exact;
   if (withinRel(s, truth, tol)) return verdict("right", WHY.right);
   if (!withinRel(0, truth, tol) && withinRel(-s, truth, tol)) return verdict("wrong", WHY.sign, "sign");
@@ -407,20 +415,28 @@ function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, de
  *     negation is 'wrong' with slip 'sign'; a +C on a derivative is 'wrong'.
  *   - antiderivative: the answer's numeric derivative is the integrand at the samples; right needs the arbitrary
  *     constant - a correct function with no +C is 'wrong' with slip 'lost-constant'; the negation is slip 'sign'.
+ *   - both compare one way (agreesWhereBoth, D2): only where answer and truth are both defined, so an answer defined
+ *     where the truth is not is right (-1/(1-x) for ln(1-x)); one undefined where the truth is defined is 'unsure' with
+ *     the domain line (ln(x) + C for 1/x, MB-B27). A gap outside every sample is not seen: ln(x+4) + C for 1/(x+4).
  *   - number shapes: within the shape's TOLERANCE (exact or rounded); fractions, sqrt, pi and ln forms read; a
  *     negated truth is slip 'sign'; a rounded decimal close to an exact shape's truth is 'unsure'. An infinite limit
  *     is answered by inf, infinity or ∞ (with its sign); 'dne' is wrong for a limit that exists.
  *   - an empty, unreadable or non-finite answer, an answer in x for a number, or a spec the desk cannot work out, is
  *     'unsure': the desk does not guess.
  * The `why` is a fixed sentence of the desk's, with no value in it.
+ * With a cz or de `system`, a one-number answer with a decimal comma ('2,718') is read as a point (MK4), and any answer is read
+ * as a Czech school writes it (calc-read czechAnswer, MB-B36): a decimal comma between digits, tg, cotg, arctg, arccotg, and
+ * + K or + C1 as the arbitrary constant. With uk, us or no system the answer is read exactly as before.
  */
-export function checkAnswer(spec: unknown, studentAnswer: unknown): CalcVerdict {
+export function checkAnswer(spec: unknown, studentAnswer: unknown, system?: SchoolSystem): CalcVerdict {
+  if (isCalc2Spec(spec)) return calc2CheckAnswer(spec, studentAnswer, system);
   const r = read(spec);
   if (!r.ok) return verdict("unsure", WHY.badSpec);
   if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
-  const ans = cleanAnswer(studentAnswer);
+  let ans = cleanAnswer(studentAnswer);
   if (!ans) return verdict("unsure", WHY.empty);
   const { truth } = r;
+  if (commaSystem(system)) ans = czechAnswer(truth.kind !== "derivative" && truth.kind !== "antiderivative" ? oneNumberComma(ans) : ans, system);
   if (truth.kind === "inf" || r.spec.shape === "limit") {
     const inf = infinityOf(ans);
     if (inf !== null) {
@@ -433,14 +449,15 @@ export function checkAnswer(spec: unknown, studentAnswer: unknown): CalcVerdict 
   if (!e) return verdict("unsure", WHY.unreadable);
   if (truth.kind === "derivative") {
     const g = (x: number) => truth.at.get(x) ?? NaN;
-    if (sameFunction(e, g, FUNCTION_TOL)) return e.constant ? verdict("wrong", WHY.extraConstant) : verdict("right", WHY.right);
-    if (sameFunction(e, (x) => -g(x), FUNCTION_TOL)) return verdict("wrong", WHY.sign, "sign");
+    if (agreesWhereBoth(e, g, FUNCTION_TOL)) return e.constant ? verdict("wrong", WHY.extraConstant) : undefinedWhereTrue(e, g) ? verdict("unsure", WHY.domain) : verdict("right", WHY.right);
+    if (agreesWhereBoth(e, (x) => -g(x), FUNCTION_TOL)) return verdict("wrong", WHY.sign, "sign");
+    if (!e.constant && chainDropped(r.f, g).some((c) => agreesWhereBoth(e, c, FUNCTION_TOL))) return verdict("wrong", WHY.chain, "forgot-chain");
     return comparable((x) => e.at(x), g) ? verdict("wrong", WHY.wrong) : verdict("unsure", WHY.noCompare);
   }
   if (truth.kind === "antiderivative") {
     const d = (x: number) => derivativeAt(e, x) ?? NaN;
-    if (sameFunction(d, truth.f, FUNCTION_TOL)) return e.constant ? verdict("right", WHY.right) : verdict("wrong", WHY.lostConstant, "lost-constant");
-    if (sameFunction(d, (x) => -truth.f.at(x), FUNCTION_TOL)) return verdict("wrong", WHY.sign, "sign");
+    if (agreesWhereBoth(d, truth.f, FUNCTION_TOL)) return e.constant ? (undefinedWhereTrue(d, truth.f) ? verdict("unsure", WHY.domain) : verdict("right", WHY.right)) : verdict("wrong", WHY.lostConstant, "lost-constant");
+    if (agreesWhereBoth(d, (x) => -truth.f.at(x), FUNCTION_TOL)) return verdict("wrong", WHY.sign, "sign");
     return comparable(d, (x) => truth.f.at(x)) ? verdict("wrong", WHY.wrong) : verdict("unsure", WHY.noCompare);
   }
   if (e.constant) return verdict("unsure", WHY.unreadable);
@@ -448,7 +465,116 @@ export function checkAnswer(spec: unknown, studentAnswer: unknown): CalcVerdict 
   const s = e.at();
   if (!fin(s)) return verdict("unsure", WHY.notFinite);
   if (truth.kind === "inf") return verdict("wrong", WHY.wrong);
-  return judgeNumber(r.spec.shape as keyof typeof TOLERANCE, truth.v, s, isDecimal(ans));
+  return judgeNumber(r.spec.shape as keyof typeof TOLERANCE, truth.v, s, ans);
+}
+
+// ------------------------------------------------------------------ the dropped chain factor (MB-B38)
+
+/** Most composition sites read in one function: a question's function is a line, and each site costs a pass of derivatives. */
+const MAX_CHAIN_SITES = 8;
+/** An inside whose derivative is within this of 1 at every sample (relative) is x + c: there is no chain factor to forget. */
+const UNIT_SLOPE = 1e-9;
+
+const nodeHasX = (n: Node): boolean => {
+  switch (n.k) {
+    case "x": return true;
+    case "num": case "const": return false;
+    case "neg": return nodeHasX(n.a);
+    case "fn": return nodeHasX(n.arg) || (!!n.base && nodeHasX(n.base));
+    default: return nodeHasX(n.a) || nodeHasX(n.b);
+  }
+};
+
+/**
+ * The composition sites of a reading: each node that is an outside function of an inside in x - fn(inside) with a
+ * constant base, base^(inside) with a constant base, (inside)^n with a constant power - whose inside is not x itself and
+ * whose derivative is not 1 at every sample (x + 1 has no chain factor to forget). x^x and log base x are not sites.
+ */
+function chainSites(root: Node): { at: Node; inner: Node }[] {
+  const out: { at: Node; inner: Node }[] = [];
+  const visit = (n: Node) => {
+    let inner: Node | null = null;
+    if (n.k === "fn" && !(n.base && nodeHasX(n.base))) inner = n.arg;
+    else if (n.k === "pow") inner = nodeHasX(n.a) && !nodeHasX(n.b) ? n.a : !nodeHasX(n.a) && nodeHasX(n.b) ? n.b : null;
+    if (inner && inner.k !== "x" && nodeHasX(inner)) {
+      const h = evalNode(inner);
+      const slopes = SAMPLES.map((x) => derivativeAt(h, x)).filter(fin);
+      if (slopes.length >= 3 && !slopes.every((d) => Math.abs(d - 1) <= UNIT_SLOPE * Math.max(1, Math.abs(d)))) out.push({ at: n, inner });
+    }
+    switch (n.k) {
+      case "x": case "num": case "const": return;
+      case "neg": return visit(n.a);
+      case "fn": visit(n.arg); if (n.base) visit(n.base); return;
+      default: visit(n.a); visit(n.b);
+    }
+  };
+  visit(root);
+  return out;
+}
+
+// ------------------------------------------------------------------ a topic's structural requirement (MB-B30)
+
+/**
+ * The structural requirements a Calculus topic may name on its definition (the spine's `requires`), each checked in code
+ * on every spec a set keeps: 'composition' - the function has a composition site (chainSites, the same sites the
+ * forgot-chain check reads), so a chain-rule question really asks for the chain rule.
+ */
+export const CALC_REQUIREMENTS = ["composition"] as const;
+export type CalcRequirement = (typeof CALC_REQUIREMENTS)[number];
+
+/**
+ * True when a function in the plain notation is a composition with a chain factor to show: an outside function of an
+ * inside that is neither x nor x + c (sin(x^2), (2x + 1)^3, e^(3x)); false for sin(x), (x + 1)^3, a product or quotient
+ * of plain pieces, and anything the desk cannot read.
+ */
+export function isComposition(f: string): boolean {
+  const e = typeof f === "string" ? compile(f) : null;
+  return !!e && chainSites(e.node).length > 0;
+}
+
+/** Does a spec meet a topic's requirement: always with none, never for an unknown name or a spec with no function. */
+export function meetsRequirement(spec: unknown, requirement?: string): boolean {
+  if (requirement === undefined) return true;
+  const f = spec && typeof spec === "object" ? (spec as { f?: unknown }).f : undefined;
+  if (typeof f !== "string") return false;
+  return requirement === "composition" ? isComposition(f) : false;
+}
+
+/** The tree with each site's inside frozen near x0: inside(x0) + (x - x0), so its derivative there is 1 and its value the same. */
+function frozen(n: Node, sites: Map<Node, Node>, x0: number): Node {
+  const inner = sites.get(n);
+  if (inner) {
+    const shift: Node = { k: "add", a: { k: "x" }, b: { k: "num", v: evalNode(inner)(x0) - x0, s: "" } };
+    if (n.k === "fn") return { ...n, arg: shift };
+    if (n.k === "pow") return n.a === inner ? { ...n, a: shift } : { ...n, b: shift };
+  }
+  switch (n.k) {
+    case "x": case "num": case "const": return n;
+    case "neg": return { ...n, a: frozen(n.a, sites, x0) };
+    case "fn": return n.base ? { ...n, arg: frozen(n.arg, sites, x0), base: frozen(n.base, sites, x0) } : { ...n, arg: frozen(n.arg, sites, x0) };
+    default: return { ...n, a: frozen(n.a, sites, x0), b: frozen(n.b, sites, x0) };
+  }
+}
+
+/**
+ * The derivatives a learner who forgot the chain rule would write: for each composition site of f, and for all of them
+ * at once, f' with that inside's derivative taken as 1 (sin(x^2) gives cos(x^2)) - sampled at SAMPLES like the truth `g`.
+ * A candidate that agrees with the truth is no slip and is left out, so a right answer can never be called this.
+ */
+function chainDropped(f: Expr, g: (x: number) => number): ((x: number) => number)[] {
+  const sites = chainSites(f.node);
+  if (!sites.length || sites.length > MAX_CHAIN_SITES) return [];
+  const sets = sites.map((s) => [s]);
+  if (sites.length > 1) sets.push(sites);
+  const out: ((x: number) => number)[] = [];
+  for (const set of sets) {
+    const map = new Map(set.map((s) => [s.at, s.inner] as [Node, Node]));
+    const at = new Map<number, number>();
+    for (const x of SAMPLES) at.set(x, derivativeAt(evalNode(frozen(f.node, map, x)), x) ?? NaN);
+    const c = (x: number) => at.get(x) ?? NaN;
+    if (comparable(c, g) && !agreesWhereBoth(c, g, FUNCTION_TOL)) out.push(c);
+  }
+  return out;
 }
 
 /** Can two functions be compared at all: at least three samples where both are defined? */
@@ -461,31 +587,6 @@ function comparable(a: (x: number) => number, b: (x: number) => number): boolean
 }
 
 // ------------------------------------------------------------------ the leak check
-
-/**
- * Number words to ninety-nine, as rules/maths.ts said() reads them. Written again here, not imported: said() is
- * private to rules/maths.ts, and this module imports only calc-expr.ts (rules stay pure and small).
- */
-const WORDS: Record<string, string> = {
-  zero: "0", one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10",
-  eleven: "11", twelve: "12", thirteen: "13", fourteen: "14", fifteen: "15", sixteen: "16", seventeen: "17", eighteen: "18",
-  nineteen: "19", twenty: "20", thirty: "30", forty: "40", fifty: "50", sixty: "60", seventy: "70", eighty: "80", ninety: "90",
-};
-const NUMBER_WORD = /\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:(?:-|\s+)(one|two|three|four|five|six|seven|eight|nine)\b)?|\b([a-z]+)\b/g;
-/** A line as it would be said, numbers in digits: 'minus sixteen' is -16, 'one and a half' is 1.5. */
-const spoken = (line: string) => line.toLowerCase().replace(/[−–—‐‑]/g, "-")
-  .replace(NUMBER_WORD, (w, tens: string | undefined, unit: string | undefined, word: string | undefined) =>
-    tens ? String(Number(WORDS[tens]) + (unit ? Number(WORDS[unit]) : 0)) : Object.hasOwn(WORDS, word!) ? WORDS[word!] : w)
-  .replace(/(\d+)\s+and\s+a\s+half\b/g, "$1.5")
-  .replace(/\b(?:minus|negative)\s*(?=\d)/g, "-")
-  .replace(/(^|[^\s\da-z)\]²])(\s*)-\s+(?=\d)/g, "$1$2-");
-
-const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-/**
- * A piece of the question as a pattern: spacing free, '->' also as '→', and only as a whole - not inside a larger
- * expression (the function 'x' is not the x of 'x^2/2', 'x^2 + 1' is not the start of 'x^2 + 10').
- */
-const piecePattern = (p: string) => new RegExp(`(?<![\\w^*/.(|])${[...p.replace(/\s+/g, "")].map(escapeRe).join("\\s*").replace(/-\\s\*>/g, "(?:-\\s*>|→)")}(?![\\w^*/.)|(])`, "gi");
 
 /** The question's own notation that may be quoted back: never the answer (the spec's function aside, handled apart). */
 function ownPieces(s: CalcSpec): string[] {
@@ -506,8 +607,19 @@ function ownPieces(s: CalcSpec): string[] {
   return out;
 }
 
+/**
+ * An answer said in words as its symbols (HL3): 'x squared' is x^2, 'x cubed' x^3, 'to the power of 4' ^4, 'plus' +, 'minus' -
+ * (a minus before a figure is already read), 'times' *. 'three x squared plus two x' is then '3 x^2 + 2 x', a window the engine reads.
+ */
+const algebraSaid = (t: string) => t
+  .replace(/\s+(?:to\s+the\s+power\s+of|to\s+the)\s+(-?\d+)\b/g, "^$1")
+  .replace(/\s+squared\b/g, "^2").replace(/\s+cubed\b/g, "^3")
+  .replace(/\s+plus\s+/g, " + ").replace(/\s+minus\s+/g, " - ").replace(/\s+times\s+/g, " * ");
+
 /** Most tokens a window of the line may span. */
 const WINDOW = 6;
+/** Most tokens the long pass reads as one expression (a right answer said whole, longer than WINDOW). */
+const LONG_WINDOW = 24;
 
 /**
  * Does this hint or explanation line state the answer? It reads the line as it would be said (number words to
@@ -516,29 +628,43 @@ const WINDOW = 6;
  * whitespace-separated tokens, taking at each place the longest window the engine can read (so the 4 in 'x^2 - 4' is
  * part of an expression, not a number standing alone):
  *   - a number shape leaks by any window whose value is the truth to ROUNDED_CLOSE (a fraction, a decimal, sqrt, pi
- *     or ln forms, 3^2), or a negative number whose size is the truth ('minus sixteen' gives the size away);
+ *     or ln forms, 3^2), or a negative number whose size is the truth ('minus sixteen' gives the size away); a limit or
+ *     an integral also by a decimal the judge would call right (0.38 for 3/8, 2.7 for e: D2 R1a);
  *   - a function shape leaks by any window that checkAnswer would call right (an antiderivative with or without +C);
  *   - an infinite limit leaks by naming infinity.
+ * Two long passes then read windows of seven up to LONG_WINDOW (24) tokens, and the line leaks if one compiles and is
+ * right by the same test: a function answer said whole ('2x e^x sin(x) + x^2 e^x sin(x) + x^2 e^x cos(x)') is refused
+ * too. One reads the line as scan reads it, the other the line as it was before the question's own pieces were set
+ * aside (that step can erase a term of the answer). Both only add hits.
+ * For a number, one more pass reads the line again with a lone digit,digit as a point ('2,72' is 2.72), for every learner (MK4).
  */
 export function leaksCalc(spec: unknown, line: unknown): boolean {
+  if (isCalc2Spec(spec)) return calc2LeaksCalc(spec, line);
+  if (leaksCalcOnce(spec, line)) return true;
+  if (typeof line !== "string") return false;
+  const pointed = pointForComma(line);
+  if (pointed === line) return false;
+  const r = read(spec);
+  return r.ok && r.truth.kind === "number" && leaksCalcOnce(spec, pointed);
+}
+function leaksCalcOnce(spec: unknown, line: unknown): boolean {
   if (typeof line !== "string" || !line.trim()) return false;
   const r = read(spec);
   if (!r.ok) return false;
   const { truth, f } = r, s = r.spec;
-  let text = spoken(line);
+  let text = algebraSaid(spoken(line));
   if (truth.kind === "inf") return /infinit|∞|\binf\b/.test(text);
+  const raw = text;
   const fnRight = (e: Expr): boolean => {
-    if (truth.kind === "derivative") return sameFunction(e, (x) => truth.at.get(x) ?? NaN, FUNCTION_TOL);
-    if (truth.kind === "antiderivative") return sameFunction((x) => derivativeAt(e, x) ?? NaN, truth.f, FUNCTION_TOL);
+    // one way, as the judge compares (D2): every answer it can call right is refused
+    if (truth.kind === "derivative") return agreesWhereBoth(e, (x) => truth.at.get(x) ?? NaN, FUNCTION_TOL);
+    if (truth.kind === "antiderivative") return agreesWhereBoth((x) => derivativeAt(e, x) ?? NaN, truth.f, FUNCTION_TOL);
     return false;
   };
   // the question's own pieces, and its function unless the function is the answer
   const pieces = ownPieces(s);
   if (!fnRight(f)) pieces.push(s.f);
   for (const p of pieces) text = text.replace(piecePattern(p.toLowerCase()), " ");
-  const tokens = text.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/)
-    .map((t) => t.replace(/\.+$/, ""))
-    .filter(Boolean);
   /** One token alone, also without a bracket it does not close ('(16', '16)'): prose wraps numbers in brackets. */
   const single = (t: string): Expr | null => {
     const e = compile(t);
@@ -546,23 +672,74 @@ export function leaksCalc(spec: unknown, line: unknown): boolean {
     const open = (t.match(/\(/g) ?? []).length, close = (t.match(/\)/g) ?? []).length;
     return open > close ? compile(t.replace(/^\(+/, "")) : close > open ? compile(t.replace(/\)+$/, "")) : null;
   };
-  const numberRight = (e: Expr, first: string): boolean => {
+  /** A limit or an integral is also given away by any decimal the judge calls right (D2 R1a: 0.38 for 3/8, 2.7 for e). */
+  const rounds = s.shape === "limit" || s.shape === "definite-integral";
+  const numberRight = (e: Expr, first: string, said: string): boolean => {
     if (truth.kind !== "number" || e.usesX || e.constant) return false;
     const v = e.at();
     if (!fin(v)) return false;
-    return withinRel(v, truth.v, ROUNDED_CLOSE) || (first.startsWith("-") && withinRel(-v, truth.v, ROUNDED_CLOSE));
+    if (withinRel(v, truth.v, ROUNDED_CLOSE) || (first.startsWith("-") && withinRel(-v, truth.v, ROUNDED_CLOSE))) return true;
+    const bare = said.replace(/^\(+|\)+$/g, "");
+    return rounds && (roundingRight(bare, v, truth.v) || (bare.startsWith("-") && roundingRight(bare.slice(1), -v, truth.v)));
   };
-  for (let i = 0; i < tokens.length;) {
-    let took = 0, hit = false;
-    for (let n = Math.min(WINDOW, tokens.length - i); n >= 1; n--) {
-      const e = n === 1 ? single(tokens[i]) : compile(tokens.slice(i, i + n).join(" "));
-      if (!e) continue;
-      took = n;
-      hit = truth.kind === "number" ? numberRight(e, tokens[i]) : fnRight(e);
-      break;
+  /** Most distinct factors a line is searched for a product pair in. */
+  const MAX_FACTORS = 14;
+  /** Does the line name two factors whose product is the answer ('Multiply cos(x^2) by 2x.')? */
+  const productRight = (toks: string[]): boolean => {
+    if (truth.kind === "number") return false;
+    const cands: { t: string; s: number; e: number; x: boolean }[] = [];
+    for (let i = 0; i < toks.length && cands.length < MAX_FACTORS; i++) {
+      for (let n = 1; n <= Math.min(3, toks.length - i); n++) {
+        const t = toks.slice(i, i + n).join(" "), e = n === 1 ? single(toks[i]) : compile(t);
+        // a bare number is a factor only of an antiderivative (the 1/2 of (1/2)e^(x^2)), and not 0 or 1
+        if (!e || (!e.usesX && !(truth.kind === "antiderivative" && n === 1 && !/^[01]$/.test(t)))) continue;
+        if (cands.some((c) => c.t === t)) continue;
+        cands.push({ t: n === 1 && !compile(t) ? t.replace(/^\(+|\)+$/g, "") : t, s: i, e: i + n, x: e.usesX });
+      }
     }
-    if (hit) return true;
-    i += Math.max(1, took);
+    for (const a of cands) for (const b of cands) {
+      if (!a.x || (a.s < b.e && b.s < a.e)) continue;
+      const e = compile(`(${a.t})*(${b.t})`);
+      if (e && fnRight(e)) return true;
+    }
+    return false;
+  };
+  const tokenize = (t: string): string[] => t.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/)
+    .map((w) => w.replace(/\.+$/, ""))
+    .filter(Boolean);
+  /** Does any window of WINDOW + 1 up to LONG_WINDOW tokens compile and read as the answer? */
+  const longRight = (tokens: string[]): boolean => {
+    for (let i = 0; i < tokens.length; i++) {
+      for (let n = WINDOW + 1; n <= Math.min(LONG_WINDOW, tokens.length - i); n++) {
+        const said = tokens.slice(i, i + n).join(" "), e = compile(said);
+        if (e && (truth.kind === "number" ? numberRight(e, tokens[i], said) : fnRight(e))) return true;
+      }
+    }
+    return false;
+  };
+  const scan = (t: string): boolean => {
+    const tokens = tokenize(t);
+    for (let i = 0; i < tokens.length;) {
+      let took = 0, hit = false;
+      for (let n = Math.min(WINDOW, tokens.length - i); n >= 1; n--) {
+        const e = n === 1 ? single(tokens[i]) : compile(tokens.slice(i, i + n).join(" "));
+        if (!e) continue;
+        took = n;
+        hit = truth.kind === "number" ? numberRight(e, tokens[i], tokens.slice(i, i + n).join(" ")) : fnRight(e);
+        break;
+      }
+      if (hit) return true;
+      i += Math.max(1, took);
+    }
+    return longRight(tokens) || productRight(tokens);
+  };
+  if (scan(text)) return true;
+  // the long pass also over the line as it was before the question's own pieces were set aside
+  if (raw !== text && longRight(tokenize(raw))) return true;
+  // a substitution said in the line ('u = x^2'): the line is read again with the letter put back as its inside
+  for (const m of text.matchAll(/\b([uvw])\s*=\s*([^\s,;=…]+)/g)) {
+    const inner = single(m[2]);
+    if (inner?.usesX && scan(text.replace(new RegExp(`(?<![a-z])${m[1]}(?![a-z])`, "g"), `(${m[2].replace(/^\(+|\)+$/g, "")})`))) return true;
   }
   return false;
 }
@@ -591,8 +768,30 @@ export const CALC_SLIPS: readonly CalcSlip[] = [
   { id: "arithmetic-slip", name: "A number came out wrong", says: "The method is right but the arithmetic on one line is not. Re-do just that line.", points: "the line you are on", shapes: CALC_SHAPES },
 ];
 
+/**
+ * Each slip's label under the TV recap's ring (cycle 21), by id: a faithful compression of its `name` - lowercase, four
+ * words and 24 characters at most (rules/school SHORT_WORDS, SHORT_CHARS), no value, no two the same. Kept beside
+ * CALC_SLIPS, not in it, so the frozen Calculus 1 table (tools/calc1-frozen.json) stays byte for byte.
+ */
+export const CALC_SLIP_SHORT: Readonly<Record<CalcSlip["id"], string>> = {
+  "lost-constant": "constant left off",
+  "sign": "sign turned over",
+  "forgot-chain": "the inside forgotten",
+  "product-as-product": "product rule skipped",
+  "quotient-order": "quotient rule backwards",
+  "power-off-by-one": "power moved wrong way",
+  "wrong-trig-sign": "a trig sign flipped",
+  "lost-inner-factor": "inner factor kept in",
+  "limit-substituted-early": "point put in early",
+  "bounds-swapped": "bounds swapped",
+  "forgot-second-derivative-check": "kind of point unchecked",
+  "decimal-newton-slip": "a newton step slipped",
+  "arithmetic-slip": "a number went wrong",
+};
+
 /** The slip ids the model may pick from for an item of this shape, already judged wrong by code. */
 export function slipsFor(shape: unknown): string[] {
+  if (isCalc2Spec({ shape })) return calc2SlipsFor(shape);
   return isShape(shape) ? CALC_SLIPS.filter((s) => s.shapes.includes(shape)).map((s) => s.id) : [];
 }
 
@@ -830,7 +1029,7 @@ function definiteSpec(fText: string, aText: string, bText: string): CalcSpec | n
  * rule, never checked against a guess. A definite integral that is zero is read as the symmetry question it is
  * (`zero: true`). Pure and deterministic: a fresh object per call.
  */
-export function specFromQuestion(text: unknown): CalcSpec | null {
+function calc1SpecFromQuestion(text: unknown): CalcSpec | null {
   if (typeof text !== "string" || !text.trim() || text.length > MAX_QUESTION) return null;
   const t = normalQuestion(text);
   for (const [pattern, make] of READERS) {
@@ -848,6 +1047,61 @@ export function specFromQuestion(text: unknown): CalcSpec | null {
   }
   return null;
 }
+
+/**
+ * The spec a printed Calculus task is: Calculus 1's reading first and unchanged (above); only a text that reading returns
+ * null for is offered to rules/calc2 (v2 M3b-3b ruling 31), on the same normalised text.
+ */
+function specOnce(text: unknown): CalcSpec | Calc2Spec | null {
+  const own = calc1SpecFromQuestion(text);
+  if (own || typeof text !== "string" || !text.trim() || text.length > MAX_QUESTION) return own;
+  return calc2SpecFromQuestion(normalQuestion(text));
+}
+
+/**
+ * A task's text with its logs as the learner's system means them (MB-B36 log, calc-read systemLogs): in cz a bare log and
+ * lg are base 10, in de lg is. Done before readTask's as-written-first reading, so a Czech page's log is never read as
+ * the natural log because the raw text happened to parse; only log names change, so the decimal comma and a list of
+ * roots keep readTask's order. uk, us and no system get the text untouched.
+ */
+const logsOfSystem = (text: unknown, system?: SchoolSystem) =>
+  typeof text === "string" && commaSystem(system) ? systemLogs(text, system) : text;
+
+/** The spec a printed Calculus task is. `system` is the learner's school system: with it a decimal comma reads as a point; an instruction in front ('Derivujte:', 'Vypočtěte') is set aside (MB-B2); a log reads in the system's base (logsOfSystem). */
+export const specFromQuestion = (text: unknown, system?: SchoolSystem): CalcSpec | Calc2Spec | null => readTask(logsOfSystem(text, system), system, specOnce);
+
+const MAX_WORDS = String.raw`(?:absolute\s+|global\s+)?(maximum|max|largest|greatest)`;
+const MIN_WORDS = String.raw`(?:absolute\s+|global\s+)?(minimum|min|smallest|least)`;
+/** The multi-part phrasings: the maximum and the minimum of one function on one interval, in either order. */
+const PART_READERS: [RegExp, boolean][] = [
+  [re(`${VERB}\\s+the\\s+${MAX_WORDS}\\s+and\\s+(?:the\\s+)?${MIN_WORDS}(?:\\s+values?)?\\s+of\\s+${FN}(.+?)\\s+(?:on|in|over)\\s+(?:the\\s+interval\\s+)?([[(].*[\\])])`), true],
+  [re(`${VERB}\\s+the\\s+${MIN_WORDS}\\s+and\\s+(?:the\\s+)?${MAX_WORDS}(?:\\s+values?)?\\s+of\\s+${FN}(.+?)\\s+(?:on|in|over)\\s+(?:the\\s+interval\\s+)?([[(].*[\\])])`), false],
+];
+
+/**
+ * The parts a printed multi-part Calculus task is, read in code from its text (v2 M3a) - or null. It knows one phrasing:
+ * 'Find the (absolute) maximum and minimum (values) of f(x) = ... on [a, b]' (either order), which is two extremum specs
+ * on the same function and interval, in the order asked. Null unless BOTH parts are well formed: a part the desk cannot
+ * judge (an extremum at an endpoint) makes the whole task one it does not claim, never half of it. specFromQuestion is
+ * untouched: no text it reads changes its spec. Pure and deterministic.
+ */
+function partsOnce(text: unknown): CalcSpec[] | null {
+  if (typeof text !== "string" || !text.trim() || text.length > MAX_QUESTION) return null;
+  const t = normalQuestion(text);
+  for (const [pattern, maxFirst] of PART_READERS) {
+    const m = pattern.exec(t);
+    if (!m) continue;
+    const f = fnOf(m[3], false), on = intervalOf(m[4]);
+    if (!f || !on) return null;
+    const kinds: ("max" | "min")[] = maxFirst ? ["max", "min"] : ["min", "max"];
+    const parts: CalcSpec[] = kinds.map((kind) => ({ shape: "extremum", f, on: [on[0], on[1]], kind }));
+    return parts.every((p) => wellFormed(p).ok) ? parts : null;
+  }
+  return null;
+}
+
+/** The parts a printed multi-part Calculus task is, read as specFromQuestion reads (MB-B2). */
+export const partsFromQuestion = (text: unknown, system?: SchoolSystem): CalcSpec[] | null => readTask(logsOfSystem(text, system), system, partsOnce);
 
 // ------------------------------------------------------------------ the line when a hint gave the answer away twice
 
@@ -871,6 +1125,7 @@ const WITHHELD_ANY = "Go back to the last step you are sure of and take the next
 
 /** The withheld line for a spec, chosen by its shape; a general line when there is no shape. */
 export function withheldCalc(spec: unknown): string {
+  if (isCalc2Spec(spec)) return calc2Withheld(spec);
   const shape = spec && typeof spec === "object" ? (spec as { shape?: unknown }).shape : undefined;
   return isShape(shape) ? CALC_WITHHELD[shape] : WITHHELD_ANY;
 }

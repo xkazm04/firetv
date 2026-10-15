@@ -1,5 +1,6 @@
 /** A sentence from the student: the rule table decides, the model explains. */
 import { text } from "../engines/text";
+import { assemble, data, say } from "../prompt/assemble";
 import { resolveEnglish, cardText } from "../rules/english";
 import { voiceOf, withManner } from "../rules/voice";
 import type { EnglishAnalysis } from "../session/store";
@@ -26,11 +27,14 @@ const systemFor = (age?: number) => {
 /** `age` is the seated profile's; without one the caption speaks as it always has (rules/voice, the teen band). */
 export async function analyseSentence(sentence: string, age?: number): Promise<EnglishAnalysis> {
   const card = resolveEnglish(sentence);
-  const { json, provider } = await text<{ explanation: string }>({
-    system: systemFor(age),
-    prompt: `They wrote: "${sentence}"\n\nRule card (for you only; they never see it):\n${cardText(card)}\n\n` +
-      (card.conflict ? "Tell them, kindly, why the tense they used does not fit the time word, and which tense the time word asks for." : "Tell them what they did right and name the time word that made it right."),
-    schema: SCHEMA, model: "fast",
+  const asked = assemble("english-sentence", {
+    system: [say("stance", systemFor(age))],
+    prompt: [
+      data("sentence", "They wrote", sentence),
+      say("card", `Rule card (for you only; they never see it):\n${cardText(card)}`),
+      say("ask", card.conflict ? "Tell them, kindly, why the tense they used does not fit the time word, and which tense the time word asks for." : "Tell them what they did right and name the time word that made it right."),
+    ],
   });
+  const { json, provider } = await text<{ explanation: string }>({ ...asked, schema: SCHEMA, model: "fast", use: "english-sentence" });
   return { sentence, card, explanation: json.explanation, provider };
 }

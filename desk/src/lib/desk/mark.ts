@@ -16,7 +16,7 @@
  * asked only to READ the page - the final answer as plain text, the working line by line, a slip id from the topic's
  * list - never to solve and never for a verdict; a verdict or a solution it volunteers is never read. The verdict is
  * checkAnswer(spec, studentAnswer) (rules/maths settleSpec): right, wrong, or unsure when the answer cannot be read or
- * compared - ASK, and no attempt. The slip is code's own (sign, lost-constant) where it names one, else the model's
+ * compared - ASK, and no attempt. The slip is code's own (sign, lost-constant, forgot-chain) where it names one, else the model's
  * pick from the topic's vocabulary, only on a wrong item. A Calculus item has no pen position (locate reads linear lines).
  *
  * A school item (a `spec` of a school shape, rules/school; Family W5b and W7: every school unit, fractions to mean and range) is marked by CODE
@@ -35,12 +35,14 @@
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
 import { vision } from "../engines/vision";
+import { DeskSaid } from "./job";
 import { rightLine, slipVocabulary } from "../rules/maths";
 import { DEFAULT_SCHOOL_SYSTEM } from "../rules/school";
 import { judgeItem, judgeSet, kindOfSheet, type JudgeCtx, type Judged, type Read } from "../rules/kinds";
-import { addDigest, addHistory, recordAttempt } from "../session/learners";
+import { getLearner, saveLearner, withAttempt, withDigest, withHistory } from "../session/learners";
 import { mathsEntry } from "../rules/digest";
 import { topicIn } from "../library/paths";
+import { partPlace } from "../rules/calc-word";
 import type { Practice, PracticeItem, SchoolSystem } from "../session/store";
 
 const SCHEMA = {
@@ -86,9 +88,30 @@ const CALC_SCHEMA = {
   required: ["items"],
 };
 
+/**
+ * The sheet as the Calculus reading prompt lists it: "n. question" per item, as always. A multi-part question (v2 M3a,
+ * rules/calc-word) shows its stem once, then each part by its own item number and its letter, and the prompt says how a
+ * part is reported: by that number. A set with no parts is listed, and asked, exactly as before.
+ */
+function calcSheet(items: readonly PracticeItem[]): { sheet: string; parts: string } {
+  const lines: string[] = [], asked: string[] = [];
+  items.forEach((it, i) => {
+    const at = partPlace(items, i);
+    if (!at) { lines.push(`${it.n}. ${it.question}`); return; }
+    if (at.first) lines.push(`Question ${at.q}, in parts: ${it.stem}`);
+    lines.push(`${it.n}. Part (${at.label}) of question ${at.q}: ${it.question}`);
+    asked.push(`part (${at.label}) of question ${at.q} as item ${it.n}`);
+  });
+  const parts = asked.length
+    ? `Some questions are in parts, which the student labels (a), (b) and so on. Report each part as its own item, by the item number listed before it: ${asked.join(", ")}.\n`
+    : "";
+  return { sheet: lines.join("\n"), parts };
+}
+
 function calcPrompt(practice: Practice, vocab: string): string {
-  const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
-  return `This is a photo of a student's handwritten working on these ${practice.items.length} Calculus questions:\n${sheet}\n\n` +
+  const { sheet, parts } = calcSheet(practice.items);
+  return `This is a photo of a student's handwritten working on these ${practice.items.length} Calculus ${parts ? "items" : "questions"}:\n${sheet}\n\n` +
+    parts +
     `Read the page. For each numbered item, report:\n` +
     `- n: the item number.\n` +
     `- studentAnswer: the final answer the student wrote, as plain text: an expression in x using ^ for powers, sqrt(), e^, ln, sin, cos and so on, ` +
@@ -169,7 +192,7 @@ export async function markSet(
   const reading = kind === "school" ? { prompt: schoolPrompt(practice), schema: SCHOOL_SCHEMA }
     : kind === "calc" ? { prompt: calcPrompt(practice, slipVocabulary(practice.topic)), schema: CALC_SCHEMA }
     : { prompt: linearPrompt(practice, slipVocabulary(practice.topic)), schema: SCHEMA };
-  const { json, provider, ms } = await vision<{ items: Read[] }>({ imageBase64, ...reading });
+  const { json, provider, ms } = await vision<{ items: Read[] }>({ imageBase64, ...reading, use: "mark" });
 
   // only what each reader asks for is read: never a verdict, and a solution only from the linear reading (the trust gate)
   const reads = (Array.isArray(json?.items) ? json.items : []).filter((m) => m && typeof m.n === "number").map((m): Read => ({
@@ -177,8 +200,15 @@ export async function markSet(
     ...(kind !== "school" ? { slip: m.slip } : {}),
     ...(kind === "linear" ? { solution: typeof m.solution === "string" ? m.solution : "" } : {}),
   }));
+  // MK11: a page the desk could not read is a failed mark, never a marked set. Empty = no read matches a question of the
+  // set with a non-blank answer. One such answer lands the set as before (no completeness check for a partial read).
+  const asked = new Set(practice.items.map((i) => i.n));
+  if (!reads.some((r) => typeof r.n === "number" && asked.has(r.n) && typeof r.studentAnswer === "string" && r.studentAnswer.trim() !== "")) throw new DeskSaid(EMPTY_MARK);
   return markReads(practice, learnerId, stillSame, reads, { topic: practice.topic, system }, { provider, ms });
 }
+
+/** A photo read that found no answer to any question of the set: the mark fails with this and nothing is recorded. */
+export const EMPTY_MARK = "The desk could not find your answers on that photo. Snap the whole sheet again.";
 
 /**
  * A set answered by typing (Family W6): the phone sends one string per question, in item order, and CODE marks each one
@@ -245,11 +275,14 @@ function land(
 
   // only settled items reach the record, each once, and only for the set still on the desk
   // a step-up item's attempt goes to the step-up record only (learners.ts recordAttempt, Family W8)
-  for (const a of attempts) recordAttempt(learnerId, practice.topic, a.right, a.slip, { stretch: a.stretch, tier: a.tier });
+  // WD10: the attempts, the history line and the digest entry are applied to one learner and written in ONE save, so a failed
+  // save writes none of them and a Try again records each once.
+  let l = getLearner(learnerId);
+  for (const a of attempts) l = withAttempt(l, practice.topic, a.right, a.slip, { stretch: a.stretch, tier: a.tier, shows: a.shows });
   // what happened, in one line the home screen can read back: never invented, always these counts
   // (rules/maths; a later settle restates the same line from the same verdicts - session/store). The label is the
   // topic's name on whichever path it belongs to (topicIn), as session/store's restate reads it.
-  addHistory(learnerId, {
+  l = withHistory(l, {
     at: Date.now(), kind: "practice",
     label: topicIn(practice.topic)?.name ?? practice.topic,
     detail: rightLine(items),
@@ -257,7 +290,8 @@ function land(
   // ...and the week's digest (Family W9, rules/digest): one entry for this set - counts, the unit, the step-up flag and
   // the most frequent code-detected slip - never a question or an answer. An explanation that settles an item later
   // restates it in place (session/store restateMarked), as it restates the history line.
-  addDigest(learnerId, mathsEntry(practice.topic, items, practice.stretch === true || items.some((i) => i.stretch === true), Date.now()));
+  l = withDigest(l, mathsEntry(practice.topic, items, practice.stretch === true || items.some((i) => i.stretch === true), Date.now()));
+  saveLearner(l);
 
   return { items, ...run, unsure, landed: true };
 }

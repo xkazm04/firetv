@@ -19,6 +19,8 @@
  */
 import { execFileSync } from 'node:child_process';
 import os from 'node:os';
+import { readFileSync } from 'node:fs';
+import { PNG } from 'pngjs';
 
 export const ADB_BIN =
   process.env.ADB ?? 'C:/Users/kazda/scoop/apps/android-clt/current/platform-tools/adb.exe';
@@ -28,6 +30,20 @@ export const ADB_SERIAL = process.env.ADB_SERIAL ?? '';
 
 export const TV_HOST = process.env.TV_HOST ?? '127.0.0.1:8765';
 export const TV_BASE = process.env.TV_URL ?? `http://${TV_HOST}`;
+
+/**
+ * The phone every browser-driven tool opens the companion as: a Pixel 8. One profile, because the
+ * companion sizes its canvases by devicePixelRatio - two profiles would test two different phones
+ * and call it one path over two transports.
+ */
+export const PHONE = Object.freeze({
+  viewport: { width: 412, height: 915 },
+  deviceScaleFactor: 2.625,
+  isMobile: true,
+  hasTouch: true,
+  userAgent:
+    'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Mobile Safari/537.36',
+});
 
 /** True when the TV is reached over the loopback tunnel rather than across a real network. */
 export const IS_TUNNELLED = /^(127\.0\.0\.1|localhost)\b/.test(TV_HOST);
@@ -56,12 +72,12 @@ export function makeAdb({ maxBuffer = 1 << 28, timeout } = {}) {
  * Docker, VPN). Pick the interface whose address shares the longest prefix with the device's, so
  * a Hyper-V switch on 172.x never wins over the Wi-Fi adapter the Stick is actually on.
  */
-export function hostAddressForDevice(tvHost = TV_HOST) {
+export function hostAddressForDevice(tvHost = TV_HOST, interfaces = os.networkInterfaces()) {
   if (process.env.TV_RELAY_HOST) return process.env.TV_RELAY_HOST;
   const deviceIp = tvHost.split(':')[0];
   if (deviceIp === '127.0.0.1' || deviceIp === 'localhost') return '10.0.2.2';
 
-  const candidates = Object.values(os.networkInterfaces())
+  const candidates = Object.values(interfaces)
     .flat()
     .filter((n) => n && n.family === 'IPv4' && !n.internal)
     .map((n) => n.address);
@@ -79,8 +95,16 @@ export function hostAddressForDevice(tvHost = TV_HOST) {
   return candidates.sort((a, b) => shared(b, deviceIp) - shared(a, deviceIp))[0];
 }
 
-/** The PIN in the last pairing line MainActivity logged (`transport=... pairing=<url>?pin=NNNN`), or undefined. */
-export const pinFromLogcat = (log) => [...log.matchAll(/pairing=\S*[?&]pin=(\d{4})/g)].at(-1)?.[1];
+/**
+ * `--name value` pairs off the command line, the one parser every tool here uses. A flag with
+ * nothing after it reads as undefined; a bare switch (`--idle`, `--nopause`) is tested with
+ * `process.argv.includes` by the tool that has one.
+ */
+export const parseArgs = (argv = process.argv.slice(2)) =>
+  Object.fromEntries(argv.flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : [])));
+
+/** The PIN in the last pairing line MainActivity logged (`transport=... pairing=<url>#pin=NNNN`, or the older ?pin=), or undefined. */
+export const pinFromLogcat = (log) => [...log.matchAll(/pairing=\S*[?&#]pin=(\d{4,8})/g)].at(-1)?.[1];
 
 /**
  * The pairing PIN for a tool that pairs as a pen. /health no longer carries it: anything that can reach the port
@@ -103,4 +127,58 @@ export function pairingPin(args, tag, adb = makeAdb({ timeout: 10_000 })) {
     process.exit(2);
   }
   return pin;
+}
+
+/**
+ * Whether a phone page turned a pen away, judged on its state and not its wording: the status line carries the
+ * `bad` class and a PIN input is visible to type into. The words change (0a6a553a rewrote them once already); the
+ * state is what the viewer relies on. Waits up to [timeoutMs] for `bad`.
+ */
+export async function refusalShown(page, timeoutMs = 8000) {
+  await page
+    .waitForFunction(() => document.getElementById('status').classList.contains('bad'), null, { timeout: timeoutMs })
+    .catch(() => {});
+  const state = await page.evaluate(() => {
+    const input = document.getElementById('pintext');
+    return {
+      status: document.getElementById('status').textContent ?? '',
+      bad: document.getElementById('status').classList.contains('bad'),
+      pinInput: !!input && input.getClientRects().length > 0 && getComputedStyle(input).visibility !== 'hidden',
+    };
+  });
+  return { ok: state.bad && state.pinInput, ...state };
+}
+
+/** Pen colours as they read in a screencap. */
+export const INK = {
+  // #FFD400 with tolerance; the fixture's pure yellow (255,255,0) fails the green test.
+  yellow: (r, g, b) => r > 230 && g > 185 && g < 232 && b < 70,
+  // #00E5FF, a hue that appears nowhere in the fixture's colour bars.
+  cyan: (r, g, b) => r < 90 && g > 195 && b > 225,
+};
+
+/**
+ * Counts pixels of one pen colour in a decoded frame ({width, height, data} RGBA), ignoring the pairing card (top
+ * right) and the status-bar band (below 94% of the height, the boundary row included in the count) so a tool does
+ * not end up grading the TV's furniture. The one classifier for live-ui-test and relay-test.
+ */
+export function countInk({ width, height, data }, which = 'yellow') {
+  const match = INK[which];
+  let n = 0;
+  for (let y = 0; y < height; y++) {
+    if (y > height * 0.94) continue;
+    for (let x = 0; x < width; x++) {
+      if (x > width * 0.74 && y < height * 0.44) continue;
+      const i = (width * y + x) << 2;
+      if (match(data[i], data[i + 1], data[i + 2])) n++;
+    }
+  }
+  return n;
+}
+
+/** Pulls a framebuffer capture off the device (screencap to [remote], pull to [dest]) as a decoded PNG. */
+export function tvScreenshot(adb, remote, dest) {
+  adb('shell', 'screencap', '-p', remote);
+  adb('pull', remote, dest);
+  return { png: PNG.sync.read(readFileSync(dest)), file: dest };
 }

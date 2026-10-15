@@ -13,10 +13,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after,afterEach}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const data=fs.mkdtempSync(path.join(os.tmpdir(),'desk-calc-course-'));process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 
 const src=(f)=>path.join(root,'src',f);
@@ -69,6 +66,9 @@ const TABLE=[
  R('calc1-trig-derivatives',3,{shape:'derivative',f:'tan(x) + cos(x)'},'1/cos(x)^2 - sin(x)','1 + sin(x)'),
  R('calc1-chain',2,{shape:'derivative',f:'(2x + 1)^3'},'6(2x + 1)^2','3(2x + 1)^2'),
  R('calc1-chain',3,{shape:'derivative',f:'sin(x^2)'},'2x cos(x^2)','cos(x^2)'),
+ // MB-B30: calc1-chain keeps compositions only, and the other topics' derivatives the stub adds are not, so it has four of its own
+ R('calc1-chain',1,{shape:'derivative',f:'e^(3x)'},'3e^(3x)','e^(3x)'),
+ R('calc1-chain',4,{shape:'derivative',f:'sqrt(x^2 + 1)'},'x/sqrt(x^2 + 1)','1/(2sqrt(x^2 + 1))'),
  R('calc1-log-derivative',4,{shape:'derivative',f:'ln(x)/x'},'1/x^2 - ln(x)/x^2','1/x'),
  R('calc1-log-derivative',2,{shape:'derivative-at',f:'x e^x',at:0},'e^0','0'),
  R('calc1-related-rates',3,{shape:'derivative-at',f:'(4/3) pi x^3',at:3},'pi*36','12pi'),
@@ -102,8 +102,8 @@ const questionOf=(spec)=>C.question(spec).plain;
 const byQuestion=new Map(TABLE.map((r)=>[questionOf(r.spec),r]));
 /** What the stub returns for a topic: its own specs first, then the table's others of shapes on its list - at most n + 3. */
 const specsFor=(topic)=>[...TABLE.filter((r)=>r.topic===topic),...TABLE.filter((r)=>r.topic!==topic&&shapesOf(topic).includes(r.spec.shape))].slice(0,9);
-/** The set the desk should make of them: easy to hard - difficulty, then the function's length - the first six. */
-const expectedSet=(topic)=>[...specsFor(topic)].sort((a,b)=>a.difficulty-b.difficulty||a.spec.f.length-b.spec.f.length).slice(0,6);
+/** The set the desk should make of them: those meeting the topic's requirement (MB-B30), easy to hard - difficulty, then the function's length - the first six. */
+const expectedSet=(topic)=>specsFor(topic).filter((r)=>C.meetsRequirement(r.spec,P.requirementOfTopic(topic))).sort((a,b)=>a.difficulty-b.difficulty||a.spec.f.length-b.spec.f.length).slice(0,6);
 
 // ------------------------------------------------------------------ the typeset check (as tools/calc-practice-test.cjs)
 const UNI={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','ˣ':'x','ⁿ':'n','₀':'0','₁':'1','₂':'2','₃':'3','ₙ':'n','½':'12','¼':'14','¾':'34','⅓':'13'};
@@ -171,7 +171,7 @@ const SHOWN=new Set(['n','question','studentAnswer','studentWorking','verdict','
 const SPEC_KEYS=new Set(['shape','f','at','a','b','side','on','kind','x0','steps']);
 const keysIn=(o)=>o&&typeof o==='object'?Object.entries(o).flatMap(([k,v])=>[k,...keysIn(v)]):[];
 /** The desk's own lines for a set on this topic: RIGHT, ASK, and the topic's slips in their own words. */
-const ownLines=(topic,n)=>new Set([...Array.from({length:n},(_,i)=>[M.RIGHT(i+1),M.ASK(i+1)]).flat(),...M.slipsFor(topic).map((s)=>s.says)]);
+const ownLines=(topic,n)=>new Set([...Array.from({length:n},(_,i)=>[M.RIGHT(i+1),M.ASK(i+1),M.BLANK(i+1),M.NOT_SURE(i+1)]).flat(),...M.slipsFor(topic).map((s)=>s.says)]);
 let scans=0;
 function scan(where){
  const s=store.getSession();
@@ -189,9 +189,9 @@ function scan(where){
     for(const k of Object.keys(it.spec))assert.ok(SPEC_KEYS.has(k),`${at}: item ${it.n}'s spec carries ${k}`);
     assert.equal(C.leaksCalc(it.spec,it.question),false,`${at}: item ${it.n}'s question states its result: ${it.question}`);
    }
-   if(it.said!==undefined)assert.ok(own.has(it.said),`${at}: item ${it.n} said "${it.said}" - not the desk's own line`);
+   if(it.said!==undefined)assert.ok(own.has(it.said)||it.said.startsWith(`The desk is not sure about number ${it.n}. `),`${at}: item ${it.n} said "${it.said}" - not the desk's own line`);
    // a reply is the desk's own line, or a model's reply the item's leak rule has passed (the course's replies all leak, so they are the desk's)
-   if(it.reply!==undefined)assert.ok(own.has(it.reply)||!(it.spec?C.leaksCalc(it.spec,it.reply):M.leaks(it.question,it.reply)),`${at}: item ${it.n} reply "${it.reply}" states the answer`);
+   if(it.reply!==undefined){const bare=it.reply.replace(/^The desk heard \S.*?\. /,'');assert.ok(own.has(bare)||!(it.spec?C.leaksCalc(it.spec,bare):M.leaks(it.question,bare)),`${at}: item ${it.n} reply "${it.reply}" states the answer`);}
   }
  }
 }
@@ -238,7 +238,7 @@ test('2: the school path through the same routes - linear-two-step practice, mar
   {n:6,studentAnswer:'3',studentWorking:'6x = 18',verdict:'right',solution:'3',slip:'unclear'},
  ]};
  r=await step('school mark',()=>post('mark',PHOTO));
- assert.equal(r.status,200);assert.deepEqual([r.body.right,r.body.wrong,r.body.unsure],[4,1,1]);
+ assert.equal(r.status,200);assert.deepEqual([r.body.right,r.body.wrong,r.body.unsure,r.body.skipped],[4,1,0,1],'MB-B1: number 3 was read empty: skipped');
  s=store.getSession();
  const undo=M.slipsFor('linear-two-step').find((x)=>x.id==='undo-wrong-order');
  assert.deepEqual(s.practice.items.map((i)=>i.verdict),['right','wrong','unsure','right','right','right']);
@@ -246,7 +246,7 @@ test('2: the school path through the same routes - linear-two-step practice, mar
  assert.equal(skill(SCHOOL,'linear-two-step').seen,5,'the unsure item is not an attempt');
  textPlan={explain:{reply:'Look at what you did to both sides first.',slip:'unclear',value:'2'}};
  r=await step('school explain',()=>post('explain',{transcript:'I took one off and got two',n:2}));
- assert.equal(r.status,200);assert.equal(r.body.settled,'right');assert.equal(r.body.reply,'Look at what you did to both sides first.');
+ assert.equal(r.status,200);assert.equal(r.body.settled,'right');assert.equal(r.body.reply,'The desk heard 2. Look at what you did to both sides first.');
  assert.equal(skill(SCHOOL,'linear-two-step').right,5);
  onPage('school-k','Solve for x:  2x + 3 = 11');
  textPlan={hint:[{hint:'What is being done to x first?',what_to_try_next:'Write the two sides one under the other.'}]};
@@ -278,7 +278,8 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
   // ---- practice: specs from the model, printed, checked and ordered by code
   const want=expectedSet(topic);
   textPlan={practice:()=>({specs:specsFor(topic).map(rawOf)})};
-  let r=await step(`${topic} practice`,()=>post('practice',{topic}));
+  // word:false (v2 M3a): the walk pins the model's set; the route's word problem has its own rows (calc-practice-test M3a)
+  let r=await step(`${topic} practice`,()=>post('practice',{topic,word:false}));
   assert.equal(r.status,200,`${topic}: ${JSON.stringify(r.body)}`);
   let s=store.getSession();
   assert.equal(s.practice.topic,topic);
@@ -296,7 +297,8 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
   r=await step(`${topic} mark`,()=>post('mark',PHOTO));
   assert.equal(r.status,200,`${topic}: ${JSON.stringify(r.body)}`);
   const count=(v)=>verdicts.filter((x)=>x===v).length;
-  assert.deepEqual([r.body.right,r.body.wrong,r.body.unsure],[count('right'),count('wrong'),count('unsure')],`${topic}: the counts are code's`);
+  const blanks=plan.filter((p)=>p==='blank').length; // MB-B1: a blank is unsure as a verdict and counted skipped, apart from the desk's doubt
+  assert.deepEqual([r.body.right,r.body.wrong,r.body.unsure,r.body.skipped],[count('right'),count('wrong'),count('unsure')-blanks,blanks],`${topic}: the counts are code's`);
   s=store.getSession();
   assert.deepEqual(s.practice.items.map((i)=>i.verdict),verdicts,`${topic}: every verdict is checkAnswer's`);
   const vocab=M.slipsFor(topic);
@@ -311,11 +313,11 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
   // ---- the blank item is settled by what the learner says they got; a reply that states it is the desk's own line
   const blank=plan.indexOf('blank');
   textPlan={explain:{reply:want[blank].right,slip:'unclear',value:want[blank].right}};
-  r=await step(`${topic} explain`,()=>post('explain',{transcript:'this is what I got',n:blank}));
+  r=await step(`${topic} explain`,()=>post('explain',{transcript:'I got '+want[blank].right,n:blank}));
   assert.equal(r.status,200);assert.equal(r.body.settled,'right',`${topic}: settled from the spoken answer`);
-  assert.equal(r.body.reply,M.RIGHT(blank+1),`${topic}: the reply stated the answer, so the desk's own line stands in`);
+  assert.equal(r.body.reply,`The desk heard ${want[blank].right.trim()}. `+M.RIGHT(blank+1),`${topic}: the reply stated the answer, so the desk's own line stands in`);
   s=store.getSession();
-  assert.deepEqual([s.practice.items[blank].verdict,s.practice.items[blank].said,s.practice.items[blank].reply],['right',M.RIGHT(blank+1),M.RIGHT(blank+1)]);
+  assert.deepEqual([s.practice.items[blank].verdict,s.practice.items[blank].said,s.practice.items[blank].reply],['right',M.RIGHT(blank+1),`The desk heard ${want[blank].right.trim()}. `+M.RIGHT(blank+1)]);
   assert.equal(skill(CALC,topic).secure,false,`${topic}: one mixed evening does not latch it`);
 
   // ---- a hint on a page item of the topic's question: clean kept; a leak re-asked once; a second leak the shape's sentence
@@ -339,7 +341,7 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
   // ---- mastery: four evenings of right work latch the topic
   for(let round=1;round<=4;round++){
    textPlan={practice:()=>({specs:specsFor(topic).map(rawOf)})};
-   r=await step(`${topic} practice ${round}`,()=>post('practice',{topic}));
+   r=await step(`${topic} practice ${round}`,()=>post('practice',{topic,word:false}));
    assert.equal(r.status,200);
    visionPlan=reading(want.map((w)=>w.right));
    r=await step(`${topic} mark ${round}`,()=>post('mark',PHOTO));
@@ -364,7 +366,8 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
 
  // ---- the end of the course
  const v=view(store.getSession(),'tv'),ps=pathSecure(v);
- assert.equal(ps.path,'calc1');assert.equal(ps.secure.length,22);assert.equal(ps.topics.length,22);
+ const N_CALC=P.PATHS.calc1.topics.length;
+ assert.equal(ps.path,'calc1');assert.equal(ps.secure.length,N_CALC);assert.equal(ps.topics.length,N_CALC);
  assert.equal(secureTitle(ps.secure.length,ps.topics.length,ps.first),'Every topic on the path is secure');
  assert.equal(topicsFocus(v),0,'every topic secure: the teach door opens Topics at 0, as designed');
  assert.ok(Object.values(topicStates(v)).every((x)=>x==='secure'));
@@ -379,10 +382,10 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
  let w=view(store.getSession(),'tv'),q=pathSecure(w);
  assert.equal(q.path,'school');assert.equal(q.secure.length,0,'the school path reads only school records');
  assert.deepEqual(Object.keys(topicStates(w)),P.topicsOf('school').map((t)=>t.id));
- assert.equal(Object.keys(learners.getLearner(CALC).skills).length,22,'the calc1 record is kept while on the school path');
+ assert.equal(Object.keys(learners.getLearner(CALC).skills).length,N_CALC,'the calc1 record is kept while on the school path');
  seat(CALC,'calc1');
  w=view(store.getSession(),'tv');q=pathSecure(w);
- assert.equal(q.secure.length,22,'back on calc1: every topic still secure');
+ assert.equal(q.secure.length,N_CALC,'back on calc1: every topic still secure');
  assert.equal(secureTitle(q.secure.length,q.topics.length,q.first),'Every topic on the path is secure');
  // and the school learner, seated again, finds their own record as they left it
  seat(SCHOOL);

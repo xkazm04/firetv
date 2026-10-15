@@ -13,10 +13,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+const {transpile,options}=require('./ts-load.cjs');
 const data=path.join(os.tmpdir(),`desk-week-rules-${process.pid}-${Date.now()}`);process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 
 const src=(f)=>path.join(root,'src',f);
@@ -40,6 +37,8 @@ const NOW=at(27,21);
 const M=(day,h,topic,right,total,extra={})=>({at:at(day,h),kind:'maths',topic,right,notSure:0,total,...extra});
 const E=(day,h,sceneId,skill,turns)=>({at:at(day,h),kind:'english',sceneId,skill,turns});
 const R=(day,h,lens,sentences,faulty)=>({at:at(day,h),kind:'essay',lens,sentences,faulty});
+const H=(day,h,problems,hints=0,second=0)=>({at:at(day,h),kind:'homework',problems,hints,second});
+const P=(day,h,questions)=>({at:at(day,h),kind:'paper',questions});
 const MIA={name:'Mia'};
 const learnerOf=(digest,english={plan:null})=>({digest:D.cleanDigest(digest),english});
 const words=(l,p=MIA,now=NOW)=>W.sundayWords(W.sundayPage(learnerOf(l.digest??l,l.english),p,now));
@@ -65,7 +64,9 @@ const FULL=[
  'Mia worked on seven evenings.',
  '# Math Buddy',
  'Add and subtract fractions: 5 of 6 right, last set.',
- 'Mean and range: 2 of 6 right, last set.',
+ // OLD 'Mean and range: 2 of 6 right, last set.' (MB5-8: its last set has one not sure)
+ 'Mean and range: 2 of 6 right, 1 not sure, last set.',
+ // W9-lines moved this to Area's line and 'And one more unit.'; MB5-8's three words take the page back to the second rung
  'And two more units.',
  'A step up taken in Ratio and sharing.',
  '# One thing to look at',
@@ -85,7 +86,7 @@ test('1: a fixed full week gives fixed words, in the page\'s order; the rows beh
  assert.deepEqual(page.units.map((u)=>[u.id,u.sets,u.right,u.total,u.stretch]),[['frac-add-sub',2,5,6,false],['mean-range',1,2,6,false],['area',1,6,6,false],['ratio-share',1,4,6,true]],'most sets first, then the most recent; the last set\'s count');
  assert.deepEqual(page.slip,{id:'tops-and-bottoms',name:'Added the tops and the bottoms',times:3});
  assert.deepEqual(page.english,{conversations:2,scenes:['The lost jacket','Say that again, please']});
- assert.deepEqual(page.essay,{readings:3,lenses:['Structure','Argument']});
+ assert.deepEqual(page.essay,{readings:3,pieces:0,lenses:['Structure','Argument']});
  assert.equal(page.tryIt,W.DO_IT['frac-add-sub'],'the unit worked most');
  assert.deepEqual(texts(W.sundayWords(page)),FULL);
  assert.ok(W.pageWords(W.sundayWords(page))<=W.PAGE_WORDS);
@@ -97,7 +98,8 @@ test('2: a thin week (one unit) and the empty week',()=>{
  assert.deepEqual(texts(words(thin)),[
   'Mia worked on one evening.',
   '# Math Buddy',
-  'Area of rectangles, triangles and composite shapes: 4 of 6 right, last set.',
+  // OLD 'Area of rectangles, triangles and composite shapes: 4 of 6 right, last set.' (W9-lines: its Sunday name; MB5-8: the last set's not sure)
+  'Area of rectangles and triangles: 4 of 6 right, 1 not sure, last set.',
   '# One thing to look at',
   'The most common slip, twice: the half left out.',
   '# One thing to try together',
@@ -116,9 +118,9 @@ test('2: a thin week (one unit) and the empty week',()=>{
 });
 
 // ------------------------------------------------------------------ 3. the one act, per unit
-test('3: DO_IT has one everyday act for each of the 15 school topics (the real path); plain, short, no percent sign, no digit, no brand, no em dash',()=>{
+test('3: DO_IT has one everyday act for each of the 17 school topics (the real path); plain, short, no percent sign, no digit, no brand, no em dash',()=>{
  const ids=PATHS.school.topics.map((t)=>t.id);
- assert.equal(ids.length,15);
+ assert.equal(ids.length,PATHS.school.topics.length);
  assert.deepEqual(Object.keys(W.DO_IT).sort(),[...ids].sort(),'exactly the school path\'s ids');
  const BRANDS=/\b(ikea|tesco|lidl|aldi|walmart|amazon|coca|pepsi|lego|mcdonald|starbucks|nutella|nike|apple store|google|netflix|kaufland|albert|billa)\b/i;
  const all=[...Object.values(W.DO_IT),...Object.values(W.DO_IT_ELSE)];
@@ -161,7 +163,8 @@ test('4: the slip line only for a slip seen twice or more; at most three units t
  const two=[M(24,18,'area',6,6,{stretch:true}),M(25,18,'ratio-share',6,6,{stretch:true})];
  assert.ok(words(two).some((l)=>l.text==='A step up taken in two units.'));
  assert.equal(words([M(24,18,'area',6,6,{stretch:true})]).filter((l)=>/step up/i.test(l.text)).length,1);
- assert.ok(words([M(24,18,'linear-both-sides',6,6,{stretch:true})]).some((l)=>l.text==='A step up taken in Equations with brackets and x on both sides.'));
+ // OLD 'A step up taken in Equations with brackets and x on both sides.' (W9-lines: the step-up line says the unit's Sunday name)
+ assert.ok(words([M(24,18,'linear-both-sides',6,6,{stretch:true})]).some((l)=>l.text==='A step up taken in Equations, x on both sides.'));
  assert.ok(!words([M(24,18,'area',6,6,{stretch:true}),M(25,18,'area',6,6)]).some((l)=>/step up taken this week/.test(l.text)),'one unit: named');
 });
 
@@ -173,7 +176,7 @@ test('5: Linga and Essay Master lines when present: scene names (authored, or th
  assert.ok(words([E(24,18,'plan-99999999','relate',2)]).some((x)=>x.text==='One conversation.'),'a scene the desk cannot name is counted, not named');
  assert.ok(words([R(24,18,'language',3,1)]).some((x)=>x.text==='One paragraph reading, through Language.'));
  const all=words([R(21,18,'language',3,1),R(22,18,'evidence',3,1),R(23,18,'argument',3,1),R(24,18,'structure',3,1)]);
- assert.ok(all.some((x)=>x.text==='Four paragraph readings, through Structure, Argument, Evidence and Language.'),'lenses in the desk\'s order');
+ assert.ok(all.some((x)=>x.text==='Four paragraph readings, through Language, Evidence, Argument and Structure.'),'lenses in the order read, as the recap lists them (not the desk order, which cannot follow per-reading counts)');
  const maths=words([M(24,18,'area',6,6)]);
  assert.ok(!maths.some((x)=>x.section==='english'||x.section==='essay'),'no Linga or Essay lines without them');
  assert.ok(!words([E(24,18,'teacher','repair',3)]).some((x)=>x.section==='maths'||x.section==='look'),'no maths lines without maths');
@@ -191,7 +194,10 @@ test('6: privacy and the stance - no percent sign, no praise, ranking or compari
  const fixtures=[WEEK,[M(24,18,'area',3,6)],[],[E(24,18,'teacher','repair',3)],[R(24,18,'structure',3,1)],
   // a worst case: every school unit, step ups everywhere, every lens, every scene, slips
   [...PATHS.school.topics.map((t,i)=>M(21+(i%7),8+i,t.id,i%7,6,{stretch:true,...(S.SCHOOL_UNIT_SLIPS[t.id]?{slip:S.SCHOOL_UNIT_SLIPS[t.id][0],slipN:3}:{})})),
-   ...ENGLISH_SCENES.map((s,i)=>E(21+(i%7),9+i,s.id,s.skill,3)),...['structure','argument','evidence','language'].map((x,i)=>R(22+i,20,x,5,2))]];
+   ...ENGLISH_SCENES.map((s,i)=>E(21+(i%7),9+i,s.id,s.skill,3)),...['structure','argument','evidence','language'].map((x,i)=>R(22+i,20,x,5,2))],
+  // widened (MB5-8, W9-lines): every library topic on every path, two-digit counts and a not-sure count, one at a time and all at once
+  ...Object.values(PATHS).flatMap((p)=>p.topics).map((t)=>[M(24,18,t.id,10,25,{notSure:12,stretch:true})]),
+  Object.values(PATHS).flatMap((p)=>p.topics).map((t,i)=>M(21+(i%7),8+(i%12),t.id,10,25,{notSure:12,stretch:i%2===0}))];
  for(const f of fixtures){
   const lines=words(f),all=lines.map((l)=>l.text).join('\n');
   assert.doesNotMatch(all,/%/,'no percent sign anywhere');
@@ -211,6 +217,125 @@ test('6: privacy and the stance - no percent sign, no praise, ranking or compari
  // the name is the profile's; with none, a neutral word, never an id
  assert.match(words(WEEK,{name:'  '})[0].text,/^Your learner worked on/);
  assert.match(words(WEEK,null)[0].text,/^Your learner worked on/);
+});
+
+// ------------------------------------------------------------------ MB-B14: homework sheets and papers on the page
+test('MB-B14: the homework line comes first in Math Buddy, the paper line last; the heading shows for either alone; a homework-only week is not empty',()=>{
+ assert.deepEqual(texts(words([H(23,18,6),H(24,18,4),H(25,18,5)])),['Mia worked on three evenings.','# Math Buddy','Three homework sheets.','# One thing to try together',W.DO_IT_ELSE.any]);
+ assert.ok(words([H(24,18,6,1)]).some((l)=>l.text==='One homework sheet, 1 hint.'));
+ assert.ok(words([H(24,18,6,3,1),H(25,18,4,2,1)]).some((l)=>l.text==='Two homework sheets, 5 hints, 2 needed a second.'));
+ assert.deepEqual(texts(words([P(24,18,20)])),['Mia worked on one evening.','# Math Buddy','One practice paper typed in.','# One thing to try together',W.DO_IT_ELSE.any]);
+ assert.ok(words([P(24,18,20),P(25,18,8)]).some((l)=>l.text==='Two practice papers typed in.'));
+ const both=words([H(22,18,6,2),M(23,18,'area',4,6,{stretch:true}),P(24,18,20)]).filter((l)=>l.section==='maths').map((l)=>l.text);
+ assert.deepEqual(both.slice(0,2),['Math Buddy','One homework sheet, 2 hints.'],'homework before the units');
+ assert.equal(both.at(-1),'One practice paper typed in.','the paper after the unit and step-up lines');
+ assert.equal(both.filter((t)=>t==='Math Buddy').length,1,'one heading');
+ // evenings: a homework evening counts as any other
+ assert.equal(W.sundayPage(learnerOf([H(21,18,3),M(22,18,'area',3,6),H(22,19,3)]),MIA,NOW).evenings,2);
+ // counts only: no percent, no praise, no em dash
+ for(const l of words([H(21,18,9,40,9),H(22,18,9,0,0),P(23,18,30)]))assert.doesNotMatch(l.text,/%|[—–]|\b(great|well done|good job|score|percent)\b/i,l.text);
+ assert.equal(calls,0);
+});
+
+// ------------------------------------------------------------------ MB5-8: the not-sure count on the unit line
+test('MB5-8: the unit line names the not-sure count of the last set when above 0, and reads as before at 0',()=>{
+ const line=(l)=>words(l).find((x)=>x.section==='maths'&&/last set\.$/.test(x.text)).text;
+ assert.equal(line([M(24,18,'linear-one-step',3,6,{notSure:2})]),'One-step equations: 3 of 6 right, 2 not sure, last set.');
+ assert.equal(line([M(24,18,'linear-one-step',4,6,{notSure:1})]),'One-step equations: 4 of 6 right, 1 not sure, last set.');
+ assert.equal(line([M(24,18,'linear-one-step',3,6,{notSure:0})]),'One-step equations: 3 of 6 right, last set.','0: exactly as before');
+ // from the latest set, as right and total are
+ assert.equal(line([M(23,18,'linear-one-step',1,6,{notSure:4}),M(24,18,'linear-one-step',5,6)]),'One-step equations: 5 of 6 right, last set.');
+ assert.equal(line([M(23,18,'linear-one-step',5,6),M(24,18,'linear-one-step',2,6,{notSure:3})]),'One-step equations: 2 of 6 right, 3 not sure, last set.');
+ assert.equal(W.sundayPage(learnerOf([M(24,18,'area',2,6,{notSure:3})]),MIA,NOW).units[0].notSure,3);
+});
+
+// ------------------------------------------------------------------ W9-lines: LINE_WORDS stays 14, long names are shortened
+/** Every topic of the library, on every path, once. */
+const ALL_TOPICS=[...new Map(Object.values(PATHS).flatMap((p)=>p.topics).map((t)=>[t.id,t])).values()];
+test('W9-lines: SUNDAY_NAMES is closed - exactly the library topics whose longest unit line would pass LINE_WORDS - in plain words; every unit line on every path fits',()=>{
+ assert.equal(W.LINE_WORDS,14,'LINE_WORDS is not raised');assert.equal(W.PAGE_WORDS,90);
+ const longest=(name)=>W.wordsIn(`${name}: 10 of 12 right, 10 not sure, last set.`);
+ const need=ALL_TOPICS.filter((t)=>longest(t.name)>W.LINE_WORDS).map((t)=>t.id).sort();
+ assert.ok(need.includes('calc1-log-derivative')&&need.includes('area'),'the council probe and a school unit');
+ assert.deepEqual(Object.keys(W.SUNDAY_NAMES).sort(),need,'the table covers exactly those topics');
+ for(const [id,name] of Object.entries(W.SUNDAY_NAMES)){
+  assert.ok(longest(name)<=W.LINE_WORDS,`${id}: ${name}`);
+  assert.doesNotMatch(name,/\d|[—–]|\.|\b(eqn|eq|deriv|calc|approx|fn|ftc|thm|diff)\b/i,`${id}: plain words, no abbreviation`);assert.doesNotMatch(name,/\b[A-Z]{2,}\b/,`${id}: no initialism`);
+  assert.notEqual(name,PATHS.calc1.topics.concat(PATHS.school.topics).find((t)=>t.id===id)?.name,`${id}: shorter than the library's`);
+ }
+ // the library itself is unchanged: a unit without a Sunday name keeps the library's
+ for(const t of ALL_TOPICS){
+  const line=words([M(24,18,t.id,10,25,{notSure:12})]).find((l)=>l.section==='maths'&&/last set\.$/.test(l.text));
+  assert.ok(line,`${t.id}: a unit line`);
+  assert.ok(W.wordsIn(line.text)<=W.LINE_WORDS,`${t.id}: ${W.wordsIn(line.text)} words: ${line.text}`);
+  assert.equal(line.text,`${W.SUNDAY_NAMES[t.id]??t.name}: 10 of 25 right, 12 not sure, last set.`);
+  const up=words([M(24,18,t.id,10,12,{stretch:true})]).find((l)=>/^A step up taken in /.test(l.text));
+  assert.equal(up.text,`A step up taken in ${W.SUNDAY_NAMES[t.id]??t.name}.`,'the step-up line says the same name');
+ }
+});
+
+test('W9-lines (craft-1): a profile name that would carry the week line past LINE_WORDS is said by its first word; a short one whole',()=>{
+ const long={name:'Maria Antonia Josefa Johanna of the House of Habsburg Lorraine Vienna Austria'};
+ assert.equal(W.wordsIn(long.name),12);
+ const first=words(WEEK,long)[0].text;
+ assert.equal(first,'Maria worked on seven evenings.');assert.ok(W.wordsIn(first)<=W.LINE_WORDS);
+ assert.equal(words(WEEK,{name:'Anna Marie Novakova'})[0].text,'Anna Marie Novakova worked on seven evenings.');
+ // ten words still fit whole with "seven evenings"
+ const ten='a b c d e f g h i j'.toUpperCase();assert.equal(words(WEEK,{name:ten})[0].text,`${ten} worked on seven evenings.`);
+});
+
+/**
+ * The busiest week: a ten-word name (the longest the week line keeps whole), the unit worked most with a five-word Sunday
+ * name and a fourteen-word act, three units with two-digit not-sure counts and more units, one step up (a five-word name),
+ * homework with two-digit hints, two papers, an eight-word slip, Linga with every scene, Essay with every lens and pieces.
+ */
+const TEN={name:'Maria Antonia Josefa Johanna Gabriela of the House of Habsburg'};
+const BUSIEST=[
+ ...[21,22,23,24].map((d)=>M(d,15,'linear-both-sides',10,25,{notSure:12})),
+ ...[21,22,23].map((d)=>M(d,17,'frac-equivalent',10,25,{notSure:12,slip:'added-same',slipN:4})),
+ M(22,18,'frac-of-amount',10,25,{notSure:12}),M(23,18,'frac-of-amount',11,25,{notSure:11}),
+ M(24,18,'calc1-log-derivative',10,25,{notSure:12}),M(25,18,'calc1-rules',10,25,{notSure:12,stretch:true}),
+ M(26,18,'calc1-limit-idea',10,25,{notSure:12}),M(27,18,'calc1-extrema',10,25,{notSure:12}),
+ H(21,19,12,24,10),H(22,19,12,20,9),H(23,19,12,30,11),P(24,20,40),P(25,20,40),
+ ...ENGLISH_SCENES.map((s,i)=>E(21+(i%7),10+(i%7),s.id,s.skill,12)),
+ ...['structure','argument','evidence','language'].map((x,i)=>R(21+i,16,x,5,2)),...['structure','argument'].map((x,i)=>R(25+i,16,x,20,3)),
+];
+test('W9-lines: the busiest week stays within PAGE_WORDS after the ladder (88 words); no section and no "nothing done" line is dropped; the last rung drops only the hint counts',()=>{
+ assert.equal(W.wordsIn(TEN.name),10);
+ const lines=words(BUSIEST,TEN),t=texts(lines);
+ assert.equal(W.pageWords(lines),88,'the busiest week, pinned');
+ assert.ok(W.pageWords(lines)<=W.PAGE_WORDS,`${W.pageWords(lines)} words`);
+ assert.equal(t[0],`${TEN.name} worked on seven evenings.`,'a ten-word name is kept whole');
+ assert.ok(t.includes('Three homework sheets.'),'on the last rung the homework line keeps its sheets, without the hint counts');
+ assert.ok(t.includes('Equations, x on both sides: 10 of 25 right, 12 not sure, last set.'));
+ assert.ok(t.includes(W.DO_IT['linear-both-sides']));
+ // a short name: the page fits a rung earlier, and the hint counts stay
+ const short=texts(words(BUSIEST));assert.ok(short.includes('Three homework sheets, 74 hints, 30 needed a second.'),short.join(' | '));
+ assert.ok(W.pageWords(words(BUSIEST))<=W.PAGE_WORDS);
+ for(const s of ['week','maths','look','english','essay','try'])assert.ok(lines.some((l)=>l.section===s&&!l.head),`${s} kept`);
+ assert.ok(t.includes('Two practice papers typed in.'),'the paper line kept');
+ assert.ok(t.some((x)=>/12 not sure, last set\.$/.test(x)),'a unit line with its not-sure count');assert.ok(t.some((x)=>/^And \w+ more units?\.$/.test(x)));
+ assert.ok(t.some((x)=>/^A step up taken/.test(x)));
+ for(const l of lines)assert.ok(W.wordsIn(l.text)<=W.LINE_WORDS,l.text);
+});
+
+// ------------------------------------------------------------------ craft-2: a week across a daylight-saving change
+test('W9-lines (craft-2): a week across the October 2026 clock change reads seven evenings; local midnight six days back is the edge',()=>{
+ const was=process.env.TZ;
+ try{
+  for(const tz of ['Europe/Prague','Europe/London']){
+   process.env.TZ=tz;
+   assert.notEqual(new Date(2026,9,24,12).getTimezoneOffset(),new Date(2026,9,25,12).getTimezoneOffset(),`${tz}: the clocks change on 25 October 2026`);
+   const noon=(d)=>new Date(2026,9,d,12).getTime(),now=new Date(2026,9,25,21).getTime();
+   const week=[19,20,21,22,23,24,25].map((d,i)=>i%2?{at:noon(d),kind:'homework',problems:3,hints:0,second:0}:{at:noon(d),kind:'maths',topic:'area',right:3,notSure:0,total:6});
+   const page=W.sundayPage(learnerOf(week),MIA,now);
+   assert.equal(page.evenings,7,tz);
+   assert.equal(W.sundayWords(page)[0].text,'Mia worked on seven evenings.',tz);
+   assert.equal(W.weekStart(now),new Date(2026,9,19).getTime(),`${tz}: the week starts at local midnight on the 19th`);
+   const edge=[{at:new Date(2026,9,19,0,30).getTime(),kind:'paper',questions:5},{at:new Date(2026,9,18,23,30).getTime(),kind:'paper',questions:5}];
+   assert.equal(W.sundayPage(learnerOf(edge),MIA,now).papers,1,`${tz}: half past midnight on the 19th is in, half past eleven on the 18th is out`);
+  }
+ }finally{if(was===undefined)delete process.env.TZ;else process.env.TZ=was;}
 });
 
 // ------------------------------------------------------------------ 7. through the store: this learner's only, lines only, phone only
@@ -246,6 +371,57 @@ test('7: the store assembles the seated learner\'s page on the server; a phone g
  assert.equal(calls,0,'no model call anywhere in the page');
 });
 
+// ------------------------------------------------------------------ W9-refresh (robustness-1): a refresh that throws is said, not swallowed
+test('W9-refresh: a week refresh that throws is logged and set to the authored line - never null, never the lines of the learner before',()=>{
+ store.dispatch({type:'reset'});
+ for(const [id,name] of [['rf-a','Ada'],['rf-b','Ben']]){store.dispatch({type:'profile.draft',patch:{id,name,type:'elementary',age:12,system:'uk',modules:['maths']}});store.dispatch({type:'profile.save'});}
+ learners.addDigest('rf-a',{at:Date.now(),kind:'maths',topic:'area',right:5,notSure:0,total:6});
+ store.dispatch({type:'learner.set',id:'rf-a'});
+ const ada=store.getSession().week;assert.equal(ada[0].text,'Ada worked on one evening.');
+ assert.equal(W.WEEK_UNREAD,'The week could not be read just now.');
+ assert.ok(W.wordsIn(W.WEEK_UNREAD)<=W.LINE_WORDS);assert.doesNotMatch(W.WEEK_UNREAD,/[—–]/);
+ const real=W.sundayPage,logged=[],err=console.error;
+ W.sundayPage=()=>{throw new Error('the learner file is unreadable');};console.error=(...a)=>logged.push(a.join(' '));
+ try{store.dispatch({type:'learner.set',id:'rf-b'});}finally{W.sundayPage=real;console.error=err;}
+ const s=store.getSession();
+ assert.equal(s.learner.id,'rf-b');
+ assert.deepEqual(s.week,[{section:'week',text:W.WEEK_UNREAD}],'the authored line');
+ assert.notEqual(s.week,null,'never null: the phone draws null as the empty week');
+ assert.ok(!JSON.stringify(s.week).includes('Ada')&&!s.week.some((l)=>/Area/.test(l.text)),'never the lines of the learner before');
+ assert.equal(logged.length,1,'logged once');assert.match(logged[0],/week could not be read.*unreadable/);
+ // the next refresh that reads draws the page again
+ store.dispatch({type:'session.end'});assert.equal(store.getSession().week[0].text,'Nothing this week.');
+ // GUARD: no refresh of the week swallows its error any more
+ const src_=fs.readFileSync(src('lib/session/store.ts'),'utf8');
+ assert.doesNotMatch(src_,/weekOf\([^)]*\)[^;]*;\s*\} catch \{\}/,'no week refresh in a bare catch');
+});
+
+// ------------------------------------------------------------------ W9-unread (WD14): a learners.json that is there but cannot be read is said, not drawn as an empty week
+test('W9-unread (WD14): an unreadable learners.json gives WEEK_UNREAD, never WEEK_EMPTY; an absent one gives WEEK_EMPTY',()=>{
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'ur-a',name:'Uma',type:'elementary',age:12,system:'uk',modules:['maths']}});store.dispatch({type:'profile.save'});
+ learners.addDigest('ur-a',{at:Date.now(),kind:'maths',topic:'area',right:5,notSure:0,total:6});
+ store.dispatch({type:'learner.set',id:'ur-a'});
+ assert.equal(store.getSession().week[0].text,'Uma worked on one evening.');
+ const file=path.join(data,'learners.json'),good=fs.readFileSync(file),bad=good.subarray(0,good.length-5),err=console.error,logged=[];
+ try{
+  fs.writeFileSync(file,bad);console.error=(...a)=>logged.push(a.join(' '));
+  try{store.dispatch({type:'learner.set',id:'ur-a'});}finally{console.error=err;}
+  const week=store.getSession().week;
+  assert.deepEqual(week,[{section:'week',text:W.WEEK_UNREAD}],'the authored line');
+  assert.ok(!week.some((l)=>l.text===W.WEEK_EMPTY),'never the empty week');
+  assert.equal(logged.filter((l)=>/week could not be read/.test(l)).length,1,'one log line');
+  assert.ok(fs.readFileSync(file).equals(bad),'nothing was written over the unreadable file');
+  fs.writeFileSync(file,good);store.dispatch({type:'session.end'});
+  assert.equal(store.getSession().week[0].text,'Uma worked on one evening.','the page reads again');
+  const aside=file+'.aside';fs.renameSync(file,aside);
+  try{store.dispatch({type:'session.end'});assert.deepEqual(store.getSession().week,[{section:'week',text:W.WEEK_EMPTY}],'absent reads as an empty week');}
+  finally{fs.renameSync(aside,file);}
+ }finally{console.error=err;if(!fs.existsSync(file)||!fs.readFileSync(file).equals(good))fs.writeFileSync(file,good);}
+ const st=fs.readFileSync(src('lib/session/store.ts'),'utf8'),body=st.slice(st.indexOf('export function weekOf('),st.indexOf('function weekRead('));
+ assert.match(body,/readLearner\(/);assert.doesNotMatch(body,/getLearner\(/,'weekOf reads through readLearner');
+});
+
 // ------------------------------------------------------------------ 8. the phone draws it, and rules/week stays pure
 test('8: GUARD - the phone\'s Recap panel draws This week from the session\'s lines under tonight\'s recap; rules/week imports no session module at run time and no engine',()=>{
  const phone=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
@@ -254,7 +430,111 @@ test('8: GUARD - the phone\'s Recap panel draws This week from the session\'s li
  assert.ok(phone.indexOf('data-role="phone-recap"')<phone.indexOf('<WeekPage'),'under tonight\'s recap');
  assert.match(phone,/WEEK_EMPTY/,'the empty week is the rule\'s own two words');
  assert.doesNotMatch(phone,/\.digest\b/,'the phone never reads a digest');
- const out=ts.transpileModule(fs.readFileSync(src('lib/rules/week.ts'),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+ const out=transpile(fs.readFileSync(src('lib/rules/week.ts'),'utf8'),{compilerOptions:{module:options.compilerOptions.module,target:options.compilerOptions.target}}).outputText;
  assert.doesNotMatch(out,/require\([^)]*(session\/(store|learners)|engines\/|desk\/)/,'pure: no store, learners file, engine or pipeline at run time');
  assert.doesNotMatch(fs.readFileSync(src('lib/rules/week.ts'),'utf8'),/—/,'no em dash in the page\'s copy');
+});
+
+test('13-i RC5: an entry with paragraphs is a piece when it has more than one; one without the count is a piece from PIECE_SENTENCES, as before',()=>{
+ const RP=(day,h,lens,sentences,faulty,paragraphs)=>({...R(day,h,lens,sentences,faulty),paragraphs});
+ assert.deepEqual(words([RP(24,18,'structure',9,2,3)]).filter((x)=>x.section==='essay'&&!x.head).map((x)=>x.text),['One piece, through Structure.'],'a 3-paragraph piece of 9 sentences is a piece, not a paragraph reading');
+ assert.deepEqual(words([RP(24,18,'structure',14,2,1)]).filter((x)=>x.section==='essay'&&!x.head).map((x)=>x.text),['One paragraph reading, through Structure.'],'one long paragraph stays a paragraph reading');
+ assert.ok(words([R(24,18,'structure',12,2)]).some((x)=>x.text==='One piece, through Structure.'),'no paragraph count, 12 sentences: a piece as before');
+ assert.ok(words([R(24,18,'structure',11,2)]).some((x)=>x.text==='One paragraph reading, through Structure.'));
+});
+
+test('13-i RC6: the Sunday page lists lenses where their first reading falls, whatever order the digest holds them in',()=>{
+ const lines=words([R(23,18,'argument',3,1),R(21,18,'structure',3,1),R(22,18,'language',3,1),R(24,18,'structure',3,1)]);
+ assert.ok(lines.some((x)=>x.text==='Four paragraph readings, through Structure, Language and Argument.'),texts(lines).join(' | '));
+});
+
+// ------------------------------------------------------------------ MB-B1: a unit's skipped count, said apart from its not sure
+test('MB-B1 week: a unit line says skipped apart from not sure; a line with both drops "last set" before it passes LINE_WORDS',()=>{
+ const unitText=(l)=>words(l).find((x)=>x.section==='maths'&&/^One-step equations:/.test(x.text)).text;
+ assert.equal(unitText([M(24,18,'linear-one-step',4,5,{skipped:1})]),'One-step equations: 4 of 5 right, 1 skipped, last set.');
+ assert.equal(unitText([M(24,18,'linear-one-step',3,6,{notSure:2,skipped:1})]),'One-step equations: 3 of 6 right, 2 not sure, 1 skipped, last set.');
+ assert.equal(unitText([M(24,18,'linear-one-step',0,2,{skipped:2})]),'One-step equations: 0 of 2 right, 2 skipped, last set.');
+ assert.equal(unitText([M(24,18,'linear-one-step',4,6,{notSure:1})]),'One-step equations: 4 of 6 right, 1 not sure, last set.','no skipped: the line as before');
+ // every unit on every path fits LINE_WORDS with both counts
+ for(const t of ALL_TOPICS){
+  const line=words([M(24,18,t.id,10,25,{notSure:7,skipped:5})]).find((l)=>l.section==='maths'&&/ 5 skipped/.test(l.text));
+  assert.ok(line,`${t.id}: a unit line`);assert.ok(W.wordsIn(line.text)<=W.LINE_WORDS,`${t.id}: ${line.text}`);
+  assert.match(line.text,/: 10 of 25 right, 7 not sure, 5 skipped(, last set)?\.$/,'the counts are never cut');
+ }
+});
+
+// ------------------------------------------------------------------ S3: Sunday names the line that came back
+/** A taught item as english/review.ts leaves it once it came back: the slip, the taught line, and the reply that used it. */
+const T=(id,sceneId,better,reusedDay,extra={})=>({id,kind:'fix',said:'My tomatoes is one metre',better,why:'are, with more than one',turnId:`ep-${id}:t1`,at:at(19,18),sceneId,title:'The first hello',
+ ...(reusedDay===undefined?{}:{reusedAt:at(reusedDay,18,30),reusedIn:`conv-${id}`,reusedQuote:'My tomatoes are big and red this year'}),...extra});
+const TALKS=[E(24,18,'teacher','repair',3),E(25,18,'meet','contact',6)];
+const lingaOf=(lines)=>lines.filter((l)=>l.section==='english'&&!l.head).map((l)=>l.text);
+const tryOf=(lines)=>lines.filter((l)=>l.section==='try'&&!l.head).map((l)=>l.text);
+test('S3: a taught phrase reused this week is named on the Linga and English try-it lines - its better only, the latest, audience-filtered; a week with no reuse reads as before; the digest stays counts',()=>{
+ calls=0;
+ // one Taught reused inside the week, better 'tomatoes are': the phrase on the Linga line and in the act
+ const one={digest:TALKS,english:{plan:null,taught:[T('a','meet','tomatoes are',25)]}};
+ const page=W.sundayPage(learnerOf(one.digest,one.english),MIA,NOW);
+ assert.equal(page.english.phrase,'tomatoes are');
+ assert.equal(page.tryIt,'Ask them to teach you the phrase “tomatoes are”.','the act names the phrase instead of asking the parent to find one');
+ const lines=words(one);
+ assert.deepEqual(lingaOf(lines),['Two conversations: The first hello · Say that again, please.','Came back this week: “tomatoes are”.']);
+ assert.deepEqual(tryOf(lines),['Ask them to teach you the phrase “tomatoes are”.']);
+ // better only: never the slip, never the reply
+ const all=JSON.stringify(lines)+JSON.stringify(page);
+ for(const x of ['tomatoes is','My tomatoes','big and red','are, with more'])assert.ok(!all.includes(x),`never ${x}`);
+ for(const l of lines)assert.ok(W.wordsIn(l.text)<=W.LINE_WORDS,l.text);
+
+ // a week of conversations and no reused item: today's count-and-names line and act, exactly
+ const before=words({digest:TALKS,english:{plan:null}});
+ assert.deepEqual(lingaOf(before),['Two conversations: The first hello · Say that again, please.']);assert.deepEqual(tryOf(before),[W.DO_IT_ELSE.english]);
+ for(const taught of [[],[T('b','meet','tomatoes are')],[T('c','meet','tomatoes are',19)],[T('d','meet','tomatoes are',20)],[T('e','meet','tomatoes are',28)],[T('f','meet','',25)],[T('g','meet','  ',25)],[T('h','meet',undefined,25)]])
+  assert.deepEqual(words({digest:TALKS,english:{plan:null,taught}}),before,`no phrase: ${JSON.stringify(taught.map((t)=>[t.id,t.reusedAt,t.better]))}`);
+ // the window is the page's own: local midnight six days back is in
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:[{...T('i','meet','tomatoes are'),reusedAt:at(21,0)}]}),MIA,NOW).english.phrase,'tomatoes are');
+ // no conversation this week: no Linga section and no phrase, even with a reuse on file
+ assert.ok(!words({digest:[M(24,18,'area',3,6)],english:{plan:null,taught:[T('j','meet','tomatoes are',25)]}}).some((l)=>/tomatoes/.test(l.text)));
+
+ // the latest reused, of several; ties by id; a phrase that would not fit a line is passed over, never cut
+ const many=[T('k','meet','I would like a glass of water',22),T('m','teacher','could you say that again',26),T('l','meet','tomatoes are',24)];
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:many}),MIA,NOW).english.phrase,'could you say that again');
+ const tie=[T('z','meet','second by id',26),T('y','meet','first by id',26)];
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:tie}),MIA,NOW).english.phrase,'first by id');
+ const long=[T('n','meet','tomatoes are',23),T('o','meet','one two three four five six seven eight',26)];
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:long}),MIA,NOW).english.phrase,'tomatoes are','eight words do not fit the act line: the next latest');
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:[T('p','meet','  “Could you   say that again?”  ',25)]}),MIA,NOW).english.phrase,'Could you say that again','its own quotes and closing stop dropped, the words as taught');
+
+ // an adult-scene item: absent when adult content is off (Family, at any age), present in Adult mode
+ const date=[T('q','meet','tomatoes are',23),T('r','date','what do you enjoy about it',26)];
+ const ADULT={name:'Ada',age:30,type:'other',mode:'adult'},FAMILY18={name:'Ada',age:30,type:'other',mode:'family'};
+ for(const p of [MIA,{name:'Mia',age:12,type:'elementary'},FAMILY18]){
+  const pg=W.sundayPage(learnerOf(TALKS,{plan:null,taught:date}),p,NOW);
+  assert.equal(pg.english.phrase,'tomatoes are',`${JSON.stringify(p)}: the adult scene's phrase is passed over for the next latest allowed`);
+  assert.ok(!JSON.stringify(W.sundayWords(pg)).includes('enjoy'),'never on a Family page');
+  assert.deepEqual(words({digest:TALKS,english:{plan:null,taught:[date[1]]}},p),words({digest:TALKS,english:{plan:null}},p),'only an adult item: the page reads as before');
+ }
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:date}),ADULT,NOW).english.phrase,'what do you enjoy about it','Adult mode: allowed');
+
+ // a maths week: the act stays the unit's, the phrase is on the Linga line
+ const mixed=words({digest:[...TALKS,M(24,19,'area',4,6)],english:{plan:null,taught:[T('s','meet','tomatoes are',25)]}});
+ assert.deepEqual(tryOf(mixed),[W.DO_IT.area]);assert.ok(lingaOf(mixed).includes('Came back this week: “tomatoes are”.'));
+
+ // the trim ladder drops the scene names, never the phrase; the busiest week with the longest phrase still fits PAGE_WORDS
+ for(const better of ['tomatoes are','one two three four five six seven']){
+  for(const p of [TEN,MIA]){
+   const busy=words({digest:BUSIEST,english:{plan:null,taught:[T('t','teacher',better,25)]}},p);
+   assert.ok(lingaOf(busy).includes(`Came back this week: “${better}”.`),'the phrase kept');
+   assert.ok(W.pageWords(busy)<=W.PAGE_WORDS,`${W.pageWords(busy)} words`);
+   for(const s of ['week','maths','look','english','essay','try'])assert.ok(busy.some((l)=>l.section===s&&!l.head),`${s} kept`);
+   for(const l of busy)assert.ok(W.wordsIn(l.text)<=W.LINE_WORDS,l.text);
+  }
+ }
+ // the busiest week without a phrase is unchanged (88 words, the ten-word name kept whole)
+ assert.equal(W.pageWords(words(BUSIEST,TEN)),88);assert.equal(words(BUSIEST,TEN)[0].text,`${TEN.name} worked on seven evenings.`);
+
+ // the digest stays counts, scene id, skill and turns: an english entry carrying text is cleaned of it
+ const dirty={at:at(25,18),kind:'english',sceneId:'meet',skill:'contact',turns:6,text:'tomatoes are',better:'tomatoes are',reusedQuote:'My tomatoes are big'};
+ assert.deepEqual(D.cleanEntry(dirty),{at:dirty.at,kind:'english',sceneId:'meet',skill:'contact',turns:6});
+ assert.deepEqual(D.cleanDigest([dirty]),[{at:dirty.at,kind:'english',sceneId:'meet',skill:'contact',turns:6}]);
+ assert.equal(calls,0,'no model');
 });

@@ -30,6 +30,10 @@ enum class Hold(val ms: Long) {
  *
  * Pure JVM by design (decision D7): the entire pen-to-document behaviour is unit-testable without
  * an emulator, and the Android layer only feeds it messages and reads [doc].
+ *
+ * Thread-safe: the shell applies messages on the pen's receive thread while the frame loop reads
+ * [doc] and the heartbeat reads the counts and [undoAt], so every public member holds this
+ * instance's lock. Without it a read could copy a list mid-write and hand the renderer a null.
  */
 class PenEngine(
     private val clipId: String,
@@ -59,7 +63,7 @@ class PenEngine(
     private val livePoints = mutableListOf<List<Double>>()
 
     val doc: AnnotationDoc
-        get() {
+        @Synchronized get() {
             val live = liveMeta?.copy(points = livePoints.toList())
             return AnnotationDoc(
                 clipId = clipId,
@@ -68,9 +72,21 @@ class PenEngine(
             )
         }
 
-    val annotationCount: Int get() = committed.size + (if (liveMeta != null) 1 else 0)
-    val canUndo: Boolean get() = history.canUndo
-    val canRedo: Boolean get() = history.canRedo
+    val annotationCount: Int @Synchronized get() = committed.size + (if (liveMeta != null) 1 else 0)
+    val canUndo: Boolean @Synchronized get() = history.canUndo
+    val canRedo: Boolean @Synchronized get() = history.canRedo
+
+    private val dropped = java.util.TreeMap<String, Int>()
+
+    /**
+     * Messages that decoded and were dropped anyway, by reason: "draws but nothing appears" is
+     * answerable from /health. A copy, sorted by reason.
+     */
+    val droppedCounts: Map<String, Int> @Synchronized get() = LinkedHashMap(dropped)
+
+    private fun drop(reason: String) {
+        dropped.merge(reason, 1, Int::plus)
+    }
 
     private fun nextId(): String = "a${ids.incrementAndGet()}"
 
@@ -78,6 +94,7 @@ class PenEngine(
         overrideHoldMs ?: (if (requested == null) defaultHold else Hold.parse(requested)).ms
 
     /** @param mediaTimeMs the player position the drawing is anchored to. */
+    @Synchronized
     fun accept(msg: PenMessage, mediaTimeMs: Long) {
         when (msg) {
             is PenMessage.Pen -> handlePen(msg, mediaTimeMs)
@@ -118,9 +135,11 @@ class PenEngine(
      * is nothing to undo. The transport plan turns a non-null answer into a trip there, paused, so
      * no edit ever changes ink the viewer cannot see (the rule the eraser already follows).
      */
+    @Synchronized
     fun undoAt(tMs: Long): Long? = frameOf(history.peekUndo(), tMs)
 
     /** As [undoAt], for the next redo. */
+    @Synchronized
     fun redoAt(tMs: Long): Long? = frameOf(history.peekRedo(), tMs)
 
     private fun frameOf(op: Op?, tMs: Long): Long? {
@@ -149,7 +168,11 @@ class PenEngine(
     }
 
     private fun handlePen(msg: PenMessage.Pen, tMs: Long) {
-        val xyp = msg.pts.map { listOf(it[0], it[1], it.getOrElse(2) { 0.5 }) }
+        // A point needs an x and a y. The wire decodes any list, and a short one would throw here,
+        // on the pen's receive loop, and end the connection; skip it and keep the rest.
+        val usable = msg.pts.filter { it.size >= 2 }
+        if (usable.size < msg.pts.size) drop("pen-short-point")
+        val xyp = usable.map { listOf(it[0], it[1], it.getOrElse(2) { 0.5 }) }
         when (msg.phase) {
             "down" -> {
                 clearLive()
@@ -174,25 +197,33 @@ class PenEngine(
                     if (finished.points.size >= 2) commit(finished)
                 }
             }
+            else -> drop("pen-unknown-phase")
         }
     }
 
     private fun handleShape(msg: PenMessage.Shape, tMs: Long) {
+        // Both ends need an x and a y, for the same reason as a pen point: drop, never throw.
+        if (msg.from.size < 2 || msg.to.size < 2) return drop("shape-short-end")
+        // A tap is not a drawing, as a one-point stroke is not (handlePen): an arrow or a ring whose
+        // ends are where the finger held still would draw a stray arrowhead or a dot. A spotlight
+        // keeps its floor radius below, so a tap there is a default-sized spotlight.
+        val length = metric.distance(msg.from, msg.to)
+        if (msg.tool != "spotlight" && length < Smoothing.MIN_POINT_DISTANCE) return drop("shape-tap")
         val hold = holdMs(msg.hold)
         val style = Style(color = msg.color, width = msg.width)
         val a = when (msg.tool) {
             "arrow" -> Annotation.Arrow(nextId(), tMs, tMs + hold, style, msg.from, msg.to)
             "circle" -> Annotation.Circle(
                 nextId(), tMs, tMs + hold, style,
-                center = msg.from, radius = metric.distance(msg.from, msg.to),
+                center = msg.from, radius = length,
             )
             "spotlight" -> Annotation.Spotlight(
                 nextId(), tMs, tMs + hold, style,
-                center = msg.from, radius = metric.distance(msg.from, msg.to).coerceAtLeast(0.03),
+                center = msg.from, radius = length.coerceAtLeast(SPOTLIGHT_MIN_RADIUS),
             )
             else -> null
         }
-        if (a != null) commit(a)
+        if (a != null) commit(a) else drop("shape-unknown-tool")
     }
 
     private fun handleTag(msg: PenMessage.Tag, tMs: Long) {
@@ -225,5 +256,13 @@ class PenEngine(
     private fun clearLive() {
         liveMeta = null
         livePoints.clear()
+    }
+
+    companion object {
+        /**
+         * The smallest spotlight, in content-width units: a tap with the spotlight tool lands this
+         * big. The phone's preview copies it (companion/index.html, checked by CompanionContractTest).
+         */
+        const val SPOTLIGHT_MIN_RADIUS: Double = 0.03
     }
 }

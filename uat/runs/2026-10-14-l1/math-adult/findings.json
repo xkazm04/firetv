@@ -1,0 +1,1997 @@
+[
+  {
+    "character": "matyas-19",
+    "journey": "MB1",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "present-broken",
+    "verdict": "confirmed",
+    "title": "Hint leak backstop on Czech-printed Calculus items: verb-led lines now read, the noun-phrase, tg and implicit forms still do not",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "expected": "Every hint on a limit, derivative or integral item of his own MA1 sheet is checked for the result in code, so C1 does not rest on the model obeying alone.",
+    "got": "Narrowed since 2026-10-09 (119988a1, c4d9ef75). READ now: \"Vypočtěte lim x→0 sin(3x)/x\", \"Derivujte: y = sin(x^2)\", \"Určete limitu lim x→0 (1-cos x)/x^2\", \"Vypočtěte ∫_0^3 x^2 dx\": each leaks-checks \"The limit is 3.\", \"The derivative is 2x cos(x^2).\" (true). STILL kind linear, spec null: \"Spočtěte derivaci funkce f(x) = ln(x^2+1)\" (the finding's own example: INSTRUCTION eats \"Spočtěte derivaci\", then \"funkce f(x) = …\" is no pattern), \"Vypočítejte derivaci y = x^2 sin x\", \"Najděte neurčitý integrál ∫ x e^(x^2) dx\", \"Derivujte f(x) = tg(x^2)\", \"Find dy/dx if x^2 + y^2 = 25\", \"Určete limitu posloupnosti a_n = …\". On those the only guard is leaks() plus unreadLeaks(), which refuses \"x = N\" / \"answer is N\" only: \"The derivative is 2x/(x^2+1).\", \"It comes out as 2x/(x^2+1).\", \"The integral is e^(x^2)/2 + C.\" all pass (executed).",
+    "evidence": [
+      "desk/src/lib/rules/taskText.ts:15-21 — INSTRUCTION strips a verb plus one noun (derivaci) and nothing after it; \"funkce\", \"neurčitý integrál\", \"limitu posloupnosti\" are not in it",
+      "desk/src/lib/rules/maths.ts:276-296 — SOLUTION/unreadLeaks: a lone letter = number, or \"answer is <number>\"; no derivative, integral or limit statement",
+      "desk/src/lib/desk/hint.ts:107-110 — leaksLine: leaksCalc only when spec.calc is non-null",
+      "repro scratchpad/p/c.cjs, b.cjs, dv.cjs (node, ts-load): readQuestion(\"Spočtěte derivaci funkce f(x) = ln(x^2+1)\",\"cz\") -> linear; leaksLine(…,\"The derivative is 2x/(x^2+1).\") -> false; \"Derivujte: y = sin(x^2)\" + \"The derivative is 2x cos(x^2).\" -> true"
+    ],
+    "suggested_acceptance": "A leading Czech instruction that names its object (derivaci, derivaci funkce, neurčitý integrál, limitu, limitu posloupnosti) is set aside whole, tg/cotg read as tan/cot for a cz learner, and the three formerly-passing lines above are pinned as leaks; or an item that does not read is checked against every Calculus spec its text contains.",
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) for the snap; the hint itself needs only the text engine (claude CLI), so a typed page fixture runs without vision. Snap a printed Czech MA1 sheet, ask hint 1 and 2 on each unread item, count lines that state the result (any one is a blocker under C1).",
+    "id": "L1-matyas-19-MB1-1",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB1-1",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "major",
+    "type": "trust",
+    "dimension": "trust",
+    "cert_level": "L1",
+    "rank": 12,
+    "severity": "major",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB1",
+    "resolution": "fixed",
+    "recurrence": 1,
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "expected": "No hint line carries the last step whole; a factor pair split by words is one answer.",
+    "got": "Landed in 66602171 (Calculus half of MB-B16). Executed on the three lines the finding pinned: \"Multiply cos(x^2) by 2x.\" -> leak; \"Differentiate the outside to get cos(x^2), then multiply by 2x, the derivative of the inside.\" -> leak; \"Substitute u = x^2, so du = 2x dx, giving (1/2) e^u + C.\" -> leak. Method lines still pass (\"Use the chain rule: the outside is sin, the inside is x^2.\").",
+    "evidence": [
+      "desk/src/lib/rules/calc.ts:521 — leaksCalc (the factor-pair and substitution rules)",
+      "repro scratchpad/p/b.cjs section MB1-2: 3 of 3 pinned lines refused; 4 of 4 method lines pass"
+    ],
+    "ceiling": "Prose forms of the same step pass: \"Multiply the outer derivative by 2x.\" (names the inner derivative only), \"Substitute u = x^2 and the integral becomes half of e^u.\" (stops before back-substitution). Hint 2 is still prompted to go \"ONE STEP FURTHER\" (hint.ts:172), so the guard carries C1 on a one-rule item. Whether the live model stays on the right side of that line is L2.",
+    "suggested_acceptance": "Keep the three pinned lines as leaks in a rules test.",
+    "l2_priority": "Text engine, no vision: hint 1 and 2 on six chain-rule and three standard-limit items; judge each line next-step / generic / leak.",
+    "id": "L1-matyas-19-MB1-2",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB1-2",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "type": "trust",
+    "dimension": "trust",
+    "title": "A step that completes the answer passes the leak guard (\"Multiply cos(x^2) by 2x\"), and hint 2 is asked to go one step further",
+    "cert_level": "L1",
+    "rank": 12,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB1",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "confirmed-absent",
+    "verdict": "confirmed",
+    "expected": "One photo of his 10-problem sheet is read and marked (equivalent forms right, not-sure where the desk cannot compare), then a walk to each ringed item.",
+    "got": "Unchanged. A snapped page gives items and hints only; /api/mark still answers \"Start a practice set first.\" when there is no desk-written set; the page screen has no mark action (Select = hint). specFromQuestion could turn a read item into a spec checkAnswer judges (it does, for the verb-led Czech forms above), so the machinery exists and is unwired to the page. docs/BACKLOG.md MB-B35 is still open.",
+    "evidence": [
+      "desk/src/app/api/mark/route.ts:45 — \"Start a practice set first.\"",
+      "desk/src/tv/keys.ts:391 — page: Select on an item = hint, nothing else",
+      "desk/src/app/api/read/route.ts — page route returns items only",
+      "docs/BACKLOG.md MB-B35 — status: open"
+    ],
+    "suggested_acceptance": "A snapped page whose items read as Calculus specs is markable from a photo of his working by the same code judge as a desk set; items that do not read are \"not sure\".",
+    "l2_priority": "precondition: vision host (env.md, Math Buddy); none until the feature exists. Then page read rate and handwriting read on a real MA1 sheet.",
+    "id": "L1-matyas-19-MB1-3",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB1-3",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "missing-feature",
+    "dimension": "missing",
+    "title": "His own weekly MA1 sheet can be hinted but never marked; only the desk's own six-question sets are marked",
+    "cert_level": "L1",
+    "rank": 9,
+    "severity": "major",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB1",
+    "resolution": "fixed",
+    "recurrence": 1,
+    "code_check": "present-but-missed",
+    "verdict": "uncertain",
+    "severity": "minor",
+    "expected": "The read is told his course and notation and asked for plain one-line notation, in the printed language.",
+    "got": "Landed in 50fd60a4 (MB-B3). mathsContext adds the school system's notation sentence, \"Their course in progress is Calculus 1.\", age or stage, and \"Write each problem as plain one-line notation: lim_(x->a), a/b with brackets …, no LaTeX. Keep the language the page is printed in.\" The read route passes system, path, age and stage from the seated profile. MB-READ grounding is 5/5 (P1 photo, P2 subject, P3 system, P4 course, P5 age or stage) against 2/5 before.",
+    "evidence": [
+      "desk/src/lib/desk/read.ts:37-46 — mathsContext",
+      "desk/src/app/api/read/route.ts:35-37 — who = { system, path, age, stage }",
+      "repro: readQuestion(\"lim_{x \\\\to 0} \\\\frac{\\\\sin 3x}{x}\") -> linear (a LaTeX transcription still reads as nothing); \"lim x→0 sin(3x)/x\" -> calc"
+    ],
+    "ceiling": "An instruction in a prompt is not a guarantee: a LaTeX transcription still reads as kind linear and loses its guard. With no school system on the profile the notation sentence says \"a decimal point\" and never mentions tg/cotg. Page read rate is unmeasured until a vision host runs.",
+    "suggested_acceptance": "Page read rate >= 0.9 on a Czech MA1 sheet and the share of read items that readQuestion turns into a Calculus spec, both at L2.",
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a printed Czech MA1 sheet (limits, derivatives, one implicit item); count problems read as printed and how many readQuestion turns into a spec.",
+    "id": "L1-matyas-19-MB1-4",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB1-4",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "minor",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "quality-gap",
+    "dimension": "senior-quality",
+    "title": "The page read prompt carries no course, notation or language (MB-READ 2/5); a LaTeX transcription reads as no Calculus item",
+    "cert_level": "L1",
+    "rank": 6,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB1",
+    "type": "quality-gap",
+    "dimension": "senior-quality",
+    "impact": {
+      "frequency": "low",
+      "reachability": "med",
+      "trust_erosion": "low"
+    },
+    "resolution": "open",
+    "recurrence": 1,
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "title": "A sequence limit written lim_(n->inf) is not read; lim_(n->infinity) and lim_(n->∞) are",
+    "expected": "The ASCII \"inf\" the read prompt itself invites (\"lim_(x->a)\") is read for a sequence as it is for a function limit.",
+    "got": "readQuestion(\"Find lim_(x->inf) (3x+1)/(2x-5)\") -> calc limit at inf; the same with n -> kind linear, spec null, so \"The limit is 3/2.\" and \"It tends to 1.5.\" pass the hint guard; with \"infinity\" or \"∞\" it reads as sequence-limit and both are refused. Reachable only after he switches to Calculus 2 (the sequence reader belongs to calc2).",
+    "evidence": [
+      "desk/src/lib/rules/calc2.ts:418 — calc2SpecFromQuestion",
+      "repro scratchpad/p/sq.cjs, sq2.cjs: lim_(n->inf) -> linear; lim_(n->infinity) and lim_(n->∞) -> sequence-limit"
+    ],
+    "suggested_acceptance": "calc2SpecFromQuestion reads inf as it reads infinity for n; a rules row pins \"Find lim_(n->inf) (3n+1)/(2n-5)\".",
+    "scope_note": "Calculus 2 path only; the Character is on Calculus 1 until he switches.",
+    "id": "L1-matyas-19-MB1-5",
+    "cert_level": "L1",
+    "rank": 2,
+    "severity": "polish",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB1",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "code_check": "n-a",
+    "verdict": "confirmed",
+    "got": "Re-executed on main: a type \"other\" profile on calc1 sees tonightStops [homework, teach], 22 topics from \"Functions, and new functions from old\", \"No lessons for Calculus 1 yet. The desk explains a step when you ask.\" (and the same for Calculus 2: 7 topics from \"Integration by parts\"). Calculus stance in the hint is the first-year-university one for any age.",
+    "evidence": [
+      "repro scratchpad/p/m1.cjs",
+      "desk/src/tv/mathsRows.ts:225 — noLessonsLine(path)",
+      "desk/src/lib/desk/hint.ts:79-82 — calcStance"
+    ],
+    "suggested_acceptance": "Keep.",
+    "id": "L1-matyas-19-MB1-6",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB1-5",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "n-a",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "strength",
+    "dimension": "clarity",
+    "title": "Calculus 1 gating is clean: two doors, the 22-topic spine, an honest \"No lessons for Calculus 1 yet\", no school video, a first-year university stance",
+    "cert_level": "L1",
+    "rank": 9,
+    "severity": "n-a",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB1",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "code_check": "n-a",
+    "verdict": "confirmed",
+    "got": "Two presses from Tonight to the first hint (Select on the homework door, photo, Select on the item); the homework door now opens only tonight's sheet or asks for tonight's photo (HW2 3a98790e, HW4 afcb2714), which does not add a press on a fresh evening. Calculus hint lines are capped at 25 words each in code (hint.ts:48, one re-ask).",
+    "evidence": [
+      "desk/src/tv/keys.ts:391",
+      "desk/src/lib/desk/hint.ts:48,184-195 — MAX_HINT_WORDS and the re-ask"
+    ],
+    "suggested_acceptance": "Keep.",
+    "id": "L1-matyas-19-MB1-7",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB1-6",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "n-a",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "strength",
+    "dimension": "effort",
+    "title": "Two presses from Tonight to the first hint; every fixed TV line on the path is <= 25 words",
+    "cert_level": "L1",
+    "rank": 9,
+    "severity": "n-a",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "blocker",
+    "expected": "A decimal is accepted only as a correct rounding of the exact value at its own written precision, else \"not sure\" asking for the exact value.",
+    "got": "Landed in 9c777d5d, refined by D2/R1a (f4a56e98). Executed: lim sin(3x)/x = 3: \"2.999\", \"3.014\", \"2.9996\", \"2.99\" -> unsure (\"rounded decimal; the desk asks for the exact value\"), \"3\", \"3.00\", \"3.0\" -> right, \"3.1\" -> wrong; lim (1-cos x)/x^2 = 1/2: \"0.4996\", \"0.498\" -> unsure, \"0.5\", \"0.50\" -> right; ∫_0^3 x^2: \"9.04\", \"8.99\" -> unsure. Sweep: 8 limits x 6 offsets x 4 precisions = 192 estimates, 0 false ticks. Sequence limit of (1+1/n)^n: \"2.7169\", \"2.717\", \"2.71\" unsure, \"2.718\", \"2.7183\", \"2.7\" right, \"2.8\" wrong.",
+    "evidence": [
+      "desk/src/lib/rules/calc.ts:393-401 — judgeNumber: decimals of a limit or definite integral go to decimalCall",
+      "desk/src/lib/rules/calc-read.ts:52 — decimalCall",
+      "repro scratchpad/p/a.cjs, c3.cjs (192-estimate sweep)"
+    ],
+    "ceiling": "An estimate that happens to round to the true value at its own precision (\"3.000\" from sin(0.0003)/0.0001) is ticked: code cannot tell a plugged-in estimate from a worked answer. Two significant figures is enough for right (\"2.7\" for e), which a strict TA may not accept. Derivative-at, evaluate and extremum decimals within 5e-3 but not within 1e-6 are \"not sure\" (see the word-problem row).",
+    "suggested_acceptance": "Keep a rules test pinning 2.999, 3.014, 0.4996 and 9.04 as not right.",
+    "l2_priority": "No vision needed: typed route on a calc1-limit-laws set, answer one item with the value at x = 0.01; the sheet must show \"not sure\", never a tick.",
+    "id": "L1-matyas-19-MB3-1",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-1",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "severity_prior": "blocker",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "type": "trust",
+    "dimension": "trust",
+    "title": "False tick: a decimal estimate within 0.5% of an exact limit or definite integral is ticked right (2.999, 3.014 for 3; 0.4996 for 1/2; 9.04 for 9)",
+    "cert_level": "L1",
+    "rank": 18,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "blocker",
+    "expected": "ln x + C for the antiderivative of 1/x is not ticked.",
+    "got": "Landed in ebdddf7c, one-way rule in f4a56e98. Executed: ∫1/x: \"ln(x)+C\", \"ln x + C\", \"ln(-x)+C\", \"log(x)+C\" -> unsure with \"Your answer is not defined everywhere the function is. Check where it holds.\"; \"ln|x|+C\", \"ln(abs(x))+C\", \"log|x|+C\" -> right. tan x: \"-ln|cos(x)|+C\", \"ln|sec(x)|+C\" right, \"-ln(cos(x))+C\" unsure, \"ln|cos(x)|+C\" wrong/sign. 1/(x^2-1): the |.| forms right, \"(1/2)ln((x-1)/(x+1))+C\" unsure.",
+    "evidence": [
+      "desk/src/lib/rules/calc.ts:448 — undefinedWhereTrue -> WHY.domain",
+      "desk/src/lib/rules/calc-expr.ts:749 — undefinedWhereTrue",
+      "repro scratchpad/p/a.cjs, c4.cjs"
+    ],
+    "ceiling": "Unsure, not wrong: a strict TA rings ln x + C; the desk only withholds the tick. A gap outside every sample is not seen (ln(x+4)+C for 1/(x+4)), as calc.ts's own header says.",
+    "suggested_acceptance": "Keep the pins; if the owner wants ln x + C wrong, that is a ruling, not a bug.",
+    "l2_priority": "No vision needed: typed route on a calc1-antiderivatives set containing 1/x (or a/x); answer ln x + C and read the card.",
+    "id": "L1-matyas-19-MB3-2",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-2",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "severity_prior": "blocker",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "type": "trust",
+    "dimension": "senior-quality",
+    "title": "False tick: \"ln x + C\" is ticked right for the antiderivative of 1/x",
+    "cert_level": "L1",
+    "rank": 18,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "confirmed-absent",
+    "verdict": "confirmed",
+    "got": "Unchanged: calc1-chain still promises \"implicit differentiation applies it to y as a function of x\" with shapes [\"derivative\"]; the nine shapes have no implicit one; \"Find dy/dx if x^2 + y^2 = 25\" and \"Najděte y' pro x^2+y^2=25\" read as kind linear (executed). docs/BACKLOG.md MB-B31 is open.",
+    "evidence": [
+      "desk/src/lib/library/calculus1.spine.ts:111-115 — name, blurb and shapes of calc1-chain",
+      "desk/src/lib/rules/calc.ts:42 — CALC_SHAPES, nine, none implicit",
+      "repro scratchpad/p/b.cjs: readQuestion(\"Find dy/dx if x^2 + y^2 = 25\") -> linear"
+    ],
+    "suggested_acceptance": "An implicit-derivative shape checked numerically by -F_x/F_y on calc1-chain, or the topic and its blurb stop promising it.",
+    "id": "L1-matyas-19-MB3-3",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-3",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "type": "missing-feature",
+    "dimension": "missing",
+    "title": "Implicit differentiation cannot be practised: \"The chain rule and implicit differentiation\" sets only y = f(x) derivatives",
+    "cert_level": "L1",
+    "rank": 12,
+    "severity": "major",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "expected": "A correct answer of ordinary length can be typed whole and is judged.",
+    "got": "Landed in 6cbe3bd4 (MK14): TYPED_ANSWER_MAX = 120, the phone's answer box and the second-go box both read it. Executed: the 45-character quotient-rule answer -> right.",
+    "evidence": [
+      "desk/src/lib/rules/maths.ts:106 — TYPED_ANSWER_MAX = 120",
+      "desk/src/app/phone/page.tsx:596,638 — maxLength={TYPED_ANSWER_MAX}",
+      "repro scratchpad/p/a.cjs last line"
+    ],
+    "ceiling": "A paste longer than 120 characters is still cut silently and the phone shows no count (MB-B32 \"phone count stays open\"); a worked answer that long is rare for Calculus 1.",
+    "suggested_acceptance": "Phone shows a character count near the cap.",
+    "id": "L1-matyas-19-MB3-4",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-4",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "type": "broken-flow",
+    "dimension": "completion",
+    "title": "Typed answers are capped at 40 characters; the phone cuts a quotient-rule answer silently and the item comes back \"not sure\"",
+    "cert_level": "L1",
+    "rank": 12,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "expected": "Where the desk cannot compare it says \"not sure\" and why, never something that reads as wrong.",
+    "got": "Landed in 83bbe368 (MK10). Executed through judgeSet: \"tg(x)^2+1\" -> unsure, said \"The desk is not sure about number 1. The desk cannot read this answer as mathematics, and it does not guess.\"; blank -> unsure, \"Number 1 has no answer yet.\"",
+    "evidence": [
+      "desk/src/lib/rules/kinds.ts:149-154 — unsureLine builds NOT_SURE(n, why)",
+      "desk/src/lib/rules/maths.ts:96 — NOT_SURE",
+      "repro scratchpad/p/d.cjs"
+    ],
+    "ceiling": "A wrong item with no named slip still says \"I got something different for number 1. How did you get there?\" even for \"2x cos(x^2)+C\" (an extra constant, whose why the checker computes and drops); \"skipped\" is not counted apart from the desk's doubt in the recap.",
+    "suggested_acceptance": "A wrong item may show its why when no slip is named.",
+    "id": "L1-matyas-19-MB3-5",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-5",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "type": "confusion",
+    "dimension": "clarity",
+    "title": "An unsure item says \"I got something different for number N\", and the checker's own reason (why) is computed and dropped",
+    "cert_level": "L1",
+    "rank": 12,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "confirmed-absent",
+    "verdict": "confirmed",
+    "title": "Czech notation on Calculus answers: decimal comma now read (cz/de); tg/arctg, + K and + C1 are still \"not sure\"",
+    "got": "Landed (2b1085d8, MK4): for cz/de \"0,5\" and \"3,0\" are right and \"2,999\" unsure for a limit. Still unsure (executed, system cz): \"1+tg(x)^2\" and \"tg(x)^2+1\" for d tan, \"arctg(x)+C\" for 1/(1+x^2), \"e^(x^2)/2 + K\", \"+ C1\", \"-acot(x)+C\". Never wrong, so C3 holds; each costs him a tick he earned and a \"cannot read this as mathematics\" card.",
+    "evidence": [
+      "desk/src/lib/rules/calc.ts:429 — commaSystem: the comma rule",
+      "desk/src/lib/rules/calc-expr.ts — compile has no tg, cotg, arctg, arccotg",
+      "repro scratchpad/p/a.cjs: \"cz comma\", \"arctg\", \"cz K\""
+    ],
+    "suggested_acceptance": "With system cz (or de) a Calculus answer reads tg, cotg, arctg, arccotg, and a constant letter other than C is the arbitrary constant.",
+    "id": "L1-matyas-19-MB3-6",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-6",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "minor",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "quality-gap",
+    "dimension": "senior-quality",
+    "cert_level": "L1",
+    "rank": 6,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "present-broken",
+    "verdict": "confirmed",
+    "got": "Unchanged for the finding's three workings (executed): \"y' = cos(x^2) · (x^2)'\" / \"y' = cos(x^2) · x\" -> checks [null, null], no slipAt; \"u = x^2, u' = 2x\" / \"y' = cos(u) · u'\" / \"y' = cos(x^2) · x\" -> all null; chained \"lim_(x->0) … = lim_(x->0) …\" -> all null. Plain working (\"y' = cos(x^2) · x\") is read and pinned. The D2 rule (c62de4fb) changed domain handling only. docs/BACKLOG.md MB-B29 is open.",
+    "evidence": [
+      "desk/src/lib/rules/chain.ts:229-315 — tagLines: two \"=\" parts or an unreadable left side is none()",
+      "desk/src/lib/rules/chain.ts:326 — chainPen: first false, else null",
+      "repro scratchpad/p/e.cjs"
+    ],
+    "suggested_acceptance": "A line \"A · (B)'\" is A times the derivative of B; \"u = g(x)\" binds u for the lines after it; \"lim … = lim …\" is an = between the two bodies.",
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap handwritten chain-rule working in prime notation; does the transcription keep the primes, and where is the pen?",
+    "id": "L1-matyas-19-MB3-7",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-7",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "med",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "high",
+      "reachability": "med",
+      "trust_erosion": "med"
+    },
+    "type": "quality-gap",
+    "dimension": "senior-quality",
+    "title": "No pen for working in prime notation, with a u = substitution line, or with chained lim lines: every line is null",
+    "cert_level": "L1",
+    "rank": 12,
+    "severity": "major",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "confirmed-absent",
+    "verdict": "confirmed",
+    "got": "Unchanged (executed): typed \"cos(x^2)\" for d/dx sin(x^2) -> wrong, no slip, \"I got something different for number 1.\" ; \"cos(x^2)*x\" likewise. Code names only sign and lost-constant. MB-B38 open.",
+    "evidence": [
+      "desk/src/lib/rules/calc.ts:442-446 — derivative: right / sign / wrong, nothing else",
+      "repro scratchpad/p/d.cjs"
+    ],
+    "suggested_acceptance": "For a derivative spec whose f is a composition g(h(x)), an answer equal to g'(h(x)) at the samples is wrong with slip forgot-chain, decided in code.",
+    "id": "L1-matyas-19-MB3-8",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-8",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "minor",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "quality-gap",
+    "dimension": "senior-quality",
+    "title": "Code never names the chain-rule slip (or an extra +C); on the typed route a dropped chain factor gets the generic line",
+    "cert_level": "L1",
+    "rank": 6,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "confirmed-absent",
+    "verdict": "uncertain",
+    "got": "Unchanged: calc1-chain shares [\"derivative\"] with calc1-rules; askCalc sends the topic name and blurb and \"Spread the questions evenly across the usual ways this topic goes wrong\"; makeCalcItems keeps any well-formed derivative spec. Nothing checks composition. MB-B30 open. Model yield for the topic is an L2 measurement.",
+    "evidence": [
+      "desk/src/lib/desk/items.ts:234-262 — askCalc prompt",
+      "desk/src/lib/library/calculus1.spine.ts:111-115"
+    ],
+    "suggested_acceptance": "A topic may name a structural requirement (calc1-chain: a composition) that code checks on each spec; set fit >= 5 of 6 each over five sets.",
+    "l2_priority": "No vision needed (text engine, claude CLI): ask five sets on calc1-chain; set fit per question, count non-composite items.",
+    "id": "L1-matyas-19-MB3-9",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-9",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "type": "quality-gap",
+    "dimension": "senior-quality",
+    "title": "A chain-rule set is not required to be composite functions; code keeps any well-formed derivative spec",
+    "cert_level": "L1",
+    "rank": 12,
+    "severity": "major",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "fixed",
+    "code_check": "n-a",
+    "verdict": "confirmed",
+    "severity": "minor",
+    "got": "Landed in 5899d6a9 (TN1): calc1-area-so-far is \"The integral with a variable upper limit\"; id and blurb unchanged.",
+    "evidence": [
+      "desk/src/lib/library/calculus1.spine.ts:173-174"
+    ],
+    "ceiling": "The id calc1-area-so-far keeps the word internally (never drawn); other topic names were not re-read for Americanisms.",
+    "suggested_acceptance": "Keep.",
+    "id": "L1-matyas-19-MB3-10",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-10",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "minor",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "confusion",
+    "dimension": "clarity",
+    "title": "Topic name \"The area-so-far function\" is the American course word the Character names as a pet peeve",
+    "cert_level": "L1",
+    "rank": 6,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "minor",
+    "got": "Landed in 1dfcfdae (X4). explainCalc's prompt now carries seenBlock: his written answer, his working as numbered lines, and \"The desk found this slip: …, on line N.\" MB-EXPLAIN on the Calculus path is 6/8 (X1 item, X2 answer, X3 slip, X4 explanation, X5 working, X8 memory notes) against 3/8; X6 age and X7 school system are absent.",
+    "evidence": [
+      "desk/src/lib/desk/explain.ts:50-70 — Seen and seenBlock",
+      "desk/src/lib/desk/explain.ts:171-195 — explainCalc uses seenBlock(seen)",
+      "desk/src/lib/desk/explain.ts:226-240 — the item's answer, working, slip and line become Seen"
+    ],
+    "ceiling": "Whether the reply points at HIS line is the model's; the leak check on the reply still runs. School system (so a cz learner's \"tg\" is read) is not in the prompt.",
+    "suggested_acceptance": "Explain on a wrong chain-rule item names his line (L2 text engine).",
+    "l2_priority": "No vision needed (typed set): explain on a wrong chain-rule item; does the reply name his line, and is the answer withheld?",
+    "id": "L1-matyas-19-MB3-11",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-11",
+    "impact_prior": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "minor",
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "type": "quality-gap",
+    "dimension": "senior-quality",
+    "title": "The explain prompt carries neither his answer, his working nor the slip the desk found (MB-EXPLAIN 3/8)",
+    "cert_level": "L1",
+    "rank": 6,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "n-a",
+    "code_check": "n-a",
+    "verdict": "confirmed",
+    "title": "Equivalent forms judged right and near-misses judged wrong, on Calculus 1 and the Calculus 2 technique topics",
+    "got": "Executed this run: 17 derivative forms of sin(x^2) and tan x (· , ², *, juxtaposition, sec^2, 1/cos^2, 1+tan^2), 0 false rings; 0 false ticks on near misses (+1e-5x, +1e-7, x1.001, 3.0001x^2 all wrong); antiderivatives of x e^x, ln x, sin^2 x, 1/(x^2-1), 1/sqrt(4-x^2), 1/(x^2+1), tan x in 3-5 forms each: every correct form right, every wrong form not right; ∫_0^1 x e^x = 1 as \"1\", \"1.0\", \"e - e + 1\" right, \"0.9999\" unsure.",
+    "evidence": [
+      "repro scratchpad/p/a.cjs, c4.cjs, fm.cjs, nm.cjs",
+      "desk/src/lib/rules/calc.ts:421-455 — checkAnswer"
+    ],
+    "suggested_acceptance": "Keep: these forms stay right in a rules test.",
+    "id": "L1-matyas-19-MB3-12",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-12",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "n-a",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "strength",
+    "dimension": "trust",
+    "cert_level": "L1",
+    "rank": 9,
+    "severity": "n-a",
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "resolution": "n-a",
+    "code_check": "n-a",
+    "verdict": "confirmed",
+    "got": "Still true: a spec carries no answer; the sign slip is code-named and pinned to its line (\"y' = cos(x^2) · 2x\" / \"y' = -2x cos(x^2)\" -> slip sign, slipAt line 1). Code-drawn word problems: 3 templates x 150 seeds = 900 parts checked against an independent grid/finite-difference truth, 0 wrong keys, 0 false ticks at +5% and +0.04%, 0 stems or part lines that leak.",
+    "evidence": [
+      "desk/src/lib/rules/calc.ts:4-9",
+      "repro scratchpad/p/h.cjs, w.cjs, w2.cjs"
+    ],
+    "suggested_acceptance": "Keep.",
+    "id": "L1-matyas-19-MB3-13",
+    "prior_id": "2026-10-09-maths-l1/L1-matyas-19-MB3-13",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "n-a",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "strength",
+    "dimension": "trust",
+    "title": "Calculus sets are specs printed and checked by code with no stored answer; the sign slip is code-detected and pinned to its line",
+    "cert_level": "L1",
+    "rank": 9,
+    "severity": "n-a",
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "type": "quality-gap",
+    "dimension": "senior-quality",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "resolution": "open",
+    "recurrence": 1,
+    "code_check": "present-broken",
+    "verdict": "confirmed",
+    "title": "The pen lands on a correct line when working starts with \"=\" after the function or after the antiderivative (definite integrals, f(a))",
+    "expected": "The mark is pinned to the line where the slip happened (his C4 and the journey's \"the slip named is the slip they made\").",
+    "got": "tagLines compares a leading \"=\" with the line before; for the first line that is the item's own function, and after \"∫ x^2 dx = x^3/3\" it is the antiderivative, never the evaluated value. Executed through judgeItem: ∫_0^3 x^2 dx with working \"∫ x^2 dx = x^3/3 / = 3^3/3 - 0 / = 8\" and answer 8 -> wrong, slipAt line 1, the CORRECT evaluation line, not line 2 (the 8). f(3) for x^2+1 with working \"= 3^2 + 1 / = 11\" -> slipAt line 0, the correct substitution. With \"f(3) = 3^2+1 / = 11\" the pen is correctly on line 1. Derivative working with a leading \"=\" gets [false, false] and pen 0 although line 0 is right.",
+    "evidence": [
+      "desk/src/lib/rules/chain.ts:244 — kind starts as \"fn\" so a leading \"=\" is tagged = against f",
+      "desk/src/lib/rules/chain.ts:269-275 — leading \"=\": the same thing as the line before",
+      "desk/src/lib/rules/kinds.ts:105-108 — pen = chainPen on a wrong Calculus item",
+      "repro scratchpad/p/f.cjs, g.cjs, h.cjs"
+    ],
+    "suggested_acceptance": "For definite-integral and evaluate specs the first \"=\" line after an antiderivative or a function is checked as its value at the bounds or the point; the two workings above put the pen on the \"= 8\" and \"= 11\" lines.",
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap definite-integral working written as \"x^3/3 then = 27/3 then = 8\"; where is the pen.",
+    "id": "L1-matyas-19-MB3-14",
+    "cert_level": "L1",
+    "rank": 12,
+    "severity": "major",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "type": "trust",
+    "dimension": "trust",
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity": "major",
+    "resolution": "open",
+    "recurrence": 1,
+    "code_check": "present-broken",
+    "verdict": "confirmed",
+    "title": "log10(x) and log2(x) are silently read as ln(10)·x and ln(2)·x, so a correct base-10 answer is ringed wrong; log(x) is natural log for a cz learner",
+    "expected": "An answer the desk cannot read is \"not sure\"; a base-10 logarithm is either read or refused (rubric false ring: 2x·e^(x²) = e^(x²)·2x).",
+    "got": "compile(\"log10(x)\") at x = 2 gives 4.605 (= ln 10 · 2) and \"log2(8)\" 5.545: the lexer takes the function \"log\" and multiplies by the digits. Executed: d/dx ln(x)/ln(10), answer \"log10(e)/x\" (= 1/(x ln 10)) -> WRONG; ∫ 1/(x·ln 10), answer \"log10(x)+C\" or \"log10|x|+C\" -> WRONG. \"lg(x)\" is correctly unsure; \"log_10(x)\" is read. Separately \"log|x|+C\" for ∫1/x is ticked: in Czech school notation log is base 10, so a cz learner who means log10 is ticked for a wrong antiderivative (a false tick on that reading).",
+    "evidence": [
+      "desk/src/lib/rules/calc-expr.ts:108 — \"log\" is the natural log function; :266-275 — base only via \"_\"",
+      "repro scratchpad/p/lg.cjs, lg2.cjs, lg3.cjs: log10(2)=4.6052, log2(8)=5.5452, \"log10(e)/x\" -> wrong"
+    ],
+    "suggested_acceptance": "log10, log2 and lg either read as their base or make the answer unreadable (\"not sure\"); for system cz/de a bare log is \"not sure\" rather than ln.",
+    "scope_note": "Rubric floor: each false ring is a major whatever the rank (rank 6 would be minor). Low frequency on Calculus 1/2, where ln is standard; higher for a Czech learner on log-derivative topics.",
+    "id": "L1-matyas-19-MB3-15",
+    "cert_level": "L1",
+    "rank": 6,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "type": "missing-feature",
+    "dimension": "senior-quality",
+    "impact": {
+      "frequency": "high",
+      "reachability": "med",
+      "trust_erosion": "low"
+    },
+    "resolution": "open",
+    "recurrence": 1,
+    "code_check": "confirmed-absent",
+    "verdict": "confirmed",
+    "title": "Calculus 2: working for by parts, partial fractions and trigonometric substitution is read as nothing; the pen never lands and no line is ticked",
+    "expected": "\"Show me the line where I slipped\" holds on the Calculus 2 technique topics as it does on Calculus 1 derivatives.",
+    "got": "Five of the seven Calculus 2 topics are antiderivative / definite-integral items, so the chain checker applies, but it reads only \"f = …\" , \"d/dx\", \"∫ … = …\" and a lone \"=\" step. Executed (calc2-parts): \"∫ x e^x dx / = x e^x - ∫ e^x dx / = x e^x + e^x + C\" -> checks [true, null, null], wrong, no slipAt; with a \"u = x, dv = e^x dx\" line first every line is null. The wrong item falls back to marking the answer line only.",
+    "evidence": [
+      "desk/src/lib/rules/chain.ts:229-312 — tagLines: no u/dv, no inner ∫ on the right of =",
+      "desk/src/lib/library/calculus2.spine.ts:41-73 — five topics on antiderivative / definite-integral",
+      "repro scratchpad/p/ch2.cjs"
+    ],
+    "suggested_acceptance": "A by-parts line \"∫ u dv = uv - ∫ v du\" is checked by differentiating both sides; u/dv lines are bound; failing that the TV says plainly that working on Calculus 2 techniques is not line-checked.",
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) and the Calculus 2 path on the profile — snap by-parts working with a wrong last line; confirm the card shows the answer line only and says so.",
+    "scope_note": "Not the same as the calc2 shapes (approx-integral, sequence-limit) whose lines are deliberately bare (v2 plan ruling 32); these five topics use Calculus 1's shapes.",
+    "id": "L1-matyas-19-MB3-16",
+    "cert_level": "L1",
+    "rank": 6,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "type": "confusion",
+    "dimension": "clarity",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "resolution": "open",
+    "recurrence": 1,
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "title": "Word-problem parts with an irrational answer accept only the exact form, and the printed line never says \"exact\"",
+    "expected": "A calculator-correct answer to \"What is the shortest length its diagonal can have? Give it in metres.\" is ticked or the line asks for an exact value.",
+    "got": "Executed over 900 drawn parts: 100 of them (sphere rates 43/300, rectangle diagonal 57/300) have an irrational key (65/(18π), 15√2). A decimal correctly rounded at 6 significant figures (1.14945, 21.2132) -> \"not sure: This is a rounded decimal; the desk asks for the exact value.\" The lines read \"Give the rate in centimetres per second.\" / \"Give it in metres.\" For limit and definite integral a correct rounding is right (D2 R1a); derivative-at and extremum keep the 1e-6 line.",
+    "evidence": [
+      "desk/src/lib/rules/calc.ts:393-401 — only limit and definite-integral go to decimalCall; TOLERANCE derivative-at/extremum rounded 1e-6",
+      "desk/src/lib/rules/calc-word.ts — the part lines (sphere-rates, rectangle-perimeter)",
+      "repro scratchpad/p/w2.cjs, w3.cjs"
+    ],
+    "suggested_acceptance": "The word-problem part line says \"Give the exact value\" where the key is irrational, or extremum / derivative-at accept a correct rounding as limit does.",
+    "l2_priority": "No vision needed: typed route on a calc1-related-rates set with the word problem; answer 1.1495 for a key 65/(18π) and read the card.",
+    "id": "L1-matyas-19-MB3-17",
+    "cert_level": "L1",
+    "rank": 6,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "type": "quality-gap",
+    "dimension": "senior-quality",
+    "impact": {
+      "frequency": "low",
+      "reachability": "med",
+      "trust_erosion": "low"
+    },
+    "resolution": "open",
+    "recurrence": 1,
+    "code_check": "present-broken",
+    "verdict": "confirmed",
+    "title": "Typesetting: an infinity as the upper bound is split (\"^inf\" becomes ^i + \"nf\") or left outside the superscript (\"∫_1^∞\")",
+    "expected": "An improper integral or series written ∫_1^∞ , int_1^inf or sum_(n=1)^infinity is set with the infinity as the bound.",
+    "got": "Executed parseMath: \"int_1^inf 1/x^2 dx\" -> \"∫_(1)^(i)nf …\"; \"sum_(n=1)^infinity 1/n^2\" -> \"^(i)nfinity\"; \"∫_1^∞ 1/x^2 dx\" -> \"^()∞\" (empty superscript, the ∞ after it); \"x^inf\", \"e^infinity\" likewise. \"lim_(n->inf)\" and \"sum_(n=1)^(inf)\" (bracketed) are fine. 16 other Calculus lines (limits, fractions, roots, integrals, primes, subscripts) parse and flatten sensibly.",
+    "evidence": [
+      "desk/src/maths/typeset.ts:297 — parsePlain; the script reader takes one letter/number without brackets",
+      "repro scratchpad/p/ty.cjs, ty2.cjs"
+    ],
+    "suggested_acceptance": "parsePlain reads a word (inf, infinity) or ∞ after ^ and _ as one atom; a typeset row pins the four lines above.",
+    "scope_note": "Improper integrals and series are not built (M3b-3d/e/f); reachable today only through a handwritten line the vision read transcribes with inf or ∞.",
+    "id": "L1-matyas-19-MB3-18",
+    "cert_level": "L1",
+    "rank": 2,
+    "severity": "polish",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "type": "confusion",
+    "dimension": "trust",
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "resolution": "by-design",
+    "recurrence": 2,
+    "code_check": "by-design",
+    "verdict": "confirmed",
+    "title": "No Adult gate on Calculus: any profile, at any age or in Family mode, can pick Calculus 1 or 2 on the Maths course row",
+    "expected": "(The brief's hypothesis) An under-18 or Family-mode profile cannot reach Calculus.",
+    "got": "Executed against the store: a 12-year-old elementary profile, a 17-year-old high-school profile and an 18-year-old with mode \"family\" all save mathPath \"calc2\" and learnerPath(s) = calc2; profileRows for an 11-year-old shows \"Maths course: School maths | Calculus 1 | Calculus 2\". The Mode gate itself holds (age 17 asking \"adult\" -> family; adultAllowed false) but Math Buddy reads no mode: the V2 plan says \"Calculus is a course path, not a mode\" (STUDY-DESK-V2-PLAN.md:218) and Matyáš's Character file says \"Mode changes nothing in Math Buddy\". The prior run's radka-41 raised the same seam (\"suggested Calculus 2 for my fourteen-year-old\", MB-B21, open).",
+    "evidence": [
+      "desk/src/tv/profileRows.ts:63,77 — COURSES = every PATHS key, offered to every profile with Maths on",
+      "desk/src/lib/session/store.ts:46-49,660 — pathChecked accepts any PATHS key; no age or mode test",
+      "desk/src/lib/rules/mode.ts:44-60 — adultAllowed/modeOf, read by no Math Buddy file",
+      "docs/concepts/STUDY-DESK-V2-PLAN.md:218 — \"Calculus is a course path, not a mode: the pen applies in either mode\"",
+      "repro scratchpad/p/gate.cjs"
+    ],
+    "ceiling": "Nothing unsafe is reachable (Calculus content is not adult content). What a parent can see: a six-year-old can seat himself on Calculus 2 and be spoken to as \"a first-year university student\". Whether the course row should hide Calculus below an age or in Family mode is an owner ruling (concept question, not a defect).",
+    "suggested_acceptance": "Owner ruling recorded either way: (a) Calculus is open to everyone and the plan's \"Math Buddy, Adult\" label stops implying a gate, or (b) the course row offers Calculus only where adultAllowed/age holds and a hand-edited mathPath is dropped like an adult mode (store.ts adultGated).",
+    "scope_note": "Reported as the Adult-gate verification the brief asked for: the gate does not exist for Math Buddy, by design.",
+    "id": "L1-matyas-19-MB3-19",
+    "cert_level": "L1",
+    "rank": 3,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "type": "quality-gap",
+    "dimension": "clarity",
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "resolution": "open",
+    "recurrence": 1,
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "title": "Three fixed Calculus 2 lines exceed 25 words (calc2-approx blurb 30, calc2-sequences blurb 33, approx withheld line 26)",
+    "expected": "Every fixed line the learner acts on is 25 words or fewer (line length >= 0.9 holds; each school line was pinned at 25 in SL3).",
+    "got": "56 of 59 fixed Calculus lines measured (Calculus 1 withheld lines, slips, blurbs; Calculus 2 withheld, blurbs) are <= 25 words: share 0.95, gate met. The three over are listed.",
+    "evidence": [
+      "desk/src/lib/library/calculus2.spine.ts:76-86 — the two blurbs",
+      "desk/src/lib/rules/calc2.ts:343 — calc2Withheld approx-integral",
+      "repro scratchpad/p/ln.cjs"
+    ],
+    "suggested_acceptance": "The blurb length pin that SL3 holds for school topics also counts the Calculus spines.",
+    "id": "L1-matyas-19-MB3-20",
+    "cert_level": "L1",
+    "rank": 3,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "type": "quality-gap",
+    "dimension": "missing",
+    "impact": {
+      "frequency": "low",
+      "reachability": "low",
+      "trust_erosion": "low"
+    },
+    "resolution": "open",
+    "recurrence": 1,
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "title": "question(spec).tex is computed for every Calculus, Calculus 2 and school spec and read by no screen (1 of 2 returned fields wired)",
+    "expected": "A field a function builds for a user-facing surface reaches a reader under desk/src outside the rules.",
+    "got": "grep -rn \"\\btex\\b\" over maths/, tv/, app/, lib/desk, lib/session, lib/library finds the typesetter's own TeX-input detection and the corpus file calculus1.ts, never question().tex; items.ts stores q.plain; the TV typesets the plain line with parsePlain. Only rules tests read .tex.",
+    "evidence": [
+      "desk/src/lib/rules/calc.ts:337-343 — header: \"the TeX the typesetter reads\"",
+      "desk/src/lib/desk/items.ts:325 — kept.push({ question: q.plain })",
+      "grep result recorded in report.md, Wiring audit"
+    ],
+    "suggested_acceptance": "Either the item stores tex for the typesetter's exact path, or the field and its code are dropped.",
+    "scope_note": "Polish: dead code with tests, not a user-visible fault.",
+    "id": "L1-matyas-19-MB3-21",
+    "cert_level": "L1",
+    "rank": 1,
+    "severity": "polish",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "type": "strength",
+    "dimension": "trust",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "resolution": "n-a",
+    "recurrence": 1,
+    "code_check": "n-a",
+    "verdict": "confirmed",
+    "title": "Calculus 2 verdicts: trapezoid, midpoint and Simpson values match an independent calculation, rules are told apart, decimal comma read for cz, sequence limits judged with the guarded limit",
+    "got": "T4 of 1/x on [1,2] = 0.6970238 (independent); \"0.6970\", \"0.697\", \"0,6970\" (cz) right; \"0.6931\", \"ln(2)\" wrong; midpoint 0.6912 right and the trapezoid value wrong for it; Simpson 0.6933 right, the midpoint value wrong for it. \"It is about 0.697.\" and \"The trapezoid rule gives about 0.6970.\" are leaks; \"Use h = 1/4 and the weights 1, 2, 2, 2, 1.\" is not. Sequence limits: (3n+1)/(2n-5) -> 3/2, \"1.5\", \"1.50\" right, \"1.4999\" unsure, \"3\" wrong; (1+1/n)^n -> e right; n^2/2^n -> 0 right.",
+    "evidence": [
+      "desk/src/lib/rules/calc2.ts:249 — calc2CheckAnswer",
+      "desk/src/lib/rules/calc2.ts:289 — calc2LeaksCalc",
+      "repro scratchpad/p/c2.cjs, c3.cjs"
+    ],
+    "ceiling": "Alternating and cancellation sequences ((-1)^n/n, sqrt(n+1)-sqrt(n), n sin(1/n)) are refused or \"not sure\" by design (descoped list, ruling 35); improper integrals and series are not built (M3b-3d/e/f/g not started: scope, not defect); a calc2 item draws no plot and its lines are bare (ruling 32).",
+    "suggested_acceptance": "Keep: these verdicts and the independent values stay pinned.",
+    "id": "L1-matyas-19-MB3-22",
+    "cert_level": "L1",
+    "rank": 9,
+    "severity": "n-a",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "matyas-19",
+    "journey": "MB3",
+    "type": "strength",
+    "dimension": "completion",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "resolution": "n-a",
+    "recurrence": 1,
+    "code_check": "n-a",
+    "verdict": "confirmed",
+    "title": "Function graphs: 16 Calculus specs plot (derivative, derivative-at with its tangent, definite integral with its area, limits at a point and at infinity, poles broken, no tangent at |x| at 0), only after marking, never on the question screen",
+    "got": "plotFor / plotModel executed on 16 specs, including 1/x (two pieces), tan x (five), sin(3x)/x (hole at 0), (2x+1)/(x-3) at inf; the derivative-at ln x tangent slope is 0.5000. The graph sits under the slip card (SlipSide, MathsTV.tsx:849), so it cannot leak a slope before the answer; a word-problem part whose function the stem does not print draws no graph.",
+    "evidence": [
+      "desk/src/maths/plotting.ts:35-70",
+      "desk/src/maths/MathsTV.tsx:849",
+      "repro scratchpad/p/pl.cjs"
+    ],
+    "ceiling": "Rendering, legibility on a TV at 3 m and the Lamplight hand are L2 (no browser here).",
+    "suggested_acceptance": "Keep the \"after marking\" placement.",
+    "id": "L1-matyas-19-MB3-23",
+    "cert_level": "L1",
+    "rank": 9,
+    "severity": "n-a",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB1",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "present-broken",
+    "verdict": "confirmed",
+    "title": "Leak backstop on his sheet: Czech equations and school fractions are guarded now; maturita-shaped tasks (inequality, sequence term, line through two points) are not",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "got": "Fixed by 119988a1 / c4d9ef75 / 42e666f7 (executed, cz): \"Řešte rovnici x^2 - 5x + 6 = 0\", \"Řeš rovnici 3(x - 2) = 2x + 5\", \"Solve 3(x - 2) = 2x + 5\" (no colon) read; \"Takže x = 11.\", \"x = 11\" refused; \"Vypočítej: 3/4 + 1/6\" reads as school and \"It is 11/12.\" refused. STILL read as nothing: \"Řešte nerovnici x^2 - 5x + 6 < 0\", \"Je dána aritmetická posloupnost a1 = 3, d = 4. Určete a10.\", \"Napište rovnici přímky procházející body A[1; 2], B[3; 6].\", \"Zjednodušte výraz …\". The fallback refuses \"The solution is 2 < x < 3.\" and \"Výsledek je 39.\" but passes \"a10 = 39\", \"The tenth term is 39.\", \"The line is y = 2x.\", \"The slope is 2.\" and \"Takže x je mezi 2 a 3.\" (executed).",
+    "evidence": [
+      "desk/src/lib/rules/maths.ts:276-296 — unreadLeaks: a lone-letter \"x = N\" or \"answer/výsledek is N\"",
+      "desk/src/lib/rules/taskText.ts:15-21",
+      "repro scratchpad/p/v1.cjs, v2.cjs"
+    ],
+    "suggested_acceptance": "The fallback also refuses a line that states a term, a slope or an interval for an item no reader reads (a letter with digits \"a10 = 39\", \"The line is y = …\", \"mezi 2 a 3\"), or a reader per maturita shape is built.",
+    "l2_priority": "The text engine only (claude CLI): hint 1 and 2 on typed maturita-style items (quadratic inequality, arithmetic sequence, line through two points); count lines that state the result.",
+    "id": "L1-vojtech-18-MB1-1",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB1-1",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "severity_prior": "blocker",
+    "type": "trust",
+    "dimension": "trust",
+    "cert_level": "L1",
+    "rank": 12,
+    "severity": "major",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB1",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "got": "Landed in 0599317f (HL2): a task no reader reads and no Calculus path claims gets \"a maths tutor for … This is a school maths task; prefer the simplest method a school course would use\", not the \"factoring and linear-equations unit\". Executed: the inequality, sequence and line items read as neither equation nor expression, so they take that stance. An equation he does type (\"Řešte rovnici x^2 - 5x + 6 = 0\") correctly keeps the linear-equations stance.",
+    "evidence": [
+      "desk/src/lib/desk/hint.ts:85,89-96 — neutralStance and stanceOf",
+      "repro scratchpad/p/v2.cjs"
+    ],
+    "ceiling": "The voice still names \"a 15-year-old\" for an 18-year-old (voice.ts:69, ruling HL2 / EM-B11 open); the stance does not know it is a maturita (C6 \"fits that task\" holds only as \"a school maths task\").",
+    "suggested_acceptance": "Voice for 16-19 does not say 15.",
+    "id": "L1-vojtech-18-MB1-2",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB1-2",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "quality-gap",
+    "dimension": "senior-quality",
+    "title": "Every maturita task gets the 'factoring and linear-equations unit' stance, for 'a 15-year-old' (C6)",
+    "cert_level": "L1",
+    "rank": 9,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB1",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "uncertain",
+    "severity": "major",
+    "got": "Landed in 50fd60a4 (MB-B3): the read prompt carries his school system (cz: decimal comma, colon division, tg/cotg), his course in progress and age or stage, plain one-line notation, the printed language, and an optional label for lettered parts. MB-READ 5/5 (his profile has system cz and a high-school stage).",
+    "evidence": [
+      "desk/src/lib/desk/read.ts:26-46",
+      "desk/src/lib/desk/read.ts:12-17 — MATHS_SCHEMA label"
+    ],
+    "ceiling": "A better prompt cannot make an unreadable photo readable; page read rate on a Czech page is an L2 number.",
+    "suggested_acceptance": "Page read rate >= 0.9 on three Czech worksheets (L2).",
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a Czech worksheet with 1. a) b) items and comma decimals.",
+    "id": "L1-vojtech-18-MB1-3",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB1-3",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "quality-gap",
+    "dimension": "trust",
+    "title": "The page read prompt carries no school system or notation (MB-READ 2/5)",
+    "cert_level": "L1",
+    "rank": 9,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB1",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "title": "Hints and Point & ask presets are English only: the word cap and the Czech mic are built, a Czech-language hint and Czech presets are not",
+    "got": "Landed: 25-word cap per hint line in code with one re-ask (d642c422), recogniser follows the school system (5a2135b9, recogniserLang -> cs-CZ for cz). Still English: the hint system prompt (no language instruction), the three Point & ask presets (\"What do I do first?\", \"Why is this negative?\", \"Which rule is this?\"), the Linga-shaped fixed lines. MB-B33 stays open.",
+    "evidence": [
+      "desk/src/lib/desk/hint.ts:48,184-195",
+      "desk/src/app/phone/recogniserLang.ts:6-7",
+      "desk/src/app/phone/page.tsx:657 — English presets"
+    ],
+    "suggested_acceptance": "A cz profile gets the presets and a \"short, plain English or Czech\" instruction; the cap holds either way.",
+    "id": "L1-vojtech-18-MB1-4",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB1-4",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "major",
+    "type": "quality-gap",
+    "dimension": "clarity",
+    "cert_level": "L1",
+    "rank": 6,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB1",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "confirmed-absent",
+    "verdict": "confirmed",
+    "got": "recapRows still builds MathsTile as sets, pages, hints, second; recapLine \"; N hints\". No problem names (MB-B23 open: per-learner blocks and problem naming undelivered).",
+    "evidence": [
+      "desk/src/tv/recapRows.ts:62-63 — hints = s.log.hints, second = s.log.hard.length"
+    ],
+    "suggested_acceptance": "The recap names the problems that needed a second hint.",
+    "id": "L1-vojtech-18-MB1-5",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB1-5",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "minor",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "missing-feature",
+    "dimension": "missing",
+    "title": "The recap counts hints and second hints but cannot say which problems",
+    "cert_level": "L1",
+    "rank": 6,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB1",
+    "resolution": "n-a",
+    "code_check": "n-a",
+    "verdict": "confirmed",
+    "got": "Re-verified: 2 presses to the first hint; the no-lesson line is said (MathsTV.tsx:1033); for a past-the-end learner the Prepare door now reads \"This path ends at 9. ročník; your year is past it.\" (executed).",
+    "evidence": [
+      "desk/src/tv/keys.ts:391",
+      "desk/src/tv/prepareRows.ts:91-96"
+    ],
+    "suggested_acceptance": "Keep.",
+    "id": "L1-vojtech-18-MB1-6",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB1-6",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "n-a",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "strength",
+    "dimension": "effort",
+    "title": "Two presses to the first hint, and 'No lesson' said plainly",
+    "cert_level": "L1",
+    "rank": 9,
+    "severity": "n-a",
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "resolution": "n-a",
+    "code_check": "n-a",
+    "verdict": "confirmed",
+    "got": "Re-executed for a Pythagoras item (21 mm, 28 mm; key 35): \"35\", \"35 mm\", \"35mm\", \"c = 35 mm\", \"c=35mm\", \"x = 35\", \"35,0 mm\" -> right; \"35 cm\" -> unsure; no wrong ticked.",
+    "evidence": [
+      "repro scratchpad/p/v4.cjs"
+    ],
+    "suggested_acceptance": "Keep.",
+    "id": "L1-vojtech-18-MB2-1",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB2-1",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "severity_prior": "n-a",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "type": "strength",
+    "dimension": "trust",
+    "title": "Typed marking is exact on Czech notation: 0 false ticks, 0 false rings, decimal comma and point, £ on either side",
+    "cert_level": "L1",
+    "rank": 27,
+    "severity": "n-a",
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "got": "Landed in 83bbe368 + 69f9bc52 (MK13): \"c = 35 mm\" and \"c=35mm\" are right; \"odpověď: 35\" is still unsure (the Czech label is not stripped) but now says why rather than \"something different\".",
+    "evidence": [
+      "desk/src/lib/rules/school.ts:37 — readNumber",
+      "repro scratchpad/p/v4.cjs"
+    ],
+    "ceiling": "\"odpověď: 35\" and other Czech labels beyond the letter-equals form stay \"not sure\".",
+    "suggested_acceptance": "Strip odpověď/výsledek labels.",
+    "id": "L1-vojtech-18-MB2-2",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB2-2",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "type": "trust",
+    "dimension": "trust",
+    "title": "A right answer in his notation ('c = 34 mm', 'P(A) = 3/13') is unsure, and the desk says 'I got something different'",
+    "cert_level": "L1",
+    "rank": 12,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "confirmed-absent",
+    "verdict": "confirmed",
+    "got": "Unchanged in kind: the last units are still 9. ročník (Pythagoras with two shorter sides 35 and 12 cm; a bag of counters); \"harder\" only changes tier mix (MB-B20 open). The new path-end line now says so before he starts, and Calculus 1 remains a profile row away, but its first three topics (functions, trigonometric functions, exponentials and logarithms) are the nearest to his maturita and are reached only by switching course.",
+    "evidence": [
+      "desk/src/lib/rules/stretch.ts:36-39",
+      "repro scratchpad/p/v5.cjs"
+    ],
+    "suggested_acceptance": "Set fit >= 5 of 6 at maturita level, or the path-end line names the next course.",
+    "id": "L1-vojtech-18-MB2-3",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB2-3",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "missing-feature",
+    "dimension": "senior-quality",
+    "title": "The nearest units to his exam set primary-school items, even as a step up (set fit 0-2 of 6)",
+    "cert_level": "L1",
+    "rank": 9,
+    "severity": "major",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "got": "Landed in 29cdfd86 (MB-B19). Executed on a cz age-18 profile: prepare focus 16 (the last topic), not 0; tonight doors [homework, teach, prepare].",
+    "evidence": [
+      "desk/src/tv/prepareRows.ts:77-96",
+      "repro scratchpad/p/v3.cjs"
+    ],
+    "ceiling": "A 14- to 16-year-old with nothing secure still opens on the first step (App Master ruling 21). Nothing on the line tells an 18-year-old that Calculus 1 exists.",
+    "suggested_acceptance": "Keep.",
+    "id": "L1-vojtech-18-MB2-4",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB2-4",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "confusion",
+    "dimension": "effort",
+    "title": "Topics and Get ready for school open on Equivalent fractions (5. ročník) for an 18-year-old",
+    "cert_level": "L1",
+    "rank": 9,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "got": "Landed in 29cdfd86: \"This path ends at 9. ročník; your year is past it.\" replaces the \"what school is teaching next\" door line (executed).",
+    "evidence": [
+      "desk/src/maths/MathsTV.tsx:431,634",
+      "desk/src/tv/prepareRows.ts:91-96"
+    ],
+    "ceiling": "It states the limit; it does not say where to go (the maturita is not on any path).",
+    "suggested_acceptance": "Keep.",
+    "id": "L1-vojtech-18-MB2-5",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB2-5",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "trust",
+    "dimension": "trust",
+    "title": "No line tells him his year is past the end of the path; the Prepare door promises 'what school is teaching next'",
+    "cert_level": "L1",
+    "rank": 9,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "got": "Landed in 632287e6 (X2) + 5a2135b9: a \"Type it\" button always sits beside the hold-to-speak button (ExplainTalk.tsx:38) and the recogniser listens in cs-CZ for a cz profile.",
+    "evidence": [
+      "desk/src/app/phone/ExplainTalk.tsx:18,32-38",
+      "desk/src/app/phone/recogniserLang.ts"
+    ],
+    "ceiling": "The explain reply is English; recognition quality on a real Android phone is L2.",
+    "suggested_acceptance": "Keep.",
+    "id": "L1-vojtech-18-MB2-6",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB2-6",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "broken-flow",
+    "dimension": "effort",
+    "title": "The explain path is hold-to-speak in en-US only; typing appears only without a mic",
+    "cert_level": "L1",
+    "rank": 9,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "got": "Landed in 9def48b2 (ruling X1a): \"The longest side is the square root of 1225.\", \"odmocnina z 1225\" and \"c² = 21² + 28² = 1225, teď odmocni.\" leak; \"c squared is 1225.\" and \"Add the squares, then take the square root.\" do not (the total alone is not a leak by ruling).",
+    "evidence": [
+      "desk/src/lib/rules/school.ts — leaksSchool, Pythagoras profile",
+      "repro scratchpad/p/v5.cjs"
+    ],
+    "ceiling": "By ruling, the squared total on its own passes; a hint that hands over 1225 leaves one step.",
+    "suggested_acceptance": "Keep the pins.",
+    "id": "L1-vojtech-18-MB2-7",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB2-7",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "type": "trust",
+    "dimension": "trust",
+    "title": "The Pythagoras leak rule lets 'the square root of 1156' and 'c squared is 1156' through",
+    "cert_level": "L1",
+    "rank": 12,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "confirmed-absent",
+    "verdict": "uncertain",
+    "got": "Unchanged: schoolPrompt names the photo and the questions and asks for the answer \"with the comma or point they used\", but not the learner's school system or notation; the code judge does take the system. MB-MARK prompt-side grounding on a school sheet is 2/6 (K1 photo, K2 items). MK11 (0b8b61fc) now fails an empty read instead of marking it.",
+    "evidence": [
+      "desk/src/lib/desk/mark.ts:144-158 — schoolPrompt",
+      "desk/src/lib/desk/mark.ts:200-203 — markSet passes system to the judge only"
+    ],
+    "suggested_acceptance": "The school photo prompt carries the system; handwriting read >= 0.9 at L2.",
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap his handwritten Pythagoras sheet; answers read exactly as written.",
+    "id": "L1-vojtech-18-MB2-8",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB2-8",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "type": "trust",
+    "dimension": "trust",
+    "title": "Photo marking of his handwritten sheet is unverified; the read prompt carries no system or notation",
+    "cert_level": "L1",
+    "rank": 12,
+    "severity": "major",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "minor",
+    "got": "Landed in 92889b66 (SL3): 17 of 17 school topic blurbs are <= 25 words (executed). (The two Calculus 2 blurbs that are not, see the Calculus row.)",
+    "evidence": [
+      "repro scratchpad/p/v4.cjs"
+    ],
+    "ceiling": "Shorter lines carry less.",
+    "suggested_acceptance": "Keep.",
+    "id": "L1-vojtech-18-MB2-9",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB2-9",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "minor",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "quality-gap",
+    "dimension": "clarity",
+    "title": "Topic blurbs on the caption exceed 25 words (C7, line length 0.84)",
+    "cert_level": "L1",
+    "rank": 6,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "confirmed-absent",
+    "verdict": "confirmed",
+    "got": "Unchanged (MB-B4 open): makeSchoolItems(pct-change, harder) prints \"Increase £400 by 34%.\" and \"Decrease £330 by 1%.\"; \"536 liber\" is \"not sure\" (UNITS: €, $, £ only, no Kč).",
+    "evidence": [
+      "desk/src/lib/rules/school.ts:141 — UNITS",
+      "repro scratchpad/p/v4.cjs"
+    ],
+    "suggested_acceptance": "question(spec, system) prints the learner's mark and a local currency for cz.",
+    "id": "L1-vojtech-18-MB2-10",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB2-10",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "minor",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "quality-gap",
+    "dimension": "senior-quality",
+    "title": "Money in percent-change items is £ for a cz learner; '536 liber' is unsure",
+    "cert_level": "L1",
+    "rank": 6,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "minor",
+    "got": "Landed in 42e666f7 (X1b): \"Pravděpodobnost je jedna pětina.\", \"Je to čtyři dvacetiny.\", \"Je to tři patnáctiny.\", \"Pravděpodobnost je dvě desetiny.\" leak. See the new row for the Czech percent word.",
+    "evidence": [
+      "desk/src/lib/rules/school.ts — leaksSchool, numberWords table",
+      "repro scratchpad/p/v5.cjs, pw.cjs"
+    ],
+    "ceiling": "Cardinals and fraction words only; a Czech percent word is not read.",
+    "suggested_acceptance": "Keep.",
+    "id": "L1-vojtech-18-MB2-11",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB2-11",
+    "impact_prior": {
+      "frequency": "low",
+      "reachability": "med",
+      "trust_erosion": "high"
+    },
+    "severity_prior": "minor",
+    "impact": {
+      "frequency": "low",
+      "reachability": "med",
+      "trust_erosion": "high"
+    },
+    "type": "trust",
+    "dimension": "trust",
+    "title": "Czech number words are not read by the leak rule",
+    "cert_level": "L1",
+    "rank": 6,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB2",
+    "type": "trust",
+    "dimension": "trust",
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "resolution": "open",
+    "recurrence": 1,
+    "code_check": "present-broken",
+    "verdict": "confirmed",
+    "title": "A Czech percent word states the probability and passes the leak check (\"Je to dvacet procent.\")",
+    "expected": "Every spelling of the answer is refused, as \"It is twenty percent.\" and \"Je to 20 %.\" are.",
+    "got": "Executed on a probability item (3 blue of 15, key 1/5): \"It is twenty percent.\" true, \"Je to 20 %.\" true, \"Je to dvacet procent.\" FALSE, \"Je to dvacet procent z celku.\" FALSE. The Czech cardinal \"dvacet\" is in the table for fraction words but not combined with \"procent\".",
+    "evidence": [
+      "desk/src/lib/rules/school.ts — leaksSchool / the number-words table of 42e666f7",
+      "repro scratchpad/p/pw.cjs"
+    ],
+    "suggested_acceptance": "A Czech cardinal followed by procent/procenta/procent is read as a percentage; the two lines above pinned.",
+    "l2_priority": "No vision needed: the text engine; explain reply and hint on a probability item at cz; count answer-bearing lines.",
+    "id": "L1-vojtech-18-MB2-12",
+    "cert_level": "L1",
+    "rank": 6,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB4",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "blocker",
+    "got": "Landed in 9875e783 (MB-B15): paperCaption says \"No marks were lost\" only when v.lost is 0; with lost marks on questions with no statement it says \"N marks were lost on questions that name no statement. Pick what each one tests on the phone.\"; paperNone likewise.",
+    "evidence": [
+      "desk/src/tv/paperRows.ts:93-100,106-111"
+    ],
+    "ceiling": "Read from the code; the TV rendering of those captions is L2.",
+    "suggested_acceptance": "Keep.",
+    "id": "L1-vojtech-18-MB4-1",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB4-1",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "severity_prior": "blocker",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "type": "trust",
+    "dimension": "trust",
+    "title": "'No marks were lost on this paper' when every lost mark sits on a question with no statement",
+    "cert_level": "L1",
+    "rank": 18,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB4",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "present-broken",
+    "verdict": "confirmed",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "title": "Partial statement links still put a school unit first for a maturita question: the list adds up now, but a cylinder-volume question leads with \"Area of rectangles\"",
+    "got": "Landed (ee949056, RP2): lost marks are shared in whole marks, so topics + off-desk + unmapped = the paper's lost marks (18 = 18 in the executed 7-row paper). Not fixed: G17 (\"… surface area and volume of solids\") touches [\"area\"], G20 (\"… and sin, cos, tan\") touches [\"pythagoras\"], N1 touches [\"frac-equivalent\"]; the executed paper's caption reads \"Start with Area of rectangles, triangles and composite shapes. The list runs from the biggest loss…\" for his 4/4-lost volume question. MB-B5 still lists these as open.",
+    "evidence": [
+      "desk/src/lib/library/gcse.ts:114,117,41 — G17, G20, N1 touches",
+      "desk/src/tv/paperRows.ts:107-109 — the caption",
+      "repro scratchpad/p/v6.cjs"
+    ],
+    "suggested_acceptance": "A statement whose wording goes beyond its topic (volume, trigonometry) is listed as such and does not lead the caption.",
+    "id": "L1-vojtech-18-MB4-2",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB4-2",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "blocker",
+    "type": "trust",
+    "dimension": "trust",
+    "cert_level": "L1",
+    "rank": 12,
+    "severity": "major",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB4",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "got": "Landed in 1faea42d (RP3): every off-desk statement is walked by name after the topics and the score card says \"3 of 18 lost marks are not on the desk yet.\" (executed).",
+    "evidence": [
+      "desk/src/tv/paperRows.ts:63-69 — offCountLine",
+      "desk/src/maths/MathsTV.tsx:703",
+      "repro scratchpad/p/v6.cjs"
+    ],
+    "ceiling": "The off-desk card is one page of names; 13 statements is a long walk.",
+    "suggested_acceptance": "Keep.",
+    "id": "L1-vojtech-18-MB4-3",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB4-3",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "missing-feature",
+    "dimension": "missing",
+    "title": "The list never says that 24 of 32 lost marks are off the desk; the off-desk card shows 3 of 13",
+    "cert_level": "L1",
+    "rank": 9,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB4",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "got": "Landed in b3581eb2 (RP1): the paper handler selects a topic row into prepare with its question open; Back and Menu land on that unit, not on Equivalent fractions.",
+    "evidence": [
+      "desk/src/tv/keys.ts:534-543"
+    ],
+    "ceiling": "Select works on topic rows; an off-desk row has no practice to go to (correctly).",
+    "suggested_acceptance": "Keep.",
+    "id": "L1-vojtech-18-MB4-4",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB4-4",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "broken-flow",
+    "dimension": "effort",
+    "title": "No Select on the recovery list; Back lands on Equivalent fractions; 16 presses to a set on the first topic",
+    "cert_level": "L1",
+    "rank": 9,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB4",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "title": "Statement picker: a search box and folded areas landed; the wording is still English GCSE statements",
+    "got": "Landed (4e779dd2, d2276d38): each area folds with its pick count and \"Find by words\" filters. Still open: Czech task-shaped statements, a \"what this paper usually tests\" list, saying which units a pick leads to (MB-B7).",
+    "evidence": [
+      "desk/src/app/phone/PaperPanel.tsx:26-39"
+    ],
+    "suggested_acceptance": "Maturita areas with task-shaped statements.",
+    "id": "L1-vojtech-18-MB4-5",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB4-5",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "major",
+    "type": "confusion",
+    "dimension": "clarity",
+    "cert_level": "L1",
+    "rank": 6,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB4",
+    "resolution": "open",
+    "recurrence": 2,
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "got": "Unchanged: RecoveryTopic.codes is built (recovery.ts:63,200) and read by no screen: grep -rn \"\\.codes\" maths/ tv/ finds 0 hits (PaperPanel's own row.codes aside). RP4 ruled the side column has no room.",
+    "evidence": [
+      "desk/src/lib/rules/recovery.ts:63,200",
+      "grep -rn \"\\.codes\" desk/src/maths desk/src/tv -> 0"
+    ],
+    "suggested_acceptance": "Show the statement behind a row on the walk card or drop the field.",
+    "id": "L1-vojtech-18-MB4-6",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB4-6",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "severity_prior": "minor",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "type": "quality-gap",
+    "dimension": "clarity",
+    "title": "The TV never shows which statement led a question to a topic (topics[].codes unwired)",
+    "cert_level": "L1",
+    "rank": 6,
+    "severity": "minor",
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "vojtech-18",
+    "journey": "MB4",
+    "resolution": "n-a",
+    "code_check": "n-a",
+    "verdict": "confirmed",
+    "got": "Executed 7-row paper: totals {marks 8, outOf 26, lost 18}; no board or grade named; unmapped counted and kept.",
+    "evidence": [
+      "repro scratchpad/p/v6.cjs"
+    ],
+    "suggested_acceptance": "Keep.",
+    "id": "L1-vojtech-18-MB4-7",
+    "prior_id": "2026-10-09-maths-l1/L1-vojtech-18-MB4-7",
+    "impact_prior": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "severity_prior": "n-a",
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "type": "strength",
+    "dimension": "trust",
+    "title": "Totals are exact, and unmapped and off-desk marks are counted apart; no board or exam is claimed",
+    "cert_level": "L1",
+    "rank": 27,
+    "severity": "n-a",
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "owen-17",
+    "journey": "MB2",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "blocker",
+    "got": "Checked incidentally because it is a blocker on the shared linear judge: landed in e4dc93f5 (MB-B26). Executed: 7 - 4x = 4 (root 3/4): \"1 3/4\" -> wrong, \"3/4\" and \"0.75\" right.",
+    "evidence": [
+      "repro scratchpad/p/o1.cjs"
+    ],
+    "ceiling": "Owen is 17: modeOf = family and adultAllowed false (executed), so his journeys are outside this Adult walk; none of his other rows were re-walked.",
+    "suggested_acceptance": "Keep.",
+    "id": "L1-owen-17-MB2-1",
+    "prior_id": "2026-10-09-maths-l1/L1-owen-17-MB2-1",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "severity_prior": "blocker",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "type": "trust",
+    "dimension": "trust",
+    "title": "False tick: a typed mixed number on a linear item is read as a product, so a wrong \"1 3/4\" for x = 3/4 is ticked right",
+    "cert_level": "L1",
+    "rank": 18,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  },
+  {
+    "character": "owen-17",
+    "journey": "MB2",
+    "resolution": "fixed",
+    "code_check": "present-but-missed",
+    "verdict": "confirmed",
+    "severity": "major",
+    "got": "Same commit: 5x + 1 = 7 -> \"1 1/5\" and \"6/5\" right; 2x + 7 = 4 -> \"-1 1/2\" and \"-3/2\" right.",
+    "evidence": [
+      "repro scratchpad/p/o1.cjs"
+    ],
+    "ceiling": "As above.",
+    "suggested_acceptance": "Keep.",
+    "id": "L1-owen-17-MB2-2",
+    "prior_id": "2026-10-09-maths-l1/L1-owen-17-MB2-2",
+    "impact_prior": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "severity_prior": "major",
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "type": "trust",
+    "dimension": "trust",
+    "title": "False ring: a correct mixed-number root (\"1 1/5\" for x = 6/5, \"-1 1/2\" for -3/2) is ringed wrong on a linear item",
+    "cert_level": "L1",
+    "rank": 12,
+    "recurrence": 1,
+    "engine": "none (L1: code read and executed, no model, no vision, no browser)",
+    "recertified_at": "4af25199"
+  }
+]

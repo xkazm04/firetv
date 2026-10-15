@@ -15,23 +15,39 @@ import re
 
 
 def _raw_cues(path):
+    """The same reading as desk's parseVtt (desk/src/lib/library/vtt.ts): keep the two in step."""
     raw = io.open(path, encoding="utf-8").read()
-    ts = re.compile(r"^(\d\d):(\d\d):(\d\d)\.(\d\d\d) --> ")
+    # the hours are optional in WebVTT (mm:ss.ttt); YouTube always writes them
+    ts = re.compile(r"^(?:(\d+):)?(\d\d):(\d\d)\.(\d\d\d) --> ")
     out, cur, buf = [], None, []
+    # a cue identifier is the line just before a timing line, itself the first line after a blank one: it is
+    # not caption text. A line YouTube leaves blank-looking inside a cue (" ") is followed by text, never by a timing line.
+    blank_before, pushed_last, after_blank = True, False, False
     for ln in raw.splitlines():
         m = ts.match(ln)
         if m:
+            if pushed_last and after_blank:
+                buf.pop()
             if cur is not None and buf:
                 out.append((cur, " ".join(buf)))
-            h, mi, s, _ = map(int, m.groups())
+            h, mi, s = int(m.group(1) or 0), int(m.group(2)), int(m.group(3))
             cur, buf = h * 3600 + mi * 60 + s, []
+            blank_before, pushed_last = False, False
             continue
-        if ln.startswith(("WEBVTT", "Kind:", "Language:", "NOTE")) or not ln.strip():
+        if not ln.strip():
+            blank_before, pushed_last = True, False
+            continue
+        if ln.startswith(("WEBVTT", "Kind:", "Language:", "NOTE")):
+            blank_before, pushed_last = False, False
             continue
         t = re.sub(r"<[^>]+>", "", ln).replace("&nbsp;", " ")
         t = re.sub(r"\s+", " ", t).strip()
         if t:
             buf.append(t)
+            pushed_last, after_blank = True, blank_before
+        else:
+            pushed_last = False
+        blank_before = False
     if cur is not None and buf:
         out.append((cur, " ".join(buf)))
     return out

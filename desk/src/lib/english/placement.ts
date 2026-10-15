@@ -4,7 +4,10 @@
  * The tutor writes and judges each task; this file decides which band comes next and where the
  * learner stands. Same marks in, same band out.
  */
-import { BANDS, type Band, type EvidenceMode, type Placement, type PlacementRecord, type PlacementTask, type Plan, type PlanTopic, type SkillId, type TaskKind, type TaskVerdict, type Taught } from "./types";
+import { slipOf } from "./slip";
+import { latched, REUSES_MAX, scheduled, yoursHolds } from "./review";
+import { BANDS, type Audience, type Band, type EvidenceMode, type Placement, type PlacementRecord, type PlacementTask, type Plan, type PlanTopic, type SkillId, type TaskKind, type TaskVerdict, type Reuse, type Taught } from "./types";
+import { audienceOf, topicText } from "./gate";
 
 export const MAX_TASKS = 5;
 export const ABOUT_QUESTIONS = 3;
@@ -80,28 +83,120 @@ export function verdictFor(task: { kind: TaskKind; band: Band; revealed?: boolea
   return answered === "partly" && verdict === "pass" ? "partial" : verdict;
 }
 
-export interface Mark { band: Band; verdict: TaskVerdict; }
-const count = (marks: Mark[], band: Band, verdict: TaskVerdict) => marks.filter(m => m.band === band && m.verdict === verdict).length;
+/**
+ * What the ladder reads of one task. `kind` and `response` say how strong a pass is (a mark with no kind reads as a
+ * say mark); `skipped` says the learner passed on it. A PlacementTask fits as it stands.
+ */
+export interface Mark { band: Band; verdict: TaskVerdict; kind?: TaskKind; response?: string; skipped?: boolean; }
+/** A skip is no evidence: no count of passes, partials or fails includes it. */
+const counted = (marks: Mark[]) => marks.filter(m => !m.skipped);
+const count = (marks: Mark[], band: Band, verdict: TaskVerdict) => counted(marks).filter(m => m.band === band && m.verdict === verdict).length;
+const oneWord = (response: string | undefined) => (response ?? "").trim().split(/\s+/).filter(Boolean).length === 1;
+/** A weak pass is a choice between two options, or a listening answer of one word; every other pass is strong, a spoken one included. */
+export const weakPass = (m: Mark) => !m.skipped && m.verdict === "pass" && (m.kind === "choose" || (m.kind === "listen" && oneWord(m.response)));
+const strongPasses = (marks: Mark[], band: Band) => counted(marks).filter(m => m.band === band && m.verdict === "pass" && !weakPass(m)).length;
+
+/** What a confidence rests on; restsLine words each. */
+export type Rests = "scattered" | "partials" | "weak" | "skips" | "floor" | "unchecked" | "thin" | "firm";
 
 /**
- * Pass goes up a band, fail goes down, partial stays. The check stops at five tasks, at two failures
- * on A1, or once a band holds two passes with two failures above it (or C2 holds two passes).
- * The band is the highest one with more passes than failures; with none, one below the lowest band tried.
+ * Pass goes up a band, fail goes down, partial stays, a skip goes down (the learner is not asked something harder).
+ * A weak pass climbs one band at most and never into a say task by itself. The check stops at five tasks, at two
+ * failures on A1 (a skip is not one), at two partials on one band, or once a band holds two passes with two failures
+ * above it (or C2 holds two passes). The band is the highest one with more passes than failures; with none, one below
+ * the lowest band tried, or the band of two partials. Confidence is high only with two strong passes at the band and
+ * a real fail or partial above it (or C2); a band resting on weak passes or skips alone reads low.
  */
-export function staircase(start: Band, marks: Mark[]): { done: boolean; next: Band; band: Band; confidence: Placement["confidence"] } {
-  const last = marks.at(-1);
-  const next = last ? shift(last.band, last.verdict === "pass" ? 1 : last.verdict === "fail" ? -1 : 0) : start;
+export function staircase(start: Band, marks: Mark[]): { done: boolean; next: Band; band: Band; confidence: Placement["confidence"]; rests: Rests } {
+  const last = marks.at(-1), real = counted(marks);
+  let next = last ? shift(last.band, last.skipped || last.verdict === "fail" ? -1 : last.verdict === "pass" ? 1 : 0) : start;
+  if (last && weakPass(last) && next !== last.band && kindFor(next, marks as Array<{ band: Band; kind: TaskKind }>) === "say") next = last.band;
   const bracketed = BANDS.some((b, i) => count(marks, b, "pass") >= 2 && (i === BANDS.length - 1 || count(marks, BANDS[i + 1], "fail") >= 2));
   const floored = count(marks, "A1", "fail") >= 2;
-  const done = marks.length >= MAX_TASKS || bracketed || floored;
+  const partialBand = [...BANDS].reverse().find(b => count(marks, b, "partial") >= 2);
+  const done = marks.length >= MAX_TASKS || bracketed || floored || !!partialBand;
   const held = BANDS.filter(b => count(marks, b, "pass") > count(marks, b, "fail"));
   const lowest = marks.length ? BANDS[Math.min(...marks.map(m => BANDS.indexOf(m.band)))] : start;
-  const band = held.length ? held[held.length - 1] : shift(lowest, -1);
+  const top = held.length ? held[held.length - 1] : null;
+  const band = partialBand && (!top || BANDS.indexOf(top) < BANDS.indexOf(partialBand)) ? partialBand : top ?? shift(lowest, -1);
   // a pass above a failure means the answers disagree with each other
-  const scattered = marks.some(a => a.verdict === "pass" && marks.some(b => b.verdict === "fail" && BANDS.indexOf(b.band) < BANDS.indexOf(a.band)));
-  const ceiling = band === "C2" || count(marks, shift(band, 1), "fail") > 0;
-  const confidence = scattered ? "low" : bracketed || floored || (count(marks, band, "pass") >= 2 && ceiling) ? "high" : "medium";
-  return { done, next, band, confidence };
+  const scattered = real.some(a => a.verdict === "pass" && real.some(b => b.verdict === "fail" && BANDS.indexOf(b.band) < BANDS.indexOf(a.band)));
+  const strong = strongPasses(marks, band);
+  const ceiling = band === "C2" || real.some(m => m.verdict !== "pass" && BANDS.indexOf(m.band) > BANDS.indexOf(band));
+  let rests: Rests;
+  if (scattered) rests = "scattered";
+  else if (partialBand) rests = "partials";
+  else if (strong === 0) rests = floored ? "floor" : real.some(m => m.band === band && weakPass(m)) ? "weak" : "skips";
+  else if (strong >= 2 && ceiling) rests = "firm";
+  else rests = strong >= 2 ? "unchecked" : "thin";
+  const confidence = rests === "scattered" || rests === "partials" || rests === "weak" || rests === "skips" ? "low" : rests === "firm" ? "high" : "medium";
+  return { done, next, band, confidence, rests };
+}
+
+/**
+ * The band the learner's own English was judged at when they spoke (S2): the HIGHEST band the judge read in the
+ * English of a say task they answered (answered "yes" or "partly", not skipped, English a band, not "none").
+ * Listening and choosing show understanding, not production, so they never count; a say task answered in another
+ * language or off-task gives no band either. null when no say task counts: a shy or choose-only learner has no
+ * spoken band, and nothing follows from one. The highest, not the median or the lowest, on purpose: a learner is
+ * never pitched below the best English they produced. A say answer typed on the phone counts as the say task it is.
+ * Pure; a task stored before the judge's band was kept has no `english`, and counts for nothing.
+ */
+export function spokenBand(tasks: Array<Pick<PlacementTask, "band" | "kind" | "skipped" | "answered" | "english">>): Band | null {
+  const said = spokenTasks(tasks);
+  return said.length ? BANDS[Math.max(...said.map(t => BANDS.indexOf(t.english as Band)))] : null;
+}
+/** The say tasks spokenBand reads: answered, not skipped, with a band for their English. */
+export const spokenTasks = <T extends Pick<PlacementTask, "kind" | "skipped" | "answered" | "english">>(tasks: T[]) =>
+  tasks.filter(t => t.kind === "say" && !t.skipped && (t.answered === "yes" || t.answered === "partly") && isBand(t.english));
+
+/**
+ * The band conversations start at after a placement (S2). The placement's own band, unless a level check found the
+ * learner's spoken English lower: then the spoken band, never more than one band below the placement. It lowers only
+ * when the learner was asked to speak at the placed band or above and spoke below it (a say task that counts for
+ * spokenBand, set at that band or higher), since an easier say task cannot show the higher band. The placement's band
+ * and the staircase are never changed by it; a band the learner picked by hand (source "self") is kept as picked.
+ */
+export function conversationBand(p: Pick<Placement, "band" | "source" | "tasks">): Band {
+  if (p.source !== "check") return p.band;
+  const spoke = spokenBand(p.tasks), at = BANDS.indexOf(p.band);
+  if (!spoke || BANDS.indexOf(spoke) >= at || !spokenTasks(p.tasks).some(t => BANDS.indexOf(t.band) >= at)) return p.band;
+  return BANDS[Math.max(BANDS.indexOf(spoke), at - 1)];
+}
+/** A level in Set up that is one of the placement's bands (its own, or the band conversations start at) keeps the placement as it is. */
+export const isPlacementBand = (p: Pick<Placement, "band" | "source" | "tasks">, level: Band) => level === p.band || level === conversationBand(p);
+/**
+ * The band a plan is pitched at: the learner's level preference when it is one of the placement's bands, else the
+ * band conversations start at. (A level picked in Set up that is neither already made the placement the learner's own
+ * pick, conversation.ts, so this falls back only for a preference older than the placement.) No placement: the preference.
+ */
+export function playBand(p: Pick<Placement, "band" | "source" | "tasks"> | null | undefined, level: Band): Band {
+  return !p ? level : isPlacementBand(p, level) ? level : conversationBand(p);
+}
+
+/**
+ * The verdict screen's one line on what a not-high read rests on (PC5): plain words, at most sixteen, no number but a
+ * band name. High keeps its own line. Pure: the tasks decide, so a placement stored under older rules reads from
+ * what it holds.
+ */
+export const CONFIDENCE_HIGH = "Your answers agreed with each other.";
+export function restsLine(confidence: Placement["confidence"], tasks: Mark[]): string {
+  if (confidence === "high") return CONFIDENCE_HIGH;
+  const ladder = staircase("A2", tasks), skipped = tasks.some(t => t.skipped);
+  switch (ladder.rests) {
+    case "scattered": return "Your answers disagreed with each other, so this is a careful guess.";
+    case "partials": return "Some answers only partly showed this level.";
+    case "weak": {
+      const atBand = tasks.filter(m => m.band === ladder.band && weakPass(m)), choices = atBand.some(m => m.kind === "choose"), words = atBand.some(m => m.kind === "listen");
+      const what = choices && words ? "answers chosen from two options and one-word answers" : choices ? "answers chosen from two options" : "one-word answers";
+      return `This level rests on ${what}${skipped ? " and skipped tasks" : ""}.`;
+    }
+    case "skips": return "Some tasks were skipped, so this level is a careful guess.";
+    case "floor": return "The tasks were too hard, so this is the lowest level.";
+    case "unchecked": return skipped ? "A skipped task left the next level up unchecked." : "No task at the next level up was answered.";
+    case "thin": return "Only one strong answer showed this level, so it may be a little off.";
+    default: return "Linga is not sure of this level, so try the check again another day.";
+  }
 }
 
 // ---- what survives a trip to disk ----
@@ -111,13 +206,17 @@ const SKILLS: SkillId[] = ["contact", "repair", "request", "describe", "narrate"
 const KINDS: TaskKind[] = ["say", "listen", "choose"];
 const VERDICTS: TaskVerdict[] = ["pass", "partial", "fail"];
 const MODES: EvidenceMode[] = ["speech", "text", "choice"];
+const ANSWERS = ["yes", "partly", "no"] as const;
 
 function cleanTask(value: unknown): PlacementTask | null {
   const t = obj(value);
   if (!text(t.id, 100) || !isBand(t.band) || !KINDS.includes(t.kind as TaskKind) || !VERDICTS.includes(t.verdict as TaskVerdict) || !MODES.includes(t.mode as EvidenceMode)) return null;
   if (!text(t.prompt, 400) || !text(t.line, 400) || !text(t.response, 1200) || !text(t.quote, 400) || !text(t.note, 400) || typeof t.at !== "number") return null;
   const options = Array.isArray(t.options) ? t.options.filter((o): o is string => text(o, 200)).slice(0, 2) : [];
-  return { id: t.id as string, band: t.band, kind: t.kind as TaskKind, prompt: t.prompt as string, line: t.line as string, options, response: t.response as string, mode: t.mode as EvidenceMode, verdict: t.verdict as TaskVerdict, quote: t.quote as string, note: t.note as string, at: t.at };
+  // the judge's readings (S2) are optional: absent on older tasks; a malformed one is dropped, the task kept
+  const answered = ANSWERS.includes(t.answered as typeof ANSWERS[number]) ? t.answered as typeof ANSWERS[number] : undefined;
+  const english = t.english === "none" || isBand(t.english) ? t.english as Band | "none" : undefined;
+  return { id: t.id as string, band: t.band, kind: t.kind as TaskKind, prompt: t.prompt as string, line: t.line as string, options, response: t.response as string, mode: t.mode as EvidenceMode, verdict: t.verdict as TaskVerdict, quote: t.quote as string, note: t.note as string, at: t.at, ...(t.skipped === true ? { skipped: true } : {}), ...(answered ? { answered } : {}), ...(english ? { english } : {}) };
 }
 export function cleanPlacement(value: unknown): Placement | null {
   const p = obj(value);
@@ -163,7 +262,11 @@ export function cleanTopic(value: unknown): PlanTopic | null {
   if (!text(t.id, 100) || !SKILLS.includes(t.skill as SkillId) || !["all", "school", "older", "adult"].includes(String(t.audience))) return null;
   for (const [key, max] of [["title", 70], ["goal", 160], ["why", 160], ["partner", 60], ["premise", 600], ["cue", 160]] as const) if (!text(t[key], max) || !(t[key] as string).trim()) return null;
   if (!text(q.question, 160) || !Array.isArray(q.options) || q.options.length !== 2 || !q.options.every(o => text(o, 160)) || ![0, 1].includes(q.correct as number)) return null;
-  return { id: t.id as string, title: t.title as string, goal: t.goal as string, why: t.why as string, skill: t.skill as SkillId, audience: t.audience as PlanTopic["audience"], partner: t.partner as string, premise: t.premise as string, cue: t.cue as string, quiz: { question: q.question as string, options: [q.options[0] as string, q.options[1] as string], correct: q.correct as number } };
+  // The model's audience is a claim; the topic's own words can raise it, and the never-list refuses it (gate.ts).
+  // Here, so a fresh proposal and a plan already stored on disk pass the same gate.
+  const audience = audienceOf(topicText(t as Parameters<typeof topicText>[0]), t.audience as Audience);
+  if (!audience) return null;
+  return { id: t.id as string, title: t.title as string, goal: t.goal as string, why: t.why as string, skill: t.skill as SkillId, audience, partner: t.partner as string, premise: t.premise as string, cue: t.cue as string, quiz: { question: q.question as string, options: [q.options[0] as string, q.options[1] as string], correct: q.correct as number } };
 }
 /**
  * Does a plan carry the learner's interest? The phone promises "conversations picked for your level and
@@ -213,7 +316,29 @@ export function cleanTaught(value: unknown): Taught[] {
     if (m.offered !== undefined && !(Number.isInteger(m.offered) && (m.offered as number) >= 0)) return [];
     if (m.reusedAt !== undefined && !(typeof m.reusedAt === "number" && Number.isFinite(m.reusedAt))) return [];
     if (m.reusedIn !== undefined && !text(m.reusedIn, 200) || m.reusedQuote !== undefined && !text(m.reusedQuote, 240)) return [];
-    const review = { ...(m.offered !== undefined && { offered: m.offered as number }), ...(m.reusedAt !== undefined && { reusedAt: m.reusedAt as number }), ...(m.reusedIn !== undefined && { reusedIn: m.reusedIn as string }), ...(m.reusedQuote !== undefined && { reusedQuote: m.reusedQuote as string }) };
-    return [{ id: m.id as string, kind: m.kind as Taught["kind"], said: m.said as string, better: m.better as string, why: m.why as string, turnId: m.turnId as string, sceneId: m.sceneId as string, title: m.title as string, at: m.at, ...review }];
+    if (m.slips !== undefined && !(Number.isInteger(m.slips) && (m.slips as number) >= 0)) return [];
+    if (m.slipAt !== undefined && !(typeof m.slipAt === "number" && Number.isFinite(m.slipAt))) return [];
+    // the schedule (K3): a date, a count, and a history whose every entry is well formed, or the item drops
+    for (const k of ["nextDueAt", "offeredAt"]) if (m[k] !== undefined && !(typeof m[k] === "number" && Number.isFinite(m[k]))) return [];
+    if (m.misses !== undefined && !(Number.isInteger(m.misses) && (m.misses as number) >= 0)) return [];
+    // a hidden line's item (K4): its source from the closed list, its key words short; only a line may have no `said`
+    if (m.line !== undefined && !["check", "offer", "quiz"].includes(String(m.line)) || m.key !== undefined && !(text(m.key, 80) && (m.key as string).trim()) || m.said === "" && m.line === undefined) return [];
+    if (m.reuses !== undefined && !(Array.isArray(m.reuses) && m.reuses.every(x => { const r = obj(x); return typeof r.at === "number" && Number.isFinite(r.at) && typeof r.conversationId === "string" && r.conversationId.length <= 200 && text(r.quote, 240) && (r.sceneId === undefined || text(r.sceneId, 100)); }))) return [];
+    const reuseOf = (x: unknown) => { const r = obj(x); return { at: r.at as number, conversationId: r.conversationId as string, quote: r.quote as string, ...(r.sceneId !== undefined ? { sceneId: r.sceneId as string } : {}) }; };
+    const reuses = Array.isArray(m.reuses) ? m.reuses.map(reuseOf).slice(-REUSES_MAX) : undefined;
+    // L1, the latch "yours": two well-formed uses and a date, or the item drops; one that does not hold the rule (review.ts
+    // yoursHolds) is not trusted and is worked out again from the history, as an item saved before L1 gets one
+    const y = obj(m.yours), yUses = Array.isArray(y.uses) ? y.uses : [];
+    if (m.yours !== undefined && !(typeof y.at === "number" && Number.isFinite(y.at) && yUses.length === 2 && yUses.every(x => { const r = obj(x); return typeof r.at === "number" && Number.isFinite(r.at) && typeof r.conversationId === "string" && r.conversationId.length <= 200 && text(r.quote, 240) && (r.sceneId === undefined || text(r.sceneId, 100)); }))) return [];
+    const yours = m.yours !== undefined ? { at: y.at as number, uses: [reuseOf(yUses[0]), reuseOf(yUses[1])] as [Reuse, Reuse] } : undefined;
+    // a fix's self-repair (K2, repair.ts): whether a try held before the fix was shown, and the try
+    if (m.selfRepaired !== undefined && typeof m.selfRepaired !== "boolean" || m.tried !== undefined && !text(m.tried, 240)) return [];
+    const review = { ...(m.offered !== undefined && { offered: m.offered as number }), ...(m.reusedAt !== undefined && { reusedAt: m.reusedAt as number }), ...(m.reusedIn !== undefined && { reusedIn: m.reusedIn as string }), ...(m.reusedQuote !== undefined && { reusedQuote: m.reusedQuote as string }), ...(m.slips !== undefined && { slips: m.slips as number }), ...(m.slipAt !== undefined && { slipAt: m.slipAt as number }),
+      ...(m.nextDueAt !== undefined && { nextDueAt: m.nextDueAt as number }), ...(m.misses !== undefined && { misses: m.misses as number }), ...(m.offeredAt !== undefined && { offeredAt: m.offeredAt as number }), ...(reuses && { reuses }), ...(m.line !== undefined && { line: m.line as Taught["line"] }), ...(m.key !== undefined && { key: m.key as string }), ...(m.selfRepaired !== undefined && { selfRepaired: m.selfRepaired as boolean }), ...(m.tried !== undefined && { tried: m.tried as string }) };
+    // a fix's slip keys (K1, slip.ts) are code's, never stored trust: worked out again from its words on every load, so a record saved before them gets them
+    const keys = m.kind === "fix" ? slipOf(m.said as string, m.better as string) : null;
+    // an item saved before the schedule gets one from its older review fields (review.ts scheduled)
+    const item = scheduled({ id: m.id as string, kind: m.kind as Taught["kind"], said: m.said as string, better: m.better as string, why: m.why as string, turnId: m.turnId as string, sceneId: m.sceneId as string, title: m.title as string, at: m.at, ...(keys ?? {}), ...review });
+    return [latched(yours && yoursHolds(item, yours) ? { ...item, yours } : item)];
   }).slice(-TAUGHT_CAP);
 }

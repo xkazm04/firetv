@@ -11,15 +11,12 @@
  * Usage: node live-ui-test.mjs [--out ../artifacts] [--pin <PIN>]
  */
 import { chromium } from 'playwright';
-import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
-import { PNG } from 'pngjs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { makeAdb, pairingPin, TV_BASE } from './device.mjs';
+import { countInk, makeAdb, pairingPin, parseArgs, PHONE, refusalShown, TV_BASE, tvScreenshot } from './device.mjs';
 
 const BASE = TV_BASE;
-const args = Object.fromEntries(
-  process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
-);
+const args = parseArgs();
 const OUT = path.resolve(args.out ?? '../artifacts');
 mkdirSync(OUT, { recursive: true });
 
@@ -27,39 +24,7 @@ const adb = makeAdb();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const health = async () => (await fetch(`${BASE}/health`)).json();
 
-/** Pulls a framebuffer capture off the device as a decoded PNG. */
-function tvScreenshot(name) {
-  adb('shell', 'screencap', '-p', '/sdcard/_live.png');
-  const dest = path.join(OUT, name);
-  adb('pull', '/sdcard/_live.png', dest);
-  return { png: PNG.sync.read(readFileSync(dest)), file: dest };
-}
-
-const INK = {
-  // #FFD400 with tolerance; the fixture's pure yellow (255,255,0) fails the green test.
-  yellow: (r, g, b) => r > 230 && g > 185 && g < 232 && b < 70,
-  // #00E5FF, a hue that appears nowhere in the fixture's colour bars.
-  cyan: (r, g, b) => r < 90 && g > 195 && b > 225,
-};
-
-/**
- * Counts pixels of one pen colour, ignoring the pairing card and the status bar so the test does
- * not end up grading its own furniture.
- */
-function countInk(png, which = 'yellow') {
-  const match = INK[which];
-  const { width, height, data } = png;
-  let n = 0;
-  for (let y = 0; y < height; y++) {
-    if (y > height * 0.94) continue;
-    for (let x = 0; x < width; x++) {
-      if (x > width * 0.74 && y < height * 0.44) continue;
-      const i = (width * y + x) << 2;
-      if (match(data[i], data[i + 1], data[i + 2])) n++;
-    }
-  }
-  return n;
-}
+const tvShot = (name) => tvScreenshot(adb, '/sdcard/_live.png', path.join(OUT, name));
 
 const checks = [];
 function check(name, ok, detail = '') {
@@ -75,18 +40,11 @@ const run = async () => {
   let h = await health();
   check('TV reachable and canvas cleared via D-pad', h.ok && h.annotations === 0, JSON.stringify(h).slice(0, 80));
 
-  const inkBefore = countInk(tvScreenshot('live-00-clean.png').png);
+  const inkBefore = countInk(tvShot('live-00-clean.png').png);
 
   // ---- 1. the phone opens the page the TV serves ---------------------------
   const browser = await chromium.launch();
-  const context = await browser.newContext({
-    viewport: { width: 412, height: 915 },
-    deviceScaleFactor: 2.625,
-    isMobile: true,
-    hasTouch: true,
-    userAgent:
-      'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Mobile Safari/537.36',
-  });
+  const context = await browser.newContext(PHONE);
   const page = await context.newPage();
   const consoleErrors = [];
   page.on('pageerror', (e) => consoleErrors.push(String(e)));
@@ -168,14 +126,14 @@ const run = async () => {
   check('touch drawing arrives on the TV as an annotation', h.annotations >= 1, `ink=${h.annotations}`);
 
   // ---- 4. the assertion that matters: it is actually on the screen ---------
-  const inkAfter = countInk(tvScreenshot('live-01-drawn.png').png);
+  const inkAfter = countInk(tvShot('live-01-drawn.png').png);
   check('stroke is rendered in the TV framebuffer', inkAfter > inkBefore + 1500, `ink px ${inkBefore} -> ${inkAfter}`);
 
   // ---- 5. time anchoring: seek away, the drawing must leave with the frame --
   adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_RIGHT');
   adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_RIGHT');
   await sleep(1200);
-  const inkSeeked = countInk(tvScreenshot('live-02-seeked-away.png').png);
+  const inkSeeked = countInk(tvShot('live-02-seeked-away.png').png);
   const hSeek = await health();
   check(
     'seeking past the hold window hides the drawing',
@@ -190,7 +148,7 @@ const run = async () => {
   await page.click('#btn-mark-prev', { timeout: 4000 });
   await sleep(1200);
   const hJump = await health();
-  const inkJump = countInk(tvScreenshot('live-02b-jumped-to-drawing.png').png);
+  const inkJump = countInk(tvShot('live-02b-jumped-to-drawing.png').png);
   const mark = marks.length ? marks[0] : NaN;
   check(
     'previous drawing jumps paused onto the drawn frame and its ink',
@@ -206,7 +164,7 @@ const run = async () => {
   adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_LEFT');
   adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_LEFT');
   await sleep(1200);
-  const inkBack = countInk(tvScreenshot('live-03-seeked-back.png').png);
+  const inkBack = countInk(tvShot('live-03-seeked-back.png').png);
   check('seeking back onto the frame restores the drawing', inkBack > inkAfter * 0.6, `ink px ${inkBack} (drawn: ${inkAfter})`);
 
   // ---- 7. shapes, in a colour chosen on the phone --------------------------
@@ -215,12 +173,12 @@ const run = async () => {
 
   // The fixture's colour bars contain a large block of pure cyan, so an absolute count would
   // pass whether or not anything was drawn. The picture is paused, so measure the delta.
-  const cyanBefore = countInk(tvScreenshot('live-04b-before-arrow.png').png, 'cyan');
+  const cyanBefore = countInk(tvShot('live-04b-before-arrow.png').png, 'cyan');
   await drag(0.3, 0.3, 0.75, 0.55);
   h = await health();
   check('arrow tool commits a second annotation', h.annotations >= 2, `ink=${h.annotations}`);
 
-  const cyanAfter = countInk(tvScreenshot('live-05-arrow.png').png, 'cyan');
+  const cyanAfter = countInk(tvShot('live-05-arrow.png').png, 'cyan');
   check(
     'the colour picked on the phone is the colour drawn on the TV',
     cyanAfter - cyanBefore > 800,
@@ -248,12 +206,12 @@ const run = async () => {
   // ---- 9. eraser ----------------------------------------------------------
   // Tap the apex of the arc from step 3; that stroke, and only that stroke, should vanish.
   await page.click('[data-tool="erase"]');
-  const inkBeforeErase = countInk(tvScreenshot('live-06-before-erase.png').png);
+  const inkBeforeErase = countInk(tvShot('live-06-before-erase.png').png);
   const apex = at(0.5, 0.25);
   await touch('touchStart', ...apex);
   await touch('touchEnd', ...apex);
   await sleep(900);
-  const inkAfterErase = countInk(tvScreenshot('live-07-erased.png').png);
+  const inkAfterErase = countInk(tvShot('live-07-erased.png').png);
   check(
     'tapping ink with the eraser removes that stroke from the TV',
     inkAfterErase < inkBeforeErase * 0.5,
@@ -262,7 +220,7 @@ const run = async () => {
 
   await page.click('#btn-undo');
   await sleep(800);
-  const inkRestored = countInk(tvScreenshot('live-08-erase-undone.png').png);
+  const inkRestored = countInk(tvShot('live-08-erase-undone.png').png);
   check(
     'undoing an erase brings the stroke back',
     inkRestored > inkBeforeErase * 0.8,
@@ -313,7 +271,7 @@ const run = async () => {
   await sleep(900);
   const tagged = await health();
   check('a name tag reaches the TV as an annotation', tagged.annotations > beforeTag, `ink=${tagged.annotations}`);
-  tvScreenshot('live-09-nametag.png');
+  tvShot('live-09-nametag.png');
 
   // ---- 11. frame stepping -------------------------------------------------
   const beforeStep = (await health()).t;
@@ -359,26 +317,37 @@ const run = async () => {
 
   // ---- 15. a pen that cannot quote the PIN is turned away -----------------
   const intruder = await context.newPage();
-  await intruder.goto(`${BASE}/?pin=0000`, { waitUntil: 'domcontentloaded' });
-  await intruder
-    .waitForFunction(() => document.getElementById('status').classList.contains('bad'), null, { timeout: 8000 })
-    .catch(() => {});
-  const intruderStatus = (await intruder.textContent('#status')) ?? '';
-  check('a phone with the wrong PIN is refused', /not paired/i.test(intruderStatus), intruderStatus.slice(0, 55));
+  await intruder.goto(`${BASE}/#pin=0000`, { waitUntil: 'domcontentloaded' });
+  const refusal = await refusalShown(intruder);
+  check('a phone with the wrong PIN is refused', refusal.ok, `${refusal.status.slice(0, 55)}${refusal.pinInput ? '' : ' (no PIN input)'}`);
   await intruder.close();
 
   await browser.close();
 
   const failed = checks.filter((c) => !c.ok);
-  writeFileSync(
-    path.join(OUT, 'live-ui-test.json'),
-    JSON.stringify({ when: new Date().toISOString(), checks }, null, 2)
-  );
+  writeReport();
   console.log(`\n${checks.length - failed.length}/${checks.length} checks passed. Artifacts: ${OUT}`);
   process.exit(failed.length ? 1 : 0);
 };
 
+/**
+ * The result file is written on every exit, a crash included. Otherwise the previous run's file,
+ * green or not, stays in artifacts/ and reads as this run's.
+ */
+function writeReport(crash) {
+  const body = { when: new Date().toISOString(), checks };
+  if (crash) body.crashed = String(crash);
+  writeFileSync(path.join(OUT, 'live-ui-test.json'), JSON.stringify(body, null, 2));
+}
+
 run().catch((e) => {
   console.error('live-ui-test crashed:', e);
+  // Exit 3, not 1: the harness could not finish, which is not the same as a check that failed.
+  checks.push({ name: 'live UI test completed', ok: false, detail: String(e) });
+  try {
+    writeReport(e);
+  } catch (w) {
+    console.error('and the result file could not be written:', w.message);
+  }
   process.exit(3);
 });

@@ -14,7 +14,7 @@
  * the manifest has audio/dataset/espeak/inference/language and nothing about terms. Shipping audio
  * synthesised from it needs that licence found and checked first. Local development is fine.
  *
- * Listening is done in the browser (Web Speech) for now; a server path can come later.
+ * Speech to text is listen.ts (served at /api/listen); the phone still listens in the browser (Web Speech).
  * Later: Amazon Polly, same request shape.
  */
 import { spawn } from "node:child_process";

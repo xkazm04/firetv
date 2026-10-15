@@ -5,17 +5,25 @@
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
-import { ESSAY_TYPES } from "@/lib/library/lessons.data";
-import { essayFileProblem, essayTooLong, paragraphsOf } from "@/lib/rules/essay";
+import { ESSAY_TYPES, PLAYBOOK } from "@/lib/library/lessons.data";
+import { essayFileProblem, essayTooLong, REWRITE_WHILE_READING, paragraphsOf, pieceAgainOffered, pieceBeingRead, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
+import { EssayShelf, TextNotice } from "./EssayShelf";
 import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
-import { follow, type PScreen } from "./panelFor";
-import { forensicAt } from "@/tv/keys";
-import { counted, recapCaption, recapLine, recapRows, tasksLine } from "@/tv/recapRows";
+import { deskLine, follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
+import { forensicAt, planAt, switchEndsLine } from "@/tv/keys";
+import { dayOf } from "@/tv/mathsRows";
+import { counted, hintedLine, recapCaption, recapLine, recapRows, slippedLine, startOfDay, tasksLine } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
+import { markCounts } from "@/lib/rules/marks";
+import { itemName, partPlace } from "@/lib/rules/calc-word";
+import { PaperPanel } from "./PaperPanel";
+import { ExplainTalk } from "./ExplainTalk";
+import { recogniserLang } from "./recogniserLang";
+import { blankRow, type DraftRow } from "@/lib/rules/paperEntry";
 import { WEEK_EMPTY, type WeekLine } from "@/lib/rules/week";
 
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
@@ -24,32 +32,54 @@ const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   // no essay page: Essay Master takes text (a file or a message on the Essay panel), never a photo of handwriting
 ];
 
-/** The TV's screens in the user's words, for the phone's status line. */
-const TV_WORDS: Partial<Record<Session["screen"], string>> = {
+/** The TV's screens in the user's words, for the phone's status line. Every screen has one: a new screen is a type error here, not a raw id on the phone. */
+const TV_WORDS: Record<Session["screen"], string> = {
   landing: "the desk", pair: "the pairing code", joined: "the paired screen", tonight: "Math Buddy", learner: "the learners", profile: "the learner's picks",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
-  headtohead: "head to head", essaytype: "Essay Master", forensic: "your paragraph", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
-  topics: "Math Buddy's topics", prepare: "getting ready for school", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item",
+  headtohead: "head to head", essaytype: "Essay Master", essayplan: "your plan", forensic: "your paragraph", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
+  topics: "Math Buddy's topics", prepare: "getting ready for school", paper: "your paper", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item", worked: "a worked lesson", workroom: "the Workroom",
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation", "linga-cert": "your certificate", "linga-certs": "your certificates",
 };
+/** The desk refuses a name longer than this (PROFILE_NAME_MAX in the session store, which is server-only and cannot be imported here); the input stops at it so the phone shows what the TV keeps. */
+const NAME_MAX = 40;
+/**
+ * Jobs that run one after another: a job starts when the one before it has finished, whether that one worked or not.
+ * The name field posts through one, so a slow early post cannot reach the desk after a later one and leave a prefix.
+ */
+function inOrder() {
+  let tail: Promise<unknown> = Promise.resolve();
+  return (job: () => Promise<unknown>): Promise<unknown> => {
+    const run = tail.then(job);
+    // the queue outlives a failed post: the next one still goes, in order; the caller holds `run` and says the failure
+    tail = run.catch(() => { /* said by the caller, through run */ });
+    return run;
+  };
+}
+/** What a fresh page load holds in the Essay and Say panels: a new learner in the seat starts from these. */
+const FRESH_PARAS = ["Many students are tired. Sleep is important. Schools start early. This is bad."];
+const FRESH_SENTENCE = "I have gone to school yesterday.";
 export default function Phone() {
   const { s, connected, post, reconnect } = useSession();
   /** Linga's panel posts and moves on; only the join reads the answer. */
   const postOnly = useCallback(async (e: Event) => { await post(e); }, [post]);
   const [role, setRole] = useState<"student" | "parent">("student");
   const [screen, setScreen] = useState<PScreen>("join");
+  /** The Paper panel's rows, kept here so a tab picked and left again does not lose what was typed. */
+  const [paperRows, setPaperRows] = useState<DraftRow[]>(() => [blankRow()]);
   const [pin, setPin] = useState("");
   const [msg, setMsg] = useState("");
   const [subject, setSubject] = useState<Subject>("maths");
   const [q, setQ] = useState("");
-  const [sentence, setSentence] = useState("I have gone to school yesterday.");
+  // the typed way of explaining has its own text: Point & ask keeps q
+  const [typedExplain, setTypedExplain] = useState(""), [typing, setTyping] = useState(false);
+  const [sentence, setSentence] = useState(FRESH_SENTENCE);
   /**
    * The Essay panel's text: a file or a message split into paragraphs (rules/essay paragraphsOf), and the one the
    * textarea shows. The desk reads ONE paragraph at a time; Next steps to the next. All of it lives in this page's
    * state: a picked file is read here in the browser and never uploaded, stored or kept, and it is gone when the
    * phone page closes. Only the current paragraph goes to the desk, when Analyse is pressed.
    */
-  const [paras, setParas] = useState<string[]>(["Many students are tired. Sleep is important. Schools start early. This is bad."]);
+  const [paras, setParas] = useState<string[]>(FRESH_PARAS);
   const [pix, setPix] = useState(0);
   /** The paragraphs the desk has already read, by index: after one, Next is the button to press. */
   const [readIx, setReadIx] = useState<number[]>([]);
@@ -59,9 +89,21 @@ export default function Phone() {
   const essay = paras[pix] ?? "";
   const setEssay = (f: (v: string) => string) => setParas((ps) => ps.map((p, i) => (i === pix ? f(p) : p)));
   const [etype, setEtype] = useState("structure");
+  /**
+   * A whole piece (v2 E1, P3): where the text came from, the shelf id once kept (a new version then goes to the same
+   * piece), whether to keep it, the one-time notice's words while it is showing, and a tick that reloads the shelf.
+   */
+  const [source, setSource] = useState<"file" | "paste" | "message">("message");
+  const [pieceId, setPieceId] = useState<string | undefined>(undefined);
+  const [keep, setKeep] = useState(true);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [shelfTick, setShelfTick] = useState(0);
   const [pname, setPname] = useState("");
   const [ring, setRing] = useState<{ x: number; y: number } | null>(null);
   const [busy, setBusy] = useState(false);
+  const ending = useRef(false);
+  /** The profile name's posts, in the order typed (inOrder). */
+  const [nameQueue] = useState(inOrder);
   const video = useRef<HTMLVideoElement>(null);
   const [cam, setCam] = useState<MediaStream | null>(null);
   /** The shot lives on the phone until the user says Use this page. Nothing is sent before that. */
@@ -78,8 +120,11 @@ export default function Phone() {
   const [reply, setReply] = useState("");
   /** The ringed item's one typed second go (route /api/second): what is typed. The desk never says on the phone how it went. */
   const [again, setAgain] = useState("");
-  /** What the desk noticed tonight, read once on the way out. */
-  const [memory, setMemory] = useState<string[] | null>(null);
+  /**
+   * What the desk noticed tonight, read once on the way out: the lines written, whether the model was asked (an evening
+   * with no work asks nothing; one written by an earlier ask is not asked again), or the desk's own sentence for a write that failed.
+   */
+  const [memory, setMemory] = useState<{ lines: string[]; asked: boolean; already?: boolean } | { error: string } | null>(null);
   /** A failed run the learner has stepped past ("Snap a new page"): its Try again is not offered again. */
   const [passed, setPassed] = useState("");
   /**
@@ -98,9 +143,8 @@ export default function Phone() {
     if (!s || s.joined) return;
     const q = new URLSearchParams(location.search).get("pin");
     if (!q) return;
-    remembered.current = null;
     history.replaceState(null, "", location.pathname);
-    void join(q, true);
+    void join(q, "qr");
   }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the input mirrors the draft; a new draft (or none) resets what is typed here
   useEffect(() => { setPname(s?.draft?.name ?? ""); }, [s?.draft?.id]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -109,10 +153,16 @@ export default function Phone() {
   useEffect(() => { if (s?.essayType && role === "student" && screen !== "paste" && s.screen === "essaytype") { setEtype(s.essayType); } }, [s?.essayType, s?.screen, role, screen]);
 
   // camera on when a screen is asking for a photo: capture, or practice with a set still to mark
-  const camWanted = screen === "capture" || (screen === "practice" && !!s?.practice && !s.practice.marked && route === "snap");
+  // (a read that failed and can be asked again offers Try again on this panel, not a camera: the same test as `failed("read")` below)
+  const readAgain = s?.jobs?.read?.phase === "failed" && !!s.jobs.read.input && s.jobs.read.retry !== false && s.jobs.read.id !== passed;
+  const camWanted = (screen === "capture" && !readAgain) || (screen === "practice" && !!s?.practice && !s.practice.marked && route === "snap");
   useEffect(() => {
     if (!camWanted) { cam?.getTracks().forEach((t) => t.stop()); setCam(null); return; }
-    navigator.mediaDevices?.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 } } }).then((st) => { setCam(st); if (video.current) video.current.srcObject = st; }).catch(() => setMsg(screen === "capture" ? "No camera here — use a sample page below." : "No camera here."));
+    // the grant can come after the panel let the camera go (a tab picked while the browser asked): that stream is
+    // stopped at once, and the one in use is stopped when the page goes, so the camera is never left on unasked
+    let live = true, got: MediaStream | null = null;
+    navigator.mediaDevices?.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 } } }).then((st) => { if (!live) { st.getTracks().forEach((t) => t.stop()); return; } got = st; setCam(st); if (video.current) video.current.srcObject = st; }).catch(() => { if (live) setMsg(screen === "capture" ? "No camera here — use a sample page below." : "No camera here."); });
+    return () => { live = false; got?.getTracks().forEach((t) => t.stop()); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [camWanted]);
   // the element arrives after the stream does; hand it the stream once it is on the page
@@ -121,43 +171,50 @@ export default function Phone() {
   const [bad, setBad] = useState(false);
   /**
    * The desk checks the code (api/session): a match sets this phone's cookie and the stream reopens as a joined
-   * phone; a refusal says why. Quiet for a code the phone brought (the QR, a remembered one): no shake for those.
+   * phone; a refusal says why (joinRefusal). Quiet for a code the phone brought (the QR): no shake for that, but the line
+   * is shown. The phone keeps no code (the code on the TV turns over after each join), and a listed phone never needs it.
    */
-  const join = async (code = pin, quiet = false) => {
+  const join = async (code = pin, how: JoinHow = "typed") => {
     let r: Response | null = null;
-    try { r = await post({ type: "join", code }); } catch {}
-    if (r?.ok) { setMsg(""); try { localStorage.setItem("desk.pin", code); setHasDesk(true); } catch {} reconnect(); return; }
-    if (quiet) return;
+    try { r = await post({ type: "join", code }); } catch { /* r stays null, and joinRefusal says "That did not reach the desk." */ }
+    if (r?.ok) { setMsg(""); reconnect(); return; }
     const j = r ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
-    setMsg(r ? j.error ?? "That code is not on the TV." : "That did not reach the desk."); setBad(true); setTimeout(() => setBad(false), 500);
+    const refusal = joinRefusal({ status: r?.status, error: j.error, how });
+    setMsg(refusal.line);
+    if (refusal.shake) { setBad(true); setTimeout(() => setBad(false), 500); }
   };
   // four digits join by themselves; Join stays as the fallback tap
   const onPin = (v: string) => { const d = v.replace(/\D/g, "").slice(0, 4); setPin(d); if (d.length === 4 && s && !s.joined) join(d); };
-  // the phone remembers the desk: a code kept from an earlier join lets it in without asking
-  const remembered = useRef<string | null>(null);
-  /** Whether this phone holds a desk to forget: the Forget link is offered only then. */
-  const [hasDesk, setHasDesk] = useState(false);
-  useEffect(() => { try { remembered.current = localStorage.getItem("desk.pin"); setHasDesk(!!remembered.current); } catch {} }, []);
-  useEffect(() => { if (s && !s.joined && remembered.current) { const code = remembered.current; remembered.current = null; void join(code, true); } }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
-  // the desk forgets this phone too: its cookie goes, and the stream reopens as a guest
-  const forget = () => { try { localStorage.removeItem("desk.pin"); } catch {} remembered.current = null; setHasDesk(false); setMsg("This phone will ask for the code next time.");
-    void post({ type: "leave" }).then(() => reconnect(), () => {}); };
+  // a code an earlier version stored is cleared on open; the phone keeps none now, and a join never reads one
+  useEffect(() => { try { localStorage.removeItem("desk.pin"); } catch { /* storage is blocked, so there is no stored code to clear */ } }, []);
+  // the desk forgets this phone: its fingerprint is dropped there and its cookie goes here, and the stream reopens as a guest
+  // it says forgotten only once the desk has answered that it is; a refusal or no answer leaves the phone paired
+  const forget = async () => {
+    let r: Response | null = null;
+    try { r = await post({ type: "leave" }); } catch { /* r stays null, and leaveOutcome says "That did not reach the desk." */ }
+    const j = r && !r.ok ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
+    const out = leaveOutcome({ status: r?.status, error: j.error });
+    setMsg(out.line);
+    if (out.forgotten) reconnect();
+  };
 
   // the phone stays where it is: the hand-off is shown, not jumped over
   const send = async (dataUrl: string, w: number, h: number, sub: Subject, title: string) => {
+    const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setPhase("sending"); setMsg("");
     try {
       const r = await call("/api/read", { image: dataUrl, subject: sub, title, w, h }); const j = await r.json();
-      // a run that failed (502) is on the desk with its sentence and a Try again; only a refusal needs the line here
-      if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(r.status === 502 ? "" : (j.error ?? `The desk could not read it (${r.status}).`)); }
-    } catch (e) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+      if (moved()) return;
+      // a run that failed is on the desk with its sentence and a Try again (its body says failure); only a refusal needs the line here
+      if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(deskLine(j, `The desk could not read it (${r.status}).`)); }
+    } catch (e) { if (!moved()) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
   };
   const toJpeg = (src: HTMLVideoElement | HTMLImageElement, sw: number, sh: number) => {
     const w = 1280, h = Math.round((sh / sw) * 1280); const c = document.createElement("canvas"); c.width = w; c.height = h;
     c.getContext("2d")!.drawImage(src, 0, 0, w, h); return { url: c.toDataURL("image/jpeg", 0.85), w, h };
   };
-  /** How many pages of this module are already on the desk — a sheet has more than one side. */
-  const pagesOf = (sub: Subject) => s?.pages.filter((p) => p.subject === sub).length ?? 0;
+  /** How many pages of this module were snapped tonight — a sheet has more than one side. */
+  const pagesOf = (sub: Subject) => { const today = dayOf(Date.now()); return s?.pages.filter((p) => p.subject === sub && p.day === today).length ?? 0; };
   const titleFor = (sub: Subject, base: string) => { const n = pagesOf(sub); return n >= 1 ? `${base} · page ${n + 1}` : base; };
   // a snap is a shot, not a send
   const snap = () => { const v = video.current; if (!v || !v.videoWidth) return setMsg("camera not ready"); const { url, w, h } = toJpeg(v, v.videoWidth, v.videoHeight);
@@ -170,10 +227,21 @@ export default function Phone() {
   // the TV is on one sentence of the paragraph: the Essay tab offers that sentence, the learner's own words, to rewrite
   const onSentence = s?.screen === "forensic" && s.essay?.sentences.length ? s.essay.sentences[forensicAt(s)] : null;
   const [rewrite, setRewrite] = useState("");
+  // E2-b: while the piece is still being read a sentence cannot be rewritten
+  const rewriting = pieceBeingRead(s?.essay?.piece);
+  // the TV is on the plan: the Essay tab writes the slot its caret is on, one sentence, in the learner's own words
+  const onPlan = s?.screen === "essayplan" && s.essayPlan ? { i: planAt(s), plan: s.essayPlan, slots: planSlots(PLAYBOOK.find((p) => p.id === "para") ?? PLAYBOOK[0]) } : null;
+  const [slotText, setSlotText] = useState("");
+  useEffect(() => { if (onPlan) setSlotText(onPlan.plan.slots[onPlan.i] ?? ""); }, [onPlan?.i, onPlan?.plan.slots[onPlan?.i ?? 0]]); // eslint-disable-line react-hooks/exhaustive-deps
+  const sendSlot = async () => { if (!onPlan) return; const r = planFill(onPlan.plan, onPlan.i, slotText); if (!r.ok) { setMsg(r.error); return; }
+    const who = seat.current.id, moved = () => seat.current.id !== who;
+    setBusy(true); setMsg("sending…");
+    try { const res = await post({ type: "essay.slot", i: onPlan.i, text: slotText }); if (moved()) return; setMsg(res.ok ? "on the TV" : "That did not reach the desk."); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   useEffect(() => { if (onSentence) setRewrite(onSentence.text); }, [onSentence?.n, onSentence?.text]); // eslint-disable-line react-hooks/exhaustive-deps
-  const sendRewrite = async () => { if (!onSentence) return; setBusy(true); setMsg("the desk is reading it…");
+  const sendRewrite = async () => { if (!onSentence) return; const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("the desk is reading it…");
     try { const r = await call("/api/analyse", { kind: "rewrite", n: onSentence.n, text: rewrite }); const j = await r.json().catch(() => ({} as { error?: string }));
-      setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "failed"); } catch { setMsg("That did not reach the desk."); } finally { setBusy(false); } };
+      if (moved()) return;
+      setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "failed"); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   /** Load a text as a list of paragraphs, the first one showing. */
   const loadParagraphs = (ps: string[], said: string) => { setParas(ps); setPix(0); setReadIx([]); setNote(""); setInfo(said); setMsg(""); };
   const goPara = (i: number) => { if (i >= 0 && i < paras.length) { setPix(i); setNote(""); setInfo(""); setMsg(""); } };
@@ -189,51 +257,95 @@ export default function Phone() {
     if (after) return setNote(after);
     const ps = paragraphsOf(text);
     if (!ps.length) return setNote("That file is empty. Pick one with some writing in it.");
-    loadParagraphs(ps, ps.length > 1 ? `${f.name}: ${ps.length} paragraphs. The desk reads one at a time.` : "");
+    setSource("file"); setPieceId(undefined);
+    loadParagraphs(ps, ps.length > 1 ? `${f.name}: ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.` : "");
   };
   /** A pasted message with blank lines is split the same way; a paste without any goes in as it always did. */
   const onEssayPaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
     const t = e.currentTarget, pasted = e.clipboardData.getData("text");
     const ps = paragraphsOf(t.value.slice(0, t.selectionStart) + pasted + t.value.slice(t.selectionEnd));
     if (ps.length < 2) return;
-    e.preventDefault(); loadParagraphs(ps, `That is ${ps.length} paragraphs. The desk reads one at a time.`);
+    e.preventDefault(); setSource("paste"); setPieceId(undefined); loadParagraphs(ps, `That is ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.`);
   };
+  /** The whole piece to the TV (v2 E1): kept on the shelf first when asked; a 428 means the one-time notice is due. */
+  const readPiece = async (keepIt = keep) => {
+    const whole = paras.join("\n\n"), problem = pieceProblem(whole);
+    if (problem) return setNote(problem);
+    const who = seat.current.id, moved = () => seat.current.id !== who;
+    setNote(""); setInfo(""); setBusy(true); setMsg("the desk is reading your piece…");
+    try {
+      const r = await call("/api/analyse", { kind: "piece", text: whole, type: etype, keep: keepIt, pieceId, source });
+      const j = await r.json().catch(() => ({} as { error?: string; notice?: boolean; piece?: { pieceId?: string } }));
+      if (moved()) return;
+      if (r.status === 428 && (j as { notice?: boolean }).notice) { setMsg(""); setNotice((j as { error?: string }).error ?? ""); return; }
+      // E3, E4: only the paragraphs the desk ruled are marked read; each one it did not rule is named with its line
+      const back = (j as { piece?: { read?: number[]; failed: number[]; notEnglish?: number[]; paragraphs: number } }).piece;
+      if (r.ok) { setMsg("on the TV"); setReadIx(back?.read ?? paras.map((_, i) => i)); setInfo([...(back?.failed ?? []).map((k) => [k, `Paragraph ${k + 1} did not come back. Send it again from the phone.`] as const), ...(back?.notEnglish ?? []).map((k) => [k, `Paragraph ${k + 1} is not in English, so the desk did not read it.`] as const)].sort((x, y) => x[0] - y[0]).map((x) => x[1]).join(" ")); const id = (j as { piece?: { pieceId?: string } }).piece?.pieceId; if (id) setPieceId(id); setShelfTick((t) => t + 1); }
+      else { setMsg(""); setNote((j as { error?: string }).error ?? "The desk could not read that piece. Try again."); }
+    } catch { if (!moved()) { setMsg(""); setNote("That did not reach the desk."); } } finally { setBusy(false); }
+  };
+  const acceptNotice = async () => {
+    const who = seat.current.id, moved = () => seat.current.id !== who;
+    setNotice(null);
+    // after a switch, readPiece here is the last learner's render: it would post their paragraphs
+    try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void readPiece(true); } catch { /* said on the next line */ }
+    if (!moved()) setNote("That did not reach the desk.");
+  };
+  const openKept = (id: string, text: string) => { const ps = paragraphsOf(text); setPieceId(id); setSource("message"); loadParagraphs(ps.length ? ps : [text], `Opened from your shelf: ${ps.length} paragraph${ps.length === 1 ? "" : "s"}. Change it, then read it again as a new version.`); };
   /** Analyse the paragraph showing. Blank lines typed into it split it first; the desk still reads only the first part. */
   const analyseParagraph = async () => {
     const ps = paragraphsOf(essay); if (!ps.length) return;
     const one = ps[0], tooLong = essayTooLong(one);
     if (tooLong) return setNote(tooLong);
     if (ps.length > 1) { setParas((all) => [...all.slice(0, pix), ...ps, ...all.slice(pix + 1)]); setReadIx([]); }
+    const who = seat.current.id, moved = () => seat.current.id !== who;
     setNote(""); setInfo(""); setBusy(true); setMsg("the desk is reading it…");
     try {
       const r = await call("/api/analyse", { kind: "essay", text: one, type: etype });
+      if (moved()) return;
       if (r.ok) { setMsg("on the TV"); setReadIx((x) => [...x, pix]); }
-      else { const j = await r.json().catch(() => ({} as { error?: string })); setMsg(""); setNote((j as { error?: string }).error ?? "The desk could not read that one. Try again."); }
-    } catch { setMsg(""); setNote("That did not reach the desk."); } finally { setBusy(false); }
+      else { const j = await r.json().catch(() => ({} as { error?: string })); if (moved()) return; setMsg(""); setNote((j as { error?: string }).error ?? "The desk could not read that one. Try again."); }
+    } catch { if (!moved()) { setMsg(""); setNote("That did not reach the desk."); } } finally { setBusy(false); }
   };
   /** From the sentence rewrite panel, on to the next paragraph: the TV goes back to the lens home, the phone to its paragraph. */
   const nextFromRewrite = () => { goPara(pix + 1); void post({ type: "nav", screen: "essaytype", focus: Math.max(0, ESSAY_TYPES.findIndex((t) => t.id === etype)) }); };
+  /** E4-a: a piece that is done with a paragraph that did not come back offers to read just those again (the desk checks it in code). */
+  const pieceAgain = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("the desk is reading them again…");
+    try { const r = await call("/api/analyse", { kind: "piece-again" }); const j = await r.json().catch(() => ({} as { error?: string }));
+      if (moved()) return;
+      setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "The desk could not read them again. Try again."); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
+  const againBtn = pieceAgainOffered(s?.essay) && <button className="pbtn" data-secondary="true" data-role="essay-piece-again" disabled={busy} onClick={() => void pieceAgain()}>Read the paragraphs that did not come back</button>;
   const tap = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!page) return; const r = e.currentTarget.getBoundingClientRect(); const y = ((e.clientY - r.top) / r.height) * page.h;
     const best = nearestItem(page.items, y);
     setRing({ x: e.clientX - r.left, y: e.clientY - r.top }); post({ type: "item", itemIx: best }); if (s?.screen !== "page") post({ type: "nav", screen: "page" });
   };
-  const ask = async () => { if (!page) return; setBusy(true); setMsg("");
-    try { const r = await call("/api/hint", { askedQ: q, itemIx: s?.itemIx }); setQ("");
-      if (!r.ok && r.status !== 502) { const j = await r.json().catch(() => ({} as { error?: string })); setMsg(j.error ?? `The desk could not ask (${r.status}).`); } }
-    catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); } };
+  const ask = async () => { if (!page) return; const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("");
+    try { const r = await call("/api/hint", { askedQ: q, itemIx: s?.itemIx }); if (moved()) return; setQ("");
+      if (!r.ok) { const j = await r.json().catch(() => null); if (moved()) return; setMsg(deskLine(j, `The desk could not ask (${r.status}).`)); } }
+    catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); } };
+  /** The Say panel's button: the sentence to the TV. */
+  const checkSentence = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("sending…");
+    try { const r = await call("/api/analyse", { kind: "english", sentence }); if (moved()) return;
+      if (r.ok) { setMsg("on the TV"); return; }
+      const j = await r.json().catch(() => ({} as { error?: string })); if (moved()) return;
+      setMsg((j as { error?: string }).error ?? `The desk could not check that sentence (${r.status}).`); }
+    catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   /** The desk's failed run of this kind that can be asked again in place: it holds what it was asked with. */
-  const failed = (kind: JobKind) => { const j = s?.jobs?.[kind]; return j?.phase === "failed" && j.input && j.id !== passed ? j : null; };
+  // a failure asking again cannot change (job.retry false: failure.ts) is not offered again; the panel goes back to its own step
+  const failed = (kind: JobKind) => { const j = s?.jobs?.[kind]; return j?.phase === "failed" && j.input && j.retry !== false && j.id !== passed ? j : null; };
   /** A hint that failed for the item the TV is on. */
   const hintAgain = (() => { const h = failed("hint"); return h && page && h.key === page.items[s?.itemIx ?? 0]?.key ? h : null; })();
   /** One press: the desk asks again with what it holds — the same page, the same item and question, the same topic. */
   const retry = async (kind: JobKind) => {
+    const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setMsg(""); if (kind === "read") setPhase("sending");
     try {
-      const r = await call("/api/session/retry", { kind }); const j = await r.json().catch(() => ({} as { error?: string }));
+      const r = await call("/api/session/retry", { kind }); const j = await r.json().catch(() => null);
+      if (moved()) return;
       if (kind === "read") setPhase(r.ok ? "sent" : "failed");
-      if (!r.ok && r.status !== 502) setMsg(j.error ?? `The desk could not try again (${r.status}).`);
-    } catch (e) { if (kind === "read") setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+      if (!r.ok) setMsg(deskLine(j, `The desk could not try again (${r.status}).`));
+    } catch (e) { if (!moved()) { if (kind === "read") setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
   };
   /** A Mic press is listening: the phone does not move away from the field it is filling. */
   const hearing = useRef(false);
@@ -243,7 +355,7 @@ export default function Phone() {
     const w = window as unknown as { SpeechRecognition?: new () => Rec; webkitSpeechRecognition?: new () => Rec };
     const SR = w.SpeechRecognition ?? w.webkitSpeechRecognition;
     if (!SR) { setMsg("No speech recognition in this browser — type instead."); return null; }
-    const r = new SR(); r.lang = "en-US"; r.onresult = (ev) => into(ev.results[0][0].transcript); r.onerror = () => { hearing.current = false; setMsg("did not catch that"); }; r.onend = () => { hearing.current = false; };
+    const r = new SR(); r.lang = recogniserLang(s); r.onresult = (ev) => into(ev.results[0][0].transcript); r.onerror = () => { hearing.current = false; setMsg("did not catch that"); }; r.onend = () => { hearing.current = false; };
     r.start(); hearing.current = true; setMsg("listening…");
     return r; // the caller may hold the button and stop it on release
   };
@@ -254,13 +366,15 @@ export default function Phone() {
   /** The whole worked set, one photo. Same shot/review machinery as capture; a different door. */
   const sendWorking = async () => {
     if (!shot) return;
+    const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setPhase("sending"); setMsg("");
     try {
       const r = await call("/api/mark", { image: shot.url, w: shot.w, h: shot.h });
       const j = await r.json().catch(() => ({} as { error?: string }));
+      if (moved()) return;
       if (r.ok) setPhase("sent");
       else { setPhase("failed"); setMsg(r.status === 404 ? "The desk cannot mark yet — that part is still being built." : (j.error ?? `The desk could not mark it (${r.status}).`)); }
-    } catch (e) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+    } catch (e) { if (!moved()) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
   };
   /**
    * The typed answers, one string per question in order (a blank for one left). Code marks them at once on the desk; the
@@ -271,49 +385,89 @@ export default function Phone() {
     const n = s?.practice?.items.length ?? 0;
     if (!n || busy) return;
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setPhase("sending"); setMsg("");
     try {
       const r = await call("/api/mark", { answers: Array.from({ length: n }, (_, i) => typed[i] ?? "") });
       const j = await r.json().catch(() => ({} as { error?: string }));
+      if (moved()) return;
       if (r.ok) setPhase("sent");
       else { setPhase("failed"); setMsg(j.error ?? `The desk could not mark it (${r.status}).`); }
-    } catch (e) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+    } catch (e) { if (!moved()) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
   };
   // the set came back marked: the sheet has done its job, so the review clears itself
   useEffect(() => { if (screen === "practice" && s?.practice?.marked) { setShot(null); setPhase("idle"); } }, [s?.practice?.marked]); // eslint-disable-line react-hooks/exhaustive-deps
   // a new item on the walk is a new question: last time's transcript and answer do not belong to it
-  useEffect(() => { setHeard(""); setReply(""); setAgain(""); }, [s?.walkIx]);
+  useEffect(() => { setHeard(""); setReply(""); setAgain(""); setTypedExplain(""); setTyping(false); }, [s?.walkIx]);
+  // and a different learner in the seat does not inherit the last one's typed words
+  useEffect(() => { setHeard(""); setReply(""); setAgain(""); setTypedExplain(""); setTyping(false); }, [s?.learner?.id]);
+
+  // P17 (i) begin: a different learner seated clears what the last learner worked on, on the phone
+  const lastSeated = useRef<string | undefined>(undefined);
+  const clearLastLearnersWork = () => {
+    setParas(FRESH_PARAS); setPix(0); setReadIx([]); setNote(""); setInfo(""); setSource("message"); setPieceId(undefined); setNotice(null);
+    setShot(null); setPhase("idle"); setQ(""); setMsg(""); setPaperRows([blankRow()]); setTyped([]); setSentence(FRESH_SENTENCE); setMemory(null); setKeep(true); setRing(null);
+  };
+  // the first seating after load, and the same learner sitting again after an empty seat, clear nothing
+  useEffect(() => {
+    const id = s?.learner?.id;
+    if (!id) return;
+    if (lastSeated.current && lastSeated.current !== id) clearLastLearnersWork();
+    lastSeated.current = id;
+  }, [s?.learner?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  // P17 (i) end
 
   const rec = useRef<{ stop: () => void } | null>(null);
   const holdStart = () => { setReply(""); setHeard(""); const r = listen((t) => { setHeard(t); setMsg(""); }); if (r) { rec.current = r; setHolding(true); } else setMicOk(false); };
   const holdEnd = () => { if (!holding) return; rec.current?.stop(); rec.current = null; setHolding(false); setMsg(""); };
+  // who is seated and which walk item is open now, read after an await (the closure's `s` is the one from send time)
+  const seat = useRef({ id: s?.learner?.id, ix: s?.walkIx }); seat.current = { id: s?.learner?.id, ix: s?.walkIx };
   const explain = async (transcript: string) => {
     const t = transcript.trim(); if (!t) return;
+    const at = { id: s?.learner?.id, ix: s?.walkIx };
+    // a reply that returns after the learner or the walk item changed belongs to neither: it is dropped (busy still clears)
+    const moved = () => seat.current.id !== at.id || seat.current.ix !== at.ix;
     setBusy(true); setMsg("");
     try {
-      const r = await call("/api/explain", { transcript: t, n: s?.walkIx });
+      const r = await call("/api/explain", { transcript: t, n: at.ix });
       const j = await r.json().catch(() => ({} as { reply?: string; error?: string }));
-      if (r.ok) { setReply(j.reply ?? "The desk heard you."); setHeard(""); }
+      if (moved()) return;
+      if (r.ok) { setReply(j.reply ?? "The desk heard you."); setHeard(""); setTypedExplain(""); setTyping(false); }
       else setMsg(r.status === 404 ? "The desk cannot listen back yet — that part is still being built." : (j.error ?? `The desk could not use that (${r.status}).`));
-    } catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+    } catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
   /** One typed second go on the ringed item in hand: the TV draws what it came to; a refusal is the desk's own sentence. */
   const sendSecond = async () => {
     const it = s?.practice?.items[s.walkIx], a = again.trim(); if (!it || !a || busy) return;
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    const at = { id: s?.learner?.id, ix: s?.walkIx };
+    // a reply that returns after the learner or the walk item changed belongs to neither: it is dropped (busy still clears)
+    const moved = () => seat.current.id !== at.id || seat.current.ix !== at.ix;
     setBusy(true); setMsg("");
     try {
       const r = await call("/api/second", { n: it.n, answer: a });
       const j = await r.json().catch(() => ({} as { error?: string }));
+      if (moved()) return;
       if (r.ok) setAgain(""); else setMsg(j.error ?? `The desk could not take that (${r.status}).`);
-    } catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+    } catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
-  /** Memory is written on the way out — and is never allowed to hold the door shut. */
+  /**
+   * The evening ends first, as the TV's Menu does (tv/keys.ts): the recap opens, then the memory is written. Busy shows
+   * "Writing tonight down…" from the first tap, and a second tap before the first is done does nothing (the ref answers
+   * at once; the disabled button waits for a render). A session.end that fails is said in the status line, and the
+   * memory is still written.
+   */
   const endSession = async () => {
+    if (ending.current) return;
+    ending.current = true;
     setBusy(true);
-    try { const r = await call("/api/memory", {}); const j = await r.json().catch(() => ({} as { lines?: string[] })); setMemory(r.ok && Array.isArray(j.lines) ? j.lines : []); }
-    catch { setMemory([]); }
-    finally { setBusy(false); await post({ type: "session.end" }); }
+    try { await post({ type: "session.end" }); } catch (e) { setMsg(`The evening could not be closed: ${String(e)}`); }
+    try {
+      const r = await call("/api/memory", {}), j = await r.json().catch(() => ({} as { lines?: unknown; asked?: boolean; already?: boolean; error?: string }));
+      setMemory(r.ok ? { lines: Array.isArray(j.lines) ? j.lines.filter((l: unknown): l is string => typeof l === "string") : [], asked: j.asked !== false, already: j.already === true }
+        : { error: j.error ?? `The desk could not write tonight down (${r.status}).` });
+    } catch { setMemory({ error: "The desk could not be reached, so tonight was not written down." }); }
+    finally { setBusy(false); ending.current = false; }
   };
 
   // The phone follows the TV (panelFor.ts): when the TV's screen changes into a hand-off, the phone moves once to
@@ -345,7 +499,7 @@ export default function Phone() {
           <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
           {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}
           <div className="field" data-bad={bad}><input inputMode="numeric" placeholder="4-digit code" value={pin} onChange={(e) => onPin(e.target.value)} /><button className="pbtn" data-signal="true" onClick={() => join()}>Join</button></div>
-          <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install. This phone remembers the desk once it has joined.{hasDesk && <> <button className="plink" onClick={forget}>Forget this desk</button></>}</p>
+          <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install. The code works once: it changes when a phone joins with it.</p>
           <button className="pbtn" data-secondary="true" onClick={() => nav("profile")}>Naming a new learner? Open Profile.</button></div>}
 
         {screen === "joined" && s && <div className="pscreen"><h3>On the desk</h3>
@@ -359,16 +513,19 @@ export default function Phone() {
               ? <button className="pbtn" data-signal="true" onClick={() => nav("paste")}>Send your paragraph</button>
               : <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>{s.awaiting ? `Snap the ${MODULE[s.awaiting]} page` : "Snap the page"}</button>)}
           <button className="pbtn" data-secondary="true" onClick={() => nav("tonight")}>Set up tonight first</button>
-          {s.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Down to Someone else and Select to switch who is at the desk.</p>}</div>}
+          {s.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Down to Someone else and Select to switch who is at the desk.{switchEndsLine(s, null) && ` ${switchEndsLine(s, null)}`}</p>}
+          {s.viewer === "phone" && <p style={{ fontSize: 12 }}><button className="plink" onClick={forget}>Forget this desk</button></p>}</div>}
 
         {screen === "profile" && <div className="pscreen"><h3>Profile</h3>
           <p>At the desk now: <b>{s?.learner?.name ?? "no one yet"}</b></p>
           {s && (s.draft || s.screen === "profile") ? <>
             <p>The TV takes the picks; type the name here.</p>
-            <div className="field"><input placeholder="Name" value={pname} onChange={(e) => { setPname(e.target.value); post({ type: "profile.draft", patch: { name: e.target.value } }); }} /></div>
-            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => post({ type: "profile.save" })}>Save</button>
+            <div className="field"><input placeholder="Name" maxLength={NAME_MAX} value={pname} onChange={(e) => { setPname(e.target.value); nameQueue(() => post({ type: "profile.draft", patch: { name: e.target.value } })).catch(() => { /* a lost keystroke: the next one sends the whole name again */ }); }} /></div>
+            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => nameQueue(() => post({ type: "profile.save" })).catch(() => setMsg("That did not reach the desk."))}>Save</button>
               <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
+
+        {screen === "paper" && <PaperPanel rows={paperRows} setRows={setPaperRows} post={post} seated={!!s?.learner} status={s?.status ?? ""} kept={!!s?.paper} name={s?.learner?.name} />}
 
         {screen === "capture" && (() => {
           const reading = phase === "sending" || (phase === "sent" && !!s?.reading);
@@ -436,10 +593,15 @@ export default function Phone() {
                 <p><b>{topicIn(pr.topic)?.name ?? "The set"}</b>. Type your answer to each question. Leave one empty if you skipped it.</p>
                 <div className="pasks" data-role="practice-typed">
                   {pr.items.map((it, i) => <div className="pask" key={it.n}>
-                    <label htmlFor={`ans-${it.n}`}><b>{it.n}.</b> {it.question}</label>
+                    {(() => {
+                      // a part of a multi-part question (v2 M3a): the stem once above its first part, then each part's own field
+                      const at = partPlace(pr.items, i);
+                      if (!at) return <label htmlFor={`ans-${it.n}`}><b>{it.n}.</b> {it.question}</label>;
+                      return <>{at.first && <p data-role="typed-stem"><b>{at.q}.</b> {it.stem}</p>}<label htmlFor={`ans-${it.n}`} data-part={at.label}><b>({at.label})</b> {it.question}</label></>;
+                    })()}
                     <input id={`ans-${it.n}`} data-role="typed-answer" ref={(el) => { boxes.current[i] = el; }} type="text" inputMode="text" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false}
                       enterKeyHint={i < n - 1 ? "next" : "done"} maxLength={TYPED_ANSWER_MAX} value={typed[i] ?? ""} disabled={phase === "sending"}
-                      aria-label={`Your answer to question ${it.n}`}
+                      aria-label={`Your answer to question ${itemName(pr.items, i)}`}
                       onChange={(e) => setTyped((t) => { const v = Array.from({ length: n }, (_, k) => t[k] ?? ""); v[i] = e.target.value; return v; })}
                       onKeyDown={(e) => { if (e.key !== "Enter") return; e.preventDefault(); if (i < n - 1) boxes.current[i + 1]?.focus(); else e.currentTarget.blur(); }} />
                   </div>)}
@@ -465,13 +627,14 @@ export default function Phone() {
           </div>;
 
           // marked: the count, and not one verdict. The walk itself belongs to the TV.
-          const right = pr.items.filter((i) => i.verdict === "right").length;
+          // the marks the sheet draws (rules/marks): an item left empty is to look at too, and named apart (MB-B1)
+          const { right, skipped } = markCounts(pr.items);
           const look = pr.items.length - right;
           const item = s.screen === "walk" ? pr.items[s.walkIx] : undefined;
           // an item the explanation just settled keeps the reply up; the verdict itself is the TV's to show
           const asking = !!item && (item.verdict === "wrong" || item.verdict === "unsure" || !!reply);
           return <div className="pscreen"><h3>Practice</h3>
-            <p><b>{right} right.</b> {look ? `${look} to look at.` : "Nothing to look at."}</p>
+            <p><b>{right} right.</b> {look ? `${look} to look at${skipped ? ` (${skipped} skipped)` : ""}.` : "Nothing to look at."}</p>
             <p>{s.screen === "walk" ? "Look at the TV — it is walking the set with you." : "Look at the TV — the whole set is on it. Pick a number there to go through it."}</p>
             {item?.verdict === "wrong" && (item.second
               ? <p data-role="second-sent">Your second go is on the TV.</p>
@@ -480,29 +643,15 @@ export default function Phone() {
                   <p>Work it on paper again, then type just your answer. You get one go.</p>
                   <div className="field">
                     <input type="text" inputMode="text" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} enterKeyHint="send"
-                      maxLength={TYPED_ANSWER_MAX} value={again} disabled={busy} aria-label={`Your second go at question ${item.n}`}
+                      maxLength={TYPED_ANSWER_MAX} value={again} disabled={busy} aria-label={`Your second go at question ${itemName(pr.items, s.walkIx)}`}
                       onChange={(e) => setAgain(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); void sendSecond(); } }} />
                     <button className="pbtn" data-signal="true" onClick={sendSecond} disabled={busy || !again.trim()}>Send</button>
                   </div>
                 </div>)}
-            {asking && <div className="ptalk">
-              <b>How did you get there?</b>
-              {reply ? <><p className="said">{reply}</p><p>The TV has it.</p></> : null}
-              {heard ? <>
-                <p>I heard: “{heard}”</p>
-                <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => explain(heard)} disabled={busy}>Send</button>
-                  <button className="pbtn" data-secondary="true" onClick={() => { setHeard(""); setReply(""); }}>Try again</button></div>
-              </> : micOk ? <>
-                <button className="phold" data-holding={holding} onPointerDown={holdStart} onPointerUp={holdEnd} onPointerLeave={holdEnd} onPointerCancel={holdEnd} onContextMenu={(e) => e.preventDefault()}>
-                  {holding ? "Listening… let go when you are done" : "Tell the desk how you got it"}</button>
-                <p style={{ fontSize: 12 }}>Hold the button, say what you did, let go.</p>
-              </> : <>
-                <p>The microphone is not available in this browser — type it instead.</p>
-                <div className="field"><textarea value={q} onChange={(e) => setQ(e.target.value)} placeholder="What did you do first?" /></div>
-                <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => explain(q)} disabled={busy || !q.trim()}>Send</button>
-                  <button className="pbtn" data-secondary="true" onClick={() => { setQ(""); setReply(""); }}>Try again</button></div>
-              </>}
-            </div>}
+            {asking && <ExplainTalk micOk={micOk} holding={holding} heard={heard} reply={reply} busy={busy} typed={typedExplain} typing={typing}
+              onHoldStart={holdStart} onHoldEnd={holdEnd} onSendHeard={() => explain(heard)} onTryAgain={() => { setHeard(""); setReply(""); }}
+              onTyped={setTypedExplain} onOpenTyping={() => setTyping(true)} onCloseTyping={() => setTyping(false)}
+              onSendTyped={() => explain(typedExplain)} onClearTyped={() => { setTypedExplain(""); setReply(""); }} />}
           </div>;
         })()}
 
@@ -522,16 +671,24 @@ export default function Phone() {
         {screen === "say" && <div className="pscreen"><h3>Say a sentence</h3><p>English. Speak it or type it; the TV shows what the time word decides.</p>
           <div className="field"><input value={sentence} onChange={(e) => setSentence(e.target.value)} /><button className="pbtn" data-secondary="true" onClick={() => listen(setSentence)}>Mic</button></div>
           <div className="presets">{["I have gone to school yesterday.", "I lived here since 2019.", "We will visit Prague next week.", "She went to the cinema last night."].map((p) => <button key={p} onClick={() => setSentence(p)}>{p}</button>)}</div>
-          <button className="pbtn" data-signal="true" disabled={busy} onClick={async () => { setBusy(true); setMsg("sending…"); try { const r = await call("/api/analyse", { kind: "english", sentence }); setMsg(r.ok ? "on the TV" : "failed"); } finally { setBusy(false); } }}>Check it on the TV</button></div>}
+          <button className="pbtn" data-signal="true" disabled={busy} onClick={checkSentence}>Check it on the TV</button></div>}
 
         {screen === "paste" && onSentence && <div className="pscreen" data-role="essay-rewrite"><h3>Sentence {onSentence.n}</h3><p>Rewrite it in your own words. The desk reads this one sentence again, in its paragraph.</p>
+          {rewriting && <p role="alert" data-role="essay-rewrite-wait">{REWRITE_WHILE_READING}</p>}
           <div className="field"><textarea value={rewrite} onChange={(e) => setRewrite(e.target.value)} /></div>
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setRewrite(t))}>Dictate</button>
-            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy} onClick={sendRewrite}>Send</button></div>
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || rewriting} onClick={sendRewrite}>Send</button></div>
+          {againBtn}
           {pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}</div>}
 
-        {screen === "paste" && !onSentence && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
-          <p>Send a .txt or .md file, or type, paste or dictate a message. The desk reads one paragraph at a time. Pick the lens, or pick it on the TV.</p>
+        {screen === "paste" && onPlan && <div className="pscreen" data-role="essay-plan"><h3>Slot {onPlan.i + 1} · {onPlan.slots[onPlan.i]?.label}</h3><p>One sentence, in your own words. It inks on the TV. When all three are written, press OK on Read it.</p>
+          <div className="field"><textarea aria-label="Your sentence for this slot" value={slotText} onChange={(e) => setSlotText(e.target.value)} /></div>
+          {onPlan.plan.slots[onPlan.i] && planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i]) && <p data-role="essay-plan-fit">{planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i])}</p>}
+          <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setSlotText(t))}>Dictate</button>
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !slotText.trim()} onClick={sendSlot}>Send</button></div></div>}
+
+        {screen === "paste" && !onSentence && !onPlan && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
+          <p>Send a .txt or .md file, or type, paste or dictate a message. The desk reads a whole piece, or one paragraph at a time. Pick the lens, or pick it on the TV.</p>
           <div className="types" data-compact="true">{ESSAY_TYPES.map((t) => <label key={t.id}><input type="radio" name="etype" checked={etype === t.id} onChange={() => setEtype(t.id)} /><span><b>{t.name}</b></span></label>)}</div>
           <p style={{ fontSize: 14 }}>{ESSAY_TYPES.find((t) => t.id === etype)?.promise}</p>
           <label className="pbtn pfile" data-secondary="true">Choose a file (.txt or .md)<input type="file" accept=".txt,.md,text/plain,text/markdown" data-role="essay-file" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void pickFile(f); }} /></label>
@@ -541,35 +698,46 @@ export default function Phone() {
             <button className="pbtn" data-signal={readIx.includes(pix) ? "true" : undefined} data-secondary={readIx.includes(pix) ? undefined : "true"} aria-label="Next paragraph" disabled={pix + 1 >= paras.length} onClick={() => goPara(pix + 1)}>Next</button></div>}
           <div className="field"><textarea aria-label="The paragraph the desk will read" value={essay} onChange={(e) => { const v = e.target.value; setEssay(() => v); }} onPaste={onEssayPaste} /></div>
           {note ? <p role="alert" data-role="essay-note" style={{ color: "#B8261A" }}>{note}</p> : info ? <p data-role="essay-info">{info}</p> : null}
+          {againBtn}
+          {notice !== null && <TextNotice text={notice} onAccept={() => void acceptNotice()} onDecline={() => { setNotice(null); setKeep(false); void readPiece(false); }} />}
+          {paras.length > 1 && <div className="field" data-role="essay-piece">
+            <label className="pkeep"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} data-role="essay-keep" /><span>Keep it on my shelf</span></label>
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()))}>Dictate</button>
-            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !essay.trim()} onClick={analyseParagraph}>Analyse on the TV</button></div></div>}
+            <button className="pbtn" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || !essay.trim()} onClick={analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button></div>
+          <EssayShelf learnerId={s?.learner?.id} refresh={shelfTick} onOpen={openKept} /></div>}
 
         {screen === "tonight" && s && <div className="pscreen"><h3>Tonight</h3>
           <div className="tlist">{s.tasks.map((t) => <label key={t.id}><input type="checkbox" checked={t.done} onChange={(e) => post({ type: "task.done", id: t.id, done: e.target.checked })} /><span>{t.name}</span><small>{t.min}m</small></label>)}</div>
           <AddTask onAdd={(name, sub) => post({ type: "task.add", name, sub, min: 10 })} />
           <button className="pbtn" onClick={() => post({ type: s.timer.running ? "timer.pause" : "timer.start" })}>{s.timer.running ? `Pause · ${fmt(s.timer.left)}` : `Start · ${fmt(s.timer.left)}`}</button>
-          <button className="pbtn" data-secondary="true" onClick={endSession} disabled={busy}>{busy ? "Closing…" : "End session"}</button>
-          {memory && <div className="precap"><b>What the desk noticed</b>
-            {memory.length ? <ul>{memory.map((l) => <li key={l}>{l}</li>)}</ul> : <ul><li>Nothing written down tonight.</li></ul>}</div>}</div>}
+          <button className="pbtn" data-secondary="true" onClick={endSession} disabled={busy}>{busy ? "Writing tonight down…" : "End session"}</button>
+          {memory && <div className="precap" data-role="phone-memory"><b>What the desk noticed</b>
+            <ul>{"error" in memory ? <li>{memory.error}</li>
+              : memory.lines.length ? memory.lines.map((l, i) => <li key={i}>{l}</li>)
+              : <li>{memory.already ? "Tonight is already written down." : memory.asked ? "Nothing new to note tonight." : "Nothing worked on tonight."}</li>}</ul></div>}</div>}
 
         {screen === "parent" && s && <div className="pscreen"><h3>Recap</h3>
-          {s.screen === "recap" || s.log.problems.length ? (() => {
+          {(() => {
             // the TV's recap in words: the same tiles (tv/recapRows.ts), a line each, then the TV's caption sentence
-            // ...and, on the phone only, tonight's list (the learner's own tasks): no tasks, no line
-            const tiles = recapRows(s, Date.now()), mins = Math.round(s.log.minutes), list = tasksLine(s.tasks);
+            // ...and, on the phone only, tonight's list (the learner's own tasks): no tasks, no line.
+            // It shows whenever tonight has a tile with work, or the evening ended since local midnight - whatever the TV shows.
+            const now = Date.now(), tiles = recapRows(s, now);
+            if (!(tiles.some((t) => !t.empty) || (s.log.endedAt ?? 0) >= startOfDay(now))) return <p>Arrives when the session ends.</p>;
+            const mins = Math.round(s.log.minutes), list = tasksLine(s.tasks);
             const tally = [mins > 0 ? counted(mins, "minute") + " on task" : "", s.log.problems.length ? counted(s.log.problems.length, "problem") : "", s.log.hints ? counted(s.log.hints, "hint") : ""].filter(Boolean).join(" · ");
             return <div className="precap" data-role="phone-recap"><b>{s.learner ? `${s.learner.name}, tonight` : "Tonight"}</b>{tally}
               <ul>{tiles.map((t) => <li key={t.app} data-app={t.app}>{recapLine(t)}</li>)}{list && <li data-app="tasks">{list}</li>}</ul>
               <p style={{ margin: "10px 0 0", fontWeight: 600 }}>{recapCaption(tiles)}</p>
-              <ul>{s.log.hard.length ? s.log.hard.map((h) => <li key={h}>Needed a second hint: {h}</li>) : <li>Nothing needed a second hint.</li>}</ul></div>;
-          })() : <p>Arrives when the session ends.</p>}
+              {tiles.map((t) => (t.app === "maths" && !t.empty ? <ul key="hinted"><li data-role="phone-hinted">{hintedLine(t)}</li>{slippedLine(t) && <li data-role="phone-slipped">{slippedLine(t)}</li>}</ul> : null))}</div>;
+          })()}
           <WeekPage lines={s.learner ? s.week : null} />
           <p style={{ fontSize: 12 }}>The TV shows {TV_WORDS[s.screen] ?? "the desk"}{s.status && Object.values(s.jobs ?? {}).some((j) => j?.phase === "running") ? <> · {s.status}</> : null}.</p></div>}
 
-        <div className="pstatus">{msg}</div>
+        <div className="pstatus" role="status" aria-live="polite">{msg}</div>
       </div>
       <div className="pnav">
-        {([["capture", "Capture"], ["practice", "Practice"], ["point", "Point & ask"], ["linga", "Linga"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} disabled={!s?.joined && id !== "profile"} onClick={() => nav(id)}>{label}</button>)}
+        {([["capture", "Capture"], ["practice", "Practice"], ["point", "Point & ask"], ["linga", "Linga"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["paper", "Paper"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} disabled={!s?.joined && id !== "profile"} onClick={() => nav(id)}>{label}</button>)}
       </div>
     </div>
   );

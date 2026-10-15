@@ -7,11 +7,9 @@
  * Usage: node pen-sim.mjs [--host <ip>:8765] [--shape arc|arrow|circle|spotlight] [--pin <PIN>]
  */
 import WebSocket from 'ws';
-import { pairingPin, TV_HOST } from './device.mjs';
+import { pairingPin, parseArgs, TV_HOST } from './device.mjs';
 
-const args = Object.fromEntries(
-  process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
-);
+const args = parseArgs();
 const host = args.host ?? TV_HOST;
 const shape = args.shape ?? 'arc';
 
@@ -55,6 +53,11 @@ ws.on('open', async () => {
   send({ type: 'transport', cmd: 'pause' });
   await sleep(500);
 
+  // The TV beats a state every 400 ms, so one has arrived by now. Its count is the ink that was
+  // already there: a TV still holding an earlier run's drawing would otherwise pass this check
+  // with the stroke below dropped on the floor.
+  const inkBefore = seen.lastState?.annotationCount;
+
   const t0 = Date.now();
   if (shape === 'arc') {
     // A big yellow arc across the middle of the picture, drawn the way a finger would:
@@ -77,10 +80,11 @@ ws.on('open', async () => {
   await sleep(1200);
   const rtt = Date.now() - t0;
 
-  const ok = seen.accepted && seen.states > 0 && (seen.lastState?.annotationCount ?? 0) > 0;
+  const inkAfter = seen.lastState?.annotationCount;
+  const ok = seen.accepted && typeof inkBefore === 'number' && typeof inkAfter === 'number' && inkAfter > inkBefore;
   console.log(
     `[pen-sim] paired=${seen.accepted} states=${seen.states} ` +
-      `ink=${seen.lastState?.annotationCount} paused=${seen.lastState?.paused} ` +
+      `ink=${inkBefore ?? 'no state before drawing'}->${inkAfter} paused=${seen.lastState?.paused} ` +
       `t=${seen.lastState?.t}ms roundtrip=${rtt}ms`
   );
   console.log(ok ? '[pen-sim] PASS' : '[pen-sim] FAIL');

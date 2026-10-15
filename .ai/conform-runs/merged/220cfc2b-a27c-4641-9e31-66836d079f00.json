@@ -1,0 +1,179 @@
+{
+  "schema": "conform-run/1",
+  "worker": "220cfc2b-a27c-4641-9e31-66836d079f00",
+  "subject": "translation-pipeline-topology",
+  "evaluatedAt": "2026-10-15T03:13:35.245483+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [
+    {
+      "context": "pen-core",
+      "subject": "translation-pipeline-topology",
+      "bundle": "localization",
+      "state": "not-applicable",
+      "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:28 Searches found no i18n, l10n, termbase or glossary references in core, whose inspected processing path produces annotations rather than translations.",
+      "techniques": [
+        {
+          "technique": "canonical-and-derived-split",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Annotation.kt:99 The serialized artifact is an annotation document; no machine-translated artifact store was identified."
+        },
+        {
+          "technique": "canonical-fallback-serving",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Timeline.kt:10 Content selection is by annotation visibility time, without a translated-unit serving path."
+        },
+        {
+          "technique": "fuzzy-reuse-under-a-threshold",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:32 Stored history consists of editing operations, without translation-memory matching."
+        },
+        {
+          "technique": "hand-authored-exception-contract",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:240 User-provided annotation labels are retained directly; no human-authored exceptions to machine translation were identified."
+        },
+        {
+          "technique": "language-registry-single-source",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:13 The inspected connection contract identifies a pen and PIN, without a translation target or language selection."
+        },
+        {
+          "technique": "non-translatable-value-classification",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:230 This is annotation-label handling, without catalog values being dispatched to a translation engine."
+        },
+        {
+          "technique": "prompt-context-contract",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:98 The engine consumes pen messages and media time; no machine-translation request was identified."
+        },
+        {
+          "technique": "pseudo-localization-readiness",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Smoothing.kt:21 This scoped processing library supplies geometry rather than a product localization-readiness surface."
+        },
+        {
+          "technique": "serialization-transport-safety",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:167 The deserialized payload is a pen message, outside the technique's batch-translation precondition."
+        },
+        {
+          "technique": "sharded-translation-ci",
+          "verdict": "not-applicable",
+          "evidence": "core/build.gradle.kts:20 The inspected build input supports companion contract tests; no corpus translation workload was identified."
+        },
+        {
+          "technique": "source-hash-translation-cache",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:302 Document reuse tracks an annotation instance for heartbeat publication, without cached translations."
+        },
+        {
+          "technique": "source-identical-value-audit",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Annotation.kt:102 The decoded data is an annotation document; no committed target-language catalog was identified."
+        }
+      ],
+      "absenceTerms": [
+        "i18n",
+        "l10n",
+        "termbase",
+        "glossary"
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "translation-pipeline-topology",
+      "context": "desk-pipelines",
+      "reason": "the seat returned unknown"
+    },
+    {
+      "subject": "translation-pipeline-topology",
+      "context": "tv-app",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor LanTransport.kt:79 is the pairingUrl line and does not itself show the absence of a translation pipeline; the serving claim rests on neighbouring lines and the technique anchors are incidental (a Copy task, stroke-cache reuse, label drawing)."
+    },
+    {
+      "subject": "translation-pipeline-topology",
+      "context": "math-buddy",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor MathText.tsx:203 is just the raw-text/try line of a typesetting component and does not show a translation pipeline is absent; the technique anchors (working.ts tick logic, sheetRows.ts English caption) are incidental, and the caption is a hard-coded English string."
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-15T03:13:35.245483+00:00",
+      "bundle": "localization",
+      "subjects": [
+        "translation-pipeline-topology"
+      ],
+      "techniques": [
+        "canonical-and-derived-split",
+        "canonical-fallback-serving",
+        "fuzzy-reuse-under-a-threshold",
+        "hand-authored-exception-contract",
+        "language-registry-single-source",
+        "non-translatable-value-classification",
+        "prompt-context-contract",
+        "pseudo-localization-readiness",
+        "serialization-transport-safety",
+        "sharded-translation-ci",
+        "source-hash-translation-cache",
+        "source-identical-value-audit"
+      ],
+      "deviations": 0,
+      "context": "pen-core",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-15T03:13:35.245483+00:00",
+      "bundle": "localization",
+      "subjects": [
+        "translation-pipeline-topology"
+      ],
+      "techniques": [
+        "canonical-and-derived-split",
+        "canonical-fallback-serving",
+        "fuzzy-reuse-under-a-threshold",
+        "hand-authored-exception-contract",
+        "language-registry-single-source",
+        "non-translatable-value-classification",
+        "prompt-context-contract",
+        "pseudo-localization-readiness",
+        "serialization-transport-safety",
+        "sharded-translation-ci",
+        "source-hash-translation-cache",
+        "source-identical-value-audit"
+      ],
+      "deviations": 0,
+      "context": "tv-app",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-15T03:13:35.245483+00:00",
+      "bundle": "localization",
+      "subjects": [
+        "translation-pipeline-topology"
+      ],
+      "techniques": [
+        "canonical-and-derived-split",
+        "canonical-fallback-serving",
+        "fuzzy-reuse-under-a-threshold",
+        "hand-authored-exception-contract",
+        "language-registry-single-source",
+        "non-translatable-value-classification",
+        "prompt-context-contract",
+        "pseudo-localization-readiness",
+        "serialization-transport-safety",
+        "sharded-translation-ci",
+        "source-hash-translation-cache",
+        "source-identical-value-audit"
+      ],
+      "deviations": 0,
+      "context": "math-buddy",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

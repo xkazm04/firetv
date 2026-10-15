@@ -57,7 +57,9 @@
   .swatch { flex:0 0 40px; height:36px; border-radius:8px; border:2px solid transparent; padding:0; }
   .swatch[aria-pressed="true"] { border-color:#fff; }
 
-  input[type=range] { flex:1; accent-color:var(--ink); min-width:0; }
+  /* The track stays thin; the box is what a thumb hits, and 16 px (the default) is under the
+     24 px minimum target. */
+  input[type=range] { flex:1; accent-color:var(--ink); min-width:0; height:32px; margin:0; }
   .lbl { color:var(--dim); font-size:11px; align-self:center; flex:0 0 auto;
     font-variant-numeric:tabular-nums; }
 
@@ -89,9 +91,9 @@
     <canvas id="cv"></canvas>
     <div id="hint">draw here</div>
     <div id="tagbox">
-      <input id="tagtext" type="text" placeholder="#10 Novák" autocomplete="off" enterkeyhint="done">
+      <input id="tagtext" type="text" placeholder="#10 Novák" aria-label="Name tag" autocomplete="off" enterkeyhint="done">
       <button id="tagok" style="flex:0 0 64px">Add</button>
-      <button id="tagcancel" style="flex:0 0 64px">✕</button>
+      <button id="tagcancel" style="flex:0 0 64px" aria-label="Cancel">✕</button>
     </div>
   </div>
 </div>
@@ -107,11 +109,11 @@
   </div>
 
   <div class="row" id="colors">
-    <button class="swatch" data-color="#FFD400" aria-pressed="true"  style="background:#FFD400"></button>
-    <button class="swatch" data-color="#FF3B30" aria-pressed="false" style="background:#FF3B30"></button>
-    <button class="swatch" data-color="#00E5FF" aria-pressed="false" style="background:#00E5FF"></button>
-    <button class="swatch" data-color="#32D74B" aria-pressed="false" style="background:#32D74B"></button>
-    <button class="swatch" data-color="#FFFFFF" aria-pressed="false" style="background:#FFFFFF"></button>
+    <button class="swatch" data-color="#FFD400" aria-label="Yellow" aria-pressed="true"  style="background:#FFD400"></button>
+    <button class="swatch" data-color="#FF3B30" aria-label="Red" aria-pressed="false" style="background:#FF3B30"></button>
+    <button class="swatch" data-color="#00E5FF" aria-label="Cyan" aria-pressed="false" style="background:#00E5FF"></button>
+    <button class="swatch" data-color="#32D74B" aria-label="Green" aria-pressed="false" style="background:#32D74B"></button>
+    <button class="swatch" data-color="#FFFFFF" aria-label="White" aria-pressed="false" style="background:#FFFFFF"></button>
     <button id="btn-hold" aria-pressed="false" title="Keep drawings until cleared">Pin</button>
   </div>
 
@@ -144,7 +146,7 @@
   <div class="row">
     <span class="lbl" id="scrub-t">0.0s</span>
     <div id="scrubwrap">
-      <input id="scrub" type="range" min="0" max="1000" value="0" step="1">
+      <input id="scrub" type="range" aria-label="Position in the clip" min="0" max="1000" value="0" step="1">
       <div id="marks"></div>
     </div>
   </div>
@@ -157,8 +159,12 @@
   const mirror = $('mirror'), mctx = mirror.getContext('2d');
   const statusEl = $('status'), dot = $('dot'), hint = $('hint');
   const tagbox = $('tagbox'), tagtext = $('tagtext');
+  const pairBtn = document.querySelector('#pinbox button');
 
-  let pin = new URLSearchParams(location.search).get('pin') || '0000';
+  // The PIN rides in the fragment (#pin=), which the browser never sends, so a relay's access
+  // log cannot learn it. The query (?pin=) stays as a fallback for QR codes printed earlier.
+  let pin = new URLSearchParams(location.hash.slice(1)).get('pin')
+    || new URLSearchParams(location.search).get('pin') || '0000';
   const clientId = 'pen-' + Math.random().toString(36).slice(2, 8);
 
   let tool = 'freehand';
@@ -169,7 +175,10 @@
 
   // ---- transport -----------------------------------------------------------
   function connect() {
-    const sock = (ws = new WebSocket('ws://' + location.host + '/ws'));
+    // The TV serves this page over http (ws://); a relay serves it over https, where a ws://
+    // socket is mixed content and never opens.
+    const scheme = location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const sock = (ws = new WebSocket(scheme + location.host + '/ws'));
     ws.onopen = () => {
       connected = true;
       send({ type: 'hello', pin, clientId });
@@ -182,24 +191,80 @@
       // every second, forever. Wait for the viewer to type the PIN instead. A drop comes back.
       if (refused) return;
       if (!statusEl.classList.contains('bad')) statusEl.textContent = 'reconnecting…';
-      setTimeout(connect, 1000);
+      scheduleReconnect();
     };
     ws.onmessage = (e) => onMessage(JSON.parse(e.data));
   }
   function send(o) { if (connected) ws.send(JSON.stringify(o)); }
 
+  // A TV that is gone is redialled with a doubling wait (1 s up to 15 s), not every second for as
+  // long as the tab lives; a welcome resets it. While the screen is hidden nothing is dialled, and
+  // showing the page again dials at once.
+  const BACKOFF_MIN_MS = 1000, BACKOFF_MAX_MS = 15000;
+  let backoff = BACKOFF_MIN_MS, redial = 0;
+  function scheduleReconnect() {
+    clearTimeout(redial);
+    redial = 0;
+    if (document.hidden) return;
+    redial = setTimeout(() => { redial = 0; connect(); }, backoff);
+    backoff = Math.min(backoff * 2, BACKOFF_MAX_MS);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden || refused || connected || redial || (ws && ws.readyState < 2)) return;
+    backoff = BACKOFF_MIN_MS;
+    connect();
+  });
+
+  // The lockout's remaining time, shown as seconds; Pair stays disabled until it runs out.
+  let lockTick = 0;
+  function stopCountdown() { clearInterval(lockTick); lockTick = 0; pairBtn.disabled = false; }
+  function countdown(reason, ms) {
+    clearInterval(lockTick);
+    const end = Date.now() + ms;
+    pairBtn.disabled = true;
+    const tick = () => {
+      const left = Math.ceil((end - Date.now()) / 1000);
+      if (left <= 0) {
+        stopCountdown();
+        statusEl.textContent = reason + ' · type the PIN from the TV';
+        return;
+      }
+      statusEl.textContent = reason + ' · wait ' + left + ' s, then type the PIN';
+    };
+    tick();
+    lockTick = setInterval(tick, 250);
+  }
+
   function onMessage(m) {
     if (m.type === 'welcome') {
       if (!m.accepted) {
         refused = true;
-        statusEl.textContent = (m.reason || 'not paired') + ' · type the PIN from the TV';
+        // After too many wrong PINs the TV refuses every PIN, the right one too, for half a
+        // minute (PairingDesk.COOLDOWN_MS): typing it at once would only be refused again.
+        const locked = m.reason === 'too many wrong PINs';
+        // Another phone paired with the same PIN and holds the pen. Typing the PIN here would take
+        // it straight back and the two phones would trade it; reloading the page is the way back.
+        if (m.reason === 'another pen took over') {
+          paired = false;
+          dot.classList.remove('on');
+          statusEl.textContent = 'another phone has the pen · reload this page to take it back';
+          statusEl.classList.add('bad');
+          return;
+        }
+        statusEl.textContent = (m.reason || 'not paired') +
+          (locked ? ' · wait half a minute, then type the PIN' : ' · type the PIN from the TV');
         statusEl.classList.add('bad');
         pinbox.classList.add('show');
         pintext.value = '';
         pintext.focus();
+        // The TV said when the cooldown ends: count it down and keep Pair off until then.
+        if (locked && typeof m.retryAfterMs === 'number') countdown(m.reason, m.retryAfterMs);
         return;
       }
       paired = true;
+      stopCountdown();
+      backoff = BACKOFF_MIN_MS;
+      hint.textContent = 'draw here';
       statusEl.classList.remove('bad');
       dot.classList.add('on');
       // Match the TV's video aspect so the pad and the picture share one coordinate space.
@@ -288,10 +353,14 @@
     if (!typed) return;
     pin = typed;
     // A reload keeps the PIN the viewer typed rather than the one the TV refused.
+    // It goes back into the fragment, and an old ?pin= is dropped from the query, so the PIN is
+    // never in anything the page host sees.
     const q = new URLSearchParams(location.search);
-    q.set('pin', pin);
-    history.replaceState(null, '', '?' + q);
+    q.delete('pin');
+    const qs = q.toString();
+    history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + '#pin=' + encodeURIComponent(pin));
     refused = false;
+    stopCountdown();
     pinbox.classList.remove('show');
     statusEl.classList.remove('bad');
     statusEl.textContent = 'pairing…';
@@ -334,6 +403,13 @@
 
   pad.addEventListener('pointerdown', (e) => {
     if (tagbox.classList.contains('show')) return;
+    // Nothing reaches the TV before it welcomes this pen, so ink here would be a lie. Say why.
+    if (!paired) {
+      hint.textContent = !refused ? 'not connected to the TV yet'
+        : pinbox.classList.contains('show') ? 'type the PIN above to draw' : 'another phone has the pen';
+      hint.classList.remove('hide');
+      return;
+    }
     pad.setPointerCapture(e.pointerId);
     const n = norm(e);
     start = last = n;
@@ -391,6 +467,7 @@
   pad.addEventListener('pointerup', endStroke);
   pad.addEventListener('pointercancel', endStroke);
 
+  const SPOTLIGHT_MIN_RADIUS = 0.03;
   function previewShape(a, b) {
     clearCanvas();
     const p1 = px(a), p2 = px(b);
@@ -398,7 +475,14 @@
     ctx.lineWidth = 3;
     ctx.beginPath();
     if (tool === 'arrow') { ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]); }
-    else { ctx.arc(p1[0], p1[1], Math.hypot(p2[0] - p1[0], p2[1] - p1[1]), 0, Math.PI * 2); }
+    else {
+      // The pad carries the video's aspect, so pad pixels are content-width units times the pad
+      // width, the unit the TV measures radii in. A spotlight never lands smaller than 0.03 of
+      // the width (PenEngine), so neither does its preview.
+      let r = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+      if (tool === 'spotlight') r = Math.max(r, SPOTLIGHT_MIN_RADIUS * pad.clientWidth);
+      ctx.arc(p1[0], p1[1], r, 0, Math.PI * 2);
+    }
     ctx.stroke();
   }
 

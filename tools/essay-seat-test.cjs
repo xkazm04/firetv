@@ -8,11 +8,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-const opts={compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText,file);
+require('./ts-load.cjs');
 process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(os.tmpdir(),'desk-essay-seat-'));
 after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
 const store=()=>require(path.join(root,'src/lib/session/store.ts'));
@@ -101,4 +97,26 @@ test('case 7: Jakub has read the same lens himself; Ema\'s paragraph is not draw
  // and the seated learner's own paragraph still draws its rail
  const own=essayWaiting({...reduce(seatedEma(),{type:'essay.set',analysis:A1}),history:s.history});
  assert.deepEqual(own.rail.map(x=>[x.n,x.against]),[[1,false],[2,true],[3,false]]);
+});
+
+test('plan case 8: Ema fills two slots, the desk goes to Jakub, who has no plan; back to Ema, her two slots are there',()=>{
+ const {reduce}=store();
+ let s=reduce(seatedEma(),{type:'essay.plan',lens:'argument'});
+ s=reduce(s,{type:'essay.slot',i:0,text:'Schools should start later.'});s=reduce(s,{type:'essay.slot',i:1,text:'Research found that teenagers fall asleep later.'});
+ assert.equal(s.essayPlan.slots.filter(Boolean).length,2);
+ s=reduce(s,{type:'learner.set',id:'jakub'});
+ assert.equal(s.essayPlan,undefined,'Jakub has no plan');
+ assert.ok(s.away.ema.essayPlan,'it sits in Ema\'s slot');
+ s=reduce(s,{type:'learner.set',id:'ema'});
+ assert.deepEqual(s.essayPlan,{lens:'argument',slots:['Schools should start later.','Research found that teenagers fall asleep later.','']});
+ assert.equal(s.away.jakub,undefined,'his empty chair keeps nothing');
+ s=reduce(s,{type:'learner.set',id:'jakub'});
+ assert.equal(JSON.parse(JSON.stringify(s)).away.ema.essayPlan.slots[0],'Schools should start later.','it survives a JSON round trip');
+});
+
+test('E9-2: a seated learner\'s reading holding model prose in its summary shows code\'s count on the landing card, never the prose',()=>{
+ const {reduce}=store(),{essayWaiting}=rows();
+ const B={...A2,verdicts:[{n:1,verdict:'faulty',note:'a'},{n:2,verdict:'faulty',note:'b'}],summary:'Excellent work, this paragraph is clear and convincing.'};
+ const s={...reduce(seatedEma(),{type:'essay.set',analysis:B}),history:[{at:Date.now()-86400000,kind:'writing',label:'Argument',detail:'2 of 2 sentences to fix'}]};
+ assert.equal(essayWaiting(s).line,'2 of 2 sentences to fix.');
 });

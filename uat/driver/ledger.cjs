@@ -2,7 +2,7 @@
  * One open ledger across every LT run, derived from the runs' own files and never stored: what is open for Linga now,
  * which Character x journey holds it, and how long each gap has gone unasked.
  *
- *   ledger(runsDir, opts?) -> { dir, runs, rows, gaps, open, byGid, product }
+ *   ledger(runsDir, opts?) -> { dir, runs, rows, gaps, open, byGid, product, unreadable: [{ run, error }] }
  *   statusOf(ledger)       -> the operator view (OPEN.md): open gaps by pair, highest rank first, the next command
  *   writeStatus(runsDir)   -> writes <runsDir>/OPEN.md from a fresh ledger; returns { md, file }
  *
@@ -18,9 +18,9 @@
  * did not show its judge the gap (in the record's prior[] or by a recertify stamp): a gap no rerun asks about ages here
  * instead of vanishing. With `opts.repo` each gap also says what product it was seen on (product.cjs): `seen` is the
  * run's own stamp (run.json `product`) or, for a run without one, the commit that first added its findings.json;
- * `changed` lists the files of the driver's load set whose blob differs now, and `productState` is 'current' (none),
+ * `changed` lists the files both sides hold whose blob differs now (`oneSided` the paths only one holds: they never age a row). A run with its own stamp is compared over the files that stamp holds, against the working tree's blob of each; a run without one over the driver's load set, at its commit and now, and `productState` is 'current' (none),
  * 'aged' (some) or 'unknown' (no stamp and no history: never read as current). `opts` may inject `git`, `files` and
- * `current` (product.cjs stampOf), so a stamped run needs no git call. Nothing here calls a model.
+ * `current` (product.cjs stampOf: a stamped run reads its now blobs from it, a stamped file absent from it is one-sided), so a stamped run needs no git call. Nothing here calls a model.
  */
 const fs = require('node:fs'), path = require('node:path');
 const UAT = path.resolve(__dirname, '..'), RUNS = path.join(UAT, 'runs'), INSIGHTS = path.resolve(UAT, '../docs/uat-insights');
@@ -50,7 +50,7 @@ function runsOf(dir) {
   }
   return out.sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0)).map((r, order) => ({ ...r, order }));
 }
-/** The per-Character result files of one run. */
+/** The per-Character result files of one run; one that cannot be read (a child that died while saving) is left out. recertify.cjs reads them here too. */
 const resultsOf = d => fs.readdirSync(d).filter(f => f.endsWith('.json') && !NOT_RESULTS.has(f)).sort()
   .map(f => { try { return readJson(path.join(d, f)); } catch { return null; } }).filter(r => r && r.character && Array.isArray(r.journeys));
 
@@ -59,7 +59,7 @@ const resolveIn = (run, ref) => String(ref).includes('/') ? String(ref) : `${run
 
 function ledger(dir = RUNS, opts = {}) {
   const runs = runsOf(dir), runById = new Map(runs.map(r => [r.id, r])), rows = [];
-  const ran = new Map(), asked = new Map(); // run id -> Set(pair), run id -> Set(gid)
+  const ran = new Map(), asked = new Map(), unreadable = []; // run id -> Set(pair), run id -> Set(gid); runs whose record could not be read
   for (const run of runs) {
     const rs = resultsOf(run.dir), mine = new Set(), shown = new Set();
     for (const r of rs) for (const j of r.journeys) {
@@ -67,9 +67,11 @@ function ledger(dir = RUNS, opts = {}) {
       for (const p of Array.isArray(j.prior) ? j.prior : []) if (p?.id) shown.add(resolveIn(run, p.id));
     }
     ran.set(run.id, mine); asked.set(run.id, shown);
+    // a record that cannot be read is named, never read as a run with nothing open: its rows would vanish from OPEN.md
     let fs0 = [];
-    try { fs0 = readJson(path.join(run.dir, 'findings.json')); } catch { fs0 = []; }
-    (Array.isArray(fs0) ? fs0 : []).forEach((f, i) => { if (f && f.id) rows.push({ ...f, run: run.id, gid: `${run.id}/${f.id}`, order: run.order, at: i }); });
+    try { fs0 = readJson(path.join(run.dir, 'findings.json')); } catch (e) { fs0 = []; unreadable.push({ run: run.id, error: String(e.message).split('\n')[0].slice(0, 160) }); }
+    if (!Array.isArray(fs0)) { unreadable.push({ run: run.id, error: 'not a list of findings' }); fs0 = []; }
+    fs0.forEach((f, i) => { if (f && f.id) rows.push({ ...f, run: run.id, gid: `${run.id}/${f.id}`, order: run.order, at: i }); });
   }
   const byRow = new Map(rows.map(r => [r.gid, r]));
   // a recertify stamp asked about the row in the run it names
@@ -106,7 +108,7 @@ function ledger(dir = RUNS, opts = {}) {
   }
   gaps.sort((a, b) => a.head.order - b.head.order || a.head.at - b.head.at);
   const product = opts.repo ? productOf(runs, gaps, opts) : null;
-  return { dir, runs, rows, gaps, open: gaps.filter(g => g.open), byGid, product };
+  return { dir, runs, rows, gaps, open: gaps.filter(g => g.open), byGid, product, unreadable };
 }
 
 /**
@@ -120,13 +122,23 @@ function productOf(runs, gaps, { repo, git, files, current }) {
     const g = git ?? PR.gitOf(repo), list = files ?? PR.surface();
     now = { git: g, files: list, current: current ?? PR.stampOf(repo, list, g) };
   } catch { return null; }
-  const cache = new Map(), seenBy = new Map();
+  const cache = new Map(), seenBy = new Map(), nowBy = new Map();
+  /** The tree's blobs now for one stamp's own file list, one git call per distinct list. */
+  const nowOf = list => {
+    const key = list.join('|');
+    if (!nowBy.has(key)) nowBy.set(key, current ? Object.fromEntries(list.filter(f => f in current.files).map(f => [f, current.files[f]])) : PR.blobsNow(repo, list, now.git));
+    return nowBy.get(key);
+  };
   const seenOf = run => { if (!seenBy.has(run.id)) seenBy.set(run.id, PR.seenOf(run, { repo, git: now.git, files: now.files, cache })); return seenBy.get(run.id); };
   for (const g of gaps) {
     const s = seenOf(runs.find(r => r.id === g.lastSeen));
-    if (!s) { Object.assign(g, { seen: null, changed: null, productState: 'unknown', productFiles: null }); continue; }
-    const d = PR.changedBetween(s.files, now.current.files);
-    Object.assign(g, { seen: { commit: s.commit, source: s.source }, changed: d.changed, productState: d.changed.length ? 'aged' : 'current', productFiles: d.total });
+    if (!s) { Object.assign(g, { seen: null, changed: null, oneSided: null, productState: 'unknown', productFiles: null }); continue; }
+    let against = now.current.files;
+    if (s.source === 'run.json') {
+      against = nowOf(Object.keys(s.files));
+    }
+    const d = PR.changedBetween(s.files, against);
+    Object.assign(g, { seen: { commit: s.commit, source: s.source }, changed: d.changed, oneSided: d.oneSided, productState: d.changed.length ? 'aged' : 'current', productFiles: d.total - d.oneSided.length });
   }
   const counts = { current: 0, aged: 0, unknown: 0 };
   for (const g of gaps) if (g.open) counts[g.productState]++;
@@ -136,27 +148,50 @@ function productOf(runs, gaps, { repo, git, files, current }) {
 // ---------------------------------------------------------------- the operator view
 const one = s => String(s ?? '').replace(/\s*\n\s*/g, ' ');
 /** How a row's product stands: nothing when it was seen on the current one (or the ledger was built without a repo). */
-const productCell = g => g.productState === 'aged' ? ` · product: ${g.changed.length} of ${g.productFiles} files changed since` : g.productState === 'unknown' ? ' · product: unknown' : '';
-/** OPEN.md: every open gap by Character x journey, the pair with the highest rank first. */
+const productCell = g => (g.productState === 'aged' ? ` · product: ${g.changed.length} of ${g.productFiles} files changed since` : g.productState === 'unknown' ? ' · product: unknown' : '') + (g.oneSided?.length ? ` · ${g.oneSided.length} paths held by one side only` : '');
+/** The module a journey id belongs to: J1-J5 Linga, EM1-EM5 Essay Master, MB1-MB5 Math Buddy. An id of no other prefix is Linga. */
+const moduleOf = journey => /^EM\d/.test(journey) ? 'Essay Master' : /^MB\d/.test(journey) ? 'Math Buddy' : 'Linga';
+const MODULES = ['Linga', 'Essay Master', 'Math Buddy'];
+const RE_WALK = 'Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Linga driver does not rerun them.';
+/** How the open rows of a module are re-checked: linga-text.cjs drives Linga only. */
+const NEXT = {
+  Linga: 'Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each judge answers all of its pair\'s open rows, and each answer is stamped into the run that owns the row.',
+  'Essay Master': RE_WALK,
+  'Math Buddy': RE_WALK,
+};
+/** OPEN.md: every open gap by module, then by Character x journey, the pair with the highest rank first. */
 function statusOf(L, { insights = INSIGHTS } = {}) {
-  const pairs = new Map();
-  for (const g of L.open) { const k = pairKey(g.character, g.journey); (pairs.get(k) ?? pairs.set(k, []).get(k)).push(g); }
   const byRank = (a, b) => b.rank - a.rank || b.recurrence - a.recurrence || b.unasked - a.unasked || a.id.localeCompare(b.id);
-  const sections = [...pairs.values()].map(gs => gs.sort(byRank)).sort((a, b) => b[0].rank - a[0].rank || b.length - a.length || a[0].character.localeCompare(b[0].character) || jn(a[0].journey) - jn(b[0].journey));
-  const holding = new Set(L.open.flatMap(g => g.rows.map(r => r.run)));
   const top = L.runs.filter(r => !r.parent), drained = top.filter(r => fs.existsSync(path.join(insights, `${r.id}.md`)));
-  const recurring = L.open.filter(g => g.recurrence > 1).length, unasked = L.open.filter(g => g.unasked > 0).length;
   const row = g => `- \`${g.id}\` ${g.severity} · rank ${g.rank} · ${one(g.title)}${g.recurrence > 1 ? ` · recurrence ${g.recurrence}, first seen ${g.firstSeen}` : ''}${g.unasked > 0 ? ` · unasked since ${g.unaskedSince} (${g.unasked} later run${g.unasked === 1 ? '' : 's'} of this pair)` : ''}${productCell(g)}`;
+  const section = mod => {
+    const open = L.open.filter(g => moduleOf(g.journey) === mod);
+    if (!open.length) return [];
+    const pairs = new Map();
+    for (const g of open) { const k = pairKey(g.character, g.journey); (pairs.get(k) ?? pairs.set(k, []).get(k)).push(g); }
+    const sections = [...pairs.values()].map(gs => gs.sort(byRank)).sort((a, b) => b[0].rank - a[0].rank || b.length - a.length || a[0].character.localeCompare(b[0].character) || jn(a[0].journey) - jn(b[0].journey));
+    const holding = new Set(open.flatMap(g => g.rows.map(r => r.run)));
+    const recurring = open.filter(g => g.recurrence > 1).length, unasked = open.filter(g => g.unasked > 0).length;
+    const n = { current: 0, aged: 0, unknown: 0 };
+    if (L.product) for (const g of open) n[g.productState]++;
+    return [
+      `# ${mod}`, '',
+      `${open.length} open in ${pairs.size} pairs across ${holding.size} runs`,
+      ...(L.product ? [`${open.length} open: ${n.current} seen on the current product, ${n.aged} seen before a product change${n.unknown ? `, ${n.unknown} unknown` : ''}`] : []), '',
+      `recurring ${recurring} · unasked by a later run of their pair ${unasked}`, '',
+      NEXT[mod], '',
+      ...sections.flatMap(gs => [`## ${gs[0].character} ${gs[0].journey} · ${gs.length} open · top rank ${gs[0].rank}`, '', ...gs.map(row), '']),
+    ];
+  };
   return [
-    '# Open LT findings — Linga', '',
-    'Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run.', '',
-    `${L.open.length} open in ${pairs.size} pairs across ${holding.size} runs`,
-    ...(L.product ? [`${L.open.length} open: ${L.product.counts.current} seen on the current product, ${L.product.counts.aged} seen before a product change${L.product.counts.unknown ? `, ${L.product.counts.unknown} unknown` : ''}`] : []), '',
-    `recurring ${recurring} · unasked by a later run of their pair ${unasked}`,
+    '# Open LT findings', '',
+    'Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run. One section per module that has open rows.', '',
+    // the total, always: with no module section below, a 0 must still be said rather than read off an empty page
+    `${L.open.length} open across ${top.length} run${top.length === 1 ? '' : 's'}${L.open.length ? '' : ': nothing to recertify'}`,
     `drained ${drained.length} of ${top.length} runs`,
-    ...(top.length > drained.length ? [`undrained: ${top.filter(r => !drained.includes(r)).map(r => r.id).join(', ')} (home: docs/uat-insights/<run-id>.md, uat/README.md)`] : []), '',
-    'Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each judge answers all of its pair\'s open rows, and each answer is stamped into the run that owns the row.', '',
-    ...sections.flatMap(gs => [`## ${gs[0].character} ${gs[0].journey} · ${gs.length} open · top rank ${gs[0].rank}`, '', ...gs.map(row), '']),
+    ...(top.length > drained.length ? [`undrained: ${top.filter(r => !drained.includes(r)).map(r => r.id).join(', ')} (home: docs/uat-insights/<run-id>.md, uat/README.md)`] : []),
+    ...(L.unreadable ?? []).map(u => `unreadable: ${u.run}/findings.json (${one(u.error)}): its rows are not counted below`), '',
+    ...MODULES.flatMap(section),
   ].join('\n');
 }
 /** OPEN.md beside the runs, from a fresh ledger. */
@@ -166,4 +201,4 @@ function writeStatus(dir = RUNS, opts = {}) {
   return { md, file };
 }
 
-module.exports = { RUNS, runsOf, ledger, statusOf, writeStatus, isOpen, pairKey };
+module.exports = { RUNS, runsOf, resultsOf, ledger, statusOf, writeStatus, isOpen, pairKey, moduleOf };

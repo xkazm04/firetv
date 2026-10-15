@@ -1,9 +1,9 @@
-import { networkInterfaces } from "node:os";
+import { lanHost } from "@/lib/session/lan";
 
 export const dynamic = "force-dynamic";
 
 export default function Home() {
-  const ip = Object.values(networkInterfaces()).flat().find((n) => n && n.family === "IPv4" && !n.internal)?.address ?? "localhost";
+  const ip = lanHost();
   return (
     <main className="land">
       <div className="box">

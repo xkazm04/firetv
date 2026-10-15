@@ -459,6 +459,10 @@
 .linga-tv .lo-note-label { display: block; color: var(--lo-muted-line); font-size: 22px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
 .linga-tv .lo-before q { display: block; margin-top: 8px; color: #7b6a6c; font-family: var(--lo-serif); font-size: 40px; line-height: 1.2; }
 .linga-tv .lo-compare .lo-card { margin-top: 40px; }
+/* a fix still withheld (K2): the after slot is an empty plum frame, dashed like every slot still to fill; the learner's line fills it */
+.linga-tv .lo-card.lo-open { border: 3px dashed var(--lo-frame); background: rgba(255, 249, 236, .5); box-shadow: none; }
+.linga-tv .lo-card.lo-open::before { opacity: .35; }
+.linga-tv .lo-card.lo-open .lo-card-text { min-height: 1.18em; }
 .linga-tv .lo-note { max-width: 720px; margin-top: 24px; color: var(--lo-data); font-size: 30px; font-weight: 700; line-height: 1.3; }
 
 /* speaking progress: stepping stones on a dashed path */
@@ -583,6 +587,8 @@
   transform: translate(-50%, -50%);
 }
 .linga-tv .lo-flag { position: absolute; left: 24px; top: -96px; width: 60px; height: 90px; }
+/* S2: the band the learner spoke at, when it is below the read: the same flag, hollow, and its step outlined */
+.linga-tv .lo-step[data-spoke="true"] { box-shadow: inset 0 0 0 5px var(--lo-amber); }
 .linga-tv[data-layout="ladder"] .lo-actions { position: absolute; left: 110px; right: 110px; bottom: 139px; z-index: 3; width: auto; flex-direction: row; gap: 15px; margin: 0; }
 .linga-tv[data-layout="ladder"] .lo-action { flex: 1; min-width: 0; }
 .linga-tv[data-layout="ladder"] .lo-action[data-focused="true"] { transform: translateY(-6px); }
@@ -661,7 +667,7 @@
 
 /* ---------------------------------------------------------------- the phone (not the TV) */
 .linga-phone label { display: flex; flex-direction: column; gap: 6px; color: #425365; }
-.linga-phone input, .linga-phone select, .linga-phone textarea { width: 100%; padding: 12px; border: 1px solid #b8c5cf; border-radius: 3px; background: #fff; color: #1b2632; font: inherit; }
+.linga-phone input, .linga-phone select, .linga-phone textarea { width: 100%; padding: 12px; border: 1px solid #b8c5cf; border-radius: 3px; background: #fff; color: #1b2632; font: inherit; font-size: 16px; }
 .linga-phone textarea { min-height: 100px; resize: vertical; }
 .linga-phone .linga-check { flex-direction: row; align-items: start; }
 .linga-phone .linga-check input { width: auto; margin-top: 4px; }
@@ -707,3 +713,16 @@
   .linga-print footer { font-size: 8pt; }
   .linga-print tr { break-inside: avoid; }
 }
+
+/* v2 R1: the keys, one per skill used on your own, golden once used elsewhere (english/LingaKeys.tsx) */
+.linga-tv .lo-keys { display: inline-flex; align-items: center; gap: 10px; margin-left: 28px; }
+.linga-tv .lo-keys svg { display: block; }
+
+/* ---------------------------------------------------------------- phrases you own (L1): home's strip, no count */
+.linga-tv .lo-yours { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; max-width: 760px; margin-top: 26px; }
+.linga-tv .lo-yours-label { flex: none; color: var(--lo-label); font-size: 22px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+.linga-tv .lo-yours-item { display: inline-flex; align-items: center; gap: 10px; max-width: 340px; padding: 8px 16px 8px 12px; border: 2px solid var(--lo-card-line); border-radius: 12px; background: var(--lo-card); }
+.linga-tv .lo-yours-door { flex: none; width: 22px; height: 30px; }
+.linga-tv .lo-yours-text { overflow: hidden; color: var(--lo-sentence); font-family: var(--lo-serif); font-size: 26px; line-height: 1.2; white-space: nowrap; text-overflow: ellipsis; }
+.linga-tv .lo-yours-list > span:last-child { font-family: var(--lo-serif); font-weight: 400; }
+.linga-print .linga-owned td:last-child { font-family: Georgia, "Times New Roman", serif; }

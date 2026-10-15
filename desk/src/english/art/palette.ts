@@ -21,6 +21,13 @@ export const P = {
   leaf: "#6c7560", stem: "#4d5c55",
 } as const;
 
+/**
+ * The colours of the things on the lost-property table (L3, LostThing.tsx): the one place a picture must be read as a
+ * colour word, so they are the four plain colours a beginner names (red, blue, green, yellow), each toned down to sit
+ * in the warm ground. Blue is the one hue the rest of Linga does not use; it is kept to these things.
+ */
+export const ITEM = { red: "#b9484c", blue: "#4f6f98", green: "#5f8a4c", yellow: "#e8b83f" } as const;
+
 /** Skin: face, ear and neck shade, and the line of the nose. */
 export const SKIN = {
   light: ["#f1c3a4", "#e3a88d", "#c48877"],

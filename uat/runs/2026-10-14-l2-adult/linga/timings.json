@@ -1,0 +1,96 @@
+[
+  {
+    "action": "pitch",
+    "ms": 29192,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 10380,
+    "sendToLineMs": 29211,
+    "lineToVoiceMs": 873,
+    "voiceStatus": "Partner speaking"
+  },
+  {
+    "action": "turn",
+    "ms": 16068,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 16011,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "the partner line did not change within 120 s"
+  },
+  {
+    "action": "moment-done",
+    "ms": 43,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 16011,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "taking a moment gives no new partner line"
+  },
+  {
+    "action": "turn",
+    "ms": 10546,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 10483,
+    "sendToLineMs": 10563,
+    "lineToVoiceMs": 1357,
+    "voiceStatus": "Partner speaking"
+  },
+  {
+    "action": "turn",
+    "ms": 9678,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 9621,
+    "sendToLineMs": 9679,
+    "lineToVoiceMs": 1207,
+    "voiceStatus": "Partner speaking"
+  },
+  {
+    "action": "cut",
+    "ms": 7061,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 6923,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "Cut ends the take: no new partner line"
+  },
+  {
+    "action": "take-two",
+    "ms": 61,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 6923,
+    "sendToLineMs": 73,
+    "lineToVoiceMs": 844,
+    "voiceStatus": "Partner speaking"
+  },
+  {
+    "action": "turn",
+    "ms": 5788,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 5739,
+    "sendToLineMs": 5795,
+    "lineToVoiceMs": 1131,
+    "voiceStatus": "Partner speaking"
+  },
+  {
+    "action": "take-end",
+    "ms": 39,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 5739,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "ending a take gives no new partner line"
+  }
+]

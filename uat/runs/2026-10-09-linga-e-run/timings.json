@@ -1,0 +1,78 @@
+[
+  {
+    "action": "level-self",
+    "ms": 75,
+    "initialStatus": 200,
+    "status": 200,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "seating a level gives no partner line"
+  },
+  {
+    "action": "start",
+    "ms": 8809,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 8739,
+    "sendToLineMs": 8815,
+    "lineToVoiceMs": null,
+    "voiceStatus": "Select Repeat audio to enable speech, or use captions.",
+    "reason": "no \"<partner> speaking\" in the footer within 15 s (headless: no server voice or no synthesis voice, or blocked)"
+  },
+  {
+    "action": "turn",
+    "ms": 11754,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 11578,
+    "sendToLineMs": 11766,
+    "lineToVoiceMs": null,
+    "voiceStatus": "Select Repeat audio to enable speech, or use captions.",
+    "reason": "no \"<partner> speaking\" in the footer within 15 s (headless: no server voice or no synthesis voice, or blocked)"
+  },
+  {
+    "action": "turn",
+    "ms": 10744,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 10700,
+    "sendToLineMs": 10750,
+    "lineToVoiceMs": null,
+    "voiceStatus": "Select Repeat audio to enable speech, or use captions.",
+    "reason": "no \"<partner> speaking\" in the footer within 15 s (headless: no server voice or no synthesis voice, or blocked)"
+  },
+  {
+    "action": "coach",
+    "ms": 6290,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 6257,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "a coaching note is not a partner line"
+  },
+  {
+    "action": "replay",
+    "ms": 9999,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 9960,
+    "sendToLineMs": 10002,
+    "lineToVoiceMs": null,
+    "voiceStatus": "Select Repeat audio to enable speech, or use captions.",
+    "reason": "no \"<partner> speaking\" in the footer within 15 s (headless: no server voice or no synthesis voice, or blocked)"
+  },
+  {
+    "action": "finish",
+    "ms": 99,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 9960,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "finishing ends the scene: no new partner line"
+  }
+]

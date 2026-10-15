@@ -60,6 +60,23 @@ export interface LandingView {
   place: string;
   /** nothing on the profile's apps yet: the same words for whichever theme */
   empty: boolean;
+  /**
+   * What a screen reader hears when the D-pad lands on a stop. The lamp is drawn, not focused (the stage keeps DOM
+   * focus and data-focused is for automation), so every theme puts this in a polite live region and the stop the
+   * light is on is spoken. It uses the same words the eye reads, and nothing more.
+   */
+  say: string;
+}
+
+const sentence = (t: string) => t.trim().replace(/[.!?]$/, "");
+/** The stop the light is on, in words: the app, when, what is waiting and where it stands; the second action; the phone. */
+export function sayOf(v: Omit<LandingView, "say">): string {
+  const parts = (xs: Array<string | null | undefined>) => xs.filter((x): x is string => !!x && !!x.trim()).map(sentence).join(". ") + ".";
+  if (!v.at) return "";
+  if (v.at === "phone") return parts([v.caption.head, `Open ${v.phone.url}, then enter ${v.phone.pin.split("").join(" ")}`]);
+  if (v.at === "place") return parts([v.place, v.learner ? `${v.learner.name} is at the desk` : null]);
+  const app = v.apps.find((a) => a.id === v.at);
+  return app ? parts([app.name, app.caption.chip?.text, app.caption.head, app.caption.sub, v.primary]) : "";
 }
 
 const LAST_VERB: Record<Subject, string> = { maths: "Practised", english: "Talked", essay: "Read" };
@@ -136,11 +153,12 @@ export function landingView(s: Session, lastApp: Subject | null = null): Landing
   const learner = learnerOf(s), wApp = apps.find((a) => a.id === world) ?? null;
   const caption: Caption = at === "phone" ? { chip: null, head: "Pair your phone", sub: "Open the address on your phone, then enter the four digits." }
     : wApp ? wApp.caption : { chip: null, head: "No apps yet", sub: "This profile has no apps on it. Select Someone else to change it." };
-  return {
+  const view: Omit<LandingView, "say"> = {
     stops, at, apps, world, learner, caption,
     phone: { paired: s.joined, pin: s.pin, url: s.phoneUrl.replace(/^https?:\/\//, "") },
     primary: primaryLabel(learner?.name ?? null, wApp?.kind ?? null),
     place: learner ? "Someone else" : "Choose who",
     empty: apps.length === 0,
   };
+  return { ...view, say: sayOf(view) };
 }

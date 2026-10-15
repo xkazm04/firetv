@@ -12,10 +12,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after,afterEach}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const data=path.join(os.tmpdir(),`desk-week-digest-${process.pid}-${Date.now()}`);process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 assert.ok(!path.resolve(data).startsWith(path.resolve(root,'data')),'never desk/data');
 
@@ -72,10 +69,10 @@ test('1: a typed set writes ONE digest entry - counts, the unit, the most freque
  const d=digest();assert.equal(d.length,1,'one entry for one set');
  const e=d[0];
  assert.ok(e.at>=t0&&e.at<=Date.now(),'dated');
- assert.deepEqual({...e,at:0},{at:0,kind:'maths',topic:UNIT,right:1,notSure:2,total:6,slip:'tops-and-bottoms',slipN:2});
+ assert.deepEqual({...e,at:0},{at:0,kind:'maths',topic:UNIT,right:1,notSure:1,total:6,skipped:1,slip:'tops-and-bottoms',slipN:2});
  assert.equal(e.stretch,undefined,'a usual set carries no step-up flag');
  const h=learners.getLearner(LEARNER).history;assert.equal(h.length,before+1,'the history line is written as before');
- assert.equal(h.at(-1).detail,'1 of 6 right, 2 not sure','the history line keeps its shape');
+ assert.equal(h.at(-1).detail,'1 of 6 right, 1 not sure, 1 skipped','the history line keeps its shape; MB-B1: the blank 6th is skipped, apart from the doubt of the desk');
  // the session is never sent the digest
  assert.equal(store.getSession().digest,undefined,'the session carries no digest');
  assert.ok(!JSON.stringify(store.getSession()).includes('"slipN"'),'nothing of the digest is hydrated into the session');
@@ -88,7 +85,7 @@ test('2: a photographed set (vision stubbed) writes one entry the same way; the 
  const r=await post('mark',PHOTO);assert.equal(r.status,200);
  assert.equal(seenVision.length,1,'one vision call per sheet, as before');assert.equal(calls.length,0);
  const d=digest();assert.equal(d.length,1);
- assert.deepEqual({...d[0],at:0},{at:0,kind:'maths',topic:UNIT,right:1,notSure:2,total:6,slip:'tops-and-bottoms',slipN:2},'code decides, not the stub');
+ assert.deepEqual({...d[0],at:0},{at:0,kind:'maths',topic:UNIT,right:1,notSure:1,total:6,skipped:1,slip:'tops-and-bottoms',slipN:2},'code decides, not the stub');
  // a second set on the same learner appends
  setOn(SIX);visionThrows();await post('mark',{answers:['11/12','11/12','11/12','11/12','3/4','11/12']});
  assert.equal(digest().length,2,'one entry per marked set');assert.deepEqual({...digest()[1],at:0},{at:0,kind:'maths',topic:UNIT,right:6,notSure:0,total:6});
@@ -111,8 +108,8 @@ test('4: an explanation that settles an unsure item restates the set\'s entry in
  // item 5 (0,75 under uk) was unsure; the learner explains and it settles right
  store.dispatch({type:'practice.settle',n:5,reply:'You got it.',verdict:'right',said:'Number 5 is right.'});
  let d=digest();assert.equal(d.length,1,'a recount, not a new entry');
- assert.deepEqual(d[0],{...was,right:2,notSure:1},'right up by one, not sure down by one; date, step-up flag and slip kept');
- // item 6 (blank) settles wrong with a code slip: the slip count follows the items
+ assert.deepEqual(d[0],{...was,right:2,notSure:0},'right up by one, not sure down by one (the skipped 6th stays skipped); date, step-up flag and slip kept');
+ // item 6 (blank, skipped) settles wrong with a code slip: the slip count follows the items
  store.dispatch({type:'practice.settle',n:6,reply:'Look again.',verdict:'wrong',slip:'tops-and-bottoms',said:'x'});
  d=digest();assert.deepEqual({...d[0],at:0},{at:0,kind:'maths',topic:UNIT,right:2,notSure:0,total:6,stretch:true,slip:'tops-and-bottoms',slipN:3});
  // a settle with no verdict (a reply only) changes nothing
@@ -134,7 +131,7 @@ test('5: mathsEntry picks the most frequent code-detected slip, ties by the unit
  for(const unit of Object.keys(S.SCHOOL_UNIT_SLIPS)){const list=S.SCHOOL_UNIT_SLIPS[unit];
   assert.deepEqual(e(list.map(W),unit),[list[0],1],`${unit}: all tied, the first on the list`);
   assert.deepEqual(e([...list.map(W),W(list.at(-1))],unit),[list.at(-1),2],`${unit}: the most frequent wins`);}
- assert.deepEqual(D.mathsEntry(UNIT,[R,U,{verdict:'wrong'},{}],true,7),{at:7,kind:'maths',topic:UNIT,right:1,notSure:2,total:4,stretch:true},'no verdict counts as not sure, as rightLine does');
+ assert.deepEqual(D.mathsEntry(UNIT,[R,U,{verdict:'wrong'},{}],true,7),{at:7,kind:'maths',topic:UNIT,right:1,notSure:1,skipped:1,total:4,stretch:true},'no verdict counts as not sure, as rightLine does; an unsure item with no answer is skipped');
 });
 
 // ------------------------------------------------------------------ 6. Linga and Essay
@@ -158,12 +155,47 @@ test('6: a finished Linga conversation writes one english entry (scene, skill, r
 
 test('7: an Essay Master reading writes one essay entry - the lens and the two counts, never a sentence',async()=>{
  seat();
- answer=async()=>({json:{verdicts:[{n:2,verdict:'faulty',note:'no evidence'},{n:3,verdict:'strong',note:'ok'}],summary:'One to fix.'},provider:'test',ms:1});
+ answer=async()=>({json:{observations:[{n:1,support:'context',note:'ok'},{n:2,support:'opinion',note:'no evidence'},{n:3,support:'context',note:'ok'}],summary:'One to fix.'},provider:'test',ms:1});
  const para='Homework should be shorter. Everyone agrees. Studies of sleep show teenagers need nine hours.';
  await analyseEssay(para,'evidence',LEARNER);
  const d=digest();assert.equal(d.length,1);
- assert.deepEqual({...d[0],at:0},{at:0,kind:'essay',lens:'evidence',sentences:3,faulty:1});
+ assert.deepEqual({...d[0],at:0},{at:0,kind:'essay',lens:'evidence',sentences:3,faulty:1,paragraphs:1});
  assert.ok(!JSON.stringify(d).includes('Homework')&&!JSON.stringify(d).includes('One to fix'),'no text of the paragraph or the reading');
+});
+
+test('M8 (EM-B20): a piece evening - the history is read again once the piece is recorded, the recap row reads the ", N paragraphs" line, the Sunday line says piece',async()=>{
+ seat();
+ answer=async(req)=>{const m=/Judge only paragraph \d+ of \d+: sentences (\d+) to (\d+)/.exec(req.prompt);const observations=[];for(let n=Number(m[1]);n<=Number(m[2]);n++)observations.push({n,support:'context',note:'ok'});return {json:{observations,summary:'Read.'},provider:'test',ms:1};};
+ const para=(k)=>Array.from({length:5},(_,i)=>`Teenagers sleep better with a later start number ${k}${i}.`).join(' ');
+ const piece=[para(1),para(2),para(3)].join('\n\n');
+ const res=await post('analyse',{kind:'piece',text:piece,type:'evidence'});
+ assert.equal(res.status,200);
+ const s=store.getSession(),line=s.history.filter((h)=>h.kind==='writing').at(-1);
+ assert.ok(line&&/^\d+ of 15 sentences to fix, 3 paragraphs$/.test(line.detail),`the session's history holds the piece's line: ${JSON.stringify(line)}`);
+ const {recapRows,parseDetail}=require(src('tv/recapRows.ts'));
+ assert.deepEqual(parseDetail('writing','2 of 15 sentences to fix, 3 paragraphs'),{against:2,of:15});
+ assert.deepEqual(parseDetail('writing','1 of 15 sentences to fix, 3 paragraphs, 1 fixed'),{against:1,of:15,fixed:1});
+ const tile=recapRows(s,Date.now()).find((t)=>t.app==='essay');
+ assert.equal(tile.empty,null,'the essay tile is lit by the piece');assert.equal(tile.readings.at(-1).of,15);
+ const text=(s.week??[]).map((l)=>l.text).join(' ');
+ assert.match(text,/One piece/,`the Sunday line says piece: ${text}`);assert.doesNotMatch(text,/paragraph reading/);
+});
+test('M8 (EM-B20): the Sunday line counts paragraph readings and pieces apart',()=>{
+ const {sundayWords,sundayPage}=require(src('lib/rules/week.ts'));
+ const now=Date.UTC(2026,8,24,18);
+ const mk=(entries)=>sundayWords(sundayPage({...learners.getLearner('nobody-week'),digest:entries.map((e,i)=>({at:now-i*1000,kind:'essay',lens:'evidence',faulty:0,...e}))},{name:'Mia'},now)).filter((l)=>l.section==='essay'&&!l.head).map((l)=>l.text);
+ assert.deepEqual(mk([{sentences:3},{sentences:4}]),['Two paragraph readings, through Evidence.']);
+ assert.deepEqual(mk([{sentences:15}]),['One piece, through Evidence.']);
+ assert.deepEqual(mk([{sentences:3},{sentences:15},{sentences:20}]),['One paragraph reading and two pieces, through Evidence.']);
+});
+
+test('6 (essay-master-A case 6): the digest counts codes verdicts - observations that decide 2 of 3 faulty beat legacy verdicts that say none',async()=>{
+ seat();
+ answer=async()=>({json:{observations:[{n:1,side:'wanders',verdict:'strong',note:'a'},{n:2,side:'wanders',verdict:'strong',note:'b'},{n:3,side:'pushes',verdict:'strong',note:'c'}],summary:'s'},provider:'test',ms:1});
+ await analyseEssay('Homework is pointless. Teachers give too much. It ruins evenings.','argument',LEARNER);
+ const d=digest();assert.equal(d.length,1);
+ assert.deepEqual({...d[0],at:0},{at:0,kind:'essay',lens:'argument',sentences:3,faulty:2,paragraphs:1});
+ assert.equal(learners.getLearner(LEARNER).history.at(-1).detail,'2 of 3 sentences to fix');
 });
 
 // ------------------------------------------------------------------ 8. the cap
@@ -232,7 +264,8 @@ test('10: a round trip keeps the digest exactly; a learners.json written before 
  const {digest:_d,...rest}=l,W10=['placements','certificates','seenIds'];
  for(const k of W10)if(k in rest.english)assert.deepEqual(rest.english[k],[],`${k} loads empty on an old file`);
  const english=Object.fromEntries(Object.entries(rest.english).filter(([k])=>!W10.includes(k)));
- assert.deepEqual({...rest,english},old,'every other field as it was');
+ // a note kept as a bare string before notes were dated reads as an undated legacy note (learners.ts cleanNotes)
+ assert.deepEqual({...rest,english},{...old,memory:[{text:'likes fractions',at:null,source:'legacy'}]},'every other field as it was');
  // writing to the old learner keeps the file valid and the others intact
  learners.addDigest('old-learner',{at:1700000000004,kind:'essay',lens:'structure',sentences:2,faulty:0});
  const after=JSON.parse(fs.readFileSync(FILE,'utf8'));
@@ -246,7 +279,7 @@ test('11: privacy - a simulated week\'s serialised digest holds no percent, no p
  const questions=[],answers=[];
  const sets=[[SIX,TYPED],[[A,B,C,A,B,C],['11/12','7/12','3/4','2/3','1/2','0.75']],[[C,C,C,C,C,C],['3/4','2/6','3/4','75%','1 1/2','3/4']]];
  for(const [specs,typed] of sets){setOn(specs);questions.push(...specs.map(q));answers.push(...typed.filter(Boolean));assert.equal((await post('mark',{answers:typed})).status,200);}
- answer=async()=>({json:{verdicts:[{n:1,verdict:'faulty',note:'Too vague.'}],summary:'Make it sharper.'},provider:'test',ms:1});
+ answer=async()=>({json:{observations:[{n:1,issues:[{kind:'vague',word:'nice'}],note:'Too vague.'},{n:2,issues:[],note:'Fine.'}],summary:'Make it sharper.'},provider:'test',ms:1});
  const para='My summer was nice. We went to the lake.';
  await analyseEssay(para,'language',LEARNER);
  const d=digest(),text=JSON.stringify(d);
@@ -256,7 +289,7 @@ test('11: privacy - a simulated week\'s serialised digest holds no percent, no p
  for(const x of questions)assert.ok(!text.includes(x),`no question text: ${x}`);
  for(const a of answers.filter((a)=>/[\/,.%\s]/.test(a)))assert.ok(!text.includes(a),`no typed answer: ${a}`);
  for(const w of ['summer','lake','vague','sharper','Work out'])assert.ok(!text.includes(w),`no ${w}`);
- const KEYS={maths:['at','kind','topic','right','notSure','total','stretch','slip','slipN'],english:['at','kind','sceneId','skill','turns'],essay:['at','kind','lens','sentences','faulty']};
+ const KEYS={maths:['at','kind','topic','right','notSure','skipped','total','stretch','slip','slipN'],english:['at','kind','sceneId','skill','turns'],essay:['at','kind','lens','sentences','faulty','paragraphs']};
  for(const e of d){for(const k of Object.keys(e))assert.ok(KEYS[e.kind].includes(k),`${e.kind}.${k} is on the whitelist`);
   for(const [k,v] of Object.entries(e))if(typeof v==='number')assert.ok(Number.isInteger(v)&&v>=0,`${k} is a whole count or a date`);}
  // every string is an id from a closed list
@@ -273,4 +306,314 @@ test('12: GUARD - the history cap is still 20 and the digest is a separate field
  assert.doesNotMatch(store,/digest: l\.digest/,'the dispatch boundary does not hydrate the digest into the session');
  for(const dir of ['tv','maths','essay','english','landing','app/phone'])for(const f of fs.readdirSync(src(dir)).filter((x)=>/\.tsx?$/.test(x)))
   assert.doesNotMatch(fs.readFileSync(src(`${dir}/${f}`),'utf8'),/\.digest\b/,`${dir}/${f} reads no digest`);
+});
+
+// ------------------------------------------------------------------ MB-B14: homework sheets and their hints write the week
+const W=require(src('lib/rules/week.ts'));
+const SHEET=[{number:1,text:'2x+3=11',x:0.5,y:0.2},{number:2,text:'x-5=2',x:0.5,y:0.5},{number:3,text:'3x=18',x:0.5,y:0.8}];
+const SNAP={...PHOTO,subject:'maths',title:'Algebra'};
+/** A homework read through the real route, vision stubbed (as desk-jobs-rules-test readOf does), at the local time `at` when given. */
+async function readSheet(at){
+ visionReads(SHEET);
+ const real=Date.now;if(at)Date.now=()=>at;
+ try{const r=await post('read',SNAP);assert.equal(r.status,200,await r.clone().text());}finally{Date.now=real;}
+}
+const weekText=()=>(store.getSession().week??[]).map((l)=>l.text);
+const hintOn=(key,problem,stage,owner)=>store.dispatch({type:'hint.set',hint:{key,problem,stage,hint1:{hint:'h',next:'n'},hint2:stage===2?{hint:'h2',next:'n2'}:null,askedQ:'',...(owner?{owner}:{})}});
+
+test('MB-B14: three homework reads and no set - the page is not "Nothing this week.", it says three homework sheets and three evenings',async()=>{
+ seat();calls=[];
+ const noon=(back)=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-back);return d.getTime();};
+ for(const back of [2,1,0])await readSheet(noon(back));
+ assert.equal(calls.length,0,'no text model');
+ const d=digest();assert.equal(d.length,3,'one entry per sheet');
+ for(const e of d)assert.deepEqual({...e,at:0},{at:0,kind:'homework',problems:3,hints:0,second:0},'counts only: no title, no page id, no problem text');
+ assert.ok(!JSON.stringify(d).includes('Algebra')&&!JSON.stringify(d).includes('2x+3'),'no title, no problem text');
+ const lines=W.sundayWords(W.sundayPage(learners.getLearner(LEARNER),{name:'Mia'},noon(0)+3600000)).map((l)=>l.text);
+ assert.notDeepEqual(lines,[W.WEEK_EMPTY]);
+ assert.equal(lines[0],'Mia worked on three evenings.');
+ assert.ok(lines.includes('Math Buddy')&&lines.includes('Three homework sheets.'),lines.join(' | '));
+ // the session's page, drawn as the last read landed, is the same
+ const real=Date.now;Date.now=()=>noon(0)+60000;try{store.dispatch({type:'session.end'});}finally{Date.now=real;}
+ assert.ok(weekText().includes('Three homework sheets.'),weekText().join(' | '));
+});
+
+test('MB-B14: hints - two on one problem (one reaching stage 2) and one on another give "3 hints, 1 needed a second", on the one entry, and the page is redrawn',async()=>{
+ seat();await readSheet();
+ hintOn('p1','2x+3=11',1);
+ hintOn('p1','2x+3=11',2);store.dispatch({type:'hint.stage',stage:2});
+ assert.ok(weekText().includes('One homework sheet, 2 hints, 1 needed a second.'),`redrawn after a hint: ${weekText().join(' | ')}`);
+ // a stage 2 again on a problem already on the hard list does not count again
+ store.dispatch({type:'hint.stage',stage:2});
+ hintOn('p2','x-5=2',1);
+ const d=digest();assert.equal(d.length,1,'never one entry per hint');
+ assert.deepEqual({...d[0],at:0},{at:0,kind:'homework',problems:3,hints:3,second:1});
+ assert.ok(weekText().includes('One homework sheet, 3 hints, 1 needed a second.'),weekText().join(' | '));
+ assert.equal(calls.length,0);
+});
+
+test('MB-B14: a hint for a learner who left the desk lands on that learner\'s entry, not the seated learner\'s',async()=>{
+ seat();const ben=LEARNER;await readSheet();
+ store.dispatch({type:'profile.draft',patch:{id:`${ben}-ada`,name:'Ada',type:'elementary',age:12,system:'uk',modules:['maths']}});store.dispatch({type:'profile.save'});
+ const ada=`${ben}-ada`;assert.equal(store.getSession().learner.id,ada);
+ await readSheet();
+ hintOn('q1','2x+3=11',1,ben);hintOn('q1','2x+3=11',2,ben);store.dispatch({type:'hint.stage',stage:2,owner:ben});
+ assert.deepEqual(learners.getLearner(ben).digest.map((e)=>[e.hints,e.second]),[[2,1]],'the away learner\'s sheet');
+ assert.deepEqual(learners.getLearner(ada).digest.map((e)=>[e.hints,e.second]),[[0,0]],'the seated learner\'s sheet untouched');
+ assert.ok(!weekText().some((t)=>/hint/.test(t)),'the seated learner\'s page says no hint');
+});
+
+test('MB-B14 limit: a hint on a day with no homework sheet read writes nothing',async()=>{
+ seat();
+ hintOn('z1','2x+3=11',1);hintOn('z1','2x+3=11',2);store.dispatch({type:'hint.stage',stage:2});
+ assert.deepEqual(digest(),[],'no entry is made for a hint');
+ // a sheet read yesterday does not take today's hints
+ const y=new Date();y.setDate(y.getDate()-1);y.setHours(12,0,0,0);await readSheet(y.getTime());
+ hintOn('z2','x-5=2',1);
+ assert.deepEqual(digest().map((e)=>e.hints),[0]);
+ assert.equal(learners.addHints(LEARNER,1,0),false);
+});
+
+test('MB-B14: cleanEntry keeps only a homework or paper entry\'s whitelisted fields; junk is dropped whole',()=>{
+ const hw={at:1700000000000,kind:'homework',problems:3,hints:5,second:2},pp={at:1700000000000,kind:'paper',questions:12};
+ assert.deepEqual(D.cleanDigest([{...hw,title:'Algebra',text:'2x+3=11',answer:'4',id:'maths-1'}]),[hw]);
+ assert.deepEqual(D.cleanDigest([{...pp,title:'Mock',text:'Q1',answer:'7',marks:30,score:60}]),[pp]);
+ assert.deepEqual(D.cleanDigest([{...hw,problems:2.9,hints:-1,second:4}]),[{...hw,problems:2,hints:0,second:0}],'whole, not negative, never more seconds than hints');
+ assert.deepEqual(D.cleanDigest([{...hw,hints:'5',second:undefined}]),[{...hw,hints:0,second:0}]);
+ for(const j of [{...hw,problems:0},{...hw,problems:'3'},{...hw,at:0},{kind:'homework'},{...pp,questions:0},{...pp,questions:null},{...pp,at:'x'},{...pp,kind:'mock'}])
+  assert.deepEqual(D.cleanDigest([j]),[],`dropped: ${JSON.stringify(j)}`);
+});
+
+// ------------------------------------------------------------------ WD9-WD13: a failed learner-file write is said, and one event is one save
+/** Fail the learners.json writes only (the rename over the book throws EPERM), after `skip` have gone through; returns the restore. Never desk/data. */
+function failLearnerWrites(skip=0){
+ const real=fs.renameSync;let n=0;
+ fs.renameSync=function(from,to,...rest){
+  if(String(to).endsWith('learners.json')&&n++>=skip)throw Object.assign(new Error(`EPERM: operation not permitted, rename '${from}' -> '${to}'`),{code:'EPERM'});
+  return real.call(this,from,to,...rest);
+ };
+ return ()=>{fs.renameSync=real;};
+}
+/** The console's error lines, caught; `done()` puts the console back. */
+function catchLog(){const errs=[],e0=console.error;console.error=(...a)=>errs.push(a.join(' '));return {errs,done:()=>{console.error=e0;}};}
+const onFile=()=>{const l=learners.getLearner(LEARNER);return {digest:l.digest,history:l.history,skills:l.skills,writing:l.writing,sessions:l.english.sessions};};
+const EXPLAINS=(value)=>async()=>({json:{reply:'Look at the common denominator again.',value},provider:'test',ms:1});
+
+test('WD9: a settle whose restate write fails is logged once and said; the answer stays 200 and done; a later settle restates in place',async()=>{
+ seat();visionThrows();setOn(SIX);assert.equal((await post('mark',{answers:TYPED})).status,200);
+ const was=onFile();
+ answer=EXPLAINS('3/4');
+ // the explanation records its attempt first (one save), then the settle's restate is the write that fails
+ const restore=failLearnerWrites(1),c=catchLog();let r,j;
+ try{r=await post('explain',{transcript:'I got three quarters',n:4});j=await r.json();}finally{c.done();restore();}
+ assert.equal(r.status,200,JSON.stringify(j));
+ assert.ok(j.reply&&j.settled==='right',`the reply and the settle are answered: ${JSON.stringify(j)}`);assert.equal(j.saved,false);
+ assert.equal(c.errs.filter((l)=>/could not be restated/.test(l)).length,1,`one log line: ${c.errs.join(' | ')}`);
+ const s=store.getSession();
+ assert.equal(s.jobs.explain.phase,'done');assert.equal(s.jobs.explain.error,undefined,'no Try again');
+ assert.equal(s.status,store.SETTLE_NOT_SAVED);
+ assert.equal(store.SETTLE_NOT_SAVED,"That answer was settled, but the desk could not write it to the learner file, so tonight's record and the week still show the old count.");
+ assert.equal(store.settleSaved(),false);
+ assert.equal(s.practice.items[4].verdict,'right','the item keeps its verdict on the session');
+ const now=onFile();assert.deepEqual(now.digest,was.digest,'the digest entry on file is as marked');assert.deepEqual(now.history,was.history,'the history line on file is as marked');
+ // writes work again: the next settle restates both lines in place, and the done line is the reply
+ answer=EXPLAINS('11/12');
+ r=await post('explain',{transcript:'eleven twelfths again',n:5});j=await r.json();
+ assert.equal(r.status,200);assert.equal(j.saved,true);assert.equal(store.settleSaved(),true);
+ assert.equal(store.getSession().status,j.reply,'the done line is the reply');
+ const d=onFile();assert.equal(d.digest.length,1,'restated in place, not a new entry');
+ assert.deepEqual({right:d.digest[0].right,notSure:d.digest[0].notSure},{right:3,notSure:0});
+ assert.equal(d.history.at(-1).detail,'3 of 6 right');
+});
+
+test('WD10: a typed mark whose one save fails writes nothing (502, not marked); Try again records one set of attempts, one history line, one digest entry',async()=>{
+ seat();visionThrows();setOn(SIX);
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();let r;
+ try{r=await post('mark',{answers:TYPED});}finally{c.done();restore();}
+ assert.equal(r.status,502);
+ assert.equal(store.getSession().practice.marked,false);
+ assert.deepEqual(onFile(),was,'attempts, history and digest on file are as they were');
+ r=await post('mark',{answers:TYPED});assert.equal(r.status,200);
+ const l=onFile();
+ assert.equal(l.skills[UNIT].seen,4,'the attempts of one set only: the four settled items, not eight');
+ assert.equal(l.history.filter((h)=>h.kind==='practice').length,1);assert.equal(l.digest.filter((d)=>d.kind==='maths').length,1);
+ assert.equal(store.getSession().practice.marked,true);
+});
+
+test('WD10: an essay reading whose save fails writes nothing; the retry writes one history line, one writing step, one essay entry',async()=>{
+ seat();
+ answer=async()=>({json:{observations:[{n:1,support:'context',note:'ok'},{n:2,support:'opinion',note:'no evidence'},{n:3,support:'context',note:'ok'}],summary:'One to fix.'},provider:'test',ms:1});
+ const para='Homework should be shorter. Everyone agrees. Studies of sleep show teenagers need nine hours.';
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();
+ try{await assert.rejects(analyseEssay(para,'evidence',LEARNER),/could not be written/);}finally{c.done();restore();}
+ assert.deepEqual(onFile(),was,'no history line, no writing step, no entry');
+ await analyseEssay(para,'evidence',LEARNER);
+ const l=onFile();
+ assert.equal(l.history.filter((h)=>h.kind==='writing').length,1);assert.equal(l.writing.evidence.seen,1);assert.equal(l.digest.filter((d)=>d.kind==='essay').length,1);
+});
+
+test('WD10: a Linga finish whose save fails writes nothing; the retried finish writes one sessions entry and one english entry',async()=>{
+ seat();
+ answer=async()=>({json:{title:'A title',goal:'Ask again.',opening:'Please open your books.'},provider:'test',ms:1});
+ const cmd=(action,extra={})=>{const s=store.getSession();return englishCommand({action,learnerId:s.learner.id,episodeId:s.conversation?.id,commandId:`wd10-${action}-${Math.random()}`,...extra});};
+ await cmd('start',{sceneId:'teacher'});
+ const last=store.getSession().conversation.turns.at(-1).id;
+ answer=async()=>({json:{reply:'Of course. Page ten.',observations:[{skill:'repair',quote:'Could you say that again, please?',success:true,confidence:'clear',note:'Asked to repeat.'}]},provider:'test',ms:1});
+ await cmd('turn',{text:'Could you say that again, please?',mode:'text',lastTurnId:last});
+ answer=async()=>{throw new Error('the text engine was called');};
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();
+ try{await assert.rejects(cmd('finish'));}finally{c.done();restore();}
+ assert.deepEqual(onFile(),was,'no sessions entry, no english entry');
+ assert.equal(was.sessions.length,0);assert.equal(was.digest.length,0);
+ await cmd('finish');
+ const l=onFile();
+ assert.equal(l.sessions.length,1,'one sessions entry');assert.equal(l.digest.filter((d)=>d.kind==='english').length,1,'the english entry is written by the retry');
+});
+
+test('WD10: a homework read whose save fails keeps the page and says READ_NOT_SAVED; neither the history line nor the homework entry is on file',async()=>{
+ seat();
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();
+ try{await readSheet();}finally{c.done();restore();}
+ assert.deepEqual(onFile(),was,'no history line, no homework entry');
+ assert.equal(onFile().digest.length,0);
+ assert.equal(store.getSession().status,store.READ_NOT_SAVED);
+ assert.ok(c.errs.some((l)=>/learner file/.test(l)),'the error is logged');
+});
+
+test('WD11: a hint whose count write fails is logged, still set on the session, and leaves the homework entry\'s counts as they were; nothing throws',async()=>{
+ seat();await readSheet();
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();
+ try{hintOn('w1','2x+3=11',1);}finally{c.done();restore();}
+ assert.ok(c.errs.some((l)=>/could not be counted/.test(l)),`logged: ${c.errs.join(' | ')}`);
+ assert.equal(store.getSession().hint?.key,'w1','the hint is still on the session');
+ assert.deepEqual(onFile().digest,was.digest);assert.deepEqual(was.digest.map((e)=>[e.hints,e.second]),[[0,0]],'the homework entry\'s counts are unchanged');
+});
+
+test('WD12: a hint whose count write fails is said (HINT_NOT_COUNTED) on both stage lines and the lesson line; the route answers 200 with counted false; a later hint counts',async()=>{
+ seat();await readSheet();
+ const HINT=async()=>({json:{hint:'What undoes the + 3?',what_to_try_next:'Write the equation again.'},provider:'test',ms:1});
+ answer=HINT;
+ const poll=async(name)=>{for(let i=0;i<200&&store.getSession().jobs?.[name]?.phase==='running';i++)await new Promise((r)=>setTimeout(r,10));await new Promise((r)=>setTimeout(r,20));};
+ assert.equal(store.HINT_NOT_COUNTED,'Here is the hint, but the desk could not count it in the learner file, so the week will not show it.');
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();let r,j;
+ try{r=await post('hint',{stage:1});j=await r.json();await poll('lesson');}finally{c.done();restore();}
+ assert.equal(r.status,200,JSON.stringify(j));assert.equal(j.counted,false);
+ const s=store.getSession();
+ assert.ok(s.hint?.hint1?.hint,'the hint is on the session');
+ assert.equal(c.errs.filter((l)=>/could not be counted/.test(l)).length,1,`one log line: ${c.errs.join(' | ')}`);
+ assert.equal(s.jobs.hint.phase,'done');assert.equal(s.jobs.hint.error,undefined);
+ assert.ok(s.status.startsWith(store.HINT_NOT_COUNTED),`status: ${s.status}`);
+ assert.equal(store.hintCounted(),false);
+ assert.deepEqual(onFile().digest,was.digest);assert.deepEqual(was.digest.map((e)=>[e.hints,e.second]),[[0,0]],'the counts on file are unchanged');
+ // writes work again: a stage 2 hint on the same item counts
+ r=await post('hint',{stage:2});j=await r.json();
+ assert.equal(r.status,200,JSON.stringify(j));assert.equal(j.counted,true);assert.equal(store.hintCounted(),true);
+ assert.notEqual(store.getSession().status,store.HINT_NOT_COUNTED);
+ const e=onFile().digest[0];assert.ok(e.hints+e.second>0,`the homework entry's counts rise: ${JSON.stringify(e)}`);
+ // WD6: a sheet read on an earlier day has nothing to count onto; that is not a failure
+ seat();const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-2);await readSheet(d.getTime());
+ answer=HINT;r=await post('hint',{stage:1});j=await r.json();await poll('lesson');
+ assert.equal(r.status,200);assert.equal(j.counted,true);assert.ok(!store.getSession().status.startsWith(store.HINT_NOT_COUNTED));
+});
+
+test('P7-b: a hint asked while learners.json is unreadable answers counted false with HINT_NOT_COUNTED, and learners.json is byte-identical after',async()=>{
+ seat();await readSheet();
+ const HINT=async()=>({json:{hint:'What undoes the + 3?',what_to_try_next:'Write the equation again.'},provider:'test',ms:1});
+ answer=HINT;
+ const poll=async(name)=>{for(let i=0;i<200&&store.getSession().jobs?.[name]?.phase==='running';i++)await new Promise((r)=>setTimeout(r,10));await new Promise((r)=>setTimeout(r,20));};
+ const whole=fs.readFileSync(FILE),short=whole.subarray(0,whole.length-5);
+ fs.writeFileSync(FILE,short);
+ const c=catchLog();let r,j;
+ let after;
+ try{r=await post('hint',{stage:1});j=await r.json();await poll('lesson');after=fs.readFileSync(FILE);}finally{c.done();fs.writeFileSync(FILE,whole);}
+ assert.ok(after.equals(short),'learners.json is still the truncated bytes after the hint and the lesson');
+ assert.equal(r.status,200,JSON.stringify(j));assert.equal(j.counted,false);assert.equal(store.hintCounted(),false);
+ assert.ok(store.getSession().status.startsWith(store.HINT_NOT_COUNTED),`status: ${store.getSession().status}`);
+ assert.ok(c.errs.some((l)=>/could not be counted/.test(l)),`logged: ${c.errs.join(' | ')}`);
+ // a missing file is an empty book: nothing to count onto, and that is not a failure
+ const aside=FILE+'.aside';fs.renameSync(FILE,aside);
+ try{assert.equal(learners.addHints(LEARNER,1,0),false);}finally{fs.renameSync(aside,FILE);}
+});
+
+test('WD13: a rehydrate that fails is logged with its reason, once per distinct failure and never once per event; the session is otherwise as it was',()=>{
+ seat();
+ const real=learners.readLearner;let reason='the disk went';
+ learners.readLearner=()=>{throw new Error(reason);};
+ const c=catchLog();
+ try{
+  store.dispatch({type:'learner.set',id:LEARNER});store.dispatch({type:'learner.set',id:LEARNER});store.dispatch({type:'profile.save'});
+  const mine=()=>c.errs.filter((l)=>/could not be read onto the desk/.test(l));
+  assert.equal(mine().length,1,`one line for three events: ${c.errs.join(' | ')}`);assert.match(mine()[0],/the disk went/);
+  reason='another failure';store.dispatch({type:'learner.set',id:LEARNER});
+  assert.equal(mine().length,2,'a distinct failure is logged again');assert.match(mine()[1],/another failure/);
+  assert.equal(store.getSession().learner.id,LEARNER,'the seat is as it was');
+ }finally{c.done();learners.readLearner=real;}
+});
+
+test('WD14a: an unreadable learners.json is said on a switch and never shows another learner\'s records; the same learner keeps its own',()=>{
+ const mk=(id)=>{store.dispatch({type:'profile.draft',patch:{id,name:'Mia',type:'elementary',age:12,system:'uk',modules:['maths','english','essay']}});store.dispatch({type:'profile.save'});};
+ store.dispatch({type:'reset'});
+ const IA=`wd14a-a-${process.pid}`,IB=`wd14a-b-${process.pid}`;
+ mk(IA);mk(IB);
+ learners.addHistory(IA,{at:Date.now(),kind:'practice',label:'Fractions',detail:'4 of 6 right'});
+ {const a=learners.getLearner(IA);learners.saveLearner({...a,memory:[...a.memory,{text:'Likes worked examples.',at:Date.now(),source:'nightly'}]});}
+ const mineA=learners.getLearner(IA);
+ assert.ok(mineA.history.length>0&&mineA.memory.length>0);
+ // the session carries the notes' text (store.ts hydrates memory as text, for the phone)
+ const mineNotes=mineA.memory.map((n)=>n.text);
+ store.dispatch({type:'learner.set',id:IA});
+ assert.deepEqual(store.getSession().history,mineA.history);assert.deepEqual(store.getSession().memory,mineNotes);
+ const whole=fs.readFileSync(FILE),short=whole.subarray(0,whole.length-5);
+ fs.writeFileSync(FILE,short);
+ const c=catchLog();
+ try{
+  store.dispatch({type:'learner.set',id:IA});
+  let s=store.getSession();
+  assert.deepEqual(s.history,mineA.history,'the same learner keeps its own history');assert.deepEqual(s.memory,mineNotes,'and memory');
+  assert.notEqual(s.status,store.LEARNER_UNREAD);
+  assert.equal(c.errs.filter((l)=>/could not be read onto the desk/.test(l)).length,1,`one log line: ${c.errs.join(' | ')}`);
+  store.dispatch({type:'learner.set',id:IB});
+  s=store.getSession();const b=learners.blank(IB);
+  assert.deepEqual(s.skills,b.skills);assert.deepEqual(s.writing,b.writing);assert.deepEqual(s.memory,b.memory);assert.deepEqual(s.history,b.history);assert.deepEqual(s.englishLearning,b.english);
+  assert.equal(s.paper,null);
+  assert.notDeepEqual(s.history,mineA.history);assert.notDeepEqual(s.memory,mineNotes);
+  assert.equal(s.status,store.LEARNER_UNREAD);
+  assert.deepEqual(s.week,[{section:'week',text:W.WEEK_UNREAD}]);
+  assert.ok(fs.readFileSync(FILE).equals(short),'learners.json on disk is the truncated bytes, untouched');
+ }finally{c.done();fs.writeFileSync(FILE,whole);}
+ store.dispatch({type:'learner.set',id:IA});
+ let s=store.getSession();
+ assert.deepEqual(s.history,mineA.history);assert.deepEqual(s.memory,mineNotes);assert.notEqual(s.status,store.LEARNER_UNREAD);
+ const aside=FILE+'.aside';fs.renameSync(FILE,aside);
+ try{
+  assert.doesNotThrow(()=>store.dispatch({type:'learner.set',id:IB}));
+  s=store.getSession();const b=learners.blank(IB);
+  assert.notEqual(s.status,store.LEARNER_UNREAD);assert.deepEqual(s.history,b.history);assert.deepEqual(s.memory,b.memory);
+ }finally{fs.renameSync(aside,FILE);}
+ const text=fs.readFileSync(src('lib/session/store.ts'),'utf8');
+ const at=text.indexOf('if (REHYDRATE.has(e.type)) {'),block=text.slice(at,text.indexOf('weekRead(store.session)',at));
+ assert.ok(block.includes('readLearner(id)')&&!block.includes('getLearner('),'the rehydrate reads through readLearner');
+});
+
+test('13-i RC5: cleanDigest keeps a valid paragraphs on an essay entry and drops a bad one while keeping the entry',()=>{
+ const e={at:1700000000000,kind:'essay',lens:'structure',sentences:9,faulty:2};
+ assert.deepEqual(D.cleanDigest([{...e,paragraphs:3}]),[{...e,paragraphs:3}]);
+ assert.deepEqual(D.cleanDigest([{...e,paragraphs:1}]),[{...e,paragraphs:1}]);
+ assert.deepEqual(D.cleanDigest([{...e,paragraphs:9}]),[{...e,paragraphs:9}],'as many paragraphs as sentences is the most');
+ for(const bad of [0,2.5,'3',10,-1,NaN,null])assert.deepEqual(D.cleanDigest([{...e,paragraphs:bad}]),[e],`paragraphs ${JSON.stringify(bad)} dropped, entry kept`);
+ assert.deepEqual(D.cleanDigest([e]),[e],'an entry from before the count stays without it');
+});
+
+// ------------------------------------------------------------------ MB-B1: skipped is its own count in the digest
+test('MB-B1 digest: cleanDigest keeps skipped as a whole count inside the set, apart from notSure; an entry without it is unchanged',()=>{
+ const ok={at:1700000000000,kind:'maths',topic:UNIT,right:3,notSure:1,total:6,slip:'top-not-scaled',slipN:2};
+ assert.deepEqual(D.cleanDigest([ok]),[ok],'an entry written before skipped existed reads as it did');
+ assert.deepEqual(D.cleanDigest([{...ok,skipped:1}]),[{...ok,skipped:1,slipN:1}],'a skipped item is not a wrong one: slipN at most 6 - 3 - 1 - 1');
+ assert.deepEqual(D.cleanDigest([{...ok,skipped:0}]),[ok],'none skipped: no key');
+ assert.deepEqual(D.cleanDigest([{...ok,skipped:9}]),[{...ok,skipped:2,slip:undefined,slipN:undefined}].map(({slip,slipN,...x})=>x),'clamped to what right and notSure leave; then no wrong item is left, so no slip');
+ assert.deepEqual(D.cleanDigest([{...ok,skipped:1.6}]),[{...ok,skipped:1,slipN:1}]);assert.deepEqual(D.cleanDigest([{...ok,skipped:'2'}]),[ok]);
+ assert.deepEqual(D.cleanDigest([{...ok,skipped:1,slipN:9}]),[{...ok,skipped:1,slipN:1}],'slipN at most the wrong items: 6 - 3 - 1 - 1');
+ // mathsEntry over an all-skipped set and a mixed one
+ assert.deepEqual(D.mathsEntry(UNIT,[{verdict:'unsure',studentAnswer:''},{verdict:'unsure'}],false,5),{at:5,kind:'maths',topic:UNIT,right:0,notSure:0,total:2,skipped:2});
+ assert.deepEqual(D.mathsEntry(UNIT,[{verdict:'right'},{verdict:'unsure',studentAnswer:'4/22'},{verdict:'unsure',studentAnswer:''},{verdict:'wrong',slip:'top-not-scaled'}],false,5),{at:5,kind:'maths',topic:UNIT,right:1,notSure:1,total:4,skipped:1,slip:'top-not-scaled',slipN:1});
 });

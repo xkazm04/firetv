@@ -4,21 +4,26 @@
  * item already wrong, a slip the explanation names from the topic's vocabulary becomes the item's shown slip.
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
+import { dispatch, getSession, NOBODY_AT_DESK, SETTLE_NOT_SAVED, settleSaved } from "@/lib/session/store";
 import { explainItem } from "@/lib/desk/explain";
 import { refused, runJob } from "@/lib/desk/job";
 import { learnerAge } from "@/lib/rules/voice";
 import { learnerSystem } from "@/lib/rules/school";
+import { itemName } from "@/lib/rules/calc-word";
+import { EXPLAIN_TRANSCRIPT_MAX } from "@/lib/rules/saidValue";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
-  const { transcript, n } = (await req.json().catch(() => ({}))) as { transcript?: string; n?: number };
+  const { transcript, n } = ((await req.json().catch(() => null)) ?? {}) as { transcript?: unknown; n?: number };
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const practice = s.practice;
   if (!practice) return NextResponse.json({ error: "Start a practice set first." }, { status: 400 });
   const item = practice.items[typeof n === "number" ? n : s.walkIx];
   if (!item) return NextResponse.json({ error: "That item is not on the desk any more." }, { status: 400 });
+  // nothing to hear, or too much to send, is refused before any model call; a refusal never truncates
+  if (typeof transcript !== "string" || !transcript.trim()) return NextResponse.json({ error: "Say or type how you got your answer first." }, { status: 400 });
+  if (transcript.length > EXPLAIN_TRANSCRIPT_MAX) return NextResponse.json({ error: `That is longer than ${EXPLAIN_TRANSCRIPT_MAX} characters. Shorten it and send again.` }, { status: 400 });
   // after the model answers, the walk may have moved on: settle only the same item, on the same set, still unsure
   const same = () => {
     const now = getSession().practice;
@@ -26,11 +31,16 @@ export async function POST(req: Request) {
     return !!now && now.owner === practice.owner && now.topic === practice.topic && it?.question === item.question ? it : undefined;
   };
   const r = await runJob("explain", async () => {
-    const x = await explainItem(item, transcript ?? "", practice.topic, who.id, () => same()?.verdict === "unsure", learnerAge(s), learnerSystem(s));
+    const x = await explainItem(item, transcript, practice.topic, who.id, () => same()?.verdict === "unsure", learnerAge(s), learnerSystem(s), itemName(practice.items, practice.items.indexOf(item)));
     // an unsure item settles; a wrong one only takes the slip the explanation named (the reducer keeps its verdict and pen)
-    if (same()) dispatch({ type: "practice.settle", n: item.n, reply: x.reply, ...(x.settled ?? x.renamed ?? {}) });
-    return x;
-  }, { key: String(item.n), start: "listening…", done: (x) => x.reply });
+    let saved = true;
+    if (same()) {
+      dispatch({ type: "practice.settle", n: item.n, reply: x.reply, ...(x.settled ?? x.renamed ?? {}) });
+      // a settle whose restate of the learner file failed keeps the answer: 200, done, no Try again (the same explanation would be paid for again to fail the same way); the status says it
+      if (x.settled) saved = settleSaved();
+    }
+    return { ...x, saved };
+  }, { key: String(item.n), start: "listening…", done: (x) => x.saved ? x.shown : SETTLE_NOT_SAVED });
   if (!r.ok) return refused(r);
-  return NextResponse.json({ reply: r.value.reply, slip: r.value.slip, ...(r.value.settled ? { settled: r.value.settled.verdict } : {}) });
+  return NextResponse.json({ reply: r.value.shown, slip: r.value.slip, ...(r.value.settled ? { settled: r.value.settled.verdict, saved: r.value.saved } : {}) });
 }

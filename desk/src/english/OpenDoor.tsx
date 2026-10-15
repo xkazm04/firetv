@@ -25,14 +25,15 @@ export function Learner({ name, up }: { name: string; up: boolean }) {
 /**
  * The arch: a door in a plum frame on a plinth, with the world of this screen behind it. A situation fills it
  * edge to edge; a state of the journey stands on the warm gradient with the brand line over it. The name tag says
- * who is behind the door (on the conversation it is also .linga-speaker).
+ * who is behind the door (on the conversation it is also .linga-speaker). `children`, when given, is the situation's
+ * picture drawn with this screen's state (the lost-property corridor, L3) in place of the plain one.
  */
-export function Arch({ art, tag, speaker }: { art: ArtKey; tag?: string; speaker?: boolean }) {
+export function Arch({ art, tag, speaker, children }: { art: ArtKey; tag?: string; speaker?: boolean; children?: ReactNode }) {
   const { Art, label } = ART[art], scene = isScene(art);
   return <div className={`lo-arch ${scene ? "lo-arch-scene" : "lo-arch-symbol"}`}>
     <div className="lo-arch-shadow"/>
     <div className="lo-door" data-role="linga-art" data-art={art} role="img" aria-label={label}>
-      {scene ? <Art/> : <><div className="lo-door-label" aria-hidden="true">A way into English</div><div className="lo-symbol"><Art/></div></>}
+      {scene ? children ?? <Art/> : <><div className="lo-door-label" aria-hidden="true">A way into English</div><div className="lo-symbol"><Art/></div></>}
     </div>
     {tag && <div className={`lo-tag${speaker ? " linga-speaker" : ""}`} data-role="linga-partner">{tag}</div>}
     <div className="lo-plinth"/>
@@ -66,11 +67,13 @@ export function SentenceCard({ label, text, role = "linga-sentence", className =
 export function DataLine({ children }: { children: ReactNode }) { return <div className="lo-data">{children}</div>; }
 
 /** The level as a picture: six steps rising from A1 to C2, the learner's step lit and flagged. */
-export function BandSteps({ band }: { band: Band }) {
-  const here = BANDS.indexOf(band);
-  return <div className="lo-steps linga-ladder" data-role="linga-steps" data-here-at={here}>
-    {BANDS.map((b, i) => <div key={b} className="lo-step" data-reached={i <= here} data-here={i === here} style={{ height: `calc(130px + (100% - 130px) * ${i} / 5)` }}>
+export function BandSteps({ band, spoke }: { band: Band; spoke?: Band }) {
+  const here = BANDS.indexOf(band), said = spoke ? BANDS.indexOf(spoke) : -1;
+  // S2: a second, hollow flag on the band the learner's say answers showed, when conversations start below the read
+  return <div className="lo-steps linga-ladder" data-role="linga-steps" data-here-at={here} data-spoke-at={said >= 0 ? said : undefined}>
+    {BANDS.map((b, i) => <div key={b} className="lo-step" data-reached={i <= here} data-here={i === here} data-spoke={i === said || undefined} style={{ height: `calc(130px + (100% - 130px) * ${i} / 5)` }}>
       {i === here && <svg className="lo-flag" viewBox="0 0 60 90" aria-hidden="true" focusable="false"><path d="M10 88V6" stroke="#5d3548" strokeWidth="7" strokeLinecap="round"/><path d="M13 8l42 15-42 15Z" fill="#b65e61"/></svg>}
+      {i === said && i !== here && <svg className="lo-flag lo-flag-spoke" data-role="linga-spoke-mark" viewBox="0 0 60 90" aria-hidden="true" focusable="false"><path d="M10 88V6" stroke="#5d3548" strokeWidth="7" strokeLinecap="round"/><path d="M13 8l42 15-42 15Z" fill="none" stroke="#b65e61" strokeWidth="5" strokeLinejoin="round"/></svg>}
       <b>{b}</b><small>{BAND_NAME[b]}</small>
     </div>)}
   </div>;
@@ -114,4 +117,23 @@ export const Arrow = () => <svg className="lo-arrow" viewBox="0 0 30 30" aria-hi
 export const OnYourPhone = () => <svg className="lo-phone" viewBox="0 0 300 44" aria-hidden="true" focusable="false">
   <rect x="7" y="2" width="22" height="39" rx="5" fill="none" stroke="currentColor" strokeWidth="3"/><path d="M14 7h8M15 35h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M18 14v11m-4-7v4m8-4v4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
   <text x="298" y="30" textAnchor="end" fill="currentColor">ON YOUR PHONE</text>
+</svg>;
+
+/**
+ * Phrases you own (L1): the learner's owned phrases under home's words. Family: each one a small open door in the arch's
+ * plum with the phrase beside it in Georgia, under YOURS; never a number, the newest few only. Adult (X2, progress, no
+ * game): the same phrases as one plain data line, PHRASES YOU OWN.
+ */
+export function Yours({ phrases, style }: { phrases: string[]; style: "objects" | "list" }) {
+  if (!phrases.length) return null;
+  if (style === "list") return <div className="lo-data lo-yours-list" data-role="linga-yours"><span className="lo-data-key">Phrases you own</span><span>{phrases.map((x, i) => <Fragment key={x}>{i > 0 && <Dot/>}“{x}”</Fragment>)}</span></div>;
+  return <div className="lo-yours" data-role="linga-yours" role="list" aria-label={`Yours: ${phrases.join(", ")}`}>
+    <span className="lo-yours-label" aria-hidden="true">Yours</span>
+    {phrases.map(x => <span key={x} className="lo-yours-item" role="listitem"><YoursDoor/><span className="lo-yours-text">{x}</span></span>)}
+  </div>;
+}
+/** An open door, the arch's own shape in miniature: a plum frame, the leaf swung open, the warm light inside. */
+const YoursDoor = () => <svg className="lo-yours-door" viewBox="0 0 24 32" aria-hidden="true" focusable="false">
+  <path d="M3 30V12a9 9 0 0 1 18 0v18Z" fill="var(--lo-glow)" stroke="var(--lo-frame)" strokeWidth="3" strokeLinejoin="round"/>
+  <path d="M6 29V13l7-3v22Z" fill="var(--lo-frame)"/>
 </svg>;

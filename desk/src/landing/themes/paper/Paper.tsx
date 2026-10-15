@@ -20,6 +20,7 @@ import { Defs } from "./shapes";
 import { HouseMark, Icon, PhoneGlyph, PostcardArt } from "./glyphs";
 import { Stamp } from "./stamps";
 import { worldFor, type Layer } from "./worlds";
+import { afterFonts } from "@/lib/afterFonts";
 
 /** Each app's colours (its own deep, its shadow, its highlight, the letters' extrusion, the motes' glow). */
 const THEME: Record<Subject | "house", { deep: string; deepLo: string; hi: string; ex: string; glow: string }> = {
@@ -57,7 +58,7 @@ function Title({ name, unpaired, seq, still }: { name: string; unpaired: boolean
       t.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;
     };
     fit();
-    document.fonts?.ready.then(fit).catch(() => {});
+    afterFonts(fit);
   }, [name, unpaired, seq]);
   return (
     <div ref={el} className="pp-title" data-role="desk-title" data-still={still || undefined} aria-hidden="true" key={`${name}${seq}`}>
@@ -68,10 +69,14 @@ function Title({ name, unpaired, seq, still }: { name: string; unpaired: boolean
 
 // ---------------------------------------------------------------- the light and the paper grain
 
-/** Warm motes drifting up through the scene: a small canvas the stage scales, still under reduced motion. */
+/**
+ * Warm motes drifting up through the scene: a small canvas the stage scales. Under reduced motion they hold still -
+ * one frame, painted again when the app in the light changes their tint - and the setting is followed while the
+ * landing is up, not only read when it mounts.
+ */
 function Motes({ glow }: { glow: string }) {
-  const cv = useRef<HTMLCanvasElement>(null), rgb = useRef(glow);
-  useEffect(() => { rgb.current = glow; }, [glow]);
+  const cv = useRef<HTMLCanvasElement>(null), rgb = useRef(glow), still = useRef<(() => void) | null>(null);
+  useEffect(() => { rgb.current = glow; still.current?.(); }, [glow]);
   useEffect(() => {
     const c = cv.current, x = c?.getContext("2d"); if (!c || !x) return;
     let r = 1234567; const rnd = () => { r = (r * 16807) % 2147483647; return r / 2147483647; };
@@ -85,13 +90,15 @@ function Motes({ glow }: { glow: string }) {
         x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.2832); x.fill();
       }
     };
-    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (still) { draw(0); return; }
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)");
     let raf = 0;
-    const loop = (t: number) => { if (document.hidden) { raf = 0; return; } draw(t); raf = requestAnimationFrame(loop); };
-    const wake = () => { if (!document.hidden && !raf) raf = requestAnimationFrame(loop); };
-    document.addEventListener("visibilitychange", wake); wake();
-    return () => { document.removeEventListener("visibilitychange", wake); cancelAnimationFrame(raf); };
+    const loop = (t: number) => { if (document.hidden || reduce.matches) { raf = 0; return; } draw(t); raf = requestAnimationFrame(loop); };
+    const wake = () => { if (!document.hidden && !reduce.matches && !raf) raf = requestAnimationFrame(loop); };
+    const settle = () => { if (reduce.matches) { cancelAnimationFrame(raf); raf = 0; draw(0); } else wake(); };
+    still.current = () => { if (reduce.matches) draw(0); };
+    reduce.addEventListener?.("change", settle);
+    document.addEventListener("visibilitychange", wake); settle();
+    return () => { reduce.removeEventListener?.("change", settle); document.removeEventListener("visibilitychange", wake); cancelAnimationFrame(raf); still.current = null; };
   }, []);
   return <canvas ref={cv} className="pp-fx" width={960} height={540} aria-hidden="true" />;
 }
@@ -124,7 +131,7 @@ function Postcard({ view }: { view: LandingView }) {
     <div className="pp-postcard" data-role="desk-phone" data-paired={false} data-focused={view.at === "phone" ? "true" : undefined}>
       <div className="pp-pcd">
         <PostcardArt />
-        <div className="pp-pin" data-role="desk-pin" aria-label={`Code ${pin}`}>{pin}</div>
+        <span className="pp-sr">Code </span><div className="pp-pin" data-role="desk-pin">{pin}</div>
         <div className="pp-url">{url}</div>
         <div className="pp-dots" aria-hidden="true"><i /><i /><i /></div>
       </div>
@@ -153,8 +160,8 @@ function Shelf({ view }: { view: LandingView }) {
         ))}
       </div>
       <div className="pp-actions">
-        <div className="pp-cont" role="button" data-role="desk-continue"><span>{view.primary}</span>{Icon.arrow}</div>
-        <div className="pp-else" role="button" data-role="desk-place-card" data-focused={at === "place" ? "true" : undefined}>{Icon.swap}<span>{view.place}</span></div>
+        <div className="pp-cont" data-role="desk-continue"><span>{view.primary}</span>{Icon.arrow}</div>
+        <div className="pp-else" data-role="desk-place-card" data-focused={at === "place" ? "true" : undefined}>{Icon.swap}<span>{view.place}</span></div>
       </div>
     </div>
   );
@@ -166,9 +173,9 @@ function Chrome({ view }: { view: LandingView }) {
     <div className="pp-chrome">
       <div className="pp-brand" data-role="desk-wordmark"><HouseMark size={64} /><span className="pp-wm">Study Desk</span></div>
       <div className="pp-badge">
-        {view.phone.paired && <div className="pp-ph" data-role="desk-phone" data-paired={true}><PhoneGlyph paired /></div>}
-        {!view.phone.paired && <div className="pp-ph"><PhoneGlyph paired={false} /></div>}
-        {learner && <div className="pp-disc" style={{ background: LEARNER_TONE[learner.tone] }}>{learner.initial}</div>}
+        {view.phone.paired && <div className="pp-ph" data-role="desk-phone" data-paired={true}><PhoneGlyph paired /><span className="pp-sr">Phone paired</span></div>}
+        {!view.phone.paired && <div className="pp-ph"><PhoneGlyph paired={false} /><span className="pp-sr">No phone paired</span></div>}
+        {learner && <div className="pp-disc" style={{ background: LEARNER_TONE[learner.tone] }} aria-hidden="true">{learner.initial}</div>}
         <div className="pp-who">{learner ? learner.name : "Whose desk?"}</div>
       </div>
       <div className="pp-hints">
@@ -267,6 +274,7 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
       <Shelf view={view} />
       <Chrome view={view} />
       {zoom && <Zoom view={view} stop={zoom} />}
+      <div className="pp-sr" data-role="desk-announce" aria-live="polite" aria-atomic="true">{view.say}</div>
       <Grain />
     </div>
   );

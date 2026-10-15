@@ -14,15 +14,12 @@
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), assert = require('node:assert/strict'), Module = require('node:module');
 const { test, after } = require('node:test');
 const root = path.resolve(__dirname, '../desk');
-let ts; try { ts = require(path.join(root, 'node_modules/typescript')); } catch { console.error("This suite transpiles desk TypeScript with desk's own compiler. Run `npm install` in desk/ first, then `npm test` from desk/."); process.exit(1); }
-const resolve = Module._resolveFilename;
-Module._resolveFilename = function (id, ...args) { return resolve.call(this, id.startsWith('@/') ? path.join(root, 'src', id.slice(2)) : id, ...args); };
-require.extensions['.ts'] = (mod, file) => mod._compile(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, file);
+require('./ts-load.cjs');
 const data = fs.mkdtempSync(path.join(os.tmpdir(), 'desk-mode-')); process.env.DESK_DATA_DIR = data;
 const src = (f) => path.join(root, 'src', f);
 const storeFile = src('lib/session/store.ts');
 const { audienceAllowed, isAdult: isAdultViaCurriculum } = require(src('lib/english/curriculum.ts'));
-const { modeOf, isAdult } = require(src('lib/rules/mode.ts'));
+const { modeOf, isAdult, adultContent } = require(src('lib/rules/mode.ts'));
 let store = require(storeFile);
 const { tvKey } = require(src('tv/keys.ts'));
 after(() => { if (globalThis.__desk?.ticker) clearInterval(globalThis.__desk.ticker); fs.rmSync(data, { recursive: true, force: true }); });
@@ -50,7 +47,27 @@ test('parity: audienceAllowed answers every combination as it did before W4 (10 
   assert.equal(n, 240);
   // no profile at all, and the mode a profile carries does not move the answer either
   for (const adultConfirmed of [false, true]) for (const audience of AUDIENCES) assert.equal(audienceAllowed(undefined, prefs(adultConfirmed), audience), frozenAllowed(undefined, prefs(adultConfirmed), audience), 'no profile');
-  for (const mode of ['family', 'adult']) for (const audience of AUDIENCES) assert.equal(audienceAllowed(profile(25, 'other', { mode }), prefs(false), audience), frozenAllowed(profile(25, 'other'), prefs(false), audience), `mode ${mode} is not read by audienceAllowed`);
+  // REVISED under the M2b protocol (v2 P6, owner V2-O7 2026-10-08: mode decides). OLD: a stored mode, family or adult, was
+  // not read by audienceAllowed - both answered as the frozen copy of the unset profile. NEW: stored 'adult' at 25 still
+  // equals the frozen value; stored 'family' at 25 equals it too except the 'adult' audience, which is refused.
+  for (const audience of AUDIENCES) assert.equal(audienceAllowed(profile(25, 'other', { mode: 'adult' }), prefs(false), audience), frozenAllowed(profile(25, 'other', { mode: 'adult' }), prefs(true), audience), `mode adult ${audience}`);
+  for (const audience of AUDIENCES) assert.equal(audienceAllowed(profile(25, 'other', { mode: 'family' }), prefs(false), audience), audience === 'adult' ? false : frozenAllowed(profile(25, 'other'), prefs(false), audience), `mode family ${audience}`);
+});
+test('P6: stored Family at 25 refuses the adult audience and keeps all and older, whatever the box', () => {
+  for (const adultConfirmed of [false, true]) {
+    const p = profile(25, 'other', { mode: 'family' });
+    assert.equal(audienceAllowed(p, prefs(adultConfirmed), 'adult'), false);
+    assert.equal(audienceAllowed(p, prefs(adultConfirmed), 'all'), true);
+    assert.equal(audienceAllowed(p, prefs(adultConfirmed), 'older'), true);
+  }
+});
+test('P6: adultContent is modeOf === adult over every grid row, and false under 18 whatever mode is stored', () => {
+  for (const age of AGES) for (const type of TYPES) for (const c of [false, true]) for (const mode of [undefined, 'family', 'adult']) {
+    const p = profile(age, type, mode ? { mode } : {});
+    assert.equal(adultContent(p, prefs(c)), modeOf(p, prefs(c)) === 'adult', JSON.stringify({ age, type, c, mode }));
+    if (age !== undefined && age < 18) assert.equal(adultContent(p, prefs(c)), false, `under 18: ${JSON.stringify({ age, type, c, mode })}`);
+  }
+  assert.equal(adultContent(undefined, prefs(true)), false, 'no profile');
 });
 test('isAdult is one function: curriculum re-exports the one in rules/mode', () => { assert.equal(isAdultViaCurriculum, isAdult); });
 
@@ -68,19 +85,21 @@ test('modeOf: the derived value for each row', () => {
   assert.equal(modeOf(profile(20, 'other')), 'adult', 'no prefs, age known');
   for (const age of AGES) for (const type of TYPES) for (const c of [false, true]) assert.equal(modeOf(profile(age, type), prefs(c)), isAdult(profile(age, type), prefs(c)) ? 'adult' : 'family', 'derived = isAdult, everywhere');
 });
-test('modeOf: an explicit "family" always wins; an explicit "adult" is not honoured', () => {
+// Slice A5 (v2 decisions 2026-10-07, O1 = 18+) revised these rows on purpose: a stored "adult" is honoured where
+// rules/mode adultAllowed holds (18+, or "other" with no age, whose Mode row is the confirmation). It pinned "never" before.
+test('modeOf: an explicit "family" always wins; an explicit "adult" counts only behind the 18+ gate (A5)', () => {
   assert.equal(modeOf(profile(30, 'other', { mode: 'family' }), prefs(true)), 'family', 'family at 30');
   assert.equal(modeOf(profile(18, 'high-school', { mode: 'family' }), prefs(false)), 'family');
   assert.equal(modeOf(profile(undefined, 'other', { mode: 'family' }), prefs(true)), 'family');
   assert.equal(modeOf(profile(12, 'elementary', { mode: 'adult' }), prefs(false)), 'family', '12 with a stored adult');
   assert.equal(modeOf(profile(16, 'high-school', { mode: 'adult' }), prefs(false)), 'family', '16 with a stored adult');
-  assert.equal(modeOf(profile(undefined, 'other', { mode: 'adult' }), prefs(false)), 'family', 'unconfirmed "other" with a stored adult');
+  assert.equal(modeOf(profile(undefined, 'other', { mode: 'adult' }), prefs(false)), 'adult', '"other" with no age: choosing Adult (18+) is the confirmation');
   assert.equal(modeOf(profile(undefined, 'high-school', { mode: 'adult' }), prefs(true)), 'family', 'no age, school type');
   for (const age of [18, 25, 60]) for (const type of TYPES) for (const c of [false, true]) assert.equal(modeOf(profile(age, type, { mode: 'adult' }), prefs(c)), modeOf(profile(age, type), prefs(c)), 'an 18+ with a stored adult equals the derived value');
   for (const bad of [1, 'ADULT', '', null, {}, [], true]) assert.equal(modeOf(profile(12, 'elementary', { mode: bad }), prefs(false)), 'family', `junk ${JSON.stringify(bad)}`);
 });
 
-test('modeChecked drops junk and keeps family; a draft patch may set family but never adult', () => {
+test('modeChecked drops junk and keeps family; a draft patch may set adult only where the gate allows (A5)', () => {
   const { modeChecked } = store;
   for (const bad of [1, 0, 'ADULT', 'Family', '', null, {}, [], true, false]) assert.equal('mode' in modeChecked({ id: 'p', mode: bad }), false, `dropped: ${JSON.stringify(bad)}`);
   assert.equal(modeChecked({ mode: 'family' }).mode, 'family'); assert.equal(modeChecked({ mode: 'adult' }).mode, 'adult', 'a stored adult is kept as data on load');
@@ -89,12 +108,35 @@ test('modeChecked drops junk and keeps family; a draft patch may set family but 
   // through the reducer
   const s0 = { ...store.fresh() };
   let s = store.reduce(s0, { type: 'profile.draft', patch: { name: 'Mia', type: 'elementary', age: 12, mode: 'adult' } });
-  assert.equal(s.draft.mode, undefined, 'adult patch dropped'); assert.equal(s.draft.name, 'Mia', 'the rest of the patch is kept');
+  assert.equal(s.draft.mode, undefined, 'adult patch dropped at 12'); assert.equal(s.draft.name, 'Mia', 'the rest of the patch is kept');
+  assert.equal(store.reduce(s0, { type: 'profile.draft', patch: { name: 'Ada', type: 'other', mode: 'adult' } }).draft.mode, 'adult', 'an "other" may choose Adult');
+  assert.equal(store.reduce(s0, { type: 'profile.draft', patch: { name: 'Leo', type: 'high-school', age: 18, mode: 'adult' } }).draft.mode, 'adult', '18 may choose Adult');
   s = store.reduce(s0, { type: 'profile.draft', patch: { name: 'Mia', type: 'elementary', age: 12, mode: 'family' } }); assert.equal(s.draft.mode, 'family');
   s = store.reduce(s, { type: 'profile.draft', patch: { mode: 'adult' } }); assert.equal(s.draft.mode, 'family', 'a dropped adult does not erase the family already drafted');
   for (const bad of [1, 'ADULT', '', null, {}]) { s = store.reduce(s0, { type: 'profile.draft', patch: { mode: bad } }); assert.equal(s.draft.mode, undefined, `junk ${JSON.stringify(bad)}`); }
   s = store.reduce(store.reduce(s0, { type: 'profile.draft', patch: { name: 'Mia', type: 'elementary', age: 12, mode: 'family' } }), { type: 'profile.save' });
   assert.equal(s.profiles.find(p => p.name === 'Mia').mode, 'family', 'family survives the save');
+});
+
+test('UD-1: retyping a saved minor to Other keeps the age, so Adult stays refused until 18+ is entered', () => {
+  const kid = { id: 'ondrej', name: 'Ondrej', type: 'elementary', age: 13, system: 'cz', modules: ['maths'], mode: 'family' };
+  const base = { ...store.fresh(), learner: null, profiles: [kid], screen: 'learner', focus: 0 };
+  let s = store.reduce(base, { type: 'profile.draft', patch: { id: 'ondrej' } });
+  s = store.reduce(s, { type: 'profile.draft', patch: { type: 'other' } });
+  assert.equal(s.draft.age, 13, 'the age survives the type change');
+  s = store.reduce(s, { type: 'profile.draft', patch: { mode: 'adult' } });
+  assert.notEqual(s.draft.mode, 'adult', 'Adult refused for a saved 13-year-old');
+  s = store.reduce(s, { type: 'profile.save' });
+  assert.equal(modeOf(s.profiles.find(p => p.id === 'ondrej')), 'family', 'saved profile stays Family');
+  // a type walk that drops the age (13 is out of some school range) must not open the gate either
+  let w = store.reduce(base, { type: 'profile.draft', patch: { id: 'ondrej' } });
+  for (const type of ['high-school', 'elementary', 'other']) w = store.reduce(w, { type: 'profile.draft', patch: { type } });
+  w = store.reduce(w, { type: 'profile.draft', patch: { mode: 'adult' } });
+  assert.notEqual(w.draft.mode, 'adult', 'no type walk reaches Adult from a saved minor');
+  // 18+ entered: Adult is allowed; a new Other with no age still self-declares (owner ruling V2-O3)
+  let a = store.reduce(store.reduce(base, { type: 'profile.draft', patch: { id: 'ondrej' } }), { type: 'profile.draft', patch: { type: 'other', age: 19 } });
+  assert.equal(store.reduce(a, { type: 'profile.draft', patch: { mode: 'adult' } }).draft.mode, 'adult');
+  assert.equal(store.reduce(store.fresh(), { type: 'profile.draft', patch: { name: 'Ada', type: 'other', mode: 'adult' } }).draft.mode, 'adult');
 });
 
 test('an edit-save copies mode through the keys.ts list', () => {
@@ -108,7 +150,7 @@ test('an edit-save copies mode through the keys.ts list', () => {
   assert.equal(saved(p).mode, 'family', 'edit-save kept the stored family');
   const q = { ...p }; delete q.mode;
   assert.equal(saved(q).mode, undefined, 'unset stays unset');
-  // a stored "adult" is not carried into a draft (a patch may not set it): the edit-save returns the profile to the derived default
+  // a stored "adult" at 12 does not survive the gate (A5): the edit-save returns the profile to the derived default
   assert.equal(saved({ ...p, mode: 'adult' }).mode, undefined);
 });
 
@@ -133,5 +175,6 @@ test('session.json: a file with no mode field loads unchanged; junk modes are dr
   assert.deepEqual(got.map(p => p.mode), ['family', 'adult', undefined, undefined, undefined]);
   assert.ok(got.slice(2).every(p => !('mode' in p)), 'junk keys are gone, not just undefined');
   assert.equal(got[1].mathPath, 'calc1', 'pathChecked still applies');
-  assert.equal(modeOf(got[1], prefs(false)), 'family', 'the stored adult on an "other" with no age and no box is not honoured');
+  assert.equal(modeOf(got[1], prefs(false)), 'adult', 'a stored adult on an "other" with no age is honoured since A5');
+  assert.equal(modeOf({ ...got[0], mode: 'adult' }, prefs(true)), 'family', 'a stored adult at 16 never is');
 });

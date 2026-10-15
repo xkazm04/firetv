@@ -18,10 +18,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after,afterEach}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const data=path.join(os.tmpdir(),`desk-school-marking-${process.pid}-${Date.now()}`);process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 
 const src=(f)=>path.join(root,'src',f);
@@ -32,6 +29,12 @@ const learners=require(src('lib/session/learners.ts'));
 const S=require(src('lib/rules/school.ts'));
 const C=require(src('lib/rules/calc.ts'));
 const M=require(src('lib/rules/maths.ts'));
+/** The line on an item that is neither right nor slipped: a blank has no answer yet, an unsure one gives the engine's reason, a wrong one with no slip asks. */
+const elseLine=(verdict,a,n)=>verdict!=='unsure'?M.ASK(n):a.trim()===''?M.BLANK(n):null;
+/** MB-B1: the set's history line - an unsure item with a blank answer is skipped, counted apart from the not sure. */
+const LINE=(right,n,unsure,skipped)=>`${right} of ${n} right${unsure?`, ${unsure} not sure`:''}${skipped?`, ${skipped} skipped`:''}`;
+const blanks=(page,want)=>page.filter((p)=>want(p)==='unsure'&&!String(p.a??'').trim()).length;
+const assertElse=(it,verdict,a,n,msg)=>{const want=elseLine(verdict,a,n);if(want!==null)return assert.equal(it.said,want,msg);assert.ok(it.said.startsWith(`The desk is not sure about number ${n}. `)&&!it.said.endsWith('How did you get there?'),`${msg||''} ${it.said}`);};
 const H=require(src('lib/desk/hint.ts'));
 const X=require(src('lib/desk/explain.ts'));
 const {PATHS,topicIn}=require(src('lib/library/paths.ts'));
@@ -156,14 +159,14 @@ for(const system of ['uk','cz','us']){
    assert.deepEqual(it.spec,p.spec,'the spec survives marking');
    if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));
    else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);
-   else assert.equal(it.said,M.ASK(i+1),'unsure, or wrong with no known slip: the desk asks');
+   else assertElse(it,verdict,p.a,i+1,'unsure says why, a blank has no answer yet, wrong with no known slip asks');
    assert.equal(it.slipAt,undefined,'no pen position on a school item');
   });
   const settledN=PAGE.filter((p)=>p[system][0]!=='unsure').length,right=PAGE.filter((p)=>p[system][0]==='right').length,unsure=PAGE.length-settledN;
   const rec=learners.getLearner(LEARNER).skills[UNIT];
   assert.equal(rec.seen,settledN,'only settled items reach the record');
   const h=learners.getLearner(LEARNER).history.filter((e)=>e.kind==='practice').pop();
-  assert.equal(h.label,'Add and subtract fractions');assert.equal(h.detail,`${right} of ${PAGE.length} right, ${unsure} not sure`);
+  assert.equal(h.label,'Add and subtract fractions');assert.equal(h.detail,LINE(right,PAGE.length,unsure-blanks(PAGE,(p)=>p[system][0]),blanks(PAGE,(p)=>p[system][0])));
   for(const v of [store.getSession()])assert.ok(!keysIn(v).includes('solution')&&!keysIn(v).includes('answer'),'the model\'s solution never lands');
  });
 }
@@ -179,10 +182,12 @@ const TASKS=[
  ['Find the sum of 2/3 and 1/5','2/3 + 1/5'],['Work out 1/2 + 3/4. Give your answer as a decimal.','1/2 + 3/4','decimal'],['c) 2 / 3 + 1 / 5','2/3 + 1/5'],
  // W7: multiply and divide fractions is a unit now, so these two (refused in W5b) read as its specs
  ['3/4 × 1/6','3/4 × 1/6'],['3/4 ÷ 1/6','3/4 ÷ 1/6'],
+ // MB-B20: a mixed number is a fraction operand now (the step-up's top rung prints them), so this one (refused before) reads
+ ['1 1/2 + 3/4','1 1/2 + 3/4'],['Work out 3 1/2 - 1 3/4.','3 1/2 - 1 3/4'],['1 3/2 + 1/4',null],['0 1/2 + 1/4',null],['1-1/2 + 1/4',null],
  // refused: not two fractions combined, or not read with one meaning
  // W7 batch 2: '0.5 + 0.25' (refused in W5b) reads as "Add, subtract and multiply decimals" now; its row is in W7b 4 below
  ['3 + 4',null],['1/2 + 1/3 + 1/4',null],['three quarters plus one sixth',null],['3/4 + x',null],['Solve x + 1/2 = 3/4',null],
- ['(3/4 + 1/6',null],['3/4 + 1/6)',null],['1 1/2 + 3/4',null],['3/4 + 1/6 = 11/12',null],['1/6 - 3/4',null],
+ ['(3/4 + 1/6',null],['3/4 + 1/6)',null],['3/4 + 1/6 = 11/12',null],['1/6 - 3/4',null],
  ['3/0 + 1/6',null],['Find the difference between 3/4 and 1/6',null],['',null],['3/4 + 1/6 and 1/2',null],['2 + 3/4',null],['Work out 3/4 + 1/6 please',null],
  ['3/1 + 1/6',null],['03/4 + 1/6',null],['Differentiate x^2 + 1/2',null],['Solve for x:  3x − 7 = 11',null],['Work out 1/3 + 1/5. Give your answer as a decimal.',null],
  ['3/4 - 3/4',null],['1/2 + 1/2 + ',null],['Add 3/4',null],['1/2 + 1/4 = 3/4 ?',null],
@@ -235,7 +240,7 @@ test('6: a hint that gives a fractions answer away twice becomes the unit\'s fix
  stubText(()=>({hint:'Think about 17/12 as a check.',what_to_try_next:'Add them in pairs.'}));
  h=await H.hint('maths','Work out 3/4 + 1/6 + 1/2',{path:'school'});
  assert.equal(seenText.length,1);assert.equal(h.hint,'Think about 17/12 as a check.');
- assert.match(seenText[0].system,/factoring and linear-equations unit/,'an unread task keeps today\'s stance');
+ assert.match(seenText[0].system,/This is a school maths task; prefer the simplest method/,'an unread task gets the neutral stance (HL2)');assert.doesNotMatch(seenText[0].system,/factoring/);
  // a linear task: today's stance and fallback, untouched
  stubText(()=>({hint:'x is 6.',what_to_try_next:'Write x = 6.'}));
  h=await H.hint('maths','Solve for x:  3x − 7 = 11',{path:'school'});
@@ -265,6 +270,7 @@ test('8: an unsure fractions item is explained in the school stance and settled 
  let r=await post('explain',{transcript:'I made them quarters and got three quarters',n:5});
  assert.equal(r.status,200);
  const b=await r.json();assert.equal(b.settled,'right');
+ assert.match(b.reply,/^The desk heard 3\/4\. /,'the route returns what the desk heard');assert.match(store.getSession().practice.items[5].reply,/^The desk heard 3\/4\. /,'and the item stores it');
  const req=seenText[0];
  assert.doesNotMatch(req.system,/first-year university student/,'not the Calculus stance');
  assert.match(req.system,/listening to a school student explain/);
@@ -279,8 +285,8 @@ test('8: an unsure fractions item is explained in the school stance and settled 
  stubText(()=>({reply:'Yes, it comes to 11/12.',value:'11/12'}));
  r=await post('explain',{transcript:'eleven twelfths',n:8});
  const it9=store.getSession().practice.items[8];
- assert.equal(it9.verdict,'right');assert.equal(it9.reply,M.RIGHT(9),'the leaking reply is not shown');
- assert.equal((await r.json()).reply,M.RIGHT(9));
+ assert.equal(it9.verdict,'right');assert.equal(it9.reply,'The desk heard 11/12. '+M.RIGHT(9),'the leaking reply is not shown');
+ assert.equal((await r.json()).reply,'The desk heard 11/12. '+M.RIGHT(9));
  // item 8 (11/13, wrong with no slip): a slip the conversation names does not rename a school item
  stubText(()=>({reply:'Look at the tops.',value:'',slip:'tops-and-bottoms'}));
  await post('explain',{transcript:'I added them',n:7});
@@ -310,10 +316,10 @@ test('9: the Calculus explanation prompt is byte for byte what it was, and a lin
   `One or two sentences. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.`;
  const mem=learners.getLearner(LEARNER).memory;
  const prompt=`Topic: ${t.name}\n${t.blurb}\n\n`+
-  `The question: ${q}\n\n`+
-  `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably `+
-  `and answer what they meant:\n«${tr}»\n\n`+
-  (mem.length?`What the desk has learned about this student:\n${mem.map((m)=>`- ${m}`).join('\n')}\n\n`:'')+
+  `The question: ${JSON.stringify(q)}\n\n`+
+  `What the student said was transcribed from speech. The transcription may be rough or misheard — read it charitably `+
+  `and answer what they meant.\n\nWhat the student said: ${JSON.stringify(tr)}\n\n`+
+  (mem.length?`What the desk has learned about this student:\n${mem.map((m)=>JSON.stringify(m)).join('\n')}\n\n`:'')+
   `Reply to them in one or two sentences that point at the step, not the answer.\n\n`+
   `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits `+
   `or their reasoning was sound:\n${M.slipVocabulary(topic)}\n\n`+
@@ -321,7 +327,7 @@ test('9: the Calculus explanation prompt is byte for byte what it was, and a lin
   `e^, ln, sin, cos and so on, or a number or a fraction (six x plus two is 6x + 2, minus three is -3, seven halves is `+
   `7/2, x squared plus C is x^2 + C; include +C if they say it). Their answer, not yours — do not work it out. `+
   `An empty string if they did not say one.`;
- assert.equal(req.system,system,'the Calculus system prompt, unchanged (no age voice, whatever the age)');
+ assert.equal(req.system,system+' '+require(src('lib/prompt/assemble.ts')).DATA_CLAUSE,'the Calculus system prompt, unchanged but for the data clause (no age voice, whatever the age)');
  assert.equal(req.prompt,prompt,'the Calculus prompt, unchanged');
  assert.deepEqual(Object.keys(req.schema.properties).sort(),['reply','slip','value']);
  // a linear item: the school system in the learner's voice, the value of x, as before
@@ -329,6 +335,106 @@ test('9: the Calculus explanation prompt is byte for byte what it was, and a lin
  await X.explainItem({n:1,question:'Solve for x: 3x - 7 = 11',verdict:'unsure'},'I added seven','linear-two-step',LEARNER,()=>false,12);
  assert.match(seenText[0].system,/listening to a school student explain/);assert.match(seenText[0].prompt,/the final value of x the student says they got/);
  assert.match(seenText[0].prompt,/^Topic: Two-step equations\n/);
+});
+
+test('10: a settled explanation names the value the desk heard; nothing settled, nothing named',async()=>{
+ const topic='calc1-rules',lin='linear-two-step',HEARD=/^The desk heard /;
+ // a Calculus item settled by the answer said, and a linear one by the value of x (the 'x = ' cleaned off)
+ stubText(()=>({reply:'Look at the second term.',slip:'unclear',value:'6x + 2'}));
+ let x=await X.explainItem({n:1,question:'Differentiate f(x) = 3x^2 + 2x.',spec:{shape:'derivative',f:'3x^2 + 2x'},verdict:'unsure'},'six x plus two',topic,LEARNER,()=>true,12,'cz');
+ assert.equal(x.settled.verdict,'right');assert.equal(x.reply,'The desk heard 6x + 2. Look at the second term.');assert.equal(x.shown,x.reply);
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'x = 4'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'I got four',lin,LEARNER,()=>true,12);
+ assert.equal(x.settled.verdict,'right');assert.equal(x.reply,'The desk heard 4. Look at the first line.');
+ // a reply that leaks is replaced, and the heard sentence still leads the item's own line (the check ran on the model's reply alone)
+ stubText(()=>({reply:'It is 4.',slip:'unclear',value:'4'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'four',lin,LEARNER,()=>true,12);
+ assert.equal(x.reply,'The desk heard 4. '+M.RIGHT(1));
+ // a wrong answer said settles wrong, and the desk still says what it heard
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'5'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'five',lin,LEARNER,()=>true,12);
+ assert.equal(x.settled.verdict,'wrong');assert.match(x.reply,/^The desk heard 5\. /);
+ // nothing settles: a value the engine cannot read, an item no longer unsure, a wrong item whose slip is renamed
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'about four'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'about four',lin,LEARNER,()=>true,12);
+ assert.equal(x.settled,undefined);assert.doesNotMatch(x.reply,HEARD);
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'4'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'four',lin,LEARNER,()=>false,12);
+ assert.equal(x.settled,undefined);assert.equal(x.reply,'Look at the first line.');
+ const undo=M.slipsFor(lin).find((q)=>q.id==='undo-wrong-order');
+ stubText(()=>({reply:'Look at what you did to both sides.',slip:undo.id,value:'4'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'wrong',slip:'arithmetic-slip',said:M.ASK(1)},'four',lin,LEARNER,()=>false,12);
+ assert.ok(x.renamed);assert.doesNotMatch(x.reply,HEARD);
+});
+
+test('11: the explanation prompt carries the written answer, the working as numbered lines and the slip with its line; never the right answer',async()=>{
+ const asked=()=>seenText[0].prompt;
+ const stay=(prompt,right)=>{assert.ok(prompt.indexOf('The question: ')<prompt.indexOf('What the student wrote as their answer'),'after the question');assert.ok(prompt.indexOf('The desk found this slip')<prompt.indexOf('What the student said was transcribed'),'before the transcript');const upTo=prompt.slice(0,prompt.indexOf('What the student said was transcribed'));for(const re of right)assert.doesNotMatch(upTo,re,'the right answer is not in the part the item supplies (the value examples further down are fixed text)');};
+ // (e) a school item: a wrong written answer, two working lines, a code slip and a pen line
+ const sq='Add 1/2 and 1/3',sspec=S.specFromQuestion(sq);
+ stubText(()=>({reply:'Look at the bottoms.',value:''}));
+ await X.explainItem({n:1,question:sq,spec:sspec,studentAnswer:'2/5',studentWorking:'1/2 + 1/3 = 2/5; 2/5 = 0.4',verdict:'wrong',slip:'tops-and-bottoms',slipAt:{line:0},said:M.ASK(1)},'I added the tops and the bottoms',UNIT,LEARNER,()=>false,12);
+ let p=asked();
+ assert.ok(p.includes('What the student wrote as their answer: "2/5"\n\n'));
+ assert.ok(p.includes('Their working, line by line:\n1. "1/2 + 1/3 = 2/5"\n2. "2/5 = 0.4"\n\n'));
+ assert.ok(p.includes(`The desk found this slip: ${M.slip('tops-and-bottoms',UNIT).says}, on line 1.\n\n`));
+ stay(p,[/5\/6/]);
+ // (f) a Calculus item and a linear one
+ const cq='Differentiate f(x) = 3x^2 + 2x.';
+ stubText(()=>({reply:'Look at the second term.',slip:'unclear',value:''}));
+ await X.explainItem({n:1,question:cq,spec:{shape:'derivative',f:'3x^2 + 2x'},studentAnswer:'6x',studentWorking:'3 * 2x + 2\n6x',verdict:'wrong',slip:'arithmetic-slip',slipAt:{line:1},said:M.ASK(1)},'I got six x',  'calc1-rules',LEARNER,()=>false,12,'cz');
+ p=asked();
+ assert.match(p,/What the student wrote as their answer: "6x"/);assert.match(p,/line by line:\n1\. "3 \* 2x \+ 2"\n2\. "6x"\n\n/);
+ assert.ok(p.includes(`The desk found this slip: ${M.slip('arithmetic-slip','calc1-rules').says}, on line 2.\n\n`));
+ stay(p,[/6x \+ 2\b/]);
+ const lin='linear-two-step';
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:''}));
+ await X.explainItem({n:1,question:'2x + 3 = 11',studentAnswer:'7',studentWorking:'2x = 14; x = 7',verdict:'wrong',slip:'undo-wrong-order',slipAt:{line:0},said:M.ASK(1)},'I got seven',lin,LEARNER,()=>false,12);
+ p=asked();
+ assert.match(p,/What the student wrote as their answer: "7"/);assert.match(p,/line by line:\n1\. "2x = 14"\n2\. "x = 7"\n\n/);
+ assert.ok(p.includes(`The desk found this slip: ${M.slip('undo-wrong-order',lin).says}, on line 1.\n\n`));
+ stay(p,[/\b4\b/]);
+ // a bare answer is not repeated as a working line, and no line is named without working
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:''}));
+ await X.explainItem({n:1,question:'2x + 3 = 11',studentAnswer:'7',verdict:'wrong',slip:'undo-wrong-order',slipAt:{line:0},said:M.ASK(1)},'seven',lin,LEARNER,()=>false,12);
+ assert.doesNotMatch(asked(),/line by line|on line/);assert.match(asked(),/answer: "7"/);
+});
+
+test('12: an item with nothing seen sends today\'s prompt byte for byte, a school item and a linear one',async()=>{
+ const mem=()=>learners.getLearner(LEARNER).memory,tr='I added them';
+ const memory=()=>(mem().length?`What the desk has learned about this student:\n${mem().map((m)=>JSON.stringify(m)).join('\n')}\n\n`:'');
+ const head=(t,q)=>`Topic: ${t.name}\n${t.blurb}\n\nThe question: ${JSON.stringify(q)}\n\nWhat the student said was transcribed from speech. The transcription may be rough or misheard — read it charitably and answer what they meant.\n\nWhat the student said: ${JSON.stringify(tr)}\n\n`+memory()+`Reply to them in one or two sentences that point at the step, not the answer.\n\n`;
+ // a school item
+ const sq='Add 3/4 and 1/6';
+ stubText(()=>({reply:'Look at the bottoms.',value:''}));
+ await X.explainItem({n:1,question:sq,spec:S.specFromQuestion(sq),verdict:'unsure'},tr,UNIT,LEARNER,()=>false,12);
+ assert.equal(seenText[0].prompt,head(topicIn(UNIT),sq)+
+  `value: the final answer the student says they got, written in figures as they said it: a whole number, a fraction, ` +
+  `a mixed number, a decimal or a percentage (eleven twelfths is 11/12, one and five twelfths is 1 5/12, nought point five is 0.5, ` +
+  `thirty-five percent is 35%), with a currency sign if they said one (seven euros fifteen is €7.15); a ratio with its colon ` +
+  `(two to three is 2:3) and two amounts joined by and (twenty-four and thirty-six is 24 and 36). ` +
+  `Their answer, not yours — do not work it out and do not simplify it. An empty string if they did not say one.`);
+ // a linear item
+ const lin='linear-two-step',t=require(src('lib/library/syllabus.ts')).topic(lin);
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:''}));
+ await X.explainItem({n:1,question:'Solve for x: 3x - 7 = 11',verdict:'unsure'},tr,lin,LEARNER,()=>false,12);
+ assert.equal(seenText[0].prompt,head(t,'Solve for x: 3x - 7 = 11')+
+  `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits ` +
+  `or their reasoning was sound:\n${M.slipVocabulary(lin)}\n\n` +
+  `value: the final value of x the student says they got, written as a plain number or simple fraction (nine is 9, ` +
+  `minus three is -3, seven halves is 7/2). Their value, not yours — do not work it out. An empty string if they did not say one.`);
+});
+
+test('13: the ceiling: with the answer and working in the prompt, a reply that states the right answer is still replaced, and the heard sentence leads',async()=>{
+ const lin='linear-two-step';
+ stubText(()=>({reply:'The answer is 4.',slip:'unclear',value:'4'}));
+ const x=await X.explainItem({n:1,question:'2x + 3 = 11',studentAnswer:'4',studentWorking:'2x = 8; x = 4',verdict:'unsure'},'I got four',lin,LEARNER,()=>true,12);
+ assert.match(seenText[0].prompt,/Their working, line by line:\n1\. "2x = 8"\n2\. "x = 4"/);
+ assert.equal(x.settled.verdict,'right');assert.equal(x.reply,'The desk heard 4. '+M.RIGHT(1));
+ // an unsettled one: the item's own line, no heard sentence
+ stubText(()=>({reply:'The answer is 4.',slip:'unclear',value:''}));
+ const y=await X.explainItem({n:1,question:'2x + 3 = 11',studentAnswer:'4',studentWorking:'2x = 8; x = 4',verdict:'unsure'},'I got four',lin,LEARNER,()=>false,12);
+ assert.equal(y.reply,M.ASK(1));
 });
 
 // ------------------------------------------------------------------ 6. typed answers (Family W6): no camera, no model
@@ -345,6 +451,7 @@ const lastLine=()=>learners.getLearner(LEARNER).history.filter((e)=>e.kind==='pr
 
 test('10: POST /api/mark takes a photo XOR typed answers - a table of what is refused in a plain sentence, and what is not',async()=>{
  seat('uk');setOn();noModel();
+ const lines0=learners.getLearner(LEARNER).history.length;
  const n=PAGE.length,ok=Array.from({length:n},()=>'1');
  const A9=Array.from({length:n},(_,i)=>String(i));
  const refused=[
@@ -360,10 +467,15 @@ test('10: POST /api/mark takes a photo XOR typed answers - a table of what is re
   ['answers that are a string',{answers:'11/12'},/as a list/],
   ['answers that are null',{answers:null},/as a list/],
   ['answers that are an object',{answers:{0:'1'}},/as a list/],
+  ['answers that are all spaces',{answers:Array.from({length:n},(_,i)=>' '.repeat(i%3))},/Every answer is empty. Type at least one and send again./],
   ['an empty list',{answers:[]},/has 9 questions and 0 answers/],
-  ['an answer of 41 characters',{answers:[...A9.slice(0,2),'1'.repeat(41),...A9.slice(3)]},/Answer 3 is longer than 40 characters/],
+  ['an answer of 121 characters',{answers:[...A9.slice(0,2),'1'.repeat(121),...A9.slice(3)]},/Answer 3 is longer than 120 characters/],
   ['a body that is not JSON','{no',/did not get a photo/],
   ['a body that is an array','[1]',/neither a photo/],
+  ['an empty image',{image:'',w:100,h:100},/did not get a photo/],
+  ['an image that is a number',{image:123,w:100,h:100},/did not get a photo/],
+  ['an image that is null',{image:null,w:100,h:100},/did not get a photo/],
+  ['a data URL with no data',{image:'data:image/jpeg;base64,',w:100,h:100},/did not get a photo/],
  ];
  for(const [why,body,words] of refused){
   const r=await raw(body);assert.equal(r.status,400,why);
@@ -373,9 +485,10 @@ test('10: POST /api/mark takes a photo XOR typed answers - a table of what is re
  }
  assert.equal(seenVision.length+seenText.length,0,'a refusal calls no model');
  assert.equal(learners.getLearner(LEARNER).skills[UNIT]?.seen??0,0,'and records nothing');
- // the cap is inclusive: an answer of exactly 40 characters is taken whole (and is not sure, being no number)
- const r40=await raw({answers:[...A9.slice(0,2),'1'.repeat(40),...A9.slice(3)]});assert.equal(r40.status,200,'40 characters is allowed');
- assert.equal(store.getSession().practice.items[2].studentAnswer.length,40,'kept whole, never cut');
+ assert.equal(learners.getLearner(LEARNER).history.length,lines0,'and writes no history line');
+ // the cap is inclusive: an answer of exactly 120 characters is taken whole (and is not sure, being no number)
+ const r120=await raw({answers:[...A9.slice(0,2),'1'.repeat(120),...A9.slice(3)]});assert.equal(r120.status,200,'120 characters is allowed');
+ assert.equal(store.getSession().practice.items[2].studentAnswer.length,120,'kept whole, never cut');
  // a set already marked is refused before anything; and no set at all is a plain 400
  const again=await raw({answers:typedOf()});assert.equal(again.status,409);assert.match((await again.json()).error,/already marked/);
  store.dispatch({type:'practice.clear'});
@@ -384,7 +497,7 @@ test('10: POST /api/mark takes a photo XOR typed answers - a table of what is re
  seat('uk');setOn();noModel();
  const good=await raw({answers:typedOf()});assert.equal(good.status,200);
  const body=await good.json();
- assert.deepEqual([body.right,body.wrong,body.unsure,body.provider,body.ms],[1,5,3,'code',0]);
+ assert.deepEqual([body.right,body.wrong,body.unsure,body.skipped,body.provider,body.ms],[1,5,2,1,'code',0],'MB-B1: the blank answer is skipped, not one to talk through');
  assert.equal(seenVision.length+seenText.length,0,'no model call on the way');
 });
 
@@ -407,7 +520,7 @@ test('11: a typed set is marked as a photographed one is fed the same strings - 
    assert.equal(typed[i].verdict,verdict,`${system} #${i+1} "${p.a||'(blank)'}"`);assert.equal(typed[i].slip,slip,`${system} #${i+1}: the slip code detected`);
   });
   // the history line: the same form as a photographed set's, "k of n right, u not sure"
-  assert.equal(lastLine().detail,photoLine);assert.match(lastLine().detail,/^\d+ of 9 right(, \d+ not sure)?$/);
+  assert.equal(lastLine().detail,photoLine);assert.match(lastLine().detail,/^\d+ of 9 right(, \d+ not sure)?(, \d+ skipped)?$/);
   assert.equal(lastLine().label,'Add and subtract fractions');
   const sk=learners.getLearner(LEARNER).skills[UNIT];
   assert.equal(sk.seen,photoSkill.seen,'the same attempts reach the learner record');assert.equal(sk.right,photoSkill.right);
@@ -430,12 +543,13 @@ test('12: a typed decimal comma is read by the seated learner\'s system: 0,75 is
   assert.equal(store.getSession().practice.items[0].studentAnswer,a);
  }
  // a blank is unsure in every system, never wrong, and records no attempt
- seat('cz');store.dispatch({type:'practice.set',practice:{topic:UNIT,marked:false,items:[{n:1,question:question(A),spec:A,tier:1}]}});noModel();
- await post('mark',{answers:['   ']});
- const it=store.getSession().practice.items[0];
- assert.deepEqual([it.verdict,it.said,it.studentAnswer,it.slip],['unsure',M.ASK(1),'',undefined],'whitespace only is a blank');
+ // (a set of nothing but blanks is refused before the job - test 10 - so one typed answer goes with the blank)
+ seat('cz');store.dispatch({type:'practice.set',practice:{topic:UNIT,marked:false,items:[{n:1,question:question(A),spec:A,tier:1},{n:2,question:question(A),spec:A,tier:1}]}});noModel();
+ await post('mark',{answers:['abc','   ']});
+ const it=store.getSession().practice.items[1];
+ assert.deepEqual([it.verdict,it.said,it.studentAnswer,it.slip],['unsure',M.BLANK(2),'',undefined],'whitespace only is a blank');
  assert.equal(learners.getLearner(LEARNER).skills[UNIT]?.seen??0,0);
- assert.equal(lastLine().detail,'0 of 1 right, 1 not sure');
+ assert.equal(lastLine().detail,'0 of 2 right, 1 not sure, 1 skipped','MB-B1: the blank is skipped, the unreadable one not sure');
  // a newline or tab typed into a box is the keyboard's: the answer is read on one line
  seat('uk');store.dispatch({type:'practice.set',practice:{topic:UNIT,marked:false,items:[{n:1,question:question(A),spec:A,tier:1}]}});noModel();
  await post('mark',{answers:[' 11/12\n\t']});
@@ -454,7 +568,7 @@ test('13: a Calculus set typed in x^2 style is settled by checkAnswer as its pho
  assert.equal(seenVision.length+seenText.length,0);
  assert.deepEqual(verdicts(),photo,'the same verdicts, slips and words as the photo path');
  assert.deepEqual(verdicts().map((v)=>v.verdict),ITEMS.map((x)=>x[2]));
- assert.equal(lastLine().detail,photoLine);assert.equal(lastLine().detail,'3 of 6 right, 2 not sure');
+ assert.equal(lastLine().detail,photoLine);assert.equal(lastLine().detail,'3 of 6 right, 1 not sure, 1 skipped','MB-B1: the blank is skipped, the junk not sure');
  assert.equal(lastLine().label,topicIn(topic).name);
  assert.ok(store.getSession().practice.items.every((it)=>it.slipAt===undefined&&it.studentWorking===''));
 });
@@ -540,9 +654,11 @@ const W7_TASKS={
   ['Calculate 2/3 × 3/4',cs('2/3 × 3/4')],['What is 2/3 × 3/4?',cs('2/3 × 3/4')],['Multiply 2/3 by 3/4',cs('2/3 × 3/4')],['Multiply 2/3 and 3/4',cs('2/3 × 3/4')],
   ['Find the product of 2/3 and 3/4',cs('2/3 × 3/4')],['3/4 ÷ 1/2',cs('3/4 ÷ 1/2')],['Work out 3/4 ÷ 1/2',cs('3/4 ÷ 1/2')],['3/4 divided by 1/2',cs('3/4 ÷ 1/2')],
   ['Divide 3/4 by 1/2',cs('3/4 ÷ 1/2')],['Work out 2/3 × 3/4. Give your answer in its simplest form.',cs('2/3 × 3/4',{form:'simplest'})],['2/3 × 3/4 =',cs('2/3 × 3/4')],
-  ['2/3 × 3/4 = ?',cs('2/3 × 3/4')],['(a) 2/3 × 3/4',cs('2/3 × 3/4')],['⅔ × ¾',cs('2/3 × 3/4')],['Evaluate 5/6 ÷ 2/3',cs('5/6 ÷ 2/3')],
+  ['2/3 × 3/4 = ?',cs('2/3 × 3/4')],['(a) 2/3 × 3/4',cs('2/3 × 3/4')],['⅔ × ¾',cs('2/3 × 3/4')],['Evaluate 5/6 ÷ 2/3',cs('5/6 ÷ 2/3')],['3/4 : 1/2',cs('3/4 ÷ 1/2')],
   // refused
-  ['2/3 × 3/4 × 1/2',null],['1 1/2 × 2/3',null],['2/3 × 3/4 = 1/2',null],['3/4 : 1/2',null],['Divide 3/4 into 1/2',null],['2/3 ÷ 2',null],['3/4 ÷ 0/2',null],
+  // MB-B20: a mixed number is a fraction operand now (refused before W8's top rung)
+  ['1 1/2 × 2/3',cs('1 1/2 × 2/3')],['4 1/2 ÷ 3/4',cs('4 1/2 ÷ 3/4')],
+  ['2/3 × 3/4 × 1/2',null],['1 1/2 × 2 3/3',null],['2/3 × 3/4 = 1/2',null],['Divide 3/4 into 1/2',null],['2/3 ÷ 2',null],['3/4 ÷ 0/2',null],
   ['2x/3 × 3/4',null],['(2/3) × (3/4)',null],['2/3 × 3/4 please',null],['Multiply 2/3 by 3/4 by 1/2',null],['2/3 ÷ 3/1',null],['Find the quotient of 3/4 and 1/2',null],['2/3 of 3/4',null],
  ],
 };
@@ -614,13 +730,13 @@ for(const unit of Object.keys(W7_PAGES)){
   page.forEach((p,i)=>{
    const [verdict,slip]=p.want,it=typed[i];
    assert.equal(it.verdict,verdict,`#${i+1} ${JSON.stringify(p.a)} on ${p.spec.expr}`);assert.equal(it.slip,slip,`#${i+1}: the slip code detected`);
-   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assert.equal(it.said,M.ASK(i+1));
+   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assertElse(it,verdict,p.a,i+1);
   });
   const settledN=page.filter((p)=>p.want[0]!=='unsure').length,right=page.filter((p)=>p.want[0]==='right').length;
   const sk=learners.getLearner(LEARNER).skills[unit];
   assert.equal(sk.seen,settledN,'only settled items reach the record');assert.equal(sk.seen,photoSkill.seen);assert.equal(sk.right,right);
   assert.deepEqual([...sk.slips].sort(),[...new Set(page.filter((p)=>p.want[1]).map((p)=>p.want[1]))].sort(),'the record keeps the slips code named');
-  assert.equal(lastLine().detail,`${right} of ${page.length} right, ${page.length-settledN} not sure`);
+  assert.equal(lastLine().detail,LINE(right,page.length,page.length-settledN-blanks(page,(p)=>p.want[0]),blanks(page,(p)=>p.want[0])));
   assert.equal(lastLine().label,topicIn(unit)?.name??unit,'the history line names the unit as the path does');
   store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
  });
@@ -771,12 +887,12 @@ for(const unit of Object.keys(B2_PAGES)){
   page.forEach((p,i)=>{
    const [verdict,slip]=p.want,it=typed[i];
    assert.equal(it.verdict,verdict,`#${i+1} ${JSON.stringify(p.a)} on ${p.spec.expr}`);assert.equal(it.slip,slip,`#${i+1}: the slip code detected`);
-   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assert.equal(it.said,M.ASK(i+1));
+   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assertElse(it,verdict,p.a,i+1);
   });
   const settledN=page.filter((p)=>p.want[0]!=='unsure').length,right=page.filter((p)=>p.want[0]==='right').length;
   const sk=learners.getLearner(LEARNER).skills[unit];
   assert.equal(sk.seen,settledN,'only settled items reach the record');assert.equal(sk.seen,photoSkill.seen);assert.equal(sk.right,right);
-  assert.equal(lastLine().detail,`${right} of ${page.length} right, ${page.length-settledN} not sure`);
+  assert.equal(lastLine().detail,LINE(right,page.length,page.length-settledN-blanks(page,(p)=>p.want[0]),blanks(page,(p)=>p.want[0])));
   store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
   assert.equal(lastLine().label,topicIn(unit).name,'the history line names the unit as the path does');
  });
@@ -819,7 +935,7 @@ test('W7b 9: an unsure decimals or percent item is explained in the school stanc
  // the reply is leak-checked against the item's own spec: one that says the answer is replaced by the item's line
  stubText(()=>({reply:'Yes: 7.15 exactly.',value:'7.15'}));
  await post('explain',{transcript:'seven point one five',n:2});
- const it=store.getSession().practice.items[2];assert.equal(it.verdict,'right');assert.equal(it.reply,M.RIGHT(3),'the leaking reply is not shown');
+ const it=store.getSession().practice.items[2];assert.equal(it.verdict,'right');assert.equal(it.reply,'The desk heard 7.15. '+M.RIGHT(3),'the leaking reply is not shown');
 });
 
 // ------------------------------------------------------------------ 9. Family W7 batch 3: ratio, rates, area, mean and range - read, withheld and marked
@@ -959,12 +1075,12 @@ for(const unit of Object.keys(B3_PAGES)){
   page.forEach((p,i)=>{
    const [verdict,slip]=p.want,it=typed[i];
    assert.equal(it.verdict,verdict,`#${i+1} ${JSON.stringify(p.a)} on ${p.spec.expr}`);assert.equal(it.slip,slip,`#${i+1}: the slip code detected`);
-   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assert.equal(it.said,M.ASK(i+1));
+   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assertElse(it,verdict,p.a,i+1);
   });
   const settledN=page.filter((p)=>p.want[0]!=='unsure').length,right=page.filter((p)=>p.want[0]==='right').length;
   const sk=learners.getLearner(LEARNER).skills[unit];
   assert.equal(sk.seen,settledN,'only settled items reach the record');assert.equal(sk.seen,photoSkill.seen);assert.equal(sk.right,right);
-  assert.equal(lastLine().detail,`${right} of ${page.length} right, ${page.length-settledN} not sure`);
+  assert.equal(lastLine().detail,LINE(right,page.length,page.length-settledN-blanks(page,(p)=>p.want[0]),blanks(page,(p)=>p.want[0])));
   store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
   assert.equal(lastLine().label,topicIn(unit).name,'the history line names the unit as the path does');
  });
@@ -1002,7 +1118,7 @@ test('W7c 9: an unsure ratio, area or mean item is explained in the school stanc
  assert.deepEqual(store.getSession().practice.items.map((i)=>i.verdict),['unsure','unsure','unsure']);
  // "twenty-four and thirty-six" said aloud: the value is transcribed as two amounts and settles right
  stubText(()=>({reply:'Look at which share goes with the 2.',value:'24 and 36'}));
- const r=await post('explain',{transcript:'the first one gets twenty-four and the other thirty-six',n:0});
+ const r=await post('explain',{transcript:'I got twenty-four and the other thirty-six',n:0});
  assert.equal(r.status,200);assert.equal((await r.json()).settled,'right');
  assert.match(seenText[0].prompt,/twenty-four and thirty-six is 24 and 36/,'the explain prompt asks for two amounts as said');
  assert.match(seenText[0].prompt,/^Topic: Ratio and sharing\n/);
@@ -1010,5 +1126,155 @@ test('W7c 9: an unsure ratio, area or mean item is explained in the school stanc
  // the area said with its square unit settles right; a reply that states the answer is replaced by the item's line
  stubText(()=>({reply:'Yes, 28 square centimetres.',value:'28 cm2'}));
  await post('explain',{transcript:'twenty-eight square centimetres',n:1});
- const it=store.getSession().practice.items[1];assert.equal(it.verdict,'right');assert.equal(it.reply,M.RIGHT(2),'the leaking reply is not shown');
+ const it=store.getSession().practice.items[1];assert.equal(it.verdict,'right');assert.equal(it.reply,'The desk heard 28 cm2. '+M.RIGHT(2),'the leaking reply is not shown');
+});
+
+test('HL6: every frac-* withheld line is 25 words or fewer, keeps the closing sentence, names no number, and leaks nothing on its unit',()=>{
+ const gens={'frac-equivalent':S.genEquivalent,'frac-of-amount':S.genOfAmount,'frac-add-sub':S.gen,'frac-mul-div':S.genMulDiv};
+ for(const [unit,gen] of Object.entries(gens)){
+  const line=S.SCHOOL_WITHHELD[unit];
+  assert.ok(line.split(/\s+/).length<=25,`${unit}: ${line.split(/\s+/).length} words`);
+  assert.match(line,/The answer is yours to work out\.$/);assert.doesNotMatch(line,/\d/);
+  for(const tier of [1,2])for(let seed=0;seed<200;seed++){const sp=gen(seed,tier);assert.equal(S.unitOf(sp),unit);assert.equal(S.leaksSchool(sp,line),false,`${unit} ${tier}/${seed}`);}
+ }
+});
+
+// ------------------------------------------------------------------ X1: the explain reply goes through the same leak checks
+test('X1: explainItem replaces a reply the shared leak checks refuse - Czech fraction words, a rooted squared total, a split product, a Czech solution - and shows a clean one',async()=>{
+ seat('cz');
+ const own='This one is yours to finish.';
+ const items=[
+  {name:'3/13 item',topic:'probability',item:{n:1,question:'A bag has 3 red and 10 blue counters. Find the probability that one taken at random is red.',spec:{shape:'probability',expr:'bag red 3, blue 10 ask red'}},
+   leak:'Pravděpodobnost je tři třináctiny.',leak2:'Pravdepodobnost je tri trinactiny.',clean:'Count the red counters, then all the counters.'},
+  {name:'16/30 mm item',topic:'pythagoras',item:{n:1,question:'A right-angled triangle has shorter sides 16 mm and 30 mm. Find the longest side.',spec:{shape:'pythagoras',expr:'longest 16 30',unit:'mm'}},
+   leak:'The longest side is the square root of 1156.',leak2:'c² = 16² + 30² = 1156, teď odmocni.',clean:'Square both shorter sides and add them.'},
+  {name:'sin(x^2) item',topic:'calc1-rules',item:{n:1,question:'Differentiate f(x) = sin(x^2).',spec:{shape:'derivative',f:'sin(x^2)'}},
+   leak:'Multiply cos(x^2) by 2x.',leak2:'Differentiate the outside to get cos(x^2), then multiply by 2x, the derivative of the inside.',clean:'Use the chain rule: differentiate the outside, then multiply by the derivative of the inside.'},
+  {name:'Czech equation item',topic:'linear-two-step',item:{n:1,question:'Řeš rovnici 3(x - 2) = 2x + 5'},
+   leak:'Takže x = 11.',leak2:'x = 11.',clean:'Rozlož závorku a převeď členy s x na jednu stranu.'},
+ ];
+ for(const t of items){
+  for(const line of [t.leak,t.leak2]){
+   stubText(()=>({reply:line,value:'',slip:'unclear'}));
+   const r=await X.explainItem({...t.item,verdict:'unsure',said:own},'I did it in my head',t.topic,LEARNER,()=>false,12,'cz');
+   assert.equal(r.reply,own,`${t.name}: replaced: ${line}`);
+  }
+  stubText(()=>({reply:t.clean,value:'',slip:'unclear'}));
+  const r=await X.explainItem({...t.item,verdict:'unsure',said:own},'I did it in my head',t.topic,LEARNER,()=>false,12,'cz');
+  assert.equal(r.reply,t.clean,`${t.name}: a clean reply is shown`);
+ }
+});
+
+// ------------------------------------------------------------------ MK11: a photo with no answers on it is a failed mark
+const {EMPTY_MARK}=require(path.join(root,'src/lib/desk/mark.ts'));
+const digestOf=()=>learners.getLearner(LEARNER).digest.length;
+const linesOf=()=>learners.getLearner(LEARNER).history.filter((e)=>e.kind==='practice').length;
+test('12: MK11 a photo read with no answer to any question is refused (502, EMPTY_MARK), records nothing, and the next good snap marks',async()=>{
+ const reads={
+  'no items':()=>({items:[]}),
+  'items numbered outside the set':()=>({items:[{n:90,studentAnswer:'11/12',studentWorking:''},{n:0,studentAnswer:'1',studentWorking:''}]}),
+  'every answer blank':()=>({items:PAGE.map((p,i)=>({n:i+1,studentAnswer:i%2?'':'   ',studentWorking:'9/12'}))}),
+ };
+ for(const [why,read] of Object.entries(reads)){
+  seat('uk');setOn();
+  stubVision(read);
+  const r=await post('mark',PHOTO);
+  assert.equal(r.status,502,why);
+  const msg=(await r.json()).error;assert.equal(msg,EMPTY_MARK,why);deskWords(msg);
+  const s=store.getSession();
+  assert.equal(s.practice.marked,false,`${why}: still open`);
+  assert.equal(s.jobs.mark.phase,'failed',why);assert.equal(s.jobs.mark.error,EMPTY_MARK,why);
+  assert.equal(linesOf(),0,`${why}: no history line`);assert.equal(digestOf(),0,`${why}: no digest entry`);
+  assert.equal(learners.getLearner(LEARNER).skills[UNIT]?.seen??0,0,`${why}: no attempt`);
+  stubVision(()=>({items:PAGE.map((p,i)=>({n:i+1,studentAnswer:p.a,studentWorking:''}))}));
+  assert.equal((await post('mark',PHOTO)).status,200,`${why}: the next good snap marks`);
+  assert.equal(store.getSession().practice.marked,true);assert.equal(linesOf(),1);assert.equal(digestOf(),1);
+ }
+});
+test('13: MK11 ruled limit - one non-blank answer to a question of the set still lands (marking has no completeness check)',async()=>{
+ seat('uk');setOn();
+ stubVision(()=>({items:[{n:1,studentAnswer:'11/12',studentWorking:''},{n:99,studentAnswer:'5',studentWorking:''}]}));
+ assert.equal((await post('mark',PHOTO)).status,200);
+ assert.equal(store.getSession().practice.marked,true);assert.equal(linesOf(),1);assert.equal(digestOf(),1);
+});
+
+// ------------------------------------------------------------------ D3-3: a failed vision call
+const {EngineError}=require(path.join(root,'src/lib/engines/types.ts'));
+for(const [why,sentence,fail] of [
+ ['a timeout','The desk could not mark the set. It took too long.',()=>{reg.useProvider('vision',{name:'stub',run:async()=>{throw new EngineError('timeout','stub','timed out');}});}],
+ ['an answer that is not JSON','The desk could not mark the set. The answer came back in pieces.',()=>{reg.useProvider('vision',{name:'stub',run:async()=>({raw:'this is not json at all'})});}],
+]){
+ test(`14: D3-3 vision fails with ${why}: 502 in desk words, job failed, nothing recorded, the next good snap marks`,async()=>{
+  seat('uk');setOn();fail();
+  const r=await post('mark',PHOTO);assert.equal(r.status,502);
+  assert.equal((await r.json()).error,sentence);
+  const s=store.getSession();
+  assert.equal(s.jobs.mark.phase,'failed');assert.equal(s.jobs.mark.error,sentence);
+  assert.equal(s.practice.marked,false);assert.equal(linesOf(),0);assert.equal(digestOf(),0);
+  stubVision(()=>({items:PAGE.map((p,i)=>({n:i+1,studentAnswer:p.a,studentWorking:''}))}));
+  assert.equal((await post('mark',PHOTO)).status,200);assert.equal(linesOf(),1);
+ });
+}
+
+test('MK10: an unsure item says why the desk is not sure, in the engine\'s words, through the real judgeSet; a blank has no answer yet; a wrong item with no slip still asks',()=>{
+ const K=require(src('lib/rules/kinds.ts'));
+ const judge=(spec,a,system='uk',topic=UNIT)=>K.judgeSet({topic,items:[{n:1,question:question(spec),spec,tier:1}]},[{n:1,studentAnswer:a}],{topic,system,typed:true}).items[0];
+ // (a) a right value not in its simplest form: the engine's own reason, no value, never 'something different'
+ const T={shape:'simplify',expr:'6/33'},why=S.check(T,'4/22','uk').why;
+ assert.equal(S.check(T,'4/22','uk').verdict,'unsure');assert.ok(why.length>10);
+ const u=judge(T,'4/22');
+ assert.equal(u.verdict,'unsure');assert.equal(u.said,M.NOT_SURE(1,why));
+ assert.match(u.said,/^The desk is not sure about number 1\. /);assert.doesNotMatch(u.said,/something different|4\/22|2\/11/);
+ // (c) a blank answer has no answer yet
+ assert.equal(judge(T,'   ').said,M.BLANK(1));assert.equal(judge(T,'').said,M.BLANK(1));
+ // (d) a linear item the desk cannot solve: not sure, no reason
+ const lin=K.judgeSet({topic:'linear-one-step',items:[{n:2,question:'x*x=4'}]},[{n:2,studentAnswer:'2'}],{topic:'linear-one-step'}).items[0];
+ assert.equal(lin.verdict,'unsure');assert.equal(lin.said,M.NOT_SURE(2));
+ // (c) a blank linear item
+ assert.equal(K.judgeSet({topic:'linear-one-step',items:[{n:3,question:'2x+3=11'}]},[],{topic:'linear-one-step'}).items[0].said,M.BLANK(3));
+ // (e) control: wrong with no known slip asks
+ const w=judge(T,'7/9');
+ assert.equal(w.verdict,'wrong');assert.equal(w.slip,undefined);assert.equal(w.said,M.ASK(1));
+ // the part name still renames it
+ assert.match(require(src('lib/rules/calc-word.ts')).namedLine(u.said,1,'5(b)'),/^The desk is not sure about number 5\(b\)\. /);
+});
+
+// ------------------------------------------------------------------ X5: a value settles an unsure item only when the learner said it
+test('X5: a model-written value the learner did not say settles nothing and writes no record; said, it settles as before (R2, R18)',async()=>{
+ const rec=(id,unit)=>JSON.stringify(learners.getLearner(id).skills[unit]??null);
+ // R2: an unsure school fraction item, the transcript has no number in it, the stub volunteers the right answer
+ seat('uk');setOn();
+ stubVision(()=>({items:PAGE.map((p,i)=>({n:i+1,studentAnswer:p.a,studentWorking:''}))}));
+ assert.equal((await post('mark',PHOTO)).status,200);
+ const item=store.getSession().practice.items[5];assert.equal(item.verdict,'unsure');
+ stubText(()=>({reply:'Look again at how you made the bottoms match.',value:'3/4'}));
+ const before=rec(LEARNER,UNIT);
+ const x=await X.explainItem(item,'nevím, nějak jsem to odečetla',UNIT,LEARNER,()=>true,12,'uk');
+ assert.equal(x.settled,undefined,'R2: not settled');assert.equal(rec(LEARNER,UNIT),before,'R2: the learner record is unchanged');
+ assert.doesNotMatch(x.reply,/The desk heard/);assert.equal(x.reply,'Look again at how you made the bottoms match. '+X.NOT_HEARD_LINE.en,'R2: the non-leaking reply still shows, then the X6-a line');assert.equal(x.shown,x.reply);
+ // R2 through the route: 200, no settled field, the item stays unsure
+ const r=await post('explain',{transcript:'nevím, nějak jsem to odečetla',n:5});
+ const b=await r.json();assert.equal(r.status,200);assert.equal('settled' in b,false,'R2 route: no settled field');
+ assert.equal(store.getSession().practice.items[5].verdict,'unsure');assert.equal(rec(LEARNER,UNIT),before,'R2 route: record unchanged');
+ // control: the same item with the value said settles right and records once
+ const c=await X.explainItem(item,'I made them quarters and got three quarters',UNIT,LEARNER,()=>true,12,'uk');
+ assert.equal(c.settled.verdict,'right');assert.match(c.reply,/^The desk heard 3\/4\. /);assert.notEqual(rec(LEARNER,UNIT),before,'control: the record moved');
+ // R18: a linear item, 'I got five' with the stub's 4
+ const lin='linear-two-step',lq={n:1,question:'2x + 3 = 11',verdict:'unsure'};
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'4'}));
+ const lb=rec(LEARNER,lin);
+ const y=await X.explainItem(lq,'I got five',lin,LEARNER,()=>true,12);
+ assert.equal(y.settled,undefined,'R18: not settled');assert.equal(rec(LEARNER,lin),lb,'R18: record unchanged');assert.doesNotMatch(y.reply,/The desk heard/);
+ assert.ok(y.reply.endsWith(' '+X.NOT_HEARD_LINE.en),'R18: ends with the X6-a line');
+ const z=await X.explainItem(lq,'I got four',lin,LEARNER,()=>true,12);
+ assert.equal(z.settled.verdict,'right','control: four said settles');assert.ok(!z.reply.includes(X.NOT_HEARD_LINE.en),'X6-a: a settled item has no line');
+ // X6-a: Czech for system cz; none when the item is no longer unsure or was already wrong
+ stubText(()=>({reply:'Look again at how you made the bottoms match.',value:'3/4'}));
+ const cz=await X.explainItem(item,'nevím, nějak jsem to odečetla',UNIT,LEARNER,()=>true,12,'cz');
+ assert.equal(cz.settled,undefined);assert.equal(cz.reply,'Look again at how you made the bottoms match. '+X.NOT_HEARD_LINE.cz,'X6-a cz');assert.ok(X.NOT_HEARD_LINE.cz.startsWith('V tom nezazněla'));
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'4'}));
+ const gone=await X.explainItem(lq,'I got five',lin,LEARNER,()=>false,12);
+ assert.ok(!gone.reply.includes(X.NOT_HEARD_LINE.en),'X6-a: no line when the item is no longer unsure');
+ const wr=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'wrong'},'I got five',lin,LEARNER,()=>true,12);
+ assert.ok(!wr.reply.includes(X.NOT_HEARD_LINE.en),'X6-a: no line on a wrong item');
 });

@@ -10,10 +10,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after,afterEach}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(os.tmpdir(),'desk-calc-hint-'));delete process.env.DESK_TEXT_ENGINE;
 
 const src=(f)=>path.join(root,'src',f);
@@ -34,13 +31,16 @@ afterEach(()=>reg.resetProviders());
  * Every spec in tools/calc-rules-test.cjs (its CHECKS, WELL and SWEEP tables), loaded by compiling that file with a
  * no-op node:test so none of its tests run here - the round trip follows the corpus as it grows.
  */
-function lotACorpus(){
+function lotATables(){
  const file=path.join(__dirname,'calc-rules-test.cjs');
  const m=new Module(file,module);m.filename=file;m.paths=Module._nodeModulePaths(__dirname);
  const real=m.require.bind(m);
  m.require=(id)=>id==='node:test'?{test(){},after(){},afterEach(){},before(){},beforeEach(){}}:real(id);
  m._compile(fs.readFileSync(file,'utf8')+'\n;module.exports={CHECKS,WELL,SWEEP};',file);
- const {CHECKS,WELL,SWEEP}=m.exports;
+ return m.exports;
+}
+function lotACorpus(){
+ const {CHECKS,WELL,SWEEP}=lotATables();
  return [...CHECKS.map(c=>c[0]),...WELL.map(w=>w[0]),...Object.values(SWEEP)].filter(s=>s&&typeof s==='object');
 }
 
@@ -225,6 +225,54 @@ test('4: the fallback for a spec is a fixed sentence per shape, chosen in code -
  assert.equal(typeof C.withheldCalc(null),'string','a line even with no spec');
 });
 
+test('D2-3: the leak check stays at least as strict as the judge - every answer checkAnswer calls right, stated in a hint, is refused',()=>{
+ const X=require(src('lib/rules/calc-expr.ts'));
+ const val=(n)=>{const e=compile(String(n));return e?e.at():NaN;};
+ /** The exact value of a limit or an integral spec, for its decimal candidates (null when infinite or not worked). */
+ const exact=(s)=>{
+  const f=compile(s.f);if(!f)return null;
+  if(s.shape==='definite-integral')return X.integrate(f,val(s.a),val(s.b));
+  if(s.shape!=='limit')return null;
+  const L=s.at==='inf'||s.at==='-inf'?X.limitInf(f,s.at==='inf'?1:-1):X.limitAt(f,val(s.at),s.side);
+  return L&&L.kind==='value'?L.v:null;
+ };
+ /** Every decimal neighbour of v at 1 to 5 places: both sides, so a halfway value has both its correct roundings. */
+ const decimals=(v)=>{const out=new Set();for(let k=1;k<=5;k++){const p=10**k;for(const r of [Math.floor(v*p)/p,Math.ceil(v*p)/p,v])out.add(r.toFixed(k));}return [...out];};
+ const {CHECKS}=lotATables();
+ const D=(f)=>({shape:'derivative',f}),A=(f)=>({shape:'antiderivative',f});
+ const pairs=[...CHECKS.map(([s,a])=>[s,a]),
+  [D('ln(1-x)'),'-1/(1-x)'],[D('ln(1-x)'),'1/(x-1)'],[D('ln(2-x)'),'-1/(2-x)'],[D('ln(4-x^2)'),'-2x/(4-x^2)'],[D('ln(x-2)'),'1/(x-2)'],
+  [A('1/(x+4)'),'ln(x+4) + C'],[A('1/x'),'ln|x| + C'],[A('1/(1-x)'),'-ln|1-x| + C']];
+ const L38={shape:'limit',f:'3/8 + x',at:0};
+ const specs=[...lotACorpus(),...grid(),L38,{shape:'definite-integral',f:'3x/4',a:0,b:1}];
+ for(const s of specs){const v=exact(s);if(v!==null&&Number.isFinite(v))for(const a of decimals(v))pairs.push([s,a]);}
+ let right=0;const bad=[],long=[];
+ for(const [s,a] of pairs){
+  if(typeof a!=='string'||C.checkAnswer(s,a).verdict!=='right')continue;
+  right++;
+  if(C.leaksCalc(s,`The answer is ${a}.`))continue;
+  // an answer longer than six tokens is read by the long passes (HL12, HL12a), so it is refused like the rest
+  (a.trim().split(/\s+/).length>6?long:bad).push(`${s.shape} ${s.f}: ${a}`);
+ }
+ assert.deepEqual(bad,[]);
+ assert.deepEqual(long,[],'the long passes read the longer answers (HL12)');
+ assert.ok(right>=400,`the sweep holds ${right} right answers`);
+ // the brief's two pins, by name
+ assert.equal(C.leaksCalc(D('ln(1-x)'),'So the derivative is -1/(1-x).'),true,'-1/(1-x) on the ln(1-x) derivative');
+ assert.equal(C.leaksCalc(L38,'It is about 0.38.'),true,'0.38 on a 3/8 limit');
+ assert.equal(C.leaksCalc(L38,'Round to two places at the end.'),false,'the method is not the answer');
+});
+
+test('HL12: the long passes refuse a long right answer said whole, and only a right one',()=>{
+ const P={shape:'derivative',f:'x^2 e^x sin(x)'},Q={shape:'derivative',f:'(x^2 + 1)/(x - 1)'};
+ assert.equal(C.leaksCalc(P,'So the derivative is 2x e^x sin(x) + x^2 e^x sin(x) + x^2 e^x cos(x).'),true,'the 11-token corpus answer');
+ assert.equal(C.leaksCalc(Q,'So the derivative is (x^2 - 2x - 1)/(x - 1)^2.'),true,'the 7-token corpus answer');
+ assert.equal(C.leaksCalc(P,'So the derivative is x^2 e^x cos(x) + 2x e^x sin(x) + e^x x^2 sin(x).'),true,'a reordered form');
+ assert.equal(C.leaksCalc(P,'So the derivative is 2x e^x sin(x) + x^2 e^x cos(x).'),false,'a long wrong expression');
+ assert.equal(C.leaksCalc(P,'So the derivative is x^2 e^x sin(x) + 2x e^x sin(x).'),false,'a long wrong expression holding the question function');
+ assert.equal(C.leaksCalc(P,'Write f(x) = x^2 e^x sin(x) as three factors and use the product rule on each.'),false,'a method line');
+});
+
 // ------------------------------------------------------------------ hint(): the engine stubbed at the provider seam
 let seen=[];
 function stub(...answers){seen=[];reg.useProvider('text',{name:'stub',run:async(req)=>{seen.push(req);const a=answers[Math.min(seen.length-1,answers.length-1)];return {raw:JSON.stringify(a)};}});}
@@ -249,6 +297,23 @@ test('5: a Calculus page\'s hint that states the derivative is re-asked once; a 
  stub({hint:'Look at each term.',what_to_try_next:"so f'(x) = x(3x + 2)"},clean);
  h=await hint('maths',DIFF,{});
  assert.equal(seen.length,2);assert.match(seen[1].prompt,/what to try next/i);assert.equal(h.hint,clean.hint);
+});
+
+test('M3a: a two-part page task (the maximum and the minimum) is leak-checked against both parts; a second leak gets the extremum line',async()=>{
+ const TWO='Find the maximum and minimum of f(x) = x^3 - 12x on [-3, 3].';
+ assert.equal(C.specFromQuestion(TWO),null,'no single spec reads');assert.equal(C.partsFromQuestion(TWO).length,2);
+ const clean={hint:'Find where the derivative is zero inside the interval.',what_to_try_next:'Write the derivative on your paper.'};
+ // the minimum alone gives part (b) away: it is re-asked
+ stub({hint:'The minimum comes out at -16.',what_to_try_next:'Check the ends.'},clean);
+ let h=await hint('maths',TWO,{path:'calc1'});
+ assert.equal(seen.length,2,'the leak of the second part is caught');assert.deepEqual([h.hint,h.next],[clean.hint,clean.what_to_try_next]);
+ // twice: the extremum's fixed line, next empty
+ stub({hint:'The largest value is 16.',what_to_try_next:'Check it.'},{hint:'You reach 16 at x = -2.',what_to_try_next:'Done.'});
+ h=await hint('maths',TWO,{path:'calc1'});
+ assert.equal(seen.length,2);assert.deepEqual([h.hint,h.next],[C.CALC_WITHHELD.extremum,'']);
+ // a clean hint is one call, kept verbatim
+ stub(clean);h=await hint('maths',TWO,{path:'calc1'});
+ assert.equal(seen.length,1);assert.equal(h.hint,clean.hint);
 });
 
 test('6: a clean Calculus hint is kept verbatim in one call; a limit hint that says the limit is re-asked',async()=>{
@@ -317,4 +382,50 @@ test('8: the route - no lesson pick on the calc1 path (the lesson job ends as "n
  assert.equal(calls.lesson,1,'one pickLesson call on the school path');
  assert.ok(calls.prompts[0].startsWith(SCHOOL_STANCE));
  assert.equal(s.jobs?.lesson?.phase,'done');assert.equal(s.noLesson,true,'the stub answered none');
+});
+
+test('MB-B8 ground: a cz learner with a recorded fractions slip gets notation, slip and method in the user prompt; a learner with none gets nothing',async()=>{
+ const {recordAttempt}=require(src('lib/session/learners.ts'));
+ const {WORKED_METHODS}=require(src('lib/library/worked.ts'));
+ const S=require(src('lib/rules/school.ts'));
+ const prompts=[];
+ const run=async(text,patch)=>{
+  store.dispatch({type:'reset'});
+  store.dispatch({type:'profile.draft',patch:{name:'Scratch',type:'other',...patch}});store.dispatch({type:'profile.save'});
+  const page={id:'g-page',subject:'maths',title:'Sheet',img:'',w:100,h:100};
+  store.dispatch({type:'page.reading',page});store.dispatch({type:'page.read',id:page.id,items:[{n:1,text,cx:0,cy:0,band:[0,10],key:'k1'}],readMs:1,provider:'test'});
+  const id=store.getSession().learner.id;
+  return id;
+ };
+ reg.useProvider('text',{name:'stub',run:async(req)=>{const p=Object.keys(req.schema?.properties??{});if(p.includes('lesson'))return {raw:JSON.stringify({lesson:'none',why:'x'})};prompts.push(req);return {raw:JSON.stringify({hint:'Look at the bottoms.',what_to_try_next:'Write them down.'})};}});
+ // a cz learner, a recorded fractions slip
+ let id=await run('3/4 + 1/6',{id:'ground-cz',system:'cz'});
+ recordAttempt(id,'frac-add-sub',false,'tops-and-bottoms');
+ assert.equal((await post('hint',{})).status,200);await drain();
+ const sent=prompts.at(-1);
+ assert.match(sent.prompt,/Czech.*decimal comma \(3,5\)/);
+ assert.match(sent.prompt,new RegExp(S.SCHOOL_SLIPS.find((x)=>x.id==='tops-and-bottoms').says.slice(0,40)));
+ assert.ok(sent.prompt.includes(WORKED_METHODS['frac-add-sub'].idea),'the unit\'s worked method');
+ assert.doesNotMatch(sent.system,/decimal comma|made these slips|The method this unit teaches/,'in the user prompt, not the system prompt');
+ // no record, a task that reads as no unit: none of the three, and the prompt is the plain one
+ prompts.length=0;
+ id=await run('Solve for x: 3x - 7 = 11',{id:'ground-none'});
+ assert.equal((await post('hint',{})).status,200);await drain();
+ assert.equal(prompts.at(-1).prompt,'Problem: "Solve for x: 3x - 7 = 11"\nGive the FIRST hint: the smallest push that gets the learner moving.\nKeep the hint and what_to_try_next to 25 words or fewer each.');
+ // a fractions task with no record gets the method but no slip line and, on the default system, no notation
+ prompts.length=0;
+ id=await run('3/4 + 1/6',{id:'ground-fresh'});
+ assert.equal((await post('hint',{})).status,200);await drain();
+ assert.doesNotMatch(prompts.at(-1).prompt,/made these slips|decimal comma/);assert.match(prompts.at(-1).prompt,/The method this unit teaches/);
+});
+
+test('MK4: the leak check reads a decimal comma as a point for every learner, and only a lone digit,digit',()=>{
+ const E={shape:'limit',f:'(1 + 1/x)^x',at:'inf'},L38={shape:'limit',f:'3/8 + x',at:0},D={shape:'derivative-at',f:'x^3',at:0.5};
+ const SEQ={shape:'sequence-limit',f:'(1 + 1/x)^x'},AP={shape:'approx-integral',f:'1/x',a:1,b:2,pieces:5,rule:'trapezoid'};
+ for(const [spec,comma,point] of [[E,'2,718','2.718'],[E,'2,7','2.7'],[L38,'0,38','0.38'],[D,'0,75','0.75'],[SEQ,'2,718','2.718'],[AP,'0,6956','0.6956']])
+  assert.equal(C.leaksCalc(spec,`The answer is ${comma}.`),C.leaksCalc(spec,`The answer is ${point}.`),comma);
+ assert.equal(C.leaksCalc(E,'The answer is 2,718.'),true);assert.equal(C.leaksCalc(L38,'The answer is 0,38.'),true);
+ assert.equal(C.leaksCalc(E,'Limita je 2,72.'),true);
+ assert.equal(C.leaksCalc(E,'Try x = 1,2,3 first.'),false);
+ assert.equal(C.leaksCalc(D,'Substitute x = 0,5.'),false);
 });

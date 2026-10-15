@@ -15,8 +15,15 @@
  *   harder        2       4     a step up from standard
  *
  * A step up is always the next rung above the learner's baseline (easier -> standard, standard -> harder), so a step-up
- * set is strictly harder than the baseline set for the same learner on the same unit: more tier-2 items, the same
- * content, the same six distinct questions. The learner's school year is read from their age and system
+ * set is strictly harder than the baseline set for the same learner on the same unit: fewer tier-1 items, the same six
+ * distinct questions.
+ *
+ * MB-B20, a step up that steps up: on a unit with a TOP rung (rules/school TOP_TIER_GENERATORS: add and subtract fractions,
+ * multiply and divide fractions, percent increase and decrease, Pythagoras' theorem, probability of an event) "harder" is two
+ * tier-1, two tier-2 and two tier-3 items, and tier 3 is new content inside the school curriculum - mixed numbers; the amount
+ * before a change, two changes in turn, a change over the years; sides with decimals and a rounded answer; two events
+ * together and draws without replacement - one item of the two a word problem. Every other unit's harder set is two and
+ * four as before, and the easier and standard rungs never hold tier 3, so a usual set is exactly what it was. The learner's school year is read from their age and system
  * (library/syllabus `schoolYear`, the rule behind the SCHOOL tick); the unit's year is its syllabus year in that system.
  *
  * Unmeasured: the rungs are set by rule and tuned after live evenings (docs/FAMILY-PHASE-1-PLAN.md "Stance check").
@@ -45,13 +52,17 @@ export function stepUpMix(base: Mix): Mix {
 
 /**
  * How many tier-1 and tier-2 items a set of `n` holds at a rung: standard is the first half rounded up at tier 1 (three
- * and three for six, as every set before W8), easier one more at tier 1, harder one fewer - within 0..n.
+ * and three for six, as every set before W8), easier one more at tier 1, harder one fewer - within 0..n. With `top` (the
+ * unit has a top rung, MB-B20) a harder set gives half its tier-2 items, rounded down, to tier 3: two, two and two for six;
+ * `tier3` is present only when `top` is asked, so a unit without a top rung counts exactly as before.
  */
-export function tierCounts(mix: Mix, n = 6): { tier1: number; tier2: number } {
+export function tierCounts(mix: Mix, n = 6, top = false): { tier1: number; tier2: number; tier3?: number } {
   const size = Math.max(0, Math.floor(n));
   const shift = mix === "easier" ? 1 : mix === "harder" ? -1 : 0;
   const tier1 = Math.max(0, Math.min(size, Math.ceil(size / 2) + shift));
-  return { tier1, tier2: size - tier1 };
+  if (!top) return { tier1, tier2: size - tier1 };
+  const tier3 = mix === "harder" ? Math.floor((size - tier1) / 2) : 0;
+  return { tier1, tier2: size - tier1 - tier3, tier3 };
 }
 
 /** Who the set is for, as the profile at the desk says: an age only for a learner at school, a system (UK when none). */

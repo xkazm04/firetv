@@ -6,36 +6,47 @@
  * day rule) and returns rows: counts of things done, unit and scene names, one slip by kind, one thing to try together.
  * `sundayWords(page)` turns the rows into short lines, in a fixed order, only where there is something true to say:
  *   a. the week: how many evenings had work;
- *   b. Math Buddy: per unit worked (three at most, then "and N more"), the last set's count right; a step up in words;
+ *   b. Math Buddy: the homework sheets read, with the hints and the second hints that evening (MB-B14); per unit worked
+ *      (three at most, then "and N more"), the last set's count right and, when above 0, not sure (MB5-8); a step up in
+ *      words; the practice papers typed in;
  *   c. one thing to look at: the week's most frequent code-detected slip, by its plain name, only when it came twice;
  *   d. Linga: how many conversations, and the situations' names (authored scene names, or a plan topic's own title);
+ *      and, when a taught phrase came back this week (english/review.ts set its reusedAt inside the window), that one
+ *      phrase: the taught `better` of the latest reused item - never the slip it corrected (`said`) and never the
+ *      learner's reply (`reusedQuote`) - kept off a page whose desk has adult content off when it came from an adult
+ *      scene (curriculum taughtAllowed, the rule that keeps it out of the scenes);
  *   e. Essay Master: how many paragraph readings, and the lenses;
  *   f. one thing to try together: exactly one everyday act, from the authored table DO_IT keyed by the unit worked most,
- *      or a fallback by what was done when there was no maths.
- * An empty week is two words: "Nothing this week." The words hold counts of things (as the recap's do), never a
+ *      or a fallback by what was done when there was no maths; the English act names the phrase that came back, when one did.
+ * An empty week, one with no entry at all, is two words: "Nothing this week." The words hold counts of things (as the recap's do), never a
  * percentage, a ranking, a comparison with a sibling, a school year or an age, never praise, a problem, an answer, a
- * transcript or a quote. Only THIS learner's record is read. Each line stays within LINE_WORDS words and the page within
- * PAGE_WORDS (a fixed ladder trims detail, never a section, when a busy week runs long). Phase 1 writes English only:
+ * transcript or a quote of the learner (the one phrase is the desk's own taught line, code-checked as come back, not
+ * the learner's words). Only THIS learner's record is read. Each line stays within LINE_WORDS words and the page within
+ * PAGE_WORDS (a fixed ladder trims detail, never a section and never the phrase, when a busy week runs long). Phase 1 writes English only:
  * the page's language follows the desk's, and the desk is English in Phase 1.
  *
  * Pure and client-safe: library data only - never the store, the learners file, a job or an engine (types excepted).
  */
 import type { Learner } from "../session/learners";
 import type { Profile } from "../session/store";
-import type { DigestEntry, EnglishDigest, EssayDigest, MathsDigest } from "./digest";
+import type { DigestEntry, EnglishDigest, EssayDigest, HomeworkDigest, MathsDigest } from "./digest";
 import { slipName } from "./digest";
 import { topicIn } from "../library/paths";
 import { ESSAY_TYPES } from "../library/lessons.data";
-import { ENGLISH_SCENES } from "../english/curriculum";
+import { AUTHORED_SCENES, defaultPreferences, taughtAllowed } from "../english/curriculum";
 import { SCHOOL_SLIPS } from "./school";
 
 /** The empty week, whole: the desk's rule that an empty state is two words. */
 export const WEEK_EMPTY = "Nothing this week.";
+/** The page when the learner's record could not be read: one line, never the empty week (it is not known to be empty). */
+export const WEEK_UNREAD = "The week could not be read just now.";
 /** The most words on one line, and on the whole page: its lines, not counting the fixed section headings the phone draws. */
 export const LINE_WORDS = 14;
 export const PAGE_WORDS = 90;
 /** The most units named before "and N more". */
 export const UNITS_SHOWN = 3;
+/** An entry with no paragraph count (written before the digest kept one) is a piece on the Sunday page at this many sentences or more; a lone paragraph is far shorter. */
+export const PIECE_SENTENCES = 12;
 
 /**
  * One thing to try together, per school unit: an everyday act a parent can ask for with no expertise, where the child
@@ -56,9 +67,36 @@ export const DO_IT: Readonly<Record<string, string>> = {
   "unit-rate": "Compare the price per kilo of two packs of the same food.",
   "area": "Measure a rug together and work out its area.",
   "mean-range": "Time a few walks to school and work out the mean and the range.",
+  "pythagoras": "Lean a plank on a wall and ask how long it must be.",
+  "probability": "Put coloured sweets in a bag and ask the chance of pulling red.",
   "linear-two-step": "Think of a number, double it, add three, and let them find your number.",
   "linear-both-sides": "Ask when two plans, each a fee plus a monthly charge, cost the same.",
 };
+/**
+ * A unit's name on the Sunday page, where the library's would carry a unit line past LINE_WORDS (two-digit counts, a
+ * not-sure count and "last set" leave five words for the name). Closed and authored: exactly the library topics whose
+ * own name is longer, each in plain words with no abbreviation. The step-up line says the same name. The library's names
+ * are unchanged; every other unit keeps its own.
+ */
+export const SUNDAY_NAMES: Readonly<Record<string, string>> = {
+  "area": "Area of rectangles and triangles",
+  "linear-both-sides": "Equations, x on both sides",
+  "calc1-functions": "Functions, new from old",
+  "calc1-limit-idea": "The idea of a limit",
+  "calc1-limit-laws": "Limit laws, the squeeze theorem",
+  "calc1-derivative": "The derivative as a limit",
+  "calc1-rules": "Polynomial, product and quotient rules",
+  "calc1-chain": "Chain rule, implicit differentiation",
+  "calc1-log-derivative": "Derivative of the logarithm",
+  "calc1-extrema": "Maxima, minima, mean value theorem",
+  "calc1-shape": "Second derivative, curve sketching",
+  "calc1-area-so-far": "Integral with a variable limit",
+  "calc1-ftc": "The fundamental theorem, net change",
+  "calc1-area-average": "Areas between curves, average values",
+};
+/** A unit's name as the page says it: its Sunday name when the table has one, else the library's. */
+const unitName = (id: string): string | undefined => (Object.prototype.hasOwnProperty.call(SUNDAY_NAMES, id) ? SUNDAY_NAMES[id] : topicIn(id)?.name);
+
 /** The act for a week with no school unit worked: by what was done. */
 export const DO_IT_ELSE = {
   english: "Ask them to teach you one English phrase they used this week.",
@@ -66,14 +104,19 @@ export const DO_IT_ELSE = {
   any: "Ask them to teach you one thing they learned this week.",
 } as const;
 
+/** The English act when a taught phrase came back this week: it names the phrase, so the parent need not find one. */
+export const tryPhrase = (phrase: string) => `Ask them to teach you the phrase “${phrase}”.`;
+/** The Linga line that names the phrase that came back. */
+export const backPhrase = (phrase: string) => `Came back this week: “${phrase}”.`;
+
 /** The page's sections, in order, and the heading the phone draws over each (the week's own line has none). */
 export type WeekSection = "week" | "maths" | "look" | "english" | "essay" | "try";
 export const WEEK_HEADS: Readonly<Record<Exclude<WeekSection, "week">, string>> = {
   maths: "Math Buddy", look: "One thing to look at", english: "Linga", essay: "Essay Master", try: "One thing to try together",
 };
 
-export interface WeekUnit { id: string; name: string; sets: number; right: number; total: number; stretch: boolean; latest: number }
-/** The page as rows: what the words are made of. Counts and names only; empty when nothing was done this week. */
+export interface WeekUnit { id: string; name: string; sets: number; right: number; notSure: number; skipped: number; total: number; stretch: boolean; latest: number }
+/** The page as rows: what the words are made of. Counts and names, and one taught phrase; empty when nothing was done this week. */
 export interface SundayPage {
   name: string;
   empty: boolean;
@@ -82,15 +125,19 @@ export interface SundayPage {
   units: WeekUnit[];
   /** the units with a step-up set this week, in `units` order */
   stepUps: string[];
+  /** the homework sheets read this week, and the hints and second hints counted onto them; null with none */
+  homework: { sheets: number; hints: number; second: number } | null;
+  /** the practice papers typed in this week */
+  papers: number;
   slip: { id: string; name: string; times: number } | null;
-  english: { conversations: number; scenes: string[] } | null;
-  essay: { readings: number; lenses: string[] } | null;
+  /** phrase: the taught line that came back this week (english.taught `better`, audience-filtered); absent when none did */
+  english: { conversations: number; scenes: string[]; phrase?: string } | null;
+  essay: { readings: number; pieces: number; lenses: string[] } | null;
   tryIt: string | null;
 }
 /** One line of the page: a section's heading, or one of its lines. What the phone is sent; never the digest. */
 export interface WeekLine { section: WeekSection; head?: true; text: string }
 
-const DAY = 24 * 60 * 60 * 1000;
 /** Local midnight six days before the day `now` falls in: the week is today and the six days before it. */
 export function weekStart(now: number): number {
   const d = new Date(now); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - 6); return d.getTime();
@@ -106,31 +153,84 @@ const low = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 const times = (n: number, one: string, many = `${one}s`) => `${num(n)} ${n === 1 ? one : many}`;
 /** Words in a line, as a reader counts them. */
 export const wordsIn = (line: string) => line.split(/\s+/).filter(Boolean).length;
+/**
+ * A unit's line from its latest set: "Mean and range: 2 of 6 right, 1 not sure, last set.", with ", 1 skipped" when
+ * items were left empty (MB-B1, counted apart from the desk's doubt). A unit's name is chosen so its line with one
+ * count fits LINE_WORDS (SUNDAY_NAMES); a line carrying both counts and running past it drops "last set" instead of
+ * the count, so the two words the second count costs are paid by the qualifier, never by a number.
+ */
+export function unitLine(u: Pick<WeekUnit, "name" | "right" | "total" | "notSure" | "skipped">): string {
+  const counts = `${u.right} of ${u.total} right${u.notSure ? `, ${u.notSure} not sure` : ""}${u.skipped ? `, ${u.skipped} skipped` : ""}`;
+  const full = `${u.name}: ${counts}, last set.`;
+  return wordsIn(full) <= LINE_WORDS ? full : `${u.name}: ${counts}.`;
+}
 
 /** A Linga scene's name: the authored scene's, or the learner's own plan topic's title as the desk stores it; else none. */
 function sceneName(id: string, learner: Pick<Learner, "english">): string | null {
-  return ENGLISH_SCENES.find((s) => s.id === id)?.name ?? learner.english?.plan?.topics?.find((t) => t.id === id)?.title?.trim() ?? null;
+  return AUTHORED_SCENES.find((s) => s.id === id)?.name ?? learner.english?.plan?.topics?.find((t) => t.id === id)?.title?.trim() ?? null;
 }
 
+/** A taught phrase as the page says it: whitespace collapsed, its own quote marks and closing stop dropped (the line adds both). */
+const phraseOf = (better: unknown): string =>
+  typeof better === "string" ? better.replace(/\s+/g, " ").trim().replace(/^["“”']+|["“”']+$/g, "").replace(/[\s.!?,;:]+$/, "").trim() : "";
+
+/**
+ * The phrase that came back this week: of the learner's taught items with reusedAt inside [from, now], allowed by
+ * taughtAllowed (an adult scene's item only where adult content is on), the `better` of the latest reused whose words
+ * fit both lines that name it within LINE_WORDS (a phrase is never cut: a longer one is passed over). Ties by id, so the
+ * page stays deterministic. Never `said`, never `reusedQuote`. Null when none.
+ */
+function phraseBack(learner: Pick<Learner, "english">, profile: SundayProfile | null | undefined, from: number, now: number): string | null {
+  const english = learner.english;
+  const taught = Array.isArray(english?.taught) ? english.taught : [];
+  if (!taught.length) return null;
+  // the profile's age, type and mode are all the audience rule reads (rules/mode modeOf)
+  const p = (profile ?? undefined) as Profile | undefined;
+  const allowed = taughtAllowed(p, english?.preferences ?? defaultPreferences(p), english);
+  const fits = (s: string) => wordsIn(tryPhrase(s)) <= LINE_WORDS && wordsIn(backPhrase(s)) <= LINE_WORDS;
+  let best: { at: number; id: string; phrase: string } | null = null;
+  for (const t of taught) {
+    const at = t?.reusedAt;
+    if (typeof at !== "number" || !Number.isFinite(at) || at < from || at > now || typeof t.sceneId !== "string" || !allowed(t)) continue;
+    const phrase = phraseOf(t.better);
+    if (!phrase || !fits(phrase)) continue;
+    const id = String(t.id ?? "");
+    if (!best || at > best.at || (at === best.at && id < best.id)) best = { at, id, phrase };
+  }
+  return best?.phrase ?? null;
+}
+
+/** The lens names, each once, in the order the lenses were first read (the digest's own entries sorted by time). */
+function lensesRead(reads: EssayDigest[]): string[] {
+  const names: string[] = [];
+  for (const r of [...reads].sort((a, b) => a.at - b.at)) { const n = ESSAY_TYPES.find((t) => t.id === r.lens)?.name; if (n && !names.includes(n)) names.push(n); }
+  return names;
+}
+/** The profile the page reads: its name, and the age, type and mode the audience rule reads (all optional but the name). */
+export type SundayProfile = Pick<Profile, "name"> & Partial<Pick<Profile, "age" | "type" | "mode">>;
 /** The week's rows from this learner's own digest. Deterministic: the same learner, profile and `now` give the same page. */
-export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile: Pick<Profile, "name"> | null | undefined, now: number): SundayPage {
+export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile: SundayProfile | null | undefined, now: number): SundayPage {
   const from = weekStart(now);
   const week = (learner.digest ?? []).filter((e: DigestEntry) => e.at >= from && e.at <= now);
   const name = profile?.name?.trim() || "Your learner";
-  const page: SundayPage = { name, empty: !week.length, evenings: new Set(week.map((e) => dayKey(e.at))).size, units: [], stepUps: [], slip: null, english: null, essay: null, tryIt: null };
+  const page: SundayPage = { name, empty: !week.length, evenings: new Set(week.map((e) => dayKey(e.at))).size, units: [], stepUps: [], homework: null, papers: 0, slip: null, english: null, essay: null, tryIt: null };
   if (page.empty) return page;
 
   // b. the units: one row each, from its latest set; most sets first, then the most recent, then the path's order
   const maths = week.filter((e): e is MathsDigest => e.kind === "maths" && !!topicIn(e.topic));
   const byUnit = new Map<string, WeekUnit>();
   maths.forEach((e) => {
-    const u = byUnit.get(e.topic) ?? { id: e.topic, name: topicIn(e.topic)!.name, sets: 0, right: 0, total: 0, stretch: false, latest: -1 };
+    const u = byUnit.get(e.topic) ?? { id: e.topic, name: unitName(e.topic)!, sets: 0, right: 0, notSure: 0, skipped: 0, total: 0, stretch: false, latest: -1 };
     u.sets++; if (e.stretch) u.stretch = true;
-    if (e.at >= u.latest) { u.latest = e.at; u.right = e.right; u.total = e.total; }
+    if (e.at >= u.latest) { u.latest = e.at; u.right = e.right; u.notSure = e.notSure; u.skipped = e.skipped ?? 0; u.total = e.total; }
     byUnit.set(e.topic, u);
   });
   page.units = [...byUnit.values()].sort((a, b) => b.sets - a.sets || b.latest - a.latest || a.id.localeCompare(b.id));
   page.stepUps = page.units.filter((u) => u.stretch).map((u) => u.name);
+  // the homework sheets and their hints, and the papers typed in: counts only (MB-B14)
+  const sheets = week.filter((e): e is HomeworkDigest => e.kind === "homework");
+  if (sheets.length) page.homework = { sheets: sheets.length, hints: sheets.reduce((a, e) => a + e.hints, 0), second: sheets.reduce((a, e) => a + e.second, 0) };
+  page.papers = week.filter((e) => e.kind === "paper").length;
 
   // c. one slip by kind: the week's most frequent code-detected slip, ties by rules/school's table order, only twice or more
   const slips = new Map<string, number>();
@@ -145,25 +245,34 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
   if (talks.length) {
     const scenes: string[] = [];
     for (const e of [...talks].sort((a, b) => b.at - a.at)) { const n = sceneName(e.sceneId, learner); if (n && !scenes.includes(n)) scenes.push(n); }
-    page.english = { conversations: talks.length, scenes };
+    const phrase = phraseBack(learner, profile, from, now);
+    page.english = { conversations: talks.length, scenes, ...(phrase ? { phrase } : {}) };
   }
-  // e. Essay Master: the readings, and the lenses in the desk's own order
+  // e. Essay Master: the readings, and the lenses in the order read (each where its first reading falls, as the recap lists them)
   const reads = week.filter((e): e is EssayDigest => e.kind === "essay");
-  if (reads.length) page.essay = { readings: reads.length, lenses: ESSAY_TYPES.filter((t) => reads.some((r) => r.lens === t.id)).map((t) => t.name) };
+  if (reads.length) page.essay = { readings: reads.length, pieces: reads.filter((r) => (r.paragraphs !== undefined ? r.paragraphs > 1 : r.sentences >= PIECE_SENTENCES)).length, lenses: lensesRead(reads) };
 
   // f. one act: the unit worked most (the first row) when the table has it, else by what was done
   const top = page.units.find((u) => DO_IT[u.id]);
   page.tryIt = top ? DO_IT[top.id]
-    : page.english && (!page.essay || page.english.conversations >= page.essay.readings) ? DO_IT_ELSE.english
+    : page.english && (!page.essay || page.english.conversations >= page.essay.readings) ? (page.english.phrase ? tryPhrase(page.english.phrase) : DO_IT_ELSE.english)
     : page.essay ? DO_IT_ELSE.essay : DO_IT_ELSE.any;
   return page;
 }
 
-/** The detail a busy week is trimmed by, rung by rung, until the page fits PAGE_WORDS: fewer units named, then no scene names, then a shorter step-up line. */
-interface Trim { units: number; scenes: boolean; stepNames: boolean }
+/**
+ * The detail a busy week is trimmed by, rung by rung, until the page fits PAGE_WORDS: fewer units named, then no scene
+ * names, then a shorter step-up line, then the homework line without its hint counts (the sheets are still said), and
+ * last, reached only when the phrase that came back would carry the busiest week past PAGE_WORDS, the week line names
+ * the learner by the first word of their name. No rung drops a section, the phrase, or a line whose absence would read
+ * as nothing done.
+ */
+interface Trim { units: number; scenes: boolean; stepNames: boolean; hints: boolean; name?: false }
 const LADDER: Trim[] = [
-  { units: 3, scenes: true, stepNames: true }, { units: 2, scenes: true, stepNames: true }, { units: 1, scenes: true, stepNames: true },
-  { units: 1, scenes: false, stepNames: true }, { units: 1, scenes: false, stepNames: false },
+  { units: 3, scenes: true, stepNames: true, hints: true }, { units: 2, scenes: true, stepNames: true, hints: true }, { units: 1, scenes: true, stepNames: true, hints: true },
+  { units: 1, scenes: false, stepNames: true, hints: true }, { units: 1, scenes: false, stepNames: false, hints: true },
+  { units: 1, scenes: false, stepNames: false, hints: false },
+  { units: 1, scenes: false, stepNames: false, hints: false, name: false },
 ];
 
 /** Scene names that fit a line after `head`: as many as fit, then "and N more"; none when not even one fits. */
@@ -176,29 +285,42 @@ function namesLine(head: string, names: string[]): string {
   return `${head}.`;
 }
 
+/** "Two homework sheets, 5 hints, 2 needed a second.": the sheets, then the hints and the second hints when each is above 0 (the sheets alone on the ladder's last rung). */
+function homeworkLine(h: NonNullable<SundayPage["homework"]>, hints: boolean): string {
+  return [cap(times(h.sheets, "homework sheet")), hints && h.hints ? `${h.hints} ${h.hints === 1 ? "hint" : "hints"}` : "", hints && h.second ? `${h.second} needed a second` : ""].filter(Boolean).join(", ") + ".";
+}
+
 function linesOf(page: SundayPage, t: Trim): WeekLine[] {
   if (page.empty) return [{ section: "week", text: WEEK_EMPTY }];
-  const out: WeekLine[] = [{ section: "week", text: `${page.name} worked on ${times(page.evenings, "evening")}.` }];
+  // a profile name long enough to carry the week line past LINE_WORDS is said by its first word
+  const said = (name: string) => `${name} worked on ${times(page.evenings, "evening")}.`;
+  const out: WeekLine[] = [{ section: "week", text: t.name !== false && wordsIn(said(page.name)) <= LINE_WORDS ? said(page.name) : said(page.name.split(/\s+/)[0]) }];
   const head = (section: Exclude<WeekSection, "week">) => out.push({ section, head: true, text: WEEK_HEADS[section] });
+  if (page.homework || page.units.length || page.papers) head("maths");
+  if (page.homework) out.push({ section: "maths", text: homeworkLine(page.homework, t.hints) });
   if (page.units.length) {
-    head("maths");
     const shown = page.units.slice(0, t.units);
-    for (const u of shown) out.push({ section: "maths", text: `${u.name}: ${u.right} of ${u.total} right, last set.` });
+    for (const u of shown) out.push({ section: "maths", text: unitLine(u) });
     const more = page.units.length - shown.length;
     if (more) out.push({ section: "maths", text: `And ${times(more, "more unit")}.` });
     if (page.stepUps.length === 1 && t.stepNames && wordsIn(`A step up taken in ${page.stepUps[0]}.`) <= LINE_WORDS) out.push({ section: "maths", text: `A step up taken in ${page.stepUps[0]}.` });
     else if (page.stepUps.length) out.push({ section: "maths", text: page.stepUps.length === 1 ? "A step up taken this week." : `A step up taken in ${times(page.stepUps.length, "unit")}.` });
   }
+  if (page.papers) out.push({ section: "maths", text: `${cap(times(page.papers, "practice paper"))} typed in.` });
   if (page.slip) { head("look"); out.push({ section: "look", text: `The most common slip, ${page.slip.times === 2 ? "twice" : `${num(page.slip.times)} times`}: ${low(page.slip.name)}.` }); }
   if (page.english) {
     head("english");
     const h = cap(times(page.english.conversations, "conversation"));
     out.push({ section: "english", text: t.scenes && page.english.scenes.length ? namesLine(h, page.english.scenes) : `${h}.` });
+    // the phrase that came back: on every rung (the ladder trims the names, never the phrase)
+    if (page.english.phrase) out.push({ section: "english", text: backPhrase(page.english.phrase) });
   }
   if (page.essay) {
     head("essay");
     const lenses = page.essay.lenses, list = lenses.length > 1 ? `${lenses.slice(0, -1).join(", ")} and ${lenses.at(-1)}` : lenses[0];
-    out.push({ section: "essay", text: `${cap(times(page.essay.readings, "paragraph reading"))}${list ? `, through ${list}` : ""}.` });
+    const { readings, pieces } = page.essay, paras = readings - pieces;
+    const said = [paras ? times(paras, "paragraph reading") : "", pieces ? times(pieces, "piece") : ""].filter(Boolean).join(" and ");
+    out.push({ section: "essay", text: `${cap(said)}${list ? `, through ${list}` : ""}.` });
   }
   if (page.tryIt) { head("try"); out.push({ section: "try", text: page.tryIt }); }
   return out;

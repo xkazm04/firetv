@@ -13,10 +13,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after,afterEach}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const data=path.join(os.tmpdir(),`desk-calc-marking-${Date.now()}`);process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 
 const src=(f)=>path.join(root,'src',f);
@@ -27,6 +24,8 @@ const learners=require(src('lib/session/learners.ts'));
 const {view}=require(src('lib/session/pairing.ts'));
 const C=require(src('lib/rules/calc.ts'));
 const M=require(src('lib/rules/maths.ts'));
+const {NOT_HEARD_LINE}=require(src('lib/desk/explain.ts'));
+const CANNOT_READ='The desk cannot read this answer as mathematics, and it does not guess.';
 const {topicIn}=require(src('lib/library/paths.ts'));
 const {CALC1_SPINE}=require(src('lib/library/calculus1.spine.ts'));
 const route=(name)=>require(src(`app/api/${name}/route.ts`));
@@ -138,8 +137,9 @@ test('2: a photographed page on each shape is marked by checkAnswer; the model\'
   const res=await post('mark',PHOTO);
   assert.equal(res.status,200,fx.topic);
   const body=await res.json();
-  const wrong=rows.filter((r)=>r.verdict==='wrong').length,unsure=rows.filter((r)=>r.verdict==='unsure').length;
-  assert.deepEqual([body.right,body.wrong,body.unsure],[1,wrong,unsure],`${fx.topic}: the counts are code's`);
+  // MB-B1: an unsure row read empty is skipped, counted apart from the desk's doubt
+  const wrong=rows.filter((r)=>r.verdict==='wrong').length,skipped=rows.filter((r)=>r.verdict==='unsure'&&!r.a).length,unsure=rows.filter((r)=>r.verdict==='unsure').length-skipped;
+  assert.deepEqual([body.right,body.wrong,body.unsure,body.skipped],[1,wrong,unsure,skipped],`${fx.topic}: the counts are code's`);
 
   // the one vision call asks only to READ the page
   assert.equal(seenVision.length,1);
@@ -158,7 +158,8 @@ test('2: a photographed page on each shape is marked by checkAnswer; the model\'
    const it=items[r.n-1],where=`${fx.topic} #${r.n} "${r.a}"`;
    assert.equal(it.verdict,r.verdict,where);
    assert.equal(it.slip,r.slip,`${where}: slip`);
-   assert.equal(it.said,r.verdict==='right'?M.RIGHT(r.n):r.slip?M.slipsFor(fx.topic).find((x)=>x.id===r.slip).says:M.ASK(r.n),`${where}: said`);
+   if(r.verdict==='unsure')assert.ok(r.a.trim()===''?it.said===M.BLANK(r.n):it.said.startsWith(M.NOT_SURE(r.n,'x').slice(0,-1))&&!it.said.includes('something different'),`${where}: said ${it.said}`);
+   else assert.equal(it.said,r.verdict==='right'?M.RIGHT(r.n):r.slip?M.slipsFor(fx.topic).find((x)=>x.id===r.slip).says:M.ASK(r.n),`${where}: said`);
    assert.equal(it.slipAt,undefined,`${where}: the pen has no position on a Calculus item`);
    assert.equal(it.studentAnswer,r.a,where);
    if(r.slip)assert.ok(M.slip(r.slip)?.name,`${where}: its name can be shown`);
@@ -170,7 +171,7 @@ test('2: a photographed page on each shape is marked by checkAnswer; the model\'
   assert.equal(h.length,lines+1,`${fx.topic}: one history line`);
   assert.equal(h.at(-1).label,topicIn(fx.topic).name,`${fx.topic}: labelled with the topic's name`);
   assert.equal(h.at(-1).detail,M.rightLine(items),`${fx.topic}: the restated line`);
-  assert.equal(h.at(-1).detail,`1 of ${rows.length} right, 2 not sure`);
+  assert.equal(h.at(-1).detail,`1 of ${rows.length} right, ${unsure} not sure, ${skipped} skipped`);
 
   // no view of the marked set holds a truth or an answer key; the volunteered solution went nowhere
   for(const [where,v] of [['tv',view(s,'tv')],['phone',view(s,'phone')]]){
@@ -179,8 +180,8 @@ test('2: a photographed page on each shape is marked by checkAnswer; the model\'
    const strings=stringsIn(v);
    assert.ok(!strings.some((x)=>x.includes('SOLVED')),`${fx.topic} ${where}: the model's solution reached the view`);
    // every line on an item is the desk's own (RIGHT, ASK or the slip's words - asserted above), never a model's text
-   const own=new Set([...rows.map((r)=>M.RIGHT(r.n)),...rows.map((r)=>M.ASK(r.n)),...M.slipsFor(fx.topic).map((x)=>x.says)]);
-   for(const it of v.practice.items)assert.ok(own.has(it.said),`${fx.topic} ${where}: "${it.said}"`);
+   const own=new Set([...rows.map((r)=>M.RIGHT(r.n)),...rows.map((r)=>M.ASK(r.n)),...rows.map((r)=>M.BLANK(r.n)),...M.slipsFor(fx.topic).map((x)=>x.says)]);
+   for(const it of v.practice.items)assert.ok(own.has(it.said)||it.said.startsWith(`The desk is not sure about number ${it.n}. `),`${fx.topic} ${where}: "${it.said}"`);
   }
   assert.ok(!stringsIn(learners.getLearner(LEARNER)).some((x)=>x.includes('SOLVED')),`${fx.topic}: the model's solution reached the record`);
  }
@@ -194,7 +195,7 @@ test('3: the model\'s verdict is not a fallback either: an answer the desk canno
  stubVision(()=>({items:[{n:1,studentAnswer:'',studentWorking:'',verdict:'right',solution:'6x + 2',slip:'unclear'},{n:2,studentAnswer:'???',studentWorking:'',verdict:'wrong',solution:'6x + 2',slip:'forgot-chain'}]}));
  assert.equal((await post('mark',PHOTO)).status,200);
  const items=store.getSession().practice.items;
- assert.deepEqual(items.map((i)=>[i.verdict,i.slip,i.said]),[['unsure',undefined,M.ASK(1)],['unsure',undefined,M.ASK(2)]]);
+ assert.deepEqual(items.map((i)=>[i.verdict,i.slip,i.said]),[['unsure',undefined,M.BLANK(1)],['unsure',undefined,M.NOT_SURE(2,CANNOT_READ)]]);
  assert.equal(skill(fx.topic).seen,was.seen,'no attempt recorded for an unsure item');
 });
 
@@ -203,7 +204,7 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  seat();
  const fx=FIX[2];
  setOn(fx.topic,fx.spec,4);
- stubVision(()=>({items:[1,2,3,4].map((n)=>({n,studentAnswer:'',studentWorking:'',verdict:'right',solution:'6x + 2',slip:'unclear'}))}));
+ stubVision(()=>({items:[1,2,3,4].map((n)=>({n,studentAnswer:'?',studentWorking:'',verdict:'right',solution:'6x + 2',slip:'unclear'}))}));
  assert.equal((await post('mark',PHOTO)).status,200);
  assert.ok(store.getSession().practice.items.every((i)=>i.verdict==='unsure'));
  const lines=()=>learners.getLearner(LEARNER).history;
@@ -213,7 +214,7 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  stubText(()=>({reply:'Good - you used the power rule on each term.',slip:'unclear',value:'2(3x+1)'}));
  let r=await post('explain',{transcript:'I brought the powers down and got two lots of three x plus one',n:0});
  assert.equal(r.status,200);let b=await r.json();
- assert.equal(b.settled,'right');assert.equal(b.reply,'Good - you used the power rule on each term.');
+ assert.equal(b.settled,'right');assert.equal(b.reply,'The desk heard 2(3x+1). Good - you used the power rule on each term.');
  const req=seenText[0];
  assert.match(req.system,/first-year university student/);assert.match(req.system,/Calculus 1/);
  assert.ok(req.prompt.includes(topicIn(fx.topic).name)&&req.prompt.includes(topicIn(fx.topic).blurb),'the topic from topicIn');
@@ -249,23 +250,23 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  // a reply that states the answer is replaced by the item's own line
  stubText(()=>({reply:'The derivative is 6x + 2, so check your last line.',slip:'unclear',value:''}));
  r=await post('explain',{transcript:'I do not know',n:3});b=await r.json();
- assert.equal(b.reply,M.ASK(4));assert.equal(store.getSession().practice.items[3].reply,M.ASK(4));
+ assert.equal(b.reply,M.NOT_SURE(4,CANNOT_READ)+' '+NOT_HEARD_LINE.en);assert.equal(store.getSession().practice.items[3].reply,M.NOT_SURE(4,CANNOT_READ)+' '+NOT_HEARD_LINE.en);
  assert.equal(store.getSession().practice.items[3].verdict,'unsure');
  // and for a number shape, the spoken number is the leak
  seat();
  const ev=FIX[0];setOn(ev.topic,ev.spec,1);
- stubVision(()=>({items:[{n:1,studentAnswer:'',studentWorking:'',slip:'unclear'}]}));
+ stubVision(()=>({items:[{n:1,studentAnswer:'?',studentWorking:'',slip:'unclear'}]}));
  assert.equal((await post('mark',PHOTO)).status,200);
  stubText(()=>({reply:'You should have got ten.',slip:'unclear',value:''}));
  b=await (await post('explain',{transcript:'no idea',n:0})).json();
- assert.equal(b.reply,M.ASK(1));
+ assert.equal(b.reply,M.NOT_SURE(1,CANNOT_READ)+' '+NOT_HEARD_LINE.en);
 });
 
 test('5: the explanation never takes the model\'s word for the verdict: a stated verdict or solution in the reply is not read',async()=>{
  seat();
  const fx=FIX[7];
  setOn(fx.topic,fx.spec,1);
- stubVision(()=>({items:[{n:1,studentAnswer:'',studentWorking:'',slip:'unclear'}]}));
+ stubVision(()=>({items:[{n:1,studentAnswer:'?',studentWorking:'',slip:'unclear'}]}));
  assert.equal((await post('mark',PHOTO)).status,200);
  // the correct function without +C: code says wrong, slip lost-constant - whatever else the model sends
  stubText(()=>({reply:'Nearly there.',slip:'power-off-by-one',value:'x^2',verdict:'right',solution:'x^2 + C'}));
@@ -287,4 +288,163 @@ test('6: the evening note names a Calculus topic by topicIn and a Calculus slip 
  const school=M.SLIPS.find((x)=>x.id==='arithmetic-slip');
  assert.match(seenText[0].prompt,new RegExp(`^Topic worked on tonight: ${topicIn('linear-one-step').name}\\n`));
  assert.ok(seenText[0].prompt.includes(`(arithmetic-slip: ${school.says})`),'a shared id reads in the school words on a school topic');
+});
+
+// ------------------------------------------------------------------ M3a: a word problem's parts are marked as items
+
+const W=require(src('lib/rules/calc-word.ts'));
+/** A calc1-optimisation set of two single items and the rectangle word problem's two parts (items 3 and 4). */
+function wordSet(){
+ const w=W.drawWord('rectangle-perimeter',7),worked=W.workedWord('rectangle-perimeter',7);
+ const singles=[spec({shape:'extremum',f:'x(10 - x)',on:[0,10],kind:'max'}),spec({shape:'extremum',f:'x^2 - 6x + 13',on:[0,5],kind:'min'})];
+ const items=[...singles.map((s,i)=>({n:i+1,question:question(s),spec:s})),...W.wordItems(w,3)];
+ store.dispatch({type:'practice.set',practice:{topic:'calc1-optimisation',marked:false,items}});
+ return {w,worked,items};
+}
+
+test('M3a 1: a word problem on a snapped sheet - the stem is listed once, each part is read by its own number and marked by its own spec; one attempt a part',async()=>{
+ seat();
+ const {w,worked}=wordSet();
+ const s0=store.getSession().practice.items;
+ assert.deepEqual(s0.map((i)=>[i.n,i.part??null,i.stem===w.stem]),[[1,null,false],[2,null,false],[3,'a',true],[4,'b',true]],'the stem and the letter ride on the parts through practice.set');
+ const was=skill('calc1-optimisation');
+ // item 1 right, item 2 wrong, part (a) right, part (b) wrong (the side, not the diagonal)
+ const P=w.drawn[0];
+ const reads=[['25','x = 5\nA = 25'],['3','f(3) = 3'],[worked[0],`A = x(${P/2} - x)\nx = ${P/4}`],[String(P/4),'x = 7']];
+ stubVision(()=>({items:reads.map(([a,wk],i)=>({n:i+1,studentAnswer:a,studentWorking:wk,slip:'unclear'}))}));
+ const res=await post('mark',PHOTO);
+ assert.equal(res.status,200);
+ const items=store.getSession().practice.items;
+ assert.deepEqual(items.map((i)=>i.verdict),['right','wrong','right','wrong'],'each part judged by checkAnswer on its own spec');
+ assert.equal(C.checkAnswer(w.parts[1].spec,String(P/4)).verdict,'wrong');
+ assert.deepEqual(items.map((i)=>i.part??null),[null,null,'a','b'],'marking keeps the parts');
+ assert.ok(items.slice(2).every((i)=>i.stem===w.stem));
+ // the read prompt lists the stem once and names each part by its item number
+ const p=seenVision[0].prompt;
+ assert.equal(p.split(w.stem).length-1,1,'the stem is printed once');
+ for(const line of [`Question 3, in parts: ${w.stem}`,`3. Part (a) of question 3: ${w.parts[0].line}`,`4. Part (b) of question 3: ${w.parts[1].line}`,'part (a) of question 3 as item 3, part (b) of question 3 as item 4'])assert.ok(p.includes(line),line);
+ assert.match(p,/on these 4 Calculus items:/);
+ assert.ok(p.includes(`1. ${question({shape:'extremum',f:'x(10 - x)',on:[0,10],kind:'max'})}`),'a single item is listed as before');
+ // one attempt per part: four settled items, two right
+ const now=skill('calc1-optimisation');
+ assert.equal(now.seen-was.seen,4);assert.equal(now.right-was.right,2);
+ assert.equal(learners.getLearner(LEARNER).history.at(-1).detail,M.rightLine(items));
+ // no view carries a worked answer of a part
+ for(const v of [view(store.getSession(),'tv'),view(store.getSession(),'phone')]){
+  const strings=stringsIn(v.practice);
+  for(const [i,a] of worked.entries())assert.ok(!strings.some((x)=>x===a&&x!==items[2+i].studentAnswer),`${a} only as the learner's own answer`);
+  for(const it of items.slice(2))for(const x of [it.stem,it.question])assert.equal(C.leaksCalc(it.spec,x),false,x);
+ }
+});
+
+test('M3a 2: the same parts typed are judged as the photo judges them, with no model; a single-item set\'s read prompt is unchanged byte for byte',async()=>{
+ seat();
+ const {w,worked}=wordSet();
+ reg.useProvider('vision',{name:'stub',run:async()=>{throw new Error('no vision call on the typed path');}});
+ reg.useProvider('text',{name:'stub',run:async()=>{throw new Error('no text call on the typed path');}});
+ const P=w.drawn[0];
+ const res=await post('mark',{answers:['25','3',worked[0],String(P/4)]});
+ assert.equal(res.status,200);
+ const items=store.getSession().practice.items;
+ assert.deepEqual(items.map((i)=>i.verdict),['right','wrong','right','wrong']);
+ assert.deepEqual(items.map((i)=>i.studentAnswer),['25','3',worked[0],String(P/4)]);
+ // a part answered with its unit does not read: unsure, as any unreadable answer (the part line names the unit)
+ seat();wordSet();
+ await post('mark',{answers:['25','3',`${worked[0]} square metres`,worked[1]]});
+ assert.deepEqual(store.getSession().practice.items.map((i)=>i.verdict),['right','wrong','unsure','right']);
+ // a set with no parts: the read prompt is exactly the one before M3a
+ seat();
+ const fx=FIX[0];setOn(fx.topic,fx.spec,3);
+ stubVision(()=>({items:[]}));await post('mark',PHOTO);
+ const sheet=[1,2,3].map((n)=>`${n}. ${question(fx.spec)}`).join('\n');
+ assert.ok(seenVision[0].prompt.startsWith(`This is a photo of a student's handwritten working on these 3 Calculus questions:\n${sheet}\n\nRead the page. For each numbered item, report:\n`));
+ assert.doesNotMatch(seenVision[0].prompt,/in parts|Part \(/);
+});
+
+test('M3a 3: shown() keeps a part\'s stem and letter together or not at all - junk is a single item',()=>{
+ seat();
+ const s=spec({shape:'extremum',f:'x(10 - x)',on:[0,10],kind:'max'}),q=question(s);
+ const set=(extra)=>{store.dispatch({type:'practice.set',practice:{topic:'calc1-optimisation',marked:false,items:[{n:1,question:q,spec:s,...extra}]}});const it=store.getSession().practice.items[0];return [it.stem??null,it.part??null];};
+ assert.deepEqual(set({stem:'A rectangle has a perimeter of 20 metres.',part:'a'}),['A rectangle has a perimeter of 20 metres.','a']);
+ for(const junk of [{part:'a'},{stem:'A rectangle.'},{stem:'A rectangle.',part:'z'},{stem:'A rectangle.',part:1},{stem:'   ',part:'a'},{stem:'x'.repeat(401),part:'a'},{stem:42,part:'b'}])assert.deepEqual(set(junk),[null,null],JSON.stringify(junk).slice(0,60));
+});
+
+test('MK11: a Calculus photo read with no answer to any question is refused (502, EMPTY_MARK), records nothing, and the next good snap marks',async()=>{
+ const {EMPTY_MARK}=require(src('lib/desk/mark.ts'));
+ const fx=FIX[2];
+ const reads={
+  'no items':()=>({items:[]}),
+  'items numbered outside the set':()=>({items:[{n:9,studentAnswer:'6x',studentWorking:'',slip:'unclear'}]}),
+  'every answer blank':()=>({items:[1,2,3].map((n)=>({n,studentAnswer:n===2?'   ':'',studentWorking:'6x',slip:'unclear'}))}),
+ };
+ const lines=()=>learners.getLearner(LEARNER).history.filter((e)=>e.kind==='practice').length,digests=()=>learners.getLearner(LEARNER).digest.length;
+ for(const [why,read] of Object.entries(reads)){
+  seat();setOn(fx.topic,fx.spec,3);
+  const l0=lines(),d0=digests(),k0=skill(fx.topic).seen;
+  stubVision(read);
+  const r=await post('mark',PHOTO);
+  assert.equal(r.status,502,why);assert.equal((await r.json()).error,EMPTY_MARK,why);
+  const s=store.getSession();
+  assert.equal(s.practice.marked,false,why);assert.equal(s.jobs.mark.phase,'failed');assert.equal(s.jobs.mark.error,EMPTY_MARK);
+  assert.equal(lines(),l0,`${why}: no history line`);assert.equal(digests(),d0,`${why}: no digest entry`);
+  assert.equal(skill(fx.topic).seen,k0,`${why}: no attempt`);
+  stubVision(()=>({items:[1,2,3].map((n)=>({n,studentAnswer:'?',studentWorking:'',slip:'unclear'}))}));
+  {const rr=await post('mark',PHOTO);assert.equal(rr.status,200,`${why}: the next snap marks ${JSON.stringify(await rr.clone().json())}`);}
+  assert.equal(store.getSession().practice.marked,true);assert.equal(lines(),l0+1);assert.equal(digests(),d0+1);
+ }
+ // the ruled limit: one non-blank answer of the set lands the set
+ seat();setOn(fx.topic,fx.spec,3);const l1=lines();
+ stubVision(()=>({items:[{n:1,studentAnswer:'?',studentWorking:'',slip:'unclear'}]}));
+ assert.equal((await post('mark',PHOTO)).status,200);assert.equal(lines(),l1+1);
+});
+
+test('MK4: settleSpec reads a decimal comma in a one-number answer only for a cz or de learner',()=>{
+ const E=spec({shape:'limit',f:'(1 + 1/x)^x',at:'inf'});
+ const s=M.settleSpec(1,E,'2,718',null,'calc1-limits','cz');
+ assert.equal(s?.verdict,'right','cz settles it right');
+ assert.equal(M.settleSpec(1,E,'2,718',null,'calc1-limits','uk'),null);
+ assert.equal(M.settleSpec(1,E,'2,718',null,'calc1-limits'),null);
+});
+
+test('MK10: a Calculus item the desk is not sure of says why, in the engine\'s words, through the real judgeSet; a blank has no answer yet',()=>{
+ const K=require(src('lib/rules/kinds.ts'));
+ const judge=(s,a,topic='calc1-functions')=>K.judgeSet({topic,items:[{n:1,question:question(s),spec:s}]},[{n:1,studentAnswer:a}],{topic,system:'uk',typed:true}).items[0];
+ // (b) a rounded decimal MK5 leaves unsure
+ const third=spec({shape:'definite-integral',f:'x^2',a:'0',b:'1'}),r=C.checkAnswer(third,'0.3','uk');
+ assert.equal(r.verdict,'unsure','rounded');
+ const a=judge(third,'0.3','calc1-definite-integral');
+ assert.equal(a.verdict,'unsure');assert.equal(a.said,M.NOT_SURE(1,r.why));assert.match(r.why,/rounded decimal/);
+ assert.doesNotMatch(a.said,/something different|0\.3|1\/3/);
+ // ln(x) + C for 1/x: the domain reason
+ const inv=spec({shape:'antiderivative',f:'1/x'}),d=C.checkAnswer(inv,'ln(x) + C','uk');
+ assert.equal(d.verdict,'unsure','domain');
+ const b=judge(inv,'ln(x) + C','calc1-antiderivatives');
+ assert.equal(b.said,M.NOT_SURE(1,d.why));assert.notEqual(d.why,r.why,'a different reason for a different doubt');
+ // (c) a blank
+ assert.equal(judge(third,'  ').said,M.BLANK(1));
+});
+
+test('MB-B1 (b): a wrong item with no slip says its checker\'s own reason; a plain disagreement still asks; every engine\'s plain disagreement is the one sentence',()=>{
+ const K=require(src('lib/rules/kinds.ts')),MK=require(src('lib/rules/marks.ts'));
+ const judge=(s,a,topic)=>K.judgeSet({topic,items:[{n:1,question:question(s),spec:s}]},[{n:1,studentAnswer:a}],{topic,system:'uk',typed:true}).items[0];
+ const D=spec({shape:'derivative',f:'x^2'});
+ // an extra constant on a derivative: wrong, no slip, and the reason is the engine's own fixed sentence
+ const c=C.checkAnswer(D,'2x + C','uk');
+ assert.deepEqual([c.verdict,c.slip],['wrong',undefined]);assert.equal(c.why,'A derivative has no arbitrary constant in it.');
+ const x=judge(D,'2x + C','calc1-rules');
+ assert.deepEqual([x.verdict,x.slip,x.said],['wrong',undefined,c.why],'the reason, not "something different"');
+ assert.doesNotMatch(x.said,/something different|2x/);
+ // a plain wrong answer: the checker only disagrees, so the desk still asks how they got there
+ const w=judge(D,'3x','calc1-rules');
+ assert.equal(C.checkAnswer(D,'3x','uk').why,MK.DISAGREES);
+ assert.deepEqual([w.verdict,w.said],['wrong',M.ASK(1)],'a genuine disagreement asks');
+ // settleSpec carries the same line (an explanation settles through it)
+ assert.equal(M.settleSpec(1,D,'2x + C',null,'calc1-rules','uk').said,c.why);
+ assert.equal(M.settled(1,false,null,'calc1-rules',MK.DISAGREES).said,M.ASK(1));
+ assert.equal(M.settled(1,false,null,'calc1-rules','  ').said,M.ASK(1));
+ // the three engines' plain disagreement is DISAGREES itself, so the rule above reads every engine alike
+ const C2=require(src('lib/rules/calc2.ts')),S=require(src('lib/rules/school.ts'));
+ assert.equal(C2.calc2CheckAnswer({shape:'sequence-limit',f:'(2x + 1)/x'},'7').why,MK.DISAGREES);
+ const sv=S.check({shape:'compute',expr:'3/4 ÷ 2/3'},'1/8','uk');
+ assert.deepEqual([sv.verdict,sv.slip,sv.why],['wrong',undefined,MK.DISAGREES],'a school wrong answer with no slip disagrees plainly');
 });

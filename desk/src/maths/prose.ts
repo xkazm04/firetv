@@ -114,12 +114,14 @@ function texToText(src: string): string {
       let env = "";
       if (src[i] === "{") { i++; env = group(); }
       if (env.replace(/\*$/, "") !== "cases") return " ";
-      // one line, an open brace, the rows side by side: & and \\ are gaps (typeset.ts)
+      // an open brace, then the rows: & is a gap, \\ ends a row and is spoken "; " (typeset.ts sets the rows as a table, v2 M4b)
       let body = "";
       while (i < src.length && !src.startsWith("\\end", i)) {
         if (src[i] === "&") { i++; body += " "; continue; }
+        if (src.startsWith("\\\\", i)) { i += 2; body = body.trimEnd() + "; "; continue; }
         body += next();
       }
+      body = body.replace(/;\s*$/, "");
       return LB + body;
     }
     if (n === "end") { if (src[i] === "{") { i++; group(); } return ""; }

@@ -21,6 +21,8 @@
 }
 .desk-tv.bp > * { position: absolute; }
 .desk-tv.bp button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; outline: none; }
+/* words only a screen reader needs (the live line that names the stop the light is on); the same shape as linga.css .lo-sr */
+.desk-tv.bp .bp-sr { width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- ground */
 .desk-tv.bp .bp-ground { left: 0; top: 0; width: 1920px; height: 1080px; background: radial-gradient(ellipse 64% 82% at var(--lx, 50%) 46%, #1d38a6 0%, #16298a 30%, #0e1c66 58%, #08103a 100%); }

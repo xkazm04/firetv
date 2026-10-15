@@ -73,6 +73,51 @@ function Adb {
 
 function Step($msg) { Write-Host "`n=== $msg ===" -ForegroundColor Cyan }
 
+# tools/node_modules must hold the packages package-lock.json names and Playwright's Chromium, or live-ui-test
+# dies at chromium.launch ("Executable doesn't exist") and the run reports only "live UI test failed". Installs when
+# node_modules is missing or older than the lockfile, and Chromium once per lockfile (a marker in node_modules).
+# Each step is judged by its exit code and named when it fails.
+function Initialize-LiveTools([string]$ToolsDir = (Join-Path $root 'tools')) {
+  Push-Location $ToolsDir
+  $prev = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $lock = Get-Item package-lock.json -ErrorAction SilentlyContinue
+    $mods = Get-Item node_modules -ErrorAction SilentlyContinue
+    $stale = (-not $mods) -or ($lock -and $lock.LastWriteTime -gt $mods.LastWriteTime)
+    if ($stale) {
+      Write-Host 'installing tools/ packages'
+      npm install --no-audit --no-fund | Out-Host
+      if ($LASTEXITCODE) { throw "npm install in tools/ failed (exit $LASTEXITCODE)" }
+      (Get-Item node_modules).LastWriteTime = Get-Date
+    }
+    $stamp = if ($lock) { "$($lock.LastWriteTimeUtc.Ticks)" } else { 'no-lockfile' }
+    $marker = Join-Path 'node_modules' '.chromium-installed'
+    if ($stale -or -not (Test-Path $marker) -or ((Get-Content $marker -ErrorAction SilentlyContinue) -ne $stamp)) {
+      Write-Host 'installing Playwright Chromium'
+      npx playwright install chromium | Out-Host
+      if ($LASTEXITCODE) { throw "npx playwright install chromium failed (exit $LASTEXITCODE)" }
+      Set-Content $marker $stamp
+    }
+  } finally { $ErrorActionPreference = $prev; Pop-Location }
+}
+
+# Waits for the device to answer as booted, with a deadline. `adb wait-for-device` and a bare
+# boot_completed loop both wait forever: a missing AVD or an emulator that dies at start, and a
+# Stick still showing its "Allow USB debugging?" prompt (unauthorized is not "device"), left the
+# cycle hanging with no sentence. Polling getprop needs no device to fail fast, so the deadline holds.
+function Wait-Device([int]$TimeoutSec = 300, [string]$Hint = '') {
+  $deadline = (Get-Date).AddSeconds($TimeoutSec)
+  while ($true) {
+    $r = Adb shell getprop sys.boot_completed
+    if ($r.Output -eq '1') { return }
+    if ((Get-Date) -gt $deadline) {
+      throw "device not booted after $TimeoutSec s (adb said: $($r.Output)). $Hint"
+    }
+    Start-Sleep -Seconds 2
+  }
+}
+
 if (& $run 'unit') {
   Step 'unit tests (core, JVM only)'
   & .\gradlew.bat :core:test --console=plain
@@ -97,7 +142,7 @@ if (& $run 'boot') {
       throw "cannot reach $serial - check the Stick is awake, on the same network, and that " +
             "Settings > My Fire TV > Developer options > ADB debugging is on"
     }
-    (Adb wait-for-device) | Out-Null
+    Wait-Device -TimeoutSec 60 -Hint "Accept the 'Allow USB debugging?' prompt on the TV, then re-run."
     $model = (Adb shell getprop ro.product.model).Output
     $fireos = (Adb shell getprop ro.build.version.fireos).Output
     Write-Host "device ready: $model (Fire OS $fireos)"
@@ -108,8 +153,7 @@ if (& $run 'boot') {
       $emuArgs = @('-avd', $Avd, '-no-snapshot-save', '-no-boot-anim')
       if ($Headless) { $emuArgs += '-no-window' }
       Start-Process -FilePath "$sdk\emulator\emulator.exe" -ArgumentList $emuArgs
-      (Adb wait-for-device) | Out-Null
-      while ((Adb shell getprop sys.boot_completed).Output -ne '1') { Start-Sleep -Seconds 2 }
+      Wait-Device -TimeoutSec 300 -Hint "Is '$Avd' an AVD? $sdk\emulator\emulator.exe -list-avds; -Headless:`$false shows why it stopped."
     }
     Write-Host "device ready: $((Adb shell getprop ro.product.model).Output)"
   }
@@ -150,7 +194,7 @@ if (& $run 'live') {
   $env:ADB_SERIAL = if ($onHardware) { $serial } else { '' }
   $env:TV_HOST = $tvHost
   try {
-    if (-not (Test-Path node_modules)) { npm install --no-audit --no-fund | Out-Null }
+    Initialize-LiveTools (Get-Location).Path
     # Judge node by its exit code alone. Anything it prints to stderr - a Playwright warning, a
     # tool's own diagnostic - would otherwise terminate this script as a NativeCommandError.
     $prev = $ErrorActionPreference

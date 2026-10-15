@@ -21,11 +21,10 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { WebSocketServer } from 'ws';
+import { parseArgs } from './device.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const args = Object.fromEntries(
-  process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
-);
+const args = parseArgs();
 const PORT = Number(args.port ?? 9787);
 
 // Served from the repo so the relay path exercises the same page the TV serves over LAN.
@@ -108,6 +107,9 @@ function attach(ws, role) {
     if (role === 'tv' && tv === ws) {
       tv = null;
       lastState = null;
+      // The phone's frames now go nowhere, so say so: a close (1012, service restart) makes the companion
+      // redial, and its hello reaches the TV once that is back with its new PIN.
+      if (pen && pen.readyState === pen.OPEN) pen.close(1012, 'tv left');
     }
     if (role === 'pen' && pen === ws) pen = null;
   });
