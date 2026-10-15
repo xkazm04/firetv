@@ -1018,7 +1018,7 @@ export function dispatch(e: Event): Session {
     if (id) try { kept = addPaper(id, e.rows); } catch (err) { failed = true; console.error("A paper could not be saved:", err instanceof Error ? err.message : err); }
     if (!kept) {
       store.session = { ...store.session, status: !id ? NOBODY_AT_DESK : failed ? PAPER_NOT_SAVED : PAPER_NO_ROW, updatedAt: Date.now() };
-      store.subs.forEach((fn) => { try { fn(store.session); } catch {} });
+      notify();
       return store.session;
     }
   }
@@ -1054,7 +1054,7 @@ export function dispatch(e: Event): Session {
   }
   if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) store.session = { ...store.session, week: weekRead(store.session) };
   writeSession();
-  store.subs.forEach((fn) => { try { fn(store.session); } catch {} });
+  notify();
   return store.session;
 }
 /**
@@ -1093,4 +1093,6 @@ export function settleSaved(): boolean { return store.settled !== false; }
 export function hintCounted(): boolean { return store.counted !== false; }
 /** Whether the last session.json write landed (HF4). */
 export function sessionSaved(): boolean { return store.saved !== false; }
+/** Hand the session to every subscriber. One that throws does not stop the others, and is said: a stream's own send catches what it expects (session/stream route). */
+function notify() { store.subs.forEach((fn) => { try { fn(store.session); } catch (e) { console.error("desk session: a subscriber threw:", e instanceof Error ? e.message : e); } }); }
 export function subscribe(fn: Sub) { store.subs.add(fn); return () => store.subs.delete(fn); }

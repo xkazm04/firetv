@@ -96,7 +96,7 @@ export default function TV() {
         const old = audio.current; old?.pause(); if (old?.src.startsWith("blob:")) URL.revokeObjectURL(old.src);
         const next = new Audio(URL.createObjectURL(blob)); next.onended = () => URL.revokeObjectURL(next.src);
         audio.current = next; await next.play(); }
-      catch { try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(line)); } catch {} }
+      catch { try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(line)); } catch (e) { console.warn("desk TV: neither the voice nor the browser could say the line; it stays on screen", e); } }
     })();
   }, [s, voice]);
 
@@ -134,7 +134,7 @@ export default function TV() {
       if (stop && step.events.some((x) => x.type === "nav")) {
         const cut = matchMedia("(prefers-reduced-motion: reduce)").matches;
         zooming.current = true; setZoom(stop);
-        setTimeout(() => { void runStep(step, { post, call, apply }).catch(() => {}); }, cut ? 0 : ZOOM_MS);
+        setTimeout(() => { void runStep(step, { post, call, apply }).catch((e) => console.error("desk TV: a landing step failed", e)); }, cut ? 0 : ZOOM_MS);
         // a post that never lands must not leave the desk frozen behind the zoom
         setTimeout(() => { if (zooming.current) { zooming.current = false; setZoom(null); } }, 4000);
         return;

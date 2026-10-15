@@ -76,20 +76,17 @@ function silentCatches(text){
 // its count (and the test then asks for the lower number), a new silent catch anywhere fails.
 const SILENT={
  'src/app/api/session/stream/route.ts':1,
- 'src/app/phone/page.tsx':5,
- 'src/app/tv/page.tsx':4,
+ 'src/app/phone/page.tsx':4,
+ 'src/app/tv/page.tsx':2,
  'src/essay/EssayTV.tsx':2,
  'src/landing/themes/blueprint/Blueprint.tsx':2,
  'src/landing/themes/paper/Paper.tsx':1,
  'src/lib/engines/call.ts':1,
- 'src/lib/engines/codex.ts':1,
  'src/lib/engines/health.ts':1,
- 'src/lib/engines/text.ts':1,
  'src/lib/library/lessons.ts':1,
  'src/lib/session/learners.ts':1,
  'src/lib/session/pairing.ts':2,
- 'src/lib/session/store.ts':5,
- 'src/tv/screens.tsx':1,
+ 'src/lib/session/store.ts':3,
 };
 test('silent-catch canary: an empty catch and an empty .catch are seen; a commented or routed one is not',()=>{
  assert.equal(silentCatches('try { x(); } catch {}').length,1);

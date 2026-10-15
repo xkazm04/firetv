@@ -64,7 +64,7 @@ export const codexCli: Provider<CodexRequest, unknown> = {
       const raw = (await readFile(last, "utf8")).trim();
       return { raw, provider: reported, audit: raw.slice(0, 2000) };
     } finally {
-      await rm(dir, { recursive: true, force: true }).catch(() => {});
+      await rm(dir, { recursive: true, force: true }).catch((e) => console.warn(`[engines] codex left its temp dir ${dir}: ${e instanceof Error ? e.message : e}`));
     }
   },
   async probe() {

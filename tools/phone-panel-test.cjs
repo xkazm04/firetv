@@ -852,6 +852,15 @@ test('deskLine: a run that failed on the desk (its body says failure) adds no li
  assert.equal(deskLine({error:'Bad gateway from a proxy.'},F),'Bad gateway from a proxy.','a 502 that is not a run says its error');
  for(const b of [null,undefined,{},{error:''},{error:3}])assert.equal(deskLine(b,F),F,JSON.stringify(b));
 });
+test("the profile queue hands each post's failure to its caller: Save that never lands says so, and the queue goes on",async()=>{
+ const raw=fs.readFileSync(PAGE,'utf8');
+ assert.match(raw,/post\(\{ type: "profile\.save" \}\)\)\.catch\(\(\) => setMsg\("That did not reach the desk\."\)\)/,'Save says when it did not land');
+ const at=raw.indexOf('function inOrder()'),body=raw.slice(at,raw.indexOf('\n}\n',at)+2);
+ const inOrder=new Function(body.replace(/: Promise<unknown>/g,'').replace(/\(job: \(\) => Promise<unknown>\)/,'(job)')+'\nreturn inOrder;')();
+ const q=inOrder(),seen=[];
+ await assert.rejects(q(async()=>{seen.push(1);throw new Error('offline');}),/offline/,'the caller sees its own failure');
+ await q(async()=>{seen.push(2);});assert.deepEqual(seen,[1,2],'and the next post still goes, in order');
+});
 test('page.tsx never reads a meaning out of a 502: the body says whether the failure is on the desk',()=>{
  assert.doesNotMatch(code(PAGE),/status\s*[!=]==\s*502/);
 });

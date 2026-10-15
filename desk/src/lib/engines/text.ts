@@ -94,7 +94,7 @@ export const claudeCli: Provider<TextRequest, unknown> = {
       });
       child.stdin.on("error", (e) => { reject(new EngineError("exit", reported, `claude closed its input: ${e.message}`)); });
       child.stdin.end(req.prompt);
-    }).finally(() => rm(dir, { recursive: true, force: true }).catch(() => {}));
+    }).finally(() => rm(dir, { recursive: true, force: true }).catch((e) => console.warn(`[engines] claude left its temp dir ${dir}: ${e instanceof Error ? e.message : e}`)));
 
     let envelope: { structured_output?: unknown; result?: unknown; stop_reason?: unknown; is_error?: unknown; subtype?: unknown };
     try { envelope = JSON.parse(out); } catch { throw new EngineError("exit", reported, `claude answered without its JSON envelope: ${out.slice(0, 200)}`); }

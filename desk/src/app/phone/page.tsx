@@ -47,7 +47,12 @@ const NAME_MAX = 40;
  */
 function inOrder() {
   let tail: Promise<unknown> = Promise.resolve();
-  return (job: () => Promise<unknown>): Promise<unknown> => { tail = tail.then(job).catch(() => undefined); return tail; };
+  return (job: () => Promise<unknown>): Promise<unknown> => {
+    const run = tail.then(job);
+    // the queue outlives a failed post: the next one still goes, in order; the caller holds `run` and says the failure
+    tail = run.catch(() => { /* said by the caller, through run */ });
+    return run;
+  };
 }
 /** What a fresh page load holds in the Essay and Say panels: a new learner in the seat starts from these. */
 const FRESH_PARAS = ["Many students are tired. Sleep is important. Schools start early. This is bad."];
@@ -514,8 +519,8 @@ export default function Phone() {
           <p>At the desk now: <b>{s?.learner?.name ?? "no one yet"}</b></p>
           {s && (s.draft || s.screen === "profile") ? <>
             <p>The TV takes the picks; type the name here.</p>
-            <div className="field"><input placeholder="Name" maxLength={NAME_MAX} value={pname} onChange={(e) => { setPname(e.target.value); void nameQueue(() => post({ type: "profile.draft", patch: { name: e.target.value } })); }} /></div>
-            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => void nameQueue(() => post({ type: "profile.save" }))}>Save</button>
+            <div className="field"><input placeholder="Name" maxLength={NAME_MAX} value={pname} onChange={(e) => { setPname(e.target.value); nameQueue(() => post({ type: "profile.draft", patch: { name: e.target.value } })).catch(() => { /* a lost keystroke: the next one sends the whole name again */ }); }} /></div>
+            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => nameQueue(() => post({ type: "profile.save" })).catch(() => setMsg("That did not reach the desk."))}>Save</button>
               <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 

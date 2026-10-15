@@ -57,7 +57,7 @@ export function Pair({ s }: { s: Session }) {
   const url = s.phoneUrl + "?pin=" + s.pin;
   // qrcode's browser build draws the code; generated here so the store stays free of UI.
   const [svg, setSvg] = useState("");
-  useEffect(() => { let live = true; QRCode.toString(url, { type: "svg", margin: 1 }).then((x) => { if (live) setSvg(x); }).catch(() => {}); return () => { live = false; }; }, [url]);
+  useEffect(() => { let live = true; QRCode.toString(url, { type: "svg", margin: 1 }).then((x) => { if (live) setSvg(x); }).catch((e) => console.error("desk TV: the pairing QR could not be drawn; the code is still shown to type", e)); return () => { live = false; }; }, [url]);
   return (<>
     <div className="band band-rule" />
     <div className="content-full" style={{ display: "grid", placeItems: "center", textAlign: "center" }}>
