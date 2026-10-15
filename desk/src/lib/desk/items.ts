@@ -40,7 +40,7 @@ import { kindOfTopic } from "../rules/kinds";
 import { CALC_SLIPS, leaksCalc, meetsRequirement, question as printed, wellFormed, type CalcRequirement, type CalcShape, type CalcSpec } from "../rules/calc";
 import type { Calc2Spec, Calc2SpecShape } from "../rules/calc2";
 import { drawWord, wordItems, wordTemplateFor } from "../rules/calc-word";
-import { SCHOOL_UNIT_SLIPS, STATEMENT_FORMS, formOf, generatorFor, paperSteer, leaksSchool, question as schoolQuestion, slipShows, storyOf, topGeneratorFor, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
+import { SCHOOL_UNIT_SLIPS, STATEMENT_FORMS, TOP_SLIP_FORMS, formOf, generatorFor, paperSteer, leaksSchool, question as schoolQuestion, slipShows, storyOf, topFormOf, topGeneratorFor, topSteer, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { JSONSchema } from "../engines/types";
 import { learnerYear, setMix, tierCounts, type Mix, type MixFor } from "../rules/stretch";
 import { STATEMENTS } from "../library/gcse";
@@ -171,19 +171,26 @@ export interface SetAsk extends MixFor { stretch?: boolean; word?: boolean | num
    * unit's draw is steered by them where they pick some of a tier's forms (rules/school paperSteer, makeSchoolItems), else
    * drawn as usual. Absent: as before.
    */
-  aim?: readonly string[] }
+  aim?: readonly string[];
+  /**
+   * The slips the learner made on this unit's top rung (cycle 18, rules/school topSlipsOf: read by the practice route from
+   * the set the session holds). A step up on a code-written unit aims its non-word-problem tier-3 slot(s) at the kinds they
+   * happen on (rules/school topSteer, makeSchoolItems); any other set ignores them. Absent: as before.
+   */
+  topSlips?: readonly string[] }
 
 /**
  * The set, and `aim`: the statements it was written for, only when it was - every one on a model-written equations set (all
  * go into its prompt), on a code-written unit the ones that steered its draw, none on Calculus. The practice route puts
- * exactly these on the set (Practice.aim), so the taped card never names an aim the set did not take.
+ * exactly these on the set (Practice.aim), so the taped card never names an aim the set did not take. `topAim`: the
+ * top-rung slips a step up's tier-3 draw was aimed at, only when the aim changed the draw (Practice.topAim).
  */
 export async function makeItems(
   topicId: string,
   learnerId: string,
   n = 6,
   opts: SetAsk = {},
-): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number; aim?: string[] }> {
+): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number; aim?: string[]; topAim?: string[] }> {
   const stretch = opts.stretch === true;
   // a step up on a road with no tiers is asked for as usual and only marked as a step up (see the file header)
   const flag = (r: { items: PracticeItem[]; provider: string; ms: number; tries: number }) =>
@@ -192,7 +199,8 @@ export async function makeItems(
   if (kind === "calc") return flag(await makeCalcItems(topicId, learnerId, n, opts.word, learnerBlock(opts), opts.system));
   // a school unit's set is aimed at the learner's live slips on it, newest first (the record keeps them newest last)
   // a paper's lost statements, when it opened the set, steer the draw first (MB-B40 cycle 14)
-  if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch, [...(getLearner(learnerId).skills[topicId]?.slips ?? [])].reverse(), opts.system, opts.aim ?? []);
+  // a step up's tier-3 slots are aimed at the slips named on the rung the last time (cycle 18); a usual set takes none
+  if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch, [...(getLearner(learnerId).skills[topicId]?.slips ?? [])].reverse(), opts.system, opts.aim ?? [], stretch ? opts.topSlips ?? [] : []);
   const aimed = aimBlock(opts.aim) ? [...(opts.aim ?? [])] : [];
   const made = flag(await makeLinearItems(topicId, learnerId, n, learnerBlock(opts), aimBlock(opts.aim)));
   return aimed.length ? { ...made, aim: aimed } : made;
@@ -464,8 +472,58 @@ const freshSeed = () => Math.floor(Math.random() * 0x100000000);
  * tierCounts with `top`): the rung's own content (mixed numbers on the fractions units, a reverse percentage, two changes
  * or the years on percent change, a rounded side on Pythagoras, two events on probability), and at least one of them a word problem (the last tier-3 slot takes only a story
  * while none is kept). Every other set asks for no tier 3 and is drawn exactly as before.
+ *
+ * `topSlips` (cycle 18): the slips the learner made on this unit's top rung (rules/school topSlipsOf). Where they pick SOME
+ * of the rung's kinds (rules/school topSteer: the amount before a change after "took the percent of the new amount", two
+ * draws after "put the first one back", a shorter side after "added the squares for a shorter side"), each tier-3 item
+ * of another kind is drawn again from those kinds, as a bare item - all but the set's first word problem, which is kept,
+ * so the pair still holds one. Tiers 1 and 2 are drawn exactly as without them (usual, slip-aimed or paper-steered), and
+ * the result's `topAim` names the slips whose kinds the redrawn items hold - only when an item was redrawn. None, or slips
+ * that pick nothing, and the set is byte for byte what it was.
  */
-export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed(), mix: Mix = "standard", stretch = false, aim: readonly string[] = [], system?: SchoolSystem, paper: readonly string[] = []): { items: PracticeItem[]; provider: string; ms: number; tries: number; aim?: string[] } {
+export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed(), mix: Mix = "standard", stretch = false, aim: readonly string[] = [], system?: SchoolSystem, paper: readonly string[] = [], topSlips: readonly string[] = []): { items: PracticeItem[]; provider: string; ms: number; tries: number; aim?: string[]; topAim?: string[] } {
+  const made = schoolSet(topicId, n, seed, mix, stretch, aim, system, paper);
+  const steer = Array.isArray(topSlips) && topSlips.length ? topSteer(topicId, topSlips) : null;
+  const aimed = steer ? aimTop(topicId, made.items, seed, steer, system) : null;
+  return aimed ? { ...made, items: aimed.items, topAim: aimed.slips } : made;
+}
+
+/**
+ * The tier-3 items of a drawn set aimed at a top steer (cycle 18, see makeSchoolItems): the set's first word problem kept,
+ * every other tier-3 item of a kind the steer does not name replaced in its place by the next bare item of a named kind
+ * from `seed` onward - well formed, printable, not leaking, a question not already in the set. Null when nothing was
+ * replaced (no tier 3, every slot already of an aimed kind, or the rung ran dry): the draw did not change.
+ */
+function aimTop(topicId: string, items: PracticeItem[], seed: number, steer: { forms: string[]; slips: string[] }, system?: SchoolSystem): { items: PracticeItem[]; slips: string[] } | null {
+  const top = topGeneratorFor(topicId);
+  const t3 = items.map((it, ix) => ({ it, ix })).filter(({ it }) => it.tier === 3);
+  const story = t3.find(({ it }) => storyOf(it.spec));
+  const open = t3.filter((x) => x !== story && !steer.forms.includes(topFormOf(topicId, x.it.spec) ?? ""));
+  if (!top || !open.length) return null;
+  const seen = new Set(items.map((it) => sameKey(it.question)));
+  const found: { spec: SchoolSpec; question: string; form: string }[] = [];
+  for (let k = 0; k < SCHOOL_TRIES && found.length < open.length; k++) {
+    const spec = top((seed + k) % 0x100000000, system);
+    if (!spec || !schoolWellFormed(spec).ok || storyOf(spec)) continue;
+    const form = topFormOf(topicId, spec);
+    if (!form || !steer.forms.includes(form)) continue;
+    // the leak check reads the question as the desk prints it with no system, as every draw here does (MB-B4)
+    const q = schoolQuestion(spec, system);
+    if (!q || leaksSchool(spec, schoolQuestion(spec)?.plain)) continue;
+    const key = sameKey(q.plain);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    found.push({ spec, question: q.plain, form });
+  }
+  if (!found.length) return null;
+  const out = items.slice();
+  found.forEach((f, i) => { const at = open[i].ix; out[at] = { ...out[at], question: f.question, spec: f.spec }; });
+  const forms = found.map((f) => f.form), by = TOP_SLIP_FORMS[topicId];
+  return { items: out, slips: steer.slips.filter((s) => by[s].some((x) => forms.includes(x))) };
+}
+
+/** The set as drawn before any top steer (cycle 18): paper-steered, slip-aimed or usual, as makeSchoolItems describes. */
+function schoolSet(topicId: string, n: number, seed: number, mix: Mix, stretch: boolean, aim: readonly string[], system: SchoolSystem | undefined, paper: readonly string[]): { items: PracticeItem[]; provider: string; ms: number; tries: number; aim?: string[] } {
   const t0 = Date.now();
   // a paper's lost statements (MB-B40 cycle 14) steer the set when they pick some of a drawn tier's forms (rules/school
   // paperSteer); the aimed half is then drawn from those forms, and the set names only the statements it was drawn for

@@ -27,7 +27,7 @@ import { WEEK_UNREAD, sundayPage, sundayWords, type WeekLine } from "../rules/we
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
 import { isCalc2Spec, type Calc2Spec } from "../rules/calc2";
 import { isPartLabel, type PartLabel } from "../rules/calc-word";
-import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
+import { SCHOOL_SHAPES, TOP_SLIP_FORMS, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import { planFill, planSlots, type Fix, type Plan, type Sentence, type Was } from "../rules/essay";
 import { adultAllowed, type Mode } from "../rules/mode";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
@@ -157,7 +157,12 @@ export interface Worked { topic: string; title: string; idea: string; own: boole
 /** `stretch`: the set was asked for as "a step up" (Family W8); every item carries the same flag. Absent is a usual set. */
 export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; stretch?: true;
   /** The statements (gcse.ts codes) a set opened from a paper's recovery row is aimed at (MB-B40); absent on any other set. */
-  aim?: string[]; }
+  aim?: string[];
+  /**
+   * The slips a step up's tier-3 draw was aimed at (cycle 18, rules/school TOP_SLIP_FORMS ids of the set's unit), only when
+   * the aim changed the draw; absent on any other set.
+   */
+  topAim?: string[]; }
 
 /** The statement codes a set may be aimed at (MB-B40): the GCSE map's own, nothing else. */
 const STATEMENT_CODES = new Set(STATEMENTS.map((x) => x.code));
@@ -220,10 +225,13 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
 /** A set as a screen may see it: its items `shown`, and the step-up flag kept only when it is true. */
 const shownPractice = (p: Practice | null | undefined): Practice | null => {
   if (!p) return null;
-  const { stretch, aim, ...rest } = p;
+  const { stretch, aim, topAim, ...rest } = p;
   // an aim is kept only as statement codes the desk knows (MB-B40): never text, never a question
   const aimed = Array.isArray(aim) ? aim.filter((c): c is string => typeof c === "string" && STATEMENT_CODES.has(c)) : [];
-  return { ...rest, items: (p.items ?? []).map(shown), ...(stretch === true ? { stretch: true as const } : {}), ...(aimed.length ? { aim: aimed } : {}) };
+  // a step up's slip aim only as slip ids its unit's top rung names (cycle 18), on a step up
+  const by = Object.prototype.hasOwnProperty.call(TOP_SLIP_FORMS, p.topic) ? TOP_SLIP_FORMS[p.topic] : {};
+  const topAimed = stretch === true && Array.isArray(topAim) ? [...new Set(topAim.filter((c): c is string => typeof c === "string" && Object.prototype.hasOwnProperty.call(by, c)))] : [];
+  return { ...rest, items: (p.items ?? []).map(shown), ...(stretch === true ? { stretch: true as const } : {}), ...(aimed.length ? { aim: aimed } : {}), ...(topAimed.length ? { topAim: topAimed } : {}) };
 };
 /**
  * The homework pipelines (lib/desk/job.ts runs each one). One record per kind: the latest run of that kind,

@@ -246,3 +246,125 @@ test('aim 6: the taped card says what the set aims at, in at most 25 words, with
  const rule=/\.mb-card \.aim\s*\{([^}]*)\}/.exec(css);assert.ok(rule,'the line has its rule');
  const px=/font-size:\s*(\d+)px/.exec(rule[1]);assert.ok(px&&Number(px[1])>=28,'and nothing under 28 px');
 });
+
+/**
+ * Cycle 18, a step up aimed at its named slips: the slips a learner made on a unit's top rung (rules/school topSlipsOf, read
+ * from the set the session holds) aim the next step up's non-word-problem tier-3 slot at the kinds they happen on
+ * (rules/school topSteer, makeSchoolItems' `topSlips`). Tiers 1 and 2 never move, and no top slip draws byte for byte.
+ */
+const TOP=Object.keys(SR.TOP_SLIP_FORMS);
+/** The fingerprint grid again, every set asked for with `topSlips(u)` beside it. */
+function fingerprintTop(slipsOn,topSlips){
+ const h=crypto.createHash('sha256');
+ const systems=slipsOn?[undefined,'cz']:[undefined,'cz','uk'],seeds=slipsOn?[0,42]:[0,1,7,42,999,123456,4294967295-3];
+ for(const u of Object.keys(SR.SCHOOL_GENERATORS))for(const mix of ['easier','standard','harder'])for(const sys of systems)for(const seed of seeds){
+  if(u==='probability'&&mix==='harder')continue;
+  const aim=slipsOn?[...SR.SCHOOL_UNIT_SLIPS[u]].reverse().slice(0,2):[];
+  const r=makeSchoolItems(u,6,seed,mix,mix==='harder',aim,sys,[],topSlips(u));
+  assert.equal(r.topAim,undefined,`${u}: no top aim when nothing was redrawn`);
+  h.update(JSON.stringify(r.items)+'\n');}
+ return h.digest('hex');
+}
+/** A top-rung spec of kind `f` on unit `u`, bare unless `story`, from the rung's own generator. */
+const topOf=(u,f,story=false)=>{for(let k=0;k<2000;k++){const sp=SR.topGeneratorFor(u)(k);if(SR.topFormOf(u,sp)===f&&!!SR.storyOf(sp)===story)return sp;}throw new Error(`${u} ${f}`);};
+
+test('aim 10: the map from a top-rung slip to the rung\'s kinds - pinned to the rung\'s draws and the slip lists, decided in code',()=>{
+ for(const [u,forms] of Object.entries(SR.SCHOOL_TOP_FORMS)){
+  const got=new Set();for(let k=0;k<600;k++){const f=SR.topFormOf(u,SR.topGeneratorFor(u)(k));assert.ok(f,`${u} seed ${k} has a kind`);got.add(f);}
+  assert.deepEqual([...got].sort(),[...forms].sort(),u);
+  // a tier-1 or tier-2 item has no top-rung kind
+  for(const t of [1,2])for(let k=0;k<50;k++)assert.equal(SR.topFormOf(u,SR.generatorFor(u)(k,t)),null,`${u} tier ${t}`);
+ }
+ for(const [u,by] of Object.entries(SR.TOP_SLIP_FORMS))for(const [id,forms] of Object.entries(by)){
+  assert.ok((SR.SCHOOL_TOP_SLIPS[u]??[]).includes(id)||SR.SCHOOL_UNIT_SLIPS[u].includes(id),`${u} ${id} is a slip of the unit`);
+  assert.ok(forms.length&&forms.length<SR.SCHOOL_TOP_FORMS[u].length&&forms.every((f)=>SR.SCHOOL_TOP_FORMS[u].includes(f)),`${u} ${id}: some kinds of the rung`);
+ }
+ // every slip SCHOOL_TOP_SLIPS names is mapped
+ for(const [u,ids] of Object.entries(SR.SCHOOL_TOP_SLIPS))for(const id of ids)assert.ok(SR.TOP_SLIP_FORMS[u]?.[id],`${u} ${id}`);
+ assert.deepEqual(SR.topSteer('pct-change',['pct-of-new']),{forms:['before'],slips:['pct-of-new']});
+ assert.deepEqual(SR.topSteer('probability',['prob-replaced','nope']),{forms:['draw-both','draw-then'],slips:['prob-replaced']});
+ assert.deepEqual(SR.topSteer('pythagoras',['pyth-squares-added','pyth-no-root']),{forms:['shorter'],slips:['pyth-squares-added']});
+ assert.equal(SR.topSteer('pct-change',['pct-of-new','pct-added']),null,'together every kind: nothing to pick');
+ for(const [u,s] of [['pythagoras',['pyth-no-root']],['pythagoras',['pyth-sides-added']],['frac-add-sub',['tops-and-bottoms']],['pct-change',['change-only']],['probability',[]],['area',['pct-of-new']],['probability',undefined]])assert.equal(SR.topSteer(u,s),null,`${u} ${s}`);
+});
+
+test('aim 11: only a tier-3 item settled wrong with a rung slip counts - the shared Pythagoras ids at tiers 1 and 2 do not',()=>{
+ const t2=SR.generatorFor('pythagoras')(3,2);
+ const items=[{n:1,tier:2,spec:t2,verdict:'wrong',slip:'pyth-squares-added'},{n:2,tier:3,spec:topOf('pythagoras','shorter'),verdict:'right'}];
+ assert.deepEqual(SR.topSlipsOf('pythagoras',items),[],'a tier-2 squares-added slip is the unit\'s, not the rung\'s');
+ items.push({n:3,tier:3,spec:topOf('pythagoras','shorter'),verdict:'wrong',slip:'pyth-squares-added'},{n:4,tier:3,spec:topOf('pythagoras','longest'),verdict:'wrong',slip:'pyth-no-root'});
+ assert.deepEqual(SR.topSlipsOf('pythagoras',items),['pyth-squares-added'],'the rung\'s own, once; the root slip shows on every kind');
+ // a tier 3 claimed on a spec that is no rung item, an unsure verdict, another unit's list: none
+ assert.deepEqual(SR.topSlipsOf('pythagoras',[{tier:3,spec:t2,verdict:'wrong',slip:'pyth-squares-added'}]),[]);
+ assert.deepEqual(SR.topSlipsOf('pct-change',[{tier:3,spec:topOf('pct-change','before'),verdict:'unsure',slip:'pct-of-new'}]),[]);
+ assert.deepEqual(SR.topSlipsOf('pct-change',[{tier:3,spec:topOf('pct-change','before'),verdict:'wrong',slip:'pct-of-new'},{tier:3,spec:topOf('pct-change','then'),verdict:'wrong',slip:'pct-added'}]),['pct-of-new','pct-added']);
+ assert.deepEqual(SR.topSlipsOf('frac-add-sub',[{tier:3,spec:{shape:'compute',expr:'1 3/4 + 2 1/3'},verdict:'wrong',slip:'tops-and-bottoms'}]),[]);
+});
+
+test('aim 12: a learner with no top-rung slip - or slips that pick nothing - gets every set byte for byte; tiers 1 and 2 never move',()=>{
+ // no top slip at all is the default path (aim 8 holds both grids without the argument); asked with none, and with slips
+ // that pick nothing (the root slip on Pythagoras, both percent slips together, unknown ids, another unit's; probability's
+ // put-back slip on its usual sets, which hold no tier 3 - its step up is outside the grid), the grids are the same
+ assert.equal(fingerprintTop(false,()=>[]),PLAIN_FP,'the usual draw');
+ const idle=(u)=>u==='pythagoras'?['pyth-no-root','pyth-sides-added']:u==='pct-change'?['pct-of-new','pct-added']:['pct-of-new','prob-replaced','nope'];
+ assert.equal(fingerprintTop(true,idle),SLIPS_FP,'the slip-aimed draw');
+ // with a slip that steers: tiers 1 and 2 as the set draws them without it, usual and slip-aimed
+ for(const u of TOP)for(const id of Object.keys(SR.TOP_SLIP_FORMS[u]))for(const sys of [undefined,'cz'])for(const seed of [0,1,42,777]){
+  for(const aim of [[],[...SR.SCHOOL_UNIT_SLIPS[u]].reverse().slice(0,2)]){
+   const a=makeSchoolItems(u,6,seed,'harder',true,aim,sys,[],[id]),b=makeSchoolItems(u,6,seed,'harder',true,aim,sys);
+   assert.deepEqual(a.items.filter((i)=>i.tier!==3),b.items.filter((i)=>i.tier!==3),`${u} ${id} ${seed}: tiers 1 and 2`);
+  }
+  // a usual (standard) set holds no tier 3: nothing to aim, nothing changes
+  const s1=makeSchoolItems(u,6,seed,'standard',false,[],sys,[],[id]),s0=makeSchoolItems(u,6,seed,'standard',false,[],sys);
+  assert.deepEqual(s1.items,s0.items);assert.equal(s1.topAim,undefined);
+ }
+});
+
+test('aim 13: a steered step up - the non-word-problem tier-3 slot of an aimed kind, the word problem kept, named only when the draw changed',()=>{
+ let changed=0;
+ for(const u of TOP)for(const id of Object.keys(SR.TOP_SLIP_FORMS[u]))for(const seed of [0,1,2,3,42,77777,123456]){
+  const a=makeSchoolItems(u,6,seed,'harder',true,[],'uk',[],[id]),b=makeSchoolItems(u,6,seed,'harder',true,[],'uk');
+  const forms=SR.TOP_SLIP_FORMS[u][id],t3=(r)=>r.items.filter((i)=>i.tier===3);
+  assert.deepEqual(a.items,makeSchoolItems(u,6,seed,'harder',true,[],'uk',[],[id]).items,'seeded');
+  assert.equal(a.items.length,6);assert.equal(new Set(a.items.map((i)=>i.question)).size,6,'six distinct');
+  assert.deepEqual(a.items.map((i)=>i.tier),b.items.map((i)=>i.tier),'the 2/2/2 mix in place');
+  assert.ok(a.items.every((i)=>i.stretch===true),'a step up still');
+  // the set's first word problem is the usual one, untouched; every other tier-3 item is of an aimed kind
+  const story=t3(b).find((i)=>SR.storyOf(i.spec));assert.ok(story,'the usual pair holds a word problem');
+  assert.ok(t3(a).some((i)=>i.question===story.question),'the word problem kept');
+  for(const i of t3(a))if(i.question!==story.question)assert.ok(forms.includes(SR.topFormOf(u,i.spec)),`${u} ${id} ${seed}: ${i.question}`);
+  // named only when the draw changed, and then exactly this slip
+  const same=JSON.stringify(a.items)===JSON.stringify(b.items);
+  assert.deepEqual(a.topAim,same?undefined:[id]);if(!same)changed++;
+  for(const i of a.items)assert.ok(!SR.leaksSchool(i.spec,SR.question(i.spec).plain),'no leak');
+ }
+ assert.ok(changed>=10,`the aim changes draws (${changed})`);
+ // the example: after "took the percent of the new amount", the bare top item is the amount before a change
+ const r=makeSchoolItems('pct-change',6,0,'harder',true,[],'uk',[],['pct-of-new']);
+ assert.equal(SR.topFormOf('pct-change',r.items.find((i)=>i.tier===3&&!SR.storyOf(i.spec)).spec),'before');assert.deepEqual(r.topAim,['pct-of-new']);
+});
+
+test('aim 14: the practice route reads the slips from the set the session holds, and the set carries the ones it was aimed at',async()=>{
+ const held=(owner,slip='pct-of-new',tier=3)=>({topic:'pct-change',marked:true,owner,stretch:true,items:[{n:1,question:'q1',tier,spec:tier===3?topOf('pct-change','before'):SR.generatorFor('pct-change')(1,2),verdict:'wrong',slip,stretch:true},{n:2,question:'q2',tier:3,spec:topOf('pct-change','then'),verdict:'right',stretch:true}]});
+ const ask=async(body)=>{const res=await post(body);assert.equal(res.status,200,await res.clone().text());return S().practice;};
+ // a 14-year-old in the UK is past percent change: standard, so a step up is harder (2/2/2)
+ let got=0;
+ for(let i=0;i<6;i++){
+  seat();stubText();store.dispatch({type:'practice.set',practice:held(LEARNER)});
+  const p=await ask({topic:'pct-change',stretch:true});assert.equal(seen.length,0,'no model call');
+  assert.deepEqual(p.items.map((x)=>x.tier),[1,1,2,2,3,3]);
+  const bare=p.items.filter((x)=>x.tier===3&&!SR.storyOf(x.spec));
+  assert.ok(bare.every((x)=>SR.topFormOf('pct-change',x.spec)==='before'),'the bare top item is a reverse percentage');
+  if(p.topAim){assert.deepEqual(p.topAim,['pct-of-new']);got++;}
+ }
+ assert.ok(got>=1,'the card names the aim when the draw changed');
+ // a usual set, another learner's set, a slip at tier 2: no aim
+ seat();store.dispatch({type:'practice.set',practice:held(LEARNER)});assert.equal((await ask({topic:'pct-change'})).topAim,undefined);
+ assert.ok(S().practice.items.every((x)=>x.tier!==3),'a usual set has no top rung');
+ for(let i=0;i<4;i++){seat();store.dispatch({type:'practice.set',practice:held('someone-else')});assert.equal((await ask({topic:'pct-change',stretch:true})).topAim,undefined,'not this learner\'s slips');}
+ for(let i=0;i<4;i++){seat();store.dispatch({type:'practice.set',practice:held(LEARNER,'change-only',2)});assert.equal((await ask({topic:'pct-change',stretch:true})).topAim,undefined,'a tier-2 slip is not the rung\'s');}
+ // the store keeps only the rung's slip ids, and only on a step up
+ const keep=(p)=>store.reduce(S(),{type:'practice.set',practice:p}).practice.topAim;
+ assert.deepEqual(keep({topic:'pct-change',items:[],marked:false,stretch:true,topAim:['pct-of-new','nope',7,'prob-added']}),['pct-of-new']);
+ assert.equal(keep({topic:'pct-change',items:[],marked:false,topAim:['pct-of-new']}),undefined,'a usual set carries none');
+});

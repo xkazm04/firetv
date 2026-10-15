@@ -12,6 +12,9 @@
  * is aimed at that paper's lost statements on the unit: they go to the set writer, and the ones it was written for go onto
  * the set (Practice.aim), for the taped card - all of them into an equations prompt, on a code-written unit the ones that
  * steered its draw (rules/school paperSteer). The body cannot ask for an aim; any other set is asked for exactly as before.
+ * A step up (cycle 18) is aimed at the slips the learner made on the unit's top rung, read from the set the session holds
+ * (rules/school topSlipsOf: the seated learner's own set on this unit, its tier-3 items settled wrong with a named slip):
+ * they go to the set writer, and the ones whose kinds the draw took go onto the set (Practice.topAim), for the taped card.
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
@@ -19,6 +22,7 @@ import { makeItems } from "@/lib/desk/items";
 import { topicIn } from "@/lib/library/paths";
 import { MOVED_ON, refused, runJob } from "@/lib/desk/job";
 import { aimOf } from "@/lib/rules/recovery";
+import { topSlipsOf } from "@/lib/rules/school";
 
 export const dynamic = "force-dynamic";
 const START = "writing a practice set…";
@@ -39,8 +43,10 @@ export async function POST(req: Request) {
   // the paper's lost statements on it are the set's aim; read from the session here, never from the body
   const s = getSession();
   const aim = s.paperAim === topic && s.screen === "prepare" && s.paper ? aimOf([...s.paper.items, ...s.paper.unmapped], topic) : [];
+  // a step up after a set on this unit by this learner: the slips named on its top rung aim the new set's tier 3 (cycle 18)
+  const topSlips = stretch && s.practice?.topic === topic && s.practice.owner === learner ? topSlipsOf(topic, s.practice.items) : [];
   const r = await runJob("practice", async (run) => {
-    const made = await makeItems(topic, learner, 6, { ...who, stretch, word, ...(aim.length ? { aim } : {}) });
+    const made = await makeItems(topic, learner, 6, { ...who, stretch, word, ...(aim.length ? { aim } : {}), ...(topSlips.length ? { topSlips } : {}) });
     // written for the learner who asked: after a learner change the run is superseded and the set is dropped
     if (!run.current() || getSession().learner?.id !== learner) return null;
     // two rounds and not one question the desk could check: a failed set (job.ts's practice sentence, "Try again."),
@@ -48,7 +54,7 @@ export async function POST(req: Request) {
     if (!made.items.length) throw new Error(`no verifiable question in ${made.tries} rounds`);
     // the set carries only the statements it was written for (makeItems' aim): a code-written unit's draw the paper did
     // not steer names none, so the card never claims an aim the set did not take
-    dispatch({ type: "practice.set", practice: { topic, items: made.items, marked: false, owner: learner, ...(stretch ? { stretch: true as const } : {}), ...(made.aim?.length ? { aim: made.aim } : {}) } });
+    dispatch({ type: "practice.set", practice: { topic, items: made.items, marked: false, owner: learner, ...(stretch ? { stretch: true as const } : {}), ...(made.aim?.length ? { aim: made.aim } : {}), ...(made.topAim?.length ? { topAim: made.topAim } : {}) } });
     return made;
   }, { key: topic, input: { topic, ...(stretch ? { stretch: 1 } : {}), ...(word ? {} : { word: 0 }) }, start: START, done: (m) => (m ? `${m.items.length} questions ready in ${(m.ms / 1000).toFixed(0)} s` : "") });
   if (!r.ok) return refused(r);

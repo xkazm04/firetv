@@ -3749,6 +3749,92 @@ export function paperSteer(topicId: unknown, codes: readonly unknown[] | undefin
   return led.length ? { forms, codes: led } : null;
 }
 
+/**
+ * MB-B20 cycle 18, a step up aimed at its named slips: the KINDS a unit's top rung draws (tier 3), by topic id, each read
+ * off the spec by `topFormOf`, never from a model; tools/paper-aim-test.cjs pins every list to the rung's own draws. A
+ * percent change is "before" (the amount before a change), "then" (two changes in turn) or "years"; a Pythagoras side
+ * "longest" or "shorter"; a probability item its ProbForm. The fractions units' rungs name no slip and are not here.
+ */
+export const SCHOOL_TOP_FORMS: Readonly<Record<string, readonly string[]>> = {
+  "pct-change": ["before", "then", "years"],
+  "pythagoras": ["longest", "shorter"],
+  "probability": ["dice-and", "dice-least", "coin-dice", "coin-spin", "draw-both", "draw-then"],
+};
+
+/**
+ * Which top-rung kinds each slip named on a top-rung item happens on, by topic id: the slip's own candidates in
+ * slipCandidates, read off. Taking the percent of the new amount is only possible on the amount before a change; adding
+ * the percentages on two changes or the years; adding the chances on the three kinds with two independent events (at
+ * least one of two dice names none); putting the first one back on the two draws; adding the squares on a shorter side.
+ * A slip that shows on EVERY kind of its rung is not listed - aiming there would draw the rung it always draws (as a paper
+ * statement covering its whole unit, STATEMENT_FORMS): the root not taken, and the sides added, on Pythagoras.
+ */
+export const TOP_SLIP_FORMS: Readonly<Record<string, Readonly<Record<string, readonly string[]>>>> = {
+  "pct-change": { "pct-of-new": ["before"], "pct-added": ["then", "years"] },
+  "pythagoras": { "pyth-squares-added": ["shorter"] },
+  "probability": { "prob-added": ["dice-and", "coin-dice", "coin-spin"], "prob-replaced": ["draw-both", "draw-then"] },
+};
+
+/** The top-rung kind of a unit's tier-3 spec (SCHOOL_TOP_FORMS), read from the spec alone; null for any other spec or unit. */
+export function topFormOf(topicId: unknown, spec: unknown): string | null {
+  if (typeof topicId !== "string" || !Object.prototype.hasOwnProperty.call(SCHOOL_TOP_FORMS, topicId)) return null;
+  try {
+    const st = structure(spec);
+    if (!st.ok) return null;
+    const K = st.kind;
+    const f = topicId === "pct-change" && K.k === "pct-top" ? K.form : topicId === "pythagoras" && K.k === "pyth-dp" ? K.find : topicId === "probability" && K.k === "prob-two" ? K.form : null;
+    return f && SCHOOL_TOP_FORMS[topicId].includes(f) ? f : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The slips a learner made on a unit's top rung, read from a set as the session holds it: each item settled wrong with a
+ * slip that its kind's list names (TOP_SLIP_FORMS), counted only on a tier-3 item whose spec reads as a top-rung kind -
+ * so the Pythagoras ids the unit shares with tiers 1 and 2 count only where the rung drew them. In item order, each once.
+ */
+export function topSlipsOf(topicId: unknown, items: readonly { verdict?: unknown; slip?: unknown; tier?: unknown; spec?: unknown }[] | undefined): string[] {
+  if (typeof topicId !== "string" || !Object.prototype.hasOwnProperty.call(TOP_SLIP_FORMS, topicId)) return [];
+  const by = TOP_SLIP_FORMS[topicId], out: string[] = [];
+  for (const it of Array.isArray(items) ? items : []) {
+    if (!it || it.verdict !== "wrong" || it.tier !== 3 || typeof it.slip !== "string" || !Object.prototype.hasOwnProperty.call(by, it.slip)) continue;
+    if (!topFormOf(topicId, it.spec) || out.includes(it.slip)) continue;
+    out.push(it.slip);
+  }
+  return out;
+}
+
+/**
+ * The top-rung kinds a step up aims at for these slips (TOP_SLIP_FORMS), in SCHOOL_TOP_FORMS order, and the slips that
+ * lead there. Null when none is known, or when together they are every kind of the rung (nothing to pick). Pure.
+ */
+export function topSteer(topicId: unknown, slips: readonly unknown[] | undefined): { forms: string[]; slips: string[] } | null {
+  if (typeof topicId !== "string" || !Object.prototype.hasOwnProperty.call(TOP_SLIP_FORMS, topicId)) return null;
+  const by = TOP_SLIP_FORMS[topicId];
+  const known = [...new Set((Array.isArray(slips) ? slips : []).filter((s): s is string => typeof s === "string" && Object.prototype.hasOwnProperty.call(by, s)))];
+  const aimed = new Set(known.flatMap((s) => by[s]));
+  const forms = SCHOOL_TOP_FORMS[topicId].filter((f) => aimed.has(f));
+  return forms.length && forms.length < SCHOOL_TOP_FORMS[topicId].length ? { forms, slips: known } : null;
+}
+
+/** The most words the step-up aim line takes: the caption slot's budget, as the paper's aim line (tv/mathsRows AIM_WORDS). */
+const TOP_AIM_WORDS = 25;
+/**
+ * The Practice card's line for a step up aimed at its named slips (cycle 18): "Aimed at: " and each slip's own name, its
+ * first letter lowered, joined by "; " - "Aimed at: took the percent of the new amount." Only ids the unit's rung names
+ * (TOP_SLIP_FORMS); null when none. A slip's name, never a value, a question or an answer.
+ */
+export function topAimLine(topicId: unknown, slips: readonly unknown[] | undefined): string | null {
+  if (typeof topicId !== "string" || !Object.prototype.hasOwnProperty.call(TOP_SLIP_FORMS, topicId)) return null;
+  const by = TOP_SLIP_FORMS[topicId];
+  const names = [...new Set((Array.isArray(slips) ? slips : []).filter((s): s is string => typeof s === "string" && Object.prototype.hasOwnProperty.call(by, s)))]
+    .map((id) => SCHOOL_SLIPS.find((c) => c.id === id)?.name).filter((x): x is string => !!x).map((x) => x.charAt(0).toLowerCase() + x.slice(1));
+  if (!names.length) return null;
+  const line = `Aimed at: ${names.join("; ")}.`;
+  return line.split(/\s+/).length <= TOP_AIM_WORDS ? line : `Aimed at: ${names[0]}.`;
+}
+
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
 export const DEFAULT_SCHOOL_SYSTEM: SchoolSystem = "uk";
 /** The school system of the learner at the desk, from their profile; the desk's default (UK) when nobody, no profile or no system. */

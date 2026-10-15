@@ -514,6 +514,19 @@ Typed entry is the door that ships; the photo path is M5c's.
   probability statements) or a whole tier (R5 sharing) steers nothing: the set is the usual draw, byte for byte, and the
   card says no aim. So "Aimed at what the paper lost: ratio notation, including simplest form" stands over a set that
   simplifies three ratios; over adding fractions from an N2 paper there is no line.
+- A step up aims at its named slips (cycle 18, 2026-10-15). A slip named on a top-rung item steers the next step up on
+  that unit, not only labels it. `lib/rules/school.ts` holds the map, in code: `SCHOOL_TOP_FORMS` lists the kinds a top
+  rung draws (read off a spec by `topFormOf`, pinned to the rung's own draws), `TOP_SLIP_FORMS` which kinds each slip
+  happens on (took the percent of the new amount: the amount before a change; added the percentages: two changes or the
+  years; added the chances: the three kinds with two independent events; put the first one back: the two draws; added
+  the squares for a shorter side: a shorter side), and `topSteer` aims only when they pick SOME of the rung's kinds - the
+  root not taken shows on every Pythagoras kind, so it aims nothing. The slips are read from the set the session holds
+  (`topSlipsOf`: the seated learner's own set on the unit, a tier-3 item settled wrong) - a Pythagoras id the unit shares
+  with tiers 1 and 2 counts only on a tier-3 item - and the learner record, the ruler and Six more's slip aim are
+  untouched. The aim takes the tier-3 slot that is not the word problem: the set's first word problem stays as drawn,
+  and the other tier-3 item, when it is of another kind, is drawn again as a bare item of an aimed kind
+  (`makeSchoolItems` with `topSlips`). Tiers 1 and 2, usual or aimed, never move, and a learner with no such slip gets
+  every set byte for byte.
 - Every model-written set knows who it is for (cycle 13, 2026-10-15). The equations and the Calculus prompt both carry
   one learner section after the topic (`learnerBlock` in `lib/desk/items.ts`): "The student is 14, in Year 10 of school in
   England. Pitch the questions there.", the age alone, or "The student studies in Germany." for a learner the desk knows
