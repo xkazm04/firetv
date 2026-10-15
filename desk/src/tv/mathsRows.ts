@@ -7,7 +7,7 @@ import { STATEMENTS } from "@/lib/library/gcse";
 import { PATHS, learnerPath, topicIn, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { firstToLook } from "@/tv/sheetRows";
 import { slip as slipById } from "@/lib/rules/maths";
-import { SCHOOL_UNIT_SLIPS } from "@/lib/rules/school";
+import { SCHOOL_UNIT_SLIPS, topAimLine } from "@/lib/rules/school";
 import { likeTopic } from "@/lib/rules/kinds";
 
 /** The local day a moment falls in, as the evening log and a snapped page are stamped with it (store.ts dayed/stamped, page.reading). */
@@ -371,11 +371,13 @@ const aimWords = (t: string) => t.split(/\s+/).filter(Boolean).length;
  * What a set opened from a paper's recovery row aims at (MB-B40), for the Practice card: "Aimed at what the paper lost:"
  * and the lost statements in the GCSE map's own words, as many whole as fit in AIM_WORDS, then "and one more". Null for a
  * set with no aim, or none the map knows. Statements only: never a question, a mark or a code.
+ * A step up aimed at the slips named on its unit's top rung (cycle 18, Practice.topAim) says so in the same slot, in
+ * rules/school topAimLine's words: "Aimed at: took the percent of the new amount." A paper's aim comes first.
  */
-export function aimLine(p: Pick<Practice, "aim"> | null | undefined): string | null {
+export function aimLine(p: (Pick<Practice, "aim"> & Partial<Pick<Practice, "topic" | "topAim">>) | null | undefined): string | null {
   const said = (p?.aim ?? []).map((c) => STATEMENTS.find((x) => x.code === c)?.can).filter((x): x is string => !!x)
     .map((x) => x.charAt(0).toLowerCase() + x.slice(1));
-  if (!said.length) return null;
+  if (!said.length) return p?.topAim?.length ? topAimLine(p.topic, p.topAim) : null;
   const kept: string[] = [];
   for (let i = 0; i < said.length; i++) {
     const tail = moreOf(said.length - i - 1);

@@ -368,3 +368,22 @@ test('aim 14: the practice route reads the slips from the set the session holds,
  assert.deepEqual(keep({topic:'pct-change',items:[],marked:false,stretch:true,topAim:['pct-of-new','nope',7,'prob-added']}),['pct-of-new']);
  assert.equal(keep({topic:'pct-change',items:[],marked:false,topAim:['pct-of-new']}),undefined,'a usual set carries none');
 });
+
+test('aim 15: the Practice card says what a step up aims at, in the slip\'s own name - only when the set carries the aim',()=>{
+ // the card: the slip's own name, no value, in the caption slot; a paper's aim comes first
+ const R=require(src('tv/mathsRows.ts'));
+ assert.equal(R.aimLine({topic:'pct-change',items:[],marked:false,stretch:true,topAim:['pct-of-new']}),'Aimed at: took the percent of the new amount.');
+ assert.equal(R.aimLine({topic:'probability',items:[],marked:false,stretch:true,topAim:['prob-replaced']}),'Aimed at: put the first one back.');
+ assert.equal(R.aimLine({topic:'pythagoras',items:[],marked:false,stretch:true,topAim:['pyth-squares-added']}),'Aimed at: added the squares for a shorter side.');
+ assert.equal(R.aimLine({topic:'pct-change',items:[],marked:false,stretch:true,topAim:['nope']}),null);
+ for(const u of TOP){const l=R.aimLine({topic:u,items:[],marked:false,topAim:Object.keys(SR.TOP_SLIP_FORMS[u])});assert.ok(l.split(/\s+/).length<=25&&!/\d/.test(l),l);}
+ assert.match(R.aimLine({topic:'pct-change',items:[],marked:false,aim:['A17'],topAim:['pct-of-new']}),/^Aimed at what the paper lost: /);
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),{createElement}=require(path.join(root,'node_modules/react'));
+ const M=require(src('maths/MathsTV.tsx'));
+ const base={...S(),screen:'practice',learner:{id:'o',name:'Owen'}};
+ const items=[1,2,3,4,5,6].map((n)=>({n,question:`Increase 60 by ${n}%.`}));
+ const aimed=renderToStaticMarkup(createElement(M.PracticeScreen,{s:{...base,practice:{topic:'pct-change',items,marked:false,stretch:true,topAim:['pct-of-new']}}}));
+ const plain=renderToStaticMarkup(createElement(M.PracticeScreen,{s:{...base,practice:{topic:'pct-change',items,marked:false,stretch:true}}}));
+ assert.ok(aimed.includes('data-role="maths-practice-aim">Aimed at: took the percent of the new amount.</div>'),'in the taped card');
+ assert.equal(aimed.replace(/<div class="aim"[^>]*>.*?<\/div>/,''),plain,'otherwise the screen is unchanged');
+});

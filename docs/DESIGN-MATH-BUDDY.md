@@ -526,7 +526,10 @@ Typed entry is the door that ships; the photo path is M5c's.
   untouched. The aim takes the tier-3 slot that is not the word problem: the set's first word problem stays as drawn,
   and the other tier-3 item, when it is of another kind, is drawn again as a bare item of an aimed kind
   (`makeSchoolItems` with `topSlips`). Tiers 1 and 2, usual or aimed, never move, and a learner with no such slip gets
-  every set byte for byte.
+  every set byte for byte. When the aim changed the draw the set carries the slips (`Practice.topAim`) and the Practice
+  card's aim line says so in the slip's own name, in the same slot as a paper's aim (`topAimLine` in
+  `lib/rules/school.ts`, through `aimLine`): "Aimed at: took the percent of the new amount.", "Aimed at: put the first
+  one back." A name, never a value; a draw the aim left as it was claims nothing.
 - Every model-written set knows who it is for (cycle 13, 2026-10-15). The equations and the Calculus prompt both carry
   one learner section after the topic (`learnerBlock` in `lib/desk/items.ts`): "The student is 14, in Year 10 of school in
   England. Pitch the questions there.", the age alone, or "The student studies in Germany." for a learner the desk knows
