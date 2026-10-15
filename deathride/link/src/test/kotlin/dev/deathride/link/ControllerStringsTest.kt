@@ -55,6 +55,11 @@ class ControllerStringsTest {
         assertFalse(page.contains("= '+c.debt+' CR."),"the totals line says League debt, not bare debt")
     }
 
+    @Test fun marketSurfaceIsHullAndCreditsOnly() {
+        assertTrue(page.contains(".textContent='Hull '+m.condition+'% / '+g.credits+' CR'"))
+        assertTrue(page.contains("id=\"marketDetail\""))
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
