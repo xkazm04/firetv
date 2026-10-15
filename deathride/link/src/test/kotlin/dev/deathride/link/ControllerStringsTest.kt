@@ -134,6 +134,13 @@ class ControllerStringsTest {
         assertTrue(page.contains("\$('pairMessage').textContent=m.message;\$('pair').hidden=false;"),"any error, known code or not, still shows the sentence")
     }
 
+    @Test fun weaponStateWordFromTheCoreWithAFallback() {
+        assertTrue(page.contains("w.state?(WEAPON_STATE[w.state]||'ready'):w.over?'over'"),"state first, heat fields as the fallback")
+        assertTrue(page.contains("WEAPON_STATE={READY:'ready',HOT:'hot',COOLING:'cooling',OVERHEATED:'over',EMPTY:'over'}"))
+        assertTrue(page.contains("setText('fireLabel',c.ammo<=0||fs?.state==='EMPTY'?'EMPTY':fireWord)"),"an empty weapon says EMPTY on FIRE")
+        assertFalse(page.contains("\$('fireLabel').textContent="),"the label goes through setText so its cache cannot go stale")
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
