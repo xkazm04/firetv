@@ -2144,7 +2144,11 @@
           "revision": 12,
           "changedAt": "2026-10-06",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:28 Searches found no i18n, l10n, termbase or glossary references in core, whose inspected processing path produces annotations rather than translations.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:678c2208c5b0dfc0",
+          "evaluatedRevision": 12
         },
         {
           "subject": "agent-cli-transport",

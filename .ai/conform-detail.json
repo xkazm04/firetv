@@ -639,6 +639,229 @@
       "evaluatedTs": "2026-10-15T02:50:57.526Z",
       "worker": "79a625b6-61c2-482f-a836-c44302b90ddb",
       "techniques": []
+    },
+    "telestrator/pen-core/translation-pipeline-topology": {
+      "context": "pen-core",
+      "subject": "translation-pipeline-topology",
+      "bundle": "localization",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:13:35.245Z",
+      "worker": "220cfc2b-a27c-4641-9e31-66836d079f00",
+      "techniques": [
+        {
+          "technique": "canonical-and-derived-split",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Annotation.kt:99 The serialized artifact is an annotation document; no machine-translated artifact store was identified."
+        },
+        {
+          "technique": "canonical-fallback-serving",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Timeline.kt:10 Content selection is by annotation visibility time, without a translated-unit serving path."
+        },
+        {
+          "technique": "fuzzy-reuse-under-a-threshold",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:32 Stored history consists of editing operations, without translation-memory matching."
+        },
+        {
+          "technique": "hand-authored-exception-contract",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:240 User-provided annotation labels are retained directly; no human-authored exceptions to machine translation were identified."
+        },
+        {
+          "technique": "language-registry-single-source",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:13 The inspected connection contract identifies a pen and PIN, without a translation target or language selection."
+        },
+        {
+          "technique": "non-translatable-value-classification",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:230 This is annotation-label handling, without catalog values being dispatched to a translation engine."
+        },
+        {
+          "technique": "prompt-context-contract",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:98 The engine consumes pen messages and media time; no machine-translation request was identified."
+        },
+        {
+          "technique": "pseudo-localization-readiness",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Smoothing.kt:21 This scoped processing library supplies geometry rather than a product localization-readiness surface."
+        },
+        {
+          "technique": "serialization-transport-safety",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:167 The deserialized payload is a pen message, outside the technique's batch-translation precondition."
+        },
+        {
+          "technique": "sharded-translation-ci",
+          "verdict": "not-applicable",
+          "evidence": "core/build.gradle.kts:20 The inspected build input supports companion contract tests; no corpus translation workload was identified."
+        },
+        {
+          "technique": "source-hash-translation-cache",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:302 Document reuse tracks an annotation instance for heartbeat publication, without cached translations."
+        },
+        {
+          "technique": "source-identical-value-audit",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Annotation.kt:102 The decoded data is an annotation document; no committed target-language catalog was identified."
+        }
+      ]
+    },
+    "telestrator/tv-app/translation-pipeline-topology": {
+      "context": "tv-app",
+      "subject": "translation-pipeline-topology",
+      "bundle": "localization",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:13:35.245Z",
+      "techniques": [
+        {
+          "technique": "canonical-and-derived-split",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/build.gradle.kts:100 The build copies companion assets; no machine-translated output was identified."
+        },
+        {
+          "technique": "canonical-fallback-serving",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/transport/LanTransport.kt:115 The route serves the loaded HTML directly, without selecting translated units."
+        },
+        {
+          "technique": "fuzzy-reuse-under-a-threshold",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/Overlay.kt:227 Reuse concerns stroke geometry keyed by annotation ID, without translation memory."
+        },
+        {
+          "technique": "hand-authored-exception-contract",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/Overlay.kt:184 The overlay draws supplied annotation labels; no hand-authored translated-page exceptions were identified."
+        },
+        {
+          "technique": "language-registry-single-source",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:109 The inspected runtime selection chooses a pen transport; no supported-language switcher or translation matrix was found."
+        },
+        {
+          "technique": "non-translatable-value-classification",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/Qr.kt:17 Pairing content is encoded as a QR code, without dispatching catalog values to a translation engine."
+        },
+        {
+          "technique": "prompt-context-contract",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:107 Received text enters the pen conversation; no machine-translation request was identified."
+        },
+        {
+          "technique": "pseudo-localization-readiness",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/Overlay.kt:26 The inspected rendering path displays annotation data; no localization-readiness undertaking or translated build was identified."
+        },
+        {
+          "technique": "serialization-transport-safety",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/transport/PenTransport.kt:100 This transport carries pen protocol frames, outside the batch machine-translation precondition."
+        },
+        {
+          "technique": "sharded-translation-ci",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/build.gradle.kts:99 The inspected asset-generation task copies bundled files; no translation corpus job was identified."
+        },
+        {
+          "technique": "source-hash-translation-cache",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/Thumbnailer.kt:39 The cache identifies video thumbnails by playback time, without storing translations."
+        },
+        {
+          "technique": "source-identical-value-audit",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/res/values/strings.xml:3 Resource enumeration found only the default values directory, with no target-language catalogs to compare."
+        }
+      ],
+      "withdrawn": {
+        "worker": "220cfc2b-a27c-4641-9e31-66836d079f00",
+        "state": "not-applicable",
+        "at": "2026-10-15T03:14:01.027358+00:00",
+        "reason": "reviewer (sonnet): The anchor LanTransport.kt:79 is the pairingUrl line and does not itself show the absence of a translation pipeline; the serving claim rests on neighbouring lines and the technique anchors are incidental (a Copy task, stroke-cache reuse, label drawing)."
+      }
+    },
+    "desk-subjects/math-buddy/translation-pipeline-topology": {
+      "context": "math-buddy",
+      "subject": "translation-pipeline-topology",
+      "bundle": "localization",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:13:35.245Z",
+      "techniques": [
+        {
+          "technique": "canonical-and-derived-split",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathText.tsx:201 The component consumes supplied text directly; no machine-translated artifact storage was identified."
+        },
+        {
+          "technique": "canonical-fallback-serving",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathText.tsx:174 The fallback preserves raw text after a rendering failure; it does not resolve missing translated units."
+        },
+        {
+          "technique": "fuzzy-reuse-under-a-threshold",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/working.ts:49 Checks validate mathematical working; no translation-memory matches are reused."
+        },
+        {
+          "technique": "hand-authored-exception-contract",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/sheetRows.ts:52 These are inline source captions, without a hand-authored translated-page exception pipeline."
+        },
+        {
+          "technique": "language-registry-single-source",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathsTV.tsx:48 The enumerated choices are screens and lighting modes; no language-offer surface or translation build matrix was identified."
+        },
+        {
+          "technique": "non-translatable-value-classification",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathText.tsx:61 Text nodes are rendered as supplied, without being sent to a translation engine."
+        },
+        {
+          "technique": "prompt-context-contract",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathsTV.tsx:45 The scoped UI receives session state; no machine-translation request construction was identified."
+        },
+        {
+          "technique": "pseudo-localization-readiness",
+          "verdict": "not-applicable",
+          "evidence": "tools/maths-type-test.cjs:6 The inspected tests exercise mathematical typesetting; no translation-readiness work or translated build was identified."
+        },
+        {
+          "technique": "serialization-transport-safety",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/typeset.ts:484 Delimiter handling here parses mathematical notation, without a batch translation wire format."
+        },
+        {
+          "technique": "sharded-translation-ci",
+          "verdict": "not-applicable",
+          "evidence": "tools/tv-sheet-test.cjs:5 The scoped test workload checks sheet behavior; no corpus translation job was identified."
+        },
+        {
+          "technique": "source-hash-translation-cache",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/mathsRows.ts:26 Page selection uses current session homework, without a source-hashed translation store."
+        },
+        {
+          "technique": "source-identical-value-audit",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/mathsRows.ts:121 The inspected captions are inline source text; no target-language catalogs were identified in this context."
+        }
+      ],
+      "withdrawn": {
+        "worker": "220cfc2b-a27c-4641-9e31-66836d079f00",
+        "state": "not-applicable",
+        "at": "2026-10-15T03:14:01.039938+00:00",
+        "reason": "reviewer (sonnet): The anchor MathText.tsx:203 is just the raw-text/try line of a typesetting component and does not show a translation pipeline is absent; the technique anchors (working.ts tick logic, sheetRows.ts English caption) are incidental, and the caption is a hard-coded English string."
+      }
     }
   }
 }
