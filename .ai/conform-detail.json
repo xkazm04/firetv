@@ -583,6 +583,62 @@
           "evidence": "desk/src/app/phone/page.tsx:74 Lines 266 and 271 join all paragraphs and send text: whole with keep: keepIt; lines 697-698 expose keeping and reading the whole piece, contradicting this unqualified comment."
         }
       ]
+    },
+    "desk-surfaces/tv-surface/table": {
+      "context": "tv-surface",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T02:50:57.526Z",
+      "worker": "79a625b6-61c2-482f-a836-c44302b90ddb",
+      "techniques": [
+        {
+          "technique": "clipboard-range-round-trip",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/keys.ts:464 Table mode navigates and opens sentences; searches found no cell-range clipboard implementation."
+        },
+        {
+          "technique": "compressed-scroll-space",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/EssayTV.tsx:472 A six-row focus window is rendered without a dataset-height scroll spacer."
+        },
+        {
+          "technique": "export-escapes-for-its-consumer",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/EssayTV.tsx:497 The table offers sentence navigation; searches found no CSV export path."
+        },
+        {
+          "technique": "filtering",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/EssayTV.tsx:473 The table displays a positional paragraph slice and exposes no filtering controls or predicate."
+        },
+        {
+          "technique": "grid-keyboard-model",
+          "verdict": "deviation",
+          "evidence": "desk/src/essay/EssayTV.tsx:481 Read-only comparative columns use div/span markup instead of native table semantics or an equivalent accessible grid."
+        },
+        {
+          "technique": "one-door-for-range-writes",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/EssayTV.tsx:489 Sentence cells render read-only text; the table has no paste, fill, cut, or clear writer."
+        },
+        {
+          "technique": "performance",
+          "verdict": "deviation",
+          "evidence": "desk/src/essay/EssayTV.tsx:485 Only six rows mount, but Table declares neither semantic total row/column counts nor full-set row/cell positions required for windowed tables."
+        }
+      ]
+    },
+    "desk-surfaces/landing/table": {
+      "context": "landing",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T02:50:57.526Z",
+      "worker": "79a625b6-61c2-482f-a836-c44302b90ddb",
+      "techniques": []
     }
   }
 }

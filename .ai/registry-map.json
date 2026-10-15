@@ -1137,7 +1137,11 @@
           "revision": 14,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/landing/themes/paper/Paper.tsx:154 Context and repository searches located the landing's app shelf and captions, with no landing hits for the listed table terms, and its app-selection objects do not compare records across uniform columns.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:c587a204413d5373",
+          "evaluatedRevision": 14
         },
         {
           "subject": "quality-gates",
@@ -1287,7 +1291,11 @@
           "revision": 14,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/essay/EssayTV.tsx:481 The TV's paragraph comparison table renders visual column headers without table or grid semantics, leaving header associations unavailable to assistive technology.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:c587a204413d5373",
+          "evaluatedRevision": 14
         },
         {
           "subject": "prompt-assembly",
