@@ -296,3 +296,17 @@ test('MB-B20 the reverse, the two changes and the years on percent change: value
   assert.doesNotMatch(st.text,/\b(?:one|two|three|four|five|six|seven|eight|nine|ten|half|quarter|third|once|twice)\b|\d/i,id);
  }
 });
+
+test('MB-B20 the fixed sentence after a second leak: a reverse percentage and a change in turns get their own (never the forward method), a rounded side the unit\'s; none leaks',()=>{
+ const words=(s)=>s.trim().split(/\s+/).length;
+ assert.deepEqual(Object.keys(S.TOP_WITHHELD).sort(),['pct-before','pct-steps']);
+ for(const line of Object.values(S.TOP_WITHHELD)){assert.ok(words(line)<=25,line);assert.doesNotMatch(line,/\d/,line);assert.match(line,/The answer is yours to work out\.$/);}
+ for(let seed=0;seed<SEEDS;seed++){
+  const p=S.genPercentTop(seed),h=pctByHand(p.expr),line=S.withheldSchool(p);
+  assert.equal(line,S.TOP_WITHHELD[h.form==='before'?'pct-before':'pct-steps'],p.expr);
+  assert.equal(S.leaksSchool(p,line),false,`${p.expr}: ${line}`);
+  const y=S.genPythagorasTop(seed);
+  assert.equal(S.withheldSchool(y),S.SCHOOL_WITHHELD.pythagoras);assert.equal(S.leaksSchool(y,S.SCHOOL_WITHHELD.pythagoras),false,y.expr);
+ }
+ assert.equal(S.withheldSchool({shape:'percent-change',expr:'increase 60 by 15%'}),S.SCHOOL_WITHHELD['pct-change'],'a tier-1/2 change keeps the unit\'s line');
+});

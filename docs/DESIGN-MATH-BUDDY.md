@@ -295,7 +295,11 @@ constant in it."); only a plain disagreement asks "I got something different for
   step in the pen-dark hand. A hint on a Calculus page is written in a first-year Calculus I stance when the learner
   is on the calc1 path. It is checked against the task's own answer whenever the task reads into a Calculus spec.
   When it gives the answer away twice, the card shows the shape's fixed sentence instead, for example "Find the
-  derivative as a function first, then put the point in. The value is yours to work out." On the calc1 path there
+  derivative as a function first, then put the point in. The value is yours to work out." A top-rung percent change
+  (MB-B20) has its own, since the unit's teaches the forward change: "The amount given already includes the change, so
+  divide back to the original. The answer is yours to work out." for the amount before a change, and "Apply each change
+  in turn to the amount you have now, not to the starting amount. The answer is yours to work out." for two changes or
+  the years (`TOP_WITHHELD`). On the calc1 path there
   is no lesson to show, so the lesson pill says "No lesson for this". On the sheet and walk: THE DESK SAYS / THE
   DESK REPLIED over the desk's line (`maths-said`) and "Look at ..." from the rulebook. `maths-hint`.
 - **Slip name** - Fraunces 54 with its last word in amber italic. `maths-slip`.

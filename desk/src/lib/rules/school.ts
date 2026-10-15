@@ -4030,8 +4030,25 @@ export const SCHOOL_WITHHELD = {
   "probability": "Probability is the counters you want divided by all the counters in the bag. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
 } as const;
-/** The withheld line for a school spec, chosen by its unit; the general line for any other. */
+/**
+ * MB-B20: the fixed sentence for a top-rung percent change, by its kind, in the same rules (one per kind, 25 words or fewer,
+ * no digit, no number word). The unit's own line teaches the forward change, which is the very slip of a reverse percentage
+ * (taking the percent off the new amount), so the rung says how to work back; two changes and the years say to apply each
+ * change to the amount there is now. A top-rung Pythagoras item keeps the unit's line.
+ */
+export const TOP_WITHHELD = {
+  "pct-before": "The amount given already includes the change, so divide back to the original. The answer is yours to work out.",
+  "pct-steps": "Apply each change in turn to the amount you have now, not to the starting amount. The answer is yours to work out.",
+} as const;
+
+/** The withheld line for a school spec, chosen by its unit (a top-rung percent change by its kind); the general line for any other. */
 export function withheldSchool(spec: unknown): string {
+  try {
+    const r = read(spec);
+    if (r.ok && r.kind.k === "pct-top") return TOP_WITHHELD[r.kind.form === "before" ? "pct-before" : "pct-steps"];
+  } catch {
+    // a spec the desk cannot read gets the line its unit (or none) gives, below
+  }
   const u = unitOf(spec);
   return u && Object.prototype.hasOwnProperty.call(SCHOOL_WITHHELD, u) ? SCHOOL_WITHHELD[u as keyof typeof SCHOOL_WITHHELD] : SCHOOL_WITHHELD.any;
 }
