@@ -408,6 +408,115 @@ const SWEEP={...HOMES,
  cert:fixture('linga-cert',{placement:placed(),certificates:[CERT_OLD,CERT_NEW],seenIds:[CERT_OLD.id,CERT_NEW.id]}),
  certs:fixture('linga-certs',{placement:placed(),certificates:[CERT_OLD,CERT_NEW],seenIds:[CERT_OLD.id,CERT_NEW.id]}),
 };
+// ---- S2: conversations start at the band the learner spoke; the placement's band and the staircase stay as they are ----
+const LT_RUN=path.resolve(__dirname,'../uat/runs/2026-10-14-lt');
+/**
+ * The ten stored LT placements. Their tasks were stored before the judge's readings were kept, so each say task's
+ * `answered` and `english` are RECONSTRUCTED here from its verdict and band, as P23 proposed: a pass reads as English
+ * at the task's band, a partial as one band below, a fail as two below, all answered "yes". It is the lowest English
+ * each verdict allows, and the test checks that verdictFor gives the stored verdict back from it. Listen and choose
+ * tasks are left without readings: they never count as production.
+ */
+function ltPlacements(){
+ const find=o=>{if(!o||typeof o!=='object')return null;if(Array.isArray(o.tasks)&&o.band&&o.source)return o;for(const v of Object.values(o)){const r=find(v);if(r)return r;}return null;};
+ const back={pass:0,partial:-1,fail:-2};
+ return fs.readdirSync(LT_RUN).filter(f=>f.endsWith('.json')&&!['findings.json','run.json'].includes(f)).map(f=>{
+  const p=find(JSON.parse(fs.readFileSync(path.join(LT_RUN,f),'utf8')));assert(p,f+' holds a placement');
+  const tasks=p.tasks.map(t=>{
+   if(t.kind!=='say'||t.skipped||t.english!==undefined)return t;
+   const r={...t,answered:'yes',english:P.shift(t.band,back[t.verdict])};
+   assert.equal(P.verdictFor(r,r.answered,r.english),t.verdict,f+': the reconstruction gives the stored verdict back');
+   return r;
+  });
+  // the run's facts keep the placement's band, source and tasks (no dates or ids), which is all the S2 rule reads
+  return {who:f.split('-')[0],placement:{band:p.band,source:p.source,tasks}};
+ });
+}
+test('S2: the ten stored LT placements - Lukas spoke B2 under a C1 read, Petra A2, Jana and Tomas unchanged',()=>{
+ const rows=ltPlacements().map(({who,placement})=>({who,placed:placement.band,spoke:P.spokenBand(placement.tasks),start:P.conversationBand(placement)}));
+ console.log('S2 per-Character result (english reconstructed from verdict + task band):\n'+rows.map(r=>`  ${r.who.padEnd(7)} placed ${r.placed}  spoke ${r.spoke??'none'}  conversations start ${r.start}${r.start!==r.placed?'  (lowered)':''}`).join('\n'));
+ const want={adela:['C1','C1','C1'],jana:['C2','C2','C2'],klara:['B1','B1','B1'],lukas:['C1','B2','B2'],martin:['B2','B2','B2'],oksana:['B2','B2','B2'],ondrej:['B2','B2','B2'],petra:['B1','A2','A2'],tomas:['A1',null,'A1'],viktor:['A2','A2','A2']};
+ assert.equal(rows.length,10);
+ for(const r of rows)assert.deepEqual([r.placed,r.spoke,r.start],want[r.who],r.who);
+ // the placement's own band is the staircase's, untouched: Lukas is still placed C1
+ const lukas=ltPlacements().find(x=>x.who==='lukas').placement;assert.equal(lukas.band,'C1');assert.equal(P.playBand(lukas,'C1'),'C1','his own pick of the read still wins');assert.equal(P.playBand(lukas,'A1'),'B2');
+});
+test('S2: spokenBand reads answered say tasks only, at their highest; conversationBand lowers at most one band, only when asked to speak at the level',()=>{
+ const say=(band,english,patch={})=>({band,kind:'say',answered:'yes',english,...patch});
+ assert.equal(P.spokenBand([]),null);
+ assert.equal(P.spokenBand([{band:'B1',kind:'listen',answered:'yes',english:'B1'},{band:'A2',kind:'choose'}]),null,'listening and choosing are not production');
+ assert.equal(P.spokenBand([say('B1','A2',{skipped:true}),say('B1','B1',{answered:'no'}),say('B1','none')]),null,'a skip, an off-task answer and no English give no band');
+ assert.equal(P.spokenBand([{band:'B1',kind:'say',verdict:'partial'}]),null,'a task stored before the readings were kept counts for nothing');
+ assert.equal(P.spokenBand([say('B2','A2'),say('B1','B1',{answered:'partly'}),say('B2','A2')]),'B1','the highest band spoken');
+ const placed=(band,tasks,source='check')=>({band,source,tasks});
+ assert.equal(P.conversationBand(placed('B1',[say('B1','A1')])),'A2','never more than one band below the read');
+ assert.equal(P.conversationBand(placed('B1',[say('A2','A2')])),'B1','an easier say task cannot show the higher band: no change');
+ assert.equal(P.conversationBand(placed('B1',[say('B1','A2')],'self')),'B1','a band picked by hand is kept as picked');
+ assert.equal(P.conversationBand(placed('B1',[say('B2','C1')])),'B1','spoken higher never lifts the start');
+ // the cleaner keeps the readings, tolerates their absence, and drops a malformed one without dropping the task
+ const task={id:'t',band:'B1',kind:'say',prompt:'p',line:'',options:[],response:'I went there.',mode:'speech',verdict:'partial',quote:'I went there.',note:'n',at:1};
+ const kept=P.cleanPlacement({at:1,band:'B1',selfBand:null,confidence:'low',source:'check',summary:'s',focus:'f',tasks:[{...task,answered:'partly',english:'A2'},task,{...task,id:'u',answered:'maybe',english:'Z9'},{...task,id:'v',english:'none'}]});
+ assert.equal(kept.tasks.length,4);
+ assert.equal(kept.tasks[0].answered,'partly');assert.equal(kept.tasks[0].english,'A2');
+ assert.equal('english' in kept.tasks[1],false);assert.equal('answered' in kept.tasks[2],false);assert.equal('english' in kept.tasks[2],false);assert.equal(kept.tasks[3].english,'none');
+});
+test('S2: a check that heard A2 under a B1 read keeps B1, starts conversations and topics at A2, and a Set up save keeps it the check\'s',async()=>{
+ fresh();const plans=[];
+ answer=wrap(req=>{const p=JSON.parse(req.prompt);
+  if(p.step==='judge')return {answered:'yes',english:p.kind==='say'?'A2':p.band,quote:p.response.slice(0,10),note:'A clear answer.'};
+  if(p.step==='plan')plans.push(p);
+  return checkAnswer(req);});
+ await command('check-start');await answerAbout(3);
+ for(let guard=0;getSession().check.stage==='tasks';guard++){
+  assert(guard<P.MAX_TASKS);const k=getSession().check,t=k.task;
+  if(t.kind==='choose')await command('check-task',{checkId:k.id,taskId:t.id,option:t.options.indexOf(RIGHT)});
+  else await command('check-task',{checkId:k.id,taskId:t.id,text:'I think it was on the bus this morning.',mode:'speech'});
+ }
+ let l=getLearner('ema').english;
+ assert.equal(l.placement.band,'B1','the check\'s read is unchanged');assert.equal(l.placement.source,'check');
+ assert.equal(l.preferences.level,'A2','conversations start at the band spoken');
+ const says=l.placement.tasks.filter(t=>t.kind==='say');assert(says.length>=2&&says.some(t=>['B1','B2','C1','C2'].includes(t.band)));
+ assert(says.every(t=>t.answered==='yes'&&t.english==='A2'),'each say task keeps the judge\'s readings');
+ assert(l.placement.tasks.filter(t=>t.kind==='choose').every(t=>!('english' in t)),'a choice has no judge reading');
+ // the verdict on the TV: both bands in the picture, the start band in the caption
+ const v=view().lingaView(getSession());
+ assert.equal(getSession().screen,'linga-verdict');assert.equal(v.hero.kind,'ladder');assert.equal(v.hero.band,'B1');assert.equal(v.hero.spoke,'A2');
+ assert.match(v.hero.kicker,/^Understood B1 · spoke A2/);assert.equal(v.caption,'Conversations start at A2, where your spoken answers were.');
+ // Set up saved after the split check, at either band: still the check's
+ await command('preferences',{preferences:{...l.preferences,level:'A2'},notes:[]});
+ l=getLearner('ema').english;assert.equal(l.placement.source,'check');assert.equal(l.placement.band,'B1');assert.equal(l.preferences.level,'A2');
+ await command('plan-propose');assert.equal(plans.at(-1).band,'A2','the topic plan is pitched at the band spoken');assert.match(plans.at(-1).bandGuide,/^A2:/);
+ await command('check-leave',{checkId:getSession().check.id});
+ await command('preferences',{preferences:{...l.preferences,level:'B1'},notes:[]});
+ l=getLearner('ema').english;assert.equal(l.placement.source,'check','the read itself is the check\'s too');assert.equal(l.preferences.level,'B1');
+ // the conversation plays at the preference: the tutor's pitch and the moment rate follow it
+ const seen=[];answer=async req=>{seen.push(req);return {json:{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'},provider:'test',ms:1};};
+ await command('preferences',{preferences:{...l.preferences,level:'A2'},notes:[]});
+ await command('start',{sceneId:'booking',replace:true});
+ assert.match(seen.at(-1).system,/Level: A2 on the CEFR scale/);assert.equal(getSession().conversation.preferences.level,'A2');
+ assert.equal(JSON.parse(seen.at(-1).prompt).levelCheck.band,'B1');assert.equal(JSON.parse(seen.at(-1).prompt).levelCheck.spokenAnswersAt,'A2');
+ // any other band by hand is the learner's own pick, as before
+ await command('preferences',{preferences:{...l.preferences,level:'B2'},notes:[]});
+ l=getLearner('ema').english;assert.equal(l.placement.source,'self');assert.equal(l.placement.band,'B2');
+});
+test('S2 view: the verdict shows the read and the band spoken when they differ, and only the read when they agree',()=>{
+ const V=view(),say=(band,english,mode='speech')=>({id:'s'+band+english,band,kind:'say',prompt:'p',line:'',options:[],response:'I like it.',mode,verdict:'partial',quote:'I like it.',note:'n',at:1,answered:'yes',english});
+ const split={...placed('B1'),tasks:[say('B1','A2')]};
+ let v=V.lingaView(sessionOf(fixture('linga-verdict',{placement:split,check:checkOf({stage:'verdict',turns:[],placement:split})})));
+ assert.equal(v.hero.spoke,'A2');assert.equal(v.hero.band,'B1');assert.equal(v.title,'B1 · Getting by');
+ assert.match(v.hero.kicker,/Understood B1 · spoke A2/);
+ assert.equal(v.caption,'Conversations start at A2, where your spoken answers were.');
+ assert(!/\d/.test(v.caption.replace(/\b[ABC][12]\b/g,'')),'no figure but band names');
+ assert.match(V.viewText(v),/marker on B1, second mark on A2/);
+ const clamped={...placed('B1'),tasks:[say('B1','A1')]};
+ v=V.lingaView(sessionOf(fixture('linga-verdict',{placement:clamped})));assert.equal(v.hero.spoke,'A1');assert.equal(v.caption,'Conversations start at A2, one step below the level you understood.');
+ const typed={...placed('B1'),tasks:[say('B1','A2','text')]};
+ v=V.lingaView(sessionOf(fixture('linga-verdict',{placement:typed})));assert.match(v.hero.kicker,/wrote A2/);assert.match(v.caption,/written answers/);
+ const agree={...placed('B1'),tasks:[say('B1','B1')]};
+ v=V.lingaView(sessionOf(fixture('linga-verdict',{placement:agree})));assert.equal('spoke' in v.hero,false);assert.equal(v.hero.kicker,"Linga's read · not a certificate");
+ const self={...split,source:'self'};
+ v=V.lingaView(sessionOf(fixture('linga-verdict',{placement:self})));assert.equal('spoke' in v.hero,false);
+});
 const offeredBy=v=>[...v.actions,...v.footer,...v.phone];
 
 test('view case 1: home decides six named states, the TV actions follow them, and the phone StartPanel renders all six',()=>{

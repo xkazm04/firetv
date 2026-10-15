@@ -101,7 +101,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       {/* the card and the steps share one column: a longer sentence lowers the steps instead of covering them */}
       <div className="lo-stage">
         {h.note&&<SentenceCard className={`lo-note-card${h.note.length>110?" lo-wide":""}`} label="Linga says" text={h.note} role="linga-note"/>}
-        <BandSteps band={h.band}/>
+        <BandSteps band={h.band} spoke={h.spoke}/>
       </div>
       {nav}
     </>}

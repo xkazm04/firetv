@@ -11,7 +11,7 @@ import type { Screen, Session } from "../session/store";
 import { checkAccepts, checkAt, isCheckCommand, ownerOf } from "./activity";
 import { certGap, dayMonth, plateOf, recommendFor, shownSkills, unseenCertificate } from "./cert";
 import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL } from "./curriculum";
-import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, easyBand, isBand, MAX_TASKS, PLAN_MAX, restsLine, shift } from "./placement";
+import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, conversationBand, easyBand, isBand, MAX_TASKS, PLAN_MAX, playBand, restsLine, shift, spokenBand, spokenTasks } from "./placement";
 import { currentStep, missionDone } from "./mission";
 import { isPitchId } from "./pitch";
 import { NOTE_LABEL } from "./notes";
@@ -96,7 +96,8 @@ export interface Spoken { line: string; key: string; blocked: boolean; slow: boo
 export interface Recap { title: string; replies: number; spoken: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
 export type Hero =
   | { kind: "intro"; kicker: string; title: string; subtitle: string; art: ArtKey; nameTag: string }
-  | { kind: "ladder"; kicker: string; title: string; band: Band; note: string }
+  /** `spoke`: a second mark, the band the learner's say answers showed, when conversations start below `band` (S2) */
+  | { kind: "ladder"; kicker: string; title: string; band: Band; note: string; spoke?: Band }
   | { kind: "message"; kicker: string; text: string; note: string }
   | { kind: "heading"; kicker: string; title: string }
   | { kind: "choices"; kicker: string; prompt: string; options: string[]; small: boolean }
@@ -241,7 +242,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   const ui: LingaUi = { ...NO_UI, ...Object.fromEntries(Object.entries(input).filter(([k, v]) => k in NO_UI && v !== undefined)) };
   const { menu, picking, sceneIndex, chapter } = ui;
   const p = s.profiles.find(p => p.id === s.learner?.id), l = s.englishLearning, prefs = l.preferences ?? defaultPreferences(p);
-  const level: Band = l.placement?.band ?? (isBand(prefs.level) ? prefs.level : "A1");
+  // the band Linga plays at: the placement's, or the lower band the learner spoke at (S2)
+  const level: Band = playBand(l.placement, isBand(prefs.level) ? prefs.level : "A1");
   const scenes = eligibleScenes(p, prefs, l), recommended = recommendFor(p, l), c = s.conversation;
   const lc = activeCheck(s), placement = lc?.placement ?? l.placement;
   const isHome = s.screen === "linga" || s.screen === "tonight", onCheck = CHECK_SCREENS.includes(s.screen);
@@ -352,9 +354,13 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     }
   } else if (s.screen === "linga-verdict" && placement) {
     const b = placement.band, self = placement.source === "self";
+    // S2: when the say answers showed a lower band, conversations start there. The picture carries both bands (the
+    // kicker names them, the ladder marks them); the caption names the band conversations start at. No other figure.
+    const start = conversationBand(placement), spoke = start !== b ? spokenBand(placement.tasks) : null;
+    const said = spoke && spokenTasks(placement.tasks).every(t => t.mode === "text") ? "wrote" : "spoke";
     tag = "Your level"; title = `${b} · ${BAND_NAME[b]}`;
-    hero = { kind: "ladder", kicker: self ? "Self-chosen" : "Linga's read · not a certificate", title, band: b, note: placement.summary || BAND_CAN[b] };
-    caption = self ? "This is the level you picked." : "See the conversations Linga picks for this level, or find your level again."; captionTag = self ? "Your pick" : "What next";
+    hero = { kind: "ladder", kicker: self ? "Self-chosen" : spoke ? `Understood ${b} · ${said} ${spoke} · not a certificate` : "Linga's read · not a certificate", title, band: b, note: placement.summary || BAND_CAN[b], ...(spoke ? { spoke } : {}) };
+    caption = self ? "This is the level you picked." : spoke ? `Conversations start at ${start}, ${start === spoke ? `where your ${said === "wrote" ? "written" : "spoken"} answers were` : "one step below the level you understood"}.` : "See the conversations Linga picks for this level, or find your level again."; captionTag = self ? "Your pick" : "What next";
     actions = [act("see-topics", "See my topics", "Linga picks conversations for this level. Swap any you don't want.", cmd(l.plan && lc?.stage !== "verdict" ? "plan-open" : "plan-propose")), act("check-again", self ? "Find my level with Linga" : "Find my level again", "Three questions and a few short tasks, about seven minutes.", cmd("check-start")), act("pick-level", "Pick it myself", "Choose a level from A1 to C2 yourself.", pickAt(b))];
     if (placement.focus && !self) details.push(`On the phone, next to practise: ${placement.focus}`);
     if (!self) details.push(`On the phone: ${restsLine(placement.confidence, placement.tasks)}`);
@@ -658,7 +664,7 @@ export function viewText(v: LingaView): string {
   const said = (text: string, who: string) => text === spoken ? `${who} says (spoken on the TV, written on the phone): "${text}"` : `On screen: "${text}"`;
   switch (h.kind) {
     case "intro": out.push(`${h.kicker}${h.subtitle ? ` · ${h.subtitle}` : ""}`); break;
-    case "ladder": out.push(h.kicker, `Ladder A1 A2 B1 B2 C1 C2, marker on ${h.band}.`, ...(h.note ? [`Linga says: ${h.note}`] : [])); break;
+    case "ladder": out.push(h.kicker, `Ladder A1 A2 B1 B2 C1 C2, marker on ${h.band}${h.spoke ? `, second mark on ${h.spoke}` : ""}.`, ...(h.note ? [`Linga says: ${h.note}`] : [])); break;
     case "message": out.push(h.kicker, ...(h.text ? [said(h.text, v.spoken.speaker)] : []), ...(h.note ? [`The words, now shown: ${h.note}`] : [])); break;
     case "heading": out.push(h.kicker, h.title); break;
     case "choices": out.push(h.kicker, h.prompt, ...h.options.map((x, i) => `  option ${i}: ${x}`)); break;

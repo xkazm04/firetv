@@ -583,6 +583,8 @@
   transform: translate(-50%, -50%);
 }
 .linga-tv .lo-flag { position: absolute; left: 24px; top: -96px; width: 60px; height: 90px; }
+/* S2: the band the learner spoke at, when it is below the read: the same flag, hollow, and its step outlined */
+.linga-tv .lo-step[data-spoke="true"] { box-shadow: inset 0 0 0 5px var(--lo-amber); }
 .linga-tv[data-layout="ladder"] .lo-actions { position: absolute; left: 110px; right: 110px; bottom: 139px; z-index: 3; width: auto; flex-direction: row; gap: 15px; margin: 0; }
 .linga-tv[data-layout="ladder"] .lo-action { flex: 1; min-width: 0; }
 .linga-tv[data-layout="ladder"] .lo-action[data-focused="true"] { transform: translateY(-6px); }

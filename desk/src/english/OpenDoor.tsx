@@ -66,11 +66,13 @@ export function SentenceCard({ label, text, role = "linga-sentence", className =
 export function DataLine({ children }: { children: ReactNode }) { return <div className="lo-data">{children}</div>; }
 
 /** The level as a picture: six steps rising from A1 to C2, the learner's step lit and flagged. */
-export function BandSteps({ band }: { band: Band }) {
-  const here = BANDS.indexOf(band);
-  return <div className="lo-steps linga-ladder" data-role="linga-steps" data-here-at={here}>
-    {BANDS.map((b, i) => <div key={b} className="lo-step" data-reached={i <= here} data-here={i === here} style={{ height: `calc(130px + (100% - 130px) * ${i} / 5)` }}>
+export function BandSteps({ band, spoke }: { band: Band; spoke?: Band }) {
+  const here = BANDS.indexOf(band), said = spoke ? BANDS.indexOf(spoke) : -1;
+  // S2: a second, hollow flag on the band the learner's say answers showed, when conversations start below the read
+  return <div className="lo-steps linga-ladder" data-role="linga-steps" data-here-at={here} data-spoke-at={said >= 0 ? said : undefined}>
+    {BANDS.map((b, i) => <div key={b} className="lo-step" data-reached={i <= here} data-here={i === here} data-spoke={i === said || undefined} style={{ height: `calc(130px + (100% - 130px) * ${i} / 5)` }}>
       {i === here && <svg className="lo-flag" viewBox="0 0 60 90" aria-hidden="true" focusable="false"><path d="M10 88V6" stroke="#5d3548" strokeWidth="7" strokeLinecap="round"/><path d="M13 8l42 15-42 15Z" fill="#b65e61"/></svg>}
+      {i === said && i !== here && <svg className="lo-flag lo-flag-spoke" data-role="linga-spoke-mark" viewBox="0 0 60 90" aria-hidden="true" focusable="false"><path d="M10 88V6" stroke="#5d3548" strokeWidth="7" strokeLinecap="round"/><path d="M13 8l42 15-42 15Z" fill="none" stroke="#b65e61" strokeWidth="5" strokeLinejoin="round"/></svg>}
       <b>{b}</b><small>{BAND_NAME[b]}</small>
     </div>)}
   </div>;

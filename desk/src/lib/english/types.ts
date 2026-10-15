@@ -34,6 +34,13 @@ export interface PlacementTask {
   response: string; mode: EvidenceMode; verdict: TaskVerdict; quote: string; note: string; at: number;
   /** the learner passed on it: no evidence either way (the verdict stays "fail" for readers older than the flag) */
   skipped?: boolean;
+  /**
+   * The judge's two readings of a judged (say or listen) task, kept as it gave them: whether the task was done, and
+   * the band the English itself showed. Absent on a choice, a skip, and every task stored before they were kept.
+   * Code reads them (placement.ts spokenBand); no screen shows them on their own.
+   */
+  answered?: "yes" | "partly" | "no";
+  english?: Band | "none";
 }
 export interface Placement {
   at: number; band: Band; selfBand: Band | null;

@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { Event, Session } from "@/lib/session/store";
 import { certWords, monthOf, recommendFor } from "@/lib/english/cert";
 import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL } from "@/lib/english/curriculum";
-import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, restsLine, TOPIC_ASK_MAX } from "@/lib/english/placement";
+import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, conversationBand, isBand, MAX_TASKS, PLAN_MAX, restsLine, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement, type Take } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
 import { isPitchId, PITCH_MAX } from "@/lib/english/pitch";
@@ -46,7 +46,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
     {panel==="settings"&&<>
       <p>Choose what feels useful. English level, imagination and social challenge are separate.</p>
       <label>Your level<select value={isBand(prefs.level)?prefs.level:"A1"} onChange={e=>setPrefs({...prefs,level:e.target.value as Band})}>{BANDS.map(b=><option key={b} value={b}>{b} · {BAND_NAME[b]}</option>)}</select></label>
-      <p className="linga-note">{learning.placement?.source==="check"?`Linga found ${learning.placement.band}. Changing it here makes it your own pick.`:"Not sure? Find your level with Linga from the Talk tab."}</p>
+      <p className="linga-note">{learning.placement?.source==="check"?(conversationBand(learning.placement)!==learning.placement.band?`Linga found ${learning.placement.band}; conversations start at ${conversationBand(learning.placement)}, nearer how you spoke. Either is still Linga's; another level makes it your own pick.`:`Linga found ${learning.placement.band}. Changing it here makes it your own pick.`):"Not sure? Find your level with Linga from the Talk tab."}</p>
       <label>Interests<input value={prefs.interest} maxLength={160} placeholder="Games, music, travel, making things…" onChange={e=>setPrefs({...prefs,interest:e.target.value})}/></label>
       <label>What would you like to practise?<input value={prefs.goal} maxLength={160} placeholder="An interview, meeting people, school…" onChange={e=>setPrefs({...prefs,goal:e.target.value})}/></label>
       <label>Creativity<select value={prefs.creativity} onChange={e=>setPrefs({...prefs,creativity:e.target.value as EnglishPreferences["creativity"]})}><option value="familiar">Familiar situations</option><option value="playful">Playful details</option><option value="surprising">A harmless surprise</option></select></label>

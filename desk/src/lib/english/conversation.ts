@@ -15,7 +15,7 @@ import { adultContent, isAdult } from "../rules/mode";
 import { ConversationError, lingaLine } from "./errors";
 import { EngineError } from "../engines/types";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
-import { appendPlacement, BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } from "./placement";
+import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, spokenBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, markReused, offer, reuseOf, reviewOf, shownLines, usedLine } from "./review";
 import { copiesShown } from "./credit";
@@ -102,9 +102,10 @@ function context(c:Conversation,invite=true){
   const recent=learning.evidence.filter(e=>e.skill===c.focusSkill&&e.mode!=="choice").slice(-4);
   const struggles=recent.filter(e=>!e.success).length,independent=recent.filter(e=>e.success&&!e.supported).length;
   const adaptation=struggles>=2?"Use a shorter question and a concrete example. Offer a phrase starter if needed, setting supportProvided=true. Stay in the scene.":independent>=3?"Ask a less predictable follow-up within the learner's chosen level and social challenge. Avoid another copy of a question they already answered.":"Keep one manageable question per turn. Respond to the learner's need before adding difficulty.";
+  // a check that found the spoken English lower says so beside its band (S2), so the level the tutor pitches at agrees with it
   const placement=learning.placement;
   const step=c.mission&&currentStep(c.mission);
-  return {scene:sceneInput(c),...(step?{currentStep:step}:{}),preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18),...(bring?{bringBack:bring}:{}),...(c.moments?.length?{taughtThisScene:c.moments.map(m=>({said:m.said,better:m.better}))}:{})};
+  return {scene:sceneInput(c),...(step?{currentStep:step}:{}),preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",...(conversationBand(placement)!==placement.band?{spokenAnswersAt:spokenBand(placement.tasks)}:{}),practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18),...(bring?{bringBack:bring}:{}),...(c.moments?.length?{taughtThisScene:c.moments.map(m=>({said:m.said,better:m.better}))}:{})};
 }
 const beginner=(c:Conversation)=>easyBand(isBand(c.preferences.level)?c.preferences.level:"A1");
 /**
@@ -193,8 +194,9 @@ export async function englishCommand(raw:unknown){
     let preferences;try{preferences=parsePreferences(input.preferences);}catch(e){throw new ConversationError((e as Error).message);}
     if(profile.age!==undefined&&profile.age<18||profile.type!=="other"&&profile.age===undefined)preferences.adultConfirmed=false;
     if(!Array.isArray(input.notes)||input.notes.length>8||input.notes.some(n=>typeof n!=="string"||n.length>240))throw new ConversationError("Use up to eight short teaching notes, 240 characters each.");
-    // A band set by hand is the learner's own call, and says so.
-    const placement=learning.placement&&learning.placement.band!==preferences.level?{...learning.placement,band:preferences.level,source:"self" as const,confidence:"low" as const,summary:"",at:Date.now()}:learning.placement;
+    // A band set by hand is the learner's own call, and says so. Either band a check gives (its read, or the band
+    // conversations start at, S2) is the check's still: saving Set up after a split check is not a pick by hand.
+    const placement=learning.placement&&!isPlacementBand(learning.placement,preferences.level)?{...learning.placement,band:preferences.level,source:"self" as const,confidence:"low" as const,summary:"",at:Date.now()}:learning.placement;
     // a changed band is a hand-picked one: appended to the record of checks as "self" (W10), which never certifies
     const placements=placement&&placement!==learning.placement?appendPlacement(learning.placements,placement):learning.placements;
     saveEnglish(learnerId,{...learning,preferences,placement,placements,notes:input.notes.map((n:string)=>n.trim()).filter(Boolean)});

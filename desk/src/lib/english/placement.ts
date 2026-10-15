@@ -132,6 +132,47 @@ export function staircase(start: Band, marks: Mark[]): { done: boolean; next: Ba
 }
 
 /**
+ * The band the learner's own English was judged at when they spoke (S2): the HIGHEST band the judge read in the
+ * English of a say task they answered (answered "yes" or "partly", not skipped, English a band, not "none").
+ * Listening and choosing show understanding, not production, so they never count; a say task answered in another
+ * language or off-task gives no band either. null when no say task counts: a shy or choose-only learner has no
+ * spoken band, and nothing follows from one. The highest, not the median or the lowest, on purpose: a learner is
+ * never pitched below the best English they produced. A say answer typed on the phone counts as the say task it is.
+ * Pure; a task stored before the judge's band was kept has no `english`, and counts for nothing.
+ */
+export function spokenBand(tasks: Array<Pick<PlacementTask, "band" | "kind" | "skipped" | "answered" | "english">>): Band | null {
+  const said = spokenTasks(tasks);
+  return said.length ? BANDS[Math.max(...said.map(t => BANDS.indexOf(t.english as Band)))] : null;
+}
+/** The say tasks spokenBand reads: answered, not skipped, with a band for their English. */
+export const spokenTasks = <T extends Pick<PlacementTask, "kind" | "skipped" | "answered" | "english">>(tasks: T[]) =>
+  tasks.filter(t => t.kind === "say" && !t.skipped && (t.answered === "yes" || t.answered === "partly") && isBand(t.english));
+
+/**
+ * The band conversations start at after a placement (S2). The placement's own band, unless a level check found the
+ * learner's spoken English lower: then the spoken band, never more than one band below the placement. It lowers only
+ * when the learner was asked to speak at the placed band or above and spoke below it (a say task that counts for
+ * spokenBand, set at that band or higher), since an easier say task cannot show the higher band. The placement's band
+ * and the staircase are never changed by it; a band the learner picked by hand (source "self") is kept as picked.
+ */
+export function conversationBand(p: Pick<Placement, "band" | "source" | "tasks">): Band {
+  if (p.source !== "check") return p.band;
+  const spoke = spokenBand(p.tasks), at = BANDS.indexOf(p.band);
+  if (!spoke || BANDS.indexOf(spoke) >= at || !spokenTasks(p.tasks).some(t => BANDS.indexOf(t.band) >= at)) return p.band;
+  return BANDS[Math.max(BANDS.indexOf(spoke), at - 1)];
+}
+/** A level in Set up that is one of the placement's bands (its own, or the band conversations start at) keeps the placement as it is. */
+export const isPlacementBand = (p: Pick<Placement, "band" | "source" | "tasks">, level: Band) => level === p.band || level === conversationBand(p);
+/**
+ * The band a plan is pitched at: the learner's level preference when it is one of the placement's bands, else the
+ * band conversations start at. (A level picked in Set up that is neither already made the placement the learner's own
+ * pick, conversation.ts, so this falls back only for a preference older than the placement.) No placement: the preference.
+ */
+export function playBand(p: Pick<Placement, "band" | "source" | "tasks"> | null | undefined, level: Band): Band {
+  return !p ? level : isPlacementBand(p, level) ? level : conversationBand(p);
+}
+
+/**
  * The verdict screen's one line on what a not-high read rests on (PC5): plain words, at most sixteen, no number but a
  * band name. High keeps its own line. Pure: the tasks decide, so a placement stored under older rules reads from
  * what it holds.
@@ -163,13 +204,17 @@ const SKILLS: SkillId[] = ["contact", "repair", "request", "describe", "narrate"
 const KINDS: TaskKind[] = ["say", "listen", "choose"];
 const VERDICTS: TaskVerdict[] = ["pass", "partial", "fail"];
 const MODES: EvidenceMode[] = ["speech", "text", "choice"];
+const ANSWERS = ["yes", "partly", "no"] as const;
 
 function cleanTask(value: unknown): PlacementTask | null {
   const t = obj(value);
   if (!text(t.id, 100) || !isBand(t.band) || !KINDS.includes(t.kind as TaskKind) || !VERDICTS.includes(t.verdict as TaskVerdict) || !MODES.includes(t.mode as EvidenceMode)) return null;
   if (!text(t.prompt, 400) || !text(t.line, 400) || !text(t.response, 1200) || !text(t.quote, 400) || !text(t.note, 400) || typeof t.at !== "number") return null;
   const options = Array.isArray(t.options) ? t.options.filter((o): o is string => text(o, 200)).slice(0, 2) : [];
-  return { id: t.id as string, band: t.band, kind: t.kind as TaskKind, prompt: t.prompt as string, line: t.line as string, options, response: t.response as string, mode: t.mode as EvidenceMode, verdict: t.verdict as TaskVerdict, quote: t.quote as string, note: t.note as string, at: t.at, ...(t.skipped === true ? { skipped: true } : {}) };
+  // the judge's readings (S2) are optional: absent on older tasks; a malformed one is dropped, the task kept
+  const answered = ANSWERS.includes(t.answered as typeof ANSWERS[number]) ? t.answered as typeof ANSWERS[number] : undefined;
+  const english = t.english === "none" || isBand(t.english) ? t.english as Band | "none" : undefined;
+  return { id: t.id as string, band: t.band, kind: t.kind as TaskKind, prompt: t.prompt as string, line: t.line as string, options, response: t.response as string, mode: t.mode as EvidenceMode, verdict: t.verdict as TaskVerdict, quote: t.quote as string, note: t.note as string, at: t.at, ...(t.skipped === true ? { skipped: true } : {}), ...(answered ? { answered } : {}), ...(english ? { english } : {}) };
 }
 export function cleanPlacement(value: unknown): Placement | null {
   const p = obj(value);

@@ -17,7 +17,7 @@ import { audienceOf, keywordAudience, topicText } from "./gate";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
 import { ConversationError, lingaLine } from "./errors";
-import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
+import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, conversationBand, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, playBand, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
 // The right option of a "choose" task. Server memory only: the session reaches every screen.
@@ -133,8 +133,10 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
       return {
         apply: now => {
           const learning = getLearner(now.learnerId).english, prefs = learning.preferences ?? defaultPreferences(ctx.profile);
-          // the live placement is overwritten as before; the check is also appended to the record of checks (W10)
-          saveEnglish(now.learnerId, { ...learning, placement, placements: appendPlacement(learning.placements, placement), preferences: { ...prefs, level: placement.band, goal: prefs.goal || now.goal, interest: prefs.interest || now.interest } });
+          // the live placement is overwritten as before; the check is also appended to the record of checks (W10).
+          // Conversations start at the band the learner spoke when that is lower (S2, conversationBand); the placement's
+          // band stays the check's read
+          saveEnglish(now.learnerId, { ...learning, placement, placements: appendPlacement(learning.placements, placement), preferences: { ...prefs, level: conversationBand(placement), goal: prefs.goal || now.goal, interest: prefs.interest || now.interest } });
           // a finished check can complete a certificate from evidence already on the record (cert.ts); the check's own
           // tasks are never evidence, so they add nothing to it
           const earned = withCertificate(getLearner(now.learnerId).english, placement.at);
@@ -161,7 +163,8 @@ interface PlanAsk { count: number; asked?: string; goal: string; interest: strin
  */
 function planAsk(ctx: Omit<Ctx, "commandId">, o: PlanAsk) {
   const learning = ctx.learning, prefs = learning.preferences ?? defaultPreferences(ctx.profile);
-  const band: Band = learning.placement?.band ?? prefs.level;
+  // pitched where conversations play (S2): the band the learner spoke, when the check found it lower
+  const band: Band = playBand(learning.placement, prefs.level);
   const { count, asked, need } = o;
   const system = `${checkSystem(ctx.profile, ctx.adult)}
 Now you are planning this learner's conversation practice. Each topic is a scene contract a conversation partner will play later: ordinary, safe situations with fictional details. No explicit content, no humiliation, threats or manipulation.`;
@@ -342,7 +345,8 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
       }, judgeSchema);
       const answered = r.json.answered as "yes" | "partly" | "no", english = r.json.english as Band | "none", quote = optional(r.json.quote, 240);
       if (!["yes", "partly", "no"].includes(answered) || !(english === "none" || isBand(english)) || !quote || !response.includes(quote)) throw new Error("The judge did not quote the learner accurately.");
-      const t = judged(verdictFor(task, answered, english), response, mode, quote, line(r.json.note, 160));
+      // the judge's two readings are kept beside the verdict (S2): code derives the band the learner spoke from them
+      const t: PlacementTask = { ...judged(verdictFor(task, answered, english), response, mode, quote, line(r.json.note, 160)), answered, english };
       return { apply: now => ({ ...now, task: null, tasks: [...now.tasks, t] }), provider: r.provider, ms: r.ms };
     });
     await advance(next, ctx, `${commandId}:next`);
@@ -385,7 +389,7 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
       const audience = audienceOf(topicText(t), t.audience);
       return audience && allowed.includes(audience) ? [{ ...t, audience }] : [];
     });
-    saveEnglish(learnerId, { ...getLearner(learnerId).english, plan: { at: Date.now(), band: learning.placement?.band ?? prefs.level, topics } });
+    saveEnglish(learnerId, { ...getLearner(learnerId).english, plan: { at: Date.now(), band: playBand(learning.placement, prefs.level), topics } });
     commit(null, "linga");
     return true;
   }
