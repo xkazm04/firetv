@@ -392,8 +392,20 @@ The working is read the same way (2026-10-15): `chainChecks` and `chainPen` take
 passes `ctx.system`, the TV's `working` the profile's), and in cz or de each working line goes through the same
 `czechAnswer` before the tagger, so "y' = (tg(x^2))'" then "= 1/cos^2(x^2)" puts the pen on the second line, and the
 paper ticks the first. One table reads answers, tasks and working (registry: localization czech,
-terminology-and-loanwords, one concept one rendering). `log` stays natural, as the answer reader has it; a cz line
-"x = 1,2" is the decimal 1.2, never a list of two roots.
+terminology-and-loanwords, one concept one rendering). A cz line "x = 1,2" is the decimal 1.2, never a list of two
+roots.
+
+The base-10 log (2026-10-15). A Czech school writes `log` for base 10 and `ln` for the natural log; the engine reads a
+bare `log` as natural (Stewart). `czechAnswer` now takes the system: in cz a bare `log` and `lg` are base 10, in de only
+`lg` is (DIN 1302, ISO 80000-2), and in both `ln` is natural and a log with its own base ("log_2", "log2", "log₂") keeps
+it. A German school writes base 10 as lg or log_10, while German university analysis writes `log` for ln, so no reading
+of a bare `log` is safe there: de keeps it natural, as before. The one table reads answers and working alike, so a cz
+"y' = log(x^2)'" then "= 1/(x^2 ln 10)" puts the pen on the second line. The spec is compared by its meaning, never its
+text: a model's spec "log(x)" stays natural, and a question printed for a cz or de learner (`question(spec, system)`,
+which the Calculus set passes) shows that natural log as `ln`, so the screen never says `log` for a function the cz
+learner reads differently; the read and hint prompts name log/lg for base 10 and ln for natural in the notation line.
+uk, us and no system read and print exactly as before. A task read from a cz page still reads a bare `log` as natural
+when its text reads as written (readTask tries the text as it is first); that stays open.
 
 ## Calculus graphs (v2 M4a, 2026-10-07)
 

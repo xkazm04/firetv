@@ -189,7 +189,7 @@ export async function makeItems(
   const flag = (r: { items: PracticeItem[]; provider: string; ms: number; tries: number }) =>
     stretch ? { ...r, items: r.items.map((it) => ({ ...it, stretch: true as const })) } : r;
   const kind = kindOfTopic(topicId);
-  if (kind === "calc") return flag(await makeCalcItems(topicId, learnerId, n, opts.word, learnerBlock(opts)));
+  if (kind === "calc") return flag(await makeCalcItems(topicId, learnerId, n, opts.word, learnerBlock(opts), opts.system));
   // a school unit's set is aimed at the learner's live slips on it, newest first (the record keeps them newest last)
   // a paper's lost statements, when it opened the set, steer the draw first (MB-B40 cycle 14)
   if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch, [...(getLearner(learnerId).skills[topicId]?.slips ?? [])].reverse(), opts.system, opts.aim ?? []);
@@ -371,7 +371,7 @@ const sameKey = (q: string) => q.replace(/\s+/g, "").toLowerCase();
  * expression's length, and the first n taken. A second round asks for what is still missing, naming what is kept. The item is
  * { n, question: the printed question, spec } - the spec carries only what the question prints.
  */
-async function makeCalcItems(topicId: string, learnerId: string, n: number, word?: boolean | number, learner = ""): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
+async function makeCalcItems(topicId: string, learnerId: string, n: number, word?: boolean | number, learner = "", system?: SchoolSystem): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
   const me = getLearner(learnerId);
   const memory = me.memory;
   const slips = me.skills[topicId]?.slips ?? [];
@@ -395,7 +395,7 @@ async function makeCalcItems(topicId: string, learnerId: string, n: number, word
       if (!c || !wellFormed(c.spec).ok) continue;
       // the topic's own structural requirement (MB-B30: a chain-rule function is a composition), dropped like a malformed spec
       if (!meetsRequirement(c.spec, requires)) continue;
-      const q = printed(c.spec);
+      const q = printed(c.spec, system);
       // a question that prints its own result (differentiate e^x) is no question
       if (!q || leaksCalc(c.spec, q.plain)) continue;
       const k = sameKey(q.plain);

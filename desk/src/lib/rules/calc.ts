@@ -17,7 +17,7 @@
  */
 import { commaSystem, readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
-import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
 import { agreesWhereBoth, compile, derivativeAt, evalNode, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit, type Node } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -338,9 +338,16 @@ function printable(spec: unknown): { s: CalcSpec; f: Expr } | null {
  * 'Differentiate f(x) = 3x^2 + 2x.', 'Find lim_(x->0) sin(3x)/x.', 'Evaluate int_0^3 2x dx.', 'Find the critical point
  * of f(x) = x^2 - 4x + 1 on [0, 5].' Null when the spec is malformed (printable): a malformed spec reaches here from
  * a model, a session file or a page reader, and it is a null, never a throw. It never carries the answer: the spec
- * has none, and the only numbers printed are the spec's own parameters.
+ * has none, and the only numbers printed are the spec's own parameters. For a comma-system learner (cz, de) the spec's
+ * bare log - the engine's natural log - prints as ln (calc-read naturalAsLn), so a cz learner never reads base 10 into
+ * it; any other system, or none, prints exactly as before.
  */
-export function question(spec: unknown): { plain: string; tex: string } | null {
+export function question(spec: unknown, system?: SchoolSystem): { plain: string; tex: string } | null {
+  if (commaSystem(system) && spec && typeof spec === "object") {
+    // a comma-system learner reads a bare log as base 10 (calc-read czechAnswer): the engine's natural log prints as ln
+    const ln = Object.fromEntries(Object.entries(spec).map(([k, v]) => [k, typeof v === "string" ? naturalAsLn(v) : Array.isArray(v) ? v.map((x) => (typeof x === "string" ? naturalAsLn(x) : x)) : v]));
+    return question(ln);
+  }
   if (isCalc2Spec(spec)) return calc2Question(spec);
   const p = printable(spec);
   if (!p) return null;
@@ -429,7 +436,7 @@ export function checkAnswer(spec: unknown, studentAnswer: unknown, system?: Scho
   let ans = cleanAnswer(studentAnswer);
   if (!ans) return verdict("unsure", WHY.empty);
   const { truth } = r;
-  if (commaSystem(system)) ans = czechAnswer(truth.kind !== "derivative" && truth.kind !== "antiderivative" ? oneNumberComma(ans) : ans);
+  if (commaSystem(system)) ans = czechAnswer(truth.kind !== "derivative" && truth.kind !== "antiderivative" ? oneNumberComma(ans) : ans, system);
   if (truth.kind === "inf" || r.spec.shape === "limit") {
     const inf = infinityOf(ans);
     if (inf !== null) {

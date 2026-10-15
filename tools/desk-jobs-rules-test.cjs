@@ -692,7 +692,7 @@ test('MB-B3: the maths read prompt carries the cz learner\'s system, notation, c
  await readPage('AAAA','maths',100,100,'p1',{system:'cz',path:'school',age:15,stage:'High school'});
  const p=seen.prompt;
  assert(p.startsWith(OLD('the maths problems, with all symbols and exponents (write exponents with ^, e.g. x^2)')),'the maths prompt keeps its old text first');
- for(const bit of ['Czech Republic','decimal comma','colon','tg and cotg','School maths','15 years old','lim_(x->a)','a/b with brackets','no LaTeX','printed in'])assert(p.includes(bit),bit);
+ for(const bit of ['Czech Republic','decimal comma','colon','tg and cotg','log (or lg) for the base-10 logarithm with ln for the natural one','School maths','15 years old','lim_(x->a)','a/b with brackets','no LaTeX','printed in'])assert(p.includes(bit),bit);
  assert(!/High school/.test(p),'the age leads; the stage is the fallback');
  assert.equal(seen.schema.properties.items.items.properties.label.type,'string');assert(!seen.schema.properties.items.items.required.includes('label'),'the label is optional');
  await readPage('AAAA','maths',100,100,'p1',{path:'calc1',stage:'Other'});assert(/Their stage is Other\./.test(seen.prompt)&&!/years old/.test(seen.prompt));

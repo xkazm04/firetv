@@ -57,12 +57,32 @@ export function czechNames(text: string): string {
 /** A trailing arbitrary constant by another letter, as a Czech school writes it: + K, + k, + C1, + C_1, + C₁. */
 const OTHER_CONSTANT = /([+\-−])\s*(?:K|k|C\s*_?\s*\(?\s*\d+\s*\)?|C[₀-₉]+)\s*$/;
 /**
+ * The base-10 logarithm as a comma-system school writes it (MB-B36 log): `lg` in cz and de (DIN 1302, ISO 80000-2), and a
+ * bare `log` - no base after it ('log_2', 'log2', 'log₂' keep theirs) - in cz only, where a school's log is base 10 and
+ * the natural log is always ln. A name touches no other letter but an x ('logx' is log x), as CZECH_FN.
+ */
+const LG = /(?<!(?!x)\p{L})lg(?!(?!x(?!\p{L}))\p{L})/giu;
+const BARE_LOG = /(?<!(?!x)\p{L})log(?![_\d₀-₉])(?!(?!x(?!\p{L}))\p{L})/giu;
+/** The base 10 as the engine reads it (calc-expr log_b): bracketed, so a number after it ('lg 2', 'lg2') stays its argument. */
+const LOG10 = "log_(10)";
+/**
  * A Calculus answer in a comma system (cz, de; MB-B36), as the reader reads it: a decimal comma between digits is a point
  * ('0,5x^2' is 0.5x^2, as taskText plainTask reads a task; '1,2,3' and '0, 5' are left alone), the Czech function names
- * (czechNames), and a trailing constant by another letter is the arbitrary constant C. Anything else comes back unchanged.
+ * (czechNames), and a trailing constant by another letter is the arbitrary constant C. `lg` is the base-10 log, and in
+ * cz a bare `log` is too (LG, BARE_LOG); in de a bare `log` stays the engine's natural log (German school writes lg or
+ * log_10 for base 10, German analysis writes log for ln: no reading of a bare log is safe there). ln is natural in both.
+ * Anything else comes back unchanged.
  */
-export const czechAnswer = (ans: string) =>
-  czechNames(ans.replace(/(?<![\d.,])(\d+),(\d+)(?![\d,])/g, "$1.$2")).replace(OTHER_CONSTANT, "$1 C");
+export const czechAnswer = (ans: string, system?: string) => {
+  let s = ans.replace(LG, LOG10);
+  if (system === "cz") s = s.replace(BARE_LOG, LOG10);
+  return czechNames(s.replace(/(?<![\d.,])(\d+),(\d+)(?![\d,])/g, "$1.$2")).replace(OTHER_CONSTANT, "$1 C");
+};
+/**
+ * A spec's own text printed for a comma-system learner (MB-B36 log): the engine's bare `log` is the natural log, and a cz
+ * learner reads log as base 10, so it prints as `ln` - one notation, one meaning on the screen. A log with a base keeps it.
+ */
+export const naturalAsLn = (text: string) => text.replace(BARE_LOG, "ln");
 /** A lone digit,digit in a line read as a point ('2,72' is 2.72); a list ('1,2,3', '1, 2') is left alone (maths.ts decimalComma's pattern). */
 export const pointForComma = (line: string) => line.replace(/(?<!\d,|[\d.])(\d+),(\d+)(?!,\d|\d)/g, "$1.$2");
 /** An infinity as a learner writes it: inf, infinity, ∞, with an optional sign. */

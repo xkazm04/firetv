@@ -25,8 +25,8 @@ export interface ReadWho { system?: SchoolSystem; path?: MathPath; age?: number;
 
 /** A school system's notation in the one sentence both maths prompts carry: the read (mathsContext) and the hint's ground (hint.ts groundFor). */
 export function notationLine(system: SchoolSystem): string {
-  const note = system === "cz" ? "a decimal comma (3,5), division written with a colon, and tg and cotg for tan and cot"
-    : system === "de" ? "a decimal comma (3,5) and division written with a colon" : "a decimal point (3.5)";
+  const note = system === "cz" ? "a decimal comma (3,5), division written with a colon, tg and cotg for tan and cot, and log (or lg) for the base-10 logarithm with ln for the natural one"
+    : system === "de" ? "a decimal comma (3,5), division written with a colon, and lg for the base-10 logarithm with ln for the natural one" : "a decimal point (3.5)";
   return `The learner is in the ${SYSTEM_WORDS[system]} school system, whose notation uses ${note}.`;
 }
 

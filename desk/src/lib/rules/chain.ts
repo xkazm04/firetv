@@ -328,7 +328,8 @@ function dNode(n: Node): Node | null {
 }
 
 const PRIME = /[′']/;
-const FN_BEFORE = /(?<![A-Za-z])(?:arcsin|arccos|arctan|asin|acos|atan|sinh|cosh|tanh|sin|cos|tan|sec|csc|cot|ln|log|exp|sqrt|cbrt|abs)\s*$/;
+/** A function name before a primed bracket; `log_(10)` is the base-10 log a comma-system line is read into (calc-read czechAnswer). */
+const FN_BEFORE = /(?<![A-Za-z])(?:arcsin|arccos|arctan|asin|acos|atan|sinh|cosh|tanh|sin|cos|tan|sec|csc|cot|ln|log(?:_\(10\))?|exp|sqrt|cbrt|abs)\s*$/;
 /**
  * Each "(B)'" (or "sin(B)'") in a line replaced by the derivative of what is primed, in brackets; the line unchanged when
  * it has no such prime; null when a primed bracket cannot be read (a letter before it that is not a function name -
@@ -513,7 +514,7 @@ export function tagLines(spec: CalcSpec, lines: readonly string[]): { lines: Cha
  * comma between two digits is a point, and a trailing + K or + C1 is the constant. Any other system: the lines as written.
  */
 const asWritten = (working: readonly string[], system?: SchoolSystem): readonly string[] =>
-  commaSystem(system) ? working.map((l) => (typeof l === "string" ? czechAnswer(l) : l)) : working;
+  commaSystem(system) ? working.map((l) => (typeof l === "string" ? czechAnswer(l, system) : l)) : working;
 
 /**
  * Each working line of a Calculus item checked against its own spec: true, false or null per line. A Calculus 2 spec

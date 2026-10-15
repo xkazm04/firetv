@@ -254,7 +254,7 @@ export function calc2CheckAnswer(spec: unknown, studentAnswer: unknown, system?:
   if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
   let ans = cleanAnswer(studentAnswer);
   if (!ans) return verdict("unsure", WHY.empty);
-  if (commaSystem(system)) ans = czechAnswer(oneNumberComma(ans));
+  if (commaSystem(system)) ans = czechAnswer(oneNumberComma(ans), system);
   const e = compile(ans);
   if (!e) return verdict("unsure", WHY.unreadable);
   if (e.constant) return verdict("unsure", WHY.unreadable);
@@ -515,7 +515,7 @@ function sequenceCheck(spec: SequenceSpec, studentAnswer: unknown, system?: stri
   if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
   let ans = cleanAnswer(studentAnswer);
   if (!ans) return verdict("unsure", WHY.empty);
-  if (commaSystem(system)) ans = czechAnswer(oneNumberComma(ans));
+  if (commaSystem(system)) ans = czechAnswer(oneNumberComma(ans), system);
   const { truth } = r;
   const inf = infinityOf(ans);
   if (inf !== null) {

@@ -248,6 +248,22 @@ test('MB3-14 property: for 400 correct workings (every line equal to, or followi
   assert.equal(n,400);
 });
 
+// MB-B36 log: a working line reads log as its answer does (calc-read czechAnswer): base 10 in cz, lg base 10 in cz and de
+test('MB-B36 log: a cz working line reads log as base 10 and lg in cz and de; ln stays natural; uk and none as before',()=>{
+  const L10={shape:'derivative',f:'log_10(x^2)'};
+  assert.deepEqual(chainChecks(L10,["y' = log(x^2)'","= 2x/(x^2 ln 10)"],'cz'),[true,true],'log primed is the base-10 log primed');
+  assert.deepEqual(chainChecks(L10,["y' = (log x^2)'","= 2/(x ln 10)"],'cz'),[true,true]);
+  assert.deepEqual(chainChecks(L10,["y' = log(x^2)'","= 1/(x^2 ln 10)"],'cz'),[true,false],'the dropped inside derivative is pinned to its line');
+  assert.equal(chainPen(L10,["y' = log(x^2)'","= 1/(x^2 ln 10)"],'cz'),1);
+  for(const sys of ['cz','de'])assert.deepEqual(chainChecks(L10,["y' = lg(x^2)'","= 2/(x ln 10)"],sys),[true,true],`lg in ${sys}`);
+  // de: a bare log stays the natural log, as the answer reader has it; ln is natural in every system
+  assert.deepEqual(chainChecks({shape:'derivative',f:'ln(x^2)'},["y' = log(x^2)'","= 2/x"],'de'),[true,true]);
+  for(const sys of ['cz','de','uk',undefined])assert.deepEqual(chainChecks({shape:'derivative',f:'ln(x^2)'},["y' = ln(x^2)'","= 2/x"],sys),[true,true],`ln in ${sys}`);
+  // uk and none: log is natural, so the base-10 line is not the spec's function
+  assert.deepEqual(chainChecks(L10,["y' = log(x^2)'","= 2x/(x^2 ln 10)"],'uk'),chainChecks(L10,["y' = log(x^2)'","= 2x/(x^2 ln 10)"]));
+  assert.deepEqual(chainChecks(L10,["y' = lg(x^2)'"],'uk'),[null],'an English reader cannot read lg');
+});
+
 // MB-B36 property: correct workings written as a Czech school writes them (tg, cotg, arctg, arccotg, a decimal comma, + K)
 const CZ_CORRECT=[
   [{shape:'derivative',f:'tan(x^2)'},["y' = (tg(x^2))'","= 1/cos^2(x^2) · (x^2)'","= 2x/cos^2(x^2)"]],
@@ -258,6 +274,8 @@ const CZ_CORRECT=[
   [{shape:'derivative',f:'x tan x'},["y' = tg x + x/cos^2 x"]],
   [{shape:'antiderivative',f:'x'},['F(x) = 0,5x^2 + K']],
   [{shape:'evaluate',f:'x^2',at:1.5},['f(1,5) = 1,5^2','= 2,25']],
+  [{shape:'derivative',f:'log_10(x^2)'},["y' = (log(x^2))'","= 2x/(x^2 ln 10)"]],
+  [{shape:'derivative',f:'log_10(3x)'},["y' = lg(3x)'","= 3/(3x ln 10)"]],
 ];
 test('MB-B36 property: 200 correct Czech workings (each line equal to, or following, the line before) ring nothing for cz',()=>{
   const rnd=mulberry(37);let n=0;

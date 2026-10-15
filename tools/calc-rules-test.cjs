@@ -554,6 +554,49 @@ test('MB-B36: a cz or de Calculus answer reads the decimal comma, tg, cotg, arct
  for(const [spec,a] of [[X,'0, 5x^2 + C'],[X,'0,5,1x^2 + C']])assert.equal(v(spec,a,'cz'),'unsure',`${a} is not read`);
 });
 
+test('MB-B36 log: in cz a bare log is base 10 and lg too; in de lg is base 10 and a bare log stays natural; ln is natural everywhere; uk, us and none as before',()=>{
+ const v=(spec,a,sys)=>{const r=C.checkAnswer(spec,a,sys);return r.verdict+(r.slip?'/'+r.slip:'');};
+ const TWO={shape:'evaluate',f:'2+0*x',at:0},THREE={shape:'evaluate',f:'3+0*x',at:0},A10={shape:'antiderivative',f:'1/(x*ln(10))'},AN={shape:'antiderivative',f:'1/x'};
+ const D10={shape:'derivative',f:'log_10(x)'},DLN={shape:'derivative',f:'ln(x^2)'};
+ // [spec, answer, cz, de, uk/us/none]
+ const rows=[
+  [TWO,'log 100','right','wrong','wrong'],[TWO,'log(100)','right','wrong','wrong'],
+  // digits glued to log are its base (calc-expr: log10 is log_10), in every system: 'log100' has no argument
+  [TWO,'log100','unsure','unsure','unsure'],
+  [TWO,'lg 100','right','right','unsure'],[TWO,'lg(100)','right','right','unsure'],[TWO,'lg100','right','right','unsure'],[TWO,'LG 100','right','right','unsure'],
+  [A10,'log|x| + C','right','wrong','wrong'],[A10,'logx + C','unsure','wrong','wrong'],[A10,'lg|x| + C','right','right','unsure'],[A10,'ln|x|/ln 10 + C','right','right','right'],
+  [AN,'ln|x| + C','right','right','right'],[AN,'log|x| + C','wrong','right','right'],
+  [D10,'1/(x ln 10)','right','right','right'],[D10,'1/(x log 10)','wrong','right','right'],[DLN,'2/x','right','right','right'],
+  // a log with its own base keeps it in every system
+  [THREE,'log_2 8','right','right','right'],[THREE,'log2(8)','right','right','right'],[THREE,'log₂ 8','right','right','right'],[TWO,'log_10 100','right','right','right'],
+ ];
+ for(const [spec,a,cz,de,rest] of rows){
+  assert.equal(v(spec,a,'cz'),cz,`${spec.f} '${a}' cz`);assert.equal(v(spec,a,'de'),de,`${spec.f} '${a}' de`);
+  for(const sys of ['uk','us',undefined])assert.equal(v(spec,a,sys),rest,`${spec.f} '${a}' ${sys}`);
+ }
+ // a word with the letters log or lg in it is not a log
+ assert.equal(v(TWO,'dialog 100','cz'),'unsure');assert.equal(v(TWO,'algx','cz'),'unsure');
+ // the spec is read by its meaning, never its text: an engine 'log(x)' in a spec is natural, so a cz 'ln' answer is right
+ assert.equal(v({shape:'derivative',f:'log(x)'},'1/x','cz'),'right');assert.equal(v({shape:'evaluate',f:'log(x)',at:100},'ln 100','cz'),'right');
+ assert.equal(v({shape:'evaluate',f:'log(x)',at:100},'log 100','cz'),'wrong','the cz learner\'s log 100 is 2, not ln 100');
+ // calc2 reads the same table
+ assert.equal(v({shape:'approx-integral',rule:'midpoint',f:'1/x',a:1,b:2,pieces:4},'ln 2','cz'),v({shape:'approx-integral',rule:'midpoint',f:'1/x',a:1,b:2,pieces:4},'ln 2','uk'));
+});
+
+test('MB-B36 log: a Calculus question printed for cz or de shows the natural log as ln; uk, us and none print as before',()=>{
+ for(const spec of [{shape:'derivative',f:'log(x^2+1)'},{shape:'antiderivative',f:'log(x)'},{shape:'evaluate',f:'x*log(x)',at:'log(4)'},{shape:'limit',f:'log(1+x)/x',at:0},{shape:'critical-point',f:'x - log(x)',on:[0.5,3]}]){
+  const base=C.question(spec);assert.ok(base,`${spec.f} prints`);
+  for(const sys of ['uk','us',undefined])assert.deepEqual(C.question(spec,sys),base,`${spec.f} ${sys} as before`);
+  for(const sys of ['cz','de']){
+   const q=C.question(spec,sys);
+   assert.ok(!/(?<![a-z\\])log/.test(q.plain)&&!/\\log/.test(q.tex),`${spec.f} ${sys}: ${q.plain} | ${q.tex}`);
+   assert.equal(q.plain,base.plain.replace(/log/g,'ln'),`${spec.f} ${sys}: only the name changes`);
+  }
+ }
+ // a log with a base, and a spec with no log, print the same in every system
+ for(const spec of [{shape:'derivative',f:'log_2(x)'},{shape:'derivative',f:'x^2 + sin(x)'}])assert.deepEqual(C.question(spec,'cz'),C.question(spec),spec.f);
+});
+
 test('MB-B36: a cz or de Calculus task with tg, cotg, arctg or arccotg reads as its spec; uk leaves it unread',()=>{
  const E=require(path.join(root,'src/lib/rules/calc-expr.ts'));
  const same=(a,b)=>{const ea=E.compile(a),eb=E.compile(b);return [0.3,0.7,1.2].every(x=>Math.abs(ea.at(x)-eb.at(x))<1e-9);};
