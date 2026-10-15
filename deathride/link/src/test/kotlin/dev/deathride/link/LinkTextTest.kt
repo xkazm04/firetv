@@ -26,6 +26,12 @@ class LinkTextTest {
         for(s in listOf(LinkText.STARTING,LinkText.READY,LinkText.LOST,LinkText.BLOCKED,LinkText.PORT_BUSY,LinkText.NO_WIFI)) { assertTrue(s.length<=60,s); assertFalse(s.contains("8765"),s) }
         assertNotEquals(LinkText.PORT_BUSY,LinkText.NO_WIFI)
     }
+    @Test fun aTokenTheTvForgotIsAResetNotABadCode() {
+        val r=LinkText.refusal("lobby",false,true,staleToken=true)
+        assertEquals(LinkText.RESET,r.code); assertTrue(r.message.length<=44,r.message); assertTrue(r.message.contains("TV code"))
+        assertEquals(LinkText.BAD_PIN,LinkText.refusal("lobby",false,true).code)
+        assertEquals(LinkText.RACE_ON,LinkText.refusal("race",false,true,staleToken=true).code)
+    }
     @Test fun notNowNamesTheCommandAndTheScreen() {
         assertEquals("""{"t":"notNow","for":"buy","screen":"RACE"}""",LinkText.notNowJson("buy","race"))
     }

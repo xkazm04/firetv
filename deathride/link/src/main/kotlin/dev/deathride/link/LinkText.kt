@@ -9,9 +9,11 @@ object LinkText {
     const val BAD_PIN="BAD_PIN"
     const val FULL="FULL"
     const val PROFILE_TAKEN="PROFILE_TAKEN"
+    const val RESET="RESET"
     /** Why a pairing hello was not given a seat, in the order [RaceServer] checks it. */
-    fun refusal(phase: String,pinOk: Boolean,seatFree: Boolean): Refusal = when {
+    fun refusal(phase: String,pinOk: Boolean,seatFree: Boolean,staleToken: Boolean=false): Refusal = when {
         phase=="race" || phase=="countdown" -> Refusal(RACE_ON,"Race on. Join from the lobby.")
+        !pinOk && staleToken -> Refusal(RESET,"TV was reset, enter the new TV code.")
         !pinOk -> Refusal(BAD_PIN,"Wrong TV code. Check the TV.")
         !seatFree -> Refusal(FULL,"Both seats taken. REWIND on the TV resets.")
         else -> Refusal(PROFILE_TAKEN,"That profile is already in.")

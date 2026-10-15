@@ -51,6 +51,7 @@ class LinkTest {
             assertEquals(dev.deathride.core.VisualTuning["driftHapticQuality"],feedback["quality"]!!.jsonPrimitive.double)
             host.slots[0].driftQuality=.5;host.slots[0].slipRadians=.4;host.slots[0].spunOut=true
             val bad=Listener(); val badWs=connect(bad); badWs.sendText("""{"t":"hello","pin":"invalid"}""",true).join(); val refused=bad.next("error"); assertEquals("BAD_PIN",refused["code"]!!.jsonPrimitive.content); assertTrue(refused["message"]!!.jsonPrimitive.content.length<=44); badWs.abort()
+            val stale=Listener(); val staleWs=connect(stale); staleWs.sendText("""{"t":"hello","pin":"invalid","token":"forgotten-token"}""",true).join(); assertEquals("RESET",stale.next("error")["code"]!!.jsonPrimitive.content); staleWs.abort()
             val good=Listener(); val ws=connect(good); ws.sendText("""{"t":"hello","pin":"${host.pin}"}""",true).join()
             val welcome=good.next("welcome"); val token=welcome["token"]!!.jsonPrimitive.content; assertEquals(0,welcome["slot"]!!.jsonPrimitive.int)
             assertEquals("LOBBY",good.next("hud")["screen"]!!.jsonPrimitive.content)
