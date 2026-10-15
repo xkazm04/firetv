@@ -94,6 +94,11 @@ class ControllerStringsTest {
         assertTrue(page.contains(".rotate{display:flex;position:fixed;inset:0;z-index:5;"))
     }
 
+    @Test fun abilityPhasesUseTheTvWords() {
+        assertTrue(page.contains("ABILITY_PHASE={WINDUP:'WIND-UP',RECOVERY:'RECOVERING'}"))
+        assertTrue(page.contains("(ABILITY_PHASE[ab.phase]||ab.phase)"))
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }

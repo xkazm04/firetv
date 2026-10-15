@@ -101,7 +101,8 @@ let lastStatus='',lastOk=null,tvPaused=false,lastRttPaint=0;const textCache=new 
 function setText(id,v){v=String(v);if(textCache.get(id)===v)return;textCache.set(id,v);$(id).textContent=v}
 const shown={},meterCache=new Map(),classCache=new Map(),ariaCache=new Map();
 function setMeter(id,max,value){const k=max+'/'+value;if(meterCache.get(id)===k)return;meterCache.set(id,k);const el=$(id);el.max=max;el.value=value}
-const WEAPON_NAMES=['Rivet','Hammer','Mine','Scatter'];const barCache=new Map();
+/* The TV's words for the ability phases (HudTheme). */
+const ABILITY_PHASE={WINDUP:'WIND-UP',RECOVERY:'RECOVERING'};const WEAPON_NAMES=['Rivet','Hammer','Mine','Scatter'];const barCache=new Map();
 function paintBar(btn,bar,fill,state,frac){const k=state+'/'+frac.toFixed(2);if(barCache.get(bar)===k)return;barCache.set(bar,k);const el=$(bar);el.className='wbar '+state;$(fill).style.width=Math.round(Math.max(0,Math.min(1,frac))*100)+'%';if(btn==='fire'){$(btn).classList.toggle('over',state==='over');$(btn).classList.toggle('cooling',state==='cooling')}}
 function setClass(id,cls,on){const k=id+'.'+cls;if(classCache.get(k)===on)return;classCache.set(k,on);$(id).classList.toggle(cls,on)}
 function setAria(id,v){if(ariaCache.get(id)===v)return;ariaCache.set(id,v);$(id).setAttribute('aria-label',v)}
@@ -135,7 +136,7 @@ if(m.t==='hud'){if(m.phase!==curPhase){curPhase=m.phase;document.body.dataset.ph
   const nx=ws?.[[0,1,3][([0,1,3].indexOf(wi)+1)%3]],nst=ready(nx),sh=w=>{const q=ready(ws?.[w]);return q==='over'?' OVERHEATED':q==='cooling'?' COOLING':q==='hot'?' HOT':''};
   setText('mineAmmo',c.mines+(c.mineCooldownSeconds>0?' / '+c.mineCooldownSeconds.toFixed(1)+'s':' READY'));
   setText('swapHint','HAMMER '+c.heavyAmmo+sh(1)+' / SCATTER '+(c.scatterAmmo||0)+sh(3));paintBar('swap','swapBar','swapFill',nst,nx?(nst==='over'?1-nx.heat:nst==='cooling'?1-nx.cd:1):1);
-  const ab=c.ability;if(ab){setText('abilityName',(layout?.fireDrives?'GO + ':'')+ab.name);setMeter('abilityMeter',ab.energyCapacity,ab.energy);setText('abilityStatus',(c.armingSeconds>0?'ARMING':ab.phase!=='READY'?ab.phase:ab.cooldownSeconds>0?'COOL '+Math.ceil(ab.cooldownSeconds)+'s':ab.energy<ab.energyCost?'LOW ENERGY':ab.id==='mine-dispatcher'?'AUTO WHILE MOVING':'READY')+' / '+Math.floor(ab.energy));setClass('ability','ready',ab.ready);setClass('ability','unavailable',!ab.available);setAria('ability',ab.name+' / '+textCache.get('abilityStatus'));}
+  const ab=c.ability;if(ab){setText('abilityName',(layout?.fireDrives?'GO + ':'')+ab.name);setMeter('abilityMeter',ab.energyCapacity,ab.energy);setText('abilityStatus',(c.armingSeconds>0?'ARMING':ab.phase!=='READY'?(ABILITY_PHASE[ab.phase]||ab.phase):ab.cooldownSeconds>0?'COOL '+Math.ceil(ab.cooldownSeconds)+'s':ab.energy<ab.energyCost?'LOW ENERGY':ab.id==='mine-dispatcher'?'AUTO WHILE MOVING':'READY')+' / '+Math.floor(ab.energy));setClass('ability','ready',ab.ready);setClass('ability','unavailable',!ab.available);setAria('ability',ab.name+' / '+textCache.get('abilityStatus'));}
   if(c.damageEvents>damageEvents&&navigator.vibrate)navigator.vibrate(c.wrecked?[40,35,70]:25);damageEvents=c.damageEvents;
   if(c.wrecked&&(fire||mine||ability||a))neutral();
  }
