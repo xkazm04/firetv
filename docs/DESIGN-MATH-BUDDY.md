@@ -312,6 +312,12 @@ answer two slips give names none (1.9 for 1.1 and 0.8).
   page number at 28 px only when two hinted problems share a name; a lamp that needed a second hint is ringed in pen.
   Five lamps, then "k more". Never the problem's text: the name is the verdict, the caption slot keeps its one sentence.
   A log with no key the desk can name draws a lamp per hint, unnamed, as before. `tv/recapRows` `hintedOf`.
+- **Recap slips** (cycle 19) - under the set rails, tonight's set's named slips, one to a line: the pen's ring, the
+  item's number in the hand at 32 px, a dot, and the slip's short label in pen at 28 px ("2 · added the percentages").
+  The short is decided in rules (rules/school `short`: lowercase, four words and 24 characters at most, no value) and
+  only a step up's top-rung slips and Pythagoras' carry one; any other ring stays on the rail unlabelled. Two, then
+  "k more". A label wraps between its words, never inside one, and is never cut by CSS. Only the set on the desk when
+  the last practice line is tonight's. `tv/recapRows` `slippedOf`.
 - **Taped card** - a cream card with a strip of amber tape: the one caption slot beside the paper. On the hint:
   the learner's question from the phone in the blue hand (`maths-said`), HINT with two pips, the hint, and the next
   step in the pen-dark hand. A hint on a Calculus page is written in a first-year Calculus I stance when the learner

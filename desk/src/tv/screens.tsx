@@ -315,7 +315,8 @@ export function BreakScreen({ s }: { s: Session }) {
 // ---- T12 Recap: tonight, done ----
 /**
  * The whole evening as one picture (tv/recapRows.ts): a tile per app on the desk, each in its own app's language -
- * Math Buddy's sheet with a tick for each right answer, the pen's ring for each slip and a dashed ring for each item
+ * Math Buddy's sheet with a tick for each right answer, the pen's ring for each slip (a step up's and Pythagoras' named slips
+ * again under the rail, the ring with the item's number and the slip's short label) and a dashed ring for each item
  * the desk was not sure of (lines that do not say how many draw none), a page per sheet read and
  * a lamp per hint (ringed when it took a second); Linga's card with a plum mark per conversation, sized by its
  * replies; Essay Master's black card with an arrow per sentence read, the ones to fix turned round in citron.
@@ -363,8 +364,18 @@ const PAGE = <svg className="rc-page" viewBox="0 0 40 50" aria-hidden="true"><pa
 function Earlier({ n }: { n: number }) {
   return n > 0 ? <div className="rc-earlier" data-role="recap-earlier">{n} earlier</div> : null;
 }
+/** The end of a row of named lamps or slips that drew its first few: how many it left out. Nothing when none. */
+function More({ n, role }: { n: number; role: string }) {
+  return n > 0 ? <div className="rc-earlier" data-role={role}>{n} more</div> : null;
+}
 /** The most hinted problems the tile names with a lamp each (one row on the sheet); the rest are "k more" (MB-B23). */
 const RECAP_LAMPS = 5;
+/**
+ * The most named slips the tile draws under the set's rail (cycle 19): the pen's ring, the item's number and the slip's
+ * short label from rules, one to a line (a label wraps between its words, never inside one); the rest are "k more".
+ * Two, because a line is the sheet's width and the rails above it come first.
+ */
+const RECAP_SLIPS = 2;
 function RecapMaths({ t }: { t: MathsTile }) {
   // a lamp per hinted problem, its name beneath, ringed when it needed a second; a log with no nameable key draws a lamp per hint as before
   const named = t.hinted.some((x) => x.name !== null), lamps = named ? [] : Array.from({ length: Math.min(t.hints, 12) }, (_, i) => i < t.second);
@@ -377,11 +388,14 @@ function RecapMaths({ t }: { t: MathsTile }) {
           <div key={k} className="rc-set" data-role="recap-set">{setMarks(x).map((m, i) => <i key={i} data-v={RECAP_PEN[m].v}>{RECAP_PEN[m].pen}</i>)}</div>
         ))}
         <Earlier n={t.sets.length - RECAP_READINGS} />
+        {t.slipped.length > 0 && <div className="rc-lamps" data-role="recap-slips">{t.slipped.slice(0, RECAP_SLIPS).map((x, i) => (
+          <span key={i} className="rc-lamp" data-slip="true"><i data-v="look">{PEN_RING}</i><em>{x.name}<small>{x.slip}</small></em></span>
+        ))}<More n={t.slipped.length - RECAP_SLIPS} role="recap-slips-more" /></div>}
         {t.pages > 0 && <div className="rc-pages" data-role="recap-pages">{Array.from({ length: Math.min(t.pages, 8) }, (_, i) => <i key={i}>{PAGE}</i>)}</div>}
         {lamps.length > 0 && <div className="rc-lamps" data-role="recap-hints">{lamps.map((two, i) => <b key={i} data-second={two || undefined} />)}</div>}
         {named && <div className="rc-lamps" data-role="recap-hints">{lit.map((x, i) => (
           <span key={i} className="rc-lamp" data-second={x.second || undefined} data-page={x.page}><b /><em>{x.name ?? ""}{x.page && <small>{PAGE}{x.page}</small>}</em></span>
-        ))}{more > 0 && <div className="rc-earlier" data-role="recap-hints-more">{more} more</div>}</div>}
+        ))}<More n={more} role="recap-hints-more" /></div>}
       </>}
     </div>
   </>);

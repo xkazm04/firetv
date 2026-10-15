@@ -908,3 +908,22 @@ test('cycle 19 rows: tonight\'s set names its ringed items whose slip has a shor
  assert.deepEqual(slippedOf(session({practice:py,history:[{at:TODAY(18),kind:'practice',label:"Pythagoras' theorem",detail:'1 of 2 right'}]}),NOW),[{name:'1',slip:'no square root'}],'a usual Pythagoras item\'s slip is named too; a right item never');
  assert.deepEqual(recapRows(evening(),NOW)[0].slipped,[],'a linear set\'s arithmetic slip has no short');
 });
+const slipsOfHtml=(html)=>[...html.matchAll(/<span class="rc-lamp" data-slip="true"><i data-v="look"><svg class="rc-ring"[^>]*>.*?<\/svg><\/i><em>([^<]*)<small>([^<]*)<\/small><\/em><\/span>/g)].map((m)=>`${m[1]} · ${m[2]}`);
+test('cycle 19 TV: under the rail, the pen\'s ring with the item\'s number and the slip\'s short label - two at most, then "k more"; never a value',()=>{
+ const html=draw(pctEvening(),NOW);
+ assert.deepEqual(slipsOfHtml(html),['2 · added the percentages','3 · percent of the new']);
+ assert.doesNotMatch(html,/recap-slips-more/);
+ for(const i of PCT.items){assert.ok(!html.includes(i.question),i.question);}
+ assert.ok(!/>(260|48|100)</.test(html),'no answer drawn');
+ const three={...PCT,items:[...PCT.items,{n:6,question:'q6',studentAnswer:'1',verdict:'wrong',slip:'pct-added',tier:3,stretch:true}]};
+ const many=draw(pctEvening({practice:three}),NOW);
+ assert.deepEqual(slipsOfHtml(many),['2 · added the percentages','3 · percent of the new']);
+ assert.match(many,/data-role="recap-slips-more">1 more</);
+ assert.doesNotMatch(draw(evening(),NOW),/recap-slips/,'no named slip: no row');
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8');
+ const rules=[...css.matchAll(/\.rc \.rc-lamp\[data-slip\][^{]*\{([^}]*)\}/g)].map((m)=>m[1]).join(' ');
+ assert.ok(rules,'the slip label has its own rules');
+ assert.doesNotMatch(rules,/ellipsis|text-overflow|word-break:\s*break-all|nowrap/,'a label is never cut mid-word');
+ for(const px of rules.matchAll(/font[^;]*?(\d+)px/g))assert.ok(+px[1]>=28,`${px[0]}: 28px or more`);
+ assert.match(rules,/font-size: 28px/);
+});

@@ -165,6 +165,15 @@
 .rc .rc-lamp em small { display: flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 28px; color: var(--mb-blue); }
 .rc .rc-lamp em small .rc-page { width: 24px; height: 30px; }
 .rc .rc-lamps .rc-earlier { align-self: center; }
+/* cycle 19: a named slip under the set's rail - the pen's ring, then the item's number in the hand and the slip's short
+   label (rules/school `short`, four words at most) at 28 px, one to a line; the label wraps between words, never inside one */
+.rc .rc-lamps:has([data-slip]) { flex-direction: column; align-items: flex-start; gap: 10px; }
+.rc .rc-lamp[data-slip] { flex-direction: row; align-items: center; gap: 12px; min-width: 0; max-width: 100%; }
+.rc .rc-lamp[data-slip] i { display: block; flex: none; width: 56px; height: 48px; }
+.rc .rc-lamp[data-slip] em { display: block; min-width: 0; text-align: left; line-height: 1.1; overflow-wrap: normal; word-break: normal; }
+.rc .rc-lamp[data-slip] em small { display: inline; margin: 0; font-size: 28px; color: var(--mb-pen); }
+.rc .rc-lamp[data-slip] em small::before { content: " \00B7  "; color: var(--mb-ink); }
+.rc .rc-lamps:has([data-slip]) .rc-earlier { align-self: flex-start; }
 /* Linga: the cream card, the plum arch, a mark per conversation sized by its replies */
 .rc .rc-lg { background: #FFF9EC; border: 2px solid #D6C5AF; border-radius: 16px; color: #261F29; }
 .rc .rc-lg .lo-mark { display: flex; align-items: center; gap: 14px; font: 700 44px/1 Georgia, "Times New Roman", serif; letter-spacing: -1.6px; }

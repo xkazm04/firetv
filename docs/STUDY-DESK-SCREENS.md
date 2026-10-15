@@ -148,7 +148,10 @@ accidentally cancel). When the break runs out, or is skipped, the TV returns to 
 End of session, reached from the phone's End session or Menu on the landing. The whole evening as one
 picture: a tile per app on the profile, each in its own app's language, from tonight's work only —
 Math Buddy's marked sets as ticks and rings (a dashed ring where the desk was not sure, an empty pencil line where
-the learner skipped one - MB-B1), pages read, a lamp per problem that had a hint with the problem's name under it
+the learner skipped one - MB-B1); under the rails, tonight's set's named slips: the pen's ring, the item's number and the
+slip's short label from rules ("2 · added the percentages"), two then "k more", only for a slip that carries a short
+(a step up's top-rung slips and Pythagoras' - cycle 19; any other ring stays unlabelled), never a value; then
+pages read, a lamp per problem that had a hint with the problem's name under it
 ("3", "5b"; the page only when two hinted problems share a name), five then "k more", the ones that needed a second
 hint ringed (MB-B23; a log with no nameable key draws a lamp per hint, unnamed); Linga's conversations as marks sized by their replies; Essay Master's readings as arrows,
 the ones to fix reversed. "Not tonight" for an app with nothing. No problem texts: the one sentence is the caption.
