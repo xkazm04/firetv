@@ -1,5 +1,6 @@
-id,name,fireDrives,padThrottle,throttleTravelPx,padBrake,brakeTravelPx,description
-Drive,Drive,0,1,90,1,70,LEFT thumb pad: drag UP for GO and DOWN for BRAKE while steering; the RIGHT thumb keeps DRIFT and FIRE
-Classic,Classic,0,0,100,0,0,Separate pedals and weapons; coast while attacking
-Cruise,Cruise,1,0,100,0,0,FIRE or ABILITY also holds GO; brake overrides both
-Split,Split,0,1,100,0,0,Drag UP on the steering pad for GO; right thumb fights
+id,name,fireDrives,padThrottle,throttleTravelPx,padBrake,brakeTravelPx,description,autoThrottle
+Auto,Auto,0,0,100,1,70,GO is automatic: LEFT thumb steers and drags DOWN to BRAKE; the RIGHT thumb keeps DRIFT and FIRE,1
+Drive,Drive,0,1,90,1,70,LEFT thumb pad: drag UP for GO and DOWN for BRAKE while steering; the RIGHT thumb keeps DRIFT and FIRE,0
+Classic,Classic,0,0,100,0,0,Separate pedals and weapons; coast while attacking,0
+Cruise,Cruise,1,0,100,0,0,FIRE or ABILITY also holds GO; brake overrides both,0
+Split,Split,0,1,100,0,0,Drag UP on the steering pad for GO; right thumb fights,0

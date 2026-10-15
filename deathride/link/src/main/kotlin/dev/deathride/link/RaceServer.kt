@@ -63,7 +63,7 @@ class Slot(val id: Int) {
     @Volatile var combatHud=""
     /** Full combat object for /stats, built by the reader; null means [combatJson]. */
     @Volatile var combatFull: (()->String)?=null
-    @Volatile var layout="Drive"
+    @Volatile var layout="Auto"
     @Volatile var mirrored=false
     @Volatile var hudDelta=false
     /** The phone page reported itself hidden: its hud is paused until it is visible again. */
