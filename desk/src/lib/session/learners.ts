@@ -292,6 +292,18 @@ export function getLearner(id: string): Learner {
 }
 
 /** The learner for a reader that must tell an unreadable learners.json from an empty one (WD14): it throws on the first, reads the second as an empty book. */
+/**
+ * What a prompt may recall about a learner: the learner, or null when learners.json cannot be read. A prompt that
+ * only reads (explain notes, a set's slips, a hint's slips) leaves that part out and carries RECALL_UNREAD instead, so
+ * the model is never told an unreadable record is an empty one (agent-memory: durable-store-failure-posture). A path
+ * that writes the learner afterwards reads with readLearner and fails before its model call.
+ */
+export function recallLearner(id: string): Learner | null {
+  try { return readLearner(id); } catch (e) { if (e instanceof LearnersUnread) return null; throw e; }
+}
+/** What a prompt says in place of a learner's record it could not read: unavailable, never empty. */
+export const RECALL_UNREAD = "The desk's record of this student could not be read just now. Assume nothing about their past work, either way.";
+
 export function readLearner(id: string): Learner {
   const book = readBook();
   if (book === null) throw new LearnersUnread("learners.json could not be read");

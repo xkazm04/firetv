@@ -44,6 +44,21 @@ test('choices, assisted replies and uncertain observations cannot earn "on your 
  learning=mergeEvidence(learning,[evidence({id:'e8',success:false})]);assert.equal(learning.achievements.request,'transfer');
  assert.equal(mergeEvidence(learning,[evidence({id:'e7'})]).evidence.length,learning.evidence.length);
 });
+test('an unreadable learner file stops a Linga command before any model call, and says so',async()=>{
+ const L=require(path.join(root,'src/lib/session/learners.ts')),{LINGA_UNREAD}=require(path.join(root,'src/lib/english/errors.ts'));
+ fresh();
+ // the book as it was before this test, restored after: later tests count what is in it
+ const f=path.join(data,'learners.json'),before=fs.existsSync(f)?fs.readFileSync(f):null;
+ if(!before)L.saveEnglish('ema',L.blank('ema').english);
+ const was=fs.readFileSync(f);fs.writeFileSync(f,was.subarray(0,was.length-5));
+ let calls=0;answer=async()=>{calls++;return {json:{},provider:'test',ms:1};};
+ const real=console.error;console.error=()=>{};
+ try{
+  await assert.rejects(command('start',{sceneId:'booking'}),(e)=>e instanceof L.LearnersUnread);
+  assert.equal(calls,0,'no model call is paid for a turn that could not be saved');
+  const c=getSession().conversation;if(c)assert.equal(c.error,LINGA_UNREAD);
+ }finally{console.error=real;if(before)fs.writeFileSync(f,before);else fs.rmSync(f,{force:true});}
+});
 test('legacy learner migration discards malformed evidence and keeps safe defaults',()=>{assert.deepEqual(cleanEnglish(undefined),emptyEnglish());assert.equal(cleanEnglish({evidence:[{skill:'request'}]}).evidence.length,0);});
 test('adult scenario cannot be started for a minor even by direct API command',async()=>{fresh();await assert.rejects(command('start',{sceneId:'date'}),e=>e.status===403);});
 test('duplicate turn commits once, failed reply is retryable, and English preserves Maths across reset',async()=>{

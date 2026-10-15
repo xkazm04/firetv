@@ -8,7 +8,7 @@
  */
 import { text } from "../engines/text";
 import { topicIn } from "../library/paths";
-import { getLearner, saveLearner } from "../session/learners";
+import { getLearner, readLearner, RECALL_UNREAD, saveLearner } from "../session/learners";
 import { slip as slipById } from "../rules/maths";
 import type { PracticeItem } from "../session/store";
 import { askedText } from "../rules/calc-word";
@@ -20,8 +20,9 @@ const SCHEMA = {
   required: ["lines"],
 };
 
-/** The learner's notes as every prompt that reads them back carries them (explain.ts, items.ts); empty when there are none. */
-export function notesBlock(memory: readonly string[]): string {
+/** The learner's notes as every prompt that reads them back carries them (explain.ts, items.ts); empty when there are none, the unavailable line when the record could not be read (null). */
+export function notesBlock(memory: readonly string[] | null): string {
+  if (memory === null) return `${RECALL_UNREAD}\n\n`;
   return memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "";
 }
 
@@ -36,7 +37,7 @@ export async function writeMemory(
   learnerId: string,
   session: { topic?: string; items?: PracticeItem[]; hintsUsed?: number } & Partial<Evening>,
 ): Promise<string[]> {
-  const existing = getLearner(learnerId).memory;
+  const existing = readLearner(learnerId).memory;
   const items = session.items ?? [];
   const t = session.topic ? topicIn(session.topic) : undefined;
 

@@ -164,6 +164,25 @@ test('P7-a (b): control, any other failure is its own sentence and is offered ag
  // whether asking again can help is a value (failure.ts), not words in the sentence
  assert.equal(m.failure,'unknown');assert.equal(m.retry,true);
 });
+test('P7-a (c): an unreadable record reaches a prompt as unavailable, never empty; a writer fails before its model call',async()=>{
+ const l=require(src('lib/session/learners.ts'));
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
+ truncatedBook();
+ const seen=[];answer=async(req)=>{seen.push(req.prompt);throw new Error('stub stops here');};
+ const c=catchErrors();
+ try{
+  await require(src('lib/desk/explain.ts')).explain('2x + 3 = 11','I took away three','linear-one-step','ema').catch(()=>{});
+  await require(src('lib/desk/items.ts')).makeItems('linear-one-step','ema',6).catch(()=>{});
+  assert(seen.length>=2,`both asked (${seen.length})`);
+  for(const p of seen){
+   assert.match(p,/could not be read just now/,'the record is said to be unavailable');
+   assert.doesNotMatch(p,/recorded no mistakes/,'never that there were none');
+  }
+  seen.length=0;
+  await assert.rejects(require(src('lib/desk/memory.ts')).writeMemory('ema',{topic:'linear-one-step',items:[]}),(e)=>e instanceof l.LearnersUnread);
+  assert.equal(seen.length,0,'the memory writer pays for no call it could not save');
+ }finally{c.done();fs.rmSync(LJ(),{force:true});}
+});
 
 // ---- robustness-1: a run writes its status line only while its learner is seated ----
 const job1=()=>require(src('lib/desk/job.ts'));

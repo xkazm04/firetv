@@ -31,7 +31,7 @@ import { calcWordsOf, judgeOf, topicIn, type MathPath } from "../library/paths";
 import { voiceOf, withManner, type Voice } from "../rules/voice";
 import { SCHOOL_SLIPS } from "../rules/school";
 import { WORKED_METHODS } from "../library/worked";
-import { getLearner } from "../session/learners";
+import { getLearner, recallLearner, RECALL_UNREAD } from "../session/learners";
 import { notationLine } from "./read";
 import type { SchoolSystem, Subject } from "../session/store";
 
@@ -126,8 +126,9 @@ export function groundFor(problem: string, who: { id: string; system: SchoolSyst
   const school = readQuestion(problem, who.system).school;
   const unit = school ? unitOf(school) : null;
   if (unit) {
-    let seen: string[] = [];
-    try { seen = getLearner(who.id).skills[unit]?.slips ?? []; } catch { /* no record is no slips */ }
+    const me = recallLearner(who.id);
+    if (!me) parts.push(RECALL_UNREAD);
+    const seen = me?.skills[unit]?.slips ?? [];
     const said = seen.map((id) => SCHOOL_SLIPS.find((s) => s.id === id)?.says).filter((x): x is string => !!x);
     if (said.length) parts.push(`This learner has made these slips on this kind of task before: ${said.join(" ")}`);
     const m = Object.prototype.hasOwnProperty.call(WORKED_METHODS, unit) ? WORKED_METHODS[unit] : null;

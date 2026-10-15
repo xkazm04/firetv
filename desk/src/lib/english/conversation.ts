@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
 import { dispatch, getSession, type Screen } from "../session/store";
-import { getLearner, saveEnglish, saveLearner, withDigest } from "../session/learners";
+import { getLearner, readLearner, saveEnglish, saveLearner, withDigest } from "../session/learners";
 import { markSeen, recommendFor, withCertificate } from "./cert";
 import { checkAt, parked } from "./activity";
 import { checkCommand, isCheckAction, pitchAsk } from "./check";
@@ -96,7 +96,7 @@ Return only the specified JSON.`;
 }
 /** The tutor's input for every call. `invite` adds the taught item this scene brings back (review.ts), until it is used. */
 function context(c:Conversation,invite=true){
-  const learning=getLearner(c.learnerId).english,bring=invite?bringBack(c,learning.taught):null;
+  const learning=readLearner(c.learnerId).english,bring=invite?bringBack(c,learning.taught):null;
   const recent=learning.evidence.filter(e=>e.skill===c.focusSkill&&e.mode!=="choice").slice(-4);
   const struggles=recent.filter(e=>!e.success).length,independent=recent.filter(e=>e.success&&!e.supported).length;
   const adaptation=struggles>=2?"Use a shorter question and a concrete example. Offer a phrase starter if needed, setting supportProvided=true. Stay in the scene.":independent>=3?"Ask a less predictable follow-up within the learner's chosen level and social challenge. Avoid another copy of a question they already answered.":"Keep one manageable question per turn. Respond to the learner's need before adding difficulty.";
@@ -185,7 +185,7 @@ export async function englishCommand(raw:unknown){
   if(s.learner?.id!==learnerId)throw new ConversationError("The learner at the desk changed. Try again.",409);
   const profile=s.profiles.find(p=>p.id===learnerId);
   if(!profile)throw new ConversationError("Choose a learner first.");
-  const learning=getLearner(learnerId).english;
+  const learning=readLearner(learnerId).english;
   if(action==="preferences"){
     if(s.conversation?.pending)throw new ConversationError("Wait for the current turn, or cancel it first.",409);
     let preferences;try{preferences=parsePreferences(input.preferences);}catch(e){throw new ConversationError((e as Error).message);}

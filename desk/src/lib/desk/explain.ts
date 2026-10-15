@@ -35,7 +35,7 @@ import { slipsShown } from "../rules/slips";
 import { voiceOf, withManner } from "../rules/voice";
 import { topic } from "../library/syllabus";
 import { PATHS, pathOfTopic, topicIn, type PathInfo } from "../library/paths";
-import { getLearner, recordAttempt } from "../session/learners";
+import { recallLearner, recordAttempt } from "../session/learners";
 import { notesBlock } from "./memory";
 import type { PracticeItem, SchoolSystem } from "../session/store";
 
@@ -84,7 +84,7 @@ export async function explain(
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   if (calc) return explainCalc(itemQuestion, transcript, topicId, learnerId, seen);
   const t = topic(topicId);
-  const memory = getLearner(learnerId).memory;
+  const memory = recallLearner(learnerId)?.memory ?? null;
 
   const system = schoolSystem(age);
 
@@ -130,7 +130,7 @@ export async function explainSchool(
   seen?: Seen,
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   const t = topicIn(topicId);
-  const memory = getLearner(learnerId).memory;
+  const memory = recallLearner(learnerId)?.memory ?? null;
   const prompt =
     `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
     `The question: ${itemQuestion}\n\n` +
@@ -170,7 +170,7 @@ async function explainCalc(
   seen?: Seen,
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   const t = topicIn(topicId);
-  const memory = getLearner(learnerId).memory;
+  const memory = recallLearner(learnerId)?.memory ?? null;
 
   const system =
     `You are a calculus tutor listening to a first-year university student on the ${calcCourse(topicId).name} course explain their own working out loud. ` +

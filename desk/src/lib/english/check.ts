@@ -10,7 +10,7 @@ import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
 import type { Again } from "../engines/types";
 import { dispatch, getSession, type Profile, type Screen } from "../session/store";
-import { getLearner, saveEnglish } from "../session/learners";
+import { getLearner, readLearner, saveEnglish } from "../session/learners";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS } from "./curriculum";
 import { adultAllowed, adultContent } from "../rules/mode";
 import { audienceOf, keywordAudience, topicText } from "./gate";
@@ -237,7 +237,7 @@ export const isCheckAction = (action: string) => action === "level-self" || acti
 
 /** The check's actions. Returns true when it handled the action. */
 export async function checkCommand(action: string, input: Record<string, unknown>, profile: Profile, commandId: string): Promise<boolean> {
-  const s = getSession(), learnerId = profile.id, learning = getLearner(learnerId).english;
+  const s = getSession(), learnerId = profile.id, learning = readLearner(learnerId).english;
   const prefs = learning.preferences ?? defaultPreferences(profile);
   const ctx: Ctx = { profile, learning, adult: adultContent(profile, prefs), commandId };
   const open = s.check?.learnerId === learnerId ? s.check : null;
