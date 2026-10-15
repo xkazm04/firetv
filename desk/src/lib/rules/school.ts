@@ -4380,18 +4380,24 @@ export const SCHOOL_WITHHELD = {
  * MB-B20: the fixed sentence for a top-rung percent change, by its kind, in the same rules (one per kind, 25 words or fewer,
  * no digit, no number word). The unit's own line teaches the forward change, which is the very slip of a reverse percentage
  * (taking the percent off the new amount), so the rung says how to work back; two changes and the years say to apply each
- * change to the amount there is now. A top-rung Pythagoras item keeps the unit's line.
+ * change to the amount there is now. A top-rung Pythagoras item keeps the unit's line. A top-rung probability item has its
+ * own too, since the unit's speaks of one draw from a bag: multiply the chance of each event; at least one is a whole less
+ * neither; a pick not put back leaves fewer for the next.
  */
 export const TOP_WITHHELD = {
   "pct-before": "The amount given already includes the change, so divide back to the original. The answer is yours to work out.",
   "pct-steps": "Apply each change in turn to the amount you have now, not to the starting amount. The answer is yours to work out.",
+  "prob-and": "Find the chance of each part on its own, then multiply them together. The answer is yours to work out.",
+  "prob-least": "At least happens unless neither does: find the chance of neither, then take it from a whole. The answer is yours to work out.",
+  "prob-draw": "Nothing taken is put back, so the next pick has fewer to choose from. Multiply both chances. The answer is yours to work out.",
 } as const;
 
-/** The withheld line for a school spec, chosen by its unit (a top-rung percent change by its kind); the general line for any other. */
+/** The withheld line for a school spec, chosen by its unit (a top-rung percent change or probability item by its kind); the general line for any other. */
 export function withheldSchool(spec: unknown): string {
   try {
     const r = read(spec);
     if (r.ok && r.kind.k === "pct-top") return TOP_WITHHELD[r.kind.form === "before" ? "pct-before" : "pct-steps"];
+    if (r.ok && r.kind.k === "prob-two") return TOP_WITHHELD[r.kind.form === "dice-least" ? "prob-least" : r.kind.form.startsWith("draw") ? "prob-draw" : "prob-and"];
   } catch {
     // a spec the desk cannot read gets the line its unit (or none) gives, below
   }

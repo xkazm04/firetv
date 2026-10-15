@@ -300,9 +300,9 @@ test('MB-B20 the reverse, the two changes and the years on percent change: value
  }
 });
 
-test('MB-B20 the fixed sentence after a second leak: a reverse percentage and a change in turns get their own (never the forward method), a rounded side the unit\'s; none leaks',()=>{
+test('MB-B20 the fixed sentence after a second leak: a reverse percentage, a change in turns and two events get their own (never the unit\'s method), a rounded side the unit\'s; none leaks',()=>{
  const words=(s)=>s.trim().split(/\s+/).length;
- assert.deepEqual(Object.keys(S.TOP_WITHHELD).sort(),['pct-before','pct-steps']);
+ assert.deepEqual(Object.keys(S.TOP_WITHHELD).sort(),['pct-before','pct-steps','prob-and','prob-draw','prob-least']);
  for(const line of Object.values(S.TOP_WITHHELD)){assert.ok(words(line)<=25,line);assert.doesNotMatch(line,/\d/,line);assert.match(line,/The answer is yours to work out\.$/);}
  for(let seed=0;seed<SEEDS;seed++){
   const p=S.genPercentTop(seed),h=pctByHand(p.expr),line=S.withheldSchool(p);
@@ -312,6 +312,14 @@ test('MB-B20 the fixed sentence after a second leak: a reverse percentage and a 
   assert.equal(S.withheldSchool(y),S.SCHOOL_WITHHELD.pythagoras);assert.equal(S.leaksSchool(y,S.SCHOOL_WITHHELD.pythagoras),false,y.expr);
  }
  assert.equal(S.withheldSchool({shape:'percent-change',expr:'increase 60 by 15%'}),S.SCHOOL_WITHHELD['pct-change'],'a tier-1/2 change keeps the unit\'s line');
+ // MB-B20: a top-rung probability item gets its own line by kind (never the unit's one-draw-from-a-bag line); none leaks; a single draw keeps the unit's
+ for(let seed=0;seed<SEEDS;seed++){
+  const p=S.genProbabilityTop(seed),h=probByHand(p.expr),line=S.withheldSchool(p);
+  assert.equal(line,S.TOP_WITHHELD[h.form==='dice-least'?'prob-least':h.form.startsWith('draw')?'prob-draw':'prob-and'],p.expr);
+  assert.equal(S.leaksSchool(p,line),false,`${p.expr}: ${line}`);
+ }
+ for(const line of ['prob-and','prob-draw','prob-least'].map((k)=>S.TOP_WITHHELD[k]))assert.doesNotMatch(line,/\b(?:one|two|three|four|five|six|half|first|second)\b/i,line);
+ assert.equal(S.withheldSchool({shape:'probability',expr:'bag red 3, blue 5, green 2 ask red'}),S.SCHOOL_WITHHELD.probability,'a single draw keeps the unit\'s line');
 });
 
 /** The top rung's own slip worked by hand: the percent of the new amount (a reverse), the percentages added (two changes, the years); null at zero or below. */

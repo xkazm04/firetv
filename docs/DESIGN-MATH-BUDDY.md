@@ -316,7 +316,11 @@ replacement; at least one of two dice names none.
   (MB-B20) has its own, since the unit's teaches the forward change: "The amount given already includes the change, so
   divide back to the original. The answer is yours to work out." for the amount before a change, and "Apply each change
   in turn to the amount you have now, not to the starting amount. The answer is yours to work out." for two changes or
-  the years (`TOP_WITHHELD`). On the calc1 path there
+  the years (`TOP_WITHHELD`). A top-rung probability item has its own too, since the unit's speaks of one draw from a
+  bag: "Find the chance of each part on its own, then multiply them together. The answer is yours to work out." for two
+  events, "At least happens unless neither does: find the chance of neither, then take it from a whole. The answer is
+  yours to work out." for at least one of two dice, and "Nothing taken is put back, so the next pick has fewer to choose
+  from. Multiply both chances. The answer is yours to work out." for two picks without replacement. On the calc1 path there
   is no lesson to show, so the lesson pill says "No lesson for this". On the sheet and walk: THE DESK SAYS / THE
   DESK REPLIED over the desk's line (`maths-said`) and "Look at ..." from the rulebook. `maths-hint`.
 - **Slip name** - Fraunces 54 with its last word in amber italic. `maths-slip`.
