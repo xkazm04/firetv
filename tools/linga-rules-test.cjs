@@ -772,7 +772,7 @@ test('turn case 7 GUARD: leave during a turn in flight cancels it, and the late 
 const review=()=>require(path.join(root,'src/lib/english/review.ts'));
 const TAUGHT_A={id:'old1:t1:moment',kind:'fix',said:'I has booking',better:'I have a booking',why:'"I" goes with "have".',turnId:'old1:t1',at:10,sceneId:'booking',title:'A hotel booking'};
 /** older than A, but already used again: never due */
-const TAUGHT_B={id:'old2:t2:moment',kind:'word',said:'rezervace',better:'reservation',why:'The booking itself.',turnId:'old2:t2',at:5,sceneId:'booking',title:'A hotel booking',offered:1,reusedAt:6,reusedIn:'old3',reusedQuote:'reservation'};
+const TAUGHT_B={id:'old2:t2:moment',kind:'word',said:'rezervace',better:'reservation',why:'The booking itself.',turnId:'old2:t2',at:5,sceneId:'booking',title:'A hotel booking',offered:1,reusedAt:Date.now(),reusedIn:'old3',reusedQuote:'reservation'};
 const TAUGHT_C={id:'old4:t4:moment',kind:'word',said:'svačina',better:'a snack',why:'Food you eat between meals.',turnId:'old4:t4',at:20,sceneId:'weekend',title:'A weekend plan'};
 const REUSED='Hi, I have a booking for Friday.';
 const REVIEW={id:TAUGHT_A.id,kind:'fix',better:'I have a booking',fromTitle:'A hotel booking'};
@@ -792,7 +792,7 @@ test('review case 1: start picks the due taught item, the opening prompt invites
  const bring=prompts[0].bringBack;
  assert(bring,'the opening prompt carries bringBack');assert.equal(bring.phrase,'I have a booking');
  assert.match(bring.task,/invite/i);assert.match(bring.task,/never say it/i);
- assert.equal(taughtOf(TAUGHT_A.id).offered,1);assert.equal(taughtOf(TAUGHT_B.id).offered,1,'the reused item is not offered again');
+ assert.equal(taughtOf(TAUGHT_A.id).offered,1);assert.equal(taughtOf(TAUGHT_B.id).offered,1,'the item used again today is not due before tomorrow (K3)');
 });
 test('review case 2: an unsupported reply that uses the phrase is recorded by code, on the record and on the scene',async()=>{
  const c=await taughtStart([TAUGHT_B,TAUGHT_A]);
@@ -853,21 +853,30 @@ test('review case 5: withholding - during the scene the phrase is on no screen u
  assert(v.baseCaption.includes('I have a booking'),'once used, the next screen says so');assert.equal(v.captionTag,'Used again');
  assert(v.baseCaption.split(/\s+/).length<=25);
 });
-test('review case 6: an item offered in two scenes without reuse is not due a third time',async()=>{
- const R=review();
- assert.equal(R.dueTaught([{...TAUGHT_A,offered:2},TAUGHT_C],'new').id,TAUGHT_C.id);
+test('review case 6 (K3): an item invited twice without a use is snoozed, not retired; an item saved retired comes back',async()=>{
+ const R=review(),now=Date.now();
+ const missed=R.offer(R.offer([TAUGHT_A],TAUGHT_A.id,now-2*R.DAY_MS),TAUGHT_A.id,now-R.DAY_MS)[0];
+ assert.equal(missed.offered,2);assert.equal(missed.nextDueAt,now-R.DAY_MS+R.SNOOZE_MS,'snoozed from its second invitation');assert.equal(missed.misses,0,'the count starts again');
+ assert.equal(R.dueTaught([missed,TAUGHT_C],'new').id,TAUGHT_C.id);
  assert.equal(R.dueTaught([TAUGHT_C,TAUGHT_A],'new').id,TAUGHT_A.id,'oldest first');
  assert.equal(R.dueTaught([TAUGHT_A],'old1'),null,'never from the rehearsal that taught it');
- let c=await taughtStart([{...TAUGHT_A,offered:2},TAUGHT_C]);assert.equal(c.review.id,TAUGHT_C.id);
- c=await taughtStart([{...TAUGHT_A,offered:2},TAUGHT_B]);assert.equal(c.review,null);assert.equal(prompts[0].bringBack,undefined);
+ let c=await taughtStart([missed,TAUGHT_C]);assert.equal(c.review.id,TAUGHT_C.id);
+ c=await taughtStart([missed,TAUGHT_B]);assert.equal(c.review,null);assert.equal(prompts[0].bringBack,undefined);
  assert.equal(taughtOf(TAUGHT_A.id).offered,2);
+ assert.equal(R.dueTaught([missed],'new',undefined,missed.nextDueAt).id,TAUGHT_A.id,'back when the snooze ends');
+ // a record saved before K3 with an item offered twice (retired, then) is snoozed from the day it was taught: long past here
+ const legacy=cleanEnglish({taught:[{...TAUGHT_A,offered:2}]}).taught[0];
+ assert.equal(legacy.nextDueAt,TAUGHT_A.at+R.SNOOZE_MS);assert.equal(R.dueTaught([legacy],'new').id,TAUGHT_A.id);
 });
-test('review case 7: cleanEnglish keeps a taught item\'s review fields and drops one with a malformed reusedAt',()=>{
- const kept={...TAUGHT_A,offered:1,reusedAt:99,reusedIn:'c9',reusedQuote:'I have a booking'};
- const taught=cleanEnglish({taught:[kept,{...TAUGHT_A,id:'bad',reusedAt:'yesterday'},TAUGHT_C]}).taught;
+test('review case 7: cleanEnglish keeps a taught item\'s review fields, schedules an item saved before K3, and drops a malformed one',()=>{
+ const R=review(),kept={...TAUGHT_A,offered:1,reusedAt:99,reusedIn:'c9',reusedQuote:'I have a booking'};
+ const taught=cleanEnglish({taught:[kept,{...TAUGHT_A,id:'bad',reusedAt:'yesterday'},{...TAUGHT_A,id:'bad2',reuses:[{at:'x'}]},{...TAUGHT_A,id:'bad3',nextDueAt:'soon'},TAUGHT_C]}).taught;
  assert.deepEqual(taught.map(t=>t.id),[TAUGHT_A.id,TAUGHT_C.id]);
- // K1: a fix's slip keys are worked out again on every load (slip.ts), so a record saved before them gets them; a word gets none
- assert.deepEqual(taught[0],{...kept,slip:'i has booking',fix:'i have a booking'});assert.deepEqual(taught[1],TAUGHT_C,'an item never offered keeps no review fields');
+ // K1: a fix's slip keys are worked out again on every load (slip.ts), so a record saved before them gets them; a word gets none.
+ // K3: the use it kept becomes the first of its history, due one interval after it
+ assert.deepEqual(taught[0],{...kept,slip:'i has booking',fix:'i have a booking',reuses:[{at:99,conversationId:'c9',quote:'I have a booking'}],misses:0,nextDueAt:99+R.REUSE_INTERVALS_MS[0]});
+ assert.deepEqual(taught[1],TAUGHT_C,'an item never offered keeps no review fields');
+ assert.deepEqual(cleanEnglish({taught:[taught[0]]}).taught[0],taught[0],'a scheduled item loads as it was saved');
 });
 test('review case 8 GUARD: a learner with no taught items gets no review and no bringBack',async()=>{
  const c=await taughtStart([]);
@@ -992,6 +1001,74 @@ test('K1 case 6: a slip taught twice merges into one Taught item; "My tomatoes a
  assert.equal(R.reuseOf('My tomatoes are big.',{...scene,turns:convo().turns}),'tomatoes are');
  // a word item keeps today's whole-phrase test
  assert.equal(R.reuseOf('I have a snack.',convo({review:R.reviewOf(TAUGHT_C)})),'a snack');assert.equal(R.reviewOf(TAUGHT_C).fix,undefined);
+});
+
+// ---- K3: taught items keep coming back until they hold (review.ts schedule; a fake clock, no model)
+const T0=Date.UTC(2026,9,1,9),HOUR=3600e3;
+test('K3 case 1: a first reuse schedules another invitation a day later, not before; then three and seven days; a use at the end of the ladder rests',()=>{
+ const R=review(),id=TAUGHT_A.id;let t=[{...TAUGHT_A,at:T0}];
+ assert.equal(R.dueTaught(t,'s1',undefined,T0+1).id,id,'a new item is due at once');
+ t=R.offer(t,id,T0+HOUR);
+ let used=T0+2*HOUR;t=R.markReused(t,id,'c1','I have a booking',used,'booking');
+ assert.equal(t[0].reusedAt,used);assert.deepEqual(t[0].reuses,[{at:used,conversationId:'c1',quote:'I have a booking',sceneId:'booking'}]);assert.equal(t[0].misses,0);
+ const ladder=[];
+ for(const [n,days] of [[1,1],[2,3],[3,7]]){
+  assert.equal(t[0].nextDueAt,used+days*R.DAY_MS,`use ${n}: due ${days} days later`);
+  assert.equal(R.dueTaught(t,'s',undefined,used+days*R.DAY_MS-1),null,`use ${n}: nothing comes due early`);
+  assert.equal(R.dueTaught(t,'s',undefined,used+days*R.DAY_MS).id,id,`use ${n}: due on the day`);
+  ladder.push(days);
+  used=used+days*R.DAY_MS+HOUR;t=R.offer(t,id,used-HOUR);t=R.markReused(t,id,`c${n+1}`,'I have a booking',used,'booking');
+ }
+ assert.deepEqual(ladder,[1,3,7]);
+ assert.equal(t[0].reuses.length,4);assert.equal(t[0].reusedAt,used,'reusedAt is the latest use');assert.equal(t[0].reusedIn,'c4');
+ assert.equal(t[0].nextDueAt,undefined);assert.equal(R.rests(t[0]),true);
+ assert.equal(R.dueTaught(t,'s',undefined,used+365*R.DAY_MS),null,'a use at the end of the ladder rests the item');
+ assert.deepEqual(cleanEnglish({taught:t}).taught[0].reuses.map(r=>r.conversationId),['c1','c2','c3','c4'],'the history survives a load, for a later "yours" rule (L1)');
+});
+test('K3 case 2: two invitations without a use snooze the item; it returns when the snooze ends, and two more misses snooze it again',()=>{
+ const R=review(),id=TAUGHT_A.id;let t=[{...TAUGHT_A,at:T0}];
+ t=R.offer(t,id,T0+HOUR);assert.equal(R.dueTaught(t,'s',undefined,T0+2*HOUR).id,id,'one miss: still due');
+ t=R.offer(t,id,T0+2*HOUR);
+ assert.equal(R.dueTaught(t,'s',undefined,T0+2*HOUR+R.SNOOZE_MS-1),null,'snoozed, nothing early');
+ assert.equal(R.dueTaught(t,'s',undefined,T0+2*HOUR+R.SNOOZE_MS).id,id,'back after the snooze, not retired');
+ const back=T0+2*HOUR+R.SNOOZE_MS;
+ t=R.offer(t,id,back);assert.equal(R.dueTaught(t,'s',undefined,back+HOUR).id,id,'the count started again');
+ t=R.offer(t,id,back+HOUR);assert.equal(R.dueTaught(t,'s',undefined,back+2*HOUR),null);assert.equal(t[0].offered,4);
+ // a use in the scene that snoozed it replaces the snooze with the ladder
+ t=R.markReused(R.offer(R.offer([{...TAUGHT_A,at:T0}],id,T0+HOUR),id,T0+2*HOUR),id,'c1','I have a booking',T0+3*HOUR);
+ assert.equal(t[0].nextDueAt,T0+3*HOUR+R.DAY_MS);
+});
+test('K3 case 3: a slipping item outranks an older due one, even snoozed or resting; a slip before its last invitation does not',()=>{
+ const R=review(),old={...TAUGHT_C,at:T0};
+ const snoozed={...TAUGHT_A,at:T0+5,offered:2,misses:0,offeredAt:T0+10,nextDueAt:T0+10+R.SNOOZE_MS};
+ assert.equal(R.dueTaught([old,snoozed],'s',undefined,T0+30).id,old.id,'without a slip: the older due item');
+ assert.equal(R.dueTaught([old,{...snoozed,slips:1,slipAt:T0+20}],'s',undefined,T0+30).id,snoozed.id,'its slip came back after the invitation: first');
+ assert.equal(R.dueTaught([old,{...snoozed,slips:1,slipAt:T0+8}],'s',undefined,T0+30).id,old.id,'a slip before the last invitation is spent');
+ const resting={...TAUGHT_A,at:T0,reuses:[1,2,3,4].map(n=>({at:T0+n,conversationId:'c'+n,quote:'I have a booking'})),reusedAt:T0+4};
+ assert.equal(R.dueTaught([old,resting],'s',undefined,T0+30).id,old.id);
+ assert.equal(R.dueTaught([old,{...resting,slips:1,slipAt:T0+9}],'s',undefined,T0+30).id,resting.id,'a resting item whose slip comes back is invited again');
+ // with two slipping, the latest slip first; the record-tier slip count comes from K1 markSlipped
+ const a={...snoozed,id:'a',slipAt:T0+20},b={...snoozed,id:'b',slipAt:T0+25};
+ assert.equal(R.dueTaught([a,b,old],'s',undefined,T0+30).id,'b');
+ assert.equal(R.dueTaught(R.markSlipped([old,{...snoozed}],'i has booking',T0+40),'s',undefined,T0+50).id,snoozed.id,'markSlipped makes it slip');
+});
+test('K3 case 4: a seeded run on a fake clock - used, not invited the same day, invited the next day; one model call per start and per turn, as before',async()=>{
+ const realNow=Date.now;let clock=T0;Date.now=()=>clock;
+ try{
+  let c=await taughtStart([{...TAUGHT_A,at:T0-review().DAY_MS}]);
+  assert.equal(c.review.id,TAUGHT_A.id);assert.equal(prompts.length,1,'the opening: one call');
+  clock+=HOUR;await reply(REUSED);assert.equal(prompts.length,2,'a turn: one call');
+  let t=taughtOf(TAUGHT_A.id);assert.equal(t.reusedAt,clock);assert.equal(t.nextDueAt,clock+review().DAY_MS);assert.equal(t.reuses.length,1);
+  const used=clock;
+  clock+=2*HOUR;prompts=[];await command('start',{sceneId:'booking',replace:true});
+  assert.equal(getSession().conversation.review,null,'not invited again the same day');assert.equal(prompts.length,1);assert.equal(prompts[0].bringBack,undefined);
+  clock=used+review().DAY_MS;prompts=[];await command('start',{sceneId:'rover',replace:true});
+  c=getSession().conversation;assert.equal(c.review.id,TAUGHT_A.id,'invited again a day after the use');assert.equal(prompts.length,1);assert.equal(prompts[0].bringBack.phrase,'I have a booking');
+  t=taughtOf(TAUGHT_A.id);assert.equal(t.offered,2);assert.equal(t.offeredAt,clock);assert.equal(t.misses,1);
+  await reply('Yes, I have a booking for two.');assert.equal(prompts.length,2,'still one call a turn');
+  t=taughtOf(TAUGHT_A.id);assert.equal(t.reuses.length,2);assert.equal(t.nextDueAt,clock+3*review().DAY_MS,'the second use: three days');
+  assert.notEqual(t.reuses[0].conversationId,t.reuses[1].conversationId,'two scenes in the history');
+ }finally{Date.now=realNow;}
 });
 
 // ---- T10: the tutor's calls run with thinking off, and only they do ----

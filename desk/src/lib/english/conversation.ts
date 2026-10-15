@@ -251,7 +251,7 @@ export async function englishCommand(raw:unknown){
     if(s.conversation?.pending)throw new ConversationError("A scene is already being prepared. You can cancel it.",409);
     if(s.conversation&&s.conversation.phase!=="finished"&&input.replace!==true)throw new ConversationError("Finish or leave the current scene before starting another.",409);
     const due=oldestDue(learning.evidence,scene.skill);
-    // One taught item comes back (review.ts): code picks it, the partner makes room for it without saying it.
+    // One taught item comes back (review.ts): code picks it on its schedule (K3), the partner makes room for it without saying it.
     const id=randomUUID(),taught=dueTaught(learning.taught,id,taughtAllowed(profile,prefs,learning));
     const c:Conversation={id,learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,scene,turns:[],coaching:null,moment:null,moments:[],phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now(),review:taught?reviewOf(taught):null,...lostStart(scene.id,id)};
     dispatch({type:"timer.pause"});commit(c,"linga-talk",parkCheck());
@@ -376,7 +376,7 @@ export async function englishCommand(raw:unknown){
       const at=Date.now(),counted=again.filter(h=>h.record).map(h=>h.keys.slip);
       const slipped=counted.reduce((t,slip)=>markSlipped(t,slip,at,allowed),learned.taught);
       const taught=moment?keepMoment(slipped,{...moment,sceneId:c.sceneId,title:c.title},partnerLines(c),TAUGHT_CAP,counted,allowed):slipped;
-      saveEnglish(learnerId,{...learned,taught:reused&&c.review?markReused(taught,c.review.id,c.id,reused,Date.now()):taught});
+      saveEnglish(learnerId,{...learned,taught:reused&&c.review?markReused(taught,c.review.id,c.id,reused,at,c.sceneId):taught});
       // a moment models wording, so the reply after it is supported practice
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
       next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported||copied},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{})};

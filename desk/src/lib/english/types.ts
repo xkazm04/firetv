@@ -96,7 +96,15 @@ export interface Taught extends Moment {
   offered?: number; reusedAt?: number; reusedIn?: string; reusedQuote?: string;
   /** how many later replies said the slip again (slip.ts, record tier only), and when the last one did; both only ever rise */
   slips?: number; slipAt?: number;
+  /**
+   * The schedule (K3, review.ts), written by code: when the item is next due (absent: due since it was taught), the
+   * invitations in a row not followed by a use, the date of the last invitation, and every unaided use, newest last
+   * (at most REUSES_MAX). reusedAt, reusedIn and reusedQuote are the latest of those uses.
+   */
+  nextDueAt?: number; misses?: number; offeredAt?: number; reuses?: Reuse[];
 }
+/** One unaided use of a taught item: when, in which conversation and scene (absent on a use kept before K3), and the learner's words. */
+export interface Reuse { at: number; conversationId: string; sceneId?: string; quote: string }
 /**
  * The taught item this scene brings back (review.ts). The partner is asked to make room for it and never to say it;
  * used is the learner's reply that used it unaided, and usedTurn that reply's turn.

@@ -5,6 +5,7 @@
  * learner stands. Same marks in, same band out.
  */
 import { slipOf } from "./slip";
+import { REUSES_MAX, scheduled } from "./review";
 import { BANDS, type Audience, type Band, type EvidenceMode, type Placement, type PlacementRecord, type PlacementTask, type Plan, type PlanTopic, type SkillId, type TaskKind, type TaskVerdict, type Taught } from "./types";
 import { audienceOf, topicText } from "./gate";
 
@@ -317,9 +318,16 @@ export function cleanTaught(value: unknown): Taught[] {
     if (m.reusedIn !== undefined && !text(m.reusedIn, 200) || m.reusedQuote !== undefined && !text(m.reusedQuote, 240)) return [];
     if (m.slips !== undefined && !(Number.isInteger(m.slips) && (m.slips as number) >= 0)) return [];
     if (m.slipAt !== undefined && !(typeof m.slipAt === "number" && Number.isFinite(m.slipAt))) return [];
-    const review = { ...(m.offered !== undefined && { offered: m.offered as number }), ...(m.reusedAt !== undefined && { reusedAt: m.reusedAt as number }), ...(m.reusedIn !== undefined && { reusedIn: m.reusedIn as string }), ...(m.reusedQuote !== undefined && { reusedQuote: m.reusedQuote as string }), ...(m.slips !== undefined && { slips: m.slips as number }), ...(m.slipAt !== undefined && { slipAt: m.slipAt as number }) };
+    // the schedule (K3): a date, a count, and a history whose every entry is well formed, or the item drops
+    for (const k of ["nextDueAt", "offeredAt"]) if (m[k] !== undefined && !(typeof m[k] === "number" && Number.isFinite(m[k]))) return [];
+    if (m.misses !== undefined && !(Number.isInteger(m.misses) && (m.misses as number) >= 0)) return [];
+    if (m.reuses !== undefined && !(Array.isArray(m.reuses) && m.reuses.every(x => { const r = obj(x); return typeof r.at === "number" && Number.isFinite(r.at) && typeof r.conversationId === "string" && r.conversationId.length <= 200 && text(r.quote, 240) && (r.sceneId === undefined || text(r.sceneId, 100)); }))) return [];
+    const reuses = Array.isArray(m.reuses) ? m.reuses.map(x => { const r = obj(x); return { at: r.at as number, conversationId: r.conversationId as string, quote: r.quote as string, ...(r.sceneId !== undefined ? { sceneId: r.sceneId as string } : {}) }; }).slice(-REUSES_MAX) : undefined;
+    const review = { ...(m.offered !== undefined && { offered: m.offered as number }), ...(m.reusedAt !== undefined && { reusedAt: m.reusedAt as number }), ...(m.reusedIn !== undefined && { reusedIn: m.reusedIn as string }), ...(m.reusedQuote !== undefined && { reusedQuote: m.reusedQuote as string }), ...(m.slips !== undefined && { slips: m.slips as number }), ...(m.slipAt !== undefined && { slipAt: m.slipAt as number }),
+      ...(m.nextDueAt !== undefined && { nextDueAt: m.nextDueAt as number }), ...(m.misses !== undefined && { misses: m.misses as number }), ...(m.offeredAt !== undefined && { offeredAt: m.offeredAt as number }), ...(reuses && { reuses }) };
     // a fix's slip keys (K1, slip.ts) are code's, never stored trust: worked out again from its words on every load, so a record saved before them gets them
     const keys = m.kind === "fix" ? slipOf(m.said as string, m.better as string) : null;
-    return [{ id: m.id as string, kind: m.kind as Taught["kind"], said: m.said as string, better: m.better as string, why: m.why as string, turnId: m.turnId as string, sceneId: m.sceneId as string, title: m.title as string, at: m.at, ...(keys ?? {}), ...review }];
+    // an item saved before the schedule gets one from its older review fields (review.ts scheduled)
+    return [scheduled({ id: m.id as string, kind: m.kind as Taught["kind"], said: m.said as string, better: m.better as string, why: m.why as string, turnId: m.turnId as string, sceneId: m.sceneId as string, title: m.title as string, at: m.at, ...(keys ?? {}), ...review })];
   }).slice(-TAUGHT_CAP);
 }
