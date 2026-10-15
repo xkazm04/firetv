@@ -17,7 +17,8 @@ import { EngineError } from "../engines/types";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, spokenBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
-import { bringBack, dueTaught, markReused, offer, reuseOf, reviewOf, shownLines, usedLine } from "./review";
+import { bringBack, dueTaught, keepMoment, markReused, markSlipped, offer, partnerLines, reuseOf, reviewOf, shownLines, slipsAgain, SLIP_AGAIN_TASK, usedLine } from "./review";
+import { slipOf } from "./slip";
 import { copiesShown } from "./credit";
 import { applyStep, currentStep, missionDone, missionOf, STEP_MAX } from "./mission";
 import { accepts, isTurnAction, refusal } from "./turn";
@@ -126,7 +127,9 @@ function parseMoment(value:unknown,reply:string,turnId:string):Moment|null{
   const said=typeof m.said==="string"?m.said.trim():"",better=typeof m.better==="string"?m.better.trim():"",why=typeof m.why==="string"?m.why.trim():"";
   if((kind!=="fix"&&kind!=="word")||!said||!better||!why||said.length>180||better.length>180||why.length>140)return null;
   if(kind==="fix"&&(!reply.includes(said)||said===better))return null;
-  return {id:`${turnId}:moment`,kind,said,better,why,turnId,at:Date.now()};
+  // a fix carries its slip keys (K1, slip.ts), worked out by code here and never asked of the model
+  const keys=kind==="fix"?slipOf(said,better):null;
+  return {id:`${turnId}:moment`,kind,said,better,why,turnId,at:Date.now(),...(keys??{})};
 }
 
 /**
@@ -340,6 +343,9 @@ export async function englishCommand(raw:unknown){
   const lastLearner=[...c.turns].reverse().find(t=>t.role==="learner");
   if(action==="replay"&&!c.coaching)throw new ConversationError("Ask for a coaching moment first.");
   const mayStop=action==="turn"&&momentAllowed(c);
+  // K1: a taught slip said again is found by code before the call (review.ts slipsAgain): this scene's moments and the
+  // taught fixes this learner may be shown. The first asks the partner for a soft recast; record-tier ones count below.
+  const allowed=taughtAllowed(profile,prefs,learning),again=action==="turn"?slipsAgain(reply,c,learning.taught.filter(allowed)):[];
   commit({...c,pending:commandId,capture:false,error:""});
   try{
     // The first LT run: 3 moments in 16 conversations, with clear errors in most learner turns. "Most turns are none"
@@ -347,7 +353,7 @@ export async function englishCommand(raw:unknown){
     const momentTask=mayStop?(beginner(c)?" This learner is a beginner: stop only for a word or phrase they will need again in this scene, never on a goodbye, a thanks or a closing line.":"")+" moment: you may stop the scene for one thing. Stop with a fix when submittedReply has an error that blurs the meaning, an error this learner has now made more than once in the transcript, or a basic error their level should already control; said is an exact excerpt of submittedReply, better is the same idea said well, why is one short reason. Stop with a word when the learner reached for a word or phrase in another language, talked around a missing word, or used a clearly wrong word; said is exactly what they used (their own-language words are fine), better is the English they needed (the word or phrase, or at most one short sentence using it in this scene), why is what it means in plain words. A word moment is vocabulary only: a grammar point (a verb form, an article, word order) is a fix, and a fix needs an exact excerpt of an English reply. When the reply has such an error, stop for it rather than letting it pass, and pick the one that matters most. Never stop for a valid alternative, a style or register choice, or a one-off slip that does not blur meaning. Otherwise kind none with empty fields.":" moment: kind none with empty fields.";
     const stepTask=c.mission&&!missionDone(c.mission)?" step: currentStep is the one goal this learner is working on. Set reached true only when submittedReply itself, in the learner's own words, does it, and quote the exact words of submittedReply that did it (at least two words); otherwise reached false with an empty quote.":"";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
-    const task=action==="turn"?{task:`Respond in character to submittedReply, then assess it against the allowed skills. Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}`,submittedReply:reply}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
+    const task=action==="turn"?{task:`Respond in character to submittedReply, then assess it against the allowed skills. Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}`,submittedReply:reply,...(again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
     const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,action!=="coach"),...task}),schema:action==="turn"?(stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:replaySchema,accept:action==="turn"?turnAccept:action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"});
     const current=checkCurrent(c,commandId);
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
@@ -360,7 +366,11 @@ export async function englishCommand(raw:unknown){
       const moment=parsed&&[parsed.said,parsed.better,parsed.why].every(x=>audienceSafe(c,x)!==null)?parsed:null;
       // Reuse is decided here, in code (review.ts): the reply as sent, on the scene as it stood when it was sent.
       const reused=reuseOf(reply,c),learned=mergeEvidence(getLearner(learnerId).english,observations);
-      const taught=moment?[...learned.taught,{...moment,sceneId:c.sceneId,title:c.title}].slice(-TAUGHT_CAP):learned.taught;
+      // a slip said again counts on the record (record tier only, and once per reply); a moment on a slip the record already
+      // holds marks that item instead of teaching it twice (review.ts keepMoment)
+      const at=Date.now(),counted=again.filter(h=>h.record).map(h=>h.keys.slip);
+      const slipped=counted.reduce((t,slip)=>markSlipped(t,slip,at,allowed),learned.taught);
+      const taught=moment?keepMoment(slipped,{...moment,sceneId:c.sceneId,title:c.title},partnerLines(c),TAUGHT_CAP,counted,allowed):slipped;
       saveEnglish(learnerId,{...learned,taught:reused&&c.review?markReused(taught,c.review.id,c.id,reused,Date.now()):taught});
       // a moment models wording, so the reply after it is supported practice
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};

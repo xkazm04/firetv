@@ -866,12 +866,132 @@ test('review case 7: cleanEnglish keeps a taught item\'s review fields and drops
  const kept={...TAUGHT_A,offered:1,reusedAt:99,reusedIn:'c9',reusedQuote:'I have a booking'};
  const taught=cleanEnglish({taught:[kept,{...TAUGHT_A,id:'bad',reusedAt:'yesterday'},TAUGHT_C]}).taught;
  assert.deepEqual(taught.map(t=>t.id),[TAUGHT_A.id,TAUGHT_C.id]);
- assert.deepEqual(taught[0],kept);assert.deepEqual(taught[1],TAUGHT_C,'an item never offered keeps no review fields');
+ // K1: a fix's slip keys are worked out again on every load (slip.ts), so a record saved before them gets them; a word gets none
+ assert.deepEqual(taught[0],{...kept,slip:'i has booking',fix:'i have a booking'});assert.deepEqual(taught[1],TAUGHT_C,'an item never offered keeps no review fields');
 });
 test('review case 8 GUARD: a learner with no taught items gets no review and no bringBack',async()=>{
  const c=await taughtStart([]);
  assert.equal(c.review??null,null);assert(!('bringBack' in prompts[0]));
  await reply(REUSED);assert(!('bringBack' in prompts[1]));
+});
+
+// ---- K1 slip keys: a taught fix is judged by the words that changed (slip.ts), not by its whole sentence
+const slipMod=()=>require(path.join(root,'src/lib/english/slip.ts'));
+/** Viktor's fix from the 2026-10-14 LT run, as the record keeps it */
+const VIKTOR={id:'v1:t1:moment',kind:'fix',said:'My tomatoes is one metr.',better:'My tomatoes are one metre tall.',why:'A plural subject like tomatoes takes are, not is.',turnId:'v1:t1',at:30,sceneId:'garden',title:'Show my tomato plants'};
+/** a learner whose record holds `taught`, and an engine that keeps every prompt and answers each turn with `turn()` */
+async function slipStart(taught,turn=()=>({reply:'Lovely! What colour are they?',supportProvided:false,observations:[]})){
+ fresh();saveEnglish('ema',{...emptyEnglish(),taught:cleanEnglish({taught}).taught});prompts=[];
+ answer=async req=>{const p=JSON.parse(req.prompt);prompts.push(p);return {json:p.submittedReply?turn(p):{title:'Garden',goal:'Show the garden.',opening:'Hi Grandpa! What is growing there?',supportProvided:false},provider:'test',ms:1};};
+ await command('start',{sceneId:'rover',replace:true});
+ return getSession().conversation;
+}
+test('K1 case 1: slipOf keeps the changed words with a neighbour - a change one, a drop or an addition both - and folds number words',()=>{
+ const S=slipMod();
+ assert.deepEqual(S.slipOf('My tomatoes is one metre','My tomatoes are one metre'),{slip:'tomatoes is',fix:'tomatoes are'});
+ assert.deepEqual(S.slipOf(VIKTOR.said,VIKTOR.better),{slip:'tomatoes is',fix:'tomatoes are'},'of two changes, the first whose own key is guarded');
+ assert.deepEqual(S.slipOf('saturday is more better for me','Saturday is better for me'),{slip:'is more better',fix:'is better'},'a dropped word keeps both neighbours');
+ assert.deepEqual(S.slipOf('I like creeper','I like the creeper.'),{slip:'like creeper',fix:'like the creeper'},'an added word keeps both neighbours');
+ assert.deepEqual(S.slipOf('we was discussing about this venue','we were discussing this venue'),{slip:'we was',fix:'we were'},'a known pair needs no content word');
+ assert.deepEqual(S.slipOf('He come with a car','He comes with a car'),{slip:'he come',fix:'he comes'});
+ assert.deepEqual(S.slipOf('I has booking','I have a booking'),{slip:'i has booking',fix:'i have a booking'},'a function-word key grows to a content word');
+ assert.equal(S.slipOf('I like it','I like it.'),null,'nothing changed');
+ assert.equal(S.slipOf('rezervace','reservation'),null,'a key needs two said-side words');
+ const k=S.slipOf('It is one metres','It is one metre');
+ assert.equal(S.slipIn('They are two metres now.',k),'two metres','number words are one class');
+});
+test('K1 case 2: the record tier refuses function-word-only keys and words the partner said; "Did he come" is no "he come"; the fix said raises nothing',()=>{
+ const S=slipMod();
+ assert.equal(S.guarded('i will'),false,'function words only: most stored "i will" are right English');
+ assert.equal(S.guarded('is more'),false);assert.equal(S.guarded('we was'),true,'on the teacher list');assert.equal(S.guarded('tomatoes is'),true);
+ const tom={slip:'tomatoes is',fix:'tomatoes are'},come={slip:'he come',fix:'he comes'};
+ assert.equal(S.recordTier(tom,['Grandpa, how big are the tomatoes?']),true);
+ assert.equal(S.recordTier(tom,['Look, the tomatoes is what I mean!']),false,'a key the partner said in this scene is never judged on the record');
+ assert.equal(S.recordTier({slip:'i will',fix:'i would'},[]),false);
+ assert.equal(S.slipIn('Did he come with the car?',come),null,'after an auxiliary the bare form is right');
+ assert.equal(S.slipIn('Can he come at six?',come),null);
+ assert.equal(S.slipIn('Please sit here, he come in ten minutes.',come),'he come');
+ assert.equal(S.slipIn('The tomatoes are green.',tom),null,'the fix said is no slip');
+ assert.equal(S.slipIn('Tomatoes is green, but tomatoes are sweet.',tom),null,'a reply that holds the fix is not flagged');
+ assert.equal(S.slipIn('Tomatoes is green.',tom),'Tomatoes is');
+ assert.equal(S.findKey('My TOMATOES   are big.',tom.fix),'TOMATOES   are');
+ assert(S.sameSlip('tomatoes is','my tomatoes is'));assert(!S.sameSlip('tomatoes is','tomato is'));
+});
+test('K1 case 3 GATE: replaying the 2026-10-14 LT moments over the stored learner lines flags the known recurrences; on other learners\' lines only two true "is more better" slips',()=>{
+ const S=slipMod(),dir=path.resolve(__dirname,'../uat/runs/2026-10-14-lt');
+ const people=fs.readdirSync(dir).filter(f=>/-\d+\.json$/.test(f)).sort().map(f=>({who:f.replace('.json',''),run:JSON.parse(fs.readFileSync(path.join(dir,f),'utf8'))}));
+ // each learner's lines in run order, with that scene's partner lines; a moment sits on the first line that quotes it
+ for(const p of people){p.lines=[];p.moments=[];
+  for(const j of p.run.journeys){const c=j.facts?.conversation;
+   if(!c){for(const st of j.steps)if(typeof st.args?.text==='string')p.lines.push({scene:j.id,text:st.args.text,partner:[]});continue;}
+   const partner=c.turns.filter(t=>t.role==='partner').map(t=>t.text);
+   for(const t of c.turns)if(t.role==='learner'){p.lines.push({scene:j.id,text:t.text,partner});for(const m of c.moments??[])if(!p.moments.some(x=>x.m===m)&&t.text.includes(m.said))p.moments.push({m,at:p.lines.length-1});}}}
+ assert.equal(people.reduce((n,p)=>n+p.moments.length,0),17,'the corpus holds 17 stored moments');
+ const own=[],other=[];
+ for(const p of people)for(const {m,at} of p.moments){
+  const keys=S.slipOf(m.said,m.better);if(!keys)continue;
+  for(const l of p.lines.slice(at+1))if(S.slipIn(l.text,keys))own.push({who:p.who,slip:keys.slip,text:l.text,record:S.recordTier(keys,l.partner)});
+  for(const q of people)if(q!==p)for(const l of q.lines)if(S.slipIn(l.text,keys))other.push({who:q.who,from:p.who,slip:keys.slip,text:l.text,record:S.recordTier(keys,l.partner)});
+ }
+ // the six P06 names: Viktor 'tomatoes is' twice, Petra 'he come' once, Tomas 'I like creeper' three times
+ const known=[['viktor-67','tomatoes is','Tomatoes is green. And red. Red, I like.'],['viktor-67','tomatoes is','I have tomatoes. My tomatoes is big.'],['petra-38','he come','Sorry. I ask my colleague now. Please sit here, he come in ten minutes. I think it is okay.'],['tomas-9','like creeper','Creeper. I like creeper. Kráva ne.'],['tomas-9','like creeper','Yes! Creeper! I like creeper. Creeper boom!'],['tomas-9','like creeper','Yes! Creeper is my favourite. I like creeper.']];
+ for(const [who,slip,text] of known)assert(own.some(h=>h.who===who&&h.slip===slip&&h.text===text&&h.record),`${who} "${slip}" flagged on the record: ${text}`);
+ // one more the six did not name: Tomas's 'I like dog.' said again the next reply
+ assert.deepEqual(own.map(h=>`${h.who} ${h.slip}`).sort(),[...known.map(([w,s])=>`${w} ${s}`),'tomas-9 like dog'].sort());
+ assert(own.every(h=>h.record),'every recurrence is record tier');
+ // other learners' lines: the only flags are Martin's own "is more better" (a double comparative, wrong in any sentence) on Ondrej's key
+ assert.deepEqual(other.map(h=>`${h.from}->${h.who} ${h.slip} ${h.record?'record':'soft'}`),['ondrej-16->martin-45 is more better record','ondrej-16->martin-45 is more better record']);
+ assert(other.every(h=>/\bmore better\b/i.test(h.text)),'no flag on another learner\'s line is a false match');
+ console.log(`# K1 replay: ${own.length} recurrences flagged (${own.filter(h=>h.record).length} record tier) over ${people.reduce((n,p)=>n+p.lines.length,0)} learner lines; other learners: ${other.filter(h=>h.record).length} record-tier flags, ${other.filter(h=>!h.record).length} soft, all true "is more better" slips`);
+});
+test('K1 case 4: a taught slip said again reaches the turn prompt as slipAgain, counts once a reply on the record, and the fix said raises nothing',async()=>{
+ await slipStart([VIKTOR]);
+ await reply('Tomatoes is green. And red.');
+ const again=prompts.at(-1).slipAgain;
+ assert.deepEqual({said:again.said,better:again.better},{said:'Tomatoes is',better:'tomatoes are'},'the learner\'s exact words and the fix key');
+ assert.match(again.task,/right form/);assert.match(again.task,/Do not stop/);
+ let t=taughtOf(VIKTOR.id);assert.equal(t.slips,1);assert.equal(typeof t.slipAt,'number');
+ const first=t.slipAt;
+ await reply('The tomatoes are green.');
+ assert.equal(prompts.at(-1).slipAgain,undefined,'the right form raises nothing');assert.equal(taughtOf(VIKTOR.id).slips,1);
+ await reply('My tomatoes is red now.');
+ t=taughtOf(VIKTOR.id);assert.equal(t.slips,2,'the count only rises');assert(t.slipAt>=first);
+ assert.equal(getLearner('ema').english.taught.length,1);
+});
+test('K1 case 5: a function-word-only slip may ask for a soft recast but never writes the record',async()=>{
+ const WILL={...VIKTOR,id:'w1:t1:moment',said:'I will',better:'I would',turnId:'w1:t1'};
+ assert.deepEqual(slipMod().slipOf(WILL.said,WILL.better),{slip:'i will',fix:'i would'});
+ await slipStart([WILL]);
+ await reply('I will go there.');
+ assert.equal(prompts.at(-1).slipAgain.said,'I will','soft tier: the partner may recast');
+ assert.equal(taughtOf(WILL.id).slips,undefined,'record tier refused');
+});
+test('K1 case 6: a slip taught twice merges into one Taught item; "My tomatoes are big." in a later scene marks Viktor\'s item reused',async()=>{
+ const R=review();
+ assert.equal(R.findPhrase('My tomatoes are big.',VIKTOR.better),null,'today\'s whole-sentence test: null');
+ // the moment Linga made in the next scene on the same slip, said in a new sentence
+ let c=await slipStart([VIKTOR],()=>({reply:'Lovely! How big is it now?',supportProvided:false,observations:[],moment:{kind:'fix',said:'My tomatoes is big.',better:'My tomatoes are big.',why:'Tomatoes is plural, so it takes are.'}}));
+ assert.equal(c.review.id,VIKTOR.id);assert.equal(c.review.fix,'tomatoes are');
+ await reply('I have tomatoes. My tomatoes is big.');
+ c=getSession().conversation;
+ assert.equal(c.moments.length,1,'the stop itself still happens');assert.equal(c.moments[0].slip,'tomatoes is');assert.equal(c.moments[0].fix,'tomatoes are');
+ const taught=getLearner('ema').english.taught;
+ assert.equal(taught.length,1,'taught once, not twice');assert.equal(taught[0].id,VIKTOR.id);assert.equal(taught[0].slips,1,'one reply counts once');
+ assert.equal(c.review.used,undefined,'the slip said is no reuse');
+ // a later scene: the fix key said unaided, in a sentence Linga never taught
+ c=await slipStart([VIKTOR]);
+ assert.equal(c.review.id,VIKTOR.id);
+ await reply('My tomatoes are big.');
+ const t=taughtOf(VIKTOR.id);
+ assert.equal(typeof t.reusedAt,'number');assert.equal(t.reusedQuote,'tomatoes are');
+ assert.equal(getSession().conversation.review.used,'My tomatoes are big.');
+ // the same guards as before: not after the partner said the fix key in this scene, not on a supported reply
+ const scene=convo({turns:[{id:'p1',role:'partner',text:'Your tomatoes are lovely!'}],review:R.reviewOf(cleanEnglish({taught:[VIKTOR]}).taught[0])});
+ assert.equal(R.reuseOf('My tomatoes are big.',scene),null,'the partner said it first');
+ assert.equal(R.reuseOf('My tomatoes are big.',{...scene,turns:convo().turns,supported:true}),null,'supported');
+ assert.equal(R.reuseOf('My tomatoes are big.',{...scene,turns:convo().turns}),'tomatoes are');
+ // a word item keeps today's whole-phrase test
+ assert.equal(R.reuseOf('I have a snack.',convo({review:R.reviewOf(TAUGHT_C)})),'a snack');assert.equal(R.reviewOf(TAUGHT_C).fix,undefined);
 });
 
 // ---- T10: the tutor's calls run with thinking off, and only they do ----

@@ -4,6 +4,7 @@
  * The tutor writes and judges each task; this file decides which band comes next and where the
  * learner stands. Same marks in, same band out.
  */
+import { slipOf } from "./slip";
 import { BANDS, type Audience, type Band, type EvidenceMode, type Placement, type PlacementRecord, type PlacementTask, type Plan, type PlanTopic, type SkillId, type TaskKind, type TaskVerdict, type Taught } from "./types";
 import { audienceOf, topicText } from "./gate";
 
@@ -314,7 +315,11 @@ export function cleanTaught(value: unknown): Taught[] {
     if (m.offered !== undefined && !(Number.isInteger(m.offered) && (m.offered as number) >= 0)) return [];
     if (m.reusedAt !== undefined && !(typeof m.reusedAt === "number" && Number.isFinite(m.reusedAt))) return [];
     if (m.reusedIn !== undefined && !text(m.reusedIn, 200) || m.reusedQuote !== undefined && !text(m.reusedQuote, 240)) return [];
-    const review = { ...(m.offered !== undefined && { offered: m.offered as number }), ...(m.reusedAt !== undefined && { reusedAt: m.reusedAt as number }), ...(m.reusedIn !== undefined && { reusedIn: m.reusedIn as string }), ...(m.reusedQuote !== undefined && { reusedQuote: m.reusedQuote as string }) };
-    return [{ id: m.id as string, kind: m.kind as Taught["kind"], said: m.said as string, better: m.better as string, why: m.why as string, turnId: m.turnId as string, sceneId: m.sceneId as string, title: m.title as string, at: m.at, ...review }];
+    if (m.slips !== undefined && !(Number.isInteger(m.slips) && (m.slips as number) >= 0)) return [];
+    if (m.slipAt !== undefined && !(typeof m.slipAt === "number" && Number.isFinite(m.slipAt))) return [];
+    const review = { ...(m.offered !== undefined && { offered: m.offered as number }), ...(m.reusedAt !== undefined && { reusedAt: m.reusedAt as number }), ...(m.reusedIn !== undefined && { reusedIn: m.reusedIn as string }), ...(m.reusedQuote !== undefined && { reusedQuote: m.reusedQuote as string }), ...(m.slips !== undefined && { slips: m.slips as number }), ...(m.slipAt !== undefined && { slipAt: m.slipAt as number }) };
+    // a fix's slip keys (K1, slip.ts) are code's, never stored trust: worked out again from its words on every load, so a record saved before them gets them
+    const keys = m.kind === "fix" ? slipOf(m.said as string, m.better as string) : null;
+    return [{ id: m.id as string, kind: m.kind as Taught["kind"], said: m.said as string, better: m.better as string, why: m.why as string, turnId: m.turnId as string, sceneId: m.sceneId as string, title: m.title as string, at: m.at, ...(keys ?? {}), ...review }];
   }).slice(-TAUGHT_CAP);
 }

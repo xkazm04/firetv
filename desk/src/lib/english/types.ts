@@ -78,7 +78,14 @@ export interface PlanTopic {
 }
 export interface Plan { at: number; band: Band; topics: PlanTopic[]; }
 /** The tutor stopped the scene: one fix to what the learner said, or one word the situation wants. */
-export interface Moment { id: string; kind: "fix" | "word"; said: string; better: string; why: string; turnId: string; at: number; }
+export interface Moment {
+  id: string; kind: "fix" | "word"; said: string; better: string; why: string; turnId: string; at: number;
+  /**
+   * A fix's slip and fix keys (slip.ts slipOf): the changed words with a neighbour, as said ("tomatoes is") and as fixed
+   * ("tomatoes are"). Worked out by code when the moment is made, and again when a record is cleaned; never on a word.
+   */
+  slip?: string; fix?: string;
+}
 /**
  * A moment kept on the learner record. The review fields are written by code (review.ts), never by the model:
  * how many scenes have invited it since, and when, where and in which words the learner used it again unaided.
@@ -86,12 +93,18 @@ export interface Moment { id: string; kind: "fix" | "word"; said: string; better
 export interface Taught extends Moment {
   sceneId: string; title: string;
   offered?: number; reusedAt?: number; reusedIn?: string; reusedQuote?: string;
+  /** how many later replies said the slip again (slip.ts, record tier only), and when the last one did; both only ever rise */
+  slips?: number; slipAt?: number;
 }
 /**
  * The taught item this scene brings back (review.ts). The partner is asked to make room for it and never to say it;
  * used is the learner's reply that used it unaided, and usedTurn that reply's turn.
  */
-export interface Review { id: string; kind: "fix" | "word"; better: string; fromTitle: string; used?: string; usedTurn?: string; }
+export interface Review {
+  id: string; kind: "fix" | "word"; better: string; fromTitle: string; used?: string; usedTurn?: string;
+  /** a fix's guarded keys (slip.ts): reuse is the fix key said unaided with the slip key absent, not the whole sentence */
+  slip?: string; fix?: string;
+}
 
 export interface EnglishLearning {
   preferences: EnglishPreferences | null; notes: string[];
