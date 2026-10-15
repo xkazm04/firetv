@@ -1046,6 +1046,68 @@
           "evidence": "desk/src/lib/session/store.ts:241 Interrupted runs are closed as failed with a prose error string (INTERRUPTED) rather than a first-class indeterminate status."
         }
       ]
+    },
+    "desk-linga/linga/conversation-orchestration": {
+      "context": "linga",
+      "subject": "conversation-orchestration",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T21:38:51.890Z",
+      "worker": "cb061768-8796-4fe8-9d7f-ee6bfef0524f",
+      "techniques": [
+        {
+          "technique": "layered-avatar-state-machine",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/english/view.ts:30 The arch art is a situation or journey picture inside the Linga screen, not a permanent face with resting/listening/working/speaking loops."
+        },
+        {
+          "technique": "model-proposed-quick-replies",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:48 The model is asked for one optional line, and the phone talk panel is a reply box plus cue and quiz actions, not two to four chips that send a user message."
+        },
+        {
+          "technique": "narration-promote-on-finish",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/english/types.ts:183 A stored turn is role and text only, so there is no live beat channel to attach when the call settles."
+        },
+        {
+          "technique": "progress-beat-grammar",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/english/conversation.ts:448 A turn is one fast call with thinking off whose reply is capped at one or two sentences, which is the short-turn case that keeps a fixed busy line."
+        },
+        {
+          "technique": "recall-transparency",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:127 Notes, recent evidence and a brought-back phrase go into the call, and the talk status shows the partner line or a preparing message, not an openable recall strip."
+        },
+        {
+          "technique": "show-dont-tell-walkthrough",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/english/conversation.ts:99 The model plays a scene partner. This context has no walkthrough registry, highlight ring, or tour of product controls."
+        },
+        {
+          "technique": "structured-visual-replies",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/english/conversation.ts:108 The reply contract forbids markdown and caps the line, so the model is not composing a comparison table inside the answer."
+        },
+        {
+          "technique": "two-surface-doctrine",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/view.ts:245 A spoken reply exists only on the phone, a choice is answered only with the remote, and the phone also repeats the partner line, so each answer has one door and the phone is a small chat."
+        }
+      ],
+      "registryProposal": "Recall transparency does not name a rehearsal that must hide a target phrase or the exercise ends, and two-surface doctrine describes one screen's chat plus an overlay, not a television and a phone that share one view and split showing from speaking. Chips that send a full model sentence would store the model's English as the learner's reply, which this tutor contract forbids."
+    },
+    "telestrator/companion/conversation-orchestration": {
+      "context": "companion",
+      "subject": "conversation-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T21:38:51.890Z",
+      "worker": "cb061768-8796-4fe8-9d7f-ee6bfef0524f",
+      "techniques": []
     }
   }
 }

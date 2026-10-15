@@ -480,7 +480,11 @@
           "revision": 6,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/english/review.ts:88 A phrase from an earlier scene is put into the tutor prompt with an order never to mention it, so the learner cannot see or correct the memory this turn spends.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:f3ecee1630629b34",
+          "evaluatedRevision": 6
         },
         {
           "subject": "test-harness",
@@ -2500,7 +2504,11 @@
           "revision": 6,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "companion/index.html:184 The page opens a drawing-pen WebSocket with a PIN hello, so there is no model turn whose narration, recall, chips, or surfaces this subject would govern.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:f3ecee1630629b34",
+          "evaluatedRevision": 6
         }
       ],
       "governance": "governed"
