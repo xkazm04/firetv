@@ -763,7 +763,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         fun title(value: String,x: Float,y: Float) {headline.addText(value.uppercase(),x,y)}
         if(phase!="race") {
             title("DEATH RIDE",42f,699f)
-            label(when(phase){"career"->"THE ASH CIRCUIT";"garage"->"PARTS / PER CAR";"results"->"RACE RESULTS";else->"${courseCatalog[selectedTrack].name} / ${activeRegion.name} / ${world.raceLaps} LAPS"},42f,644f)
+            label(when(phase){"career"->"THE ASH CIRCUIT";"garage"->"";else->"${courseCatalog[selectedTrack].name} / ${activeRegion.name} / ${world.raceLaps} LAPS"},42f,644f)
             label(if(phase=="lobby")"FEEL  /  ${server.feel.id.uppercase()}" else "BACK: LOBBY   /   ${server.feel.id}",810f,691f)
             val notice=if(::saves.isInitialized)saves.notice else ""
             label(TvCopy.statusLine(notice,scene.ready),810f,654f,if(notice.startsWith("Save failed"))warning else if(scene.ready && notice.isEmpty())muted else accent)
@@ -883,7 +883,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 label(if(!scene.ready)"PREPARING CIRCUIT" else if(combat.wrecked(c.id))"WRECKED / SPECTATING" else "${driverName(c)} / ${world.seconds.toInt()}s / ${courseCatalog[selectedTrack].name}",363f,109f)
             }
             "results" -> {
-                title("THE FINISH",286f,575f)
+                title("RESULTS",286f,575f)
                 label(if(world.eventType==EventType.ELIMINATION)if(world.duelDraw)"DEATH DUEL / DRAW" else "DEATH DUEL / LAST CAR RUNNING" else if(world.entrantCount==2)"THE CROWN / TWO DRIVERS" else "${world.raceLaps} LAPS / SIX CARS",288f,518f)
                 for(c in world.cars)if(c.entered)rankOrder[c.position-1]=c.id
                 for(rank in 0 until world.entrantCount) {
@@ -895,8 +895,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 if(outcome==ProfileSaves.Outcome.PENDING)label(ProfileSaves.SAVING_RESULT.uppercase(),291f,245f,accent)
                 else if(outcome==ProfileSaves.Outcome.FAILED)label(ProfileSaves.RESULT_NOT_COUNTED.uppercase(),291f,245f,warning)
                 else if(receipt!=null) {
-                    label("PRIZE ${receipt.gross} / PIT ${receipt.repair} / DEBT + CAP ${receipt.net-receipt.banked}",291f,245f,accent)
-                    label("BANKED +${receipt.banked} CR / BALANCE ${profiles[0].credits} CR",291f,220f,accent)
+                    label(TvCopy.receiptBanked(receipt.banked,profiles[0].credits),291f,245f,accent)
+                    label(TvCopy.receiptBreakdown(receipt.gross,receipt.repair,receipt.net-receipt.banked),291f,220f)
                 }
                 if(campaignRace && raceRound==Career.events.lastIndex && profiles[0].campaign.finale==2) {
                     val card=AshStory.cards.getValue("campaign-victory")

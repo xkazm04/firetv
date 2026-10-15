@@ -21,6 +21,10 @@ object TvCopy {
     fun seatLine(seat: Int,car: String,credits: Number): String = "PLAYER ${seat+1} / $car / $credits CR"
     const val JOIN_LINE="PLAYER 2 / SCAN TO JOIN"
 
+    /** Results receipt: what the player kept leads (accent); the arithmetic is the quiet second line, in the phone's words. */
+    fun receiptBanked(banked: Number,balance: Number): String = "BANKED +$banked CR / BALANCE $balance CR"
+    fun receiptBreakdown(prize: Number,pit: Number,taken: Number): String = "PRIZE $prize / PIT $pit / REPAYMENTS + CAP $taken"
+
     /** The seat's controller layout that holds GO for the driver (controller-layouts.csv, autoThrottle=1). */
     const val AUTO_LAYOUT="Auto"
 

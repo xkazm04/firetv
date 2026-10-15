@@ -57,6 +57,12 @@ class TvCopyTest {
         val src=raceGameSource()
         if(src!=null)for(gone in listOf("\"P1 ","\"P2 ","\"P1\"","SECOND DRIVER"))assertFalse(src.contains(gone),"two names for a seat: $gone")
     }
+    @Test fun resultsNameTheScreenOnceAndLeadWithWhatWasKept() {
+        assertTrue(TvCopy.receiptBanked(240,1900).startsWith("BANKED +240 CR"))
+        assertTrue(TvCopy.receiptBreakdown(400,100,60).startsWith("PRIZE 400"))
+        val src=raceGameSource()
+        if(src!=null)for(gone in listOf("\"THE FINISH\"","\"RACE RESULTS\"","PARTS / PER CAR","DEBT + CAP"))assertFalse(src.contains(gone),"duplicate or jargon title: $gone")
+    }
     @Test fun statusLineHasNoSlogan() {
         assertEquals("",TvCopy.statusLine("",true))
         assertEquals("PREPARING CIRCUIT",TvCopy.statusLine("",false))
