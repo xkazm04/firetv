@@ -99,6 +99,10 @@ class ControllerStringsTest {
         assertTrue(page.contains("(ABILITY_PHASE[ab.phase]||ab.phase)"))
     }
 
+    @Test fun installButtonNamesTheTierLikeTheTv() {
+        assertTrue(page.contains("'INSTALL TIER '+o.nextTier+' / '+o.price+' CR'"))
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
