@@ -28,9 +28,9 @@ object HudTheme {
         combat.armingSeconds>0 -> "ARMING ${ceil(combat.armingSeconds).toInt()}s"
         combat.ammo(car.id,weapon)<=0 -> "EMPTY"
         car.ability.weaponsLocked -> "LOCKED"
-        combat.overheated(car.id,weapon) -> "OVERHEAT"
+        combat.overheated(car.id,weapon) -> "OVERHEATED"
         combat.burstRemaining(car.id,weapon)>0 -> "FIRING"
-        combat.cooldown(car.id,weapon)>1e-9 -> "COOL ${ceil(combat.cooldown(car.id,weapon)).toInt()}s"
+        combat.cooldown(car.id,weapon)>1e-9 -> "COOLING ${ceil(combat.cooldown(car.id,weapon)).toInt()}s"
         else -> "READY"
     }
     fun abilityState(state: AbilityState,protection: Double): String {

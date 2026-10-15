@@ -867,7 +867,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 label("POSITION",40f,695f);title("${c.position}/${world.entrantCount}",48f,663f)
                 label(if(world.eventType==EventType.ELIMINATION)"SURVIVORS" else "LAP",204f,695f);title(if(world.eventType==EventType.ELIMINATION)"${world.entrantCount-world.combat.wreckCount}" else "${min(world.raceLaps,c.lap.laps+1)}/${world.raceLaps}",196f,663f)
                 label("KM/H",395f,695f);title((c.speedMps*3.6).toInt().toString(),397f,663f)
-                label("HULL ${combat.health(c.id).toInt()}/${combat.maxHealth(c.id).toInt()}",553f,695f,HudTheme.bone)
+                label("${TvCopy.HP} ${combat.health(c.id).toInt()}/${combat.maxHealth(c.id).toInt()}",553f,695f,HudTheme.bone)
                 label("ARMOUR ${(c.armorReduction*100).toInt()}%",553f,636f)
                 label("${Weapons.all[weapon].id.uppercase()} ${combat.ammo(c.id,weapon)}",800f,695f,HudTheme.bone)
                 label(HudTheme.weaponState(combat,c,weapon),800f,669f)

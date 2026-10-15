@@ -39,6 +39,17 @@ class TvCopyTest {
             assertTrue(h.length<=52,"hint overflows the 677 px footer: $h")
         }
     }
+    @Test fun healthIsCalledHpEverywhereAndWeaponStatesUseThePhonesWords() {
+        val src=raceGameSource()
+        if(src!=null)assertFalse(src.contains("\"HULL "),"the phone and the footer say HP")
+        val theme=File("src/main/kotlin/dev/deathride/game/HudTheme.kt")
+        if(theme.exists()) {
+            val text=theme.readText()
+            assertTrue(text.contains("\"OVERHEATED\"") && text.contains("\"COOLING \${"),"phone words: OVERHEATED, COOLING")
+        }
+        val html=phone()
+        if(html!=null)assertTrue(html.contains("OVERHEATED") && html.contains("COOLING") && html.contains("HP <b"))
+    }
     @Test fun statusLineHasNoSlogan() {
         assertEquals("",TvCopy.statusLine("",true))
         assertEquals("PREPARING CIRCUIT",TvCopy.statusLine("",false))
