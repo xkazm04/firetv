@@ -6,10 +6,11 @@
  * Run with npm test in desk/ (directly: node tools/cambridge-rules-test.cjs). No model is called.
  */
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), assert = require('node:assert/strict'), Module = require('node:module');
-const { test } = require('node:test');
+const { test, after } = require('node:test');
 const root = path.resolve(__dirname, '../desk');
 require('./ts-load.cjs');
-process.env.DESK_DATA_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'desk-cambridge-'));
+const data = fs.mkdtempSync(path.join(os.tmpdir(), 'desk-cambridge-')); process.env.DESK_DATA_DIR = data;
+after(() => { if (!process.env.KEEP_TMP) fs.rmSync(data, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 }); });
 const src = (f) => path.join(root, 'src', f);
 const C = require(src('lib/english/cambridge.ts'));
 const { ENGLISH_SKILLS, ENGLISH_SCENES, AUTHORED_SCENES, eligibleScenes, audienceAllowed, defaultPreferences } = require(src('lib/english/curriculum.ts'));
