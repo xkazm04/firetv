@@ -195,6 +195,11 @@ test('case 6: the ruler draws the NEWEST four live slips; Six more names the sli
  assert.ok(words(aimed)<=25,`${words(aimed)} words`);
  // every school slip's line fits
  for(const u of UNITS)for(const sl of S.SCHOOL_UNIT_SLIPS[u]){const l=RR.moreLine(u,'Add and subtract fractions',[sl]);assert.ok(words(l)<=25,`${u} ${sl}: ${words(l)} words: ${l}`);}
+ // a long topic name falls back by whitespace words, not by the letter s (the counter once split on /s+/)
+ const long='Solve simultaneous equations by substitution and by elimination, with graphs showing intersecting lines across several sessions';
+ const fell=RR.moreLine('frac-add-sub',long,['tops-and-bottoms']);
+ assert.ok(words(fell)<=25,`${words(fell)} words: ${fell}`);
+ assert.equal(fell,'Six new questions, aimed at: Added the tops and the bottoms.','over 25 words drops to the short line');
  const none=RR.moreLine('frac-add-sub',name,[]);
  assert.ok(!/aimed/i.test(none),`no 'aimed' claim: ${none}`);
  assert.ok(!/aimed/i.test(RR.moreLine('frac-add-sub',name,['not-a-slip-of-this-unit'])),'a slip of no school unit is no live slip');
