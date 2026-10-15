@@ -1886,7 +1886,11 @@
           "revision": 27,
           "changedAt": "2026-10-06",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/session/store.ts:241 The restart recovery sweep marks in-flight jobs as failed with an error message string instead of recording an indeterminate result.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "agent-memory",

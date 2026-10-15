@@ -1030,6 +1030,22 @@
           "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:47 Opening creates a pen protocol conversation, without restoring a child-owned model thread."
         }
       ]
+    },
+    "desk-platform/session/agent-runtime-assembly": {
+      "context": "session",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T04:16:35.570Z",
+      "worker": "8b789f75-3938-48f4-84c6-4371962d524d",
+      "techniques": [
+        {
+          "technique": "indeterminate-closure-on-interruption",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/session/store.ts:241 Interrupted runs are closed as failed with a prose error string (INTERRUPTED) rather than a first-class indeterminate status."
+        }
+      ]
     }
   }
 }
