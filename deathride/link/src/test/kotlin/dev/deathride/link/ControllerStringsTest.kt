@@ -122,6 +122,13 @@ class ControllerStringsTest {
         assertFalse(page.contains("AUTO WHILE MOVING"))
     }
 
+    @Test fun refusedCommandIsAOneLineToastNotAModal() {
+        assertTrue(page.contains("m.t==='notNow'"))
+        assertTrue(page.contains("toast('Not now'+(m.screen?' - TV is on '+m.screen:''))"))
+        assertTrue(page.contains("setTimeout(()=>{el.hidden=true},2000)"))
+        assertTrue(page.contains("<div id=\"toast\" role=\"status\" hidden>"))
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
