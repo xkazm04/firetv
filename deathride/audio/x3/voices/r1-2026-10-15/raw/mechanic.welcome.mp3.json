@@ -1,0 +1,35 @@
+{
+  "id": "8648a58b-6769-4773-b5b2-445b84a8e149",
+  "ts": "2026-10-15T10:43:04.296Z",
+  "session": "r1-2026-10-15",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/x3/voices/r1-2026-10-15/raw/mechanic.welcome.mp3",
+  "seconds": null,
+  "request": {
+    "text": "You made it. Good. Let me check that engine first.",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.25,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/SOYHLrjzK2X1ezoPC6cr",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 50,
+  "budgetCharge": 50,
+  "creditsBefore": 142838,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 62736,
+  "providerCredits": 22,
+  "sha256": "a49e6ed545929588b6dea2b4608d4e84fc20070e253edb7c2e8698b7c10ad799",
+  "completedAt": "2026-10-15T10:43:06.745Z",
+  "creditsAfter": 142838,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 214
+}

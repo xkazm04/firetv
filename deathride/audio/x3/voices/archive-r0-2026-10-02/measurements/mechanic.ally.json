@@ -1,0 +1,177 @@
+{
+  "id": "mechanic.ally",
+  "cue": "voice.mechanic.ally",
+  "category": "tts",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:56:41.885089+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\voices\\raw\\mechanic.ally.mp3.json",
+    "sourceSha256": "2bf3deba31fc1e11cf4b7f67f22f22189812547dba92b70ec0f2630ae4c71806",
+    "generatedAt": "2026-10-02T21:53:07.789Z",
+    "request": {
+      "text": "That boss is backing you now. Money, a car, parts. We finally have some help.",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.75,
+        "style": 0.25,
+        "use_speaker_boost": true
+      }
+    },
+    "budgetCharge": 77,
+    "providerCredits": 77,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/voices/raw/mechanic.ally.mp3",
+    "sha256": "2bf3deba31fc1e11cf4b7f67f22f22189812547dba92b70ec0f2630ae4c71806",
+    "bytes": 94502,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "loudness"
+    ],
+    "durationSeconds": 5.851428571428571,
+    "durationWindowSeconds": [
+      1,
+      20
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 258048,
+    "decodedBytes": 516096,
+    "integratedLufs": -24.08,
+    "truePeakDbtp": -8.45,
+    "loudnessRangeLu": 2.6,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          68821,
+          80594
+        ],
+        [
+          95659,
+          104333
+        ],
+        [
+          126190,
+          137127
+        ],
+        [
+          158119,
+          192966
+        ],
+        [
+          246149,
+          258048
+        ]
+      ],
+      "fraction": 0.3027731274801587,
+      "longestInteriorSeconds": 0.7901814058956916
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 1833,
+    "endFrameExclusive": 122951,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 2.0253496068249714,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/voices/edited/mechanic.ally.wav",
+    "sha256": "aa77035b55ba1692be76d5ca3ded87cef733b554b0c3d4d00156c422792e0ef6",
+    "bytes": 242314,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 5.492879818594104,
+    "durationWindowSeconds": [
+      5.490879818594104,
+      5.494879818594104
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 121118,
+    "decodedBytes": 242236,
+    "integratedLufs": -18.01,
+    "truePeakDbtp": -2.33,
+    "loudnessRangeLu": 2.0,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          32876,
+          38407
+        ],
+        [
+          46152,
+          50273
+        ],
+        [
+          61435,
+          66639
+        ],
+        [
+          77340,
+          94636
+        ]
+      ],
+      "fraction": 0.26546012979078254,
+      "longestInteriorSeconds": 0.7843990929705216
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness"
+  ]
+}

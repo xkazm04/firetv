@@ -1,0 +1,35 @@
+{
+  "id": "0e8907c3-5e0a-458a-b5c3-2de838c0630e",
+  "ts": "2026-10-02T21:53:07.789Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/x3/voices/raw/mechanic.ally.mp3",
+  "seconds": null,
+  "request": {
+    "text": "That boss is backing you now. Money, a car, parts. We finally have some help.",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.25,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/SOYHLrjzK2X1ezoPC6cr",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 77,
+  "budgetCharge": 77,
+  "creditsBefore": 23608,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 94502,
+  "providerCredits": 77,
+  "sha256": "2bf3deba31fc1e11cf4b7f67f22f22189812547dba92b70ec0f2630ae4c71806",
+  "completedAt": "2026-10-02T21:53:10.240Z",
+  "creditsAfter": 23608,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 6115
+}

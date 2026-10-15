@@ -1,0 +1,158 @@
+{
+  "id": "mechanic.books",
+  "cue": "voice.mechanic.books",
+  "category": "tts",
+  "loop": false,
+  "measuredAt": "2026-10-15T10:44:29.031117+00:00",
+  "ownerStatus": "listening pending (re-recorded 2026-10-15, text shortened)",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\voices\\r1-2026-10-15\\raw\\mechanic.books.mp3.json",
+    "sourceSha256": "e61e91e080fd663604655aee5cadfb76cc1de75d104b002e9653bde9f4d1ffdc",
+    "generatedAt": "2026-10-15T10:43:13.852Z",
+    "request": {
+      "text": "I checked the receipts. His numbers never let you go.",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.75,
+        "style": 0.25,
+        "use_speaker_boost": true
+      }
+    },
+    "budgetCharge": 53,
+    "providerCredits": 23,
+    "session": "r1-2026-10-15",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/voices/r1-2026-10-15/raw/mechanic.books.mp3",
+    "sha256": "e61e91e080fd663604655aee5cadfb76cc1de75d104b002e9653bde9f4d1ffdc",
+    "bytes": 55213,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "loudness"
+    ],
+    "durationSeconds": 3.3901133786848074,
+    "durationWindowSeconds": [
+      1,
+      20
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 149504,
+    "decodedBytes": 299008,
+    "integratedLufs": -25.36,
+    "truePeakDbtp": -9.29,
+    "loudnessRangeLu": 1.1,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          48987,
+          75683
+        ],
+        [
+          135623,
+          149504
+        ]
+      ],
+      "fraction": 0.2714107983732877,
+      "longestInteriorSeconds": 0.6053514739229024
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 1000,
+    "endFrameExclusive": 68004,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 2.2413000457823298,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/voices/r1-2026-10-15/edited/mechanic.books.wav",
+    "sha256": "c144d1ceb8e47e4c8af489858cdadadb18cc557b94d1b2acf0c9b912d6cfdb89",
+    "bytes": 134086,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 3.038730158730159,
+    "durationWindowSeconds": [
+      3.036730158730159,
+      3.0407301587301587
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 67004,
+    "decodedBytes": 134008,
+    "integratedLufs": -18.0,
+    "truePeakDbtp": -2.28,
+    "loudnessRangeLu": 0.2,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          23651,
+          36604
+        ]
+      ],
+      "fraction": 0.19331681690645336,
+      "longestInteriorSeconds": 0.587437641723356
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness"
+  ],
+  "rerecord": {
+    "supersedes": "audio/x3/voices/archive-r0-2026-10-02",
+    "reason": "ability rename + <=60-char caption budget; owner approval 2026-10-15",
+    "previousText": "I checked the receipts. You keep winning, but his numbers never let you go."
+  }
+}

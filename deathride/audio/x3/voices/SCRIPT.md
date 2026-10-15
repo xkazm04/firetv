@@ -8,19 +8,25 @@ The inherited game story is older than this owner choice. New seizure/ally/last-
 
 campaign opening: survival debt
 
-> Your engine is collateral. Every race buys another day. Marrow keeps the books.
+> Your engine is collateral. Marrow keeps the books.
+
+<!-- 2026-10-15 r1 re-record; previous: Your engine is collateral. Every race buys another day. Marrow keeps the books. -->
 
 ## announcer.boss
 
 boss briefing
 
-> Beat the division boss. Give them a reason to stand beside you.
+> Beat the division boss. Give them a reason to back you.
+
+<!-- 2026-10-15 r1 re-record; previous: Beat the division boss. Give them a reason to stand beside you. -->
 
 ## announcer.ally
 
 boss turns ally; payout type undecided
 
-> A beaten rival. A new ally. Their backing keeps you on the road.
+> A beaten rival. A new ally. Their backing keeps you moving.
+
+<!-- 2026-10-15 r1 re-record; previous: A beaten rival. A new ally. Their backing keeps you on the road. -->
 
 ## announcer.seizure
 
@@ -44,37 +50,49 @@ final victory
 
 shop introduction
 
-> You made it. Good. Let me check that engine before Marrow sends you out again.
+> You made it. Good. Let me check that engine first.
+
+<!-- 2026-10-15 r1 re-record; previous: You made it. Good. Let me check that engine before Marrow sends you out again. -->
 
 ## mechanic.repair
 
 shop repair
 
-> Easy. I can hold this together. Just bring it back in one piece, all right?
+> Easy. I can hold this together. Bring it back in one piece?
+
+<!-- 2026-10-15 r1 re-record; previous: Easy. I can hold this together. Just bring it back in one piece, all right? -->
 
 ## mechanic.books
 
 debt twist; no unsupported money destination
 
-> I checked the receipts. You keep winning, but his numbers never let you go.
+> I checked the receipts. His numbers never let you go.
+
+<!-- 2026-10-15 r1 re-record; previous: I checked the receipts. You keep winning, but his numbers never let you go. -->
 
 ## mechanic.ally
 
 ally reward types; no choice mechanic assumed
 
-> That boss is backing you now. Money, a car, parts. We finally have some help.
+> That boss is backing you now. Money, a car, parts. Help.
+
+<!-- 2026-10-15 r1 re-record; previous: That boss is backing you now. Money, a car, parts. We finally have some help. -->
 
 ## mechanic.seizure
 
 seizure response
 
-> He took your car? Right. Right... I thought he might. Come round the back.
+> He took your car? Right. I thought he might. Round back.
+
+<!-- 2026-10-15 r1 re-record; previous: He took your car? Right. Right... I thought he might. Come round the back. -->
 
 ## mechanic.rig
 
 secret basic car and mine rig
 
-> It is basic. I know. But I fitted a mine dispatcher. Keep moving and let him follow.
+> It is basic. I know. But I fitted Dispatch. Let him follow.
+
+<!-- 2026-10-15 r1 re-record; previous: It is basic. I know. But I fitted a mine dispatcher. Keep moving and let him follow. -->
 
 ## mechanic.duel
 
@@ -86,5 +104,7 @@ duel setup
 
 aftermath without promising seized car return
 
-> You are back. I kept listening for the engine. Thought I had lost you.
+> You are back. I kept listening for the engine.
+
+<!-- 2026-10-15 r1 re-record; previous: You are back. I kept listening for the engine. Thought I had lost you. -->
 

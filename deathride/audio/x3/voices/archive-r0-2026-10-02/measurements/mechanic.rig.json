@@ -1,0 +1,177 @@
+{
+  "id": "mechanic.rig",
+  "cue": "voice.mechanic.rig",
+  "category": "tts",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:56:43.439523+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\voices\\raw\\mechanic.rig.mp3.json",
+    "sourceSha256": "e9c51570b40484fc807f4c62d064fb49753867d0107f58f9b2fd5aced1431cf9",
+    "generatedAt": "2026-10-02T21:53:30.491Z",
+    "request": {
+      "text": "It is basic. I know. But I fitted a mine dispatcher. Keep moving and let him follow.",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.75,
+        "style": 0.25,
+        "use_speaker_boost": true
+      }
+    },
+    "budgetCharge": 84,
+    "providerCredits": 84,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/voices/raw/mechanic.rig.mp3",
+    "sha256": "e9c51570b40484fc807f4c62d064fb49753867d0107f58f9b2fd5aced1431cf9",
+    "bytes": 94084,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "loudness"
+    ],
+    "durationSeconds": 5.804988662131519,
+    "durationWindowSeconds": [
+      1,
+      20
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 256000,
+    "decodedBytes": 512000,
+    "integratedLufs": -23.37,
+    "truePeakDbtp": -5.34,
+    "loudnessRangeLu": 1.1,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          35056,
+          46278
+        ],
+        [
+          64313,
+          79331
+        ],
+        [
+          138452,
+          175345
+        ],
+        [
+          199878,
+          206994
+        ],
+        [
+          242242,
+          256000
+        ]
+      ],
+      "fraction": 0.32815234375,
+      "longestInteriorSeconds": 0.8365759637188208
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 1182,
+    "endFrameExclusive": 121007,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 1.1363182976673103,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/voices/edited/mechanic.rig.wav",
+    "sha256": "3a2022b8453794541478a2bb1e39c1b0752c09d2cad63031fd4bf85ffdc8b856",
+    "bytes": 239728,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 5.434240362811791,
+    "durationWindowSeconds": [
+      5.4322403628117915,
+      5.436240362811791
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 119825,
+    "decodedBytes": 239650,
+    "integratedLufs": -17.99,
+    "truePeakDbtp": -5.22,
+    "loudnessRangeLu": 0.9,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          16475,
+          21927
+        ],
+        [
+          31149,
+          38473
+        ],
+        [
+          68294,
+          86469
+        ],
+        [
+          98870,
+          102224
+        ]
+      ],
+      "fraction": 0.2862925099102858,
+      "longestInteriorSeconds": 0.8242630385487528
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness"
+  ]
+}
