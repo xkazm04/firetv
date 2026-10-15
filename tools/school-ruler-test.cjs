@@ -297,8 +297,8 @@ test('W8 2: Get ready for school lists the units by strand with the learner\'s o
   assert.ok(html.includes(PR.choiceLine(ask,PR.prepareStops(s)[plain].id)),'the lit cell\'s sentence (MB-B20: the unit\'s own step-up line)');
   assert.doesNotMatch(textOf(html.split('class="mb-lede')[1].split('data-role="maths-prepare"')[0]),/[0-9]/,'no number anywhere on the question');
  }
- // MB-B20: a step up on a unit with a top rung (fractions, percent change, Pythagoras) says what it adds and that it is still school level, with no number
- for(const id of ['frac-add-sub','frac-mul-div','pct-change','pythagoras']){
+ // MB-B20: a step up on a unit with a top rung (fractions, percent change, Pythagoras, probability) says what it adds and that it is still school level, with no number
+ for(const id of ['frac-add-sub','frac-mul-div','pct-change','pythagoras','probability']){
   const at=PR.prepareStops(s0).findIndex((u)=>u.id===id);assert.ok(at>=0,id);
   const st={...seated({system:'uk'}),screen:'prepare',focus:at,skills:{}},cells=PR.choicesFor(hasWorked(id)).length;
   const html=drawW8(st,1);

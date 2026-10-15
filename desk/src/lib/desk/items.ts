@@ -462,7 +462,7 @@ const freshSeed = () => Math.floor(Math.random() * 0x100000000);
  *
  * MB-B20: on a unit with a top rung (rules/school TOP_TIER_GENERATORS) a "harder" set holds tier-3 items too (rules/stretch
  * tierCounts with `top`): the rung's own content (mixed numbers on the fractions units, a reverse percentage, two changes
- * or the years on percent change, a rounded side on Pythagoras), and at least one of them a word problem (the last tier-3 slot takes only a story
+ * or the years on percent change, a rounded side on Pythagoras, two events on probability), and at least one of them a word problem (the last tier-3 slot takes only a story
  * while none is kept). Every other set asks for no tier 3 and is drawn exactly as before.
  */
 export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed(), mix: Mix = "standard", stretch = false, aim: readonly string[] = [], system?: SchoolSystem, paper: readonly string[] = []): { items: PracticeItem[]; provider: string; ms: number; tries: number; aim?: string[] } {

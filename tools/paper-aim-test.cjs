@@ -171,13 +171,16 @@ test('aim 7: the map from a paper\'s statements to a unit\'s forms - pinned to t
 /**
  * Captured from c4f39c53, before cycle 14: the draws of every code-written unit at every rung - with no aim in three
  * systems on seven seeds, and aimed at the newest two of the unit's slips in two systems on two seeds (an aimed draw scans
- * far more seeds, so its grid is smaller). A set opened without a paper is byte-identical.
+ * far more seeds, so its grid is smaller). A set opened without a paper is byte-identical. Recaptured at eea3fa97 without
+ * probability's step-up sets, which gained a top rung after cycle 14 (MB-B20) and moved by design; every other row is as
+ * c4f39c53 drew it.
  */
-const PLAIN_FP='1ee66af9aafde06d139cf6fb2886ab61374649552a8b2af6771daab9cc59c4f1',SLIPS_FP='ea4443df628f6b6defa5d5f0d60bb2370bbeafd9196b39b19247ef9b7cf844f7';
+const PLAIN_FP='c196d8bbe89e39eeeed3cf0bf1eba554b47e45a7ced01ea85e571b95668aa5fe',SLIPS_FP='ec6b23846ee1c72265197a4b917bd185e271f96497fab8162a22de37493f6fc5';
 function fingerprint(slipsOn,paper){
  const h=crypto.createHash('sha256');
  const systems=slipsOn?[undefined,'cz']:[undefined,'cz','uk'],seeds=slipsOn?[0,42]:[0,1,7,42,999,123456,4294967295-3];
  for(const u of Object.keys(SR.SCHOOL_GENERATORS))for(const mix of ['easier','standard','harder'])for(const sys of systems)for(const seed of seeds){
+  if(u==='probability'&&mix==='harder')continue;
   const aim=slipsOn?[...SR.SCHOOL_UNIT_SLIPS[u]].reverse().slice(0,2):[];
   const r=paper===undefined?makeSchoolItems(u,6,seed,mix,mix==='harder',aim,sys):makeSchoolItems(u,6,seed,mix,mix==='harder',aim,sys,paper(u));
   if(paper!==undefined)assert.equal(r.aim,undefined,`${u}: no aim when nothing steered`);

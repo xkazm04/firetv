@@ -75,6 +75,7 @@ export const TOP_RUNG_LINES: Readonly<Record<string, string>> = {
   "frac-mul-div": TOP_RUNG_LINE,
   "pct-change": "Reverse and repeated percentage changes and a word problem join the harder ones, still school level, and a secure step up draws a second line.",
   "pythagoras": "Sides with decimals, answers rounded and a word problem join the harder ones, still school level, and a secure step up draws a second line.",
+  "probability": "Combined events, picking without replacement and a word problem join the harder ones, still school level, and a secure step up draws a second line.",
 };
 
 /** The one sentence under the cells, for the lit one; `topic` the unit asked about (a top-rung unit says what its step up adds). */

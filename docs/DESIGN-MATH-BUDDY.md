@@ -219,10 +219,12 @@ attempt still moves no slip on the ruler.
   cell is the one thing lit. The sentence under the lit "A step up" on a fractions unit with a top rung (MB-B20: Add and
   subtract fractions, Multiply and divide fractions) says what the step up adds and names its level: "Mixed numbers and
   a word problem join the harder ones, still school level, and a secure step up draws a second line." (`TOP_RUNG_LINE`).
-  Percent increase and decrease and Pythagoras' theorem have a top rung too (MB-B20), each with its own sentence
-  (`TOP_RUNG_LINES`): "Reverse and repeated percentage changes and a word problem join the harder ones, still school
-  level, and a secure step up draws a second line." and "Sides with decimals, answers rounded and a word problem join the
-  harder ones, still school level, and a secure step up draws a second line." Every other unit keeps its sentence.
+  Percent increase and decrease, Pythagoras' theorem and Probability of an event have a top rung too (MB-B20), each with
+  its own sentence (`TOP_RUNG_LINES`): "Reverse and repeated percentage changes and a word problem join the harder ones,
+  still school level, and a secure step up draws a second line.", "Sides with decimals, answers rounded and a word
+  problem join the harder ones, still school level, and a secure step up draws a second line." and "Combined events,
+  picking without replacement and a word problem join the harder ones, still school level, and a secure step up draws a
+  second line." Every other unit keeps its sentence.
   `maths-prepare`, `maths-choice`.
 - **The second ink line** (Family W8, the step-up) - a unit whose step-up record has latched (`SkillRecord.stretch` in
   `desk/src/lib/session/learners.ts`, `stretchSecure` in `desk/src/tv/mathsRows.ts`) gets a second, thinner line

@@ -54,9 +54,10 @@ const twos=(items)=>items.filter((i)=>i.tier===2).length;
 const beyond=(items)=>items.filter((i)=>i.tier>=2).length;
 /** The tiers of a step-up set from the standard baseline: two, two and two on a unit with a top rung (MB-B20), else two and four. */
 const harderTiers=(unit)=>(S.topGeneratorFor(unit)?[1,1,2,2,3,3]:[1,1,2,2,2,2]);
-/** What each top rung adds (MB-B20): mixed numbers on the fractions units, a reverse, two changes or the years on percent change, a rounded side on Pythagoras. */
+/** What each top rung adds (MB-B20): mixed numbers on the fractions units, a reverse, two changes or the years on percent change, a rounded side on Pythagoras, two events on probability. */
 const TOP_CONTENT={'frac-add-sub':(i)=>/\d \d+\//.test(i.question),'frac-mul-div':(i)=>/\d \d+\//.test(i.question),
- 'pct-change':(i)=>/^(?:[a-z]+ )?(?:before |.* then |.* for \d years$)/.test(i.spec.expr),'pythagoras':(i)=>/ dp[12]$/.test(i.spec.expr)};
+ 'pct-change':(i)=>/^(?:[a-z]+ )?(?:before |.* then |.* for \d years$)/.test(i.spec.expr),'pythagoras':(i)=>/ dp[12]$/.test(i.spec.expr),
+ 'probability':(i)=>/^(?:[a-z]+ )?(?:dice|coin|draw) /.test(i.spec.expr)};
 /** The usual record's own fields, as JSON: everything but the step-up record. */
 const usual=(rec)=>{if(!rec)return 'none';const {stretch,...rest}=rec;return JSON.stringify(rest);};
 /**
@@ -138,8 +139,8 @@ test('2: a step-up set is strictly harder than the baseline for every unit with 
  assert.deepEqual(tiers(makeSchoolItems(UNIT,6,11).items),[1,1,1,2,2,2],'the default is the standard mix');
  assert.deepEqual(tiers(makeSchoolItems(UNIT,6,11,'harder',true).items),[1,1,2,2,3,3],'MB-B20: the top rung on add and subtract fractions');
  assert.deepEqual(tiers(makeSchoolItems('ratio-share',6,11,'harder',true).items),[1,1,2,2,2,2],'a unit with no top rung: two and four as before');
- // MB-B20: percent change and Pythagoras have a top rung too; their usual sets hold none of it
- for(const unit of ['pct-change','pythagoras']){
+ // MB-B20: percent change, Pythagoras and probability have a top rung too; their usual sets hold none of it
+ for(const unit of ['pct-change','pythagoras','probability']){
   assert.deepEqual(tiers(makeSchoolItems(unit,6,11,'harder',true).items),[1,1,2,2,3,3],`MB-B20: the top rung on ${unit}`);
   for(const mix of ['easier','standard'])assert.ok(makeSchoolItems(unit,6,11,mix).items.every((i)=>i.tier!==3&&!TOP_CONTENT[unit](i)),`${unit} ${mix}: no top-rung item`);
  }

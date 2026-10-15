@@ -611,6 +611,7 @@ test('W8 prepare 4: the words - one sentence per caption slot, 25 words or fewer
  for(const [id,line] of Object.entries(TOP_RUNG_LINES)){assert.equal(choiceLine(1,id),line);assert.equal(choiceLine(0,id),choiceLine(0));assert.match(line,/word problem/i,id);assert.match(line,/still school level/,id);}
  assert.match(choiceLine(1,'pct-change'),/reverse/i);assert.match(choiceLine(1,'pct-change'),/repeated/i);
  assert.match(choiceLine(1,'pythagoras'),/decimals/i);assert.match(choiceLine(1,'pythagoras'),/rounded/i);
+ assert.match(choiceLine(1,'probability'),/combined events/i);assert.match(choiceLine(1,'probability'),/without replacement/i);
  for(const id of ['ratio-share','frac-equivalent','linear-one-step',undefined])assert.equal(choiceLine(1,id),choiceLine(1),String(id));
 });
 

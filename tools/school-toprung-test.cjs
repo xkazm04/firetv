@@ -8,7 +8,9 @@
  * numbers, and the stories' shape rule. The top rungs of percent change (genPercentTop: the amount before a change, two
  * changes in turn, a change over the years; a money story on every odd seed) and Pythagoras (genPythagorasTop: sides with
  * a decimal, the answer rounded to the places asked; a ladder, a screen or a field on every odd seed) take the same property
- * over 2000 seeds, their answers worked by hand in BigInt, a rounded side judged by the rulings MK5 / D2 R1a. Run with npm
+ * over 2000 seeds, their answers worked by hand in BigInt, a rounded side judged by the rulings MK5 / D2 R1a; so does the
+ * top rung of probability (genProbabilityTop: two dice, a coin with a dice or a spinner, two counters without replacement;
+ * socks, sweets or a coin-and-dice game on every odd seed), its fraction right in any equal form. Run with npm
  * test in desk/ (directly: node tools/school-toprung-test.cjs). Pure: no model, no store, no filesystem.
  */
 const path=require('node:path'),assert=require('node:assert/strict');
@@ -88,13 +90,14 @@ for(const [unit,gen] of Object.entries(GENS)){
  });
 }
 
-test('MB-B20 the top rung belongs to the two fractions units, percent change and Pythagoras only, and a bad seed is null',()=>{
- assert.deepEqual(Object.keys(S.TOP_TIER_GENERATORS).sort(),['frac-add-sub','frac-mul-div','pct-change','pythagoras']);
+test('MB-B20 the top rung belongs to the two fractions units, percent change, Pythagoras and probability only, and a bad seed is null',()=>{
+ assert.deepEqual(Object.keys(S.TOP_TIER_GENERATORS).sort(),['frac-add-sub','frac-mul-div','pct-change','probability','pythagoras']);
  assert.equal(S.topGeneratorFor('ratio-share'),null);assert.equal(S.topGeneratorFor('constructor'),null);
- for(const bad of [-1,1.5,NaN,'1',null,undefined,2**32])for(const g of [...Object.values(GENS),S.genPercentTop,S.genPythagorasTop])assert.equal(g(bad),null);
+ for(const bad of [-1,1.5,NaN,'1',null,undefined,2**32])for(const g of [...Object.values(GENS),S.genPercentTop,S.genPythagorasTop,S.genProbabilityTop])assert.equal(g(bad),null);
  // the registered top rungs are the generators themselves, a money amount in the learner's own currency (MB-B4)
  for(let seed=0;seed<200;seed++){
   assert.deepEqual(S.TOP_TIER_GENERATORS.pythagoras(seed,'cz'),S.genPythagorasTop(seed));
+  assert.deepEqual(S.TOP_TIER_GENERATORS.probability(seed,'cz'),S.genProbabilityTop(seed));
   const raw=S.genPercentTop(seed);
   for(const [sys,own] of [['cz','Kč'],['de','€'],['uk','£']]){
    const got=S.TOP_TIER_GENERATORS['pct-change'](seed,sys);
