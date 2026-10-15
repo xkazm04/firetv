@@ -85,6 +85,15 @@ class ControllerStringsTest {
         assertFalse(page.contains("m.phase==='countdown'?'GET READY'"),"the phone must not re-derive the screen from the phase")
     }
 
+    @Test fun careerCarOptionsCarryOneStatusWord() {
+        assertTrue(page.contains("(owned?'':' / BUY'):' / LOCKED'"))
+        assertFalse(page.contains("buy in garage"))
+    }
+
+    @Test fun rotatePromptSitsAboveTheModals() {
+        assertTrue(page.contains(".rotate{display:flex;position:fixed;inset:0;z-index:5;"))
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
