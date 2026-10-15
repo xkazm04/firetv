@@ -10,6 +10,8 @@ import type { Session, Subject, Task } from "@/lib/session/store";
 import { landingModules } from "@/tv/landingRows";
 import { BRAND } from "@/tv/profileRows";
 import { MARKS, type Mark } from "@/lib/rules/marks";
+import { slip as slipById } from "@/lib/rules/maths";
+import { topicIn } from "@/lib/library/paths";
 
 /** An app with nothing tonight says so in two words. */
 export const RECAP_EMPTY = "Not tonight";
@@ -19,13 +21,19 @@ export const RECAP_EMPTY = "Not tonight";
  * then `skipped` items the child left empty (MB-B1, rules/marks). Each is drawn by its own mark (tv/screens RECAP_PEN).
  */
 export interface MathsSet { right: number; of: number; unsure?: number; skipped?: number }
-export interface MathsTile { app: "maths"; empty: string | null; sets: MathsSet[]; pages: number; hints: number; second: number; hinted: Hinted[] }
+export interface MathsTile { app: "maths"; empty: string | null; sets: MathsSet[]; pages: number; hints: number; second: number; hinted: Hinted[]; slipped: Slipped[] }
 /**
  * A problem that had a hint tonight, by the name the learner knows it (MB-B23): its printed number, or its lettered
  * part ("5b"), with the page it is on only when two hinted problems share a name. `second` when it needed a second hint.
  * `name` is null for a hint whose problem the session can no longer name: it is counted, never guessed.
  */
 export interface Hinted { name: string | null; page?: number; second: boolean }
+/**
+ * A problem of tonight's marked set that the desk ringed with a named slip: its number as the set prints it ("4", a
+ * part "2b") and the slip's short label from rules (rules/school `short`: "added the percentages"). Only a slip that
+ * carries a short is named; any other ring stays unlabelled on the set's rail. Never the question, an answer or a value.
+ */
+export interface Slipped { name: string; slip: string }
 export interface LingaTile { app: "english"; empty: string | null; talks: number[] }
 export interface EssayTile { app: "essay"; empty: string | null; readings: Array<{ lens: string; against: number; of: number; fixed?: number }> }
 export type RecapTile = MathsTile | LingaTile | EssayTile;
@@ -69,7 +77,7 @@ export function recapRows(s: Session, now: number): RecapTile[] {
         if (c.pages) pages += c.pages;
       }
       const hints = s.log?.hints ?? 0, second = s.log?.hard?.length ?? 0;
-      return { app, empty: mine.length || hints ? null : RECAP_EMPTY, sets, pages, hints, second, hinted: hintedOf(s) };
+      return { app, empty: mine.length || hints ? null : RECAP_EMPTY, sets, pages, hints, second, hinted: hintedOf(s), slipped: slippedOf(s, now) };
     }
     if (app === "english") {
       const talks = (s.englishLearning?.sessions ?? []).filter((x) => tonight(x.at)).map((x) => x.turns);
@@ -115,6 +123,22 @@ export function hintedOf(s: Pick<Session, "pages" | "log">): Hinted[] {
   found.sort((a, b) => a.at[0] - b.at[0] || a.at[1] - b.at[1]);
   const twice = (x: Hinted) => x.name !== null && found.filter((y) => y.name === x.name).length > 1;
   return found.map((x) => ({ name: x.name, ...(twice(x) && x.page ? { page: x.page } : {}), second: x.second }));
+}
+/**
+ * Tonight's named slips: the ringed items of the set on the desk whose slip has a short label in rules (rules/maths
+ * `slip(id, topic).short`), in the set's order. Only a marked set, and only when it is tonight's: the last practice
+ * line of the history (mark.ts writes one per marked set, a settle restates it in place) is dated since local midnight
+ * and written under this set's topic (its name, or its bare id). A set from an earlier evening names nothing.
+ */
+export function slippedOf(s: Pick<Session, "practice" | "history">, now: number): Slipped[] {
+  const p = s.practice;
+  if (!p?.marked) return [];
+  const h = (s.history ?? []).findLast((x) => x.kind === "practice");
+  if (!h || h.at < startOfDay(now) || h.at > now || (h.label !== (topicIn(p.topic)?.name ?? p.topic) && h.label !== p.topic)) return [];
+  return (p.items ?? []).flatMap((it): Slipped[] => {
+    const short = it.verdict === "wrong" && it.slip ? slipById(it.slip, p.topic)?.short : undefined, name = problemName(it.n, it.part);
+    return short && name ? [{ name, slip: short }] : [];
+  });
 }
 /** How many hinted problems the phone's line names before "and k more". */
 export const HINTED_NAMED = 6;

@@ -1598,7 +1598,14 @@ function printQuestion(spec: unknown, system?: SchoolSystem): { plain: string; t
 // ------------------------------------------------------------------ the slips a closed form can detect
 
 /** `name` is the slip's title, `says` the desk's line, `points` where to look: none carries a value. */
-export interface SchoolSlip { id: string; name: string; says: string; points: string }
+/**
+ * `short`: the slip's label under the TV recap's ring (tv/recapRows `slippedOf`) - lowercase, at most four words, no value;
+ * only the slips a step up's top rung names (SCHOOL_TOP_SLIPS) and the Pythagoras unit's (a top-rung side names them by its
+ * own rounding rule) carry one. A slip without one is never named on the recap: its ring is drawn, unlabelled.
+ */
+export interface SchoolSlip { id: string; name: string; short?: string; says: string; points: string }
+/** The longest a slip's `short` may be, in words and in characters: it must fit under a ring on the recap's sheet without a cut. */
+export const SHORT_WORDS = 4, SHORT_CHARS = 24;
 
 export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "tops-and-bottoms", name: "Added the tops and the bottoms", says: "The tops were combined and so were the bottoms. Fractions need the same bottom first; then only the tops change.", points: "the line where the fractions were combined" },
@@ -1639,8 +1646,8 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "change-wrong-way", name: "Went the wrong way", says: "The change went the wrong way. Read the question again: an increase adds, a decrease takes away.", points: "the line where the change was added or taken off" },
   { id: "change-as-number", name: "The percent added as a plain number", says: "The percentage was added or taken off as a plain number. Find that percentage of the amount first.", points: "the line where the percentage was added or taken off" },
   // the top rung of percent increase and decrease (MB-B20): named on a top-rung item only (SCHOOL_TOP_SLIPS)
-  { id: "pct-of-new", name: "Took the percent of the new amount", says: "The percentage was taken of the amount after the change, but it is a percentage of the amount before. Divide back to the original.", points: "the line where the percentage was taken" },
-  { id: "pct-added", name: "Added the percentages together", says: "The percentages were added into one change. Each change is a percentage of the amount there is by then, so apply them one after another.", points: "the line where the percentages were combined" },
+  { id: "pct-of-new", name: "Took the percent of the new amount", short: "percent of the new", says: "The percentage was taken of the amount after the change, but it is a percentage of the amount before. Divide back to the original.", points: "the line where the percentage was taken" },
+  { id: "pct-added", name: "Added the percentages together", short: "added the percentages", says: "The percentages were added into one change. Each change is a percentage of the amount there is by then, so apply them one after another.", points: "the line where the percentages were combined" },
   // ratio and sharing (Family W7 batch 3)
   { id: "ratio-split-each", name: "Divided by each number of the ratio", says: "The amount was divided by each number of the ratio in turn. Add the ratio's numbers first to find the equal parts, then one part.", points: "the division" },
   { id: "ratio-as-amounts", name: "The ratio's numbers given as the amounts", says: "The ratio's numbers were given as the answer. They say how many parts each side gets: find one part and multiply by them.", points: "the answer" },
@@ -1662,17 +1669,17 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "range-largest", name: "The largest number only", says: "This is the largest number of the list only. The range is the largest take away the smallest.", points: "the answer" },
   { id: "range-backwards", name: "Took away the wrong way round", says: "The largest was taken away from the smallest, so the answer is below zero. The range is the largest take away the smallest.", points: "the subtraction" },
   // Pythagoras' theorem (v2 M2b)
-  { id: "pyth-sides-added", name: "Added the two sides", says: "The two lengths were added. The sides are linked through their squares, not their sum: multiply each by itself first, then add or take away.", points: "the line where the two lengths were combined" },
-  { id: "pyth-no-root", name: "Stopped before the square root", says: "The square root was never taken. That result is the side multiplied by itself, so find the number that multiplies by itself to make it.", points: "the last line" },
-  { id: "pyth-squares-added", name: "Added the squares for a shorter side", says: "The squares were added, but a shorter side needs the other shorter square taken from the longest side's square. The longest is the biggest square.", points: "the line where the squares were combined" },
+  { id: "pyth-sides-added", name: "Added the two sides", short: "added the sides", says: "The two lengths were added. The sides are linked through their squares, not their sum: multiply each by itself first, then add or take away.", points: "the line where the two lengths were combined" },
+  { id: "pyth-no-root", name: "Stopped before the square root", short: "no square root", says: "The square root was never taken. That result is the side multiplied by itself, so find the number that multiplies by itself to make it.", points: "the last line" },
+  { id: "pyth-squares-added", name: "Added the squares for a shorter side", short: "added the squares", says: "The squares were added, but a shorter side needs the other shorter square taken from the longest side's square. The longest is the biggest square.", points: "the line where the squares were combined" },
   // the probability of an event (v2 M2b)
   { id: "prob-count-alone", name: "The count instead of the chance", says: "The number of counters was given, not a probability. Compare that number with all the counters in the bag; it is never above one whole.", points: "the answer" },
   { id: "prob-part-over-rest", name: "Compared with the rest instead of the whole", says: "The counters asked about were compared with the other counters. Compare them with all the counters in the bag, the ones asked about included.", points: "the bottom of the fraction" },
   { id: "prob-one-over-colours", name: "One over the number of colours", says: "Every colour was given the same chance. The counts differ, so each colour has its own chance: its count over all the counters.", points: "the bottom of the fraction" },
   { id: "prob-own", name: "The chance of the event itself", says: "This is the chance of the colour itself, but the question asks for the chance it is not. Take it away from a whole.", points: "the last line" },
   // the top rung of probability (MB-B20): named on a top-rung item only (SCHOOL_TOP_SLIPS)
-  { id: "prob-added", name: "Added the chances instead of multiplying", says: "The chances were added. For both things to happen, multiply the chance of each, so the answer is smaller than either chance.", points: "the line where the chances were combined" },
-  { id: "prob-replaced", name: "Put the first one back", says: "The first pick was treated as put back. It is kept out, so the second pick has fewer to choose from.", points: "the second fraction" },
+  { id: "prob-added", name: "Added the chances instead of multiplying", short: "added the chances", says: "The chances were added. For both things to happen, multiply the chance of each, so the answer is smaller than either chance.", points: "the line where the chances were combined" },
+  { id: "prob-replaced", name: "Put the first one back", short: "put the first back", says: "The first pick was treated as put back. It is kept out, so the second pick has fewer to choose from.", points: "the second fraction" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */

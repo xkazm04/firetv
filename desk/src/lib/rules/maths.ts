@@ -22,8 +22,8 @@ import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_TOP_SLIPS, SCHOOL_UNIT_SLIP
 import type { SchoolSystem } from "../session/store";
 import { DISAGREES, markCounts, type Markable } from "./marks";
 
-/** `name` is what the TV sets as the slip's title; `says` is the desk's line; `points` the place in words. */
-export interface Slip { id: string; topics: string[]; says: string; points: string; name: string; }
+/** `name` is what the TV sets as the slip's title; `short` its label on the recap (rules/school SchoolSlip, a few only); `says` is the desk's line; `points` the place in words. */
+export interface Slip { id: string; topics: string[]; says: string; points: string; name: string; short?: string; }
 
 const ONE = "linear-one-step";
 const TWO = "linear-two-step";
@@ -61,7 +61,7 @@ const isCalcTopic = (topicId: string) => judgeOfTopic(topicId) === "calc";
  * from the spec's own operands (rules/school check), never picked by a model.
  */
 const SCHOOL_AS_SLIPS: Slip[] = SCHOOL_SLIPS.map((c) => ({
-  id: c.id, says: c.says, points: c.points, name: c.name,
+  id: c.id, says: c.says, points: c.points, name: c.name, ...(c.short ? { short: c.short } : {}),
   topics: Object.keys(SCHOOL_UNIT_SLIPS).filter((u) => SCHOOL_UNIT_SLIPS[u].includes(c.id)),
 }));
 

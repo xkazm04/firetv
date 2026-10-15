@@ -76,7 +76,7 @@ test('case 1: recapRows draws tonight\'s work per app - sets, pages, hints, talk
  const {recapRows}=recap();
  const s=evening();
  assert.deepEqual(recapRows(s,NOW),[
-  {app:'maths',empty:null,sets:[{right:4,of:6}],pages:1,hints:3,second:1,hinted:[{name:null,second:false},{name:null,second:false}]},
+  {app:'maths',empty:null,sets:[{right:4,of:6}],pages:1,hints:3,second:1,hinted:[{name:null,second:false},{name:null,second:false}],slipped:[]},
   {app:'english',empty:null,talks:[7,4]},
   {app:'essay',empty:null,readings:[{lens:'Argument',against:2,of:5}]},
  ]);
@@ -88,7 +88,7 @@ test('case 2: only the apps on the learner\'s profile, in the desk\'s order; an 
  assert.deepEqual(recapRows(jakub({history:evening().history,englishLearning:evening().englishLearning}),NOW).map((t)=>t.app),['english','essay'],'Jakub never gets a Math Buddy tile, whatever his history holds');
  assert.deepEqual(recapRows(session({profiles:[{...EMA,modules:['essay','maths']}]}),NOW).map((t)=>t.app),['maths','essay'],'the desk\'s left-to-right order, not the profile\'s');
  const quiet=recapRows(session(),NOW);
- assert.deepEqual(quiet[0],{app:'maths',empty:'Not tonight',sets:[],pages:0,hints:0,second:0,hinted:[]},'no counts invented');
+ assert.deepEqual(quiet[0],{app:'maths',empty:'Not tonight',sets:[],pages:0,hints:0,second:0,hinted:[],slipped:[]},'no counts invented');
  for(const t of quiet)assert.equal(t.empty,'Not tonight');
  assert.equal(words('Not tonight').length,2);
 });
@@ -872,4 +872,39 @@ test('MB-B23 phone: the Recap tab says which problems had a hint by name, from h
  assert.match(sec,/hintedLine\(/,'the parent panel calls hintedLine');
  assert.doesNotMatch(sec,/log\.hard\.map|Needed a second hint: \{/,'no hinted problem\'s text on the phone');
  assert.match(sec,/data-role="phone-hinted"/);
+});
+
+// cycle 19: the recap names a step up's slips - the ringed item's number and the slip's short label from rules, never a value
+const PCT={topic:'pct-change',marked:true,stretch:true,items:[
+ {n:1,question:'Increase 80 by 25%.',studentAnswer:'100',verdict:'right',tier:3,stretch:true},
+ {n:2,question:'Increase 200 by 10% then by 20%.',studentAnswer:'260',verdict:'wrong',slip:'pct-added',tier:3,stretch:true},
+ {n:3,question:'After a 20% rise it costs 60. What did it cost before?',studentAnswer:'48',verdict:'wrong',slip:'pct-of-new',tier:3,stretch:true},
+ {n:4,question:'Decrease 50 by 10%.',studentAnswer:'40',verdict:'wrong',slip:'pct-ten-stopped'},
+ {n:5,question:'Increase 30 by 10%.',studentAnswer:'34',verdict:'wrong'}]};
+const pctEvening=(patch={})=>session({practice:PCT,history:[{at:TODAY(17),kind:'practice',label:'Percent increase and decrease',detail:'1 of 5 right'}],...patch});
+test('cycle 19 rules: a short label on the top-rung and Pythagoras slips only - lowercase, four words at most, no digit',()=>{
+ const S=require(path.join(root,'src/lib/rules/school.ts')),{slip}=require(path.join(root,'src/lib/rules/maths.ts'));
+ const shorts=S.SCHOOL_SLIPS.filter((x)=>x.short).map((x)=>x.id).sort();
+ const want=[...Object.values(S.SCHOOL_TOP_SLIPS).flat(),...S.SCHOOL_UNIT_SLIPS.pythagoras].sort();
+ assert.deepEqual(shorts,want,'every top-rung slip and every Pythagoras slip, and no other');
+ for(const x of S.SCHOOL_SLIPS.filter((y)=>y.short)){
+  assert.equal(x.short,x.short.toLowerCase(),x.id);assert.doesNotMatch(x.short,/\d/,x.id);
+  assert.ok(x.short.split(/\s+/).length<=S.SHORT_WORDS&&x.short.length<=S.SHORT_CHARS,`${x.id}: "${x.short}" fits`);
+ }
+ assert.equal(slip('pct-added','pct-change').short,'added the percentages','carried through rules/maths slip()');
+ assert.equal(slip('arithmetic-slip').short,undefined,'a linear slip has none');
+});
+test('cycle 19 rows: tonight\'s set names its ringed items whose slip has a short, in the set\'s order; nothing else',()=>{
+ const {recapRows,slippedOf}=recap();
+ const t=recapRows(pctEvening(),NOW)[0];
+ assert.deepEqual(t.slipped,[{name:'2',slip:'added the percentages'},{name:'3',slip:'percent of the new'}],'a unit slip without a short and a ring with no slip are not named');
+ const flat=JSON.stringify(t);
+ for(const i of PCT.items){assert.ok(!flat.includes(i.question),i.question);assert.ok(!flat.includes(`"${i.studentAnswer}"`),i.studentAnswer);}
+ assert.deepEqual(slippedOf(pctEvening({history:[{at:YESTERDAY,kind:'practice',label:'Percent increase and decrease',detail:'1 of 5 right'}]}),NOW),[],'yesterday\'s set names nothing tonight');
+ assert.deepEqual(slippedOf(pctEvening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'4 of 6 right'}]}),NOW),[],'tonight\'s line is another set\'s');
+ assert.deepEqual(slippedOf(pctEvening({history:[{at:TODAY(17),kind:'practice',label:'pct-change',detail:'1 of 5 right'}]}),NOW).length,2,'a line under the bare id is the set\'s too');
+ assert.deepEqual(slippedOf(pctEvening({practice:{...PCT,marked:false}}),NOW),[],'an unmarked set names nothing');
+ const py={topic:'pythagoras',marked:true,items:[{n:1,question:'q',verdict:'wrong',slip:'pyth-no-root'},{n:2,question:'q',verdict:'right',slip:'pyth-sides-added'}]};
+ assert.deepEqual(slippedOf(session({practice:py,history:[{at:TODAY(18),kind:'practice',label:"Pythagoras' theorem",detail:'1 of 2 right'}]}),NOW),[{name:'1',slip:'no square root'}],'a usual Pythagoras item\'s slip is named too; a right item never');
+ assert.deepEqual(recapRows(evening(),NOW)[0].slipped,[],'a linear set\'s arithmetic slip has no short');
 });
