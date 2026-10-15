@@ -1,0 +1,179 @@
+{
+ "schema": "conform-run/1",
+ "worker": "74a7848a-9c98-4c5f-9d2b-f9e20c1b6b1b",
+ "subject": "agent-memory",
+ "evaluatedAt": "2026-10-15T00:17:21.215483+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "desk-pipelines",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "desk/src/lib/desk/memory.ts:87 Model-generated beliefs are appended as plain strings without provenance, confidence or supersedence metadata.",
+   "techniques": [
+    {
+     "technique": "consolidation",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/desk/memory.ts:87 The durable write retains only generated sentences, with no supporting episode references, confidence or contradiction lineage."
+    },
+    {
+     "technique": "filter-at-the-id-door",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/desk/memory.ts:24 This recall path renders supplied strings directly; it does not load model-selected memory IDs."
+    },
+    {
+     "technique": "read-set-bounded-links",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/desk/memory.ts:19 The memory extraction contract exposes sentences, with no model-authored memory-reference fields to resolve."
+    },
+    {
+     "technique": "recall-injection",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/desk/memory.ts:25 Every retained sentence is injected without a token budget or relevance selection; labeling the block does not bound its cost."
+    },
+    {
+     "technique": "self-trained-capture-filter",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/desk/memory.ts:79 This pass calls the model directly; its subsequent fixed output filters do not learn a screen from empty extractions."
+    }
+   ]
+  },
+  {
+   "context": "linga",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "desk/src/lib/english/conversation.ts:99 The tutor receives a fixed window of retained learning evidence without being told how many matching records were omitted.",
+   "techniques": [
+    {
+     "technique": "decay-and-forgetting",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/english/conversation.ts:358 Adding a taught item discards the oldest items past the cap instead of demoting by value while preserving an audit trail."
+    },
+    {
+     "technique": "filter-at-the-id-door",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/english/conversation.ts:246 Code selects the review item through dueTaught; the model does not choose memory IDs from a shortlist."
+    },
+    {
+     "technique": "loss-site-inventory",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/english/conversation.ts:104 The assembled tutor input silently windows conversation turns and learning evidence, whereas the phone can render the full current transcript."
+    }
+   ]
+  },
+  {
+   "context": "uat",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "uat/driver/linga-text.cjs:510 The Character agent carries a recency-truncated action log between decisions instead of maintaining a rolling synthesis of operative state.",
+   "techniques": [
+    {
+     "technique": "probe-without-write-back",
+     "verdict": "not-applicable",
+     "evidence": "uat/rubric.md:34 This recall metric measures missed teaching corrections, not a scheduled memory-retrieval health probe."
+    },
+    {
+     "technique": "working-memory",
+     "verdict": "deviation",
+     "evidence": "uat/driver/linga-text.cjs:510 The Character prompt receives recentSteps from this ten-step window; older decisions disappear by position rather than being synthesized into current constraints, decisions and open threads."
+    }
+   ]
+  },
+  {
+   "context": "session",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "desk/src/lib/session/learners.ts:141 The getLearner read path converts an unreadable durable book into an empty book without returning a degraded-memory signal.",
+   "techniques": [
+    {
+     "technique": "decay-and-forgetting",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/session/learners.ts:302 Saving enforces memory retention by deleting the oldest strings, without value-based demotion, archival or tombstones."
+    },
+    {
+     "technique": "durable-store-failure-posture",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/session/learners.ts:141 Although writers refuse an unreadable book and readLearner offers a strict alternative, getLearner uses this fallback and cannot distinguish corruption from empty memory."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "agent-memory",
+   "context": "landing",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-15T00:17:21.215483+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [
+    "consolidation",
+    "filter-at-the-id-door",
+    "read-set-bounded-links",
+    "recall-injection",
+    "self-trained-capture-filter"
+   ],
+   "deviations": 1,
+   "context": "desk-pipelines",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-15T00:17:21.215483+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [
+    "decay-and-forgetting",
+    "filter-at-the-id-door",
+    "loss-site-inventory"
+   ],
+   "deviations": 1,
+   "context": "linga",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-15T00:17:21.215483+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [
+    "probe-without-write-back",
+    "working-memory"
+   ],
+   "deviations": 1,
+   "context": "uat",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-15T00:17:21.215483+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [
+    "decay-and-forgetting",
+    "durable-store-failure-posture"
+   ],
+   "deviations": 1,
+   "context": "session",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

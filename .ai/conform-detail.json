@@ -104,6 +104,110 @@
         }
       ],
       "registryProposal": "The standard should distinguish conversational rehearsal contexts where domain safety policies (e.g. minor protection and age gating) trigger immediate conversation termination while pedagogical preference updates are deferred to subsequent scenes."
+    },
+    "desk-subjects/desk-pipelines/agent-memory": {
+      "context": "desk-pipelines",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:17:21.215Z",
+      "worker": "74a7848a-9c98-4c5f-9d2b-f9e20c1b6b1b",
+      "techniques": [
+        {
+          "technique": "consolidation",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/desk/memory.ts:87 The durable write retains only generated sentences, with no supporting episode references, confidence or contradiction lineage."
+        },
+        {
+          "technique": "filter-at-the-id-door",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/desk/memory.ts:24 This recall path renders supplied strings directly; it does not load model-selected memory IDs."
+        },
+        {
+          "technique": "read-set-bounded-links",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/desk/memory.ts:19 The memory extraction contract exposes sentences, with no model-authored memory-reference fields to resolve."
+        },
+        {
+          "technique": "recall-injection",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/desk/memory.ts:25 Every retained sentence is injected without a token budget or relevance selection; labeling the block does not bound its cost."
+        },
+        {
+          "technique": "self-trained-capture-filter",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/desk/memory.ts:79 This pass calls the model directly; its subsequent fixed output filters do not learn a screen from empty extractions."
+        }
+      ]
+    },
+    "desk-linga/linga/agent-memory": {
+      "context": "linga",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:17:21.215Z",
+      "worker": "74a7848a-9c98-4c5f-9d2b-f9e20c1b6b1b",
+      "techniques": [
+        {
+          "technique": "decay-and-forgetting",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:358 Adding a taught item discards the oldest items past the cap instead of demoting by value while preserving an audit trail."
+        },
+        {
+          "technique": "filter-at-the-id-door",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/english/conversation.ts:246 Code selects the review item through dueTaught; the model does not choose memory IDs from a shortlist."
+        },
+        {
+          "technique": "loss-site-inventory",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:104 The assembled tutor input silently windows conversation turns and learning evidence, whereas the phone can render the full current transcript."
+        }
+      ]
+    },
+    "tooling/uat/agent-memory": {
+      "context": "uat",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:17:21.215Z",
+      "worker": "74a7848a-9c98-4c5f-9d2b-f9e20c1b6b1b",
+      "techniques": [
+        {
+          "technique": "probe-without-write-back",
+          "verdict": "not-applicable",
+          "evidence": "uat/rubric.md:34 This recall metric measures missed teaching corrections, not a scheduled memory-retrieval health probe."
+        },
+        {
+          "technique": "working-memory",
+          "verdict": "deviation",
+          "evidence": "uat/driver/linga-text.cjs:510 The Character prompt receives recentSteps from this ten-step window; older decisions disappear by position rather than being synthesized into current constraints, decisions and open threads."
+        }
+      ]
+    },
+    "desk-platform/session/agent-memory": {
+      "context": "session",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:17:21.215Z",
+      "worker": "74a7848a-9c98-4c5f-9d2b-f9e20c1b6b1b",
+      "techniques": [
+        {
+          "technique": "decay-and-forgetting",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/session/learners.ts:302 Saving enforces memory retention by deleting the oldest strings, without value-based demotion, archival or tombstones."
+        },
+        {
+          "technique": "durable-store-failure-posture",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/session/learners.ts:141 Although writers refuse an unreadable book and readLearner offers a strict alternative, getLearner uses this fallback and cannot distinguish corruption from empty memory."
+        }
+      ]
     }
   }
 }

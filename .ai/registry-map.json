@@ -424,7 +424,11 @@
           "revision": 48,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:99 The tutor receives a fixed window of retained learning evidence without being told how many matching records were omitted.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
+          "evaluatedRevision": 51
         },
         {
           "subject": "agent-runtime-assembly",
@@ -542,7 +546,11 @@
           "revision": 48,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/desk/memory.ts:87 Model-generated beliefs are appended as plain strings without provenance, confidence or supersedence metadata.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
+          "evaluatedRevision": 51
         },
         {
           "subject": "test-harness",
@@ -1866,7 +1874,11 @@
           "revision": 48,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/session/learners.ts:141 The getLearner read path converts an unreadable durable book into an empty book without returning a degraded-memory signal.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
+          "evaluatedRevision": 51
         },
         {
           "subject": "fleet-orchestration",
@@ -2613,7 +2625,11 @@
           "revision": 48,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "uat/driver/linga-text.cjs:510 The Character agent carries a recency-truncated action log between decisions instead of maintaining a rolling synthesis of operative state.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
+          "evaluatedRevision": 51
         },
         {
           "subject": "quality-gates",
