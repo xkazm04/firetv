@@ -60,6 +60,12 @@ class ControllerStringsTest {
         assertTrue(page.contains("id=\"marketDetail\""))
     }
 
+    @Test fun cardDescriptionsOpenOnTap() {
+        assertTrue(page.contains("desc.className='more'"))
+        assertTrue(page.contains("info.className='more'"))
+        assertTrue(page.contains(".offer p.more{display:none"))
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
