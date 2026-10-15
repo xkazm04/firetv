@@ -87,6 +87,11 @@ test('case b5: the claude envelope is read for why the turn ended before its ans
  assert.equal(stopOf({is_error:true,subtype:'error_during_execution'}).kind,'exit');
  assert.match(stopOf({is_error:true,subtype:'error_during_execution'}).why,/error_during_execution/);
 });
+test('case b7: the sentence of a failed run says what failed and why, never what to do: no surface has to cut an action out of it',()=>{
+ const {jobError}=load('desk/job.ts');
+ assert.equal(jobError('mark',new Error('boom')),'The desk could not mark the set.');
+ for(const k of ['timeout','unreachable','exit','shape','cutoff','declined'])assert.doesNotMatch(jobError('mark',new EngineError(k,'stub','x')),/Try again/i,k);
+});
 test('case b6: the job and smoke copy name every kind, and a cut-off is never worded as an answer in pieces',()=>{
  const {jobError}=load('desk/job.ts');
  const cut=jobError('hint',new EngineError('cutoff','stub','x')),no=jobError('hint',new EngineError('declined','stub','x')),shape=jobError('hint',new EngineError('shape','stub','x'));

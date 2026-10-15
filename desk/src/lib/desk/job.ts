@@ -83,12 +83,16 @@ export function failureOf(e: unknown): JobFailure {
   return e instanceof EngineError ? e.kind : "unknown";
 }
 
-/** The sentence a failed run leaves on the session: never an exception's text or its stack. */
+/**
+ * The sentence a failed run leaves on the session: never an exception's text or its stack. It says what failed and,
+ * when the desk knows, why - never what to do next: whether asking again can help is `retry` (failure.ts), and each
+ * surface words its own action (the phone's Try again, the TV's Select or snap line).
+ */
 export function jobError(kind: JobKind, e: unknown): string {
   if (e instanceof DeskSaid) return e.message;
   if (e instanceof LearnersUnread) return LEARNER_UNREAD_RUN;
   const why = e instanceof EngineError ? WHY[e.kind] : "";
-  return why ? `${FAILED[kind]} ${why}` : `${FAILED[kind]} Try again.`;
+  return why ? `${FAILED[kind]} ${why}` : FAILED[kind];
 }
 
 /** Whether a job holds its kind against a new run by the seated learner: running, and theirs or nobody's (P11). */

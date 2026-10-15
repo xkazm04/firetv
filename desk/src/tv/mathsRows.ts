@@ -274,8 +274,8 @@ export const MARKING = "The desk is marking the set…";
 /** Practice, after a failed mark: how to ask again (the phone's snap is the retry). */
 export const SNAP_AGAIN = "Snap the sheet again and the desk tries again.";
 /**
- * The Practice caption's state: the set is being marked, or the mark failed (its sentence, then that snapping again
- * tries again - the sentence's own "Try again." is dropped, as the snap line says how). A failure belongs to the
+ * The Practice caption's state: the set is being marked, or the mark failed (its sentence as the job says it, then
+ * that snapping again tries again - the job's sentence carries no action of its own: job.ts jobError). A failure belongs to the
  * set it was for: once a newer set has been written it is not shown. Otherwise null, and the caption is unchanged.
  */
 export function markLine(s: JobsOf): JobLine | null {
@@ -283,8 +283,7 @@ export function markLine(s: JobsOf): JobLine | null {
   if (!p || p.marked || !j) return null;
   if (j.phase === "running") return theirs(j, s) ? { phase: "running", text: MARKING } : null;
   if (j.phase !== "failed" || at(s.jobs?.practice) > at(j)) return null;
-  const said = (j.error ?? "The desk could not mark the set.").replace(/\s*Try again\.\s*$/, "");
-  return { phase: "failed", text: `${said} ${SNAP_AGAIN}` };
+  return { phase: "failed", text: `${j.error ?? "The desk could not mark the set."} ${SNAP_AGAIN}` };
 }
 
 /** The Walk, while the learner's explanation of the open item is being thought over. */
