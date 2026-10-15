@@ -143,6 +143,11 @@ test('2: a step-up set is strictly harder than the baseline for every unit with 
   assert.deepEqual(tiers(makeSchoolItems(unit,6,11,'harder',true).items),[1,1,2,2,3,3],`MB-B20: the top rung on ${unit}`);
   for(const mix of ['easier','standard'])assert.ok(makeSchoolItems(unit,6,11,mix).items.every((i)=>i.tier!==3&&!TOP_CONTENT[unit](i)),`${unit} ${mix}: no top-rung item`);
  }
+ // an aimed step up (a paper's slips, MB-B40) still holds the rung's word problem: the aim works on tiers 1 and 2 only
+ for(const unit of Object.keys(S.TOP_TIER_GENERATORS))for(const id of S.SCHOOL_UNIT_SLIPS[unit])for(let seed=0;seed<8;seed++){
+  const threes=makeSchoolItems(unit,6,seed*977,'harder',true,[id],'uk').items.filter((i)=>i.tier===3);
+  assert.equal(threes.length,2,`${unit} ${id} ${seed}`);assert.ok(threes.some((i)=>S.storyOf(i.spec)),`${unit} aimed at ${id}, seed ${seed}: a word problem`);
+ }
  // the top rung's money is the learner's own, printed in their writing (a Czech learner's step up in Kč)
  for(let seed=0;seed<40;seed++){
   const threes=makeSchoolItems('pct-change',6,seed*101,'harder',true,[],'cz').items.filter((i)=>i.tier===3);

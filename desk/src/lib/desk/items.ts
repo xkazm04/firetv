@@ -467,9 +467,10 @@ function aimedSchoolItems(topicId: string, n: number, seed: number, mix: Mix, st
       // or space is the question's own number, not its answer (MB-B4), and the numbers printed are the same
       const q = schoolQuestion(spec, system);
       if (!q || leaksSchool(spec, schoolQuestion(spec)?.plain)) continue;
-      const hit = aim.some((id) => slipShows(spec, id));
+      // MB-B20: the aim works on tiers 1 and 2; a tier-3 item is always the rest (a rounded Pythagoras side shows slips, a
+      // mixed number none), so its pair keeps the rung's word problem: its last slot takes only a story while none is kept
+      const hit = tier !== 3 && aim.some((id) => slipShows(spec, id));
       if ((hit ? hits : rest).length >= want) continue;
-      // MB-B20: no slip shows on a tier-3 item, so its pair is the rest: its last slot takes only a word problem while none is kept
       if (tier === 3 && !hit && rest.length === want - 1 && !rest.some((d) => storyOf(d.spec)) && !storyOf(spec)) continue;
       const key = sameKey(q.plain);
       if (seen.has(key)) continue;
