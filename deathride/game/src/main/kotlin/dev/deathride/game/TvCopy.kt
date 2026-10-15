@@ -25,6 +25,15 @@ object TvCopy {
     fun receiptBanked(banked: Number,balance: Number): String = "BANKED +$banked CR / BALANCE $balance CR"
     fun receiptBreakdown(prize: Number,pit: Number,taken: Number): String = "PRIZE $prize / PIT $pit / REPAYMENTS + CAP $taken"
 
+    /** Header hint outside the lobby: where BACK goes. The feel preset is a lobby setting and said nothing in a menu. */
+    const val BACK_LOBBY="BACK: LOBBY"
+    /** KEY  ACTION like every other hint, so the label names what the key does, never a state it might be in. */
+    fun soundHint(muted: Boolean): String = if(muted)"M / Y  SOUND ON" else "M / Y  MUTE"
+    /** The garage's focused bar; the phone's button reads "INSTALL n / price CR" (its "n" is a bare tier). */
+    fun installLabel(tier: Int,price: Number): String = "INSTALL TIER $tier / $price CR"
+    /** The phone's own words for a dead link (controller: "Link lost · coasting"). */
+    const val LINK_LOST="LINK LOST"
+
     /** The seat's controller layout that holds GO for the driver (controller-layouts.csv, autoThrottle=1). */
     const val AUTO_LAYOUT="Auto"
 

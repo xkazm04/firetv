@@ -764,7 +764,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(phase!="race") {
             title("DEATH RIDE",42f,699f)
             label(when(phase){"career"->"THE ASH CIRCUIT";"garage"->"";else->"${courseCatalog[selectedTrack].name} / ${activeRegion.name} / ${world.raceLaps} LAPS"},42f,644f)
-            label(if(phase=="lobby")"FEEL  /  ${server.feel.id.uppercase()}" else "BACK: LOBBY   /   ${server.feel.id}",810f,691f)
+            label(if(phase=="lobby")"FEEL  /  ${server.feel.id.uppercase()}" else TvCopy.BACK_LOBBY,810f,691f)
             val notice=if(::saves.isInitialized)saves.notice else ""
             label(TvCopy.statusLine(notice,scene.ready),810f,654f,if(notice.startsWith("Save failed"))warning else if(scene.ready && notice.isEmpty())muted else accent)
         }
@@ -777,7 +777,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         } else {
             label(TvCopy.seatLine(0,CarCatalog.all[profiles[0].selectedCar].id,profiles[0].credits),42f,if(phase=="lobby")62f else 55f,accent)
             label(if(server.slots[1].claimed)TvCopy.seatLine(1,CarCatalog.all[profiles[1].selectedCar].id,profiles[1].credits) else TvCopy.JOIN_LINE,455f,if(phase=="lobby")62f else 55f)
-            label(if(audio.gain("master")==0f)"M / Y: SOUND OFF" else "M / Y: SOUND ON",995f,if(phase=="lobby")62f else 55f)
+            label(TvCopy.soundHint(audio.gain("master")==0f),995f,if(phase=="lobby")62f else 55f)
         }
         when(phase) {
             "lobby" -> {
@@ -818,7 +818,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 }
                 for(i in CarCatalog.statNames.indices)label(CarCatalog.statNames[i]+" ${offer.before[i]} > ${offer.after[i]}",631f,492f-i*26)
                 detail.setColor(muted);detail.wrapped(part.description,631f,276f,560f,25f)
-                label(if(offer.available)"SELECT: TIER ${offer.nextTier} / ${offer.price} CR" else offer.reason,642f,235f,bg)
+                label(if(offer.available)TvCopy.installLabel(offer.nextTier,offer.price) else offer.reason,642f,235f,bg)
                 detail.setColor(muted);detail.wrapped(shopMessage[0]+" / "+saveStatus[0],631f,186f,554f,25f)
                 val mechanicX=if(storyArt.available("mechanic"))148f else 68f
                 label("THE MECHANIC",mechanicX,201f,accent)
@@ -879,7 +879,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     label("ENERGY ${a.energy.toInt()}",1038f,636f)
                 }
                 if(stateTime<1.2)title("GO",599f,390f)
-                for(slot in server.slots)if(slot.claimed && slot.stale) {label("PLAYER ${slot.id+1} / LINK QUIET / COASTING",365f,529f,warning);break}
+                for(slot in server.slots)if(slot.claimed && slot.stale) {label("PLAYER ${slot.id+1} / ${TvCopy.LINK_LOST} / COASTING",365f,529f,warning);break}
                 label(if(!scene.ready)"PREPARING CIRCUIT" else if(combat.wrecked(c.id))"WRECKED / SPECTATING" else "${driverName(c)} / ${world.seconds.toInt()}s / ${courseCatalog[selectedTrack].name}",363f,109f)
             }
             "results" -> {

@@ -63,6 +63,19 @@ class TvCopyTest {
         val src=raceGameSource()
         if(src!=null)for(gone in listOf("\"THE FINISH\"","\"RACE RESULTS\"","PARTS / PER CAR","DEBT + CAP"))assertFalse(src.contains(gone),"duplicate or jargon title: $gone")
     }
+    @Test fun hintsAreKeyThenAction() {
+        assertEquals("M / Y  MUTE",TvCopy.soundHint(false))
+        assertEquals("M / Y  SOUND ON",TvCopy.soundHint(true))
+        assertTrue(TvCopy.soundHint(true).length<=16,"the footer slot is 285 px")
+        assertEquals("INSTALL TIER 2 / 300 CR",TvCopy.installLabel(2,300))
+        val html=phone()
+        if(html!=null) {
+            assertTrue(html.contains("INSTALL '+"),"phone install verb changed")
+            assertTrue(html.contains("Link lost"),"phone link wording changed")
+        }
+        val src=raceGameSource()
+        if(src!=null)for(gone in listOf("LINK QUIET","SELECT: TIER","SOUND OFF\"","BACK: LOBBY   /"))assertFalse(src.contains(gone),gone)
+    }
     @Test fun statusLineHasNoSlogan() {
         assertEquals("",TvCopy.statusLine("",true))
         assertEquals("PREPARING CIRCUIT",TvCopy.statusLine("",false))
