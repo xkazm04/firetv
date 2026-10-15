@@ -845,6 +845,16 @@ test('PR11: a join answered 500 or above never shakes and never forgets the code
  assert.deepEqual(P().joinRefusal({status:403,error:WRONG,how:'typed'}),{line:WRONG,shake:true,forget:false});
  assert.deepEqual(P().joinRefusal({status:undefined,error:undefined,how:'typed'}),{line:NOREACH,shake:true,forget:false});
 });
+test('deskLine: a run that failed on the desk (its body says failure) adds no line; any other refusal says its error, whatever the status',()=>{
+ const {deskLine}=P(),F='The desk could not ask (502).';
+ assert.equal(deskLine({error:'The desk could not follow that. It took too long.',failure:'timeout',retry:true},F),'','a failed run: its sentence is on the TV');
+ assert.equal(deskLine({error:'Asking again would end the same way.',failure:'cutoff'},F),'');
+ assert.equal(deskLine({error:'Bad gateway from a proxy.'},F),'Bad gateway from a proxy.','a 502 that is not a run says its error');
+ for(const b of [null,undefined,{},{error:''},{error:3}])assert.equal(deskLine(b,F),F,JSON.stringify(b));
+});
+test('page.tsx never reads a meaning out of a 502: the body says whether the failure is on the desk',()=>{
+ assert.doesNotMatch(code(PAGE),/status\s*[!=]==\s*502/);
+});
 test('PR11: leaveOutcome says forgotten only for a 2xx answer',()=>{
  assert.deepEqual(P().leaveOutcome({status:200,error:undefined}),{line:FORGOTTEN,forgotten:true});
  assert.deepEqual(P().leaveOutcome({status:500,error:LEAVE_NOT_SAVED}),{line:LEAVE_NOT_SAVED,forgotten:false});

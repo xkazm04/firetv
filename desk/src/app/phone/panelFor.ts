@@ -110,6 +110,16 @@ export function joinRefusal(r: { status: number | undefined; error: string | und
 }
 
 /**
+ * The line a refused run leaves on the phone. A body that carries `failure` is a run that failed on the desk: its sentence
+ * and any Try again are on the session already, so the phone says nothing more. Any other refusal - whatever its status,
+ * a 502 from something that is not a run included - says its own error, or the fallback when it sent none.
+ */
+export function deskLine(body: { error?: unknown; failure?: unknown } | null | undefined, fallback: string): string {
+  if (body?.failure !== undefined) return "";
+  return typeof body?.error === "string" && body.error ? body.error : fallback;
+}
+
+/**
  * What Forget this desk shows once the desk has answered. The phone is forgotten only for a 2xx answer; no answer or a
  * refusal leaves it paired and says so (the route's own line when it sent one).
  */

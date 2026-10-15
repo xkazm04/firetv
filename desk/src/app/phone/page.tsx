@@ -12,7 +12,7 @@ import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
-import { follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
+import { deskLine, follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
 import { forensicAt, planAt, switchEndsLine } from "@/tv/keys";
 import { dayOf } from "@/tv/mathsRows";
 import { counted, recapCaption, recapLine, recapRows, startOfDay, tasksLine } from "@/tv/recapRows";
@@ -199,8 +199,8 @@ export default function Phone() {
     try {
       const r = await call("/api/read", { image: dataUrl, subject: sub, title, w, h }); const j = await r.json();
       if (moved()) return;
-      // a run that failed (502) is on the desk with its sentence and a Try again; only a refusal needs the line here
-      if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(r.status === 502 ? "" : (j.error ?? `The desk could not read it (${r.status}).`)); }
+      // a run that failed is on the desk with its sentence and a Try again (its body says failure); only a refusal needs the line here
+      if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(deskLine(j, `The desk could not read it (${r.status}).`)); }
     } catch (e) { if (!moved()) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
   };
   const toJpeg = (src: HTMLVideoElement | HTMLImageElement, sw: number, sh: number) => {
@@ -316,7 +316,7 @@ export default function Phone() {
   };
   const ask = async () => { if (!page) return; const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("");
     try { const r = await call("/api/hint", { askedQ: q, itemIx: s?.itemIx }); if (moved()) return; setQ("");
-      if (!r.ok && r.status !== 502) { const j = await r.json().catch(() => ({} as { error?: string })); if (moved()) return; setMsg(j.error ?? `The desk could not ask (${r.status}).`); } }
+      if (!r.ok) { const j = await r.json().catch(() => null); if (moved()) return; setMsg(deskLine(j, `The desk could not ask (${r.status}).`)); } }
     catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); } };
   /** The Say panel's button: the sentence to the TV. */
   const checkSentence = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("sending…");
@@ -335,10 +335,10 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setMsg(""); if (kind === "read") setPhase("sending");
     try {
-      const r = await call("/api/session/retry", { kind }); const j = await r.json().catch(() => ({} as { error?: string }));
+      const r = await call("/api/session/retry", { kind }); const j = await r.json().catch(() => null);
       if (moved()) return;
       if (kind === "read") setPhase(r.ok ? "sent" : "failed");
-      if (!r.ok && r.status !== 502) setMsg(j.error ?? `The desk could not try again (${r.status}).`);
+      if (!r.ok) setMsg(deskLine(j, `The desk could not try again (${r.status}).`));
     } catch (e) { if (!moved()) { if (kind === "read") setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
   };
   /** A Mic press is listening: the phone does not move away from the field it is filling. */
