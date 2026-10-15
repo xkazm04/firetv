@@ -57,6 +57,10 @@ object TvCopy {
         else -> ""
     }
 
+    /** The pairing panel's status line: the connection count only while a LAN address exists; otherwise the server's own words (No Wi-Fi, Port busy). */
+    fun pairStatus(running: Boolean,noNetwork: Boolean,connected: Int,status: String): String =
+        if(running && !noNetwork)"$connected / 2 PHONES CONNECTED" else status
+
     /** The seat's controller layout that holds GO for the driver (controller-layouts.csv, autoThrottle=1). */
     const val AUTO_LAYOUT="Auto"
 

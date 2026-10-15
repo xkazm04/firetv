@@ -26,4 +26,15 @@ class RaceHudCopyTest {
         val draw=s.substring(s.indexOf("private fun drawOverlay()"),s.indexOf("private fun previewKey()"))
         assertFalse(draw.contains("label("),"label() belongs to rebuildUi")
     }
+    @Test fun pairingStatusShowsNoWifiAndPortBusyNotAPhoneCount() {
+        assertEquals("1 / 2 PHONES CONNECTED",TvCopy.pairStatus(true,false,1,"READY"))
+        assertEquals("No Wi-Fi",TvCopy.pairStatus(true,true,0,"No Wi-Fi"))
+        assertEquals("Port busy",TvCopy.pairStatus(false,false,0,"Port busy"))
+    }
+    @Test fun hudJsonCarriesTheCoreWeaponState() {
+        val f=File("src/main/kotlin/dev/deathride/game/RaceGame.kt");if(!f.exists())return
+        val s=f.readText()
+        assertTrue(s.contains("append(\",\\\"state\\\":\\\"\").append(c.weaponStatus(id,w))"))
+        assertTrue(s.contains("TvCopy.pairStatus(server.running,server.noNetwork"))
+    }
 }

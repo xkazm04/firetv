@@ -787,7 +787,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 detail.setColor(HudTheme.bone);detail.wrapped(TvCopy.PAIR_LINE,64f,517f,320f,27f)
                 updateQr();label(TvCopy.CODE_LABEL,232f,408f,accent);title(server.pin,232f,372f)
                 label(addressLabel,64f,246f)
-                label(if(server.running)"${server.slots.count{it.connected}} / 2 PHONES CONNECTED" else server.serverStatus,64f,214f,accent)
+                label(TvCopy.pairStatus(server.running,server.noNetwork,server.slots.count{it.connected},server.serverStatus),64f,214f,accent)
                 TvCopy.mainButton("lobby",false).let{label(it,224f-detail.width(it)/2,168f,bg)}
                 title(car.id,896f,578f);detail.setColor(muted);detail.wrapped(car.role,896f,534f,320f)
                 label("PLAYER 1",904f,494f,colors[0])
@@ -966,7 +966,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     /** Per weapon index: cd = cooldown fraction 0..1, heat 0..1, over = overheat lockout, burst = bullets still owed, fired = monotonic bullet-fired id. */
     private fun weaponStatesJson(id: Int): String {
         val c=world.combat;val sb=StringBuilder(160);sb.append('[')
-        for(w in Weapons.all.indices){if(w>0)sb.append(',');sb.append("{\"cd\":").append(c.cooldownFraction(id,w)).append(",\"heat\":").append(c.heatFraction(id,w)).append(",\"over\":").append(c.overheated(id,w)).append(",\"burst\":").append(c.burstRemaining(id,w)).append(",\"fired\":").append(c.fireCount(id,w)).append('}')}
+        for(w in Weapons.all.indices){if(w>0)sb.append(',');sb.append("{\"cd\":").append(c.cooldownFraction(id,w)).append(",\"heat\":").append(c.heatFraction(id,w)).append(",\"over\":").append(c.overheated(id,w)).append(",\"state\":\"").append(c.weaponStatus(id,w)).append("\"").append(",\"burst\":").append(c.burstRemaining(id,w)).append(",\"fired\":").append(c.fireCount(id,w)).append('}')}
         return sb.append(']').toString()
     }
     private fun combatJson(id: Int): String {
