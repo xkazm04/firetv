@@ -107,18 +107,22 @@ test('aim 3: the aimed equations set - the lost statement, the age and the schoo
  const pr=S().practice;assert.ok(pr);assert.deepEqual(pr.aim,['A17']);assert.equal(S().paperAim,null,'the set consumed the aim');
 });
 
-test('aim 4: a set asked for any other way is asked for exactly as before - no aim, the same prompt byte for byte',async()=>{
+/** The same set asked for now with no aim (cycle 13): the learner section - age, school year, system - after the topic, the rest byte for byte. */
+const UNAIMED_AT=BEFORE.indexOf('The desk has recorded');
+const UNAIMED=()=>BEFORE.slice(0,UNAIMED_AT)+`The student is 14, in Year ${require(src('lib/rules/stretch.ts')).learnerYear({age:14,system:'uk'})} of school in England. Pitch the questions there.\n\n`+BEFORE.slice(UNAIMED_AT);
+
+test('aim 4: a set asked for any other way carries no aim section - the prompt before MB-B40 plus the learner section every set now carries',async()=>{
  // Topics, the door's Get ready for school, and Get ready for school on another unit than the aimed one
  seat();stubText();
  store.dispatch({type:'nav',screen:'topics',focus:0});
  const res=await post({topic:'linear-one-step'});assert.equal(res.status,200);
  const p=seen[0].prompt;
- assert.equal(p,BEFORE,'byte-identical to the base commit');
+ assert.equal(p,UNAIMED(),'the base prompt with the learner section after the topic, and nothing else');
  assert.equal(S().practice.aim,undefined);
  seat();fromPaper('frac-add-sub');stubText();
  const ix=prepareStops(S()).findIndex((u)=>u.id==='linear-one-step');store.dispatch({type:'focus',focus:ix});
  const r2=await post({topic:'linear-one-step'});assert.equal(r2.status,200);
- assert.equal(seen[0].prompt,BEFORE,'the aim belongs to its own unit only');
+ assert.equal(seen[0].prompt,UNAIMED(),'the aim belongs to its own unit only');
  assert.equal(S().practice.aim,undefined);
 });
 

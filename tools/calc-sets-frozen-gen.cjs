@@ -4,6 +4,8 @@
  * tools/calc-sets-frozen.json BEFORE the approx-integral shape and its topic were added, and compared byte for byte by
  * tools/calc2-approx-test.cjs ('frozen sets') afterwards. The new shape and topic must leave it equal: a set on an existing
  * topic sends the model exactly the words it sent. Never regenerate it to make a row green.
+ * Regenerated once on purpose (cycle 13): calc1-chain's prompt gained its requirement line (the spine's `requires`); the
+ * learner section is absent on every row, since the frozen learners carry no age and no system. No other row moved.
  *
  * Each topic gets a fresh learner on its own path in a disposable DESK_DATA_DIR; makeItems(topic, learner, 3, {word: false})
  * runs with the text provider stubbed to record the request and reply {specs: []} (the empty set fails; the failure is

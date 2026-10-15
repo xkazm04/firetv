@@ -468,14 +468,20 @@ Typed entry is the door that ships; the photo path is M5c's.
 - The set aims at what the paper lost (MB-B40, 2026-10-15). Select on a topic row carries that unit into the session as
   the paper's aim (`Session.paperAim`, the `nav` event's `aim`). A set asked for on that unit while Get ready for school is
   open (The usual or A step up, also after its worked lesson) is aimed at the statements that gave the topic its lost marks
-  (`aimOf` in `lib/rules/recovery.ts`): on an equations unit the model's prompt gets them in the map's own words, with the
-  learner's age and school year in their own system (`aimBlock` in `lib/desk/items.ts`), and the code still checks every
+  (`aimOf` in `lib/rules/recovery.ts`): on an equations unit the model's prompt gets them in the map's own words
+  (`aimBlock` in `lib/desk/items.ts`), and the code still checks every
   answer; a code-written unit draws as before, since no statement maps to a generator's shapes yet. The set carries the
   codes (`Practice.aim`), and the Practice screen's taped card opens with one line, at most 25 words (`aimLine` in
   `tv/mathsRows.ts`, `maths-practice-aim`, 30 px, pen-red over a dashed rule): "Aimed at what the paper lost: solve linear
   equations in one unknown, including the unknown on both sides." The aim is a statement, never the question, its marks
   or a code. It is gone on any other screen, a new paper, a learner switch, a new evening and once the set is written; a
-  set opened any other way is asked for, and drawn, exactly as before. Six more on the sheet is not aimed.
+  set opened any other way carries no aim section. Six more on the sheet is not aimed.
+- Every model-written set knows who it is for (cycle 13, 2026-10-15). The equations and the Calculus prompt both carry
+  one learner section after the topic (`learnerBlock` in `lib/desk/items.ts`): "The student is 14, in Year 10 of school in
+  England. Pitch the questions there.", the age alone, or "The student studies in Germany." for a learner the desk knows
+  only a system for (an age is read only for a learner at school); nothing known, no section. A Calculus topic whose
+  definition names a requirement (the spine's `requires`, today calc1-chain's composition) adds one rule line asking for
+  it; code still keeps only the specs `meetsRequirement` passes. No screen changes.
 - The slip card (`SlipSide`) now says its line through `deskLine`, the one place a part is named as the paper names it;
   the text is the same as before for every item.
 - A paper whose rows were fine but could not be written to the learner file says so (v2 M5c, ruling 11): "That paper

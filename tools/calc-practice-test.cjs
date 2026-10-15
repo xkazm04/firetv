@@ -360,10 +360,37 @@ test('MB-B30 3: a first round short of compositions asks again, and a set still 
  assert.deepEqual((await makeItems('calc1-chain',LEARNER,6,{word:false})).items.map((i)=>i.question),[COMPOSITE[0],COMPOSITE[1]].map(questionOf));
 });
 
-test('MB-B30 4: a topic with no requirement keeps a plain function, and the request on calc1-chain is the one it sent before',async()=>{
+test('MB-B30 4: a topic with no requirement keeps a plain function and is not asked for compositions; calc1-chain is asked for them, from its own requires field',async()=>{
  seat();
  stub({specs:[...PLAIN.slice(0,3),S('derivative','5x^2 - 3x + 7',{},1),S('derivative','3x^4 - x^2',{},2),S('derivative','x^5',{},3)]});
  assert.equal((await makeItems('calc1-rules',LEARNER,6,{word:false})).items.length,6,'calc1-rules keeps plain derivatives');
+ assert.doesNotMatch(seen[0].prompt,/composition/i,'no requirement, no line');
  stub({specs:COMPOSITE});await makeItems('calc1-chain',LEARNER,6,{word:false});
- assert.doesNotMatch(seen[0].prompt,/composition/i,'the check is code\'s; the prompt is unchanged (tools/calc-sets-frozen.json)');
+ const line='- Every function must be a composition: one function inside another, such as sin(x^2), (2x + 1)^3 or e^(3x), with an inside that is neither x nor x plus a number.';
+ assert.ok(seen[0].prompt.includes(`\n${line}\n`),'the requirement is asked for as a rule line');
+ // data-driven: every topic whose definition names the requirement is asked for it, and no other
+ for(const t of CALC1_SPINE){stub({specs:[]});try{await makeItems(t.id,LEARNER,3,{word:false});}catch{}assert.equal(seen[0].prompt.includes(line),t.requires==='composition',t.id);}
+ // the line only asks: the examples it gives are compositions by code's own check, and the one it rules out is not
+ for(const f of ['sin(x^2)','(2x + 1)^3','e^(3x)'])assert.ok(C.isComposition(f),f);assert.equal(C.isComposition('(x + 1)^3'),false);
+});
+
+test('cycle 13: every Calculus set carries the learner\'s age, school year and system as they are known, and nothing when none is',async()=>{
+ const ask=async(patch,who)=>{
+  store.dispatch({type:'reset'});
+  store.dispatch({type:'profile.draft',patch:{id:'calc-who',name:'Who',modules:['maths'],mathPath:'calc1',...patch}});store.dispatch({type:'profile.save'});
+  stub({specs:COMPOSITE});await makeItems('calc1-chain','calc-who',6,{word:false,...who});return seen[0].prompt;
+ };
+ const head='Topic: The chain rule and implicit differentiation\nThe chain rule differentiates a function inside a function, and implicit differentiation applies it to y as a function of x.\n\n';
+ const y=require(src('lib/rules/stretch.ts')).learnerYear({age:17,system:'cz'});
+ assert.ok((await ask({type:'high-school',age:17,system:'cz'},{age:17,system:'cz'})).startsWith(head+`The student is 17, in ${y}. ročník of a Czech school. Pitch the questions there.\n\n`));
+ assert.ok((await ask({type:'other',system:'de'},{system:'de'})).startsWith(head+'The student studies in Germany.\n\nThe desk has recorded'));
+ assert.ok((await ask({type:'high-school',age:16},{age:16})).startsWith(head+'The student is 16. Pitch the questions there.\n\n'));
+ const none=await ask({type:'other'},{});
+ assert.ok(none.startsWith(head+'The desk has recorded'),'no age and no system: no section');
+ assert.doesNotMatch(none,/student is|studies in|unknown/i);
+ // the route reads the seated profile: a learner at school brings an age and a system to the set
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'calc-route',name:'Route',type:'high-school',age:17,system:'cz',modules:['maths'],mathPath:'calc1'}});store.dispatch({type:'profile.save'});
+ stub({specs:COMPOSITE});assert.equal((await post({topic:'calc1-chain',word:false})).status,200);
+ assert.ok(seen[0].prompt.includes(`The student is 17, in ${y}. ročník of a Czech school.`),'the route passes the seated learner');
 });

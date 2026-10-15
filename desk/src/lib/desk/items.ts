@@ -37,7 +37,7 @@ import { degenerate, verify } from "./verify";
 import type { PracticeItem, SchoolSystem } from "../session/store";
 import { calcWordsOf, pathOfTopic, requirementOfTopic, shapesOfTopic, topicIn } from "../library/paths";
 import { kindOfTopic } from "../rules/kinds";
-import { CALC_SLIPS, leaksCalc, meetsRequirement, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
+import { CALC_SLIPS, leaksCalc, meetsRequirement, question as printed, wellFormed, type CalcRequirement, type CalcShape, type CalcSpec } from "../rules/calc";
 import type { Calc2Spec, Calc2SpecShape } from "../rules/calc2";
 import { drawWord, wordItems, wordTemplateFor } from "../rules/calc-word";
 import { SCHOOL_UNIT_SLIPS, generatorFor, leaksSchool, question as schoolQuestion, slipShows, storyOf, topGeneratorFor, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
@@ -68,7 +68,7 @@ const SYSTEM =
   "Each question is a single equation in x. Each answer is the value of x alone, as a plain number " +
   "(for example -4) or a simple fraction (for example 7/2) — no words, no 'x =', no units.";
 
-/** The learner's school year as their own system says it, and where that system is, for the aim section's learner line. */
+/** The learner's school year as their own system says it, and where that system is, for the learner section. */
 const YEAR_IN: Record<SchoolSystem, (y: number) => string> = {
   uk: (y) => `Year ${y} of school in England`, us: (y) => `Grade ${y} of school in the United States`,
   cz: (y) => `${y}. ročník of a Czech school`, de: (y) => `Klasse ${y} of a German school`,
@@ -76,26 +76,40 @@ const YEAR_IN: Record<SchoolSystem, (y: number) => string> = {
 const PLACE: Record<SchoolSystem, string> = { uk: "England", us: "the United States", cz: "the Czech Republic", de: "Germany" };
 
 /**
- * The aim section of the equations prompt (MB-B40), rendered from data alone: the statements a paper lost (gcse.ts codes,
- * printed in the map's own words - never a code, a question or a mark count) and the learner's age and school system as
- * the seated profile gives them. No aim, no section - heading and learner line included - so a set asked for any other
- * way is asked for byte for byte as before (registry prompt-assembly, layered-composition: absent means absent).
+ * The learner section of a set prompt (MB-B40, every model-written set since cycle 13): the learner's age, school year and
+ * school system as the seated profile gives them (the practice route reads them; an age only for a learner at school),
+ * the year by the desk's own rule (rules/stretch learnerYear). One renderer for the equations and the Calculus prompt,
+ * aimed or not. Nothing known, no section - never "unknown" (registry prompt-assembly, layered-composition: absent means
+ * absent).
  */
-export function aimBlock(aim: readonly string[] | undefined, who: MixFor = {}): string {
-  const said = (aim ?? []).map((c) => STATEMENTS.find((x) => x.code === c)?.can).filter((x): x is string => !!x);
-  if (!said.length) return "";
+export function learnerBlock(who: MixFor = {}): string {
   const sys = who.system && who.system in PLACE ? who.system : undefined;
   const age = typeof who.age === "number" && Number.isFinite(who.age) ? who.age : undefined;
   const year = sys && age !== undefined ? learnerYear(who) : undefined;
-  const student = age !== undefined && sys && year !== undefined ? `The student is ${age}, in ${YEAR_IN[sys](year)}. Pitch the questions there.\n`
-    : age !== undefined ? `The student is ${age}. Pitch the questions there.\n`
-    : sys ? `The student is at school in ${PLACE[sys]}.\n` : "";
-  return `What this set is aimed at: on a school maths paper the student lost marks on ${said.length === 1 ? "this statement" : "these statements"} of what a student can do:\n` +
-    said.map((x) => `- ${x}`).join("\n") + "\n" +
-    `Write questions that practise exactly this, on this topic. Do not name the statement in a question.\n` + student + "\n";
+  return age !== undefined && sys && year !== undefined ? `The student is ${age}, in ${YEAR_IN[sys](year)}. Pitch the questions there.\n\n`
+    : age !== undefined ? `The student is ${age}. Pitch the questions there.\n\n`
+    : sys ? `The student studies in ${PLACE[sys]}.\n\n` : "";
 }
 
-function ask(topicId: string, memory: string[], slips: string[], want: number, avoid: string[], aim = "") {
+/**
+ * The aim section of the equations prompt (MB-B40), rendered from data alone: the statements a paper lost (gcse.ts codes,
+ * printed in the map's own words - never a code, a question or a mark count). The learner's age and system are the
+ * learner section's (learnerBlock), not this one's. No aim, no section, heading included.
+ */
+export function aimBlock(aim: readonly string[] | undefined): string {
+  const said = (aim ?? []).map((c) => STATEMENTS.find((x) => x.code === c)?.can).filter((x): x is string => !!x);
+  if (!said.length) return "";
+  return `What this set is aimed at: on a school maths paper the student lost marks on ${said.length === 1 ? "this statement" : "these statements"} of what a student can do:\n` +
+    said.map((x) => `- ${x}`).join("\n") + "\n" +
+    `Write questions that practise exactly this, on this topic. Do not name the statement in a question.\n\n`;
+}
+
+/**
+ * The equations prompt, assembled in a fixed layer order, each layer rendered on its own and absent when it has nothing
+ * to say: the topic, the learner (learnerBlock), the desk's notes, the learner's slips here, the aim (aimBlock), what the
+ * set already holds, and the task.
+ */
+function ask(topicId: string, memory: string[], slips: string[], want: number, avoid: string[], learner = "", aim = "") {
   const t = topic(topicId);
   const name = t?.name ?? topicId;
   const blurb = t?.blurb ?? "";
@@ -107,6 +121,7 @@ function ask(topicId: string, memory: string[], slips: string[], want: number, a
     : `The desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\n`;
   const prompt =
     `Topic: ${name}\n${blurb}\n\n` +
+    learner +
     notesBlock(memory) +
     known +
     aim +
@@ -152,7 +167,7 @@ function keep(cands: Candidate[] | undefined, have: PracticeItem[]): Candidate[]
 export interface SetAsk extends MixFor { stretch?: boolean; word?: boolean | number;
   /**
    * The statements (gcse.ts codes) a paper lost on this unit, when the set was opened from its recovery row (MB-B40). A
-   * model-written equations set takes them, with the learner's age and system, into its prompt (aimBlock); a code-written
+   * model-written equations set takes them into its prompt (aimBlock; the learner's age and system go into every set's prompt, learnerBlock); a code-written
    * unit's draw does not change, since no map from a statement to a generator's shapes exists yet. Absent: as before.
    */
   aim?: readonly string[] }
@@ -168,14 +183,14 @@ export async function makeItems(
   const flag = (r: { items: PracticeItem[]; provider: string; ms: number; tries: number }) =>
     stretch ? { ...r, items: r.items.map((it) => ({ ...it, stretch: true as const })) } : r;
   const kind = kindOfTopic(topicId);
-  if (kind === "calc") return flag(await makeCalcItems(topicId, learnerId, n, opts.word));
+  if (kind === "calc") return flag(await makeCalcItems(topicId, learnerId, n, opts.word, learnerBlock(opts)));
   // a school unit's set is aimed at the learner's live slips on it, newest first (the record keeps them newest last)
   if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch, [...(getLearner(learnerId).skills[topicId]?.slips ?? [])].reverse(), opts.system);
-  return flag(await makeLinearItems(topicId, learnerId, n, aimBlock(opts.aim, opts)));
+  return flag(await makeLinearItems(topicId, learnerId, n, learnerBlock(opts), aimBlock(opts.aim)));
 }
 
 /** A linear-equation set, written by the model and kept only where substitution proves its stated answer. */
-async function makeLinearItems(topicId: string, learnerId: string, n: number, aim = ""): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
+async function makeLinearItems(topicId: string, learnerId: string, n: number, learner = "", aim = ""): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
   const me = getLearner(learnerId);
   const memory = me.memory;
   // the named mistakes this learner has made HERE: the set is written for them, not for the topic
@@ -187,7 +202,7 @@ async function makeLinearItems(topicId: string, learnerId: string, n: number, ai
 
   for (let round = 0; round < 2 && items.length < n; round++) {
     const want = round === 0 ? n + 3 : n - items.length + 3;
-    const r = await ask(topicId, memory, slips, want, items.map((i) => i.question), aim);
+    const r = await ask(topicId, memory, slips, want, items.map((i) => i.question), learner, aim);
     tries++;
     provider = r.provider;
     ms += r.ms;
@@ -263,7 +278,21 @@ function calcSchema(shapes: (CalcShape | Calc2SpecShape)[], want: number): JSONS
 /** The reply is held only to "a list of objects": one spec off its shape is dropped by code, not the whole round. */
 const CALC_ACCEPT: JSONSchema = { type: "object", properties: { specs: { type: "array", items: { type: "object" } } }, required: ["specs"] };
 
-function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory: string[], slips: string[], want: number, avoid: string[]) {
+/**
+ * The rule line a topic's structural requirement adds to its Calculus prompt (the spine's `requires`, the same field
+ * rules/calc meetsRequirement checks): the model is told what code will keep, so fewer specs are thrown away. The check
+ * stays code's; this line only asks.
+ */
+const REQUIREMENT_LINES: Record<CalcRequirement, string> = {
+  composition: "- Every function must be a composition: one function inside another, such as sin(x^2), (2x + 1)^3 or e^(3x), with an inside that is neither x nor x plus a number.\n",
+};
+
+/**
+ * The Calculus prompt, assembled in a fixed layer order, each layer rendered on its own and absent when it has nothing to
+ * say: the topic, the learner (learnerBlock), the desk's notes, the learner's slips here, what the set already holds, the
+ * task with its shapes, and the rules - the topic's requirement line among them when its definition names one.
+ */
+function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory: string[], slips: string[], want: number, avoid: string[], learner = "", requires?: CalcRequirement) {
   const t = topicIn(topicId);
   // the slips as the desk would say them, never as ids
   const said = slips.map((id) => CALC_SLIPS.find((x) => x.id === id)).filter((x): x is (typeof CALC_SLIPS)[number] => !!x);
@@ -273,6 +302,7 @@ function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory
     : `The desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\n`;
   const prompt =
     `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
+    learner +
     notesBlock(memory) +
     known +
     (avoid.length ? `Do not repeat any of these, which the student already has:\n${avoid.map((q) => `- ${q}`).join("\n")}\n\n` : "") +
@@ -280,6 +310,7 @@ function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory
     `Rules:\n` +
     `- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n` +
     `- Every question must be workable by hand in a few minutes.\n` +
+    (requires ? REQUIREMENT_LINES[requires] : "") +
     `- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n` +
     (leavesUnused(shapes) ? `- A field the shape does not use is left as an empty string (0 for steps).\n` : "") +
     `- Do not work any question out: give the specs only.`;
@@ -331,7 +362,7 @@ const sameKey = (q: string) => q.replace(/\s+/g, "").toLowerCase();
  * expression's length, and the first n taken. A second round asks for what is still missing, naming what is kept. The item is
  * { n, question: the printed question, spec } - the spec carries only what the question prints.
  */
-async function makeCalcItems(topicId: string, learnerId: string, n: number, word?: boolean | number): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
+async function makeCalcItems(topicId: string, learnerId: string, n: number, word?: boolean | number, learner = ""): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
   const me = getLearner(learnerId);
   const memory = me.memory;
   const slips = me.skills[topicId]?.slips ?? [];
@@ -345,7 +376,7 @@ async function makeCalcItems(topicId: string, learnerId: string, n: number, word
 
   for (let round = 0; round < 2 && kept.length < n; round++) {
     const want = round === 0 ? n + 3 : n - kept.length + 3;
-    const r = await askCalc(topicId, shapes, memory, slips, want, kept.map((k) => k.question));
+    const r = await askCalc(topicId, shapes, memory, slips, want, kept.map((k) => k.question), learner, requires);
     tries++;
     provider = r.provider;
     ms += r.ms;
