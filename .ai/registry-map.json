@@ -1209,7 +1209,11 @@
           "revision": 26,
           "changedAt": "2026-10-13",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/tv/landingRows.ts:156 The landing derives study-app cards from learner state rather than managing agent sessions, and searches found no hibernation or harvest references in its files, directories, or the repository.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28
         },
         {
           "subject": "voice-io",
@@ -1930,7 +1934,11 @@
           "revision": 26,
           "changedAt": "2026-10-13",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/lib/session/store.ts:950 The code maintains one shared study session rather than an autonomous agent fleet, and searches found no hibernation or harvest references in the context or repository.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28
         },
         {
           "subject": "native-guest-interop",

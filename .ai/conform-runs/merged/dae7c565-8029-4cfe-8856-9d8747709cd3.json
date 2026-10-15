@@ -1,0 +1,293 @@
+{
+ "schema": "conform-run/1",
+ "worker": "dae7c565-8029-4cfe-8856-9d8747709cd3",
+ "subject": "fleet-orchestration",
+ "evaluatedAt": "2026-10-15T23:04:43.049976+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "session",
+   "subject": "fleet-orchestration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "desk/src/lib/session/store.ts:950 The code maintains one shared study session rather than an autonomous agent fleet, and searches found no hibernation or harvest references in the context or repository.",
+   "techniques": [
+    {
+     "technique": "absent-status-passthrough",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:821 This status is application display text, not an observed agent lifecycle state."
+    },
+    {
+     "technique": "brief-carries-the-session",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:786 Task creation adds a learner's study-list entry; it does not dispatch a worker brief."
+    },
+    {
+     "technique": "completion-claim-verification",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/app/api/session/route.ts:14 These are protected application-pipeline events, not completion claims from autonomous delegates."
+    },
+    {
+     "technique": "coordination-failure-triage",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/instrumentation.ts:21 The context captures server failures; no multi-agent failure analysis or topology redesign appears."
+    },
+    {
+     "technique": "deliberation-as-an-elected-turn",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:1061 Dispatch applies an application reducer, rather than a model choosing fleet fan-out."
+    },
+    {
+     "technique": "durable-fleet-state",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:1115 Persistence stores the shared study session, not a registry of autonomous workers."
+    },
+    {
+     "technique": "evidence-outranks-a-liveness-claim",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/pairing.ts:157 This expiry determines phone authentication, not whether guarded agent work may be reclaimed."
+    },
+    {
+     "technique": "heterogeneous-model-panels",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:37 The session groups educational subjects; it does not convene independent model seats."
+    },
+    {
+     "technique": "hibernation-and-resume",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:822 Ending a session stops a study timer and opens a recap; it does not park an agent process."
+    },
+    {
+     "technique": "inherited-state-provenance",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/learners.ts:313 Stored state belongs to a learner; no retried worker receives a predecessor's workspace."
+    },
+    {
+     "technique": "lifecycle-signals",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/app/api/session/stream/route.ts:55 SSE delivers caller-specific study-session snapshots, not agent lifecycle observations."
+    },
+    {
+     "technique": "outbound-compute-plane",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/app/api/session/route.ts:88 This authenticates a person's phone, which the standard explicitly distinguishes from executor bootstrap."
+    },
+    {
+     "technique": "parallel-dispatch",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/app/api/session/stream/route.ts:51 The capacity bound controls browser streams, not autonomous sessions or write scopes."
+    },
+    {
+     "technique": "result-harvest",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:805 A practice result updates the learner's screen; there is no dispatched fleet roster to account for."
+    },
+    {
+     "technique": "session-registry",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:974 The accessor returns one application session, not entries describing agent identities and resource claims."
+    },
+    {
+     "technique": "soft-budget-under-the-hard-cap",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:795 This is a learner's work/break timer, not a model-driven dispatcher loop."
+    },
+    {
+     "technique": "substrate-reconciliation",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/pairing.ts:181 Deletion revokes a phone credential; it does not retire fleet containers, volumes, or worktrees."
+    },
+    {
+     "technique": "verifier-seat-capacity",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:787 The done flag tracks learner tasks, not producer submissions awaiting an independent verifier."
+    },
+    {
+     "technique": "worker-trajectory-anatomy",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:969 The monitored activity is lesson viewing, not a worker's recovery trajectory."
+    }
+   ],
+   "absenceTerms": [
+    "hibernation",
+    "harvest"
+   ]
+  },
+  {
+   "context": "landing",
+   "subject": "fleet-orchestration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "desk/src/tv/landingRows.ts:156 The landing derives study-app cards from learner state rather than managing agent sessions, and searches found no hibernation or harvest references in its files, directories, or the repository.",
+   "techniques": [
+    {
+     "technique": "absent-status-passthrough",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:122 The default describes a learner's placement view, not an unobserved fleet lifecycle status."
+    },
+    {
+     "technique": "brief-carries-the-session",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/landing/LandingTV.tsx:32 The component hands presentation data to a theme, not a task brief to a worker."
+    },
+    {
+     "technique": "completion-claim-verification",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:98 Displayed verdicts concern student answers, not delegated-agent completion claims."
+    },
+    {
+     "technique": "coordination-failure-triage",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/landing/LandingTV.tsx:30 This handles navigation before a learner is selected, not a failed multi-agent run."
+    },
+    {
+     "technique": "deliberation-as-an-elected-turn",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:167 A deterministic sort selects the suggested study app; no model chooses fleet topology."
+    },
+    {
+     "technique": "durable-fleet-state",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/landing/LandingTV.tsx:18 The retained identity controls a page-load animation, not durable worker recovery."
+    },
+    {
+     "technique": "evidence-outranks-a-liveness-claim",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:95 History supplies study-card content; it is not evidence used to reclaim a worker's resources."
+    },
+    {
+     "technique": "heterogeneous-model-panels",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:18 The three members are study applications, not independently trained model seats."
+    },
+    {
+     "technique": "hibernation-and-resume",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:105 Resume labels unfinished student practice; no agent process or checkpoint is restored."
+    },
+    {
+     "technique": "inherited-state-provenance",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:120 Ownership associates a conversation with its learner, not artifacts with a retried worker."
+    },
+    {
+     "technique": "lifecycle-signals",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/design/desk-landing.css:144 These are pairing-card decorations, not evidence that an agent process is alive."
+    },
+    {
+     "technique": "outbound-compute-plane",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:38 Phone pairing affects navigation stops; no remote executor control channel is defined."
+    },
+    {
+     "technique": "parallel-dispatch",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:34 Filtering enabled study apps neither admits workers nor assigns write scopes."
+    },
+    {
+     "technique": "result-harvest",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:138 Aggregation summarizes learner writing progress, not the results of a dispatched fleet."
+    },
+    {
+     "technique": "session-registry",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/landing/LandingTV.tsx:26 The component consumes a supplied study session to form a view; it owns no agent registry."
+    },
+    {
+     "technique": "soft-budget-under-the-hard-cap",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:185 The bound clamps a navigation index, not a model-driven loop's iterations."
+    },
+    {
+     "technique": "substrate-reconciliation",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:43 A missing navigation stop falls back to resting focus; no hosted fleet entity is deleted."
+    },
+    {
+     "technique": "verifier-seat-capacity",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:144 These verdicts describe essay sentences, not work owed to a verification seat."
+    },
+    {
+     "technique": "worker-trajectory-anatomy",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/tv/landingRows.ts:150 The estimate represents learner progress, not an autonomous worker's trajectory or recovery budget."
+    }
+   ],
+   "absenceTerms": [
+    "hibernation",
+    "harvest"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-15T23:04:43.049976+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "fleet-orchestration"
+   ],
+   "techniques": [
+    "absent-status-passthrough",
+    "brief-carries-the-session",
+    "completion-claim-verification",
+    "coordination-failure-triage",
+    "deliberation-as-an-elected-turn",
+    "durable-fleet-state",
+    "evidence-outranks-a-liveness-claim",
+    "heterogeneous-model-panels",
+    "hibernation-and-resume",
+    "inherited-state-provenance",
+    "lifecycle-signals",
+    "outbound-compute-plane",
+    "parallel-dispatch",
+    "result-harvest",
+    "session-registry",
+    "soft-budget-under-the-hard-cap",
+    "substrate-reconciliation",
+    "verifier-seat-capacity",
+    "worker-trajectory-anatomy"
+   ],
+   "deviations": 0,
+   "context": "session",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-15T23:04:43.049976+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "fleet-orchestration"
+   ],
+   "techniques": [
+    "absent-status-passthrough",
+    "brief-carries-the-session",
+    "completion-claim-verification",
+    "coordination-failure-triage",
+    "deliberation-as-an-elected-turn",
+    "durable-fleet-state",
+    "evidence-outranks-a-liveness-claim",
+    "heterogeneous-model-panels",
+    "hibernation-and-resume",
+    "inherited-state-provenance",
+    "lifecycle-signals",
+    "outbound-compute-plane",
+    "parallel-dispatch",
+    "result-harvest",
+    "session-registry",
+    "soft-budget-under-the-hard-cap",
+    "substrate-reconciliation",
+    "verifier-seat-capacity",
+    "worker-trajectory-anatomy"
+   ],
+   "deviations": 0,
+   "context": "landing",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
