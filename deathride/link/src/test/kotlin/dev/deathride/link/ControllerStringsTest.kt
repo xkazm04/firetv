@@ -70,6 +70,11 @@ class ControllerStringsTest {
         assertFalse(page.contains("' / '+offer.reason"))
     }
 
+    @Test fun spokenMechanicLineIsNotOnTheSurface() {
+        assertFalse(page.contains("mechanicLine"))
+        assertTrue(page.contains("\$('mechanicTutorial').textContent=g.campaign.tutorial"))
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
