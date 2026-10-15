@@ -800,7 +800,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 }
                 detail.setColor(HudTheme.bone);detail.wrapped(courseCatalog[selectedTrack].lesson,424f,574f,432f,24f)
                 val p=profiles[0];val event=Career.events[p.careerRound]
-                label("UP  /  CAREER",432f,202f,HudTheme.bone)
+                label(TvCopy.LOBBY_CAREER_HINT,432f,202f,HudTheme.bone)
                 label((if(p.careerCleared>0)"ROUND ${p.careerRound+1} OF ${Career.events.size}" else "NEW SEASON")+"  /  "+event.name,432f,176f,HudTheme.bone)
                 label(if(p.campaign.debt>0)"LEAGUE DEBT ${p.campaign.debt} CR" else "THE ASH CIRCUIT",432f,150f,HudTheme.bone)
                 val hints=arrayOf("DOWN  CAR","MENU  CIRCUIT","L / R  FEEL","PLAY  GARAGE","BACK  EXIT")
@@ -810,7 +810,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 val p=profiles[0];val offer=Garage.offer(p,selectedPart);val part=Parts.all[selectedPart]
                 title("THE GARAGE",67f,577f);label("${p.credits} CR",429f,566f,accent)
                 label(CarCatalog.all[p.selectedCar].id+" / PLAYER 1",631f,568f,HudTheme.bone)
-                label("LEFT / RIGHT: CAR",631f,537f)
+                label(TvCopy.GARAGE_CAR_HINT,631f,537f)
                 for(i in Parts.all.indices) {
                     val item=Garage.offer(p,i)
                     label(Parts.all[i].name+" ${item.tier}/${Parts.all[i].maxTier}",78f,492f-i*52,if(i==selectedPart)accent else HudTheme.bone)

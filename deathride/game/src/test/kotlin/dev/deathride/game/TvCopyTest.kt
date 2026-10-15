@@ -76,6 +76,12 @@ class TvCopyTest {
         val src=raceGameSource()
         if(src!=null)for(gone in listOf("LINK QUIET","SELECT: TIER","SOUND OFF\"","BACK: LOBBY   /"))assertFalse(src.contains(gone),gone)
     }
+    @Test fun everyRemoteHintUsesOneForm() {
+        for(h in listOf(TvCopy.GARAGE_CAR_HINT,TvCopy.LOBBY_CAREER_HINT,TvCopy.soundHint(true),TvCopy.soundHint(false),TvCopy.CAREER_HINT_REWARD,TvCopy.CAREER_HINT_DIFFICULTY)) {
+            assertFalse(h.contains(":") || h.contains(" / ")&&!h.startsWith("L / R")&&!h.startsWith("M / Y"),"mixed hint form: $h")
+            assertEquals(h.uppercase(),h)
+        }
+    }
     @Test fun statusLineHasNoSlogan() {
         assertEquals("",TvCopy.statusLine("",true))
         assertEquals("PREPARING CIRCUIT",TvCopy.statusLine("",false))

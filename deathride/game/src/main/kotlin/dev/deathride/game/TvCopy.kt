@@ -34,6 +34,9 @@ object TvCopy {
     /** The phone's own words for a dead link (controller: "Link lost · coasting"). */
     const val LINK_LOST="LINK LOST"
 
+    const val GARAGE_CAR_HINT="L / R  CAR"
+    const val LOBBY_CAREER_HINT="UP  CAREER"
+
     /** The seat's controller layout that holds GO for the driver (controller-layouts.csv, autoThrottle=1). */
     const val AUTO_LAYOUT="Auto"
 
