@@ -16,7 +16,7 @@ import { adultAllowed, adultContent } from "../rules/mode";
 import { audienceOf, keywordAudience, topicText } from "./gate";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
-import { ConversationError } from "./errors";
+import { ConversationError, lingaLine } from "./errors";
 import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
@@ -88,7 +88,7 @@ async function call(k: LevelCheck, token: string, failure: string, work: () => P
     commit(next, stageScreen(next));
     return next;
   } catch (e) {
-    try { const now = current(k, token); commit({ ...now, pending: null, error: failure }, stageScreen(now)); } catch { /* a newer check owns the screen */ }
+    try { const now = current(k, token); commit({ ...now, pending: null, error: lingaLine(e, failure) }, stageScreen(now)); } catch { /* a newer check owns the screen */ }
     throw e;
   }
 }

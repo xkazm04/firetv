@@ -1336,11 +1336,30 @@ test('cut case 4: a failed or empty Cut makes up no note; the take stays as it w
  assert.equal(c.phase,'conversation');assert.equal(c.pending,null);assert.equal(c.turns.length,turns);assert.equal(c.cut,undefined);
  assert.match(c.error,/could not give notes on this take/);assert.equal(getLearner('jakub').english.sessions.some(x=>x.id===c.id),false,'nothing recorded');
  answer=async req=>({json:{notes:[{turnId:'nope',quote:'invented',kind:'word',note:'Made up.',better:''}]},provider:'test',ms:1});
- await assert.rejects(command('cut'),e=>e.status===502);
+ await assert.rejects(command('cut'),e=>e.kind==='shape'&&e.status===undefined,'an unusable answer is a model failure (shape), never a learner refusal');
  c=getSession().conversation;assert.equal(c.phase,'conversation');assert.equal(c.cut,undefined,'no note survived, so none is shown');
  assert(turn().accepts(c,'cut','adult'),'Cut is offered again');
  answer=async req=>GOOD_NOTES(JSON.parse(req.prompt));await command('cut');
  assert.equal(getSession().conversation.cut.notes.length,2);
+});
+test("taxonomy: a Linga model failure carries failure and retry like the desk jobs; a cut-off or refusal is not offered again",async()=>{
+ const {EngineError}=require(path.join(root,'src/lib/engines/types.ts'));
+ const {LINGA_NOT_AGAIN}=require(path.join(root,'src/lib/english/errors.ts'));
+ const {POST}=require(path.join(root,'src/app/api/english/route.ts'));
+ const post=async(action,extra={})=>{const s=getSession();const r=await POST(new Request('http://desk/api/english',{method:'POST',body:JSON.stringify({action,learnerId:s.learner.id,episodeId:s.conversation?.id,commandId:'tx-'+(++counter),...extra})}));return {status:r.status,body:await r.json()};};
+ for(const [kind,retry] of [['cutoff',false],['declined',false],['timeout',true],['shape',true]]){
+  fresh();answer=async()=>{throw new EngineError(kind,'stub','x');};
+  const r=await post('start',{sceneId:'booking'});
+  assert.equal(r.status,502,kind);assert.equal(r.body.failure,kind);assert.equal(r.body.retry,retry,kind);
+  const line=getSession().conversation.error;
+  if(retry){assert.notEqual(r.body.error,LINGA_NOT_AGAIN,kind);assert.equal(line,'The scene could not be prepared. Try again or choose another situation.',kind+': its own line, as before');}
+  else{assert.equal(r.body.error,LINGA_NOT_AGAIN,kind);assert.equal(line,LINGA_NOT_AGAIN,kind+': the session line says so too');}
+ }
+ fresh();answer=async()=>{throw new Error('boom');};
+ const u=await post('start',{sceneId:'booking'});
+ assert.deepEqual([u.status,u.body.failure,u.body.retry],[502,'unknown',true]);assert.match(u.body.error,/please retry/);
+ fresh();const refusal=await post('start',{sceneId:'date'});
+ assert.equal(refusal.status,403,'a refusal stays a 4xx with no failure value');assert.equal(refusal.body.failure,undefined);
 });
 test('cut case 5: Family mode refuses Cut on the server with a plain reason and no model call',async()=>{
  fresh();await command('start',{sceneId:'booking'});

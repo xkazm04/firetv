@@ -12,7 +12,8 @@ import { BETTER_MAX, cleanNotes, NOTE_KINDS, NOTE_MAX, NOTES_MAX, QUOTE_MAX } fr
 import { modeOf } from "../rules/mode";
 import { audienceAllowed, defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, oldestDue, taughtAllowed } from "./curriculum";
 import { adultContent, isAdult } from "../rules/mode";
-import { ConversationError } from "./errors";
+import { ConversationError, lingaLine } from "./errors";
+import { EngineError } from "../engines/types";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
@@ -174,7 +175,7 @@ async function takeTurn(c:Conversation,input:Record<string,unknown>,commandId:st
     const takes=current.takes!.map((t):Take=>t.note===take.note?{...t,turns,held}:t);
     commit({...current,takes,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms},"linga-talk");
     return getSession();
-  }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:"Linga could not answer in this take. Say your line again."});}catch{/* newer episode owns the UI */}throw e;}
+  }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:lingaLine(e,"Linga could not answer in this take. Say your line again.")});}catch{/* newer episode owns the UI */}throw e;}
 }
 
 /** One validated command surface for both devices. No client can commit model evidence. */
@@ -255,7 +256,7 @@ export async function englishCommand(raw:unknown){
       const steps=Array.isArray(result.json.steps)?result.json.steps.filter(x=>typeof x!=="string"||audienceSafe(c,x)!==null):result.json.steps;
       commit({...c,title:safeTitle??scene.name,goal:safeGoal??scene.goal,turns:[opening],...(()=>{const m=missionOf(scene,steps);return m?{mission:m}:{};})(),supported:result.json.supportProvided!==false,help:keepLadder(opening.id,validLadder(openingHeld?result.json.help:undefined,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
       return getSession();
-    }catch(e){try{const now=checkCurrent(c,commandId);commit({...now,pending:null,error:"The scene could not be prepared. Try again or choose another situation."});}catch{/* superseded */}throw e;}
+    }catch(e){try{const now=checkCurrent(c,commandId);commit({...now,pending:null,error:lingaLine(e,"The scene could not be prepared. Try again or choose another situation.")});}catch{/* superseded */}throw e;}
   }
   const c=s.conversation;
   if(!c||c.id!==input.episodeId||c.learnerId!==learnerId)throw new ConversationError("This conversation has changed. Open the current scene.",409);
@@ -306,9 +307,9 @@ export async function englishCommand(raw:unknown){
       const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({scene:{title:c.title,goal:c.goal},preferences:c.preferences,learnerTurns:lines,task:CUT_TASK}),schema:cutSchema,accept:cutAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-cut"});
       const current=checkCurrent(c,commandId),notes=cleanNotes(result.json.notes,current.turns);
       // an empty list is a clean take; notes that all failed the quote check are not (UD-16); only a malformed answer is a failure
-      if(!notes.length&&(!Array.isArray(result.json.notes)||result.json.notes.length>0))throw new ConversationError(failed,502);
+      if(!notes.length&&(!Array.isArray(result.json.notes)||result.json.notes.length>0))throw new EngineError("shape",result.provider,failed);
       endTake({...current,pending:null,error:"",cut:{at:Date.now(),notes,...(notes.length?{}:{clean:CLEAN_TAKE})},provider:result.provider,responseMs:result.ms},commandId);return getSession();
-    }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:failed});}catch{/* newer episode owns the UI */}throw e;}
+    }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:lingaLine(e,failed)});}catch{/* newer episode owns the UI */}throw e;}
   }
   if(action==="take-two"){
     // Take Two (v2 L4, adult C1; the turn table took the mode, the note and the state): the scene goes back to the
@@ -369,5 +370,5 @@ export async function englishCommand(raw:unknown){
       next={...next,phase:"replay",supported:true,turns:[...c.turns,partner],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replayHeld?result.json.help:undefined,partner.text),c.help?.forTurn)};
     }
     commit(next,screenFor(next));return getSession();
-  }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:"The tutor could not complete that turn. Your reply is still on the phone; please retry."});}catch{/* newer episode owns the UI */}throw e;}
+  }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:lingaLine(e,"The tutor could not complete that turn. Your reply is still on the phone; please retry.")});}catch{/* newer episode owns the UI */}throw e;}
 }
