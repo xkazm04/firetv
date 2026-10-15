@@ -17,6 +17,10 @@ object TvCopy {
     const val CAREER_HINT_REWARD="L / R  REWARD   DOWN  RACE   PLAY  GARAGE"
     const val CAREER_HINT_DIFFICULTY="L / R  DIFFICULTY   DOWN  RACE   PLAY  GARAGE"
 
+    /** A seat is "PLAYER n" on the phone, the race strip and the results; the footer used to say P1 / P2 / SECOND DRIVER. */
+    fun seatLine(seat: Int,car: String,credits: Number): String = "PLAYER ${seat+1} / $car / $credits CR"
+    const val JOIN_LINE="PLAYER 2 / SCAN TO JOIN"
+
     /** The seat's controller layout that holds GO for the driver (controller-layouts.csv, autoThrottle=1). */
     const val AUTO_LAYOUT="Auto"
 

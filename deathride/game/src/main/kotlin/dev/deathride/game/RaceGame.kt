@@ -775,8 +775,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 label(if(world.combat.wrecked(c.id))"WRECKED" else if(world.eventType==EventType.ELIMINATION)"HP ${world.combat.health(c.id).toInt()} / DUEL" else "HP ${world.combat.health(c.id).toInt()}  L${min(world.raceLaps,c.lap.laps+1)}/${world.raceLaps}",x,39f)
             }
         } else {
-            label("P1 ${CarCatalog.all[profiles[0].selectedCar].id} / ${profiles[0].credits} CR",42f,if(phase=="lobby")62f else 55f,accent)
-            label(if(server.slots[1].claimed)"P2 ${CarCatalog.all[profiles[1].selectedCar].id} / ${profiles[1].credits} CR" else "SECOND DRIVER / SCAN TO JOIN",455f,if(phase=="lobby")62f else 55f)
+            label(TvCopy.seatLine(0,CarCatalog.all[profiles[0].selectedCar].id,profiles[0].credits),42f,if(phase=="lobby")62f else 55f,accent)
+            label(if(server.slots[1].claimed)TvCopy.seatLine(1,CarCatalog.all[profiles[1].selectedCar].id,profiles[1].credits) else TvCopy.JOIN_LINE,455f,if(phase=="lobby")62f else 55f)
             label(if(audio.gain("master")==0f)"M / Y: SOUND OFF" else "M / Y: SOUND ON",995f,if(phase=="lobby")62f else 55f)
         }
         when(phase) {
@@ -790,7 +790,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 label(if(server.running)"${server.slots.count{it.connected}} / 2 PHONES CONNECTED" else server.serverStatus,64f,214f,accent)
                 TvCopy.mainButton("lobby",false).let{label(it,224f-detail.width(it)/2,168f,bg)}
                 title(car.id,896f,578f);detail.setColor(muted);detail.wrapped(car.role,896f,534f,320f)
-                label("P1",904f,494f,colors[0])
+                label("PLAYER 1",904f,494f,colors[0])
                 val ability=AbilityCatalog.byCar[car.id]
                 if(ability!=null)label("SIGNATURE / ${ability.name}",896f,380f,accent)
                 for(i in CarCatalog.statNames.indices) {

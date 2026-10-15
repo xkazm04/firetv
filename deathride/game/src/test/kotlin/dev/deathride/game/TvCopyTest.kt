@@ -50,6 +50,13 @@ class TvCopyTest {
         val html=phone()
         if(html!=null)assertTrue(html.contains("OVERHEATED") && html.contains("COOLING") && html.contains("HP <b"))
     }
+    @Test fun seatsAreAlwaysPlayerN() {
+        assertEquals("PLAYER 1 / Line / 120 CR",TvCopy.seatLine(0,"Line",120))
+        assertEquals("PLAYER 2 / Bulwark / 0 CR",TvCopy.seatLine(1,"Bulwark",0L))
+        assertTrue(words(TvCopy.JOIN_LINE)<=5)
+        val src=raceGameSource()
+        if(src!=null)for(gone in listOf("\"P1 ","\"P2 ","\"P1\"","SECOND DRIVER"))assertFalse(src.contains(gone),"two names for a seat: $gone")
+    }
     @Test fun statusLineHasNoSlogan() {
         assertEquals("",TvCopy.statusLine("",true))
         assertEquals("PREPARING CIRCUIT",TvCopy.statusLine("",false))
