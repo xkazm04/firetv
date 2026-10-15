@@ -784,7 +784,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 val car=CarCatalog.all[selectedCars[0]]
                 // Left column: pair. Centre: lesson caption + campaign card. Right: car. Hints share one tidy footer row.
                 title("SCAN + GO",64f,578f)
-                detail.setColor(HudTheme.bone);detail.wrapped("1  Same Wi-Fi as this TV\n2  Scan with your phone\n3  Hold GO. Find the first corner.",64f,517f,320f,27f)
+                detail.setColor(HudTheme.bone);detail.wrapped(TvCopy.LOBBY_STEPS,64f,517f,320f,27f)
                 updateQr();label("PIN ${server.pin}",232f,408f,accent)
                 detail.setColor(muted);detail.wrapped("No app needed.\nTwo phone seats.",232f,378f,152f,25f)
                 label(addressLabel,64f,246f)
@@ -862,7 +862,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     else -> "DIVERTED ${p.campaign.diverted} CR"
                 },842f,210f)
             }
-            "countdown" -> if(scene.ready) {title(digits[ceil(countdown).toInt().coerceIn(1,3)],626f,396f);label("HOLD GO",593f,319f,accent)}
+            "countdown" -> if(scene.ready) {title(digits[ceil(countdown).toInt().coerceIn(1,3)],626f,396f);val cue=TvCopy.countdownCue(server.slots.filter{it.claimed}.map{it.layout}+(if(keyboard && !server.slots[0].claimed)listOf("Keyboard") else emptyList()));label(cue,640f-detail.width(cue)/2,319f,accent)}
             "race" -> {
                 val c=activeDriver();val combat=world.combat;val weapon=combat.selectedWeapon[c.id];val a=c.ability;val d=a.definition
                 label("POSITION",40f,695f);title("${c.position}/${world.entrantCount}",48f,663f)
