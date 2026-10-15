@@ -116,6 +116,12 @@ class ControllerStringsTest {
         assertFalse(page.contains("Wrong PIN"),"the refusal sentence comes from the link")
     }
 
+    @Test fun abilityStatusIsTheCoreWordWithNoBareEnergyNumber() {
+        assertTrue(page.contains("setText('abilityStatus',ab.status||("))
+        assertFalse(page.contains("Math.floor(ab.energy)"),"the meter shows energy; a unit-less number beside the word is noise")
+        assertFalse(page.contains("AUTO WHILE MOVING"))
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
