@@ -2388,13 +2388,13 @@ test('K2 case 6: a self-repaired fix is not a shown line; Finish over an open mo
  let c=await k2Moment();await momentTry('My tomatoes are one metre.');await command('moment-done');c=getSession().conversation;
  assert(!review().shownLines(c).includes(TOMATO.better),'the TV showed the learner\'s own line, never the fix');
  c=await k2Moment();await command('finish');
- assert.equal(getLearner('ema').english.taught.length,1,'Finish over a moment keeps it');assert.equal(getSession().conversation.moments.length,1);
+ assert.equal(getLearner('ema').english.taught.filter(t=>t.line===undefined).length,1,'Finish over a moment keeps it (a K4 hidden line handed over at finish is its own item)');assert.equal(getSession().conversation.moments.length,1);
  c=await k2Moment();globalThis.__lingaRepair.clear();
  await command('moment-show');c=getSession().conversation;
  assert.equal(c.moment.repair.lost,true);withheldEverywhere('after a restart');
  const T=turn();assert.equal(T.accepts(c,'moment-try'),false);assert.equal(T.refusal(c,'moment-try'),T.LOST);
  assert.match(view().lingaView(getSession()).caption,/lost this fix/);
- await command('moment-done');assert.equal(getLearner('ema').english.taught.length,0,'nothing kept: the fix existed only in memory');
+ await command('moment-done');assert.equal(getLearner('ema').english.taught.filter(t=>t.line===undefined).length,0,'nothing kept: the fix existed only in memory');
 });
 test('K2 case 7: the server refuses exactly what the table refuses on a fix moment at every rung',async()=>{
  const T=turn(),wrong=[];
