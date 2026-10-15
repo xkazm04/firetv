@@ -20,6 +20,7 @@ import { Defs } from "./shapes";
 import { HouseMark, Icon, PhoneGlyph, PostcardArt } from "./glyphs";
 import { Stamp } from "./stamps";
 import { worldFor, type Layer } from "./worlds";
+import { afterFonts } from "@/lib/afterFonts";
 
 /** Each app's colours (its own deep, its shadow, its highlight, the letters' extrusion, the motes' glow). */
 const THEME: Record<Subject | "house", { deep: string; deepLo: string; hi: string; ex: string; glow: string }> = {
@@ -57,7 +58,7 @@ function Title({ name, unpaired, seq, still }: { name: string; unpaired: boolean
       t.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;
     };
     fit();
-    document.fonts?.ready.then(fit).catch(() => {});
+    afterFonts(fit);
   }, [name, unpaired, seq]);
   return (
     <div ref={el} className="pp-title" data-role="desk-title" data-still={still || undefined} aria-hidden="true" key={`${name}${seq}`}>

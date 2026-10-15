@@ -152,7 +152,7 @@ function writeBook(book: Book): void {
     writeFileSync(tmp, JSON.stringify(book));
     renameSync(tmp, FILE());
   } catch (e) {
-    try { rmSync(tmp, { force: true }); } catch {}
+    try { rmSync(tmp, { force: true }); } catch { /* best effort: the write's own failure is thrown just below */ }
     throw new Error(`learners.json could not be written, so progress was not saved: ${why(e)}`);
   }
 }

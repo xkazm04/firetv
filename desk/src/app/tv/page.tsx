@@ -69,7 +69,7 @@ export default function TV() {
     try { if (q === "tv" || q === "desk") localStorage.setItem("desk-display", q); setDisplay(localStorage.getItem("desk-display") === "desk" ? "desk" : "tv"); }
     catch { setDisplay(q === "desk" ? "desk" : "tv"); }
   }, []);
-  const toggleDisplay = () => setDisplay((d) => { const n = d === "desk" ? "tv" : "desk"; try { localStorage.setItem("desk-display", n); } catch {} return n; });
+  const toggleDisplay = () => setDisplay((d) => { const n = d === "desk" ? "tv" : "desk"; try { localStorage.setItem("desk-display", n); } catch { /* storage is blocked: the choice holds for this page only */ } return n; });
   /** The stage this screen is drawn on. The landing is one picture with nothing more to fit, so it keeps the TV's. */
   const shown: Display = s?.screen === "landing" ? "tv" : display;
 
@@ -154,7 +154,7 @@ export default function TV() {
         <button onClick={() => post({ type: "reset" })}>Reset session</button>
         <button onClick={() => post({ type: "join" })}>Fake phone</button>
         <button aria-pressed={display === "desk"} onClick={toggleDisplay} title="A 2880×1620 stage for a PC monitor; off is the 1920×1080 TV">Desk display</button>
-        <button onClick={() => void bench.current?.requestFullscreen().catch(() => {})} title="The stage alone; Esc leaves">Fullscreen</button>
+        <button onClick={() => void bench.current?.requestFullscreen().catch(() => { /* the browser refused: the operator's bench stays windowed */ })} title="The stage alone; Esc leaves">Fullscreen</button>
         <span className="status">{connected ? "" : "reconnecting… "}{s?.status}</span>
       </div>
       {testBar && s && lingaOwns(s) && <LingaTestBar s={s} />}

@@ -39,7 +39,7 @@ export async function GET(req?: Request) {
   let release = () => {};
   const stream = new ReadableStream({
     start(controller) {
-      function close() { release(); try { controller.close(); } catch {} }
+      function close() { release(); try { controller.close(); } catch { /* the client closed it first: nothing is left to close */ } }
       // the role is read once, as the stream opens: a stream stays in the list it joined
       const role = roleFrom(req), key = deviceKey(req, role);
       release = () => {

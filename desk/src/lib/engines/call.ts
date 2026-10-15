@@ -39,7 +39,7 @@ export async function call<Req extends { timeoutMs?: number; use?: string }, R>(
   });
   // A provider that settles after the deadline has already lost the race; its late rejection is not an unhandled one.
   const ran = Promise.resolve().then(() => p.run(req, { signal: ctl.signal }));
-  ran.catch(() => {});
+  ran.catch(() => { /* its outcome is read below, in the race; this only keeps a late loser from being unhandled */ });
   let got: ProviderAnswer<R> | undefined;
   try {
     const answer = await Promise.race([ran, late]);

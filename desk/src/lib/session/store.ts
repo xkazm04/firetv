@@ -469,7 +469,7 @@ export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry
   const at = s.learner.id, cur = s.pages[s.pageIx]?.id;
   if (s.pages.every((p) => p.owner === at) && (!s.practice || s.practice.owner === at) && (!s.hint || s.hint.owner === at) && (!s.lesson || s.lesson.owner === at)) return s;
   const hist = new Map<string, HistoryEntry[]>();
-  const lines = (id: string) => { if (!hist.has(id)) { let h: HistoryEntry[] = []; try { h = historyOf(id) ?? []; } catch {} hist.set(id, h); } return hist.get(id)!; };
+  const lines = (id: string) => { if (!hist.has(id)) { let h: HistoryEntry[] = []; try { h = historyOf(id) ?? []; } catch { /* read as no history: the only reader that throws (boot, readable) has set learnersUnread, and the status says it */ } hist.set(id, h); } return hist.get(id)!; };
   const ids = s.profiles.map((p) => p.id);
   const snapped = (p: Page) => Number(/-(\d+)$/.exec(p.id)?.[1] ?? 0);
   const readBy = (p: Page) => { let best: [string, number] | null = null;
@@ -923,7 +923,7 @@ if (!store.session.jobs) store.session.jobs = {};
 // the startup reads go through readLearner: an unreadable learners.json is said once, in one sentence, never read as an empty book
 let learnersUnread = false;
 const readable = (id: string) => { try { return readLearner(id); } catch (err) { learnersUnread = true; throw err; } };
-try { store.session = settleOwners(store.session, (id) => readable(id).history); } catch {}
+try { store.session = settleOwners(store.session, (id) => readable(id).history); } catch (e) { console.error("desk session: the work's owners could not be settled at start:", e instanceof Error ? e.message : e); }
 // the Sunday page is drawn fresh for whoever is seated, never taken from the file
 store.session = { ...store.session, week: weekRead(store.session) };
 // the learner's latest paper (v2 M5b), read back through cleanPaper from their record, never taken from the saved session
@@ -1082,7 +1082,7 @@ function writeSession(): void {
     if (store.saved === false) console.error("desk session: session.json is being written again");
     store.saved = true;
   } catch (e) {
-    try { rmSync(tmp, { force: true }); } catch {}
+    try { rmSync(tmp, { force: true }); } catch { /* best effort: the write's own failure is logged just below */ }
     if (store.saved !== false) console.error("desk session: session.json could not be written, so the session will not survive a restart:", e instanceof Error ? e.message : e);
     store.saved = false;
   }

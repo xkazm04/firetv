@@ -18,6 +18,7 @@ import { CIT, BONE, EssayBrand as Brand, EssayArrow as Arrow } from "@/tv/marks"
 import { ESSAY_FONTS } from "./fonts";
 import { EssayCabinet } from "./EssayCabinet";
 import { WorkroomScreen } from "./Workroom";
+import { afterFonts } from "@/lib/afterFonts";
 
 const MUTE = "rgba(238,233,224,.5)";
 
@@ -135,7 +136,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
       brk.innerHTML = `<path d="${d}" fill="none" stroke="${CIT}" stroke-width="4"/>`;
     });
     place();
-    document.fonts?.ready.then(place).catch(() => {});
+    afterFonts(place);
   }, []);
 
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
@@ -403,7 +404,7 @@ function Page({ sn, n, v, lens, type, inked, job, unruled, pending }: { sn: Sent
       }
     };
     fit();
-    document.fonts?.ready.then(fit).catch(() => {});
+    afterFonts(fit);
   }, [sn.n, sn.text, t?.fix.move, t?.fix.pattern]);
 
   const note = v?.note?.trim();

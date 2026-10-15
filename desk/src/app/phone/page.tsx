@@ -175,7 +175,7 @@ export default function Phone() {
    */
   const join = async (code = pin, how: JoinHow = "typed") => {
     let r: Response | null = null;
-    try { r = await post({ type: "join", code }); } catch {}
+    try { r = await post({ type: "join", code }); } catch { /* r stays null, and joinRefusal says "That did not reach the desk." */ }
     if (r?.ok) { setMsg(""); reconnect(); return; }
     const j = r ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
     const refusal = joinRefusal({ status: r?.status, error: j.error, how });
@@ -185,12 +185,12 @@ export default function Phone() {
   // four digits join by themselves; Join stays as the fallback tap
   const onPin = (v: string) => { const d = v.replace(/\D/g, "").slice(0, 4); setPin(d); if (d.length === 4 && s && !s.joined) join(d); };
   // a code an earlier version stored is cleared on open; the phone keeps none now, and a join never reads one
-  useEffect(() => { try { localStorage.removeItem("desk.pin"); } catch {} }, []);
+  useEffect(() => { try { localStorage.removeItem("desk.pin"); } catch { /* storage is blocked, so there is no stored code to clear */ } }, []);
   // the desk forgets this phone: its fingerprint is dropped there and its cookie goes here, and the stream reopens as a guest
   // it says forgotten only once the desk has answered that it is; a refusal or no answer leaves the phone paired
   const forget = async () => {
     let r: Response | null = null;
-    try { r = await post({ type: "leave" }); } catch {}
+    try { r = await post({ type: "leave" }); } catch { /* r stays null, and leaveOutcome says "That did not reach the desk." */ }
     const j = r && !r.ok ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
     const out = leaveOutcome({ status: r?.status, error: j.error });
     setMsg(out.line);
@@ -287,7 +287,7 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNotice(null);
     // after a switch, readPiece here is the last learner's render: it would post their paragraphs
-    try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void readPiece(true); } catch {}
+    try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void readPiece(true); } catch { /* said on the next line */ }
     if (!moved()) setNote("That did not reach the desk.");
   };
   const openKept = (id: string, text: string) => { const ps = paragraphsOf(text); setPieceId(id); setSource("message"); loadParagraphs(ps.length ? ps : [text], `Opened from your shelf: ${ps.length} paragraph${ps.length === 1 ? "" : "s"}. Change it, then read it again as a new version.`); };

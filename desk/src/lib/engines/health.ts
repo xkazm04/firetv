@@ -57,7 +57,7 @@ async function probeRow(kind: EngineKind, budgetMs: number): Promise<EngineRow> 
     const p = provider(kind);
     if (!p.probe) return row(name, null, NO_PROBE);
     const asked = p.probe();
-    asked.catch(() => {});
+    asked.catch(() => { /* its outcome is read below, raced against the budget; this only keeps a late loser from being unhandled */ });
     const late = new Promise<null>((resolve) => { timer = setTimeout(() => resolve(null), budgetMs); });
     const r: ProbeResult | null = await Promise.race([asked, late]);
     return r ? row(name, r.ok, r.say) : row(name, false, `${name} did not answer in ${budgetMs} ms.`);

@@ -124,7 +124,7 @@ function commit(st: NonNullable<typeof cached>, next: Phone[]): void {
   try {
     writeFileSync(tmp, JSON.stringify({ key: st.key, phones: phones.map(({ fp, joined, seen }) => ({ fp, joined, seen })) }));
     renameSync(tmp, st.file);
-  } catch (e) { try { unlinkSync(tmp); } catch {} throw e; }
+  } catch (e) { try { unlinkSync(tmp); } catch { /* best effort: the write's own failure is rethrown */ } throw e; }
   st.phones = phones;
   for (const p of st.phones) p.saved = p.seen;
   Object.assign(st, stamp(st.file));
@@ -200,7 +200,7 @@ export function cookiesOf(req: Request): Jar {
     const i = part.indexOf("="); if (i < 0) continue;
     const k = part.slice(0, i).trim(); if (!k || all.has(k)) continue;
     // a value that will not decode is left out, as Next's own parser does (@edge-runtime/cookies parseCookie), so the proxy and the stream agree
-    try { all.set(k, decodeURIComponent(part.slice(i + 1).trim())); } catch {}
+    try { all.set(k, decodeURIComponent(part.slice(i + 1).trim())); } catch { /* left out, as Next's parser leaves it out (above) */ }
   }
   return { get: (name) => (all.has(name) ? { value: all.get(name)! } : undefined) };
 }

@@ -74,20 +74,9 @@ function silentCatches(text){
 }
 // Pinned 2026-10-15 from the dry run (node tools/error-doors-test.cjs --list). Each entry is file:count; a fixed site lowers
 // its count (and the test then asks for the lower number), a new silent catch anywhere fails.
-const SILENT={
- 'src/app/api/session/stream/route.ts':1,
- 'src/app/phone/page.tsx':4,
- 'src/app/tv/page.tsx':2,
- 'src/essay/EssayTV.tsx':2,
- 'src/landing/themes/blueprint/Blueprint.tsx':2,
- 'src/landing/themes/paper/Paper.tsx':1,
- 'src/lib/engines/call.ts':1,
- 'src/lib/engines/health.ts':1,
- 'src/lib/library/lessons.ts':1,
- 'src/lib/session/learners.ts':1,
- 'src/lib/session/pairing.ts':2,
- 'src/lib/session/store.ts':3,
-};
+// Burned down to zero on 2026-10-15 (silent-catch-burn-down): a new silent catch anywhere fails. A catch that owes
+// nothing says why inside its body.
+const SILENT={};
 test('silent-catch canary: an empty catch and an empty .catch are seen; a commented or routed one is not',()=>{
  assert.equal(silentCatches('try { x(); } catch {}').length,1);
  assert.equal(silentCatches('try { x(); } catch (e) {}').length,1);
