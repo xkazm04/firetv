@@ -208,6 +208,82 @@
           "evidence": "desk/src/lib/session/learners.ts:141 Although writers refuse an unreadable book and readLearner offers a strict alternative, getLearner uses this fallback and cannot distinguish corruption from empty memory."
         }
       ]
+    },
+    "tooling/uat/test-harness": {
+      "context": "uat",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:43:46.437Z",
+      "techniques": [
+        {
+          "technique": "context-starved-executor",
+          "verdict": "deviation",
+          "evidence": "uat/driver/linga-text.cjs:517 The driver automatically synthesizes missing placement/plan state instead of declaring unmet preconditions in machine-readable form and refusing to run, and uses a four-member outcome vocabulary without an inconclusive member."
+        },
+        {
+          "technique": "live-app-harness",
+          "verdict": "deviation",
+          "evidence": "uat/README.md:15 The live-app harness (L2) driving real running browser instances of TV and phone surfaces is unbuilt and marked 'not scaffolded yet', leaving Linga UAT entirely on simulated in-process renders."
+        },
+        {
+          "technique": "history-driven-partitioning",
+          "verdict": "deviation",
+          "evidence": "uat/driver/linga-text.cjs:272 Parallel Character worker execution assigns tasks via an unweighted dynamic index queue without longest-first bin-packing based on retained timing history."
+        },
+        {
+          "technique": "recorded-interaction-fixtures",
+          "verdict": "deviation",
+          "evidence": "uat/driver/linga-text.cjs:43 All model exchanges invoke the live Claude CLI process directly on each run without a record/playback fixture mechanism to capture and replay remote interactions."
+        },
+        {
+          "technique": "derived-selection-must-be-measured",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:189 The driver validates requested journey selection against parsed journey definitions and throws if unknown, preventing the runner from selecting zero tests and exiting green."
+        },
+        {
+          "technique": "platform-quirk-absorption",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:46 The runner intercepts incompatible environment configurations before child processes launch and converts them to clear actionable diagnoses."
+        },
+        {
+          "technique": "suite-partitioning",
+          "verdict": "conformant",
+          "evidence": "uat/README.md:14 Linga UAT explicitly partitions tests into separate tiers (L1 theoretical, LT text-live, L2 empirical) with distinct runtimes, engines, and concurrency policies."
+        },
+        {
+          "technique": "flake-lifecycle",
+          "verdict": "conformant",
+          "evidence": "uat/driver/ledger.cjs:17 The ledger chains recurring findings across runs and measures how many runs passed each open gap by unasked to track debt aging."
+        },
+        {
+          "technique": "isolation-lanes",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:262 Child processes run with dedicated, per-Character DESK_DATA_DIR paths and sanitized environment variables to isolate state."
+        },
+        {
+          "technique": "out-of-graph-artifacts",
+          "verdict": "conformant",
+          "evidence": "uat/README.md:5 The driver isolates modules into subdirectories so that uninstrumented artifacts from Essay and Math modules do not break Linga's driver."
+        },
+        {
+          "technique": "pin-the-call-not-the-name",
+          "verdict": "conformant",
+          "evidence": "uat/driver/linga-text.cjs:52 The driver extracts metadata blocks directly from markdown files via structured regular expressions without loading executable modules."
+        },
+        {
+          "technique": "negative-control-tests",
+          "verdict": "conformant",
+          "evidence": "uat/driver/recertify.cjs:149 Recertification verifies that outcome changes on an unchanged product are classified as noise rather than valid regressions."
+        }
+      ],
+      "withdrawn": {
+        "worker": "0db426a7-e35b-4f35-9df2-34c2cd3dc840",
+        "state": "deviation",
+        "at": "2026-10-15T00:44:14.541633+00:00",
+        "reason": "reviewer (sonnet): The 'four-member outcome vocabulary without an inconclusive member' claim could not be confirmed: verdict.cjs yields pass/conditional/fail, with per-item and recertify 'not-evaluable'/'uncertain' states that act as inconclusive, and the cited line 517 records its synthesized state as an explicit 'fi"
+      }
     }
   }
 }
