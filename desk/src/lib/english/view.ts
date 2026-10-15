@@ -18,6 +18,7 @@ import { NOTE_LABEL } from "./notes";
 import { modeOf } from "../rules/mode";
 import { accepts, refusal, turnState } from "./turn";
 import { runningTake, takeSpent } from "./take";
+import { lostLine, type LostTask } from "./lostfound";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
 
 /**
@@ -110,7 +111,9 @@ export type Hero =
       /** a scene this learner pitched (v2 L3): the situation card says it is their own */
       own?: boolean;
       /** inside Take Two (v2 L4): the subtitle is the noted quote, and the TV's data line reads "Take Two of" */
-      take?: boolean }
+      take?: boolean;
+      /** the lost-property table (L3, lostfound.ts), its public half: the corridor draws it */
+      lost?: LostTask }
   | { kind: "track"; kicker: string; title: string; progress: Progress; subtitle: string; illustration: ArtKey;
       /** on the recap: the taught phrase this scene invited and the learner did not use, to take with them */
       sentence?: string;
@@ -492,7 +495,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     } else {
       hero = { kind: "scene", kicker: `${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: said ? (c.mission ? currentStep(c.mission) ?? "Mission done" : c.goal) : "", art: c.sceneId, small: true,
         ...(c.mission ? { steps: c.mission.steps.map((text, i) => ({ text, state: (i < c.mission!.reached.length ? "done" : i === c.mission!.reached.length ? "current" : "open") as Dot })) } : {}),
-        partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes };
+        partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes, ...(c.lost ? { lost: c.lost } : {}) };
       const quiz = act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") });
       const second = hasReply ? act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting || refused("coach") }) : quiz;
       // At the top of the ladder the help button gives way to the recognition fallback.
@@ -669,7 +672,7 @@ export function viewText(v: LingaView): string {
     case "heading": out.push(h.kicker, h.title); break;
     case "choices": out.push(h.kicker, h.prompt, ...h.options.map((x, i) => `  option ${i}: ${x}`)); break;
     case "topics": out.push(h.kicker, ...h.topics.map(t => `  [${t.id}] ${t.title} — ${t.skill}\n      why: ${t.why}`)); break;
-    case "scene": out.push(...(h.own ? ["Your own scene"] : []), h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : [])); break;
+    case "scene": out.push(...(h.own ? ["Your own scene"] : []), h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : []), ...(h.lost ? [lostLine(h.lost)] : [])); break;
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
     case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;

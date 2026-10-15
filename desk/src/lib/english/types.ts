@@ -1,4 +1,5 @@
 /** Shared data only: safe to import from the TV and phone. */
+import type { LostTask } from "./lostfound";
 export type SkillId = "contact" | "repair" | "request" | "describe" | "narrate" | "negotiate" | "relate" | "resolve";
 export const BANDS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 export type Band = typeof BANDS[number];
@@ -188,6 +189,8 @@ export interface Conversation {
   review?: Review | null;
   /** absent on a conversation saved before missions, and null-free: a scene with no valid steps has none */
   mission?: Mission;
+  /** the lost-property task (L3, lostfound.ts): only on the "lost" scene, null once it stood down; its public half only */
+  lost?: LostTask | null;
   /** absent unless the take was ended by Cut in Adult mode (v2 L3) */
   cut?: Cut;
   /** absent until a Take Two (v2 L4) starts from one of the cut notes; oldest first, the running one last */

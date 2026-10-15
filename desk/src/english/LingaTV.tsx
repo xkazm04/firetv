@@ -11,6 +11,7 @@ import { landingFocus } from "@/tv/landingRows";
 import { useEnglish } from "./useEnglish";
 import { useEnglishAudio } from "./useEnglishAudio";
 import { ART } from "./art";
+import { Corridor } from "./art/Corridor";
 import { Arch, Arrow, BandSteps, Caption, DataLine, Dots, Kicker, Learner, Mark, OnYourPhone, Plate, SentenceCard, Stones } from "./OpenDoor";
 
 const CHECK_SCREENS:Screen[]=["linga-check","linga-verdict","linga-plan"];
@@ -93,7 +94,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
   return <div className="linga-tv" data-view={v.screen} data-layout={layout} data-hero={h.kind} data-fit={fit||undefined}>
     <header className="lo-top"><Mark/><Learner name={s.learner?.name ?? ""} up={home&&!menu&&!picking}/></header>
     {layout==="door"&&<>
-      {art&&<Arch art={art} tag={tag} speaker={s.screen==="linga-talk"}/>}
+      {art&&<Arch art={art} tag={tag} speaker={s.screen==="linga-talk"}>{art==="lost"&&h.kind==="scene"&&h.lost?<Corridor lost={h.lost}/>:undefined}</Arch>}
       <section className="lo-panel" ref={panel}><div className="lo-body"><Body v={v} s={s} caption={caption}/></div>{nav}</section>
     </>}
     {layout==="ladder"&&h.kind==="ladder"&&<>

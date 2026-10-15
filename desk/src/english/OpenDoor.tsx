@@ -25,14 +25,15 @@ export function Learner({ name, up }: { name: string; up: boolean }) {
 /**
  * The arch: a door in a plum frame on a plinth, with the world of this screen behind it. A situation fills it
  * edge to edge; a state of the journey stands on the warm gradient with the brand line over it. The name tag says
- * who is behind the door (on the conversation it is also .linga-speaker).
+ * who is behind the door (on the conversation it is also .linga-speaker). `children`, when given, is the situation's
+ * picture drawn with this screen's state (the lost-property corridor, L3) in place of the plain one.
  */
-export function Arch({ art, tag, speaker }: { art: ArtKey; tag?: string; speaker?: boolean }) {
+export function Arch({ art, tag, speaker, children }: { art: ArtKey; tag?: string; speaker?: boolean; children?: ReactNode }) {
   const { Art, label } = ART[art], scene = isScene(art);
   return <div className={`lo-arch ${scene ? "lo-arch-scene" : "lo-arch-symbol"}`}>
     <div className="lo-arch-shadow"/>
     <div className="lo-door" data-role="linga-art" data-art={art} role="img" aria-label={label}>
-      {scene ? <Art/> : <><div className="lo-door-label" aria-hidden="true">A way into English</div><div className="lo-symbol"><Art/></div></>}
+      {scene ? children ?? <Art/> : <><div className="lo-door-label" aria-hidden="true">A way into English</div><div className="lo-symbol"><Art/></div></>}
     </div>
     {tag && <div className={`lo-tag${speaker ? " linga-speaker" : ""}`} data-role="linga-partner">{tag}</div>}
     <div className="lo-plinth"/>
