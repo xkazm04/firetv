@@ -1108,6 +1108,42 @@
       "evaluatedTs": "2026-10-15T21:38:51.890Z",
       "worker": "cb061768-8796-4fe8-9d7f-ee6bfef0524f",
       "techniques": []
+    },
+    "tooling/uat/data-access": {
+      "context": "uat",
+      "subject": "data-access",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T22:02:29.176Z",
+      "worker": "e73f34da-d27f-4741-b3b0-e61480e4f837",
+      "techniques": [
+        {
+          "technique": "capability-declared-in-the-type",
+          "verdict": "not-applicable",
+          "evidence": "uat/driver/recertify.cjs:35 Findings use a fixed filesystem reader; no family of interchangeable storage implementations was found."
+        },
+        {
+          "technique": "cross-driver-invariant-parity",
+          "verdict": "not-applicable",
+          "evidence": "uat/driver/ledger.cjs:27 The inspected ledger has one filesystem implementation, without a second storage driver to compare."
+        },
+        {
+          "technique": "query-construction",
+          "verdict": "not-applicable",
+          "evidence": "uat/driver/recertify.cjs:29 The inspected access paths parse JSON files rather than construct executable storage queries."
+        },
+        {
+          "technique": "repo-testing",
+          "verdict": "conformant",
+          "evidence": "tools/uat-recertify-test.cjs:326 A fault drill exercises the production writeBack path on an isolated filesystem copy and verifies that a torn write preserves the original record."
+        },
+        {
+          "technique": "row-mapping",
+          "verdict": "deviation",
+          "evidence": "uat/driver/ledger.cjs:55 resultsOf suppresses decode failures without returning an error, skipped-file identity or incomplete-collection indicator; findings.json has separate reporting, but these per-character files do not."
+        }
+      ]
     }
   }
 }

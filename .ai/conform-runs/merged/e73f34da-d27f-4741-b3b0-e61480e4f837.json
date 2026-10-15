@@ -1,0 +1,71 @@
+{
+ "schema": "conform-run/1",
+ "worker": "e73f34da-d27f-4741-b3b0-e61480e4f837",
+ "subject": "data-access",
+ "evaluatedAt": "2026-10-15T22:02:29.176202+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "uat",
+   "subject": "data-access",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "uat/driver/ledger.cjs:55 The shared result reader silently drops unreadable per-character records, allowing ledger coverage and metric comparisons to undercount without identifying the missing evidence.",
+   "techniques": [
+    {
+     "technique": "capability-declared-in-the-type",
+     "verdict": "not-applicable",
+     "evidence": "uat/driver/recertify.cjs:35 Findings use a fixed filesystem reader; no family of interchangeable storage implementations was found."
+    },
+    {
+     "technique": "cross-driver-invariant-parity",
+     "verdict": "not-applicable",
+     "evidence": "uat/driver/ledger.cjs:27 The inspected ledger has one filesystem implementation, without a second storage driver to compare."
+    },
+    {
+     "technique": "query-construction",
+     "verdict": "not-applicable",
+     "evidence": "uat/driver/recertify.cjs:29 The inspected access paths parse JSON files rather than construct executable storage queries."
+    },
+    {
+     "technique": "repo-testing",
+     "verdict": "conformant",
+     "evidence": "tools/uat-recertify-test.cjs:326 A fault drill exercises the production writeBack path on an isolated filesystem copy and verifies that a torn write preserves the original record."
+    },
+    {
+     "technique": "row-mapping",
+     "verdict": "deviation",
+     "evidence": "uat/driver/ledger.cjs:55 resultsOf suppresses decode failures without returning an error, skipped-file identity or incomplete-collection indicator; findings.json has separate reporting, but these per-character files do not."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "data-access",
+   "context": "math-buddy",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-15T22:02:29.176202+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "data-access"
+   ],
+   "techniques": [
+    "capability-declared-in-the-type",
+    "cross-driver-invariant-parity",
+    "query-construction",
+    "repo-testing",
+    "row-mapping"
+   ],
+   "deviations": 1,
+   "context": "uat",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
