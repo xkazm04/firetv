@@ -1,0 +1,107 @@
+{
+  "schema": "conform-run/1",
+  "worker": "e37bfe63-9d8a-4fef-a408-a373b407379d",
+  "subject": "docs-sync",
+  "evaluatedAt": "2026-10-15T02:24:19.618182+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [
+    {
+      "context": "landing",
+      "subject": "docs-sync",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "context-map.json:194 The landing's context description still advertises the replaced walnut-desk design while its implementation and design document identify Small Worlds.",
+      "techniques": [
+        {
+          "technique": "cross-repo-drift-detection",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/landing/LandingTV.tsx:3 The component explicitly identifies its design document within this repository."
+        },
+        {
+          "technique": "doc-rot-detection",
+          "verdict": "deviation",
+          "evidence": "context-map.json:194 desk/src/design/desk-landing.css:2 identifies Small Worlds, and docs/DESIGN-STUDY-DESK.md:3 explicitly records replacing Left on the Desk on 2026-09-29; this context description remains stale."
+        }
+      ]
+    },
+    {
+      "context": "phone-surface",
+      "subject": "docs-sync",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "desk/src/app/phone/page.tsx:74 The comment promises transmission of only the current paragraph, while readPiece sends the whole piece with an option to keep it, leaving the documented data flow stale.",
+      "techniques": [
+        {
+          "technique": "cross-repo-drift-detection",
+          "verdict": "not-applicable",
+          "evidence": "docs/STUDY-DESK-SCREENS.md:18 The phone documentation and its named implementations are in the same repository."
+        },
+        {
+          "technique": "doc-rot-detection",
+          "verdict": "deviation",
+          "evidence": "desk/src/app/phone/page.tsx:74 Lines 266 and 271 join all paragraphs and send text: whole with keep: keepIt; lines 697-698 expose keeping and reading the whole piece, contradicting this unqualified comment."
+        }
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "docs-sync",
+      "context": "math-buddy",
+      "reason": "the seat returned unknown"
+    },
+    {
+      "subject": "docs-sync",
+      "context": "tv-surface",
+      "reason": "withdrawn after review: reviewer (sonnet): The count mismatch is real (the Screen union has 40 members, the doc says 38 and points at store.ts:23 when the union is at line 37), but docs/STUDY-DESK-SCREENS.md and desk/src/lib/session/store.ts are not among tv-surface's context files, so the verdict is about a repo-wide doc and shared lib rath"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-15T02:24:19.618182+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "docs-sync"
+      ],
+      "techniques": [
+        "cross-repo-drift-detection",
+        "doc-rot-detection"
+      ],
+      "deviations": 1,
+      "context": "tv-surface",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-15T02:24:19.618182+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "docs-sync"
+      ],
+      "techniques": [
+        "cross-repo-drift-detection",
+        "doc-rot-detection"
+      ],
+      "deviations": 1,
+      "context": "landing",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-15T02:24:19.618182+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "docs-sync"
+      ],
+      "techniques": [
+        "cross-repo-drift-detection",
+        "doc-rot-detection"
+      ],
+      "deviations": 1,
+      "context": "phone-surface",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

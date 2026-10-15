@@ -515,6 +515,74 @@
           "evidence": "tools/uat-metrics-test.cjs:117 Asserts that invoking invalid journey names fails immediately during argument parsing rather than exiting 0 vacuously."
         }
       ]
+    },
+    "desk-surfaces/tv-surface/docs-sync": {
+      "context": "tv-surface",
+      "subject": "docs-sync",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T02:24:19.618Z",
+      "techniques": [
+        {
+          "technique": "cross-repo-drift-detection",
+          "verdict": "not-applicable",
+          "evidence": "docs/STUDY-DESK-SCREENS.md:15 This inventory and the implementation it describes reside in the same repository."
+        },
+        {
+          "technique": "doc-rot-detection",
+          "verdict": "deviation",
+          "evidence": "docs/STUDY-DESK-SCREENS.md:13 Counting the quoted members of desk/src/lib/session/store.ts:37 yields 40; the documented count does not reproduce, and no general documentation freshness checker was located."
+        }
+      ],
+      "withdrawn": {
+        "worker": "e37bfe63-9d8a-4fef-a408-a373b407379d",
+        "state": "deviation",
+        "at": "2026-10-15T02:24:57.120830+00:00",
+        "reason": "reviewer (sonnet): The count mismatch is real (the Screen union has 40 members, the doc says 38 and points at store.ts:23 when the union is at line 37), but docs/STUDY-DESK-SCREENS.md and desk/src/lib/session/store.ts are not among tv-surface's context files, so the verdict is about a repo-wide doc and shared lib rath"
+      }
+    },
+    "desk-surfaces/landing/docs-sync": {
+      "context": "landing",
+      "subject": "docs-sync",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T02:24:19.618Z",
+      "worker": "e37bfe63-9d8a-4fef-a408-a373b407379d",
+      "techniques": [
+        {
+          "technique": "cross-repo-drift-detection",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/landing/LandingTV.tsx:3 The component explicitly identifies its design document within this repository."
+        },
+        {
+          "technique": "doc-rot-detection",
+          "verdict": "deviation",
+          "evidence": "context-map.json:194 desk/src/design/desk-landing.css:2 identifies Small Worlds, and docs/DESIGN-STUDY-DESK.md:3 explicitly records replacing Left on the Desk on 2026-09-29; this context description remains stale."
+        }
+      ]
+    },
+    "desk-surfaces/phone-surface/docs-sync": {
+      "context": "phone-surface",
+      "subject": "docs-sync",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T02:24:19.618Z",
+      "worker": "e37bfe63-9d8a-4fef-a408-a373b407379d",
+      "techniques": [
+        {
+          "technique": "cross-repo-drift-detection",
+          "verdict": "not-applicable",
+          "evidence": "docs/STUDY-DESK-SCREENS.md:18 The phone documentation and its named implementations are in the same repository."
+        },
+        {
+          "technique": "doc-rot-detection",
+          "verdict": "deviation",
+          "evidence": "desk/src/app/phone/page.tsx:74 Lines 266 and 271 join all paragraphs and send text: whole with keep: keepIt; lines 697-698 expose keeping and reading the whole piece, contradicting this unqualified comment."
+        }
+      ]
     }
   }
 }

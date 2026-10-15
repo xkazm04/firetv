@@ -1101,7 +1101,11 @@
           "revision": 14,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "context-map.json:194 The landing's context description still advertises the replaced walnut-desk design while its implementation and design document identify Small Worlds.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:fd96220db75846a1",
+          "evaluatedRevision": 14
         },
         {
           "subject": "repository-landing-document",
@@ -1472,7 +1476,11 @@
           "revision": 14,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/app/phone/page.tsx:74 The comment promises transmission of only the current paragraph, while readPiece sends the whole piece with an option to keep it, leaving the documented data flow stale.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:fd96220db75846a1",
+          "evaluatedRevision": 14
         },
         {
           "subject": "voice-io",
