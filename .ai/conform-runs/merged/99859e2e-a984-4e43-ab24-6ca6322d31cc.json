@@ -1,0 +1,89 @@
+{
+ "schema": "conform-run/1",
+ "worker": "99859e2e-a984-4e43-ab24-6ca6322d31cc",
+ "subject": "module-design",
+ "evaluatedAt": "2026-10-15T23:43:35.571970+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "pen-core",
+   "subject": "module-design",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:30 Transport planning accepts a project-owned closed command vocabulary as unrestricted text and silently ignores unknown commands, leaving accepted values outside the checked interface.",
+   "techniques": [
+    {
+     "technique": "borrowed-surface",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:25 History keeps its deque private and exposes explicit operations; inspection and searches found no implicit surface forwarding or dependency-category disjointness premise in the context."
+    },
+    {
+     "technique": "concurrency-at-the-edge",
+     "verdict": "conformant",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:182 Timeout decisions receive time and return effects; coroutine launches, delays and execution of those effects reside in PenSessionHost."
+    },
+    {
+     "technique": "declarative-or-sequential",
+     "verdict": "conformant",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/Timeline.kt:28 Moment grouping uses an explicit loop because accepting the next anchor depends on the last accepted anchor; the preceding projection and sorting remain declarative."
+    },
+    {
+     "technique": "emitted-code-names-from-a-root",
+     "verdict": "not-applicable",
+     "evidence": "core/build.gradle.kts:3 The module uses compiler-provided serialization generation; source and build inspection found no exported generator splicing authored names into a caller's scope."
+    },
+    {
+     "technique": "host-primitive-facade",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:135 The core calculates a deadline from supplied time instead of driving a host timer; searches found no owned spawn, sleep or runtime-timeout calls requiring a facade."
+    },
+    {
+     "technique": "io-free-core",
+     "verdict": "deviation",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:156 Malformed input executes an injected callback inside onText instead of returning a diagnostic effect; PenSessionHost supplies Log.w, so this path performs logging during the core transition."
+    },
+    {
+     "technique": "mirror-type-at-the-edge",
+     "verdict": "not-applicable",
+     "evidence": "core/src/test/kotlin/dev/telestrator/core/PenConversationTest.kt:255 Tests construct heartbeat inputs directly from ordinary values; inspected core entry points do not require a host-minted input that tests cannot construct."
+    },
+    {
+     "technique": "module-depth",
+     "verdict": "deviation",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:30 plan branches on a fixed set of project-owned command strings and returns emptyList for everything else, matching the standard's closed vocabulary represented by an open type failure."
+    },
+    {
+     "technique": "state-carrier-decides-the-lane",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:94 Connections retain the original PairingDesk reference; searches and source inspection found no runner lane that copies an existing shared carrier across a fork or worker boundary."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-15T23:43:35.571970+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "module-design"
+   ],
+   "techniques": [
+    "borrowed-surface",
+    "concurrency-at-the-edge",
+    "declarative-or-sequential",
+    "emitted-code-names-from-a-root",
+    "host-primitive-facade",
+    "io-free-core",
+    "mirror-type-at-the-edge",
+    "module-depth",
+    "state-carrier-decides-the-lane"
+   ],
+   "deviations": 1,
+   "context": "pen-core",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

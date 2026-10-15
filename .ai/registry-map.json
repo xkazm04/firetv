@@ -2100,7 +2100,11 @@
           "revision": 18,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:30 Transport planning accepts a project-owned closed command vocabulary as unrestricted text and silently ignores unknown commands, leaving accepted values outside the checked interface.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:7c8008f2207b1946",
+          "evaluatedRevision": 18
         },
         {
           "subject": "prompt-assembly",
