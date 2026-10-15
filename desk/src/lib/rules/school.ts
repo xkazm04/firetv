@@ -3455,6 +3455,82 @@ export const SCHOOL_TOP_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "pct-change": ["pct-of-new", "pct-added"],
 };
 
+/**
+ * MB-B40 cycle 14, a code-written set aimed at what a paper lost: the FORMS a unit's generator draws at tiers 1 and 2, by
+ * topic id - only for a unit whose generator draws more than one form inside a tier, so a paper's statement can pick some
+ * of them. Each form is read off the spec by `formOf`, never from a model; tools/paper-aim-test.cjs pins every list to
+ * the generator's own draws. A unit not here has nothing a statement could pick and is never steered by a paper.
+ */
+export const SCHOOL_UNIT_FORMS: Readonly<Record<string, Readonly<Record<1 | 2, readonly string[]>>>> = {
+  "dec-convert": {
+    1: ["fraction-decimal", "fraction-percent", "decimal-fraction", "decimal-percent", "percent-decimal", "percent-fraction"],
+    2: ["fraction-decimal", "fraction-percent", "decimal-fraction", "decimal-percent", "percent-decimal", "percent-fraction"],
+  },
+  "ratio-share": { 1: ["simplify", "missing"], 2: ["share"] },
+  "area": { 1: ["rectangle", "triangle"], 2: ["composite", "triangle", "rectangle"] },
+};
+
+/**
+ * The form of a unit's spec (SCHOOL_UNIT_FORMS), read from the spec alone: a conversion is "<given>-<asked>" (the given
+ * form read off its expression: a '/' is a fraction, a '%' a percent, else a decimal), a ratio item "share" ('N in a:b'),
+ * "missing" ('a:b = ?:c') or "simplify" ('a:b'), an area item "composite" (two rectangles), "triangle" or "rectangle".
+ * Null for a unit with no forms or a spec of another shape.
+ */
+export function formOf(topicId: unknown, spec: unknown): string | null {
+  if (!isSchoolSpec(spec)) return null;
+  if (topicId === "dec-convert" && spec.shape === "convert") {
+    const given = spec.expr.includes("/") ? "fraction" : spec.expr.includes("%") ? "percent" : "decimal";
+    return `${given}-${spec.to}`;
+  }
+  if (topicId === "ratio-share" && spec.shape === "ratio") return spec.expr.includes(" in ") ? "share" : spec.expr.includes("=") ? "missing" : "simplify";
+  if (topicId === "area" && spec.shape === "area") return spec.expr.startsWith("rectangles ") ? "composite" : spec.expr.startsWith("triangle") ? "triangle" : "rectangle";
+  return null;
+}
+
+/**
+ * Which forms of a unit each paper statement (library/gcse.ts code) is about, by topic id: the map from what a marked
+ * paper says was lost to the generator's shapes. Decided here, by rule, from the statement's own words:
+ *   - dec-convert: N10 "move between terminating decimals and their fractions" is the two fraction-decimal conversions;
+ *     R9 "percentages ... as a fraction or decimal" is the four with a percent in them.
+ *   - ratio-share: R4 "ratio notation, including simplest form" is simplifying a ratio.
+ *   - area: G16 "area of triangles ..." is the triangle; G17 "... composite areas ..." is the two rectangles joined.
+ * A statement that covers its whole unit is not listed (N2 on the fraction and decimal units, R9 on the percent units,
+ * S4 on mean and range, G20 on Pythagoras, the probability statements, R11 on unit rates...): the usual set already is
+ * that statement. Nor is one whose forms are a whole tier and nothing else (R5 and N11, sharing, is all of tier 2 on
+ * ratio-share): aiming there would draw the set the unit always draws.
+ */
+export const STATEMENT_FORMS: Readonly<Record<string, Readonly<Record<string, readonly string[]>>>> = {
+  "dec-convert": { N10: ["fraction-decimal", "decimal-fraction"], R9: ["fraction-percent", "decimal-percent", "percent-decimal", "percent-fraction"] },
+  "ratio-share": { R4: ["simplify"] },
+  "area": { G16: ["triangle"], G17: ["composite"] },
+};
+
+/** A paper's steer on one unit's set: the forms aimed at in each tier it narrows, and the statements that lead there. */
+export interface PaperSteer { forms: Partial<Record<1 | 2, readonly string[]>>; codes: string[] }
+
+/**
+ * The steer a paper's lost statements put on a code-written set of `topicId` drawn at `tiers` (MB-B40 cycle 14). The aimed
+ * forms are every form the known statements name on this unit (STATEMENT_FORMS); a tier is steered only when they are
+ * SOME of its forms (SCHOOL_UNIT_FORMS) - none, or all of them, leaves the tier as it is drawn. Tier 3 is never steered
+ * (as a slip aim, MB-B20). `codes` are the statements, in the order given, that name a form of a steered tier. Null when
+ * no tier is steered: the set is drawn exactly as it would be with no paper. Pure.
+ */
+export function paperSteer(topicId: unknown, codes: readonly unknown[] | undefined, tiers: readonly number[]): PaperSteer | null {
+  if (typeof topicId !== "string" || !Object.prototype.hasOwnProperty.call(STATEMENT_FORMS, topicId)) return null;
+  const by = STATEMENT_FORMS[topicId], unit = SCHOOL_UNIT_FORMS[topicId];
+  const known = [...new Set((Array.isArray(codes) ? codes : []).filter((c): c is string => typeof c === "string" && Object.prototype.hasOwnProperty.call(by, c)))];
+  const aimed = new Set(known.flatMap((c) => by[c]));
+  const forms: PaperSteer["forms"] = {};
+  for (const t of [1, 2] as const) {
+    if (!tiers.includes(t)) continue;
+    const some = unit[t].filter((f) => aimed.has(f));
+    if (some.length && some.length < unit[t].length) forms[t] = some;
+  }
+  const steered = new Set([...(forms[1] ?? []), ...(forms[2] ?? [])]);
+  const led = known.filter((c) => by[c].some((f) => steered.has(f)));
+  return led.length ? { forms, codes: led } : null;
+}
+
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
 export const DEFAULT_SCHOOL_SYSTEM: SchoolSystem = "uk";
 /** The school system of the learner at the desk, from their profile; the desk's default (UK) when nobody, no profile or no system. */

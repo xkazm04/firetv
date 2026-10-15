@@ -22,6 +22,9 @@ const K=require(src('tv/keys.ts'));
 const {prepareStops}=require(src('tv/prepareRows.ts'));
 const {paperView}=require(src('tv/paperRows.ts'));
 const {STATEMENTS}=require(src('lib/library/gcse.ts'));
+const SR=require(src('lib/rules/school.ts'));
+const {makeSchoolItems}=require(src('lib/desk/items.ts'));
+const crypto=require('node:crypto');
 const route=(name)=>require(src(`app/api/${name}/route.ts`));
 after(()=>{clearInterval(globalThis.__desk.ticker);fs.rmSync(data,{recursive:true,force:true});});
 afterEach(()=>reg.resetProviders());
@@ -162,4 +165,25 @@ test('aim 6: the taped card says what the set aims at, in at most 25 words, with
  const css=fs.readFileSync(src('design/maths-lamplight.css'),'utf8');
  const rule=/\.mb-card \.aim\s*\{([^}]*)\}/.exec(css);assert.ok(rule,'the line has its rule');
  const px=/font-size:\s*(\d+)px/.exec(rule[1]);assert.ok(px&&Number(px[1])>=28,'and nothing under 28 px');
+});
+
+test('aim 7: the map from a paper\'s statements to a unit\'s forms - pinned to the generators and to the statements, decided in code',()=>{
+ // every form list is what the unit's generator draws at that tier, no more and no fewer
+ for(const [u,tiers] of Object.entries(SR.SCHOOL_UNIT_FORMS))for(const t of [1,2]){
+  const got=new Set();for(let k=0;k<600;k++){const f=SR.formOf(u,SR.generatorFor(u)(k,t));assert.ok(f,`${u} tier ${t} seed ${k} has a form`);got.add(f);}
+  assert.deepEqual([...got].sort(),[...tiers[t]].sort(),`${u} tier ${t}`);
+ }
+ // every mapped statement is a real one that touches its unit, and names forms of that unit
+ for(const [u,by] of Object.entries(SR.STATEMENT_FORMS))for(const [c,forms] of Object.entries(by)){
+  const st=STATEMENTS.find((x)=>x.code===c);assert.ok(st&&st.touches.includes(u),`${c} touches ${u}`);
+  const all=new Set([...SR.SCHOOL_UNIT_FORMS[u][1],...SR.SCHOOL_UNIT_FORMS[u][2]]);for(const f of forms)assert.ok(all.has(f),`${c}: ${f}`);
+ }
+ const steer=(u,c,t=[1,2])=>SR.paperSteer(u,c,t);
+ assert.deepEqual(steer('dec-convert',['N10']),{forms:{1:['fraction-decimal','decimal-fraction'],2:['fraction-decimal','decimal-fraction']},codes:['N10']});
+ assert.deepEqual(steer('area',['G17']),{forms:{2:['composite']},codes:['G17']},'composites are tier 2 only');
+ assert.equal(steer('dec-convert',['N10','R9']),null,'the two together are every conversion: nothing to pick');
+ assert.equal(steer('ratio-share',['R5']),null,'not mapped: sharing is the whole of tier 2');
+ assert.deepEqual(steer('ratio-share',['R5','R4']),{forms:{1:['simplify']},codes:['R4']});
+ assert.equal(steer('area',['G17'],[1]),null,'a tier the set does not draw steers nothing');
+ for(const [u,c] of [['frac-add-sub',['N2']],['pct-change',['R9']],['probability',['P4']],['mean-range',['S4']],['area',['nope',7,null]],['constructor',['N10']],['dec-convert',undefined]])assert.equal(steer(u,c),null,`${u} ${c}`);
 });
