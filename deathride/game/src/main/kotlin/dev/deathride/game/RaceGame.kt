@@ -633,17 +633,18 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             }
             "career" -> {
                 panel(44f,96f,729f,506f);panel(788f,96f,448f,506f)
-                if(regionPresentation)regionLooks.getValue(Career.events[profiles[0].careerRound].region.id).backdrop(shape,65f,487f,678f,82f)
+                if(regionPresentation)regionLooks.getValue(Career.events[profiles[0].careerRound].region.id).backdrop(shape,CareerLayout.banner.x,CareerLayout.banner.y,CareerLayout.banner.w,CareerLayout.banner.h)
                 for(i in Career.difficulties.indices) {shape.color=if(i==if(Campaign.pending(profiles[0])>=0)selectedReward else profiles[0].careerDifficulty)accent else road;shape.rect(66f+i*229,230f,216f,42f)}
-                bar(66f,356f,677f,HudTheme.fraction(profiles[0].careerCleared.toDouble(),Career.events.size.toDouble()),accent)
+                bar(CareerLayout.progress.x,CareerLayout.progress.y,CareerLayout.progress.w,HudTheme.fraction(profiles[0].careerCleared.toDouble(),Career.events.size.toDouble()),accent)
                 if(storyArt.available("debt-meter")) {
                     val debt=profiles[0].campaign.debt.toDouble()
                     val initial=profiles[0].campaign.initial.toDouble()+profiles[0].campaign.interest
-                    shape.color=bg;shape.rect(66f,326f,240f,8f)
-                    shape.color=warning;shape.rect(66f,326f,240f*HudTheme.fraction(debt,initial),8f)
+                    shape.color=bg;shape.rect(CareerLayout.debt.x+5f,420f,240f,8f)
+                    shape.color=warning;shape.rect(CareerLayout.debt.x+5f,420f,240f*HudTheme.fraction(debt,initial),8f)
                 }
                 shape.color=accent;shape.rect(66f,137f,677f,44f)
-                shape.color=bg;shape.rect(400f,288f,343f,64f);CoursePreview.draw(shape,Courses.all[Career.events[profiles[0].careerRound].courseIndex],410f,292f,110f,56f,muted,road,accent)
+                val pv=CareerLayout.preview
+                shape.color=bg;shape.rect(pv.x,pv.y,pv.w,pv.h);CoursePreview.draw(shape,Courses.all[Career.events[profiles[0].careerRound].courseIndex],pv.x+8f,pv.y+4f,pv.w-16f,pv.h-8f,muted,road,accent)
             }
             "results" -> {panel(260f,96f,760f,506f);shape.color=accent;shape.rect(286f,128f,708f,44f)}
             "countdown" -> if(scene.ready)panel(542f,268f,196f,172f)
@@ -677,10 +678,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 frame(44f,96f,729f,506f,"hud/frame-panel");frame(788f,96f,448f,506f,"hud/frame-panel")
                 // Quiet opaque story text area remains separate from the low-contrast illustration.
                 if(!regionPresentation)art.drawBackdrop(batch,65f,486f,678f,82f)
-                storyArt.draw(batch,storyPanel,625f,370f,112f,112f)
-                storyArt.meter(batch,61f,321f,250f,18f)
-                storyArt.draw(batch,"icon-ledger",747f,331f,22f,22f)
-                storyArt.draw(batch,"icon-payment",747f,307f,22f,22f)
+                storyArt.draw(batch,storyPanel,CareerLayout.story.x,CareerLayout.story.y,CareerLayout.story.w,CareerLayout.story.h)
+                storyArt.meter(batch,CareerLayout.debt.x,415f,250f,18f)
+                storyArt.draw(batch,"icon-ledger",CareerLayout.debt.x,438f,22f,22f)
                 storyArt.draw(batch,StoryArt.ledgerIcon(profiles[0]),808f,187f,28f,28f)
                 for((i,index) in RivalEconomy.cast(profiles[0].careerRound).withIndex())art.draw(batch,"rival-"+Career.rivals[index].id,1174f,513f-i*72,60f,60f)
                 frame(61f,132f,687f,54f,"hud/frame-button")
@@ -747,7 +747,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val keys=linkedSetOf<String>()
             storyPanel?.let{keys.add(it)}
             if(phase=="garage")keys.addAll(listOf("mechanic","icon-ledger"))
-            if(phase=="career")keys.addAll(listOf("debt-meter","icon-ledger","icon-payment",StoryArt.ledgerIcon(profiles[0])))
+            if(phase=="career")keys.addAll(listOf("debt-meter","icon-ledger",StoryArt.ledgerIcon(profiles[0])))
             if(keys!=storySelection) {
                 art.selectBackdrop(null)
                 storyArt.select(keys)
@@ -826,35 +826,29 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 label("LEAGUE ${p.campaign.debt} / LOANS ${p.debt} CR",68f,127f)
             }
             "career" -> {
-                val p=profiles[0];val event=Career.events[p.careerRound];val cup=Career.cups[event.cupIndex];val tier=Career.difficulties[p.careerDifficulty]
-                label("SEASON ${p.careerSeasons+1} / ROUND ${p.careerRound+1} OF ${Career.events.size}",66f,577f,accent)
+                // A picture and one short line per element; story, objective, unlocks, rival economy and the ledger arithmetic stay on the phone's career sheet.
+                val p=profiles[0];val event=Career.events[p.careerRound];val cup=Career.cups[event.cupIndex]
+                label(TvCopy.careerRound(p.careerRound+1,Career.events.size),66f,577f,accent)
                 title(event.name,66f,541f)
-                label(cup.region.name+(if(event.elimination)" / DEATH DUEL / " else " / ${event.laps} LAPS / ")+Career.gradeName(p.careerTrophies[event.cupIndex]),66f,488f,HudTheme.bone)
-                detail.setColor(HudTheme.bone);detail.wrapped(DeathDuel.story(p).lines.joinToString(" "),66f,453f,if(storyArt.available(storyPanel))548f else 677f,25f)
-                label("LEAGUE DEBT ${p.campaign.debt} CR / PAID ${p.campaign.lastPayment}",66f,343f)
-                val next=Career.unlocks.filter{it.afterRounds>p.careerCleared}.minByOrNull{it.afterRounds}
-                label(if(next!=null)"NEXT ${next.name} / ROUND ${next.afterRounds}" else "ALL CARS AND COURSES UNLOCKED",66f,312f,accent)
+                label(TvCopy.careerCourseLine(Courses.all[event.courseIndex].name,cup.region.name,event.elimination,event.laps),66f,488f,HudTheme.bone)
+                label(TvCopy.leagueDebt(p.campaign.debt),CareerLayout.debt.x+33f,458f,HudTheme.bone)
                 val pending=Campaign.pending(p)
                 if(pending>=0) {
                     for(i in Campaign.choices.indices)label(Campaign.choices[i].uppercase(),83f+i*229,260f,if(i==selectedReward)bg else HudTheme.bone)
-                    val choice=Campaign.choices[selectedReward];val rejection=Campaign.reason(p,pending,choice)
-                    detail.setColor(muted);detail.wrapped(Campaign.allies[pending].id.uppercase()+": "+Campaign.label(p,pending,choice)+(if(rejection.isEmpty())"" else " / $rejection"),66f,219f,677f,25f)
+                    val rejection=Campaign.reason(p,pending,Campaign.choices[selectedReward])
+                    if(rejection.isNotEmpty())label(rejection,66f,219f,warning)
                     TvCopy.mainButton("career",true,true).let{label(it,404f-detail.width(it)/2,169f,bg)}
                     label(TvCopy.CAREER_HINT_REWARD,66f,127f)
                 } else {
                     for(i in Career.difficulties.indices)label(Career.difficulties[i].name.uppercase(),83f+i*229,260f,if(i==p.careerDifficulty)bg else HudTheme.bone)
-                    detail.setColor(muted);detail.wrapped(tier.description,66f,219f,677f,25f)
                     TvCopy.mainButton("career",true).let{label(it,404f-detail.width(it)/2,169f,bg)}
                     label(TvCopy.CAREER_HINT_DIFFICULTY,66f,127f)
                 }
-                label(Courses.all[event.courseIndex].name.uppercase(),532f,346f,accent);label(cup.region.name,532f,321f,HudTheme.bone);label(if(event.elimination)"DEATH DUEL" else "${event.laps} LAPS",532f,296f)
-                label("RIVALS / THEIR GARAGES",808f,577f,accent)
                 for((i,index) in RivalEconomy.cast(p.careerRound).withIndex()) {
-                    val rival=Career.rivals[index];val g=p.rivalProfiles[index]
-                    label(rival.name+" / "+CarCatalog.all[g.selectedCar].id,808f,540f-i*72,colors[i+1])
-                    label("PR ${PowerRating.of(CarCatalog.all[g.selectedCar],g.bonuses()).toInt()} / ${g.credits} CR"+(if(Campaign.taunt(p,rival.id)!=null)" / ALLY" else if(p.grudges[index]>0)" / GRUDGE" else ""),808f,514f-i*72)
+                    val rival=Career.rivals[index]
+                    label(rival.name,808f,540f-i*72,colors[i+1])
+                    label(TvCopy.rivalTag(CarCatalog.all[p.rivalProfiles[index].selectedCar].id,Campaign.taunt(p,rival.id)!=null,p.grudges[index]>0),808f,514f-i*72)
                 }
-                detail.setColor(muted);detail.wrapped(if(event.duel)"DEATH DUEL. Mechanic rig supplied. No lap win. P2 spectates." else Career.objective(p.careerRound),808f,158f,400f,25f)
                 if(storyArt.available(StoryArt.ledgerIcon(p)))label(when(StoryArt.ledgerIcon(p)) {
                     "icon-cancelled" -> "CLAIM VOIDED ${p.campaign.voided} CR"
                     "icon-recovery" -> "RECOVERED ${p.campaign.recovered+p.campaign.restitutionPaid} / HELD ${p.campaign.restitutionDue}"
@@ -912,8 +906,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun drawScriptCaption(){
         val value=script.caption
         if(value.isEmpty() || audio.caption.isNotEmpty())return
-        val (bx,by)=when(phase){"career"->60f to 300f;"results"->190f to 84f;else->190f to 132f}
-        val width=if(phase=="career")700f else 900f
+        val (bx,by)=when(phase){"career"->CareerLayout.caption.x to CareerLayout.caption.y;"results"->190f to 84f;else->190f to 132f}
+        val width=if(phase=="career")CareerLayout.caption.w else 900f
         if(script.serial!=drawnScript){scriptLayer.clear();scriptLayer.setColor(HudTheme.bone);scriptLayer.wrapped(value,bx+16f,by+38f,width-32f,24f);drawnScript=script.serial}
         shape.projectionMatrix=view.camera.combined;shape.begin(ShapeRenderer.ShapeType.Filled)
         shape.color=HudTheme.soot;shape.rect(bx,by,width,60f);shape.end()

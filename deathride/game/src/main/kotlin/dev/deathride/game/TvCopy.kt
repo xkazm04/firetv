@@ -38,6 +38,14 @@ object TvCopy {
     const val GARAGE_CAR_HINT="L / R  CAR"
     const val LOBBY_CAREER_HINT="UP  CAREER"
 
+    /** Career card lines: one short line each; the rest is on the phone's career sheet. */
+    fun careerRound(round: Int,total: Int): String = "ROUND $round OF $total"
+    fun careerCourseLine(course: String,region: String,duel: Boolean,laps: Int): String =
+        course.uppercase()+" / "+region.uppercase()+(if(duel)" / DEATH DUEL" else " / $laps LAPS")
+    fun leagueDebt(debt: Number): String = "LEAGUE DEBT $debt CR"
+    /** Rival's second line: their car, plus a tag only when the relationship matters. */
+    fun rivalTag(car: String,ally: Boolean,grudge: Boolean): String = car+(if(ally)" / ALLY" else if(grudge)" / GRUDGE" else "")
+
     /** The seat's controller layout that holds GO for the driver (controller-layouts.csv, autoThrottle=1). */
     const val AUTO_LAYOUT="Auto"
 
