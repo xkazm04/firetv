@@ -129,6 +129,11 @@ class ControllerStringsTest {
         assertTrue(page.contains("<div id=\"toast\" role=\"status\" hidden>"))
     }
 
+    @Test fun resetShowsThePairingScreenWithAFreshCodeField() {
+        assertTrue(page.contains("m.code==='BAD_PIN'||m.code==='RESET'"))
+        assertTrue(page.contains("\$('pairMessage').textContent=m.message;\$('pair').hidden=false;"),"any error, known code or not, still shows the sentence")
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
