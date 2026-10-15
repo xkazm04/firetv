@@ -75,6 +75,11 @@ class ControllerStringsTest {
         assertTrue(page.contains("\$('mechanicTutorial').textContent=g.campaign.tutorial"))
     }
 
+    @Test fun wrongPinClearsAndRefocusesTheInput() {
+        assertTrue(page.contains("m.code==='BAD_PIN'"))
+        assertTrue(page.contains("\$('pin').value='';\$('pin').focus()"))
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
