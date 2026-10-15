@@ -31,7 +31,7 @@ const firstLine = (e: unknown) => String((e as { message?: unknown } | null)?.me
  * `accept`, when set, judges the answer before the ledger row is written (shape.ts holds it to the schema there), so a
  * malformed answer is booked as the shape failure it is, with the spend it cost - never as ok.
  */
-export async function call<Req extends { timeoutMs?: number; use?: string }, R>(kind: EngineKind, p: Provider<Req, R>, req: Req, attempt = 1, budgetMs?: number, accept?: (answer: ProviderAnswer<R>, provider: string) => void): Promise<Called<R>> {
+export async function call<Req extends { timeoutMs?: number; use?: string; fingerprint?: string }, R>(kind: EngineKind, p: Provider<Req, R>, req: Req, attempt = 1, budgetMs?: number, accept?: (answer: ProviderAnswer<R>, provider: string) => void): Promise<Called<R>> {
   const started = Date.now(), ctl = new AbortController();
   let timer: ReturnType<typeof setTimeout> | undefined;
   const late = new Promise<never>((_, reject) => {
@@ -46,12 +46,12 @@ export async function call<Req extends { timeoutMs?: number; use?: string }, R>(
     got = answer;
     const provider = answer.provider ?? p.name, ms = Date.now() - started;
     accept?.(answer, provider);
-    meter({ kind, use: req.use, provider, try: attempt, ok: true, error: null, ms, startedAt: started, usage: answer.usage });
+    meter({ kind, use: req.use, prompt: req.fingerprint, provider, try: attempt, ok: true, error: null, ms, startedAt: started, usage: answer.usage });
     return { answer, provider, ms };
   } catch (e) {
     const err = e instanceof EngineError ? e : new EngineError("exit", p.name, firstLine(e));
     // the spend is booked before the error propagates: what the provider said it used, on its answer or on its error
-    meter({ kind, use: req.use, provider: err.provider || p.name, try: attempt, ok: false, error: err.kind, ms: Date.now() - started, startedAt: started, usage: err.usage ?? got?.usage });
+    meter({ kind, use: req.use, prompt: req.fingerprint, provider: err.provider || p.name, try: attempt, ok: false, error: err.kind, ms: Date.now() - started, startedAt: started, usage: err.usage ?? got?.usage });
     throw err;
   } finally {
     clearTimeout(timer);

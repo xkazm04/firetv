@@ -12,8 +12,8 @@ import path from "node:path";
 export type JSONSchema = Record<string, unknown>;
 
 /** `schema` is what the model is asked for; `accept`, when set, is the looser shape the caller holds the answer to (optional parts it checks and drops itself); `shorten` allows one re-ask when the answer only runs strings past their maxLength (shape.ts); `thinking: false` asks the provider to answer without hidden reasoning, for a short call where speed is the product (a provider without that switch ignores it). */
-export interface TextRequest { system: string; prompt: string; schema?: JSONSchema; accept?: JSONSchema; model?: "fast" | "best"; timeoutMs?: number; isolated?: boolean; shorten?: boolean; thinking?: boolean; use: string; }
-export interface VisionRequest { imageBase64: string; prompt: string; schema?: JSONSchema; timeoutMs?: number; use: string; }
+export interface TextRequest { system: string; prompt: string; schema?: JSONSchema; accept?: JSONSchema; model?: "fast" | "best"; timeoutMs?: number; isolated?: boolean; shorten?: boolean; thinking?: boolean; use: string; /** The assembled prompt's fingerprint (lib/prompt/assemble.ts), recorded on the ledger row. */ fingerprint?: string; }
+export interface VisionRequest { imageBase64: string; prompt: string; schema?: JSONSchema; timeoutMs?: number; use: string; fingerprint?: string; }
 export interface SpeakRequest { text: string; voice?: string; timeoutMs?: number; use: string; }
 export interface EmbedRequest { texts: string[]; timeoutMs?: number; use: string; }
 export interface ListenRequest { audio: Blob; filename: string; timeoutMs?: number; use: string; }

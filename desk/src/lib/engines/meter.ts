@@ -15,7 +15,8 @@ import { dataDir } from "../dataDir";
 import type { EngineErrorKind, EngineKind, Usage } from "./types";
 
 export interface UsageRow {
-  v: 1; id: string; at: string; kind: EngineKind; use: string | null; provider: string; try: number; ok: boolean;
+  /** prompt: the fingerprint of the prompt the call was sent (lib/prompt/assemble.ts), null for a family not yet on the assembler. */
+  v: 1; id: string; at: string; kind: EngineKind; use: string | null; prompt: string | null; provider: string; try: number; ok: boolean;
   error: EngineErrorKind | null; ms: number; tokens: Usage["tokens"]; notionalUsd: number | null;
   marginalUsd: number | null; basis: string;
 }
@@ -28,11 +29,11 @@ export function usageFile(): string {
 }
 
 /** Append one row. Never throws. */
-export function meter(r: { kind: EngineKind; use?: string; provider: string; try?: number; ok: boolean; error: EngineErrorKind | null; ms: number; startedAt: number; usage?: Usage }): void {
+export function meter(r: { kind: EngineKind; use?: string; prompt?: string; provider: string; try?: number; ok: boolean; error: EngineErrorKind | null; ms: number; startedAt: number; usage?: Usage }): void {
   try {
     const price = priceOf(r.provider);
     const row: UsageRow = {
-      v: 1, id: randomUUID(), at: new Date(r.startedAt).toISOString(), kind: r.kind, use: r.use ?? null, provider: r.provider,
+      v: 1, id: randomUUID(), at: new Date(r.startedAt).toISOString(), kind: r.kind, use: r.use ?? null, prompt: r.prompt ?? null, provider: r.provider,
       try: r.try ?? 1, ok: r.ok, error: r.error, ms: r.ms, tokens: r.usage?.tokens ?? null, notionalUsd: r.usage?.notionalUsd ?? null,
       marginalUsd: price.marginalUsd, basis: price.basis,
     };
