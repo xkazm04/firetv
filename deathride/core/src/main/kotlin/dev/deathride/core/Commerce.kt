@@ -41,9 +41,9 @@ object Market {
         return floor(CarCatalog.all[car].priceCredits*MarketRules["tradeCarShare"]+parts*MarketRules["tradePartShare"]).toInt()
     }
     fun transact(p: Profile,action: String,id: String,expectedRevision: Long): String {
-        if(expectedRevision!=p.marketRevision)return "Offer changed - refresh the garage"
+        if(expectedRevision!=p.marketRevision)return "Offer changed - refresh"
         if(action=="ally")return Campaign.claim(p,id,expectedRevision)
-        if(DeathDuel.seized(p))return "Car seized - the supplied rig needs no purchase"
+        if(DeathDuel.seized(p))return "Car seized - rig is supplied"
         val result=when(action) {
             "buy","trade" -> {
                 val car=CarCatalog.all.indexOfFirst{it.id==id}
@@ -68,7 +68,7 @@ object Market {
             "loan" -> {
                 val principal=MarketRules["loanPrincipal"].toInt();val owed=principal+ceil(principal*MarketRules["loanFeeShare"]).toInt()
                 if(p.debt+owed>MarketRules["debtCap"] || p.credits+principal>EconomyRules["creditCap"])return "Loan limit reached"
-                p.debt+=owed;p.credits+=principal;"Loan received - fixed fee and bounded repayment"
+                p.debt+=owed;p.credits+=principal;"Loan received - fixed fee"
             }
             "repay" -> {
                 val paid=min(p.debt,p.credits);if(paid==0)return "Nothing to repay"

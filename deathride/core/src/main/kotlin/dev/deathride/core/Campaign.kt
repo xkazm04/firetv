@@ -127,12 +127,12 @@ object Campaign {
         return if(p.grudges[r]>0)allies[index].grudgeLine else allies[index].joinedLine
     }
     fun reason(p: Profile,index: Int,choice: String): String {
-        if(index !in allies.indices || p.campaign.rewards[index]!=1)return "Reward already claimed or not earned"
+        if(index !in allies.indices || p.campaign.rewards[index]!=1)return "Already claimed or not earned"
         val a=allies[index]
         return when(choice) {
-            "money"->if(p.credits>=EconomyRules["creditCap"])"Wallet full - choose another reward" else ""
+            "money"->if(p.credits>=EconomyRules["creditCap"])"Wallet full - pick another" else ""
             "car"->{val car=rewardCar(p,index);if(car<0)"Both tier cars already owned" else if(!Career.unlocked(p,"car",CarCatalog.all[car].id))"Licence not earned" else ""}
-            "part"->if(rewardPart(p,index)>=0)"" else "No useful unlocked part on this car - choose another car or reward"
+            "part"->if(rewardPart(p,index)>=0)"" else "No useful part - pick another"
             else->"Unknown reward"
         }
     }
@@ -145,10 +145,10 @@ object Campaign {
         }
     }
     fun claim(p: Profile,id: String,revision: Long): String {
-        if(revision!=p.marketRevision)return "Offer changed - refresh the garage"
+        if(revision!=p.marketRevision)return "Offer changed - refresh"
         val pair=id.split(':');if(pair.size!=2)return "Unknown reward"
         val index=allyIndex(pair[0]);val choice=pair[1];val error=reason(p,index,choice);if(error.isNotEmpty())return error
-        if(!p.owned[p.selectedCar])return "Select an owned car for promotion"
+        if(!p.owned[p.selectedCar])return "Select an owned car"
         val a=allies[index];val description=label(p,index,choice);var grant=0
         when(choice) {
             "money"->{grant=min(a.money,EconomyRules["creditCap"].toInt()-p.credits);p.credits+=grant}

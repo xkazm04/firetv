@@ -97,9 +97,9 @@ object Career {
     }
     internal fun advance(p: Profile,expectedRound: Int,position: Int,qualified: Boolean): CareerResult {
         require(position in 1..Tuning.CAR_COUNT)
-        if(expectedRound!=p.careerRound)return CareerResult(false,0,0,"Career round changed - result not advanced")
-        if(!qualified)return CareerResult(false,0,0,if(events[p.careerRound].elimination)"No survivor victory - the rig is ready for another attempt" else "Complete a lap or make progress before a wreck")
-        if(events[p.careerRound].boss && position!=1)return CareerResult(false,0,0,if(events[p.careerRound].elimination)"Be the last car running - the rig is ready for another attempt" else "Win the boss race in first place to earn promotion - repair and retry")
+        if(expectedRound!=p.careerRound)return CareerResult(false,0,0,"Round changed - result not counted")
+        if(!qualified)return CareerResult(false,0,0,if(events[p.careerRound].elimination)"Not the last car - try again" else "Make progress before a wreck")
+        if(events[p.careerRound].boss && position!=1)return CareerResult(false,0,0,if(events[p.careerRound].elimination)"Be the last car running - try again" else "Win the boss race to be promoted")
         val event=events[p.careerRound];p.careerPoints+=points[position-1]
         p.careerCleared=max(p.careerCleared,p.careerRound+1)
         val cupEnds=p.careerRound==events.lastIndex || events[p.careerRound+1].cupIndex!=event.cupIndex
@@ -116,7 +116,7 @@ object Career {
             if(p.owned.indices.none{p.owned[it] && CarCatalog.all[it].tierRank==0}) {
                 val starter=EconomyRules["startingCarIndex"].toInt();p.owned[starter]=true;p.condition[starter]=100
             }
-            message="Marrow is finished. Your car returns. The league claim is void."
+            message="Marrow is finished. Your car returns."
         }
         return CareerResult(true,grade,bonus,message)
     }
@@ -137,9 +137,9 @@ object Career {
         return "{\"campaign\":${Campaign.json(p)},\"phase\":\"${e.phase}\",\"objective\":\"${objective(p.careerRound)}\",\"eventType\":\"${e.type}\",\"laps\":${e.laps},\"story\":$story,\"rivals\":$roster,\"fieldPowerRating\":$field,\"duel\":${e.duel},\"maximumPlayerTier\":${e.playerTier},\"ownedCars\":[${p.owned.indices.filter{p.owned[it]}.joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"round\":${p.careerRound+1},\"roundCount\":${events.size},\"cleared\":${p.careerCleared},\"season\":${p.careerSeasons+1},\"event\":\"${e.name}\",\"course\":${course.json(e.region)},\"cup\":\"${cup.name}\",\"region\":\"${e.region.id}\",\"regionName\":\"${e.region.name}\",\"points\":${p.careerPoints},\"bestTrophy\":\"${gradeName(p.careerTrophies[e.cupIndex])}\",\"targets\":[${cup.targets.drop(1).joinToString(",")}],\"bonuses\":[${cup.bonuses.drop(1).joinToString(",")}],\"trophies\":[${p.careerTrophies.joinToString(",")}],\"difficulty\":${difficulties[p.careerDifficulty].json},\"unlocks\":$locks,\"partUnlocks\":$parts,\"message\":\"$message\"}"
     }
     fun objective(round: Int)=when {
-        events[round].elimination->"Last car running wins. Free supplied rig on every retry."
-        events[round].boss->"Win the boss race in first place to recruit ${rivals[bossIndex(round)].name}."
-        else->"Complete a lap or make progress before a wreck. Repairs are insured."
+        events[round].elimination->"Last car running wins. Retries are free."
+        events[round].boss->"Win the boss race to recruit ${rivals[bossIndex(round)].name}."
+        else->"Make progress. Repairs are insured."
     }
     val catalogJson get()="{\"difficulties\":[${difficulties.joinToString(","){it.json}}],\"rivals\":[${rivals.joinToString(","){it.json}}]}"
 }
