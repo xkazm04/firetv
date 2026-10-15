@@ -75,7 +75,7 @@ export function dueTaught(taught: Taught[], episodeId: string, allowed?: (t: Tau
 }
 export function reviewOf(t: Taught): Review {
   const keys = keysOf(t);
-  return { id: t.id, kind: t.kind, better: t.better, fromTitle: t.title, ...(keys && guarded(keys.slip) ? keys : {}) };
+  return { id: t.id, kind: t.kind, better: t.better, fromTitle: t.title, ...(keys && guarded(keys.slip) ? keys : {}), ...(t.key && !keys ? { key: t.key } : {}) };
 }
 
 /** What the tutor is told while the item is not yet used: the phrase, what it means, and to invite it, never say it. */
@@ -118,6 +118,8 @@ export function reuseOf(reply: string, c: Conversation): string | null {
     if (alreadyShown(c, r.fix) || slipStands(reply, r.slip) !== null) return null;
     return findKey(reply, r.fix);
   }
+  // a line handed over or found in an earlier room (K4, line.ts) is judged by its key words
+  if (r.key) return alreadyShown(c, r.key) ? null : findKey(reply, r.key);
   if (alreadyShown(c, r.better)) return null;
   return findPhrase(reply, r.better);
 }

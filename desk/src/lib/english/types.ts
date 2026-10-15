@@ -102,7 +102,20 @@ export interface Taught extends Moment {
    * (at most REUSES_MAX). reusedAt, reusedIn and reusedQuote are the latest of those uses.
    */
   nextDueAt?: number; misses?: number; offeredAt?: number; reuses?: Reuse[];
+  /**
+   * An item a scene's hidden line became (K4, line.ts): where the line came from, and, for a line that fixes no words
+   * of the learner's, the key words a later use is judged on. `said` is then empty: the learner never said it wrong.
+   */
+  line?: LineSource; key?: string;
 }
+/** Where a scene's hidden line came from (K4, line.ts): the level check's better phrase, the opening's offer, the quiz answer. */
+export type LineSource = "check" | "offer" | "quiz";
+/**
+ * A scene's hidden line as the session may know it (K4, line.ts): its source, whether the scene put its key words on
+ * screen (an opened quiz, a cue), and its words only once they are earned: `found`, the learner's reply that said it,
+ * with `foundTurn`; or handed over by the recap. Before that the words are in server memory only.
+ */
+export interface SceneLine { source: LineSource; shown?: boolean; found?: string; foundTurn?: string; text?: string }
 /** One unaided use of a taught item: when, in which conversation and scene (absent on a use kept before K3), and the learner's words. */
 export interface Reuse { at: number; conversationId: string; sceneId?: string; quote: string }
 /**
@@ -113,6 +126,8 @@ export interface Review {
   id: string; kind: "fix" | "word"; better: string; fromTitle: string; used?: string; usedTurn?: string;
   /** a fix's guarded keys (slip.ts): reuse is the fix key said unaided with the slip key absent, not the whole sentence */
   slip?: string; fix?: string;
+  /** a line's key words (K4, line.ts): reuse is the key said unaided, not the whole line */
+  key?: string;
 }
 
 export interface EnglishLearning {
@@ -195,6 +210,8 @@ export interface Conversation {
   help?: ConversationHelp | null;
   /** absent on a conversation saved before review, null when nothing taught was due */
   review?: Review | null;
+  /** K4: the scene's hidden line (line.ts); absent or null when the review is the room's line, or none was hidden */
+  line?: SceneLine | null;
   /** absent on a conversation saved before missions, and null-free: a scene with no valid steps has none */
   mission?: Mission;
   /** the lost-property task (L3, lostfound.ts): only on the "lost" scene, null once it stood down; its public half only */

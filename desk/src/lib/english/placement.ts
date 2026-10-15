@@ -321,10 +321,12 @@ export function cleanTaught(value: unknown): Taught[] {
     // the schedule (K3): a date, a count, and a history whose every entry is well formed, or the item drops
     for (const k of ["nextDueAt", "offeredAt"]) if (m[k] !== undefined && !(typeof m[k] === "number" && Number.isFinite(m[k]))) return [];
     if (m.misses !== undefined && !(Number.isInteger(m.misses) && (m.misses as number) >= 0)) return [];
+    // a hidden line's item (K4): its source from the closed list, its key words short; only a line may have no `said`
+    if (m.line !== undefined && !["check", "offer", "quiz"].includes(String(m.line)) || m.key !== undefined && !(text(m.key, 80) && (m.key as string).trim()) || m.said === "" && m.line === undefined) return [];
     if (m.reuses !== undefined && !(Array.isArray(m.reuses) && m.reuses.every(x => { const r = obj(x); return typeof r.at === "number" && Number.isFinite(r.at) && typeof r.conversationId === "string" && r.conversationId.length <= 200 && text(r.quote, 240) && (r.sceneId === undefined || text(r.sceneId, 100)); }))) return [];
     const reuses = Array.isArray(m.reuses) ? m.reuses.map(x => { const r = obj(x); return { at: r.at as number, conversationId: r.conversationId as string, quote: r.quote as string, ...(r.sceneId !== undefined ? { sceneId: r.sceneId as string } : {}) }; }).slice(-REUSES_MAX) : undefined;
     const review = { ...(m.offered !== undefined && { offered: m.offered as number }), ...(m.reusedAt !== undefined && { reusedAt: m.reusedAt as number }), ...(m.reusedIn !== undefined && { reusedIn: m.reusedIn as string }), ...(m.reusedQuote !== undefined && { reusedQuote: m.reusedQuote as string }), ...(m.slips !== undefined && { slips: m.slips as number }), ...(m.slipAt !== undefined && { slipAt: m.slipAt as number }),
-      ...(m.nextDueAt !== undefined && { nextDueAt: m.nextDueAt as number }), ...(m.misses !== undefined && { misses: m.misses as number }), ...(m.offeredAt !== undefined && { offeredAt: m.offeredAt as number }), ...(reuses && { reuses }) };
+      ...(m.nextDueAt !== undefined && { nextDueAt: m.nextDueAt as number }), ...(m.misses !== undefined && { misses: m.misses as number }), ...(m.offeredAt !== undefined && { offeredAt: m.offeredAt as number }), ...(reuses && { reuses }), ...(m.line !== undefined && { line: m.line as Taught["line"] }), ...(m.key !== undefined && { key: m.key as string }) };
     // a fix's slip keys (K1, slip.ts) are code's, never stored trust: worked out again from its words on every load, so a record saved before them gets them
     const keys = m.kind === "fix" ? slipOf(m.said as string, m.better as string) : null;
     // an item saved before the schedule gets one from its older review fields (review.ts scheduled)

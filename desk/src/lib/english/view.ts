@@ -15,6 +15,7 @@ import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, conversationBand, easyBand, isBan
 import { currentStep, missionDone } from "./mission";
 import { isPitchId } from "./pitch";
 import { NOTE_LABEL } from "./notes";
+import { CHECK_TITLE, focusParts } from "./line";
 import { modeOf } from "../rules/mode";
 import { accepts, refusal, turnState } from "./turn";
 import { runningTake, takeSpent } from "./take";
@@ -363,7 +364,10 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const said = spoke && spokenTasks(placement.tasks).every(t => t.mode === "text") ? "wrote" : "spoke";
     tag = "Your level"; title = `${b} · ${BAND_NAME[b]}`;
     hero = { kind: "ladder", kicker: self ? "Self-chosen" : spoke ? `Understood ${b} · ${said} ${spoke} · not a certificate` : "Linga's read · not a certificate", title, band: b, note: placement.summary || BAND_CAN[b], ...(spoke ? { spoke } : {}) };
-    caption = self ? "This is the level you picked." : spoke ? `Conversations start at ${start}, ${start === spoke ? `where your ${said === "wrote" ? "written" : "spoken"} answers were` : "one step below the level you understood"}.` : "See the conversations Linga picks for this level, or find your level again."; captionTag = self ? "Your pick" : "What next";
+    // K4 (P17): the words the read rests on, quoted from the learner's own answers in code (line.ts focusParts), lead the caption
+    const quote = self ? undefined : focusParts(placement.focus, placement.tasks).quote;
+    const starts = spoke ? `Conversations start at ${start}, ${start === spoke ? `where your ${said === "wrote" ? "written" : "spoken"} answers were` : "one step below the level you understood"}.` : "";
+    caption = self ? "This is the level you picked." : quote ? `Your words: “${quote}”.${starts ? ` ${starts}` : ""}` : starts || "See the conversations Linga picks for this level, or find your level again."; captionTag = self ? "Your pick" : quote ? "Your words" : "What next";
     actions = [act("see-topics", "See my topics", "Linga picks conversations for this level. Swap any you don't want.", cmd(l.plan && lc?.stage !== "verdict" ? "plan-open" : "plan-propose")), act("check-again", self ? "Find my level with Linga" : "Find my level again", "Three questions and a few short tasks, about seven minutes.", cmd("check-start")), act("pick-level", "Pick it myself", "Choose a level from A1 to C2 yourself.", pickAt(b))];
     if (placement.focus && !self) details.push(`On the phone, next to practise: ${placement.focus}`);
     if (!self) details.push(`On the phone: ${restsLine(placement.confidence, placement.tasks)}`);
@@ -449,7 +453,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const attempts = c.turns.filter(t => t.role === "learner"), spokenCount = attempts.filter(t => t.mode === "speech").length, moments = c.moments ?? [];
     recap = { title: c.title, replies: attempts.length, spoken: spokenCount, moments: moments.map(({ kind, said, better, why }) => ({ kind, said, better, why })) };
     const counts = `${spokenCount} spoken · ${attempts.length - spokenCount} written replies${moments.length ? ` · ${moments.length} ${moments.length === 1 ? "moment" : "moments"} to keep` : ""}`;
-    const rv = c.review, notes = c.cut?.notes ?? [];
+    const rv = c.review, notes = c.cut?.notes ?? [], ln = c.line?.text ? c.line : null;
     caption = attempts.length ? `Next, try ${recommended.name.toLowerCase()}. Your notes and learning map are on the phone.` : "You explored the scene. Try a reply next time; no progress was recorded.";
     if (notes.length) {
       // Cut (v2 L3): the take's notes as a tape strip. Three pins at most and one caption slot: the focused pin's note,
@@ -467,13 +471,20 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       title = "It came back";
       hero = { kind: "comparison", before: { kicker: `Linga taught · ${rv.fromTitle}`, quote: rv.better }, after: { kicker: "You said it tonight", quote: rv.used }, note: "", art: "done", data: counts };
       caption = `You used it without help. Next, try ${recommended.name.toLowerCase()}.`;
+    } else if (ln?.found && !moments.some(m => m.kind === "fix")) {
+      // K4: the line this room hid, beside the learner's own words that found it. A fix moment keeps the slot.
+      title = "You found it";
+      hero = { kind: "comparison", before: { kicker: ln.source === "check" ? `From ${CHECK_TITLE.toLowerCase()}` : "The line in this room", quote: ln.text! }, after: { kicker: "You said it tonight", quote: ln.found }, note: "", art: "done", data: counts };
+      caption = `You found it without help. Next, try ${recommended.name.toLowerCase()}.`;
     } else if (c.coaching || moments.length) {
       // One thing learned tonight, as the picture. A coaching change carries no time, so when the order is unknown it wins.
       const m = moments.at(-1), co = c.coaching;
       hero = co
         ? { kind: "comparison", before: { kicker: "You said", quote: co.before }, after: { kicker: "One way to try it", quote: co.after }, note: co.note, art: "done", data: counts }
         : { kind: "comparison", before: { kicker: m!.kind === "fix" ? "You said" : "You wanted to say", quote: m!.said }, after: { kicker: m!.kind === "fix" ? "Try" : "In English", quote: m!.better }, note: m!.why, art: "done", data: counts };
-    } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better, from: rv.fromTitle.slice(0, 40) } : {}) };
+    } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better, from: rv.fromTitle.slice(0, 40) } : ln && !ln.found ? { sentence: ln.text!, ...(ln.source === "check" ? { from: CHECK_TITLE.toLowerCase() } : {}) } : {}) };
+    // a line the hero does not carry is still the learner's to take, on the phone
+    if (ln && hero.kind !== "track" && !(hero.kind === "comparison" && hero.before.quote === ln.text)) details.push(ln.found ? `On the phone, the line in this room: "${ln.text}". You said: "${ln.found}"` : `On the phone, a sentence to take with you: "${ln.text}"`);
     actions = [chooseSituation("Choose a fresh context for your next conversation.", "Another situation"), act("learning-map", "Learning map", "See saved evidence for each ability; printing is on the phone.", go("linga-map"))];
     // the tape's pins come first: Left and Right walk them, and each one's note is its caption
     if (notes.length) actions = [...notes.map((n, i) => act("note", `Note ${i + 1}`, n.note, { focus: i })), ...actions];

@@ -1071,6 +1071,153 @@ test('K3 case 4: a seeded run on a fake clock - used, not invited the same day, 
  }finally{Date.now=realNow;}
 });
 
+// ---- K4: one line in every room (line.ts). A stubbed engine, no live model.
+const lineMod=()=>require(path.join(root,'src/lib/english/line.ts'));
+const BRIDGE='Which bridge do you mean?';
+const ROVER_OPENING={title:'Rover',goal:'Find the rover.',opening:'Hello there. Where are you going?',supportProvided:false};
+/** a learner whose record is `learning`, a rover scene started on an engine that keeps every prompt and request */
+let requests=[];
+async function roomStart(learning={},opening=ROVER_OPENING,turn=()=>({reply:'Good. Then turn left at the tree. What do you see?',supportProvided:false,observations:[]})){
+ fresh();saveEnglish('ema',{...emptyEnglish(),...learning});prompts=[];requests=[];
+ answer=async req=>{requests.push(req);const p=JSON.parse(req.prompt);prompts.push(p);return {json:p.submittedReply?turn(p):opening,provider:'test',ms:1};};
+ await command('start',{sceneId:'rover',replace:true});
+ return getSession().conversation;
+}
+const withoutScene=c=>JSON.stringify({...c,scene:undefined});
+test('K4 case 1: the rover scene hides its quiz answer; an unsupported reply that says its key words finds it - the recap pictures it and one Taught item is kept, unreused',async()=>{
+ const L=lineMod();
+ assert.equal(L.lineKey(BRIDGE),'bridge do you mean');assert.equal(L.lineKey('Could I have the bill, please?'),'the bill');assert.equal(L.lineKey('Yes, I am.'),null);
+ const c=await roomStart();
+ assert.deepEqual(c.line,{source:'quiz'},'the session knows the source only');
+ assert.equal(L.heldLine(c.id).text,BRIDGE);assert.equal(L.heldLine(c.id).key,'bridge do you mean');
+ assert(!withoutScene(getSession().conversation).includes('bridge do you mean')&&!withoutScene(getSession().conversation).includes(BRIDGE),'the line is in server memory, not the conversation (the scene contract carries its quiz, as before)');
+ assert.equal(prompts[0].roomLine.phrase,BRIDGE);assert.match(prompts[0].roomLine.task,/never say it/i);assert.match(prompts[0].roomLine.task,/one question/i);
+ assert.equal(prompts[0].bringBack,undefined,'no taught item: the review is untouched');
+ const before=getLearner('ema').english.taught.length;
+ await reply('Sorry, which bridge do you mean?');
+ assert.equal(prompts.length,2,'one call to open, one for the turn: no second call');
+ let now=getSession().conversation;assert.equal(now.line.found,'Sorry, which bridge do you mean?');assert.equal(now.line.text,BRIDGE);assert.equal(L.heldLine(c.id),null);
+ const taught=getLearner('ema').english.taught;assert.equal(taught.length,before+1,'one Taught item');
+ const item=taught.at(-1);
+ assert.equal(item.better,BRIDGE);assert.equal(item.reusedAt,undefined,'found here, not yet reused: a later room invites it');assert.equal(item.offered,undefined);
+ assert.equal(item.line,'quiz');assert.equal(item.key,'bridge do you mean');assert.equal(item.said,'');assert.equal(item.kind,'word');
+ await reply('The old one.');assert.equal(prompts[2].roomLine,undefined,'once found, the partner stops inviting it');
+ await command('finish');
+ const v=view().lingaView(getSession(),{});
+ assert.equal(v.hero.kind,'comparison');assert.equal(v.title,'You found it');
+ assert.deepEqual(v.hero.before,{kicker:'The line in this room',quote:BRIDGE});assert.deepEqual(v.hero.after,{kicker:'You said it tonight',quote:'Sorry, which bridge do you mean?'});
+ const text=view().viewText(v);assert(text.includes(`"${BRIDGE}"`));assert(text.includes('"Sorry, which bridge do you mean?"'));
+ assert.equal(getLearner('ema').english.taught.length,before+1,'finishing keeps it once');
+ // the item comes back in a later room, judged on its key words (review.ts reuseOf)
+ const R=review(),stored=cleanEnglish({taught:[item]}).taught[0];assert.deepEqual(stored,item,'it loads as it was kept');
+ const rv=R.reviewOf(stored);assert.equal(rv.key,'bridge do you mean');
+ assert.equal(R.reuseOf('So which bridge do you mean, the red one?',convo({review:rv})),'bridge do you mean');
+ assert.equal(R.reuseOf('Which bridge?',convo({review:rv})),null);
+});
+test('K4 case 2: no find after a partner line said it, after the quiz showed it, or on a supported reply; the partner stops inviting a shown line',async()=>{
+ let c=await roomStart({},{...ROVER_OPENING,opening:'Hello! There are two bridges here. Which bridge do you mean? Where to?'});
+ await reply('Which bridge do you mean?');
+ assert.equal(getSession().conversation.line.found,undefined,'the partner said it first');assert.equal(getLearner('ema').english.taught.length,0);
+ c=await roomStart({},ROVER_OPENING,()=>({reply:'Which bridge do you mean? There are two.',supportProvided:false,observations:[]}));
+ await reply('I want the bridge.');await reply('Which bridge do you mean?');
+ assert.equal(getSession().conversation.line.found,undefined,'a partner line already said it');
+ c=await roomStart();
+ await command('quiz');assert.equal(getSession().conversation.line.shown,true,'the quiz put it on screen');
+ await reply('I go to the river.');await reply('Which bridge do you mean?');
+ assert.equal(getSession().conversation.line.found,undefined,'shown by the quiz two turns ago');assert.equal(prompts.at(-1).roomLine,undefined);
+ c=await roomStart({},{...ROVER_OPENING,supportProvided:true});
+ await reply('Which bridge do you mean?');assert.equal(getSession().conversation.line.found,undefined,'a supported reply');
+ assert.deepEqual(getSession().conversation.line,{source:'quiz'},'not found, not handed over: the session holds no words of it');
+});
+test('K4 case 3: a zero-moment scene\'s recap hands over the line as the sentence to take, and keeps it as invited once; without a line it is today\'s bare track',async()=>{
+ await roomStart();
+ await reply('I go left at the big tree.');await command('finish');
+ const s=getSession(),c=s.conversation;assert.equal(c.moments.length,0);assert.equal(c.line.text,BRIDGE);assert.equal(c.line.found,undefined);
+ const v=view().lingaView(s,{});assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,BRIDGE);assert.equal('from' in v.hero,false);
+ assert(view().viewText(v).includes(`A sentence to take with you: "${BRIDGE}"`));
+ const item=getLearner('ema').english.taught.at(-1);assert.equal(item.better,BRIDGE);assert.equal(item.offered,1);assert.equal(item.misses,1);assert.equal(typeof item.offeredAt,'number');assert.equal(item.reusedAt,undefined);
+ // today, with no review and no line, the recap is a track with no sentence
+ const bare=view().lingaView(sessionOf(fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',turns:REPLIED})})),{});
+ assert.equal(bare.hero.kind,'track');assert.equal(bare.hero.sentence,undefined);
+ // a scene left with no reply hands nothing over and keeps nothing
+ await roomStart();await command('finish');assert.equal(getSession().conversation.line,null);assert.equal(getLearner('ema').english.taught.length,0);
+});
+test('K4 case 4: the check focus \'Try "he needs" instead of "he need"\' - the verdict shows "he need", and the first room hides "he needs" on its fix key',async()=>{
+ const L=lineMod(),task={id:'s1',band:'A2',kind:'say',prompt:'Tell me about your family.',line:'',options:[],response:'My brother he need a new bike.',mode:'speech',verdict:'partial',quote:'he need',note:'n',at:1};
+ const focus='Try "he needs" instead of "he need"',pl={...placed('A2'),focus,tasks:[task]};
+ assert.deepEqual(L.focusParts(focus,[task]),{focus,quote:'he need',line:'he needs'});
+ const {quotedFocus}=require(path.join(root,'src/lib/english/check.ts'));
+ assert.equal(quotedFocus(focus,[task]),focus,'a second quote no answer holds is the line, not a misquote');
+ assert.equal(quotedFocus('Try "a beer with friends" instead of "he need"',[task],l=>!/beer/.test(l)),L.FOCUS_FALLBACK,'a line the audience gate refuses takes the focus with it');
+ assert.equal(quotedFocus('Try "he needs" or "he wants" for "he need"',[task]),L.FOCUS_FALLBACK,'two unheld spans: a misquote');
+ assert.equal(quotedFocus('Try "he need a new bike please" not "he need"',[task]),L.FOCUS_FALLBACK,'a line that holds the learner\'s words');
+ let v=view().lingaView(sessionOf(fixture('linga-verdict',{placement:pl,check:checkOf({stage:'verdict',turns:[],placement:pl})})),{});
+ assert.equal(v.caption,'Your words: “he need”.');assert.equal(v.captionTag,'Your words');assert(view().viewText(v).includes('he need'));
+ v=view().lingaView(sessionOf(fixture('linga-verdict',{placement:{...pl,focus:L.FOCUS_FALLBACK}})),{});
+ assert(!v.caption.includes(L.FOCUS_FALLBACK),'the fallback focus is never the caption');
+ // the first room: no taught item due, so the check's line is hidden, keyed on its fix key, its slip absent
+ const c=await roomStart({placement:pl});
+ assert.deepEqual(c.line,{source:'check'});const h=L.heldLine(c.id);
+ assert.equal(h.text,'he needs');assert.equal(h.key,'he needs');assert.equal(h.slip,'he need');assert.equal(prompts[0].roomLine.phrase,'he needs');
+ await reply('He need a map.');assert.equal(getSession().conversation.line.found,undefined,'the slip again is no find');
+ await reply('My robot friend, he needs a map too.');
+ const now=getSession().conversation;assert.equal(now.line.found,'My robot friend, he needs a map too.');
+ const item=getLearner('ema').english.taught.at(-1);
+ assert.equal(item.kind,'fix');assert.equal(item.said,'he need');assert.equal(item.better,'he needs');assert.equal(item.title,'Your level check');assert.equal(item.slip,'he need');assert.equal(item.fix,'he needs');
+ await command('finish');
+ v=view().lingaView(getSession(),{});assert.deepEqual(v.hero.before,{kicker:'From your level check',quote:'he needs'});
+ // once kept, the check's line does not seed a room again; the fallback focus never seeds one
+ assert.equal(L.checkLine(pl,getLearner('ema').english.taught),null);
+ const c2=await roomStart({placement:{...pl,focus:L.FOCUS_FALLBACK}});assert.deepEqual(c2.line,{source:'quiz'});
+ // a due taught item stays the room's line (source 1): nothing is held beside it
+ const c3=await roomStart({placement:pl,taught:[TAUGHT_A]});assert.equal(c3.review.id,TAUGHT_A.id);assert.equal(c3.line,undefined);assert.equal(prompts[0].roomLine,undefined);
+});
+test('K4 case 5: the summary task asks for the better phrase in a second pair of quotes, and a check whose answers hold the first keeps the focus',async()=>{
+ const r=await runCheck({summary:'You get by in everyday talk.',focus:'Say "on the bus that morning" for "on the bus this morning"'});
+ assert.match(r.sent.task,/second pair of double quotes after the learner's words/);
+ assert.equal(r.focus,'Say "on the bus that morning" for "on the bus this morning"');
+ const p=getLearner('ema').english.placement;assert.deepEqual(lineMod().focusParts(p.focus,p.tasks),{focus:p.focus,quote:'on the bus this morning',line:'on the bus that morning'});
+});
+const OFFER='Is it near the landing site?';
+const B2={preferences:{...defaultPreferences(),level:'B2'}};
+test('K4 case 6: B2-C2 only - the opening offers a line, held off the session until found or handed over; a bad offer falls back to the quiz answer',async()=>{
+ const L=lineMod();
+ let c=await roomStart(B2,{...ROVER_OPENING,offer:OFFER});
+ assert.equal(requests[0].schema.properties.offer.maxLength,80);assert(requests[0].schema.required.includes('offer'));assert.match(prompts[0].task,/offer: one line/);
+ assert.deepEqual(c.line,{source:'offer'});assert.equal(L.heldLine(c.id).text,OFFER);assert.equal(L.heldLine(c.id).key,'near the landing site');
+ assert(!JSON.stringify(getSession()).includes(OFFER)&&!/landing site/i.test(JSON.stringify(getSession())),'absent from the whole session');
+ for(const ui of [{},{menu:true}]){const v=view().lingaView(getSession(),ui);assert(!JSON.stringify(v).includes('landing site'));}
+ await reply('I am looking for the rover.');assert(!JSON.stringify(getSession()).includes(OFFER),'still absent after a turn');assert.equal(prompts[1].roomLine.phrase,OFFER);
+ await reply('Is the rover near the landing site?');
+ assert.equal(getSession().conversation.line.found,'Is the rover near the landing site?');assert(JSON.stringify(getSession()).includes(OFFER),'found: now it may show');
+ // handed over: absent until the recap
+ c=await roomStart(B2,{...ROVER_OPENING,offer:OFFER});await reply('I am looking for the rover.');
+ assert(!JSON.stringify(getSession()).includes(OFFER));await command('finish');assert.equal(getSession().conversation.line.text,OFFER);
+ // dropped: too long, about the learner, in the cue, or refused by the audience gate - the quiz answer instead
+ for(const bad of ['x'.repeat(30)+' landing site '+'y'.repeat(40),'You are a brave explorer.','Which way should I go?','Shall we celebrate with a beer at the landing site?']){
+  c=await roomStart(B2,{...ROVER_OPENING,offer:bad});assert.deepEqual(c.line,{source:'quiz'},bad);assert.equal(L.heldLine(c.id).text,BRIDGE);
+ }
+ c=await roomStart(B2,ROVER_OPENING);assert.deepEqual(c.line,{source:'quiz'},'no offer given');
+ // below B2 the opening is never asked
+ c=await roomStart({},{...ROVER_OPENING,offer:OFFER});assert.equal(requests[0].schema.properties.offer,undefined);assert.doesNotMatch(prompts[0].task,/offer:/);assert.deepEqual(c.line,{source:'quiz'});
+});
+test('K4 case 7: a restart loses the line - no invitation, no find, and the recap falls back to today\'s',async()=>{
+ const c=await roomStart();lineMod().forgetLine(c.id);
+ await reply('Which bridge do you mean?');assert.equal(prompts[1].roomLine,undefined);assert.equal(getSession().conversation.line.found,undefined);
+ await command('finish');assert.equal(getSession().conversation.line,null);
+ const v=view().lingaView(getSession(),{});assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,undefined);assert.equal(getLearner('ema').english.taught.length,0);
+});
+test('K4 case 8: a fix moment keeps the recap\'s moment slot over a found line; the line goes on the phone; a word moment does not',()=>{
+ const V=view(),turns=[...REPLIED,{id:'l2',role:'learner',text:BRIDGE,mode:'speech'},{id:'p3',role:'partner',text:'The red one.'}];
+ const found={source:'quiz',found:BRIDGE,foundTurn:'l2',text:BRIDGE};
+ const fix={id:'m1',kind:'fix',said:'I am work in hotel',better:'I work in a hotel',why:'Work is the verb.',turnId:'l1',at:1};
+ let v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',turns,moments:[fix],line:found})})),{});
+ assert.equal(v.hero.kind,'comparison');assert.equal(v.hero.before.quote,fix.said);assert(v.details.some(d=>d.includes(BRIDGE)),'the line is still the learner\'s, on the phone');
+ v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',turns,moments:[{...fix,kind:'word',said:'most',better:'bridge'}],line:found})})),{});
+ assert.equal(v.title,'You found it');assert.equal(v.hero.before.quote,BRIDGE);
+ const phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8');assert.match(phone,/data-role="linga-line"/);
+});
+
 // ---- T10: the tutor's calls run with thinking off, and only they do ----
 test('thinking case 1: opening, turn, coach and replay ask for thinking off; the level check and its plan do not',async()=>{
  const seen=[];

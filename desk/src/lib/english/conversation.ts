@@ -19,12 +19,13 @@ import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isB
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, keepMoment, markReused, markSlipped, offer, partnerLines, reuseOf, reviewOf, shownLines, slipsAgain, SLIP_AGAIN_TASK, usedLine } from "./review";
 import { slipOf } from "./slip";
+import { checkLine, forgetLine, heldLine, holdLine, keepLine, LINE_MAX, lineBack, lineFound, lineTaught, OFFER_BANDS, offerLine, quizLine, showsLine, type HiddenLine } from "./line";
 import { copiesShown } from "./credit";
 import { applyStep, currentStep, missionDone, missionOf, STEP_MAX } from "./mission";
 import { accepts, isTurnAction, refusal } from "./turn";
 import { forkOf, heldOf, runningTake } from "./take";
 import { lostFacts, lostPicture, lostStart, lostTurn } from "./lostfound";
-import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, LevelCheck, Moment, SkillId, Take } from "./types";
+import type { Conversation, EnglishEvidence, EnglishPreferences, EnglishScene, EvidenceMode, LevelCheck, Moment, SceneLine, SkillId, Take } from "./types";
 
 export { ConversationError };
 // The engine already holds each answer to its schema; these second checks fit a line to the screen.
@@ -39,6 +40,10 @@ const openingProps={title:str(70),goal:str(120),opening:str(230),supportProvided
 const stepsSchema={type:"array",maxItems:3,items:str(STEP_MAX)};
 const openingSchema=schema({...openingProps,help:helpSchema}),openingAccept={...loose(openingProps),properties:{...loose(openingProps).properties,steps:{}}};
 const openingWithSteps=schema({...openingProps,steps:stepsSchema,help:helpSchema});
+// K4 source 3 (line.ts): for B2-C2, with no taught item or check line to hide, the opening may offer one line; line.ts keeps it or drops it
+type Shape=ReturnType<typeof schema>;
+const withOffer=(s:Shape):Shape=>({...s,properties:{...s.properties,offer:str(LINE_MAX,0)},required:[...s.required,"offer"]});
+const OFFER_TASK=` offer: one line, at most ${LINE_MAX} characters, the learner could say in this scene to meet its goal more sharply than a plain answer would: a precise word, a natural phrase or an idiom at their level. Never a sentence about the learner, never words from the scene's cue. Empty when nothing fits.`;
 const momentSchema=schema({kind:{type:"string",enum:["none","fix","word"]},said:{type:"string",maxLength:180},better:{type:"string",maxLength:180},why:{type:"string",maxLength:140}});
 // The turn is held to its reply; an over-long observation or moment is optional, and validateObservations and
 // parseMoment drop it rather than failing the turn.
@@ -75,9 +80,10 @@ function partnerSays(c:Conversation,value:unknown,max?:number):string{
  * UD-4: model text shown to a learner who is not an adult (or a desk in Family mode) goes through the same keyword gate as a
  * partner line, wherever it lands: a moment, a title or goal, a coaching note, a mission step. null = held; the caller drops it.
  */
-function audienceSafe(c:Conversation,value:string):string|null{
-  const p=getSession().profiles.find(p=>p.id===c.learnerId);
-  if(adultContent(p,c.preferences))return value;
+function audienceSafe(c:Conversation,value:string):string|null{return audienceFor(c.learnerId,c.preferences,value);}
+function audienceFor(learnerId:string,prefs:EnglishPreferences,value:string):string|null{
+  const p=getSession().profiles.find(p=>p.id===learnerId);
+  if(adultContent(p,prefs))return value;
   const a=keywordAudience(value);return a===null||a==="adult"?null:value;
 }
 function tutorSystem(c:Conversation):string{
@@ -98,16 +104,19 @@ Return only the specified JSON.`;
 }
 /** The scene as every call's input carries it: its title and goal, and the partner and premise - for a scene the learner pitched, their own words, so data in the input JSON, never part of the system prompt. */
 const sceneInput=(c:Conversation)=>{const s=sceneOf(c);return {title:c.title,goal:c.goal,...(s?{partner:s.partner,premise:s.premise}:{})};};
-/** The tutor's input for every call. `invite` adds the taught item this scene brings back (review.ts), until it is used. */
+/**
+ * The tutor's input for every call. `invite` adds the taught item this scene brings back (review.ts), until it is used,
+ * or the line this scene hides (K4, line.ts roomLine), until it is found or shown: the same contract, invite it, never say it.
+ */
 function context(c:Conversation,invite=true){
-  const learning=readLearner(c.learnerId).english,bring=invite?bringBack(c,learning.taught):null;
+  const learning=readLearner(c.learnerId).english,bring=invite?bringBack(c,learning.taught):null,roomLine=invite?lineBack(c):null;
   const recent=learning.evidence.filter(e=>e.skill===c.focusSkill&&e.mode!=="choice").slice(-4);
   const struggles=recent.filter(e=>!e.success).length,independent=recent.filter(e=>e.success&&!e.supported).length;
   const adaptation=struggles>=2?"Use a shorter question and a concrete example. Offer a phrase starter if needed, setting supportProvided=true. Stay in the scene.":independent>=3?"Ask a less predictable follow-up within the learner's chosen level and social challenge. Avoid another copy of a question they already answered.":"Keep one manageable question per turn. Respond to the learner's need before adding difficulty.";
   // a check that found the spoken English lower says so beside its band (S2), so the level the tutor pitches at agrees with it
   const placement=learning.placement;
   const step=c.mission&&currentStep(c.mission);
-  return {scene:sceneInput(c),...(step?{currentStep:step}:{}),preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",...(conversationBand(placement)!==placement.band?{spokenAnswersAt:spokenBand(placement.tasks)}:{}),practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18),...(bring?{bringBack:bring}:{}),...(c.moments?.length?{taughtThisScene:c.moments.map(m=>({said:m.said,better:m.better}))}:{}),...(c.lost?{lostProperty:lostFacts(c.lost)}:{})};
+  return {scene:sceneInput(c),...(step?{currentStep:step}:{}),preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",...(conversationBand(placement)!==placement.band?{spokenAnswersAt:spokenBand(placement.tasks)}:{}),practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18),...(bring?{bringBack:bring}:{}),...(roomLine?{roomLine}:{}),...(c.moments?.length?{taughtThisScene:c.moments.map(m=>({said:m.said,better:m.better}))}:{}),...(c.lost?{lostProperty:lostFacts(c.lost)}:{})};
 }
 const beginner=(c:Conversation)=>easyBand(isBand(c.preferences.level)?c.preferences.level:"A1");
 /**
@@ -140,17 +149,23 @@ function parseMoment(value:unknown,reply:string,turnId:string):Moment|null{
 function endTake(c:Conversation,commandId:string){
   const learnerId=c.learnerId,learning=getLearner(learnerId).english;
   const entry={id:c.id,sceneId:c.sceneId,title:c.title,at:Date.now(),turns:c.turns.filter(t=>t.role==="learner").length};
+  // K4: a hidden line not found is handed over by the recap and kept as invited once (line.ts keepLine), so a later room
+  // can bring it back; with no reply, or after a restart lost it, the scene ends as before, with no line
+  const hidden=c.line&&!c.line.found?heldLine(c.id):null,handed=hidden&&entry.turns>0?hidden:null;
+  const sceneLine:SceneLine|null|undefined=c.line&&!c.line.found?(handed?{...c.line,text:handed.text}:null):c.line;
+  const taught=handed?keepLine(learning.taught,lineTaught(handed,c,entry.at),null,TAUGHT_CAP):learning.taught;
+  if(c.line)forgetLine(c.id);
   // the sessions entry and the week's digest (Family W9, rules/digest: the scene, its skill and the replies counted, never a
   // word of them; once per conversation, as the sessions list keeps it once) are written in ONE save (WD10), so a failed
   // finish writes neither and the retried finish writes both
-  let next={...getLearner(learnerId),english:{...learning,sessions:[...learning.sessions.filter(x=>x.id!==c.id),entry].slice(-30)}};
+  let next={...getLearner(learnerId),english:{...learning,taught,sessions:[...learning.sessions.filter(x=>x.id!==c.id),entry].slice(-30)}};
   if(!learning.sessions.some(x=>x.id===c.id))next=withDigest(next,{at:entry.at,kind:"english",sceneId:c.sceneId,skill:c.focusSkill,turns:entry.turns});
   saveLearner(next);
   // a certificate, when this rehearsal completes what one needs (cert.ts): issued by code from the record, tonight's
   // quotes checked again against the replies as sent. Never at read time, never back-issued.
   const words=Object.fromEntries(c.turns.filter(t=>t.role==="learner").map(t=>[t.id,t.text]));
   const earned=withCertificate(getLearner(learnerId).english,entry.at,words);if(earned.cert)saveEnglish(learnerId,earned.learning);
-  commit({...c,phase:"finished",moment:null,capture:false,quizOpen:false,paused:false,commands:[...c.commands,commandId]},"linga-recap");
+  commit({...c,phase:"finished",moment:null,capture:false,quizOpen:false,paused:false,commands:[...c.commands,commandId],...(sceneLine!==undefined?{line:sceneLine}:{})},"linga-recap");
 }
 const CLEAN_TAKE="Nothing to flag in this take.";
 const CUT_TASK=`Cut: this take is over. Give at most ${NOTES_MAX} notes on the learner's own lines in learnerTurns, the ones that would help most in a second take. Each note: turnId, the id of one learner turn; quote, an exact excerpt of that turn's text, copied character for character (at most ${QUOTE_MAX} characters); kind: meaning (what they said did not carry what they meant), form (a grammar form, such as a verb tense), word (a word or phrase choice) or register (too formal or too casual for this scene); note, one plain sentence to the learner, at most ${NOTE_MAX} characters, in English simple enough for their level; better, the same idea said well (at most ${BETTER_MAX} characters), or empty. Only real slips that matter; never a valid alternative, a style choice or the partner's words. Fewer notes are better than invented ones; never two on the same words.`;
@@ -253,16 +268,24 @@ export async function englishCommand(raw:unknown){
     const due=oldestDue(learning.evidence,scene.skill);
     // One taught item comes back (review.ts): code picks it on its schedule (K3), the partner makes room for it without saying it.
     const id=randomUUID(),taught=dueTaught(learning.taught,id,taughtAllowed(profile,prefs,learning));
-    const c:Conversation={id,learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,scene,turns:[],coaching:null,moment:null,moments:[],phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now(),review:taught?reviewOf(taught):null,...lostStart(scene.id,id)};
+    // K4: one line in every room (line.ts). The due taught item is the room's line when there is one; else the level
+    // check's better phrase; else, for B2-C2, the opening is asked for an offer; else (and when the offer is dropped)
+    // the quiz answer. Held in server memory, never on the session.
+    const safe=(l:HiddenLine|null)=>l&&audienceFor(learnerId,prefs,l.text)!==null?l:null;
+    const seeded=taught?null:safe(checkLine(learning.placement,learning.taught)),askOffer=!taught&&!seeded&&OFFER_BANDS.includes(prefs.level);
+    const first=seeded??(taught||askOffer?null:safe(quizLine(scene)));
+    const c:Conversation={id,learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,scene,turns:[],coaching:null,moment:null,moments:[],phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now(),review:taught?reviewOf(taught):null,...(first?{line:holdLine(id,first)}:{}),...lostStart(scene.id,id)};
     dispatch({type:"timer.pause"});commit(c,"linga-talk",parkCheck());
     try{
-      const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:"Prepare a fitting scene and opening question. Title <=70 characters, goal <=120, opening <=230. Give an easy entry at the learner's level. Use the learner's interest as a detail within the scene contract; do not change its purpose."+(scene.steps?.length?"":` steps: two or three things the learner can reach in this scene, each a goal under ${STEP_MAX} characters, never words for the learner to say.`)}),schema:scene.steps?.length?openingSchema:openingWithSteps,accept:openingAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-opening"});
+      const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:"Prepare a fitting scene and opening question. Title <=70 characters, goal <=120, opening <=230. Give an easy entry at the learner's level. Use the learner's interest as a detail within the scene contract; do not change its purpose."+(scene.steps?.length?"":` steps: two or three things the learner can reach in this scene, each a goal under ${STEP_MAX} characters, never words for the learner to say.`)+(askOffer?OFFER_TASK:"")}),schema:askOffer?withOffer(scene.steps?.length?openingSchema:openingWithSteps):scene.steps?.length?openingSchema:openingWithSteps,accept:askOffer?{...openingAccept,properties:{...openingAccept.properties,offer:{}}}:openingAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-opening"});
       checkCurrent(c,commandId);
       const opening={id:randomUUID(),role:"partner" as const,text:partnerSays(c,result.json.opening)},openingHeld=opening.text===line(result.json.opening);
       if(c.review){const now=getLearner(learnerId).english;saveEnglish(learnerId,{...now,taught:offer(now.taught,c.review.id)});}
       const safeTitle=audienceSafe(c,line(result.json.title,70)),safeGoal=audienceSafe(c,line(result.json.goal,120));
       const steps=Array.isArray(result.json.steps)?result.json.steps.filter(x=>typeof x!=="string"||audienceSafe(c,x)!==null):result.json.steps;
-      commit({...c,title:safeTitle??scene.name,goal:safeGoal??scene.goal,turns:[opening],...(()=>{const m=missionOf(scene,steps);return m?{mission:m}:{};})(),supported:result.json.supportProvided!==false,help:keepLadder(opening.id,validLadder(openingHeld?result.json.help:undefined,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
+      // the offer, kept only when line.ts and the audience gate pass it; else the quiz answer is the room's line
+      const offered=askOffer?safe(offerLine(result.json.offer,scene,profile.name))??safe(quizLine(scene)):null;
+      commit({...c,...(offered?{line:holdLine(c.id,offered)}:{}),title:safeTitle??scene.name,goal:safeGoal??scene.goal,turns:[opening],...(()=>{const m=missionOf(scene,steps);return m?{mission:m}:{};})(),supported:result.json.supportProvided!==false,help:keepLadder(opening.id,validLadder(openingHeld?result.json.help:undefined,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
       return getSession();
     }catch(e){try{const now=checkCurrent(c,commandId);commit({...now,pending:null,error:lingaLine(e,"The scene could not be prepared. Try again or choose another situation.")});}catch{/* superseded */}throw e;}
   }
@@ -292,10 +315,14 @@ export async function englishCommand(raw:unknown){
     // The next rung of the line on screen, or the scene's cue when that line has no ladder. No model call. The
     // command id is kept, so a retried request cannot climb a second rung.
     const step=climb(c.help,c.turns.at(-1)?.id),commands=[...c.commands,commandId].slice(-100);
-    commit(step?{...c,help:step.help,cue:step.cue,supported:c.supported||supportedBy(step.help),quizOpen:false,commands}:{...c,help:null,supported:true,cue:scene.cue,quizOpen:false,commands},"linga-talk");return getSession();
+    // a cue that shows the hidden line's key words spends the line's find (K4)
+    const spent=c.line&&showsLine(c,step?.cue??scene.cue)?{line:{...c.line,shown:true}}:{};
+    commit(step?{...c,help:step.help,cue:step.cue,supported:c.supported||supportedBy(step.help),quizOpen:false,commands,...spent}:{...c,help:null,supported:true,cue:scene.cue,quizOpen:false,commands,...spent},"linga-talk");return getSession();
   }
   if(action==="quiz"){
-    commit({...c,supported:true,cue:scene.cue,quizOpen:true,help:c.help&&{...c.help,shown:false}},"linga-talk");return getSession();
+    // the quiz puts its options and the cue on screen: one that shows the hidden line's key words spends the find (K4)
+    const shown=c.line&&[scene.cue,...scene.quiz.options].some(x=>showsLine(c,x))?{line:{...c.line,shown:true}}:{};
+    commit({...c,supported:true,cue:scene.cue,quizOpen:true,help:c.help&&{...c.help,shown:false},...shown},"linga-talk");return getSession();
   }
   if(action==="choice"){
     const quiz=scene.quiz;
@@ -371,15 +398,19 @@ export async function englishCommand(raw:unknown){
       const moment=parsed&&[parsed.said,parsed.better,parsed.why].every(x=>audienceSafe(c,x)!==null)?parsed:null;
       // Reuse is decided here, in code (review.ts): the reply as sent, on the scene as it stood when it was sent.
       const reused=reuseOf(reply,c),learned=mergeEvidence(getLearner(learnerId).english,observations);
+      // K4: the scene's hidden line found, in code, on its key words (line.ts lineFound): kept on the record for a later room
+      const hidden=c.line&&!c.line.found?heldLine(c.id):null,found=hidden?lineFound(reply,c,hidden):null;
       // a slip said again counts on the record (record tier only, and once per reply); a moment on a slip the record already
       // holds marks that item instead of teaching it twice (review.ts keepMoment)
       const at=Date.now(),counted=again.filter(h=>h.record).map(h=>h.keys.slip);
       const slipped=counted.reduce((t,slip)=>markSlipped(t,slip,at,allowed),learned.taught);
       const taught=moment?keepMoment(slipped,{...moment,sceneId:c.sceneId,title:c.title},partnerLines(c),TAUGHT_CAP,counted,allowed):slipped;
-      saveEnglish(learnerId,{...learned,taught:reused&&c.review?markReused(taught,c.review.id,c.id,reused,at,c.sceneId):taught});
+      const kept=reused&&c.review?markReused(taught,c.review.id,c.id,reused,at,c.sceneId):taught;
+      saveEnglish(learnerId,{...learned,taught:found&&hidden?keepLine(kept,lineTaught(hidden,c,at),{at,conversationId:c.id,sceneId:c.sceneId,quote:found},TAUGHT_CAP):kept});
+      if(found)forgetLine(c.id);
       // a moment models wording, so the reply after it is supported practice
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
-      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported||copied},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{})};
+      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported||copied},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{}),...(found&&hidden&&c.line?{line:{...c.line,found:usedLine(reply,found),foundTurn:turnId,text:hidden.text}}:{})};
     }else if(action==="coach"){
       const before=line(result.json.before,180);
       if(audienceSafe(c,line(result.json.after,180))===null||audienceSafe(c,line(result.json.note,220))===null)throw new Error("The coach note did not fit this learner.");if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
