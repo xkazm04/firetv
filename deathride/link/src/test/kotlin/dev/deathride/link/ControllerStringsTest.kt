@@ -49,6 +49,12 @@ class ControllerStringsTest {
         assertFalse(page.contains("BACK TO LOBBY"),"one name for the lobby")
     }
 
+    @Test fun debtHasOneWordPerThing() {
+        assertTrue(page.contains("return 'League debt '+c.debt+' CR · Loans '+c.loanDebt+' CR'"))
+        assertFalse(Regex("[Oo]ptional loans").containsMatchIn(page),"loans are Loans")
+        assertFalse(page.contains("= '+c.debt+' CR."),"the totals line says League debt, not bare debt")
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
