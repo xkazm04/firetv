@@ -1,0 +1,47 @@
+{
+  "schema": "conform-run/1",
+  "worker": "386037ab-b772-495e-af8b-f2eb63bcfe80",
+  "subject": "eval-harness",
+  "evaluatedAt": "2026-10-15T22:36:48.184370+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "eval-harness",
+      "context": "tv-surface",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor, desk/src/app/tv/page.tsx:5, is a doc-comment line about the TV stage and does not show that an eval harness is absent; the claim that model evaluation lives in a separate UAT driver rests on files I could not confirm are outside this context."
+    },
+    {
+      "subject": "eval-harness",
+      "context": "telestrator-harness",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor, tools/package.json:5, is only a package description, so it is incidental; the tools directory also holds eval-like artefacts (calc1-frozen.json, calc-sets-frozen.json, lab-bench.cjs, maths-judge-test.cjs, uat-verdict-test.cjs), which contradicts 'no holdout or benchmark constructs in too"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-15T22:36:48.184370+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "eval-harness"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "tv-surface",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-15T22:36:48.184370+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "eval-harness"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "telestrator-harness",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

@@ -1144,6 +1144,36 @@
           "evidence": "uat/driver/ledger.cjs:55 resultsOf suppresses decode failures without returning an error, skipped-file identity or incomplete-collection indicator; findings.json has separate reporting, but these per-character files do not."
         }
       ]
+    },
+    "desk-surfaces/tv-surface/eval-harness": {
+      "context": "tv-surface",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T22:36:48.184Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "386037ab-b772-495e-af8b-f2eb63bcfe80",
+        "state": "not-applicable",
+        "at": "2026-10-15T22:37:01.578499+00:00",
+        "reason": "reviewer (sonnet): The anchor, desk/src/app/tv/page.tsx:5, is a doc-comment line about the TV stage and does not show that an eval harness is absent; the claim that model evaluation lives in a separate UAT driver rests on files I could not confirm are outside this context."
+      }
+    },
+    "telestrator/telestrator-harness/eval-harness": {
+      "context": "telestrator-harness",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T22:36:48.184Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "386037ab-b772-495e-af8b-f2eb63bcfe80",
+        "state": "not-applicable",
+        "at": "2026-10-15T22:37:01.596124+00:00",
+        "reason": "reviewer (sonnet): The anchor, tools/package.json:5, is only a package description, so it is incidental; the tools directory also holds eval-like artefacts (calc1-frozen.json, calc-sets-frozen.json, lab-bench.cjs, maths-judge-test.cjs, uat-verdict-test.cjs), which contradicts 'no holdout or benchmark constructs in too"
+      }
     }
   }
 }
