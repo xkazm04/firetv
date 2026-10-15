@@ -368,3 +368,102 @@ test('MB-B20 a side of one metre is printed in the singular and read back',()=>{
  assert.match(q,/its foot 1 metre from the wall/);assert.doesNotMatch(q,/\b1 metres\b/);
  for(const sys of SYSTEMS)assert.deepEqual(S.specFromQuestion(S.question(spec,sys).plain,sys),spec,sys);
 });
+
+// ------------------------------------------------------------------ MB-B20, the top rung of probability
+
+/** A top-rung probability worked by hand from its expr: two dice, a coin with a dice or a spinner, two counters without replacement; [N, D] in lowest terms, and `raw` before cancelling. */
+function probByHand(expr){
+ const m=/^(?:(socks|sweets|game) )?(.+)$/.exec(expr),body=m[2],B=BigInt;
+ const dice=(e)=>(e==='even'||e==='odd'?[3n,6n]:e.startsWith('over ')?[6n-B(e.slice(5)),6n]:[1n,6n]);
+ const bag=(t)=>Object.fromEntries(t.split(', ').map((x)=>{const [c,n]=x.split(' ');return [c,B(n)];}));
+ const sum=(s)=>Object.values(s).reduce((x,y)=>x+y,0n);
+ let N,D,form,d;
+ if((d=/^dice least (.+)$/.exec(body))){const [a,b]=dice(d[1]);N=b*b-(b-a)*(b-a);D=b*b;form='dice-least';}
+ else if((d=/^dice (\S+|over \d) and (\S+|over \d)$/.exec(body))){const [a,b]=dice(d[1]),[c,e]=dice(d[2]);N=a*c;D=b*e;form='dice-and';}
+ else if((d=/^coin (heads|tails) and dice (.+)$/.exec(body))){const [a,b]=dice(d[2]);N=a;D=2n*b;form='coin-dice';}
+ else if((d=/^coin (heads|tails) and spinner (.+) ask (\w+)$/.exec(body))){const s=bag(d[2]);N=s[d[3]];D=2n*sum(s);form='coin-spin';}
+ else if((d=/^draw (.+) both (\w+)$/.exec(body))){const s=bag(d[1]),t=sum(s);N=s[d[2]]*(s[d[2]]-1n);D=t*(t-1n);form='draw-both';}
+ else if((d=/^draw (.+) (\w+) then (\w+)$/.exec(body))){const s=bag(d[1]),t=sum(s);N=s[d[2]]*s[d[3]];D=t*(t-1n);form='draw-then';}
+ else assert.fail(expr);
+ const g=gcd(N,D);return {story:m[1],form,N:N/g,D:D/g,raw:[N,D]};
+}
+/** The fraction as a terminating decimal and a percent, when it is one: ['0.25', '25%'] for 1/4; else []. */
+function exactForms({N,D}){
+ for(const k of [1,2,3,4]){
+  const s=10n**BigInt(k);if((N*s)%D!==0n)continue;
+  const v=String((N*s)/D).padStart(k+1,'0'),dec=`${v.slice(0,-k)}.${v.slice(-k)}`;
+  const p=String((N*s*100n)/D).padStart(k+1,'0'),pct=k<=2?String((N*100n)/D):`${p.slice(0,-k).replace(/^0+(?=\d)/,'')}.${p.slice(-k)}`.replace(/\.?0+$/,'');
+  return [dec,`${pct}%`];
+ }
+ return [];
+}
+
+test(`MB-B20 probability: ${SEEDS} seeds - two events, its own unit, a story on every odd seed, printed and read back in all four systems, no leak, judged right by a hand-worked fraction in any equal form`,()=>{
+ const stories=new Set(),forms=new Set();
+ for(let seed=0;seed<SEEDS;seed++){
+  const spec=S.genProbabilityTop(seed);
+  assert.deepEqual(S.genProbabilityTop(seed),spec,'pure: same seed, same spec');
+  assert.ok(S.wellFormed(spec).ok,JSON.stringify(spec));
+  assert.equal(S.unitOf(spec),'probability',spec.expr);
+  assert.equal(spec.unit,undefined,'a probability has no unit');
+  const h=probByHand(spec.expr);
+  assert.ok(h.N>0n&&h.N<h.D,`${spec.expr}: strictly between nothing and a whole`);
+  assert.equal(!!S.storyOf(spec),seed%2===1,`${spec.expr}: a word problem on an odd seed only`);
+  if(h.story){stories.add(h.story);assert.equal(S.storyOf(spec),h.story);}else forms.add(h.form);
+  const right=[`${h.N}/${h.D}`,`${h.N*3n}/${h.D*3n}`,`${h.raw[0]}/${h.raw[1]}`,...exactForms(h)];
+  for(const sys of SYSTEMS){
+   const q=S.question(spec,sys);assert.ok(q&&q.plain&&q.tex,`${spec.expr} prints in ${sys}`);
+   assert.ok(q.plain.length<=200,`${q.plain}: short enough to read back`);
+   assert.doesNotMatch(q.plain,/\{|\}/,'every placeholder filled');assert.ok(!q.tex.includes('/'),q.tex);
+   assert.deepEqual(S.specFromQuestion(q.plain,sys),spec,`${sys}: ${q.plain} reads back`);
+   assert.equal(S.leaksSchool(spec,q.plain),false,`${sys}: ${q.plain} does not give its answer away`);
+   for(const w of right)assert.equal(S.check(spec,comma(w,sys),sys).verdict,'right',`${sys}: ${comma(w,sys)} for ${q.plain}`);
+   assert.equal(S.check(spec,`${h.N+h.D}/${h.D}`,sys).verdict,'wrong',`${sys}: a whole more is wrong`);
+   assert.equal(S.check(spec,`${h.N}/${h.D} cm`,sys).verdict,'unsure','a unit the question did not ask for');
+  }
+  const shown=S.workedAnswer(spec,'uk');assert.ok(shown,spec.expr);assert.equal(S.check(spec,shown,'uk').verdict,'right');
+  for(const leak of [`It comes to ${h.N}/${h.D}.`,`The answer is ${h.raw[0]}/${h.raw[1]}.`])assert.equal(S.leaksSchool(spec,leak),true,`${spec.expr}: ${leak}`);
+ }
+ assert.deepEqual([...stories].sort(),['game','socks','sweets']);
+ assert.deepEqual([...forms].sort(),['coin-dice','coin-spin','dice-and','dice-least','draw-both','draw-then']);
+});
+
+test('MB-B20 the probability top rung: values, the judge on equal forms and roundings, bounds, stories and the leak rule',()=>{
+ const pb=(expr)=>({shape:'probability',expr}),val=(spec)=>S.workedAnswer(spec,'uk'),v=(spec,a,sys='uk')=>S.check(spec,a,sys).verdict;
+ assert.equal(val(pb('dice 6 and even')),'1/12');
+ assert.equal(val(pb('dice least 6')),'11/36');
+ assert.equal(val(pb('coin heads and dice over 4')),'1/6');
+ assert.equal(val(pb('coin tails and spinner red 3, blue 5 ask red')),'3/16');
+ assert.equal(val(pb('draw red 3, blue 5 both red')),'3/28');
+ assert.equal(val(pb('draw red 3, blue 5, green 2 red then blue')),'1/6');
+ assert.equal(val(pb('socks draw black 4, white 6 both white')),'1/3');
+ // any equal form is right, as on tiers 1 and 2 and the fractions top rung (no simplest form asked); a rounding is unsure
+ const two=pb('draw red 3, blue 5 both red'); // 6/56 = 3/28
+ for(const a of ['3/28','6/56','12/112'])assert.equal(v(two,a),'right',a);
+ for(const a of ['0.107','0.11','10.7%'])assert.equal(v(two,a),'unsure',a);
+ assert.equal(v(two,'9/64'),'wrong','with replacement is wrong');
+ const dice=pb('dice 6 and even'); // 1/12
+ assert.equal(v(dice,'0.083'),'unsure');assert.equal(v(dice,'0,083','cz'),'unsure');assert.equal(v(dice,'1/12','cz'),'right');
+ assert.equal(v(pb('dice least even'),'0.75'),'right');assert.equal(v(pb('dice least even'),'75%'),'right');
+ // bounds: certain or impossible, a colour not in the bag, the same colour twice, a story that does not fit, four colours
+ for(const bad of ['dice 7 and even','dice over 5 and even','draw red 1, blue 5 both red','draw red 3, blue 5 both green','draw red 3, blue 5 red then red',
+  'coin heads and spinner red 3 ask red','draw red 12, blue 12 both red','socks draw red 4, white 6 both white','sweets draw red 3, green 5 both red','game coin heads and spinner red 3, blue 5 ask red',
+  'socks draw white 6, black 4 both white','draw red 1, blue 1, green 1, pink 1 both red','march dice 6 and even'])
+  assert.equal(S.wellFormed(pb(bad)).ok,false,bad);
+ // the tier-1/2 probability specs read exactly as before
+ assert.ok(S.wellFormed(pb('bag red 3, blue 5, green 2 ask red')).ok);assert.equal(S.storyOf(pb('bag red 3, blue 5, green 2 ask red')),null);
+ assert.equal(S.workedAnswer(pb('complement red 0.35'),'uk'),'0.65');
+ // the reader: a top-rung question read back, the case free; a change in its words is refused
+ assert.deepEqual(S.specFromQuestion('A fair coin is flipped and a fair dice is rolled. Find the probability of heads and a 6.','uk'),pb('coin heads and dice 6'));
+ assert.deepEqual(S.specFromQuestion('a bag has 3 red and 5 blue counters. a counter is taken at random without replacement, then another is taken. find the probability that both are red','uk'),pb('draw red 3, blue 5 both red'));
+ for(const t of ['A fair coin is flipped and a fair dice is rolled. Find the probability of heads and a 7.','A bag has 3 red and 5 blue counters. A counter is taken at random with replacement, then another is taken. Find the probability that both are red.'])
+  assert.equal(S.specFromQuestion(t,'uk'),null,t);
+ // the leak rule: the answer in any form, and the last multiplication that makes it; each event's chance and the counts are steps
+ for(const hint of ['That gives 3/28.','It is 6/56.','3/8 × 2/7 = 6/56.','Multiply 3/8 by 2/7 to get it.'])assert.equal(S.leaksSchool(two,hint),true,hint);
+ for(const hint of ['The first is red with chance 3/8.','After that, 2 red are left of 7.','Multiply the two chances.'])assert.equal(S.leaksSchool(two,hint),false,hint);
+ // the stories: one situation and one question, no number word
+ for(const [id,st] of Object.entries(S.PROB_STORIES)){
+  assert.match(st.text,/^[A-Z][^?]*\?$/,id);
+  assert.doesNotMatch(st.text,/\b(?:one|two|three|four|five|six|seven|eight|nine|ten|half|quarter|third|once|twice)\b|\d/i,id);
+ }
+});

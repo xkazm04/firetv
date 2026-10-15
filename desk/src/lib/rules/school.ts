@@ -389,6 +389,12 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     "complement red 0.35" / "complement red 35%" (the probability of a colour is stated, as a decimal or a percent: find the
  *     probability it does not happen). No unit. The value is a fraction strictly between 0 and 1, exactly; a certain or an
  *     impossible event is not well formed; the answer in any equal form (a fraction, unsimplified too, a decimal, a percent) is right.
+ *     MB-B20, the top rung of a step up (`prob-two`, two events): "dice 6 and even", "dice least over 4" (two fair dice; a
+ *     number, even, odd or more than 2..4), "coin heads and dice odd", "coin tails and spinner red 3, blue 5 ask red", "draw
+ *     red 3, blue 5 both red", "draw red 3, blue 5, green 2 red then blue" (two counters without replacement), each
+ *     optionally after a story's id (PROB_STORIES: "socks draw black 4, white 6 both white", "sweets draw red 5, green 4 green
+ *     then red", "game coin heads and dice over 3"). The value is an exact fraction, judged as tiers 1 and 2 are: any equal
+ *     form is right, a fraction need not be in its simplest form (as the fractions top rung, which asks for no form).
  */
 export type ComputeSpec = { shape: "compute"; expr: string; form?: "simplest" | "decimal"; unit?: Unit; allowNegative?: true };
 export type FractionOfSpec = { shape: "fraction-of"; expr: string; unit?: Unit };
@@ -595,6 +601,7 @@ const REJECT = {
   pythExact: "The missing side is exact: there is nothing to round.",
   pythRound: "The side rounded to the places asked ends in a zero, or has fewer than two figures.",
   pythStory: "The word problem does not fit the sides: its kind or its unit.",
+  probStory: "The word problem does not fit the events: its kind or its colours.",
 } as const;
 
 /**
@@ -631,7 +638,10 @@ type Kind =
   | { k: "pct-top"; form: PctForm; base: bigint; steps: { up: boolean; p: Q; ptext: string }[]; years: number; story?: PctStoryId }
   // MB-B20, the Pythagoras top rung: sides x and y as written (xt, yt; a decimal allowed), the side asked rounded to `dp`
   // places; `sq` is that side's exact square, never a whole or a rational square; `story` its word problem (PYTH_STORIES)
-  | { k: "pyth-dp"; find: "longest" | "shorter"; x: Q; y: Q; xt: string; yt: string; dp: 1 | 2; sq: Q; story?: PythStoryId };
+  | { k: "pyth-dp"; find: "longest" | "shorter"; x: Q; y: Q; xt: string; yt: string; dp: 1 | 2; sq: Q; story?: PythStoryId }
+  // MB-B20, the probability top rung: two events (`form`, ProbForm) - the dice's events in order, the coin's side, a
+  // spinner's or a bag's colours with their counts in the order printed and the colour(s) asked; `story` its word problem
+  | { k: "prob-two"; form: ProbForm; events: DiceEvent[]; side?: "heads" | "tails"; counts: [string, bigint][]; ask: string[]; story?: ProbStoryId };
 type Structure = { ok: true; spec: SchoolSpec; node: Node; kind: Kind } | { ok: false; why: string };
 /** `pair` (W7 batch 3, a ratio share): the two amounts in the ratio's order; `truth` is then the first of them. */
 type ReadOk = { ok: true; spec: SchoolSpec; node: Node; kind: Kind; truth: Q; pair?: [Q, Q] };
@@ -793,6 +803,78 @@ const ratSquare = (S: Q) => S.n >= Z && isqrt(S.n) ** BigInt(2) === S.n && isqrt
 /** Half a unit and a whole unit of the k-th decimal place. */
 const halfPlace = (k: number) => mk(BigInt(5), pow10(k + 1))!, onePlace = (k: number) => mk(ONE, pow10(k))!;
 
+/**
+ * MB-B20, the six kinds of a top-rung probability item: two fair dice, both events asked ("dice-and") or at least one
+ * showing an event ("dice-least"); a fair coin with a fair dice ("coin-dice") or with a spinner of equal coloured sections
+ * ("coin-spin"); two counters taken from a bag without replacement, both one colour ("draw-both") or one colour then
+ * another ("draw-then").
+ */
+export type ProbForm = "dice-and" | "dice-least" | "coin-dice" | "coin-spin" | "draw-both" | "draw-then";
+/** MB-B20: what a dice is asked to show - a number 1..6, an even or an odd number, or a number more than k (2..4). */
+type DiceEvent = { kind: "n" | "even" | "odd" | "over"; k: number };
+/**
+ * MB-B20: the word problems a top-rung probability item may be printed in, a closed list, each with its kind and (for a
+ * drawer or a jar) the two colours in the order printed. A story spec's expr starts with the story's id ("socks draw black
+ * 4, white 6 both black"). Placeholders: {A} and {B} the two counts, {C} and {D} the colours asked, {S} heads or tails,
+ * {E} the dice's event. One situation and one question each; no number word in a text.
+ */
+export const PROB_STORIES = {
+  socks: { form: "draw-both", colours: ["black", "white"], text: "A drawer holds {A} black socks and {B} white socks. Sam takes a sock at random and keeps it, then takes another. What is the probability that both are {C}?" },
+  sweets: { form: "draw-then", colours: ["red", "green"], text: "A jar holds {A} red sweets and {B} green sweets. Ali picks a sweet at random and eats it, then picks another. What is the probability that the first is {C} and the second is {D}?" },
+  game: { form: "coin-dice", colours: [], text: "In a game you flip a fair coin and roll a fair dice. You win with {S} and {E}. What is the probability that you win?" },
+} as const satisfies Record<string, { form: ProbForm; colours: readonly string[]; text: string }>;
+export type ProbStoryId = keyof typeof PROB_STORIES;
+const isProbStory = (x: unknown): x is ProbStoryId => typeof x === "string" && Object.prototype.hasOwnProperty.call(PROB_STORIES, x);
+/** MB-B20: the bare top-rung probability questions, by kind ({L} the bag's or the spinner's counts, "3 red, 2 blue and 5 green"). */
+const PROB_BARE: Readonly<Record<ProbForm, string>> = {
+  "dice-and": "A fair red dice and a fair blue dice are rolled. Find the probability that the red dice shows {E} and the blue dice shows {F}.",
+  "dice-least": "A fair red dice and a fair blue dice are rolled. Find the probability that at least one of them shows {E}.",
+  "coin-dice": "A fair coin is flipped and a fair dice is rolled. Find the probability of {S} and {E}.",
+  "coin-spin": "A fair coin is flipped and a spinner with {L} equal sections is spun. Find the probability of {S} and {C}.",
+  "draw-both": "A bag has {L} counters. A counter is taken at random without replacement, then another is taken. Find the probability that both are {C}.",
+  "draw-then": "A bag has {L} counters. A counter is taken at random without replacement, then another is taken. Find the probability that the first is {C} and the second is {D}.",
+};
+/** A dice event as an expr writes it: "6", "even", "odd", "over 4". */
+const DICE_EV = String.raw`(?:[1-6]|even|odd|over [2-4])`;
+/** Two or three colours with their counts, as a bag's expr writes them: "red 3, blue 5". */
+const PROB_COUNTS = String.raw`${COL} [1-9]\d?(?:, ${COL} [1-9]\d?){1,2}`;
+const PROB_TOP_RES: [RegExp, ProbForm][] = [
+  [new RegExp(String.raw`^dice (${DICE_EV}) and (${DICE_EV})$`), "dice-and"],
+  [new RegExp(String.raw`^dice least (${DICE_EV})$`), "dice-least"],
+  [new RegExp(String.raw`^coin (heads|tails) and dice (${DICE_EV})$`), "coin-dice"],
+  [new RegExp(String.raw`^coin (heads|tails) and spinner (${PROB_COUNTS}) ask (${COL})$`), "coin-spin"],
+  [new RegExp(String.raw`^draw (${PROB_COUNTS}) both (${COL})$`), "draw-both"],
+  [new RegExp(String.raw`^draw (${PROB_COUNTS}) (${COL}) then (${COL})$`), "draw-then"],
+];
+const diceEvent = (t: string): DiceEvent => (t === "even" || t === "odd" ? { kind: t, k: 0 } : t.startsWith("over ") ? { kind: "over", k: Number(t.slice(5)) } : { kind: "n", k: Number(t) });
+/** The chance a fair dice shows the event: 1/6, 1/2, or (6 - k)/6. */
+const diceChance = (e: DiceEvent): Q => mk(e.kind === "n" ? ONE : e.kind === "over" ? BigInt(6 - e.k) : BigInt(3), BigInt(6))!;
+const countsOf = (t: string) => t.split(", ").map((x): [string, bigint] => { const [c, n] = x.split(" "); return [c, BigInt(n)]; });
+
+/** MB-B20: a top-rung probability item's structure (a story id first, when it is one), or why not. */
+function probTopStructure(s: Record<string, unknown>): Structure {
+  let expr = s.expr as string, story: ProbStoryId | undefined;
+  const sm = /^([a-z]+) (.+)$/.exec(expr);
+  if (sm && isProbStory(sm[1])) { story = sm[1]; expr = sm[2]; }
+  for (const [re, form] of PROB_TOP_RES) {
+    const m = re.exec(expr);
+    if (!m) continue;
+    const kind: Extract<Kind, { k: "prob-two" }> = { k: "prob-two", form, events: [], counts: [], ask: [] };
+    if (form === "dice-and") kind.events = [diceEvent(m[1]), diceEvent(m[2])];
+    else if (form === "dice-least") kind.events = [diceEvent(m[1])];
+    else if (form === "coin-dice") { kind.side = m[1] as "heads" | "tails"; kind.events = [diceEvent(m[2])]; }
+    else if (form === "coin-spin") { kind.side = m[1] as "heads" | "tails"; kind.counts = countsOf(m[2]); kind.ask = [m[3]]; }
+    else { kind.counts = countsOf(m[1]); kind.ask = form === "draw-both" ? [m[2]] : [m[2], m[3]]; }
+    if (story) {
+      const st = PROB_STORIES[story], cols: readonly string[] = st.colours;
+      if (st.form !== form || (cols.length > 0 && kind.counts.map(([c]) => c).join() !== cols.join())) return { ok: false, why: REJECT.probStory };
+      kind.story = story;
+    }
+    return { ok: true, spec: s as SchoolSpec, node: fracNode(ONE, ONE), kind };
+  }
+  return { ok: false, why: story ? REJECT.probStory : REJECT.read };
+}
+
 /** The spec's structure (printable), without its truth. The W7 shapes are read in their one printed spelling each. */
 function structure(spec: unknown): Structure {
   const shape = spec && typeof spec === "object" ? (spec as { shape?: unknown }).shape : undefined;
@@ -877,7 +959,8 @@ function structure(spec: unknown): Structure {
       const p = pct ? mk(BigInt(t), BigInt(100))! : mk(BigInt(t), pow10(t.length))!;
       return { ok: true, spec: s as SchoolSpec, node: fracNode(ONE, ONE), kind: { k: "prob-comp", colour: m[1], p, ptext: m[2] } };
     }
-    return { ok: false, why: REJECT.read };
+    // MB-B20: anything else may be a top-rung item, two events ("dice 6 and even", "draw red 3, blue 5 both red")
+    return probTopStructure(s);
   }
   if (shape === "pythagoras") {
     const m = PYTH_RE.exec(s.expr);
@@ -1118,6 +1201,27 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
     if (K.p.n <= Z || K.p.n >= K.p.d) return { ok: false, why: REJECT.probRange };
     const truth = sub(qi(ONE), K.p);
     return eq(truth, K.p) ? { ok: false, why: REJECT.probSame } : ok(truth);
+  }
+  if (K.k === "prob-two") {
+    // MB-B20: independent events multiply (a coin is a half); at least one is a whole less neither; without replacement the
+    // second draw is from a counter fewer, and of the colour drawn first one fewer. Never nothing and never certain
+    const half = mk(ONE, BigInt(2))!, total = K.counts.reduce((a, [, n]) => a + n, Z), names = K.counts.map(([c]) => c);
+    if (K.counts.length) {
+      if (new Set(names).size !== names.length || K.counts.some(([, n]) => n < ONE) || total > BigInt(20)) return { ok: false, why: REJECT.probBag };
+      if (K.ask.some((c) => !names.includes(c))) return { ok: false, why: REJECT.probColour };
+      if (K.form === "draw-then" && K.ask[0] === K.ask[1]) return { ok: false, why: REJECT.probTwo };
+    }
+    const count = (c: string) => K.counts.find(([x]) => x === c)![1];
+    let truth: Q;
+    if (K.form === "dice-and") truth = mul(diceChance(K.events[0]), diceChance(K.events[1]));
+    else if (K.form === "dice-least") { const not = sub(qi(ONE), diceChance(K.events[0])); truth = sub(qi(ONE), mul(not, not)); }
+    else if (K.form === "coin-dice") truth = mul(half, diceChance(K.events[0]));
+    else if (K.form === "coin-spin") truth = mul(half, mk(count(K.ask[0]), total)!);
+    else {
+      const a = count(K.ask[0]), b = K.form === "draw-both" ? a - ONE : count(K.ask[1]);
+      truth = mk(a * b, total * (total - ONE)) ?? qi(Z);
+    }
+    return truth.n <= Z || truth.n >= truth.d ? { ok: false, why: REJECT.probCertain } : ok(truth);
   }
   if (K.k === "pyth") {
     // M2b: c squared is a squared plus b squared, in whole numbers only; the root is the bigint integer square root
@@ -1379,6 +1483,25 @@ function printQuestion(spec: unknown, system?: SchoolSystem): { plain: string; t
         plain: `Find the total area of rectangles ${A.plain} by ${B.plain} and ${C.plain} by ${D.plain}.`,
         tex: `\\text{Find the total area of rectangles } ${A.tex} \\text{ by } ${B.tex} \\text{ and } ${C.tex} \\text{ by } ${D.tex}.`,
       };
+    }
+    if (K.k === "prob-two") {
+      // MB-B20: "A fair coin is flipped and a fair dice is rolled. Find the probability of heads and a 6.", "A bag has 3 red and
+      // 5 blue counters. A counter is taken at random without replacement, then another is taken. Find the probability that
+      // both are red.", or a word problem - the counts and a dice's number outside the TeX text
+      const word = (x: string) => ({ plain: x, tex: `\\text{${x}}` });
+      const ev = (e: DiceEvent) => (e.kind === "n" ? { plain: `a ${e.k}`, tex: `\\text{a } ${e.k}` } : e.kind === "over" ? { plain: `a number more than ${e.k}`, tex: `\\text{a number more than } ${e.k}` } : word(`an ${e.kind} number`));
+      const list = {
+        plain: K.counts.map(([c, n], i) => `${n} ${c}${i < K.counts.length - 2 ? ", " : i === K.counts.length - 2 ? " and " : ""}`).join(""),
+        tex: K.counts.map(([c, n], i) => `${n} \\text{ ${c}${i < K.counts.length - 2 ? ", " : i === K.counts.length - 2 ? " and " : ""}}`).join(" "),
+      };
+      const vals: Record<string, { plain: string; tex: string }> = { "{L}": list };
+      if (K.events[0]) vals["{E}"] = ev(K.events[0]);
+      if (K.events[1]) vals["{F}"] = ev(K.events[1]);
+      if (K.side) vals["{S}"] = word(K.side);
+      if (K.ask[0]) vals["{C}"] = word(K.ask[0]);
+      if (K.ask[1]) vals["{D}"] = word(K.ask[1]);
+      if (K.counts.length === 2) { vals["{A}"] = { plain: String(K.counts[0][1]), tex: String(K.counts[0][1]) }; vals["{B}"] = { plain: String(K.counts[1][1]), tex: String(K.counts[1][1]) }; }
+      return fillText(K.story ? PROB_STORIES[K.story].text : PROB_BARE[K.form], vals);
     }
     if (K.k === "prob" || K.k === "prob-comp") {
       // M2b: "A bag has 3 red, 5 blue and 2 green counters. Find the probability that one taken at random is red." (also "is not
@@ -1686,6 +1809,8 @@ function slipCandidates(r: ReadOk): [string, Q][] {
     if (K.mode === "not") cands.push(["prob-own", mk(ev, total)!]);
     return distinctSlips(cands, r.truth);
   }
+  // MB-B20: no slip of the probability list is named on a top-rung item (two events have their own ways to go wrong)
+  if (K.k === "prob-two") return [];
   if (K.k === "pct-top") {
     // MB-B20, the top rung's own slips (SCHOOL_TOP_SLIPS), never the forward list's: the amount before a change worked as a
     // change of the amount after it, A × (100 ∓ p)/100 (20% off a price after a 20% rise); the percentages added into one
@@ -2344,6 +2469,11 @@ function leakProfile(r: ReadOk): LeakProfile {
     }
     return { T, targets: [T], lowestOnly: false, bare: new Set(), restated, written: [] };
   }
+  if (K.k === "prob-two") {
+    // MB-B20: the probability in any form. Each event's own chance, a count over the total, the chance of neither are steps
+    // and pass; the last operation that makes the answer (the two chances multiplied, a whole less neither) is refused
+    return { T, targets: [T], lowestOnly: false, bare: new Set(), restated: [], written: [] };
+  }
   if (K.k === "pyth-dp") {
     // MB-B20: the rounded side, any decimal close to the root at its last place (7.2, 7.21, 7.211 for √52), and the squared
     // total under a root (leaksSchool). The squares, their total and the given sides are steps and pass
@@ -2882,14 +3012,14 @@ export const topGeneratorFor = (topicId: unknown) =>
   typeof topicId === "string" && Object.prototype.hasOwnProperty.call(TOP_TIER_GENERATORS, topicId) ? TOP_TIER_GENERATORS[topicId] : null;
 /**
  * The word problem a school spec is printed in (MB-B20), or null: a compute spec with a story (STORIES), a top-rung percent
- * change (PCT_STORIES) or a top-rung Pythagoras item (PYTH_STORIES) with one.
+ * change (PCT_STORIES), a top-rung Pythagoras item (PYTH_STORIES) or a top-rung probability item (PROB_STORIES) with one.
  */
-export function storyOf(spec: unknown): StoryId | PctStoryId | PythStoryId | null {
+export function storyOf(spec: unknown): StoryId | PctStoryId | PythStoryId | ProbStoryId | null {
   try {
     const st = structure(spec);
     if (!st.ok) return null;
     const K = st.kind;
-    return (K.k === "compute" || K.k === "pct-top" || K.k === "pyth-dp") && K.story ? K.story : null;
+    return (K.k === "compute" || K.k === "pct-top" || K.k === "pyth-dp" || K.k === "prob-two") && K.story ? K.story : null;
   } catch {
     return null;
   }
@@ -3374,6 +3504,64 @@ export function genProbability(seed: unknown, tier: unknown): SchoolSpec | null 
     if (fair(spec)) return spec;
   }
   return tier === 1 ? { shape: "probability", expr: "bag red 3, blue 5, green 2 ask red" } : { shape: "probability", expr: "bag red 3, blue 5, green 2 ask not red" };
+}
+
+/**
+ * The top rung of "Probability of an event" (MB-B20), from a seed: two events, the answer an exact fraction. An even seed,
+ * one of six bare kinds: two fair dice, both events asked (a number, even, odd, a number more than 2..4) or at least one
+ * showing an event; a fair coin with a fair dice, or with a spinner of two or three colours (4 to 12 equal sections); two
+ * counters from a bag of two or three colours (5 to 12 counters) without replacement, both one colour or one colour then
+ * another. An odd seed, a word problem from PROB_STORIES: socks from a drawer (both one colour), sweets from a jar (one
+ * colour then the other), both without replacement, or a game of a coin and a dice. Drawn again: a certain or impossible
+ * event, a question longer than the reader reads back, and an item that is not `fair`. Pure and seeded; null for a seed
+ * that is not a whole number 0..2^32 - 1.
+ */
+export function genProbabilityTop(seed: unknown): SchoolSpec | null {
+  if (!topSeed(seed)) return null;
+  const rnd = prng(((seed * 2 + 3) ^ 0x5eed2c04) >>> 0);
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd() * xs.length)]; }
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd() * (hi - lo + 1));
+  const ev = () => { const k = pick(["n", "n", "even", "odd", "over"] as const); return k === "n" ? String(int(1, 6)) : k === "over" ? `over ${int(2, 4)}` : k; };
+  const bag = (lo: number, hi: number, most: number) => {
+    const pool = [...PROB_COLOURS], names: string[] = [];
+    for (let i = int(2, 3); i > 0; i--) names.push(pool.splice(int(0, pool.length - 1), 1)[0]);
+    const counts = names.map(() => int(1, most)), total = counts.reduce((a, b) => a + b, 0);
+    return total < lo || total > hi ? null : names.map((c, i): [string, number] => [c, counts[i]]);
+  };
+  const listed = (xs: [string, number][]) => xs.map(([c, n]) => `${c} ${n}`).join(", ");
+  const story = seed % 2 === 1;
+  for (let t = 0; t < MAX_TRIES; t++) {
+    let expr: string;
+    if (story) {
+      const id = pick(Object.keys(PROB_STORIES) as ProbStoryId[]);
+      if (id === "game") expr = `game coin ${pick(["heads", "tails"] as const)} and dice ${ev()}`;
+      else {
+        const [x, y] = PROB_STORIES[id].colours, a = int(2, 8), b = int(2, 8);
+        if (a + b < 5 || a + b > 12) continue;
+        const ask = id === "socks" ? `both ${pick([x, y])}` : rnd() < 0.5 ? `${x} then ${y}` : `${y} then ${x}`;
+        expr = `${id} draw ${x} ${a}, ${y} ${b} ${ask}`;
+      }
+    } else {
+      const form = pick(["dice-and", "dice-least", "coin-dice", "coin-spin", "draw-both", "draw-then"] as const);
+      if (form === "dice-and") expr = `dice ${ev()} and ${ev()}`;
+      else if (form === "dice-least") expr = `dice least ${ev()}`;
+      else if (form === "coin-dice") expr = `coin ${pick(["heads", "tails"] as const)} and dice ${ev()}`;
+      else {
+        const xs = form === "coin-spin" ? bag(4, 12, 6) : bag(5, 12, 8);
+        if (!xs) continue;
+        const names = xs.map(([c]) => c), a = int(0, names.length - 1);
+        if (form === "coin-spin") expr = `coin ${pick(["heads", "tails"] as const)} and spinner ${listed(xs)} ask ${names[a]}`;
+        else if (form === "draw-both") expr = `draw ${listed(xs)} both ${names[a]}`;
+        else expr = `draw ${listed(xs)} ${names[a]} then ${names[(a + int(1, names.length - 1)) % names.length]}`;
+      }
+    }
+    const spec: SchoolSpec = { shape: "probability", expr };
+    if (!read(spec).ok) continue;
+    const q = question(spec);
+    if (!q || q.plain.length > MAX_TASK) continue;
+    if (fair(spec)) return spec;
+  }
+  return story ? { shape: "probability", expr: "socks draw black 4, white 6 both black" } : { shape: "probability", expr: "coin heads and dice 6" };
 }
 
 /**
@@ -3999,6 +4187,39 @@ function readPythagorasDp(t0: string): SchoolSpec | null {
   return null;
 }
 
+/** A dice event as a top-rung question prints it: 'a 6', 'an even number', 'an odd number', 'a number more than 4' (MB-B20). */
+const DICE_WORD = String.raw`a [1-6]|an even number|an odd number|a number more than [2-4]`;
+/** Two or three colours with their counts as a question prints them: '3 red, 2 blue and 5 green' (MB-B20). */
+const COUNTS_WORD = String.raw`\d{1,2} ${COL}(?:, \d{1,2} ${COL})? and \d{1,2} ${COL}`;
+const PROB_PATS: Record<string, string> = { "{L}": COUNTS_WORD, "{E}": DICE_WORD, "{F}": DICE_WORD, "{S}": "heads|tails", "{C}": COL, "{D}": COL, "{A}": String.raw`\d{1,2}`, "{B}": String.raw`\d{1,2}` };
+
+/**
+ * A top-rung probability task (MB-B20) exactly as `question` prints it - two dice, a coin with a dice or a spinner, two
+ * counters drawn without replacement, or a word problem of PROB_STORIES; or null.
+ */
+function readProbabilityTop(t0: string): SchoolSpec | null {
+  const forms: [ProbStoryId | null, ProbForm, string][] = [
+    ...(Object.keys(PROB_BARE) as ProbForm[]).map((f): [null, ProbForm, string] => [null, f, PROB_BARE[f]]),
+    ...(Object.keys(PROB_STORIES) as ProbStoryId[]).map((id): [ProbStoryId, ProbForm, string] => [id, PROB_STORIES[id].form, PROB_STORIES[id].text]),
+  ];
+  for (const [id, form, text] of forms) {
+    const g0 = readTemplate(text, PROB_PATS, t0);
+    if (!g0) continue;
+    const g = Object.fromEntries(Object.entries(g0).map(([k, v]) => [k, v.toLowerCase()]));
+    const ev = (x: string) => (/^a \d$/.test(x) ? x.slice(2) : x.startsWith("a number more than ") ? `over ${x.slice(19)}` : x.split(" ")[1]);
+    const counts = id && id !== "game" ? `${PROB_STORIES[id].colours[0]} ${g["{A}"]}, ${PROB_STORIES[id].colours[1]} ${g["{B}"]}` : (g["{L}"] ?? "").split(/, | and /).map((x) => x.split(" ").reverse().join(" ")).join(", ");
+    const expr = form === "dice-and" ? `dice ${ev(g["{E}"])} and ${ev(g["{F}"])}`
+      : form === "dice-least" ? `dice least ${ev(g["{E}"])}`
+      : form === "coin-dice" ? `coin ${g["{S}"]} and dice ${ev(g["{E}"])}`
+      : form === "coin-spin" ? `coin ${g["{S}"]} and spinner ${counts} ask ${g["{C}"]}`
+      : form === "draw-both" ? `draw ${counts} both ${g["{C}"]}`
+      : `draw ${counts} ${g["{C}"]} then ${g["{D}"]}`;
+    const spec: SchoolSpec = { shape: "probability", expr: id ? `${id} ${expr}` : expr };
+    return read(spec).ok ? spec : null;
+  }
+  return null;
+}
+
 /**
  * A probability task (v2 M2b), or null: 'A bag has 3 red, 5 blue and 2 green counters. Find the probability that one taken at random
  * is red.' (also 'is not red', 'is red or blue'; two to four colours from PROB_COLOURS, each with its count, at most 20 in all) or
@@ -4049,8 +4270,9 @@ function readProbability(t0: string): SchoolSpec | null {
  *   - area (W7 batch 3): `readArea`'s phrasings, every side with the same length unit;
  *   - mean and range (W7 batch 3): `readStat`'s phrasings, a list with a comma and a space between its numbers.
  *   - mixed numbers (MB-B20): `readMixed`'s two operands, at least one a mixed number '1 3/4' (the top rung of a step up), and a
- *     word problem of STORIES exactly as `question` prints it (`readStory`); the top rungs of percent change and Pythagoras
- *     exactly as `question` prints them (`readPercentTop`, `readPythagorasDp`), a decimal comma read by readTask.
+ *     word problem of STORIES exactly as `question` prints it (`readStory`); the top rungs of percent change, Pythagoras and
+ *     probability exactly as `question` prints them (`readPercentTop`, `readPythagorasDp`, `readProbabilityTop`), a decimal
+ *     comma read by readTask.
  * Null for: whole numbers as operands (a whole amount after 'of' excepted), a mixed number written with a hyphen or with a
  * fraction part that is not proper, a decimal beside a fraction, three or more
  * terms, any letter in the maths (an x), brackets, number words, an answer after '=', a bottom of 1 or 0, a leading
@@ -4065,7 +4287,7 @@ function specOnce(text: unknown): SchoolSpec | null {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
     return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readMixed(t) ?? readStory(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
-      ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t) ?? readPythagoras(t) ?? readProbability(t) ?? readPercentTop(t) ?? readPythagorasDp(t);
+      ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t) ?? readPythagoras(t) ?? readProbability(t) ?? readPercentTop(t) ?? readPythagorasDp(t) ?? readProbabilityTop(t);
   } catch {
     return null;
   }
@@ -4096,7 +4318,7 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "area") return "area";
     if (r.kind.k === "stat") return "mean-range";
     if (r.kind.k === "pyth") return "pythagoras";
-    if (r.kind.k === "prob" || r.kind.k === "prob-comp") return "probability";
+    if (r.kind.k === "prob" || r.kind.k === "prob-comp" || r.kind.k === "prob-two") return "probability";
     const n = r.node;
     if (decimalPair(n)) return "dec-arith";
     // MB-B20: a mixed number is a fraction operand too (1 3/4 + 2/3 is add and subtract fractions)
