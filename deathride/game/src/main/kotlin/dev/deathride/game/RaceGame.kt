@@ -788,7 +788,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 updateQr();label("PIN ${server.pin}",232f,408f,accent)
                 label(addressLabel,64f,246f)
                 label(if(server.running)"${server.slots.count{it.connected}} / 2 PHONES CONNECTED" else server.serverStatus,64f,214f,accent)
-                label("SELECT / PRACTICE",124f,168f,bg)
+                TvCopy.mainButton("lobby",false).let{label(it,224f-detail.width(it)/2,168f,bg)}
                 title(car.id,896f,578f);detail.setColor(muted);detail.wrapped(car.role,896f,534f,320f)
                 label("P1",904f,494f,colors[0])
                 val ability=AbilityCatalog.byCar[car.id]
@@ -839,13 +839,13 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     for(i in Campaign.choices.indices)label(Campaign.choices[i].uppercase(),83f+i*229,260f,if(i==selectedReward)bg else HudTheme.bone)
                     val choice=Campaign.choices[selectedReward];val rejection=Campaign.reason(p,pending,choice)
                     detail.setColor(muted);detail.wrapped(Campaign.allies[pending].id.uppercase()+": "+Campaign.label(p,pending,choice)+(if(rejection.isEmpty())"" else " / $rejection"),66f,219f,677f,25f)
-                    label("SELECT CLAIM / DOWN RACE",162f,169f,bg)
-                    label("LEFT-RIGHT Reward / PLAY Garage",66f,127f)
+                    TvCopy.mainButton("career",true,true).let{label(it,404f-detail.width(it)/2,169f,bg)}
+                    label(TvCopy.CAREER_HINT_REWARD,66f,127f)
                 } else {
                     for(i in Career.difficulties.indices)label(Career.difficulties[i].name.uppercase(),83f+i*229,260f,if(i==p.careerDifficulty)bg else HudTheme.bone)
                     detail.setColor(muted);detail.wrapped(tier.description,66f,219f,677f,25f)
-                    label("SELECT / RACE NEXT ROUND",220f,169f,bg)
-                    label("PLAY Garage / LEFT-RIGHT Difficulty",66f,127f)
+                    TvCopy.mainButton("career",true).let{label(it,404f-detail.width(it)/2,169f,bg)}
+                    label(TvCopy.CAREER_HINT_DIFFICULTY,66f,127f)
                 }
                 label(Courses.all[event.courseIndex].name.uppercase(),532f,346f,accent);label(cup.region.name,532f,321f,HudTheme.bone);label(if(event.elimination)"DEATH DUEL" else "${event.laps} LAPS",532f,296f)
                 label("RIVALS / THEIR GARAGES",808f,577f,accent)
@@ -903,7 +903,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     label(card.title.uppercase(),291f,365f,accent);detail.setColor(HudTheme.bone);detail.wrapped(card.lines.joinToString(" "),291f,328f,705f,25f)
                 }
                 if(campaignRace) {detail.setColor(muted);detail.wrapped(careerMessage[0],291f,194f,705f,25f)}
-                label(if(campaignRace)"SELECT / NEXT ROUND" else "SELECT / REMATCH",495f,160f,bg)
+                TvCopy.mainButton("results",campaignRace).let{label(it,640f-detail.width(it)/2,160f,bg)}
             }
         }
     }

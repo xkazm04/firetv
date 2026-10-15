@@ -32,6 +32,13 @@ class TvCopyTest {
         val src=raceGameSource()?:return
         for(gone in listOf("TWO PHONES. ONE CIRCUIT","No app needed","Two phone seats"))assertFalse(src.contains(gone),"slogan came back: $gone")
     }
+    @Test fun careerHintsAreCapitalsAndNameDown() {
+        for(h in listOf(TvCopy.CAREER_HINT_REWARD,TvCopy.CAREER_HINT_DIFFICULTY)) {
+            assertEquals(h.uppercase(),h)
+            assertTrue(h.contains("DOWN  RACE") && h.contains("PLAY  GARAGE"))
+            assertTrue(h.length<=52,"hint overflows the 677 px footer: $h")
+        }
+    }
     @Test fun statusLineHasNoSlogan() {
         assertEquals("",TvCopy.statusLine("",true))
         assertEquals("PREPARING CIRCUIT",TvCopy.statusLine("",false))

@@ -13,6 +13,10 @@ object TvCopy {
     const val RACE_AGAIN="RACE AGAIN"
     const val HP="HP"
 
+    /** Remote-key hints, one footer row, always "KEY  ACTION" in capitals like the lobby's row. DOWN races, as the handler does. */
+    const val CAREER_HINT_REWARD="L / R  REWARD   DOWN  RACE   PLAY  GARAGE"
+    const val CAREER_HINT_DIFFICULTY="L / R  DIFFICULTY   DOWN  RACE   PLAY  GARAGE"
+
     /** The seat's controller layout that holds GO for the driver (controller-layouts.csv, autoThrottle=1). */
     const val AUTO_LAYOUT="Auto"
 
