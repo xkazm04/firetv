@@ -46,6 +46,17 @@ object TvCopy {
     /** Rival's second line: their car, plus a tag only when the relationship matters. */
     fun rivalTag(car: String,ally: Boolean,grudge: Boolean): String = car+(if(ally)" / ALLY" else if(grudge)" / GRUDGE" else "")
 
+    /** Race HUD: numbers beside icons and bars; a state word shows only when it is not the default. */
+    const val ARMOUR="ARMOUR"
+    fun hpLine(hp: Int): String = "$HP $hp"
+    fun quietReady(state: String): String = if(state=="READY")"" else state
+    /** The one status strip under the road: nothing unless the circuit is still loading or the driver is out. */
+    fun raceStrip(preparing: Boolean,wrecked: Boolean): String = when {
+        preparing -> "PREPARING CIRCUIT"
+        wrecked -> "WRECKED / SPECTATING"
+        else -> ""
+    }
+
     /** The seat's controller layout that holds GO for the driver (controller-layouts.csv, autoThrottle=1). */
     const val AUTO_LAYOUT="Auto"
 

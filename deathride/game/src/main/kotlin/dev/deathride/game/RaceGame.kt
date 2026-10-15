@@ -598,7 +598,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 bar(1038f,590f,182f,HudTheme.fraction(a.energy,d.energyCapacity),accent)
                 bar(1038f,567f,182f,1f-HudTheme.fraction(a.cooldownSeconds,d.cooldownSeconds),HudTheme.bone)
             }
-            panel(345f,82f,690f,35f)
+            if(raceStrip.isNotEmpty())panel(345f,82f,690f,35f)
             if(server.slots.any{it.claimed && it.stale})panel(345f,500f,690f,40f)
         }
         when(phase) {
@@ -649,7 +649,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             "results" -> {panel(260f,96f,760f,506f);shape.color=accent;shape.rect(286f,128f,708f,44f)}
             "countdown" -> if(scene.ready)panel(542f,268f,196f,172f)
         }
-        if(phase=="race" || phase=="countdown" || phase=="results")for(c in world.cars)if(c.entered) {shape.color=colors[c.id];shape.rect(20f+c.id*210,21f,4f,43f)}
+        if(phase=="race" || phase=="countdown" || phase=="results")for(c in world.cars)if(c.entered) {shape.color=colors[c.id];shape.rect(20f+c.id*210,21f,4f,43f);if(phase!="results"){shape.color=road;shape.rect(30f+c.id*210,26f,150f,8f);shape.color=colors[c.id];shape.rect(30f+c.id*210,26f,150f*world.snapshot.healthFraction(c.id).toFloat().coerceIn(0f,1f),8f)}}
         if(Presentation.FOLLOW_CAMERA && racing && scene.ready)drawMinimap()
         shape.end()
         batch.projectionMatrix=view.camera.combined;batch.begin();batch.color=Color.WHITE
@@ -772,7 +772,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             for(c in world.cars)if(c.entered) {
                 val x=30f+c.id*210
                 label("${c.position}. "+driverName(c),x,66f,colors[c.id])
-                label(if(world.combat.wrecked(c.id))"WRECKED" else if(world.eventType==EventType.ELIMINATION)"HP ${world.combat.health(c.id).toInt()} / DUEL" else "HP ${world.combat.health(c.id).toInt()}  L${min(world.raceLaps,c.lap.laps+1)}/${world.raceLaps}",x,39f)
+                if(world.combat.wrecked(c.id))label("WRECKED",x,39f)
             }
         } else {
             label(TvCopy.seatLine(0,CarCatalog.all[profiles[0].selectedCar].id,profiles[0].credits),42f,if(phase=="lobby")62f else 55f,accent)
@@ -861,20 +861,18 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 label("POSITION",40f,695f);title("${c.position}/${world.entrantCount}",48f,663f)
                 label(if(world.eventType==EventType.ELIMINATION)"SURVIVORS" else "LAP",204f,695f);title(if(world.eventType==EventType.ELIMINATION)"${world.entrantCount-world.combat.wreckCount}" else "${min(world.raceLaps,c.lap.laps+1)}/${world.raceLaps}",196f,663f)
                 label("KM/H",395f,695f);title((c.speedMps*3.6).toInt().toString(),397f,663f)
-                label("${TvCopy.HP} ${combat.health(c.id).toInt()}/${combat.maxHealth(c.id).toInt()}",553f,695f,HudTheme.bone)
-                label("ARMOUR ${(c.armorReduction*100).toInt()}%",553f,636f)
-                label("${Weapons.all[weapon].id.uppercase()} ${combat.ammo(c.id,weapon)}",800f,695f,HudTheme.bone)
-                label(HudTheme.weaponState(combat,c,weapon),800f,669f)
-                label("MINE ${combat.ammo(c.id,Weapons.MINE)}",800f,638f,HudTheme.bone)
-                label(HudTheme.weaponState(combat,c,Weapons.MINE),800f,615f)
+                label(TvCopy.hpLine(combat.health(c.id).toInt()),553f,695f,HudTheme.bone)
+                label(TvCopy.ARMOUR,553f,636f)
+                label("${combat.ammo(c.id,weapon)}",800f,695f,HudTheme.bone)
+                label(TvCopy.quietReady(HudTheme.weaponState(combat,c,weapon)),800f,669f)
+                label("${combat.ammo(c.id,Weapons.MINE)}",800f,638f,HudTheme.bone)
+                label(TvCopy.quietReady(HudTheme.weaponState(combat,c,Weapons.MINE)),800f,615f)
                 if(d!=null) {
-                    label(d.name.uppercase(),1008f,697f,HudTheme.bone)
                     label(HudTheme.abilityState(a,combat.armingSeconds),1038f,671f,accent)
-                    label("ENERGY ${a.energy.toInt()}",1038f,636f)
                 }
                 if(stateTime<1.2)title("GO",599f,390f)
                 for(slot in server.slots)if(slot.claimed && slot.stale) {label("PLAYER ${slot.id+1} / ${TvCopy.LINK_LOST} / COASTING",365f,529f,warning);break}
-                label(if(!scene.ready)"PREPARING CIRCUIT" else if(combat.wrecked(c.id))"WRECKED / SPECTATING" else "${driverName(c)} / ${world.seconds.toInt()}s / ${courseCatalog[selectedTrack].name}",363f,109f)
+                raceStrip=TvCopy.raceStrip(!scene.ready,combat.wrecked(c.id));label(raceStrip,363f,109f)
             }
             "results" -> {
                 title("RESULTS",286f,575f)
@@ -935,6 +933,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         return "{\"mineBlastRadiusM\":${Weapons.all[Weapons.MINE].radiusM},\"mineTriggerRadiusM\":${combat.mineTriggerRadiusM},\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.entrantCount-world.resolved},\"living\":${world.entrantCount-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions},\"abilityDamage\":${combat.abilityDamage.sum()},\"abilityUses\":${world.cars.sumOf{it.ability.activation}}}"
     }
     private var uiStage=0
+    private var raceStrip=""
     private val jsonBuilder=StringBuilder(8192)
     /** Same text as the former joinToString/template version, built in one reusable buffer. */
     private fun trafficJson(): String {
