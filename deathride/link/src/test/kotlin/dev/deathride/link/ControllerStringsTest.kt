@@ -103,6 +103,19 @@ class ControllerStringsTest {
         assertTrue(page.contains("'INSTALL TIER '+o.nextTier+' / '+o.price+' CR'"))
     }
 
+    @Test fun headerPositionIsLabelledLikeTheTv() {
+        assertTrue(page.contains("<span>POSITION <b id=\"position\">"))
+    }
+
+    @Test fun pairingUsesTheWordTvCode() {
+        val pair=Regex("<div class=\"modal\" id=\"pair\".*?</form>",RegexOption.DOT_MATCHES_ALL).find(page)!!.value
+        assertTrue(pair.contains("<h1>TV code</h1>"))
+        assertTrue(pair.contains("aria-label=\"TV code\""))
+        assertFalse(Regex("\\bPIN\\b",RegexOption.IGNORE_CASE).containsMatchIn(pair.replace("id=\"pin\"","")),"the pairing screen never says PIN")
+        assertTrue(page.contains("m.code==='BAD_PIN'"),"keyed on the code, not on the sentence")
+        assertFalse(page.contains("Wrong PIN"),"the refusal sentence comes from the link")
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
