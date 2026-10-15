@@ -862,6 +862,174 @@
         "at": "2026-10-15T03:14:01.039938+00:00",
         "reason": "reviewer (sonnet): The anchor MathText.tsx:203 is just the raw-text/try line of a typesetting component and does not show a translation pipeline is absent; the technique anchors (working.ts tick logic, sheetRows.ts English caption) are incidental, and the caption is a hard-coded English string."
       }
+    },
+    "telestrator/pen-core/agent-cli-transport": {
+      "context": "pen-core",
+      "subject": "agent-cli-transport",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:35:11.841Z",
+      "worker": "8e15b9b8-c5f1-428f-aad6-9ac98a400578",
+      "techniques": [
+        {
+          "technique": "availability-probe",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:7 The conversation consumes values and emits effects; no agent binary is selected or probed."
+        },
+        {
+          "technique": "child-observed-posture",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:31 This engine transforms pen input into annotations; the negative searches found no agent child whose posture it must verify."
+        },
+        {
+          "technique": "dated-capability-matrix",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:7 The protocol describes phone messages, not version-dependent agent CLI capabilities."
+        },
+        {
+          "technique": "fallback-ladder",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:41 Transport commands control media playback; there is no optional agent transport to replace."
+        },
+        {
+          "technique": "host-routed-approval-round-trip",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:163 The admission decision checks a pen pairing PIN, not a child's tool approval request."
+        },
+        {
+          "technique": "output-normalization",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:167 Parsing decodes pen messages rather than agent answer envelopes."
+        },
+        {
+          "technique": "permission-stance-enforcement",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:100 The operation applies drawing input, without a repository-scanning or editing agent."
+        },
+        {
+          "technique": "subscription-auth-selection",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:73 Authentication concerns phone pairing, without provider credentials or child billing."
+        },
+        {
+          "technique": "thread-custody-across-resume",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:195 The session identifier denotes a pen pairing generation, not a resumable agent thread."
+        }
+      ]
+    },
+    "desk-platform/engines/agent-cli-transport": {
+      "context": "engines",
+      "subject": "agent-cli-transport",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:35:11.841Z",
+      "worker": "8e15b9b8-c5f1-428f-aad6-9ac98a400578",
+      "techniques": [
+        {
+          "technique": "availability-probe",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/text.ts:108 Both CLI probes check filesystem presence without executing a version command or establishing authorization in the run environment."
+        },
+        {
+          "technique": "child-observed-posture",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/codex.ts:57 Codex discards its event output and performs no child-observed check that the requested sandbox is in force; the inspected tests do not verify that posture."
+        },
+        {
+          "technique": "dated-capability-matrix",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/codex.ts:48 Schema support and its invocation are hardcoded without consulting versioned capability data carrying verification dates and methods."
+        },
+        {
+          "technique": "fallback-ladder",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/call.ts:20 Claude has no provider floor, so timeoutMs: 0 yields an immediate deadline and NaN remains NaN instead of being floored to a sane minimum."
+        },
+        {
+          "technique": "host-routed-approval-round-trip",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/text.ts:67 The attended Claude surface removes native tools; the Codex adapter serves unattended UAT generation, so no attended native approval loop is present."
+        },
+        {
+          "technique": "output-normalization",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/text.ts:54 The CLI's error subtype becomes prose inside a generic exit error rather than a typed classification callers can branch on."
+        },
+        {
+          "technique": "permission-stance-enforcement",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/text.ts:65 These adapters expose answer-generation calls in temporary working directories, without a workspace scan or unattended editing seam."
+        },
+        {
+          "technique": "subscription-auth-selection",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/text.ts:33 Environment construction preserves all host credentials and session markers; Codex likewise spawns without an explicit child environment."
+        },
+        {
+          "technique": "thread-custody-across-resume",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/codex.ts:46 Codex uses ephemeral calls and Claude disables session persistence; neither adapter stores an identifier for resume."
+        }
+      ]
+    },
+    "telestrator/tv-app/agent-cli-transport": {
+      "context": "tv-app",
+      "subject": "agent-cli-transport",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:35:11.841Z",
+      "worker": "8e15b9b8-c5f1-428f-aad6-9ac98a400578",
+      "techniques": [
+        {
+          "technique": "availability-probe",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/transport/LanTransport.kt:36 The availability check concerns a listening port, without an agent binary or login."
+        },
+        {
+          "technique": "child-observed-posture",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:28 The host drives network messages and effects; no agent child was found."
+        },
+        {
+          "technique": "dated-capability-matrix",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:109 The transport setting chooses a pen network transport, without encoding CLI capabilities."
+        },
+        {
+          "technique": "fallback-ladder",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:111 LAN and relay are phone connectivity choices, not alternative model providers."
+        },
+        {
+          "technique": "host-routed-approval-round-trip",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:58 Refusals concern pen pairing, without child tool requests needing human decisions."
+        },
+        {
+          "technique": "output-normalization",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/transport/PenTransport.kt:100 The input channel reads WebSocket text frames, not CLI answer envelopes."
+        },
+        {
+          "technique": "permission-stance-enforcement",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:219 Edits modify annotations through the session rather than granting an agent workspace access."
+        },
+        {
+          "technique": "subscription-auth-selection",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:41 The credentials bind a phone to the TV; there is no agent billing environment."
+        },
+        {
+          "technique": "thread-custody-across-resume",
+          "verdict": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:47 Opening creates a pen protocol conversation, without restoring a child-owned model thread."
+        }
+      ]
     }
   }
 }

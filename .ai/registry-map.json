@@ -1736,7 +1736,11 @@
           "revision": 9,
           "changedAt": "2026-10-02",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/engines/text.ts:33 The Claude adapter inherits the host environment without stripping billing credentials or session markers, so subscription billing is not deliberately enforced.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:5791230ffb7d9fad",
+          "evaluatedRevision": 9
         },
         {
           "subject": "test-harness",
@@ -2164,7 +2168,11 @@
           "revision": 9,
           "changedAt": "2026-10-02",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:7 Searches found no agent CLI terms in core, while repository hits identified desk adapters and tooling; this context implements pen protocol and annotation behavior without spawning a model transport.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:5791230ffb7d9fad",
+          "evaluatedRevision": 9
         },
         {
           "subject": "undo-history",
@@ -2361,7 +2369,11 @@
           "revision": 9,
           "changedAt": "2026-10-02",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "tv-app/src/main/kotlin/dev/telestrator/tv/transport/PenTransport.kt:82 Searches found no agent CLI terms in tv-app, while repository hits identified desk adapters and tooling; this application's transport carries pen messages over WebSockets.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:5791230ffb7d9fad",
+          "evaluatedRevision": 9
         },
         {
           "subject": "prompt-assembly",
