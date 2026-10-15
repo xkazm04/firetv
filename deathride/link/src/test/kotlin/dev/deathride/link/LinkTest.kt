@@ -18,9 +18,9 @@ class LinkTest {
             try {
                 host.start()
                 val deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(15)
-                while(!host.serverStatus.contains("unavailable") && System.nanoTime()<deadline)Thread.sleep(20)
+                while(host.serverStatus!=LinkText.PORT_BUSY && System.nanoTime()<deadline)Thread.sleep(20)
                 assertFalse(host.running)
-                assertTrue(host.serverStatus.contains("unavailable"),host.serverStatus)
+                assertTrue(host.serverStatus==LinkText.PORT_BUSY,host.serverStatus)
             } finally { host.stop() }
         }
     }

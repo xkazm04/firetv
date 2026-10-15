@@ -20,6 +20,8 @@ object LinkText {
     const val STARTING="Starting phone link..."
     const val READY="Phone link ready"
     const val LOST="Phone link lost. Reopen the app."
+    const val PORT_BUSY="Port busy. Close the other Death Ride, reopen."
+    const val NO_WIFI="No Wi-Fi. Connect the TV to your network."
     const val BLOCKED="Phone link unavailable. Close the other Death Ride, reopen."
     /** The name of the screen the TV is on, one word, for the phone to show instead of deriving it. */
     fun screen(phase: String): String = when(phase) {

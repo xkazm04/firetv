@@ -141,6 +141,9 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         override fun newThread(r: Runnable)=Thread(r,"deathride-link-${count.incrementAndGet()}").apply{isDaemon=true;priority=Thread.NORM_PRIORITY-2}
     }).asCoroutineDispatcher()
     private val scope=CoroutineScope(SupervisorJob()+linkDispatcher+errors)
+    /** The LAN address fell back to loopback: no Wi-Fi to pair over. The TV shows [serverStatus] when this is true. */
+    val noNetwork get()=address=="127.0.0.1"
+    private fun linkStatus()=if(noNetwork)LinkText.NO_WIFI else LinkText.READY
     fun nowMs()=(System.nanoTime()-origin)/1e6
     fun pairingUrl()="http://$address:$port/?pin=$pin"
     @Synchronized private fun claim(token: String, providedPin: String, profile: String): Slot? {
@@ -163,9 +166,10 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         val rawHtml=assets("index.html");val buildId=Integer.toHexString(rawHtml.hashCode());val html=rawHtml.replace("__BUILD__",buildId)
         val manifest=assets("manifest.webmanifest");val htmlPacked=Packed(html);val cssPacked=Packed(assets("hud.css"));val catalogCache=PackedCache()
         networkJob=scope.launch {
+            var portBusy=false
             repeat(10) {
                 val free=runCatching { ServerSocket().use { socket -> socket.reuseAddress=true; socket.bind(InetSocketAddress("0.0.0.0",port)) }; true }.getOrDefault(false)
-                if(!free) { serverStatus=LinkText.STARTING; log("Port $port busy; retry ${it+1}/10"); delay(300); return@repeat }
+                if(!free) { portBusy=true;serverStatus=LinkText.STARTING; log("Port $port busy; retry ${it+1}/10"); delay(300); return@repeat }
                 val candidate=embeddedServer(CIO, host="0.0.0.0",port=port,parentCoroutineContext=errors+linkDispatcher) {
                     install(WebSockets) { maxFrameSize=2048; masking=false }
                     routing {
@@ -192,13 +196,13 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                     }
                 }
                 if(runCatching { candidate.start(false) }.isSuccess) {
-                    engine=candidate; running=true; serverStatus=LinkText.READY; log("pairing ${pairingUrl()}")
-                    launch { while(isActive) { delay(10000); address=lanAddress(); log(metricsJson()) } }
+                    engine=candidate; running=true; serverStatus=linkStatus(); log("pairing ${pairingUrl()}")
+                    launch { while(isActive) { delay(10000); address=lanAddress(); serverStatus=linkStatus(); log(metricsJson()) } }
                     return@launch
                 }
                 runCatching { candidate.stop(0,0) }; delay(300)
             }
-            serverStatus=LinkText.BLOCKED
+            serverStatus=if(portBusy)LinkText.PORT_BUSY else LinkText.BLOCKED
             log("Port $port unavailable")
         }
     }

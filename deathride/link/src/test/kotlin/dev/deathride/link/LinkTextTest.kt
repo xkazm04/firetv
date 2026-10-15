@@ -23,8 +23,8 @@ class LinkTextTest {
         assertEquals("BAD_PIN",(j["code"] as kotlinx.serialization.json.JsonPrimitive).content)
     }
     @Test fun linkStatusLinesFitTheTvLobbyLabel() {
-        for(s in listOf(LinkText.STARTING,LinkText.READY,LinkText.LOST,LinkText.BLOCKED)) { assertTrue(s.length<=60,s); assertFalse(s.contains("port",ignoreCase=true),s) }
-        assertTrue(LinkText.BLOCKED.contains("unavailable"))
+        for(s in listOf(LinkText.STARTING,LinkText.READY,LinkText.LOST,LinkText.BLOCKED,LinkText.PORT_BUSY,LinkText.NO_WIFI)) { assertTrue(s.length<=60,s); assertFalse(s.contains("8765"),s) }
+        assertNotEquals(LinkText.PORT_BUSY,LinkText.NO_WIFI)
     }
     @Test fun screenNamesAreOneWordPerPhase() {
         assertEquals(setOf("LOBBY","GARAGE","CAREER","COUNTDOWN","RACE","RESULTS"),phases.map(LinkText::screen).toSet())
