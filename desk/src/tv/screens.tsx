@@ -14,7 +14,7 @@ import { fmt } from "./useSession";
 import { playerCommand, stopAt, learnerStops, switchEndsLine, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
 import { lessonStates } from "@/lib/library/watched";
 import { pathOf } from "@/lib/library/paths";
-import { recapRows, recapCaption, railOf, setMarks, RECAP_READINGS, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
+import { recapRows, recapCaption, railOf, setMarks, RECAP_READINGS, RECAP_SLIPS, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
 import type { Mark } from "@/lib/rules/marks";
 import { MathsMark, EssayBrand, EssayArrow } from "./marks";
 import { MATHS_FONTS } from "@/maths/fonts";
@@ -373,9 +373,9 @@ const RECAP_LAMPS = 5;
 /**
  * The most named slips the tile draws under the set's rail (cycle 19): the pen's ring, the item's number and the slip's
  * short label from rules, one to a line (a label wraps between its words, never inside one); the rest are "k more".
- * Two, because a line is the sheet's width and the rails above it come first.
+ * Two (recapRows RECAP_SLIPS, the phone's slip line's cap too), because a line is the sheet's width and the rails above
+ * it come first.
  */
-const RECAP_SLIPS = 2;
 function RecapMaths({ t }: { t: MathsTile }) {
   // a lamp per hinted problem, its name beneath, ringed when it needed a second; a log with no nameable key draws a lamp per hint as before
   const named = t.hinted.some((x) => x.name !== null), lamps = named ? [] : Array.from({ length: Math.min(t.hints, 12) }, (_, i) => i < t.second);

@@ -145,6 +145,19 @@ export function slippedOf(s: Pick<Session, "practice" | "history">, now: number)
     return short && name ? [{ name, slip: short }] : [];
   });
 }
+/** How many named slips the TV draws under the rail, and the phone's line names, before "k more" (cycle 19). */
+export const RECAP_SLIPS = 2;
+/**
+ * The parent's line of tonight's named slips (cycle 23), in words from the tile's own rows (slippedOf), so it names what
+ * the TV's rail names and nothing more: "Slips tonight: 2 · added the percentages; 3 · percent of the new; and 1 more."
+ * At most RECAP_SLIPS named, the rest counted. Null when tonight's set names no slip: no line. Numbers and short labels
+ * only - never a question, an answer or a value.
+ */
+export function slippedLine(t: MathsTile): string | null {
+  if (!t.slipped.length) return null;
+  const shown = t.slipped.slice(0, RECAP_SLIPS).map((x) => `${x.name} · ${x.slip}`), rest = t.slipped.length - shown.length;
+  return `${t.slipped.length === 1 ? "A slip" : "Slips"} tonight: ${[...shown, ...(rest ? [`and ${rest} more`] : [])].join("; ")}.`;
+}
 /** How many hinted problems the phone's line names before "and k more". */
 export const HINTED_NAMED = 6;
 /** A hinted problem in words: "5b", or "3 on page 2" when another hinted problem is called 3 too. */

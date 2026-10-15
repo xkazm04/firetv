@@ -1000,3 +1000,18 @@ test('cycle 22 store: practice.marked stamps the set by the desk\'s clock - seat
   assert.ok(!('markedAt' in set(PCT)),'an older set with no stamp loads unchanged');
  }finally{Date.now=real;}
 });
+
+// cycle 23: the parent's words name tonight's slips as the TV's rail does - the same rows (slippedOf), the same cap of two
+test('cycle 23 words: slippedLine names tonight\'s slips by number and short, two then "k more"; none, no line; never a value',()=>{
+ const {recapRows,slippedLine,RECAP_SLIPS}=recap();
+ const maths=(s)=>recapRows(s,NOW).find((t)=>t.app==='maths');
+ assert.equal(RECAP_SLIPS,2,'the TV and the words share one cap');
+ assert.equal(slippedLine(maths(pctEvening())),'Slips tonight: 2 · added the percentages; 3 · percent of the new; and 1 more.');
+ const two={...PCT,items:PCT.items.filter((i)=>i.n!==4)};
+ assert.equal(slippedLine(maths(pctEvening({practice:two}))),'Slips tonight: 2 · added the percentages; 3 · percent of the new.');
+ assert.equal(slippedLine(maths(evening())),'A slip tonight: 2 · a number went wrong.','one slip, said as one');
+ assert.equal(slippedLine(maths(pctEvening({practice:{...PCT,markedAt:YESTERDAY}}))),null,'an earlier evening\'s set: no line');
+ assert.equal(slippedLine(maths(pctEvening({practice:{...PCT,items:PCT.items.filter((i)=>!i.slip)}}))),null,'rings with no slip: no line');
+ const line=slippedLine(maths(pctEvening()));
+ for(const i of PCT.items){assert.ok(!line.includes(i.question),i.question);assert.doesNotMatch(line,new RegExp(`\\b${i.studentAnswer}\\b`),i.studentAnswer);}
+});
