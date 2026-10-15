@@ -184,6 +184,12 @@ kept one bottom", "Subtracted the wrong way round") only when code detected it, 
 the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal) is the dashed ring, "not sure".
 A wrong item with no slip says its checker's own fixed reason when it has one ("A derivative has no arbitrary
 constant in it."); only a plain disagreement asks "I got something different for number N" (MB-B1).
+A top-rung percent change (MB-B20) names its own two slips, never the forward list's (`SCHOOL_TOP_SLIPS`, offered to
+no model): "Took the percent of the new amount" ("The percentage was taken of the amount after the change, but it is a
+percentage of the amount before. Divide back to the original.") on the amount before a change, and "Added the
+percentages together" ("The percentages were added into one change. Each change is a percentage of the amount there is
+by then, so apply them one after another.") on two changes or the years. Neither carries a value, and a step-up
+attempt still moves no slip on the ruler.
 
 **A typed set** (Family W6) is marked by the same code from the strings the learner typed on the phone instead of strings a model read from a photo (`markTyped` in `desk/src/lib/desk/mark.ts`, `POST /api/mark` with `answers`): one string per question, a school or Calculus item by `settleSpec` under the seated learner's system, a linear item by the substitution rule when the desk can solve the equation itself. A blank or unreadable answer is "not sure", never wrong, exactly as a photographed empty answer is. There is no working and no pen position, so a wrong typed item gets the wavy underline on its answer line. No vision call and no model call is made; the history line and the learner record are the ones a photographed sheet writes.
 

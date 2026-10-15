@@ -311,6 +311,56 @@ test('MB-B20 the fixed sentence after a second leak: a reverse percentage and a 
  assert.equal(S.withheldSchool({shape:'percent-change',expr:'increase 60 by 15%'}),S.SCHOOL_WITHHELD['pct-change'],'a tier-1/2 change keeps the unit\'s line');
 });
 
+/** The top rung's own slip worked by hand: the percent of the new amount (a reverse), the percentages added (two changes, the years); null at zero or below. */
+function pctSlipByHand(expr){
+ const m=/^(?:([a-z]+) )?(?:before (increase|decrease) (\d+) by (\d+)%|(increase|decrease) (\d+) by (\d+)%(?: then (increase|decrease) by (\d+)%| for (\d) years))$/.exec(expr);assert.ok(m,expr);
+ const sg=(v,p)=>(v==='increase'?BigInt(p):-BigInt(p));
+ let id,base,pct;
+ if(m[2]){id='pct-of-new';base=BigInt(m[3]);pct=-sg(m[2],m[4]);}
+ else if(m[8]){id='pct-added';base=BigInt(m[6]);pct=sg(m[5],m[7])+sg(m[8],m[9]);}
+ else{id='pct-added';base=BigInt(m[6]);pct=BigInt(m[10])*sg(m[5],m[7]);}
+ const N=base*(100n+pct),D=100n;if(N<=0n)return null;
+ const g=gcd(N,D);return {id,N:N/g,D:D/g};
+}
+
+test('MB-B20 the top rung names its own slips: the percent taken of the new amount and the percentages added, never the forward list\'s',()=>{
+ const M=require(path.resolve(__dirname,'../desk/src/lib/rules/maths.ts'));
+ const pc=(expr,unit)=>({shape:'percent-change',expr,...(unit?{unit}:{})}),slipOf=(spec,a)=>S.check(spec,a,'uk');
+ assert.deepEqual(S.SCHOOL_TOP_SLIPS,{'pct-change':['pct-of-new','pct-added']});
+ // the commonest: 20% off a price after a 20% rise (432 for 450), 10% on after a 10% sale (594 for 600)
+ const off=slipOf(pc('before increase 540 by 20%','€'),'€432');assert.deepEqual([off.verdict,off.slip],['wrong','pct-of-new']);
+ assert.equal(slipOf(pc('before increase 540 by 20%','€'),'432').slip,'pct-of-new');
+ assert.equal(slipOf(pc('sale before decrease 540 by 10%','€'),'€594').slip,'pct-of-new');
+ // the percentages added: +10% then -20% as -10% (180 for 176), 5% for two years as 10% simple (880 for 882), up and down the same as no change
+ assert.equal(slipOf(pc('increase 200 by 10% then decrease by 20%'),'180').slip,'pct-added');
+ assert.equal(slipOf(pc('savings increase 800 by 5% for 2 years','£'),'£880').slip,'pct-added');
+ assert.equal(slipOf(pc('increase 200 by 10% then decrease by 10%'),'200').slip,'pct-added');
+ // a value no slip gives stays the plain wrong; the answer stays right; the forward slips are not this rung's
+ for(const a of ['500','648','108'])assert.deepEqual([slipOf(pc('before increase 540 by 20%','€'),a).verdict,slipOf(pc('before increase 540 by 20%','€'),a).slip],['wrong',undefined],a);
+ assert.equal(slipOf(pc('before increase 540 by 20%','€'),'450').verdict,'right');
+ // a decrease past nothing is no amount: 50% off for three years added is no slip
+ assert.equal(pctSlipByHand('decrease 800 by 50% for 3 years'),null);
+ // the usual change is as it was
+ assert.equal(slipOf(pc('increase 60 by 15%','€'),'51').slip,'change-wrong-way');
+ assert.deepEqual(M.slipsFor('pct-change').map((s)=>s.id),[...S.SCHOOL_UNIT_SLIPS['pct-change']],'the unit\'s list (and the explain prompt) is unchanged');
+ // the desk's line is the slip's own words, no value; a model's pick of a top slip is never taken
+ const says=(id)=>S.SCHOOL_SLIPS.find((s)=>s.id===id).says;
+ assert.deepEqual(M.settleSpec(3,pc('before increase 540 by 20%','€'),'€432',undefined,'pct-change'),{verdict:'wrong',slip:'pct-of-new',said:says('pct-of-new')});
+ assert.deepEqual(M.settleSpec(4,pc('increase 200 by 10% then decrease by 20%'),'180','pct-of-new','pct-change'),{verdict:'wrong',slip:'pct-added',said:says('pct-added')});
+ assert.equal(M.settled(5,false,'pct-added','pct-change').slip,undefined,'a pick not named by code');
+ assert.equal(M.slip('pct-of-new','pct-change').name,'Took the percent of the new amount');
+ // property: every seed's own slip, worked by hand, is named; its line never leaks the item's answer
+ let named=0;
+ for(let seed=0;seed<SEEDS;seed++){
+  const p=S.genPercentTop(seed),h=pctSlipByHand(p.expr),t=pctByHand(p.expr);
+  if(!h||(h.N===t.N&&h.D===t.D))continue;
+  const v=S.check(p,plainOf(h),'uk');
+  assert.deepEqual([v.verdict,v.slip],['wrong',h.id],`${p.expr}: ${plainOf(h)}`);named++;
+  assert.equal(S.leaksSchool(p,says(h.id)),false,p.expr);
+ }
+ assert.ok(named>SEEDS*0.9,`named on ${named} of ${SEEDS}`);
+});
+
 test('MB-B20 a side of one metre is printed in the singular and read back',()=>{
  const spec={shape:'pythagoras',expr:'ladder 3 1 dp1',unit:'m'};
  assert.ok(S.wellFormed(spec).ok);

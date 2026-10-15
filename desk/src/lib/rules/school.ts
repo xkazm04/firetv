@@ -1515,6 +1515,9 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "change-only", name: "Found the change and stopped", says: "This is the change itself, the percentage of the amount. The question asks for the new amount: add the change on, or take it off.", points: "the last line" },
   { id: "change-wrong-way", name: "Went the wrong way", says: "The change went the wrong way. Read the question again: an increase adds, a decrease takes away.", points: "the line where the change was added or taken off" },
   { id: "change-as-number", name: "The percent added as a plain number", says: "The percentage was added or taken off as a plain number. Find that percentage of the amount first.", points: "the line where the percentage was added or taken off" },
+  // the top rung of percent increase and decrease (MB-B20): named on a top-rung item only (SCHOOL_TOP_SLIPS)
+  { id: "pct-of-new", name: "Took the percent of the new amount", says: "The percentage was taken of the amount after the change, but it is a percentage of the amount before. Divide back to the original.", points: "the line where the percentage was taken" },
+  { id: "pct-added", name: "Added the percentages together", says: "The percentages were added into one change. Each change is a percentage of the amount there is by then, so apply them one after another.", points: "the line where the percentages were combined" },
   // ratio and sharing (Family W7 batch 3)
   { id: "ratio-split-each", name: "Divided by each number of the ratio", says: "The amount was divided by each number of the ratio in turn. Add the ratio's numbers first to find the equal parts, then one part.", points: "the division" },
   { id: "ratio-as-amounts", name: "The ratio's numbers given as the amounts", says: "The ratio's numbers were given as the answer. They say how many parts each side gets: find one part and multiply by them.", points: "the answer" },
@@ -1570,7 +1573,8 @@ function commonFactors(a: bigint, b: bigint): bigint[] {
  *   - p% of N (W7 batch 2): N ÷ p and N ÷ (p/100) divided by the percent; p × N the percent as a whole number; N ÷ 10
  *     ten percent and stopped (p not ten); (100 - p)% of N the part left;
  *   - B increased or decreased by p% (W7 batch 2): p% of B the change and stopped; B × (100 ∓ p)/100 the other way; B ± p
- *     the percent added or taken off as a plain number (the percent of a hundred, not of the amount);
+ *     the percent added or taken off as a plain number (the percent of a hundred, not of the amount). Its top rung (MB-B20)
+ *     names its own instead: the percent taken of the amount after the change; the percentages added into one change;
  *   - a missing ratio term a:b = ?:k (W7 batch 3): a + (k - b) the difference added; b × k / a the ratio the other way
  *     round (whole only). A ratio to simplify and a share are judged by `checkRatio`, whose pairs carry their own slips;
  *   - q2 at p for q1 (W7 batch 3, a rate): q1 ÷ p × q2 the division the wrong way round; p × q1 × q2 multiplied instead of
@@ -1682,8 +1686,20 @@ function slipCandidates(r: ReadOk): [string, Q][] {
     if (K.mode === "not") cands.push(["prob-own", mk(ev, total)!]);
     return distinctSlips(cands, r.truth);
   }
-  // MB-B20: no slip of the percent-change list is named on a top-rung change (its own slips are not written yet)
-  if (K.k === "pct-top") return [];
+  if (K.k === "pct-top") {
+    // MB-B20, the top rung's own slips (SCHOOL_TOP_SLIPS), never the forward list's: the amount before a change worked as a
+    // change of the amount after it, A × (100 ∓ p)/100 (20% off a price after a 20% rise); the percentages added into one
+    // change, B × (100 ± p1 ± p2)/100 for two in turn and B × (100 ± n·p)/100 for the years (simple, not compound). A
+    // value of zero or below is no amount, and is not listed
+    const H = qi(BigInt(100)), B = qi(K.base), signed = (x: { up: boolean; p: Q }) => (x.up ? x.p : sub(qi(Z), x.p));
+    const changed = (pct: Q): Q | null => { const v = div(mul(B, add(H, pct)), H)!; return v.n > Z ? v : null; };
+    const cands: [string, Q][] = [];
+    const put = (id: string, v: Q | null) => { if (v) cands.push([id, v]); };
+    if (K.form === "before") put("pct-of-new", changed(sub(qi(Z), signed(K.steps[0]))));
+    else if (K.form === "then") put("pct-added", changed(add(signed(K.steps[0]), signed(K.steps[1]))));
+    else put("pct-added", changed(mul(qi(BigInt(K.years)), signed(K.steps[0]))));
+    return distinctSlips(cands, r.truth);
+  }
   if (K.k === "pyth-dp") {
     // MB-B20: the tier-1/2 slips from the sides as written, exact; the rooted squares-added slip is judged in `check` (a rounding)
     const xx = mul(K.x, K.x), yy = mul(K.y, K.y);
@@ -3428,6 +3444,15 @@ export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
   // v2 M2b: the units beyond the school path (a slip of a kind with no exact value is not listed: the rooted squares-added slip)
   "pythagoras": ["pyth-sides-added", "pyth-no-root", "pyth-squares-added"],
   "probability": ["prob-count-alone", "prob-part-over-rest", "prob-one-over-colours", "prob-own"],
+};
+
+/**
+ * MB-B20: the slips only a unit's TOP rung can show, by topic id, in SCHOOL_SLIPS order, each detected by code
+ * (slipCandidates). Kept off SCHOOL_UNIT_SLIPS: a usual item never shows them, so the unit's list - the explain prompt's
+ * vocabulary, an aimed set, the ruler - stays as it was; a step-up attempt never reaches the slip record (rules/slips).
+ */
+export const SCHOOL_TOP_SLIPS: Readonly<Record<string, readonly string[]>> = {
+  "pct-change": ["pct-of-new", "pct-added"],
 };
 
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */

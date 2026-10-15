@@ -18,7 +18,7 @@ import { leaksMaturita, readsMaturita } from "./maturita";
 import { EN_CARD, figuresOfCzech, fold } from "./numberWords";
 import { CALC_SHAPES, CALC_SLIPS, checkAnswer, partsFromQuestion as calcPartsOf, slipsFor as calcSlipsFor, specFromQuestion as calcSpecOf } from "./calc";
 import { calcTopics, judgeOfTopic } from "../library/paths";
-import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec, specFromQuestion as schoolSpecOf } from "./school";
+import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_TOP_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec, specFromQuestion as schoolSpecOf } from "./school";
 import type { SchoolSystem } from "../session/store";
 import { DISAGREES, markCounts, type Markable } from "./marks";
 
@@ -82,6 +82,15 @@ export function slip(id: string, topicId?: string): Slip | undefined {
 export function slipsFor(topicId: string): Slip[] {
   if (isCalcTopic(topicId)) return CALC_AS_SLIPS.filter((s) => s.topics.includes(topicId));
   return [...SLIPS, ...SCHOOL_AS_SLIPS].filter((s) => s.topics.includes(topicId));
+}
+
+/**
+ * MB-B20: the slips only a school unit's top rung shows (rules/school SCHOOL_TOP_SLIPS), in its words; none for any other
+ * topic. Off `slipsFor` on purpose: a model is never offered them, and only the school check names one (`settled`).
+ */
+function topSlipsFor(topicId: string): Slip[] {
+  const ids = Object.prototype.hasOwnProperty.call(SCHOOL_TOP_SLIPS, topicId) ? SCHOOL_TOP_SLIPS[topicId] : [];
+  return SCHOOL_AS_SLIPS.filter((s) => ids.includes(s.id));
 }
 
 /** The list the prompt carries: one slip per line, id then what the desk would say. */
@@ -155,13 +164,13 @@ export interface Settled { verdict: "right" | "wrong"; slip?: string; said: stri
 
 /**
  * The verdict the substitution gave, and the line that goes with it. A slip survives only on a wrong
- * item and only from this topic's closed vocabulary. A wrong item with no slip says its checker's own reason
- * (`why`, a fixed sentence: "A derivative has no arbitrary constant in it.") when it has one beyond the plain
+ * item and only from this topic's closed vocabulary, or (MB-B20, `byCode`: the school check named it) from its top
+ * rung's. A wrong item with no slip says its checker's own reason (`why`, a fixed sentence: "A derivative has no arbitrary constant in it.") when it has one beyond the plain
  * disagreement (rules/marks DISAGREES), and asks how the learner got there when it has none (MB-B1). Never a value.
  */
-export function settled(n: number, right: boolean, slipId: unknown, topicId: string, why?: string): Settled {
+export function settled(n: number, right: boolean, slipId: unknown, topicId: string, why?: string, byCode = false): Settled {
   const id = typeof slipId === "string" ? slipId.trim() : "";
-  const own = right ? undefined : slipsFor(topicId).find((s) => s.id === id);
+  const own = right ? undefined : slipsFor(topicId).find((s) => s.id === id) ?? (byCode ? topSlipsFor(topicId) : []).find((s) => s.id === id);
   const reason = typeof why === "string" && why.trim() && why !== DISAGREES ? why.trim() : "";
   return { verdict: right ? "right" : "wrong", slip: own?.id, said: right ? RIGHT(n) : own ? own.says : reason || ASK(n) };
 }
@@ -191,7 +200,7 @@ export function judgeSpec(n: number, spec: unknown, answer: unknown, slipId: unk
   if (isSchoolSpec(spec)) {
     const v = schoolCheck(spec, typeof answer === "string" ? answer : "", system);
     if (v.verdict === "unsure") return { verdict: "unsure", why: v.why };
-    return settled(n, v.verdict === "right", v.slip, topicId, v.why);
+    return settled(n, v.verdict === "right", v.slip, topicId, v.why, true);
   }
   if (!isCalcSpec(spec)) return { verdict: "unsure" };
   const c = checkAnswer(spec, typeof answer === "string" ? answer : "", system);

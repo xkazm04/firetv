@@ -480,7 +480,10 @@ test('W7 SLIPS: every slip on the closed list belongs to exactly one unit, carri
  assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent','frac-mul-div','frac-of-amount',...B2_UNITS,...B3_UNITS,...M2B_UNITS].sort());
  const listed=units.flatMap((u)=>S.SCHOOL_UNIT_SLIPS[u]);
  assert.equal(new Set(listed).size,listed.length,'no slip id is on two units');
- assert.deepEqual([...listed].sort(),S.SCHOOL_SLIPS.map((s)=>s.id).sort(),'the closed list is exactly the units\' lists');
+ // MB-B20: a top rung's own slips (SCHOOL_TOP_SLIPS) are on no unit's list, and on no other top rung's
+ const top=Object.values(S.SCHOOL_TOP_SLIPS).flat();
+ assert.equal(new Set([...listed,...top]).size,listed.length+top.length,'no top-rung slip is on a unit\'s list or two top rungs');
+ assert.deepEqual([...listed,...top].sort(),S.SCHOOL_SLIPS.map((s)=>s.id).sort(),'the closed list is exactly the units\' lists and the top rungs\'');
  for (const s of S.SCHOOL_SLIPS){assert.doesNotMatch(s.name+s.says+s.points,/\d/,s.id);assert.match(s.says,/^[A-Z][^]*\.$/,s.id);const n=s.says.trim().split(/\s+/).length;assert.ok(n<=25,`${s.id}: says is ${n} words, 25 or fewer`);}
  for (const u of units){const order=S.SCHOOL_SLIPS.map((s)=>s.id).filter((id)=>S.SCHOOL_UNIT_SLIPS[u].includes(id));assert.deepEqual([...S.SCHOOL_UNIT_SLIPS[u]],order,`${u}: in SCHOOL_SLIPS order`);}
 });
