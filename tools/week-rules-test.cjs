@@ -462,3 +462,79 @@ test('MB-B1 week: a unit line says skipped apart from not sure; a line with both
   assert.match(line.text,/: 10 of 25 right, 7 not sure, 5 skipped(, last set)?\.$/,'the counts are never cut');
  }
 });
+
+// ------------------------------------------------------------------ S3: Sunday names the line that came back
+/** A taught item as english/review.ts leaves it once it came back: the slip, the taught line, and the reply that used it. */
+const T=(id,sceneId,better,reusedDay,extra={})=>({id,kind:'fix',said:'My tomatoes is one metre',better,why:'are, with more than one',turnId:`ep-${id}:t1`,at:at(19,18),sceneId,title:'The first hello',
+ ...(reusedDay===undefined?{}:{reusedAt:at(reusedDay,18,30),reusedIn:`conv-${id}`,reusedQuote:'My tomatoes are big and red this year'}),...extra});
+const TALKS=[E(24,18,'teacher','repair',3),E(25,18,'meet','contact',6)];
+const lingaOf=(lines)=>lines.filter((l)=>l.section==='english'&&!l.head).map((l)=>l.text);
+const tryOf=(lines)=>lines.filter((l)=>l.section==='try'&&!l.head).map((l)=>l.text);
+test('S3: a taught phrase reused this week is named on the Linga and English try-it lines - its better only, the latest, audience-filtered; a week with no reuse reads as before; the digest stays counts',()=>{
+ calls=0;
+ // one Taught reused inside the week, better 'tomatoes are': the phrase on the Linga line and in the act
+ const one={digest:TALKS,english:{plan:null,taught:[T('a','meet','tomatoes are',25)]}};
+ const page=W.sundayPage(learnerOf(one.digest,one.english),MIA,NOW);
+ assert.equal(page.english.phrase,'tomatoes are');
+ assert.equal(page.tryIt,'Ask them to teach you the phrase “tomatoes are”.','the act names the phrase instead of asking the parent to find one');
+ const lines=words(one);
+ assert.deepEqual(lingaOf(lines),['Two conversations: The first hello · Say that again, please.','Came back this week: “tomatoes are”.']);
+ assert.deepEqual(tryOf(lines),['Ask them to teach you the phrase “tomatoes are”.']);
+ // better only: never the slip, never the reply
+ const all=JSON.stringify(lines)+JSON.stringify(page);
+ for(const x of ['tomatoes is','My tomatoes','big and red','are, with more'])assert.ok(!all.includes(x),`never ${x}`);
+ for(const l of lines)assert.ok(W.wordsIn(l.text)<=W.LINE_WORDS,l.text);
+
+ // a week of conversations and no reused item: today's count-and-names line and act, exactly
+ const before=words({digest:TALKS,english:{plan:null}});
+ assert.deepEqual(lingaOf(before),['Two conversations: The first hello · Say that again, please.']);assert.deepEqual(tryOf(before),[W.DO_IT_ELSE.english]);
+ for(const taught of [[],[T('b','meet','tomatoes are')],[T('c','meet','tomatoes are',19)],[T('d','meet','tomatoes are',20)],[T('e','meet','tomatoes are',28)],[T('f','meet','',25)],[T('g','meet','  ',25)],[T('h','meet',undefined,25)]])
+  assert.deepEqual(words({digest:TALKS,english:{plan:null,taught}}),before,`no phrase: ${JSON.stringify(taught.map((t)=>[t.id,t.reusedAt,t.better]))}`);
+ // the window is the page's own: local midnight six days back is in
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:[{...T('i','meet','tomatoes are'),reusedAt:at(21,0)}]}),MIA,NOW).english.phrase,'tomatoes are');
+ // no conversation this week: no Linga section and no phrase, even with a reuse on file
+ assert.ok(!words({digest:[M(24,18,'area',3,6)],english:{plan:null,taught:[T('j','meet','tomatoes are',25)]}}).some((l)=>/tomatoes/.test(l.text)));
+
+ // the latest reused, of several; ties by id; a phrase that would not fit a line is passed over, never cut
+ const many=[T('k','meet','I would like a glass of water',22),T('m','teacher','could you say that again',26),T('l','meet','tomatoes are',24)];
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:many}),MIA,NOW).english.phrase,'could you say that again');
+ const tie=[T('z','meet','second by id',26),T('y','meet','first by id',26)];
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:tie}),MIA,NOW).english.phrase,'first by id');
+ const long=[T('n','meet','tomatoes are',23),T('o','meet','one two three four five six seven eight',26)];
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:long}),MIA,NOW).english.phrase,'tomatoes are','eight words do not fit the act line: the next latest');
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:[T('p','meet','  “Could you   say that again?”  ',25)]}),MIA,NOW).english.phrase,'Could you say that again','its own quotes and closing stop dropped, the words as taught');
+
+ // an adult-scene item: absent when adult content is off (Family, at any age), present in Adult mode
+ const date=[T('q','meet','tomatoes are',23),T('r','date','what do you enjoy about it',26)];
+ const ADULT={name:'Ada',age:30,type:'other',mode:'adult'},FAMILY18={name:'Ada',age:30,type:'other',mode:'family'};
+ for(const p of [MIA,{name:'Mia',age:12,type:'elementary'},FAMILY18]){
+  const pg=W.sundayPage(learnerOf(TALKS,{plan:null,taught:date}),p,NOW);
+  assert.equal(pg.english.phrase,'tomatoes are',`${JSON.stringify(p)}: the adult scene's phrase is passed over for the next latest allowed`);
+  assert.ok(!JSON.stringify(W.sundayWords(pg)).includes('enjoy'),'never on a Family page');
+  assert.deepEqual(words({digest:TALKS,english:{plan:null,taught:[date[1]]}},p),words({digest:TALKS,english:{plan:null}},p),'only an adult item: the page reads as before');
+ }
+ assert.equal(W.sundayPage(learnerOf(TALKS,{plan:null,taught:date}),ADULT,NOW).english.phrase,'what do you enjoy about it','Adult mode: allowed');
+
+ // a maths week: the act stays the unit's, the phrase is on the Linga line
+ const mixed=words({digest:[...TALKS,M(24,19,'area',4,6)],english:{plan:null,taught:[T('s','meet','tomatoes are',25)]}});
+ assert.deepEqual(tryOf(mixed),[W.DO_IT.area]);assert.ok(lingaOf(mixed).includes('Came back this week: “tomatoes are”.'));
+
+ // the trim ladder drops the scene names, never the phrase; the busiest week with the longest phrase still fits PAGE_WORDS
+ for(const better of ['tomatoes are','one two three four five six seven']){
+  for(const p of [TEN,MIA]){
+   const busy=words({digest:BUSIEST,english:{plan:null,taught:[T('t','teacher',better,25)]}},p);
+   assert.ok(lingaOf(busy).includes(`Came back this week: “${better}”.`),'the phrase kept');
+   assert.ok(W.pageWords(busy)<=W.PAGE_WORDS,`${W.pageWords(busy)} words`);
+   for(const s of ['week','maths','look','english','essay','try'])assert.ok(busy.some((l)=>l.section===s&&!l.head),`${s} kept`);
+   for(const l of busy)assert.ok(W.wordsIn(l.text)<=W.LINE_WORDS,l.text);
+  }
+ }
+ // the busiest week without a phrase is unchanged (88 words, the ten-word name kept whole)
+ assert.equal(W.pageWords(words(BUSIEST,TEN)),88);assert.equal(words(BUSIEST,TEN)[0].text,`${TEN.name} worked on seven evenings.`);
+
+ // the digest stays counts, scene id, skill and turns: an english entry carrying text is cleaned of it
+ const dirty={at:at(25,18),kind:'english',sceneId:'meet',skill:'contact',turns:6,text:'tomatoes are',better:'tomatoes are',reusedQuote:'My tomatoes are big'};
+ assert.deepEqual(D.cleanEntry(dirty),{at:dirty.at,kind:'english',sceneId:'meet',skill:'contact',turns:6});
+ assert.deepEqual(D.cleanDigest([dirty]),[{at:dirty.at,kind:'english',sceneId:'meet',skill:'contact',turns:6}]);
+ assert.equal(calls,0,'no model');
+});

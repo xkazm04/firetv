@@ -11,13 +11,18 @@
  *      words; the practice papers typed in;
  *   c. one thing to look at: the week's most frequent code-detected slip, by its plain name, only when it came twice;
  *   d. Linga: how many conversations, and the situations' names (authored scene names, or a plan topic's own title);
+ *      and, when a taught phrase came back this week (english/review.ts set its reusedAt inside the window), that one
+ *      phrase: the taught `better` of the latest reused item - never the slip it corrected (`said`) and never the
+ *      learner's reply (`reusedQuote`) - kept off a page whose desk has adult content off when it came from an adult
+ *      scene (curriculum taughtAllowed, the rule that keeps it out of the scenes);
  *   e. Essay Master: how many paragraph readings, and the lenses;
  *   f. one thing to try together: exactly one everyday act, from the authored table DO_IT keyed by the unit worked most,
- *      or a fallback by what was done when there was no maths.
+ *      or a fallback by what was done when there was no maths; the English act names the phrase that came back, when one did.
  * An empty week, one with no entry at all, is two words: "Nothing this week." The words hold counts of things (as the recap's do), never a
  * percentage, a ranking, a comparison with a sibling, a school year or an age, never praise, a problem, an answer, a
- * transcript or a quote. Only THIS learner's record is read. Each line stays within LINE_WORDS words and the page within
- * PAGE_WORDS (a fixed ladder trims detail, never a section, when a busy week runs long). Phase 1 writes English only:
+ * transcript or a quote of the learner (the one phrase is the desk's own taught line, code-checked as come back, not
+ * the learner's words). Only THIS learner's record is read. Each line stays within LINE_WORDS words and the page within
+ * PAGE_WORDS (a fixed ladder trims detail, never a section and never the phrase, when a busy week runs long). Phase 1 writes English only:
  * the page's language follows the desk's, and the desk is English in Phase 1.
  *
  * Pure and client-safe: library data only - never the store, the learners file, a job or an engine (types excepted).
@@ -28,7 +33,7 @@ import type { DigestEntry, EnglishDigest, EssayDigest, HomeworkDigest, MathsDige
 import { slipName } from "./digest";
 import { topicIn } from "../library/paths";
 import { ESSAY_TYPES } from "../library/lessons.data";
-import { AUTHORED_SCENES } from "../english/curriculum";
+import { AUTHORED_SCENES, defaultPreferences, taughtAllowed } from "../english/curriculum";
 import { SCHOOL_SLIPS } from "./school";
 
 /** The empty week, whole: the desk's rule that an empty state is two words. */
@@ -99,6 +104,11 @@ export const DO_IT_ELSE = {
   any: "Ask them to teach you one thing they learned this week.",
 } as const;
 
+/** The English act when a taught phrase came back this week: it names the phrase, so the parent need not find one. */
+export const tryPhrase = (phrase: string) => `Ask them to teach you the phrase “${phrase}”.`;
+/** The Linga line that names the phrase that came back. */
+export const backPhrase = (phrase: string) => `Came back this week: “${phrase}”.`;
+
 /** The page's sections, in order, and the heading the phone draws over each (the week's own line has none). */
 export type WeekSection = "week" | "maths" | "look" | "english" | "essay" | "try";
 export const WEEK_HEADS: Readonly<Record<Exclude<WeekSection, "week">, string>> = {
@@ -106,7 +116,7 @@ export const WEEK_HEADS: Readonly<Record<Exclude<WeekSection, "week">, string>> 
 };
 
 export interface WeekUnit { id: string; name: string; sets: number; right: number; notSure: number; skipped: number; total: number; stretch: boolean; latest: number }
-/** The page as rows: what the words are made of. Counts and names only; empty when nothing was done this week. */
+/** The page as rows: what the words are made of. Counts and names, and one taught phrase; empty when nothing was done this week. */
 export interface SundayPage {
   name: string;
   empty: boolean;
@@ -120,7 +130,8 @@ export interface SundayPage {
   /** the practice papers typed in this week */
   papers: number;
   slip: { id: string; name: string; times: number } | null;
-  english: { conversations: number; scenes: string[] } | null;
+  /** phrase: the taught line that came back this week (english.taught `better`, audience-filtered); absent when none did */
+  english: { conversations: number; scenes: string[]; phrase?: string } | null;
   essay: { readings: number; pieces: number; lenses: string[] } | null;
   tryIt: string | null;
 }
@@ -159,14 +170,46 @@ function sceneName(id: string, learner: Pick<Learner, "english">): string | null
   return AUTHORED_SCENES.find((s) => s.id === id)?.name ?? learner.english?.plan?.topics?.find((t) => t.id === id)?.title?.trim() ?? null;
 }
 
+/** A taught phrase as the page says it: whitespace collapsed, its own quote marks and closing stop dropped (the line adds both). */
+const phraseOf = (better: unknown): string =>
+  typeof better === "string" ? better.replace(/\s+/g, " ").trim().replace(/^["“”']+|["“”']+$/g, "").replace(/[\s.!?,;:]+$/, "").trim() : "";
+
+/**
+ * The phrase that came back this week: of the learner's taught items with reusedAt inside [from, now], allowed by
+ * taughtAllowed (an adult scene's item only where adult content is on), the `better` of the latest reused whose words
+ * fit both lines that name it within LINE_WORDS (a phrase is never cut: a longer one is passed over). Ties by id, so the
+ * page stays deterministic. Never `said`, never `reusedQuote`. Null when none.
+ */
+function phraseBack(learner: Pick<Learner, "english">, profile: SundayProfile | null | undefined, from: number, now: number): string | null {
+  const english = learner.english;
+  const taught = Array.isArray(english?.taught) ? english.taught : [];
+  if (!taught.length) return null;
+  // the profile's age, type and mode are all the audience rule reads (rules/mode modeOf)
+  const p = (profile ?? undefined) as Profile | undefined;
+  const allowed = taughtAllowed(p, english?.preferences ?? defaultPreferences(p), english);
+  const fits = (s: string) => wordsIn(tryPhrase(s)) <= LINE_WORDS && wordsIn(backPhrase(s)) <= LINE_WORDS;
+  let best: { at: number; id: string; phrase: string } | null = null;
+  for (const t of taught) {
+    const at = t?.reusedAt;
+    if (typeof at !== "number" || !Number.isFinite(at) || at < from || at > now || typeof t.sceneId !== "string" || !allowed(t)) continue;
+    const phrase = phraseOf(t.better);
+    if (!phrase || !fits(phrase)) continue;
+    const id = String(t.id ?? "");
+    if (!best || at > best.at || (at === best.at && id < best.id)) best = { at, id, phrase };
+  }
+  return best?.phrase ?? null;
+}
+
 /** The lens names, each once, in the order the lenses were first read (the digest's own entries sorted by time). */
 function lensesRead(reads: EssayDigest[]): string[] {
   const names: string[] = [];
   for (const r of [...reads].sort((a, b) => a.at - b.at)) { const n = ESSAY_TYPES.find((t) => t.id === r.lens)?.name; if (n && !names.includes(n)) names.push(n); }
   return names;
 }
+/** The profile the page reads: its name, and the age, type and mode the audience rule reads (all optional but the name). */
+export type SundayProfile = Pick<Profile, "name"> & Partial<Pick<Profile, "age" | "type" | "mode">>;
 /** The week's rows from this learner's own digest. Deterministic: the same learner, profile and `now` give the same page. */
-export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile: Pick<Profile, "name"> | null | undefined, now: number): SundayPage {
+export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile: SundayProfile | null | undefined, now: number): SundayPage {
   const from = weekStart(now);
   const week = (learner.digest ?? []).filter((e: DigestEntry) => e.at >= from && e.at <= now);
   const name = profile?.name?.trim() || "Your learner";
@@ -202,7 +245,8 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
   if (talks.length) {
     const scenes: string[] = [];
     for (const e of [...talks].sort((a, b) => b.at - a.at)) { const n = sceneName(e.sceneId, learner); if (n && !scenes.includes(n)) scenes.push(n); }
-    page.english = { conversations: talks.length, scenes };
+    const phrase = phraseBack(learner, profile, from, now);
+    page.english = { conversations: talks.length, scenes, ...(phrase ? { phrase } : {}) };
   }
   // e. Essay Master: the readings, and the lenses in the order read (each where its first reading falls, as the recap lists them)
   const reads = week.filter((e): e is EssayDigest => e.kind === "essay");
@@ -211,21 +255,24 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
   // f. one act: the unit worked most (the first row) when the table has it, else by what was done
   const top = page.units.find((u) => DO_IT[u.id]);
   page.tryIt = top ? DO_IT[top.id]
-    : page.english && (!page.essay || page.english.conversations >= page.essay.readings) ? DO_IT_ELSE.english
+    : page.english && (!page.essay || page.english.conversations >= page.essay.readings) ? (page.english.phrase ? tryPhrase(page.english.phrase) : DO_IT_ELSE.english)
     : page.essay ? DO_IT_ELSE.essay : DO_IT_ELSE.any;
   return page;
 }
 
 /**
  * The detail a busy week is trimmed by, rung by rung, until the page fits PAGE_WORDS: fewer units named, then no scene
- * names, then a shorter step-up line, then the homework line without its hint counts (the sheets are still said). No
- * rung drops a section, or a line whose absence would read as nothing done.
+ * names, then a shorter step-up line, then the homework line without its hint counts (the sheets are still said), and
+ * last, reached only when the phrase that came back would carry the busiest week past PAGE_WORDS, the week line names
+ * the learner by the first word of their name. No rung drops a section, the phrase, or a line whose absence would read
+ * as nothing done.
  */
-interface Trim { units: number; scenes: boolean; stepNames: boolean; hints: boolean }
+interface Trim { units: number; scenes: boolean; stepNames: boolean; hints: boolean; name?: false }
 const LADDER: Trim[] = [
   { units: 3, scenes: true, stepNames: true, hints: true }, { units: 2, scenes: true, stepNames: true, hints: true }, { units: 1, scenes: true, stepNames: true, hints: true },
   { units: 1, scenes: false, stepNames: true, hints: true }, { units: 1, scenes: false, stepNames: false, hints: true },
   { units: 1, scenes: false, stepNames: false, hints: false },
+  { units: 1, scenes: false, stepNames: false, hints: false, name: false },
 ];
 
 /** Scene names that fit a line after `head`: as many as fit, then "and N more"; none when not even one fits. */
@@ -247,7 +294,7 @@ function linesOf(page: SundayPage, t: Trim): WeekLine[] {
   if (page.empty) return [{ section: "week", text: WEEK_EMPTY }];
   // a profile name long enough to carry the week line past LINE_WORDS is said by its first word
   const said = (name: string) => `${name} worked on ${times(page.evenings, "evening")}.`;
-  const out: WeekLine[] = [{ section: "week", text: wordsIn(said(page.name)) <= LINE_WORDS ? said(page.name) : said(page.name.split(/\s+/)[0]) }];
+  const out: WeekLine[] = [{ section: "week", text: t.name !== false && wordsIn(said(page.name)) <= LINE_WORDS ? said(page.name) : said(page.name.split(/\s+/)[0]) }];
   const head = (section: Exclude<WeekSection, "week">) => out.push({ section, head: true, text: WEEK_HEADS[section] });
   if (page.homework || page.units.length || page.papers) head("maths");
   if (page.homework) out.push({ section: "maths", text: homeworkLine(page.homework, t.hints) });
@@ -265,6 +312,8 @@ function linesOf(page: SundayPage, t: Trim): WeekLine[] {
     head("english");
     const h = cap(times(page.english.conversations, "conversation"));
     out.push({ section: "english", text: t.scenes && page.english.scenes.length ? namesLine(h, page.english.scenes) : `${h}.` });
+    // the phrase that came back: on every rung (the ladder trims the names, never the phrase)
+    if (page.english.phrase) out.push({ section: "english", text: backPhrase(page.english.phrase) });
   }
   if (page.essay) {
     head("essay");
