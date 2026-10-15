@@ -290,6 +290,11 @@ constant in it."); only a plain disagreement asks "I got something different for
 - **Hand and print lines** - `maths-hand`, `maths-print`, fractions `maths-frac`, ticks `maths-tick`.
 - **Tally** - the set as six hand-drawn numbers in the top bar: ticked, ringed, dashed when unsure, an empty pencil
   line under the number when skipped (MB-B1); the current one lit.
+- **Recap lamps** (MB-B23) - on the shell's recap, Math Buddy's tile draws a lamp per problem that had a hint tonight,
+  its name under it in the hand at 32 px as the learner knows it from the paper ("3", "5b"), a small page icon and the
+  page number at 28 px only when two hinted problems share a name; a lamp that needed a second hint is ringed in pen.
+  Five lamps, then "k more". Never the problem's text: the name is the verdict, the caption slot keeps its one sentence.
+  A log with no key the desk can name draws a lamp per hint, unnamed, as before. `tv/recapRows` `hintedOf`.
 - **Taped card** - a cream card with a strip of amber tape: the one caption slot beside the paper. On the hint:
   the learner's question from the phone in the blue hand (`maths-said`), HINT with two pips, the hint, and the next
   step in the pen-dark hand. A hint on a Calculus page is written in a first-year Calculus I stance when the learner

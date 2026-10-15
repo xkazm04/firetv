@@ -363,8 +363,12 @@ const PAGE = <svg className="rc-page" viewBox="0 0 40 50" aria-hidden="true"><pa
 function Earlier({ n }: { n: number }) {
   return n > 0 ? <div className="rc-earlier" data-role="recap-earlier">{n} earlier</div> : null;
 }
+/** The most hinted problems the tile names with a lamp each (one row on the sheet); the rest are "k more" (MB-B23). */
+const RECAP_LAMPS = 5;
 function RecapMaths({ t }: { t: MathsTile }) {
-  const lamps = Array.from({ length: Math.min(t.hints, 12) }, (_, i) => i < t.second);
+  // a lamp per hinted problem, its name beneath, ringed when it needed a second; a log with no nameable key draws a lamp per hint as before
+  const named = t.hinted.some((x) => x.name !== null), lamps = named ? [] : Array.from({ length: Math.min(t.hints, 12) }, (_, i) => i < t.second);
+  const lit = t.hinted.slice(0, RECAP_LAMPS), more = t.hinted.length - lit.length;
   return (<>
     <div className="rc-head"><MathsMark /><div className="mb-word">Math <em>Buddy</em></div></div>
     <div className="rc-sheet">
@@ -375,6 +379,9 @@ function RecapMaths({ t }: { t: MathsTile }) {
         <Earlier n={t.sets.length - RECAP_READINGS} />
         {t.pages > 0 && <div className="rc-pages" data-role="recap-pages">{Array.from({ length: Math.min(t.pages, 8) }, (_, i) => <i key={i}>{PAGE}</i>)}</div>}
         {lamps.length > 0 && <div className="rc-lamps" data-role="recap-hints">{lamps.map((two, i) => <b key={i} data-second={two || undefined} />)}</div>}
+        {named && <div className="rc-lamps" data-role="recap-hints">{lit.map((x, i) => (
+          <span key={i} className="rc-lamp" data-second={x.second || undefined} data-page={x.page}><b /><em>{x.name ?? ""}{x.page && <small>{PAGE}{x.page}</small>}</em></span>
+        ))}{more > 0 && <div className="rc-earlier" data-role="recap-hints-more">{more} more</div>}</div>}
       </>}
     </div>
   </>);

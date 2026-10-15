@@ -157,7 +157,14 @@
 .rc .rc-page path:last-child { fill: none; stroke: var(--mb-ink); stroke-width: 2.5; stroke-linecap: round; opacity: .55; }
 .rc .rc-lamps { display: flex; flex-wrap: wrap; gap: 20px; padding-left: 6px; }
 .rc .rc-lamps b { width: 40px; height: 40px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--mb-amber-lo), var(--mb-amber-2) 70%); box-shadow: 0 0 14px rgba(255, 177, 61, .55); }
-.rc .rc-lamps b[data-second] { box-shadow: 0 0 0 4px var(--mb-paper), 0 0 0 8px var(--mb-pen); }
+.rc .rc-lamps b[data-second], .rc .rc-lamp[data-second] b { box-shadow: 0 0 0 4px var(--mb-paper), 0 0 0 8px var(--mb-pen); }
+/* MB-B23: a lamp per hinted problem, the problem's name under it in the learner's hand; the page only when two share a name */
+.rc .rc-lamps:has(.rc-lamp) { align-items: flex-start; gap: 14px 22px; }
+.rc .rc-lamp { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 64px; }
+.rc .rc-lamp em { display: flex; flex-direction: column; align-items: center; font: 600 32px/1 var(--mb-hand, inherit); font-style: normal; color: var(--mb-ink); }
+.rc .rc-lamp em small { display: flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 28px; color: var(--mb-blue); }
+.rc .rc-lamp em small .rc-page { width: 24px; height: 30px; }
+.rc .rc-lamps .rc-earlier { align-self: center; }
 /* Linga: the cream card, the plum arch, a mark per conversation sized by its replies */
 .rc .rc-lg { background: #FFF9EC; border: 2px solid #D6C5AF; border-radius: 16px; color: #261F29; }
 .rc .rc-lg .lo-mark { display: flex; align-items: center; gap: 14px; font: 700 44px/1 Georgia, "Times New Roman", serif; letter-spacing: -1.6px; }

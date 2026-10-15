@@ -849,3 +849,20 @@ test('MB-B23 rows 4: the names are the seated learner\'s - a learner switch take
  const back=reduce(j,{type:'learner.set',id:'ema'});
  assert.equal(hintedLine(recap().recapRows(back,NOW).find((t)=>t.app==='maths')),'A hint on 3; none needed a second.');
 });
+const lampsOf=(html)=>[...html.matchAll(/<span class="rc-lamp"( data-second="true")?(?: data-page="(\d+)")?><b><\/b><em>([^<]*)(?:<small>.*?<\/small>)?<\/em><\/span>/g)].map((m)=>`${m[3]}${m[2]?` p${m[2]}`:''}${m[1]?'!':''}`);
+test('MB-B23 TV: a lamp per hinted problem with its name beneath, the second-hint lamp ringed, five at most then "k more"',()=>{
+ const one=draw(session({pages:[SHEET],log:{started:null,minutes:0,problems:['pA:5:b)','pA:3'],hard:['3x - 2 = 10'],hints:3}}),NOW);
+ assert.deepEqual(lampsOf(one),['3','5b!']);
+ for(const text of ['2x + 1 = 7','3x - 2 = 10'])assert.ok(!one.includes(text),'never a problem\'s text on the TV');
+ const page=HP('pL',Array.from({length:8},(_,i)=>[i+1,null,`q${i+1}`]));
+ const many=draw(session({pages:[page],log:{started:null,minutes:0,problems:page.items.map((x)=>x.key),hard:[],hints:8}}),NOW);
+ assert.deepEqual(lampsOf(many),['1','2','3','4','5']);
+ assert.match(many,/data-role="recap-hints-more">3 more</);
+ const two=draw(session({pages:[SHEET,HP('pB',[[3,null,'y = 2']])],log:{started:null,minutes:0,problems:['pA:3','pB:3'],hard:[],hints:2}}),NOW);
+ assert.deepEqual(lampsOf(two),['3 p1','3 p2'],'two problems called 3: the page under each');
+ // a log written before the names (no key the session can read): a lamp per hint as before, no label
+ const old=draw(session({log:{started:null,minutes:0,problems:['k1'],hard:['t'],hints:2}}),NOW);
+ assert.deepEqual(lampsOf(old),[]);assert.equal([...old.matchAll(/<b( data-second="true")?><\/b>/g)].length,2);
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8'),em=/\.rc \.rc-lamp em \{[^}]*?(\d+)px/.exec(css);
+ assert.ok(em&&+em[1]>=28,'the name under a lamp is 28px or more');
+});
