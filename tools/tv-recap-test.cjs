@@ -875,6 +875,8 @@ test('MB-B23 phone: the Recap tab says which problems had a hint by name, from h
  assert.match(sec,/hintedLine\(/,'the parent panel calls hintedLine');
  assert.doesNotMatch(sec,/log\.hard\.map|Needed a second hint: \{/,'no hinted problem\'s text on the phone');
  assert.match(sec,/data-role="phone-hinted"/);
+ // tonight's slips: the line slippedLine words (two then "k more", short labels, never a value), only when it names one
+ assert.match(sec,/\{slippedLine\(t\) && <li data-role="phone-slipped">\{slippedLine\(t\)\}<\/li>\}/,'the parent panel draws slippedLine under the hinted line, and nothing when it is null');
 });
 
 // cycle 19: the recap names a step up's slips - the ringed item's number and the slip's short label from rules, never a value
