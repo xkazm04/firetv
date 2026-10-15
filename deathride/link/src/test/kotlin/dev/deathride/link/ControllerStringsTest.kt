@@ -80,6 +80,11 @@ class ControllerStringsTest {
         assertTrue(page.contains("\$('pin').value='';\$('pin').focus()"))
     }
 
+    @Test fun phoneRendersTheScreenTheLinkNames() {
+        assertTrue(page.contains("const screenName=m.screen||"))
+        assertFalse(page.contains("m.phase==='countdown'?'GET READY'"),"the phone must not re-derive the screen from the phase")
+    }
+
     @Test fun raceDoesNotRepeatAmmoInTheHeader() {
         assertFalse(page.contains("c.weaponName.toUpperCase()+' '+c.ammo);"),"the FIRE button already shows the ammo")
     }
