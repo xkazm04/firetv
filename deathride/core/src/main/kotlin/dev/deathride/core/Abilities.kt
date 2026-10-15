@@ -197,17 +197,33 @@ class Abilities(private val world: World,var enabled: Boolean) {
         }
         return h
     }
+    /** The one word the player reads for this ability, in player vocabulary rather than phase names:
+     * OUT (wrecked or not racing), ARMING (start protection), PRIMING (windup), ACTIVE, COOL 7s (cooldown, which
+     * already includes recovery), LOW ENERGY, AUTO (the dispatcher fires itself), READY. Observational only. */
+    fun statusLabel(id: Int): String {
+        val c=world.cars[id];val s=c.ability;val d=s.definition?:return ""
+        return when {
+            !enabled || !world.combat.canAct(id)->"OUT"
+            world.combat.armingSeconds>0->"ARMING"
+            s.phase==AbilityPhase.WINDUP->"PRIMING"
+            s.phase==AbilityPhase.ACTIVE->"ACTIVE"
+            s.cooldownSeconds>1e-9->"COOL ${ceil(s.cooldownSeconds).toInt()}s"
+            s.energy+1e-9<d.energyCost->"LOW ENERGY"
+            d.kind==AbilityKind.DISPATCHER->"AUTO"
+            else->"READY"
+        }
+    }
     /** The fields the phone hud reads; /stats keeps the full [json]. */
     fun hudJson(id: Int): String {
         val c=world.cars[id];val s=c.ability;val d=s.definition?:return "null"
         val available=enabled && world.combat.canAct(id)
         val ready=available && world.combat.armingSeconds<=0 && !s.committed && s.cooldownSeconds<=1e-9 && s.energy+1e-9>=d.energyCost
-        return "{\"id\":\"${d.id}\",\"name\":\"${d.name}\",\"phase\":\"${s.phase}\",\"cooldownSeconds\":${s.cooldownSeconds},\"energy\":${s.energy},\"energyCapacity\":${d.energyCapacity},\"energyCost\":${d.energyCost},\"ready\":$ready,\"available\":$available}"
+        return "{\"id\":\"${d.id}\",\"name\":\"${d.name}\",\"phase\":\"${s.phase}\",\"cooldownSeconds\":${s.cooldownSeconds},\"energy\":${s.energy},\"energyCapacity\":${d.energyCapacity},\"energyCost\":${d.energyCost},\"ready\":$ready,\"available\":$available,\"status\":\"${statusLabel(id)}\"}"
     }
     fun json(id: Int): String {
         val c=world.cars[id];val s=c.ability;val d=s.definition?:return "null"
         val available=enabled && world.combat.canAct(id)
         val ready=available && world.combat.armingSeconds<=0 && !s.committed && s.cooldownSeconds<=1e-9 && s.energy+1e-9>=d.energyCost
-        return "{\"id\":\"${d.id}\",\"name\":\"${d.name}\",\"phase\":\"${s.phase}\",\"remainingSeconds\":${s.remainingSeconds},\"cooldownSeconds\":${s.cooldownSeconds},\"energy\":${s.energy},\"energyCapacity\":${d.energyCapacity},\"energyCost\":${d.energyCost},\"ready\":$ready,\"available\":$available,\"uses\":${s.activation},\"hits\":${world.combat.abilityHits[id]},\"damage\":${world.combat.abilityDamage[id]},\"effectId\":\"${d.effectId}\"}"
+        return "{\"id\":\"${d.id}\",\"name\":\"${d.name}\",\"phase\":\"${s.phase}\",\"remainingSeconds\":${s.remainingSeconds},\"cooldownSeconds\":${s.cooldownSeconds},\"energy\":${s.energy},\"energyCapacity\":${d.energyCapacity},\"energyCost\":${d.energyCost},\"ready\":$ready,\"available\":$available,\"status\":\"${statusLabel(id)}\",\"uses\":${s.activation},\"hits\":${world.combat.abilityHits[id]},\"damage\":${world.combat.abilityDamage[id]},\"effectId\":\"${d.effectId}\"}"
     }
 }
