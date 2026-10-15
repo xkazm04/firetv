@@ -310,6 +310,8 @@ export interface Session {
    * (lib/session/pairing.ts view); the seated learner's own is in the fields above.
    */
   away?: Record<string, MathsSlot>;
+  /** The essay refusal the analyse route said before any run (rules/essay.ts refusalCaption): the status it set, kept as a value so no screen decodes the sentence. A later status that is not this one is not a refusal. */
+  essayRefused?: string;
   status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null; /** the local day the log was first written: it is one evening's, see dayed */ day?: string; /** when the evening was last ended (session.end): the phone's recap shows for an evening ended since local midnight */ endedAt?: number };
   updatedAt: number;
   /** Who this copy was drawn for (lib/session/pairing.ts view): never stored, set only on what a route sends. */
@@ -345,7 +347,7 @@ export type Event =
   | { type: "practice.second"; n: number; verdict: "right" | "wrong" }
   | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string; slipAt?: SlipAt }
   | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string; by?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string; failure?: JobFailure }
-  | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" };
+  | { type: "status"; text: string; essayRefused?: boolean } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" };
 
 /**
  * The one door for what a screen or phone posts (api/session POST, after the server-only refusals): for each client-postable
@@ -377,7 +379,7 @@ const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { ty
   "task.add": { name: f.name, sub: f.subject, min: f.num }, "task.done": { id: f.str, done: f.bool },
   "timer.start": {}, "timer.pause": {}, "timer.tick": { seconds: f.num }, "timer.skipbreak": {},
   "topic.open": { topic: f.str, stay: maybe(f.bool) }, walk: { ix: f.int }, "practice.clear": {},
-  status: { text: f.str }, "session.end": {}, reset: {},
+  status: { text: f.str, essayRefused: maybe(f.bool) }, "session.end": {}, reset: {},
 };
 /** Why a posted event is refused, or null when it may go to the reducer. */
 export function badPost(e: unknown): string | null {
@@ -781,7 +783,7 @@ function step(s: Session, e: Event): Session {
       n.practice = { ...s.practice, items: s.practice.items.map((x) => (x.n === e.n ? shown({ ...x, second: e.verdict }) : x)) }; break; }
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
-    case "status": n.status = e.text; break;
+    case "status": n.status = e.text; n.essayRefused = e.essayRefused ? e.text : undefined; break;
     case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.log = { ...s.log, endedAt: Date.now() }; break;
     case "reset": return fresh();
   }

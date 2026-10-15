@@ -1312,10 +1312,25 @@ test('E3-c guard: the refusal lines are byte for byte what they were at 3b97c46d
  const got=refusals().map(r=>r[1]);
  assert.deepEqual(got,[LINE_ENGLISH,LINE_LONG,LINE_EMPTY,LINE_PIECE_BIG,LINE_PARAS,LINE_PARA_LONG]);
 });
-test('E3-c: refusalCaption names every refusal line, and nothing else',()=>{
- for(const [n,l] of refusals())assert.deepEqual(ER.refusalCaption(l),{label:'Not read',text:l},n);
+test('E3-c: refusalCaption captions a refusal dispatched as one, and reads no wording',()=>{
+ for(const [n,l] of refusals()){
+  assert.deepEqual(ER.refusalCaption({status:l,essayRefused:l}),{label:'Not read',text:l},n);
+  assert.equal(ER.refusalCaption({status:l}),null,n+': the same words, not dispatched as a refusal, are not one');
+  assert.equal(ER.refusalCaption({status:'something later',essayRefused:l}),null,n+': a later status ends it');
+ }
+ assert.deepEqual(ER.refusalCaption({status:'That is 7 paragraphs and change.',essayRefused:'That is 7 paragraphs and change.'}),{label:'Not read',text:'That is 7 paragraphs and change.'},'a new refusal line needs no recogniser');
  for(const x of [KEYS.planStatus(0),KEYS.rewriteStatus(2),'structure lens chosen \u2014 paste or dictate the paragraph on the phone','reading your paragraph \u2014 structure lens…','reading your piece, 3 paragraphs \u2014 argument lens…','',null,undefined,42])
-  assert.equal(ER.refusalCaption(x),null,String(x));
+  assert.equal(ER.refusalCaption({status:x}),null,String(x));
+});
+test('E3-c: the analyse route dispatches an essay refusal as one; the English sentence refusal and a plain status are not',async()=>{
+ const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+ const res=await analyse({kind:'piece',text:''});assert.equal(res.status,400);
+ assert.deepEqual(ER.refusalCaption(getSession()),{label:'Not read',text:ER.pieceProblem('')});
+ dispatch({type:'status',text:'structure lens chosen'});assert.equal(getSession().essayRefused,undefined);assert.equal(ER.refusalCaption(getSession()),null);
+ const long=await analyse({kind:'english',sentence:'word '.repeat(2000)});
+ assert.equal(long.status,400,'the sentence is over the cap');assert.match(getSession().status,/Send one sentence at a time/);
+ assert.equal(getSession().essayRefused,undefined,'an English sentence refusal is not an essay refusal');
 });
 {
  for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){
@@ -1331,7 +1346,7 @@ test('E3-c: EssayType and EssayPlan caption a refusal line, a running job still 
  const {getSession}=require(path.join(root,'src/lib/session/store.ts'));
  const base=getSession();
  for(const name of ['EssayType','EssayPlan']){
-  const s={...base,jobs:{},status:ER.NOT_ENGLISH_LINE};
+  const s={...base,jobs:{},status:ER.NOT_ENGLISH_LINE,essayRefused:ER.NOT_ENGLISH_LINE};
   assert.deepEqual(capOf(drawEssay(name,s)),{label:'Not read',text:ER.NOT_ENGLISH_LINE},name);
   const running={...s,jobs:{analyse:{id:'j',phase:'running',startedAt:Date.now(),key:'essay'}}};
   assert.equal(capOf(drawEssay(name,running)).label,'Reading',name);
