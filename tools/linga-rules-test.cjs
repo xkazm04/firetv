@@ -2410,3 +2410,141 @@ test('K2 case 7: the server refuses exactly what the table refuses on a fix mome
  }
  assert.deepEqual(wrong,[]);
 });
+
+// ---- L1: phrases you own (review.ts yoursOf; own.ts; the recap, the TV home strip, the print page). A fake clock, local days, no model.
+const own=()=>require(path.join(root,'src/lib/english/own.ts'));
+/** local noon on 5 October 2026, plus `d` days and `h` hours: day boundaries in the desk's own time zone, whatever it is */
+const NOON=(d=0,h=0)=>new Date(2026,9,5+d,12+h).getTime();
+const BOOKED='I have a booking';
+/** one turn as the pipeline runs it: reuseOf decides on the scene as it stood; only a use it counts reaches markReused */
+function useIn(t,reply,scene,at){const R=review(),q=R.reuseOf(reply,scene);return q?R.markReused(t,TAUGHT_A.id,scene.id,q,at,scene.sceneId):t;}
+const sceneFor=(id,sceneId,patch={})=>convo({id,sceneId,review:review().reviewOf(TAUGHT_A),...patch});
+const YOURS_A={...TAUGHT_A,at:NOON(-3),reuses:[{at:NOON(0),conversationId:'cA',sceneId:'booking',quote:BOOKED},{at:NOON(1),conversationId:'cB',sceneId:'rover',quote:BOOKED}],reusedAt:NOON(1),reusedIn:'cB',reusedQuote:BOOKED};
+YOURS_A.yours={at:NOON(1),uses:[YOURS_A.reuses[0],YOURS_A.reuses[1]]};
+/** an owned item taught in the adult-audience date scene */
+const ADULT_OWNED={...YOURS_A,id:'d:1',sceneId:'date',said:'What music you like',better:'What kind of music do you like',reuses:[],yours:{at:NOON(3),uses:[{at:NOON(2),conversationId:'d1',sceneId:'date',quote:'What kind of music do you like'},{at:NOON(3),conversationId:'d2',sceneId:'weekend',quote:'what kind of music do you like'}]}};
+test('L1 case 1: used unaided in scene A on day 1 and scene B on day 2 is "yours"; two uses on one day, or in one scene, are not',()=>{
+ const R=review(),base=[{...TAUGHT_A,at:NOON(-3)}];
+ let t=useIn(base,'Hi, I have a booking for Friday.',sceneFor('cA','booking'),NOON(0));
+ assert.equal(t[0].reuses.length,1);assert.equal(t[0].yours,undefined,'one use is not yours');
+ t=useIn(t,'Yes, I have a booking here.',sceneFor('cB','rover'),NOON(1));
+ assert.deepEqual(t[0].yours,{at:NOON(1),uses:[t[0].reuses[0],t[0].reuses[1]]},'scene A day 1, scene B day 2: yours');
+ assert.deepEqual(t[0].yours.uses.map(u=>[u.conversationId,u.sceneId,u.quote]),[['cA','booking',BOOKED],['cB','rover',BOOKED]]);
+ // the same uses on one local day, in three scenes: not yours, however many
+ let same=useIn(useIn(base,'I have a booking.',sceneFor('c1','booking'),NOON(0,-2)),'I have a booking, yes.',sceneFor('c2','rover'),NOON(0,3));
+ same=useIn(same,'I have a booking!',sceneFor('c3','weekend'),NOON(0,5));
+ assert.equal(same[0].reuses.length,3);assert.equal(same[0].yours,undefined,'one day is not enough');
+ // in one scene on two days: not yours
+ const one=useIn(useIn(base,'I have a booking.',sceneFor('c1','booking'),NOON(0)),'I have a booking.',sceneFor('c2','booking'),NOON(4));
+ assert.equal(one[0].reuses.length,2);assert.equal(one[0].yours,undefined,'one scene is not enough');
+ // day 1 booking, day 1 rover, day 2 booking: the day-2 use is apart from the rover one only
+ const mixed=useIn(same.map(x=>({...x,reuses:x.reuses.slice(0,2)})),'I have a booking.',sceneFor('c4','booking'),NOON(1));
+ assert.deepEqual(mixed[0].yours.uses.map(u=>u.conversationId),['c2','c4'],'the earliest earlier use in another scene on another day');
+ assert.equal(R.yoursOf({...TAUGHT_A,reuses:[{at:NOON(0),conversationId:'x',quote:BOOKED},{at:NOON(2),conversationId:'y',sceneId:'rover',quote:BOOKED}]}),null,'a use kept before K3 names no scene and cannot count');
+ assert.equal(R.yoursOf({...TAUGHT_A,reuses:[{at:NOON(0),conversationId:'x',sceneId:'booking',quote:'a booking'},{at:NOON(2),conversationId:'y',sceneId:'rover',quote:BOOKED}]}),null,'a quote that does not say the item cannot count');
+});
+test('L1 case 2: a supported, already-shown or copied reply never counts toward "yours"; the next unaided one does',()=>{
+ const base=[{...TAUGHT_A,at:NOON(-3)}];
+ const day1=useIn(base,'Hi, I have a booking for Friday.',sceneFor('cA','booking'),NOON(0));
+ const supported=useIn(day1,'I have a booking.',sceneFor('cB','rover',{supported:true}),NOON(1));
+ const shown=useIn(day1,'I have a booking.',sceneFor('cB','rover',{turns:[{id:'p1',role:'partner',text:'Do you have a booking? I have a booking list.'}]}),NOON(1));
+ const copied=useIn(day1,'You said: I have a booking.',sceneFor('cB','rover',{turns:[{id:'p1',role:'partner',text:'Say after me: I have a booking.'}]}),NOON(1));
+ const moment=useIn(day1,'I have a booking.',sceneFor('cB','rover',{moments:[{id:'m',kind:'fix',said:'I has booking',better:'I have a booking',why:'x',turnId:'t',at:1}]}),NOON(1));
+ for(const [name,t] of Object.entries({supported,shown,copied,moment})){assert.equal(t[0].reuses.length,1,`${name}: no use recorded`);assert.equal(t[0].yours,undefined,`${name}: not yours`);}
+ const later=useIn(supported,'Sorry, I have a booking.',sceneFor('cC','weekend'),NOON(2));
+ assert.equal(later[0].yours.uses[1].conversationId,'cC','the next unaided use in another scene on another day');
+});
+test('L1 case 3: the latch never unsets - more uses, invitations and a slip keep it; a slip after it reopens the item for review first',()=>{
+ const R=review(),y=YOURS_A.yours,{keysOf}=require(path.join(root,'src/lib/english/slip.ts'));
+ let t=R.markReused([YOURS_A],YOURS_A.id,'cC',BOOKED,NOON(5),'weekend');assert.deepEqual(t[0].yours,y,'a later use keeps the first latch');
+ t=R.offer(t,YOURS_A.id,NOON(6));assert.deepEqual(t[0].yours,y);
+ t=R.markReused(R.markReused(t,YOURS_A.id,'cD',BOOKED,NOON(9),'booking'),YOURS_A.id,'cE',BOOKED,NOON(20),'rover');
+ assert.equal(R.rests(t[0]),true);assert.equal(R.dueTaught(t,'new',undefined,NOON(60)),null,'at the end of the ladder it rests');
+ const slipped=R.markSlipped(t,keysOf(TAUGHT_A).slip,NOON(61));
+ assert(slipped[0].slipAt>slipped[0].yours.at&&slipped[0].slips===1,'a slip after the latch');
+ assert.equal(R.dueTaught([{...TAUGHT_C,at:NOON(-9)},...slipped],'new',undefined,NOON(62)).id,YOURS_A.id,'reopened: the slipping item comes first');
+ assert.deepEqual(slipped[0].yours,y,'and it stays yours');
+ assert.deepEqual(cleanEnglish({taught:slipped}).taught[0].yours,y,'through a load');
+});
+test('L1 case 4: the cleaner works the latch out for an old record from its history, keeps one the history no longer holds, and refuses one that breaks the rule',()=>{
+ const {yours,...old}=YOURS_A;
+ assert.deepEqual(cleanEnglish({taught:[old]}).taught[0].yours,yours,'computed from the history on load');
+ assert.deepEqual(cleanEnglish({taught:[{...YOURS_A,reuses:[YOURS_A.reuses[1]]}]}).taught[0].yours,yours,'a latch outlives a trimmed history');
+ const bent={...YOURS_A,reuses:[],yours:{at:NOON(1),uses:[{...YOURS_A.reuses[0],sceneId:'rover'},YOURS_A.reuses[1]]}};
+ const kept=cleanEnglish({taught:[bent]}).taught;assert.equal(kept.length,1);assert.equal(kept[0].yours,undefined,'one scene twice is no latch, stored or not');
+ assert.equal(cleanEnglish({taught:[{...YOURS_A,yours:{at:1,uses:[1]}}]}).taught.length,0,'a malformed latch drops the item, as any malformed field does');
+});
+test('L1 case 5: the scene whose use completes it shows "Yours now" - the learner\'s two quotes, no digit; one model call a turn, as before',async()=>{
+ const realNow=Date.now;let clock=NOON(1);Date.now=()=>clock;
+ try{
+  const seeded={...TAUGHT_A,at:NOON(-3),reuses:[YOURS_A.reuses[0]],reusedAt:NOON(0),reusedIn:'cA',reusedQuote:BOOKED,nextDueAt:NOON(0)+review().DAY_MS};
+  const c=await taughtStart([seeded]);assert.equal(c.review.id,TAUGHT_A.id,'due the next day, invited in the rover scene');
+  clock+=HOUR;await reply(REUSED);assert.equal(prompts.length,2,'one call to open, one a turn');
+  const t=taughtOf(TAUGHT_A.id);assert(t.yours,'yours');assert.equal(t.yours.uses[1].conversationId,c.id);assert.equal(t.yours.uses[1].sceneId,'rover');
+  await command('finish');assert.equal(prompts.length,2,'no call to finish');
+  const after=getSession().conversation;assert.equal(after.phase,'finished');
+  const V=view(),v=V.lingaView(sessionOf(fixture('linga-recap',{...getLearner('ema').english,conversation:after})),{});
+  assert.equal(v.hero.kind,'comparison');assert.equal(v.hero.kicker,'Yours now');assert.equal(v.title,'Yours now');
+  assert.deepEqual(v.hero.before,{kicker:'You said it · A booking that is missing',quote:BOOKED},'the earlier scene\'s quote, its scene named');
+  assert.deepEqual(v.hero.after,{kicker:'And tonight',quote:REUSED},'tonight\'s line');
+  assert(after.turns.some(x=>x.role==='learner'&&x.text.includes(v.hero.after.quote)),'tonight\'s quote is the learner\'s reply');
+  assert.doesNotMatch(JSON.stringify(v.hero),/\d/,'no digit on the hero');assert.doesNotMatch(v.baseCaption,/\d/);
+  assert(V.viewText(v).includes('Yours now'));
+  console.log('# L1 recap hero:',JSON.stringify(v.hero));
+  // a later scene that used it again did not make it yours: "It came back", as before
+  const later=V.lingaView(sessionOf(fixture('linga-recap',{...getLearner('ema').english,conversation:{...after,id:'cZ'}})),{});
+  assert.equal(later.title,'It came back');
+  assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/<Kicker text=\{h\.kicker\?\?v\.tag\}\/>/,'the TV draws the comparison\'s own kicker');
+ }finally{Date.now=realNow;}
+});
+test('L1 case 6: the TV home draws the owned phrases as a strip with no count and no digit; Adult as a progress line; an adult scene\'s item never in Family',()=>{
+ const V=view(),digits={...YOURS_A,id:'n:1',better:'I have a booking for 2',reuses:[]};
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),React=require(path.join(root,'node_modules/react'));
+ const {Yours}=require(path.join(root,'src/english/OpenDoor.tsx'));
+ const v=V.lingaView(sessionOf(fixture('linga',{placement:placed(),taught:[YOURS_A,ADULT_OWNED,digits]})),{});assert.equal(v.home,'no-plan');
+ assert.deepEqual(v.hero.yours,{phrases:[BOOKED],style:'objects'},'Family: Open Door objects; the adult scene\'s item and the phrase with a digit are left out');
+ assert.doesNotMatch(JSON.stringify(v.hero.yours),/\d/,'no digit on the strip (the band in home\'s kicker is home\'s own, as before)');
+ const html=renderToStaticMarkup(React.createElement(Yours,v.hero.yours));
+ assert.match(html,/data-role="linga-yours"/);assert(html.includes(BOOKED));
+ assert.doesNotMatch(html.replace(/<[^>]*>/g,' '),/\d/,'the drawn strip shows no digit');
+ console.log('# L1 home strip:',JSON.stringify(v.hero.yours));
+ assert(V.viewText(v).includes(`Yours: "${BOOKED}"`));
+ assert.equal(V.lingaView(sessionOf(fixture('linga',{placement:placed()})),{}).hero.yours,undefined,'none owned: home as it was');
+ // Adult mode: the list as progress, and an adult scene's item is shown there
+ const adultPrefs={...defaultPreferences({type:'other'}),adultConfirmed:true};
+ const asJakub=(fx)=>{const s=sessionOf(fx);return {...s,learner:{...s.learner,id:'jakub',name:'Jakub'}};};
+ const a=V.lingaView(asJakub(fixture('linga',{placement:placed(),preferences:adultPrefs,taught:[YOURS_A,ADULT_OWNED]})),{});
+ assert.equal(a.hero.yours.style,'list');assert.deepEqual(a.hero.yours.phrases,[BOOKED,'What kind of music do you like']);
+ assert.match(renderToStaticMarkup(React.createElement(Yours,a.hero.yours)),/Phrases you own/);
+ // never over a conversation waiting
+ const resume=V.lingaView(sessionOf(fixture('linga',{placement:placed(),taught:[YOURS_A],conversation:convo({turns:REPLIED})})),{});
+ assert.equal(resume.home,'resume');assert.equal(resume.hero.yours,undefined);
+ assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/\{h\.yours&&<Yours phrases=\{h\.yours\.phrases\} style=\{h\.yours\.style\}\/>\}/,'the TV draws the strip under home\'s words');
+});
+test('L1 case 7: the print page lists each owned phrase with the learner\'s exact words from two uses and the scene names; an adult scene\'s item is absent in Family',()=>{
+ const O=own(),{renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),React=require(path.join(root,'node_modules/react'));
+ const {PhrasesYouOwn}=require(path.join(root,'src/english/PhrasesYouOwn.tsx'));
+ const {taughtAllowed}=require(path.join(root,'src/lib/english/curriculum.ts'));
+ const l={...emptyEnglish(),taught:[YOURS_A,ADULT_OWNED,{...TAUGHT_C}],sessions:[{id:'cA',sceneId:'booking',title:'A booking that is missing',at:NOON(0),turns:3}]};
+ const kid={id:'k',name:'K',type:'elementary',age:10,modules:['english']},adult={id:'a',name:'A',type:'other',modules:['english'],mode:'adult'};
+ // the replies still at hand (tonight's conversation cB): a quote from it must be an exact substring of one of them
+ const replies={cB:['Yes, I have a booking here.']};
+ const fam=O.ownedPhrases(l,taughtAllowed(kid,defaultPreferences(kid),l),replies);
+ assert.deepEqual(fam.map(o=>o.id),[YOURS_A.id],'Family: the adult scene\'s item is absent');
+ assert.deepEqual(fam[0].uses.map(u=>[u.quote,u.scene]),[[BOOKED,'A booking that is missing'],[BOOKED,'The missing moon rover']]);
+ assert(replies.cB.some(r=>r.includes(fam[0].uses[1].quote)),'an exact substring of the reply');
+ assert.deepEqual(O.ownedPhrases(l,taughtAllowed(adult,defaultPreferences(adult),l),replies).map(o=>o.id),[YOURS_A.id,'d:1'],'Adult: both');
+ assert.equal(O.ownedPhrases(l,()=>true,{cB:['I have booking, yes.']}).some(o=>o.id===YOURS_A.id),false,'a quote not in the reply at hand is never printed');
+ const html=renderToStaticMarkup(React.createElement(PhrasesYouOwn,{owned:fam}));
+ assert.match(html,/<h2>Phrases you own<\/h2>/);assert(html.includes(`<b>${BOOKED}</b>`));
+ assert.equal((html.match(/“I have a booking” · /g)||[]).length,2,'both of the learner\'s quotes');
+ assert(html.includes('A booking that is missing')&&html.includes('The missing moon rover'),'the scene names');
+ assert(!html.includes('music'),'Family: no adult item');assert.doesNotMatch(html.replace(/<[^>]*>/g,' '),/\d/,'no digit');
+ console.log('# L1 print section:',html.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim());
+ assert.equal(renderToStaticMarkup(React.createElement(PhrasesYouOwn,{owned:[]})),'','none owned: nothing printed');
+ const page=fs.readFileSync(path.join(root,'src/app/english/print/page.tsx'),'utf8');
+ assert.match(page,/ownedPhrases\(l,taughtAllowed\(p,l\.preferences\?\?defaultPreferences\(p\),l\),repliesOf\(s\.conversation\)\)/,'the page reads them through the audience rule and the quote check');
+ assert.match(page,/<PhrasesYouOwn owned=\{owned\}\/>/);
+ // collectibles stay the existing latches only (owner ruling S1): no collectible for "yours"
+ assert.doesNotMatch(fs.readFileSync(path.join(root,'src/lib/rules/collect.ts'),'utf8'),/yours/i);
+});

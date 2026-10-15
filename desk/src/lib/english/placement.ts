@@ -5,8 +5,8 @@
  * learner stands. Same marks in, same band out.
  */
 import { slipOf } from "./slip";
-import { REUSES_MAX, scheduled } from "./review";
-import { BANDS, type Audience, type Band, type EvidenceMode, type Placement, type PlacementRecord, type PlacementTask, type Plan, type PlanTopic, type SkillId, type TaskKind, type TaskVerdict, type Taught } from "./types";
+import { latched, REUSES_MAX, scheduled, yoursHolds } from "./review";
+import { BANDS, type Audience, type Band, type EvidenceMode, type Placement, type PlacementRecord, type PlacementTask, type Plan, type PlanTopic, type SkillId, type TaskKind, type TaskVerdict, type Reuse, type Taught } from "./types";
 import { audienceOf, topicText } from "./gate";
 
 export const MAX_TASKS = 5;
@@ -324,7 +324,13 @@ export function cleanTaught(value: unknown): Taught[] {
     // a hidden line's item (K4): its source from the closed list, its key words short; only a line may have no `said`
     if (m.line !== undefined && !["check", "offer", "quiz"].includes(String(m.line)) || m.key !== undefined && !(text(m.key, 80) && (m.key as string).trim()) || m.said === "" && m.line === undefined) return [];
     if (m.reuses !== undefined && !(Array.isArray(m.reuses) && m.reuses.every(x => { const r = obj(x); return typeof r.at === "number" && Number.isFinite(r.at) && typeof r.conversationId === "string" && r.conversationId.length <= 200 && text(r.quote, 240) && (r.sceneId === undefined || text(r.sceneId, 100)); }))) return [];
-    const reuses = Array.isArray(m.reuses) ? m.reuses.map(x => { const r = obj(x); return { at: r.at as number, conversationId: r.conversationId as string, quote: r.quote as string, ...(r.sceneId !== undefined ? { sceneId: r.sceneId as string } : {}) }; }).slice(-REUSES_MAX) : undefined;
+    const reuseOf = (x: unknown) => { const r = obj(x); return { at: r.at as number, conversationId: r.conversationId as string, quote: r.quote as string, ...(r.sceneId !== undefined ? { sceneId: r.sceneId as string } : {}) }; };
+    const reuses = Array.isArray(m.reuses) ? m.reuses.map(reuseOf).slice(-REUSES_MAX) : undefined;
+    // L1, the latch "yours": two well-formed uses and a date, or the item drops; one that does not hold the rule (review.ts
+    // yoursHolds) is not trusted and is worked out again from the history, as an item saved before L1 gets one
+    const y = obj(m.yours), yUses = Array.isArray(y.uses) ? y.uses : [];
+    if (m.yours !== undefined && !(typeof y.at === "number" && Number.isFinite(y.at) && yUses.length === 2 && yUses.every(x => { const r = obj(x); return typeof r.at === "number" && Number.isFinite(r.at) && typeof r.conversationId === "string" && r.conversationId.length <= 200 && text(r.quote, 240) && (r.sceneId === undefined || text(r.sceneId, 100)); }))) return [];
+    const yours = m.yours !== undefined ? { at: y.at as number, uses: [reuseOf(yUses[0]), reuseOf(yUses[1])] as [Reuse, Reuse] } : undefined;
     // a fix's self-repair (K2, repair.ts): whether a try held before the fix was shown, and the try
     if (m.selfRepaired !== undefined && typeof m.selfRepaired !== "boolean" || m.tried !== undefined && !text(m.tried, 240)) return [];
     const review = { ...(m.offered !== undefined && { offered: m.offered as number }), ...(m.reusedAt !== undefined && { reusedAt: m.reusedAt as number }), ...(m.reusedIn !== undefined && { reusedIn: m.reusedIn as string }), ...(m.reusedQuote !== undefined && { reusedQuote: m.reusedQuote as string }), ...(m.slips !== undefined && { slips: m.slips as number }), ...(m.slipAt !== undefined && { slipAt: m.slipAt as number }),
@@ -332,6 +338,7 @@ export function cleanTaught(value: unknown): Taught[] {
     // a fix's slip keys (K1, slip.ts) are code's, never stored trust: worked out again from its words on every load, so a record saved before them gets them
     const keys = m.kind === "fix" ? slipOf(m.said as string, m.better as string) : null;
     // an item saved before the schedule gets one from its older review fields (review.ts scheduled)
-    return [scheduled({ id: m.id as string, kind: m.kind as Taught["kind"], said: m.said as string, better: m.better as string, why: m.why as string, turnId: m.turnId as string, sceneId: m.sceneId as string, title: m.title as string, at: m.at, ...(keys ?? {}), ...review })];
+    const item = scheduled({ id: m.id as string, kind: m.kind as Taught["kind"], said: m.said as string, better: m.better as string, why: m.why as string, turnId: m.turnId as string, sceneId: m.sceneId as string, title: m.title as string, at: m.at, ...(keys ?? {}), ...review });
+    return [latched(yours && yoursHolds(item, yours) ? { ...item, yours } : item)];
   }).slice(-TAUGHT_CAP);
 }

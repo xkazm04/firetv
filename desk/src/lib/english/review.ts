@@ -9,7 +9,7 @@
  * Pure data, no filesystem: the server, the view and the tests all import it.
  */
 import { findKey, guarded, keysOf, recordTier, sameSlip, slipIn, slipStands, type SlipKeys } from "./slip";
-import type { Conversation, Moment, Review, Taught } from "./types";
+import type { Conversation, Moment, Reuse, Review, Taught, Yours } from "./types";
 
 /**
  * The schedule (K3): a taught item keeps coming back until it holds. Code decides it, on the item, with no model call.
@@ -146,16 +146,74 @@ export function offer(taught: Taught[], id: string, at = Date.now()): Taught[] {
   });
 }
 /**
+ * "Yours" (L1): a taught item the learner has shown they own. Code decides it from the reuse history, with no model
+ * call: two unaided uses (exactly the uses reuseOf counts: never a supported reply, never a phrase the scene already
+ * showed, never a copy of the partner's words) in two DIFFERENT scenes on two DIFFERENT local days. Two uses in one
+ * scene, or on one day, are not enough, however many there are: the latch rewards a phrase that came back days apart in a
+ * new situation, never raw volume (owner ruling X1). Once set it never unsets; a slip after it (K1 slips/slipAt) makes
+ * the item slipping, so the schedule (dueTaught) brings it back first, and it stays yours.
+ */
+/** The longest quote the latch accepts, as the reuse history keeps it (placement.ts cleanTaught). */
+export const YOURS_QUOTE_MAX = 240;
+/** The local day of a date, as the desk's other day rules key it (rules/week.ts, session/learners.ts). */
+export const localDay = (at: number) => { const d = new Date(at); return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; };
+/**
+ * A quote that may stand for the learner's words, in the style of cert.ts quoteOk: a trimmed, non-empty line of at most
+ * YOURS_QUOTE_MAX characters with a letter and no control character; and, when the replies it may have come from are at
+ * hand (`replies`), a substring of one of them exactly as sent. A reply no longer kept cannot be held to it twice.
+ */
+export function quoteHolds(quote: string, replies?: readonly string[]): boolean {
+  if (typeof quote !== "string" || !quote.trim() || quote.length > YOURS_QUOTE_MAX || !/\p{L}/u.test(quote) || /[\u0000-\u001f\u007f]/.test(quote)) return false;
+  return !replies || replies.some(r => r.includes(quote));
+}
+/** Whether `quote` says the item, judged as reuseOf judges a reply: a guarded fix by its fix key, a line by its key, else the whole phrase. */
+export function saysItem(t: Taught, quote: string): boolean {
+  const r = reviewOf(t);
+  if (r.kind === "fix" && r.slip && r.fix && guarded(r.slip)) return findKey(quote, r.fix) !== null;
+  if (r.key) return findKey(quote, r.key) !== null;
+  return findPhrase(quote, r.better) !== null;
+}
+/** A use that may count toward "yours": it names its scene (a use kept before K3 does not), and its quote holds and says the item. */
+const countsToward = (t: Taught, r: Reuse) => !!r.sceneId && quoteHolds(r.quote) && saysItem(t, r.quote);
+const apart = (a: Reuse, b: Reuse) => a.sceneId !== b.sceneId && localDay(a.at) !== localDay(b.at);
+/**
+ * The latch an item's history earns, or null: the first use that comes in a different scene AND on a different local
+ * day from an earlier counting use, with the earliest such earlier use. Pure; the same history gives the same latch.
+ */
+export function yoursOf(t: Taught): Yours | null {
+  const uses = (t.reuses ?? []).filter(r => countsToward(t, r)).sort((a, b) => a.at - b.at);
+  for (let j = 1; j < uses.length; j++) {
+    const first = uses.slice(0, j).find(u => apart(u, uses[j]));
+    if (first) return { at: uses[j].at, uses: [first, uses[j]] };
+  }
+  return null;
+}
+/** Whether a latch, as stored, is one code could have set: two counting uses of this item, apart, dated in order, earned at the second. */
+export function yoursHolds(t: Taught, y: Yours): boolean {
+  const [a, b] = y.uses;
+  return countsToward(t, a) && countsToward(t, b) && apart(a, b) && a.at < b.at && y.at === b.at;
+}
+/** The item with its latch: one already set is kept (it never unsets), else it is worked out from the history. */
+export function latched(t: Taught): Taught {
+  if (t.yours) return t;
+  const y = yoursOf(t);
+  return y ? { ...t, yours: y } : t;
+}
+/** Whether an item is the learner's own (L1). */
+export const isYours = (t: Taught): boolean => !!t.yours;
+
+/**
  * The record after the learner used the item unaided in conversation `conversationId` (scene `sceneId`) at `at`.
  * reusedAt, reusedIn and reusedQuote are the latest use (the Sunday page reads them); the use joins the history, and
- * the item is due again one interval later, or rests at the end of the ladder.
+ * the item is due again one interval later, or rests at the end of the ladder. The use that makes it the learner's
+ * own (yoursOf) sets the latch.
  */
 export function markReused(taught: Taught[], id: string, conversationId: string, quote: string, at: number, sceneId?: string): Taught[] {
   return taught.map(t => {
     if (t.id !== id) return t;
     const reuses = [...(t.reuses ?? []), { at, conversationId, quote, ...(sceneId ? { sceneId } : {}) }];
     const { nextDueAt: _, ...rest } = t, n = reuses.length;
-    return { ...rest, reusedAt: at, reusedIn: conversationId, reusedQuote: quote, reuses: reuses.slice(-REUSES_MAX), misses: 0, ...(n <= REUSE_INTERVALS_MS.length ? { nextDueAt: at + REUSE_INTERVALS_MS[n - 1] } : {}) };
+    return latched({ ...rest, reusedAt: at, reusedIn: conversationId, reusedQuote: quote, reuses: reuses.slice(-REUSES_MAX), misses: 0, ...(n <= REUSE_INTERVALS_MS.length ? { nextDueAt: at + REUSE_INTERVALS_MS[n - 1] } : {}) });
   });
 }
 

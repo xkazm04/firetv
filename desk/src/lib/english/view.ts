@@ -10,7 +10,8 @@
 import type { Screen, Session } from "../session/store";
 import { checkAccepts, checkAt, isCheckCommand, ownerOf } from "./activity";
 import { certGap, dayMonth, plateOf, recommendFor, shownSkills, unseenCertificate } from "./cert";
-import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL } from "./curriculum";
+import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL, taughtAllowed } from "./curriculum";
+import { ownedPhrases, quoteOf, repliesOf, stripOf } from "./own";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, conversationBand, easyBand, isBand, MAX_TASKS, PLAN_MAX, playBand, restsLine, shift, spokenBand, spokenTasks } from "./placement";
 import { currentStep, missionDone } from "./mission";
 import { isPitchId } from "./pitch";
@@ -102,7 +103,8 @@ export interface Answer { id: "answer"; action: "check-answer" | "check-task" | 
 export interface Spoken { line: string; key: string; blocked: boolean; slow: boolean; speaker: string; }
 export interface Recap { title: string; replies: number; spoken: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
 export type Hero =
-  | { kind: "intro"; kicker: string; title: string; subtitle: string; art: ArtKey; nameTag: string }
+  /** `yours` (L1): the learner's owned phrases on home, no count and no digit; Family draws them as Open Door objects, Adult as a progress line (X2) */
+  | { kind: "intro"; kicker: string; title: string; subtitle: string; art: ArtKey; nameTag: string; yours?: { phrases: string[]; style: "objects" | "list" } }
   /** `spoke`: a second mark, the band the learner's say answers showed, when conversations start below `band` (S2) */
   | { kind: "ladder"; kicker: string; title: string; band: Band; note: string; spoke?: Band }
   | { kind: "message"; kicker: string; text: string; note: string }
@@ -131,7 +133,9 @@ export type Hero =
       /** the picture in the arch when it is not the coach's; the data line under the picture */
       art?: ArtKey; data?: string;
       /** a fix still withheld (K2): the after slot is an empty frame, waiting for the learner's line */
-      open?: boolean }
+      open?: boolean
+      /** the overline when it is not the screen's tag: "Yours now" (L1) */
+      kicker?: string }
   | { kind: "menu"; kicker: string; title: string; entries: string[]; selected: number }
   /** the recap of a take ended by Cut (v2 L3): the notes as a tape strip, one pin each, the focused pin's note in the caption slot.
    * A pin whose note had its Take Two (v2 L4) carries a mark: held (its quote struck), open, or undecided ("Not decided");
@@ -145,6 +149,8 @@ export type Hero =
   /** every certificate held, newest first, one door each */
   | { kind: "certs"; kicker: string; title: string; entries: string[]; selected: number }
   | { kind: "plain"; title: string };
+/** The owned phrase whose latch tonight's use set (L1): its second use was in this conversation. */
+const yoursTonight = (owned: ReturnType<typeof ownedPhrases>, id: string, conversationId: string) => owned.find(o => o.id === id && o.uses[1].conversationId === conversationId) ?? null;
 /** A cut note after its Take Two: held (struck), open (not held), or undecided (code could not tell). */
 export type TakeMark = "held" | "open" | "undecided";
 export const markOf = (held: boolean | null): TakeMark => held === true ? "held" : held === false ? "open" : "undecided";
@@ -270,6 +276,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   const refused = (action: string) => !c || !accepts(c, action);
   // Cut (v2 L3): Adult mode only, where the learner has a line of their own (turn.ts reads the mode for it)
   const mode = modeOf(p, prefs), hasLine = !!c?.turns.some(t => t.role === "learner"), cutting = mode === "adult" && hasLine;
+  // L1: the phrases this learner owns and may see now (an adult scene's only where adult content is on), quotes checked in code
+  const owned = ownedPhrases(l, taughtAllowed(p, prefs, l), repliesOf(c));
   const cutAction = () => act("cut", "Cut", "End this take. Linga gives up to three notes, each quoting your own words.", cmd("cut"), { disabled: waiting || !c || !accepts(c, "cut", mode) });
   const spoken: Spoken = s.screen === "linga-check" && lc
     ? { line: lc.stage === "about" ? (asked?.role === "tutor" ? asked.text : "") : lc.task?.kind === "listen" ? lc.task.line : lc.task?.kind === "say" ? lc.task.prompt : "", key: `${lc.id}:${asked?.id}:${lc.task?.id}:${lc.audioNonce}`, blocked: !!lc.pending, slow: easyBand(lc.task?.band ?? "A2"), speaker: "Linga" }
@@ -333,6 +341,11 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
         actions = [act("start-talking", "Start talking", caption, cmd("start", { sceneId: recommended.id, replace: true })), chooseSituation("Choose a goal and practise it in a conversation.")];
         break;
     }
+    // L1: the phrases this learner owns, a small strip under home's words where the learner has a journey to show (not over a
+    // conversation or a check left part way, nor before a level). Family draws Open Door objects; Adult a plain progress line (X2).
+    const strip = stripOf(owned);
+    if (strip.length && hero.kind === "intro" && (home === "next-topic" || home === "plan-done" || home === "no-plan"))
+      hero = { ...hero, yours: { phrases: strip, style: mode === "adult" ? "list" : "objects" } };
     // A certificate issued and not opened yet (cert.ts): it is home's first door, the one Enter runs, until it is
     // opened; the state's own first door stays beside it. Not over a conversation or a check left part way.
     const fresh = unseenCertificate(l);
@@ -494,6 +507,13 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       const takes = c.takes ?? [], taken = (i: number) => takes.find(t => t.note === i), shown = taken(at) ?? takes.at(-1);
       const branch = shown && { pin: shown.note, partner: c.partner, from: shown.turns[0]?.text ?? "", again: shown.turns.find(t => t.role === "learner")?.text ?? "" };
       hero = { kind: "tape", kicker: `Cut · ${c.title}`, title, pins: notes.map((n, i) => { const t = taken(i); return { label: label(i), quote: n.quote, better: n.better ?? "", note: n.note, ...(t ? { mark: markOf(t.held) } : {}) }; }), selected: s.focus < notes.length ? s.focus : -1, data: counts, ...(branch ? { branch } : {}) };
+    } else if (rv?.used && yoursTonight(owned, rv.id, c.id)) {
+      // L1: tonight's use made it the learner's own. The picture is their two quotes, the earlier scene's and tonight's,
+      // under "Yours now"; no count and no data line, so no digit (the counts are on the phone).
+      const own = yoursTonight(owned, rv.id, c.id)!, first = own.uses[0], tonight = quoteOf(rv.used, own.uses[1].quote, repliesOf(c)[c.id]);
+      title = "Yours now";
+      hero = { kind: "comparison", kicker: "Yours now", before: { kicker: `You said it · ${/\d/.test(first.scene) ? "an earlier scene" : first.scene}`, quote: first.quote }, after: { kicker: "And tonight", quote: tonight }, note: "", art: "done" };
+      caption = "On your own, in two scenes on two days. It stays yours.";
     } else if (rv?.used) {
       // What Linga taught in an earlier scene, beside the learner's own words tonight: the verdict is the picture.
       title = "It came back";
@@ -706,7 +726,7 @@ export function viewText(v: LingaView): string {
   const spoken = v.spoken.line && !v.spoken.blocked ? v.spoken.line : "";
   const said = (text: string, who: string) => text === spoken ? `${who} says (spoken on the TV, written on the phone): "${text}"` : `On screen: "${text}"`;
   switch (h.kind) {
-    case "intro": out.push(`${h.kicker}${h.subtitle ? ` · ${h.subtitle}` : ""}`); break;
+    case "intro": out.push(`${h.kicker}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.yours ? [`${h.yours.style === "list" ? "Phrases you own" : "Yours"}: ${h.yours.phrases.map(x => `"${x}"`).join(" · ")}`] : [])); break;
     case "ladder": out.push(h.kicker, `Ladder A1 A2 B1 B2 C1 C2, marker on ${h.band}${h.spoke ? `, second mark on ${h.spoke}` : ""}.`, ...(h.note ? [`Linga says: ${h.note}`] : [])); break;
     case "message": out.push(h.kicker, ...(h.text ? [said(h.text, v.spoken.speaker)] : []), ...(h.note ? [`The words, now shown: ${h.note}`] : [])); break;
     case "heading": out.push(h.kicker, h.title); break;
@@ -714,7 +734,7 @@ export function viewText(v: LingaView): string {
     case "topics": out.push(h.kicker, ...h.topics.map(t => `  [${t.id}] ${t.title} — ${t.skill}\n      why: ${t.why}`)); break;
     case "scene": out.push(...(h.own ? ["Your own scene"] : []), h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : []), ...(h.lost ? [lostLine(h.lost)] : [])); break;
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
-    case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"${h.before.struck ? `, "${h.before.struck}" struck through` : ""}`, h.open ? `${h.after.kicker}: an empty frame, waiting for your line` : `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
+    case "comparison": out.push(...(h.kicker ? [h.kicker] : []), `${h.before.kicker}: "${h.before.quote}"${h.before.struck ? `, "${h.before.struck}" struck through` : ""}`, h.open ? `${h.after.kicker}: an empty frame, waiting for your line` : `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
     case "tape": out.push(h.kicker, h.title, ...h.pins.map((x, i) => `  pin ${i + 1} · ${x.label}: "${x.quote}"${x.better ? ` → "${x.better}"` : ""}\n      note: ${x.note}${x.mark ? `\n      Take Two: ${TAKE_MARK_WORDS[x.mark]}` : ""}`),
       ...(h.branch ? [`  Take Two of pin ${h.branch.pin + 1}, a branch from it: ${h.branch.partner} says "${h.branch.from}"${h.branch.again ? `; you again: "${h.branch.again}"` : ""}`] : []), h.data); break;

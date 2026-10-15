@@ -118,3 +118,22 @@ export const OnYourPhone = () => <svg className="lo-phone" viewBox="0 0 300 44" 
   <rect x="7" y="2" width="22" height="39" rx="5" fill="none" stroke="currentColor" strokeWidth="3"/><path d="M14 7h8M15 35h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M18 14v11m-4-7v4m8-4v4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
   <text x="298" y="30" textAnchor="end" fill="currentColor">ON YOUR PHONE</text>
 </svg>;
+
+/**
+ * Phrases you own (L1): the learner's owned phrases under home's words. Family: each one a small open door in the arch's
+ * plum with the phrase beside it in Georgia, under YOURS; never a number, the newest few only. Adult (X2, progress, no
+ * game): the same phrases as one plain data line, PHRASES YOU OWN.
+ */
+export function Yours({ phrases, style }: { phrases: string[]; style: "objects" | "list" }) {
+  if (!phrases.length) return null;
+  if (style === "list") return <div className="lo-data lo-yours-list" data-role="linga-yours"><span className="lo-data-key">Phrases you own</span><span>{phrases.map((x, i) => <Fragment key={x}>{i > 0 && <Dot/>}“{x}”</Fragment>)}</span></div>;
+  return <div className="lo-yours" data-role="linga-yours" role="list" aria-label={`Yours: ${phrases.join(", ")}`}>
+    <span className="lo-yours-label" aria-hidden="true">Yours</span>
+    {phrases.map(x => <span key={x} className="lo-yours-item" role="listitem"><YoursDoor/><span className="lo-yours-text">{x}</span></span>)}
+  </div>;
+}
+/** An open door, the arch's own shape in miniature: a plum frame, the leaf swung open, the warm light inside. */
+const YoursDoor = () => <svg className="lo-yours-door" viewBox="0 0 24 32" aria-hidden="true" focusable="false">
+  <path d="M3 30V12a9 9 0 0 1 18 0v18Z" fill="var(--lo-glow)" stroke="var(--lo-frame)" strokeWidth="3" strokeLinejoin="round"/>
+  <path d="M6 29V13l7-3v22Z" fill="var(--lo-frame)"/>
+</svg>;

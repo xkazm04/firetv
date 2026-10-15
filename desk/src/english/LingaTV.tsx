@@ -12,7 +12,7 @@ import { useEnglish } from "./useEnglish";
 import { useEnglishAudio } from "./useEnglishAudio";
 import { ART } from "./art";
 import { Corridor } from "./art/Corridor";
-import { Arch, Arrow, BandSteps, Caption, DataLine, Dots, Kicker, Learner, Mark, OnYourPhone, Plate, SentenceCard, Stones } from "./OpenDoor";
+import { Arch, Arrow, BandSteps, Caption, DataLine, Dots, Kicker, Learner, Mark, OnYourPhone, Plate, SentenceCard, Stones, Yours } from "./OpenDoor";
 
 const CHECK_SCREENS:Screen[]=["linga-check","linga-verdict","linga-plan"];
 /** Actions whose next step is speaking on the phone: they carry the phone badge. */
@@ -178,7 +178,8 @@ function Title({text}:{text:string}){return <h1 className="lo-title" data-role="
 function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
   const h=v.hero,focus=s.focus;
   switch(h.kind){
-    case "intro":return <><Kicker text={h.kicker}/><Title text={h.title}/>{caption}{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}</>;
+    // L1: the phrases the learner owns, a small strip under home's words (Open Door objects; Adult, a progress line)
+    case "intro":return <><Kicker text={h.kicker}/><Title text={h.title}/>{caption}{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{h.yours&&<Yours phrases={h.yours.phrases} style={h.yours.style}/>}</>;
     case "message":{
       const label=s.screen==="linga-check"&&activeCheck(s)?.stage==="tasks"?"Your task":"Linga asks";
       return <><Kicker text={h.kicker}/>{h.text&&<SentenceCard className={`lo-said linga-message${h.note?" lo-compact":""}`} label={label} text={h.text} role="linga-said"/>}{h.note&&<SentenceCard className="lo-compact" label="The words" text={h.note}/>}{caption}</>;
@@ -196,7 +197,7 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
     // On the recap, the phrase this scene invited and the learner has yet to use stands where the title would be.
     case "track":return <><Kicker text={h.kicker}/>{h.sentence?<SentenceCard className="lo-compact" label={h.from?`From ${h.from}`:"A sentence to take with you"} text={h.sentence}/>:<Title text={h.title}/>}<Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;
     // a fix moment (K2): the slip the learner repaired is struck (Take Two's mark), and a fix still withheld leaves the after slot an empty frame
-    case "comparison":return <><Kicker text={v.tag}/><div className="lo-compare linga-comparison">
+    case "comparison":return <><Kicker text={h.kicker??v.tag}/><div className="lo-compare linga-comparison">
       <div className="lo-before"><span>{h.before.kicker}</span><q>{struck(h.before.quote,h.before.struck)}</q></div>
       <SentenceCard className={h.open?"lo-open":""} role={h.open?"linga-open":undefined} label={h.after.kicker} text={h.after.quote}/>
     </div>{h.note&&<div className="lo-note">{h.note}</div>}{caption}{h.data&&<DataLine>{h.data}</DataLine>}</>;

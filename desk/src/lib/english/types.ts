@@ -131,7 +131,15 @@ export interface Taught extends Moment {
   line?: LineSource; key?: string;
   /** a fix's self-repair (K2): whether a try held before the fix was shown, and the learner's latest try; never evidence */
   selfRepaired?: boolean; tried?: string;
+  /**
+   * L1, "yours" (review.ts yoursOf): set by code when the item was used unaided in two different scenes on two
+   * different local days, with the two uses that earned it. A latch: it never unsets, a later slip reopens the item for
+   * review without taking it away (owner ruling X1: mastery only).
+   */
+  yours?: Yours;
 }
+/** The latch "yours" (L1): when it was earned (the second use's date) and the two unaided uses, in two scenes on two days. */
+export interface Yours { at: number; uses: [Reuse, Reuse] }
 /** Where a scene's hidden line came from (K4, line.ts): the level check's better phrase, the opening's offer, the quiz answer. */
 export type LineSource = "check" | "offer" | "quiz";
 /**

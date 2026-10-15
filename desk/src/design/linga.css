@@ -717,3 +717,12 @@
 /* v2 R1: the keys, one per skill used on your own, golden once used elsewhere (english/LingaKeys.tsx) */
 .linga-tv .lo-keys { display: inline-flex; align-items: center; gap: 10px; margin-left: 28px; }
 .linga-tv .lo-keys svg { display: block; }
+
+/* ---------------------------------------------------------------- phrases you own (L1): home's strip, no count */
+.linga-tv .lo-yours { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; max-width: 760px; margin-top: 26px; }
+.linga-tv .lo-yours-label { flex: none; color: var(--lo-label); font-size: 22px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+.linga-tv .lo-yours-item { display: inline-flex; align-items: center; gap: 10px; max-width: 340px; padding: 8px 16px 8px 12px; border: 2px solid var(--lo-card-line); border-radius: 12px; background: var(--lo-card); }
+.linga-tv .lo-yours-door { flex: none; width: 22px; height: 30px; }
+.linga-tv .lo-yours-text { overflow: hidden; color: var(--lo-sentence); font-family: var(--lo-serif); font-size: 26px; line-height: 1.2; white-space: nowrap; text-overflow: ellipsis; }
+.linga-tv .lo-yours-list > span:last-child { font-family: var(--lo-serif); font-weight: 400; }
+.linga-print .linga-owned td:last-child { font-family: Georgia, "Times New Roman", serif; }
