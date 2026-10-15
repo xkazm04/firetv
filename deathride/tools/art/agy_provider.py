@@ -48,6 +48,12 @@ class AgyBudget(Budget):
             slot = re.sub(r'-v\d+$', '', asset)
             used = sum(e.get('event')=='reserved' and re.sub(r'-v\d+$','',e.get('asset',''))==slot for e in events)
             if used >= self.attempt_limit(asset): raise RuntimeError('ASSET_ATTEMPT_CAP: '+slot)
+            for name,env in self.config.get('envelopes',{}).items():
+                prefixes=tuple(env.get('asset_prefixes',[]))
+                if prefixes and asset.startswith(prefixes):
+                    spent=sum(e.get('event')=='reserved' and e.get('provider')=='agy' and e.get('asset','').startswith(prefixes)
+                              and e.get('at','')>=env['started_at'] for e in events)
+                    if spent>=env['max_new_images']:raise RuntimeError('AGY_ENVELOPE_CAP: '+name)
             usage['images_reserved'] += 1
             write_json(self.art/'usage-agy.json', usage)
             append_json(path,dict(event='reserved',asset=asset,attempt=attempt,at=now(),images=1,
@@ -63,6 +69,20 @@ class AgyBudget(Budget):
                 usage['stop']=dict(at=now(),reason=reason)
                 write_json(self.art/'usage-agy.json',usage)
                 append_json(self.art/'history.jsonl',dict(event='spend-stop',provider='agy',model=self.model,**usage['stop']))
+
+    def clear_stop(self, owner_message, evidence):
+        """Owner-directed clearing of the one latch. Reservations stay counted; every cap is untouched."""
+        if not owner_message or not evidence:raise ValueError('owner message and failure evidence required')
+        with file_lock(self.art/'.budget.lock'):
+            usage=self._load()
+            if not usage['stop']:return None
+            cleared=dict(usage['stop'])
+            usage['stop']=None
+            write_json(self.art/'usage-agy.json',usage)
+            append_json(self.art/'history.jsonl',dict(event='spend-stop-cleared',provider='agy',model=self.model,at=now(),
+                        cleared_stop=cleared,owner_message=owner_message,failure_record=evidence,
+                        images_reserved_kept=usage['images_reserved'],caps_changed=False))
+            return cleared
 
     def summary(self):
         usage=self._load()

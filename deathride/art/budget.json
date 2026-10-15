@@ -78,7 +78,19 @@
       "run_image_cap": 120,
       "model": "gemini-3.8-flash-high",
       "real_allowance": "unknown",
-      "authorization": "2026-10-04 owner AGY IMAGE PROVIDER A0-A2: separate local cap 120 images; first auth/quota/rate/empty stop; no error retries"
+      "authorization": "2026-10-04 owner AGY IMAGE PROVIDER A0-A2: separate local cap 120 images; first auth/quota/rate/empty stop; no error retries",
+      "envelopes": {
+        "mount-pilot": {
+          "asset_prefixes": [
+            "mount-"
+          ],
+          "max_new_images": 30,
+          "started_at": "2026-10-15T00:00:00+00:00",
+          "one_time": true,
+          "proof_stage_max_images": 9,
+          "authorization": "2026-10-15 owner chose 'Option 2' (ONE-TIME Gemini image pilot, hard cap 30 images total, car weapon-mount art, proof -> owner-approve -> bundle gates) and then directed the route: \"Use 'agy' cli for Gemini instead of API key\". No cap in this file is raised; the envelope sits inside agy run_image_cap 120. Proof stage only (Rivet x Needle/Bastion/Comet, at most 9) before owner approval."
+        }
+      }
     }
   }
 }
