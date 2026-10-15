@@ -210,31 +210,34 @@ test('case 17: a shorten re-ask that never settles ends as a timeout within the 
  reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1)return {raw:{topics:[{why:'x'.repeat(25),skill:'ask'}]}};return new Promise(()=>{});}});
  const {text}=load('engines/text.ts');
  const t0=Date.now();
- await assert.rejects(within(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true,timeoutMs:30})),(e)=>{assert(e instanceof engineError());assert.equal(e.kind,'timeout');return true;});
+ await assert.rejects(within(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true,timeoutMs:1000}),3000),(e)=>{assert(e instanceof engineError());assert.equal(e.kind,'timeout');return true;});
  assert.equal(calls,2);
- assert(Date.now()-t0<30+200,`both attempts end inside the one 30 ms deadline (plus scheduling), took ${Date.now()-t0} ms`);
+ // a fresh deadline for the re-ask would end near 2000; the bound sits halfway, wide of any loop stall
+ assert(Date.now()-t0<1500,`both attempts end inside the one 1000 ms deadline (plus scheduling), took ${Date.now()-t0} ms`);
 });
 test('case 17b: the re-ask gets what is left of the first deadline, not a fresh one',async()=>{
  let calls=0;
- reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1){await new Promise(r=>setTimeout(r,120));return {raw:{topics:[{why:'x'.repeat(25),skill:'ask'}]}};}return new Promise(()=>{});}});
+ reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1){await new Promise(r=>setTimeout(r,600));return {raw:{topics:[{why:'x'.repeat(25),skill:'ask'}]}};}return new Promise(()=>{});}});
  const {text}=load('engines/text.ts');
  const t0=Date.now();
- await assert.rejects(within(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true,timeoutMs:200}),1000),(e)=>e instanceof engineError()&&e.kind==='timeout');
+ await assert.rejects(within(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true,timeoutMs:1000}),3000),(e)=>e instanceof engineError()&&e.kind==='timeout');
  const took=Date.now()-t0;
  assert.equal(calls,2);
- assert(took<200+60,`ended inside the one 200 ms deadline (plus scheduling), not 120 + a fresh 200: took ${took} ms`);
+ // the old seam ends at 600 + a fresh 1000 = 1600; the bound sits halfway, wide of any loop stall (a lazy require, a ledger write)
+ assert(took<1300,`ended inside the one 1000 ms deadline (plus scheduling), not 600 + a fresh 1000: took ${took} ms`);
 });
 test('case 17d: a caller\'s re-ask handed the first answer\'s ticket ends inside that call\'s deadline, not a fresh one',async()=>{
  let calls=0;
- reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1){await new Promise(r=>setTimeout(r,120));return {raw:ANSWER.text};}return new Promise(()=>{});}});
+ reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1){await new Promise(r=>setTimeout(r,600));return {raw:ANSWER.text};}return new Promise(()=>{});}});
  const {text}=load('engines/text.ts');
  const t0=Date.now();
- const first=await text({system:'s',prompt:'p',timeoutMs:200});
- assert.equal(first.again.try,2);assert(Math.abs(first.again.deadlineAt-(t0+200))<30,'the ticket names the first call\'s own deadline');
- await assert.rejects(within(text({system:'s',prompt:'p again',timeoutMs:200},first.again),1000),(e)=>e instanceof engineError()&&e.kind==='timeout');
+ const first=await text({system:'s',prompt:'p',timeoutMs:1000});
+ assert.equal(first.again.try,2);assert(Math.abs(first.again.deadlineAt-(t0+1000))<100,'the ticket names the first call\'s own deadline');
+ await assert.rejects(within(text({system:'s',prompt:'p again',timeoutMs:1000},first.again),3000),(e)=>e instanceof engineError()&&e.kind==='timeout');
  const took=Date.now()-t0;
  assert.equal(calls,2);
- assert(took<200+60,`the turn ended inside the one 200 ms deadline (plus scheduling), not 120 + a fresh 200: took ${took} ms`);
+ // the old seam ends at 600 + a fresh 1000 = 1600; the bound sits halfway, wide of any loop stall
+ assert(took<1300,`the turn ended inside the one 1000 ms deadline (plus scheduling), not 600 + a fresh 1000: took ${took} ms`);
 });
 test('case 17e: a re-ask whose ticket has no time left is not started: timeout, and the provider is never called',async()=>{
  let calls=0;
