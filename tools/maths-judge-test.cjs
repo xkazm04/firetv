@@ -131,6 +131,14 @@ test('M4c-1: a planted-slip Calculus item\'s slipAt lands on the line that slipp
  const t=k.judgeItem({n:2,question:'Find the derivative of cos(3x) at x = 0',spec:{shape:'derivative-at',f:'cos(3x)',at:0}},{studentAnswer:'3',studentWorking:"f'(x) = 3 sin(3x)\nf'(0) = 0\n= 3"},{topic:'calc1-derivative'});
  assert.equal(t.verdict,'wrong');assert.deepEqual(t.slipAt,{line:0},'the first line that stops holding, not a later one');
 });
+test('MB-B36: a cz learner\'s Calculus working in Czech names gets the chain pen; uk reads it as before (kinds.ts judgeItem)',()=>{
+ const k=kinds(),item={n:1,question:'Derivujte: y = tg(x^2)',spec:{shape:'derivative',f:'tan(x^2)'}};
+ const read={studentAnswer:'1/cos^2(x^2)',studentWorking:"y' = (tg(x^2))'\n= 1/cos^2(x^2)"};
+ const cz=k.judgeItem(item,read,{topic:'calc1-derivative',system:'cz'});
+ assert.equal(cz.verdict,'wrong');assert.deepEqual(cz.slipAt,{line:1});
+ const uk=k.judgeItem(item,read,{topic:'calc1-derivative',system:'uk'});
+ assert.equal(uk.verdict,'wrong');assert.equal(uk.slipAt,undefined,'an English reader cannot read tg, so places no pen');
+});
 test('M4c-2: a wrong answer whose working holds on every line gets no chain pen; a line in words is null',()=>{
  const k=kinds(),item={n:1,question:'Find the derivative of x^3',spec:{shape:'derivative',f:'x^3'}},ctx={topic:'calc1-derivative'};
  const s=k.judgeItem(item,{studentAnswer:'2x',studentWorking:"f(x) = x^3\nf'(x) = 3x^2"},ctx);

@@ -378,6 +378,12 @@ pi/2 - arctan u, values in (0, pi)), and a trailing "+ K", "+ k", "+ C1", "+ C_1
 printed task with those names reads into its spec the same way ("Derivujte: y = arctg(x)"). A comma that is not between
 two digits ("0, 5", "1,2,3") is not read, and an arccotg whose argument is neither bracketed nor a bare x or number stays
 unread: the desk is not sure rather than guessing. A uk, us or unset profile reads every answer exactly as before.
+The working is read the same way (2026-10-15): `chainChecks` and `chainPen` take the learner's system (`judgeItem`
+passes `ctx.system`, the TV's `working` the profile's), and in cz or de each working line goes through the same
+`czechAnswer` before the tagger, so "y' = (tg(x^2))'" then "= 1/cos^2(x^2)" puts the pen on the second line, and the
+paper ticks the first. One table reads answers, tasks and working (registry: localization czech,
+terminology-and-loanwords, one concept one rendering). `log` stays natural, as the answer reader has it; a cz line
+"x = 1,2" is the decimal 1.2, never a list of two roots.
 
 ## Calculus graphs (v2 M4a, 2026-10-07)
 

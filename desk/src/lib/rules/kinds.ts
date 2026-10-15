@@ -104,7 +104,7 @@ export function judgeItem(item: { n: number; question: string; spec?: unknown },
     const s = answer ? settleSpec(item.n, item.spec, answer, read.slip, ctx.topic, ctx.system ?? DEFAULT_SCHOOL_SYSTEM) : null;
     // a wrong Calculus item with working: the pen at the first line the chain rings (rules/chain), the verdict untouched
     if (s && s.verdict === "wrong" && kind === "calc" && working) {
-      const line = chainPen(item.spec, workingLines({ studentWorking: working, studentAnswer: answer, spec: item.spec }));
+      const line = chainPen(item.spec, workingLines({ studentWorking: working, studentAnswer: answer, spec: item.spec }), ctx.system);
       if (line !== null) return { ...s, slipAt: { line } };
     }
     return s;

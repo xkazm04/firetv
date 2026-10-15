@@ -10,7 +10,7 @@
  * itself. Stable `data-role` hooks (maths-*) name the parts a host checks.
  */
 import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import type { Page, PracticeItem, Session } from "@/lib/session/store";
+import type { Page, PracticeItem, SchoolSystem, Session } from "@/lib/session/store";
 import { PATHS, expectedOn, learnerPath, topicIn, topicsOf } from "@/lib/library/paths";
 import { LESSONS } from "@/lib/library/lessons.data";
 import { hasWorked } from "@/lib/library/worked";
@@ -879,9 +879,9 @@ function SlipSide({ items, ix, points, job }: { items: PracticeItem[]; ix: numbe
 }
 
 /** An item on the marked paper. Open: the question and every line of working; folded: the question, and the line the pen is on. */
-function MarkedItem({ it, at, open, focused, cur, dim, okLabel }: { it: PracticeItem; at?: PartPlace | null; open: boolean; focused?: boolean; cur?: boolean; dim?: boolean; okLabel?: string }) {
+function MarkedItem({ it, at, open, focused, cur, dim, okLabel, sys }: { it: PracticeItem; at?: PartPlace | null; open: boolean; focused?: boolean; cur?: boolean; dim?: boolean; okLabel?: string; sys?: SchoolSystem }) {
   const v = markOf(it);
-  const w = working(it);
+  const w = working(it, sys);
   const rows: ReactNode[] = [];
   if (v === "right") {
     if (open) w.lines.forEach((l, k) => rows.push(<HandRow key={k} line={l} tick={w.ticks[k]} />));
@@ -923,13 +923,14 @@ export function Sheet({ s, focus }: { s: Session; focus: number }) {
   const right = tiles.filter((x) => x.verdict === "right").length, fixed = tiles.filter((x) => x.second === "right").length, look = lookCount(p.items);
   const tile = ix === null ? undefined : tiles[ix];
   const curIx = ix ?? Math.min(tiles.length - 1, Math.max(0, firstToLook(p.items)));
+  const sys = systemOf(s.profiles.find((q) => q.id === s.learner?.id));
   return (<>
     <Top s={s} crumb={name} right={<div className="mb-status"><Tally items={p.items} cur={ix} /><Chips s={s} phone={false} clock={false} /></div>} />
     <div className="mb-win">
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
           <header className="mb-sheethead"><span className="st" data-role="maths-title">{sheetHead(look, tiles.length)}</span><span className="who">{s.learner?.name}</span></header>
-          {p.items.map((it, i) => { const at = partPlace(p.items, i); return <Fragment key={it.n}>{at?.first && <Stem at={at} text={it.stem ?? ""} />}<MarkedItem it={it} at={at} open={false} focused={ix === i} cur={i === curIx} okLabel="Open" /></Fragment>; })}
+          {p.items.map((it, i) => { const at = partPlace(p.items, i); return <Fragment key={it.n}>{at?.first && <Stem at={at} text={it.stem ?? ""} />}<MarkedItem it={it} at={at} open={false} focused={ix === i} cur={i === curIx} okLabel="Open" sys={sys} /></Fragment>; })}
         </div>
       </div>
     </div>
@@ -963,13 +964,14 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
   const name = topicName(p.topic);
   const last = s.walkIx === p.items.length - 1;
   const sl = it.slip ? slipById(it.slip) : undefined;
+  const sys = systemOf(s.profiles.find((q) => q.id === s.learner?.id));
   return (<>
     <Top s={s} crumb={name} right={<div className="mb-status"><Tally items={p.items} cur={s.walkIx} /><Chips s={s} phone={false} clock={false} /></div>} />
     <div className="mb-win">
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
           <header className="mb-sheethead"><span className="st" data-role="maths-title">{name}</span><span className="who">{s.learner?.name}</span></header>
-          {p.items.map((x, i) => { const at = partPlace(p.items, i); return <Fragment key={x.n}>{at?.first && <Stem at={at} text={x.stem ?? ""} />}<MarkedItem it={x} at={at} open={i === s.walkIx} focused={i === s.walkIx && !last} cur={i === s.walkIx} dim={i !== s.walkIx} /></Fragment>; })}
+          {p.items.map((x, i) => { const at = partPlace(p.items, i); return <Fragment key={x.n}>{at?.first && <Stem at={at} text={x.stem ?? ""} />}<MarkedItem it={x} at={at} open={i === s.walkIx} focused={i === s.walkIx && !last} cur={i === s.walkIx} dim={i !== s.walkIx} sys={sys} /></Fragment>; })}
         </div>
       </div>
     </div>

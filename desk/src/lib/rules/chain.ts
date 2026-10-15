@@ -27,6 +27,8 @@
 import { compile, derivativeAt, limitAt, limitInf, SAMPLES, SAME_REL, toPlain, type Expr, type FnName, type Limit, type Node } from "./calc-expr";
 import { FUNCTION_TOL, ROUNDED_CLOSE, type CalcSpec } from "./calc";
 import { isCalc2Spec } from "./calc2";
+import { czechAnswer } from "./calc-read";
+import { commaSystem, type SchoolSystem } from "./taskText";
 
 export interface ChainLine {
   tag: string;
@@ -506,13 +508,22 @@ export function tagLines(spec: CalcSpec, lines: readonly string[]): { lines: Cha
 }
 
 /**
- * Each working line of a Calculus item checked against its own spec: true, false or null per line. A Calculus 2 spec
- * (rules/calc2) has no chain: every line is null, so its working stays bare (v2 M3b-3b ruling 32).
+ * The working lines as the learner's school system writes them (MB-B36): in a comma system (cz, de) each line is read as
+ * its answer is (calc-read czechAnswer, the one table): tg, cotg, arctg, arccotg are tan, cot, arctan and arccot, a decimal
+ * comma between two digits is a point, and a trailing + K or + C1 is the constant. Any other system: the lines as written.
  */
-export function chainChecks(spec: unknown, working: readonly string[]): ChainResult[] {
+const asWritten = (working: readonly string[], system?: SchoolSystem): readonly string[] =>
+  commaSystem(system) ? working.map((l) => (typeof l === "string" ? czechAnswer(l) : l)) : working;
+
+/**
+ * Each working line of a Calculus item checked against its own spec: true, false or null per line. A Calculus 2 spec
+ * (rules/calc2) has no chain: every line is null, so its working stays bare (v2 M3b-3b ruling 32). `system` is the
+ * learner's school system: a cz learner's tg(x) line is read as tan(x) (asWritten); with none the lines are read as before.
+ */
+export function chainChecks(spec: unknown, working: readonly string[], system?: SchoolSystem): ChainResult[] {
   if (!spec || typeof spec !== "object" || !working.length || isCalc2Spec(spec)) return working.map(() => null);
   try {
-    const tagged = tagLines(spec as CalcSpec, working);
+    const tagged = tagLines(spec as CalcSpec, asWritten(working, system));
     return checkChain(tagged.lines, { from: tagged.from ?? undefined, definite: tagged.definite });
   } catch {
     return working.map(() => null);
@@ -520,7 +531,7 @@ export function chainChecks(spec: unknown, working: readonly string[]): ChainRes
 }
 
 /** The first line the chain rings, or null: where the pen goes on a wrong Calculus item. */
-export function chainPen(spec: unknown, working: readonly string[]): number | null {
-  const at = chainChecks(spec, working).indexOf(false);
+export function chainPen(spec: unknown, working: readonly string[], system?: SchoolSystem): number | null {
+  const at = chainChecks(spec, working, system).indexOf(false);
   return at < 0 ? null : at;
 }

@@ -175,6 +175,10 @@ test('10 (pen case 8): no prose ordinal places the pen or earns a tick, the card
  // ticks before a located slip only on the lines the desk could read as arithmetic
  assert.deepEqual(W.working({...base,studentWorking:'3x = 18\nx = -6',verdict:'wrong',slipAt:{line:1}}).ticks,[true,false]);
  assert.deepEqual(W.working({...base,studentWorking:'take 7 from both sides\n3x = 4\nx = 4/3',verdict:'wrong',slipAt:{line:1}}).ticks,[false,false,false]);
+ // MB-B36: a cz learner's Calculus line in Czech names is ticked where the chain holds, as the server read it
+ const czItem={n:1,question:'Derivujte: y = tg(x^2)',spec:{shape:'derivative',f:'tan(x^2)'},studentWorking:"y' = (tg(x^2))'\n= 1/cos^2(x^2)",studentAnswer:'1/cos^2(x^2)',verdict:'wrong',slipAt:{line:1}};
+ assert.deepEqual(W.working(czItem,'cz').ticks,[true,false]);
+ assert.deepEqual(W.working(czItem).ticks,[false,false],'with no system the tg line is not read, so not ticked');
  const TODAY={
   'undo-wrong-order':'Undone in the wrong order','sign-lost-moving':'Sign lost crossing the equals','divided-one-term':'Only one term divided',
   'bracket-first-term-only':'Bracket on the first term only','collect-x-wrong-sign':'x-terms gathered with the wrong sign',

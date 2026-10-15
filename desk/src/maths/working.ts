@@ -14,7 +14,7 @@
  * A right item ticks its answer line (the substitution checked the value, not each line); an unsure one is
  * drawn without a mark.
  */
-import type { PracticeItem } from "@/lib/session/store";
+import type { PracticeItem, SchoolSystem } from "@/lib/session/store";
 import { chainChecks } from "@/lib/rules/chain";
 import { isCalcSpec, readsAsArithmetic, workingLines } from "@/lib/rules/maths";
 import type { ErrorKind, LineMarkSpec } from "./typeset";
@@ -35,7 +35,8 @@ export interface Working {
   placed: Placed | null;
 }
 
-export function working(it: PracticeItem): Working {
+/** `system` is the learner's school system: the chain reads a cz learner's tg(x) line as the server did (rules/chain). */
+export function working(it: PracticeItem, system?: SchoolSystem): Working {
   const lines = workingLines(it), n = lines.length;
   const ticks = lines.map(() => false);
   const none: Working = { lines, at: null, mark: null, ticks, placed: null };
@@ -46,7 +47,7 @@ export function working(it: PracticeItem): Working {
   if (at && at.line < n) {
     // a Calculus line is ticked only where the chain checker (rules/chain, the server's own rule) says it holds; a line it
     // cannot tell stays bare. The school and linear lines tick as they always did.
-    const held = isCalcSpec(it.spec) ? chainChecks(it.spec, lines) : null;
+    const held = isCalcSpec(it.spec) ? chainChecks(it.spec, lines, system) : null;
     for (let k = 0; k < at.line; k++) ticks[k] = held ? held[k] === true : readsAsArithmetic(lines[k]);
     // the occurrence rides with the span, so a sign written twice on the line is ringed where the server found it
     const mark: LineMarkSpec = at.kind && at.span ? { kind: at.kind, span: at.span, ...(at.nth !== undefined ? { nth: at.nth } : {}) } : { kind: "line" };

@@ -183,6 +183,31 @@ test('MB3-14: the pen never lands on a correct evaluation or a correct first lin
   assert.equal(checkChain([{tag:'=',text:'7'}],{from:'x^2'})[0],null,'a function then a constant under = is not rung: it cannot tell what was substituted');
 });
 
+// MB-B36: a cz (or de) learner's working is read as the answer is (calc-read czechAnswer, the one table); any other system as before
+test('MB-B36: with system cz a working line in Czech names, a decimal comma or + K is read; uk and none read as before',()=>{
+  const tg={shape:'derivative',f:'tan(x^2)'},slip=["y' = (tg(x^2))'","= 1/cos^2(x^2)"];
+  assert.deepEqual(chainChecks(tg,slip),[null,null],'an English reader cannot read tg: the pen has nowhere to stand');
+  assert.deepEqual(chainChecks(tg,slip,'cz'),[true,false]);
+  assert.equal(chainPen(tg,slip,'cz'),1,'the pen on the line that dropped the inside\'s derivative');
+  assert.equal(chainPen(tg,slip,'de'),1,'de is a comma system too');
+  assert.deepEqual(chainChecks(tg,["y' = tg(x^2)'","= 2x/cos^2(x^2)"],'cz'),[true,true],'tg before a primed bracket is the function primed');
+  assert.deepEqual(chainChecks({shape:'derivative',f:'x tan x'},["y' = tgx + x/cos^2 x"],'cz'),[true],'tgx is tg x');
+  assert.deepEqual(chainChecks({shape:'derivative',f:'atan(2x)'},["y' = (arctg(2x))'","= 1/(1+4x^2) · 2"],'cz'),[true,true]);
+  assert.deepEqual(chainChecks({shape:'derivative',f:'cot x'},["y' = (cotg x)'","= -1/sin^2 x"],'cz'),[true,true]);
+  assert.deepEqual(chainChecks({shape:'derivative',f:'cot x'},["y' = (cotg x)'","= 1/sin^2 x"],'cz'),[true,false],'a sign slip after cotg is pinned to its line');
+  assert.deepEqual(chainChecks({shape:'derivative',f:'pi/2 - atan(x)'},["y' = (arccotg x)'","= -1/(1+x^2)"],'cz'),[true,true],'arccotg x is pi/2 - arctan x');
+  // the decimal comma and the constant by another letter, as the answer reader takes them
+  assert.deepEqual(chainChecks({shape:'antiderivative',f:'x'},['F(x) = 0,5x^2 + C'],'cz'),[true]);
+  assert.deepEqual(chainChecks({shape:'antiderivative',f:'x'},['F(x) = 0,6x^2 + C'],'cz'),[false]);
+  assert.deepEqual(chainChecks({shape:'antiderivative',f:'2x'},['F(x) = x^2 + K'],'cz'),[true],'+ K is the arbitrary constant');
+  assert.deepEqual(chainChecks({shape:'evaluate',f:'x^2',at:1.5},['f(1,5) = 1,5^2','= 2,35'],'cz'),[true,false]);
+  assert.deepEqual(chainChecks({shape:'evaluate',f:'x^2',at:1.5},['f(1,5) = 1,5^2','= 2,35']),[null,null],'uk reads no decimal comma');
+  // a substitution's comma between clauses is not a decimal comma
+  assert.deepEqual(chainChecks({shape:'derivative',f:'sin(x^2)'},["u = x^2, u' = 2x","y' = cos(u) · u'","= 2x cos(x^2)"],'cz'),[true,true,true]);
+  // uk, us and no system are the lines as written
+  for(const sys of ['uk','us',undefined])assert.deepEqual(chainChecks(tg,slip,sys),[null,null]);
+});
+
 // the property: for a correct working, every line holds given the line before it, and the pen is null
 const mulberry=(a)=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
 const CORRECT=[
@@ -214,8 +239,35 @@ test('MB3-14 property: for 400 correct workings (every line equal to, or followi
     const r=chainChecks(spec,w);
     assert.ok(!r.includes(false),`a correct working was rung: ${JSON.stringify(spec)} ${JSON.stringify(w)} -> ${JSON.stringify(r)}`);
     assert.equal(chainPen(spec,w),null);n++;
+    // MB-B36: the same working read for a uk learner is byte-identical, and for a cz learner rings nothing either
+    assert.deepEqual(chainChecks(spec,w,'uk'),r);
+    assert.ok(!chainChecks(spec,w,'cz').includes(false),`a correct working was rung for cz: ${JSON.stringify(w)}`);
   }
   // the base workings are read, not merely null: the pen has something to stand on
   for(const [spec,base] of CORRECT)assert.ok(chainChecks(spec,base).some((v)=>v===true),`unread: ${JSON.stringify(base)}`);
   assert.equal(n,400);
+});
+
+// MB-B36 property: correct workings written as a Czech school writes them (tg, cotg, arctg, arccotg, a decimal comma, + K)
+const CZ_CORRECT=[
+  [{shape:'derivative',f:'tan(x^2)'},["y' = (tg(x^2))'","= 1/cos^2(x^2) · (x^2)'","= 2x/cos^2(x^2)"]],
+  [{shape:'derivative',f:'tan(3x)'},["y' = tg(3x)'","= 3/cos^2(3x)"]],
+  [{shape:'derivative',f:'cot(2x)'},["y' = (cotg(2x))'","= -2/sin^2(2x)"]],
+  [{shape:'derivative',f:'atan(x^2)'},["y' = (arctg(x^2))'","= 1/(1+x^4) · (x^2)'","= 2x/(1+x^4)"]],
+  [{shape:'derivative',f:'pi/2 - atan(x)'},["y' = (arccotg x)'","= -1/(1+x^2)"]],
+  [{shape:'derivative',f:'x tan x'},["y' = tg x + x/cos^2 x"]],
+  [{shape:'antiderivative',f:'x'},['F(x) = 0,5x^2 + K']],
+  [{shape:'evaluate',f:'x^2',at:1.5},['f(1,5) = 1,5^2','= 2,25']],
+];
+test('MB-B36 property: 200 correct Czech workings (each line equal to, or following, the line before) ring nothing for cz',()=>{
+  const rnd=mulberry(37);let n=0;
+  for(let k=0;k<200;k++){
+    const [spec,base]=CZ_CORRECT[k%CZ_CORRECT.length],w=[];
+    for(const line of base){w.push(line);const e=exprOf(line);if(e&&rnd()<0.6)w.push('= '+REWRITES[Math.floor(rnd()*REWRITES.length)](e));}
+    const r=chainChecks(spec,w,'cz');
+    assert.ok(!r.includes(false),`a correct Czech working was rung: ${JSON.stringify(w)} -> ${JSON.stringify(r)}`);
+    assert.equal(chainPen(spec,w,'cz'),null);n++;
+  }
+  for(const [spec,base] of CZ_CORRECT)assert.ok(chainChecks(spec,base,'cz').every((v)=>v===true),`not every line read: ${JSON.stringify(base)}`);
+  assert.equal(n,200);
 });
