@@ -448,9 +448,9 @@ test('S2: the ten stored LT placements - Lukas spoke B2 under a C1 read, Petra A
 // ---- LG-48: the recert's stored placements (2026-10-14-lt/recert-1), replayed through the ladder; no model call ----
 const RECERT_RUNS=['recert-1','recert-2','recert-3'],RECERT_RUN=path.join(LT_RUN,'recert-1'),BANDS=['A1','A2','B1','B2','C1','C2'];
 /** Each recert-1 Character's J1 placement as ladder marks. The facts keep no `skipped` flag: a task with no response whose note starts "Skipped" was one. */
-function recertMarks(runs=['recert-1']){
- return runs.flatMap(run=>fs.readdirSync(path.join(LT_RUN,run)).filter(f=>/-\d+\.json$/.test(f)).map(f=>{
-  const j=JSON.parse(fs.readFileSync(path.join(LT_RUN,run,f),'utf8'));
+function recertMarks(runs=['recert-1'],base=LT_RUN){
+ return runs.flatMap(run=>fs.readdirSync(path.join(base,run)).filter(f=>/-\d+\.json$/.test(f)).map(f=>{
+  const j=JSON.parse(fs.readFileSync(path.join(base,run,f),'utf8'));
   const p=Object.values(j.journeys).map(J=>J.facts&&J.facts.placement).find(Boolean);if(!p)return null;
   const marks=p.tasks.map(t=>({band:t.band,verdict:t.verdict,kind:t.kind,response:t.response,...(t.skipped||(t.response===''&&/^Skipped/.test(t.note))?{skipped:true}:{})}));
   return {run,who:f.replace(/\.json$/,''),trueBand:j.trueBand,stored:p.band,storedConfidence:p.confidence,read:p.selfBand||null,marks};
@@ -501,6 +501,31 @@ test('placement rework: over recert-1, -2 and -3 no learner moves farther from t
  assert.equal(P.staircase('A2',[{band:'A2',verdict:'fail',kind:'choose',response:'x'},{band:'A1',verdict:'pass',kind:'choose',response:'y'},{band:'A2',verdict:'pass',kind:'choose',response:'z'},{band:'B1',verdict:'pass',kind:'listen',response:'He missed the bus'},say('B2','pass')]).band,'B1');
  const climber=P.staircase('A2',[{band:'A2',verdict:'fail',kind:'choose',response:'x'},{band:'A1',verdict:'pass',kind:'choose',response:'y'},{band:'A2',verdict:'pass',kind:'choose',response:'z'},say('B2','pass'),say('B2','pass')]);
  assert.equal(climber.band,'B2');assert.notEqual(climber.confidence,'high');
+});
+// ---- the A2/B1 boundary: every stored placement (17 recert + 6 out of sample), replayed through the ladder; no model call ----
+const OOS_RUN='2026-10-16-lt-placement-oos';
+/** The ladder at db604738 on every stored placement: [band, confidence]. Every A2 Character placed B1; the boundary rule is measured against it. */
+const HEAD_BOUNDARY={'recert-1/adela-17':['B2','medium'],'recert-1/jana-29':['C1','medium'],'recert-1/klara-13':['B1','low'],'recert-1/lukas-24':['B2','low'],'recert-1/martin-45':['B1','medium'],'recert-1/oksana-34':['B2','low'],'recert-1/ondrej-16':['B1','low'],'recert-1/petra-38':['B1','medium'],'recert-1/tomas-9':['A1','low'],'recert-1/viktor-67':['A1','low'],
+ 'recert-2/tomas-9':['A1','low'],'recert-3/jana-29':['C1','medium'],'recert-3/klara-13':['B1','medium'],'recert-3/lukas-24':['B2','low'],'recert-3/martin-45':['B1','medium'],'recert-3/oksana-34':['B2','medium'],'recert-3/viktor-67':['A1','low'],
+ [OOS_RUN+'/dominik-17']:['B2','low'],[OOS_RUN+'/hana-41']:['B1','medium'],[OOS_RUN+'/klara-13']:['B1','medium'],[OOS_RUN+'/oksana-34']:['B2','low'],[OOS_RUN+'/petra-38']:['B1','low'],[OOS_RUN+'/sofie-11']:['B1','low']};
+/** The A2 placements the boundary rule moves down to A2. oos petra-38 (A2 choice, B1 listen and say partial, read B1) is Ondrej's shape (B1 exact) and stays. */
+const BOUNDARY_MOVED=['recert-1/klara-13','recert-1/petra-38','recert-3/klara-13',OOS_RUN+'/klara-13',OOS_RUN+'/sofie-11'];
+test('A2/B1 boundary: over all 23 stored placements every exact one stays, none moves farther or below its true band, none turns high, and the A2 learners held at B1 land on A2',()=>{
+ const far=(a,b)=>Math.abs(BANDS.indexOf(a)-BANDS.indexOf(b));
+ const rows=[...recertMarks(RECERT_RUNS),...recertMarks([OOS_RUN],path.resolve(LT_RUN,'..'))].map(r=>{const key=r.run+'/'+r.who,head=HEAD_BOUNDARY[key];assert(head,key+' has a HEAD reading');return {...r,key,head,now:P.staircase('A2',r.marks,r.read)};});
+ assert.equal(rows.length,23,'17 recert placements with marks and the six out of sample');
+ console.log('A2/B1 boundary replay (character | true | HEAD (confidence) | now (confidence)):\n  '+rows.map(r=>[r.key.padEnd(38),r.trueBand,(r.head[0]+' ('+r.head[1]+')').padEnd(11),r.now.band+' ('+r.now.confidence+')'].join(' | ')).join('\n  '));
+ const exact=rows.filter(r=>r.head[0]===r.trueBand);
+ assert.equal(exact.length,14,'the placements exact at HEAD');
+ for(const w of ['hana-41','dominik-17','ondrej-16','martin-45','adela-17','jana-29','lukas-24'])assert(exact.some(r=>r.who===w),w+' is exact at HEAD');
+ for(const r of rows){
+  if(r.head[0]===r.trueBand)assert.equal(r.now.band,r.trueBand,`(i) ${r.key} was exact at ${r.trueBand}, now ${r.now.band}`);
+  assert(far(r.now.band,r.trueBand)<=far(r.head[0],r.trueBand),`(ii) ${r.key}: ${r.head[0]} -> ${r.now.band}, true ${r.trueBand}`);
+  assert(BANDS.indexOf(r.now.band)>=BANDS.indexOf(r.trueBand)||r.now.band===r.head[0],`(iii) ${r.key} moved below its true ${r.trueBand} to ${r.now.band}`);
+  if(r.head[1]!=='high')assert.notEqual(r.now.confidence,'high',`(iv) ${r.key} turned high`);
+ }
+ for(const k of BOUNDARY_MOVED){const r=rows.find(x=>x.key===k);assert.equal(r.trueBand,'A2');assert.equal(r.now.band,'A2',`(v) ${k} lands on A2 (HEAD ${r.head[0]})`);}
+ for(const r of rows)if(!BOUNDARY_MOVED.includes(r.key))assert.equal(r.now.band,r.head[0],`${r.key} does not move`);
 });
 test('S2: spokenBand reads answered say tasks only, at their highest; conversationBand lowers at most one band, only when asked to speak at the level',()=>{
  const say=(band,english,patch={})=>({band,kind:'say',answered:'yes',english,...patch});
