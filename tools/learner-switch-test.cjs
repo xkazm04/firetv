@@ -20,6 +20,7 @@ const reg=require(src('lib/engines/registry.ts'));
 const engine=require(src('lib/engines/text.ts'));require(src('lib/engines/embed.ts'));require(src('lib/engines/vision.ts'));
 let answer=async()=>{throw new Error('the text engine was called');};
 engine.text=(req)=>answer(req);
+const getLearnerOf=(id)=>require(src('lib/session/learners.ts')).getLearner(id);
 const storeFile=src('lib/session/store.ts');
 let store=require(storeFile);
 const route=(name)=>require(src(`app/api/${name}/route.ts`));
@@ -559,6 +560,33 @@ test('P6: a profile.draft carrying an id from a phone is refused; its name patch
  const tv=await postSession({type:'profile.draft',patch:{id:store.getSession().draft.id,name:'Mia B'}},'tv');assert.equal(tv.status,200);
 });
 
+// ---- LP-R2: a whole-piece reading that outlives a switch finishes into the leaving learner's away slot ----
+test('LP-R2: a three-paragraph piece read past a switch lands whole in the leavers away slot, never on the seated desk, and agrees with his record',async()=>{
+ seatedWithWork('ema');store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
+ const gates=[held1(),held1(),held1()],started=[];
+ answer=async(r)=>{
+  const m=/Judge only paragraph (\d+) of \d+: sentences (\d+) to (\d+)/.exec(r.prompt);const para=Number(m[1])-1;started.push(para);await gates[para].p;
+  const observations=[];for(let n=Number(m[2]);n<=Number(m[3]);n++)observations.push({n,job:'link',note:'x'});
+  return {json:{observations,summary:'s'},provider:'stub',ms:1};};
+ const PIECE=['Schools start too early. Teenagers are tired.','Research found that teens sleep later. This is bad.','Therefore school should start at nine.'].join('\n\n');
+ const p=postAnalyse({kind:'piece',text:PIECE,type:'structure'});
+ gates[0].open();await settle();await until(()=>started.length===2&&store.getSession().essay);
+ store.dispatch({type:'learner.set',id:'jakub'});
+ gates[1].open();gates[2].open();assert.equal((await p).status,200);await settle();
+ let s=store.getSession();
+ assert.equal(s.learner.id,'jakub');assert.ok(!s.essay,'jakubs desk shows none of emas reading');
+ const a=s.away.ema.essay;assert.ok(a,'emas away slot holds the reading');
+ assert.equal(a.piece.paragraphs,3);assert.equal(a.piece.read.length,3,'3 of 3 paragraphs');
+ const line=getLearnerOf('ema').history.find((h)=>h.kind==='writing');assert.ok(line,'the record has the history line');
+ const fixed=a.verdicts.filter((v)=>v.verdict==='faulty').length,sents=a.sentences.length;
+ assert.equal(line.detail,`${fixed} of ${sents} sentences to fix, 3 paragraphs`,'record and away slot agree');
+ store.dispatch({type:'learner.set',id:'ema'});
+ s=store.getSession();assert.equal(s.essay.piece.read.length,3);assert.equal(s.essay.summary,a.summary);
+});
+test('LP-R2: a reading the learner replaced himself still drops (a real supersede, not a switch)',()=>{
+ const t=fs.readFileSync(src('app/api/analyse/route.ts'),'utf8');
+ assert.match(t,/run\.current\(\) \|\| \(getSession\(\)\.learner\?\.id !== undefined/);
+});
 // ---- P1: load (last: it swaps the store module out from under the routes) ----
 const reload=(content)=>{
  clearInterval(globalThis.__desk.ticker);delete globalThis.__desk;delete require.cache[storeFile];
