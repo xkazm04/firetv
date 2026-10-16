@@ -140,6 +140,15 @@ export const THIN_STRONG_PASSES = 2;
  * is not evidence, so Ondrej (B1, read A2, A2 held by a choice only) stays at B1. Every miss of the recerts was high, none
  * low: Adela, Jana (twice) and Lukas (twice) land on their true band, Oksana moves a band nearer. Leaned confidence
  * is medium, low when the top band was thin.
+ *
+ * The A2/B1 boundary leans on less. A2 is mostly held by a choice, a weak pass, so the strong-pass lean never fires
+ * there, and every stored A2 learner was placed B1. When the read is below B1, a pass of any kind at A2 is enough: B1
+ * leans to A2, low, if B1 is held by its own passes (not by two partials) and something above it was failed or partly
+ * done. Replayed on all 23 stored placements (17 recert, six out of sample): exact 14 -> 19, none moved farther, below
+ * its true band or to high. Sofie (A2), Klara (A2, three times) and Petra (A2, recert-1), all read A2, land on A2.
+ * Ondrej (B1, read A2: an A2 choice, then two partials at B1, nothing above) stays B1, and so does out-of-sample Petra
+ * (A2, read B1), whose marks are his shape; Hana (B1, read B1) stays B1. A say partial at B1 alone does not lean: a B1
+ * learner read at B1 with two strong B1 listens and a B1 say partial (the S2 check) keeps B1.
  */
 export function staircase(start: Band, marks: Mark[], read: Band | null = null): { done: boolean; next: Band; band: Band; confidence: Placement["confidence"]; rests: Rests } {
   const last = marks.at(-1), real = counted(marks);
@@ -163,6 +172,9 @@ export function staircase(start: Band, marks: Mark[], read: Band | null = null):
   const thin = strong < THIN_STRONG_PASSES;
   if (lowerHeld && (thin || (read && BANDS.indexOf(read) < BANDS.indexOf(band)))) {
     return { done, next, band: shift(band, -1), confidence: thin ? "low" : "medium", rests: "lean" };
+  }
+  if (band === "B1" && band === top && ceiling && count(marks, "A2", "pass") >= 1 && read && BANDS.indexOf(read) < BANDS.indexOf("B1")) {
+    return { done, next, band: "A2", confidence: "low", rests: "lean" };
   }
   if (scattered) rests = "scattered";
   else if (partialBand) rests = "partials";
