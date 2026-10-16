@@ -107,12 +107,12 @@ run, because nothing in P22 touches code.
 
 ## Questions
 
-1. **Goal 1.** By the owner's line, sound-on goal 1 passes on p95, median, PSS, rejects and the transition bar, and misses only the
+1. **Answered, decisions section 15(a).** **Goal 1.** By the owner's line, sound-on goal 1 passes on p95, median, PSS, rejects and the transition bar, and misses only the
    33 ms max (37.6 ms, five frames, all preempted). Does goal 1 count as met, or is the max line to be worked, for example by
    card 3 or a settled rerun?
-2. **A soak without the poller.** Should the max, median and PSS lines be read once more without the SurfaceFlinger poller (3.4% of a
+2. **Open, decisions section 15(b).** **A soak without the poller.** Should the max, median and PSS lines be read once more without the SurfaceFlinger poller (3.4% of a
    core), and on a settled host?
-3. **The release Code line** was read under `dev.deathride.perf`. Is that accepted for ruling 3(b), or should the shipped id be read
+3. **Answered, decisions section 15(a).** **The release Code line** was read under `dev.deathride.perf`. Is that accepted for ruling 3(b), or should the shipped id be read
    once the Stick's `dev.deathride.tracks` stream allows an install?
-4. **Card 15** (P21 question 2) and the 30 MB floor (P21 question 3) were not touched. They need a settled pair, which this host
+4. **Open, decisions section 15(b).** **Card 15** (P21 question 2) and the 30 MB floor (P21 question 3) were not touched. They need a settled pair, which this host
    has not given.
