@@ -50,10 +50,44 @@ All three A2 Characters (klara-13, petra-38, sofie-11) place at B1, and each of 
 
 The pattern: a B1 listen pass (klara, sofie), a B1 say task that is a partial or a pass, and A2 held only by weak choose passes. Petra differs in one detail: her B1 listen was a partial, and two partials at B1 end the check at B1. In all three, the band below B1 holds no strong pass, so the lean-down rule (T4) cannot fire: a lower band with no strong pass is by design not evidence. What the rules did do is cap confidence. Klara reads medium (the read A2 differs from B1), sofie and petra read low. The judge findings ask for a clearer caveat on these verdicts: the line "What you said at the start pointed elsewhere, so this is a careful guess" (LT-klara-13-J1-2, LT-sofie-11-J1-1) and the line "Linga placed you one level lower than your answers alone, to be safe" (LT-dominik-17-J1-4, LT-oksana-34-J1-2) state a rule, not a reason.
 
+The outcome of the tightening aimed at this limit is in section 8.
+
 ## 6. Limits of the evidence
 
 n = 6, one run each, model-played Characters, LT only (no L2). A single run per Character cannot separate a Character's luck from the ladder. Three of the six were fitted, so only three are out of sample, and only one of those is an A2. One A2 sample is not a trend; it does show that the rule that lifts A2 learners to B1 was not removed by the fit. Judge agreement was 23 of 28 (82 percent), so some per-task verdicts are contested. A second run of the three new Characters would give a spread.
 
 ## 7. Follow-up
 
-A separate delivery is tightening the A2/B1 boundary only, without moving any B1/B2 exact result (dominik-17 and hana-41, and the pinned replay of 3a49c0c1). It is dispatched beside this record and is not part of the state described here. The next capture appends its outcome. LG-48 and LG-49 in `docs/BACKLOG.md` carry the run's recert lines; no new LG row was filed because nobody landed two bands off or high-confidence wrong.
+A separate delivery is tightening the A2/B1 boundary only, without moving any B1/B2 exact result (dominik-17 and hana-41, and the pinned replay of 3a49c0c1). It is dispatched beside this record and is not part of the state described here. The next capture appends its outcome. That outcome is section 8. LG-48 and LG-49 in `docs/BACKLOG.md` carry the run's recert lines; no new LG row was filed because nobody landed two bands off or high-confidence wrong.
+
+## 8. Outcome of the A2/B1 tightening (ae4b1153)
+
+The tightening: 7c94669c ("lean B1 to A2 on any A2 pass when the read is below B1"), pinned by the replay test 26376e3d and noted under LG-48 by ae4b1153. When the about-questions read is below B1, B1 is the top held band, held by its own passes and checked above, and A2 holds a pass of any kind (a choice counts), the placement leans to A2 at low confidence. The accepted risk is the mirror case: a true B1 learner whose read comes out low could now be placed A2.
+
+### Stored replay (in sample)
+
+`tools/linga-rules-test.cjs`, test "A2/B1 boundary", replays all 23 stored placements (the 17 recert placements with marks and the six of `2026-10-16-lt-placement-oos`) against the ladder at db604738. Exact goes from 14 to 19 of 23. The five that move are all true A2 and all land on A2: klara-13 (recert-1, recert-3, OOS), petra-38 (recert-1) and sofie-11 (OOS). No placement moved below its true band, farther from it, or to high, and every one of the 14 exact placements stayed exact. OOS petra-38 (read B1) and ondrej-16 (true B1) stay B1. The test is green in this worktree's `npm run test:rules` (linga-rules-test 159/159). These marks are the ones the rule was written against, so this result is in sample by construction.
+
+### Live out-of-sample run
+
+Run `uat/runs/2026-10-16-lt-a2b1-tightening`, journey J1, claude CLI only (tutor haiku, Character and judge sonnet), `--parallel 1`, measured at c290d10b (clean; `placement.ts` blob 782e7e11, which includes the tightening). Changed no product code. The new Character ivana-33 (true B1, built to read low: brief, hesitant, self-deprecating about-question answers, simple task answers) was committed alone in c290d10b before the run and not changed after it. "Rule fired" is decided by replaying each Character's live marks through `staircase` at this product with and without the read. Source: the run's `report.md`, last section.
+
+| Character | True | Read | Placed | Confidence | Distance | Rule fired | Previous OOS run (read, placed) |
+|---|---|---|---|---|---|---|---|
+| ivana-33 | B1 | B1 | B1 | low | 0, exact | no: read B1; raw ladder band B2 (two B2 say partials), leaned to B1 by T4 | n/a, new |
+| petra-38 | A2 | B1 | B1 | medium | +1, near | no: read B1 | read B1, placed B1 low |
+| sofie-11 | A2 | A2 | A2 | low | 0, exact | yes: without the rule the same marks place B1 | read A2, placed B1 low |
+
+Live marks, in task order: ivana-33 A2 choose pass, B1 listen pass, B2 say partial, B2 say partial. petra-38 A2 choose pass, B1 listen pass, B2 say partial, B2 say fail, B1 say partial. sofie-11 A1 choose pass, A2 choose pass, B1 listen pass, B2 say fail, B1 say partial.
+
+**The new true-B1 Character was not placed A2. The accepted risk was not realized, and it was not exercised.** Ivana's about-question answers came out short and self-deprecating, as played ("At school and a course. Sorry, my English is not good."), and the read was still B1, so the rule's precondition never held. Her marks could not have triggered it with any read: her raw band is B2 from two partials, not B1, and a replay with a read of A2 or A1 still places her B1. The risk case needs a true B1 whose ladder tops out at B1 and whose read is A2. No stored or live sample has that shape yet.
+
+On the A2 side the rule did its job where its precondition held. Sofie (read A2) moved from one band high to exact, which matches her stored replay. Petra's read came out B1 in both live runs, so the rule could not reach her. On her live marks a read of A2 would have placed her A2. Scorecard: exact 2, near 1, miss 0. On the same two A2 Characters the previous run had exact 0, near 2. No read was high-confidence.
+
+### Honest ceiling
+
+n = 3, one run each. The Characters are model-played and judged by a model of the same family (claude sonnet), and the tutor is a claude model too. LT only, no L2. The one sample built for the accepted risk did not reach the condition it was built to test, so the run gives no evidence for or against that risk. One A2 move (Sofie) in one run cannot be told apart from run-to-run luck. Sofie's previous marks were the same shape, though, and both her runs read A2.
+
+### Section 5's known limit: narrowed
+
+The limit in section 5 was that every A2 Character placed B1. The stored replay moves five of those placements to A2, and live Sofie lands on A2. The limit remains wherever the read itself comes out B1 for a true A2 learner. Petra shows this in both live runs and in the stored OOS replay. The tightening depends on the read, so it cannot correct a read that is high. The accepted risk (a true B1 read low and placed A2) is unconfirmed and untested, not refuted. Closing the limit would need a second run of the A2 Characters for a spread, plus a true-B1 sample whose ladder tops out at B1 under a low read.
