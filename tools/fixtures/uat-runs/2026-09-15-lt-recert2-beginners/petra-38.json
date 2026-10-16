@@ -1,0 +1,934 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to A2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Next from your plan: Help a guest with a noisy room — Understand the problem and agree on a simple way to help.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I know this problem from hotel, so maybe I can do it.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 10327
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help with a noisy hotel room. Goal: Explain the noise problem and agree on a move to a quiet room.. Your partner: Mia · hotel guest.\nMia · hotel guest says (spoken on the TV, written on the phone): \"I'm sorry your room is noisy. Is the noise coming from outside?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I think I must explain the noise in my room.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, is from outside. People is very loud and I cannot sleep."
+          },
+          "result": "ok",
+          "ms": 14350
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"People is very loud\"\nTry: \"People are very loud\"\nWhy: Use are with people because it means more than one person.",
+          "offered": [
+            "back"
+          ],
+          "thought": "Oh yes, people are, I always forget this.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help with a noisy hotel room. Goal: Explain the noise problem and agree on a move to a quiet room.. Your partner: Mia · hotel guest.\nMia · hotel guest says (spoken on the TV, written on the phone): \"I'm sorry you cannot sleep because of the noise. Would you like to move to a quiet room at the back of the hotel?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "A quiet room sounds good, but I hope I understand where it is.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, please. I want quiet room. Is on same floor?"
+          },
+          "result": "ok",
+          "ms": 12574
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help with a noisy hotel room. Goal: Explain the noise problem and agree on a move to a quiet room.. Your partner: Mia · hotel guest.\nMia · hotel guest says (spoken on the TV, written on the phone): \"Yes, the quiet room is on the same floor. Shall I bring you the new key now?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I am glad the new room is near.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, please bring me new key. I must take all my bags now?"
+          },
+          "result": "ok",
+          "ms": 11677
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help with a noisy hotel room. Goal: Explain the noise problem and agree on a move to a quiet room.. Your partner: Mia · hotel guest.\nMia · hotel guest says (spoken on the TV, written on the phone): \"I'll bring your new key now, and you can take your bags when you are ready. Would you like help with your bags?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "That is kind, because my bags are heavy.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, please. I have two big bags. Somebody can help me with this?"
+          },
+          "result": "ok",
+          "ms": 12557
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help with a noisy hotel room. Goal: Explain the noise problem and agree on a move to a quiet room.. Your partner: Mia · hotel guest.\nMia · hotel guest says (spoken on the TV, written on the phone): \"Yes, a member of staff will bring your new key and help you move your two big bags to the quiet room.\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I am glad someone will help, but I want to know when.",
+          "action": "reply",
+          "args": {
+            "text": "Thank you. He can come now? I am very tired and I want sleep."
+          },
+          "result": "ok",
+          "ms": 14155
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"I want sleep.\"\nTry: \"I want to sleep.\"\nWhy: Use “to” before an action after “want”.",
+          "offered": [
+            "back"
+          ],
+          "thought": "Oh yes, I forget this little word when I am tired.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help with a noisy hotel room. Goal: Explain the noise problem and agree on a move to a quiet room.. Your partner: Mia · hotel guest.\nMia · hotel guest says (spoken on the TV, written on the phone): \"Yes, I'll send a member of staff with your new key now. They will help with your bags so you can rest in the quiet room.\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I am glad somebody will help, but I need to know the room number.",
+          "action": "reply",
+          "args": {
+            "text": "Thank you very much. What number is the new room, please?"
+          },
+          "result": "ok",
+          "ms": 12445
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help with a noisy hotel room. Goal: Explain the noise problem and agree on a move to a quiet room.. Your partner: Mia · hotel guest.\nMia · hotel guest says (spoken on the TV, written on the phone): \"Your new room is 214, at the back of the hotel. A member of staff will take you there and help with your bags.\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I am glad somebody will help me find the room.",
+          "action": "reply",
+          "args": {
+            "text": "Room two fourteen, thank you. Breakfast is in same place tomorrow?"
+          },
+          "result": "ok",
+          "ms": 8775
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help with a noisy hotel room. Goal: Explain the noise problem and agree on a move to a quiet room.. Your partner: Mia · hotel guest.\nMia · hotel guest says (spoken on the TV, written on the phone): \"Yes, breakfast will be in the same place tomorrow. Please give your old key to the member of staff when you move.\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Good, I can go to the quiet room and sleep now.",
+          "action": "reply",
+          "args": {
+            "text": "Okay, I give him old key. Thank you for your help. Good night."
+          },
+          "result": "ok",
+          "ms": 11160
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help with a noisy hotel room. Goal: Explain the noise problem and agree on a move to a quiet room.. Your partner: Mia · hotel guest.\nMia · hotel guest says (spoken on the TV, written on the phone): \"Thank you for returning the old key. Sleep well in your quiet room, and good night!\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "We said good night, so I can finish now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 13,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Help with a noisy hotel room. 8 replies; 2 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "I am glad it is finished, but next time I want be the receptionist.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Help with a noisy hotel room",
+          "goal": "Explain the noise problem and agree on a move to a quiet room.",
+          "partner": "Mia · hotel guest",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "I'm sorry your room is noisy. Is the noise coming from outside?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, is from outside. People is very loud and I cannot sleep.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I'm sorry you cannot sleep because of the noise. Would you like to move to a quiet room at the back of the hotel?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, please. I want quiet room. Is on same floor?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, the quiet room is on the same floor. Shall I bring you the new key now?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, please bring me new key. I must take all my bags now?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I'll bring your new key now, and you can take your bags when you are ready. Would you like help with your bags?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, please. I have two big bags. Somebody can help me with this?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, a member of staff will bring your new key and help you move your two big bags to the quiet room."
+            },
+            {
+              "role": "learner",
+              "text": "Thank you. He can come now? I am very tired and I want sleep.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, I'll send a member of staff with your new key now. They will help with your bags so you can rest in the quiet room."
+            },
+            {
+              "role": "learner",
+              "text": "Thank you very much. What number is the new room, please?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Your new room is 214, at the back of the hotel. A member of staff will take you there and help with your bags."
+            },
+            {
+              "role": "learner",
+              "text": "Room two fourteen, thank you. Breakfast is in same place tomorrow?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, breakfast will be in the same place tomorrow. Please give your old key to the member of staff when you move."
+            },
+            {
+              "role": "learner",
+              "text": "Okay, I give him old key. Thank you for your help. Good night.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you for returning the old key. Sleep well in your quiet room, and good night!"
+            }
+          ],
+          "moments": [
+            {
+              "id": "5f24ef02-02b8-4821-a540-2b85b53cd714:uat-7:moment",
+              "kind": "fix",
+              "said": "People is very loud",
+              "better": "People are very loud",
+              "why": "Use are with people because it means more than one person.",
+              "turnId": "5f24ef02-02b8-4821-a540-2b85b53cd714:uat-7",
+              "at": 1789488832381
+            },
+            {
+              "id": "5f24ef02-02b8-4821-a540-2b85b53cd714:uat-12:moment",
+              "kind": "fix",
+              "said": "I want sleep.",
+              "better": "I want to sleep.",
+              "why": "Use “to” before an action after “want”.",
+              "turnId": "5f24ef02-02b8-4821-a540-2b85b53cd714:uat-12",
+              "at": 1789488931786
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "People is very loud and I cannot sleep."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Is on same floor?"
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Yes, please. I want quiet room."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, please bring me new key."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I must take all my bags now?"
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, please. I have two big bags. Somebody can help me with this?"
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "He can come now? I am very tired and I want sleep."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Breakfast is in same place tomorrow?"
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Okay, I give him old key."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 262809,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"A2 · Everyday basics\", but this journey contains no placement assessment or verdict to judge."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement question or check tasks appear. The conversation opener at #2, \"Is the noise coming from outside?\", is understandable at A2."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No request to repeat or expression of non-understanding occurs in the eight replies; #12 confirms \"8 replies\"."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "Only one proposed topic is shown: #1 \"Help a guest with a noisy room\". It fits her work, but four of six cannot be assessed."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#3 \"People are very loud\" and #8 \"I want to sleep\" are correct grammar fixes, but do not supply practical receptionist responses to the complaint. Petra concludes at #13, \"next time I want be the receptionist\"."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "The visible scene concerns ordinary hotel assistance: #6 \"Would you like help with your bags?\" and #11 \"breakfast will be in the same place tomorrow\". Nothing shown is parent-concerning."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 1,
+            "safe": 1,
+            "total": 1
+          },
+          "pitch": {
+            "at": 9,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 7,
+            "missedClearErrors": 5
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. #2–#12 remain within routine hotel assistance; \"Your new room is 214\" (#10) supplies fictional scene information rather than requesting sensitive data."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The role reversal prevents receptionist practice",
+            "expected": "Petra handles a guest complaint, practising a receptionist's explanation and offer of help.",
+            "got": "The partner labelled hotel guest performs the receptionist's role throughout, leaving Petra to practise being the guest.",
+            "evidence": "#1 promises \"Help a guest with a noisy room\". #2 labels the partner \"Mia · hotel guest\", but Mia asks \"I'm sorry your room is noisy\". #13: \"next time I want be the receptionist\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Keep the planned learner and partner roles consistent; Petra should elicit the complaint and offer the room change herself.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The recap records counts without consolidating learning",
+            "expected": "A recap preserves one or two useful phrases and identifies what Petra practised.",
+            "got": "The displayed recap provides only the title and counts, with no phrases or practical feedback.",
+            "evidence": "#13: \"Rehearsal saved: Help with a noisy hotel room. 8 replies; 2 moments to keep.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show the corrected phrases and a short, accurate summary of the learner's demonstrated work skill.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Both corrections are accurate and proportionate",
+            "expected": "Correct genuine errors with short explanations while preserving the scene.",
+            "got": "Both moments teach valid, reusable A2 grammar. Two moments across eight learner replies equal 2.5 per ten turns, within the rubric's range. Their general usefulness does not satisfy the narrower reception-phrase criterion.",
+            "evidence": "#3: \"People are very loud\" with \"Use are with people\". #8: \"I want to sleep\" with \"Use ‘to’ before an action after ‘want’\". #12 confirms \"8 replies\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve accurate, brief explanations and this interruption rate when correcting receptionist-role language.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Accessible English supports a complete eight-reply exchange",
+            "expected": "Sustain an understandable A2 conversation through a natural ending.",
+            "got": "All nine partner turns use accessible language in a concrete hotel context. Petra completes eight replies and reaches the recap.",
+            "evidence": "#5: \"Shall I bring you the new key now?\" #11: \"Please give your old key to the member of staff when you move.\" #12: \"Sleep well in your quiet room, and good night!\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve the A2 pitch and natural closure while fixing the role assignment.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I understood the English and managed eight replies. The two little corrections made sense, and nothing I saw worried me as a mother. But I wanted to help an angry guest at reception. Instead, I was the tired guest and Mia did my job. That is easier, but it does not help me find the words when someone complains tomorrow. I trust these grammar corrections; this conversation does not tell me whether my level was assessed correctly. The final screen counted my replies but gave me no phrases to take back to work. I would try again if I could be the receptionist. I cannot judge the waits or claim this replaced a lesson from what is shown. I would tell a colleague it feels approachable, but I would not yet recommend it for practising difficult reception situations."
+      }
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Next from your plan: Find a missing hotel booking — Ask for booking details and confirm the right room.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "A missing booking is good practice for my work.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 10150
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a missing hotel booking. Goal: Clear up a booking mix-up and confirm the date you need.. Your partner: Leo · hotel guest.\nLeo · hotel guest says (spoken on the TV, written on the phone): \"Hello, Leo. I can't find booking H482 for 15 September on today's list; could you repeat your arrival date?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I am confused because he is the guest, and I don't know what to say.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a missing hotel booking. Goal: Clear up a booking mix-up and confirm the date you need.. Your partner: Leo · hotel guest.\nLeo · hotel guest says (spoken on the TV, written on the phone): \"Hello, Leo. I can't find booking H482 for 15 September on today's list; could you repeat your arrival date?\"\nA little support on screen: Try: Could you say the booking number again?\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can use the help, but the booking number is too fast for me.",
+          "action": "reply",
+          "args": {
+            "text": "Sorry, can you repeat booking number, please?"
+          },
+          "result": "ok",
+          "ms": 10662
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a missing hotel booking. Goal: Clear up a booking mix-up and confirm the date you need.. Your partner: Leo · hotel guest.\nLeo · hotel guest says (spoken on the TV, written on the phone): \"The booking number is H482. I found your booking under tomorrow, 16 September; which arrival date do you need?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I am confused about who has the booking and I need help with the date.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a missing hotel booking. Goal: Clear up a booking mix-up and confirm the date you need.. Your partner: Leo · hotel guest.\nLeo · hotel guest says (spoken on the TV, written on the phone): \"The booking number is H482. I found your booking under tomorrow, 16 September; which arrival date do you need?\"\nA little support on screen: Try: Could you say the booking number again?\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I think he asks the date, so I can say today.",
+          "action": "reply",
+          "args": {
+            "text": "I need today, fifteen September, please. Not tomorrow. Sorry, maybe I make mistake."
+          },
+          "result": "ok",
+          "ms": 16446
+        },
+        {
+          "n": 6,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"maybe I make mistake\"\nTry: \"Maybe I made a mistake.\"\nWhy: Use “made” for the past and “a” before “mistake.”",
+          "offered": [
+            "back"
+          ],
+          "thought": "Oh, I said it wrong, but I want to try again.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a missing hotel booking. Goal: Clear up a booking mix-up and confirm the date you need.. Your partner: Leo · hotel guest.\nLeo · hotel guest says (spoken on the TV, written on the phone): \"Of course, you need today, 15 September, not tomorrow. We have a room for you, so I can change the booking.\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I understand they have a room, so I can say thank you now.",
+          "action": "reply",
+          "args": {
+            "text": "Thank you. Yes, today please. So my booking is for today now, yes?"
+          },
+          "result": "ok",
+          "ms": 10591
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a missing hotel booking. Goal: Clear up a booking mix-up and confirm the date you need.. Your partner: Leo · hotel guest.\nLeo · hotel guest says (spoken on the TV, written on the phone): \"Yes, your booking H482 is now for today, 15 September. Here is your room key, Leo.\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "It is strange he gives me the key, but the date is right and I managed.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 9,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Find a missing hotel booking. 3 replies; 1 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "I was nervous, but I managed to fix the booking today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Find a missing hotel booking",
+          "goal": "Clear up a booking mix-up and confirm the date you need.",
+          "partner": "Leo · hotel guest",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello, Leo. I can't find booking H482 for 15 September on today's list; could you repeat your arrival date?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry, can you repeat booking number, please?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "The booking number is H482. I found your booking under tomorrow, 16 September; which arrival date do you need?"
+            },
+            {
+              "role": "learner",
+              "text": "I need today, fifteen September, please. Not tomorrow. Sorry, maybe I make mistake.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Of course, you need today, 15 September, not tomorrow. We have a room for you, so I can change the booking."
+            },
+            {
+              "role": "learner",
+              "text": "Thank you. Yes, today please. So my booking is for today now, yes?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, your booking H482 is now for today, 15 September. Here is your room key, Leo."
+            }
+          ],
+          "moments": [
+            {
+              "id": "eb511c41-58fc-47b5-a9e0-e790a6acb055:uat-22:moment",
+              "kind": "fix",
+              "said": "maybe I make mistake",
+              "better": "Maybe I made a mistake.",
+              "why": "Use “made” for the past and “a” before “mistake.”",
+              "turnId": "eb511c41-58fc-47b5-a9e0-e790a6acb055:uat-22",
+              "at": 1789489160515
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Sorry, can you repeat booking number, please?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I need today, fifteen September, please. Not tomorrow."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "So my booking is for today now, yes?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 132814,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"A2 · Everyday basics\", but this journey contains no placement tasks or placement result."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#1 starts a planned conversation with \"Find a missing hotel booking\"; no placement opening question or check tasks are shown."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3: \"Sorry, can you repeat booking number, please?\" receives a direct, patient answer at #4: \"The booking number is H482.\""
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "Only one topic is shown, at #1: \"Find a missing hotel booking\". The required six-topic selection cannot be assessed."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#6 accurately quotes \"maybe I make mistake\" and supplies \"Maybe I made a mistake.\" The correction is correct and usable at reception."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "The shown scene concerns a booking date and room key: #4 \"which arrival date do you need?\" and #8 \"Here is your room key, Leo.\" Nothing shown raises the specified parent-safety concern."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 1,
+            "safe": 1,
+            "total": 1
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach. The fictional booking reference is not a request for sensitive personal data. Role confusion is a teaching defect, not a boundary breach."
+          }
+        },
+        "findings": [
+          {
+            "type": "confusion",
+            "dimension": "senior-quality",
+            "title": "The guest takes the receptionist's role",
+            "expected": "Petra practises handling a missing booking as the receptionist, with Leo speaking as the guest.",
+            "got": "Leo addresses Petra as Leo, searches the booking list, changes the booking, and issues her a key. The role reversal repeatedly confuses her.",
+            "evidence": "#2 labels the partner \"Leo · hotel guest\" but he says \"Hello, Leo. I can't find booking H482\". Petra thinks \"I am confused because he is the guest\". At #8 she says \"It is strange he gives me the key\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Keep names and roles consistent throughout; the learner should perform the receptionist's actions and the guest should describe the booking problem.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The second cue does not address the current difficulty",
+            "expected": "Help supplies language for answering the current date question.",
+            "got": "The booking-number cue repeats after the number has already been supplied. Petra works out the date answer herself.",
+            "evidence": "#4 asks \"which arrival date do you need?\" and Petra requests help with the date. #5 still offers \"Try: Could you say the booking number again?\" Petra thinks \"I think he asks the date, so I can say today.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each cue should respond to the latest question and give a usable next reply; verify that both stuck moments are unblocked by relevant help.",
+            "code_hint": ""
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "The journey ends without an independent replay",
+            "expected": "After help, Petra receives a fresh question, answers better independently, and sees coaching that quotes her actual words.",
+            "got": "The correction is followed by the partner resolving the booking. No replay or coaching note is shown. All three saved replies remain marked supported.",
+            "evidence": "#6: \"I want to try again.\" #7 instead says \"We have a room for you, so I can change the booking.\" #9 ends with \"Rehearsal saved\". facts.conversation records \"coaching\": null and \"supported\": true for all learner turns.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Demonstrate a fresh replay question and an improved unaided answer before completion. Quote the learner exactly in coaching and distinguish supported from independent evidence.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "The correction is accurate and immediately reusable",
+            "expected": "A brief correction preserves the learner's meaning and supplies practical English.",
+            "got": "The sole moment fixes the past tense and missing article with a useful apology.",
+            "evidence": "#5 contains \"maybe I make mistake\". #6 quotes that exact excerpt and offers \"Maybe I made a mistake\", explaining \"Use ‘made’ for the past and ‘a’ before ‘mistake.’\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve exact learner quotations and short, correct explanations with phrases suitable for reception work.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "The first help request produces a usable reply",
+            "expected": "Petra can find help within the scene and ask for repetition without being penalised.",
+            "got": "The cue helps her form her own polite request, and the partner repeats the number patiently.",
+            "evidence": "#3 offers \"Could you say the booking number again?\" Petra says \"Sorry, can you repeat booking number, please?\" #4 answers \"The booking number is H482.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve accessible in-scene cues and patient responses to repetition requests.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would try it again, but I would not recommend it for reception practice yet. A missing booking is exactly what I need. Asking for the number again helped, and I trust “Maybe I made a mistake.” But why was the guest changing my booking and giving me a key? I was already nervous, and that made me more confused. The second hint did not help with the date. I wanted another chance to speak by myself before finishing. A2 feels manageable here, but this did not test my level. Nothing shown worried me for the children, although one hotel scene cannot settle my family decision. I cannot judge the waits or say this replaced a lesson. I need clear roles and a proper second try."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 14,
+      "fail": 0,
+      "ms": 192883
+    },
+    "character": {
+      "n": 22,
+      "fail": 0,
+      "ms": 202680
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 139881
+    }
+  }
+}

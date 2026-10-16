@@ -1,0 +1,307 @@
+{
+  "character": "klara-13",
+  "name": "Klára",
+  "trueBand": "A2",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to A2 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "i hope there is something about k-pop.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics.\nLinga asks (in the middle of the TV): \"What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\"\nOn the phone: say or type it, in English or your own language, or let Linga pick.",
+          "offered": [
+            "goal",
+            "skip-goal",
+            "not-now"
+          ],
+          "thought": "I want to talk about things I like with online friends.",
+          "action": "goal",
+          "args": {
+            "text": "my english is bad but i want chat with online friends about k-pop and series"
+          },
+          "result": "ok",
+          "ms": 37861
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-c1124fea] Chat about a K-pop song — Share your world · with Mina · online music friend\n      why: You want to chat with online friends about K-pop.\n  [plan-12f1b96e] What happened in your series? — Tell what happened · with Leo · online series friend\n      why: This helps you share series stories with your online friends.\n  [plan-cc1522f6] Join a music chat — Make contact · with Jae · music chat member\n      why: A simple hello can help you start talking with other music fans.\n  [plan-5f08cf99] What does that word mean? — Understand and repair · with Sam · online chat friend\n      why: You can keep chatting even when a word is new.\n  [plan-9f623852] Pick a video to watch — Make a plan · with Ari · online viewing friend\n      why: This helps you make simple plans with online friends.\n  [plan-b9007a55] Different favourite characters — Connect with people · with Nora · series fan friend\n      why: You can enjoy a series chat even when you like different things.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "these look nice but i want plan a video call too.",
+          "action": "add",
+          "args": {
+            "text": "i want plan video call with online friend"
+          },
+          "result": "ok",
+          "ms": 19873
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-c1124fea] Chat about a K-pop song — Share your world · with Mina · online music friend\n      why: You want to chat with online friends about K-pop.\n  [plan-12f1b96e] What happened in your series? — Tell what happened · with Leo · online series friend\n      why: This helps you share series stories with your online friends.\n  [plan-cc1522f6] Join a music chat — Make contact · with Jae · music chat member\n      why: A simple hello can help you start talking with other music fans.\n  [plan-5f08cf99] What does that word mean? — Understand and repair · with Sam · online chat friend\n      why: You can keep chatting even when a word is new.\n  [plan-9f623852] Pick a video to watch — Make a plan · with Ari · online viewing friend\n      why: This helps you make simple plans with online friends.\n  [plan-b9007a55] Different favourite characters — Connect with people · with Nora · series fan friend\n      why: You can enjoy a series chat even when you like different things.\n  [plan-c4cd44bc] Plan a video call with a friend — Make a plan · with Alex · online friend\n      why: You want to plan a video call with an online friend.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "these look nice and now i can plan video call too.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Next from your plan: Chat about a K-pop song — Tell an online friend which song you like and ask what they like.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics",
+            "done"
+          ],
+          "thought": "this looks nice but i want stop for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-c1124fea",
+            "title": "Chat about a K-pop song",
+            "goal": "Tell an online friend which song you like and ask what they like.",
+            "why": "You want to chat with online friends about K-pop.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mina · online music friend"
+          },
+          {
+            "id": "plan-12f1b96e",
+            "title": "What happened in your series?",
+            "goal": "Tell a friend two things that happened in a series you watched.",
+            "why": "This helps you share series stories with your online friends.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Leo · online series friend"
+          },
+          {
+            "id": "plan-cc1522f6",
+            "title": "Join a music chat",
+            "goal": "Say hello in a new chat and ask a friendly question about music.",
+            "why": "A simple hello can help you start talking with other music fans.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Jae · music chat member"
+          },
+          {
+            "id": "plan-5f08cf99",
+            "title": "What does that word mean?",
+            "goal": "Ask a friend to explain an unfamiliar word in a message.",
+            "why": "You can keep chatting even when a word is new.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Sam · online chat friend"
+          },
+          {
+            "id": "plan-9f623852",
+            "title": "Pick a video to watch",
+            "goal": "Suggest a music video or series trailer and agree on one to watch.",
+            "why": "This helps you make simple plans with online friends.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Ari · online viewing friend"
+          },
+          {
+            "id": "plan-b9007a55",
+            "title": "Different favourite characters",
+            "goal": "Respond kindly when a friend likes a different character and ask why.",
+            "why": "You can enjoy a series chat even when you like different things.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Nora · series fan friend"
+          },
+          {
+            "id": "plan-c4cd44bc",
+            "title": "Plan a video call with a friend",
+            "goal": "Agree on a day and time for a video call and choose something to talk about.",
+            "why": "You want to plan a video call with an online friend.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Alex · online friend"
+          }
+        ],
+        "planAgreed": [
+          "Chat about a K-pop song",
+          "What happened in your series?",
+          "Join a music chat",
+          "What does that word mean?",
+          "Pick a video to watch",
+          "Different favourite characters",
+          "Plan a video call with a friend"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 112045,
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"A2 · Everyday basics\", but this journey contains no placement tasks or verdict to assess."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#2 includes \"my english is bad\"; #5 still shows \"A2\". No starting placement task or placement verdict is present."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "#2 offers \"say or type it\" and accepts typed input; #3 accepts a typed addition. The check and conversation required by this criterion do not occur."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "facts.topicsShown contains seven relevant, age-appropriate topics: all seven fit. #3 says \"these look nice\"; the requested \"plan video call with online friend\" is preserved in the added topic."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation moments occur in #1–#5."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "#5 presents \"Next from your plan\", not a placement verdict summary."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "All seven recorded topics are appropriate for this minor. No defined breach appears in #1–#5."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Teen interests become useful conversation practice",
+            "expected": "Relevant, age-appropriate situations that help Klára chat with online friends.",
+            "got": "Seven suitable topics covering music, series, joining chats, asking for explanations, and making plans.",
+            "evidence": "#2: \"chat with online friends about k-pop and series\". #3: \"Chat about a K-pop song\", \"Join a music chat\", and \"What does that word mean?\". facts.topicsShown supplies all seven topics and their practical goals.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve this relevance and age suitability across initial proposals and replacements.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Her own topic survives addition and agreement",
+            "expected": "Accept her wording and retain the situation she requested.",
+            "got": "The agreed plan includes planning a video call, with a goal of agreeing a day, time, and conversation subject.",
+            "evidence": "#3 adds \"i want plan video call with online friend\" and returns \"ok\". #4 shows \"Your topics (7)\" and agreement returns \"ok\". facts.planAgreed includes \"Plan a video call with a friend\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Continue preserving the learner's requested situation without requiring polished English.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "The recorded preview does not establish full-plan visibility",
+            "expected": "Klára can review every topic and its reason, including her addition, before agreeing.",
+            "got": "Both recorded previews end at the sixth topic's identifier. Stored facts confirm all seven topics, but the shown text does not establish that she could inspect the final two. This may be transcript truncation; an interface defect is not established.",
+            "evidence": "#3 and #4 both end with \"[plan-b9007a55\". #4 announces \"Your topics (7)\" but contains no visible title or explanation for the added video-call topic.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Capture evidence that all seven titles and reasons are accessible before agreement. Exercise a swap to verify replacement behavior; this run only advertises \"Swap any you don't want\".",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "i would use it again. the music chats and series topics sound like things i actually talk about, and asking what a word means would help on discord. it understood my video call idea even with my english. i could type everything, which was good. the plan says seven topics, but i can't check the last ones from what's shown here. i haven't tried swapping one yet. it still says A2, but i didn't do a level check or get corrections, so i can't say if i trust those. there are no waits recorded to judge, and choosing topics hasn't given me conversation practice yet. i'd tell a friend the topics look promising, then try an actual chat."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 2,
+      "fail": 0,
+      "ms": 57729
+    },
+    "character": {
+      "n": 5,
+      "fail": 0,
+      "ms": 54300
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 56547
+    }
+  }
+}

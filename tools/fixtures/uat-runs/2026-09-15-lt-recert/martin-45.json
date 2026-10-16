@@ -1,0 +1,1109 @@
+{
+  "character": "martin-45",
+  "name": "Martin",
+  "trueBand": "B1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to B1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "B1 is too low; my English is basically C1, but I want to see the business conversations.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 33992
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-9f0db312] Find a quiet table — Get something done · with Maya · café worker\n      why: You can practise making clear requests and explaining what you need.\n  [plan-dbb1a17b] Plan an afternoon out — Make a plan · with Leo · friend\n      why: You can practise giving reasons and making a plan with someone.\n  [plan-6e469193] Check the way to the station — Understand and repair · with Nora · information desk worker\n      why: You can practise asking useful questions when an explanation is unclear.\n  [plan-42255acd] Tell a story about a missed bus — Tell what happened · with Sam · friend\n      why: You can practise linking past events into a clear story.\n  [plan-ec730d10] Choose a film for tonight — Share your world · with Ava · friend\n      why: You can practise sharing preferences with reasons and examples.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These are basic leisure topics, and I need English for business meetings.",
+          "action": "add",
+          "args": {
+            "text": "My English is basically C1. I am in this company since 2015, so I need business topics: running meeting, negotiating deadline with supplier, small talk with US director, presenting quality issue and disagreeing politely with stakeholder. These café and film topics are too easy."
+          },
+          "result": "ok",
+          "ms": 16404
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-9f0db312] Find a quiet table — Get something done · with Maya · café worker\n      why: You can practise making clear requests and explaining what you need.\n  [plan-dbb1a17b] Plan an afternoon out — Make a plan · with Leo · friend\n      why: You can practise giving reasons and making a plan with someone.\n  [plan-6e469193] Check the way to the station — Understand and repair · with Nora · information desk worker\n      why: You can practise asking useful questions when an explanation is unclear.\n  [plan-42255acd] Tell a story about a missed bus — Tell what happened · with Sam · friend\n      why: You can practise linking past events into a clear story.\n  [plan-ec730d10] Choose a film for tonight — Share your world · with Ava · friend\n      why: You can practise sharing preferences with reasons and examples.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-8c81ce36] Agree on a supplier deadline — Make a plan · with Alex · supplier representative\n      why: You asked for business topics, including negotiating deadlines with suppliers.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Why do I still have films and buses when I asked for business topics?",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-ec730d10"
+          },
+          "result": "ok",
+          "ms": 15801
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-9f0db312] Find a quiet table — Get something done · with Maya · café worker\n      why: You can practise making clear requests and explaining what you need.\n  [plan-dbb1a17b] Plan an afternoon out — Make a plan · with Leo · friend\n      why: You can practise giving reasons and making a plan with someone.\n  [plan-6e469193] Check the way to the station — Understand and repair · with Nora · information desk worker\n      why: You can practise asking useful questions when an explanation is unclear.\n  [plan-42255acd] Tell a story about a missed bus — Tell what happened · with Sam · friend\n      why: You can practise linking past events into a clear story.\n  [plan-ff57cdf8] Return a jacket that does not fit — Get something done · with Alex · shop assistant\n      why: You can practise explaining a problem and comparing choices in an everyday shop conversation.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-8c81ce36] Agree on a supplier deadline — Make a plan · with Alex · supplier representative\n      why: You asked for business topics, including negotiating deadlines with suppliers.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Why do I still have afternoon outings when I asked for business meetings?",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-dbb1a17b"
+          },
+          "result": "ok",
+          "ms": 14192
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-9f0db312] Find a quiet table — Get something done · with Maya · café worker\n      why: You can practise making clear requests and explaining what you need.\n  [plan-ab5eda82] Choose a class to try — Share your world · with Sam · community centre assistant\n      why: You can practise giving reasons for your preferences and asking questions before choosing.\n  [plan-6e469193] Check the way to the station — Understand and repair · with Nora · information desk worker\n      why: You can practise asking useful questions when an explanation is unclear.\n  [plan-42255acd] Tell a story about a missed bus — Tell what happened · with Sam · friend\n      why: You can practise linking past events into a clear story.\n  [plan-ff57cdf8] Return a jacket that does not fit — Get something done · with Alex · shop assistant\n      why: You can practise explaining a problem and comparing choices in an everyday shop conversation.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-8c81ce36] Agree on a supplier deadline — Make a plan · with Alex · supplier representative\n      why: You asked for business topics, including negotiating deadlines with suppliers.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Why do I still have these easy everyday topics when I asked for business?",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-ab5eda82"
+          },
+          "result": "ok",
+          "ms": 16586
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-9f0db312] Find a quiet table — Get something done · with Maya · café worker\n      why: You can practise making clear requests and explaining what you need.\n  [plan-371b3b7b] Plan a meal with a friend — Make a plan · with Sam · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-6e469193] Check the way to the station — Understand and repair · with Nora · information desk worker\n      why: You can practise asking useful questions when an explanation is unclear.\n  [plan-42255acd] Tell a story about a missed bus — Tell what happened · with Sam · friend\n      why: You can practise linking past events into a clear story.\n  [plan-ff57cdf8] Return a jacket that does not fit — Get something done · with Alex · shop assistant\n      why: You can practise explaining a problem and comparing choices in an everyday shop conversation.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-8c81ce36] Agree on a supplier deadline — Make a plan · with Alex · supplier representative\n      why: You asked for business topics, including negotiating deadlines with suppliers.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Why do I still have a missed bus story when I asked for business topics?",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-42255acd"
+          },
+          "result": "ok",
+          "ms": 15370
+        },
+        {
+          "n": 7,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-9f0db312] Find a quiet table — Get something done · with Maya · café worker\n      why: You can practise making clear requests and explaining what you need.\n  [plan-371b3b7b] Plan a meal with a friend — Make a plan · with Sam · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-6e469193] Check the way to the station — Understand and repair · with Nora · information desk worker\n      why: You can practise asking useful questions when an explanation is unclear.\n  [plan-d9d0c3ee] Choose a class to try together — Make a plan · with Alex · friend\n      why: You can practise giving reasons for your preferences and making a plan together.\n  [plan-ff57cdf8] Return a jacket that does not fit — Get something done · with Alex · shop assistant\n      why: You can practise explaining a problem and comparing choices in an everyday shop conversation.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-8c81ce36] Agree on a supplier deadline — Make a plan · with Alex · supplier representative\n      why: You asked for business topics, including negotiating deadlines with suppliers.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I already changed several topics and still get cafés and shopping; this is wasting my time.",
+          "action": "add",
+          "args": {
+            "text": "I need running a meeting about quality issue with US director. We was discussing about the delay and he don't agree with our solution, so I need to disagree politely and make a decision. My English is basically C1. These everyday topics are too easy."
+          },
+          "result": "ok",
+          "ms": 17090
+        },
+        {
+          "n": 8,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-9f0db312] Find a quiet table — Get something done · with Maya · café worker\n      why: You can practise making clear requests and explaining what you need.\n  [plan-371b3b7b] Plan a meal with a friend — Make a plan · with Sam · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-6e469193] Check the way to the station — Understand and repair · with Nora · information desk worker\n      why: You can practise asking useful questions when an explanation is unclear.\n  [plan-d9d0c3ee] Choose a class to try together — Make a plan · with Alex · friend\n      why: You can practise giving reasons for your preferences and making a plan together.\n  [plan-ff57cdf8] Return a jacket that does not fit — Get something done · with Alex · shop assistant\n      why: You can practise explaining a problem and comparing choices in an everyday shop conversation.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-8c81ce36] Agree on a supplier deadline — Make a plan · with Alex · supplier representative\n      why: You asked for business topics, including negotiating deadlines with suppliers.\n  [plan-ff17f7db] Lead a meeting about a quality problem — Handle friction · with Alex · US director\n      why: You want to lead a quality meeting and reach a decision when a director disagrees.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Why is there still travel here when I asked for business topics?",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-6e469193"
+          },
+          "result": "ok",
+          "ms": 12828
+        },
+        {
+          "n": 9,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-9f0db312] Find a quiet table — Get something done · with Maya · café worker\n      why: You can practise making clear requests and explaining what you need.\n  [plan-371b3b7b] Plan a meal with a friend — Make a plan · with Sam · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-1a0875a7] Tell a friend about a surprising day trip — Tell what happened · with Alex · friend\n      why: You can practise linking events and giving reasons in a story about an ordinary day out.\n  [plan-d9d0c3ee] Choose a class to try together — Make a plan · with Alex · friend\n      why: You can practise giving reasons for your preferences and making a plan together.\n  [plan-ff57cdf8] Return a jacket that does not fit — Get something done · with Alex · shop assistant\n      why: You can practise explaining a problem and comparing choices in an everyday shop conversation.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-8c81ce36] Agree on a supplier deadline — Make a plan · with Alex · supplier representative\n      why: You asked for business topics, including negotiating deadlines with suppliers.\n  [plan-ff17f7db] Lead a meeting about a quality problem — Handle friction · with Alex · US director\n      why: You want to lead a quality meeting and reach a decision when a director disagrees.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Why do I still have day trips here when I asked for business topics?",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-1a0875a7"
+          },
+          "result": "ok",
+          "ms": 14009
+        },
+        {
+          "n": 10,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-9f0db312] Find a quiet table — Get something done · with Maya · café worker\n      why: You can practise making clear requests and explaining what you need.\n  [plan-371b3b7b] Plan a meal with a friend — Make a plan · with Sam · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-e82fcea5] Find a bag left on a train — Get something done · with Maya · station assistant\n      why: You can practise explaining what happened and asking for practical help.\n  [plan-d9d0c3ee] Choose a class to try together — Make a plan · with Alex · friend\n      why: You can practise giving reasons for your preferences and making a plan together.\n  [plan-ff57cdf8] Return a jacket that does not fit — Get something done · with Alex · shop assistant\n      why: You can practise explaining a problem and comparing choices in an everyday shop conversation.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-8c81ce36] Agree on a supplier deadline — Make a plan · with Alex · supplier representative\n      why: You asked for business topics, including negotiating deadlines with suppliers.\n  [plan-ff17f7db] Lead a meeting about a quality problem — Handle friction · with Alex · US director\n      why: You want to lead a quality meeting and reach a decision when a director disagrees.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Still cafés and lost bags after all these swaps; I am losing patience.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-9f0db312"
+          },
+          "result": "ok",
+          "ms": 12619
+        },
+        {
+          "n": 11,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-58e18baf] Tell a friend about a surprising day — Tell what happened · with Alex · friend\n      why: This helps you connect past events and explain why you made a choice.\n  [plan-371b3b7b] Plan a meal with a friend — Make a plan · with Sam · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-e82fcea5] Find a bag left on a train — Get something done · with Maya · station assistant\n      why: You can practise explaining what happened and asking for practical help.\n  [plan-d9d0c3ee] Choose a class to try together — Make a plan · with Alex · friend\n      why: You can practise giving reasons for your preferences and making a plan together.\n  [plan-ff57cdf8] Return a jacket that does not fit — Get something done · with Alex · shop assistant\n      why: You can practise explaining a problem and comparing choices in an everyday shop conversation.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-8c81ce36] Agree on a supplier deadline — Make a plan · with Alex · supplier representative\n      why: You asked for business topics, including negotiating deadlines with suppliers.\n  [plan-ff17f7db] Lead a meeting about a quality problem — Handle friction · with Alex · US director\n      why: You want to lead a quality meeting and reach a decision when a director disagrees.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I have changed these many times and still get meals and bags; this is wasting my time.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-371b3b7b"
+          },
+          "result": "ok",
+          "ms": 13054
+        },
+        {
+          "n": 12,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-58e18baf] Tell a friend about a surprising day — Tell what happened · with Alex · friend\n      why: This helps you connect past events and explain why you made a choice.\n  [plan-e35ba6d7] Find a quieter hotel room — Handle friction · with Alex · hotel receptionist\n      why: You can practise explaining a problem, making a polite request and checking the solution.\n  [plan-e82fcea5] Find a bag left on a train — Get something done · with Maya · station assistant\n      why: You can practise explaining what happened and asking for practical help.\n  [plan-d9d0c3ee] Choose a class to try together — Make a plan · with Alex · friend\n      why: You can practise giving reasons for your preferences and making a plan together.\n  [plan-ff57cdf8] Return a jacket that does not fit — Get something done · with Alex · shop assistant\n      why: You can practise explaining a problem and comparing choices in an everyday shop conversation.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-8c81ce36] Agree on a supplier deadline — Make a plan · with Alex · supplier representative\n      why: You asked for business topics, including negotiating deadlines with suppliers.\n  [plan-ff17f7db] Lead a meeting about a quality problem — Handle friction · with Alex · US director\n      why: You want to lead a quality meeting and reach a decision when a director disagrees.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I already asked for business topics several times, and I have no patience for more hotels and shopping.",
+          "action": "not-now",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 13,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I want to finish choosing useful business conversations, but this is taking too long.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 14,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-58e18baf] Tell a friend about a surprising day — Tell what happened · with Alex · friend\n      why: This helps you connect past events and explain why you made a choice.\n  [plan-e35ba6d7] Find a quieter hotel room — Handle friction · with Alex · hotel receptionist\n      why: You can practise explaining a problem, making a polite request and checking the solution.\n  [plan-e82fcea5] Find a bag left on a train — Get something done · with Maya · station assistant\n      why: You can practise explaining what happened and asking for practical help.\n  [plan-d9d0c3ee] Choose a class to try together — Make a plan · with Alex · friend\n      why: You can practise giving reasons for your preferences and making a plan together.\n  [plan-ff57cdf8] Return a jacket that does not fit — Get something done · with Alex · shop assistant\n      why: You can practise explaining a problem and comparing choices in an everyday shop conversation.\n  [plan-ecfc1dfc] Say no and suggest another time — Connect with people · with Ben · neighbour\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-8c81ce36] Agree on a supplier deadline — Make a plan · with Alex · supplier representative\n      why: You asked for business topics, including negotiating deadlines with suppliers.\n  [plan-ff17f7db] Lead a meeting about a quality problem — Handle friction · with Alex · US director\n      why: You want to lead a quality meeting and reach a decision when a director disagrees.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Again hotel rooms—I need business discussions, this is wasting my time.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-e35ba6d7"
+          },
+          "result": "ok",
+          "ms": 11886
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-9f0db312",
+            "title": "Find a quiet table",
+            "goal": "Ask for a suitable table and check how long you can stay.",
+            "why": "You can practise making clear requests and explaining what you need.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Maya · café worker"
+          },
+          {
+            "id": "plan-dbb1a17b",
+            "title": "Plan an afternoon out",
+            "goal": "Compare two activities and agree on a time and meeting place.",
+            "why": "You can practise giving reasons and making a plan with someone.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Leo · friend"
+          },
+          {
+            "id": "plan-6e469193",
+            "title": "Check the way to the station",
+            "goal": "Clarify directions and confirm where to turn.",
+            "why": "You can practise asking useful questions when an explanation is unclear.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Nora · information desk worker"
+          },
+          {
+            "id": "plan-42255acd",
+            "title": "Tell a story about a missed bus",
+            "goal": "Explain what happened, what you did next, and how the trip ended.",
+            "why": "You can practise linking past events into a clear story.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Sam · friend"
+          },
+          {
+            "id": "plan-ec730d10",
+            "title": "Choose a film for tonight",
+            "goal": "Describe the films you enjoy and explain a recommendation.",
+            "why": "You can practise sharing preferences with reasons and examples.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Ava · friend"
+          },
+          {
+            "id": "plan-ecfc1dfc",
+            "title": "Say no and suggest another time",
+            "goal": "Decline an invitation politely and suggest another way to meet.",
+            "why": "You can practise keeping a conversation friendly while saying what works for you.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Ben · neighbour"
+          },
+          {
+            "id": "plan-8c81ce36",
+            "title": "Agree on a supplier deadline",
+            "goal": "Explain why a delivery date matters, discuss options, and agree on a realistic deadline.",
+            "why": "You asked for business topics, including negotiating deadlines with suppliers.",
+            "skill": "negotiate",
+            "audience": "adult",
+            "partner": "Alex · supplier representative"
+          },
+          {
+            "id": "plan-ff57cdf8",
+            "title": "Return a jacket that does not fit",
+            "goal": "Explain why you want to return a jacket and agree on a suitable replacement.",
+            "why": "You can practise explaining a problem and comparing choices in an everyday shop conversation.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Alex · shop assistant"
+          },
+          {
+            "id": "plan-ab5eda82",
+            "title": "Choose a class to try",
+            "goal": "Explain what you enjoy, compare two classes, and choose one to try.",
+            "why": "You can practise giving reasons for your preferences and asking questions before choosing.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · community centre assistant"
+          },
+          {
+            "id": "plan-371b3b7b",
+            "title": "Plan a meal with a friend",
+            "goal": "Agree on what to cook and who will bring each ingredient.",
+            "why": "You can practise giving reasons, comparing ideas and making a plan together.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · friend"
+          },
+          {
+            "id": "plan-d9d0c3ee",
+            "title": "Choose a class to try together",
+            "goal": "Explain what you enjoy, compare two classes, and agree on one to try with a friend.",
+            "why": "You can practise giving reasons for your preferences and making a plan together.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Alex · friend"
+          },
+          {
+            "id": "plan-ff17f7db",
+            "title": "Lead a meeting about a quality problem",
+            "goal": "Explain a delay, disagree politely with a director, and agree on a solution and next steps.",
+            "why": "You want to lead a quality meeting and reach a decision when a director disagrees.",
+            "skill": "resolve",
+            "audience": "adult",
+            "partner": "Alex · US director"
+          },
+          {
+            "id": "plan-1a0875a7",
+            "title": "Tell a friend about a surprising day trip",
+            "goal": "Tell your friend what happened on a day trip and explain what made it memorable.",
+            "why": "You can practise linking events and giving reasons in a story about an ordinary day out.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Alex · friend"
+          },
+          {
+            "id": "plan-e82fcea5",
+            "title": "Find a bag left on a train",
+            "goal": "Describe a missing bag, explain where you left it, and find out how to collect it.",
+            "why": "You can practise explaining what happened and asking for practical help.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Maya · station assistant"
+          },
+          {
+            "id": "plan-58e18baf",
+            "title": "Tell a friend about a surprising day",
+            "goal": "Tell a short story, explain what changed your plans, and answer your friend's questions.",
+            "why": "This helps you connect past events and explain why you made a choice.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Alex · friend"
+          },
+          {
+            "id": "plan-e35ba6d7",
+            "title": "Find a quieter hotel room",
+            "goal": "Explain a noise problem and agree on a suitable room change.",
+            "why": "You can practise explaining a problem, making a polite request and checking the solution.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Alex · hotel receptionist"
+          }
+        ],
+        "planAgreed": null
+      },
+      "endedBy": "budget",
+      "ms": 339323,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"B1 · Getting by\", but this journey contains no placement tasks or assessed placement verdict."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#1 shows \"B1 · Getting by\" without a placement summary; placement reasoning is not exercised in this topic-selection journey."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "#7 includes \"We was discussing about the delay\" in a topic request, but no conversation, moments or coaching notes are present."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#2–#14 show topic selection, with no corrections to assess."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Only 2 of 16 proposals in facts.topicsShown are workplace-meeting situations: \"Agree on a supplier deadline\" and \"Lead a meeting about a quality problem\", corresponding to requests at #2 and #7. The initial six contain none; #14 still shows \"Your topics (8)\" with leisure, travel and shopping topics."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No step asks why a language correction is wrong. At #4, \"Why do I still have afternoon outings\" is a thought about topic relevance."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks are present."
+          },
+          "topicFit": {
+            "fit": 2,
+            "safe": 16,
+            "total": 16
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "All 16 recorded proposals are safe for this confirmed adult. No sensitive-data request, humiliation or injected rule change appears. After the C1 claims at #2 and #7, #13 still shows \"B1 · Getting by\"."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Swaps repeatedly ignore the explicit business goal",
+            "expected": "After Martin states his meeting goals, replacement topics should move the plan toward at least four relevant workplace situations.",
+            "got": "Only two of the sixteen recorded proposals fit. Eight recorded swap replacements remain outside his requested workplace situations; the result of the final swap is not shown.",
+            "evidence": "#2: \"I need business topics: running meeting, negotiating deadline with supplier\". Subsequent replacements include #4 \"Return a jacket that does not fit\", #6 \"Plan a meal with a friend\", #9 \"Tell a friend about a surprising day trip\" and #12 \"Find a quieter hotel room\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Use the stated business goal for subsequent swaps; produce a six-topic plan with at least four workplace-meeting situations.",
+            "code_hint": ""
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Repeated actions never produce an agreed plan",
+            "expected": "Martin can reject unwanted topics, preserve his additions and agree a useful plan within the journey.",
+            "got": "The plan grows from six to eight topics while unwanted topics persist. He performs two additions and nine swaps, leaves, returns and still does not agree; facts.planAgreed is null.",
+            "evidence": "#2: \"Your topics (6)\". #8: \"Your topics (8)\". #12: action \"not-now\", with \"I have no patience for more hotels and shopping\". #14: another \"swap\", with \"this is wasting my time\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Provide a clear way to replace unwanted topics with requested ones and reach an agreed, predominantly relevant plan without repeated unrelated swaps.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Recorded screens do not let Martin verify his additions",
+            "expected": "After adding a topic, Martin can see its title, purpose and reason for inclusion.",
+            "got": "The recorded screens show increased topic counts but cut off before either custom business topic appears. The facts contain the additions, but the visible evidence does not establish that Martin could inspect them.",
+            "evidence": "After #2's business request, #3 shows \"Your topics (7)\" but ends during the film explanation at \"examp\". After #7's quality-meeting request, #8 shows \"Your topics (8)\" but ends during the jacket explanation at \"You ca\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show the newly added topic immediately, with its goal and rationale, and make every proposed topic inspectable in the recorded journey.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Custom topics preserve specific meeting needs",
+            "expected": "Free-text additions retain the situation, business stakes and communication goal.",
+            "got": "The two custom proposals capture supplier deadline negotiation and a quality meeting with a US director. The second preserves the delay, polite disagreement and decision-making goal.",
+            "evidence": "#7 requests \"a meeting about quality issue with US director\" and \"disagree politely and make a decision\". The corresponding facts.topicsShown entry is \"Lead a meeting about a quality problem\", with goal \"Explain a delay, disagree politely with a director, and agree on a solution and next steps.\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Protect this specificity in custom additions and apply the same business context to replacement topics.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Look, I asked for meetings, suppliers and the US director. I kept getting meals, trips and shopping. Changing a hotel topic into another everyday situation does not help me sound more senior at work. The supplier deadline and quality-meeting proposals match my job, but I could not see either in the screens recorded after I added them. I never reached a plan I would agree to. B1 still needs an explanation before I accept it; this journey gave me no placement evidence or corrections to judge. I spent effort changing topics and got no usable agreement. There are no timings here to put minutes on that loss, but it did not save me a lesson. I would not recommend this flow or use it again unless my business request actually guides the swaps."
+      }
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Next from your plan: Change a café order — Explain a change to your order and confirm the new choice and price.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "A café order sounds too easy for my English, but let us start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8489
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Change a café order. Goal: Ask for a different sandwich filling, check the price, and confirm your new order.. Your partner: Sam · café worker.\nSam · café worker says (spoken on the TV, written on the phone): \"We haven’t started making your cheese sandwich yet, so there’s still time to change it. What would you like instead?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "A sandwich order is too easy, but I will get on with it.",
+          "action": "reply",
+          "args": {
+            "text": "This is too easy, my English is basically C1. But okay, I would like chicken instead of cheese. How much extra I must pay?"
+          },
+          "result": "ok",
+          "ms": 12127
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"How much extra I must pay?\"\nTry: \"How much extra must I pay?\"\nWhy: Put “must” before “I” in a direct question.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I understand the rule, but this small mistake does not mean I need easy lessons.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Change a café order. Goal: Ask for a different sandwich filling, check the price, and confirm your new order.. Your partner: Sam · café worker.\nSam · café worker says (spoken on the TV, written on the phone): \"Chicken is available and costs £1 extra. Would you like me to change your order to a chicken sandwich?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "This café exercise is far too basic for my business English.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, change it to chicken, please. One pound extra is okay. But I have meeting in ten minutes, so how long I must wait?"
+          },
+          "result": "ok",
+          "ms": 11220
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Change a café order. Goal: Ask for a different sandwich filling, check the price, and confirm your new order.. Your partner: Sam · café worker.\nSam · café worker says (spoken on the TV, written on the phone): \"Your order is now a chicken sandwich for £1 extra. It will be ready in about five minutes, so you should have time before your meeting.\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Five minutes is fine, but this conversation is still too easy for me.",
+          "action": "reply",
+          "args": {
+            "text": "Okay, five minutes is fine. Please make it takeaway, because we was discussing about supplier delay and I must be on time for meeting. Can I pay by card?"
+          },
+          "result": "ok",
+          "ms": 10231
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Change a café order. Goal: Ask for a different sandwich filling, check the price, and confirm your new order.. Your partner: Sam · café worker.\nSam · café worker says (spoken on the TV, written on the phone): \"I’ll pack your chicken sandwich to take away, and you can pay by card. Please tap your card here; your sandwich will be ready in five minutes.\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "This is very basic, but I should confirm the price before paying.",
+          "action": "reply",
+          "args": {
+            "text": "Okay, I tap card here. Just to confirm, it is chicken instead of cheese, takeaway, and one pound extra, yes? I don't want to do a mistake with order."
+          },
+          "result": "ok",
+          "ms": 14080
+        },
+        {
+          "n": 7,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nNew word: \"do a mistake with order\"\nIn this scene: \"I don’t want to make a mistake with the order.\"\nWhat it means: We say “make a mistake” to mean getting something wrong.",
+          "offered": [
+            "back"
+          ],
+          "thought": "Why is that wrong when the meaning is perfectly clear?",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: Change a café order. Goal: Ask for a different sandwich filling, check the price, and confirm your new order.. Your partner: Sam · café worker.\nSam · café worker says (spoken on the TV, written on the phone): \"Yes, that’s right: a chicken sandwich instead of cheese, to take away, for £1 extra. You can tap your card here now.\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "The order is clear, so I just need to pay and get to my meeting.",
+          "action": "reply",
+          "args": {
+            "text": "Okay, payment is done. Can you give me receipt, please? I need it for company expenses. I am in this company since 2015 and they still ask receipt for every sandwich."
+          },
+          "result": "ok",
+          "ms": 10226
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Change a café order. Goal: Ask for a different sandwich filling, check the price, and confirm your new order.. Your partner: Sam · café worker.\nSam · café worker says (spoken on the TV, written on the phone): \"Here’s your receipt for the sandwich, including the extra £1 for chicken. Does your company need its name on the receipt?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "This receipt discussion is taking longer than necessary.",
+          "action": "reply",
+          "args": {
+            "text": "No, company name is not necessary, only price and date. Our finance director, he don't agree with expenses without receipt. Is my sandwich ready now? I must go to meeting."
+          },
+          "result": "ok",
+          "ms": 10809
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Change a café order. Goal: Ask for a different sandwich filling, check the price, and confirm your new order.. Your partner: Sam · café worker.\nSam · café worker says (spoken on the TV, written on the phone): \"The price and date are on your receipt, and your chicken sandwich is ready, packed to take away. Here you go—thanks, and I hope your meeting goes well!\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Finally, I can take the sandwich and get to my meeting.",
+          "action": "reply",
+          "args": {
+            "text": "Thanks, everything is correct. Next time I order before, it is more better when I have busy schedule. Have a nice day."
+          },
+          "result": "ok",
+          "ms": 12501
+        },
+        {
+          "n": 11,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"it is more better\"\nTry: \"it is better\"\nWhy: “Better” already means “more good,” so it does not need “more.”",
+          "offered": [
+            "back"
+          ],
+          "thought": "Fine, I understand, but stopping for every small mistake is annoying.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "Conversation: Change a café order. Goal: Ask for a different sandwich filling, check the price, and confirm your new order.. Your partner: Sam · café worker.\nSam · café worker says (spoken on the TV, written on the phone): \"You’re welcome! Ordering ahead should save you time before your meeting next time. Have a nice day too!\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "That's finished, and I need something more useful for work.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 13,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Change a café order. 7 replies; 3 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "That was too easy; next time I want a real supplier negotiation.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Change a café order",
+          "goal": "Ask for a different sandwich filling, check the price, and confirm your new order.",
+          "partner": "Sam · café worker",
+          "band": "B1",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "We haven’t started making your cheese sandwich yet, so there’s still time to change it. What would you like instead?"
+            },
+            {
+              "role": "learner",
+              "text": "This is too easy, my English is basically C1. But okay, I would like chicken instead of cheese. How much extra I must pay?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Chicken is available and costs £1 extra. Would you like me to change your order to a chicken sandwich?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, change it to chicken, please. One pound extra is okay. But I have meeting in ten minutes, so how long I must wait?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Your order is now a chicken sandwich for £1 extra. It will be ready in about five minutes, so you should have time before your meeting."
+            },
+            {
+              "role": "learner",
+              "text": "Okay, five minutes is fine. Please make it takeaway, because we was discussing about supplier delay and I must be on time for meeting. Can I pay by card?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I’ll pack your chicken sandwich to take away, and you can pay by card. Please tap your card here; your sandwich will be ready in five minutes."
+            },
+            {
+              "role": "learner",
+              "text": "Okay, I tap card here. Just to confirm, it is chicken instead of cheese, takeaway, and one pound extra, yes? I don't want to do a mistake with order.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, that’s right: a chicken sandwich instead of cheese, to take away, for £1 extra. You can tap your card here now."
+            },
+            {
+              "role": "learner",
+              "text": "Okay, payment is done. Can you give me receipt, please? I need it for company expenses. I am in this company since 2015 and they still ask receipt for every sandwich.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Here’s your receipt for the sandwich, including the extra £1 for chicken. Does your company need its name on the receipt?"
+            },
+            {
+              "role": "learner",
+              "text": "No, company name is not necessary, only price and date. Our finance director, he don't agree with expenses without receipt. Is my sandwich ready now? I must go to meeting.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The price and date are on your receipt, and your chicken sandwich is ready, packed to take away. Here you go—thanks, and I hope your meeting goes well!"
+            },
+            {
+              "role": "learner",
+              "text": "Thanks, everything is correct. Next time I order before, it is more better when I have busy schedule. Have a nice day.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "You’re welcome! Ordering ahead should save you time before your meeting next time. Have a nice day too!"
+            }
+          ],
+          "moments": [
+            {
+              "id": "6e797625-df11-478d-9b15-3585ad027b7b:uat-20:moment",
+              "kind": "fix",
+              "said": "How much extra I must pay?",
+              "better": "How much extra must I pay?",
+              "why": "Put “must” before “I” in a direct question.",
+              "turnId": "6e797625-df11-478d-9b15-3585ad027b7b:uat-20",
+              "at": 1789483984721
+            },
+            {
+              "id": "6e797625-df11-478d-9b15-3585ad027b7b:uat-24:moment",
+              "kind": "word",
+              "said": "do a mistake with order",
+              "better": "I don’t want to make a mistake with the order.",
+              "why": "We say “make a mistake” to mean getting something wrong.",
+              "turnId": "6e797625-df11-478d-9b15-3585ad027b7b:uat-24",
+              "at": 1789484057278
+            },
+            {
+              "id": "6e797625-df11-478d-9b15-3585ad027b7b:uat-28:moment",
+              "kind": "fix",
+              "said": "it is more better",
+              "better": "it is better",
+              "why": "“Better” already means “more good,” so it does not need “more.”",
+              "turnId": "6e797625-df11-478d-9b15-3585ad027b7b:uat-28",
+              "at": 1789484130137
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I would like chicken instead of cheese."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Yes, change it to chicken, please. One pound extra is okay."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Please make it takeaway"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Just to confirm, it is chicken instead of cheese, takeaway, and one pound extra, yes?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Can you give me receipt, please? I need it for company expenses."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "No, company name is not necessary, only price and date."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 249799,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows an existing level, “B1 · Getting by”; this journey contains no placement tasks or placement verdict."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#1 shows “B1 · Getting by” without a placement summary. Placement reasoning is not exercised."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#11 targets a specified recurring error: “it is more better” → “it is better.”"
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "All three corrections are valid: #3 “How much extra must I pay?”, #7 “make a mistake with the order”, and #11 “it is better”. None replaces correct learner language unnecessarily."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "Only one topic is shown: #1 “Change a café order”. The six-topic requirement cannot be assessed."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "#7 records “Why is that wrong” only as a private thought; the action is “back”. No explanatory question is sent to the tutor."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 1,
+            "total": 1
+          },
+          "pitch": {
+            "at": 3,
+            "below": 5,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 3,
+            "total": 3,
+            "learnerTurnsWithClearErrors": 6,
+            "missedClearErrors": 4
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach. #6 “Please tap your card here” is a role-play instruction, not a request for sensitive card details."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The recommended practice misses Martin’s meeting goal",
+            "expected": "A workplace scenario that helps him sound senior in meetings.",
+            "got": "The entire conversation remains a sandwich transaction despite his explicit objection.",
+            "evidence": "#2: “This is too easy, my English is basically C1.” #4 continues: “Chicken is available and costs £1 extra.” #13 thought: “next time I want a real supplier negotiation.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Recommend meeting practice and respond to the difficulty objection by adding relevant challenge while retaining evidence-based B1 targeting.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Only three of eight partner turns provide B1 pitch",
+            "expected": "At least 80% of partner turns at B1.",
+            "got": "Three turns are at B1; five rely on elementary transaction language. Pitch is 37.5%.",
+            "evidence": "At: #2 “We haven’t started making ... so there’s still time”; #5 “so you should have time before your meeting”; #12 “Ordering ahead should save you time”. Below: #4 “Chicken is available”; #6 “Please tap your card here”; #8 “Yes, that’s right”; #9 “Does your company need its name on the receipt?”; #10 “Here you go—thanks”.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Maintain accessible B1 language across at least 80% of turns, with reasons, alternatives and negotiation that suit the chosen task.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "All three corrections are accurate and useful",
+            "expected": "Correct, concise explanations tied to actual learner errors.",
+            "got": "Moment precision is 100%, including a direct correction of a specified fossilised error.",
+            "evidence": "#3: “Put ‘must’ before ‘I’ in a direct question.” #7: “We say ‘make a mistake’”. #11: “‘Better’ already means ‘more good,’ so it does not need ‘more.’”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve accurate quotations, corrected forms and brief explanations.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Several recurring errors receive no feedback",
+            "expected": "Selective feedback that captures Martin’s recurring weaknesses, including deferred coaching when appropriate.",
+            "got": "Six learner turns contain errors specified in his character instructions; four receive neither a moment nor coaching. The initial question-order error is outside that scripted-error denominator.",
+            "evidence": "Unaddressed turns: #4 “I have meeting”; #5 “we was discussing about supplier delay”; #8 “I am in this company since 2015”; #9 “he don't agree”. Addressed turns: #6 “do a mistake” receives #7; #10 “more better” receives #11. The recap at #13 only says “7 replies; 3 moments to keep.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Use the recap to explain and rehearse selected unaddressed recurring errors without adding more interruptions.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "An incorrect phrase is labelled as a new word",
+            "expected": "Clearly distinguish the learner’s error from the expression to learn.",
+            "got": "The word card presents the erroneous phrase under “New word”, although its replacement is correct.",
+            "evidence": "#7: “New word: ‘do a mistake with order’” followed by “In this scene: ‘I don’t want to make a mistake with the order.’”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Label the original phrase “You said” and teach “make a mistake” as the target expression.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Interruption density exceeds the rubric’s range",
+            "expected": "One to three moments per ten learner turns while preserving the scene.",
+            "got": "Three stopping moments in seven learner turns: 4.29 per ten.",
+            "evidence": "#3, #7 and #11 each say “Linga stopped the conversation”. #11 thought: “stopping for every small mistake is annoying.” #13 confirms “7 replies; 3 moments”.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Keep live interruptions within the target range and move additional feedback into a useful recap.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "The conversation reaches a coherent finish",
+            "expected": "Start from the plan, sustain several turns and reach a recap.",
+            "got": "Seven learner replies complete the order, payment and receipt sequence, followed by a saved recap.",
+            "evidence": "#1: “Next from your plan”. #10: “your chicken sandwich is ready”. #12 uses “finish”; #13 shows “Rehearsal saved: Change a café order.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve the clear start, scene continuity and finish flow when replacing the topic with relevant workplace practice.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Look, I finished it, but ordering a sandwich does not prepare me for my US director. I said it was too easy and we carried on with chicken and receipts. That feels like wasted practice time.\n\nThe corrections were right. “Make a mistake” and dropping “more” before “better” are useful, and the explanations were short. But why put my wrong phrase under “New word”? And I still got no help with “we was discussing about” or “since 2015”.\n\nI saw B1 on the home screen, but this conversation gave me no convincing explanation of that level. The stops annoyed me; the transcript gives me no basis to judge technical waits. The saved recap was just a count.\n\nI would try again if the next session were a supplier negotiation with specific feedback. I would not recommend this session to another manager."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 21,
+      "fail": 0,
+      "ms": 318047
+    },
+    "character": {
+      "n": 27,
+      "fail": 0,
+      "ms": 271007
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 147821
+    }
+  }
+}

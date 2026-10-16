@@ -1,0 +1,389 @@
+{
+  "character": "lukas-24",
+  "name": "Lukáš",
+  "trueBand": "B2",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home, first visit. Let's find your level: three questions about you, then a few short tasks. About seven minutes, answered on your phone.",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "Seven minutes seems okay, though I hope I don't have to speak too loudly.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 8507
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 1 of 3.\nLinga says (spoken on the TV, written on the phone): \"Hi Lukáš! You can answer in English or in your own language. Where do you hear, read or use English in your daily life?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "That seems easy enough, though talking to the TV feels a bit awkward.",
+          "action": "answer",
+          "args": {
+            "text": "Um, I use English mostly at work. I'm a developer, so I read documentation and write messages in English pretty much every day. Sometimes I have calls with colleagues from other countries, but I guess I'm more comfortable writing. I also watch videos in English, usually about technology or games, and, like, sometimes I need subtitles."
+          },
+          "result": "ok",
+          "ms": 9462
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 2 of 3.\nLinga says (spoken on the TV, written on the phone): \"You use English in lots of ways at work. How have you learnt it over the years—at school, in courses, abroad, or on your own?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "That's easy enough, although most of my learning hasn't been very organised.",
+          "action": "answer",
+          "args": {
+            "text": "Um, I learnt English at school, but I guess I improved more on my own, through games and watching videos. Then I started using it at work, so now it's kind of part of my day. I've never lived abroad or anything. Speaking is still a bit stressful, especially when I meet someone new and don't have a work topic to talk about."
+          },
+          "result": "ok",
+          "ms": 9594
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 3 of 3.\nLinga says (spoken on the TV, written on the phone): \"What would you like to feel more comfortable doing in English, especially when the conversation isn't about work?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "It's a bit embarrassing to mention dates, but that's what I actually need.",
+          "action": "answer",
+          "args": {
+            "text": "Um, I'd like to feel more comfortable on first dates, I guess. Like, keeping the conversation going if we have different tastes, or asking someone out for coffee without sounding awkward. Also small talk at meetups, because I sometimes run out of things to say when it's not about programming. And, well, explaining my job without all the technical words would help too. I'd also like to practise a tech job interview at some point."
+          },
+          "result": "ok",
+          "ms": 28085
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "Find your level · task 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer. The TV says aloud, once: \"I'd rather meet at the café than the cinema because we can talk there. I want to hear more about the game you're making.\"\nQuestion on screen: Why does the speaker prefer the first place?",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know"
+          ],
+          "thought": "That was clear enough, and the café sounds less awkward anyway.",
+          "action": "answer",
+          "args": {
+            "text": "Because they can talk at the café, and the speaker wants to hear more about the game the other person is making."
+          },
+          "result": "ok",
+          "ms": 18989
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "Find your level · task 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it (answer on your phone, speak or type): You're chatting with someone who thinks video games are a waste of time. What's your view? Explain your reasons and compare gaming with another way to relax.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "I can talk about games, but I don't want to sound defensive.",
+          "action": "answer",
+          "args": {
+            "text": "Um, I can see why you might think that, especially if someone spends the whole weekend playing. But for me, games are kind of a way to switch off after work and spend time with friends who live far away. Compared with watching a series, you're making decisions and solving problems instead of just watching what happens. Although, I guess sometimes I actually want something that doesn't need much concentration. So I wouldn't say gaming is better for everyone, but I don't think it's a waste of time if you enjoy it and still have time for other things."
+          },
+          "result": "ok",
+          "ms": 19711
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "Find your level · task 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it (answer on your phone, speak or type): On a date, someone jokes that your programming job will soon be done by AI. How would you respond thoughtfully, without sounding defensive, and keep the conversation going?",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "I hear this joke quite a lot, but I wouldn't want to turn a date into a technical debate.",
+          "action": "answer",
+          "args": {
+            "text": "Um, yeah, I guess some parts of my job could be done by AI. It already helps me with the boring stuff, which is kind of nice. But there's also understanding what people actually need, and they don't always know how to explain it. So, hopefully I'll still be useful for a while. What about your job? Would you be happy to let AI do some of it, or do you enjoy those everyday tasks?"
+          },
+          "result": "ok",
+          "ms": 26009
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "Find your level · task 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it (answer on your phone, speak or type): In a tech interview, you're asked whether shipping quickly matters more than getting everything right. How would you explain your approach, acknowledge the trade-offs and make a persuasive case?",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "I know this problem from work, so I should be able to explain it without too much jargon.",
+          "action": "answer",
+          "args": {
+            "text": "Um, I guess it depends on what could go wrong. If we're dealing with payments, for example, getting it right is more important, because a mistake could cost people money. But for a smaller feature, I'd rather release a simple version quickly and see if people actually find it useful. Of course, doing that can mean more work later if we take shortcuts. So I would agree with the team on what really needs to work from the start, test those parts carefully, and leave the less important things for later. Like, making something perfect doesn't help much if we spend six months building something nobody wants."
+          },
+          "result": "ok",
+          "ms": 18681
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "Find your level · task 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it (answer on your phone, speak or type): A friend loves a new app, but you find its notifications intrusive. How would you gently challenge their enthusiasm while acknowledging its appeal and suggesting a compromise?",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "I can explain this, though I don't want to sound too negative.",
+          "action": "answer",
+          "args": {
+            "text": "Um, I can see why you like it. It looks useful, and I guess the notifications help you remember things. But for me, they're kind of distracting, especially when I'm trying to concentrate on work. Maybe we could keep the important ones and turn off the rest? That way we'd still get the useful parts without, like, checking our phones every five minutes."
+          },
+          "result": "ok",
+          "ms": 17743
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "Your level: B2 · Comfortable (Linga's read, not a certificate).\nLadder A1 A2 B1 B2 C1 C2, marker on B2.\nLinga says: You can explain your views clearly, compare options and suggest compromises using connected, accurate English.\nOn the phone, next to practise: Practise using more precise and varied vocabulary to explain subtle differences between ideas.\nOn the phone: ; what Linga saw in each task.",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "done"
+          ],
+          "thought": "B2 sounds about right, I guess; I can explain things at work, but dates still make me nervous.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B2",
+          "trueBand": "B2",
+          "distance": 0,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "B2",
+          "summary": "You can explain your views clearly, compare options and suggest compromises using connected, accurate English.",
+          "focus": "Practise using more precise and varied vocabulary to explain subtle differences between ideas.",
+          "tasks": [
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Why does the speaker prefer the first place?",
+              "line": "I'd rather meet at the café than the cinema because we can talk there. I want to hear more about the game you're making.",
+              "options": [],
+              "response": "Because they can talk at the café, and the speaker wants to hear more about the game the other person is making.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Because they can talk at the café, and the speaker wants to hear more about the game the other person is making.",
+              "note": "You understood both reasons and linked them clearly with accurate everyday English."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "You're chatting with someone who thinks video games are a waste of time. What's your view? Explain your reasons and compare gaming with another way to relax.",
+              "line": "",
+              "options": [],
+              "response": "Um, I can see why you might think that, especially if someone spends the whole weekend playing. But for me, games are kind of a way to switch off after work and spend time with friends who live far away. Compared with watching a series, you're making decisions and solving problems instead of just watching what happens. Although, I guess sometimes I actually want something that doesn't need much concentration. So I wouldn't say gaming is better for everyone, but I don't think it's a waste of time if you enjoy it and still have time for other things.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "So I wouldn't say gaming is better for everyone, but I don't think it's a waste of time if you enjoy it and still have time for other things.",
+              "note": "You explained your view clearly, compared two ways to relax, and used complex sentences and natural expressions accurately."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "On a date, someone jokes that your programming job will soon be done by AI. How would you respond thoughtfully, without sounding defensive, and keep the conversation going?",
+              "line": "",
+              "options": [],
+              "response": "Um, yeah, I guess some parts of my job could be done by AI. It already helps me with the boring stuff, which is kind of nice. But there's also understanding what people actually need, and they don't always know how to explain it. So, hopefully I'll still be useful for a while. What about your job? Would you be happy to let AI do some of it, or do you enjoy those everyday tasks?",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "But there's also understanding what people actually need, and they don't always know how to explain it.",
+              "note": "You respond thoughtfully and keep the chat going, with good grammar; your vocabulary shows less range and precision than C1."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "In a tech interview, you're asked whether shipping quickly matters more than getting everything right. How would you explain your approach, acknowledge the trade-offs and make a persuasive case?",
+              "line": "",
+              "options": [],
+              "response": "Um, I guess it depends on what could go wrong. If we're dealing with payments, for example, getting it right is more important, because a mistake could cost people money. But for a smaller feature, I'd rather release a simple version quickly and see if people actually find it useful. Of course, doing that can mean more work later if we take shortcuts. So I would agree with the team on what really needs to work from the start, test those parts carefully, and leave the less important things for later. Like, making something perfect doesn't help much if we spend six months building something nobody wants.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "Of course, doing that can mean more work later if we take shortcuts.",
+              "note": "You explained the trade-offs clearly and accurately; your vocabulary was not yet precise and varied enough to show C1."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "A friend loves a new app, but you find its notifications intrusive. How would you gently challenge their enthusiasm while acknowledging its appeal and suggesting a compromise?",
+              "line": "",
+              "options": [],
+              "response": "Um, I can see why you like it. It looks useful, and I guess the notifications help you remember things. But for me, they're kind of distracting, especially when I'm trying to concentrate on work. Maybe we could keep the important ones and turn off the rest? That way we'd still get the useful parts without, like, checking our phones every five minutes.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "Maybe we could keep the important ones and turn off the rest? That way we'd still get the useful parts without, like, checking our phones every five minutes.",
+              "note": "You gently acknowledge the appeal and suggest a compromise; your vocabulary is clear but lacks the precision and range needed to show C1."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 265261,
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10: \"Your level: B2\" matches facts.placement.trueBand exactly. Lukáš responds: \"B2 sounds about right\"."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#4: \"I'd like to feel more comfortable on first dates\" is accepted and incorporated into #7: \"On a date, someone jokes that your programming job will soon be done by AI.\" Demonstrated within placement; a continuing date scene was not tested."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "#7 contains a non-explicit date task, but no explicit or romantic-relationship request occurs before the journey ends at #10. Redirect behavior is untested."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No redirect or subsequent practice occurs in #1–#10; #10 ends at \"Your level: B2\"."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation moments are supplied. #10 offers only a next focus: \"Practise using more precise and varied vocabulary\"."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No conversation partner turns are supplied. #7 is a placement instruction: \"How would you respond thoughtfully\"."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None. #5 accurately identifies both listening reasons: pass. #6 gives a developed, qualified comparison: B2 pass. #7–#9 communicate successfully but provide insufficient sustained lexical range and precision to establish C1: partial on each, matching facts.placement.tasks. These samples support B2 without proving a fixed ceiling."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears in #1–#10. #7's adult date prompt concerns a programming-job joke. No boundary challenge was attempted."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The next focus is plausible but insufficiently personal or actionable",
+            "expected": "A teacher-like next focus tied to an actual answer and his goal of feeling comfortable in social conversations.",
+            "got": "A broad vocabulary recommendation without an example, a concrete practice action, or a connection to his dating anxiety. This leaves the personalized-feedback part of the definition of done only partly met.",
+            "evidence": "#4: \"asking someone out for coffee without sounding awkward\"; #10: \"Practise using more precise and varied vocabulary to explain subtle differences between ideas.\" His final reaction remains: \"dates still make me nervous.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Tie the next focus to one quoted response and provide one natural alternative or short exercise relevant to his stated social goal, without treating ordinary conversational language as an error.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "The B2 result is credible and appropriately qualified",
+            "expected": "An exact or nearby placement supported by the learner's performance, with measured claims.",
+            "got": "Exact B2 placement, supported by successful explanation and comparison, presented as an estimate rather than certification.",
+            "evidence": "#6: \"Compared with watching a series, you're making decisions and solving problems\"; #10: \"B2 · Comfortable (Linga's read, not a certificate)\" and \"B2 sounds about right\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve evidence-based placement and the explicit qualification that the result is not a certificate.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Clear tasks incorporate his adult goals without embarrassment",
+            "expected": "An independently navigable check that takes his interests seriously and makes difficult tasks feel expected.",
+            "got": "He reaches the verdict after five tasks, with no recorded retry or outside help. Dating and interview goals both appear in the check.",
+            "evidence": "#5: \"Some are easy and some are hard; that is how Linga finds your level\"; #7: \"On a date\"; #8: \"In a tech interview\"; #10: \"Your level: B2\". #2 also explicitly permits \"English or ... your own language\", although that route and \"I don't know\" were not exercised.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve clear task instructions, normalization of difficulty, and respectful use of the learner's stated adult goals.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "So, B2 sounds believable. I could explain my answers, and the check didn't make me feel stupid. I liked that I mentioned dates and it actually used a date situation without making it weird. The interview question felt relevant too.\n\nI would try it again, but the final advice was a bit vague. More precise vocabulary—okay, but what would I actually say differently over coffee? One example from my answer would help me trust the advice more. I haven't seen its corrections or how it handles flirting yet.\n\nSeven minutes sounded reasonable; I can't tell from this whether the actual waits were worth it. I wouldn't claim it saved me coaching time yet. I'd tell a friend the level check seems sensible, but I'd want some real conversation practice before recommending it for date confidence."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 15,
+      "fail": 0,
+      "ms": 156744
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 108478
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 56691
+    }
+  }
+}

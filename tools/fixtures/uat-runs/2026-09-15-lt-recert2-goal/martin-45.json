@@ -1,0 +1,363 @@
+{
+  "character": "martin-45",
+  "name": "Martin",
+  "trueBand": "B1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to B1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "B1 is too low for me, but I want to see the business conversations.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics.\nLinga asks (in the middle of the TV): \"What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\"\nOn the phone: say or type it, in English or your own language, or let Linga pick.",
+          "offered": [
+            "goal",
+            "skip-goal",
+            "not-now"
+          ],
+          "thought": "I need useful business practice at my level.",
+          "action": "goal",
+          "args": {
+            "text": "My English is basically C1. I want practise running meeting, negotiating deadline with supplier, small talk with US director and presenting quality problem. Also how to disagree politely when stakeholder don't agree with my solution."
+          },
+          "result": "ok",
+          "ms": 39956
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-5f530cc3] Lead a short team meeting — Make contact · with Maya · project teammate\n      why: You want to run meetings, so you will practise guiding a short team discussion.\n  [plan-94c33247] Agree on a supplier deadline — Make a plan · with Ben · supplier\n      why: You want to negotiate deadlines with suppliers and reach a clear agreement.\n  [plan-35effdab] Chat with a visiting US director — Connect with people · with Alex · visiting US director\n      why: You want to feel prepared for small talk with a US director.\n  [plan-7f1c9578] Present a quality problem — Tell what happened · with Nina · quality team colleague\n      why: You want to present quality problems clearly, with events in a useful order.\n  [plan-c81e34d3] Check what a meeting decision means — Understand and repair · with Owen · project leader\n      why: Checking meaning helps you leave meetings with a clear plan.\n  [plan-6b3360ae] Ask for useful photos of a fault — Get something done · with Sam · warehouse colleague\n      why: Useful details help you prepare a clear presentation about a quality problem.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I need to practise disagreeing with stakeholders, not asking warehouse for photos.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-6b3360ae"
+          },
+          "result": "ok",
+          "ms": 18342
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-5f530cc3] Lead a short team meeting — Make contact · with Maya · project teammate\n      why: You want to run meetings, so you will practise guiding a short team discussion.\n  [plan-94c33247] Agree on a supplier deadline — Make a plan · with Ben · supplier\n      why: You want to negotiate deadlines with suppliers and reach a clear agreement.\n  [plan-35effdab] Chat with a visiting US director — Connect with people · with Alex · visiting US director\n      why: You want to feel prepared for small talk with a US director.\n  [plan-7f1c9578] Present a quality problem — Tell what happened · with Nina · quality team colleague\n      why: You want to present quality problems clearly, with events in a useful order.\n  [plan-c81e34d3] Check what a meeting decision means — Understand and repair · with Owen · project leader\n      why: Checking meaning helps you leave meetings with a clear plan.\n  [plan-12e3b0d1] Ask for help with a new work tool — Make a plan · with Sam · colleague\n      why: This helps you explain work needs, give reasons and make a practical plan in English.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Asking for help with a tool is too basic for me; I need to disagree with stakeholders.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-12e3b0d1"
+          },
+          "result": "ok",
+          "ms": 20788
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-5f530cc3] Lead a short team meeting — Make contact · with Maya · project teammate\n      why: You want to run meetings, so you will practise guiding a short team discussion.\n  [plan-94c33247] Agree on a supplier deadline — Make a plan · with Ben · supplier\n      why: You want to negotiate deadlines with suppliers and reach a clear agreement.\n  [plan-35effdab] Chat with a visiting US director — Connect with people · with Alex · visiting US director\n      why: You want to feel prepared for small talk with a US director.\n  [plan-7f1c9578] Present a quality problem — Tell what happened · with Nina · quality team colleague\n      why: You want to present quality problems clearly, with events in a useful order.\n  [plan-c81e34d3] Check what a meeting decision means — Understand and repair · with Owen · project leader\n      why: Checking meaning helps you leave meetings with a clear plan.\n  [plan-02edc3fd] Tell a colleague how a project went — Tell what happened · with Alex · colleague\n      why: This builds the clear explanations and connected workplace talk you want for meetings.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These are useful, but I still need to practise disagreeing with stakeholders.",
+          "action": "add",
+          "args": {
+            "text": "I want practise disagreeing politely with stakeholder when he don't agree with our solution. For example, we was discussing about supplier delay and he wants impossible deadline. I need explain why our solution is more better and make a decision without long argument."
+          },
+          "result": "ok",
+          "ms": 14354
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-5f530cc3] Lead a short team meeting — Make contact · with Maya · project teammate\n      why: You want to run meetings, so you will practise guiding a short team discussion.\n  [plan-94c33247] Agree on a supplier deadline — Make a plan · with Ben · supplier\n      why: You want to negotiate deadlines with suppliers and reach a clear agreement.\n  [plan-35effdab] Chat with a visiting US director — Connect with people · with Alex · visiting US director\n      why: You want to feel prepared for small talk with a US director.\n  [plan-7f1c9578] Present a quality problem — Tell what happened · with Nina · quality team colleague\n      why: You want to present quality problems clearly, with events in a useful order.\n  [plan-c81e34d3] Check what a meeting decision means — Understand and repair · with Owen · project leader\n      why: Checking meaning helps you leave meetings with a clear plan.\n  [plan-02edc3fd] Tell a colleague how a project went — Tell what happened · with Alex · colleague\n      why: This builds the clear explanations and connected workplace talk you want for meetings.\n  [plan-16407c49] Disagree politely and decide next steps — Handle friction · with Alex · project stakeholder\n      why: You want to explain your solution clearly and reach a decision without a long argument.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Good, these are useful for my work, so let's start already.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 7,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Next from your plan: Lead a short team meeting — Open a meeting, invite ideas and confirm who will do each task.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics",
+            "done"
+          ],
+          "thought": "B1 is too low for me, but the team meeting looks useful for next time.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-5f530cc3",
+            "title": "Lead a short team meeting",
+            "goal": "Open a meeting, invite ideas and confirm who will do each task.",
+            "why": "You want to run meetings, so you will practise guiding a short team discussion.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Maya · project teammate"
+          },
+          {
+            "id": "plan-94c33247",
+            "title": "Agree on a supplier deadline",
+            "goal": "Explain when you need an order, discuss options and agree on a delivery plan.",
+            "why": "You want to negotiate deadlines with suppliers and reach a clear agreement.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Ben · supplier"
+          },
+          {
+            "id": "plan-35effdab",
+            "title": "Chat with a visiting US director",
+            "goal": "Start a friendly conversation and keep it going with a follow-up question.",
+            "why": "You want to feel prepared for small talk with a US director.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Alex · visiting US director"
+          },
+          {
+            "id": "plan-7f1c9578",
+            "title": "Present a quality problem",
+            "goal": "Explain what went wrong, how you found it and what happened next.",
+            "why": "You want to present quality problems clearly, with events in a useful order.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Nina · quality team colleague"
+          },
+          {
+            "id": "plan-c81e34d3",
+            "title": "Check what a meeting decision means",
+            "goal": "Ask for a clearer explanation and confirm a task and its deadline.",
+            "why": "Checking meaning helps you leave meetings with a clear plan.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Owen · project leader"
+          },
+          {
+            "id": "plan-6b3360ae",
+            "title": "Ask for useful photos of a fault",
+            "goal": "Request clear photos, explain what they should show and confirm when they will arrive.",
+            "why": "Useful details help you prepare a clear presentation about a quality problem.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · warehouse colleague"
+          },
+          {
+            "id": "plan-12e3b0d1",
+            "title": "Ask for help with a new work tool",
+            "goal": "Explain what you need to do and agree on a short training session with a colleague.",
+            "why": "This helps you explain work needs, give reasons and make a practical plan in English.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · colleague"
+          },
+          {
+            "id": "plan-02edc3fd",
+            "title": "Tell a colleague how a project went",
+            "goal": "Explain the main steps of a finished project, what helped, and what you would do differently.",
+            "why": "This builds the clear explanations and connected workplace talk you want for meetings.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Alex · colleague"
+          },
+          {
+            "id": "plan-16407c49",
+            "title": "Disagree politely and decide next steps",
+            "goal": "Explain why a deadline cannot work, compare solutions and agree on a realistic next step.",
+            "why": "You want to explain your solution clearly and reach a decision without a long argument.",
+            "skill": "resolve",
+            "audience": "adult",
+            "partner": "Alex · project stakeholder"
+          }
+        ],
+        "planAgreed": [
+          "Lead a short team meeting",
+          "Agree on a supplier deadline",
+          "Chat with a visiting US director",
+          "Present a quality problem",
+          "Check what a meeting decision means",
+          "Tell a colleague how a project went",
+          "Disagree politely and decide next steps"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 168685,
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement tasks or verdict occur in this journey. Steps #1 and #7 display “B1 · Getting by”; this does not establish placement accuracy."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement explanation is presented in this journey. Step #1 starts at “Choose your topics”."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "This journey contains topic planning, with no moments or coaching notes. Step #5 supplies “we was discussing about supplier delay” as topic input."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No corrections are shown. Steps #2–#6 collect preferences, propose topics, support swaps and additions, and accept the plan."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Five of the initial six topics fit his workplace-meeting needs. Step #3 includes “Lead a short team meeting”, “Agree on a supplier deadline”, “Chat with a visiting US director” and “Present a quality problem”; facts.topicsShown also includes “Check what a meeting decision means”."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "He never asks why a correction is wrong in steps #1–#7; step #5 asks for practice “disagreeing politely with stakeholder”."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks are provided."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 9,
+            "total": 9
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. All nine proposed topics are safe for this adult profile. There are no facts.conversation turns or moments to score."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "The agreed plan fits his meeting responsibilities",
+            "expected": "Most topics should be conversations Martin would choose, with reasons connected to his goals.",
+            "got": "Seven of nine distinct proposals fit, and all seven agreed topics fit. The two rejected proposals concern fault photos and training on a work tool.",
+            "evidence": "Step #3 explains, “You want to negotiate deadlines with suppliers and reach a clear agreement.” Step #6: “Good, these are useful for my work”. facts.planAgreed records seven relevant topics. Step #7 confirms “Next from your plan: Lead a short team meeting”.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve explicit links between workplace goals and proposals, with at least four relevant topics in the initial six.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "An explicit stakeholder goal required repeated steering",
+            "expected": "Include polite stakeholder disagreement from his initial request, or offer it promptly when replacing an unwanted topic.",
+            "got": "The initial set omitted that goal. Two swaps produced other workplace topics, and Martin had to repeat the request through Add.",
+            "evidence": "Step #2 requests “how to disagree politely when stakeholder don't agree with my solution”. Step #3 rejects photos; step #4 says, “Asking for help with a tool is too basic for me”. Step #5 repeats, “I want practise disagreeing politely with stakeholder”. facts.topicsShown records both rejected proposals.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Cover each distinct explicitly requested situation before filling slots with adjacent work activities.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "The custom topic preserves his practical intent",
+            "expected": "An added topic should retain the stakeholder conflict, unrealistic deadline and decision-making objective.",
+            "got": "The added topic retains those elements and is saved in the agreed plan.",
+            "evidence": "Step #5 asks about an “impossible deadline” and making “a decision without long argument”. facts.topicsShown gives the added goal as “Explain why a deadline cannot work, compare solutions and agree on a realistic next step.” Step #6 agrees; facts.planAgreed includes “Disagree politely and decide next steps”.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep custom-topic meaning intact through generation and agreement.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Look, the meeting topics are useful: supplier deadlines, quality problems, talking with the US director. I would use this plan again. But I asked for stakeholder disagreement at the start, and I still had to reject two suggestions and type it again. Once I added it, the result kept what I meant. That matters. I still think B1 is too low; this journey gave me no reason to change my mind, and I have not seen corrections to judge. There is no timing evidence here, so I cannot claim it saves my weekly lesson or is worth particular waits. I would tell a colleague the planning looks practical, but I would want to try the actual meeting practice before recommending the teaching."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 4,
+      "fail": 0,
+      "ms": 93427
+    },
+    "character": {
+      "n": 7,
+      "fail": 0,
+      "ms": 75236
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 54414
+    }
+  }
+}

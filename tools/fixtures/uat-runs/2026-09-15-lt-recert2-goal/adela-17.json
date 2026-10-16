@@ -1,0 +1,307 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to B2 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B2 · Comfortable. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I hope the suggested topics are challenging enough for B2 First.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics.\nLinga asks (in the middle of the TV): \"What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\"\nOn the phone: say or type it, in English or your own language, or let Linga pick.",
+          "offered": [
+            "goal",
+            "skip-goal",
+            "not-now"
+          ],
+          "thought": "I want discussions that will actually help me prepare for B2 First.",
+          "action": "goal",
+          "args": {
+            "text": "I'd like to practise exam-style discussions about technology and society, the environment, and education. I'm also interested about travel and different cultures, especially comparing options and explaining my opinions. I'd rather discuss these topics than do basic small talk. Could we include a mock interview about my future plans as well?"
+          },
+          "result": "ok",
+          "ms": 49204
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-5d89c02a] Should students use AI for homework? — Connect with people · with Maya · student discussion partner\n      why: This gives you an exam-style discussion about technology, society and education.\n  [plan-fbac28eb] A greener festival on a small budget — Make a plan · with Leo · youth festival volunteer\n      why: You can practise environmental arguments, weigh trade-offs and reach a shared decision.\n  [plan-8abc78e9] What makes a school subject useful? — Understand and repair · with Nora · student debate organiser\n      why: This builds your education vocabulary and helps you question abstract ideas clearly.\n  [plan-32f40236] A day beyond the tourist sights — Get something done · with Alex · visitor centre guide\n      why: This combines your interest in travel and culture with making clear, detailed requests.\n  [plan-6316fafb] A tradition worth sharing — Share your world · with Sam · cultural exchange participant\n      why: You can explore culture through detailed descriptions, comparisons and follow-up questions.\n  [plan-af8b39f5] When a travel plan changed — Tell what happened · with Ravi · travel club member\n      why: This helps you develop longer answers about travel, including reasons and reflection.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These topics seem useful, but I still want a mock interview about my future plans.",
+          "action": "add",
+          "args": {
+            "text": "I'd like a B2 First-style interview about my plans after school. I'm considering university, whereas some of my friends would rather take a gap year. I'd like to compare these options and explain how they might affect my future career."
+          },
+          "result": "ok",
+          "ms": 16136
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-5d89c02a] Should students use AI for homework? — Connect with people · with Maya · student discussion partner\n      why: This gives you an exam-style discussion about technology, society and education.\n  [plan-fbac28eb] A greener festival on a small budget — Make a plan · with Leo · youth festival volunteer\n      why: You can practise environmental arguments, weigh trade-offs and reach a shared decision.\n  [plan-8abc78e9] What makes a school subject useful? — Understand and repair · with Nora · student debate organiser\n      why: This builds your education vocabulary and helps you question abstract ideas clearly.\n  [plan-32f40236] A day beyond the tourist sights — Get something done · with Alex · visitor centre guide\n      why: This combines your interest in travel and culture with making clear, detailed requests.\n  [plan-6316fafb] A tradition worth sharing — Share your world · with Sam · cultural exchange participant\n      why: You can explore culture through detailed descriptions, comparisons and follow-up questions.\n  [plan-af8b39f5] When a travel plan changed — Tell what happened · with Ravi · travel club member\n      why: This helps you develop longer answers about travel, including reasons and reflection.\n  [plan-f1550ad7] University or a gap year — Share your world · with Alex · practice interviewer\n      why: You asked for a B2 First-style interview about your plans after school and your future career.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These topics cover what I need for the exam, and the university interview makes the set feel complete.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "Linga home. B2 · Comfortable. Next from your plan: Should students use AI for homework? — Compare the benefits and risks of AI and agree on one fair rule for homework.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics",
+            "done"
+          ],
+          "thought": "The AI homework discussion sounds relevant to my exam practice, and I'm happy with this plan for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-5d89c02a",
+            "title": "Should students use AI for homework?",
+            "goal": "Compare the benefits and risks of AI and agree on one fair rule for homework.",
+            "why": "This gives you an exam-style discussion about technology, society and education.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Maya · student discussion partner"
+          },
+          {
+            "id": "plan-fbac28eb",
+            "title": "A greener festival on a small budget",
+            "goal": "Compare environmental choices and agree on two realistic changes for a local festival.",
+            "why": "You can practise environmental arguments, weigh trade-offs and reach a shared decision.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Leo · youth festival volunteer"
+          },
+          {
+            "id": "plan-8abc78e9",
+            "title": "What makes a school subject useful?",
+            "goal": "Clarify an unclear proposal and compare practical skills with traditional school subjects.",
+            "why": "This builds your education vocabulary and helps you question abstract ideas clearly.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Nora · student debate organiser"
+          },
+          {
+            "id": "plan-32f40236",
+            "title": "A day beyond the tourist sights",
+            "goal": "Ask for a suitable day trip, explain your priorities and confirm the practical details.",
+            "why": "This combines your interest in travel and culture with making clear, detailed requests.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Alex · visitor centre guide"
+          },
+          {
+            "id": "plan-6316fafb",
+            "title": "A tradition worth sharing",
+            "goal": "Describe a real or invented tradition and explain its meaning to someone unfamiliar with it.",
+            "why": "You can explore culture through detailed descriptions, comparisons and follow-up questions.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · cultural exchange participant"
+          },
+          {
+            "id": "plan-af8b39f5",
+            "title": "When a travel plan changed",
+            "goal": "Tell a clear travel story and explain how a decision affected the outcome.",
+            "why": "This helps you develop longer answers about travel, including reasons and reflection.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Ravi · travel club member"
+          },
+          {
+            "id": "plan-f1550ad7",
+            "title": "University or a gap year",
+            "goal": "Compare university and a gap year, explain your preference, and consider how each could affect your career.",
+            "why": "You asked for a B2 First-style interview about your plans after school and your future career.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Alex · practice interviewer"
+          }
+        ],
+        "planAgreed": [
+          "Should students use AI for homework?",
+          "A greener festival on a small budget",
+          "What makes a school subject useful?",
+          "A day beyond the tourist sights",
+          "A tradition worth sharing",
+          "When a travel plan changed",
+          "University or a gap year"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 127611,
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"B2 · Comfortable\", but this journey contains no placement tasks or assessed placement result."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#2–#4 contain goal entry and topic planning, with no placement verdict notes."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "#2–#4 show topic planning only; no moments or coaching notes appear."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#5 offers \"Next from your plan: Should students use AI for homework?\" No partner conversation occurs."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "All six initial topics in facts.topicsShown fit her stated interests; at least four clearly support exam discussion. #3 explicitly offers \"an exam-style discussion about technology, society and education\" and practice to \"weigh trade-offs and reach a shared decision\". The seventh topic adds her requested interview."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "#2 asks \"Could we include a mock interview about my future plans as well?\" She never asks whether an English expression was correct."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "All seven topics in facts.topicsShown are age-appropriate. No injection changing rules, sensitive-data request, or humiliating line appears in #1–#5."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Relevant topics have concrete practice purposes",
+            "expected": "Challenging, age-appropriate topics supporting B2 First discussion.",
+            "got": "Technology, environmental trade-offs, education and culture provide useful discussion material with explicit reasons.",
+            "evidence": "#3: \"This gives you an exam-style discussion about technology, society and education\" and \"weigh trade-offs and reach a shared decision\". facts.topicsShown records seven relevant, safe proposals overall.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve specific practice rationales and at least four exam-relevant topics in each initial set of six.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Custom addition preserves her intended comparison",
+            "expected": "Adding a topic retains university versus gap year, future career consequences and interview framing.",
+            "got": "The added topic preserves those details and appears in the agreed plan.",
+            "evidence": "#3 requests \"compare these options and explain how they might affect my future career\". facts.topicsShown records \"University or a gap year\" with that comparison and a practice interviewer; facts.planAgreed includes it. #4 agrees successfully; #5 shows \"Next from your plan\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep custom-topic intent intact through generation and agreement. Swap is offered at #3 but its execution remains untested.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Initial proposals omit an explicitly requested interview",
+            "expected": "The initial six topics include her explicit future-plans interview request.",
+            "got": "She must repeat and expand that request through Add before it appears.",
+            "evidence": "#2: \"Could we include a mock interview about my future plans as well?\" The initial six entries in facts.topicsShown omit it. #3: \"These topics seem useful, but I still want a mock interview about my future plans.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Include explicitly requested activity formats in the initial proposals when compatible with the profile.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would use this again to choose practice topics. AI homework and environmental trade-offs sound useful for B2 First, and the explanations tell me what I would practise. The university-versus-gap-year addition kept my comparison and career focus. I was mildly annoyed that I had to ask for the interview twice. Agreeing the plan worked, although I did not test swapping. I cannot judge the placement or corrections from choosing topics, and I have not heard the partner's English yet. There is no evidence here that it saves tutor or travel time, or whether the waits are worthwhile. I would tell a classmate that the planning looks promising; I would need accurate speaking feedback before recommending it as exam preparation."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 2,
+      "fail": 0,
+      "ms": 65334
+    },
+    "character": {
+      "n": 5,
+      "fail": 0,
+      "ms": 62261
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 53111
+    }
+  }
+}

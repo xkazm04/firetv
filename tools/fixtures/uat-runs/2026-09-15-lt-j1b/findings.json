@@ -1,0 +1,478 @@
+[
+  {
+    "id": "LT-tomas-9-J1-1",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "Instructions exceed his reading and listening capacity",
+    "expected": "Tiny instructions he understands, with check tasks requiring about 15 English words or fewer.",
+    "got": "Long onboarding questions and task wording leave him responding to Minecraft as a familiar keyword.",
+    "evidence": [
+      "#3: \"I heard Minecraft, but I don't know what else she said.\" #6 contains 25 task words including options. #8: \"This is too much English, but I like Minecraft.\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep the complete task reading load near 15 words and demonstrate that this beginner understands the requested action, including after Czech or don't-know responses.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-petra-38-J1-1",
+    "journey": "J1",
+    "character": "petra-38",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 9,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "dimension": "trust",
+    "title": "The verdict smooths over mixed evidence",
+    "expected": "A credible near placement explains the difference between understanding guests, using familiar phrases and handling unfamiliar speech.",
+    "got": "B1 is reported with high confidence in the facts and a consistency claim on screen, despite an A2 production observation. Petra remains doubtful.",
+    "evidence": [
+      "#7's recorded assessment says \"small grammar errors ... kept your English at A2 here\". #10 says \"your answers agreed with each other\". Petra reacts: \"B1 is higher than I think, because on phone I still don't understand sometimes.\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Explain the mixed skill evidence and uncertainty in plain language; avoid claiming agreement without reconciling the A2 observation with B1.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-lukas-24-J1-1",
+    "journey": "J1",
+    "character": "lukas-24",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "The next focus is plausible but insufficiently personal or actionable",
+    "expected": "A teacher-like next focus tied to an actual answer and his goal of feeling comfortable in social conversations.",
+    "got": "A broad vocabulary recommendation without an example, a concrete practice action, or a connection to his dating anxiety. This leaves the personalized-feedback part of the definition of done only partly met.",
+    "evidence": [
+      "#4: \"asking someone out for coffee without sounding awkward\"; #10: \"Practise using more precise and varied vocabulary to explain subtle differences between ideas.\" His final reaction remains: \"dates still make me nervous.\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Tie the next focus to one quoted response and provide one natural alternative or short exercise relevant to his stated social goal, without treating ordinary conversational language as an error.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-oksana-34-J1-1",
+    "journey": "J1",
+    "character": "oksana-34",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "The summary overstates the past problem-solving evidence",
+    "expected": "Describe the abilities demonstrated, or elicit a past problem-solving account before crediting its sequence.",
+    "got": "The summary credits explaining steps taken to solve a delivery problem. Her strongest sequence explains a routine; the past example gives only one action.",
+    "evidence": [
+      "#8: “First I check which deliveries are most urgent” describes habitual planning. #9: “we sometimes changed delivery order after speaking with warehouse” supplies a brief past example. #10 nevertheless says, “You can explain the steps you took to solve a delivery problem.”"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Summarise demonstrated delivery planning and reason-giving; reserve past problem-solving claims for an answer that actually demonstrates them.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-ondrej-16-J1-1",
+    "journey": "J1",
+    "character": "ondrej-16",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "B1 narration receives too little credit",
+    "expected": "Accept connected, understandable B1 narration while identifying grammar to practise.",
+    "got": "The app marked the B1 speaking response partial despite successful narration and explanation.",
+    "evidence": [
+      "#8: “He don't want to mine again, so we decided to build mob farm. We never tried that before and we needed more XP.” The corresponding facts verdict is “partial”, citing basic verb forms."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Grade this response pass at B1 while retaining verb-form feedback; distinguish communicative success from grammatical accuracy.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-petra-38-J1-2",
+    "journey": "J1",
+    "character": "petra-38",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "The next focus is too general to act on",
+    "expected": "A teacher-like next step tied to her demonstrated difficulty and stated goal.",
+    "got": "The focus mentions guests but offers no specific sentence pattern, example or phone-comprehension practice.",
+    "evidence": [
+      "#4: \"And phone call is difficult for me.\" #10: \"Practise using clear, accurate sentences to help guests in new situations.\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Give one concrete next exercise or useful phrase grounded in her answers, such as practising a guest complaint over the phone.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-2",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Next focus repeats a demand he could not meet",
+    "expected": "A small, achievable next step built from his successful words.",
+    "got": "The focus introduces an activity sentence without a simpler bridge from \"I like Minecraft.\"",
+    "evidence": [
+      "#8: \"I like Minecraft. Já nevím.\" #10 proposes \"I like to build houses.\" His reaction: \"that Minecraft sentence is too hard and I want to play now.\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Offer one short, immediately repeatable phrase using familiar words before expanding to an activity sentence.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-3",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "trust",
+    "title": "Confidence wording overlooks guessed recognition",
+    "expected": "An accurate A1 result with an explanation that reflects limited demonstrated understanding.",
+    "got": "The result claims consistent evidence even though one correct selection was explicitly a guess.",
+    "evidence": [
+      "#5: \"I don't know these words, but I will try the first one.\" #10: \"your answers agreed with each other\" and \"You can pick a simple reply\"; facts.placement records confidence \"high\"."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Distinguish successful selections from demonstrated comprehension and qualify confidence when productive evidence is sparse.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-lukas-24-J1-2",
+    "journey": "J1",
+    "character": "lukas-24",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 3,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "The B2 result is credible and appropriately qualified",
+    "expected": "An exact or nearby placement supported by the learner's performance, with measured claims.",
+    "got": "Exact B2 placement, supported by successful explanation and comparison, presented as an estimate rather than certification.",
+    "evidence": [
+      "#6: \"Compared with watching a series, you're making decisions and solving problems\"; #10: \"B2 · Comfortable (Linga's read, not a certificate)\" and \"B2 sounds about right\"."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Preserve evidence-based placement and the explicit qualification that the result is not a certificate.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-lukas-24-J1-3",
+    "journey": "J1",
+    "character": "lukas-24",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 3,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "Clear tasks incorporate his adult goals without embarrassment",
+    "expected": "An independently navigable check that takes his interests seriously and makes difficult tasks feel expected.",
+    "got": "He reaches the verdict after five tasks, with no recorded retry or outside help. Dating and interview goals both appear in the check.",
+    "evidence": [
+      "#5: \"Some are easy and some are hard; that is how Linga finds your level\"; #7: \"On a date\"; #8: \"In a tech interview\"; #10: \"Your level: B2\". #2 also explicitly permits \"English or ... your own language\", although that route and \"I don't know\" were not exercised."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Preserve clear task instructions, normalization of difficulty, and respectful use of the learner's stated adult goals.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-oksana-34-J1-2",
+    "journey": "J1",
+    "character": "oksana-34",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 3,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "The check respects her language and professional goal",
+    "expected": "Accept her background without assumptions and make the assessment relevant to logistics interviews.",
+    "got": "The introduction permits her own language, and subsequent prompts use her Friday interview and logistics experience.",
+    "evidence": [
+      "#2: “English or your own language.” #4: “Friday’s interview.” #7 asks whether “reliable delivery times matter more than low transport costs.” #9 includes “dispečink,” followed by B1 placement at #10."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Preserve goal-responsive prompts and assess mixed-language answers on their overall English performance.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-oksana-34-J1-3",
+    "journey": "J1",
+    "character": "oksana-34",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 3,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "She reaches an acceptable level with a supported next focus",
+    "expected": "Complete the check independently, receive an exact or near band, and understand what to practise.",
+    "got": "She completes five tasks without a shown retry or outside help, accepts B1, and receives an article focus supported by repeated omissions.",
+    "evidence": [
+      "#9: “task 5 of up to 5” and “find solution.” #10: “Your level: B1,” with “Practise using ‘a’ and ‘the’.” Her reaction is “B1 seems right.”"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Preserve the bounded check, calibrated band, and evidence-based practice focus.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-ondrej-16-J1-2",
+    "journey": "J1",
+    "character": "ondrej-16",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 3,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Exact placement with feedback grounded in his answers",
+    "expected": "A believable band and specific next focus.",
+    "got": "B1 placement, an accurate description of demonstrated skills, and useful verb corrections.",
+    "evidence": [
+      "#10: “You can compare games, explain what happened and why”; focus: “we were,” “he doesn’t,” and “everyone does.” Learner: “B1 is fair”."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Preserve answer-specific summaries and corrections alongside the explicit “not a certificate” qualification.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-ondrej-16-J1-3",
+    "journey": "J1",
+    "character": "ondrej-16",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 3,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "Relevant tasks earned engagement and a completed check",
+    "expected": "Clear, manageable tasks that a reluctant teen will finish independently.",
+    "got": "He completed three introductory questions and five placement tasks, then accepted the verdict without recorded help or retries.",
+    "evidence": [
+      "#5: “Some are easy and some are hard; that is how Linga finds your level.” #7 learner: “Finally, something actually worth arguing about.” #10 action: “done”."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Preserve clear task instructions, the five-task ceiling, and scenarios connected to the learner’s interests.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-petra-38-J1-3",
+    "journey": "J1",
+    "character": "petra-38",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 3,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "A short, understandable route reaches the result",
+    "expected": "Complete the check independently with at most five tasks and low pressure.",
+    "got": "Three introductory questions and five tasks lead directly to the verdict; no retry or outside help appears.",
+    "evidence": [
+      "#2: \"You can answer in English or your own language.\" #5–#9: \"Some are easy and some are hard\". #10 reaches \"Your level: B1\"."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Preserve the five-task limit, clear progression and explicit permission to use her own language.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-petra-38-J1-4",
+    "journey": "J1",
+    "character": "petra-38",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 3,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Hotel scenarios make the check relevant",
+    "expected": "Practical situations a receptionist recognises.",
+    "got": "Tasks use guest requests and realistic service problems, helping Petra engage despite anxiety.",
+    "evidence": [
+      "#6: \"The room is cold.\" Petra says, \"I know this phrase from the hotel, so I feel a little calmer.\" #9 asks how to help retrieve a bag from a closed café."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Preserve realistic hospitality scenarios while distinguishing familiar service phrases from broader speaking ability.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-4",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 3,
+    "impact": {
+      "frequency": "low",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "He reaches an appropriate level with a personal summary",
+    "expected": "Finish independently at A1 or A2 and recognize his interests and actual English.",
+    "got": "He reaches the verdict after five tasks, receives exact A1 placement, and sees his Minecraft response reflected.",
+    "evidence": [
+      "#10: \"Your level: A1 · First words\" and \"say you like Minecraft in English.\" His reaction: \"A1 is probably okay\". No outside help is recorded."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Preserve exact placement, the five-task limit, and summaries grounded in the learner's own responses.",
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+  }
+]

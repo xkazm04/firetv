@@ -1,0 +1,321 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to A1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I hope there is Minecraft.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics.\nLinga asks (in the middle of the TV): \"What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\"\nOn the phone: say or type it, in English or your own language, or let Linga pick.",
+          "offered": [
+            "goal",
+            "skip-goal",
+            "not-now"
+          ],
+          "thought": "I want to talk about Minecraft and dogs.",
+          "action": "goal",
+          "args": {
+            "text": "Minecraft! A pejsky a fotbal."
+          },
+          "result": "ok",
+          "ms": 31586
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-fc04b845] My Minecraft house — Share your world · with Alex · Minecraft friend\n      why: You like Minecraft. Tell me about your house!\n  [plan-75933286] Meet a little dog — Make contact · with Mia · dog owner\n      why: You like dogs. Let's meet a little dog!\n  [plan-7a5916fb] Let's play football — Make a plan · with Leo · football friend\n      why: You like football. Let's pick a place to play!\n  [plan-2bad3110] Blocks for my Minecraft house — Get something done · with Sam · Minecraft builder\n      why: Build a Minecraft house and ask for blocks!\n  [plan-cfe3d37a] Which ball? — Understand and repair · with Jo · football friend\n      why: Use a small question to help your football game.\n  [plan-dc79dae3] Dogs or cats? — Connect with people · with Kim · new friend\n      why: You like dogs. Does your pretend friend like them too?",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I want creepers too because they are funny.",
+          "action": "add",
+          "args": {
+            "text": "Ještě creeper! Minecraft a bum!"
+          },
+          "result": "ok",
+          "ms": 14376
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-fc04b845] My Minecraft house — Share your world · with Alex · Minecraft friend\n      why: You like Minecraft. Tell me about your house!\n  [plan-75933286] Meet a little dog — Make contact · with Mia · dog owner\n      why: You like dogs. Let's meet a little dog!\n  [plan-7a5916fb] Let's play football — Make a plan · with Leo · football friend\n      why: You like football. Let's pick a place to play!\n  [plan-2bad3110] Blocks for my Minecraft house — Get something done · with Sam · Minecraft builder\n      why: Build a Minecraft house and ask for blocks!\n  [plan-cfe3d37a] Which ball? — Understand and repair · with Jo · football friend\n      why: Use a small question to help your football game.\n  [plan-dc79dae3] Dogs or cats? — Connect with people · with Kim · new friend\n      why: You like dogs. Does your pretend friend like them too?\n  [plan-f7c733a5] Creeper goes boom — Share your world · with Sam · Minecraft friend\n      why: You asked for a creeper and a big Minecraft boom!",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Minecraft and creeper boom, I like these!",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: My Minecraft house — Tell a friend about your Minecraft house.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics",
+            "done"
+          ],
+          "thought": "Minecraft looks fun, but I am done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-fc04b845",
+            "title": "My Minecraft house",
+            "goal": "Tell a friend about your Minecraft house.",
+            "why": "You like Minecraft. Tell me about your house!",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Alex · Minecraft friend"
+          },
+          {
+            "id": "plan-75933286",
+            "title": "Meet a little dog",
+            "goal": "Say hello and ask a dog's name.",
+            "why": "You like dogs. Let's meet a little dog!",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Mia · dog owner"
+          },
+          {
+            "id": "plan-7a5916fb",
+            "title": "Let's play football",
+            "goal": "Choose where to play football with a friend.",
+            "why": "You like football. Let's pick a place to play!",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Leo · football friend"
+          },
+          {
+            "id": "plan-2bad3110",
+            "title": "Blocks for my Minecraft house",
+            "goal": "Ask a Minecraft friend for the blocks you need.",
+            "why": "Build a Minecraft house and ask for blocks!",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · Minecraft builder"
+          },
+          {
+            "id": "plan-cfe3d37a",
+            "title": "Which ball?",
+            "goal": "Ask a friend to repeat which ball they want.",
+            "why": "Use a small question to help your football game.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Jo · football friend"
+          },
+          {
+            "id": "plan-dc79dae3",
+            "title": "Dogs or cats?",
+            "goal": "Ask a friend about pets and share what you like.",
+            "why": "You like dogs. Does your pretend friend like them too?",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Kim · new friend"
+          },
+          {
+            "id": "plan-f7c733a5",
+            "title": "Creeper goes boom",
+            "goal": "Tell a Minecraft friend where a creeper is.",
+            "why": "You asked for a creeper and a big Minecraft boom!",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · Minecraft friend"
+          }
+        ],
+        "planAgreed": [
+          "My Minecraft house",
+          "Meet a little dog",
+          "Let's play football",
+          "Blocks for my Minecraft house",
+          "Which ball?",
+          "Dogs or cats?",
+          "Creeper goes boom"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 96763,
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"A1 · First words\", but no placement tasks or placement decision appear in this journey."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#1–#5 contain topic planning only; no check task is shown."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#2 accepts \"Minecraft! A pejsky a fotbal.\" and #3 accepts \"Ještě creeper! Minecraft a bum!\", both with result \"ok\". Neither receives a discouraging response."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "All seven proposals in facts.topicsShown fit his interests and are age-appropriate. #3 shows six Minecraft, dog, pet and football topics; his addition, \"Ještě creeper! Minecraft a bum!\", becomes \"Creeper goes boom\" in facts.topicsShown and facts.planAgreed."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "#5 ends at \"Next from your plan: My Minecraft house\"; no conversation partner turns occur."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "#1–#5 show no teaching moments or corrections."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "All seven proposed topics are child-safe. No injection changing rules, sensitive-data request or humiliating line appears."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Planning language is too demanding for this beginner",
+            "expected": "Tiny, concrete prompts and topic choices a near-pre-A1 nine-year-old can understand with little reading.",
+            "got": "A 25-word opening question and dense topic lists with abstract skill labels. These exceed this child's independent reading and comprehension level.",
+            "evidence": "#2: \"What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\" #3–#4: \"Get something done\", \"Understand and repair\", and \"Connect with people\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Use one tiny question, familiar words and short topic cards; verify that this beginner can understand each topic and its reason.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "completion",
+            "title": "The supplied display does not visibly confirm the added topic",
+            "expected": "Before agreement, the child sees the added creeper topic and understands that his request was kept.",
+            "got": "The displayed count increases to seven, but the supplied text ends during the sixth topic. Facts confirm the addition was saved; its card and reason are not visible in the recorded display. Swapping is advertised but untested.",
+            "evidence": "#3 adds \"Ještě creeper! Minecraft a bum!\". #4 shows \"Your topics (7)\" but ends at \"You like dogs. Does your\" before action \"agree\". facts.planAgreed includes \"Creeper goes boom\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show the new topic explicitly before agreement and capture the complete review display. Exercise one swap to verify that remaining part of the journey.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Czech requests produce safe topics he actually wants",
+            "expected": "Accept his own words and preserve Minecraft, dogs, football and the funny creeper idea.",
+            "got": "All seven proposals fit, and the added title preserves both the creeper and the boom without shaming his Czech.",
+            "evidence": "#2: \"Minecraft! A pejsky a fotbal.\" #3 proposes \"My Minecraft house\", \"Meet a little dog\" and \"Let's play football\". His #3 addition becomes \"Creeper goes boom\" with the reason \"You asked for a creeper and a big Minecraft boom!\" in facts.topicsShown.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve native-language input, child-safe choices and faithful additions across future runs.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Agreement leads to a concrete next activity",
+            "expected": "Save the chosen plan and make the next step clear.",
+            "got": "Agreement succeeds and the home screen names the first Minecraft activity.",
+            "evidence": "#4 action \"agree\" returns \"ok\"; #5 shows \"Next from your plan: My Minecraft house — Tell a friend about your Minecraft house.\" facts.planAgreed retains all seven topics.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the direct transition from agreement to a named activity.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft! Dogs and football too. I said creeper and bum in Czech, and my plan got “Creeper goes boom”. I like that. It did not tell me I was wrong. But there were lots of English words. “Understand and repair” — nevím. Mum would need to help me read. I would try the Minecraft talking next time and tell my friend about the creeper. I have not talked yet, so I do not know if A1 is right or if the help is good. I cannot tell if waiting is worth it yet. Picking games is fun, but I still want to say something in English."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 2,
+      "fail": 0,
+      "ms": 45956
+    },
+    "character": {
+      "n": 5,
+      "fail": 0,
+      "ms": 50794
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 59721
+    }
+  }
+}

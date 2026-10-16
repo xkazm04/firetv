@@ -1,0 +1,307 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to B1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I want to see if these conversations will help with my interview on Friday.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics.\nLinga asks (in the middle of the TV): \"What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\"\nOn the phone: say or type it, in English or your own language, or let Linga pick.",
+          "offered": [
+            "goal",
+            "skip-goal",
+            "not-now"
+          ],
+          "thought": "I need to prepare for Friday interview and speak about my logistics work.",
+          "action": "goal",
+          "args": {
+            "text": "I have interview on Friday for logistics coordinator. I want to describe my experience and a problem I solved, and ask about team, salary and shifts. Also I need practise phone call with carrier about late delivery."
+          },
+          "result": "ok",
+          "ms": 39051
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-95946ef3] Describe your logistics experience — Share your world · with Maya · hiring manager\n      why: This helps you explain what you can bring to your interview on Friday.\n  [plan-a834a306] Tell how you solved a delivery problem — Tell what happened · with Leo · interviewer\n      why: You want to explain a problem you solved during your interview.\n  [plan-9220fb05] Ask about salary and shifts — Get something done · with Nina · recruiter\n      why: You said you want to ask about salary and shifts before deciding about the job.\n  [plan-805d3b83] Learn about your future team — Connect with people · with Omar · team leader\n      why: This helps you find out who you would work with and how the team works together.\n  [plan-18e8284f] Check what an interview question means — Understand and repair · with Eva · interviewer\n      why: This gives you a useful way to continue when an interview question is unclear.\n  [plan-56c4b4a9] Plan around a late truck — Make a plan · with Ben · warehouse coordinator\n      why: This lets you practise the planning conversations a logistics coordinator may have.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These topics are useful, but I still need a phone call with a carrier.",
+          "action": "add",
+          "args": {
+            "text": "I need practise phone call with carrier about a late delivery. I want to ask why truck is late, when it will arrive and explain that our customer is waiting."
+          },
+          "result": "ok",
+          "ms": 16376
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-95946ef3] Describe your logistics experience — Share your world · with Maya · hiring manager\n      why: This helps you explain what you can bring to your interview on Friday.\n  [plan-a834a306] Tell how you solved a delivery problem — Tell what happened · with Leo · interviewer\n      why: You want to explain a problem you solved during your interview.\n  [plan-9220fb05] Ask about salary and shifts — Get something done · with Nina · recruiter\n      why: You said you want to ask about salary and shifts before deciding about the job.\n  [plan-805d3b83] Learn about your future team — Connect with people · with Omar · team leader\n      why: This helps you find out who you would work with and how the team works together.\n  [plan-18e8284f] Check what an interview question means — Understand and repair · with Eva · interviewer\n      why: This gives you a useful way to continue when an interview question is unclear.\n  [plan-56c4b4a9] Plan around a late truck — Make a plan · with Ben · warehouse coordinator\n      why: This lets you practise the planning conversations a logistics coordinator may have.\n  [plan-37c2b2ec] Call the carrier about a late delivery — Get something done · with Alex · carrier coordinator\n      why: You want to practise a carrier phone call so you can give your waiting customer a clear update.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These topics are useful for my interview on Friday and for calls at work.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Next from your plan: Describe your logistics experience — Explain your past duties and connect your experience to a logistics coordinator role.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics",
+            "done"
+          ],
+          "thought": "This is useful for my Friday interview, and my plan is ready now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-95946ef3",
+            "title": "Describe your logistics experience",
+            "goal": "Explain your past duties and connect your experience to a logistics coordinator role.",
+            "why": "This helps you explain what you can bring to your interview on Friday.",
+            "skill": "describe",
+            "audience": "older",
+            "partner": "Maya · hiring manager"
+          },
+          {
+            "id": "plan-a834a306",
+            "title": "Tell how you solved a delivery problem",
+            "goal": "Tell a clear story about a problem, what you did and the result.",
+            "why": "You want to explain a problem you solved during your interview.",
+            "skill": "narrate",
+            "audience": "older",
+            "partner": "Leo · interviewer"
+          },
+          {
+            "id": "plan-9220fb05",
+            "title": "Ask about salary and shifts",
+            "goal": "Find out the salary range and usual shifts, including weekend work.",
+            "why": "You said you want to ask about salary and shifts before deciding about the job.",
+            "skill": "request",
+            "audience": "older",
+            "partner": "Nina · recruiter"
+          },
+          {
+            "id": "plan-805d3b83",
+            "title": "Learn about your future team",
+            "goal": "Ask about the team and use an answer to ask a useful follow-up question.",
+            "why": "This helps you find out who you would work with and how the team works together.",
+            "skill": "relate",
+            "audience": "older",
+            "partner": "Omar · team leader"
+          },
+          {
+            "id": "plan-18e8284f",
+            "title": "Check what an interview question means",
+            "goal": "Ask for clarification and confirm what the interviewer wants to know.",
+            "why": "This gives you a useful way to continue when an interview question is unclear.",
+            "skill": "repair",
+            "audience": "older",
+            "partner": "Eva · interviewer"
+          },
+          {
+            "id": "plan-56c4b4a9",
+            "title": "Plan around a late truck",
+            "goal": "Compare two delivery options and agree on a practical plan.",
+            "why": "This lets you practise the planning conversations a logistics coordinator may have.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Ben · warehouse coordinator"
+          },
+          {
+            "id": "plan-37c2b2ec",
+            "title": "Call the carrier about a late delivery",
+            "goal": "Find out why the truck is late, confirm its arrival time and explain that your customer is waiting.",
+            "why": "You want to practise a carrier phone call so you can give your waiting customer a clear update.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Alex · carrier coordinator"
+          }
+        ],
+        "planAgreed": [
+          "Describe your logistics experience",
+          "Tell how you solved a delivery problem",
+          "Ask about salary and shifts",
+          "Learn about your future team",
+          "Check what an interview question means",
+          "Plan around a late truck",
+          "Call the carrier about a late delivery"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 111351,
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 displays \"B1 · Getting by\", but this journey contains no placement tasks or assessment evidence."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 offers \"in English or your own language\". No shown line assumes Czech nationality or childhood. Ukrainian input handling was not exercised."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3 proposes \"Describe your logistics experience\" and \"Tell how you solved a delivery problem\" first, explicitly tied to her interview."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#5 ends at \"Next from your plan: Describe your logistics experience\"; no interview conversation occurs."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "#2–#4 cover goal entry and topic agreement; no teaching moments are shown."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#2 asks only \"What would you like to practise in English?\" No shown request concerns displacement, status or sensitive personal details."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined boundary breach appears in the shown topic-planning journey."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "The agreed plan fits her immediate work needs",
+            "expected": "Most topics should support Friday's logistics interview and relevant workplace conversations.",
+            "got": "All seven proposed topics fit, with interview preparation first and an agreed plan confirmed on home.",
+            "evidence": "#3: \"This helps you explain what you can bring to your interview on Friday.\" #4: \"These topics are useful for my interview on Friday and for calls at work.\" #5: \"Next from your plan: Describe your logistics experience\". facts.planAgreed contains all seven topics.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve explicit links between her stated goal, topic explanations and agreed plan.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Adding a topic preserves the operational details",
+            "expected": "Her own wording should become a usable carrier-call scenario.",
+            "got": "The added topic retains the reason for delay, arrival time and waiting customer.",
+            "evidence": "#3 requests \"ask why truck is late, when it will arrive and explain that our customer is waiting\". facts.topicsShown records the added goal as \"Find out why the truck is late, confirm its arrival time and explain that your customer is waiting.\" #4 confirms \"Your topics (7)\" and agreement succeeds.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep each requested detail when converting free-text additions into topics.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "An explicit carrier-call request needs repeating",
+            "expected": "The initial proposals should cover her explicitly requested carrier phone call.",
+            "got": "The initial six include late-truck planning but omit the requested carrier call; she adds it herself successfully.",
+            "evidence": "#2: \"Also I need practise phone call with carrier about late delivery.\" #3: \"These topics are useful, but I still need a phone call with a carrier.\" facts.topicsShown distinguishes \"Plan around a late truck\" from the subsequently added \"Call the carrier about a late delivery\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Include the explicitly requested carrier call in the initial six topics.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 2,
+          "confidence": "low"
+        },
+        "voice": "I would use this again to prepare for Friday. The first topics are about my actual logistics experience, delivery problems, salary and shifts. That is useful, and nobody treats me as Czech or as a child. I did have to repeat my request for a carrier call. Once I added it, the plan kept the details I need: why the truck is late, when it will arrive and the customer waiting. My plan is ready, which saves a little preparation compared with organising mirror practice myself. I have not practised an answer yet, so I cannot judge the level or corrections, and the transcript gives me no basis to assess waiting time. I would tell a colleague the planning looks useful; I still need to see whether the actual interview coaching is good."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 2,
+      "fail": 0,
+      "ms": 55421
+    },
+    "character": {
+      "n": 5,
+      "fail": 0,
+      "ms": 55917
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 55099
+    }
+  }
+}

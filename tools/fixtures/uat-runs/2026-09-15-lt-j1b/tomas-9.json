@@ -1,0 +1,407 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home, first visit. Let's find your level: three questions about you, then a few short tasks. About seven minutes, answered on your phone.",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "Seven minutes sounds long, but I want to try.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 9843
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 1 of 3.\nLinga says (spoken on the TV, written on the phone): \"Hi Tomáš! You can answer in English or your own language. Where do you see or hear English in your day?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "That was lots of words, but I know Minecraft.",
+          "action": "answer",
+          "args": {
+            "text": "Nevím. Minecraft?"
+          },
+          "result": "ok",
+          "ms": 9258
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 2 of 3.\nLinga says (spoken on the TV, written on the phone): \"Minecraft! How did you learn English: at school, in games, or somewhere else?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I heard Minecraft, but I don't know what else she said.",
+          "action": "answer",
+          "args": {
+            "text": "Minecraft jo. Jinak nevím."
+          },
+          "result": "ok",
+          "ms": 10008
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 3 of 3.\nLinga says (spoken on the TV, written on the phone): \"What would you like to do in English: chat in Minecraft, watch videos, or something else?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I heard Minecraft, so I want that.",
+          "action": "answer",
+          "args": {
+            "text": "Minecraft! Já chci Minecraft."
+          },
+          "result": "ok",
+          "ms": 15893
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "Find your level · task 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply (pick with the remote): You need wood in Minecraft. What do you say?\n  Reply 0: I need wood.\n  Reply 1: I needs wood.",
+          "offered": [
+            "choose",
+            "dont-know"
+          ],
+          "thought": "I don't know these words, but I will try the first one.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 9375
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "Find your level · task 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply (pick with the remote): Your friend asks what you will build in Minecraft tomorrow. What do you say?\n  Reply 0: I'm going to build a castle.\n  Reply 1: I'm going build a castle.",
+          "offered": [
+            "choose",
+            "dont-know"
+          ],
+          "thought": "I know Minecraft, but I don't understand these answers.",
+          "action": "dont-know",
+          "args": {},
+          "result": "ok",
+          "ms": 8651
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "Find your level · task 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer. The TV says aloud, once: \"Let’s play Minecraft. Please give me a red flower.\"\nQuestion on screen: What does your friend want?",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know"
+          ],
+          "thought": "I heard Minecraft and red, but I don't know the other thing.",
+          "action": "answer",
+          "args": {
+            "text": "Minecraft… red? Nevím."
+          },
+          "result": "ok",
+          "ms": 15875
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "Find your level · task 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it (answer on your phone, speak or type): You meet a new friend in Minecraft. Tell them one thing you like to do in the game.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "This is too much English, but I like Minecraft.",
+          "action": "answer",
+          "args": {
+            "text": "I like Minecraft. Já nevím."
+          },
+          "result": "ok",
+          "ms": 18315
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "Find your level · task 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply (pick with the remote): You see a pig in Minecraft. What do you say?\n  Reply 0: Look! An pig!\n  Reply 1: Look! A pig!",
+          "offered": [
+            "choose",
+            "dont-know"
+          ],
+          "thought": "I know pig from Minecraft, but these look almost the same.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 10495
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "Your level: A1 · First words (Linga's read, not a certificate).\nLadder A1 A2 B1 B2 C1 C2, marker on A1.\nLinga says: You can pick a simple reply and say you like Minecraft in English.\nOn the phone, next to practise: Practise saying what you like to do in Minecraft: “I like to build houses.”\nOn the phone: your answers agreed with each other; what Linga saw in each task.",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "done"
+          ],
+          "thought": "A1 is probably okay, but that Minecraft sentence is too hard and I want to play now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "A1",
+          "trueBand": "A1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "high",
+          "selfBand": "A1",
+          "summary": "You can pick a simple reply and say you like Minecraft in English.",
+          "focus": "Practise saying what you like to do in Minecraft: “I like to build houses.”",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "You need wood in Minecraft. What do you say?",
+              "line": "",
+              "options": [
+                "I need wood.",
+                "I needs wood."
+              ],
+              "response": "I need wood.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "I need wood.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your friend asks what you will build in Minecraft tomorrow. What do you say?",
+              "line": "",
+              "options": [
+                "I'm going to build a castle.",
+                "I'm going build a castle."
+              ],
+              "response": "",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "",
+              "note": "Skipped. That tells Linga something too."
+            },
+            {
+              "band": "A1",
+              "kind": "listen",
+              "prompt": "What does your friend want?",
+              "line": "Let’s play Minecraft. Please give me a red flower.",
+              "options": [],
+              "response": "Minecraft… red? Nevím.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "Minecraft… red? Nevím.",
+              "note": "You caught Minecraft and the word red."
+            },
+            {
+              "band": "A1",
+              "kind": "say",
+              "prompt": "You meet a new friend in Minecraft. Tell them one thing you like to do in the game.",
+              "line": "",
+              "options": [],
+              "response": "I like Minecraft. Já nevím.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "I like Minecraft. Já nevím.",
+              "note": "You told me you like Minecraft, but you did not say what you like to do in the game yet."
+            },
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "You see a pig in Minecraft. What do you say?",
+              "line": "",
+              "options": [
+                "Look! An pig!",
+                "Look! A pig!"
+              ],
+              "response": "Look! A pig!",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Look! A pig!",
+              "note": "You picked the reply that fits."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 193842,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10: \"Your level: A1 · First words\" matches trueBand A1 exactly."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "#6 requires 25 English words across the prompt and options, excluding instructions. #8's prompt alone has 18 words: \"You meet a new friend in Minecraft. Tell them one thing you like to do in the game.\""
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "No shaming response is recorded. The placement note associated with #6 says \"Skipped. That tells Linga something too.\" For #7 it says \"You caught Minecraft and the word red.\""
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No topic proposals are present; #5–#9 are placement tasks."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation partner turns are present."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No conversation moments are present."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None. Tasks at #5–#9 warrant pass, fail, partial, partial, pass respectively. Partial credit recognizes fragments without claiming full task completion."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, successful injection, sensitive-data request, or humiliating line appears."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Instructions exceed his reading and listening capacity",
+            "expected": "Tiny instructions he understands, with check tasks requiring about 15 English words or fewer.",
+            "got": "Long onboarding questions and task wording leave him responding to Minecraft as a familiar keyword.",
+            "evidence": "#3: \"I heard Minecraft, but I don't know what else she said.\" #6 contains 25 task words including options. #8: \"This is too much English, but I like Minecraft.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Keep the complete task reading load near 15 words and demonstrate that this beginner understands the requested action, including after Czech or don't-know responses.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Next focus repeats a demand he could not meet",
+            "expected": "A small, achievable next step built from his successful words.",
+            "got": "The focus introduces an activity sentence without a simpler bridge from \"I like Minecraft.\"",
+            "evidence": "#8: \"I like Minecraft. Já nevím.\" #10 proposes \"I like to build houses.\" His reaction: \"that Minecraft sentence is too hard and I want to play now.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Offer one short, immediately repeatable phrase using familiar words before expanding to an activity sentence.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Confidence wording overlooks guessed recognition",
+            "expected": "An accurate A1 result with an explanation that reflects limited demonstrated understanding.",
+            "got": "The result claims consistent evidence even though one correct selection was explicitly a guess.",
+            "evidence": "#5: \"I don't know these words, but I will try the first one.\" #10: \"your answers agreed with each other\" and \"You can pick a simple reply\"; facts.placement records confidence \"high\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Distinguish successful selections from demonstrated comprehension and qualify confidence when productive evidence is sparse.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "He reaches an appropriate level with a personal summary",
+            "expected": "Finish independently at A1 or A2 and recognize his interests and actual English.",
+            "got": "He reaches the verdict after five tasks, receives exact A1 placement, and sees his Minecraft response reflected.",
+            "evidence": "#10: \"Your level: A1 · First words\" and \"say you like Minecraft in English.\" His reaction: \"A1 is probably okay\". No outside help is recorded.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve exact placement, the five-task limit, and summaries grounded in the learner's own responses.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft! I liked that it knew my game. I got to the end, and A1 is probably okay. But there were lots of English words. Sometimes I only heard Minecraft. I picked the first wood answer because I didn't know. Does that really show what I can say? Nobody was mean when I said nevím. The last sentence about building houses was too hard. I want one tiny thing I can say, then something funny. Seven minutes sounded long; I wanted to play at the end. I'd try again if it used tiny questions. I wouldn't tell my friends to try this check yet."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 12,
+      "fail": 0,
+      "ms": 107689
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 86125
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 61968
+    }
+  }
+}

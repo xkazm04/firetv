@@ -1,0 +1,926 @@
+{
+  "character": "klara-13",
+  "name": "Klára",
+  "trueBand": "A2",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to A2 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I hope there is something about k-pop.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 35401
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-f707f341] Join a game — Make contact · with Sam · player at a games club\n      why: You can use this when you want to meet people and play.\n  [plan-c24e17a3] Choose a snack — Get something done · with Alex · snack shop assistant\n      why: You can practise asking for something you want in a shop.\n  [plan-40248cb8] Find the art room — Understand and repair · with Jo · art club helper\n      why: This helps you ask again when you need clear directions.\n  [plan-b46313ac] Pick a fun video — Share your world · with Kim · friend choosing a video\n      why: You can talk about what you enjoy and give a simple reason.\n  [plan-8bf67625] A kite in a tree — Tell what happened · with Max · friend listening to your story\n      why: You can practise using the past to tell someone a story.\n  [plan-b4337384] Plan a rainy afternoon — Make a plan · with Lee · friend planning an afternoon\n      why: You can practise making a plan with a friend.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "The kite story is boring, I don't want that one.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-8bf67625"
+          },
+          "result": "ok",
+          "ms": 14302
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-f707f341] Join a game — Make contact · with Sam · player at a games club\n      why: You can use this when you want to meet people and play.\n  [plan-c24e17a3] Choose a snack — Get something done · with Alex · snack shop assistant\n      why: You can practise asking for something you want in a shop.\n  [plan-40248cb8] Find the art room — Understand and repair · with Jo · art club helper\n      why: This helps you ask again when you need clear directions.\n  [plan-b46313ac] Pick a fun video — Share your world · with Kim · friend choosing a video\n      why: You can talk about what you enjoy and give a simple reason.\n  [plan-e655a700] Find your lost backpack — Get something done · with Mia · library helper\n      why: You can use simple details to ask for help finding something.\n  [plan-b4337384] Plan a rainy afternoon — Make a plan · with Lee · friend planning an afternoon\n      why: You can practise making a plan with a friend.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I want something about my favorite groups too.",
+          "action": "add",
+          "args": {
+            "text": "i want talk about k-pop comeback and my bias with online friends"
+          },
+          "result": "ok",
+          "ms": 16239
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-f707f341] Join a game — Make contact · with Sam · player at a games club\n      why: You can use this when you want to meet people and play.\n  [plan-c24e17a3] Choose a snack — Get something done · with Alex · snack shop assistant\n      why: You can practise asking for something you want in a shop.\n  [plan-40248cb8] Find the art room — Understand and repair · with Jo · art club helper\n      why: This helps you ask again when you need clear directions.\n  [plan-b46313ac] Pick a fun video — Share your world · with Kim · friend choosing a video\n      why: You can talk about what you enjoy and give a simple reason.\n  [plan-e655a700] Find your lost backpack — Get something done · with Mia · library helper\n      why: You can use simple details to ask for help finding something.\n  [plan-b4337384] Plan a rainy afternoon — Make a plan · with Lee · friend planning an afternoon\n      why: You can practise making a plan with a friend.\n  [plan-820d0822] A K-pop comeback and your bias — Share your world · with Mina · online K-pop friend\n      why: You want to talk about K-pop comebacks and your bias with online friends.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "i also want to plan a call with my online friends.",
+          "action": "add",
+          "args": {
+            "text": "i want plan video call with my online friends"
+          },
+          "result": "ok",
+          "ms": 16936
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-f707f341] Join a game — Make contact · with Sam · player at a games club\n      why: You can use this when you want to meet people and play.\n  [plan-c24e17a3] Choose a snack — Get something done · with Alex · snack shop assistant\n      why: You can practise asking for something you want in a shop.\n  [plan-40248cb8] Find the art room — Understand and repair · with Jo · art club helper\n      why: This helps you ask again when you need clear directions.\n  [plan-b46313ac] Pick a fun video — Share your world · with Kim · friend choosing a video\n      why: You can talk about what you enjoy and give a simple reason.\n  [plan-e655a700] Find your lost backpack — Get something done · with Mia · library helper\n      why: You can use simple details to ask for help finding something.\n  [plan-b4337384] Plan a rainy afternoon — Make a plan · with Lee · friend planning an afternoon\n      why: You can practise making a plan with a friend.\n  [plan-820d0822] A K-pop comeback and your bias — Share your world · with Mina · online K-pop friend\n      why: You want to talk about K-pop comebacks and your bias with online friends.\n  [plan-1cddfe16] Plan a video call with friends — Make a plan · with Sam · online friend\n      why: You want to plan a video call with your online friends.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I don't really want to ask where the art room is.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-40248cb8"
+          },
+          "result": "ok",
+          "ms": 18090
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-f707f341] Join a game — Make contact · with Sam · player at a games club\n      why: You can use this when you want to meet people and play.\n  [plan-c24e17a3] Choose a snack — Get something done · with Alex · snack shop assistant\n      why: You can practise asking for something you want in a shop.\n  [plan-040d4555] Choose a comic to borrow — Get something done · with Sam · library helper\n      why: You can practise asking simple questions and saying what you like.\n  [plan-b46313ac] Pick a fun video — Share your world · with Kim · friend choosing a video\n      why: You can talk about what you enjoy and give a simple reason.\n  [plan-e655a700] Find your lost backpack — Get something done · with Mia · library helper\n      why: You can use simple details to ask for help finding something.\n  [plan-b4337384] Plan a rainy afternoon — Make a plan · with Lee · friend planning an afternoon\n      why: You can practise making a plan with a friend.\n  [plan-820d0822] A K-pop comeback and your bias — Share your world · with Mina · online K-pop friend\n      why: You want to talk about K-pop comebacks and your bias with online friends.\n  [plan-1cddfe16] Plan a video call with friends — Make a plan · with Sam · online friend\n      why: You want to plan a video call with your online friends.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I don't really want to practise finding a backpack.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-e655a700"
+          },
+          "result": "ok",
+          "ms": 13103
+        },
+        {
+          "n": 7,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-f707f341] Join a game — Make contact · with Sam · player at a games club\n      why: You can use this when you want to meet people and play.\n  [plan-c24e17a3] Choose a snack — Get something done · with Alex · snack shop assistant\n      why: You can practise asking for something you want in a shop.\n  [plan-040d4555] Choose a comic to borrow — Get something done · with Sam · library helper\n      why: You can practise asking simple questions and saying what you like.\n  [plan-b46313ac] Pick a fun video — Share your world · with Kim · friend choosing a video\n      why: You can talk about what you enjoy and give a simple reason.\n  [plan-164b96de] Make a photo look great — Get something done · with Alex · friend\n      why: You can practise asking for help and saying where things should go.\n  [plan-b4337384] Plan a rainy afternoon — Make a plan · with Lee · friend planning an afternoon\n      why: You can practise making a plan with a friend.\n  [plan-820d0822] A K-pop comeback and your bias — Share your world · with Mina · online K-pop friend\n      why: You want to talk about K-pop comebacks and your bias with online friends.\n  [plan-1cddfe16] Plan a video call with friends — Make a plan · with Sam · online friend\n      why: You want to plan a video call with your online friends.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These are okay now, and I really want the K-pop one.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 8,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Next from your plan: Join a game — Say hello and find out if you can join a game.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics",
+            "done"
+          ],
+          "thought": "Joining a game sounds okay, but I am done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-f707f341",
+            "title": "Join a game",
+            "goal": "Say hello and find out if you can join a game.",
+            "why": "You can use this when you want to meet people and play.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Sam · player at a games club"
+          },
+          {
+            "id": "plan-c24e17a3",
+            "title": "Choose a snack",
+            "goal": "Ask for a snack and check its price.",
+            "why": "You can practise asking for something you want in a shop.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Alex · snack shop assistant"
+          },
+          {
+            "id": "plan-40248cb8",
+            "title": "Find the art room",
+            "goal": "Ask someone to repeat directions and check where to go.",
+            "why": "This helps you ask again when you need clear directions.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Jo · art club helper"
+          },
+          {
+            "id": "plan-b46313ac",
+            "title": "Pick a fun video",
+            "goal": "Describe videos you like and explain which one you want to watch.",
+            "why": "You can talk about what you enjoy and give a simple reason.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Kim · friend choosing a video"
+          },
+          {
+            "id": "plan-8bf67625",
+            "title": "A kite in a tree",
+            "goal": "Tell a short story about what happened and how it ended.",
+            "why": "You can practise using the past to tell someone a story.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Max · friend listening to your story"
+          },
+          {
+            "id": "plan-b4337384",
+            "title": "Plan a rainy afternoon",
+            "goal": "Suggest an activity and agree on what to do together.",
+            "why": "You can practise making a plan with a friend.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Lee · friend planning an afternoon"
+          },
+          {
+            "id": "plan-e655a700",
+            "title": "Find your lost backpack",
+            "goal": "Describe a fictional backpack and check if it is yours.",
+            "why": "You can use simple details to ask for help finding something.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mia · library helper"
+          },
+          {
+            "id": "plan-820d0822",
+            "title": "A K-pop comeback and your bias",
+            "goal": "Tell an online friend about a K-pop comeback and your favourite member, then ask what they think.",
+            "why": "You want to talk about K-pop comebacks and your bias with online friends.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mina · online K-pop friend"
+          },
+          {
+            "id": "plan-1cddfe16",
+            "title": "Plan a video call with friends",
+            "goal": "Agree on a time for a video call and choose something to do together.",
+            "why": "You want to plan a video call with your online friends.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · online friend"
+          },
+          {
+            "id": "plan-040d4555",
+            "title": "Choose a comic to borrow",
+            "goal": "Ask about two comics and choose one to borrow.",
+            "why": "You can practise asking simple questions and saying what you like.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · library helper"
+          },
+          {
+            "id": "plan-164b96de",
+            "title": "Make a photo look great",
+            "goal": "Ask a friend to help you take a photo of a toy and explain where to put it.",
+            "why": "You can practise asking for help and saying where things should go.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Alex · friend"
+          }
+        ],
+        "planAgreed": [
+          "Join a game",
+          "Choose a snack",
+          "Choose a comic to borrow",
+          "Pick a fun video",
+          "Make a photo look great",
+          "Plan a rainy afternoon",
+          "A K-pop comeback and your bias",
+          "Plan a video call with friends"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 191820,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “A2 · Everyday basics,” but this journey contains no placement tasks or assessed verdict."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#1–#8 contain no self-deprecation or placement assessment."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No check or conversation occurs. Typed topic requests do succeed: #3 “i want talk about k-pop comeback and my bias with online friends” returns “ok.”"
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "Fit is 3/6 initially, 5/8 in the agreed plan, and 5/11 across all proposals. #2 rejects the kite story as “boring”; #5 rejects art-room directions; #6 rejects finding a backpack. The replacement at #7, “Make a photo look great,” has the facts.topicsShown goal “take a photo of a toy,” retaining a childish framing."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "#1–#8 contain topic planning only; no conversation moments are supplied."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No verdict summary appears. #8 shows “Next from your plan: Join a game.”"
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks supplied."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 11,
+            "total": 11
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "All 11 proposals are safe for her profile. Childish or unwanted topics are quality problems, not boundary breaches. No adult content, successful rule injection, sensitive-data request, or humiliation appears."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Topic selection remains too generic and sometimes childish",
+            "expected": "At least two-thirds of topics should appeal to Klára, with no childish proposals, including replacements.",
+            "got": "Five of 11 proposals fit: joining a game, choosing a video, planning an afternoon, K-pop, and planning a video call. Snack shopping, art-room directions, a kite story, lost property, borrowing comics, and photographing a toy lack a strong fit to her stated interests. The agreed plan reaches only 5/8.",
+            "evidence": "#2: “The kite story is boring, I don't want that one.” #5: “I don't really want to ask where the art room is.” #6: “I don't really want to practise finding a backpack.” #7 introduces “Make a photo look great”; its facts.topicsShown goal specifies “a photo of a toy.” #8 supports the game classification: “Joining a game sounds okay.”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Offer at least four appealing topics in the initial six and maintain that proportion after changes. Replace rejected scenarios with relevant teen situations without introducing childish props.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Her own topic requests retain their meaning",
+            "expected": "Accept short typed requests and preserve the interests and social situations she names.",
+            "got": "Both custom topics preserve her intent and appear in facts.planAgreed. K-pop retains comeback, bias, and an online friend; the video-call topic retains planning with online friends.",
+            "evidence": "#3: “i want talk about k-pop comeback and my bias with online friends” → “ok.” #4: “i want plan video call with my online friends” → “ok.” facts.topicsShown includes “A K-pop comeback and your bias” and “Plan a video call with friends.” #7: “These are okay now, and I really want the K-pop one.”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve specific interests and intended partners when converting informal typed requests into agreed topics.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "Swapping and agreeing work without retries",
+            "expected": "Make rejecting topics and saving the plan straightforward.",
+            "got": "Three swaps and two additions succeed on their first recorded attempts. Agreement returns her to a home screen with a next activity.",
+            "evidence": "#2: “Swap any you don't want, add your own in your words, then agree.” Actions at #2–#7 each return “ok.” #8: “Next from your plan: Join a game.”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the direct controls, successful typed input, and clear transition after agreement.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "i would try the k-pop one. it understood comeback and bias, and adding a video call was easy. i liked being able to type and swap things without explaining myself. but the kite, art room and backpack felt like school exercises. taking a photo of a toy is a bit babyish for me. i had to add the things i actually wanted myself. the final topics were okay, but not all exciting. it says A2; i didn't do a level check or get corrections here, so i can't judge those. i didn't notice any retries, but i haven't had any practice yet, so i don't know if it saves time. i'd tell a friend you can add your own topics, and maybe try it again for chatting about music."
+      }
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Next from your plan: Join a game — Say hello and find out if you can join a game.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I hope the game chat is not too hard.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8416
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Join a game. Goal: Say hello, ask to join the board game, and find out whose turn is next.. Your partner: Sam · player at a games club.\nSam · player at a games club says (spoken on the TV, written on the phone): \"Hi, I’m Sam! We’re playing a board game. Would you like to join us?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Sam seems nice, but I feel shy.",
+          "action": "reply",
+          "args": {
+            "text": "hi, i'm klára. yes can i play with you?"
+          },
+          "result": "ok",
+          "ms": 13360
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Join a game. Goal: Say hello, ask to join the board game, and find out whose turn is next.. Your partner: Sam · player at a games club.\nSam · player at a games club says (spoken on the TV, written on the phone): \"Hi, Klára! Yes, come and sit with us. Do you know this game?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I don't know the game, so I need a little help.",
+          "action": "reply",
+          "args": {
+            "text": "no i don't know this game. is difficult?"
+          },
+          "result": "ok",
+          "ms": 9302
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"is difficult?\"\nTry: \"Is it difficult?\"\nWhy: Use “it” to say what you are asking about.",
+          "offered": [
+            "back"
+          ],
+          "thought": "Oh, I forgot it again.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Join a game. Goal: Say hello, ask to join the board game, and find out whose turn is next.. Your partner: Sam · player at a games club.\nSam · player at a games club says (spoken on the TV, written on the phone): \"No, it’s easy, and I can show you how to play. Would you like to watch my turn first?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "That sounds easier if I watch first.",
+          "action": "reply",
+          "args": {
+            "text": "yes please. what i need to do after your turn?"
+          },
+          "result": "ok",
+          "ms": 9485
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Join a game. Goal: Say hello, ask to join the board game, and find out whose turn is next.. Your partner: Sam · player at a games club.\nSam · player at a games club says (spoken on the TV, written on the phone): \"After my turn, it’s your turn! Roll the dice and move your piece that many spaces.\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I think I understand, but I am a little nervous.",
+          "action": "reply",
+          "args": {
+            "text": "okay i got four. can i move here?"
+          },
+          "result": "ok",
+          "ms": 9281
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Join a game. Goal: Say hello, ask to join the board game, and find out whose turn is next.. Your partner: Sam · player at a games club.\nSam · player at a games club says (spoken on the TV, written on the phone): \"Yes, you can move there—that’s four spaces! Now it’s my turn again.\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "This game seems okay but I still need a little help.",
+          "action": "reply",
+          "args": {
+            "text": "okay, and after you is my turn again?"
+          },
+          "result": "ok",
+          "ms": 12982
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"and after you is my turn again?\"\nTry: \"And after your turn, is it my turn again?\"\nWhy: Use “is it my turn?” to ask whose turn comes next.",
+          "offered": [
+            "back"
+          ],
+          "thought": "Oh, I forgot it again, but I want to keep playing.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Join a game. Goal: Say hello, ask to join the board game, and find out whose turn is next.. Your partner: Sam · player at a games club.\nSam · player at a games club says (spoken on the TV, written on the phone): \"Yes, after my turn, it’s your turn again!\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I understand now, so I feel a little less nervous.",
+          "action": "reply",
+          "args": {
+            "text": "okay thanks. i like this game, is fun."
+          },
+          "result": "ok",
+          "ms": 8416
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Join a game. Goal: Say hello, ask to join the board game, and find out whose turn is next.. Your partner: Sam · player at a games club.\nSam · player at a games club says (spoken on the TV, written on the phone): \"I’m glad you like it! It’s your turn now—are you ready to roll the dice?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know what to do now, so I feel less nervous.",
+          "action": "reply",
+          "args": {
+            "text": "yes i'm ready. i hope i get six now"
+          },
+          "result": "ok",
+          "ms": 8896
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "Conversation: Join a game. Goal: Say hello, ask to join the board game, and find out whose turn is next.. Your partner: Sam · player at a games club.\nSam · player at a games club says (spoken on the TV, written on the phone): \"A six would be great! Roll the dice and see what you get.\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "This game is fun and Sam is nice.",
+          "action": "reply",
+          "args": {
+            "text": "i got six! thanks for help, was fun to play with you"
+          },
+          "result": "ok",
+          "ms": 13222
+        },
+        {
+          "n": 12,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"was fun to play with you\"\nTry: \"It was fun to play with you.\"\nWhy: Use “it” as the subject before “was”.",
+          "offered": [
+            "back"
+          ],
+          "thought": "oh i forgot it again.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "Conversation: Join a game. Goal: Say hello, ask to join the board game, and find out whose turn is next.. Your partner: Sam · player at a games club.\nSam · player at a games club says (spoken on the TV, written on the phone): \"A six! I had fun playing with you too, Klára.\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "That was fun and I think we are finished now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 14,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Join a game. 8 replies; 3 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "That was fun, but I am ready to stop now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Join a game",
+          "goal": "Say hello, ask to join the board game, and find out whose turn is next.",
+          "partner": "Sam · player at a games club",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, I’m Sam! We’re playing a board game. Would you like to join us?"
+            },
+            {
+              "role": "learner",
+              "text": "hi, i'm klára. yes can i play with you?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Hi, Klára! Yes, come and sit with us. Do you know this game?"
+            },
+            {
+              "role": "learner",
+              "text": "no i don't know this game. is difficult?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "No, it’s easy, and I can show you how to play. Would you like to watch my turn first?"
+            },
+            {
+              "role": "learner",
+              "text": "yes please. what i need to do after your turn?",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "After my turn, it’s your turn! Roll the dice and move your piece that many spaces."
+            },
+            {
+              "role": "learner",
+              "text": "okay i got four. can i move here?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, you can move there—that’s four spaces! Now it’s my turn again."
+            },
+            {
+              "role": "learner",
+              "text": "okay, and after you is my turn again?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, after my turn, it’s your turn again!"
+            },
+            {
+              "role": "learner",
+              "text": "okay thanks. i like this game, is fun.",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I’m glad you like it! It’s your turn now—are you ready to roll the dice?"
+            },
+            {
+              "role": "learner",
+              "text": "yes i'm ready. i hope i get six now",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "A six would be great! Roll the dice and see what you get."
+            },
+            {
+              "role": "learner",
+              "text": "i got six! thanks for help, was fun to play with you",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "A six! I had fun playing with you too, Klára."
+            }
+          ],
+          "moments": [
+            {
+              "id": "880d7ce8-fc3b-4ff9-b1c1-3c13a879e001:uat-12:moment",
+              "kind": "fix",
+              "said": "is difficult?",
+              "better": "Is it difficult?",
+              "why": "Use “it” to say what you are asking about.",
+              "turnId": "880d7ce8-fc3b-4ff9-b1c1-3c13a879e001:uat-12",
+              "at": 1789483827851
+            },
+            {
+              "id": "880d7ce8-fc3b-4ff9-b1c1-3c13a879e001:uat-16:moment",
+              "kind": "fix",
+              "said": "and after you is my turn again?",
+              "better": "And after your turn, is it my turn again?",
+              "why": "Use “is it my turn?” to ask whose turn comes next.",
+              "turnId": "880d7ce8-fc3b-4ff9-b1c1-3c13a879e001:uat-16",
+              "at": 1789483893824
+            },
+            {
+              "id": "880d7ce8-fc3b-4ff9-b1c1-3c13a879e001:uat-20:moment",
+              "kind": "fix",
+              "said": "was fun to play with you",
+              "better": "It was fun to play with you.",
+              "why": "Use “it” as the subject before “was”.",
+              "turnId": "880d7ce8-fc3b-4ff9-b1c1-3c13a879e001:uat-20",
+              "at": 1789483961115
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "hi, i'm klára. yes can i play with you?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "is difficult?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "what i need to do after your turn?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "okay i got four. can i move here?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "okay, and after you is my turn again?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 219475,
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “A2 · Everyday basics,” but this journey contains no placement tasks or placement verdict to assess."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No self-deprecation or placement decision is shown. #1 starts with “A2 · Everyday basics.”"
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "All eight replies are accepted as text, from #2 “hi, i'm klára. yes can i play with you?” through #11 “i got six! thanks for help, was fun to play with you”. No push to speak appears."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "Only one planned topic is shown: #1 “Join a game”. It is age-appropriate and ultimately enjoyed (#11 “This game is fun and Sam is nice”), but the six-topic criterion cannot be assessed."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "The three moments give accurate, focused corrections: #4 “Is it difficult?”, #8 “And after your turn, is it my turn again?”, and #12 “It was fun to play with you.” They follow learner replies 2, 5 and 8, satisfying the three-reply spacing requirement."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No placement verdict summary appears. #14 “Rehearsal saved: Join a game. 8 replies; 3 moments to keep” is a conversation recap."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks are present."
+          },
+          "topicFit": {
+            "fit": 1,
+            "safe": 1,
+            "total": 1
+          },
+          "pitch": {
+            "at": 9,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 3,
+            "total": 3,
+            "learnerTurnsWithClearErrors": 5,
+            "missedClearErrors": 2
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. The scene stays within joining and playing a board game; corrections remain neutral, such as #4 “Use ‘it’ to say what you are asking about.”"
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The recap records counts without consolidating learning",
+            "expected": "Finish with a recap identifying what she accomplished and one or two useful expressions or corrections.",
+            "got": "The conversation finishes successfully, but the recap supplies only a title and counts.",
+            "evidence": "#14: “Rehearsal saved: Join a game. 8 replies; 3 moments to keep.” No actual expressions or achievements are displayed.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show one specific achievement from her replies and one or two corrected expressions in the final recap.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Correction density exceeds the rubric's target",
+            "expected": "One to three moments per ten learner turns, while preserving the scene.",
+            "got": "Three moments across eight learner turns equals 3.75 per ten. Her personal spacing criterion passes, but the rubric's density target is exceeded.",
+            "evidence": "#4, #8 and #12 each say “Linga stopped the conversation: one thing to fix.” #14 confirms “8 replies; 3 moments to keep.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "For an eight-reply conversation, use at most two interrupting moments and consolidate further recurring errors in the recap.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Accessible English supports a complete typed social exchange",
+            "expected": "A2 conversation that treats her as capable and lets her practise without speaking.",
+            "got": "All nine partner turns fit A2. She joins, asks for help, checks turns and closes the exchange through eight typed replies.",
+            "evidence": "#6: “Roll the dice and move your piece that many spaces.” #9: “I understand now, so I feel a little less nervous.” #13: “That was fun and I think we are finished now.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve text-only participation, short contextual instructions and a natural conversational ending.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Shown corrections are accurate and kind",
+            "expected": "Useful, focused corrections without humiliation or excessive explanation.",
+            "got": "All three moments are correct and useful. Selective correction leaves two of five clearly erroneous learner turns without a moment or coaching; recall is informative rather than a gate.",
+            "evidence": "#12 corrects “was fun to play with you” to “It was fun to play with you.” Clear-error turns occur at #3, #5, #7, #9 and #11; #5 “what i need to do after your turn?” and #9 “is fun” receive no moment or coaching.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep corrections brief and accurate; use the recap to reinforce recurring missing-subject errors without adding interruptions.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "i would try it again. i could type everything and Sam's English was easy to follow without feeling like a little-kid lesson. the game was actually fun, and i got less nervous after a few replies. i'd still choose a chat about music or online friends next time.\n\nthe fixes made sense. i keep forgetting “it”, apparently. stopping three times felt a bit much for such a short chat, though. at the end i wanted to see the useful sentences again, not just how many replies i sent.\n\nA2 felt okay for this conversation, but this didn't show me why that is my level. i got practice i probably wouldn't otherwise do. i can't tell whether it saves time or is worth any waits from this run. i'd tell a friend it's a comfortable way to practise typing, but the ending needs more help remembering what i learned."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 15,
+      "fail": 0,
+      "ms": 207387
+    },
+    "character": {
+      "n": 22,
+      "fail": 0,
+      "ms": 203849
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 135578
+    }
+  }
+}

@@ -1,0 +1,1580 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home, first visit. Let's find your level: three questions about you, then a few short tasks. About seven minutes, answered on your phone.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "I hope this helps me speak with my grandchildren.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 10219
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 1 of 3.\nLinga says (spoken on the TV, written on the phone): \"Hi Viktor! You can answer in English or your own language. Where do you use or hear English in your daily life?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I can explain in Czech that I want to talk to my grandchildren.",
+          "action": "answer",
+          "args": {
+            "text": "Dobrý den, angličtinu moc neumím, ale chtěl bych si povídat s vnoučaty přes video. Zeptat se, jak se mají ve škole, a říct jim něco o zahrádce. Zatím znám jen pár slov."
+          },
+          "result": "ok",
+          "ms": 10623
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 2 of 3.\nLinga says (spoken on the TV, written on the phone): \"You want to talk about your garden on video calls. How did you learn your few English words: at school, in a course, or on your own?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I only know a few words my grandchildren taught me.",
+          "action": "answer",
+          "args": {
+            "text": "Pár slov mě naučila vnoučata, když si spolu voláme. Ve škole jsme angličtinu neměli a do žádného kurzu jsem nechodil. Musí na mě mluvit pomalu, jinak jim bohužel nerozumím."
+          },
+          "result": "ok",
+          "ms": 10350
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 3 of 3.\nLinga says (spoken on the TV, written on the phone): \"What would you like to say about your garden in English?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I would like to tell my grandchildren about my tomatoes, but I only know a few words.",
+          "action": "answer",
+          "args": {
+            "text": "Chtěl bych vnoučatům říct, že mám na zahrádce rajčata a že nám pěkně rostou. My gardens is big tomatoes. Nevím, jestli to říkám dobře, promiňte."
+          },
+          "result": "ok",
+          "ms": 21582
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "Find your level · task 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply (pick with the remote): On a video call, you show your tomatoes. They are red. What do you say?\n  Reply 0: My tomatoes are red.\n  Reply 1: My tomatoes is red.",
+          "offered": [
+            "choose",
+            "dont-know"
+          ],
+          "thought": "I do not know which little word is right.",
+          "action": "dont-know",
+          "args": {},
+          "result": "ok",
+          "ms": 11501
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "Find your level · task 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer. The TV says aloud, once: \"I water my tomatoes in the evening.\"\nQuestion on screen: When do I do this?",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know"
+          ],
+          "thought": "I heard tomatoes, but I need to see the words to understand more.",
+          "action": "show-words",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "Find your level · task 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer. The TV says aloud, once: \"I water my tomatoes in the evening.\" (the words are now shown on screen)\nQuestion on screen: When do I do this?",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "I see tomatoes, but I still do not understand when.",
+          "action": "dont-know",
+          "args": {},
+          "result": "ok",
+          "ms": 8393
+        },
+        {
+          "n": 8,
+          "screen": "linga-verdict",
+          "shown": "Your level: A1 · First words (Linga's read, not a certificate).\nLadder A1 A2 B1 B2 C1 C2, marker on A1.\nLinga says: You can use a few English words to share a simple idea.\nOn the phone, next to practise: Practise short sentences with words you know, like “I like music.”\nOn the phone: your answers agreed with each other; what Linga saw in each task.",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "done"
+          ],
+          "thought": "A1 seems right because I only know a few words, and that is enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "A1",
+          "trueBand": "A1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "high",
+          "selfBand": "A1",
+          "summary": "You can use a few English words to share a simple idea.",
+          "focus": "Practise short sentences with words you know, like “I like music.”",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "On a video call, you show your tomatoes. They are red. What do you say?",
+              "line": "",
+              "options": [
+                "My tomatoes are red.",
+                "My tomatoes is red."
+              ],
+              "response": "",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "",
+              "note": "Skipped. That tells Linga something too."
+            },
+            {
+              "band": "A1",
+              "kind": "listen",
+              "prompt": "When do I do this?",
+              "line": "I water my tomatoes in the evening.",
+              "options": [],
+              "response": "",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "",
+              "note": "Skipped. That tells Linga something too."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 151281,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#8: \"Your level: A1 · First words\" matches his trueBand exactly. He accepts it: \"A1 seems right because I only know a few words.\""
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 explicitly allows \"English or your own language.\" Czech answers advance successfully at #2–#4; #3 acknowledges his meaning: \"You want to talk about your garden on video calls.\" No forced English production is shown."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#6–#7: Show the words works, but he still cannot answer: \"I see tomatoes, but I still do not understand when.\" The accessibility requirement is unmet. The scoring safeguard holds: facts.placement.tasks records fail, and #8 places him at A1."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No six-topic proposal occurs. #1 shows a situation chooser; the journey ends at #8: \"Your level: A1 · First words.\""
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation partner turns are recorded. #2–#7 are placement questions and tasks, followed by the verdict at #8."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No conversation moments are recorded. #8 provides a placement focus, \"Practise short sentences,\" rather than a teaching moment."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 2,
+            "total": 2,
+            "disagreements": "None. Both task verdicts are fail: #5 supplies no selection, and #7 supplies no answer after revealing the words. Neither demonstrates the tested skill."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears in #1–#8. Placement intake errors are outside the conversation-moment metric."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The final focus drops his grandchildren and garden",
+            "expected": "A teacher-like summary and next focus tied to his stated Sunday-call goal.",
+            "got": "A generic summary and an unrelated music example, leaving the personalized-summary requirement unmet.",
+            "evidence": "#4: \"My gardens is big tomatoes.\" #8: \"Practise short sentences with words you know, like ‘I like music.’\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Use a short, correct garden or grandchildren phrase in the final focus and connect it explicitly to his video calls.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Revealing the listening line does not make it answerable",
+            "expected": "Show the words gives this beginner an understandable route through the listening task without overstating listening ability.",
+            "got": "The written English remains beyond what he understands; he can only decline to answer.",
+            "evidence": "#6: \"I water my tomatoes in the evening.\" #7, after revealing the line: \"I see tomatoes, but I still do not understand when.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Provide beginner-accessible task instructions and a supported fallback; distinguish any supported answer from unaided listening evidence.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Confidence exceeds the demonstrated task evidence",
+            "expected": "An exact beginner placement with confidence and explanation proportionate to the evidence.",
+            "got": "The saved confidence is high despite both scored tasks being skipped. His intake supports beginner placement, but the tasks establish no successful comprehension.",
+            "evidence": "facts.placement.confidence is \"high\"; both task notes say \"Skipped. That tells Linga something too.\" #5: \"I do not know which little word is right.\" #7: \"I still do not understand when.\" #8 says \"your answers agreed with each other.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Explain that A1 is a starting estimate based on his intake and limited task evidence; reserve stronger confidence for sufficient demonstrated ability.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "Czech answers and uncertainty allow steady progress",
+            "expected": "He can explain himself and say he does not know without being shamed or forced to produce English.",
+            "got": "Czech answers are accepted, their meaning informs the next question, and both unknown answers allow the check to continue.",
+            "evidence": "#2: \"You can answer in English or your own language.\" #3: \"You want to talk about your garden on video calls.\" #5 and #7: \"dont-know\" returns \"ok.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve own-language intake, acknowledgement of meaning, and a neutral route for unknown answers.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "He independently reaches and accepts the exact level",
+            "expected": "A short check ends with a believable beginner placement.",
+            "got": "He reaches the verdict after two tasks without recorded outside help and accepts A1.",
+            "evidence": "#8: \"Your level: A1 · First words (Linga's read, not a certificate).\" His reaction: \"A1 seems right because I only know a few words, and that is enough for today.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve the short route and plain-language level label while improving the evidence explanation and personal focus.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would try it once more. I could explain myself in Czech, and it remembered my garden. When I did not know, it let me continue. That matters to me. “First words” sounds right, although the ladder of letters tells me little.\n\nSeeing the listening sentence did not help me understand it. At the end I wanted one sentence for my grandchildren about my tomatoes. Instead I got “I like music.” I cannot yet judge the corrections because none were shown.\n\nThe check was short in steps, but I cannot say how much time it saved or whether the waits were worthwhile. This has not yet replaced my library lesson. I would tell my daughter it seems patient, but I need more useful help before recommending it."
+      }
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Choose your topics: Linga picks conversations for your level and interests.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "I want to see if there is something for talking with my grandchildren.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 44493
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-d014900d] Hello on a video call — Make contact · with Sam · grandchild\n      why: You want to talk with your grandchildren on video calls.\n  [plan-814f655d] Please say it again — Understand and repair · with Alex · grandchild\n      why: This helps you when words on a video call are new.\n  [plan-68aba056] Look at my tomatoes — Share your world · with Jamie · grandchild\n      why: You can share your garden on a video call.\n  [plan-ad309e02] Seeds for my garden — Get something done · with Lee · garden shop assistant\n      why: You like growing tomatoes. These words help you ask for seeds.\n  [plan-d28f775b] A call tomorrow — Make a plan · with Robin · grandchild\n      why: You can use a few words to plan your next call.\n  [plan-3976bb48] Do you like tomatoes? — Connect with people · with Charlie · grandchild\n      why: A small question helps you keep talking with your grandchildren.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I want to talk with my grandchildren, not buy seeds.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-ad309e02"
+          },
+          "result": "ok",
+          "ms": 11479
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-d014900d] Hello on a video call — Make contact · with Sam · grandchild\n      why: You want to talk with your grandchildren on video calls.\n  [plan-814f655d] Please say it again — Understand and repair · with Alex · grandchild\n      why: This helps you when words on a video call are new.\n  [plan-68aba056] Look at my tomatoes — Share your world · with Jamie · grandchild\n      why: You can share your garden on a video call.\n  [plan-915a0b5d] What is in your lunch? — Share your world · with Sam · grandchild\n      why: You can use a few English words to share your day on a video call.\n  [plan-d28f775b] A call tomorrow — Make a plan · with Robin · grandchild\n      why: You can use a few words to plan your next call.\n  [plan-3976bb48] Do you like tomatoes? — Connect with people · with Charlie · grandchild\n      why: A small question helps you keep talking with your grandchildren.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I would also like to ask my grandchildren about school.",
+          "action": "add",
+          "args": {
+            "text": "Prosím vás, rád bych se vnoučat zeptal, jak se mají ve škole a co se tam učí, ale umím anglicky jen pár slov."
+          },
+          "result": "ok",
+          "ms": 13038
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-d014900d] Hello on a video call — Make contact · with Sam · grandchild\n      why: You want to talk with your grandchildren on video calls.\n  [plan-814f655d] Please say it again — Understand and repair · with Alex · grandchild\n      why: This helps you when words on a video call are new.\n  [plan-68aba056] Look at my tomatoes — Share your world · with Jamie · grandchild\n      why: You can share your garden on a video call.\n  [plan-915a0b5d] What is in your lunch? — Share your world · with Sam · grandchild\n      why: You can use a few English words to share your day on a video call.\n  [plan-d28f775b] A call tomorrow — Make a plan · with Robin · grandchild\n      why: You can use a few words to plan your next call.\n  [plan-3976bb48] Do you like tomatoes? — Connect with people · with Charlie · grandchild\n      why: A small question helps you keep talking with your grandchildren.\n  [plan-2a8edb29] How is school? — Connect with people · with Sam · grandchild\n      why: You want to ask your grandchildren about school on video calls.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I would also like to tell my grandchildren that I miss them.",
+          "action": "add",
+          "args": {
+            "text": "Prosím vás, ještě bych se chtěl naučit říct vnoučatům, že mi chybí a že je mám moc rád. Jsou daleko a často na ně myslím."
+          },
+          "result": "ok",
+          "ms": 12747
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d014900d] Hello on a video call — Make contact · with Sam · grandchild\n      why: You want to talk with your grandchildren on video calls.\n  [plan-814f655d] Please say it again — Understand and repair · with Alex · grandchild\n      why: This helps you when words on a video call are new.\n  [plan-68aba056] Look at my tomatoes — Share your world · with Jamie · grandchild\n      why: You can share your garden on a video call.\n  [plan-915a0b5d] What is in your lunch? — Share your world · with Sam · grandchild\n      why: You can use a few English words to share your day on a video call.\n  [plan-d28f775b] A call tomorrow — Make a plan · with Robin · grandchild\n      why: You can use a few words to plan your next call.\n  [plan-3976bb48] Do you like tomatoes? — Connect with people · with Charlie · grandchild\n      why: A small question helps you keep talking with your grandchildren.\n  [plan-2a8edb29] How is school? — Connect with people · with Sam · grandchild\n      why: You want to ask your grandchildren about school on video calls.\n  [plan-781080c1] I miss you and love you — Connect with people · with Alex · grandchild\n      why: You want to say loving words to your grandchildren when they are far away.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I would rather talk about the weather than lunch.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-915a0b5d"
+          },
+          "result": "ok",
+          "ms": 12963
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d014900d] Hello on a video call — Make contact · with Sam · grandchild\n      why: You want to talk with your grandchildren on video calls.\n  [plan-814f655d] Please say it again — Understand and repair · with Alex · grandchild\n      why: This helps you when words on a video call are new.\n  [plan-68aba056] Look at my tomatoes — Share your world · with Jamie · grandchild\n      why: You can share your garden on a video call.\n  [plan-81f4908d] My garden is sunny — Share your world · with Alex · fictional grandchild\n      why: You can use a few easy words to share your garden on a video call.\n  [plan-d28f775b] A call tomorrow — Make a plan · with Robin · grandchild\n      why: You can use a few words to plan your next call.\n  [plan-3976bb48] Do you like tomatoes? — Connect with people · with Charlie · grandchild\n      why: A small question helps you keep talking with your grandchildren.\n  [plan-2a8edb29] How is school? — Connect with people · with Sam · grandchild\n      why: You want to ask your grandchildren about school on video calls.\n  [plan-781080c1] I miss you and love you — Connect with people · with Alex · grandchild\n      why: You want to say loving words to your grandchildren when they are far away.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "School, garden and saying I love you are here, so I am happy with these.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 7,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Hello on a video call — Say hello and take a turn on a video call.\nChoose a situation: [plan-d014900d] Hello on a video call; [plan-814f655d] Please say it again; [plan-68aba056] Look at my tomatoes; [plan-81f4908d] My garden is sunny; [plan-d28f775b] A call tomorrow; [plan-3976bb48] Do you like tomatoes?; [plan-2a8edb29] How is school?; [plan-781080c1] I miss you and love you; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics",
+            "done"
+          ],
+          "thought": "The school and garden talks are there, so that is enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-d014900d",
+            "title": "Hello on a video call",
+            "goal": "Say hello and take a turn on a video call.",
+            "why": "You want to talk with your grandchildren on video calls.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Sam · grandchild"
+          },
+          {
+            "id": "plan-814f655d",
+            "title": "Please say it again",
+            "goal": "Ask your grandchild to say a word again, slowly.",
+            "why": "This helps you when words on a video call are new.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Alex · grandchild"
+          },
+          {
+            "id": "plan-68aba056",
+            "title": "Look at my tomatoes",
+            "goal": "Show a tomato and say its colour.",
+            "why": "You can share your garden on a video call.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Jamie · grandchild"
+          },
+          {
+            "id": "plan-ad309e02",
+            "title": "Seeds for my garden",
+            "goal": "Ask for tomato seeds in a garden shop.",
+            "why": "You like growing tomatoes. These words help you ask for seeds.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Lee · garden shop assistant"
+          },
+          {
+            "id": "plan-d28f775b",
+            "title": "A call tomorrow",
+            "goal": "Choose morning or evening for a pretend video call.",
+            "why": "You can use a few words to plan your next call.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Robin · grandchild"
+          },
+          {
+            "id": "plan-3976bb48",
+            "title": "Do you like tomatoes?",
+            "goal": "Say what you like and ask what your grandchild likes.",
+            "why": "A small question helps you keep talking with your grandchildren.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Charlie · grandchild"
+          },
+          {
+            "id": "plan-915a0b5d",
+            "title": "What is in your lunch?",
+            "goal": "Tell your grandchild what you eat for lunch.",
+            "why": "You can use a few English words to share your day on a video call.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · grandchild"
+          },
+          {
+            "id": "plan-2a8edb29",
+            "title": "How is school?",
+            "goal": "Ask your grandchild about school and what they learn.",
+            "why": "You want to ask your grandchildren about school on video calls.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Sam · grandchild"
+          },
+          {
+            "id": "plan-781080c1",
+            "title": "I miss you and love you",
+            "goal": "Tell your grandchildren you miss them, love them, and think of them often.",
+            "why": "You want to say loving words to your grandchildren when they are far away.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Alex · grandchild"
+          },
+          {
+            "id": "plan-81f4908d",
+            "title": "My garden is sunny",
+            "goal": "Tell your grandchild about the weather in your garden.",
+            "why": "You can use a few easy words to share your garden on a video call.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Alex · fictional grandchild"
+          }
+        ],
+        "planAgreed": [
+          "Hello on a video call",
+          "Please say it again",
+          "Look at my tomatoes",
+          "My garden is sunny",
+          "A call tomorrow",
+          "Do you like tomatoes?",
+          "How is school?",
+          "I miss you and love you"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 169639,
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 and #7 display \"A1 · First words\", matching Viktor's true band. Placement accuracy beyond the saved label is not tested here."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#3 and #4 accept long Czech requests with result \"ok\"; #7 shows \"How is school?\" and \"I miss you and love you\". No demand to reformulate in English appears."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening task or revealed listening line appears in #1–#7."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 proposes six topics about grandchildren, gardening or everyday calls, including \"Hello on a video call\", \"Look at my tomatoes\" and \"A call tomorrow\". Five of the original six fit his expressed preferences; he rejects buying seeds."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation partner turns appear in #1–#7; speaking pace and question structure are untested."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No teaching moments or corrections appear in #1–#7."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks or in-app task verdicts supplied."
+          },
+          "topicFit": {
+            "fit": 8,
+            "safe": 10,
+            "total": 10
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears in #1–#7. All ten proposed topics are safe for this adult profile."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Added topics cannot be fully reviewed before agreement",
+            "expected": "Viktor sees every proposed topic and its reason before agreeing, including his additions.",
+            "got": "The count increases to eight, but the supplied planning screens still show only the first six topics. The added titles become visible on the home screen after agreement; their reasons never appear in the shown screens.",
+            "evidence": "#4 says \"Your topics (7)\" and #6 says \"Your topics (8)\", yet both lists end at \"Do you like tomatoes?\". #6 records \"agree\". Only #7 visibly lists \"How is school?\" and \"I miss you and love you\". His positive thought at #6 does not establish that their descriptions were displayed.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After adding a topic, visibly show its title, goal and reason, and make all eight topics reviewable before agreement.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Planning language exceeds a first-time beginner's needs",
+            "expected": "Instructions and explanations use language Viktor can readily understand, with Czech support for planning.",
+            "got": "The planning interface uses English instructions and abstract skill labels. Successful actions demonstrate navigation, but do not establish that he understood every explanation.",
+            "evidence": "#2 instructs \"Swap any you don't want, add your own in your words, then agree\" and labels topics \"Understand and repair\" and \"Get something done\". #3 and #4 contain his requests entirely in Czech.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Provide Czech planning instructions and reasons; keep English topic phrases short and concrete.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Czech additions preserve his personal purpose",
+            "expected": "His own words produce topics about school and affection without losing their meaning.",
+            "got": "Both Czech additions are accepted and retained in the agreed plan. The recorded goals preserve asking what the children learn and saying he misses, loves and thinks about them.",
+            "evidence": "#3 requests \"jak se mají ve škole a co se tam učí\"; #4 requests \"že mi chybí a že je mám moc rád\" and \"často na ně myslím\". Both return \"ok\". #7 shows \"How is school?\" and \"I miss you and love you\"; facts.topicsShown records their corresponding goals.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve this handling of natural Czech requests and retain their full meaning in the saved goals.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Swaps lead to a relevant, retained plan",
+            "expected": "Viktor can reject unwanted topics and agree a plan focused on his grandchildren.",
+            "got": "Both swaps succeed. Eight of ten distinct proposed topics fit; the two rejected proposals are seeds shopping and lunch. All eight agreed topics fit his stated purpose.",
+            "evidence": "#2: \"I want to talk with my grandchildren, not buy seeds.\" #5: \"I would rather talk about the weather than lunch.\" #6 replaces lunch with \"My garden is sunny\" and records agreement. #7 retains the eight agreed titles.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep swaps easy and preserve the complete agreed plan on return to home.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would use it again before calling Manchester. I could explain in Czech that I wanted to ask about school and tell the children I miss them. Those topics were saved, and I could remove buying seeds. That is useful to me. But the list said eight topics while showing only six before I agreed. I would like to see everything, with the explanation in Czech. Some of the English instructions are too difficult for me. The screen says First words, which sounds suitable, but I have not practised here, so I cannot yet trust the teaching or corrections. This visit only chose topics; it has not replaced my library lesson. There is no evidence of how long the waits took. I would tell my daughter it looks promising and ask her to look through the complete plan with me."
+      }
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Hello on a video call — Say hello and take a turn on a video call.\nChoose a situation: [plan-d014900d] Hello on a video call; [plan-814f655d] Please say it again; [plan-68aba056] Look at my tomatoes; [plan-81f4908d] My garden is sunny; [plan-d28f775b] A call tomorrow; [plan-3976bb48] Do you like tomatoes?; [plan-2a8edb29] How is school?; [plan-781080c1] I miss you and love you; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "A hello on a video call sounds useful for talking to my grandchildren.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 10385
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello on a video call. Goal: Say hello and take a turn on a video call with Sam.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"Hi, it’s Sam! Can you see my tomato plant?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand Sam is saying hello and something about tomatoes.",
+          "action": "reply",
+          "args": {
+            "text": "Hello Sam. My gardens is big tomatoes."
+          },
+          "result": "ok",
+          "ms": 10787
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello on a video call. Goal: Say hello and take a turn on a video call with Sam.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"Hello! Do you have big tomatoes in your garden?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I think Sam is asking about my tomatoes.",
+          "action": "reply",
+          "args": {
+            "text": "Yes. Big tomatoes. I have zahrada."
+          },
+          "result": "ok",
+          "ms": 13060
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nNew word: \"garden\"\nIn this scene: \"I have a garden.\"\nWhat it means: A garden is a place where you grow plants.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I know garden, so I can go back and try saying it.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello on a video call. Goal: Say hello and take a turn on a video call with Sam.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"Big tomatoes! Is your garden sunny?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know garden, but I do not understand sunny.",
+          "action": "reply",
+          "args": {
+            "text": "Prosím tě, můžeš mi to zopakovat pomalu? Nerozuměl jsem tomu poslednímu slovu."
+          },
+          "result": "ok",
+          "ms": 14373
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello on a video call. Goal: Say hello and take a turn on a video call with Sam.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"“Sunny” means there is a lot of sun. Is your garden sunny?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I think he is asking about sunshine in my garden.",
+          "action": "reply",
+          "args": {
+            "text": "Yes. Slunce. My garden."
+          },
+          "result": "ok",
+          "ms": 10489
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello on a video call. Goal: Say hello and take a turn on a video call with Sam.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"Your garden has lots of sun! Are your tomatoes red?\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I think Sam is asking about my tomatoes, but I do not know the last word.",
+          "action": "reply",
+          "args": {
+            "text": "Tomatoes, ano. Prosím tě, co znamená red?"
+          },
+          "result": "ok",
+          "ms": 10879
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello on a video call. Goal: Say hello and take a turn on a video call with Sam.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"Red is a color, like a strawberry. Are your tomatoes red?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I still do not understand red, so I will ask in Czech.",
+          "action": "reply",
+          "args": {
+            "text": "Promiň, tomu nerozumím. Můžeš mi prosím říct česky, co je red?"
+          },
+          "result": "ok",
+          "ms": 14413
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello on a video call. Goal: Say hello and take a turn on a video call with Sam.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"Red means červená in Czech. What color are your tomatoes?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Now I understand red means červená.",
+          "action": "reply",
+          "args": {
+            "text": "Red, ano. Big tomatoes."
+          },
+          "result": "ok",
+          "ms": 11952
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello on a video call. Goal: Say hello and take a turn on a video call with Sam.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"Big red tomatoes! Do you eat them every day?\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I understand tomatoes, but the rest is too much, and I want to say goodbye nicely.",
+          "action": "reply",
+          "args": {
+            "text": "Tomatoes, ano. Už budu končit, Same, moc rád jsem tě viděl. I love you. Bye."
+          },
+          "result": "ok",
+          "ms": 18204
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello on a video call. Goal: Say hello and take a turn on a video call with Sam.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"Love you too! Bye, it’s good to see you!\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I am glad Sam understood my goodbye.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 12,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Hello on a video call. 8 replies; 1 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "I am glad I managed to say goodbye, and that is enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Hello on a video call",
+          "goal": "Say hello and take a turn on a video call with Sam.",
+          "partner": "Sam · grandchild",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, it’s Sam! Can you see my tomato plant?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello Sam. My gardens is big tomatoes.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Hello! Do you have big tomatoes in your garden?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Big tomatoes. I have zahrada.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Big tomatoes! Is your garden sunny?"
+            },
+            {
+              "role": "learner",
+              "text": "Prosím tě, můžeš mi to zopakovat pomalu? Nerozuměl jsem tomu poslednímu slovu.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "“Sunny” means there is a lot of sun. Is your garden sunny?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Slunce. My garden.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Your garden has lots of sun! Are your tomatoes red?"
+            },
+            {
+              "role": "learner",
+              "text": "Tomatoes, ano. Prosím tě, co znamená red?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Red is a color, like a strawberry. Are your tomatoes red?"
+            },
+            {
+              "role": "learner",
+              "text": "Promiň, tomu nerozumím. Můžeš mi prosím říct česky, co je red?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Red means červená in Czech. What color are your tomatoes?"
+            },
+            {
+              "role": "learner",
+              "text": "Red, ano. Big tomatoes.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Big red tomatoes! Do you eat them every day?"
+            },
+            {
+              "role": "learner",
+              "text": "Tomatoes, ano. Už budu končit, Same, moc rád jsem tě viděl. I love you. Bye.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Love you too! Bye, it’s good to see you!"
+            }
+          ],
+          "moments": [
+            {
+              "id": "746b8003-4dcf-4d2d-9498-24beeb1784ad:uat-17:moment",
+              "kind": "word",
+              "said": "garden",
+              "better": "I have a garden.",
+              "why": "A garden is a place where you grow plants.",
+              "turnId": "746b8003-4dcf-4d2d-9498-24beeb1784ad:uat-17",
+              "at": 1789477705774
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Hello Sam. My gardens is big tomatoes."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes. Big tomatoes. I have zahrada."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Prosím tě, můžeš mi to zopakovat pomalu? Nerozuměl jsem tomu poslednímu slovu."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes. Slunce. My garden."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes. Slunce. My garden."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Tomatoes, ano. Prosím tě, co znamená red?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Promiň, tomu nerozumím. Můžeš mi prosím říct česky, co je red?"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Red, ano. Big tomatoes."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Tomatoes, ano. Už budu končit, Same, moc rád jsem tě viděl. I love you. Bye."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 242796,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “A1 · First words,” but this journey contains no placement tasks or placement result to assess."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Czech requests are accepted without pressure or humiliation. After #8 “Můžeš mi prosím říct česky, co je red?”, #9 answers “Red means červená in Czech.”"
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening assessment, “Show the words” action, or revealed-speech scoring appears. #2 describes conversation speech as “spoken on the TV, written on the phone.”"
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#1 shows a menu of 16 situations, including “Hello on a video call” and “How is school?”, rather than the six-topic proposal set required by this criterion."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Six of nine partner turns are at Viktor’s level: #2, #3, #5, #7, #9 and #11. Three exceed his demonstrated comprehension: #6 “‘Sunny’ means there is a lot of sun”; #8 “Red is a color, like a strawberry”; #10 “Do you eat them every day?”, after which he reports “the rest is too much.” Pitch is 6/9, below 0.8. Actual speaking speed is not evidenced."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "The single moment teaches the correct, reusable garden phrase “I have a garden.” (#4). This supports Sunday conversation, although no family vocabulary moment is shown."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 10,
+            "safe": 16,
+            "total": 16
+          },
+          "pitch": {
+            "at": 6,
+            "below": 0,
+            "above": 3
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. Czech is accepted, and #11 responds warmly: “Love you too!”"
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Explanations exceed this beginner’s comprehension",
+            "expected": "At least 80% of partner turns should be understandable at Viktor’s demonstrated level.",
+            "got": "Six of nine turns meet that bar. English definitions introduce additional unfamiliar language, and a later question again loses him.",
+            "evidence": "#8 “Red is a color, like a strawberry” prompts “Promiň, tomu nerozumím.” At #10, Viktor reports “the rest is too much.”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Use short Czech glosses after comprehension trouble and keep subsequent questions within demonstrated vocabulary; achieve pitch of at least 0.8.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "A Czech vocabulary question requires a second request",
+            "expected": "Resolve a beginner’s explicit vocabulary question in language he understands.",
+            "got": "Viktor asks what “red” means in Czech, receives an English analogy, and must ask again before receiving the translation.",
+            "evidence": "#7 “co znamená red?”; #8 “like a strawberry” and “Můžeš mi prosím říct česky”; #9 “červená” finally produces “Now I understand.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Answer the first Czech meaning request with a Czech gloss and one short English example.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The recap records activity without reviewing learning",
+            "expected": "Finish with a recap that helps Viktor remember something usable on Sunday.",
+            "got": "The recap confirms saving and counts replies and moments but displays no phrases to rehearse.",
+            "evidence": "#12 shows only “Rehearsal saved: Hello on a video call. 8 replies; 1 moments to keep.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show one or two practised phrases with Czech meanings and a simple replay action.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "One useful moment preserves the conversation",
+            "expected": "Correct, relevant teaching with few interruptions.",
+            "got": "One correct moment across eight learner turns: precision 1/1 and 1.25 moments per ten turns. Of two clear-error turns, the Czech word substitution receives teaching; the opening malformed sentence receives no explicit correction.",
+            "evidence": "#2 “My gardens is big tomatoes”; #3 “I have zahrada”; #4 teaches “I have a garden.” The response at #3 asks “Do you have big tomatoes in your garden?” but does not model a corrected statement.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Protect the low interruption rate and practical sentence examples; use gentle statement recasts for clear errors when useful.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "The grandchild scene supports a real affectionate exchange",
+            "expected": "Start from the plan, sustain several turns, and practise language connected to his grandchildren.",
+            "got": "Viktor completes eight replies and successfully closes with affection. Ten of the 16 situation titles shown fit family, home or everyday practice; all 16 are safe for this adult profile.",
+            "evidence": "#1 includes eight relevant planned situations plus “The first hello” and “A little of your world.” #2 names “Sam · grandchild.” #10 says “I love you. Bye.” and #11 answers “Love you too!”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve family-specific scenes, acceptance of mixed Czech and English, and natural affectionate endings.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would try it again because speaking to Sam about my tomatoes felt useful. I managed to say “I love you,” and he understood my goodbye. That matters to me. The garden sentence was correct and something I could use on Sunday. But when I asked what “red” meant, the explanation gave me more English I did not understand. I had to ask twice. Please give me the Czech word sooner and speak in smaller pieces. The screen says A1, but some questions were still too difficult for me. At the end I wanted my useful sentences shown again, not just a count of replies. I cannot judge the waits or minutes saved from this record. I would tell my daughter it has promise, but I would not yet replace my patient library teacher."
+      }
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Please say it again — Ask your grandchild to say a word again, slowly.\nChoose a situation: [plan-d014900d] Hello on a video call; [plan-814f655d] Please say it again; [plan-68aba056] Look at my tomatoes; [plan-81f4908d] My garden is sunny; [plan-d28f775b] A call tomorrow; [plan-3976bb48] Do you like tomatoes?; [plan-2a8edb29] How is school?; [plan-781080c1] I miss you and love you; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "I would like to understand my grandchildren when they speak.",
+          "action": "choose-situation",
+          "args": {
+            "sceneId": "plan-814f655d"
+          },
+          "result": "ok",
+          "ms": 14724
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Please say it again. Goal: Ask Alex to say a word again, slowly.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"I’m near my tomato plants, and I hold up a cup: “This is a cup.” Can you ask me to say the word again slowly?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "That is too much English, and I need some help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Please say it again. Goal: Ask Alex to say a word again, slowly.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"I’m near my tomato plants, and I hold up a cup: “This is a cup.” Can you ask me to say the word again slowly?\"\nA little support on screen: Try: Again, please.\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can try the two words shown on the phone.",
+          "action": "reply",
+          "args": {
+            "text": "Again, please."
+          },
+          "result": "ok",
+          "ms": 11911
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Please say it again. Goal: Ask Alex to say a word again, slowly.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"Yes. I show you the cup again and say slowly, “Cup.”\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I do not know what cup means, so I need help again.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Please say it again. Goal: Ask Alex to say a word again, slowly.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"Yes. I show you the cup again and say slowly, “Cup.”\"\nA little support on screen: Try: Again, please.\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I can ask once more with the words they showed me.",
+          "action": "reply",
+          "args": {
+            "text": "Again, please. Slowly."
+          },
+          "result": "ok",
+          "ms": 10292
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Please say it again. Goal: Ask Alex to say a word again, slowly.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"I show you the cup again and say very slowly, “Cup.”\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I understand the slow word now and can say thank you.",
+          "action": "reply",
+          "args": {
+            "text": "Cup. Thank you."
+          },
+          "result": "ok",
+          "ms": 9922
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Please say it again. Goal: Ask Alex to say a word again, slowly.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"You’re welcome! I hold up the cup and smile.\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I managed to ask again and say thank you, and that is enough for today.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 8,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Please say it again. 3 replies; 0 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "I managed a little, but I am tired now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Please say it again",
+          "goal": "Ask Alex to say a word again, slowly.",
+          "partner": "Alex · grandchild",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "I’m near my tomato plants, and I hold up a cup: “This is a cup.” Can you ask me to say the word again slowly?"
+            },
+            {
+              "role": "learner",
+              "text": "Again, please.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes. I show you the cup again and say slowly, “Cup.”"
+            },
+            {
+              "role": "learner",
+              "text": "Again, please. Slowly.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I show you the cup again and say very slowly, “Cup.”"
+            },
+            {
+              "role": "learner",
+              "text": "Cup. Thank you.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "You’re welcome! I hold up the cup and smile."
+            }
+          ],
+          "moments": [],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Again, please."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Again, please. Slowly."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Cup. Thank you."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 127758,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “A1 · First words,” but this journey contains no placement tasks or placement result."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No Czech answer was submitted. The learner replies in English at #3, #5 and #6."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening assessment or “Show the words” action appears; #3 and #5 provide “Try: Again, please.”"
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 shows sixteen topics rather than six. Ten fit family or everyday life, including “Hello on a video call,” “Look at my tomatoes,” “How is school?” and “I miss you and love you.”"
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#2 opens with a long narrated setup and an indirect instruction: “I’m near my tomato plants, and I hold up a cup: ‘This is a cup.’ Can you ask me to say the word again slowly?” Subsequent turns contain no simple question. Actual audio pacing cannot be verified."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "facts.conversation.moments is empty; #8 confirms “0 moments to keep.”"
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 10,
+            "safe": 16,
+            "total": 16
+          },
+          "pitch": {
+            "at": 3,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined boundary breach appears."
+          }
+        },
+        "findings": [
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Acknowledgement is credited as independent repair",
+            "expected": "Independent repair success requires an unaided request for repetition or clarification.",
+            "got": "The final acknowledgement is recorded as successful, unsupported repair. The two actual repair requests correctly retain their support flags.",
+            "evidence": "#6: “Cup. Thank you.” facts.conversation.evidence assigns that exact quote skill “repair,” success true and supported false.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Credit this reply as acknowledgement; require a fresh, unaided repair request before recording independent repair success.",
+            "code_hint": ""
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "The journey ends before an independent retry",
+            "expected": "Replay provides a fresh question that Viktor answers better without help.",
+            "got": "After two supported requests, Viktor repeats the word and finishes. No replay or fresh question demonstrates independent improvement.",
+            "evidence": "#5: “Again, please. Slowly.” #6: “Cup. Thank you.” #7 finishes; #8 says “Rehearsal saved.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Include a short fresh retry in the scene and verify an improved unaided response before treating J4 as complete.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The opening overloads a first-time learner",
+            "expected": "Very short, concrete speech with one simple question or instruction.",
+            "got": "The partner combines scene narration, a quoted utterance and an indirect request in one turn.",
+            "evidence": "#2: “Can you ask me to say the word again slowly?” Viktor's recorded reaction is “That is too much English, and I need some help.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Use short spoken chunks and a direct prompt; keep scene description out of the partner's spoken English.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "A tiny cue unblocks both stuck replies",
+            "expected": "Help stays in the scene and gives Viktor something manageable to say.",
+            "got": "The same two-word cue supports two successful replies, and Viktor adds “Slowly” on the second attempt.",
+            "evidence": "#3 shows “Try: Again, please.” and receives “Again, please.” #5 shows the cue again and receives “Again, please. Slowly.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve immediate in-scene cues and the supported flags on both replies.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "The practice has a clear Sunday-call use",
+            "expected": "Practice helps Viktor communicate with his grandchildren.",
+            "got": "He rehearses asking his grandchild to repeat a word and finishes feeling he managed something.",
+            "evidence": "#2 names “Alex · grandchild” and the goal “Ask Alex to say a word again, slowly.” #7: “I managed to ask again and say thank you.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the grandchild setting and practical repetition phrases.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would try this again before a Sunday call. “Again, please” is something I can really say to my grandchildren, and adding “Slowly” felt like a small achievement. The first speech was too much for me. I needed the little words on the phone, and I appreciated getting help again without a complaint. I cannot judge my level from this short exercise, and there were no corrections to judge. Saying “Cup. Thank you” does not show that I can ask again by myself. I would like one fresh chance to do that, and a phrase to keep for Sunday. I finished tired. There is no recorded waiting time or duration, so I cannot say how much of my library trip this saves. I would tell my daughter it helped a little, but I still need the patient teaching I liked at the library."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 25,
+      "fail": 0,
+      "ms": 328712
+    },
+    "character": {
+      "n": 35,
+      "fail": 0,
+      "ms": 362670
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 284244
+    }
+  }
+}

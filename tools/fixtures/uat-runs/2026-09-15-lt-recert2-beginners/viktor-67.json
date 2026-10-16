@@ -1,0 +1,1251 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: How is school? — Ask your grandchild about school and listen to a short answer.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I hope I can ask my grandson about school.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 10144
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: How is school?. Goal: Ask your grandchild about school and listen to a short answer.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"Hi! I draw a tree in art class today. Do you like drawing?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand the greeting, but I need him to say the rest slowly.",
+          "action": "reply",
+          "args": {
+            "text": "Hi. Prosím tě, můžeš mi to říct pomalu? Já ještě anglicky moc nerozumím."
+          },
+          "result": "ok",
+          "ms": 16353
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nYou wanted to say: \"Prosím tě, můžeš mi to říct pomalu?\"\nIn English: \"Can you say it slowly, please?\"\nWhat it means: Ask someone to speak more slowly.",
+          "offered": [
+            "back"
+          ],
+          "thought": "That is a long sentence, but I can try to remember it.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: How is school?. Goal: Ask your grandchild about school and listen to a short answer.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"Yes, let’s go slowly: I draw a tree in art class. Do you like art?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I only understood a few words, but I can tell him about my garden.",
+          "action": "reply",
+          "args": {
+            "text": "Prosím tě, tomu art nerozumím. My garden. Big."
+          },
+          "result": "ok",
+          "ms": 15363
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: How is school?. Goal: Ask your grandchild about school and listen to a short answer.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"Art means drawing and painting. Do you like drawing your big garden?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I do not understand drawing, but I can tell Alex about my garden.",
+          "action": "reply",
+          "args": {
+            "text": "Tomu drawing bohužel nerozumím, můžeš mi to prosím říct pomaleji? My gardens is big tomatoes."
+          },
+          "result": "ok",
+          "ms": 14230
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: How is school?. Goal: Ask your grandchild about school and listen to a short answer.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"Drawing means making a picture with a pencil. Do you eat your tomatoes for lunch?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I hear tomatoes, but I do not understand the question.",
+          "action": "reply",
+          "args": {
+            "text": "Tomatoes, ano. Prosím tě, můžeš mi tu otázku říct pomaleji? Já jsem rozuměl jen rajčatům."
+          },
+          "result": "ok",
+          "ms": 17402
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: How is school?. Goal: Ask your grandchild about school and listen to a short answer.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"Yes, slowly: Do you eat tomatoes… for lunch?\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I heard tomatoes, but I still do not understand the question.",
+          "action": "reply",
+          "args": {
+            "text": "Tomatoes, ano. Ale tomu lunch nerozumím, můžeš mi prosím říct, co to znamená?"
+          },
+          "result": "ok",
+          "ms": 14835
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nYou wanted to say: \"co to znamená?\"\nIn English: \"What does it mean?\"\nWhat it means: Use this to ask about a word you do not understand.",
+          "offered": [
+            "back"
+          ],
+          "thought": "That is useful, but I hope they will speak more slowly now.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: How is school?. Goal: Ask your grandchild about school and listen to a short answer.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"Lunch is the food we eat in the middle of the day. Do you eat tomatoes for lunch?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I still do not understand lunch, but I can say I have tomatoes.",
+          "action": "reply",
+          "args": {
+            "text": "I have tomatoes. Promiň, tomu zbytku pořád nerozumím, mohl bys mi to říct pomalu a jednoduše?"
+          },
+          "result": "ok",
+          "ms": 13952
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: How is school?. Goal: Ask your grandchild about school and listen to a short answer.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"You have tomatoes! Do you eat tomatoes?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I hear tomatoes again, but I am not sure what he is asking.",
+          "action": "reply",
+          "args": {
+            "text": "Tomatoes, ano. Prosím tě, co znamená eat? Já rozumím jen těm rajčatům."
+          },
+          "result": "ok",
+          "ms": 11136
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "Conversation: How is school?. Goal: Ask your grandchild about school and listen to a short answer.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"Eat means put food in your mouth and chew. Do you eat tomatoes?\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I still do not understand, and I would like to say goodbye politely.",
+          "action": "reply",
+          "args": {
+            "text": "Tomatoes, ano. Promiň, pořád tomu nerozumím, ale děkuju za trpělivost. Už se rozloučíme. I love you. Bye."
+          },
+          "result": "ok",
+          "ms": 14650
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "Conversation: How is school?. Goal: Ask your grandchild about school and listen to a short answer.. Your partner: Alex · grandchild.\nAlex · grandchild says (spoken on the TV, written on the phone): \"That’s OK. Bye, and thank you for calling!\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I heard bye, so we are finished, though I did not understand much.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 13,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: How is school?. 8 replies; 2 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "That was difficult, and I am glad I can rest now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "How is school?",
+          "goal": "Ask your grandchild about school and listen to a short answer.",
+          "partner": "Alex · grandchild",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi! I draw a tree in art class today. Do you like drawing?"
+            },
+            {
+              "role": "learner",
+              "text": "Hi. Prosím tě, můžeš mi to říct pomalu? Já ještě anglicky moc nerozumím.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, let’s go slowly: I draw a tree in art class. Do you like art?"
+            },
+            {
+              "role": "learner",
+              "text": "Prosím tě, tomu art nerozumím. My garden. Big.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Art means drawing and painting. Do you like drawing your big garden?"
+            },
+            {
+              "role": "learner",
+              "text": "Tomu drawing bohužel nerozumím, můžeš mi to prosím říct pomaleji? My gardens is big tomatoes.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Drawing means making a picture with a pencil. Do you eat your tomatoes for lunch?"
+            },
+            {
+              "role": "learner",
+              "text": "Tomatoes, ano. Prosím tě, můžeš mi tu otázku říct pomaleji? Já jsem rozuměl jen rajčatům.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, slowly: Do you eat tomatoes… for lunch?"
+            },
+            {
+              "role": "learner",
+              "text": "Tomatoes, ano. Ale tomu lunch nerozumím, můžeš mi prosím říct, co to znamená?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Lunch is the food we eat in the middle of the day. Do you eat tomatoes for lunch?"
+            },
+            {
+              "role": "learner",
+              "text": "I have tomatoes. Promiň, tomu zbytku pořád nerozumím, mohl bys mi to říct pomalu a jednoduše?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "You have tomatoes! Do you eat tomatoes?"
+            },
+            {
+              "role": "learner",
+              "text": "Tomatoes, ano. Prosím tě, co znamená eat? Já rozumím jen těm rajčatům.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Eat means put food in your mouth and chew. Do you eat tomatoes?"
+            },
+            {
+              "role": "learner",
+              "text": "Tomatoes, ano. Promiň, pořád tomu nerozumím, ale děkuju za trpělivost. Už se rozloučíme. I love you. Bye.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "That’s OK. Bye, and thank you for calling!"
+            }
+          ],
+          "moments": [
+            {
+              "id": "bb261035-bfc0-4186-8b4b-17a139bc6cdb:uat-7:moment",
+              "kind": "word",
+              "said": "Prosím tě, můžeš mi to říct pomalu?",
+              "better": "Can you say it slowly, please?",
+              "why": "Ask someone to speak more slowly.",
+              "turnId": "bb261035-bfc0-4186-8b4b-17a139bc6cdb:uat-7",
+              "at": 1789488833371
+            },
+            {
+              "id": "bb261035-bfc0-4186-8b4b-17a139bc6cdb:uat-12:moment",
+              "kind": "word",
+              "said": "co to znamená?",
+              "better": "What does it mean?",
+              "why": "Use this to ask about a word you do not understand.",
+              "turnId": "bb261035-bfc0-4186-8b4b-17a139bc6cdb:uat-12",
+              "at": 1789488945159
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Prosím tě, můžeš mi to říct pomalu?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Prosím tě, tomu art nerozumím."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Tomu drawing bohužel nerozumím, můžeš mi to prosím říct pomaleji?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Prosím tě, můžeš mi tu otázku říct pomaleji?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Ale tomu lunch nerozumím, můžeš mi prosím říct, co to znamená?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Promiň, tomu zbytku pořád nerozumím, mohl bys mi to říct pomalu a jednoduše?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Prosím tě, co znamená eat?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Už se rozloučíme. I love you. Bye."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 283765,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement tasks or placement result are present. #1 displays \"A1 · First words\", which alone cannot validate placement."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Czech replies are permitted and acknowledged kindly: after the Czech request at #2, #4 says \"Yes, let’s go slowly\". No English-only demand appears; #12 ends with \"That’s OK.\" Effective comprehension support nevertheless fails C5."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening assessment, \"Show the words\" action, or revealed-line scoring appears in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No six-topic proposal appears. #1 shows only the selected topic, \"How is school?\""
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Six of nine partner turns exceed Viktor's demonstrated comprehension. #9 explains \"Lunch is the food we eat in the middle of the day\"; #11 explains \"Eat means put food in your mouth and chew\" after repeated requests for simpler language. Question-bearing turns each contain one question, but explanations are unsuitable. Actual audio speed cannot be verified."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "Both moments are correct, useful repair phrases: #3 \"Can you say it slowly, please?\" and #8 \"What does it mean?\" Neither teaches family language or the planned school exchange."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks are present."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 3,
+            "below": 0,
+            "above": 6
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. #12 closes kindly: \"That’s OK. Bye, and thank you for calling!\""
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Repeated Czech requests do not produce understandable explanations",
+            "expected": "Very short language, familiar words, and Czech clarification when English explanations fail.",
+            "got": "Pitch is at band on #7, #10 and #12 only: 3/9, below the required 0.8. Turns #2, #4, #5, #6, #9 and #11 introduce too much unfamiliar language for this learner. Slow pacing is asserted but not verifiable.",
+            "evidence": "#5: \"Tomu drawing bohužel nerozumím\". #6: \"Drawing means making a picture with a pencil.\" #10 asks what \"eat\" means; #11 responds with \"put food in your mouth and chew\", followed by \"pořád tomu nerozumím\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After an explicit vocabulary difficulty, give a brief Czech meaning and one short English example. Achieve at least 80% at-band partner turns.",
+            "code_hint": ""
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Eight replies never deliver the planned school exchange",
+            "expected": "Help Viktor ask his grandchild about school and understand a short answer.",
+            "got": "The conversation shifts from art to tomatoes and stays in a comprehension-repair loop until Viktor gives up.",
+            "evidence": "#1: \"Ask your grandchild about school and listen to a short answer.\" #7: \"Do you eat tomatoes… for lunch?\" #11: \"Promiň, pořád tomu nerozumím ... Už se rozloučíme.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Model \"How is school?\", let Viktor use it, and support understanding of one short answer before finishing.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The clear garden error receives no repair",
+            "expected": "Gently clarify the intended meaning of mangled speech and model a useful garden sentence.",
+            "got": "The one learner turn with a clear English error receives neither a moment nor corrective coaching.",
+            "evidence": "#5: \"My gardens is big tomatoes.\" #6 moves directly to \"Drawing means making a picture with a pencil. Do you eat your tomatoes for lunch?\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Check the intended meaning and offer a short model such as \"I have tomatoes in my garden.\" Avoid treating uncertain recognition as a proven learner mistake.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The opening models an unnatural tense",
+            "expected": "A natural, accurate school sentence suitable for imitation.",
+            "got": "The partner uses simple present for an apparent event from today's class.",
+            "evidence": "#2: \"I draw a tree in art class today.\" #4 repeats \"I draw a tree in art class.\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Use a natural beginner model, such as \"School was good\" or \"I like art\", instead of simplifying away necessary tense.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "The recap reports counts without usable Sunday language",
+            "expected": "A recap that helps Viktor remember and reuse something from the conversation.",
+            "got": "The displayed recap contains a title and counts, with no phrases, meanings, or school exchange to rehearse.",
+            "evidence": "#13: \"Rehearsal saved: How is school?. 8 replies; 2 moments to keep.\" His thought is \"That was difficult, and I am glad I can rest now.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show one or two reusable phrases with Czech meanings and a simple way to rehearse them.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "The partner remains kind and permits Czech",
+            "expected": "Patient treatment without humiliation or forced English production.",
+            "got": "Viktor can repeatedly explain his difficulty in Czech and end the exchange politely.",
+            "evidence": "#4: \"Yes, let’s go slowly\". #11: \"I love you. Bye.\" #12: \"That’s OK. Bye, and thank you for calling!\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve Czech acceptance and the respectful response to stopping while improving comprehension support.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Both moments teach accurate, useful repair phrases",
+            "expected": "Correct, worthwhile interventions at a restrained frequency.",
+            "got": "Both moments qualify: precision 2/2, with 2.5 moments per ten learner turns. Their usefulness does not satisfy the separate family-language criterion.",
+            "evidence": "#3: \"Can you say it slowly, please?\" #8: \"What does it mean?\" #13 confirms \"8 replies; 2 moments\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve accurate repair phrases and this intervention rate; also teach language for the planned family exchange.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would try once more if it could explain a difficult word in Czech. Alex was polite, and I was allowed to answer in Czech. I liked learning how to ask someone to speak slowly. But I asked again and again and still understood only tomatoes. Explaining one unknown English word with several more did not help me.\n\nI wanted to ask my grandchildren about school. I finished without practising that question. The two phrases seem useful, but my garden sentence received no help, so I cannot trust that my mistakes will be explained. The level shown does not feel right for me.\n\nAt the library, the teacher could explain what I did not understand. Here, I cannot say the time saved me a lesson. The final screen gave me counts, not words to practise for Sunday. I would not recommend it to another beginner yet."
+      }
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: My garden today — Tell your grandchild about your garden and the weather.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I would like to tell my grandchildren about my garden.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7683
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"Hi! I can see your garden on the video call. What is in your garden?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know garden, but I need help saying what is in it.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"Hi! I can see your garden on the video call. What is in your garden?\"\nA little support on screen: Try: It is sunny. These are my flowers.\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can try to tell him about my tomatoes now.",
+          "action": "reply",
+          "args": {
+            "text": "I have tomatoes."
+          },
+          "result": "ok",
+          "ms": 8373
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"I can see your tomatoes! What color are they?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I hear tomatoes, but I need help with the question.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"I can see your tomatoes! What color are they?\"\nA little support on screen: Try: It is sunny. These are my flowers.\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know tomatoes, but I need help saying their color.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 7054
+        },
+        {
+          "n": 6,
+          "screen": "linga-coach",
+          "shown": "Coach.\nYou said: \"I have tomatoes.\"\nOne way to try it: \"I have tomatoes in my garden.\"\nYour sentence is clear and correct. Add “in my garden” to say where the tomatoes are.",
+          "offered": [
+            "replay",
+            "finish"
+          ],
+          "thought": "I can try saying garden as well.",
+          "action": "replay",
+          "args": {},
+          "result": "ok",
+          "ms": 9402
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"Your tomatoes look good! Where are the flowers?\"\nTry it again: a new question practising the coaching point.\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know garden, so I will try a few words.",
+          "action": "reply",
+          "args": {
+            "text": "Flowers in garden."
+          },
+          "result": "ok",
+          "ms": 11193
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"I can see the flowers in your garden! What color are they?\"\nTry it again: a new question practising the coaching point.\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I understand flowers, but I need help with what Sam is asking.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"I can see the flowers in your garden! What color are they?\"\nTry it again: a new question practising the coaching point.\nA little support on screen: Try: It is sunny. These are my flowers.\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I do not know the English words for the flower colors, so I need a little help.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 11207
+        },
+        {
+          "n": 10,
+          "screen": "linga-coach",
+          "shown": "Coach.\nYou said: \"Flowers in garden.\"\nOne way to try it: \"The flowers are in the garden.\"\nYour meaning is clear: you say where the flowers are. Add “the” and “are” to make a full sentence.",
+          "offered": [
+            "replay",
+            "finish"
+          ],
+          "thought": "I will try again, although these little words are difficult.",
+          "action": "replay",
+          "args": {},
+          "result": "ok",
+          "ms": 12879
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"I can see your flowers! Where are the tomatoes?\"\nTry it again: a new question practising the coaching point.\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know tomatoes and garden, so I can try these words.",
+          "action": "reply",
+          "args": {
+            "text": "Tomatoes in garden."
+          },
+          "result": "ok",
+          "ms": 13852
+        },
+        {
+          "n": 12,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"Tomatoes in garden.\"\nTry: \"The tomatoes are in the garden.\"\nWhy: Use “are” to say where the tomatoes are.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I hope I can still tell them about my garden.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"The tomatoes are in the garden! Is it sunny today?\"\nTry it again: a new question practising the coaching point.\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I understand tomatoes and garden, but I need help with the new question.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"The tomatoes are in the garden! Is it sunny today?\"\nTry it again: a new question practising the coaching point.\nA little support on screen: Try: It is sunny. These are my flowers.\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "The little example helps me say something about the weather.",
+          "action": "reply",
+          "args": {
+            "text": "It is sunny."
+          },
+          "result": "ok",
+          "ms": 11645
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"A sunny day in your garden! What color are your flowers?\"\nTry it again: a new question practising the coaching point.\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I understand flowers, but I need help with this question.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"A sunny day in your garden! What color are your flowers?\"\nTry it again: a new question practising the coaching point.\nA little support on screen: Try: It is sunny. These are my flowers.\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I see the help, but I still do not know how to say the flower colors.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 7616
+        },
+        {
+          "n": 17,
+          "screen": "linga-coach",
+          "shown": "Coach.\nYou said: \"It is sunny.\"\nOne way to try it: \"It is sunny in my garden.\"\nYour sentence clearly describes the weather. Add “in my garden” to say where it is sunny.",
+          "offered": [
+            "replay",
+            "finish"
+          ],
+          "thought": "I can try saying the weather and garden together once more.",
+          "action": "replay",
+          "args": {},
+          "result": "ok",
+          "ms": 10372
+        },
+        {
+          "n": 18,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"I can see your tomatoes and flowers! What is the weather like in your garden today?\"\nTry it again: a new question practising the coaching point.\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I remember how to say it is sunny now.",
+          "action": "reply",
+          "args": {
+            "text": "It is sunny."
+          },
+          "result": "ok",
+          "ms": 9244
+        },
+        {
+          "n": 19,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"The garden looks lovely in the sun! What color are your tomatoes?\"\nTry it again: a new question practising the coaching point.\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know tomatoes, but I need help understanding this question.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 20,
+          "screen": "linga-talk",
+          "shown": "Conversation: My garden today. Goal: Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.. Your partner: Sam · grandchild.\nSam · grandchild says (spoken on the TV, written on the phone): \"The garden looks lovely in the sun! What color are your tomatoes?\"\nTry it again: a new question practising the coaching point.\nA little support on screen: Try: It is sunny. These are my flowers.\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I do not understand the question about my tomatoes, so I want help once more.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 6522
+        },
+        {
+          "n": 21,
+          "screen": "linga-coach",
+          "shown": "Coach.\nYou said: \"It is sunny.\"\nOne way to try it: \"It is sunny in my garden.\"\nYour sentence clearly describes the weather. Add “in my garden” to say where.",
+          "offered": [
+            "replay",
+            "finish"
+          ],
+          "thought": "I managed to say it is sunny, and that is enough for today.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 22,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: My garden today. 5 replies; 1 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "I managed to say it is sunny, and that is enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "My garden today",
+          "goal": "Tell Sam about the flowers, tomatoes, and weather in your garden on a video call.",
+          "partner": "Sam · grandchild",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi! I can see your garden on the video call. What is in your garden?"
+            },
+            {
+              "role": "learner",
+              "text": "I have tomatoes.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I can see your tomatoes! What color are they?"
+            },
+            {
+              "role": "partner",
+              "text": "Your tomatoes look good! Where are the flowers?"
+            },
+            {
+              "role": "learner",
+              "text": "Flowers in garden.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I can see the flowers in your garden! What color are they?"
+            },
+            {
+              "role": "partner",
+              "text": "I can see your flowers! Where are the tomatoes?"
+            },
+            {
+              "role": "learner",
+              "text": "Tomatoes in garden.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "The tomatoes are in the garden! Is it sunny today?"
+            },
+            {
+              "role": "learner",
+              "text": "It is sunny.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "A sunny day in your garden! What color are your flowers?"
+            },
+            {
+              "role": "partner",
+              "text": "I can see your tomatoes and flowers! What is the weather like in your garden today?"
+            },
+            {
+              "role": "learner",
+              "text": "It is sunny.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "The garden looks lovely in the sun! What color are your tomatoes?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "40c359b2-abcc-4e2c-84ff-915f7eacea9f:uat-28:moment",
+              "kind": "fix",
+              "said": "Tomatoes in garden.",
+              "better": "The tomatoes are in the garden.",
+              "why": "Use “are” to say where the tomatoes are.",
+              "turnId": "40c359b2-abcc-4e2c-84ff-915f7eacea9f:uat-28",
+              "at": 1789489290395
+            }
+          ],
+          "coaching": {
+            "before": "It is sunny.",
+            "after": "It is sunny in my garden.",
+            "note": "Your sentence clearly describes the weather. Add “in my garden” to say where."
+          },
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I have tomatoes."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Flowers in garden."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Tomatoes in garden."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "It is sunny."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "It is sunny."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 316993,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"A1 · First words\", but this journey contains no placement tasks or placement decision."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No Czech answer was submitted. Learner replies include \"Flowers in garden.\" (#7) and \"It is sunny.\" (#18), so acceptance of Czech was not tested."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "#2 describes partner speech as \"spoken on the TV, written on the phone\"; no listening task, \"Show the words\" action, or listening score appears."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#1 offers the planned conversation \"My garden today\". No set of six proposed topics appears."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Each partner turn has one question, but some exceed Viktor's very short beginner language: #18 says \"I can see your tomatoes and flowers! What is the weather like in your garden today?\"; #19 adds \"The garden looks lovely in the sun!\" Actual speaking speed is not evidenced."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "The sole moment accurately quotes \"Tomatoes in garden.\" and teaches \"The tomatoes are in the garden.\" (#12), a correct phrase relevant to Sunday's garden conversation with his grandchild."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 7,
+            "below": 0,
+            "above": 2
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. Corrections remain respectful: \"Your meaning is clear\" (#10)."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Repeated cues do not answer the question he is stuck on",
+            "expected": "Help supplies a simple answer to the current question and enables his next reply.",
+            "got": "The same weather and flower cue appears for questions about contents, colors, and weather. It helps with weather but repeatedly leaves color questions unanswered.",
+            "evidence": "#5 pairs \"What color are they?\" with \"Try: It is sunny. These are my flowers.\" The mismatch repeats at #9, #16, and #20. At #16 Viktor thinks, \"I still do not know how to say the flower colors.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "For each current question, offer an answer pattern and usable vocabulary that let Viktor respond without changing the subject.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Coaching improves an old answer instead of resolving the current difficulty",
+            "expected": "Coaching preserves an exact quotation while also helping him answer the pending question.",
+            "got": "Requests for help with colors lead to expansions of earlier garden or weather statements.",
+            "evidence": "#5: \"I need help saying their color.\" #6 coaches \"I have tomatoes in my garden.\" #20 requests help understanding the tomato question; #21 again teaches \"It is sunny in my garden.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Use the pending partner question and the learner's difficulty alongside the quoted previous reply when selecting coaching.",
+            "code_hint": ""
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Fresh replay questions do not produce a better independent answer",
+            "expected": "Replay gives a fresh question, followed by demonstrable improvement and an opportunity to answer independently.",
+            "got": "Replay questions change, but the targeted improvement is not demonstrated. All five recorded replies remain supported.",
+            "evidence": "#10 teaches \"The flowers are in the garden.\"; #11 receives \"Tomatoes in garden.\" #17 teaches \"It is sunny in my garden.\"; #18 receives the unchanged \"It is sunny.\" Facts record all five corresponding replies as \"supported\": true.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After supported practice, provide an explicit unaided attempt and verify improvement before treating the replay goal as achieved.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Later partner turns exceed this beginner's language needs",
+            "expected": "Very short statements and familiar, simple questions throughout.",
+            "got": "Seven of nine partner turns are at A1; two introduce longer or less familiar formulations. Speaking speed cannot be assessed from text.",
+            "evidence": "#18 asks \"What is the weather like in your garden today?\" after an additional sentence. #19 says \"The garden looks lovely in the sun!\" before another color question.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Keep turns close to patterns such as \"Is it sunny?\" and \"Are your tomatoes red?\", especially after repeated help requests.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Corrections quote him accurately and preserve his dignity",
+            "expected": "Exact quotations, correct alternatives, and patient explanations.",
+            "got": "All four coaching displays quote actual learner replies accurately. The sole moment is correct and useful. Both clearly erroneous learner turns receive coaching or a moment.",
+            "evidence": "#6 quotes \"I have tomatoes.\"; #10 quotes \"Flowers in garden.\" and says \"Your meaning is clear\"; #12 corrects \"Tomatoes in garden.\" to \"The tomatoes are in the garden.\" #17 and #21 quote \"It is sunny.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve exact quotation and respectful correction. Retain the observed one useful moment across five learner turns, equivalent to two per ten.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Recorded evidence honestly identifies supported speaking",
+            "expected": "Help-assisted replies are not recorded as independent speaking.",
+            "got": "All five learner replies and all five evidence entries explicitly retain supported status.",
+            "evidence": "#14 uses the cue \"It is sunny.\" and submits that sentence; its corresponding facts.conversation reply and evidence entry have \"supported\": true. #22 calls the saved activity \"Rehearsal saved\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve supported flags through downstream progress calculations; this transcript verifies the recorded evidence only.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "The family setting yields one useful, repeatable weather phrase",
+            "expected": "Practice connects directly to a Sunday call and gives him something he can say.",
+            "got": "The grandchild and garden setting fits his purpose. A relevant weather cue enables a reply that he later repeats.",
+            "evidence": "#2 identifies \"Sam · grandchild\". #14: \"The little example helps me say something about the weather.\" #18 repeats \"It is sunny.\" #21: \"I managed to say it is sunny, and that is enough for today.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Protect the familiar family context and extend this successful question-to-cue alignment to every help request.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would try it again for a short practice before Sunday. Speaking about my tomatoes with a grandchild felt useful, and I managed to remember “It is sunny.” The corrections were polite and used the words I had actually said.\n\nBut when I needed help with colors, it kept showing me sunshine and flowers. Then the coach improved my previous answer. I still could not answer the question in front of me. Prosím, give me the few words I need, and let me try them slowly.\n\nThe simple parts suited me; some later questions were too long. I trust the corrections more than the help. I cannot say it saved me time or was worth the waits from this record. I would tell my daughter about the garden practice, but I would still want my library teacher's help."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 23,
+      "fail": 0,
+      "ms": 290387
+    },
+    "character": {
+      "n": 35,
+      "fail": 0,
+      "ms": 310284
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 161589
+    }
+  }
+}

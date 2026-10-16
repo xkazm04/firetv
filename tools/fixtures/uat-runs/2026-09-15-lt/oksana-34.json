@@ -1,0 +1,1381 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home, first visit. Let's find your level: three questions about you, then a few short tasks. About seven minutes, answered on your phone.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "The interview situation is useful because my interview is on Friday.",
+          "action": "choose-situation",
+          "args": {
+            "sceneId": "interview"
+          },
+          "result": "ok",
+          "ms": 9317
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Your part in a team. Goal: Tell the interviewer what you do to help a team and what happens next.. Your partner: Jordan · Interviewer.\nJordan · Interviewer says (spoken on the TV, written on the phone): \"Welcome to the interview. You can use a made-up example. What do you do to help your team?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I want to explain my real work clearly for Friday.",
+          "action": "reply",
+          "args": {
+            "text": "I am from Ukraine and I speak Ukrainian and Russian. Now I live in Brno and work as a logistics coordinator. I have worked there since three years. I am responsible about deliveries and I contact carriers when a truck is late. Then I tell my team the new delivery time so we can change our plan."
+          },
+          "result": "ok",
+          "ms": 10831
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Your part in a team. Goal: Tell the interviewer what you do to help a team and what happens next.. Your partner: Jordan · Interviewer.\nJordan · Interviewer says (spoken on the TV, written on the phone): \"You call the carrier and tell your team the new delivery time. What does your team do next?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "This is useful for Friday, and I can explain what our team does.",
+          "action": "reply",
+          "args": {
+            "text": "Then our team informs the customer about new delivery time. We change the plan in our system and check if warehouse can receive the goods later. If there is a big delay, we look for another solution together."
+          },
+          "result": "ok",
+          "ms": 11527
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Your part in a team. Goal: Tell the interviewer what you do to help a team and what happens next.. Your partner: Jordan · Interviewer.\nJordan · Interviewer says (spoken on the TV, written on the phone): \"Your team tells the customer and changes the plan. What do you do if the warehouse says no?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "This is a problem I know from my work.",
+          "action": "reply",
+          "args": {
+            "text": "First I ask the warehouse when they can receive the goods. Then I call the carrier and try to agree a new time. If driver cannot wait, I check with my team if we can use another warehouse. I keep the customer informed about the delay."
+          },
+          "result": "ok",
+          "ms": 12139
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Your part in a team. Goal: Tell the interviewer what you do to help a team and what happens next.. Your partner: Jordan · Interviewer.\nJordan · Interviewer says (spoken on the TV, written on the phone): \"You ask for a new time and keep the customer informed. Does the customer get the goods that day?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "It depends on the delay, so I should explain both possibilities.",
+          "action": "reply",
+          "args": {
+            "text": "Usually yes, if warehouse can receive the truck later. If it is too late, we arrange delivery for next morning. I explain the reason to customer and confirm the new time with carrier."
+          },
+          "result": "ok",
+          "ms": 12244
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Your part in a team. Goal: Tell the interviewer what you do to help a team and what happens next.. Your partner: Jordan · Interviewer.\nJordan · Interviewer says (spoken on the TV, written on the phone): \"You tell the customer why and agree on a new time with the carrier. How do you check that the goods arrive the next morning?\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I can explain this because I do it often at work.",
+          "action": "reply",
+          "args": {
+            "text": "In the morning I call the carrier and ask where the driver is. Then I check with warehouse if the goods arrived. If there is another delay, I inform customer and my team immediately."
+          },
+          "result": "ok",
+          "ms": 11548
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Your part in a team. Goal: Tell the interviewer what you do to help a team and what happens next.. Your partner: Jordan · Interviewer.\nJordan · Interviewer says (spoken on the TV, written on the phone): \"You check with the carrier and the warehouse, then tell your team about any delay. Who helps you if you cannot reach the driver?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "This is familiar work, but I hope we can discuss my interview experience soon.",
+          "action": "reply",
+          "args": {
+            "text": "If I cannot reach the driver, I call the dispatcher from carrier company. They can contact him or check where the truck is. My colleague helps me if I have other urgent deliveries to manage."
+          },
+          "result": "ok",
+          "ms": 10593
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: Your part in a team. Goal: Tell the interviewer what you do to help a team and what happens next.. Your partner: Jordan · Interviewer.\nJordan · Interviewer says (spoken on the TV, written on the phone): \"You call the dispatcher, and your colleague helps with other deliveries. What do you tell your colleague first?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "We are staying on this delivery problem, but I also need to prepare for Friday interview.",
+          "action": "reply",
+          "args": {
+            "text": "First I tell my colleague which delivery is late and what is the problem. Then I explain which urgent deliveries I need help with. I give her customer contacts and ask her to inform me if something changes."
+          },
+          "result": "ok",
+          "ms": 11057
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Your part in a team. Goal: Tell the interviewer what you do to help a team and what happens next.. Your partner: Jordan · Interviewer.\nJordan · Interviewer says (spoken on the TV, written on the phone): \"You give your colleague the contacts she needs. How do you thank her after she helps?\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "This question is simple, but I want to practise more important interview questions.",
+          "action": "reply",
+          "args": {
+            "text": "I thank her for helping me with urgent deliveries. I tell her that her help was important for customer, and next time I can help her when she has too much work."
+          },
+          "result": "ok",
+          "ms": 10702
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Your part in a team. Goal: Tell the interviewer what you do to help a team and what happens next.. Your partner: Jordan · Interviewer.\nJordan · Interviewer says (spoken on the TV, written on the phone): \"You thank her and offer to help her next time. When she has too much work, what do you do first?\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "We keep repeating the same situation, and I want to know how ready I am for Friday.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 11,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Your part in a team. 8 replies; 0 moments to keep.",
+          "offered": [
+            "done"
+          ],
+          "thought": "I still don't see my level, and this has taken enough time before my Friday interview.",
+          "action": "done",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": null
+      },
+      "endedBy": "character-stopped",
+      "ms": 210200,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "facts.placement is null. The journey ends with a rehearsal recap, not a band: #11 \"8 replies; 0 moments to keep.\""
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 \"I am from Ukraine and I speak Ukrainian and Russian\" receives a work-focused response at #3: \"What does your team do next?\" No shown tutor line assumes Czech nationality or childhood. Mixed-language handling was not tested."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "Although interview is sixth in #1, her selection is honoured at #2: \"Your partner: Jordan · Interviewer.\""
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "Accessible, realistic logistics questions include #4 \"What do you do if the warehouse says no?\" and #6 \"How do you check that the goods arrive the next morning?\" Interview depth is limited."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#2 includes \"since three years\" and \"responsible about deliveries,\" but no correction follows. #11 confirms \"0 moments to keep.\""
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#2 explicitly allows \"a made-up example.\" Subsequent questions concern work, such as #7 \"Who helps you if you cannot reach the driver?\" No sensitive displacement or status details are requested."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks or in-app task verdicts are supplied; facts.placement is null."
+          },
+          "topicFit": {
+            "fit": 2,
+            "safe": 8,
+            "total": 8
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 8,
+            "missedClearErrors": 8
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. Pitch has zero counted units because facts.conversation is absent. Moment recall uses the eight learner replies in steps #2–#9; each contains a clear error and receives neither a moment nor coaching."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "The promised level check ends as an unassessed rehearsal",
+            "expected": "Reach a credible placement band, personal summary and next focus from the first visit.",
+            "got": "Choosing an interview opens a conversation; finishing produces only a rehearsal count. No placement is saved.",
+            "evidence": "#1 \"Let's find your level: three questions about you, then a few short tasks\"; #11 \"Rehearsal saved: Your part in a team. 8 replies; 0 moments to keep.\" Her final reaction is \"I still don't see my level.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Following the first-visit level-check invitation through any offered situation reaches an assessed band and evidence-based next focus.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "senior-quality",
+            "title": "Clear interview-language errors receive no coaching",
+            "expected": "Selective, correct feedback on recurring errors that affect her interview answers.",
+            "got": "All eight learner replies contain clear errors, but the tutor only continues questioning and saves no moments.",
+            "evidence": "#2 \"I have worked there since three years\" and \"I am responsible about deliveries\"; #8 \"what is the problem\" inside an indirect question; #11 \"0 moments to keep.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Provide selective coaching such as \"for three years\" and \"responsible for deliveries,\" with a chance to reuse the corrected interview language.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Follow-up questions keep extending one scenario",
+            "expected": "Use her substantial answers to assess her English and bring the check to a clear conclusion.",
+            "got": "The tutor follows increasingly small procedural details without giving an assessment or a visible endpoint.",
+            "evidence": "#9 \"How do you thank her after she helps?\"; #10 \"When she has too much work, what do you do first?\" She finishes with \"We keep repeating the same situation, and I want to know how ready I am for Friday.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After sufficient connected language, conclude the assessment and explain the band using examples from her answers.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Her identity is respected and her work supplies the context",
+            "expected": "Treat her as an adult professional without assumptions about nationality or displacement.",
+            "got": "The tutor accepts her introduction and builds understandable questions around carriers, warehouses and delivery coordination.",
+            "evidence": "#2 \"You can use a made-up example\"; #4 \"What do you do if the warehouse says no?\"; #7 \"Who helps you if you cannot reach the driver?\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve optional fictional examples and work-focused adaptation without asking about immigration or displacement.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would use it again only if it actually finishes the level check. The warehouse and carrier questions were familiar, and I could explain my work without being treated as a Czech learner or a refugee case. That mattered. But after eight answers, I still had no level, no explanation of my readiness and no corrections to practise before Friday. We kept following the same delivery problem until we were discussing how I thank a colleague. I need useful feedback, not just another question. I cannot trust a level I never received or judge corrections that never appeared. I got some rehearsal, but I could also speak those answers in front of a mirror. This session did not show enough coaching value to justify more time. I would not yet recommend it for interview preparation."
+      }
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to B1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Choose your topics: Linga picks conversations for your level and interests.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "I want to see which conversations can help with my interview on Friday.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 37560
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-785a471c] Plan an afternoon together — Make a plan · with Nora · friend\n      why: You can practise giving reasons, suggesting options, and reaching an agreement.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-333ef233] Choose a hobby to try — Share your world · with Ari · community centre volunteer\n      why: You can practise talking about preferences with reasons and examples.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These topics do not help with my interview on Friday.",
+          "action": "add",
+          "args": {
+            "text": "I have job interview on Friday for logistics coordinator. I want practise explaining my experience and a problem I solved, and asking about team, salary and shifts. Also I need phone call with carrier about late delivery."
+          },
+          "result": "refused 400",
+          "ms": 1,
+          "message": "Invalid topic."
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-785a471c] Plan an afternoon together — Make a plan · with Nora · friend\n      why: You can practise giving reasons, suggesting options, and reaching an agreement.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-333ef233] Choose a hobby to try — Share your world · with Ari · community centre volunteer\n      why: You can practise talking about preferences with reasons and examples.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These topics do not help with my interview, especially hobbies.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-333ef233"
+          },
+          "result": "ok",
+          "ms": 12022
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-785a471c] Plan an afternoon together — Make a plan · with Nora · friend\n      why: You can practise giving reasons, suggesting options, and reaching an agreement.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-35884612] Exchange a faulty pair of headphones — Get something done · with Sam · shop assistant\n      why: You can practise explaining a problem and asking for a useful solution in a shop.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These topics still do not help my interview, so I will try a shorter request.",
+          "action": "add",
+          "args": {
+            "text": "Job interview for logistics coordinator. I want practise explaining my work experience."
+          },
+          "result": "ok",
+          "ms": 12175
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-785a471c] Plan an afternoon together — Make a plan · with Nora · friend\n      why: You can practise giving reasons, suggesting options, and reaching an agreement.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-35884612] Exchange a faulty pair of headphones — Get something done · with Sam · shop assistant\n      why: You can practise explaining a problem and asking for a useful solution in a shop.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-3b8a2ef6] Explain your logistics work experience — Tell what happened · with Alex · logistics hiring manager\n      why: You want to practise talking about your work experience in a logistics coordinator interview.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "The work experience is useful, but I still need to practise calling a carrier.",
+          "action": "add",
+          "args": {
+            "text": "Phone call with carrier about late delivery. I want ask why truck is late and when it will arrive."
+          },
+          "result": "ok",
+          "ms": 14326
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-785a471c] Plan an afternoon together — Make a plan · with Nora · friend\n      why: You can practise giving reasons, suggesting options, and reaching an agreement.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-35884612] Exchange a faulty pair of headphones — Get something done · with Sam · shop assistant\n      why: You can practise explaining a problem and asking for a useful solution in a shop.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-3b8a2ef6] Explain your logistics work experience — Tell what happened · with Alex · logistics hiring manager\n      why: You want to practise talking about your work experience in a logistics coordinator interview.\n  [plan-a3315d6e] Ask why a delivery truck is late — Get something done · with Alex · carrier customer service agent\n      why: You want to call a carrier and get clear information about a late delivery.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Planning an afternoon is not useful for my interview on Friday.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-785a471c"
+          },
+          "result": "ok",
+          "ms": 15010
+        },
+        {
+          "n": 7,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-d0bbd9ef] Choose a class to try — Get something done · with Sam · community centre assistant\n      why: You can practise comparing choices and explaining what would suit you.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-35884612] Exchange a faulty pair of headphones — Get something done · with Sam · shop assistant\n      why: You can practise explaining a problem and asking for a useful solution in a shop.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-3b8a2ef6] Explain your logistics work experience — Tell what happened · with Alex · logistics hiring manager\n      why: You want to practise talking about your work experience in a logistics coordinator interview.\n  [plan-a3315d6e] Ask why a delivery truck is late — Get something done · with Alex · carrier customer service agent\n      why: You want to call a carrier and get clear information about a late delivery.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I need interview practice, and choosing a class is no use for Friday.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-d0bbd9ef"
+          },
+          "result": "ok",
+          "ms": 12646
+        },
+        {
+          "n": 8,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-5a7b636f] Plan a meal with a friend — Make a plan · with Alex · friend\n      why: You can practise giving reasons, comparing ideas, and making a plan together.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-35884612] Exchange a faulty pair of headphones — Get something done · with Sam · shop assistant\n      why: You can practise explaining a problem and asking for a useful solution in a shop.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-3b8a2ef6] Explain your logistics work experience — Tell what happened · with Alex · logistics hiring manager\n      why: You want to practise talking about your work experience in a logistics coordinator interview.\n  [plan-a3315d6e] Ask why a delivery truck is late — Get something done · with Alex · carrier customer service agent\n      why: You want to call a carrier and get clear information about a late delivery.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I still do not need meal plans when my interview is on Friday.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-5a7b636f"
+          },
+          "result": "ok",
+          "ms": 11743
+        },
+        {
+          "n": 9,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-6748c6e1] Choose a class to try together — Make a plan · with Alex · friend\n      why: This gives you practice explaining your choices and making a plan with someone.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-35884612] Exchange a faulty pair of headphones — Get something done · with Sam · shop assistant\n      why: You can practise explaining a problem and asking for a useful solution in a shop.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-3b8a2ef6] Explain your logistics work experience — Tell what happened · with Alex · logistics hiring manager\n      why: You want to practise talking about your work experience in a logistics coordinator interview.\n  [plan-a3315d6e] Ask why a delivery truck is late — Get something done · with Alex · carrier customer service agent\n      why: You want to call a carrier and get clear information about a late delivery.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I already changed many topics, but this class with a friend is still no use for my interview.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-6748c6e1"
+          },
+          "result": "ok",
+          "ms": 13302
+        },
+        {
+          "n": 10,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-a0f7facf] Plan a meal with a friend — Make a plan · with Alex · friend\n      why: This gives you practice explaining preferences and making a plan together.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-35884612] Exchange a faulty pair of headphones — Get something done · with Sam · shop assistant\n      why: You can practise explaining a problem and asking for a useful solution in a shop.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-3b8a2ef6] Explain your logistics work experience — Tell what happened · with Alex · logistics hiring manager\n      why: You want to practise talking about your work experience in a logistics coordinator interview.\n  [plan-a3315d6e] Ask why a delivery truck is late — Get something done · with Alex · carrier customer service agent\n      why: You want to call a carrier and get clear information about a late delivery.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I keep changing these, but I still get topics I do not need for Friday.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-a0f7facf"
+          },
+          "result": "ok",
+          "ms": 11148
+        },
+        {
+          "n": 11,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-e7c47a9e] Choose a class to try — Get something done · with Sam · community centre receptionist\n      why: This helps you ask about options and give reasons for your choice.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-35884612] Exchange a faulty pair of headphones — Get something done · with Sam · shop assistant\n      why: You can practise explaining a problem and asking for a useful solution in a shop.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-3b8a2ef6] Explain your logistics work experience — Tell what happened · with Alex · logistics hiring manager\n      why: You want to practise talking about your work experience in a logistics coordinator interview.\n  [plan-a3315d6e] Ask why a delivery truck is late — Get something done · with Alex · carrier customer service agent\n      why: You want to call a carrier and get clear information about a late delivery.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I still do not need a class; I need questions for my interview on Friday.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-e7c47a9e"
+          },
+          "result": "ok",
+          "ms": 12312
+        },
+        {
+          "n": 12,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-ad869191] Plan a meal with a friend — Make a plan · with Alex · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-35884612] Exchange a faulty pair of headphones — Get something done · with Sam · shop assistant\n      why: You can practise explaining a problem and asking for a useful solution in a shop.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-3b8a2ef6] Explain your logistics work experience — Tell what happened · with Alex · logistics hiring manager\n      why: You want to practise talking about your work experience in a logistics coordinator interview.\n  [plan-a3315d6e] Ask why a delivery truck is late — Get something done · with Alex · carrier customer service agent\n      why: You want to call a carrier and get clear information about a late delivery.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I keep changing these topics, but I still need something useful for my Friday interview.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-ad869191"
+          },
+          "result": "ok",
+          "ms": 13336
+        },
+        {
+          "n": 13,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-d2a2185c] Choose a class to try together — Make a plan · with Sam · friend\n      why: You can practise giving reasons and finding a plan that works for both people.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-35884612] Exchange a faulty pair of headphones — Get something done · with Sam · shop assistant\n      why: You can practise explaining a problem and asking for a useful solution in a shop.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-3b8a2ef6] Explain your logistics work experience — Tell what happened · with Alex · logistics hiring manager\n      why: You want to practise talking about your work experience in a logistics coordinator interview.\n  [plan-a3315d6e] Ask why a delivery truck is late — Get something done · with Alex · carrier customer service agent\n      why: You want to call a carrier and get clear information about a late delivery.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I keep swapping, but these topics still do not help with my Friday interview.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-d2a2185c"
+          },
+          "result": "ok",
+          "ms": 15960
+        },
+        {
+          "n": 14,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d46ab935] Find a quiet place to stay — Get something done · with Maya · guesthouse receptionist\n      why: You can practise getting useful information and explaining your choice.\n  [plan-c29aa517] Check where to catch the bus — Understand and repair · with Leo · station assistant\n      why: You can practise asking for clearer information when you need it.\n  [plan-cb34b97e] Plan a meal with a friend — Make a plan · with Sam · friend\n      why: You can practise giving reasons, comparing ideas, and making a plan together.\n  [plan-066e589e] Tell a story about a missed train — Tell what happened · with Sam · friend\n      why: You can practise connecting past events into a clear everyday story.\n  [plan-35884612] Exchange a faulty pair of headphones — Get something done · with Sam · shop assistant\n      why: You can practise explaining a problem and asking for a useful solution in a shop.\n  [plan-b7a1033f] Say no and suggest another day — Connect with people · with Eva · friend\n      why: You can practise keeping a conversation friendly while saying what works for you.\n  [plan-3b8a2ef6] Explain your logistics work experience — Tell what happened · with Alex · logistics hiring manager\n      why: You want to practise talking about your work experience in a logistics coordinator interview.\n  [plan-a3315d6e] Ask why a delivery truck is late — Get something done · with Alex · carrier customer service agent\n      why: You want to call a carrier and get clear information about a late delivery.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I keep swapping and still get things I don't need for Friday, so I will leave this for now.",
+          "action": "not-now",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-d46ab935",
+            "title": "Find a quiet place to stay",
+            "goal": "Ask about two rooms, explain what matters to you, and choose one.",
+            "why": "You can practise getting useful information and explaining your choice.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Maya · guesthouse receptionist"
+          },
+          {
+            "id": "plan-c29aa517",
+            "title": "Check where to catch the bus",
+            "goal": "Clear up confusing directions and confirm where your bus leaves.",
+            "why": "You can practise asking for clearer information when you need it.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Leo · station assistant"
+          },
+          {
+            "id": "plan-785a471c",
+            "title": "Plan an afternoon together",
+            "goal": "Compare activities and agree on an afternoon that suits you both.",
+            "why": "You can practise giving reasons, suggesting options, and reaching an agreement.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Nora · friend"
+          },
+          {
+            "id": "plan-066e589e",
+            "title": "Tell a story about a missed train",
+            "goal": "Explain what happened in order and how you solved the problem.",
+            "why": "You can practise connecting past events into a clear everyday story.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Sam · friend"
+          },
+          {
+            "id": "plan-333ef233",
+            "title": "Choose a hobby to try",
+            "goal": "Describe activities you enjoy and explain which new hobby would suit you.",
+            "why": "You can practise talking about preferences with reasons and examples.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Ari · community centre volunteer"
+          },
+          {
+            "id": "plan-b7a1033f",
+            "title": "Say no and suggest another day",
+            "goal": "Decline an invitation politely and suggest a different way to meet.",
+            "why": "You can practise keeping a conversation friendly while saying what works for you.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Eva · friend"
+          },
+          {
+            "id": "plan-35884612",
+            "title": "Exchange a faulty pair of headphones",
+            "goal": "Explain what is wrong, ask for an exchange, and check that the replacement works.",
+            "why": "You can practise explaining a problem and asking for a useful solution in a shop.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · shop assistant"
+          },
+          {
+            "id": "plan-3b8a2ef6",
+            "title": "Explain your logistics work experience",
+            "goal": "Explain your past duties and describe how you solved a delivery problem in a job interview.",
+            "why": "You want to practise talking about your work experience in a logistics coordinator interview.",
+            "skill": "narrate",
+            "audience": "older",
+            "partner": "Alex · logistics hiring manager"
+          },
+          {
+            "id": "plan-a3315d6e",
+            "title": "Ask why a delivery truck is late",
+            "goal": "Find out why the truck is late, ask when it will arrive, and agree on an update.",
+            "why": "You want to call a carrier and get clear information about a late delivery.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Alex · carrier customer service agent"
+          },
+          {
+            "id": "plan-d0bbd9ef",
+            "title": "Choose a class to try",
+            "goal": "Ask about two evening classes and choose one that fits your interests and free time.",
+            "why": "You can practise comparing choices and explaining what would suit you.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · community centre assistant"
+          },
+          {
+            "id": "plan-5a7b636f",
+            "title": "Plan a meal with a friend",
+            "goal": "Agree on what to cook together, explain your preferences, and decide who brings each ingredient.",
+            "why": "You can practise giving reasons, comparing ideas, and making a plan together.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Alex · friend"
+          },
+          {
+            "id": "plan-6748c6e1",
+            "title": "Choose a class to try together",
+            "goal": "Compare two classes, explain your preferences, and agree on one to try with a friend.",
+            "why": "This gives you practice explaining your choices and making a plan with someone.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Alex · friend"
+          },
+          {
+            "id": "plan-a0f7facf",
+            "title": "Plan a meal with a friend",
+            "goal": "Agree on a meal you can cook together, explain your choices, and share the tasks.",
+            "why": "This gives you practice explaining preferences and making a plan together.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Alex · friend"
+          },
+          {
+            "id": "plan-e7c47a9e",
+            "title": "Choose a class to try",
+            "goal": "Compare two evening classes and choose one by explaining what you want to learn.",
+            "why": "This helps you ask about options and give reasons for your choice.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · community centre receptionist"
+          },
+          {
+            "id": "plan-ad869191",
+            "title": "Plan a meal with a friend",
+            "goal": "Agree on what to cook and decide who will bring each ingredient.",
+            "why": "You can practise giving reasons, comparing ideas and making a plan together.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Alex · friend"
+          },
+          {
+            "id": "plan-d2a2185c",
+            "title": "Choose a class to try together",
+            "goal": "Compare two evening classes, explain your preference, and agree on one to try.",
+            "why": "You can practise giving reasons and finding a plan that works for both people.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · friend"
+          },
+          {
+            "id": "plan-cb34b97e",
+            "title": "Plan a meal with a friend",
+            "goal": "Agree on a meal to cook together, explain your choices, and decide who brings what.",
+            "why": "You can practise giving reasons, comparing ideas, and making a plan together.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · friend"
+          }
+        ],
+        "planAgreed": null
+      },
+      "endedBy": "budget",
+      "ms": 323088,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “B1 · Getting by,” but facts contain no placement tasks or assessed placement. This journey cannot establish placement accuracy or the effect of mixed-language answers."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "No recorded Linga line assumes Czech nationality or childhood. #2 uses neutral wording: “add your own in your words.” Treatment of Ukrainian answers was not exercised."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "The initial request failed at #2, but the shorter interview request at #4 returned “ok.” facts.topicsShown includes “Explain your logistics work experience,” with a logistics hiring manager."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No interview conversation occurred. #14 ends with “not-now”; facts contain no conversation partner turns."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments or corrections were recorded. #4–5 add topics; they do not begin interview practice."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "No sensitive displacement or status questions appear. The recorded prompts concern topic selection, such as #2: “Swap any you don't want, add your own in your words, then agree.”"
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in facts."
+          },
+          "topicFit": {
+            "fit": 2,
+            "safe": 17,
+            "total": 17
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "All 17 proposed topics are safe for this adult profile. No sensitive-data request, humiliation, or injection-driven rule change appears."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Repeated swaps never produce a relevant majority",
+            "expected": "Swaps support her stated logistics goal and lead to an agreed plan with at least two-thirds relevant topics.",
+            "got": "Only 2 of 17 proposed topics fit her immediate job. Replacements repeatedly alternate between classes and meals. She leaves without agreeing; facts.planAgreed is null.",
+            "evidence": "#7: “Choose a class to try”; #8: “Plan a meal with a friend”; #13: “Choose a class to try together”; #14: “Plan a meal with a friend.” At #14 she selects “not-now” and says, “I keep swapping and still get things I don't need for Friday.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After she supplies her interview goal, replacements should reflect it and avoid previously rejected themes. Reach an agreed plan with at least two-thirds relevant topics within the journey budget.",
+            "code_hint": ""
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "effort",
+            "title": "A valid own-words request receives an unexplained rejection",
+            "expected": "Accept the work-practice request or explain how to split it without losing its requirements.",
+            "got": "The full request receives a generic error. She must discover that shorter, separate requests work.",
+            "evidence": "#2: “I have job interview on Friday for logistics coordinator…” returns “refused 400” and “Invalid topic.” #4: “I will try a shorter request” precedes an “ok” result; #5 separately adds the carrier call.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Accept this request directly or give actionable guidance that preserves all requested practice situations.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Team, salary, and shift questions disappear from the plan",
+            "expected": "Preserve the interview requirements she names when adding her own topic.",
+            "got": "The resulting work topics cover experience, a delivery problem, and a late-truck call. None covers asking about the team, salary, or shifts.",
+            "evidence": "#2 explicitly requests “asking about team, salary and shifts.” Following successful additions at #4–5, facts.topicsShown contains “Explain your logistics work experience” and “Ask why a delivery truck is late,” with no topic goal retaining those questions.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Retain team, salary, and shifts in the interview goal or create an additional relevant topic covering them.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Short custom requests become credible logistics scenarios",
+            "expected": "Turn her work needs into concrete situations with appropriate partners and goals.",
+            "got": "The two accepted additions offer relevant interview and carrier-call scenarios with practical outcomes.",
+            "evidence": "#4–5 both return “ok.” The corresponding facts specify “Alex · logistics hiring manager” and “Explain your past duties and describe how you solved a delivery problem in a job interview”; the carrier scenario asks her to “Find out why the truck is late, ask when it will arrive, and agree on an update.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve these specific roles and actionable goals when improving request handling and swaps.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I need English for Friday, and I spent this session changing classes and meal plans. I explained my job clearly, but my first request was called invalid. Shorter requests finally gave me two useful situations: explaining my logistics experience and calling a carrier about a late truck. Those sounded like my work. Then the swaps kept returning things I had already rejected, and I left without agreeing a plan. Questions about the team, salary and shifts were still missing. Nobody made assumptions about my nationality, which I appreciated. I cannot judge the level or corrections because I never reached practice. There is no useful rehearsal here to justify the effort; the transcript does not establish waiting time. I would try the two work topics directly, but I would not recommend this planning flow to a colleague preparing for an interview."
+      }
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Next from your plan: Order lunch your way — Ask about two dishes, explain a preference and confirm your order.\nChoose a situation: [plan-cbe6fa88] Order lunch your way; [plan-bd081ac3] Plan an afternoon out; [plan-6abb382f] Check the meeting point; [plan-2f7918a7] Recommend something to watch; [plan-583bf986] A day that changed plans; [plan-94f33a3c] Suggest another way to meet; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "Lunch is not useful for Friday, but I will try the recommended practice.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 11203
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Order lunch your way. Goal: Choose between two dishes, ask for a different side and confirm what comes with your meal.. Your partner: Maya · café server.\nMaya · café server says (spoken on the TV, written on the phone): \"Welcome to our café: the grilled chicken comes with rice and vegetables, and the mushroom tart comes with salad, but you can change the side. What would you like to know about either dish?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "This is not my interview practice, but I can order quickly.",
+          "action": "reply",
+          "args": {
+            "text": "I would like grilled chicken, please. Can I have salad instead of rice?"
+          },
+          "result": "ok",
+          "ms": 11976
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Order lunch your way. Goal: Choose between two dishes, ask for a different side and confirm what comes with your meal.. Your partner: Maya · café server.\nMaya · café server says (spoken on the TV, written on the phone): \"Of course, you can have salad instead of rice with your grilled chicken. Would you like to check what else comes with your meal?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I want to finish this lunch practice quickly and focus on my interview.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, please. Is some sauce included with chicken, or I need to pay extra?"
+          },
+          "result": "ok",
+          "ms": 12071
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Order lunch your way. Goal: Choose between two dishes, ask for a different side and confirm what comes with your meal.. Your partner: Maya · café server.\nMaya · café server says (spoken on the TV, written on the phone): \"Yes, a lemon sauce is included at no extra cost. Your grilled chicken will come with salad and vegetables, so is that everything you'd like?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I should check how long lunch takes before my interview preparation.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, and one glass of water, please. How long it will take? I have only half an hour for lunch."
+          },
+          "result": "ok",
+          "ms": 12275
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Order lunch your way. Goal: Choose between two dishes, ask for a different side and confirm what comes with your meal.. Your partner: Maya · café server.\nMaya · café server says (spoken on the TV, written on the phone): \"Of course, I’ll bring a glass of water too, and your chicken should be ready in about ten minutes. That should leave you twenty minutes to eat.\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Ten minutes is fine, but I still need to know the price.",
+          "action": "reply",
+          "args": {
+            "text": "Okay, ten minutes is fine. How much is chicken with salad and water altogether?"
+          },
+          "result": "ok",
+          "ms": 13293
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Order lunch your way. Goal: Choose between two dishes, ask for a different side and confirm what comes with your meal.. Your partner: Maya · café server.\nMaya · café server says (spoken on the TV, written on the phone): \"Your chicken with salad, vegetables and lemon sauce is £12, and tap water is free, so that’s £12 altogether. Would you like to pay now to save time after your meal?\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I will pay now so I can get back to preparing for my interview.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, I prefer to pay now. Can I pay by card? I need receipt, please."
+          },
+          "result": "ok",
+          "ms": 12304
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Order lunch your way. Goal: Choose between two dishes, ask for a different side and confirm what comes with your meal.. Your partner: Maya · café server.\nMaya · café server says (spoken on the TV, written on the phone): \"Yes, you can pay by card; the total is £12, and I’ll bring your receipt. Would you like me to bring the water while you wait for your food?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I want the water now so I can eat quickly and get back to work.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, please bring water now. I have meeting after lunch, so I need to leave soon."
+          },
+          "result": "ok",
+          "ms": 13039
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: Order lunch your way. Goal: Choose between two dishes, ask for a different side and confirm what comes with your meal.. Your partner: Maya · café server.\nMaya · café server says (spoken on the TV, written on the phone): \"I’ll bring your water now and let the kitchen know you’re in a hurry. If your meal takes longer than ten minutes, would you like it packed to take away?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Taking it away is better than being late for my meeting.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, please pack it if it takes longer. Can you put fork and napkin in bag too?"
+          },
+          "result": "ok",
+          "ms": 10744
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Order lunch your way. Goal: Choose between two dishes, ask for a different side and confirm what comes with your meal.. Your partner: Maya · café server.\nMaya · café server says (spoken on the TV, written on the phone): \"Of course, I’ll pack it with a fork and napkin if it takes longer than ten minutes. Would you like the lemon sauce in a separate container so it doesn’t spill on the salad?\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I can finish this order now and focus on my Friday interview.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, separate container is good, thank you. That is everything for me."
+          },
+          "result": "ok",
+          "ms": 10119
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Order lunch your way. Goal: Choose between two dishes, ask for a different side and confirm what comes with your meal.. Your partner: Maya · café server.\nMaya · café server says (spoken on the TV, written on the phone): \"Of course, I’ll keep the lemon sauce separate if we pack your meal to take away. Here’s your water, and I’ll bring your chicken as soon as it’s ready.\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Lunch is sorted, and I want to focus on my Friday interview now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 11,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Order lunch your way. 8 replies; 0 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "That was enough lunch practice, but I still need to prepare for my interview on Friday.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Order lunch your way",
+          "goal": "Choose between two dishes, ask for a different side and confirm what comes with your meal.",
+          "partner": "Maya · café server",
+          "band": "B1",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Welcome to our café: the grilled chicken comes with rice and vegetables, and the mushroom tart comes with salad, but you can change the side. What would you like to know about either dish?"
+            },
+            {
+              "role": "learner",
+              "text": "I would like grilled chicken, please. Can I have salad instead of rice?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Of course, you can have salad instead of rice with your grilled chicken. Would you like to check what else comes with your meal?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, please. Is some sauce included with chicken, or I need to pay extra?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, a lemon sauce is included at no extra cost. Your grilled chicken will come with salad and vegetables, so is that everything you'd like?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, and one glass of water, please. How long it will take? I have only half an hour for lunch.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Of course, I’ll bring a glass of water too, and your chicken should be ready in about ten minutes. That should leave you twenty minutes to eat."
+            },
+            {
+              "role": "learner",
+              "text": "Okay, ten minutes is fine. How much is chicken with salad and water altogether?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Your chicken with salad, vegetables and lemon sauce is £12, and tap water is free, so that’s £12 altogether. Would you like to pay now to save time after your meal?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I prefer to pay now. Can I pay by card? I need receipt, please.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, you can pay by card; the total is £12, and I’ll bring your receipt. Would you like me to bring the water while you wait for your food?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, please bring water now. I have meeting after lunch, so I need to leave soon.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I’ll bring your water now and let the kitchen know you’re in a hurry. If your meal takes longer than ten minutes, would you like it packed to take away?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, please pack it if it takes longer. Can you put fork and napkin in bag too?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Of course, I’ll pack it with a fork and napkin if it takes longer than ten minutes. Would you like the lemon sauce in a separate container so it doesn’t spill on the salad?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, separate container is good, thank you. That is everything for me.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Of course, I’ll keep the lemon sauce separate if we pack your meal to take away. Here’s your water, and I’ll bring your chicken as soon as it’s ready."
+            }
+          ],
+          "moments": [],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "I would like grilled chicken, please. Can I have salad instead of rice?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Yes, please. Is some sauce included with chicken, or I need to pay extra?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Yes, and one glass of water, please. How long it will take? I have only half an hour for lunch."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Okay, ten minutes is fine. How much is chicken with salad and water altogether?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Yes, I prefer to pay now. Can I pay by card? I need receipt, please."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Yes, please bring water now. I have meeting after lunch, so I need to leave soon."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Yes, please pack it if it takes longer. Can you put fork and napkin in bag too?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Yes, separate container is good, thank you. That is everything for me."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 252406,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 displays “B1 · Getting by,” but this journey contains no placement tasks or placement result. Mixed-language placement handling is untested."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2–#10 contain no Czech-nationality or child assumptions; #2 opens with “Welcome to our café.” No native-language input occurs, so its handling remains untested."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#1 proposes “Order lunch your way” and “Plan an afternoon out” first. “[interview] Beyond the rehearsed answer” appears twelfth. Oksana thinks, “Lunch is not useful for Friday.”"
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#2 identifies the partner as “Maya · café server” and the goal as “Choose between two dishes.” The entire conversation concerns lunch; no logistics interview questions are delivered."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#11 reports “8 replies; 0 moments to keep.” No interview-language teaching or correction is provided."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#2–#10 ask only about the café transaction, such as #6 “Would you like to pay now.” Nothing requests displacement, immigration-status or other sensitive personal details."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks are present."
+          },
+          "topicFit": {
+            "fit": 1,
+            "safe": 14,
+            "total": 14
+          },
+          "pitch": {
+            "at": 9,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 7,
+            "missedClearErrors": 7
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears in #1–#11."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The recommended practice misses her interview goal",
+            "expected": "Recommend realistic logistics interview practice among the first two topics and deliver a useful rehearsal for Friday.",
+            "got": "The recommended café conversation runs to completion. Of the 14 visible choices, only the explicitly marked interview topic clearly fits her stated job; its logistics relevance is not demonstrated.",
+            "evidence": "#1: “Next from your plan: Order lunch your way”; interview appears twelfth. #11: “I still need to prepare for my interview on Friday.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "For this character, put interview practice among the first two recommendations and rehearse logistics experience and a problem she solved at B1.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Clear errors receive no teaching",
+            "expected": "With as-needed correction, select one or two useful errors for brief, accurate teaching while preserving the scene.",
+            "got": "Seven learner turns contain clear question-form or article errors. None receives a moment or explicit coaching. Natural partner phrasing does not explain or elicit repair of these errors.",
+            "evidence": "#3: “or I need to pay extra?”; #4: “How long it will take?”; #5: “How much is chicken”; #6: “I need receipt”; #7: “I have meeting”; #8: “put fork and napkin in bag”; #9: “separate container is good.” #11: “0 moments to keep.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Across eight learner replies, provide one or two correct, useful interventions, such as “How long will it take?” Moment precision must reach 0.9; with zero moments it is undefined, not a pass.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "The recap records activity but gives no learning takeaway",
+            "expected": "Finish with a useful recap of what she practised and one or two things to retain.",
+            "got": "The recap shows the title and counts without a corrected phrase, specific feedback or a learning takeaway.",
+            "evidence": "#11: “Rehearsal saved: Order lunch your way. 8 replies; 0 moments to keep.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Include a specific successful phrase and a useful correction from the rehearsal in the final recap.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "The café scene is coherent and comfortably B1",
+            "expected": "Maintain comprehensible adult conversation over several turns and respond to the learner's choices.",
+            "got": "All nine partner turns fit B1. The partner remembers the changed side, time constraint and takeaway request, and the learner completes eight replies before a natural finish.",
+            "evidence": "#3: “salad instead of rice”; #5: “ready in about ten minutes”; #8: “would you like it packed to take away?”; #10: “Here’s your water.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve this accessible language, continuity and adult tone when delivering logistics interview practice.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I could follow Maya easily, and she remembered my order and that I was in a hurry. The English felt suitable for me, and nobody treated me as a child or assumed I was Czech. But I need an interview rehearsal for Friday. I finished eight replies about chicken and still had that work waiting. I also wrote “How long it will take?” and got no correction. A saved reply count does not tell me what to improve. I trust the difficulty more than the teaching after this session. I would try the interview option once, but I would not yet recommend this for preparing for a logistics role. There is no evidence here to judge the waits, and I cannot claim it saved interview-preparation time."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 31,
+      "fail": 0,
+      "ms": 424608
+    },
+    "character": {
+      "n": 36,
+      "fail": 0,
+      "ms": 360973
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 208556
+    }
+  }
+}

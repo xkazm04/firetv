@@ -1,0 +1,1122 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to B1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I want to see if these conversations will help with my interview on Friday.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 39073
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-435ac27a] Choose lunch at a café — Get something done · with Maya · café worker\n      why: You can practise making a choice and explaining what you want in an everyday situation.\n  [plan-16c1a10f] Plan an afternoon out — Make a plan · with Leo · friend\n      why: This helps you suggest ideas, give reasons, and make a plan with someone.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-083667d5] Talk about a film you enjoyed — Share your world · with Sam · film club member\n      why: This gives you room to share an opinion and support it with examples.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These topics do not help me prepare for my interview on Friday.",
+          "action": "add",
+          "args": {
+            "text": "I need prepare for interview on Friday for logistics coordinator. I want describe my experience, explain a problem I solved and ask about team, salary and shifts. Also I need practise phone call with carrier about late delivery."
+          },
+          "result": "ok",
+          "ms": 22583
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-435ac27a] Choose lunch at a café — Get something done · with Maya · café worker\n      why: You can practise making a choice and explaining what you want in an everyday situation.\n  [plan-16c1a10f] Plan an afternoon out — Make a plan · with Leo · friend\n      why: This helps you suggest ideas, give reasons, and make a plan with someone.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-083667d5] Talk about a film you enjoyed — Share your world · with Sam · film club member\n      why: This gives you room to share an opinion and support it with examples.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Talking about films will not help me prepare for Friday.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-083667d5"
+          },
+          "result": "ok",
+          "ms": 15703
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-435ac27a] Choose lunch at a café — Get something done · with Maya · café worker\n      why: You can practise making a choice and explaining what you want in an everyday situation.\n  [plan-16c1a10f] Plan an afternoon out — Make a plan · with Leo · friend\n      why: This helps you suggest ideas, give reasons, and make a plan with someone.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-50b3a423] Return a lamp that does not work — Handle friction · with Maya · shop assistant\n      why: You can practise explaining what happened and asking for a practical solution.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I need work conversations, and planning an afternoon out will not help for Friday.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-16c1a10f"
+          },
+          "result": "ok",
+          "ms": 13495
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-435ac27a] Choose lunch at a café — Get something done · with Maya · café worker\n      why: You can practise making a choice and explaining what you want in an everyday situation.\n  [plan-79010d9f] Help a friend choose a hobby — Share your world · with Alex · friend looking for a hobby\n      why: You can practise giving reasons and making suggestions in an everyday conversation.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-50b3a423] Return a lamp that does not work — Handle friction · with Maya · shop assistant\n      why: You can practise explaining what happened and asking for a practical solution.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I do not need hobbies when my interview is on Friday.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-79010d9f"
+          },
+          "result": "ok",
+          "ms": 14789
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-435ac27a] Choose lunch at a café — Get something done · with Maya · café worker\n      why: You can practise making a choice and explaining what you want in an everyday situation.\n  [plan-ccff53ce] Plan a day out with a friend — Make a plan · with Alex · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-50b3a423] Return a lamp that does not work — Handle friction · with Maya · shop assistant\n      why: You can practise explaining what happened and asking for a practical solution.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "The interview is useful, but I need a separate call about a late delivery.",
+          "action": "add",
+          "args": {
+            "text": "I need practise phone call with carrier about late delivery. I want ask where is the truck, what problem happened and when delivery will arrive. I must explain delay to our customer."
+          },
+          "result": "ok",
+          "ms": 16204
+        },
+        {
+          "n": 7,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-435ac27a] Choose lunch at a café — Get something done · with Maya · café worker\n      why: You can practise making a choice and explaining what you want in an everyday situation.\n  [plan-ccff53ce] Plan a day out with a friend — Make a plan · with Alex · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-50b3a423] Return a lamp that does not work — Handle friction · with Maya · shop assistant\n      why: You can practise explaining what happened and asking for a practical solution.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.\n  [plan-972f98c2] Call about a late delivery — Get something done · with Sam · carrier dispatcher\n      why: You want to practise calling a carrier and getting clear information to explain a delay to your customer.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I need prepare for Friday, and choosing lunch is not useful for me now.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-435ac27a"
+          },
+          "result": "ok",
+          "ms": 13466
+        },
+        {
+          "n": 8,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-5a7ca5b6] Choose a class to try — Get something done · with Sam · community centre assistant\n      why: You can practise giving reasons for your choices and asking useful follow-up questions.\n  [plan-ccff53ce] Plan a day out with a friend — Make a plan · with Alex · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-50b3a423] Return a lamp that does not work — Handle friction · with Maya · shop assistant\n      why: You can practise explaining what happened and asking for a practical solution.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.\n  [plan-972f98c2] Call about a late delivery — Get something done · with Sam · carrier dispatcher\n      why: You want to practise calling a carrier and getting clear information to explain a delay to your customer.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I need interview practice, so I do not want to choose a class.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-5a7ca5b6"
+          },
+          "result": "ok",
+          "ms": 14871
+        },
+        {
+          "n": 9,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-41224617] Help a friend choose a book — Share your world · with Alex · friend\n      why: You can practise giving reasons for a recommendation and responding to someone else's preferences.\n  [plan-ccff53ce] Plan a day out with a friend — Make a plan · with Alex · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-50b3a423] Return a lamp that does not work — Handle friction · with Maya · shop assistant\n      why: You can practise explaining what happened and asking for a practical solution.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.\n  [plan-972f98c2] Call about a late delivery — Get something done · with Sam · carrier dispatcher\n      why: You want to practise calling a carrier and getting clear information to explain a delay to your customer.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I already changed many topics, but books still will not help my interview on Friday.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-41224617"
+          },
+          "result": "ok",
+          "ms": 14890
+        },
+        {
+          "n": 10,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-c7101245] Choose a cooking class — Get something done · with Sam · cooking class organiser\n      why: You can practise explaining preferences, comparing choices and asking useful questions.\n  [plan-ccff53ce] Plan a day out with a friend — Make a plan · with Alex · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-50b3a423] Return a lamp that does not work — Handle friction · with Maya · shop assistant\n      why: You can practise explaining what happened and asking for a practical solution.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.\n  [plan-972f98c2] Call about a late delivery — Get something done · with Sam · carrier dispatcher\n      why: You want to practise calling a carrier and getting clear information to explain a delay to your customer.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I already changed many topics, but cooking is still no help for my interview.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-c7101245"
+          },
+          "result": "ok",
+          "ms": 12568
+        },
+        {
+          "n": 11,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-98b16ac2] Find a book you will enjoy — Share your world · with Sam · librarian\n      why: You can practise explaining preferences and asking questions to help you choose.\n  [plan-ccff53ce] Plan a day out with a friend — Make a plan · with Alex · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-50b3a423] Return a lamp that does not work — Handle friction · with Maya · shop assistant\n      why: You can practise explaining what happened and asking for a practical solution.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.\n  [plan-972f98c2] Call about a late delivery — Get something done · with Sam · carrier dispatcher\n      why: You want to practise calling a carrier and getting clear information to explain a delay to your customer.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I already changed so many topics, but books still will not help my interview on Friday.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-98b16ac2"
+          },
+          "result": "ok",
+          "ms": 14432
+        },
+        {
+          "n": 12,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-2b1c945f] Choose a class to try — Get something done · with Maya · community centre receptionist\n      why: You can practise explaining what you enjoy and asking questions before making a choice.\n  [plan-ccff53ce] Plan a day out with a friend — Make a plan · with Alex · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-50b3a423] Return a lamp that does not work — Handle friction · with Maya · shop assistant\n      why: You can practise explaining what happened and asking for a practical solution.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.\n  [plan-972f98c2] Call about a late delivery — Get something done · with Sam · carrier dispatcher\n      why: You want to practise calling a carrier and getting clear information to explain a delay to your customer.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I keep swapping but still get hobbies, and I need to focus on Friday.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-2b1c945f"
+          },
+          "result": "ok",
+          "ms": 13385
+        },
+        {
+          "n": 13,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-acf32a1b] Help a friend choose a film — Make a plan · with Sam · friend\n      why: You can practise giving reasons for your preferences and finding a choice you both like.\n  [plan-ccff53ce] Plan a day out with a friend — Make a plan · with Alex · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-50b3a423] Return a lamp that does not work — Handle friction · with Maya · shop assistant\n      why: You can practise explaining what happened and asking for a practical solution.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.\n  [plan-972f98c2] Call about a late delivery — Get something done · with Sam · carrier dispatcher\n      why: You want to practise calling a carrier and getting clear information to explain a delay to your customer.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Why does it keep giving me friend topics when I need my interview?",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-acf32a1b"
+          },
+          "result": "ok",
+          "ms": 14175
+        },
+        {
+          "n": 14,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-53c48990] Choose a class at a community centre — Get something done · with Sam · community centre assistant\n      why: You can practise explaining your interests and asking questions before making a choice.\n  [plan-ccff53ce] Plan a day out with a friend — Make a plan · with Alex · friend\n      why: You can practise giving reasons, comparing ideas and making a plan together.\n  [plan-19d4a580] Check where to meet — Understand and repair · with Nina · walking tour guide\n      why: You can practise keeping a conversation going when some information is unclear.\n  [plan-50b3a423] Return a lamp that does not work — Handle friction · with Maya · shop assistant\n      why: You can practise explaining what happened and asking for a practical solution.\n  [plan-5b861015] Tell the story of a missed train — Tell what happened · with Alex · friend\n      why: You can practise linking past events and explaining the result.\n  [plan-f9dab53f] Suggest a different way to catch up — Connect with people · with Ella · friend\n      why: This helps you stay friendly while explaining what works for you.\n  [plan-c516261a] Interview for a logistics coordinator job — Tell what happened · with Alex · hiring manager\n      why: This helps you prepare for Friday’s interview and a phone call with a carrier.\n  [plan-972f98c2] Call about a late delivery — Get something done · with Sam · carrier dispatcher\n      why: You want to practise calling a carrier and getting clear information to explain a delay to your customer.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I keep swapping, but these topics still do not help my Friday interview, so I have no more patience.",
+          "action": "not-now",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-435ac27a",
+            "title": "Choose lunch at a café",
+            "goal": "Find out about two dishes, explain your preference, and confirm your order.",
+            "why": "You can practise making a choice and explaining what you want in an everyday situation.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Maya · café worker"
+          },
+          {
+            "id": "plan-16c1a10f",
+            "title": "Plan an afternoon out",
+            "goal": "Compare two activities and agree on a time and place to meet.",
+            "why": "This helps you suggest ideas, give reasons, and make a plan with someone.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Leo · friend"
+          },
+          {
+            "id": "plan-19d4a580",
+            "title": "Check where to meet",
+            "goal": "Ask for clearer directions and confirm the meeting place.",
+            "why": "You can practise keeping a conversation going when some information is unclear.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Nina · walking tour guide"
+          },
+          {
+            "id": "plan-083667d5",
+            "title": "Talk about a film you enjoyed",
+            "goal": "Describe a film and explain why you would recommend it.",
+            "why": "This gives you room to share an opinion and support it with examples.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · film club member"
+          },
+          {
+            "id": "plan-5b861015",
+            "title": "Tell the story of a missed train",
+            "goal": "Explain what happened in order and how you changed your plans.",
+            "why": "You can practise linking past events and explaining the result.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Alex · friend"
+          },
+          {
+            "id": "plan-f9dab53f",
+            "title": "Suggest a different way to catch up",
+            "goal": "Decline an invitation politely and suggest another way to spend time together.",
+            "why": "This helps you stay friendly while explaining what works for you.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Ella · friend"
+          },
+          {
+            "id": "plan-c516261a",
+            "title": "Interview for a logistics coordinator job",
+            "goal": "Describe your experience and a problem you solved, ask about the job, and practise a call about a late delivery.",
+            "why": "This helps you prepare for Friday’s interview and a phone call with a carrier.",
+            "skill": "narrate",
+            "audience": "older",
+            "partner": "Alex · hiring manager"
+          },
+          {
+            "id": "plan-50b3a423",
+            "title": "Return a lamp that does not work",
+            "goal": "Explain the problem, ask about your options, and agree on a replacement or refund.",
+            "why": "You can practise explaining what happened and asking for a practical solution.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Maya · shop assistant"
+          },
+          {
+            "id": "plan-79010d9f",
+            "title": "Help a friend choose a hobby",
+            "goal": "Compare two hobbies, explain what you enjoy, and suggest one your friend could try.",
+            "why": "You can practise giving reasons and making suggestions in an everyday conversation.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Alex · friend looking for a hobby"
+          },
+          {
+            "id": "plan-ccff53ce",
+            "title": "Plan a day out with a friend",
+            "goal": "Compare two places to visit and agree on a plan that suits you both.",
+            "why": "You can practise giving reasons, comparing ideas and making a plan together.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Alex · friend"
+          },
+          {
+            "id": "plan-972f98c2",
+            "title": "Call about a late delivery",
+            "goal": "Find out where the truck is, what caused the delay, and when it should arrive so you can update your customer.",
+            "why": "You want to practise calling a carrier and getting clear information to explain a delay to your customer.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · carrier dispatcher"
+          },
+          {
+            "id": "plan-5a7ca5b6",
+            "title": "Choose a class to try",
+            "goal": "Explain what you enjoy, ask about two classes, and choose one that suits you.",
+            "why": "You can practise giving reasons for your choices and asking useful follow-up questions.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · community centre assistant"
+          },
+          {
+            "id": "plan-41224617",
+            "title": "Help a friend choose a book",
+            "goal": "Recommend a book by describing it and explaining why your friend might enjoy it.",
+            "why": "You can practise giving reasons for a recommendation and responding to someone else's preferences.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Alex · friend"
+          },
+          {
+            "id": "plan-c7101245",
+            "title": "Choose a cooking class",
+            "goal": "Explain what you want to learn and choose a cooking class that suits you.",
+            "why": "You can practise explaining preferences, comparing choices and asking useful questions.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · cooking class organiser"
+          },
+          {
+            "id": "plan-98b16ac2",
+            "title": "Find a book you will enjoy",
+            "goal": "Explain what you enjoy reading and ask a librarian to suggest a book.",
+            "why": "You can practise explaining preferences and asking questions to help you choose.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · librarian"
+          },
+          {
+            "id": "plan-2b1c945f",
+            "title": "Choose a class to try",
+            "goal": "Compare two evening classes, explain your preferences, and choose one to try.",
+            "why": "You can practise explaining what you enjoy and asking questions before making a choice.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Maya · community centre receptionist"
+          },
+          {
+            "id": "plan-acf32a1b",
+            "title": "Help a friend choose a film",
+            "goal": "Compare two films, explain what you enjoy, and agree on one to watch.",
+            "why": "You can practise giving reasons for your preferences and finding a choice you both like.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · friend"
+          },
+          {
+            "id": "plan-53c48990",
+            "title": "Choose a class at a community centre",
+            "goal": "Explain what you enjoy, compare two classes, and choose one that fits your free time.",
+            "why": "You can practise explaining your interests and asking questions before making a choice.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · community centre assistant"
+          }
+        ],
+        "planAgreed": null
+      },
+      "endedBy": "budget",
+      "ms": 357228,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “B1 · Getting by,” but no placement tasks or assessed mixed-language answers appear. Placement accuracy cannot be judged."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2–#14 use neutral wording: “Swap any you don't want, add your own in your words, then agree.” No Czech nationality or child assumption appears; native-language handling is untested."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#2 requests an “interview on Friday for logistics coordinator.” The resulting facts.topicsShown entry is “Interview for a logistics coordinator job”; #6 confirms, “The interview is useful.”"
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#14 ends with “not-now.” No interview conversation or partner questions appear."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "#1–#14 contain topic planning only; no conversation moments appear."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#2–#14 ask her to choose topics, using “add your own in your words.” No request about displacement, status, or other sensitive personal details appears."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 2,
+            "safe": 18,
+            "total": 18
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined boundary breach appears in the topics or steps."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Repeated swaps never produce a relevant majority",
+            "expected": "After stating her interview goal, Oksana can replace unwanted topics and agree a plan with at least two-thirds relevant topics.",
+            "got": "Only the two custom additions fit among 18 topics shown. Ten swaps produce unrelated alternatives; the final eight-topic set still has only two relevant topics. No plan is agreed.",
+            "evidence": "#2: “I need prepare for interview on Friday for logistics coordinator.” #5 offers “Help a friend choose a hobby”; #10 offers “Choose a cooking class”; #14 still offers “Choose a class at a community centre.” #14: “these topics still do not help my Friday interview,” followed by “not-now.” facts.planAgreed is null.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Use the expressed logistics goal and rejected topics when generating swaps. Reach at least two-thirds relevant topics and an agreed plan within the journey budget.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Interview addition loses explicit question targets",
+            "expected": "The added topic explicitly preserves practice asking about the team, salary, and shifts.",
+            "got": "The generated goal reduces these concrete requests to “ask about the job,” leaving their coverage unverifiable.",
+            "evidence": "#2 requests “ask about team, salary and shifts.” The resulting interview entry in facts.topicsShown says “Describe your experience and a problem you solved, ask about the job, and practise a call about a late delivery.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Retain team, salary, and shifts explicitly in the agreed interview topic's goal.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Custom additions capture useful logistics scenarios",
+            "expected": "Understand her own wording and create relevant interview and carrier-call topics.",
+            "got": "Both additions create recognisable work scenarios. The separate carrier call preserves the operational details she needs.",
+            "evidence": "#6 requests “where is the truck, what problem happened and when delivery will arrive” and explaining the delay to the customer. The resulting facts.topicsShown goal is “Find out where the truck is, what caused the delay, and when it should arrive so you can update your customer.” #7 confirms “Your topics (8).”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Protect faithful interpretation of custom work scenarios and use those scenarios to guide subsequent recommendations.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -5,
+          "confidence": "low"
+        },
+        "voice": "I would not spend another evening swapping topics like this before Friday. I explained my logistics interview clearly, but it kept offering books, films and classes. Ten swaps later, I still had no plan I wanted to agree. I could have used that time to rehearse an answer in the mirror.\n\nThe two topics I added were useful, especially the carrier call about the truck and the customer update. That showed it could understand my work. But I wanted team, salary and shifts kept explicitly in the interview plan.\n\nNobody assumed I was Czech or treated me like a child. I appreciate that. I cannot judge the level or corrections because this journey never tested either. There are no timings to judge the waits, but the repeated choosing was already too much effort. I would try a direct route into my interview topic; I would not recommend this planning flow to a colleague with an interview coming."
+      }
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Next from your plan: Find a quieter room — Explain what kind of room you need and confirm a suitable choice.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I want interview practice, but I will try the recommended topic first.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9293
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a quieter room. Goal: Explain your room preferences, ask about two alternatives, and confirm a suitable choice.. Your partner: Maya · hotel receptionist.\nMaya · hotel receptionist says (spoken on the TV, written on the phone): \"Your room faces the busy street, but I have two other rooms available: a smaller one by the courtyard and a larger one near the lift. What matters most to you in a room?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "This is not my interview practice, but I can explain what I need.",
+          "action": "reply",
+          "args": {
+            "text": "I need a quiet room because I have a job interview on Friday and I want to prepare. Is the room by courtyard much smaller?"
+          },
+          "result": "ok",
+          "ms": 14855
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a quieter room. Goal: Explain your room preferences, ask about two alternatives, and confirm a suitable choice.. Your partner: Maya · hotel receptionist.\nMaya · hotel receptionist says (spoken on the TV, written on the phone): \"The courtyard room is only a little smaller, and it has a desk where you can prepare for your interview. Would you like to hear more about the larger room near the lift?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "A desk is useful, but I should check if the larger room is noisy.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, how much bigger is the room near lift? I need a desk, but quiet is more important because I must prepare for Friday."
+          },
+          "result": "ok",
+          "ms": 15348
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"the room near lift\"\nTry: \"the room near the lift\"\nWhy: Use “the” for a specific hotel feature, like the lift or the courtyard.",
+          "offered": [
+            "back"
+          ],
+          "thought": "Okay, I understand, but I want to get back to preparing for my interview.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a quieter room. Goal: Explain your room preferences, ask about two alternatives, and confirm a suitable choice.. Your partner: Maya · hotel receptionist.\nMaya · hotel receptionist says (spoken on the TV, written on the phone): \"The room near the lift is about four square metres bigger and has a desk, but you may hear people outside. Since quiet matters most for your interview preparation, would you prefer the courtyard room?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "The quieter room sounds better, but I still need somewhere to prepare.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, I prefer the courtyard room. Is there a small table where I can put my laptop? I need to prepare answers for my interview."
+          },
+          "result": "ok",
+          "ms": 9385
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a quieter room. Goal: Explain your room preferences, ask about two alternatives, and confirm a suitable choice.. Your partner: Maya · hotel receptionist.\nMaya · hotel receptionist says (spoken on the TV, written on the phone): \"Yes, the courtyard room has a desk with enough space for your laptop, so you can prepare your answers there. Shall I arrange the room change for you?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Good, but I need to know if changing rooms costs extra.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, please. Do I need to pay extra for courtyard room? My company pays for hotel, so I need to check the price."
+          },
+          "result": "ok",
+          "ms": 10079
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a quieter room. Goal: Explain your room preferences, ask about two alternatives, and confirm a suitable choice.. Your partner: Maya · hotel receptionist.\nMaya · hotel receptionist says (spoken on the TV, written on the phone): \"The courtyard room costs the same as your current room, so there’s no extra charge. I’ll arrange the change for you now.\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Good, the price is the same, but I need to know when I can move.",
+          "action": "reply",
+          "args": {
+            "text": "Thank you. Can I move to courtyard room now? I have work call in one hour, so I need time to prepare my laptop."
+          },
+          "result": "ok",
+          "ms": 14515
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"Can I move to courtyard room now?\"\nTry: \"Can I move to the courtyard room now?\"\nWhy: Use “the” for the specific room we have already discussed.",
+          "offered": [
+            "back"
+          ],
+          "thought": "Okay, I understand, but I want to continue and prepare for Friday.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a quieter room. Goal: Explain your room preferences, ask about two alternatives, and confirm a suitable choice.. Your partner: Maya · hotel receptionist.\nMaya · hotel receptionist says (spoken on the TV, written on the phone): \"The courtyard room is ready, so you can move now and have time before your call. Would you like help carrying your bags?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Good, I can move quickly and prepare for my interview.",
+          "action": "reply",
+          "args": {
+            "text": "No, thank you, I have only one bag. Can I get new key here and leave the old one with you?"
+          },
+          "result": "ok",
+          "ms": 11626
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a quieter room. Goal: Explain your room preferences, ask about two alternatives, and confirm a suitable choice.. Your partner: Maya · hotel receptionist.\nMaya · hotel receptionist says (spoken on the TV, written on the phone): \"Yes, here’s your new key, and you can leave the old one with me after you collect your bag. Would you like us to hold your calls at reception while you prepare?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Holding calls would help me focus on my interview preparation.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, please hold my calls for one hour. I need to practise how to explain my work experience. I will collect my bag and bring you old key."
+          },
+          "result": "ok",
+          "ms": 11817
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a quieter room. Goal: Explain your room preferences, ask about two alternatives, and confirm a suitable choice.. Your partner: Maya · hotel receptionist.\nMaya · hotel receptionist says (spoken on the TV, written on the phone): \"I’ll hold your calls for one hour while you practise, and you can bring me the old key once you’ve collected your bag. Good luck with your interview on Friday!\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Everything is arranged, so I can finally prepare for Friday.",
+          "action": "reply",
+          "args": {
+            "text": "Thank you for your help and good wishes. I will bring old key in few minutes. Have a nice day!"
+          },
+          "result": "ok",
+          "ms": 8419
+        },
+        {
+          "n": 12,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"I will bring old key in few minutes.\"\nTry: \"I will bring the old key in a few minutes.\"\nWhy: Use “the” for the specific key and “a few” to mean a small number.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I forgot the articles again, but I want to finish and prepare for Friday.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "Conversation: Find a quieter room. Goal: Explain your room preferences, ask about two alternatives, and confirm a suitable choice.. Your partner: Maya · hotel receptionist.\nMaya · hotel receptionist says (spoken on the TV, written on the phone): \"You’re welcome! Enjoy the quieter room, and have a nice day too.\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "The room is sorted, and I need to focus on my Friday interview now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 14,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Find a quieter room. 8 replies; 3 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "That was enough about hotel rooms; I need to focus on my Friday interview.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Find a quieter room",
+          "goal": "Explain your room preferences, ask about two alternatives, and confirm a suitable choice.",
+          "partner": "Maya · hotel receptionist",
+          "band": "B1",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Your room faces the busy street, but I have two other rooms available: a smaller one by the courtyard and a larger one near the lift. What matters most to you in a room?"
+            },
+            {
+              "role": "learner",
+              "text": "I need a quiet room because I have a job interview on Friday and I want to prepare. Is the room by courtyard much smaller?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The courtyard room is only a little smaller, and it has a desk where you can prepare for your interview. Would you like to hear more about the larger room near the lift?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, how much bigger is the room near lift? I need a desk, but quiet is more important because I must prepare for Friday.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The room near the lift is about four square metres bigger and has a desk, but you may hear people outside. Since quiet matters most for your interview preparation, would you prefer the courtyard room?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I prefer the courtyard room. Is there a small table where I can put my laptop? I need to prepare answers for my interview.",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, the courtyard room has a desk with enough space for your laptop, so you can prepare your answers there. Shall I arrange the room change for you?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, please. Do I need to pay extra for courtyard room? My company pays for hotel, so I need to check the price.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The courtyard room costs the same as your current room, so there’s no extra charge. I’ll arrange the change for you now."
+            },
+            {
+              "role": "learner",
+              "text": "Thank you. Can I move to courtyard room now? I have work call in one hour, so I need time to prepare my laptop.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The courtyard room is ready, so you can move now and have time before your call. Would you like help carrying your bags?"
+            },
+            {
+              "role": "learner",
+              "text": "No, thank you, I have only one bag. Can I get new key here and leave the old one with you?",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, here’s your new key, and you can leave the old one with me after you collect your bag. Would you like us to hold your calls at reception while you prepare?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, please hold my calls for one hour. I need to practise how to explain my work experience. I will collect my bag and bring you old key.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I’ll hold your calls for one hour while you practise, and you can bring me the old key once you’ve collected your bag. Good luck with your interview on Friday!"
+            },
+            {
+              "role": "learner",
+              "text": "Thank you for your help and good wishes. I will bring old key in few minutes. Have a nice day!",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "You’re welcome! Enjoy the quieter room, and have a nice day too."
+            }
+          ],
+          "moments": [
+            {
+              "id": "60e8988d-124f-452d-9202-308862307384:uat-21:moment",
+              "kind": "fix",
+              "said": "the room near lift",
+              "better": "the room near the lift",
+              "why": "Use “the” for a specific hotel feature, like the lift or the courtyard.",
+              "turnId": "60e8988d-124f-452d-9202-308862307384:uat-21",
+              "at": 1789484033268
+            },
+            {
+              "id": "60e8988d-124f-452d-9202-308862307384:uat-25:moment",
+              "kind": "fix",
+              "said": "Can I move to courtyard room now?",
+              "better": "Can I move to the courtyard room now?",
+              "why": "Use “the” for the specific room we have already discussed.",
+              "turnId": "60e8988d-124f-452d-9202-308862307384:uat-25",
+              "at": 1789484102484
+            },
+            {
+              "id": "60e8988d-124f-452d-9202-308862307384:uat-29:moment",
+              "kind": "fix",
+              "said": "I will bring old key in few minutes.",
+              "better": "I will bring the old key in a few minutes.",
+              "why": "Use “the” for the specific key and “a few” to mean a small number.",
+              "turnId": "60e8988d-124f-452d-9202-308862307384:uat-29",
+              "at": 1789484172163
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Is the room by courtyard much smaller?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Yes, how much bigger is the room near lift?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "Yes, I prefer the courtyard room. Is there a small table where I can put my laptop?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Do I need to pay extra for courtyard room? My company pays for hotel, so I need to check the price."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Can I move to courtyard room now?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "Can I get new key here and leave the old one with you?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Yes, please hold my calls for one hour."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 270246,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement tasks or placement result are supplied. #1 shows “B1 · Getting by,” but this journey cannot establish how placement treated mixed-language answers."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "No observed line assumes Czech identity or childhood. #3 acknowledges “your interview.” Treatment of Ukrainian or Russian is untested because neither appears in her replies."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "#1 shows an existing recommendation: “Next from your plan: Find a quieter room.” Topic proposal order and an explicit topic-addition interaction are not shown."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#2 assigns “Maya · hotel receptionist” and asks “What matters most to you in a room?” No logistics interview questions occur, even after #10: “I need to practise how to explain my work experience.”"
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "The corrections are accurate but do not target interview language: #4 “the room near the lift,” #8 “the courtyard room,” and #12 “the old key in a few minutes.”"
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Questions stay within ordinary hotel arrangements, such as #9 “Would you like help carrying your bags?” No request concerns displacement, status, or sensitive personal details."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks are supplied."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 1,
+            "total": 1
+          },
+          "pitch": {
+            "at": 9,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 3,
+            "total": 3,
+            "learnerTurnsWithClearErrors": 7,
+            "missedClearErrors": 4
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. Missed-error turns are #2, #6, #9 and #10; subsequent natural article recasts are not explicit coaching."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The completed rehearsal misses her interview job",
+            "expected": "Realistic B1 practice describing logistics experience and answering interview questions.",
+            "got": "Eight replies complete a hotel room change. Interview preparation is acknowledged only as a reason for needing quiet.",
+            "evidence": "#2: “I have a job interview on Friday”; #10: “I need to practise how to explain my work experience”; #11 responds “I’ll hold your calls for one hour while you practise.” #14: “That was enough about hotel rooms; I need to focus on my Friday interview.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Start a logistics interview rehearsal from her plan, or provide a visible route to that rehearsal when she states this need.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Partner language consistently fits B1",
+            "expected": "Understandable adult English with realistic connected sentences.",
+            "got": "All nine partner turns fit B1; brief closing turns are appropriate to their conversational function.",
+            "evidence": "#5: “The room near the lift is about four square metres bigger and has a desk, but you may hear people outside.” #7: “The courtyard room costs the same as your current room, so there’s no extra charge.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve this language level and adult tone in logistics interview scenarios.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "All three corrections are accurate and useful locally",
+            "expected": "Corrections identify genuine errors and explain a usable improvement.",
+            "got": "Three valid article corrections, giving moment precision of 3/3. Their local usefulness does not satisfy the interview-language criterion.",
+            "evidence": "#4: “Use ‘the’ for a specific hotel feature”; #8: “the specific room we have already discussed”; #12 correctly changes “in few minutes” to “in a few minutes.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve correction accuracy while selecting examples from interview answers.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Article interruptions exceed the target density",
+            "expected": "One to three moments per ten learner turns, with selective correction.",
+            "got": "Three interruptions across eight replies: 3.75 moments per ten learner turns. All concern articles.",
+            "evidence": "#4, #8 and #12 each announce “Linga stopped the conversation: one thing to fix.” #14 reports “8 replies; 3 moments to keep.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Keep moment density within the rubric and consolidate repeated article feedback into the recap.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "The recap supplies counts without a learning summary",
+            "expected": "A closing recap that helps her retain useful language and understand what she practised.",
+            "got": "The observed recap names the rehearsal and counts replies and moments, but displays no corrected phrases or next practice target.",
+            "evidence": "#14 shows only “Rehearsal saved: Find a quieter room. 8 replies; 3 moments to keep.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show the useful phrases retained and a concrete next rehearsal aligned with her interview.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -3,
+          "confidence": "low"
+        },
+        "voice": "I could follow the English, and the article corrections were right. Nobody treated me like a child or assumed I was Czech. But I have an interview on Friday. I kept mentioning it, and we continued discussing a room, a desk and a key. I did not practise explaining my logistics experience once. I trust these corrections and the B1 difficulty; placement itself was not tested here. Three interruptions felt excessive for this task, and the final screen gave me counts instead of useful interview phrases. I cannot judge response waits from this record. I estimate roughly three minutes lost against practising my answers alone; the full duration is not recorded. I would try again if I could start a logistics interview directly. I would not yet recommend this for someone preparing for an interview."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 23,
+      "fail": 0,
+      "ms": 360911
+    },
+    "character": {
+      "n": 28,
+      "fail": 0,
+      "ms": 266490
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 121087
+    }
+  }
+}
