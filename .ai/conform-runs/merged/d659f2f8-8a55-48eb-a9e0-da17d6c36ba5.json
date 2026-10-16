@@ -1,0 +1,77 @@
+{
+ "schema": "conform-run/1",
+ "worker": "d659f2f8-8a55-48eb-a9e0-da17d6c36ba5",
+ "subject": "accessibility",
+ "evaluatedAt": "2026-10-16T02:28:35.846783+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "phone-surface",
+   "subject": "accessibility",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "desk/src/app/phone/page.tsx:661 The phone's problem selector exposes only pointer activation, leaving keyboard users without an equivalent selection path on this surface.",
+   "techniques": [
+    {
+     "technique": "a11y-verification",
+     "verdict": "deviation",
+     "evidence": "tools/phone-panel-test.cjs:888 The test claims reader output from a source-attribute assertion; it does not observe announcement delivery, timing, or repeated messages."
+    },
+    {
+     "technique": "hidden-but-mounted-inertness",
+     "verdict": "conformant",
+     "evidence": "desk/src/app/phone/page.tsx:528 Inactive panels are conditionally unmounted; Paper's draft state lives in the parent, preserving it without leaving inactive controls mounted."
+    },
+    {
+     "technique": "keyboard-navigation-models",
+     "verdict": "deviation",
+     "evidence": "desk/src/app/phone/page.tsx:661 Problem selection uses a nonfocusable div with a pointer handler and no keyboard equivalent in the Point & ask panel."
+    },
+    {
+     "technique": "live-region-architecture",
+     "verdict": "deviation",
+     "evidence": "desk/src/app/phone/page.tsx:737 The persistent region renders one state string directly, without a drain queue or deliberate repeat mutation, so bursts can overwrite messages and identical consecutive refusals produce no new mutation."
+    },
+    {
+     "technique": "name-and-description-wiring",
+     "verdict": "deviation",
+     "evidence": "desk/src/app/phone/page.tsx:678 The rewrite textarea has neither an associated label nor an explicit accessible name; the nearby heading and instructions are not wired to it."
+    },
+    {
+     "technique": "preference-respect",
+     "verdict": "deviation",
+     "evidence": "desk/src/app/globals.css:57 Join refusal triggers this nonessential shake without reduced-motion handling; the imported reduced-motion rules target other selectors and do not suppress it."
+    },
+    {
+     "technique": "primitive-level-a11y",
+     "verdict": "deviation",
+     "evidence": "desk/src/app/phone/ExplainTalk.tsx:36 The reusable recording control is a focusable native button whose behavior is wired exclusively to pointer events, so keyboard activation does nothing."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-16T02:28:35.846783+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "accessibility"
+   ],
+   "techniques": [
+    "a11y-verification",
+    "hidden-but-mounted-inertness",
+    "keyboard-navigation-models",
+    "live-region-architecture",
+    "name-and-description-wiring",
+    "preference-respect",
+    "primitive-level-a11y"
+   ],
+   "deviations": 1,
+   "context": "phone-surface",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

@@ -1576,7 +1576,11 @@
           "revision": 7,
           "changedAt": "2026-09-20",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/app/phone/page.tsx:661 The phone's problem selector exposes only pointer activation, leaving keyboard users without an equivalent selection path on this surface.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:5e30485ee0c7c123",
+          "evaluatedRevision": 7
         },
         {
           "subject": "native-shell-integration",
