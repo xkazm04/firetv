@@ -2723,3 +2723,18 @@ test('LG-8 slips: cleanPlacement accepts none, keeps 3 valid, trims 5 to 3, drop
 test('LG-8 slips: the TV never shows them (view.ts and LingaTV.tsx do not reference slips)',()=>{
  for(const f of ['src/lib/english/view.ts','src/english/LingaTV.tsx'])assert(!/slips/.test(fs.readFileSync(path.join(root,f),"utf8")),f);
 });
+test('LG-50/LG-34: an unfound room line and a brought-back review sentence name their origin, never the bare "A sentence to take with you"',()=>{
+ const V=view(),L=lineMod(),BARE='A sentence to take with you',turns=convo().turns;
+ const recap=patch=>V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),taught:[TAUGHT_A],conversation:convo({phase:'finished',turns,...patch})})),{});
+ const cases=[[recap({line:{source:'quiz',text:'Which bridge do you mean'}}),'The line hidden in this room','Which bridge do you mean'],
+  [recap({line:{source:'check',text:'on the bus that morning'}}),'From the level check','on the bus that morning'],
+  [recap({review:REVIEW}),'From an earlier scene: A hotel booking','I have a booking']];
+ for(const [v,label,sentence] of cases){
+  assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,sentence);assert.equal(v.hero.label,label);
+  const text=V.viewText(v);assert(!text.includes(BARE),text);assert(text.includes(`${label}: "${sentence}"`),text);}
+ assert.equal(L.originLabel({line:{source:'quiz',text:'x'}}),'The line hidden in this room');
+ assert.equal(L.originLabel({line:{source:'check',text:'x'}}),'From the level check');
+ assert.equal(L.originLabel({review:REVIEW}),'From an earlier scene: A hotel booking');
+ for(const f of ['src/english/LingaPhone.tsx','src/english/LingaTV.tsx']){const src=fs.readFileSync(path.join(root,f),'utf8');
+  assert(!/take with you<\/b>|label=\{h\.from\?[^}]*take with you/.test(src),f+' still heads a recap sentence with the bare label');}
+});
