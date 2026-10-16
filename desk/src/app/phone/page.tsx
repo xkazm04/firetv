@@ -714,7 +714,7 @@ export default function Phone() {
           <div className="field"><textarea aria-label="The paragraph the desk will read" value={essay} onChange={(e) => { const v = e.target.value; setEssay(() => v); }} onPaste={onEssayPaste} /></div>
           {note ? <p role="alert" data-role="essay-note" style={{ color: "#B8261A" }}>{note}</p> : info ? <p data-role="essay-info">{info}</p> : null}
           {againBtn}
-          {notice !== null && <TextNotice text={notice} onAccept={() => void (noticeFor === "paragraph" ? acceptParagraphNotice() : acceptNotice())} onDecline={() => { setNotice(null); if (noticeFor === "piece") { setKeep(false); void readPiece(false); } }} />}
+          {notice !== null && <TextNotice text={notice} mode={noticeFor} onAccept={() => void (noticeFor === "paragraph" ? acceptParagraphNotice() : acceptNotice())} onDecline={() => { setNotice(null); if (noticeFor === "piece") { setKeep(false); void readPiece(false); } }} />}
           {paras.length > 1 && <div className="field" data-role="essay-piece">
             <label className="pkeep"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} data-role="essay-keep" /><span>Keep it on my shelf</span></label>
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}

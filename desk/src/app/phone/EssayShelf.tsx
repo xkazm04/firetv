@@ -51,13 +51,14 @@ export function EssayShelf({ learnerId, refresh, onOpen }: { learnerId: string |
 }
 
 /** Shown once per learner before their first kept piece; the words come from the server (texts.ts TEXT_NOTICE). */
-export function TextNotice({ text, onAccept, onDecline }: { text: string; onAccept: () => void; onDecline: () => void }) {
+export function TextNotice({ text, mode = "piece", onAccept, onDecline }: { text: string; mode?: "paragraph" | "piece"; onAccept: () => void; onDecline: () => void }) {
+  const reading = mode === "paragraph";
   return (
-    <div className="pnotice" role="dialog" aria-label="Before you keep a piece" data-role="essay-notice">
+    <div className="pnotice" role="dialog" aria-label={reading ? "Before the desk reads your writing" : "Before you keep a piece"} data-role="essay-notice">
       <p>{text}</p>
       <div className="field">
-        <button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={onAccept}>I understand, keep it</button>
-        <button className="pbtn" data-secondary="true" onClick={onDecline}>Read without keeping</button>
+        <button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={onAccept}>{reading ? "I understand, read it" : "I understand, keep it"}</button>
+        <button className="pbtn" data-secondary="true" onClick={onDecline}>{reading ? "Not now" : "Read without keeping"}</button>
       </div>
     </div>
   );
