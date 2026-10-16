@@ -4,7 +4,9 @@
  * desk/node_modules already there it prints nothing and exits 0. Without one it links desk/node_modules to the
  * desk/node_modules of another worktree of this repository (a junction on Windows, a directory symlink elsewhere),
  * or of DESK_NODE_MODULES, so tsc and the
- * rules suites resolve modules the way they do in the operator's checkout. No donor, or a real directory in the
+ * rules suites resolve modules the way they do in the operator's checkout. tools/node_modules (ws, playwright: the
+ * device rules suite and the live harnesses require them) is provided the same way, from another worktree's
+ * tools/node_modules that really holds both; its absence is a warning and never fails the desk gate. No donor, or a real directory in the
  * way, is one line telling the human to run `npm install` in desk/ and a non-zero exit — never an unreadable stack.
  * Read-only towards every donor: it creates a link, and never writes into or deletes anything it did not create.
  * The link it leaves is not: `git worktree remove --force` (and rm -rf) follow it and empty the donor's install
@@ -18,6 +20,10 @@ const root = path.resolve(__dirname, "..");
 /** The compiler both halves of the gate need: tsc --noEmit is desk's own, and the rules suites require() it to transpile. */
 function usable(modules) {
   try { return fs.statSync(path.join(modules, "typescript/package.json")).isFile(); } catch { return false; }
+}
+/** The packages tools/ needs on its own: the device rules suite takes ws, the live harnesses playwright. */
+function usableTools(modules) {
+  try { return ["ws", "playwright"].every(p => fs.statSync(path.join(modules, p, "package.json")).isFile()); } catch { return false; }
 }
 /** What is sitting at desk/node_modules: nothing, a link (ours or broken), an empty directory, or a real install. */
 function occupant(dest) {
@@ -41,19 +47,20 @@ function occupant(dest) {
  * suite's scratch fixtures and for an operator who passes it deliberately; nothing in the gate does. `main: null`
  * means no git here, so there are no worktrees either.
  */
-function donorCandidates({ env = process.env, checkout = root, main, trees, levels = 0 } = {}) {
+function donorCandidates({ env = process.env, checkout = root, main, trees, levels = 0, area = "desk" } = {}) {
   const out = [];
-  const add = (modules, source) => { if (modules && !same(modules, path.join(checkout, "desk/node_modules")) && !out.some(o => same(o.modules, modules))) out.push({ modules: path.resolve(modules), source }); };
-  if (env.DESK_NODE_MODULES) { add(env.DESK_NODE_MODULES, "DESK_NODE_MODULES"); return out; }
+  const envName = area === "desk" ? "DESK_NODE_MODULES" : "TOOLS_NODE_MODULES";
+  const add = (modules, source) => { if (modules && !same(modules, path.join(checkout, area, "node_modules")) && !out.some(o => same(o.modules, modules))) out.push({ modules: path.resolve(modules), source }); };
+  if (env[envName]) { add(env[envName], envName); return out; }
   const listed = trees ?? (main === null ? [] : worktrees(checkout));
   const head = main === undefined ? listed[0] ?? null : main;
-  if (head && !same(head, checkout)) add(path.join(head, "desk/node_modules"), "main checkout");
-  for (const t of listed) if (!same(t, checkout)) add(path.join(t, "desk/node_modules"), `worktree ${t}`);
+  if (head && !same(head, checkout)) add(path.join(head, area, "node_modules"), "main checkout");
+  for (const t of listed) if (!same(t, checkout)) add(path.join(t, area, "node_modules"), `worktree ${t}`);
   let dir = path.dirname(path.resolve(checkout));
   for (let i = 0; i < levels; i++) {
     let entries = [];
     try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { entries = []; }
-    for (const e of entries) if (e.isDirectory() || e.isSymbolicLink()) add(path.join(dir, e.name, "desk/node_modules"), `sibling checkout ${path.join(dir, e.name)}`);
+    for (const e of entries) if (e.isDirectory() || e.isSymbolicLink()) add(path.join(dir, e.name, area, "node_modules"), `sibling checkout ${path.join(dir, e.name)}`);
     const up = path.dirname(dir);
     if (up === dir) break;
     dir = up;
@@ -62,29 +69,31 @@ function donorCandidates({ env = process.env, checkout = root, main, trees, leve
 }
 /** The first candidate that really carries the compiler. A donor whose desk/node_modules is empty is no donor. */
 function findDonor(options = {}) {
-  return donorCandidates(options).find(c => usable(c.modules)) || null;
+  const ok = options.area === "tools" ? usableTools : usable;
+  return donorCandidates(options).find(c => ok(c.modules)) || null;
 }
 
 /**
  * Link desk/node_modules to a donor, or say why it cannot. Never removes a real install: only a link (ours or
  * broken, which unlink removes without touching what it points at) or an empty directory is cleared out of the way.
  */
-function ensure({ env = process.env, checkout = root, main, trees, levels, link = linkDir } = {}) {
-  const dest = path.join(checkout, "desk/node_modules");
-  if (usable(dest)) return { action: "present", dest };
+function ensure({ env = process.env, checkout = root, main, trees, levels, link = linkDir, area = "desk" } = {}) {
+  const tools = area === "tools", ok = tools ? usableTools : usable, needs = tools ? "ws and playwright" : "typescript", envName = tools ? "TOOLS_NODE_MODULES" : "DESK_NODE_MODULES";
+  const dest = path.join(checkout, area, "node_modules");
+  if (ok(dest)) return { action: "present", dest, area };
   const sitting = occupant(dest);
-  if (sitting.kind === "directory" || sitting.kind === "file") return { action: "blocked", dest, reason: `${dest} is there but has no typescript in it` };
-  const donor = findDonor({ env, checkout, main, trees, levels });
-  if (!donor) return { action: "unavailable", dest, reason: env.DESK_NODE_MODULES ? `DESK_NODE_MODULES (${env.DESK_NODE_MODULES}) has no typescript in it`
-    : `no worktree of this repository has a desk/node_modules with typescript in it (DESK_NODE_MODULES can name another install)` };
+  if (sitting.kind === "directory" || sitting.kind === "file") return { action: "blocked", dest, reason: `${dest} is there but has no ${needs} in it`, area };
+  const donor = findDonor({ env, checkout, main, trees, levels, area });
+  if (!donor) return { action: "unavailable", dest, area, reason: env[envName] ? `${envName} (${env[envName]}) has no ${needs} in it`
+    : `no worktree of this repository has a ${area}/node_modules with ${needs} in it (${envName} can name another install)` };
   if (sitting.kind === "link") { try { fs.unlinkSync(dest); } catch { try { fs.rmdirSync(dest); } catch { /* the link outlives us; the create below will say so */ } } }
   if (sitting.kind === "empty") { try { fs.rmdirSync(dest); } catch { /* likewise */ } }
   try {
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     link(donor.modules, dest);
-  } catch (e) { return { action: "blocked", dest, donor, reason: `could not link ${dest} to ${donor.modules}: ${e.message}` }; }
-  if (!usable(dest)) return { action: "blocked", dest, donor, reason: `${dest} links to ${donor.modules} but still has no typescript in it` };
-  return { action: "linked", dest, donor };
+  } catch (e) { return { action: "blocked", dest, donor, area, reason: `could not link ${dest} to ${donor.modules}: ${e.message}` }; }
+  if (!ok(dest)) return { action: "blocked", dest, donor, area, reason: `${dest} links to ${donor.modules} but still has no ${needs} in it` };
+  return { action: "linked", dest, donor, area };
 }
 /** A junction on Windows: it needs no developer mode, and `cmd mklink /J` does not survive this shell's path mangling. */
 function linkDir(from, to) { fs.symlinkSync(from, to, process.platform === "win32" ? "junction" : "dir"); }
@@ -92,10 +101,23 @@ function linkDir(from, to) { fs.symlinkSync(from, to, process.platform === "win3
 /** One line at most, and only when something happened. Anything it cannot fix is one instruction, then exit 1. */
 function run(result = ensure(), out = console) {
   if (result.action === "present") return 0;
+  if (result.area === "tools") {
+    // the device rules suite and the live harnesses need it; the desk gate does not: say so, never fail on it
+    if (result.action === "linked") out.log(`tools/node_modules was missing — linked it to ${result.donor.modules} (${result.donor.source}). Remove the link and run \`npm install\` in tools/ for an install of its own. Unlink it before removing this worktree: \`git worktree remove --force\` follows the link and empties ${result.donor.modules}.`);
+    else out.error(`tools/node_modules cannot run device-rules-test or the live harnesses: ${result.reason}. Run \`npm install\` in tools/ if you need them.`);
+    return 0;
+  }
   if (result.action === "linked") { out.log(`desk/node_modules was missing — linked it to ${result.donor.modules} (${result.donor.source}). Remove the link and run \`npm install\` in desk/ for an install of its own. Unlink it before removing this worktree: \`git worktree remove --force\` follows the link and empties ${result.donor.modules}.`); return 0; }
   out.error(`desk/node_modules cannot run the gate: ${result.reason}. Run \`npm install\` in desk/, then \`npm test\`.`);
   return 1;
 }
 
-module.exports = { usable, occupant, donorCandidates, findDonor, ensure, linkDir, run, mainCheckout, same };
-if (require.main === module) process.exit(run());
+/** The whole preflight: desk first, whose result is the exit code, then tools, which only ever speaks. */
+function runAll(opts = {}, out = console) {
+  const code = run(ensure(opts), out);
+  run(ensure({ ...opts, area: "tools" }), out);
+  return code;
+}
+
+module.exports = { usable, usableTools, runAll, occupant, donorCandidates, findDonor, ensure, linkDir, run, mainCheckout, same };
+if (require.main === module) process.exit(runAll());
