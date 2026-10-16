@@ -47,6 +47,8 @@ export interface Placement {
   at: number; band: Band; selfBand: Band | null;
   confidence: "low" | "medium" | "high"; source: "check" | "self";
   summary: string; focus: string; tasks: PlacementTask[];
+  /** up to three errors the learner made, their words and the better form; phone only, absent on older records */
+  slips?: { said: string; better: string }[];
 }
 /**
  * One level check kept in the record of checks (Family W10): what it found and how, never its tasks or answers.

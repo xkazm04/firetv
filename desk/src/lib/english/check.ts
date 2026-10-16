@@ -33,7 +33,7 @@ const optional = (value: unknown, max: number) => typeof value === "string" ? va
 const aboutSchema = schema({ reply: str(230), selfBand: { type: "string", enum: BANDS }, goal: str(160, 0), interest: str(160, 0), language: { type: "string", enum: ["english", "mixed", "other", "none"] }, read: str(300) });
 const taskSchema = schema({ prompt: str(200), line: str(230, 0), options: { type: "array", maxItems: 2, items: str(120) }, correct: { type: "integer", enum: [0, 1] } });
 const judgeSchema = schema({ answered: { type: "string", enum: ["yes", "partly", "no"] }, english: { type: "string", enum: [...BANDS, "none"] }, quote: str(240, 0), note: str(160) });
-const summarySchema = schema({ summary: str(160), focus: str(120) });
+const summarySchema = schema({ summary: str(160), focus: str(120), slips: { type: "array", maxItems: 3, items: schema({ said: str(120), better: str(120) }) } });
 const topicSchema = schema({ title: str(48), goal: str(120), why: str(120), skill: { type: "string", enum: ENGLISH_SKILLS.map(s => s.id) }, audience: { type: "string", enum: ["all", "older", "adult"] }, partner: str(40), premise: str(400), cue: str(90), quiz: schema({ question: str(90), options: { type: "array", minItems: 2, maxItems: 2, items: str(90) }, correct: { type: "integer", enum: [0, 1] } }) });
 const planSchema = (count: number) => schema({ topics: { type: "array", minItems: 1, maxItems: count, items: topicSchema } });
 
@@ -104,6 +104,25 @@ export function quotedFocus(focus: string, tasks: PlacementTask[], safe: (line: 
   return parts.line && !safe(parts.line) ? FOCUS_FALLBACK : parts.focus;
 }
 
+/**
+ * The usual slips the summary lists (LG-8): a slip is kept only when the learner's words occur in an answer they gave
+ * (a skipped answer is no answer), the better form differs from them, and it passes the audience gate the focus uses.
+ * Normalised as focusParts does. At most three. Code checks the words were said, not that they were repeated.
+ */
+export function keepSlips(slips: unknown, tasks: readonly PlacementTask[], safe: (line: string) => boolean = () => true): { said: string; better: string }[] {
+  const norm = (x: string) => x.toLowerCase().replace(/[\s"“”]+/g, " ").trim(), held = tasks.filter(t => !t.skipped).map(t => norm(t.response)).join(" | ");
+  if (!Array.isArray(slips)) return [];
+  const out: { said: string; better: string }[] = [];
+  for (const s of slips) {
+    if (!s || typeof s !== "object" || typeof (s as { said?: unknown }).said !== "string" || typeof (s as { better?: unknown }).better !== "string") continue;
+    const said = (s as { said: string }).said.trim().slice(0, 120), better = (s as { better: string }).better.trim().slice(0, 120);
+    if (norm(said).length < 2 || !norm(better) || norm(said) === norm(better) || !held.includes(norm(said)) || !safe(better)) continue;
+    if (!out.some(o => norm(o.said) === norm(said))) out.push({ said, better });
+    if (out.length === 3) break;
+  }
+  return out;
+}
+
 /** Whatever the check is missing next, fetch it: the first question, the next task, the verdict, the topics. */
 async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelCheck> {
   const system = checkSystem(ctx.profile, ctx.adult), name = getSession().learner?.name ?? ctx.profile.name;
@@ -147,8 +166,10 @@ Your previous answer repeated an earlier task ("${twin?.prompt ?? ""}"). Answer 
       });
     }
     return call(k, token, "Linga could not put your level together. Try again.", async () => {
-      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.skipped ? "skipped" : t.verdict, note: t.note, answer: t.skipped ? "" : t.response.slice(0, 300) })), goal: (ctx.learning.preferences?.goal || k.goal).slice(0, 160), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, specific to what they showed, and where it fits tie it to their goal (goal). focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise; if it points at something the learner wrote, quote those exact words in double quotes from an answer. If you offer a better phrase for those words, put it in a second pair of double quotes after the learner's words.` }, summarySchema);
-      const placement: Placement = { at: Date.now(), band: ladder.band, selfBand: k.selfBand, confidence: ladder.confidence, source: "check", summary: line(r.json.summary, 160), focus: quotedFocus(line(r.json.focus, 120), k.tasks, l => ctx.adult || ![null, "adult"].includes(keywordAudience(l))), tasks: k.tasks };
+      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.skipped ? "skipped" : t.verdict, note: t.note, answer: t.skipped ? "" : t.response.slice(0, 300) })), goal: (ctx.learning.preferences?.goal || k.goal).slice(0, 160), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, and naming at least one concrete thing the learner did, taken from their answers, not a generic line; where it fits tie it to their goal (goal). slips: up to three errors the learner made more than once, or the most important ones. Each said is the learner's exact words, copied from an answer; each better is the corrected form. Leave the list empty only when no answer holds an error. focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise; if it points at something the learner wrote, quote those exact words in double quotes from an answer. If you offer a better phrase for those words, put it in a second pair of double quotes after the learner's words.` }, summarySchema);
+      const safe = (l: string) => ctx.adult || ![null, "adult"].includes(keywordAudience(l));
+      const slips = keepSlips(r.json.slips, k.tasks, safe);
+      const placement: Placement = { at: Date.now(), band: ladder.band, selfBand: k.selfBand, confidence: ladder.confidence, source: "check", summary: line(r.json.summary, 160), focus: quotedFocus(line(r.json.focus, 120), k.tasks, safe), ...(slips.length ? { slips } : {}), tasks: k.tasks };
       return {
         apply: now => {
           const learning = getLearner(now.learnerId).english, prefs = learning.preferences ?? defaultPreferences(ctx.profile);

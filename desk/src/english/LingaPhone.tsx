@@ -179,6 +179,7 @@ function VerdictPanel({placement,run,busy,hasPlan}:{placement:Placement;run:Run;
     <p>{placement.summary||BAND_CAN[placement.band]}</p>
     <p className="linga-note">{self?"You chose this level yourself.":`Linga's read from your answers, not a certificate.${" "+restsLine(placement.confidence,placement.tasks,placement.selfBand)}`}</p>
     {placement.focus&&!self&&<p><b>Next to practise:</b> {placement.focus}</p>}
+    {!self&&!!placement.slips?.length&&<><p><b>Your usual slips</b></p><ul className="linga-note">{placement.slips.map((s,i)=><li key={i}>“{s.said}” → try “{s.better}”</li>)}</ul></>}
     {placement.summary&&<p className="linga-note">{BAND_CAN[placement.band]}</p>}
     <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run(hasPlan?"plan-open":"plan-propose")}>See my topics</button>
     <button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>{self?"Find my level with Linga":"Find my level again"}</button>

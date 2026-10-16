@@ -299,7 +299,8 @@ export function cleanPlacement(value: unknown): Placement | null {
   if (!isBand(p.band) || typeof p.at !== "number" || !["low", "medium", "high"].includes(String(p.confidence)) || !["check", "self"].includes(String(p.source))) return null;
   if (!text(p.summary, 400) || !text(p.focus, 400)) return null;
   const tasks = Array.isArray(p.tasks) ? p.tasks.map(cleanTask).filter((t): t is PlacementTask => !!t).slice(0, MAX_TASKS) : [];
-  return { at: p.at, band: p.band, selfBand: isBand(p.selfBand) ? p.selfBand : null, confidence: p.confidence as Placement["confidence"], source: p.source as Placement["source"], summary: p.summary as string, focus: p.focus as string, tasks };
+  const slips = Array.isArray(p.slips) ? p.slips.flatMap(v => { const s = obj(v); return text(s.said, 120) && text(s.better, 120) && (s.said as string).trim() && (s.better as string).trim() ? [{ said: s.said as string, better: s.better as string }] : []; }).slice(0, 3) : [];
+  return { at: p.at, band: p.band, selfBand: isBand(p.selfBand) ? p.selfBand : null, confidence: p.confidence as Placement["confidence"], source: p.source as Placement["source"], summary: p.summary as string, focus: p.focus as string, ...(slips.length ? { slips } : {}), tasks };
 }
 /**
  * The record of level checks (Family W10). The live `placement` is still overwritten by each check (the screens and

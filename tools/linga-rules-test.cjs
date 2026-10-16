@@ -2700,3 +2700,26 @@ test('a level-check task that repeats an earlier prompt is asked once more, with
  await command('check-task',{checkId:k.id,taskId:k.task.id,text:'I would argue that it depends on the place.',mode:'text'});
  assert.equal(asks.length,2);assert.equal(getSession().check.task.prompt,same,'the repeat is kept rather than failing the check');
 });
+
+test('LG-8 slips: keepSlips drops a slip no answer holds, one only in a skipped answer, one that equals its fix, and keeps a valid one',()=>{
+ const {keepSlips}=require(path.join(root,'src/lib/english/check.ts'));
+ const t=(response,skipped)=>({id:'x'+response.length,band:'A2',kind:'say',prompt:'p',line:'',options:[],response,mode:'text',verdict:'partial',quote:'',note:'n',at:1,...(skipped?{skipped:true}:{})});
+ const tasks=[t('I live here for longer time.'),t('She go to work every day.'),t('Yesterday I am tired and stayed home.',true)];
+ assert.deepEqual(keepSlips([{said:'for longer time',better:'for a longer time'}],tasks),[{said:'for longer time',better:'for a longer time'}],'a valid slip is kept');
+ assert.deepEqual(keepSlips([{said:'He have a car',better:'He has a car'}],tasks),[],'said in no answer');
+ assert.deepEqual(keepSlips([{said:'I am tired',better:'I was tired'}],tasks),[],'said only in a skipped answer');
+ assert.deepEqual(keepSlips([{said:'She go to work',better:'she  go to work'}],tasks),[],'better equals said after normalising');
+ assert.deepEqual(keepSlips([{said:'She GO to  work',better:'She goes to work'}],tasks),[{said:'She GO to  work',better:'She goes to work'}],'matching is case and space blind');
+ assert.deepEqual(keepSlips([{said:'She go to work',better:'She goes to the beer bar'}],tasks,l=>!/beer/.test(l)),[],'the audience gate refuses the better form');
+ assert.deepEqual(keepSlips('nope',tasks),[]);assert.deepEqual(keepSlips([null,{said:1,better:'x'}],tasks),[]);
+});
+test('LG-8 slips: cleanPlacement accepts none, keeps 3 valid, trims 5 to 3, drops a malformed item',()=>{
+ const base={...placed('B1')},sl=n=>({said:'w'+n+' w',better:'b'+n+' b'});
+ assert.equal(P.cleanPlacement(base).slips,undefined,'an older record stays valid');
+ assert.equal(P.cleanPlacement({...base,slips:[sl(1),sl(2),sl(3)]}).slips.length,3);
+ assert.deepEqual(P.cleanPlacement({...base,slips:[1,2,3,4,5].map(sl)}).slips,[1,2,3].map(sl));
+ assert.deepEqual(P.cleanPlacement({...base,slips:[{said:'a'},sl(1),{said:5,better:'x'}]}).slips,[sl(1)]);
+});
+test('LG-8 slips: the TV never shows them (view.ts and LingaTV.tsx do not reference slips)',()=>{
+ for(const f of ['src/lib/english/view.ts','src/english/LingaTV.tsx'])assert(!/slips/.test(fs.readFileSync(path.join(root,f),"utf8")),f);
+});
