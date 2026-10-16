@@ -2775,3 +2775,21 @@ test('LG-52: a choose task asks for a meaning choice at A1-A2 and a grammar cont
   assert(/120 characters/.test(t)&&/two short replies/.test(t)&&/correct: the index/.test(t),b+' keeps the choose contract');
  }
 });
+
+test('LG-51: a direct correctness question gets the line quoted, a yes or no, and the one change',async()=>{
+ fresh();await command('start',{sceneId:'booking',replace:true});const c=getSession().conversation;
+ let system;answer=async(req)=>{system=req.system;return {json:{reply:'What date was it?',observations:[],moment:{kind:'none',said:'',better:'',why:''}},provider:'test',ms:1};};
+ await command('turn',{text:'I have booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});
+ assert(system,'the turn sent the partner prompt');
+ const m=/When the learner asks whether[^\n]*/.exec(system);
+ assert(m,'the partner prompt has a rule for a direct correctness question');
+ const r=m[0];
+ assert(/their own line or a word in it was correct/.test(r),'names the question: '+r);
+ assert(/quote the line or the words in question exactly/.test(r),'quotes exactly: '+r);
+ assert(/say plainly yes or no/.test(r),'plain yes or no: '+r);
+ assert(/if no, give the one change that matters most/.test(r),'the one change: '+r);
+ assert(/never answer with general praise such as "sounds natural"/.test(r),'no general praise: '+r);
+ assert(/do not reverse a verdict from an earlier turn without saying you are correcting yourself/.test(r),'no silent reversal: '+r);
+ assert(/then carry on in the scene/.test(r),'carries on: '+r);
+ assert(/keep the quote short/.test(r)&&/230 characters/.test(r),'says how to fit the reply limits: '+r);
+});
