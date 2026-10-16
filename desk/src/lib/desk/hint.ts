@@ -32,7 +32,7 @@ import { calcWordsOf, judgeOf, topicIn, type MathPath } from "../library/paths";
 import { voiceOf, withManner, type Voice } from "../rules/voice";
 import { SCHOOL_SLIPS } from "../rules/school";
 import { WORKED_METHODS } from "../library/worked";
-import { getLearner, recallLearner, RECALL_UNREAD } from "../session/learners";
+import { recallLearner, RECALL_UNREAD } from "../session/learners";
 import { notationLine } from "./read";
 import type { SchoolSystem, Subject } from "../session/store";
 
