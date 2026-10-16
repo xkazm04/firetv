@@ -1,10 +1,10 @@
 /**
  * The learner said how they got there; the desk answers with a step, never the answer. On an item the
- * desk was not sure about, the value they say they got is substituted (rules/maths) and the item settles. On an
- * item already wrong, a slip the explanation names from the topic's vocabulary becomes the item's shown slip.
+ * desk was not sure about, nothing settles (X7, ask d6d87220): the item settles only from an answer the learner enters.
+ * On an item already wrong, a slip the explanation names from the topic's vocabulary becomes the item's shown slip.
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession, NOBODY_AT_DESK, SETTLE_NOT_SAVED, settleSaved } from "@/lib/session/store";
+import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { explainItem } from "@/lib/desk/explain";
 import { refused, runJob } from "@/lib/desk/job";
 import { learnerAge } from "@/lib/rules/voice";
@@ -32,15 +32,10 @@ export async function POST(req: Request) {
   };
   const r = await runJob("explain", async () => {
     const x = await explainItem(item, transcript, practice.topic, who.id, () => same()?.verdict === "unsure", learnerAge(s), learnerSystem(s), itemName(practice.items, practice.items.indexOf(item)));
-    // an unsure item settles; a wrong one only takes the slip the explanation named (the reducer keeps its verdict and pen)
-    let saved = true;
-    if (same()) {
-      dispatch({ type: "practice.settle", n: item.n, reply: x.reply, ...(x.settled ?? x.renamed ?? {}) });
-      // a settle whose restate of the learner file failed keeps the answer: 200, done, no Try again (the same explanation would be paid for again to fail the same way); the status says it
-      if (x.settled) saved = settleSaved();
-    }
-    return { ...x, saved };
-  }, { key: String(item.n), start: "listening…", done: (x) => x.saved ? x.shown : SETTLE_NOT_SAVED });
+    // an explanation never settles (X7): only a wrong item takes the slip the explanation named (the reducer keeps its verdict and pen)
+    if (same()) dispatch({ type: "practice.settle", n: item.n, reply: x.reply, ...(x.renamed ?? {}) });
+    return x;
+  }, { key: String(item.n), start: "listening…", done: (x) => x.shown });
   if (!r.ok) return refused(r);
-  return NextResponse.json({ reply: r.value.shown, slip: r.value.slip, ...(r.value.settled ? { settled: r.value.settled.verdict, saved: r.value.saved } : {}) });
+  return NextResponse.json({ reply: r.value.shown, slip: r.value.slip });
 }

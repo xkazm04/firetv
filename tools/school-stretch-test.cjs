@@ -320,18 +320,19 @@ test('6b: a photographed step-up set is read by the model, marked by code and re
  assert.deepEqual(store.getSession().skills[UNIT].stretch,rec.stretch,'the TV\'s copy of the record carries it');
 });
 
-test('6c: an explanation that settles an unsure step-up item records on the step-up record only; a usual one on the usual record',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('6c: an explanation of an unsure step-up item, or of a usual one, records nothing on either record',async()=>{
  seat();
  const spec=S.gen(99,2),q=S.question(spec).plain,value=answerOf(spec);
  reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'Look at the bottoms.',value})})});
  const a=await X.explainItem({n:1,question:q,spec,tier:2,stretch:true,verdict:'unsure'},'I made the bottoms the same and got '+value,UNIT,LEARNER,()=>true,12,'uk');
- assert.equal(a.settled.verdict,'right');
+ assert.equal(a.settled,undefined);
  let rec=learners.getLearner(LEARNER).skills[UNIT];
- assert.equal(rec.seen,0);assert.deepEqual([rec.stretch.seen,rec.stretch.right],[1,1]);
+ assert.ok(!rec||(rec.seen===0&&!(rec.stretch&&rec.stretch.seen)),'the step-up record is untouched');
  const b=await X.explainItem({n:1,question:q,spec,tier:2,verdict:'unsure'},'I made the bottoms the same and got '+value,UNIT,LEARNER,()=>true,12,'uk');
- assert.equal(b.settled.verdict,'right');
+ assert.equal(b.settled,undefined);
  rec=learners.getLearner(LEARNER).skills[UNIT];
- assert.deepEqual([rec.seen,rec.right,rec.stretch.seen],[1,1,1]);
+ assert.ok(!rec||(rec.seen===0&&!(rec.stretch&&rec.stretch.seen)),'the usual record is untouched');
 });
 
 // ------------------------------------------------------------------ 7. the tier is code's, never a model's

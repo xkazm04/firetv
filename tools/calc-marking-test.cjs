@@ -24,7 +24,7 @@ const learners=require(src('lib/session/learners.ts'));
 const {view}=require(src('lib/session/pairing.ts'));
 const C=require(src('lib/rules/calc.ts'));
 const M=require(src('lib/rules/maths.ts'));
-const {NOT_HEARD_LINE}=require(src('lib/desk/explain.ts'));
+const {NOT_HEARD_LINE,ENTER_LINE}=require(src('lib/desk/explain.ts'));
 const CANNOT_READ='The desk cannot read this answer as mathematics, and it does not guess.';
 const {topicIn}=require(src('lib/library/paths.ts'));
 const {CALC1_SPINE}=require(src('lib/library/calculus1.spine.ts'));
@@ -200,7 +200,8 @@ test('3: the model\'s verdict is not a fallback either: an answer the desk canno
 });
 
 // ------------------------------------------------------------------ the explanation
-test('4: an explanation settles an unsure Calculus item from the answer the learner says, by checkAnswer; a leaking reply is replaced',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken answer.
+test('4: an explanation leaves an unsure Calculus item unsure, whatever answer the learner says, and asks them to enter it; a leaking reply is replaced',async()=>{
  seat();
  const fx=FIX[2];
  setOn(fx.topic,fx.spec,4);
@@ -214,38 +215,31 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  stubText(()=>({reply:'Good - you used the power rule on each term.',slip:'unclear',value:'2(3x+1)'}));
  let r=await post('explain',{transcript:'I brought the powers down and got two lots of three x plus one',n:0});
  assert.equal(r.status,200);let b=await r.json();
- assert.equal(b.settled,'right');assert.equal(b.reply,'The desk heard 2(3x+1). Good - you used the power rule on each term.');
+ assert.equal(b.settled,undefined);assert.equal(b.reply,'Good - you used the power rule on each term. '+ENTER_LINE.en);
  const req=seenText[0];
  assert.match(req.system,/first-year university student/);assert.match(req.system,/Calculus 1/);
  assert.ok(req.prompt.includes(topicIn(fx.topic).name)&&req.prompt.includes(topicIn(fx.topic).blurb),'the topic from topicIn');
  assert.ok(req.prompt.includes(M.slipVocabulary(fx.topic)),'the topic\'s own slip list');
  assert.match(req.prompt,/final answer/);assert.doesNotMatch(req.prompt,/value of x/);
  let s=store.getSession();
- assert.deepEqual([s.practice.items[0].verdict,s.practice.items[0].said],['right',M.RIGHT(1)]);
- assert.equal(skill(fx.topic).seen,was.seen+1);assert.equal(skill(fx.topic).right,was.right+1);
- assert.equal(lines().length,n0,'no new history line');assert.equal(lines().at(-1).detail,'1 of 4 right, 3 not sure','the line is restated');
+ assert.equal(s.practice.items[0].verdict,'unsure');
+ assert.equal(skill(fx.topic).seen,was.seen);assert.equal(skill(fx.topic).right,was.right);
+ assert.equal(lines().length,n0,'no new history line');assert.equal(lines().at(-1).detail,'0 of 4 right, 4 not sure','the line is as marking wrote it');
 
- // a spoken wrong one settles it wrong, with a slip from the topic's vocabulary
+ // a spoken wrong one settles nothing either, and the slip the model named is not taken
  stubText(()=>({reply:'Look at what happens to the constant in front of each term.',slip:'forgot-chain',value:'6x'}));
  r=await post('explain',{transcript:'I got six x',n:1});b=await r.json();
- assert.equal(b.settled,'wrong');
+ assert.equal(b.settled,undefined);
  s=store.getSession();
- const chain=M.slipsFor(fx.topic).find((x)=>x.id==='forgot-chain');
- assert.deepEqual([s.practice.items[1].verdict,s.practice.items[1].slip,s.practice.items[1].said],['wrong','forgot-chain',chain.says]);
- assert.equal(skill(fx.topic).seen,was.seen+2);assert.ok(skill(fx.topic).slips.includes('forgot-chain'));
- assert.equal(lines().at(-1).detail,'1 of 4 right, 2 not sure');
-
- // on the item already wrong, a slip the conversation names from the vocabulary renames it; no attempt
- stubText(()=>({reply:'Check the rule you used on the product.',slip:'product-as-product',value:''}));
- await post('explain',{transcript:'I multiplied them',n:1});
- s=store.getSession();assert.equal(s.practice.items[1].slip,'product-as-product');assert.equal(s.practice.items[1].verdict,'wrong');
- assert.equal(skill(fx.topic).seen,was.seen+2);
+ assert.deepEqual([s.practice.items[1].verdict,s.practice.items[1].slip],['unsure',undefined]);
+ assert.equal(skill(fx.topic).seen,was.seen);
+ assert.equal(lines().at(-1).detail,'0 of 4 right, 4 not sure');
 
  // a value the desk cannot read leaves the item unsure, and nothing is recorded
  stubText(()=>({reply:'Tell me what you did to the first term.',slip:'unclear',value:'something like six-ish'}));
  r=await post('explain',{transcript:'something like six-ish',n:2});b=await r.json();
  assert.equal(b.settled,undefined);assert.equal(store.getSession().practice.items[2].verdict,'unsure');
- assert.equal(skill(fx.topic).seen,was.seen+2);
+ assert.equal(skill(fx.topic).seen,was.seen);
 
  // a reply that states the answer is replaced by the item's own line
  stubText(()=>({reply:'The derivative is 6x + 2, so check your last line.',slip:'unclear',value:''}));
@@ -262,7 +256,8 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  assert.equal(b.reply,M.NOT_SURE(1,CANNOT_READ)+' '+NOT_HEARD_LINE.en);
 });
 
-test('5: the explanation never takes the model\'s word for the verdict: a stated verdict or solution in the reply is not read',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken answer.
+test('5: the explanation never takes the model\'s word for the verdict: a stated verdict or solution in the reply is not read, and nothing settles',async()=>{
  seat();
  const fx=FIX[7];
  setOn(fx.topic,fx.spec,1);
@@ -271,9 +266,9 @@ test('5: the explanation never takes the model\'s word for the verdict: a stated
  // the correct function without +C: code says wrong, slip lost-constant - whatever else the model sends
  stubText(()=>({reply:'Nearly there.',slip:'power-off-by-one',value:'x^2',verdict:'right',solution:'x^2 + C'}));
  const b=await (await post('explain',{transcript:'x squared',n:0})).json();
- assert.equal(b.settled,'wrong');
+ assert.equal(b.settled,undefined);
  const it=store.getSession().practice.items[0];
- assert.deepEqual([it.verdict,it.slip],['wrong','lost-constant'],'code\'s own slip over the model\'s pick');
+ assert.deepEqual([it.verdict,it.slip],['unsure',undefined],'no verdict from the explanation, the model\'s or the code\'s');
 });
 
 test('6: the evening note names a Calculus topic by topicIn and a Calculus slip in its own words; a school topic as before',async()=>{

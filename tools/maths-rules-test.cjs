@@ -11,7 +11,7 @@ let looked;eye.vision=(req)=>looked(req);
 const {makeItems}=require(path.join(root,'src/lib/desk/items.ts'));
 const {markSet,EMPTY_MARK}=require(path.join(root,'src/lib/desk/mark.ts'));
 const {hint}=require(path.join(root,'src/lib/desk/hint.ts'));
-const {explain,NOT_HEARD_LINE}=require(path.join(root,'src/lib/desk/explain.ts'));
+const {explain,NOT_HEARD_LINE,ENTER_LINE}=require(path.join(root,'src/lib/desk/explain.ts'));
 const {slip}=require(path.join(root,'src/lib/rules/maths.ts'));
 const {getLearner,recordAttempt,saveLearner,saveEnglish,addHistory}=require(path.join(root,'src/lib/session/learners.ts'));
 const {SYLLABUS,SYSTEM_START,topic,nextTopic,expectedIndex}=require(path.join(root,'src/lib/library/syllabus.ts'));
@@ -292,25 +292,26 @@ async function explainAt(ix,transcript='I took one away and got nine'){
  return {status:r.status,body:await r.json()};
 }
 const record=(id)=>JSON.parse(JSON.stringify(getLearner(id).skills['linear-one-step']??null));
-test('case 1: an unsure item whose spoken value substitutes is settled right, and the attempt is recorded once',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('case 1: an unsure item whose spoken value would substitute stays unsure, the record is untouched, and the reply asks for the answer to be entered',async()=>{
  const me=await markedWalk(),before=record(me);
  assert.equal(store.getSession().practice.items[3].verdict,'unsure');
  said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});
  const r=await explainAt(3);
- assert.equal(r.status,200);assert.equal(r.body.settled,'right');
+ assert.equal(r.status,200);assert.equal(r.body.settled,undefined);assert.equal(r.body.saved,undefined);
  const it=store.getSession().practice.items[3];
- assert.equal(it.verdict,'right');assert.equal(it.said,'Number 4 is right.');assert.equal(it.slip,undefined);
- const after=record(me);assert.equal(after.seen,before.seen+1);assert.equal(after.right,before.right+1);
- assert.equal(store.getSession().skills['linear-one-step'].seen,after.seen,'the session reads the learner record back');
+ assert.equal(it.verdict,'unsure');assert.equal(it.reply,'Look at the line where the 1 moved. '+ENTER_LINE.en);
+ assert.deepEqual(record(me),before);
 });
-test('case 2: a spoken value that does not substitute settles the item wrong, with the slip from the topic\'s vocabulary',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('case 2: a spoken value that does not substitute leaves the item unsure too, and the slip the model named is not taken',async()=>{
  const me=await markedWalk(),before=record(me);
  said({reply:'Check what happened to the 1.',value:'x = 11',slip:'sign-lost-moving'});
  const r=await explainAt(3,'I moved the one over and got eleven');
- assert.equal(r.status,200);assert.equal(r.body.settled,'wrong');
+ assert.equal(r.status,200);assert.equal(r.body.settled,undefined);
  const it=store.getSession().practice.items[3];
- assert.equal(it.verdict,'wrong');assert.equal(it.slip,'sign-lost-moving');assert.equal(it.said,slip('sign-lost-moving').says);
- const after=record(me);assert.equal(after.seen,before.seen+1);assert.equal(after.right,before.right);assert(after.slips.includes('sign-lost-moving'));
+ assert.equal(it.verdict,'unsure');assert.equal(it.slip,undefined);assert.match(it.reply,/enter it as your answer/);
+ assert.deepEqual(record(me),before);
 });
 test('case 3: a value the desk cannot read leaves the item unsure and the learner record alone',async()=>{
  const me=await markedWalk(),before=record(me);
@@ -322,6 +323,18 @@ test('case 3: a value the desk cannot read leaves the item unsure and the learne
   assert.equal(it.verdict,'unsure',value);assert.equal(it.reply,'Tell me the number you ended with. '+NOT_HEARD_LINE.en,'the reply still reaches the walk');assert.equal(it.said,'The desk is not sure about number 4. How did you get there?',value);
  }
  assert.deepEqual(record(me),before);
+});
+test('X7: "I got stuck on five sixths", "the answer is not eleven twelfths" and a right spoken answer each leave an unsure item unsure and write nothing',async()=>{
+ const me=await markedWalk(),before=record(me);
+ for(const [tr,value] of [['I got stuck on five sixths','5/6'],['the answer is not eleven twelfths','11/12'],['I took one away and got nine','9']]){
+  said({reply:'Look at the line where the 1 moved.',value,slip:'unclear'});
+  const r=await explainAt(3,tr);
+  assert.equal(r.status,200,tr);assert.equal(r.body.settled,undefined,tr);assert.equal(r.body.saved,undefined,tr);
+  const it=store.getSession().practice.items[3];
+  assert.equal(it.verdict,'unsure',tr);assert.equal(it.said,'The desk is not sure about number 4. How did you get there?',tr);
+  assert.equal(r.body.reply,'Look at the line where the 1 moved. '+ENTER_LINE.en,tr);
+  assert.deepEqual(record(me),before,tr);
+ }
 });
 test('case 4: a settled item is never settled or recorded again',async()=>{
  const me=await markedWalk(),before=record(me);
@@ -413,30 +426,32 @@ test('GUARD case 9: marking alone writes one line, "1 of 6 right, 2 not sure, 1 
  assert.equal(getLearner(me).history.length,before+1);assert.equal(lineNow(me).detail,'1 of 6 right, 2 not sure, 1 skipped');
  assert.equal(store.getSession().history.at(-1).detail,'1 of 6 right, 2 not sure, 1 skipped');
 });
-test('case 10: an item that settles right restates the line k+1 of n, in the learner record and the session, and adds no entry',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('case 10: an explanation does not restate the marking line: it stays as marking wrote it, and adds no entry',async()=>{
  const me=await markedWalk(),n=getLearner(me).history.length;
  said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});
- assert.equal((await explainAt(3)).body.settled,'right');
- assert.equal(lineNow(me).detail,'2 of 6 right, 1 not sure, 1 skipped','k+1 of n after an item settles right, and one fewer not sure');
- assert.equal(store.getSession().history.at(-1).detail,'2 of 6 right, 1 not sure, 1 skipped','the session reads the restated line back');
+ assert.equal((await explainAt(3)).body.settled,undefined);
+ assert.equal(lineNow(me).detail,'1 of 6 right, 2 not sure, 1 skipped','nothing settled, so the line is as marking wrote it');
+ assert.equal(store.getSession().history.at(-1).detail,'1 of 6 right, 2 not sure, 1 skipped');
  assert.equal(getLearner(me).history.length,n,'a settle restates the marking line, it adds none');
 });
-test('case 11: an item settled twice is counted once',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('case 11: an item explained twice is counted not at all',async()=>{
  const me=await markedWalk();
  for(let k=0;k<2;k++){said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});await explainAt(3);}
- assert.equal(lineNow(me).detail,'2 of 6 right, 1 not sure, 1 skipped');
+ assert.equal(lineNow(me).detail,'1 of 6 right, 2 not sure, 1 skipped');
 });
-test('case 12: a wrong settle leaves k where it stands',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('case 12: an explanation of an unsure item moves no tick, whatever value it carries',async()=>{
  const me=await markedWalk(),n=getLearner(me).history.length;
  said({reply:'Check the step where x was left alone.',value:'11',slip:'arithmetic-slip'});
- assert.equal((await explainAt(4,'I got eleven')).body.settled,'wrong');
- assert.equal(lineNow(me).detail,'1 of 6 right, 1 not sure, 1 skipped','a wrong settle moves no tick, only a not sure');
+ assert.equal((await explainAt(4,'I got eleven')).body.settled,undefined);
+ assert.equal(lineNow(me).detail,'1 of 6 right, 2 not sure, 1 skipped','no settle moves no tick');
  said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});await explainAt(3);
  said({reply:'Check the step where x was left alone.',value:'11',slip:'arithmetic-slip'});
- assert.equal((await explainAt(5,'I got eleven')).body.settled,'wrong');
- assert.equal(lineNow(me).detail,'2 of 6 right','after a right settle, a wrong one leaves 2 - and nothing is left unsure');
+ assert.equal((await explainAt(5,'I got eleven')).body.settled,undefined);
+ assert.equal(lineNow(me).detail,'1 of 6 right, 2 not sure, 1 skipped');
  assert.equal(getLearner(me).history.length,n);
- const p=store.getSession().practice.items;assert.equal(lineNow(me).detail,`${p.filter(i=>i.verdict==='right').length} of ${p.length} right`,'the line is what the verdicts say');
 });
 
 // ---- the pen: where the working broke, decided in rules/maths from the learner's own lines and a root found in code ----
@@ -476,7 +491,8 @@ test('pen case 6: marking puts slipAt on a wrong item from its own lines and it 
  assert.deepEqual(store.getSession().practice.items[1].slipAt,{line:0,span:'- 7',kind:'sign'},'kept through practice.marked');
  const keys=keysIn(store.getSession());assert(!keys.includes('answer'));assert(!keys.includes('solution'));
 });
-test('pen case 7: an unsure item settled wrong by an explanation gets its slipAt from the same rule; settled right, none',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('pen case 7: an unsure item explained gets no verdict and no slipAt, whatever value was said',async()=>{
  const walk=async()=>{
   store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});store.dispatch({type:'practice.set',practice:sheet});
   looked=reply({items:marks.map(m=>m.n===4?{...m,studentWorking:'x = 10 + 1'}:m)});
@@ -484,11 +500,11 @@ test('pen case 7: an unsure item settled wrong by an explanation gets its slipAt
   store.dispatch({type:'practice.marked',items});assert.equal(store.getSession().practice.items[3].verdict,'unsure');
  };
  await walk();said({reply:'Check what happened to the 1.',value:'11',slip:'sign-lost-moving'});
- assert.equal((await explainAt(3,'I moved the one over and got eleven')).body.settled,'wrong');
- let it=store.getSession().practice.items[3];assert.equal(it.verdict,'wrong');assert.deepEqual(it.slipAt,{line:0});
+ assert.equal((await explainAt(3,'I moved the one over and got eleven')).body.settled,undefined);
+ let it=store.getSession().practice.items[3];assert.equal(it.verdict,'unsure');assert.equal(it.slipAt,undefined);
  await walk();said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});
- assert.equal((await explainAt(3)).body.settled,'right');
- it=store.getSession().practice.items[3];assert.equal(it.verdict,'right');assert.equal(it.slipAt,undefined);
+ assert.equal((await explainAt(3)).body.settled,undefined);
+ it=store.getSession().practice.items[3];assert.equal(it.verdict,'unsure');assert.equal(it.slipAt,undefined);
 });
 
 // ---- practice-gate-rejects-identities: an item whose verdict cannot depend on the answer never reaches the set ----

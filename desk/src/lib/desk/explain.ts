@@ -7,35 +7,34 @@
  * sentences that point at the step, never the answer. It may also name a slip, but only from the
  * topic's closed vocabulary, and the desk drops anything outside it.
  *
- * The model also transcribes the value the learner says they got. That is evidence, not a verdict:
- * the value settles only when code finds it in what was said (rules/saidValue, X5), and then
- * rules/maths substitutes it into the question, exactly as marking does, and an unsure item settles
- * on what the substitution says. The model never decides right or wrong. Its reply is checked in code
+ * An explanation never settles an item (X7, ask d6d87220, craft-1). An unsure item stays unsure and nothing is written to
+ * the learner record, whatever the model transcribed. The model's `value` only tells the desk whether the learner said a
+ * figure (rules/saidValue, X5): if so the reply ends with ENTER_LINE, which asks them to enter it as their answer; if not,
+ * with NOT_HEARD_LINE (X6-a). The item settles only from a value the learner enters (the mark and second-go routes).
+ * A wrong item only takes the slip the explanation named. Its reply is checked in code
  * for the answer (`leaks`) - a reply that gives it away is replaced by the item's own line.
  *
  * A Calculus item (one with a `spec`) is heard the same way, spoken to as a first-year university student on the
  * Calculus 1 course: the model transcribes the final answer they say they got (an expression or a number, as plain
- * text), rules/calc checkAnswer settles an unsure item from it (rules/maths settleSpec), and the reply is checked
+ * text) only so the desk can tell they said one, the reply is checked
  * with leaksCalc(spec, reply). Only a spec of a Calculus SHAPE is a Calculus item.
  *
  * A school item (a spec of a school shape, rules/school; Family W5b and W7: every school unit, fractions to mean and range) takes the school
  * stance with the learner's age voice, exactly the school system prompt; the model transcribes the answer they say as
- * figures (a fraction, a mixed number, a decimal), rules/school check settles an unsure item from it by the learner's
- * school system (rules/maths settleSpec), the slip is only the one code detects (the model is not asked for one, and a
+ * figures (a fraction, a mixed number, a decimal), the slip is only the one code detects (the model is not asked for one, and a
  * wrong item is never renamed from the conversation), and the reply is checked with leaksSchool(spec, reply).
  */
 import { text } from "../engines/text";
-import { ASK, leaks, settle, settled, settleSpec, slip as slipOf, slipsFor, slipVocabulary, cleanValue, workingLines, type Settled } from "../rules/maths";
+import { ASK, leaks, settled, slip as slipOf, slipsFor, slipVocabulary, workingLines } from "../rules/maths";
 import { leaksCalc } from "../rules/calc";
 import { askedText, namedLine } from "../rules/calc-word";
 import { DEFAULT_SCHOOL_SYSTEM, leaksSchool } from "../rules/school";
 import { kindOfSpec } from "../rules/kinds";
 import { saidIn } from "../rules/saidValue";
-import { slipsShown } from "../rules/slips";
 import { voiceOf, withManner } from "../rules/voice";
 import { topic } from "../library/syllabus";
 import { PATHS, pathOfTopic, topicIn, type PathInfo } from "../library/paths";
-import { recallLearner, recordAttempt } from "../session/learners";
+import { recallLearner } from "../session/learners";
 import { notesPart } from "./memory";
 import { assemble, data, dataRows, say, type Part } from "../prompt/assemble";
 import type { PracticeItem, SchoolSystem } from "../session/store";
@@ -227,14 +226,13 @@ function heard(
 }
 
 /**
- * What an explanation does to its item. `settled` is set only when the item was unsure and the spoken
- * value could be read: the substitution decided it, and the attempt went to the learner record once.
+ * What an explanation does to its item. It never settles one (X7): there is no `settled`, and the learner record is not written.
  * `reply` never carries a number the substitution accepts for the question.
  * `renamed` is set only when the item was already wrong and the model named a slip from this topic's
  * vocabulary (the same `settled` rule marking uses): the item's shown slip and line follow the conversation.
  * Its verdict, its pen (`slipAt`) and the learner record are left as they were.
  */
-export interface Explained { reply: string; /** the reply as the learner reads it: a part named as the paper names it (v2 M3a-2); `reply` is what the session stores */ shown: string; slip?: string; settled?: Settled; renamed?: { slip: string; said: string }; }
+export interface Explained { reply: string; /** the reply as the learner reads it: a part named as the paper names it (v2 M3a-2); `reply` is what the session stores */ shown: string; slip?: string; renamed?: { slip: string; said: string }; }
 
 /**
  * What the item carries for the prompt: the written answer, the working as the pen counts it (workingLines, the same lines
@@ -260,6 +258,12 @@ export const NOT_HEARD_LINE = {
   cz: "V tom nezazněla konečná odpověď. Řekni nebo napiš, co ti vyšlo, například: Vyšlo mi ...",
 };
 
+/** The line an unsure item gets when the learner did say a value (X7): it tells them to enter it as their answer and does not say the desk checked it. */
+export const ENTER_LINE = {
+  en: "If that is what you got, enter it as your answer and the desk will check it.",
+  cz: "Pokud ti vyšlo tohle, zadej to jako svou odpověď a stůl to zkontroluje.",
+};
+
 export async function explainItem(
   item: PracticeItem,
   transcript: string,
@@ -279,25 +283,18 @@ export async function explainItem(
   // a part of a multi-part question (v2 M3a) is explained with its stem: the part's line alone does not say the situation
   const seen = seenOf(item, topicId);
   const h = school ? await explainSchool(item.question, transcript, topicId, learnerId, age, seen) : await explain(askedText(item), transcript, topicId, learnerId, calc, age, seen);
-  // an item with a spec settles by its engine's check (null when unsure); a linear item by substitution
-  // the value settles only when the learner said it (X5): a model-written value that is not in the transcript settles nothing and writes no record
+  // an explanation never settles an item (X7, ask d6d87220): the item settles only from a value the learner enters as their answer,
+  // so the model's `value` is read here only to know whether the learner said one, and nothing is written to the learner record
   const unsure = stillUnsure(), heard = saidIn(h.value, transcript);
-  const verdict = !unsure || !heard ? null
-    : calc || school ? settleSpec(item.n, item.spec, h.value, h.slip, topicId, system)
-    : settle(item, h.value, h.slip, topicId);
-  // a step-up item (Family W8) settles onto the step-up record only, as marking does
-  if (verdict) recordAttempt(learnerId, topicId, verdict.verdict === "right", verdict.slip, { stretch: item.stretch === true, tier: item.tier, ...(school ? { shows: slipsShown(topicId, item.spec) } : {}) });
   // an item already wrong: the slip the conversation found replaces the marker's, when the rulebook has it (no verdict,
   // no record) - never on a school item, whose slip only code detects
-  const named = !verdict && !school && item.verdict === "wrong" && h.slip ? settled(item.n, false, h.slip, topicId) : null;
+  const named = !school && item.verdict === "wrong" && h.slip ? settled(item.n, false, h.slip, topicId) : null;
   // the item's own line stands in for a reply that gives the answer away (or says nothing)
-  const own = verdict?.said ?? item.said ?? ASK(item.n);
+  const own = item.said ?? ASK(item.n);
   const gives = calc ? leaksCalc(item.spec, h.reply) : school ? leaksSchool(item.spec, h.reply) : leaks(item.question, h.reply, system);
   const chosen = h.reply && !gives ? h.reply : own;
-  // a settled item names the value the desk took from the words (the learner's own value is not a leak, so the leak check above ran on the model's reply alone)
-  const took = verdict ? (calc || school ? h.value : cleanValue(h.value)).trim() : "";
-  const body = took ? `The desk heard ${took}. ${chosen}` : chosen;
-  // an item still unsure whose value was not heard asks for the answer (X6-a); a wrong item or one no longer unsure gets no line
-  const reply = unsure && !heard && item.verdict !== "wrong" ? `${body} ${system === "cz" ? NOT_HEARD_LINE.cz : NOT_HEARD_LINE.en}` : body;
-  return { reply, shown: namedLine(reply, item.n, name), slip: h.slip, ...(verdict ? { settled: verdict } : {}), ...(named?.slip ? { renamed: { slip: named.slip, said: named.said } } : {}) };
+  // an item still unsure asks for the answer to be entered (X7), or says none was heard (X6-a); a wrong item or one no longer unsure gets no line
+  const line = system === "cz" ? (heard ? ENTER_LINE.cz : NOT_HEARD_LINE.cz) : (heard ? ENTER_LINE.en : NOT_HEARD_LINE.en);
+  const reply = unsure && item.verdict !== "wrong" ? `${chosen} ${line}` : chosen;
+  return { reply, shown: namedLine(reply, item.n, name), slip: h.slip, ...(named?.slip ? { renamed: { slip: named.slip, said: named.said } } : {}) };
 }

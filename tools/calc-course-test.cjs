@@ -24,6 +24,7 @@ const learners=require(src('lib/session/learners.ts'));
 const {view}=require(src('lib/session/pairing.ts'));
 const C=require(src('lib/rules/calc.ts'));
 const M=require(src('lib/rules/maths.ts'));
+const {ENTER_LINE}=require(src('lib/desk/explain.ts'));
 const T=require(src('maths/typeset.ts'));
 const P=require(src('lib/library/paths.ts'));
 const {CALC1_SPINE}=require(src('lib/library/calculus1.spine.ts'));
@@ -246,8 +247,9 @@ test('2: the school path through the same routes - linear-two-step practice, mar
  assert.equal(skill(SCHOOL,'linear-two-step').seen,5,'the unsure item is not an attempt');
  textPlan={explain:{reply:'Look at what you did to both sides first.',slip:'unclear',value:'2'}};
  r=await step('school explain',()=>post('explain',{transcript:'I took one off and got two',n:2}));
- assert.equal(r.status,200);assert.equal(r.body.settled,'right');assert.equal(r.body.reply,'The desk heard 2. Look at what you did to both sides first.');
- assert.equal(skill(SCHOOL,'linear-two-step').right,5);
+ // X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+ assert.equal(r.status,200);assert.equal(r.body.settled,undefined);assert.match(r.body.reply,/^Look at what you did to both sides first\. /);
+ assert.equal(skill(SCHOOL,'linear-two-step').right,4,'an explanation records nothing');
  onPage('school-k','Solve for x:  2x + 3 = 11');
  textPlan={hint:[{hint:'What is being done to x first?',what_to_try_next:'Write the two sides one under the other.'}]};
  const before={...calls};
@@ -310,14 +312,14 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
   assert.equal(skill(CALC,topic).seen-was.seen,count('right')+count('wrong'),`${topic}: an unsure item is no attempt`);
   assert.equal(skill(CALC,topic).right-was.right,count('right'),`${topic}: right attempts`);
 
-  // ---- the blank item is settled by what the learner says they got; a reply that states it is the desk's own line
+  // ---- the blank item stays unsure after the learner says what they got: an explanation never settles (X7, ask d6d87220)
   const blank=plan.indexOf('blank');
   textPlan={explain:{reply:want[blank].right,slip:'unclear',value:want[blank].right}};
   r=await step(`${topic} explain`,()=>post('explain',{transcript:'I got '+want[blank].right,n:blank}));
-  assert.equal(r.status,200);assert.equal(r.body.settled,'right',`${topic}: settled from the spoken answer`);
-  assert.equal(r.body.reply,`The desk heard ${want[blank].right.trim()}. `+M.RIGHT(blank+1),`${topic}: the reply stated the answer, so the desk's own line stands in`);
+  assert.equal(r.status,200);assert.equal(r.body.settled,undefined,`${topic}: not settled from the spoken answer`);
+  assert.equal(r.body.reply,`${store.getSession().practice.items[blank].said} ${ENTER_LINE.en}`,`${topic}: the reply stated the answer, so the desk's own line stands in, then the enter line`);
   s=store.getSession();
-  assert.deepEqual([s.practice.items[blank].verdict,s.practice.items[blank].said,s.practice.items[blank].reply],['right',M.RIGHT(blank+1),`The desk heard ${want[blank].right.trim()}. `+M.RIGHT(blank+1)]);
+  assert.equal(s.practice.items[blank].verdict,'unsure');
   assert.equal(skill(CALC,topic).secure,false,`${topic}: one mixed evening does not latch it`);
 
   // ---- a hint on a page item of the topic's question: clean kept; a leak re-asked once; a second leak the shape's sentence

@@ -261,7 +261,8 @@ test('7: the hint route asks no lesson pick for a fractions task (no lesson in t
 });
 
 // ------------------------------------------------------------------ 5. explanations
-test('8: an unsure fractions item is explained in the school stance and settled by check; a reply that states the answer is replaced',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('8: an unsure fractions item is explained in the school stance and stays unsure; a reply that states the answer is replaced',async()=>{
  seat('uk');setOn();
  stubVision(()=>({items:PAGE.map((p,i)=>({n:i+1,studentAnswer:p.a,studentWorking:''}))}));
  assert.equal((await post('mark',PHOTO)).status,200);
@@ -269,8 +270,8 @@ test('8: an unsure fractions item is explained in the school stance and settled 
  stubText(()=>({reply:'Good - look again at how you made the bottoms match.',value:'3/4',slip:'tops-and-bottoms'}));
  let r=await post('explain',{transcript:'I made them quarters and got three quarters',n:5});
  assert.equal(r.status,200);
- const b=await r.json();assert.equal(b.settled,'right');
- assert.match(b.reply,/^The desk heard 3\/4\. /,'the route returns what the desk heard');assert.match(store.getSession().practice.items[5].reply,/^The desk heard 3\/4\. /,'and the item stores it');
+ const b=await r.json();assert.equal(b.settled,undefined);
+ assert.equal(b.reply,'Good - look again at how you made the bottoms match. '+X.ENTER_LINE.en,'the route returns the step, then the enter line');assert.equal(store.getSession().practice.items[5].reply,b.reply,'and the item stores it');
  const req=seenText[0];
  assert.doesNotMatch(req.system,/first-year university student/,'not the Calculus stance');
  assert.match(req.system,/listening to a school student explain/);
@@ -279,14 +280,14 @@ test('8: an unsure fractions item is explained in the school stance and settled 
  assert.match(req.prompt,/eleven twelfths is 11\/12/);assert.doesNotMatch(req.prompt,/value of x/);
  assert.doesNotMatch(req.prompt,/name the mistake/,'no slip asked for');
  assert.deepEqual(Object.keys(req.schema.properties).sort(),['reply','value']);
- assert.equal(store.getSession().practice.items[5].verdict,'right');
- assert.equal(learners.getLearner(LEARNER).skills[UNIT].seen,PAGE.filter((p)=>p.uk[0]!=='unsure').length+1,'the settle recorded once');
+ assert.equal(store.getSession().practice.items[5].verdict,'unsure');
+ assert.equal(learners.getLearner(LEARNER).skills[UNIT].seen,PAGE.filter((p)=>p.uk[0]!=='unsure').length,'nothing recorded');
  // item 9 (0.9167, a rounding): the learner says eleven twelfths, but the reply gives it away - replaced by the item's own line
  stubText(()=>({reply:'Yes, it comes to 11/12.',value:'11/12'}));
  r=await post('explain',{transcript:'eleven twelfths',n:8});
  const it9=store.getSession().practice.items[8];
- assert.equal(it9.verdict,'right');assert.equal(it9.reply,'The desk heard 11/12. '+M.RIGHT(9),'the leaking reply is not shown');
- assert.equal((await r.json()).reply,'The desk heard 11/12. '+M.RIGHT(9));
+ assert.equal(it9.verdict,'unsure');assert.equal(it9.reply,it9.said+' '+X.ENTER_LINE.en,'the leaking reply is not shown');
+ assert.equal((await r.json()).reply,it9.said+' '+X.ENTER_LINE.en);
  // item 8 (11/13, wrong with no slip): a slip the conversation names does not rename a school item
  stubText(()=>({reply:'Look at the tops.',value:'',slip:'tops-and-bottoms'}));
  await post('explain',{transcript:'I added them',n:7});
@@ -301,7 +302,7 @@ test('8: an unsure fractions item is explained in the school stance and settled 
  assert.equal(store.getSession().practice.items[6].verdict,'unsure','a rounding said aloud is still unsure');
  stubText(()=>({reply:'Look at the bottoms.',value:'0,5'}));
  await post('explain',{transcript:'nula cela pet',n:6});
- assert.equal(store.getSession().practice.items[6].verdict,'wrong','0,5 is a half in cz, and 3/4 + 1/6 is not a half');
+ assert.equal(store.getSession().practice.items[6].verdict,'unsure','a spoken 0,5 settles nothing either');
 });
 
 test('9: the Calculus explanation prompt is byte for byte what it was, and a linear item keeps its own',async()=>{
@@ -337,23 +338,24 @@ test('9: the Calculus explanation prompt is byte for byte what it was, and a lin
  assert.match(seenText[0].prompt,/^Topic: Two-step equations\n/);
 });
 
-test('10: a settled explanation names the value the desk heard; nothing settled, nothing named',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('10: an explanation names no heard value and settles nothing; it asks for the answer to be entered',async()=>{
  const topic='calc1-rules',lin='linear-two-step',HEARD=/^The desk heard /;
- // a Calculus item settled by the answer said, and a linear one by the value of x (the 'x = ' cleaned off)
+ // a Calculus item and a linear one (the 'x = ' cleaned off) with the answer said: the step, then the enter line
  stubText(()=>({reply:'Look at the second term.',slip:'unclear',value:'6x + 2'}));
  let x=await X.explainItem({n:1,question:'Differentiate f(x) = 3x^2 + 2x.',spec:{shape:'derivative',f:'3x^2 + 2x'},verdict:'unsure'},'six x plus two',topic,LEARNER,()=>true,12,'cz');
- assert.equal(x.settled.verdict,'right');assert.equal(x.reply,'The desk heard 6x + 2. Look at the second term.');assert.equal(x.shown,x.reply);
+ assert.equal(x.settled,undefined);assert.equal(x.reply,'Look at the second term. '+X.ENTER_LINE.cz);assert.equal(x.shown,x.reply);
  stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'x = 4'}));
  x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'I got four',lin,LEARNER,()=>true,12);
- assert.equal(x.settled.verdict,'right');assert.equal(x.reply,'The desk heard 4. Look at the first line.');
- // a reply that leaks is replaced, and the heard sentence still leads the item's own line (the check ran on the model's reply alone)
+ assert.equal(x.settled,undefined);assert.equal(x.reply,'Look at the first line. '+X.ENTER_LINE.en);
+ // a reply that leaks is replaced by the item's own line, then the enter line
  stubText(()=>({reply:'It is 4.',slip:'unclear',value:'4'}));
  x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'four',lin,LEARNER,()=>true,12);
- assert.equal(x.reply,'The desk heard 4. '+M.RIGHT(1));
- // a wrong answer said settles wrong, and the desk still says what it heard
+ assert.equal(x.reply,M.ASK(1)+' '+X.ENTER_LINE.en);
+ // a wrong answer said settles nothing either
  stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'5'}));
  x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'five',lin,LEARNER,()=>true,12);
- assert.equal(x.settled.verdict,'wrong');assert.match(x.reply,/^The desk heard 5\. /);
+ assert.equal(x.settled,undefined);assert.equal(x.reply,'Look at the first line. '+X.ENTER_LINE.en);
  // nothing settles: a value the engine cannot read, an item no longer unsure, a wrong item whose slip is renamed
  stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'about four'}));
  x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'about four',lin,LEARNER,()=>true,12);
@@ -425,12 +427,13 @@ test('12: an item with nothing seen sends today\'s prompt byte for byte, a schoo
   `minus three is -3, seven halves is 7/2). Their value, not yours — do not work it out. An empty string if they did not say one.`);
 });
 
-test('13: the ceiling: with the answer and working in the prompt, a reply that states the right answer is still replaced, and the heard sentence leads',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('13: the ceiling: with the answer and working in the prompt, a reply that states the right answer is still replaced, and nothing settles',async()=>{
  const lin='linear-two-step';
  stubText(()=>({reply:'The answer is 4.',slip:'unclear',value:'4'}));
  const x=await X.explainItem({n:1,question:'2x + 3 = 11',studentAnswer:'4',studentWorking:'2x = 8; x = 4',verdict:'unsure'},'I got four',lin,LEARNER,()=>true,12);
  assert.match(seenText[0].prompt,/Their working, line by line:\n1\. "2x = 8"\n2\. "x = 4"/);
- assert.equal(x.settled.verdict,'right');assert.equal(x.reply,'The desk heard 4. '+M.RIGHT(1));
+ assert.equal(x.settled,undefined);assert.equal(x.reply,M.ASK(1)+' '+X.ENTER_LINE.en);
  // an unsettled one: the item's own line, no heard sentence
  stubText(()=>({reply:'The answer is 4.',slip:'unclear',value:''}));
  const y=await X.explainItem({n:1,question:'2x + 3 = 11',studentAnswer:'4',studentWorking:'2x = 8; x = 4',verdict:'unsure'},'I got four',lin,LEARNER,()=>false,12);
@@ -920,7 +923,8 @@ test('W7b 8: a hint on each decimals and percent task names the unit in its stan
  }
 });
 
-test('W7b 9: an unsure decimals or percent item is explained in the school stance and settled by check from the value said, the percent sign kept',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('W7b 9: an unsure decimals or percent item is explained in the school stance and stays unsure, the percent sign read but nothing settled',async()=>{
  const items=[{spec:cv('7/20','percent'),a:'35'},{spec:po('35% of 80'),a:'28%'},{spec:cs('4.35 + 2.8'),a:'7.2'}];
  seat('uk');store.dispatch({type:'practice.set',practice:{topic:'dec-convert',marked:false,items:items.map((p,i)=>({n:i+1,question:question(p.spec),spec:p.spec,tier:1}))}});noModel();
  assert.equal((await post('mark',{answers:items.map((p)=>p.a)})).status,200);
@@ -928,14 +932,14 @@ test('W7b 9: an unsure decimals or percent item is explained in the school stanc
  // "thirty-five percent" said aloud for "Write 7/20 as a percentage": the value is transcribed with its sign and settles right
  stubText(()=>({reply:'Look at how you turned twentieths into hundredths.',value:'35%'}));
  const r=await post('explain',{transcript:'I made it thirty-five percent',n:0});
- assert.equal(r.status,200);assert.equal((await r.json()).settled,'right');
+ assert.equal(r.status,200);assert.equal((await r.json()).settled,undefined);
  assert.match(seenText[0].prompt,/thirty-five percent is 35%/,'the explain prompt asks for a percentage with its sign');
  assert.match(seenText[0].prompt,/^Topic: Fractions, decimals and percent\n/);
- assert.equal(store.getSession().practice.items[0].verdict,'right');
+ assert.equal(store.getSession().practice.items[0].verdict,'unsure');
  // the reply is leak-checked against the item's own spec: one that says the answer is replaced by the item's line
  stubText(()=>({reply:'Yes: 7.15 exactly.',value:'7.15'}));
  await post('explain',{transcript:'seven point one five',n:2});
- const it=store.getSession().practice.items[2];assert.equal(it.verdict,'right');assert.equal(it.reply,'The desk heard 7.15. '+M.RIGHT(3),'the leaking reply is not shown');
+ const it=store.getSession().practice.items[2];assert.equal(it.verdict,'unsure');assert.equal(it.reply,it.said+' '+X.ENTER_LINE.en,'the leaking reply is not shown');
 });
 
 // ------------------------------------------------------------------ 9. Family W7 batch 3: ratio, rates, area, mean and range - read, withheld and marked
@@ -1111,7 +1115,8 @@ test('W7c 8: a hint on each batch-3 task names the unit in its stance, and a hin
  }
 });
 
-test('W7c 9: an unsure ratio, area or mean item is explained in the school stance and settled by check from the value said - two amounts, a ratio, a square unit',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('W7c 9: an unsure ratio, area or mean item is explained in the school stance and stays unsure - two amounts, a ratio, a square unit are read but nothing settles',async()=>{
  const items=[{spec:ra('60 in 2:3'),a:'36 and 24'},{spec:ar('rectangle 7 by 4'),a:'28 cm'},{spec:st('mean 4, 7, 9, 10'),a:'7,5'}];
  seat('uk');store.dispatch({type:'practice.set',practice:{topic:'ratio-share',marked:false,items:items.map((p,i)=>({n:i+1,question:question(p.spec),spec:p.spec,tier:1}))}});noModel();
  assert.equal((await post('mark',{answers:items.map((p)=>p.a)})).status,200);
@@ -1119,14 +1124,14 @@ test('W7c 9: an unsure ratio, area or mean item is explained in the school stanc
  // "twenty-four and thirty-six" said aloud: the value is transcribed as two amounts and settles right
  stubText(()=>({reply:'Look at which share goes with the 2.',value:'24 and 36'}));
  const r=await post('explain',{transcript:'I got twenty-four and the other thirty-six',n:0});
- assert.equal(r.status,200);assert.equal((await r.json()).settled,'right');
+ assert.equal(r.status,200);assert.equal((await r.json()).settled,undefined);
  assert.match(seenText[0].prompt,/twenty-four and thirty-six is 24 and 36/,'the explain prompt asks for two amounts as said');
  assert.match(seenText[0].prompt,/^Topic: Ratio and sharing\n/);
- assert.equal(store.getSession().practice.items[0].verdict,'right');
+ assert.equal(store.getSession().practice.items[0].verdict,'unsure');
  // the area said with its square unit settles right; a reply that states the answer is replaced by the item's line
  stubText(()=>({reply:'Yes, 28 square centimetres.',value:'28 cm2'}));
  await post('explain',{transcript:'twenty-eight square centimetres',n:1});
- const it=store.getSession().practice.items[1];assert.equal(it.verdict,'right');assert.equal(it.reply,'The desk heard 28 cm2. '+M.RIGHT(2),'the leaking reply is not shown');
+ const it=store.getSession().practice.items[1];assert.equal(it.verdict,'unsure');assert.equal(it.reply,it.said+' '+X.ENTER_LINE.en,'the leaking reply is not shown');
 });
 
 test('HL6: every frac-* withheld line is 25 words or fewer, keeps the closing sentence, names no number, and leaks nothing on its unit',()=>{
@@ -1240,7 +1245,8 @@ test('MK10: an unsure item says why the desk is not sure, in the engine\'s words
 });
 
 // ------------------------------------------------------------------ X5: a value settles an unsure item only when the learner said it
-test('X5: a model-written value the learner did not say settles nothing and writes no record; said, it settles as before (R2, R18)',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('X5: a model-written value the learner did not say gets the not-heard line; one they said gets the enter line; neither settles nor writes a record (R2, R18)',async()=>{
  const rec=(id,unit)=>JSON.stringify(learners.getLearner(id).skills[unit]??null);
  // R2: an unsure school fraction item, the transcript has no number in it, the stub volunteers the right answer
  seat('uk');setOn();
@@ -1256,9 +1262,9 @@ test('X5: a model-written value the learner did not say settles nothing and writ
  const r=await post('explain',{transcript:'nevím, nějak jsem to odečetla',n:5});
  const b=await r.json();assert.equal(r.status,200);assert.equal('settled' in b,false,'R2 route: no settled field');
  assert.equal(store.getSession().practice.items[5].verdict,'unsure');assert.equal(rec(LEARNER,UNIT),before,'R2 route: record unchanged');
- // control: the same item with the value said settles right and records once
+ // control: the same item with the value said gets the enter line and still writes nothing (X7)
  const c=await X.explainItem(item,'I made them quarters and got three quarters',UNIT,LEARNER,()=>true,12,'uk');
- assert.equal(c.settled.verdict,'right');assert.match(c.reply,/^The desk heard 3\/4\. /);assert.notEqual(rec(LEARNER,UNIT),before,'control: the record moved');
+ assert.equal(c.settled,undefined);assert.ok(c.reply.endsWith(' '+X.ENTER_LINE.en));assert.doesNotMatch(c.reply,/The desk heard/);assert.equal(rec(LEARNER,UNIT),before,'control: the record is unchanged');
  // R18: a linear item, 'I got five' with the stub's 4
  const lin='linear-two-step',lq={n:1,question:'2x + 3 = 11',verdict:'unsure'};
  stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'4'}));
@@ -1267,7 +1273,7 @@ test('X5: a model-written value the learner did not say settles nothing and writ
  assert.equal(y.settled,undefined,'R18: not settled');assert.equal(rec(LEARNER,lin),lb,'R18: record unchanged');assert.doesNotMatch(y.reply,/The desk heard/);
  assert.ok(y.reply.endsWith(' '+X.NOT_HEARD_LINE.en),'R18: ends with the X6-a line');
  const z=await X.explainItem(lq,'I got four',lin,LEARNER,()=>true,12);
- assert.equal(z.settled.verdict,'right','control: four said settles');assert.ok(!z.reply.includes(X.NOT_HEARD_LINE.en),'X6-a: a settled item has no line');
+ assert.equal(z.settled,undefined,'control: four said settles nothing');assert.equal(rec(LEARNER,lin),lb,'control: record unchanged');assert.ok(!z.reply.includes(X.NOT_HEARD_LINE.en)&&z.reply.endsWith(' '+X.ENTER_LINE.en),'X7: a value said gets the enter line, not the not-heard line');
  // X6-a: Czech for system cz; none when the item is no longer unsure or was already wrong
  stubText(()=>({reply:'Look again at how you made the bottoms match.',value:'3/4'}));
  const cz=await X.explainItem(item,'nevím, nějak jsem to odečetla',UNIT,LEARNER,()=>true,12,'cz');

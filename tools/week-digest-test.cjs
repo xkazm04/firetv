@@ -399,31 +399,22 @@ function catchLog(){const errs=[],e0=console.error;console.error=(...a)=>errs.pu
 const onFile=()=>{const l=learners.getLearner(LEARNER);return {digest:l.digest,history:l.history,skills:l.skills,writing:l.writing,sessions:l.english.sessions};};
 const EXPLAINS=(value)=>async()=>({json:{reply:'Look at the common denominator again.',value},provider:'test',ms:1});
 
-test('WD9: a settle whose restate write fails is logged once and said; the answer stays 200 and done; a later settle restates in place',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('WD9: an explanation writes no learner file at all, so no restate can fail: 200, done, no settled and no saved; the item stays unsure',async()=>{
  seat();visionThrows();setOn(SIX);assert.equal((await post('mark',{answers:TYPED})).status,200);
  const was=onFile();
  answer=EXPLAINS('3/4');
- // the explanation records its attempt first (one save), then the settle's restate is the write that fails
- const restore=failLearnerWrites(1),c=catchLog();let r,j;
+ // a write that would fail is armed, and the explanation never reaches it
+ const restore=failLearnerWrites(0),c=catchLog();let r,j;
  try{r=await post('explain',{transcript:'I got three quarters',n:4});j=await r.json();}finally{c.done();restore();}
  assert.equal(r.status,200,JSON.stringify(j));
- assert.ok(j.reply&&j.settled==='right',`the reply and the settle are answered: ${JSON.stringify(j)}`);assert.equal(j.saved,false);
- assert.equal(c.errs.filter((l)=>/could not be restated/.test(l)).length,1,`one log line: ${c.errs.join(' | ')}`);
+ assert.ok(j.reply,'the reply is answered');assert.equal(j.settled,undefined);assert.equal(j.saved,undefined);
+ assert.equal(c.errs.filter((l)=>/could not be restated/.test(l)).length,0,`no restate was tried: ${c.errs.join(' | ')}`);
  const s=store.getSession();
  assert.equal(s.jobs.explain.phase,'done');assert.equal(s.jobs.explain.error,undefined,'no Try again');
- assert.equal(s.status,store.SETTLE_NOT_SAVED);
- assert.equal(store.SETTLE_NOT_SAVED,"That answer was settled, but the desk could not write it to the learner file, so tonight's record and the week still show the old count.");
- assert.equal(store.settleSaved(),false);
- assert.equal(s.practice.items[4].verdict,'right','the item keeps its verdict on the session');
- const now=onFile();assert.deepEqual(now.digest,was.digest,'the digest entry on file is as marked');assert.deepEqual(now.history,was.history,'the history line on file is as marked');
- // writes work again: the next settle restates both lines in place, and the done line is the reply
- answer=EXPLAINS('11/12');
- r=await post('explain',{transcript:'eleven twelfths again',n:5});j=await r.json();
- assert.equal(r.status,200);assert.equal(j.saved,true);assert.equal(store.settleSaved(),true);
- assert.equal(store.getSession().status,j.reply,'the done line is the reply');
- const d=onFile();assert.equal(d.digest.length,1,'restated in place, not a new entry');
- assert.deepEqual({right:d.digest[0].right,notSure:d.digest[0].notSure},{right:3,notSure:0});
- assert.equal(d.history.at(-1).detail,'3 of 6 right');
+ assert.notEqual(s.status,store.SETTLE_NOT_SAVED);
+ assert.equal(s.practice.items[4].verdict,'unsure','the item is still unsure');
+ assert.deepEqual(onFile(),was,'the learner file is as marking left it');
 });
 
 test('WD10: a typed mark whose one save fails writes nothing (502, not marked); Try again records one set of attempts, one history line, one digest entry',async()=>{

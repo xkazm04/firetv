@@ -1136,7 +1136,8 @@ test('MK10: the drawn card of an unsure part gives the desk\'s reason under the 
  }
 });
 
-test('heard 1: the drawn card of an item the desk settled from a spoken value opens with what the desk heard',async()=>{
+// X7, ask d6d87220: an explanation never settles an item; it settles only from an answer the learner enters. This pin used to assert a settle from a spoken value.
+test('heard 1: an item an explanation heard a value on stays unsure; the drawn card carries no heard sentence and the reply asks for the answer to be entered',async()=>{
  const reg=require(path.join(root,'src/lib/engines/registry.ts'));require(path.join(root,'src/lib/engines/text.ts'));
  const X=require(path.join(root,'src/lib/desk/explain.ts')),{reduce}=require(path.join(root,'src/lib/session/store.ts'));
  reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'Look again at the step where the 1 moved.',slip:'unclear',value:'4'})})});
@@ -1144,11 +1145,11 @@ test('heard 1: the drawn card of an item the desk settled from a spoken value op
   const base=secondSession(null,'walk');
   const item={n:2,question:'2x + 3 = 11',studentAnswer:'',verdict:'unsure'};
   const x=await X.explainItem(item,'I took three off and halved it and got four','linear-two-step','tv-heard',()=>true,12);
-  assert.equal(x.settled.verdict,'right');
-  // the route stores it the way it does: practice.settle with the reply
-  const s=reduce({...base,practice:{...base.practice,items:base.practice.items.map((it)=>it.n===2?item:it)}},{type:'practice.settle',n:2,reply:x.reply,verdict:x.settled.verdict,slip:x.settled.slip,said:x.settled.said});
+  assert.equal(x.settled,undefined);assert.match(x.reply,/enter it as your answer/);
+  // the route stores it the way it does: practice.settle with the reply and no verdict
+  const s=reduce({...base,practice:{...base.practice,items:base.practice.items.map((it)=>it.n===2?item:it)}},{type:'practice.settle',n:2,reply:x.reply});
   const card=words(cardOf(drawMaths('Walk',{...s,walkIx:1}))).join(' ');
-  assert.match(card,/The desk heard 4\./,'the drawn card names the value the desk took');
+  assert.doesNotMatch(card,/The desk heard/,'nothing was taken from the words');
  }finally{reg.resetProviders();}
 });
 
