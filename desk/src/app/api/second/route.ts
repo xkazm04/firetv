@@ -1,13 +1,18 @@
 /**
- * The second go: a ringed item takes ONE typed answer from the phone (Math Buddy's Walk). Code judges it - the judge marking
- * uses (rules/kinds judgeItem, through lib/desk/mark secondGo), no model - and the route raises the one event only the desk may
- * raise, `practice.second`, which carries a verdict and never the answer typed. The first attempt stays the record: nothing
- * here touches the learner's skills, history or digest. An answer the desk cannot read is refused in a desk sentence and does
- * not spend the go. The reply is `{ ok: true }`: the TV draws what the go came to, the phone says nothing about it.
+ * The typed go: a ringed item takes ONE second go, and (the X7 door, ask d6d87220) an unsure item takes its entered answer here.
+ * Code judges either - the judge marking uses (rules/kinds judgeItem, through lib/desk/mark secondGo / enteredGo), no model.
+ *   - A wrong item: the route raises `practice.second`, which carries a verdict and never the answer typed. The first attempt
+ *     stays the record: nothing here touches the learner's skills, history or digest.
+ *   - An unsure item: the entered answer is the item's first attempt. The route settles it with the code judge's verdict
+ *     (`practice.settle`, no answer in the event; the reducer restates the history line and digest, never skills). An
+ *     explanation still never settles. Its entry is its one go: if it comes back wrong, the second go is spent with it, so
+ *     the item takes no further entry (the stricter reading; never guess-and-check).
+ * An answer the desk cannot read is refused in a desk sentence and does not spend the go. The reply is `{ ok: true }`: the TV
+ * draws what the go came to, the phone says nothing about it.
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
-import { secondGo } from "@/lib/desk/mark";
+import { enteredGo, secondGo } from "@/lib/desk/mark";
 import { TYPED_ANSWER_MAX, secondProblem } from "@/lib/rules/maths";
 import { learnerSystem } from "@/lib/rules/school";
 import { itemName } from "@/lib/rules/calc-word";
@@ -27,13 +32,20 @@ export async function POST(req: Request) {
   if (!practice || !practice.marked) return NextResponse.json({ error: NOT_MARKED }, { status: 409 });
   const item = practice.items.find((it) => it.n === body.n);
   if (!item) return NextResponse.json({ error: "That item is not on the desk any more." }, { status: 400 });
-  // one go, on a wrong item only: the rule is the rulebook's (rules/maths secondProblem)
+  // one go, on a wrong or an unsure item: the rule is the rulebook's (rules/maths secondProblem)
   const problem = secondProblem(item, itemName(practice.items, practice.items.indexOf(item)));
   if (problem) return NextResponse.json({ error: problem }, { status: 409 });
   if (typeof body.answer !== "string") return NextResponse.json({ error: NO_BODY }, { status: 400 });
   if (!body.answer.trim()) return NextResponse.json({ error: BLANK }, { status: 400 });
   // a refusal never truncates: past the cap it is sent back to be shortened
   if (body.answer.length > TYPED_ANSWER_MAX) return NextResponse.json({ error: `That answer is longer than ${TYPED_ANSWER_MAX} characters. Shorten it and send again.` }, { status: 400 });
+  if (item.verdict === "unsure") {
+    const j = enteredGo(item, body.answer, practice.topic, learnerSystem(s));
+    if (!j) return NextResponse.json({ error: UNREADABLE }, { status: 400 });
+    dispatch({ type: "practice.settle", n: item.n, reply: item.reply ?? "", verdict: j.verdict, slip: j.slip, said: j.said, slipAt: j.slipAt });
+    if (j.verdict === "wrong") dispatch({ type: "practice.second", n: item.n, verdict: "wrong" });
+    return NextResponse.json({ ok: true });
+  }
   const verdict = secondGo(item, body.answer, practice.topic, learnerSystem(s));
   if (!verdict) return NextResponse.json({ error: UNREADABLE }, { status: 400 });
   dispatch({ type: "practice.second", n: item.n, verdict });

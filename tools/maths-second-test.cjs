@@ -38,11 +38,11 @@ const item=(n)=>store().getSession().practice.items.find((i)=>i.n===n);
 const learners=()=>{const f=path.join(DATA,'learners.json');return fs.existsSync(f)?fs.readFileSync(f,'utf8'):null;};
 const plain=(t)=>typeof t==='string'&&t.trim().length>=12&&/[.?!]$/.test(t.trim());
 
-test('case 1: secondProblem - null for a wrong item with no second go; a plain desk sentence for right, unsure and a spent go',()=>{
+test('case 1: secondProblem - null for a wrong item with no second go; a plain desk sentence for right, unmarked and a spent go; null for unsure (X7 door)',()=>{
  const {secondProblem}=maths();
  assert.equal(typeof secondProblem,'function','rules/maths exports secondProblem');
  assert.equal(secondProblem({n:2,question:'x-5=2',verdict:'wrong'}),null);
- for(const it of [{n:1,question:'x+3=7',verdict:'right'},{n:4,question:'x/2=4',verdict:'unsure'},{n:2,question:'x-5=2',verdict:'wrong',second:'right'},{n:2,question:'x-5=2',verdict:'wrong',second:'wrong'},{n:3,question:'3x=18'}]){
+ for(const it of [{n:1,question:'x+3=7',verdict:'right'},{n:2,question:'x-5=2',verdict:'wrong',second:'right'},{n:2,question:'x-5=2',verdict:'wrong',second:'wrong'},{n:3,question:'3x=18'}]){
   const t=secondProblem(it);
   assert.ok(plain(t),`a plain sentence for ${JSON.stringify(it)}: ${t}`);
   assert.ok(!/\d{2,}|x\s*=/.test(t),'no value in it');
@@ -129,4 +129,47 @@ test('case 8b: a second go never calls recordAttempt - the whole learner record 
  assert.equal(getLearner(ID).skills[TOPIC].seen,seen,'skills[topic].seen unchanged: a second go is practice, not evidence');
  assert.equal(JSON.stringify(getLearner(ID)),record,'skills, history and digest are as marking left them');
  assert.match(require(src('tv/mathsRows.ts')).continueCard(store().getSession()).d,/3 of 6 right/);
+});
+
+/** X7 door (ask d6d87220, lite r2 value-1): an unsure item takes ONE entered answer on /api/second, judged in code; an explanation never settles it. */
+test('X7 door: secondProblem lets an unsure item through; a settled one is refused with a desk sentence',()=>{
+ const {secondProblem}=maths();
+ assert.equal(secondProblem({n:4,question:'x/2=4',verdict:'unsure'}),null);
+ for(const it of [{n:4,verdict:'right'},{n:4,verdict:'wrong',second:'wrong'}])assert.ok(plain(secondProblem(it)),JSON.stringify(it));
+});
+test('X7 door: an unsure item settles RIGHT from the entered answer, by the code judge, no model; the answer is not kept; a second entry is refused',async()=>{
+ const calls=modelCalls;
+ seat(markedSet({4:{verdict:'unsure',slip:undefined,studentAnswer:'?',said:'The desk is not sure about number 4. How did you get there?'}}),{walkIx:3});
+ const ok=await second({n:4,answer:'8'});
+ assert.equal(ok.status,200);assert.deepEqual(await ok.json(),{ok:true});
+ assert.equal(item(4).verdict,'right');assert.equal(item(4).second,undefined);
+ assert.ok(!JSON.stringify(store().getSession()).includes('"answer"'));
+ const again=await second({n:4,answer:'8'});
+ assert.equal(again.status,409);assert.ok(plain((await again.json()).error),'the second entry is refused in a desk sentence');
+ assert.equal(modelCalls,calls);
+});
+test('X7 door: an unsure item entered WRONG settles wrong and spends its one go (stricter reading): a further entry is refused',async()=>{
+ seat(markedSet({4:{verdict:'unsure',slip:undefined,said:'The desk is not sure about number 4. How did you get there?'}}),{walkIx:3});
+ assert.equal((await second({n:4,answer:'5'})).status,200);
+ assert.equal(item(4).verdict,'wrong');assert.equal(item(4).second,'wrong','the entry was its go');
+ const r=await second({n:4,answer:'8'});
+ assert.equal(r.status,409);assert.ok(plain((await r.json()).error));assert.equal(item(4).second,'wrong');
+});
+test('X7 door: an unreadable entry does not spend the unsure item\'s go; a wrong item keeps exactly one second go',async()=>{
+ seat(markedSet({4:{verdict:'unsure'}}),{walkIx:3});
+ assert.equal((await second({n:4,answer:'eight'})).status,400);assert.equal(item(4).verdict,'unsure');
+ assert.equal((await second({n:4,answer:'8'})).status,200);assert.equal(item(4).verdict,'right');
+ seat(markedSet());
+ assert.equal((await second({n:2,answer:'5'})).status,200);assert.equal(item(2).second,'wrong');
+ assert.equal((await second({n:2,answer:'7'})).status,409,'a wrong item: one go only');
+});
+test('X7 door: an explanation still never settles an unsure item - only the entered answer does',async()=>{
+ seat(markedSet({4:{verdict:'unsure'}}),{walkIx:3});
+ store().dispatch({type:'practice.settle',n:4,reply:'Look at the line.'});
+ assert.equal(item(4).verdict,'unsure','a reply alone leaves it unsure');
+ assert.equal((await second({n:4,answer:'8'})).status,200);assert.equal(item(4).verdict,'right');
+});
+test('X7 door: the explain closing lines name the door that exists and carry no value (craft-2)',()=>{
+ const X=require(src('lib/desk/explain.ts'));
+ for(const l of [X.ENTER_LINE.en,X.ENTER_LINE.cz,X.NOT_HEARD_LINE.en,X.NOT_HEARD_LINE.cz]){assert.ok(/phone|telefon/.test(l),l);assert.ok(!/\d/.test(l),l);}
 });

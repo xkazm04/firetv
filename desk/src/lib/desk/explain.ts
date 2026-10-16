@@ -254,14 +254,14 @@ function seenOf(item: PracticeItem, topicId: string): Seen | undefined {
 
 /** The one line an unsure item gets when the value the model wrote was not in what the learner said (X6-a): English for every system but cz. */
 export const NOT_HEARD_LINE = {
-  en: "The desk did not hear a final answer in that. Say or type what you got, for example: I got ...",
-  cz: "V tom nezazněla konečná odpověď. Řekni nebo napiš, co ti vyšlo, například: Vyšlo mi ...",
+  en: "The desk did not hear a final answer in that. Type what you got in the box on your phone and the desk will check it, once.",
+  cz: "V tom nezazněla konečná odpověď. Napiš, co ti vyšlo, do políčka v telefonu a stůl to zkontroluje, jen jednou.",
 };
 
 /** The line an unsure item gets when the learner did say a value (X7): it tells them to enter it as their answer and does not say the desk checked it. */
 export const ENTER_LINE = {
-  en: "If that is what you got, enter it as your answer and the desk will check it.",
-  cz: "Pokud ti vyšlo tohle, zadej to jako svou odpověď a stůl to zkontroluje.",
+  en: "If that is what you got, type it in the box on your phone and the desk will check it, once.",
+  cz: "Pokud ti vyšlo tohle, napiš to do políčka v telefonu a stůl to zkontroluje, jen jednou.",
 };
 
 export async function explainItem(

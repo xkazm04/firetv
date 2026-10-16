@@ -1145,7 +1145,7 @@ test('heard 1: an item an explanation heard a value on stays unsure; the drawn c
   const base=secondSession(null,'walk');
   const item={n:2,question:'2x + 3 = 11',studentAnswer:'',verdict:'unsure'};
   const x=await X.explainItem(item,'I took three off and halved it and got four','linear-two-step','tv-heard',()=>true,12);
-  assert.equal(x.settled,undefined);assert.match(x.reply,/enter it as your answer/);
+  assert.equal(x.settled,undefined);assert.match(x.reply,/box on your phone/);
   // the route stores it the way it does: practice.settle with the reply and no verdict
   const s=reduce({...base,practice:{...base.practice,items:base.practice.items.map((it)=>it.n===2?item:it)}},{type:'practice.settle',n:2,reply:x.reply});
   const card=words(cardOf(drawMaths('Walk',{...s,walkIx:1}))).join(' ');

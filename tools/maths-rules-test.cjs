@@ -310,7 +310,7 @@ test('case 2: a spoken value that does not substitute leaves the item unsure too
  const r=await explainAt(3,'I moved the one over and got eleven');
  assert.equal(r.status,200);assert.equal(r.body.settled,undefined);
  const it=store.getSession().practice.items[3];
- assert.equal(it.verdict,'unsure');assert.equal(it.slip,undefined);assert.match(it.reply,/enter it as your answer/);
+ assert.equal(it.verdict,'unsure');assert.equal(it.slip,undefined);assert.match(it.reply,/box on your phone/);
  assert.deepEqual(record(me),before);
 });
 test('case 3: a value the desk cannot read leaves the item unsure and the learner record alone',async()=>{

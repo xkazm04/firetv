@@ -62,20 +62,21 @@ test('2: a single item, and the hint, sentence, forensic and break screens, spea
 test('3: the second go\'s three sentences name a part 5(b); a single item\'s are unchanged',()=>{
  const its=items(),nm=(i)=>W.itemName(its,i);
  assert.equal(nm(5),'5(b)');
- const states=[{...its[5],verdict:'wrong',second:{}},{...its[5],verdict:'right'},{...its[5],verdict:'unsure'}];
+ const states=[{...its[5],verdict:'wrong',second:{}},{...its[5],verdict:'right'},{...its[5],verdict:undefined}];
  for(const it of states){
   const line=M.secondProblem(it,nm(5));
   assert.match(line,/5\(b\)/);assert.doesNotMatch(line,/umber 6|number 6/);
   assert.equal(line,M.secondProblem({...it,n:6},'5(b)'));
  }
  assert.equal(M.secondProblem({...its[5],verdict:'wrong'},nm(5)),null,'a wrong item without its go may take it');
- for(const v of ['right','unsure'])for(const second of [undefined]){
+ for(const v of ['right',undefined])for(const second of [undefined]){
   const it={...single(2),verdict:v};
   assert.equal(M.secondProblem(it,W.itemName(its,1)),M.secondProblem(it),'a single item: byte for byte');
  }
  assert.equal(M.secondProblem({n:2,verdict:'wrong',second:{}},'2'),'Number 2 has had its second go. Look at where the pen is, or try a new set.');
  assert.equal(M.secondProblem({n:2,verdict:'right'}),'Number 2 came back right, so it needs no second go.');
- assert.equal(M.secondProblem({n:2,verdict:'unsure'}),'The desk is not sure about number 2 yet. Tell it how you got there first.');
+ assert.equal(M.secondProblem({n:2,verdict:'unsure'}),null,'X7 door: an unsure item takes its entered answer');
+ assert.equal(M.secondProblem({n:2}),'Number 2 has not been marked yet. Mark the set first.');
 });
 
 let seen=[];

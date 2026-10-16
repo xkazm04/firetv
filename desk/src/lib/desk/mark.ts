@@ -36,7 +36,7 @@
  */
 import { vision } from "../engines/vision";
 import { DeskSaid } from "./job";
-import { NOT_SURE, rightLine, slipVocabulary } from "../rules/maths";
+import { NOT_SURE, rightLine, slipVocabulary, type Settled } from "../rules/maths";
 import { DEFAULT_SCHOOL_SYSTEM, unitOf } from "../rules/school";
 import { judgeItem, judgeSet, kindOfSheet, readQuestion, unsureLine, type JudgeCtx, type Judged, type Read } from "../rules/kinds";
 import { getLearner, saveLearner, withAttempt, withDigest, withHistory } from "../session/learners";
@@ -258,6 +258,15 @@ export function markTyped(
  */
 export function secondGo(item: PracticeItem, answer: string, topic: string, system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM): "right" | "wrong" | null {
   return judgeItem(item, { studentAnswer: oneLine(answer) }, { topic, system })?.verdict ?? null;
+}
+
+/**
+ * The answer an unsure item is entered with (the X7 door, route /api/second), judged by the same code judge with no model: the
+ * whole settled verdict (verdict, slip, line, pen), or null when the answer cannot be read, so the go is not spent. It records
+ * nothing itself; the route settles the item with it.
+ */
+export function enteredGo(item: PracticeItem, answer: string, topic: string, system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM): Settled | null {
+  return judgeItem(item, { studentAnswer: oneLine(answer) }, { topic, system });
 }
 
 /** What was typed, on one line: a control character (a newline, a tab) or a run of spaces is the keyboard's, not the child's. */
