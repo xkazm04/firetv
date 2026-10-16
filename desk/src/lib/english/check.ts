@@ -50,8 +50,16 @@ Do not ask for or keep sensitive personal details (full name, school name, addre
 Plain text, no markdown. Return only the specified JSON.`;
 }
 
-const KIND_TASK: Record<TaskKind, string> = {
-  choose: "prompt: a tiny everyday situation, at most 120 characters, ending with a question such as 'What do you say?'. options: two short replies. Exactly one is natural, correct English that fits the situation; the other has one typical learner error for this band, or does not fit. correct: the index of the right reply. line: empty.",
+/** The choose instruction by band (LG-52): A1-A2 get a meaning choice, since a beginner cannot hear a function-word minimal pair; B1 up keep a grammar contrast. */
+export function chooseTaskFor(band: Band): string {
+  const head = "prompt: a tiny everyday situation, at most 120 characters, ending with a question such as 'What do you say?'. options: two short replies. ";
+  const tail = " correct: the index of the right reply. line: empty.";
+  return head + (band === "A1" || band === "A2"
+    ? "Both replies are correct, simple English; exactly one fits the situation and the other does not fit the situation. The wrong reply must not be a grammar error."
+    : "Exactly one is natural, correct English that fits the situation; the other has one typical learner error for this band, or does not fit.") + tail;
+}
+
+const KIND_TASK: Record<Exclude<TaskKind, "choose">, string> = {
   listen: "line: one or two sentences someone says to the learner, with the vocabulary and pace of this band, at most 200 characters. prompt: one question about what was said, at most 120 characters, that can only be answered by understanding the line, answerable in a few words. Do not repeat the line's key words in the question. options: empty. correct: 0.",
   say: "prompt: a small situation, from the learner's interests where they fit, that invites them to say something at this band, at most 200 characters. One situation and one question, never a scenario followed by a separate general question. A1 and A2: one simple sentence about themselves or their day. B1: two or three sentences with a reason or a short story. B2: an opinion or a comparison with reasons. C1 and C2: something that needs nuance, a hypothetical or persuading. line: empty. options: empty. correct: 0.",
 };
@@ -136,7 +144,7 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
     if (!ladder.done) {
       const band = ladder.next, kind = kindFor(band, k.tasks);
       return call(k, token, "Linga could not prepare the next task. Try again.", async () => {
-        const request = { step: "task", band, kind, bandGuide: BAND_TUTOR[band], learner: { interest: k.interest, goal: k.goal }, avoid: k.tasks.map(t => t.prompt), task: `Write one ${kind} task at band ${band}. ${KIND_TASK[kind]}` };
+        const request = { step: "task", band, kind, bandGuide: BAND_TUTOR[band], learner: { interest: k.interest, goal: k.goal }, avoid: k.tasks.map(t => t.prompt), task: `Write one ${kind} task at band ${band}. ${kind === "choose" ? chooseTaskFor(band) : KIND_TASK[kind]}` };
         let r = await ask(system, request, taskSchema);
         // a repeat of an earlier task (LG-55): asked once more inside this call, booked as its next try (types.ts Again)
         const earlier = k.tasks.map(t => `${t.prompt} ${t.line}`.trim()), said = (j: Record<string, unknown>) => kind === "listen" ? `${line(j.prompt, 200)} ${line(j.line, 230)}` : line(j.prompt, 200);
