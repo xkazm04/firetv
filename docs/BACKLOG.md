@@ -595,6 +595,12 @@ Drained from `2026-10-14-l1/essay-family`, `2026-10-14-l1/essay-adult` (L1) and 
   - recommendation: method-commitment — trigger: every release. Re-run `tools/essay-ui-test.cjs` and `tools/linga-ui-test.cjs`, and their Adult variants once EM-B44 lands; a failing check opens a finding for the next drain
   - status: open
   - ceiling: scripted learners on one happy path each
+- **EM-B49** — A first-time learner with one paragraph cannot get past the one-time text notice on the phone
+  - origin: L2-essay-browser-teen-W3-1 (uat/runs/2026-10-14-l1/essay-family, L2 recertify 2026-10-16, harness learner Sam)
+  - recommendation: build, a blocker (the same class as X7: a learner dead end). Cause: `analyseParagraph` (`desk/src/app/phone/page.tsx:296-310` before the fix) got the 428 from `/api/analyse` kind essay (`route.ts:148`) and put the notice into the red alert line; `TextNotice` was reached only from `readPiece`, whose button exists only with 2 or more paragraphs, so the learner was refused on every press.
+  - owner: delivery accepted-idea-delivery
+  - status: built, 274f3e42 (`fix(phone): the single-paragraph 428 opens the one-time text notice…`), red harness first at d34e9a84. The paragraph 428 now opens the same `TextNotice`; accepting posts `/api/texts {notice:true}` and reads the paragraph again; Analyse is disabled while the notice shows. `tools/essay-ui-test.cjs` W3 goes past the notice only by clicking the accept button; W1-W8 pass live (claude CLI, isolated desk).
+  - ceiling: the accept button reads "I understand, keep it" on the paragraph path too, though a single paragraph is not kept; decline only closes the notice. Observed on the harness learner, not a child on a physical phone
 
 **Recurrence on earlier entries (2026-10-14 origins; no new id):**
 - **EM-B9** — UD-6 (the delete half) and UD-7 (the notice half). Origins: l1-ef/L1-barbora-43-EM4-4, l1-ea/L1-helena-46-EM5-4, l1-ea/L1-helena-46-EM1-9. "A tool that says it holds nothing while it holds her paragraph is not one I leave in the living room." (barbora-43, l1-ef) ranks it as trust, above its `major`. Verified: `DELETE ?all=1` calls `deleteAll` and refreshes the Workroom only (`app/api/texts/route.ts:71`); the store has no essay-clear event (`lib/session/store.ts:719-737`); a paragraph read (`app/api/analyse/route.ts:127-137`) shows no notice (keep does, `:93-101`). UD-6 is size M, UD-7 size S.

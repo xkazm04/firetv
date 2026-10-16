@@ -2925,7 +2925,7 @@
   ],
   "code_check": "present-broken",
   "verdict": "confirmed",
-  "resolution": "open",
+  "resolution": "resolved-verified",
   "recurrence": 1,
   "suggested_acceptance": "The paragraph path shows TextNotice with 'I understand' (POST /api/texts {notice:true}, then analyse the paragraph) and a decline; a first-time learner reads one paragraph without the PC page.",
   "carried_from": null,
@@ -2934,7 +2934,8 @@
   "base": "main HEAD 3e494e0c",
   "rank": 0,
   "recertify_run": "2026-10-14-l1/essay-family L2 recertify 2026-10-16 (tools/essay-ui-test.cjs W1-W8 live, claude CLI sonnet, main 3e494e0c)",
-  "recertify_status": "new",
-  "recertify_evidence": "W3 live, 2026-10-16."
+  "recertify_status": "resolved-verified",
+  "recertify_evidence": "W3 live after 274f3e42 (red first at d34e9a84): the single-paragraph 428 opens the essay-notice dialog; one click on its accept button recorded the notice and the analyse went through to the forensic page; W1-W8 pass.",
+  "recert_note": "Observed on the harness learner Sam (15, one paragraph), not a child on a physical phone."
  }
 ]
