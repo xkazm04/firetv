@@ -85,7 +85,9 @@ export interface PageItem { n: number; /** a lettered part's own name on the pag
  * when it is made - by the route that asked, else by the reducer from the learner at the desk. Older sessions have none:
  * settleOwners gives each the learner the desk's own record names.
  */
-export interface Page { id: string; subject: Subject; title: string; img: string; w: number; h: number; items: PageItem[]; readMs?: number; provider?: string; owner?: string; day?: string; /** the printed numbers the read left out: empty when complete, null when unknown, absent when never checked */ missing?: number[] | null; }
+export interface Page { id: string; subject: Subject; title: string; img: string; w: number; h: number; items: PageItem[]; readMs?: number; provider?: string; owner?: string; day?: string; /** the printed numbers the read left out: empty when complete, null when unknown, absent when never checked */ missing?: number[] | null;
+  /** The learner's own sheet, marked from a photo of their working (MB-B35): one verdict per item, in page order. Absent until marked. */
+  marked?: { items: PracticeItem[]; at: number }; }
 export interface Task { id: string; sub: Subject; name: string; min: number; done: boolean; }
 export interface Hint { key: string; problem: string; stage: 1 | 2; hint1: { hint: string; next: string } | null; hint2: { hint: string; next: string } | null; askedQ: string; rule?: RuleCard; provider?: string; ms?: number; owner?: string; }
 export interface LessonPick { id: string; title: string; t: number; text: string; why: string; youtube?: string; owner?: string; }
@@ -358,6 +360,7 @@ export type Event =
   | { type: "learner.set"; id: string }
   | { type: "profile.draft"; patch: Partial<Profile> } | { type: "profile.save" } | { type: "profile.discard" }
   | { type: "page.reading"; page: Omit<Page, "items"> } | { type: "page.read"; id: string; items: PageItem[]; readMs: number; provider: string; missing?: number[] | null }
+  | { type: "page.marked"; id: string; items: PracticeItem[] }
   | { type: "page.ask"; subject: Subject } | { type: "page.unask" }
   | { type: "page.select"; pageIx: number; itemIx?: number } | { type: "item"; itemIx: number } | { type: "view"; view: "band" | "overview" }
   | { type: "hint.set"; hint: Hint } | { type: "hint.stage"; stage: 1 | 2; owner?: string }
@@ -566,7 +569,7 @@ export function fresh(): Session {
  * With no one at the desk (a fresh desk) nothing is written for no one: the work an app, a route or the phone would leave
  * is dropped, and an app asked for is the learner switcher first - who is at the desk is the first question.
  */
-const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "page.read", "page.ask", "page.select", "item", "hint.set", "hint.stage", "lesson.set",
+const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "page.read", "page.marked", "page.ask", "page.select", "item", "hint.set", "hint.stage", "lesson.set",
   "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "essay.clear", "essay.plan", "essay.slot", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle", "practice.second",
   "walk", "practice.clear", "paper.enter", "session.end",
   // tonight's list and the lesson's pause are a learner's (MathsSlot tasks, lessonPaused): seat() replaces them on the first sit-down
@@ -722,6 +725,11 @@ function step(s: Session, e: Event): Session {
       const who = s.pages.some((p) => p.id === e.id) ? null : awayWith(s, (x) => x.pages.some((p) => p.id === e.id));
       if (who) { toAway(s, n, who, (x) => ({ ...x, pages: x.pages.map(read), reading: false })); break; }
       n.pages = s.pages.map(read); n.reading = false; break; }
+    // the learner's own sheet, marked: it lands on the page it marked, in the page owner's slot when they have left the desk
+    case "page.marked": { const mark = (p: Page): Page => (p.id === e.id && !p.marked ? { ...p, marked: { items: e.items.map(shown), at: Date.now() } } : p);
+      const who = s.pages.some((p) => p.id === e.id) ? null : awayWith(s, (x) => x.pages.some((p) => p.id === e.id));
+      if (who) { toAway(s, n, who, (x) => ({ ...x, pages: x.pages.map(mark) })); break; }
+      n.pages = s.pages.map(mark); break; }
     case "page.select": n.pageIx = e.pageIx; n.itemIx = e.itemIx ?? 0; break;
     case "item": n.itemIx = e.itemIx; break;
     case "view": n.view = e.view; break;
@@ -977,7 +985,7 @@ export function getSession() { return store.session; }
  * at the desk. The reducer stays pure: the file read happens here, at the boundary that already
  * writes to disk and pushes to subscribers.
  */
-const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set", "essay.progress", "essay.revised", "lesson.watched", "paper.enter"]);
+const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "page.marked", "linga.changed", "essay.set", "essay.progress", "essay.revised", "lesson.watched", "paper.enter"]);
 
 /**
  * A settled item changes its set's count: the line marking wrote (the last practice line, this topic, this n)

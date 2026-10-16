@@ -36,14 +36,14 @@
  */
 import { vision } from "../engines/vision";
 import { DeskSaid } from "./job";
-import { rightLine, slipVocabulary } from "../rules/maths";
-import { DEFAULT_SCHOOL_SYSTEM } from "../rules/school";
-import { judgeItem, judgeSet, kindOfSheet, type JudgeCtx, type Judged, type Read } from "../rules/kinds";
+import { NOT_SURE, rightLine, slipVocabulary } from "../rules/maths";
+import { DEFAULT_SCHOOL_SYSTEM, unitOf } from "../rules/school";
+import { judgeItem, judgeSet, kindOfSheet, readQuestion, unsureLine, type JudgeCtx, type Judged, type Read } from "../rules/kinds";
 import { getLearner, saveLearner, withAttempt, withDigest, withHistory } from "../session/learners";
 import { mathsEntry } from "../rules/digest";
-import { topicIn } from "../library/paths";
+import { calcTopics, shapesOfTopic, topicIn } from "../library/paths";
 import { partPlace } from "../rules/calc-word";
-import type { Practice, PracticeItem, SchoolSystem } from "../session/store";
+import type { Page, Practice, PracticeItem, SchoolSystem } from "../session/store";
 
 const SCHEMA = {
   type: "object",
@@ -188,10 +188,20 @@ export async function markSet(
   /** The seated learner's school system, for reading a school item's answer (rules/school readNumber). UK when not given. */
   system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM,
 ): Promise<MarkResult> {
+  const { reads, provider, ms } = await readSheet(imageBase64, practice, slipVocabulary(practice.topic));
+  return markReads(practice, learnerId, stillSame, reads, { topic: practice.topic, system }, { provider, ms });
+}
+
+/**
+ * One vision call reads a sheet: by the kinds on it (rules/kinds kindOfSheet), with `vocab` the slip list a Calculus or a
+ * linear reading offers. Only what each reader asks for is kept - never a verdict, a solution only from the linear reading -
+ * and a page with no answer to any of its questions is the failed mark MK11 names (EMPTY_MARK). Shared by a desk set and a page.
+ */
+async function readSheet(imageBase64: string, practice: Practice, vocab: string): Promise<{ reads: Read[]; provider: string; ms: number }> {
   const kind = kindOfSheet(practice.items);
   const reading = kind === "school" ? { prompt: schoolPrompt(practice), schema: SCHOOL_SCHEMA }
-    : kind === "calc" ? { prompt: calcPrompt(practice, slipVocabulary(practice.topic)), schema: CALC_SCHEMA }
-    : { prompt: linearPrompt(practice, slipVocabulary(practice.topic)), schema: SCHEMA };
+    : kind === "calc" ? { prompt: calcPrompt(practice, vocab), schema: CALC_SCHEMA }
+    : { prompt: linearPrompt(practice, vocab), schema: SCHEMA };
   const { json, provider, ms } = await vision<{ items: Read[] }>({ imageBase64, ...reading, use: "mark" });
 
   // only what each reader asks for is read: never a verdict, and a solution only from the linear reading (the trust gate)
@@ -204,7 +214,7 @@ export async function markSet(
   // set with a non-blank answer. One such answer lands the set as before (no completeness check for a partial read).
   const asked = new Set(practice.items.map((i) => i.n));
   if (!reads.some((r) => typeof r.n === "number" && asked.has(r.n) && typeof r.studentAnswer === "string" && r.studentAnswer.trim() !== "")) throw new DeskSaid(EMPTY_MARK);
-  return markReads(practice, learnerId, stillSame, reads, { topic: practice.topic, system }, { provider, ms });
+  return { reads, provider, ms };
 }
 
 /** A photo read that found no answer to any question of the set: the mark fails with this and nothing is recorded. */
@@ -294,4 +304,60 @@ function land(
   saveLearner(l);
 
   return { items, ...run, unsure, landed: true };
+}
+
+/**
+ * A learner's own snapped maths page, marked (MB-B35, ask e78baa5a). Each page item is read into a spec by rules/kinds
+ * readQuestion (a single Calculus or school spec); the one that reads is judged by the same code judge a desk set uses
+ * (judgeItem), the learner's school system and all. An item that does not read - no spec, or a multi-part question, which a
+ * page does not split into parts - is "not sure": never wrong, and no answer is shown or said. One vision call reads the
+ * working of the items that read; nothing else is sent. The page's own items are never changed.
+ *
+ * It lands once, on the page's owner (`stillSame` false lands nothing): one history line that says it was their own sheet,
+ * and no attempt - a page names no topic, so it adds no evidence to a skill. The verdicts are returned in page order.
+ */
+export const OWN_SHEET = "own sheet: ";
+/** The history line for a marked page: every item the desk did not settle is "not sure" (an item it could not read is not one the learner skipped). */
+const notSure = (items: readonly PracticeItem[]) => items.filter((i) => i.verdict !== "right" && i.verdict !== "wrong").length;
+const pageLine = (items: readonly PracticeItem[]) => `${items.filter((i) => i.verdict === "right").length} of ${items.length} right${notSure(items) ? `, ${notSure(items)} not sure` : ""}`;
+const NL = String.fromCharCode(10);
+
+/** The spec each page item reads as, with the topic its slips come from: only the items that read have an entry. */
+export function pageSpecs(page: Page, system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM): Map<number, { spec: unknown; topic: string }> {
+  const out = new Map<number, { spec: unknown; topic: string }>();
+  for (const it of page.items) {
+    const q = readQuestion(it.text, system);
+    if (q.calc) out.set(it.n, { spec: q.calc, topic: calcTopics().find((t) => (shapesOfTopic(t.id) as string[]).includes((q.calc as { shape: string }).shape))?.id ?? "" });
+    else if (q.school) out.set(it.n, { spec: q.school, topic: unitOf(q.school) ?? "" });
+  }
+  return out;
+}
+
+export async function markPage(
+  imageBase64: string,
+  page: Page,
+  learnerId: string,
+  stillSame: () => boolean = () => true,
+  system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM,
+): Promise<MarkResult> {
+  const specs = pageSpecs(page, system);
+  const readable = page.items.filter((i) => specs.has(i.n)).map((i): PracticeItem => ({ n: i.n, question: i.text, spec: specs.get(i.n)!.spec as PracticeItem["spec"] }));
+  // the slips a reading may offer: the lists of the topics these items sit on
+  const vocab = Array.from(new Set(readable.flatMap((i) => slipVocabulary(specs.get(i.n)!.topic).split(NL)).filter(Boolean))).join(NL);
+  const { reads, provider, ms } = await readSheet(imageBase64, { topic: "", items: readable, marked: false }, vocab);
+  const readFor = new Map(reads.map((r) => [r.n, r]));
+  const items = page.items.map((it): PracticeItem => {
+    const at = specs.get(it.n), read: Read = readFor.get(it.n) ?? {};
+    const studentAnswer = typeof read.studentAnswer === "string" ? read.studentAnswer.trim() : "", studentWorking = typeof read.studentWorking === "string" ? read.studentWorking.trim() : "";
+    const s = at ? judgeItem({ n: it.n, question: it.text, spec: at.spec }, read, { topic: at.topic, system }) : null;
+    if (!s) {
+      return at ? { n: it.n, question: it.text, studentAnswer, studentWorking, verdict: "unsure", said: unsureLine({ n: it.n, spec: at.spec }, read, { topic: at.topic, system }) }
+        : { n: it.n, question: it.text, verdict: "unsure", said: NOT_SURE(it.n) };
+    }
+    return { n: it.n, question: it.text, studentAnswer, studentWorking, verdict: s.verdict, slip: s.slip, said: s.said, ...(s.slipAt ? { slipAt: s.slipAt } : {}) };
+  });
+  if (!stillSame()) return { items, provider, ms, unsure: notSure(items), landed: false };
+  // one write: the learner's history line (their own sheet), nothing in a skill
+  saveLearner(withHistory(getLearner(learnerId), { at: Date.now(), kind: "homework", label: page.title, detail: OWN_SHEET + pageLine(items) }));
+  return { items, provider, ms, unsure: notSure(items), landed: true };
 }

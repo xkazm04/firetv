@@ -20,3 +20,12 @@ export function missingLine(missing: number[]): string {
   const names = more > 0 ? `${shown.join(", ")} and ${more} more` : `${shown.slice(0, -1).join(", ")} and ${shown[shown.length - 1]}`;
   return `Numbers ${names} were not read.${ask}`;
 }
+
+/**
+ * The counts under a page the learner's own working was marked on (MB-B35), as the practice sheet says them: right, to look at,
+ * to talk through. Counts only: no answer, no slip.
+ */
+export function markedLine(items: readonly { verdict?: "right" | "wrong" | "unsure" }[]): string {
+  const right = items.filter((i) => i.verdict === "right").length, wrong = items.filter((i) => i.verdict === "wrong").length;
+  return `Your sheet: ${right} right, ${wrong} to look at, ${items.length - right - wrong} to talk through.`;
+}

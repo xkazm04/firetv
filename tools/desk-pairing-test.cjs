@@ -880,6 +880,7 @@ const SAMPLES={
  'profile.draft':{type:'profile.draft',patch:{name:'x'}},'profile.save':{type:'profile.save'},'profile.discard':{type:'profile.discard'},
  'page.reading':{type:'page.reading',page:{id:'p1',subject:'maths',photo:'x'}},
  'page.read':{type:'page.read',id:'p1',items:[{n:1,text:'1+1'}],readMs:1,provider:'stub'},
+ 'page.marked':{type:'page.marked',id:'p1',items:[{n:1,question:'1+1',verdict:'right'}]},
  'page.ask':{type:'page.ask',subject:'maths'},'page.unask':{type:'page.unask'},
  'page.select':{type:'page.select',pageIx:1,itemIx:1},'item':{type:'item',itemIx:1},'view':{type:'view',view:'overview'},
  'hint.set':{type:'hint.set',hint:{stage:1,text:'h',n:1}},'hint.stage':{type:'hint.stage',stage:2},
