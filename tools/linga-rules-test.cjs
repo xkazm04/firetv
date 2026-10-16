@@ -2759,3 +2759,19 @@ test('OOS item 1: the lean caveat names the nearly-reached band and its cause',(
  for(const [,[line]] of Object.entries(causes))assert(line.split(/\s+/).length<=20,line);
  assert.equal(P.staircase('B1',[say('B1','pass'),say('B2','pass')],'B1').band,'B1','the ladder is unchanged');
 });
+
+test('LG-52: a choose task asks for a meaning choice at A1-A2 and a grammar contrast from B1',()=>{
+ const {chooseTaskFor}=require(path.join(root,'src/lib/english/check.ts'));
+ for(const b of ['A1','A2']){
+  const t=chooseTaskFor(b);
+  assert(/does not fit the situation/.test(t),b+' asks for a reply that does not fit: '+t);
+  assert(!/learner error/.test(t),b+' does not ask for a learner error: '+t);
+  assert(/not a grammar error/.test(t),b+' forbids a grammar-error wrong reply: '+t);
+  assert(/120 characters/.test(t)&&/two short replies/.test(t)&&/correct: the index/.test(t),b+' keeps the choose contract');
+ }
+ for(const b of ['B1','B2','C1','C2']){
+  const t=chooseTaskFor(b);
+  assert(/typical learner error for this band/.test(t),b+' asks for a typical learner error: '+t);
+  assert(/120 characters/.test(t)&&/two short replies/.test(t)&&/correct: the index/.test(t),b+' keeps the choose contract');
+ }
+});
