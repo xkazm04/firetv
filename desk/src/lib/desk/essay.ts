@@ -7,7 +7,7 @@
  */
 import { text } from "../engines/text";
 import { assemble, data, dataRows, say } from "../prompt/assemble";
-import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, sentenceRows, revise, ruledSentences, SIDES, splitSentences, summaryLine, SUPPORTS, taught, unanswered, unruledLines, type AnalysisType, type Sentence } from "../rules/essay";
+import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, sentenceRows, revise, ruledSentences, SIDES, splitSentences, summaryLine, SUPPORTS, taught, unanswered, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
 import { getLearner, LearnersUnread, readLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
 import { DeskSaid } from "./job";
