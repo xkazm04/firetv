@@ -85,6 +85,9 @@ export interface JudgeCtx { topic: string; system?: SchoolSystem }
 
 const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
 
+/** A lone decimal comma between digits, as a point, for a system that writes one (cz, de); anything else is left as typed. */
+const commaValue = (v: string, system?: SchoolSystem) => (system === "cz" || system === "de") && /^-?\d+,\d+$/.test(v) ? v.replace(",", ".") : v;
+
 /**
  * One item judged by its own kind, or null (the desk asks, records nothing). Never a model's verdict:
  *   - school: rules/school check by the learner's school system; the slip is code's own;
@@ -110,7 +113,8 @@ export function judgeItem(item: { n: number; question: string; spec?: unknown },
     return s;
   }
 
-  const value = cleanValue(answer);
+  // a linear value is read by the learner's school system too: '0,5' is a half in cz and de (uk and us keep the comma unread)
+  const value = commaValue(cleanValue(answer), ctx.system);
   if (read.solution !== undefined) {
     const solution = cleanValue(read.solution);
     const truth = solution && !degenerate(item.question) ? verify(item.question, solution) : false;

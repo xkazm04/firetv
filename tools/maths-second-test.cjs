@@ -173,3 +173,16 @@ test('X7 door: the explain closing lines name the door that exists and carry no 
  const X=require(src('lib/desk/explain.ts'));
  for(const l of [X.ENTER_LINE.en,X.ENTER_LINE.cz,X.NOT_HEARD_LINE.en,X.NOT_HEARD_LINE.cz]){assert.ok(/phone|telefon/.test(l),l);assert.ok(!/\d/.test(l),l);}
 });
+
+test('value-2 (lite r3, nela-12 C3): a linear item reads the learner\'s decimal comma - cz "0,5" on 2x=1 is right, "0,4" is wrong (judged, not refused); uk keeps "0,5" unread',()=>{
+ const {enteredGo}=require(src('lib/desk/mark.ts'));
+ const go=(a,sys)=>enteredGo({n:1,question:'2x=1'},a,'linear-one-step',sys);
+ assert.equal(go('0,5','cz')?.verdict,'right');
+ assert.equal(go('0,4','cz')?.verdict,'wrong');
+ assert.equal(go('0.5','cz')?.verdict,'right');
+ assert.equal(go('1/2','cz')?.verdict,'right');
+ assert.equal(go('x = 0,5','cz')?.verdict,'right');
+ assert.equal(go('0,5','de')?.verdict,'right');
+ assert.equal(go('0,5','uk'),null,'uk: today\'s result - the comma is not read, the go is not spent');
+ assert.equal(go('0.5','uk')?.verdict,'right');
+});
