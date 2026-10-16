@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { Event, Session } from "@/lib/session/store";
 import { certWords, monthOf, recommendFor } from "@/lib/english/cert";
 import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL } from "@/lib/english/curriculum";
-import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, conversationBand, isBand, MAX_TASKS, PLAN_MAX, restsLine, TOPIC_ASK_MAX } from "@/lib/english/placement";
+import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, conversationBand, isBand, MAX_TASKS, PLAN_MAX, restsLine, TOPIC_ASK_MAX, verdictReason } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement, type Take } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
 import { isPitchId, PITCH_MAX } from "@/lib/english/pitch";
@@ -182,7 +182,7 @@ function VerdictPanel({placement,run,busy,hasPlan}:{placement:Placement;run:Run;
     {placement.summary&&<p className="linga-note">{BAND_CAN[placement.band]}</p>}
     <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run(hasPlan?"plan-open":"plan-propose")}>See my topics</button>
     <button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>{self?"Find my level with Linga":"Find my level again"}</button>
-    {placement.tasks.length>0&&!self&&<details><summary>What Linga saw</summary><div className="linga-transcript">{placement.tasks.map(t=><p key={t.id}><b>{t.band} · {KIND_WORD[t.kind]} · {t.skipped?"skipped":VERDICT_WORD[t.verdict]}</b>{t.prompt}<br/>{t.response?`“${t.response}”`:"Skipped"}<br/>{t.note}</p>)}</div></details>}
+    {placement.tasks.length>0&&!self&&<details><summary>What Linga saw</summary><div className="linga-transcript">{placement.tasks.map(t=><p key={t.id}><b>{t.band} · {KIND_WORD[t.kind]} · {t.skipped?"skipped":VERDICT_WORD[t.verdict]}</b>{t.prompt}<br/>{t.response?`“${t.response}”`:"Skipped"}<br/>{verdictReason(t)&&<><i>{verdictReason(t)}</i><br/></>}{t.note}</p>)}</div></details>}
   </>;
 }
 

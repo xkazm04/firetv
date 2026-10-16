@@ -84,6 +84,24 @@ export function verdictFor(task: { kind: TaskKind; band: Band; revealed?: boolea
 }
 
 /**
+ * One plain line, written by code, for a task that did not pass: why the verdict is what it is. The judge's note is a
+ * free sentence written without the verdict and often rates the ideas, so a "fail" could sit beside praise (LG-54).
+ * Empty for a pass, a skip, a choice (its note says which reply fits) and a task stored before the judge's readings were kept.
+ */
+export function verdictReason(task: { kind: TaskKind; band: Band; verdict: TaskVerdict; answered?: "yes" | "partly" | "no"; english?: Band | "none"; skipped?: boolean }): string {
+  const { kind, band, verdict, answered, english } = task;
+  if (task.skipped || verdict === "pass" || kind === "choose" || !answered || !english) return "";
+  if (answered === "no") return kind === "listen" ? "Linga did not find that you understood the line." : "The answer did not do what the task asked.";
+  if (kind === "listen") {
+    if (answered === "partly") return "You understood only part of the line.";
+    return english === "none" ? "There was no English in this answer." : "You read the line instead of hearing it, so it counts as nearly there.";
+  }
+  if (english === "none") return "There was no English in this answer.";
+  if (BANDS.indexOf(band) > BANDS.indexOf(english)) return `Your English read as ${english} here, and this task was ${band}.`;
+  return answered === "partly" ? "The answer was only partly on the task." : "";
+}
+
+/**
  * What the ladder reads of one task. `kind` and `response` say how strong a pass is (a mark with no kind reads as a
  * say mark); `skipped` says the learner passed on it. A PlacementTask fits as it stands.
  */

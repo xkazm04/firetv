@@ -345,7 +345,7 @@ Then your read of everything so far. selfBand: your best estimate of their band 
 answered: ${task.kind === "listen" ? "does the response show the spoken line was understood? yes, partly (some of it), or no. An answer in another language counts if it shows understanding." : "does the response do what the task asks? yes, partly, or no (off-task, empty, or no real answer)."}
 english: the band the English in the response itself shows, using languageBands: grammatical control and vocabulary range. Rate the language, never the ideas, the length or the confidence. A long, fluent, well-argued answer full of systematic basic errors is A2. A response can only show what it contains: one or two words are at most A1, a single simple sentence at most A2. none when the response has no English.
 quote: an exact excerpt of the response, copied character for character, that the english rating rests on (the whole response when it is short).
-note: one plain, kind sentence to the learner about what their answer showed; when the English sits below ${task.band}, name the one thing that held it back. At most 160 characters, simple English.`,
+note: one plain, kind sentence to the learner about what their answer showed; when the English sits below ${task.band}, name the one thing that held it back, and never call the answer clear, strong or good then. At most 160 characters, simple English.`,
       }, judgeSchema);
       const answered = r.json.answered as "yes" | "partly" | "no", english = r.json.english as Band | "none", quote = optional(r.json.quote, 240);
       if (!["yes", "partly", "no"].includes(answered) || !(english === "none" || isBand(english)) || !quote || !response.includes(quote)) throw new Error("The judge did not quote the learner accurately.");

@@ -2654,3 +2654,20 @@ test('L1 case 7: the print page lists each owned phrase with the learner\'s exac
  // collectibles stay the existing latches only (owner ruling S1): no collectible for "yours"
  assert.doesNotMatch(fs.readFileSync(path.join(root,'src/lib/rules/collect.ts'),'utf8'),/yours/i);
 });
+
+test('verdict reason: a non-pass task names why before the note',()=>{
+ const t=(p)=>({kind:'say',band:'B2',verdict:'fail',answered:'yes',english:'A2',...p});
+ const gap=P.verdictReason(t({}));
+ assert(gap.includes('A2')&&gap.includes('B2'),gap);
+ assert(gap.length<=100&&!gap.includes('—'));
+ assert.match(P.verdictReason(t({answered:'no',english:'B2'})),/not|did/i);
+ assert.match(P.verdictReason(t({english:'none'})),/no English/i);
+ const partly=P.verdictReason(t({verdict:'partial',answered:'partly',english:'B2'}));
+ assert(partly.length>0&&partly.length<=100&&/part/i.test(partly),partly);
+ assert(P.verdictReason(t({verdict:'partial',english:'B1'})).includes('B1'));
+ assert(P.verdictReason({kind:'listen',band:'B1',verdict:'partial',answered:'yes',english:'B1'}).length>0);
+ assert.equal(P.verdictReason(t({verdict:'pass',english:'B2'})),'');
+ assert.equal(P.verdictReason(t({skipped:true})),'');
+ assert.equal(P.verdictReason({kind:'choose',band:'A1',verdict:'fail'}),'');
+ assert.equal(P.verdictReason({kind:'say',band:'B2',verdict:'fail'}),'');
+});
