@@ -2738,3 +2738,24 @@ test('LG-50/LG-34: an unfound room line and a brought-back review sentence name 
  for(const f of ['src/english/LingaPhone.tsx','src/english/LingaTV.tsx']){const src=fs.readFileSync(path.join(root,f),'utf8');
   assert(!/take with you<\/b>|label=\{h\.from\?[^}]*take with you/.test(src),f+' still heads a recap sentence with the bare label');}
 });
+test('OOS item 1: the lean caveat names the nearly-reached band and its cause',()=>{
+ const say=(band,verdict)=>({band,verdict,kind:'say',response:'I usually go to school by bus with my friends.'});
+ const choose=(band,verdict)=>({band,verdict,kind:'choose',response:'Yes'});
+ const causes={
+  oneStrong:[P.restsLine('low',[say('B1','pass'),say('B2','pass')],'B1'),/B2/,/only one/,'B1'],
+  noneStrong:[P.restsLine('low',[say('B1','pass'),{band:'B2',verdict:'pass',kind:'choose',response:'Yes'}],'B1'),/B2/,/none/,'B1'],
+  readLower:[P.restsLine('medium',[say('B1','pass'),say('B2','pass'),say('B2','pass')],'B1'),/B2/,/said/,'B1'],
+  boundary:[P.restsLine('low',[choose('A2','pass'),say('B1','pass'),say('B1','pass'),say('B2','fail')],'A2'),/B1/,/harder task/,'A2'],
+ };
+ const lines=new Set();
+ for(const [name,[line,hi,why,lo]] of Object.entries(causes)){
+  assert(hi.test(line),name+' names the higher band: '+line);assert(why.test(line),name+' names its cause: '+line);
+  assert(line.includes('at '+lo),name+' names the band Linga starts at: '+line);
+  assert(!/to be safe|one level lower/.test(line),name+' keeps the bare rule out: '+line);
+  assert(!/\d/.test(line.replace(/[A-C][12]/g,''))&&!line.includes(String.fromCharCode(8212)),name+' has no digit but band names and no em dash');
+  lines.add(line);
+ }
+ assert.equal(lines.size,4,'one line per cause');
+ for(const [,[line]] of Object.entries(causes))assert(line.split(/\s+/).length<=20,line);
+ assert.equal(P.staircase('B1',[say('B1','pass'),say('B2','pass')],'B1').band,'B1','the ladder is unchanged');
+});
