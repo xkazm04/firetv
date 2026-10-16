@@ -101,7 +101,15 @@ export const weakPass = (m: Mark) => !m.skipped && m.verdict === "pass" && (m.ki
 const strongPasses = (marks: Mark[], band: Band) => counted(marks).filter(m => m.band === band && m.verdict === "pass" && !weakPass(m)).length;
 
 /** What a confidence rests on; restsLine words each. */
-export type Rests = "scattered" | "partials" | "weak" | "skips" | "floor" | "unchecked" | "thin" | "firm";
+export type Rests = "scattered" | "partials" | "weak" | "skips" | "floor" | "unchecked" | "thin" | "few" | "read" | "firm";
+/**
+ * Strong passes at the placed band that a HIGH confidence needs (with a real fail or partial above, or C2). Two were
+ * enough until the 2026-10-14 LT recerts: of the eight placements stored as high across recert-1 and recert-3, six were
+ * one band above the true band (Adela B2->C1, Jana C1->C2 twice, Petra A2->B1, Klara A2->B1, Oksana B1->B2), and all eight
+ * rested on exactly two strong passes. A third strong pass at the band is the cheapest extra proof the
+ * five-task check can ask for.
+ */
+export const HIGH_STRONG_PASSES = 3;
 
 /**
  * Pass goes up a band, fail goes down, partial stays, a skip goes down (the learner is not asked something harder).
@@ -118,8 +126,13 @@ export type Rests = "scattered" | "partials" | "weak" | "skips" | "floor" | "unc
  * above a misclicked 50/50 still holds its band, which is why this is not a flat cap at one band above the fail. The
  * two-word weak pass is the other half: without it "Creeper! Boom." is strong and B1 still holds. Replayed on the ten
  * stored recert-1 placements, no other band or confidence moves.
+ *
+ * `read` is the band the about-questions read the learner at (check.ts selfBand), or null when there is none. Confidence
+ * is never high when the ladder band differs from it (the talk and the tasks disagree), nor when fewer than
+ * HIGH_STRONG_PASSES strong passes hold the band. It caps at medium, or low when the band also has fewer than two
+ * strong passes.
  */
-export function staircase(start: Band, marks: Mark[]): { done: boolean; next: Band; band: Band; confidence: Placement["confidence"]; rests: Rests } {
+export function staircase(start: Band, marks: Mark[], read: Band | null = null): { done: boolean; next: Band; band: Band; confidence: Placement["confidence"]; rests: Rests } {
   const last = marks.at(-1), real = counted(marks);
   let next = last ? shift(last.band, last.skipped || last.verdict === "fail" ? -1 : last.verdict === "pass" ? 1 : 0) : start;
   if (last && weakPass(last) && next !== last.band && kindFor(next, marks as Array<{ band: Band; kind: TaskKind }>) === "say") next = last.band;
@@ -140,9 +153,11 @@ export function staircase(start: Band, marks: Mark[]): { done: boolean; next: Ba
   if (scattered) rests = "scattered";
   else if (partialBand) rests = "partials";
   else if (strong === 0) rests = floored ? "floor" : real.some(m => m.band === band && weakPass(m)) ? "weak" : "skips";
-  else if (strong >= 2 && ceiling) rests = "firm";
-  else rests = strong >= 2 ? "unchecked" : "thin";
-  const confidence = rests === "scattered" || rests === "partials" || rests === "weak" || rests === "skips" ? "low" : rests === "firm" ? "high" : "medium";
+  else if (read && read !== band) rests = "read";
+  else if (strong >= HIGH_STRONG_PASSES && ceiling) rests = "firm";
+  else if (strong >= 2) rests = ceiling ? "few" : "unchecked";
+  else rests = "thin";
+  const confidence = rests === "scattered" || rests === "partials" || rests === "weak" || rests === "skips" || (rests === "read" && strong < 2) ? "low" : rests === "firm" ? "high" : "medium";
   return { done, next, band, confidence, rests };
 }
 
@@ -193,9 +208,9 @@ export function playBand(p: Pick<Placement, "band" | "source" | "tasks"> | null 
  * what it holds.
  */
 export const CONFIDENCE_HIGH = "Your answers agreed with each other.";
-export function restsLine(confidence: Placement["confidence"], tasks: Mark[]): string {
+export function restsLine(confidence: Placement["confidence"], tasks: Mark[], read: Band | null = null): string {
   if (confidence === "high") return CONFIDENCE_HIGH;
-  const ladder = staircase("A2", tasks), skipped = tasks.some(t => t.skipped);
+  const ladder = staircase("A2", tasks, read), skipped = tasks.some(t => t.skipped);
   switch (ladder.rests) {
     case "scattered": return "Your answers disagreed with each other, so this is a careful guess.";
     case "partials": return "Some answers only partly showed this level.";
@@ -208,6 +223,8 @@ export function restsLine(confidence: Placement["confidence"], tasks: Mark[]): s
     case "skips": return "Some tasks were skipped, so this level is a careful guess.";
     case "floor": return "The tasks were too hard, so this is the lowest level.";
     case "unchecked": return skipped ? "A skipped task left the next level up unchecked." : "No task at the next level up was answered.";
+    case "read": return "What you said at the start pointed to a different level, so this is a careful guess.";
+    case "few": return "Only a few strong answers showed this level, so it may be a little off.";
     case "thin": return "Only one strong answer showed this level, so it may be a little off.";
     default: return "Linga is not sure of this level, so try the check again another day.";
   }

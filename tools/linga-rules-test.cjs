@@ -130,7 +130,7 @@ test('the level ladder is bounded, and the same answers always give the same ban
  const climb=(start,judge)=>{const marks=[];let st=P.staircase(start,marks);while(!st.done){marks.push({band:st.next,verdict:judge(st.next)});assert(marks.length<=P.MAX_TASKS);st=P.staircase(start,marks);}return {st,marks};};
  const top=climb('B2',()=>'pass');assert.equal(top.st.band,'C2');assert(top.marks.every(m=>P.isBand(m.band)));
  const bottom=climb('A1',()=>'fail');assert.equal(bottom.st.band,'A1');assert.equal(bottom.marks.length,2);
- const b1=climb('A2',b=>['A1','A2','B1'].includes(b)?'pass':'fail');assert.equal(b1.st.band,'B1');assert.equal(b1.st.confidence,'high');
+ const b1=climb('A2',b=>['A1','A2','B1'].includes(b)?'pass':'fail');assert.equal(b1.st.band,'B1');assert.equal(b1.st.confidence,'medium','two passes at B1 under a fail: few strong passes, no longer high');
  assert.deepEqual(P.staircase('A2',b1.marks),P.staircase('A2',b1.marks));
  assert.equal(P.staircase('A2',[{band:'A2',verdict:'pass'},{band:'B1',verdict:'fail'},{band:'A2',verdict:'pass'},{band:'B1',verdict:'pass'},{band:'B2',verdict:'pass'}]).confidence,'low');
  assert.equal(P.startBand(null),'A2');assert.equal(P.startBand('A1'),'A1');assert.equal(P.startBand('C1'),'B2');
@@ -144,7 +144,8 @@ test('a skip is no evidence, a weak pass is not strong, and two partials end the
  assert.equal(P.staircase('B1',[skip('B1')]).next,'A2','a skip still moves the ladder down one band');
  const weak=P.staircase('B1',[skip('B1'),{band:'A2',verdict:'pass',kind:'choose',response:'Yes please'},{band:'A2',verdict:'pass',kind:'listen',response:' Tuesday '}]);
  assert.notEqual(weak.confidence,'high');assert.equal(weak.confidence,'low');
- assert.equal(P.staircase('B1',[say('B1','pass'),say('B1','pass'),say('B2','fail')]).confidence,'high','two say passes under a say fail: high');
+ assert.equal(P.staircase('B1',[say('B1','pass'),say('B1','pass'),say('B2','fail')]).confidence,'medium','two say passes under a say fail: medium, only a few strong passes');
+ assert.equal(P.staircase('B1',[say('B1','pass'),say('B1','pass'),say('B1','pass'),say('B2','fail')]).confidence,'high','three say passes under a say fail: high');
  assert.notEqual(P.staircase('B1',[say('B1','pass'),say('B1','pass'),skip('B2')]).confidence,'high','a skip above is not a ceiling');
  const two=P.staircase('B1',[say('B1','partial'),say('B1','partial')]);
  assert.equal(two.done,true);assert.equal(two.band,'B1');assert.equal(two.confidence,'low');

@@ -400,7 +400,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     caption = self ? "This is the level you picked." : quote ? `Your words: “${quote}”.${starts ? ` ${starts}` : ""}` : starts || "See the conversations Linga picks for this level, or find your level again."; captionTag = self ? "Your pick" : quote ? "Your words" : "What next";
     actions = [act("see-topics", "See my topics", "Linga picks conversations for this level. Swap any you don't want.", cmd(l.plan && lc?.stage !== "verdict" ? "plan-open" : "plan-propose")), act("check-again", self ? "Find my level with Linga" : "Find my level again", "Three questions and a few short tasks, about seven minutes.", cmd("check-start")), act("pick-level", "Pick it myself", "Choose a level from A1 to C2 yourself.", pickAt(b))];
     if (placement.focus && !self) details.push(`On the phone, next to practise: ${placement.focus}`);
-    if (!self) details.push(`On the phone: ${restsLine(placement.confidence, placement.tasks)}`);
+    if (!self) details.push(`On the phone: ${restsLine(placement.confidence, placement.tasks, placement.selfBand)}`);
   } else if (s.screen === "linga-plan" && lc && lc.askGoal) {
     tag = `Your topics · ${read}`;
     hero = { kind: "message", kicker: "Before Linga picks your topics", text: "What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.", note: "" };

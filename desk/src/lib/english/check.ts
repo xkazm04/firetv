@@ -113,7 +113,7 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
     return next;
   }
   if (k.stage === "tasks" && !k.task) {
-    const ladder = staircase(startBand(k.selfBand), k.tasks);
+    const ladder = staircase(startBand(k.selfBand), k.tasks, k.selfBand);
     if (!ladder.done) {
       const band = ladder.next, kind = kindFor(band, k.tasks);
       return call(k, token, "Linga could not prepare the next task. Try again.", async () => {

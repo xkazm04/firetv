@@ -177,7 +177,7 @@ function VerdictPanel({placement,run,busy,hasPlan}:{placement:Placement;run:Run;
   return <>
     <div className="linga-band"><b>{placement.band}</b><span>{BAND_NAME[placement.band]}</span></div>
     <p>{placement.summary||BAND_CAN[placement.band]}</p>
-    <p className="linga-note">{self?"You chose this level yourself.":`Linga's read from your answers, not a certificate.${" "+restsLine(placement.confidence,placement.tasks)}`}</p>
+    <p className="linga-note">{self?"You chose this level yourself.":`Linga's read from your answers, not a certificate.${" "+restsLine(placement.confidence,placement.tasks,placement.selfBand)}`}</p>
     {placement.focus&&!self&&<p><b>Next to practise:</b> {placement.focus}</p>}
     {placement.summary&&<p className="linga-note">{BAND_CAN[placement.band]}</p>}
     <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run(hasPlan?"plan-open":"plan-propose")}>See my topics</button>
