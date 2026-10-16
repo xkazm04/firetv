@@ -118,6 +118,7 @@ async function adultPass(){
    const shelf=await call(pc,'GET','/api/texts');assert.equal(shelf.status,200);
    assert.equal(shelf.j.pieces.length,0,'a piece was kept before the notice was accepted');
    assert.equal(shelf.j.noticed,false);
+   assert.equal(await pc.getByRole('button',{name:'Read without keeping',exact:true}).count(),1,'the keep path lost its Read without keeping button');
    await pc.getByRole('button',{name:'I understand, keep it',exact:true}).click();
    for(let i=0;i<100&&!kept;i++){const sh=await call(pc,'GET','/api/texts');if(sh.j?.pieces?.length)kept=sh.j.pieces[0];else await sleep(150);}
    assert.ok(kept,'the piece was kept after accepting');assert.equal(kept.title,TITLE,'the stored title is the one typed');assert.equal(kept.format,'essay');
@@ -266,7 +267,9 @@ async function adultPass(){
     assert.notEqual(before.screen,'forensic','the TV opened the forensic page before the notice was accepted');
     assert.ok(!before.essay?.sentences?.length,'a paragraph was analysed before the notice was accepted');
     assert.equal((await call('GET','/api/texts')).j.noticed,false,'the notice was recorded as accepted before anyone accepted it');
-    await phone.getByRole('button',{name:'I understand, keep it',exact:true}).click();
+    assert.equal(await phone.getByRole('button',{name:'I understand, keep it',exact:true}).count(),0,'the paragraph path offers to keep what it does not keep');
+    assert.equal(await phone.getByRole('button',{name:'Not now',exact:true}).count(),1,'the paragraph notice has no Not now button');
+    await phone.getByRole('button',{name:'I understand, read it',exact:true}).click();
     // the click alone records the acceptance and the analyse goes through, with no second press on Analyse
     await until(s=>s.screen==='forensic'&&s.essay?.sentences?.length>0,'the forensic page with sentences after the accept click');
     assert.equal((await call('GET','/api/texts')).j.noticed,true,'the notice was not recorded as accepted after the click');
