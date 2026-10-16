@@ -2766,7 +2766,7 @@ test('LG-52: a choose task asks for a meaning choice at A1-A2 and a grammar cont
   const t=chooseTaskFor(b);
   assert(/does not fit the situation/.test(t),b+' asks for a reply that does not fit: '+t);
   assert(!/learner error/.test(t),b+' does not ask for a learner error: '+t);
-  assert(/not a grammar error/.test(t),b+' forbids a grammar-error wrong reply: '+t);
+  assert(/must not be a grammar error/.test(t),b+' forbids a grammar-error wrong reply: '+t);
   assert(/120 characters/.test(t)&&/two short replies/.test(t)&&/correct: the index/.test(t),b+' keeps the choose contract');
  }
  for(const b of ['B1','B2','C1','C2']){
