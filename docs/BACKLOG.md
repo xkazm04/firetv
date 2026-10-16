@@ -31,6 +31,7 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - origin: 2026-09-15-lt/LT-oksana-34-J1-3, 2026-09-15-lt/LT-ondrej-16-J1-2, 2026-09-15-lt-recert/LT-adela-17-J3-2, 2026-09-15-lt-recert/LT-lukas-24-J3-3, 2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-2
   - recommendation: build (hypothesis: missions postdate the run; measure on a claude-CLI LT run first) — the step task only judges whether a reply reached `currentStep` (`lib/english/conversation.ts:323`); nothing steers back or wraps up after the mission (`conversation.ts:89-90`, `:307`). When the step has not moved for N partner turns, ask for one move toward it; when the mission is done, offer to close
   - status: open
+  - recert 2026-10-14-lt: 2 fixed / 1 open. Fixed lt/LT-petra-38-J4-3, lt/LT-tomas-9-J3-2; open lt/LT-klara-13-J3-2. New origins: recert-1/LT-ondrej-16-J5-2, recert-1/LT-ondrej-16-J3-1 (the partner repeats a question already answered)
   - ceiling: steering stays prompt-held; a partner can still follow a tangent too far
 - **LG-3** — "The plan is not fully visible before agreeing"
   - origin: 2026-09-15-lt/LT-viktor-67-J2-1, 2026-09-15-lt/LT-martin-45-J2-2, 2026-09-15-lt/LT-tomas-9-J2-3, 2026-09-15-lt-recert/LT-martin-45-J2-3, 2026-09-15-lt-recert/LT-viktor-67-J2-3, 2026-09-15-lt-recert2-goal/LT-klara-13-J2-3, 2026-09-15-lt-recert2-goal/LT-petra-38-J2-4, 2026-09-15-lt-recert2-goal/LT-tomas-9-J2-2, 2026-09-15-lt-recert2-goal/LT-viktor-67-J2-1
@@ -41,16 +42,19 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - origin: 2026-09-15-lt/LT-tomas-9-J4-1, 2026-09-15-lt/LT-viktor-67-J4-2, 2026-09-15-lt-recert/LT-tomas-9-J4-4, 2026-09-15-lt-recert2-beginners/LT-petra-38-J4-3; "Then let me try by myself! It stopped after three answers. I did not get that try." (tomas-9, 2026-09-15-lt)
   - recommendation: concept-doc — `docs/LINGA-CONVERSATION-DESIGN.md`, *Open questions (09-15 drain)*. Replay asks a new question (`lib/english/conversation.ts:325`) and is supported (`:347`). Take Two re-asks the same line in Adult mode only (`lib/english/turn.ts:94`) and records nothing
   - status: open
+  - recert 2026-10-14-lt: 0 fixed / 3 open (lt/LT-adela-17-J4-4, lt/LT-petra-38-J4-1, lt/LT-viktor-67-J4-1). New origin: recert-1/LT-tomas-9-J4-5 (the moment cannot be replayed)
   - ceiling: one retry in the same scene shows reuse, not retention
 - **LG-5** — Beginner partner language runs above band and does not ease after "nevím"
   - origin: 2026-09-15-lt/LT-tomas-9-J3-1, 2026-09-15-lt/LT-viktor-67-J3-1, 2026-09-15-lt/LT-klara-13-J3-1, 2026-09-15-lt-recert/LT-tomas-9-J3-1, 2026-09-15-lt-recert2-beginners/LT-tomas-9-J4-3, 2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-4; "I said nevím and he said almost the same thing again." (tomas-9, 2026-09-15-lt)
   - recommendation: build — pitch is prompt text only (`lib/english/conversation.ts:72`), and adaptation reads the stored record, not this turn (`conversation.ts:87`). Code reads the last reply for signs of not understanding (another language, "nevím", "don't understand", help twice) and asks for one short question with a one-word answer next; a length cap on A1–A2 partner lines is checked in code. That prompt-only pitch is the cause is a hypothesis (judge-rated on codex)
   - status: open
+  - recert 2026-10-14-lt: 0 fixed / 5 open, shared with LG-14 (lt/LT-tomas-9-J1-1, lt/LT-tomas-9-J2-2, lt/LT-tomas-9-J4-3, lt/LT-viktor-67-J1-1, lt/LT-viktor-67-J3-1). New origins: recert-1/LT-petra-38-J4-1 (partner at B1, above A2), recert-1/LT-tomas-9-J3-1 (partner at B1 to an A1 child; its cause is the B1 placement, LG-48)
   - ceiling: vocabulary fit stays the model's judgement; a length cap does not make a rare word easy
 - **LG-6** — Planning screens assume an adult reader of English
   - origin: 2026-09-15-lt/LT-tomas-9-J2-2, 2026-09-15-lt/LT-viktor-67-J2-2, 2026-09-15-lt-recert/LT-tomas-9-J2-2, 2026-09-15-lt-recert2-goal/LT-tomas-9-J2-1; "Mum would need to help me read." (tomas-9, 2026-09-15-lt-recert2-goal)
   - recommendation: build — the goal question (`lib/english/view.ts:361`), the fixed English skill labels (`lib/english/curriculum.ts:8-17`) and the phone's card text (`english/LingaPhone.tsx:156-159`) have no band or language variant. At A1–A2: no skill label, a short goal question, the why in the learner's language
   - status: open
+  - recert 2026-10-14-lt: new origin recert-1/LT-tomas-9-J2-3 (a B1 mission leads the next screen; "because" put him off; a consequence of LG-48)
   - ceiling: a nine-year-old still has to read the titles, or have them read aloud
 - **LG-7** — "What does X mean?" asked in Czech is answered in more English
   - origin: 2026-09-15-lt/LT-viktor-67-J3-2, 2026-09-15-lt-recert/LT-viktor-67-J3-2, 2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-1; "Please give me the Czech word sooner" (viktor-67, 2026-09-15-lt)
@@ -61,6 +65,7 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - origin: 2026-09-15-lt/LT-martin-45-J1-1, 2026-09-15-lt/LT-klara-13-J1-2, 2026-09-15-lt/LT-adela-17-J1-4, 2026-09-15-lt/LT-viktor-67-J1-1, 2026-09-15-lt-j1b/LT-lukas-24-J1-1, 2026-09-15-lt-j1b/LT-petra-38-J1-2; "Show me the repeated mistakes and explain how they separate my English from C1." (martin-45, 2026-09-15-lt); 2026-10-09-lt/LT-tomas-9-J1-3 (claude CLI; the focus copies task 5's note, "like: The ball was red")
   - recommendation: build — the summary step gets each task's band, kind, verdict and note, never the answer (`lib/english/check.ts:123`), and only the focus length is checked (`check.ts:124`). Pass the quoted answers; the focus quotes one answer and gives one better sentence, the quote code-checked against the answers
   - status: open
+  - recert 2026-10-14-lt: 1 fixed / 5 open. Fixed lt/LT-viktor-67-J1-3; open lt/LT-adela-17-J1-3, lt/LT-jana-29-J1-3, lt/LT-oksana-34-J1-1, lt/LT-petra-38-J1-3, lt/LT-martin-45-J1-2. New origins: recert-1/LT-oksana-34-J1-2 (blocker: "no real mistakes" despite 'explain me' and 'find solution'), recert-1/LT-ondrej-16-J1-2, recert-1/LT-viktor-67-J1-3 (generic focus), recert-1/LT-lukas-24-J1-2 (praise contradicts the task notes). The cause holds on HEAD (`lib/english/check.ts:123`)
   - ceiling: a grounded verdict still does not earn acceptance from a learner who rates himself higher; accuracy and acceptance stay separate
 - **LG-9** — The first conversation after agreeing is the model's first card, not the learner's priority
   - origin: 2026-09-15-lt/LT-petra-38-J2-2, 2026-09-15-lt/LT-tomas-9-J3-2, 2026-09-15-lt-recert/LT-lukas-24-J2-4, 2026-09-15-lt-recert/LT-tomas-9-J2-3; "After agreeing, I got a museum exercise first. That isn't what I need fifteen minutes before a date." (lukas-24, 2026-09-15-lt-recert)
@@ -71,11 +76,13 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - origin: 2026-09-15-lt/LT-viktor-67-J1-3 (verified: two skipped A1 tasks, `confidence: "high"` in the stored placement), 2026-09-15-lt/LT-jana-29-J1-1, 2026-09-15-lt-j1b/LT-petra-38-J1-1, 2026-09-15-lt-j1b/LT-tomas-9-J1-3; 2026-10-09-lt/LT-tomas-9-J1-2 (claude CLI; verified: `high` rests on the B1 skip as the fail above A2, and on a guessed choose pass and a keyword listen pass); "I guessed the 'took' one, so I don't quite believe it." (tomas-9, 2026-10-09-lt)
   - recommendation: build — a skip settles as a fail (`lib/english/check.ts:311`); two A1 fails set `floored`, which reads "high" (`lib/english/placement.ts:96`, `:104`); partials never touch confidence. A floor reached by skips reads "low", and repeated partials cap at "medium". A certificate needs medium or high (`lib/english/cert.ts:69`), so this now gates certificates
   - status: built 05192cff
+  - recert 2026-10-14-lt: 0 fixed / 2 open (lt/LT-tomas-9-J1-2, lt/LT-viktor-67-J1-2); the guessed-choice ceiling is now LG-52
   - ceiling: a lucky guess on a choose task still reads as a pass
 - **LG-11** — Shaping an own-words topic can drop the details the learner named
   - origin: 2026-09-15-lt/LT-jana-29-J2-2, 2026-09-15-lt/LT-oksana-34-J2-3, 2026-09-15-lt-recert/LT-lukas-24-J2-3, 2026-09-15-lt-recert/LT-tomas-9-J2-4; "the bit about ending a date politely seems to have disappeared" (lukas-24, 2026-09-15-lt-recert)
   - recommendation: build (hypothesis: the shaping call drops clauses; prompts were not stored) — shaping is prompt-held (`lib/english/check.ts:164`) and exempt from the word check (`check.ts:189-190`). Keep and show the learner's own words on the topic; check that their content words reach the title or premise
   - status: open
+  - recert 2026-10-14-lt: 2 fixed / 0 open (lt/LT-jana-29-J2-2, lt/LT-lukas-24-J2-2). Not stamped fixed: its 09-15 origins were not in the rerun, and the instrument changed
   - ceiling: a detail can survive in the premise and still not come up in the scene
 - **LG-12** — "Try it again" stays on screen after the retry
   - origin: 2026-09-15-lt/LT-adela-17-J4-6, 2026-09-15-lt-recert/LT-viktor-67-J4-4, 2026-09-15-lt-recert/LT-adela-17-J4-5, 2026-09-15-lt-recert/LT-petra-38-J4-2
@@ -91,17 +98,20 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - origin: 2026-09-15-lt/LT-viktor-67-J1-2, 2026-09-15-lt-j1b/LT-tomas-9-J1-1; 2026-10-09-lt/LT-tomas-9-J1-1 (claude CLI; a B1 say task asks a nine-year-old for "two or three sentences", `lib/english/check.ts:54`); "the long Minecraft one, 'two or three sentences', nevím, I wanted to stop" (tomas-9, 2026-10-09-lt)
   - recommendation: build — instructions are not shortened by band (`lib/english/check.ts:44`, `:52-54`), captions are fixed English (`lib/english/view.ts:347`), and *Show the words* reveals English only (`view.ts:346`). At A1, ask the task question in the learner's language and keep captions to a few words (the measurement question is LG-18)
   - status: open
+  - recert 2026-10-14-lt: 0 fixed / 5 open, shared with LG-5 (the same five lt rows). New origin: recert-1/LT-tomas-9-J1-4 (opening questions ask a child about learning history)
   - ceiling: a child who cannot yet read relies on the TV voice
 - **LG-15** — A learner who makes no mistakes leaves with nothing new
   - origin: 2026-09-15-lt/LT-jana-29-J3-1, 2026-09-15-lt/LT-lukas-24-J3-1, 2026-09-15-lt-recert/LT-jana-29-J3-1, 2026-09-15-lt-recert/LT-lukas-24-J3-2; "Give me one register distinction or a sharper alternative I wouldn't have reached myself." (jana-29, 2026-09-15-lt)
   - recommendation: concept-doc — `docs/LINGA-CONVERSATION-DESIGN.md`, *Open questions (09-15 drain)*. Moments serve errors and other-language words (`lib/english/conversation.ts:322`), and Cut rules out valid alternatives (`conversation.ts:131`)
   - status: open
+  - recert 2026-10-14-lt: 1 fixed / 2 open. Fixed lt/LT-lukas-24-J3-1; open lt/LT-jana-29-J3-2, lt/LT-lukas-24-J5-2
   - ceiling: an enrichment line can be right and still be no use to the learner
 - **LG-16** — A turn's learning evidence is decided by provenance, not substance
   - origin: 2026-09-15-lt-recert/LT-tomas-9-J4-7, 2026-09-15-lt/LT-adela-17-J4-7, ceiling of 2026-09-15-lt/LT-viktor-67-J4-1; 2026-10-09-linga-e-run/E4 (L2, builder's reading: of three replies only the repair-shaped one left a row; the typed "Where is the rover?" left none); 2026-10-09-linga-e-run-2/E4 (L2: neither the typed nor the spoken reply left a row; neither is a repair, the rover's only allowed skill); 2026-10-09-linga-run-3/R3 (traced read-only: a drop or no observation is undecidable, the desk keeps no raw output; open question: log dropped observations)
   - recommendation: build — `validateObservations` keeps a quote found in the reply that passes word-pattern `creditOf` (`lib/english/rules.ts:69`, `lib/english/credit.ts:35-46`) and drops the rest silently (`rules.ts:67-69`); the turn schema is loose (`lib/english/conversation.ts:42`)
   - owner: linga-conversation-turn council rework
   - status: open
+  - recert 2026-10-14-lt: 0 fixed / 1 open (lt/LT-petra-38-J4-2)
   - ceiling: a substance check is still a model reading the quote; code can bound it, not prove it
 - **LG-17** — Partner pitch below band for B1+ learners
   - origin: 2026-09-15-lt-recert/LT-martin-45-J3-2, 2026-09-15-lt/LT-lukas-24-J1-2; "ordering a sandwich does not prepare me for my US director" (martin-45, 2026-09-15-lt-recert)
@@ -112,6 +122,7 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - origin: 2026-09-15-lt/LT-martin-45-J1-2, 2026-09-15-lt-j1b/LT-ondrej-16-J1-1, against 2026-09-15-lt-j1b/LT-oksana-34-J1-1 and `2026-09-15-lt/VERIFY.md` (three near placements, all one band above; three C1 partials held the band); 2026-10-09-lt/LT-tomas-9-J1-2 (informs: a near placement one band above again, on claude, lifted by code-scored tasks, not the say judge)
   - recommendation: concept-doc — `docs/LINGA-PLACEMENT-DESIGN.md`, *Open questions (09-15 drain)*. Say tasks are model-judged and code-mapped (`lib/english/placement.ts:79-81`), and a partial holds the band with no repeated-partial rule (`placement.ts:94`)
   - status: open
+  - recert 2026-10-14-lt: new origins recert-1/LT-martin-45-J1-2 (task 3 'fail' harsh), recert-1/LT-ondrej-16-J1-3 (B1 shown exact while every B1 answer was only 'nearly there'): the opposing errors again
   - ceiling: four exact and three near placements are a codex sample; the claude engine was never measured
 - **LG-19** — The learner's role in a scene is left to the model
   - origin: 2026-09-15-lt/LT-petra-38-J1-2, 2026-09-15-lt/LT-petra-38-J1-3, 2026-09-15-lt-recert2-beginners/LT-petra-38-J4-1, 2026-09-15-lt-recert2-beginners/LT-petra-38-J3-1; "Instead, I was the tired guest and Mia did my job." (petra-38, 2026-09-15-lt-recert2-beginners)
@@ -128,6 +139,7 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - origin: 2026-09-15-lt-recert/LT-lukas-24-J5-2, 2026-09-15-lt/LT-lukas-24-J3-3; "Hearing that three times felt mechanical. I want to practise showing interest respectfully" (lukas-24, 2026-09-15-lt-recert)
   - recommendation: concept-doc — `docs/LINGA-CONVERSATION-DESIGN.md`, *Open questions (09-15 drain)*. Trades against LG-20: the date premise (`lib/english/curriculum.ts:57`) and "never flirt explicitly … Decline warmly" (`lib/english/conversation.ts:77`)
   - status: open
+  - recert 2026-10-14-lt: 1 fixed / 0 open (lt/LT-ondrej-16-J5-3: the refusal is now in-scene). Not stamped fixed: its 09-15 origins were not in the rerun
   - ceiling: any line drawn here is prompt-held
 - **LG-22** — Closed-on-main rows stay open until a claude-CLI recertify answers them
   - origin: the 50 rows marked closed-on-main in the five accounting tables, such as 2026-09-15-lt/LT-tomas-9-J4-2 and 2026-09-15-lt/LT-tomas-9-J3-3
@@ -143,11 +155,13 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - origin: 2026-09-15-lt-recert/LT-ondrej-16-J3-4, 2026-09-15-lt-recert/LT-martin-45-J3-4, 2026-09-15-lt-recert/LT-petra-38-J3-2, 2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-3; "I said 'five euro' straight after learning 'four euros' and nobody helped me catch it again." (petra-38, 2026-09-15-lt-recert)
   - recommendation: build (hypothesis: the model cannot see what it already taught; prompts were not stored) — the prompt asks for repeated errors (`lib/english/conversation.ts:322`), but `context()` omits this scene's moments (`conversation.ts:83-90`), and review skips the same episode (`lib/english/review.ts:23`). Pass the scene's moments into the turn context; a repeated taught error gets the right form modelled in the partner's next line, with no extra stop
   - status: open
+  - recert 2026-10-14-lt: 0 fixed / 5 open, shared with LG-28 (UD-10): lt/LT-martin-45-J3-1, lt/LT-ondrej-16-J5-4, lt/LT-petra-38-J3-2 recur; lt/LT-oksana-34-J3-3, lt/LT-viktor-67-J3-2 not evaluable. Moment recall 20 of 53 (confounded). New origins: recert-1/LT-adela-17-J3-3, recert-1/LT-oksana-34-J3-2
   - ceiling: a follow-up in the partner's line is modelling, not teaching, and easy to miss
 - **LG-25** — Situations named in the goal are dropped from the first plan: the goal is cut at 160 characters
   - origin: 2026-09-15-lt-recert2-goal/LT-adela-17-J2-3, 2026-09-15-lt-recert2-goal/LT-jana-29-J2-1, 2026-09-15-lt-recert2-goal/LT-lukas-24-J2-3, 2026-09-15-lt-recert2-goal/LT-martin-45-J2-2, 2026-09-15-lt-recert2-goal/LT-oksana-34-J2-3, 2026-09-15-lt-recert2-goal/LT-petra-38-J2-3; "I asked for stakeholder disagreement at the start, and I still had to reject two suggestions and type it again." (martin-45, 2026-09-15-lt-recert2-goal)
   - recommendation: build — root cause verified against the stored goal answers: the goal question accepts 400 characters (`lib/english/check.ts:346`) but saves `said.slice(0, 160)` (`check.ts:349`), and the plan reads `prefs.goal || k.goal` (`check.ts:192`), so the truncated copy wins. All six repeated situations sit past character 160; the three goals under 160 lost nothing. XS: plan from the whole answer, or keep the preference at 400 (`lib/english/rules.ts:15`, `english/LingaPhone.tsx:51`). Then, only if a re-run still drops situations, extend the ef1dcb40 coverage check from the interest to the goal
   - status: open
+  - recert 2026-10-14-lt: new origin recert-1/LT-adela-17-J2-3 (blocker: topics are mostly not exam discussion topics). That her exam goal is lost on the way to the plan is a hypothesis; she is the only Character
   - ceiling: a situation can be present in a title and still be practised thinly; coverage is not fit
 - **LG-26** — Coaching praised a premise the scene never held
   - origin: 2026-10-09-linga-e-run/E5 (L2, builder's reading: "Clear repair move: you asked Pip to explain the word bridge", and Pip never said "bridge")
@@ -163,6 +177,7 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - origin: 2026-10-09-linga-e-run-2/E5 (L2, builder's reading: "the learner meets the same correction twice, and 'also say' makes it sound optional"); the moment said "ONE THING TO FIX", the coach "you could also say" the same sentence; 2026-10-09-linga-run-3/E5 ("A smoother option is 'Where did you see the rover last time?'" after the moment taught that fix)
   - recommendation: build — root cause verified in code: the coach call sends `context(c, false)` and the last reply (`lib/english/conversation.ts:325-326`), and `context()` omits this scene's moments (`conversation.ts:83-90`), so the coach cannot know the fix was taught. XS, built with LG-24 (the same omission): pass the scene's moments to the coach; on a reply that already has a moment, coach a different change or confirm the fix as a fix. That this alone stops the repeat is a hypothesis
   - status: open
+  - recert 2026-10-14-lt: as LG-24 (0 fixed / 5 open, the same five lt rows)
   - ceiling: the TV recap shows one comparison and coaching wins (`lib/english/view.ts:459-462`), so once coaching and moment differ the moment is only a count
 
 ### 2026-10-14 drain
@@ -198,6 +213,7 @@ Drained from `2026-10-14-l1/linga` (L1) and `2026-10-14-lt` (LT, claude CLI); an
   - origin: lt/LT-ondrej-16-J3-3, lt/LT-viktor-67-J4-4; "I also saw a sentence about 'one metre' that I never said." (viktor-67, lt)
   - recommendation: build — verified: the track hero draws `sentence: rv.better` (`lib/english/view.ts:465`) under "A sentence to take with you" (`english/LingaTV.tsx:189`) without `fromTitle`; the phone names it ("from <title>", `english/LingaPhone.tsx:248`). The TV says "From <scene>". Size S
   - status: open
+  - recert 2026-10-14-lt: 0 fixed / 2 open (lt/LT-ondrej-16-J3-3, lt/LT-viktor-67-J4-4). UD-15 has landed: the TV names the source (`lib/english/view.ts:537`, `english/LingaTV.tsx:198`), so the recurrence is this row's ceiling. New origins, same cause (a brought-back sentence from an earlier scene shown as the take-away): recert-1/LT-lukas-24-J5-4 ("From Drinks after a testing talk"; the learner never said it in this scene), recert-1/LT-tomas-9-J4-4 ("I like the dog house.", from *Tell me about your Minecraft world*; "it said I said 'dog house', I never said that. Mum would not trust it."), recert-1/LT-adela-17-J4-5 (a "Used again" phrase from another topic)
   - ceiling: the learner still meets a sentence they did not say tonight; only its origin is named
 - **LG-35** — UD-16 · Cut on a clean take is an error: "Linga could not give notes on this take … press Cut again"
   - origin: l1-linga/L1-lukas-24-CO-3 (executed with a stub); "If my take is good, Cut tells me Linga 'could not give notes' … This will happen on exactly the dates that went well." (lukas-24, l1-linga)
@@ -213,21 +229,24 @@ Drained from `2026-10-14-l1/linga` (L1) and `2026-10-14-lt` (LT, claude CLI); an
   - origin: lt/LT-adela-17-J2-2, lt/LT-jana-29-J2-3, lt/LT-klara-13-J1-1, lt/LT-lukas-24-J2-1, lt/LT-oksana-34-J1-3, lt/LT-ondrej-16-J1-2, lt/LT-tomas-9-J3-3; "At the start it broke twice, which is annoying." (tomas-9, lt)
   - recommendation: build (hypothesis: about half are length-only, read from the log lines) — `lib/engines/shape.ts:92-111` re-asks once to shorten, then fails. After the re-ask, a display string over `maxLength` is cut at a word boundary in code; type, JSON and quote failures still fail. Size M
   - status: open
+  - recert 2026-10-14-lt: 6 fixed / 1 open. Fixed lt/LT-adela-17-J2-2, lt/LT-jana-29-J2-3, lt/LT-klara-13-J1-1, lt/LT-oksana-34-J1-3, lt/LT-ondrej-16-J1-2, lt/LT-tomas-9-J3-3; open (not evaluable) lt/LT-lukas-24-J2-1. New origins: recert-1/LT-viktor-67-J1-4 (task generation failed twice), recert-1/LT-oksana-34-J1-4 (task 4 prompt ends 'without taking more', the ceiling of the UD-22 cut)
   - ceiling: a cut premise may lose its last clause; the others still need Try again
 - **LG-38** — UD-23 · LT driver: a swap picks the first topic whatever the Character names
   - origin: lt/LT-adela-17-J2-1, lt/LT-jana-29-J2-1, lt/LT-petra-38-J2-1, lt/LT-tomas-9-J2-1, lt/LT-viktor-67-J2-1 (5 blockers, all artefacts), lt/LT-petra-38-J2-2
   - recommendation: build — verified: `choices()` asks for `topicId` and shows only titles (`uat/driver/surface.cjs:269-278`); `pick()` falls back to `list[0]` (`:281-287`). Show the id with each label; `pick()` returns null on a non-matching param. Kill test in `tools/uat-surface-test.cjs`. Size S
   - status: open
+  - recert 2026-10-14-lt: 0 fixed / 6 open. lt/LT-adela-17-J2-1, lt/LT-jana-29-J2-1 recur on the new driver (a swap kept the rejected topic, or changed nothing), so these are now product leads for LG-1 once a same-instrument rerun repeats them; lt/LT-petra-38-J2-1, lt/LT-tomas-9-J2-1, lt/LT-viktor-67-J2-1, lt/LT-petra-38-J2-2 not evaluable (no swap made)
   - ceiling: a Character can still pick the wrong topic on purpose; that is a finding, not a bug
 - **LG-39** — UD-24 · LT driver: a Character can never stop mid-journey
   - origin: lt/LT-tomas-9-J4-1 (artefact; tomas J4 ended on budget)
   - recommendation: build — verified: `done` is in the schema (`uat/driver/linga-text.cjs:67`), but the offered check (`:538`) rejects it before the done branch (`:557`). Size S
-  - status: open
+  - status: fixed — recert 2026-10-14-lt: lt/LT-tomas-9-J4-1 fixed ("Journey ended by done (#13) with the recap reached"), its only LT origin. LT evidence on the driver this row changed (`uat/driver/linga-text.cjs` 05229633e55bf1b7)
   - ceiling: none of note
 - **LG-40** — Help and phrases ignore the question on screen (a closed-on-main row returns)
   - origin: lt/LT-viktor-67-J4-2, lt/LT-adela-17-J4-3, lt/LT-tomas-9-J4-4, returning 2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-1 (closed-on-main e3a55e1a); "the phrase help gave me hello again when I needed words for my plants" (viktor-67, lt)
   - recommendation: build (hypothesis, no UD until located) — the rescue ladder is per partner line (`lib/english/help.ts:37-63`); the *Choose a phrase* list appears scene-fixed. The fixer traces which control Viktor used (stored `viktor-67.json` J4 steps) before changing code. LG-22's first answer: a code-read closure did not hold on claude
   - status: open
+  - recert 2026-10-14-lt: 0 fixed / 3 open (lt/LT-viktor-67-J4-2, lt/LT-adela-17-J4-3, lt/LT-tomas-9-J4-4)
   - ceiling: a phrase fitted to the question is still the model's
 - **LG-41** — Take Two: what a strike may claim
   - origin: l1-linga/L1-martin-45-CO-1, l1-linga/L1-martin-45-CO-2 (both executed); "if I trust the strike, it flatters me; if I do not trust it, I do not need it. I hate being flattered." (martin-45, l1-linga)
@@ -238,11 +257,13 @@ Drained from `2026-10-14-l1/linga` (L1) and `2026-10-14-lt` (LT, claude CLI); an
   - origin: lt/LT-klara-13-J3-3, lt/LT-jana-29-J3-3 ("it was over in three replies, and she caved fast", jana-29, lt), against LG-2's five Characters
   - recommendation: concept-doc — `docs/LINGA-CONVERSATION-DESIGN.md`, *Open questions (10-14 drain)*: when a done mission ends the scene, and how a stretch learner extends it. Not averaged with LG-2
   - status: open
+  - recert 2026-10-14-lt: 0 fixed / 2 open (lt/LT-klara-13-J3-3, lt/LT-jana-29-J3-3). New origin: recert-1/LT-viktor-67-J3-2 (the mission ends after three replies, Mia's question unanswered)
   - ceiling: one rate of closing is wrong for someone
 - **LG-43** — Calibrate the placement lean before building on it (method)
   - origin: lt placement 9 near of 10, all one band above (stored `facts.placement`); lt/LT-adela-17-J1-1 and 22 more rows; "a flattering level is useless for the exam." (adela-17, lt)
   - recommendation: method-commitment — trigger: before any build on LG-18. One LT J1 pass in which each Character answer is rated for CEFR band blind to `trueBand` (or 10 rated by a person). If the Characters write at band, the say judge is lenient (`lib/english/placement.ts:79-81`, `:94`) and LG-18 turns to build; if they write above it, the lean is the instrument's
   - status: open
+  - recert 2026-10-14-lt: 6 fixed / 17 open. Fixed lt/LT-martin-45-J1-3, lt/LT-martin-45-J2-3, lt/LT-martin-45-J3-4, lt/LT-ondrej-16-J1-1, lt/LT-ondrej-16-J2-3, lt/LT-ondrej-16-J3-4 (both B1 exact); open lt/LT-adela-17-J1-1, lt/LT-adela-17-J2-3, lt/LT-adela-17-J3-2, lt/LT-adela-17-J4-2, lt/LT-jana-29-J1-2, lt/LT-klara-13-J1-3, lt/LT-klara-13-J2-4, lt/LT-klara-13-J3-4, lt/LT-lukas-24-J1-1, lt/LT-lukas-24-J3-2, lt/LT-lukas-24-J5-3, lt/LT-oksana-34-J1-2, lt/LT-oksana-34-J2-3, lt/LT-oksana-34-J3-6, lt/LT-petra-38-J1-2, lt/LT-petra-38-J3-3, lt/LT-viktor-67-J1-2. New origin: recert-1/LT-lukas-24-J2-4. Oksana moved from B2 to C1 (two bands), and Tomas from exact to B1 (LG-48); placement exact 2 of 10 (confounded)
   - ceiling: a model rating a model's English is still one reading
 - **LG-44** — The next LT J5 adds the gate asks, the topic-box injection and sp-about-you (method)
   - origin: l1-linga/L1-ondrej-16-GATE-5 (`uncertain`), l1-linga/L1-klara-13-SP-1, l1-linga/L1-ondrej-16-GATE-2
@@ -279,6 +300,41 @@ Drained from `2026-10-14-l1/linga` (L1) and `2026-10-14-lt` (LT, claude CLI); an
 - **LG-21** — lt/LT-ondrej-16-J5-3: the robotic redirect is the code's fixed `REDIRECT_LINE` from LG-20's build ("Let's keep to our practice here, so tell me more about what you need."), against lt/LT-ondrej-16-J5-2 (model redirects praised). LG-20 trades against LG-21; the concept-doc gains it.
 - **LG-22** — answered once: LG-40.
 - **LG-10** — its ceiling ("a lucky guess on a choose task still reads as a pass") is observed again: lt/LT-tomas-9-J1-2, lt/LT-viktor-67-J1-2.
+
+### 2026-10-14-lt recert drain
+
+Drained from `2026-10-14-lt/recert-1` (LT, claude CLI, on a new driver, so every delta and verdict drop is confounded); analysis in `docs/uat-insights/2026-10-14-lt-recert.md`. Paths are under `desk/src/` unless they start `uat/` or `tools/`, checked against main 7e6b6897. `recert-1` = `2026-10-14-lt/recert-1`. Rows of `lt` gain a `recert 2026-10-14-lt` line. The new blockers and majors are filed below or on those lines.
+
+- **LG-48** — Tomas (A1, age 9) is placed at B1, and the partner then pitches at B1
+  - origin: recert-1/LT-tomas-9-J1-1, recert-1/LT-tomas-9-J2-1, recert-1/LT-tomas-9-J3-2, recert-1/LT-tomas-9-J4-2 (all blockers: one J1 placement, carried into J2-J4); consequences recert-1/LT-tomas-9-J3-1 (partner at B1: "I'd love to hear more about your house", "cosy"), recert-1/LT-tomas-9-J2-3 (a B1 mission first). "B1? That seems too hard for me" (tomas-9, J1 #10); "Then it says my level is B1, that's wrong, I know only colours and animals." (tomas-9, J4). In `lt` he was placed exact (A1)
+  - recommendation: build — verified on the stored marks (`recert-1/tomas-9.json`, `facts.placement`): A1 choose fail ("Yes, I want play."), A1 listen pass ("Creeper! Utéct do domu? Run.", half Czech), A2 choose pass (a 50/50), B1 listen pass on the two words "Creeper! Boom.", B2 say skipped. `staircase()` takes the highest band with more passes than fails (`lib/english/placement.ts:118`), and a listen pass is weak only at one word (`:94-96`), so the two-word B1 pass held B1 over an A1 fail (scattered, low). The narrowest rule has two parts. A listen pass of one or two words is weak. In a scattered ladder, a band more than one above the lowest real fail holds only on a strong pass. Kill test in `tools/linga-rules-test.cjs`: Tomas's stored marks are red at B1 on HEAD and green at A2 or lower, not high. The other nine stored placements must not move farther from their true band. Size S
+  - status: open
+  - ceiling: A2 is still one band above his true A1. The ladder cannot tell an unlucky fail from a lucky pass, and the partner's pitch at A2 is still LG-5's
+- **LG-49** — The level label differs between TV and phone
+  - origin: recert-1/LT-klara-13-J2-4 (TV "A2 Everyday basics", phone "B1 Getting by"), recert-1/LT-ondrej-16-J2-3 (blocker, the same split), recert-1/LT-oksana-34-J2-2 (TV B2, phone C1), recert-1/LT-lukas-24-J3-1 (blocker: TV B2, phone C1), recert-1/LT-ondrej-16-J3-4, recert-1/LT-klara-13-J1-2 (blocker: the verdict screen's "Understood B1 · wrote A2" above a large "B1 · Getting by")
+  - recommendation: build (the owner picks which band is "Your level") — verified in code. Since c2efa231 (S2), conversations start at the band the learner spoke (`conversationBand`, `lib/english/placement.ts:160`). The TV's home hero shows that band (`playBand`, `lib/english/view.ts:271`, drawn at `:333` and `:344`). The phone's level line shows the read (`placement.band`, `english/LingaPhone.tsx:178`, `:216`). So every learner who spoke below the read sees two levels. Fix: one band is "Your level" on both screens, and the other is named in one plain line ("Linga read B1; conversations start at A2"). The recert drain did not change this, because the label code is outside its paths. Size S
+  - status: open
+  - ceiling: two bands still exist; naming them both is honest, not simple
+- **LG-50** — "A sentence to take with you" is a line the learner never said, tied to nothing in the scene, and the reply count is one short
+  - origin: recert-1/LT-jana-29-J3-2 (blocker: "'4 spoken · 0 written replies' after 5 replies; sentence 'I'm not really the right audience for it' was not hers"); minors recert-1/LT-adela-17-J3-4, recert-1/LT-lukas-24-J3-3 ("I'd say"), recert-1/LT-petra-38-J3-4 ("the guest wants"), recert-1/LT-tomas-9-J3-5 ("Yes, I want to play.", a line from his level check)
+  - recommendation: build (hypothesis: the hidden line is the cause) — since 143e93f4 (K4), a room's hidden line that the learner did not find becomes the recap's sentence (`lib/english/view.ts:537`, `ln && !ln.found`). It is named only when it came from the check (`from: CHECK_TITLE`). On the phone it sits under "A sentence to take with you", which tells the learner to keep it, and nothing on screen says it was the room's hidden line. Fix: name it ("The line hidden in this room"), or show it only when it is a full sentence that fits the scene. The count reads the learner turns (`view.ts:498-500`). Why five replies read as four is untraced (a turn sent as a choice or a retry is a guess). Size S
+  - status: open
+  - ceiling: a hidden line can still be one the learner had no reason to say
+- **LG-51** — A direct "was that correct?" gets vague praise or a wrong yes
+  - origin: recert-1/LT-adela-17-J3-2 (blocker: "Yes, 'eventually' fits there, meaning 'in the end'", then the reverse one turn later); lt/LT-adela-17-J4-1 (recurs: "'Your sentences sound natural to me' when asked 'Was my sentence correct?'"); related lt/LT-adela-17-J3-3 (fixed)
+  - recommendation: build (hypothesis: the answer is prompt-held) — the partner prompt has no rule for a direct correctness question (`lib/english/conversation.ts` has no such line), and moments serve errors only. When the learner asks whether a line was right, the answer quotes the line, says yes or no, and gives the one change. That the model then answers accurately is a hypothesis, since a false friend is a judgement call. Size M
+  - status: open
+  - ceiling: a yes from the model is still one reading of the learner's English
+- **LG-52** — Choose tasks are grammar minimal pairs: guessable for some learners, unanswerable for beginners
+  - origin: recert-1/LT-ondrej-16-J1-1 (blocker: "Thank you, good game!" against the same line with a sentence added; "Thank you, I am good game."), recert-1/LT-viktor-67-J1-5 (draw/drew, "unanswerable for a beginner"); lt/LT-tomas-9-J1-2 (recurs: "'Yes, I want play.' vs 'Yes, I want to play!' picked by looks")
+  - recommendation: build — verified in code. The choose task asks for two replies where "the other has one typical learner error for this band, or does not fit" (`lib/english/check.ts:54`), so the model writes a minimal pair. At A1 the difference is a function word whose point the learner can neither hear nor see. At A1-A2 the wrong option should not fit the situation (a meaning choice), with a grammar contrast only from B1. That this cuts the guessing is a hypothesis. Size S
+  - status: open
+  - ceiling: any two-option task is still a 50/50 guess (LG-10's ceiling); a meaning choice is easier to guess, which is the point at A1
+- **LG-53** — A self-repair try is held as "You found it" while another error stays in the line
+  - origin: recert-1/LT-martin-45-J3-2 ("'We have been waiting for this brackets since two weeks.' was marked 'You found it'. The explanation never mentioned since→for.")
+  - recommendation: concept-doc — `docs/LINGA-CONVERSATION-DESIGN.md`. By design (K2, 137bcf41), a try is judged by the changed words of its own slip (`lib/english/repair.ts:86-94`, `judgeTry`), so other errors in the try are not read. Decide whether "You found it" claims the whole line or only the fix ("You fixed 'waiting'"), and whether a second slip in the try may become the next moment. Size S once ruled
+  - status: open
+  - ceiling: code reads the slip it taught, not the learner's grammar
 
 ## Essay Master
 
