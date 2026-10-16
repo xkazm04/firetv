@@ -345,6 +345,11 @@ Drained from `2026-10-14-lt/recert-1` (LT, claude CLI, on a new driver, so every
   - recommendation: code writes the reason. `verdictReason` (`lib/english/placement.ts`) returns one plain line for a non-pass say or listen task (answer off task, English below the band, partly on task, no English, line read); the phone's "What Linga saw" shows it before the note. The judge's note instruction (`check.ts`, judge step) also says not to call an answer clear, strong or good when the English sits below the band. Size S
   - status: built on branch autopilot/accepted-idea-delivery-337ccdd6; pinned by the rules test 'verdict reason: a non-pass task names why before the note' (red on HEAD, green after). Not live-verified. No TV surface shows task verdicts, so none changed
   - ceiling: the judge's own note can still praise the ideas; the code line is what keeps the pair honest
+- **LG-55** — Level-check task prompts repeat or are muddled: the same prompt twice, near-duplicates, a scenario and a general question in one
+  - origin: 2026-10-16-lt-placement-oos/LT-sofie-11-J1-4 (tasks 1 and 2 are the same prompt), LT-oksana-34-J1-3 and -J1-4 (the last two tasks are near-duplicates), LT-petra-38-J1-3 (a scenario and a general question mixed in one prompt)
+  - recommendation: code checks the repeat. `sameTask` (`lib/english/placement.ts`) compares a new prompt (for listen, prompt plus line) with the check's earlier tasks by content-word overlap; `advance()` (`check.ts`, task step) asks once more inside the same call with the earlier prompt named, booked as the next try, and keeps the second answer even if it repeats. The say task now asks for one situation and one question. Size S
+  - status: built on branch autopilot/accepted-idea-delivery-bd20cda7; pinned by the rules tests 'sameTask: ...' and 'a level-check task that repeats an earlier prompt is asked once more ...' (red on HEAD, green after). Not live-verified
+  - ceiling: word overlap misses a repeat in other words, and the mixed-prompt clause is only an instruction; nothing checks it in code
 
 ## Essay Master
 

@@ -18,7 +18,7 @@ import { FOCUS_FALLBACK, focusParts } from "./line";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
 import { ConversationError, lingaLine } from "./errors";
-import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, conversationBand, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, playBand, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
+import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, conversationBand, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, playBand, sameTask, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
 // The right option of a "choose" task. Server memory only: the session reaches every screen.
@@ -53,7 +53,7 @@ Plain text, no markdown. Return only the specified JSON.`;
 const KIND_TASK: Record<TaskKind, string> = {
   choose: "prompt: a tiny everyday situation, at most 120 characters, ending with a question such as 'What do you say?'. options: two short replies. Exactly one is natural, correct English that fits the situation; the other has one typical learner error for this band, or does not fit. correct: the index of the right reply. line: empty.",
   listen: "line: one or two sentences someone says to the learner, with the vocabulary and pace of this band, at most 200 characters. prompt: one question about what was said, at most 120 characters, that can only be answered by understanding the line, answerable in a few words. Do not repeat the line's key words in the question. options: empty. correct: 0.",
-  say: "prompt: a small situation, from the learner's interests where they fit, that invites them to say something at this band, at most 200 characters. A1 and A2: one simple sentence about themselves or their day. B1: two or three sentences with a reason or a short story. B2: an opinion or a comparison with reasons. C1 and C2: something that needs nuance, a hypothetical or persuading. line: empty. options: empty. correct: 0.",
+  say: "prompt: a small situation, from the learner's interests where they fit, that invites them to say something at this band, at most 200 characters. One situation and one question, never a scenario followed by a separate general question. A1 and A2: one simple sentence about themselves or their day. B1: two or three sentences with a reason or a short story. B2: an opinion or a comparison with reasons. C1 and C2: something that needs nuance, a hypothetical or persuading. line: empty. options: empty. correct: 0.",
 };
 
 function stageScreen(k: LevelCheck): Screen { return k.stage === "verdict" ? "linga-verdict" : k.stage === "plan" ? "linga-plan" : "linga-check"; }
@@ -117,7 +117,22 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
     if (!ladder.done) {
       const band = ladder.next, kind = kindFor(band, k.tasks);
       return call(k, token, "Linga could not prepare the next task. Try again.", async () => {
-        const r = await ask(system, { step: "task", band, kind, bandGuide: BAND_TUTOR[band], learner: { interest: k.interest, goal: k.goal }, avoid: k.tasks.map(t => t.prompt), task: `Write one ${kind} task at band ${band}. ${KIND_TASK[kind]}` }, taskSchema);
+        const request = { step: "task", band, kind, bandGuide: BAND_TUTOR[band], learner: { interest: k.interest, goal: k.goal }, avoid: k.tasks.map(t => t.prompt), task: `Write one ${kind} task at band ${band}. ${KIND_TASK[kind]}` };
+        let r = await ask(system, request, taskSchema);
+        // a repeat of an earlier task (LG-55): asked once more inside this call, booked as its next try (types.ts Again)
+        const earlier = k.tasks.map(t => `${t.prompt} ${t.line}`.trim()), said = (j: Record<string, unknown>) => kind === "listen" ? `${line(j.prompt, 200)} ${line(j.line, 230)}` : line(j.prompt, 200);
+        let ms = r.ms;
+        if (sameTask(said(r.json), earlier)) {
+          const twin = k.tasks.find(t => sameTask(said(r.json), [`${t.prompt} ${t.line}`.trim()]));
+          console.info("Linga check: the task repeats an earlier one; asked once more.");
+          try {
+            const again = await ask(system, { ...request, task: `${request.task}
+Your previous answer repeated an earlier task ("${twin?.prompt ?? ""}"). Answer again with a different situation.` }, taskSchema, 90000, r.again);
+            ms += again.ms;
+            // if the second answer repeats too it is kept: a repeated task is a smaller harm than a check that cannot go on
+            r = { ...again, ms };
+          } catch (e) { console.warn("Linga check: the repeat re-ask failed; the first answer is kept:", e instanceof Error ? e.message : e); }
+        }
         const task: CheckTask = { id: randomUUID(), band, kind, prompt: line(r.json.prompt, 200), line: "", options: [], revealed: false };
         if (kind === "listen") task.line = line(r.json.line, 230);
         if (kind === "choose") {

@@ -377,6 +377,27 @@ export function touchesInterest(topic: Pick<PlanTopic, "title" | "premise">, ste
   const own = new Set(words(`${topic.title} ${topic.premise}`).map(stemWord));
   return stems.some(s => own.has(s));
 }
+/** Words that frame any task prompt and say nothing about its situation; "what do you say" opens half of them. */
+const TASK_STOP = new Set("the and for with that this what when where which who how why you your are was were have has had can could would will not but about from into there their then them they him her his she its our out one two just please say tell does did give told ask want need".split(" "));
+/** A new prompt shares at least this share of the shorter prompt's content words with an earlier one: the same task asked again. */
+export const SAME_TASK_SHARE = 0.6;
+/** ...and at least this many words, so two short prompts that happen to share a word are not read as one. */
+export const SAME_TASK_WORDS = 2;
+const taskWords = (text: string) => new Set(text.toLowerCase().split(/[^a-z]+/).filter(w => w.length >= 3 && !TASK_STOP.has(w)).map(stemWord));
+/**
+ * Is this prompt a near-duplicate of an earlier one in the same check? By content-word overlap against the shorter
+ * prompt, so a reworded repeat counts and two different situations on one interest (only "football" in common) do not.
+ */
+export function sameTask(prompt: string, earlier: string[]): boolean {
+  const mine = taskWords(prompt);
+  if (!mine.size) return false;
+  return earlier.some(e => {
+    const theirs = taskWords(e);
+    if (!theirs.size) return false;
+    const shared = [...mine].filter(w => theirs.has(w)).length;
+    return shared === mine.size && shared === theirs.size || (shared >= SAME_TASK_WORDS && shared / Math.min(mine.size, theirs.size) >= SAME_TASK_SHARE);
+  });
+}
 export function cleanPlan(value: unknown): Plan | null {
   const p = obj(value);
   if (!isBand(p.band) || typeof p.at !== "number" || !Array.isArray(p.topics)) return null;

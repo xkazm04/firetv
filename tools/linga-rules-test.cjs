@@ -2671,3 +2671,32 @@ test('verdict reason: a non-pass task names why before the note',()=>{
  assert.equal(P.verdictReason({kind:'choose',band:'A1',verdict:'fail'}),'');
  assert.equal(P.verdictReason({kind:'say',band:'B2',verdict:'fail'}),'');
 });
+
+test('sameTask: a reworded repeat is the same task, two situations on one interest are not',()=>{
+ const sofie='You are at a cafe with a friend. Tell me what you like to do at the weekend and why.';
+ assert(P.sameTask(sofie,[sofie]),'identical prompts');
+ assert(P.sameTask('Tell me what you like to do at the weekend, and why you like it.',[sofie]),'reworded repeat');
+ assert(!P.sameTask('A football match is on tonight. What do you say to the person next to you?',['Tell me about your favourite football team and why you follow them.']),'one shared interest word');
+ assert(!P.sameTask('You miss your bus to school. What do you say to your teacher?',[sofie,'A friend invites you to dinner. How do you answer?']));
+ assert(P.sameTask('Go home',['Go home']),'two identical short prompts');
+ assert(!P.sameTask('Go home now',['Go to school']),'short prompts sharing a word');
+ assert(!P.sameTask('',['anything at all here']));assert(!P.sameTask('Tell me about your day at school',[]));
+});
+test('a level-check task that repeats an earlier prompt is asked once more, with the earlier prompt named (LG-55)',async()=>{
+ fresh();const same='Tell me about a trip you took with your family and what you enjoyed most.',other='Describe your favourite place in town and say why you go there.';
+ const asks=[];
+ answer=wrap(req=>{const p=JSON.parse(req.prompt);
+  if(p.step==='about')return {...checkAnswer(req),selfBand:'C1'};
+  if(p.step==='task'){asks.push(p);const retry=/previous answer repeated/.test(p.task);return {prompt:retry?other:same,line:p.kind==='listen'?'I left my bag on the bus this morning.':'',options:[],correct:0};}
+  return checkAnswer(req);});
+ await command('check-start');await answerAbout(3);
+ let k=getSession().check;assert.equal(k.task.prompt,same);assert.equal(asks.length,1,'the first task is never re-asked');
+ await command('check-task',{checkId:k.id,taskId:k.task.id,text:'I would argue that it depends on the trip.',mode:'text'});
+ k=getSession().check;
+ assert.equal(asks.length,3,'the repeat was asked once more');assert.match(asks[2].task,new RegExp(same.slice(0,30)),'the gap names the earlier prompt');
+ assert.equal(k.task.prompt,other,'the second task on screen differs');
+ // a second answer that repeats too is kept: the check goes on
+ asks.length=0;answer=wrap(req=>{const p=JSON.parse(req.prompt);if(p.step==='task'){asks.push(p);return {prompt:same,line:p.kind==='listen'?'I left my bag on the bus this morning.':'',options:[],correct:0};}return checkAnswer(req);});
+ await command('check-task',{checkId:k.id,taskId:k.task.id,text:'I would argue that it depends on the place.',mode:'text'});
+ assert.equal(asks.length,2);assert.equal(getSession().check.task.prompt,same,'the repeat is kept rather than failing the check');
+});
