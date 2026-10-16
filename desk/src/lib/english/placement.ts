@@ -237,7 +237,7 @@ export function restsLine(confidence: Placement["confidence"], tasks: Mark[], re
     case "skips": return "Some tasks were skipped, so this level is a careful guess.";
     case "floor": return "The tasks were too hard, so this is the lowest level.";
     case "unchecked": return skipped ? "A skipped task left the next level up unchecked." : "No task at the next level up was answered.";
-    case "read": return "What you said at the start pointed to a different level, so this is a careful guess.";
+    case "read": return "What you said at the start pointed elsewhere, so this is a careful guess.";
     case "lean": return "Linga placed you one level lower than your answers alone, to be safe.";
     case "few": return "Only a few strong answers showed this level, so it may be a little off.";
     case "thin": return "Only one strong answer showed this level, so it may be a little off.";

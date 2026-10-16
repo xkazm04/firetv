@@ -446,16 +446,19 @@ test('S2: the ten stored LT placements - Lukas spoke B2 under a C1 read, Petra A
  const lukas=ltPlacements().find(x=>x.who==='lukas').placement;assert.equal(lukas.band,'C1');assert.equal(P.playBand(lukas,'C1'),'C1','his own pick of the read still wins');assert.equal(P.playBand(lukas,'A1'),'B2');
 });
 // ---- LG-48: the recert's stored placements (2026-10-14-lt/recert-1), replayed through the ladder; no model call ----
-const RECERT_RUN=path.join(LT_RUN,'recert-1'),BANDS=['A1','A2','B1','B2','C1','C2'];
+const RECERT_RUNS=['recert-1','recert-2','recert-3'],RECERT_RUN=path.join(LT_RUN,'recert-1'),BANDS=['A1','A2','B1','B2','C1','C2'];
 /** Each recert-1 Character's J1 placement as ladder marks. The facts keep no `skipped` flag: a task with no response whose note starts "Skipped" was one. */
-function recertMarks(){
- return fs.readdirSync(RECERT_RUN).filter(f=>/-\d+\.json$/.test(f)).map(f=>{
-  const j=JSON.parse(fs.readFileSync(path.join(RECERT_RUN,f),'utf8'));
-  const p=Object.values(j.journeys).map(J=>J.facts&&J.facts.placement).find(Boolean);assert(p,f+' holds a placement');
+function recertMarks(runs=['recert-1']){
+ return runs.flatMap(run=>fs.readdirSync(path.join(LT_RUN,run)).filter(f=>/-\d+\.json$/.test(f)).map(f=>{
+  const j=JSON.parse(fs.readFileSync(path.join(LT_RUN,run,f),'utf8'));
+  const p=Object.values(j.journeys).map(J=>J.facts&&J.facts.placement).find(Boolean);if(!p)return null;
   const marks=p.tasks.map(t=>({band:t.band,verdict:t.verdict,kind:t.kind,response:t.response,...(t.skipped||(t.response===''&&/^Skipped/.test(t.note))?{skipped:true}:{})}));
-  return {who:f.replace(/\.json$/,''),trueBand:j.trueBand,stored:p.band,storedConfidence:p.confidence,marks};
- });
+  return {run,who:f.replace(/\.json$/,''),trueBand:j.trueBand,stored:p.band,storedConfidence:p.confidence,read:p.selfBand||null,marks};
+ })).filter(Boolean);
 }
+/** The ladder at the start of the LG-48 follow-up (dba8c1de) on every recert placement that carries marks: [band, confidence]. The new rules are measured against it, not against the older stored bands. */
+const HEAD_LADDER={'recert-1/adela-17':['C1','high'],'recert-1/jana-29':['C2','high'],'recert-1/klara-13':['B1','medium'],'recert-1/lukas-24':['C1','low'],'recert-1/martin-45':['B1','high'],'recert-1/oksana-34':['C1','low'],'recert-1/ondrej-16':['B1','low'],'recert-1/petra-38':['B1','high'],'recert-1/tomas-9':['A2','low'],'recert-1/viktor-67':['A2','low'],
+ 'recert-2/tomas-9':['A2','low'],'recert-3/jana-29':['C2','high'],'recert-3/klara-13':['B1','high'],'recert-3/lukas-24':['C1','low'],'recert-3/martin-45':['B1','high'],'recert-3/oksana-34':['B2','high'],'recert-3/viktor-67':['A1','medium']};
 test('LG-48: Tomas (A1, age 9) is placed no higher than A2 on his stored marks, and not with high confidence',()=>{
  const tomas=recertMarks().find(r=>r.who==='tomas-9');
  // the stored J1 check (J2-J4 carry it): A1 choose fail on "want play", A1 listen pass in Czech and English, A2 choose
@@ -467,14 +470,34 @@ test('LG-48: Tomas (A1, age 9) is placed no higher than A2 on his stored marks, 
  assert.notEqual(st.confidence,'high');
  assert(P.weakPass(tomas.marks[3]),'a two-word listening pass is weak');
 });
-test('LG-48: no recert-1 learner moves farther from their true band than the stored (HEAD) placement',()=>{
+test('placement rework: over recert-1, -2 and -3 no learner moves farther from their true band, no unproven read keeps high, and one-band-high misses land',()=>{
  const far=(a,b)=>Math.abs(BANDS.indexOf(a)-BANDS.indexOf(b));
- const rows=recertMarks().map(r=>({...r,now:P.staircase('A2',r.marks)}));
- console.log('LG-48 replay (true / stored / now):\n'+rows.map(r=>`  ${r.who.padEnd(10)} ${r.trueBand}  ${r.stored} ${r.storedConfidence}  ${r.now.band} ${r.now.confidence}`).join('\n'));
- assert.equal(rows.length,10);
- for(const r of rows)assert(far(r.now.band,r.trueBand)<=far(r.stored,r.trueBand),`${r.who}: ${r.stored} -> ${r.now.band}, true ${r.trueBand}`);
- // one strong say pass above a lower fail is thin: the learner leans down to the band under it, which holds a strong pass; a second one holds the band
+ const rows=recertMarks(RECERT_RUNS).map(r=>{const head=HEAD_LADDER[r.run+'/'+r.who];assert(head,r.run+'/'+r.who+' has a HEAD reading');return {...r,head,now:P.staircase('A2',r.marks,r.read)};});
+ assert.equal(rows.length,17,'every recert placement that carries marks (ondrej-16 of recert-3 stored none)');
+ const table=rows.map(r=>[(r.run+' '+r.who).padEnd(20),r.trueBand,(r.head[0]+' ('+r.head[1]+')').padEnd(11),(r.now.band+' ('+r.now.confidence+')').padEnd(11),far(r.head[0],r.trueBand)+' -> '+far(r.now.band,r.trueBand)].join(' | '));
+ console.log('placement replay (character | true band | HEAD band (confidence) | new band (confidence) | distance before -> after):\n  '+table.join('\n  '));
+ // (b) no learner farther from the true band than the HEAD placement
+ for(const r of rows)assert(far(r.now.band,r.trueBand)<=far(r.head[0],r.trueBand),`${r.run}/${r.who}: ${r.head[0]} -> ${r.now.band}, true ${r.trueBand}`);
+ // (a) a placement above the true band, or one the read disagrees with, or one resting on fewer than three strong passes, is never high
+ for(const r of rows){
+  const strong=r.marks.filter(m=>m.band===r.now.band&&m.verdict==='pass'&&!m.skipped&&!P.weakPass(m)).length;
+  if(BANDS.indexOf(r.now.band)>BANDS.indexOf(r.trueBand)||(r.read&&r.read!==r.now.band)||strong<P.HIGH_STRONG_PASSES)assert.notEqual(r.now.confidence,'high',`${r.run}/${r.who}: ${r.now.band} must not be high`);
+ }
+ // (c) the recorded one-band-high misses now land on their true band
+ const high=rows.filter(r=>BANDS.indexOf(r.head[0])===BANDS.indexOf(r.trueBand)+1),landed=high.filter(r=>r.now.band===r.trueBand);
+ assert(high.length>=5);assert(landed.length>=1,'at least one one-band-high miss lands on its true band');
+ for(const w of ['adela-17','jana-29','lukas-24'])assert(landed.some(r=>r.who===w),w+' lands on the true band');
+ // the lean needs a strong pass one band down: Ondrej (B1, read A2, A2 held by a choice only) is not pushed below his true band
+ assert.equal(rows.find(r=>r.run==='recert-1'&&r.who==='ondrej-16').now.band,'B1');
+ // the lines for the new reasons stay short and say what holds
  const say=(band,verdict)=>({band,verdict,kind:'say',response:'I usually go to school by bus with my friends.'});
+ const lean=P.staircase('B1',[say('B1','pass'),say('B2','pass')],'B1');assert.equal(lean.band,'B1');assert.equal(lean.rests,'lean');assert.equal(lean.confidence,'low');
+ const agree=[say('B1','pass'),say('B1','pass'),say('B1','pass'),say('B2','fail')];
+ assert.equal(P.staircase('B1',agree,'B1').confidence,'high');
+ const clash=P.staircase('B1',agree,'A2');assert.equal(clash.band,'B1');assert.equal(clash.rests,'read');assert.equal(clash.confidence,'medium');
+ for(const [conf,marks,read,re] of [['medium',[say('B1','pass'),say('B1','pass'),say('B2','fail')],null,/few strong/],['medium',[say('B1','pass'),say('B1','pass'),say('B1','pass'),say('B2','fail'),say('B1','pass')],'B2',/start pointed elsewhere/],['low',[say('B1','pass'),say('B2','pass')],'B1',/one level lower/]])
+  {const line=P.restsLine(conf,marks,read);assert.match(line,re);assert(line.split(' ').length<=16,line);}
+ // one strong say pass above a lower fail is thin: the learner leans down to the band under it, which holds a strong pass; a second one holds the band
  assert.equal(P.staircase('A2',[{band:'A2',verdict:'fail',kind:'choose',response:'x'},{band:'A1',verdict:'pass',kind:'choose',response:'y'},{band:'A2',verdict:'pass',kind:'choose',response:'z'},{band:'B1',verdict:'pass',kind:'listen',response:'He missed the bus'},say('B2','pass')]).band,'B1');
  const climber=P.staircase('A2',[{band:'A2',verdict:'fail',kind:'choose',response:'x'},{band:'A1',verdict:'pass',kind:'choose',response:'y'},{band:'A2',verdict:'pass',kind:'choose',response:'z'},say('B2','pass'),say('B2','pass')]);
  assert.equal(climber.band,'B2');assert.notEqual(climber.confidence,'high');
