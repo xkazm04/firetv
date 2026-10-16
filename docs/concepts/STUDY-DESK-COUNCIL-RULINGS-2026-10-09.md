@@ -926,6 +926,15 @@ Full r3 (round 2026-10-10-student-working-explanation-r3, run dff24ac2), the las
 
 Next, ruled 2026-10-11 (round 13): the owner decides craft-1 beside the r3 Approval. The App Master asked the owner to choose between a confirm on the phone before a settle, never settling from an explanation, and accepting it as a known limit. No rework is slotted until he answers.
 
+Ruled 2026-10-16 (ask d6d87220, answered by the owner): never settle from an explanation. An explanation, spoken or typed, never settles an unsure item and never writes the learner record. The learner still gets the step and a line that asks them to enter what they got as their answer. The item settles only from a value the learner enters (the mark and second-go routes). A wrong item keeps today's behaviour: it only takes the slip the explanation named.
+
+X7, as delivered (commit 34148887, message prefix 'explain: X7'):
+- `explainItem` makes no verdict and writes no learner record. The model's `value` is read only to pick the closing line: `ENTER_LINE` when the learner said a figure, `NOT_HEARD_LINE` (X6-a) when not. The route sends no `settled` or `saved`.
+- craft-1 is closed by construction, because no path from an explanation reaches the record. The false admissions A6, A7 and A8 now leave the item unsure.
+- Nineteen pins that asserted a settle from an explanation were moved to the new rule, each with a comment citing ask d6d87220, in `tools/maths-rules-test.cjs`, `tools/school-marking-test.cjs`, `tools/calc-marking-test.cjs`, `tools/calc-course-test.cjs`, `tools/maths-tv-test.cjs`, `tools/school-stretch-test.cjs` and `tools/week-digest-test.cjs`. A new test in `tools/maths-rules-test.cjs` pins 'I got stuck on five sixths', 'the answer is not eleven twelfths' and a right spoken answer.
+- A lite council round follows, to measure the new state. It is not an approval.
+
+
 ## 6. essay-paragraph-analysis
 
 Lite r1: ready, 0.5179. Tier: major (key goal 5).
