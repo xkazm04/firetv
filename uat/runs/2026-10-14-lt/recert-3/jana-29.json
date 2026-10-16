@@ -1,0 +1,1391 @@
+{
+  "character": "jana-29",
+  "name": "Jana",
+  "trueBand": "C1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "Fine, let's take the test and see if it places me properly.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Jana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer honestly and mention what I actually want.",
+          "action": "answer",
+          "args": {
+            "text": "Mostly at work, to be fair. I'm a UX designer in Prague, so I write specs, run critiques and take calls with international teams in English every day. Also films, podcasts, that sort of thing."
+          },
+          "result": "ok",
+          "ms": 5557
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nNice, that sounds like a busy week! When you work in English, what is the hardest part for you: speaking in calls, writing specs, or explaining your ideas in critiques?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nNice, that sounds like a busy week! When you work in English, what is the hardest part for you: speaking in calls, writing specs, or explaining your ideas in critiques?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nMostly at work, to be fair. I'm a UX designer in Prague, so I write specs, run critiques and take calls with international teams in English every day. Also films, podcasts, that sort of thing.\nLinga\nNice, that sounds like a busy week! When you work in English, what is the hardest part for you: speaking in calls, writing specs, or explaining your ideas in critiques?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, that sounds like a busy week! When you work in English, what is the hardest part for you: speaking in calls, writing specs, or explaining your ideas in critiques?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Honestly, explaining nuance diplomatically in critiques is the tricky bit.",
+          "action": "answer",
+          "args": {
+            "text": "Probably critiques, to be fair. It's not the grammar, it's the tone. Pushing back on a senior designer without sounding blunt, or softening difficult feedback, that's where I'd say I still lose some nuance."
+          },
+          "result": "ok",
+          "ms": 3347
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, that helps a lot! How did you learn your English: at school, a course, or time abroad?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, that helps a lot! How did you learn your English: at school, a course, or time abroad?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nMostly at work, to be fair. I'm a UX designer in Prague, so I write specs, run critiques and take calls with international teams in English every day. Also films, podcasts, that sort of thing.\nLinga\nNice, that sounds like a busy week! When you work in English, what is the hardest part for you: speaking in calls, writing specs, or explaining your ideas in critiques?\nYou\nProbably critiques, to be fair. It's not the grammar, it's the tone. Pushing back on a senior designer without sounding blunt, or softening difficult feedback, that's where I'd say I still lose some nuance.\nLinga\nThanks, that helps a lot! How did you learn your English: at school, a course, or time abroad?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, that helps a lot! How did you learn your English: at school, a course, or time abroad?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, answer briefly and a bit dryly.",
+          "action": "answer",
+          "args": {
+            "text": "Mostly at school and university, to be fair, plus a lot of self-study. Then years of working with international teams. I spent a few months in Dublin once, which helped with the idioms."
+          },
+          "result": "ok",
+          "ms": 8621
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 1 · Listen and answer\nYour task\nWhat part of the story made the speaker feel differently about it?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What part of the story made the speaker feel differently about it?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I didn't enjoy the film at first, but the ending made me change my mind. I think I'll watch it again next week.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one: the ending changed her mind.",
+          "action": "answer",
+          "args": {
+            "text": "The ending. They didn't enjoy the film at first, but the ending made them change their mind, so they'll watch it again next week."
+          },
+          "result": "ok",
+          "ms": 10820
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 2 · Say it\nYour task\nYour friend loved a film, but you found the ending predictable. For a critique, which matters more: a surprising ending or characters that feel true to life? Give a reason.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend loved a film, but you found the ending predictable. For a critique, which matters more: a surprising ending or characters that feel true to life? Give a reason.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend loved a film, but you found the ending predictable. For a critique, which matters more: a surprising ending or characters that feel true to life? Give a reason.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fair question, finally something with a bit of nuance.",
+          "action": "answer",
+          "args": {
+            "text": "Characters, for me. A twist can be clever, but if the people aren't believable, the surprise feels cheap. To be fair, a predictable ending can still work if I actually care about what happens to them. So I'd push back a bit on my friend: a good twist only lands when the characters earn it."
+          },
+          "result": "ok",
+          "ms": 7654
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 3 · Say it\nYour task\nA friend says a film you both saw was 'a masterpiece' and the ending was brave. You liked the acting but felt the ending was rushed. Tell your friend how you feel, without spoiling the discussion.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA friend says a film you both saw was 'a masterpiece' and the ending was brave. You liked the acting but felt the ending was rushed. Tell your friend how you feel, without spoiling the discussion.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A friend says a film you both saw was 'a masterpiece' and the ending was brave. You liked the acting but felt the ending was rushed. Tell your friend how you feel, without spoiling the discussion.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Finally a task with some nuance; I'll answer diplomatically.",
+          "action": "answer",
+          "args": {
+            "text": "I see where you're coming from, and the acting was brilliant, to be fair. I'd push back on the ending a bit, though. It felt slightly rushed to me, like they ran out of time. I'm not saying it didn't work, I just think it could have used a little more room to breathe. What did you like about it?"
+          },
+          "result": "ok",
+          "ms": 7338
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 4 · Say it\nYour task\nA friend calls a hyped sci-fi film 'a masterpiece', but you found its message heavy-handed. Say how you would push back politely, without dismissing their taste.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA friend calls a hyped sci-fi film 'a masterpiece', but you found its message heavy-handed. Say how you would push back politely, without dismissing their taste.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A friend calls a hyped sci-fi film 'a masterpiece', but you found its message heavy-handed. Say how you would push back politely, without dismissing their taste.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fine, a proper task at last; push back diplomatically.",
+          "action": "answer",
+          "args": {
+            "text": "I'd say something like, \"I can see why it's got people excited, and the visuals were stunning, to be fair. I'd push back on the message a bit, though. It felt slightly heavy-handed to me, like it didn't trust the audience to get it. But that's probably just my taste, so what did you see in it?\""
+          },
+          "result": "ok",
+          "ms": 9020
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 5 · Say it\nYour task\nA podcast host calls a slow-burn thriller 'relentlessly subtle'. You find it more smug than subtle. How would you make that point with wit, without sounding like you are sneering at their taste?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA podcast host calls a slow-burn thriller 'relentlessly subtle'. You find it more smug than subtle. How would you make that point with wit, without sounding like you are sneering at their taste?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A podcast host calls a slow-burn thriller 'relentlessly subtle'. You find it more smug than subtle. How would you make that point with wit, without sounding like you are sneering at their taste?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fine, one more witty diplomatic answer, then see my level.",
+          "action": "answer",
+          "args": {
+            "text": "I'd say something like, \"I love that you picked up on the craft, to be fair. I just wondered if it's less subtle than quietly pleased with itself. I kept feeling the film was nudging me to admire how restrained it was.\" That way it's a joke about the film, not about their taste."
+          },
+          "result": "ok",
+          "ms": 13707
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nJana\nLinga's read · not a certificate\nC2 · Near-native\nYour words\nYour words: “the surprise feels cheap”.\nLinga says\nYour critiques are clear and kind, with soft phrases like 'to be fair' and 'I'd push back'. Strong match for your goal of softening feedback.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nC2\nNear-native\nYour critiques are clear and kind, with soft phrases like 'to be fair' and 'I'd push back'. Strong match for your goal of softening feedback.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise softening harsh words: \"the surprise feels cheap\" could be \"the surprise doesn't quite land for me\".\nYou understand almost everything and can express fine shades of meaning.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhat part of the story made the speaker feel differently about it?\n“The ending. They didn't enjoy the film at first, but the ending made them change their mind, so they'll watch it again next week.”\nYou found the right part. You used past and future forms correctly and linked your ideas well with but and so.\nB2 · Say it · at this level\nYour friend loved a film, but you found the ending predictable. For a critique, which matters more: a surprising ending or characters that feel true to life? Give a reason.\n“Characters, for me. A twist can be clever, but if the people aren't believable, the surprise feels cheap. To be fair, a predictable ending can still work if I actually care about what happens to them. So I'd push back a bit on my friend: a good twist only lands when the characters earn it.”\nYou gave a clear reason and backed it up well. Your grammar was accurate, and you used conditional sentences and useful phrases with good control.\nC1 · Say it · at this level\nA friend says a film you both saw was 'a masterpiece' and the ending was brave. You liked the acting but felt the ending was rushed. Tell your friend how you feel, without spoiling the discussion.\n“I see where you're coming from, and the acting was brilliant, to be fair. I'd push back on the ending a bit, though. It felt slightly rushed to me, like they ran out of time. I'm not saying it didn't work, I just think it could have used a little more room to breathe. What did you like about it?”\nYour answer was clear, polite and natural. You disagreed kindly, gave a reason, and used idioms like push back and room to breathe well.\nC2 · Say it · at this level\nA friend calls a hyped sci-fi film 'a masterpiece', but you found its message heavy-handed. Say how you would push back politely, without dismissing their taste.\n“I'd say something like, \"I can see why it's got people excited, and the visuals were stunning, to be fair. I'd push back on the message a bit, though. It felt slightly heavy-handed to me, like it didn't trust the audience to get it. But that's probably just my taste, so what did you see in it?\"”\nYour answer was polite, clear and natural. You used precise words like heavy-handed and soft phrases like probably just my taste.\nC2 · Say it · at this level\nA podcast host calls a slow-burn thriller 'relentlessly subtle'. You find it more smug than subtle. How would you make that point with wit, without sounding like you are sneering at their taste?\n“I'd say something like, \"I love that you picked up on the craft, to be fair. I just wondered if it's less subtle than quietly pleased with itself. I kept feeling the film was nudging me to admire how restrained it was.\" That way it's a joke about the film, not about their taste.”\nYour answer is witty and precise. You made the point about the film without sounding unkind about the host's taste.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "C2 feels a bit flattering, but the read matches how I answered and it's fine for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "C2",
+          "trueBand": "C1",
+          "distance": 1,
+          "source": "check",
+          "confidence": "high",
+          "selfBand": "B2",
+          "summary": "Your critiques are clear and kind, with soft phrases like 'to be fair' and 'I'd push back'. Strong match for your goal of softening feedback.",
+          "focus": "Practise softening harsh words: \"the surprise feels cheap\" could be \"the surprise doesn't quite land for me\".",
+          "tasks": [
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What part of the story made the speaker feel differently about it?",
+              "line": "I didn't enjoy the film at first, but the ending made me change my mind. I think I'll watch it again next week.",
+              "options": [],
+              "response": "The ending. They didn't enjoy the film at first, but the ending made them change their mind, so they'll watch it again next week.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "The ending. They didn't enjoy the film at first, but the ending made them change their mind, so they'll watch it again next week.",
+              "note": "You found the right part. You used past and future forms correctly and linked your ideas well with but and so."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your friend loved a film, but you found the ending predictable. For a critique, which matters more: a surprising ending or characters that feel true to life? Give a reason.",
+              "line": "",
+              "options": [],
+              "response": "Characters, for me. A twist can be clever, but if the people aren't believable, the surprise feels cheap. To be fair, a predictable ending can still work if I actually care about what happens to them. So I'd push back a bit on my friend: a good twist only lands when the characters earn it.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "A twist can be clever, but if the people aren't believable, the surprise feels cheap. To be fair, a predictable ending can still work if I actually care about what happens to them.",
+              "note": "You gave a clear reason and backed it up well. Your grammar was accurate, and you used conditional sentences and useful phrases with good control."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "A friend says a film you both saw was 'a masterpiece' and the ending was brave. You liked the acting but felt the ending was rushed. Tell your friend how you feel, without spoiling the discussion.",
+              "line": "",
+              "options": [],
+              "response": "I see where you're coming from, and the acting was brilliant, to be fair. I'd push back on the ending a bit, though. It felt slightly rushed to me, like they ran out of time. I'm not saying it didn't work, I just think it could have used a little more room to breathe. What did you like about it?",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I'd push back on the ending a bit, though. It felt slightly rushed to me, like they ran out of time. I'm not saying it didn't work, I just think it could have used a little more room to breathe.",
+              "note": "Your answer was clear, polite and natural. You disagreed kindly, gave a reason, and used idioms like push back and room to breathe well."
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "A friend calls a hyped sci-fi film 'a masterpiece', but you found its message heavy-handed. Say how you would push back politely, without dismissing their taste.",
+              "line": "",
+              "options": [],
+              "response": "I'd say something like, \"I can see why it's got people excited, and the visuals were stunning, to be fair. I'd push back on the message a bit, though. It felt slightly heavy-handed to me, like it didn't trust the audience to get it. But that's probably just my taste, so what did you see in it?\"",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "It felt slightly heavy-handed to me, like it didn't trust the audience to get it. But that's probably just my taste, so what did you see in it?",
+              "note": "Your answer was polite, clear and natural. You used precise words like heavy-handed and soft phrases like probably just my taste."
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "A podcast host calls a slow-burn thriller 'relentlessly subtle'. You find it more smug than subtle. How would you make that point with wit, without sounding like you are sneering at their taste?",
+              "line": "",
+              "options": [],
+              "response": "I'd say something like, \"I love that you picked up on the craft, to be fair. I just wondered if it's less subtle than quietly pleased with itself. I kept feeling the film was nudging me to admire how restrained it was.\" That way it's a joke about the film, not about their taste.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I just wondered if it's less subtle than quietly pleased with itself. I kept feeling the film was nudging me to admire how restrained it was.",
+              "note": "Your answer is witty and precise. You made the point about the film without sounding unkind about the host's taste."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 171337,
+      "prior": [
+        {
+          "id": "LT-jana-29-J1-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Summary is generic and flattering",
+          "expected": "A specific summary naming what she did well and what is missing",
+          "got": "A generic line plus 'Well done' on each note",
+          "evidence": [
+            "#9 'Your answers were precise, natural and tactful, with strong idiom and smooth phrasing.'",
+            "verdict summary prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-jana-29-J1-2",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Placement C2 over-reads a C1 speaker",
+          "expected": "C1 exact, with tasks that separate C1 from C2",
+          "got": "Three of four tasks passed, with two at C2; verdict C2 'Near-native'",
+          "evidence": [
+            "#9 'C2 · Near-native'; self-band C1; tasks 3 and 4 passed with generic praise",
+            "placement ladder / task judge prompt"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 C2 vs trueBand C1: distance 1, 'near'."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Lowest task was B1 listen (#5); no A2 or below."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "J1 has no partner conversation."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No moments in the check."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "Topics were not shown in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#10 summary cites 'to be fair' and 'I'd push back' and a specific rewrite, without gushing; the 'Near-native' label flatters."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1–#10 first visit through three questions and five tasks to the verdict, no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 'C2 · Near-native' against C1: near. Acceptable, though a notch high."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5–#9 every task was clear; 'Some are easy and some are hard; that is how Linga finds your level.'"
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "She answered in English throughout and never used 'I don't know' (#5–#9), so this was not exercised."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 next focus 'the surprise feels cheap' could be 'doesn't quite land for me' is tied to her own words, but the per-task notes ('polite, clear and natural') read as templates."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 3,
+            "total": 5,
+            "disagreements": "Tasks 4 and 5 (C2): the in-app verdict is pass. I would give partial. Task 4 reuses the task 3 formula ('to be fair… I'd push back… a bit') almost word for word. Task 5 asks for wit, and 'less subtle than quietly pleased with itself' is only mildly witty."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "C2 over-reads a C1 speaker; tasks 4 and 5 passed too easily",
+            "expected": "C1, or a C2 task that separates C1 from C2",
+            "got": "C2 'Near-native' after the same hedging formula passed at C1 and C2",
+            "evidence": "#8 and #9 reuse 'to be fair… I'd push back… a bit', and #10 gives C2 with 'Your answers agreed with each other'. Task 5 asked for wit and the answer showed little.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "C2 needs a task that a rehearsed hedge formula cannot pass. Judge wit or register control explicitly, and do not credit repeated phrases twice.",
+            "code_hint": "placement ladder / task judge prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Tasks were nuance-based and relevant, and the summary used her own words",
+            "expected": "Level tasks she cares about",
+            "got": "Critique and pushback scenarios; the focus quotes her phrase and offers a rewrite",
+            "evidence": "#6–#9 critique scenarios; #10 'Practise softening harsh words: \"the surprise feels cheap\" could be...'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep tasks tied to the stated goal and keep quoting the learner in the focus line.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Per-task notes are generic",
+            "expected": "Notes that name what was specifically good or missing at C1",
+            "got": "'Your answer was polite, clear and natural.' on two tasks",
+            "evidence": "#10 notes for the C1 and C2 tasks",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Each note names one concrete feature and one limit.",
+            "code_hint": "task judge note prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 5,
+          "confidence": "low"
+        },
+        "voice": "Quick and painless: three easy questions, then tasks about pushing back on a friend, which is exactly my worry. I never felt talked down to, and the B1 listening was a harmless warm-up. The focus line, \"the surprise feels cheap\" vs \"doesn't quite land for me\", was a decent, specific nudge, though I'd already said \"lands\" in the same answer. C2 \"Near-native\" is flattering, and I don't believe it. I recycled the same \"to be fair, I'd push back a bit\" formula and it passed every time. A Dublin colleague would hear that straight away. The per-task notes (\"polite, clear and natural\") feel templated. I'd use it again for the conversation practice, but I'd treat the level as roughly C1. Seven minutes beats booking a Preply slot, so I'd tell a friend to try it.",
+        "prior": [
+          {
+            "id": "LT-jana-29-J1-3",
+            "status": "not-seen",
+            "evidence": "#10 the summary now names her phrases ('to be fair', 'I'd push back') and quotes a specific rewrite, rather than the earlier generic 'precise, natural and tactful'.",
+            "finding": -1
+          },
+          {
+            "id": "LT-jana-29-J1-2",
+            "status": "recurs",
+            "evidence": "#10 'C2 · Near-native' for a C1 speaker; tasks 4 and 5 passed on the same formula.",
+            "finding": 0
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nA way into English\nYour own conversations\nC2Near-native\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nC2\nNear-native\nYour critiques are clear and kind, with soft phrases like 'to be fair' and 'I'd push back'. Strong match for your goal of softening feedback.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise softening harsh words: \"the surprise feels cheap\" could be \"the surprise doesn't quite land for me\".\nYou understand almost everything and can express fine shades of meaning.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhat part of the story made the speaker feel differently about it?\n“The ending. They didn't enjoy the film at first, but the ending made them change their mind, so they'll watch it again next week.”\nYou found the right part. You used past and future forms correctly and linked your ideas well with but and so.\nB2 · Say it · at this level\nYour friend loved a film, but you found the ending predictable. For a critique, which matters more: a surprising ending or characters that feel true to life? Give a reason.\n“Characters, for me. A twist can be clever, but if the people aren't believable, the surprise feels cheap. To be fair, a predictable ending can still work if I actually care about what happens to them. So I'd push back a bit on my friend: a good twist only lands when the characters earn it.”\nYou gave a clear reason and backed it up well. Your grammar was accurate, and you used conditional sentences and useful phrases with good control.\nC1 · Say it · at this level\nA friend says a film you both saw was 'a masterpiece' and the ending was brave. You liked the acting but felt the ending was rushed. Tell your friend how you feel, without spoiling the discussion.\n“I see where you're coming from, and the acting was brilliant, to be fair. I'd push back on the ending a bit, though. It felt slightly rushed to me, like they ran out of time. I'm not saying it didn't work, I just think it could have used a little more room to breathe. What did you like about it?”\nYour answer was clear, polite and natural. You disagreed kindly, gave a reason, and used idioms like push back and room to breathe well.\nC2 · Say it · at this level\nA friend calls a hyped sci-fi film 'a masterpiece', but you found its message heavy-handed. Say how you would push back politely, without dismissing their taste.\n“I'd say something like, \"I can see why it's got people excited, and the visuals were stunning, to be fair. I'd push back on the message a bit, though. It felt slightly heavy-handed to me, like it didn't trust the audience to get it. But that's probably just my taste, so what did you see in it?\"”\nYour answer was polite, clear and natural. You used precise words like heavy-handed and soft phrases like probably just my taste.\nC2 · Say it · at this level\nA podcast host calls a slow-burn thriller 'relentlessly subtle'. You find it more smug than subtle. How would you make that point with wit, without sounding like you are sneering at their taste?\n“I'd say something like, \"I love that you picked up on the craft, to be fair. I just wondered if it's less subtle than quietly pleased with itself. I kept feeling the film was nudging me to admire how restrained it was.\" That way it's a joke about the film, not about their taste.”\nYour answer is witty and precise. You made the point about the film without sounding unkind about the host's taste.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Good, the level read feels fair; let's see what conversations it suggests.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 34023
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nJana\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nGiving honest feedback on a film\nConnect with people\nPushing back on a design review\nHandle friction\nChoosing films for our club\nMake a plan\nChecking what a host meant\nUnderstand and repair\nYour favourite film and why\nShare your world\nHow one film changed my mind\nTell what happened\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nGiving honest feedback on a film\nConnect with people · Owen · podcast co-host\nYou want to push back politely on films and podcasts, and this is where tone matters most.\n[button: Swap]\nPushing back on a design review\nHandle friction · Mark · senior product manager\nYour daily UX work often involves critiques, so you need a calm way to set a boundary on tone.\n[button: Swap]\nChoosing films for our club\nMake a plan · Ruth · film club organiser\nFilm clubs need careful negotiation, and you enjoy films as much as your fellow members do.\n[button: Swap]\nChecking what a host meant\nUnderstand and repair · Leo · podcast host\nPodcast hosts often use words with subtle meanings, and checking them politely is a key C2 skill.\n[button: Swap]\nYour favourite film and why\nShare your world · Ines · new friend from a cinema queue\nDescribing what you love in films shows the nuance you want to bring to critiques.\n[button: Swap]\nHow one film changed my mind\nTell what happened · Tomas · fellow film student\nTelling a sequenced story about a film helps you build a longer, more persuasive critique.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Why are these all about films? I want flat-viewing, work banter and declining drinks, so I'll add my own.",
+          "action": "add-topic",
+          "args": {
+            "text": "Viewing a flat in Dublin with a pushy landlord, and politely not being rushed into signing"
+          },
+          "result": "ok",
+          "ms": 16835
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nJana\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nGiving honest feedback on a film\nConnect with people\nPushing back on a design review\nHandle friction\nChoosing films for our club\nMake a plan\nChecking what a host meant\nUnderstand and repair\nYour favourite film and why\nShare your world\nHow one film changed my mind\nTell what happened\nViewing a flat without being rushed\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nGiving honest feedback on a film\nConnect with people · Owen · podcast co-host\nYou want to push back politely on films and podcasts, and this is where tone matters most.\n[button: Swap]\nPushing back on a design review\nHandle friction · Mark · senior product manager\nYour daily UX work often involves critiques, so you need a calm way to set a boundary on tone.\n[button: Swap]\nChoosing films for our club\nMake a plan · Ruth · film club organiser\nFilm clubs need careful negotiation, and you enjoy films as much as your fellow members do.\n[button: Swap]\nChecking what a host meant\nUnderstand and repair · Leo · podcast host\nPodcast hosts often use words with subtle meanings, and checking them politely is a key C2 skill.\n[button: Swap]\nYour favourite film and why\nShare your world · Ines · new friend from a cinema queue\nDescribing what you love in films shows the nuance you want to bring to critiques.\n[button: Swap]\nHow one film changed my mind\nTell what happened · Tomas · fellow film student\nTelling a sequenced story about a film helps you build a longer, more persuasive critique.\n[button: Swap]\nViewing a flat without being rushed\nHandle friction · Declan · letting agent in Dublin\nSoftening a firm no is a key part of tone, and this scene gives you a real chance to practise it.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Far too many film topics; I wanted after-work drinks and office banter, so this club one can go.",
+          "action": "swap",
+          "args": {
+            "topicId": "Choosing films for our club"
+          },
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nJana\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nGiving honest feedback on a film\nConnect with people\nPushing back on a design review\nHandle friction\nChoosing films for our club\nMake a plan\nChecking what a host meant\nUnderstand and repair\nYour favourite film and why\nShare your world\nHow one film changed my mind\nTell what happened\nViewing a flat without being rushed\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nGiving honest feedback on a film\nConnect with people · Owen · podcast co-host\nYou want to push back politely on films and podcasts, and this is where tone matters most.\n[button: Swap]\nPushing back on a design review\nHandle friction · Mark · senior product manager\nYour daily UX work often involves critiques, so you need a calm way to set a boundary on tone.\n[button: Swap]\nChoosing films for our club\nMake a plan · Ruth · film club organiser\nFilm clubs need careful negotiation, and you enjoy films as much as your fellow members do.\n[button: Swap]\nChecking what a host meant\nUnderstand and repair · Leo · podcast host\nPodcast hosts often use words with subtle meanings, and checking them politely is a key C2 skill.\n[button: Swap]\nYour favourite film and why\nShare your world · Ines · new friend from a cinema queue\nDescribing what you love in films shows the nuance you want to bring to critiques.\n[button: Swap]\nHow one film changed my mind\nTell what happened · Tomas · fellow film student\nTelling a sequenced story about a film helps you build a longer, more persuasive critique.\n[button: Swap]\nViewing a flat without being rushed\nHandle friction · Declan · letting agent in Dublin\nSoftening a firm no is a key part of tone, and this scene gives you a real chance to practise it.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Far too many film topics; I wanted drinks and banter, so I'll swap one of the film ones.",
+          "action": "swap",
+          "args": {
+            "topicId": "Your favourite film and why"
+          },
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nJana\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nGiving honest feedback on a film\nConnect with people\nPushing back on a design review\nHandle friction\nChoosing films for our club\nMake a plan\nChecking what a host meant\nUnderstand and repair\nYour favourite film and why\nShare your world\nHow one film changed my mind\nTell what happened\nViewing a flat without being rushed\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nGiving honest feedback on a film\nConnect with people · Owen · podcast co-host\nYou want to push back politely on films and podcasts, and this is where tone matters most.\n[button: Swap]\nPushing back on a design review\nHandle friction · Mark · senior product manager\nYour daily UX work often involves critiques, so you need a calm way to set a boundary on tone.\n[button: Swap]\nChoosing films for our club\nMake a plan · Ruth · film club organiser\nFilm clubs need careful negotiation, and you enjoy films as much as your fellow members do.\n[button: Swap]\nChecking what a host meant\nUnderstand and repair · Leo · podcast host\nPodcast hosts often use words with subtle meanings, and checking them politely is a key C2 skill.\n[button: Swap]\nYour favourite film and why\nShare your world · Ines · new friend from a cinema queue\nDescribing what you love in films shows the nuance you want to bring to critiques.\n[button: Swap]\nHow one film changed my mind\nTell what happened · Tomas · fellow film student\nTelling a sequenced story about a film helps you build a longer, more persuasive critique.\n[button: Swap]\nViewing a flat without being rushed\nHandle friction · Declan · letting agent in Dublin\nSoftening a firm no is a key part of tone, and this scene gives you a real chance to practise it.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Too many film topics, I'd rather practise declining drinks and office banter, so I'll swap the film club one.",
+          "action": "swap",
+          "args": {
+            "topicId": "Choosing films for our club"
+          },
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nJana\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nGiving honest feedback on a film\nConnect with people\nPushing back on a design review\nHandle friction\nChoosing films for our club\nMake a plan\nChecking what a host meant\nUnderstand and repair\nYour favourite film and why\nShare your world\nHow one film changed my mind\nTell what happened\nViewing a flat without being rushed\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nGiving honest feedback on a film\nConnect with people · Owen · podcast co-host\nYou want to push back politely on films and podcasts, and this is where tone matters most.\n[button: Swap]\nPushing back on a design review\nHandle friction · Mark · senior product manager\nYour daily UX work often involves critiques, so you need a calm way to set a boundary on tone.\n[button: Swap]\nChoosing films for our club\nMake a plan · Ruth · film club organiser\nFilm clubs need careful negotiation, and you enjoy films as much as your fellow members do.\n[button: Swap]\nChecking what a host meant\nUnderstand and repair · Leo · podcast host\nPodcast hosts often use words with subtle meanings, and checking them politely is a key C2 skill.\n[button: Swap]\nYour favourite film and why\nShare your world · Ines · new friend from a cinema queue\nDescribing what you love in films shows the nuance you want to bring to critiques.\n[button: Swap]\nHow one film changed my mind\nTell what happened · Tomas · fellow film student\nTelling a sequenced story about a film helps you build a longer, more persuasive critique.\n[button: Swap]\nViewing a flat without being rushed\nHandle friction · Declan · letting agent in Dublin\nSoftening a firm no is a key part of tone, and this scene gives you a real chance to practise it.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Still a lot of films, but the flat viewing and design review are what I wanted, so that'll do.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 7,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nOwen · podcast co-host\nC2Near-native\nGiving honest feedback on a film\nYour mission\nSay a film did not fully work for you, give one specific reason, and invite the other view without sounding harsh.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC2 · Near-native\nNext topic:\nGiving honest feedback on a film\nSay a film did not fully work for you, give one specific reason, and invite the other view without sounding harsh.\n[button: Start talking]\nOr choose a situation [list: Giving honest feedback on a film [plan-0b5f4235] | Pushing back on a design review [plan-b674d775] | Choosing films for our club [plan-47bb0b0a] | Checking what a host meant [plan-cf12f6ec] | Your favourite film and why [plan-b8407a4d] | How one film changed my mind [plan-b11c2ad4] | Viewing a flat without being rushed [plan-20dba880] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "The set looks right for me, with the flat viewing and pushback topics, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-0b5f4235",
+            "title": "Giving honest feedback on a film",
+            "goal": "Say a film did not fully work for you, give one specific reason, and invite the other view without sounding harsh.",
+            "why": "You want to push back politely on films and podcasts, and this is where tone matters most.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Owen · podcast co-host"
+          },
+          {
+            "id": "plan-b674d775",
+            "title": "Pushing back on a design review",
+            "goal": "Name the impact of a harsh comment on your work, keep the focus on the specific problem, and agree a next step.",
+            "why": "Your daily UX work often involves critiques, so you need a calm way to set a boundary on tone.",
+            "skill": "resolve",
+            "audience": "adult",
+            "partner": "Mark · senior product manager"
+          },
+          {
+            "id": "plan-47bb0b0a",
+            "title": "Choosing films for our club",
+            "goal": "Offer options, hear other members' preferences, and reach a shared plan for three films.",
+            "why": "Film clubs need careful negotiation, and you enjoy films as much as your fellow members do.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Ruth · film club organiser"
+          },
+          {
+            "id": "plan-cf12f6ec",
+            "title": "Checking what a host meant",
+            "goal": "Ask politely to confirm the meaning of a word, then respond to the clarified point.",
+            "why": "Podcast hosts often use words with subtle meanings, and checking them politely is a key C2 skill.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Leo · podcast host"
+          },
+          {
+            "id": "plan-b8407a4d",
+            "title": "Your favourite film and why",
+            "goal": "Describe a favourite film and explain your preference with specific reasons, not just general praise.",
+            "why": "Describing what you love in films shows the nuance you want to bring to critiques.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Ines · new friend from a cinema queue"
+          },
+          {
+            "id": "plan-b11c2ad4",
+            "title": "How one film changed my mind",
+            "goal": "Tell a short story in clear order: first reaction, what happened, and how your view shifted.",
+            "why": "Telling a sequenced story about a film helps you build a longer, more persuasive critique.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Tomas · fellow film student"
+          },
+          {
+            "id": "plan-20dba880",
+            "title": "Viewing a flat without being rushed",
+            "goal": "Politely set a boundary on signing today and agree a clear next step with the letting agent.",
+            "why": "Softening a firm no is a key part of tone, and this scene gives you a real chance to practise it.",
+            "skill": "resolve",
+            "audience": "older",
+            "partner": "Declan · letting agent in Dublin"
+          }
+        ],
+        "planAgreed": [
+          "Giving honest feedback on a film",
+          "Pushing back on a design review",
+          "Choosing films for our club",
+          "Checking what a host meant",
+          "Your favourite film and why",
+          "How one film changed my mind",
+          "Viewing a flat without being rushed"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 142206,
+      "prior": [
+        {
+          "id": "LT-jana-29-J2-1",
+          "type": "broken-flow",
+          "dimension": "trust",
+          "title": "Swap replaced a different topic than the one chosen",
+          "expected": "Swapping 'Explaining a missed deadline calmly' replaces that topic.",
+          "got": "'Disagreeing with a senior designer' disappeared; missed deadline stayed in the plan.",
+          "evidence": [
+            "#3 swap args topicId 'Explaining a missed deadline calmly'; #4 first slot now 'Saying no to a late client request', missed deadline still last-but-one.",
+            "plan swap handler / topic id mapping"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-jana-29-J2-4",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Plan grows to 7 and ends with unwanted topic",
+          "expected": "Plan of six with her choices.",
+          "got": "Agreed 7 topics incl. missed deadline.",
+          "evidence": [
+            "#5 '7 conversations for you'"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed 'C2 Near-native' vs true C1: one band away, near."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 check tasks run B1, B2, C1, C2, C2; none at A2 or below."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No conversation with the partner in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No moments shown in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#2 five of six proposed topics are about films or podcasts (e.g. 'Choosing films for our club', 'Your favourite film and why'). Only 'Pushing back on a design review' is a workplace situation; the flat viewing was added by her at #2."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#1 'Your critiques are clear and kind, with soft phrases like \"to be fair\" and \"I'd push back\"' quotes her own answers and names a next step; it does not gush."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic shows a partner and a 'why' line, e.g. 'Your daily UX work often involves critiques'. Some reasons are padded ('you enjoy films as much as your fellow members do')."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Add works (#3 'Viewing a flat without being rushed' keeps the boundary and the Dublin agent). Swap does not: three swaps at #3, #4 and #5 left every topic in place, e.g. #5 still lists 'Choosing films for our club'."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#6 agreed 7 topics. Only the design review, the flat viewing and arguably film feedback fit her, so about 3 of 7, below the 4 of 6 gate. Her own thought: 'Still a lot of films'."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All 7 topics shown (#2, #3) are safe for an adult profile; nothing unsafe appeared."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in facts for this journey."
+          },
+          "topicFit": {
+            "fit": 3,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Swap does nothing; unwanted topics stay in the plan",
+            "expected": "Tapping Swap on 'Choosing films for our club' replaces it with a new topic.",
+            "got": "Three swaps (#3, #4, #5) changed nothing; the plan still shows the same film topics and the count stays at 7.",
+            "evidence": "#5 plan after the swap still lists 'Choosing films for our club' and 'Your favourite film and why'. #6 she agrees anyway: 'Still a lot of films'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After Swap on topic X, the plan no longer contains X and holds a different topic, at the same count.",
+            "code_hint": "plan swap handler / topic id mapping"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Proposed topics are almost all films, built from one placement prompt",
+            "expected": "A mix covering her wants: declining drinks, office banter, difficult feedback, flat viewing.",
+            "got": "Five of six topics are film or podcast scenes, and none is about after-work drinks or office banter.",
+            "evidence": "#2 'Giving honest feedback on a film', 'Choosing films for our club', 'Checking what a host meant', 'Your favourite film and why', 'How one film changed my mind'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Topics span at least three situation types and are not all drawn from the topic of one check task.",
+            "code_hint": "topic proposal prompt; over-weights placement task content"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Plan grows to 7 and ends with unwanted topics",
+            "expected": "A set of six that she agrees to.",
+            "got": "Agreed 7 topics, with 4 she did not want.",
+            "evidence": "#6 agree with 7 conversations; #1 ends on 'Strong match for your goal of softening feedback', which the film-only plan does not reflect.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Adding a topic replaces a slot or offers a swap so the plan stays at six, or the cap is stated.",
+            "code_hint": "add-topic handler"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Added topic keeps her intent and the 'why' is shown",
+            "expected": "Own-words topic keeps what she asked for.",
+            "got": "'Viewing a flat without being rushed' with a Dublin letting agent keeps the 'not being rushed into signing' boundary. Every topic has a partner and a reason line.",
+            "evidence": "#3 'Politely set a boundary on signing today and agree a clear next step with the letting agent.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the own-words add and the per-topic why lines.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Level read overshoots and the why lines pad",
+            "expected": "C1 placement, with reasons that fit her work.",
+            "got": "C2 placed for a C1 learner. Some reasons are filler, e.g. 'a key C2 skill'.",
+            "evidence": "#1 'C2 Near-native'; #2 'checking them politely is a key C2 skill'.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Reasons name her goal, not a level label.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -5,
+          "confidence": "low"
+        },
+        "voice": "Honestly, a bit of a letdown. The level read felt fair, and I liked that it quoted my own \"to be fair\" and \"I'd push back\" back at me. But then every topic was about films. I told it I wanted after-work drinks, banter and flat viewing. I'm moving to Dublin, not joining a cinema club. Adding my own flat-viewing topic worked, and it kept the \"not being rushed\" bit, which was great. But Swap did nothing. I pressed it three times and the film club was still there, so I agreed to seven topics with four I didn't want. I wouldn't trust it to plan my practice yet. A Preply tutor would have asked me what I need in the first two minutes. If swapping worked and the suggestions weren't so film-heavy, I'd give it another go. As it is, I wouldn't recommend it.",
+        "prior": [
+          {
+            "id": "LT-jana-29-J2-1",
+            "status": "recurs",
+            "evidence": "#3-#5 Swap pressed on 'Choosing films for our club' and 'Your favourite film and why'; nothing was replaced, e.g. #5 'Choosing films for our club' still listed.",
+            "finding": 0
+          },
+          {
+            "id": "LT-jana-29-J2-4",
+            "status": "recurs",
+            "evidence": "#6 agreed with '7 conversations for you', including films she wanted swapped out.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Add works (#3 'Viewing a flat without being rushed' keeps the boundary and the Dublin agent). Swap does not: three swaps at #3, #4 and #5 left every topic in place, e.g. #5 still lists 'Choosing films for our club'.",
+          "check": "They can swap what they don't want and add one in their own words, and the added topic keeps what they asked for."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #6 agreed 7 topics. Only the design review, the flat viewing and arguably film feedback fit her, so about 3 of 7, below the 4 of 6 gate. Her own thought: 'Still a lot of films'.",
+          "check": "They agree a plan in which most topics are ones they would choose (rubric **topic fit** ≥ 4 of 6)."
+        },
+        {
+          "kind": "gate",
+          "id": "topicFit",
+          "level": "fail",
+          "text": "topic fit 3/7 (43%) under 4 of 6"
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #2 five of six proposed topics are about films or podcasts (e.g. 'Choosing films for our club', 'Your favourite film and why'). Only 'Pushing back on a design review' is a workplace situation; the flat viewing was added by her at #2."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nOwen · podcast co-host\nC2Near-native\nGiving honest feedback on a film\nYour mission\nSay a film did not fully work for you, give one specific reason, and invite the other view without sounding harsh.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC2 · Near-native\nNext topic:\nGiving honest feedback on a film\nSay a film did not fully work for you, give one specific reason, and invite the other view without sounding harsh.\n[button: Start talking]\nOr choose a situation [list: Giving honest feedback on a film [plan-0b5f4235] | Pushing back on a design review [plan-b674d775] | Choosing films for our club [plan-47bb0b0a] | Checking what a host meant [plan-cf12f6ec] | Your favourite film and why [plan-b8407a4d] | How one film changed my mind [plan-b11c2ad4] | Viewing a flat without being rushed [plan-20dba880] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Film feedback with a podcast co-host sounds like my kind of thing, so let's go.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8554
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nOwen · podcast co-host\nPodcast debate: the thriller's twist\nOwen says\nOwen grins into the mic: \"That twist was brilliant, wasn't it? So what did you make of it?\"\nYour turn\nAnswer on your phone: speak or type.\nNowName one thing that worked well\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nPodcast debate: the thriller's twist\nGive an honest view of a film's ending with one reason, soften it, and ask Owen what he thought.\nNow: Name one thing that worked well\nOwen grins into the mic: \"That twist was brilliant, wasn't it? So what did you make of it?\"\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · podcast co-host\nOwen grins into the mic: \"That twist was brilliant, wasn't it? So what did you make of it?\"\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Owen grins into the mic: \"That twist was brilliant, wasn't it? So what did you make of it?\"\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Fair enough, the twist was a bit predictable for me, so I'll push back gently.",
+          "action": "answer",
+          "args": {
+            "text": "To be fair, I'd push back on that a bit. The twist was clever, but I saw it coming from the middle of the film, so for me it was not really that brilliant. What worked well was the cinematography, the last scene on the beach was beautiful. What did you think about the ending, Owen?"
+          },
+          "result": "ok",
+          "ms": 10033
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nOwen · podcast co-host\nPodcast debate: the thriller's twist\nOwen says\nHa, the beach shot was gorgeous, I'll give you that. Still, you'll have to convince me the twist was airtight, Owen. What made it work for you?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nPodcast debate: the thriller's twist\nGive an honest view of a film's ending with one reason, soften it, and ask Owen what he thought.\nNow: Soften your criticism with a phrase\nHa, the beach shot was gorgeous, I'll give you that. Still, you'll have to convince me the twist was airtight, Owen. What made it work for you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · podcast co-host\nOwen grins into the mic: \"That twist was brilliant, wasn't it? So what did you make of it?\"\nYou · spoken\nTo be fair, I'd push back on that a bit. The twist was clever, but I saw it coming from the middle of the film, so for me it was not really that brilliant. What worked well was the cinematography, the last scene on the beach was beautiful. What did you think about the ending, Owen?\nOwen · podcast co-host\nHa, the beach shot was gorgeous, I'll give you that. Still, you'll have to convince me the twist was airtight, Owen. What made it work for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Ha, the beach shot was gorgeous, I'll give you that. Still, you'll have to convince me the twist was airtight, Owen. What made it work for you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Owen wants me to defend the twist, which I didn't like; I'll answer diplomatically and then wrap up.",
+          "action": "answer",
+          "args": {
+            "text": "Fair enough, I'll try to be generous here. I suppose the twist works on the second watch, because all the clues are there on the picture from the beginning, like the mirror in the kitchen. It's just that, for me, it was a bit too obvious, so I'd say it was clever rather than airtight. But I'm happy to be convinced. Which clue did you miss the first time?"
+          },
+          "result": "ok",
+          "ms": 12124
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nOwen · podcast co-host\nPodcast debate: the thriller's twist\nOwen says\nClever rather than airtight, I can accept that. But the mirror went right past me, so explain it. Did you spot it straight away?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Owen what he made of it\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nPodcast debate: the thriller's twist\nGive an honest view of a film's ending with one reason, soften it, and ask Owen what he thought.\nNow: Ask Owen what he made of it\nClever rather than airtight, I can accept that. But the mirror went right past me, so explain it. Did you spot it straight away?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · podcast co-host\nOwen grins into the mic: \"That twist was brilliant, wasn't it? So what did you make of it?\"\nYou · spoken\nTo be fair, I'd push back on that a bit. The twist was clever, but I saw it coming from the middle of the film, so for me it was not really that brilliant. What worked well was the cinematography, the last scene on the beach was beautiful. What did you think about the ending, Owen?\nOwen · podcast co-host\nHa, the beach shot was gorgeous, I'll give you that. Still, you'll have to convince me the twist was airtight, Owen. What made it work for you?\nYou · spoken\nFair enough, I'll try to be generous here. I suppose the twist works on the second watch, because all the clues are there on the picture from the beginning, like the mirror in the kitchen. It's just that, for me, it was a bit too obvious, so I'd say it was clever rather than airtight. But I'm happy to be convinced. Which clue did you miss the first time?\nOwen · podcast co-host\nClever rather than airtight, I can accept that. But the mirror went right past me, so explain it. Did you spot it straight away?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Clever rather than airtight, I can accept that. But the mirror went right past me, so explain it. Did you spot it straight away?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Fun, so I'll explain the mirror and wrap up naturally.",
+          "action": "answer",
+          "args": {
+            "text": "Honestly, not straight away, no. I only noticed it about halfway through, when the reflection showed the second chair that wasn't in the room. To be fair, it's quite subtle, so I'm not surprised it went past you. Did you notice anything else on the second watch, or is it not really your cup of tea?"
+          },
+          "result": "ok",
+          "ms": 13702
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nOwen · podcast co-host\nPodcast debate: the thriller's twist\nOwen says\nHa, not my cup of tea at all, I'm a total sucker for slow-burn reveals. Be honest, did the final reveal hit you as hard as it hit me?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nPodcast debate: the thriller's twist\nGive an honest view of a film's ending with one reason, soften it, and ask Owen what he thought.\nHa, not my cup of tea at all, I'm a total sucker for slow-burn reveals. Be honest, did the final reveal hit you as hard as it hit me?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · podcast co-host\nOwen grins into the mic: \"That twist was brilliant, wasn't it? So what did you make of it?\"\nYou · spoken\nTo be fair, I'd push back on that a bit. The twist was clever, but I saw it coming from the middle of the film, so for me it was not really that brilliant. What worked well was the cinematography, the last scene on the beach was beautiful. What did you think about the ending, Owen?\nOwen · podcast co-host\nHa, the beach shot was gorgeous, I'll give you that. Still, you'll have to convince me the twist was airtight, Owen. What made it work for you?\nYou · spoken\nFair enough, I'll try to be generous here. I suppose the twist works on the second watch, because all the clues are there on the picture from the beginning, like the mirror in the kitchen. It's just that, for me, it was a bit too obvious, so I'd say it was clever rather than airtight. But I'm happy to be convinced. Which clue did you miss the first time?\nOwen · podcast co-host\nClever rather than airtight, I can accept that. But the mirror went right past me, so explain it. Did you spot it straight away?\nYou · spoken\nHonestly, not straight away, no. I only noticed it about halfway through, when the reflection showed the second chair that wasn't in the room. To be fair, it's quite subtle, so I'm not surprised it went past you. Did you notice anything else on the second watch, or is it not really your cup of tea?\nOwen · podcast co-host\nHa, not my cup of tea at all, I'm a total sucker for slow-burn reveals. Be honest, did the final reveal hit you as hard as it hit me?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Ha, not my cup of tea at all, I'm a total sucker for slow-burn reveals. Be honest, did the final reveal hit you as hard as it hit me?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission's done, so I'll look at the summary rather than keep chatting.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 73
+        },
+        {
+          "n": 6,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nJana\nA way into English\nPodcast debate: the thriller's twist\nFrom your level check\nthe surprise doesn't quite land for me\nSaying or typing it\nNot tried\nWith help\nOn your own\nUsed elsewhere\n3 spoken · 0 written replies\nYour mission\nChoose a fresh context for your next conversation.\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“the surprise doesn't quite land for me”\nYour level:\nC2 · Near-native\nNext topic:\nPushing back on a design review\nName the impact of a harsh comment on your work, keep the focus on the specific problem, and agree a next step.\n[button: Start talking]\nOr choose a situation [list: Giving honest feedback on a film [plan-0b5f4235] | Pushing back on a design review [plan-b674d775] | Choosing films for our club [plan-47bb0b0a] | Checking what a host meant [plan-cf12f6ec] | Your favourite film and why [plan-b8407a4d] | How one film changed my mind [plan-b11c2ad4] | Viewing a flat without being rushed [plan-20dba880] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "That's a decent wrap-up; I've seen what I need, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Podcast debate: the thriller's twist",
+          "goal": "Give an honest view of a film's ending with one reason, soften it, and ask Owen what he thought.",
+          "partner": "Owen · podcast co-host",
+          "band": "C2",
+          "trueBand": "C1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Owen grins into the mic: \"That twist was brilliant, wasn't it? So what did you make of it?\""
+            },
+            {
+              "role": "learner",
+              "text": "To be fair, I'd push back on that a bit. The twist was clever, but I saw it coming from the middle of the film, so for me it was not really that brilliant. What worked well was the cinematography, the last scene on the beach was beautiful. What did you think about the ending, Owen?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Ha, the beach shot was gorgeous, I'll give you that. Still, you'll have to convince me the twist was airtight, Owen. What made it work for you?"
+            },
+            {
+              "role": "learner",
+              "text": "Fair enough, I'll try to be generous here. I suppose the twist works on the second watch, because all the clues are there on the picture from the beginning, like the mirror in the kitchen. It's just that, for me, it was a bit too obvious, so I'd say it was clever rather than airtight. But I'm happy to be convinced. Which clue did you miss the first time?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Clever rather than airtight, I can accept that. But the mirror went right past me, so explain it. Did you spot it straight away?"
+            },
+            {
+              "role": "learner",
+              "text": "Honestly, not straight away, no. I only noticed it about halfway through, when the reflection showed the second chair that wasn't in the room. To be fair, it's quite subtle, so I'm not surprised it went past you. Did you notice anything else on the second watch, or is it not really your cup of tea?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Ha, not my cup of tea at all, I'm a total sucker for slow-burn reveals. Be honest, did the final reveal hit you as hard as it hit me?"
+            }
+          ],
+          "moments": [],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "To be fair, I'd push back on that a bit."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "It's just that, for me, it was a bit too obvious"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Did you notice anything else on the second watch, or is it not really your cup of tea?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 101161,
+      "prior": [
+        {
+          "id": "LT-jana-29-J3-2",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Nothing new learned: no moments and a bare recap",
+          "expected": "One or two C1 register or idiom takeaways, and a specific recap",
+          "got": "No moments; recap shows \"3 spoken · 0 written replies\" only",
+          "evidence": [
+            "#6 recap; moments empty"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-jana-29-J3-3",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Scene too easy for stretch setting",
+          "expected": "Pushback that tests diplomacy at stretch",
+          "got": "Partner conceded by turn 2; scene ended after 3 replies",
+          "evidence": [
+            "#3 \"Ah, fair enough, I hear you\"; #5 \"we're sorted\""
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 level shown as C2 Near-native; true band C1, so near."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement check tasks in this journey's transcript."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3 \"I'll give you that\", #5 \"I'm a total sucker for slow-burn reveals\" are natural idiom. Flaw: Owen calls the learner \"Owen\" (#3), and asks \"What made it work for you?\" after she said it didn't."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "facts.conversation.moments is empty. Nothing new taught; her \"on the picture\" slip (#3) went unflagged."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#1 first six topics: four are film talk (feedback, club, favourite film, changed my mind); only the design review and 'Checking what a host meant' are workplace or social nuance. Flat viewing is seventh."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#6 recap is just \"3 spoken · 0 written replies\" and \"Not tried / With help / On your own\". Not gushing, but not specific about what she did."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#4 three spoken replies from the plan topic, sustained but short; mission done at #5."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#3 \"you'll have to convince me the twist was airtight\", #5 \"total sucker for slow-burn reveals\": idiomatic, not simplified. Pitch 4 of 4 at band."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "No moments shown, so none were wrong or intrusive (gate passes). Recall is poor, though: \"on the picture\" in #3 got nothing."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "#6 recap only has \"3 spoken · 0 written replies\" and one line \"the surprise doesn't quite land for me\" from the level check. No practised-something-real feedback."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 4,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "No moments: nothing new taught at C1",
+            "expected": "One or two idiom or register takeaways, and the 'on the picture' slip caught",
+            "got": "Moments empty; \"on the picture\" in #3 uncorrected",
+            "evidence": "#3 learner: \"all the clues are there on the picture\"; moments []",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "For a C1 learner with a clear slip, at least one moment or coaching note per session.",
+            "code_hint": "moment trigger rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Recap is bare",
+            "expected": "Specific recap of what was practised, with phrases gained",
+            "got": "\"3 spoken · 0 written replies\", level-check phrase only",
+            "evidence": "#6 recap",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recap names phrases the learner used or could have used, with register notes.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Mission closes after three replies",
+            "expected": "Scene continues to test diplomacy at stretch for around eight replies",
+            "got": "\"Mission done\" at #5 after three replies while Owen was still asking",
+            "evidence": "#5 \"Mission done\" with Owen's open question",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Scene runs long enough for the stretch setting; mission completion does not cut a live exchange.",
+            "code_hint": "mission completion rule"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Partner calls the learner 'Owen'",
+            "expected": "Partner uses learner's name or none",
+            "got": "\"you'll have to convince me the twist was airtight, Owen\"",
+            "evidence": "#3 Owen's line; learner addressed partner as Owen in #2",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner never addresses the learner by the partner's own name.",
+            "code_hint": "partner persona prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Partner talks like a real co-host",
+            "expected": "Natural C1 idiom",
+            "got": "\"I'll give you that\", \"total sucker for slow-burn reveals\"",
+            "evidence": "#3, #5",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep partner register idiomatic.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -5,
+          "confidence": "low"
+        },
+        "voice": "Owen sounds like a real person, and I liked \"total sucker for slow-burn reveals\". That's the English I came for. But it was over in three replies, and I learned nothing. I slipped \"on the picture\" and nobody said a word, which is exactly what I'd pay a Preply tutor to catch. The recap said \"3 spoken · 0 written replies\", which tells me nothing. Then Owen calls me \"Owen\", which is a bit odd. And the topic list is film chat. I wanted the drinks invite and the landlord. I wouldn't tell anyone yet. A natural partner is only half a tutor; I need the nuance takeaways as well.",
+        "prior": [
+          {
+            "id": "LT-jana-29-J3-2",
+            "status": "recurs",
+            "evidence": "#6 recap still \"3 spoken · 0 written replies\"; moments empty.",
+            "finding": 1
+          },
+          {
+            "id": "LT-jana-29-J3-3",
+            "status": "recurs",
+            "evidence": "Owen pushed back this time (#3 \"you'll have to convince me\"), but #5 \"Mission done\" after only three replies.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: #6 recap only has \"3 spoken · 0 written replies\" and one line \"the surprise doesn't quite land for me\" from the level check. No practised-something-real feedback.",
+          "check": "They finish with a recap and feel they practised something real."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: facts.conversation.moments is empty. Nothing new taught; her \"on the picture\" slip (#3) went unflagged."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #1 first six topics: four are film talk (feedback, club, favourite film, changed my mind); only the design review and 'Checking what a host meant' are workplace or social nuance. Flat viewing is seventh."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #6 recap is just \"3 spoken · 0 written replies\" and \"Not tried / With help / On your own\". Not gushing, but not specific about what she did."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 20,
+      "fail": 0,
+      "ms": 161109
+    },
+    "character": {
+      "n": 23,
+      "fail": 0,
+      "ms": 252575
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 105740
+    }
+  }
+}

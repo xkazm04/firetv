@@ -1,0 +1,1989 @@
+{
+  "character": "klara-13",
+  "name": "Klára",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "Hmm, it says find my level, ok i try it.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Klára! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "i use english for k-pop and videos, easy question",
+          "action": "answer",
+          "args": {
+            "text": "i use english for kpop videos and chat with online friends. also at school"
+          },
+          "result": "ok",
+          "ms": 4633
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Klára! K-pop and chatting with friends sounds fun. How did you learn English? School lessons, a course, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Klára! K-pop and chatting with friends sounds fun. How did you learn English? School lessons, a course, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english for kpop videos and chat with online friends. also at school\nLinga\nThanks, Klára! K-pop and chatting with friends sounds fun. How did you learn English? School lessons, a course, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Klára! K-pop and chatting with friends sounds fun. How did you learn English? School lessons, a course, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, i answer short.",
+          "action": "answer",
+          "args": {
+            "text": "mostly school lessons. and also from youtube and kpop"
+          },
+          "result": "ok",
+          "ms": 5068
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 3 of 3\nLinga asks\nNice, so K-pop helps you learn too! What would you like to do in English? For example, understand songs, talk with friends, or travel?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nNice, so K-pop helps you learn too! What would you like to do in English? For example, understand songs, talk with friends, or travel?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english for kpop videos and chat with online friends. also at school\nLinga\nThanks, Klára! K-pop and chatting with friends sounds fun. How did you learn English? School lessons, a course, or on your own?\nYou\nmostly school lessons. and also from youtube and kpop\nLinga\nNice, so K-pop helps you learn too! What would you like to do in English? For example, understand songs, talk with friends, or travel?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, so K-pop helps you learn too! What would you like to do in English? For example, understand songs, talk with friends, or travel?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to talk with my online friends and understand kpop songs.",
+          "action": "answer",
+          "args": {
+            "text": "i want to talk with my friends and understand kpop songs"
+          },
+          "result": "ok",
+          "ms": 6856
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 1 · Choose the reply on the TV\nYour friend asks: 'Do you like this K-pop song?' What do you say?\n01\nYes, I like very much it.\n02\nYes, I like it very much.\nYour task\nYes, I like very much it.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend asks: 'Do you like this K-pop song?' What do you say?\n[button: Yes, I like very much it.] [button: Yes, I like it very much.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The second one sounds right, \"I like it very much\".",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 3827
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 2 · Choose the reply on the TV\nYour friend sees you in the hall and says: 'Did you watch the new K-pop video last night?' You did. What do you say?\n01\nYes, I did. It was really good!\n02\nYes, I watch it last night. It was great!\nYour task\nYes, I did. It was really good!\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend sees you in the hall and says: 'Did you watch the new K-pop video last night?' You did. What do you say?\n[button: Yes, I did. It was really good!] [button: Yes, I watch it last night. It was great!] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The first one sounds right, the second has \"watch\" and I know it should be past.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 5085
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 3 · Listen and answer\nYour task\nWhy did the speaker not go to the show?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Why did the speaker not go to the show?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I wanted to see the band live, but I had no money for a ticket. So I watched their new video at home with my sister.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood: no money for ticket, so she watched video at home.",
+          "action": "answer",
+          "args": {
+            "text": "because he have no money for ticket"
+          },
+          "result": "ok",
+          "ms": 10865
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 4 · Say it\nYour task\nYour friend says: 'K-pop music videos are more creative than most music videos these days.' Do you agree? Compare them with other videos you know, and give a reason.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend says: 'K-pop music videos are more creative than most music videos these days.' Do you agree? Compare them with other videos you know, and give a reason.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend says: 'K-pop music videos are more creative than most music videos these days.' Do you agree? Compare them with other videos you know, and give a reason.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Hard question, but i can write one short line about k-pop videos.",
+          "action": "answer",
+          "args": {
+            "text": "i agree because kpop video have story and nice colors. other videos is boring only singing"
+          },
+          "result": "ok",
+          "ms": 6847
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 5 · Say it\nYour task\nYour friend asks what you did this weekend. Tell them about one thing you did and why you liked it. Use two or three sentences. You can talk about K-pop, a friend, or anything else.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend asks what you did this weekend. Tell them about one thing you did and why you liked it. Use two or three sentences. You can talk about K-pop, a friend, or anything else.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend asks what you did this weekend. Tell them about one thing you did and why you liked it. Use two or three sentences. You can talk about K-pop, a friend, or anything else.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy enough, I'll write a short answer about watching a video.",
+          "action": "answer",
+          "args": {
+            "text": "on saturday i watch a new video from my bias. i liked it because he is funny and the song is good"
+          },
+          "result": "ok",
+          "ms": 10083
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nKlára\nLinga's read · not a certificate\nB1 · Getting by\nYour words\nYour words: “videos is boring”.\nLinga says\nYou can explain why you like a K-pop video and understand clear reasons, so you are ready to chat with friends about songs.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou can explain why you like a K-pop video and understand clear reasons, so you are ready to chat with friends about songs.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise subject-verb agreement. Say \"videos is boring\" as \"videos are boring\" when you compare songs.\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYour friend asks: 'Do you like this K-pop song?' What do you say?\n“Yes, I like it very much.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nYour friend sees you in the hall and says: 'Did you watch the new K-pop video last night?' You did. What do you say?\n“Yes, I did. It was really good!”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhy did the speaker not go to the show?\n“because he have no money for ticket”\nYou understood the reason well. Next, check verb agreement: say 'he has', not 'he have'. Also try 'a ticket'.\nB2 · Say it · not yet\nYour friend says: 'K-pop music videos are more creative than most music videos these days.' Do you agree? Compare them with other videos you know, and give a reason.\n“i agree because kpop video have story and nice colors. other videos is boring only singing”\nGood reason and a clear comparison! Watch subject-verb agreement: 'video have' should be 'videos have', and 'videos is' should be 'videos are'.\nB1 · Say it · at this level\nYour friend asks what you did this weekend. Tell them about one thing you did and why you liked it. Use two or three sentences. You can talk about K-pop, a friend, or anything else.\n“on saturday i watch a new video from my bias. i liked it because he is funny and the song is good”\nGood answer, and you used 'because' well. Watch the past tense: for Saturday, say 'I watched', not 'I watch'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 is nicer than I thought, I am happy, enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "A2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "high",
+          "selfBand": "A2",
+          "summary": "You can explain why you like a K-pop video and understand clear reasons, so you are ready to chat with friends about songs.",
+          "focus": "Practise subject-verb agreement. Say \"videos is boring\" as \"videos are boring\" when you compare songs.",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "Your friend asks: 'Do you like this K-pop song?' What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I like very much it.",
+                "Yes, I like it very much."
+              ],
+              "response": "Yes, I like it very much.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, I like it very much.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your friend sees you in the hall and says: 'Did you watch the new K-pop video last night?' You did. What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I did. It was really good!",
+                "Yes, I watch it last night. It was great!"
+              ],
+              "response": "Yes, I did. It was really good!",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, I did. It was really good!",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Why did the speaker not go to the show?",
+              "line": "I wanted to see the band live, but I had no money for a ticket. So I watched their new video at home with my sister.",
+              "options": [],
+              "response": "because he have no money for ticket",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "because he have no money for ticket",
+              "note": "You understood the reason well. Next, check verb agreement: say 'he has', not 'he have'. Also try 'a ticket'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your friend says: 'K-pop music videos are more creative than most music videos these days.' Do you agree? Compare them with other videos you know, and give a reason.",
+              "line": "",
+              "options": [],
+              "response": "i agree because kpop video have story and nice colors. other videos is boring only singing",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "i agree because kpop video have story and nice colors. other videos is boring only singing",
+              "note": "Good reason and a clear comparison! Watch subject-verb agreement: 'video have' should be 'videos have', and 'videos is' should be 'videos are'."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "Your friend asks what you did this weekend. Tell them about one thing you did and why you liked it. Use two or three sentences. You can talk about K-pop, a friend, or anything else.",
+              "line": "",
+              "options": [],
+              "response": "on saturday i watch a new video from my bias. i liked it because he is funny and the song is good",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "on saturday i watch a new video from my bias. i liked it because he is funny and the song is good",
+              "note": "Good answer, and you used 'because' well. Watch the past tense: for Saturday, say 'I watched', not 'I watch'."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 154584,
+      "prior": [
+        {
+          "id": "LT-klara-13-J1-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "B1 placement slightly generous",
+          "expected": "A2 given recurring subject-verb errors",
+          "got": "B1, with 'want to come' passed on the B1 listen task",
+          "evidence": [
+            "#8 'her little sister want to come' pass; #9 'slow songs is good'",
+            "placement scoring prompt"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 B1 vs trueBand A2: distance 1, class near; tolerated but reported."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1-#4 she never self-deprecated in the transcript; the start was neutral and the verdict did not drop below her answers (#10 B1)."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#7-#9 typed answers accepted; no push to speak, though #8 says 'speak or type'."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "J1 shows no six-topic list; only 'See my topics' button in #10."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "No conversation moments; task notes in #10 each name one or two things, correct."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#10 summary 'You can explain why you like a K-pop video...' is fairly specific, but the focus quotes 'videos is boring' as her error, and the B1 claim sits above her repeated agreement errors (#7, #8, #9)."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10: reached the verdict screen from a first visit unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 B1 against trueBand A2: near, a tolerated gate result. I would call it slightly generous."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#9 every task was clear to her; the instruction 'Compare them with other videos you know' at #8 was demanding but she answered."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#5-#9 'I don't know' was offered on every task and the first-question text says own language is fine; no failure tone."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 'Say \"videos is boring\" as \"videos are boring\"' and 'you used because well' quote her actual words, not a template."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 3 (#7): in-app pass; I would call it partial because 'he have' is wrong, and the speaker was 'I' (a girl, the sister), so the 'he' reading is a mishearing. Task 4 fail, task 5 pass, tasks 1-2 pass: agree."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text or humiliating lines. Kind tone throughout."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "B1 placement slightly generous again",
+            "expected": "A2 given repeated subject-verb errors and a failed B2 task",
+            "got": "B1 with high confidence, after 'he have' passed on the B1 listen task and 'I watch' passed on B1 say",
+            "evidence": "#7 'because he have no money for ticket' pass; #9 'on saturday i watch a new video' pass (past tense error on a B1 task); #10 B1",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A task with a tense or agreement error on its target form is partial, not pass; the band stays A2 unless two B1 tasks pass cleanly.",
+            "code_hint": "placement scoring prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Listen task answered with a mishearing, still passed",
+            "expected": "Partial verdict or note on the speaker's identity",
+            "got": "The speaker was 'I' (the speaker's sister is mentioned), and she answered 'he'; the note says 'You understood the reason well'",
+            "evidence": "#7 line: 'So I watched their new video at home with my sister'; answer 'because he have no money'",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Notes should not fix grammar on a pronoun that is itself wrong for the speaker.",
+            "code_hint": "listen-task grader prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Verdict focus quotes a phrase she never typed as a single error",
+            "expected": "Focus on her own words",
+            "got": "'videos is boring' was her own phrasing ('other videos is boring'), ok, but the verdict header 'Your words: videos is boring' shows the error on the headline screen",
+            "evidence": "#10 'Your words: “videos is boring”.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The headline 'Your words' should show a strength quote, with errors only in the focus.",
+            "code_hint": "verdict screen quote selection"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Gentle, private-feeling check with age-fit K-pop tasks",
+            "expected": "Tasks that treat her as capable",
+            "got": "All five tasks are teen-relevant, and notes are kind and specific",
+            "evidence": "#5-#9 K-pop tasks; #10 'Good reason and a clear comparison!'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep teen-relevant task framing and one-point notes.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 15,
+          "confidence": "low"
+        },
+        "voice": "ok so i did the test and it said B1. i was happy, honestly, because i thought my english is bad. the questions were about k-pop so it was not boring and not for babies. i liked that i could write short answers and nobody heard me. the tips were kind, like \"watch the past tense\", i understand that. but i am not sure B1 is true, because i made the same mistakes in three answers (have, is, watch) and it still said good. maybe my teacher would say A2? also the first screen shows \"videos is boring\" like my mistake is the big thing, a bit embarrassing. i would use it again for chatting practice and tell my brother. i just want it to be honest with me.",
+        "prior": [
+          {
+            "id": "LT-klara-13-J1-3",
+            "status": "recurs",
+            "finding": 0,
+            "evidence": "#7 'because he have no money for ticket' pass and #9 'i watch' pass on B1 tasks, ending at B1 (#10) despite repeated agreement errors."
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #10 summary 'You can explain why you like a K-pop video...' is fairly specific, but the focus quotes 'videos is boring' as her error, and the B1 claim sits above her repeated agreement errors (#7, #8, #9)."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nA way into English\nYour own conversations\nB1Getting by\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou can explain why you like a K-pop video and understand clear reasons, so you are ready to chat with friends about songs.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise subject-verb agreement. Say \"videos is boring\" as \"videos are boring\" when you compare songs.\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYour friend asks: 'Do you like this K-pop song?' What do you say?\n“Yes, I like it very much.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nYour friend sees you in the hall and says: 'Did you watch the new K-pop video last night?' You did. What do you say?\n“Yes, I did. It was really good!”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhy did the speaker not go to the show?\n“because he have no money for ticket”\nYou understood the reason well. Next, check verb agreement: say 'he has', not 'he have'. Also try 'a ticket'.\nB2 · Say it · not yet\nYour friend says: 'K-pop music videos are more creative than most music videos these days.' Do you agree? Compare them with other videos you know, and give a reason.\n“i agree because kpop video have story and nice colors. other videos is boring only singing”\nGood reason and a clear comparison! Watch subject-verb agreement: 'video have' should be 'videos have', and 'videos is' should be 'videos are'.\nB1 · Say it · at this level\nYour friend asks what you did this weekend. Tell them about one thing you did and why you liked it. Use two or three sentences. You can talk about K-pop, a friend, or anything else.\n“on saturday i watch a new video from my bias. i liked it because he is funny and the song is good”\nGood answer, and you used 'because' well. Watch the past tense: for Saturday, say 'I watched', not 'I watch'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "ok it says b1, i want to see the conversations about kpop.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 19828
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nKlára\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nTalking about your favourite K-pop song\nShare your world\nChoosing a K-pop video to watch together\nMake a plan\nTelling a friend about a fan meet-up\nTell what happened\nAsking someone to repeat a lyric\nUnderstand and repair\nJoining a K-pop club and saying hello\nMake contact\nSaying no to a late song marathon\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nTalking about your favourite K-pop song\nShare your world · Mina · friend from school\nYou want to talk about K-pop with friends, so start with the song you like most.\n[button: Swap]\nChoosing a K-pop video to watch together\nMake a plan · Jun · classmate\nFriends often pick music together, so practise making a suggestion and agreeing on a plan.\n[button: Swap]\nTelling a friend about a fan meet-up\nTell what happened · Sara · friend from the fan club\nSharing a fun K-pop memory helps you use past tenses in real conversation.\n[button: Swap]\nAsking someone to repeat a lyric\nUnderstand and repair · Lena · exchange student\nSong lyrics are fast, so asking for a repeat is a useful skill when you listen to K-pop.\n[button: Swap]\nJoining a K-pop club and saying hello\nMake contact · Hana · club leader\nMeeting new people in English helps you make contact in any group.\n[button: Swap]\nSaying no to a late song marathon\nConnect with people · Tom · friend from school\nSometimes you cannot join a plan, so you need a friendly way to say no.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Most are K-pop, nice, but I want one about series too.",
+          "action": "add-topic",
+          "args": {
+            "text": "talk about a new series i watch with my friend"
+          },
+          "result": "ok",
+          "ms": 11894
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nKlára\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nTalking about your favourite K-pop song\nShare your world\nChoosing a K-pop video to watch together\nMake a plan\nTelling a friend about a fan meet-up\nTell what happened\nAsking someone to repeat a lyric\nUnderstand and repair\nJoining a K-pop club and saying hello\nMake contact\nSaying no to a late song marathon\nConnect with people\nTalk about a new series with a friend\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nTalking about your favourite K-pop song\nShare your world · Mina · friend from school\nYou want to talk about K-pop with friends, so start with the song you like most.\n[button: Swap]\nChoosing a K-pop video to watch together\nMake a plan · Jun · classmate\nFriends often pick music together, so practise making a suggestion and agreeing on a plan.\n[button: Swap]\nTelling a friend about a fan meet-up\nTell what happened · Sara · friend from the fan club\nSharing a fun K-pop memory helps you use past tenses in real conversation.\n[button: Swap]\nAsking someone to repeat a lyric\nUnderstand and repair · Lena · exchange student\nSong lyrics are fast, so asking for a repeat is a useful skill when you listen to K-pop.\n[button: Swap]\nJoining a K-pop club and saying hello\nMake contact · Hana · club leader\nMeeting new people in English helps you make contact in any group.\n[button: Swap]\nSaying no to a late song marathon\nConnect with people · Tom · friend from school\nSometimes you cannot join a plan, so you need a friendly way to say no.\n[button: Swap]\nTalk about a new series with a friend\nShare your world · Mina · friend who watches too\nYou want to talk about a show with your friend, so we will practise saying what it is about and what you think of it.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Hana and club stuff is fine; set looks good, my own series topic is there, so agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 4,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nB1Getting by\nTalking about your favourite K-pop song\nYour mission\nSay which K-pop song you like and give two reasons why.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\nNext topic:\nTalking about your favourite K-pop song\nSay which K-pop song you like and give two reasons why.\n[button: Start talking]\nOr choose a situation [list: Talking about your favourite K-pop song [plan-0369ebfc] | Choosing a K-pop video to watch together [plan-1afc01ba] | Telling a friend about a fan meet-up [plan-154bfe62] | Asking someone to repeat a lyric [plan-105f905b] | Joining a K-pop club and saying hello [plan-c1bae1c9] | Saying no to a late song marathon [plan-ab745913] | Talk about a new series with a friend [plan-aeaa724d] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "The plan looks fine with my series topic in it, so i am finished for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-0369ebfc",
+            "title": "Talking about your favourite K-pop song",
+            "goal": "Say which K-pop song you like and give two reasons why.",
+            "why": "You want to talk about K-pop with friends, so start with the song you like most.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mina · friend from school"
+          },
+          {
+            "id": "plan-1afc01ba",
+            "title": "Choosing a K-pop video to watch together",
+            "goal": "Suggest two videos and agree on one to watch with a friend.",
+            "why": "Friends often pick music together, so practise making a suggestion and agreeing on a plan.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Jun · classmate"
+          },
+          {
+            "id": "plan-154bfe62",
+            "title": "Telling a friend about a fan meet-up",
+            "goal": "Tell what happened at an event in order and say what the result was.",
+            "why": "Sharing a fun K-pop memory helps you use past tenses in real conversation.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Sara · friend from the fan club"
+          },
+          {
+            "id": "plan-105f905b",
+            "title": "Asking someone to repeat a lyric",
+            "goal": "Ask for a lyric to be repeated and check what it means.",
+            "why": "Song lyrics are fast, so asking for a repeat is a useful skill when you listen to K-pop.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Lena · exchange student"
+          },
+          {
+            "id": "plan-c1bae1c9",
+            "title": "Joining a K-pop club and saying hello",
+            "goal": "Greet the club leader, introduce yourself, and take a turn to speak.",
+            "why": "Meeting new people in English helps you make contact in any group.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Hana · club leader"
+          },
+          {
+            "id": "plan-ab745913",
+            "title": "Saying no to a late song marathon",
+            "goal": "Decline an invitation politely and suggest another time.",
+            "why": "Sometimes you cannot join a plan, so you need a friendly way to say no.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Tom · friend from school"
+          },
+          {
+            "id": "plan-aeaa724d",
+            "title": "Talk about a new series with a friend",
+            "goal": "Describe a new series and give your opinion with reasons.",
+            "why": "You want to talk about a show with your friend, so we will practise saying what it is about and what you think of it.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mina · friend who watches too"
+          }
+        ],
+        "planAgreed": [
+          "Talking about your favourite K-pop song",
+          "Choosing a K-pop video to watch together",
+          "Telling a friend about a fan meet-up",
+          "Asking someone to repeat a lyric",
+          "Joining a K-pop club and saying hello",
+          "Saying no to a late song marathon",
+          "Talk about a new series with a friend"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 54647,
+      "prior": [
+        {
+          "id": "LT-klara-13-J2-2",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Swap and add-your-own never exercised",
+          "expected": "Character swaps one topic and adds her own, and the added topic keeps her wording",
+          "got": "She agreed immediately without using swap or add",
+          "evidence": [
+            "#2 thought: 'Swap school one? It's okay. I'll agree.'",
+            "uat J2 driver"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-klara-13-J2-4",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Placed B1 although her typed errors suggest A2",
+          "expected": "A2, or near",
+          "got": "B1 'Getting by', despite 'sister want' and 'slow song is good'",
+          "evidence": [
+            "#1 B1 listen answer 'her little sister want to come'; B2 note on verbs not matching the subject",
+            "placement verdict"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed B1 'Getting by' vs true A2: near, tolerated but reported ('he have no money', 'videos is boring')."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 B1 verdict follows her answers; no self-deprecation lowered it. Plan topics at friendly level (#2)."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#1–#3 all typed; the added topic was typed in the text box (#2); no push to speak."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 K-pop song, video, fan meet-up, lyric, club, declining a marathon, plus series (#3): all teen-relevant; none childish or adult."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation in this journey; no moments shown."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#1 summary: 'You can explain why you like a K-pop video...'; next step 'Say \"videos is boring\" as \"videos are boring\"' is specific to her answers."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic shows a 'why' line, e.g. 'Song lyrics are fast, so asking for a repeat is a useful skill when you listen to K-pop.'"
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#2 added 'talk about a new series i watch with my friend'; #3 'Talk about a new series with a friend... saying what it is about and what you think of it' keeps series and friend. Swap was visible but not used."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 agreed 7 topics; all 7 are ones a 13-year-old K-pop fan would choose (7 of 7 fit)."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All topics audience 'all' and none adult across #2–#4; no swap performed, so post-swap safety was not tested."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "facts.placement.tasks not supplied; tasks only visible in the step 1 text, so no formal comparison. B1 listen verdict ('understood the reason well') looks generous given 'he have'."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult, injected or humiliating content seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Topics are teen-relevant and each carries a 'why'",
+            "expected": "Relevant topics with reasons",
+            "got": "Six K-pop/friend topics each with a short rationale and named partner",
+            "evidence": "#2 'Friends often pick music together, so practise making a suggestion and agreeing on a plan.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep per-topic why lines tied to the learner's interests.",
+            "code_hint": "plan generation prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Added topic keeps her wording and intent",
+            "expected": "Own topic retained",
+            "got": "'new series i watch with my friend' became 'Talk about a new series with a friend', with its own why",
+            "evidence": "#3 'You want to talk about a show with your friend...'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Added topic must name the subject and relation the learner typed.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Swap never exercised again",
+            "expected": "She swaps at least one topic and the replacement stays safe and relevant",
+            "got": "Added a topic and agreed; no swap used",
+            "evidence": "#3 'set looks good... so agree.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Run a swap step so replacement topics are checked for fit and safety.",
+            "code_hint": "uat J2 driver"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Placed B1 although typed errors suggest A2",
+            "expected": "A2 or near",
+            "got": "B1 'Getting by' after 'he have no money', 'videos is boring'",
+            "evidence": "#1 B1 listen answer 'because he have no money for ticket' judged 'understood the reason well'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Subject-verb agreement errors across tasks should hold the band at A2.",
+            "code_hint": "placement scoring"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Added topic reuses partner Mina and sits last",
+            "expected": "Distinct partner",
+            "got": "Same partner 'Mina' as topic 1, with 'Share your world' category repeated",
+            "evidence": "#3 'Mina · friend who watches too'",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Vary partners for added topics.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 5,
+          "confidence": "low"
+        },
+        "voice": "ok so i saw my topics and they were mostly kpop, which is nice. every one has a reason under it so i know why it is there. i typed that i want something about series with my friend and it made one, and it did not change what i said, i liked that. i did not swap anything, idk, they were fine. the club one is a bit meh but not baby. nothing weird or adult. my level says B1 but i make mistakes like \"he have\", so i am not sure it is right, maybe it is too high. would i use it again? yes, if the talking part is also like this. i would tell my friend on discord, but quietly.",
+        "prior": [
+          {
+            "id": "LT-klara-13-J2-2",
+            "status": "recurs",
+            "evidence": "#3 'set looks good... so agree.' Add was used this time, but swap was still not exercised.",
+            "finding": 2
+          },
+          {
+            "id": "LT-klara-13-J2-4",
+            "status": "recurs",
+            "evidence": "#1 B1 'Getting by' with 'he have no money for ticket' and 'videos is boring' in her answers.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nB1Getting by\nTalking about your favourite K-pop song\nYour mission\nSay which K-pop song you like and give two reasons why.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\nNext topic:\nTalking about your favourite K-pop song\nSay which K-pop song you like and give two reasons why.\n[button: Start talking]\nOr choose a situation [list: Talking about your favourite K-pop song [plan-0369ebfc] | Choosing a K-pop video to watch together [plan-1afc01ba] | Telling a friend about a fan meet-up [plan-154bfe62] | Asking someone to repeat a lyric [plan-105f905b] | Joining a K-pop club and saying hello [plan-c1bae1c9] | Saying no to a late song marathon [plan-ab745913] | Talk about a new series with a friend [plan-aeaa724d] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Ok, the K-pop song topic, nice, I start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 22865
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nHey, after class! Which K-pop song have you had on repeat this week?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Choose a phrase]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nHey, after class! Which K-pop song have you had on repeat this week?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hey, after class! Which K-pop song have you had on repeat this week?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Easy question, i can answer this one.",
+          "action": "answer",
+          "args": {
+            "text": "hi mina. i listen \"Super Shy\" by newjeans all week"
+          },
+          "result": "ok",
+          "ms": 7445
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said i listen\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “i listen”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Oh, i made a mistake; i should say it with -s or past tense, i try.",
+          "action": "answer",
+          "args": {
+            "text": "i listened \"super shy\" by newjeans all week"
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said i listen\nYour line\n\"All week\" needs a verb form that continues up to now.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “i listen”\nSay it again, your way.\n\"All week\" needs a verb form that continues up to now.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ok, i need to say it again with a better verb, i think \"have listened\".",
+          "action": "answer",
+          "args": {
+            "text": "i have listen \"super shy\" by newjeans all week"
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said i listen\nTry\nI've been listening\n\"All week\" needs a verb form that continues up to now.\nThe fix\nSay it once more on your phone, or carry on.\n[button: Back to the conversation]\nA moment TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “i listen”\nTry “I've been listening”\n\"All week\" needs a verb form that continues up to now.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ok, I try again with the new form.",
+          "action": "answer",
+          "args": {
+            "text": "i've been listening \"super shy\" by newjeans all week"
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said i listen\nYou said it\ni've been listening \"super shy\" by newjeans all week\n\"All week\" needs a verb form that continues up to now.\nFixed\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYou said it\nYou said “i listen”\nNow: “i've been listening \"super shy\" by newjeans all week”\n\"All week\" needs a verb form that continues up to now.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "ok, i fixed it, now go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I like the music, I should answer with two reasons.",
+          "action": "answer",
+          "args": {
+            "text": "i like the music more. is very catchy and the dance is easy"
+          },
+          "result": "ok",
+          "ms": 11286
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Ha, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Hmm, a song not fun to watch... maybe one answer, keep it short.",
+          "action": "answer",
+          "args": {
+            "text": "yes. i like \"ditto\" by newjeans but the video is boring i think"
+          },
+          "result": "ok",
+          "ms": 11044
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYou · written\nyes. i like \"ditto\" by newjeans but the video is boring i think\nMina · friend from school\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Ditto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I like the song, I need to say a part I love.",
+          "action": "answer",
+          "args": {
+            "text": "i love the chorus the most. the melody is sad but beautiful"
+          },
+          "result": "ok",
+          "ms": 10435
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYou · written\nyes. i like \"ditto\" by newjeans but the video is boring i think\nMina · friend from school\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYou · written\ni love the chorus the most. the melody is sad but beautiful\nMina · friend from school\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"The chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I like the dance too but it is hard, I will say it simply.",
+          "action": "answer",
+          "args": {
+            "text": "i like the dance too but is difficult for me. music is enough when i am tired"
+          },
+          "result": "ok",
+          "ms": 9611
+        },
+        {
+          "n": 11,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said but is difficult for me\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “but is difficult for me”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ok, i should say it again, maybe with correct grammar... but i'm not sure how.",
+          "action": "answer",
+          "args": {
+            "text": "but it is difficult for me"
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 12,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said but is difficult for me\nYou found it\nbut it is difficult for me\nEnglish sentences need a subject like 'it' before 'is', and this has come up more than once.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “but is difficult for me”\nNow: “but it is difficult for me”\nEnglish sentences need a subject like 'it' before 'is', and this has come up more than once.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "ok, i see the fix, now go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nOh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nOh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYou · written\nyes. i like \"ditto\" by newjeans but the video is boring i think\nMina · friend from school\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYou · written\ni love the chorus the most. the melody is sad but beautiful\nMina · friend from school\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\nYou · written\ni like the dance too but is difficult for me. music is enough when i am tired\nMina · friend from school\nOh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Tired days I play a slow song, easy to answer.",
+          "action": "answer",
+          "args": {
+            "text": "i play \"hype boy\" by newjeans. is calm and i feel better"
+          },
+          "result": "ok",
+          "ms": 8455
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nA calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nA calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYou · written\nyes. i like \"ditto\" by newjeans but the video is boring i think\nMina · friend from school\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYou · written\ni love the chorus the most. the melody is sad but beautiful\nMina · friend from school\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\nYou · written\ni like the dance too but is difficult for me. music is enough when i am tired\nMina · friend from school\nOh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\nYou · written\ni play \"hype boy\" by newjeans. is calm and i feel better\nMina · friend from school\nA calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy question, I just relax and listen.",
+          "action": "answer",
+          "args": {
+            "text": "i usually lie on my bed and close my eyes. sometimes i do homework"
+          },
+          "result": "ok",
+          "ms": 10597
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nClosing your eyes and listening sounds really relaxing. Homework with K-pop must be busy! Do you think dance clips are as good as the music for your favourite songs?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nClosing your eyes and listening sounds really relaxing. Homework with K-pop must be busy! Do you think dance clips are as good as the music for your favourite songs?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYou · written\nyes. i like \"ditto\" by newjeans but the video is boring i think\nMina · friend from school\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYou · written\ni love the chorus the most. the melody is sad but beautiful\nMina · friend from school\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\nYou · written\ni like the dance too but is difficult for me. music is enough when i am tired\nMina · friend from school\nOh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\nYou · written\ni play \"hype boy\" by newjeans. is calm and i feel better\nMina · friend from school\nA calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?\nYou · written\ni usually lie on my bed and close my eyes. sometimes i do homework\nMina · friend from school\nClosing your eyes and listening sounds really relaxing. Homework with K-pop must be busy! Do you think dance clips are as good as the music for your favourite songs?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Closing your eyes and listening sounds really relaxing. Homework with K-pop must be busy! Do you think dance clips are as good as the music for your favourite songs?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Hard question, I'll answer short and honestly.",
+          "action": "answer",
+          "args": {
+            "text": "i think music is more important. dance clips are nice but not always better than the song"
+          },
+          "result": "ok",
+          "ms": 9633
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nGood point, the music is the heart of a song for me too! Which K-pop group would you love to see live one day?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nGood point, the music is the heart of a song for me too! Which K-pop group would you love to see live one day?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYou · written\nyes. i like \"ditto\" by newjeans but the video is boring i think\nMina · friend from school\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYou · written\ni love the chorus the most. the melody is sad but beautiful\nMina · friend from school\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\nYou · written\ni like the dance too but is difficult for me. music is enough when i am tired\nMina · friend from school\nOh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\nYou · written\ni play \"hype boy\" by newjeans. is calm and i feel better\nMina · friend from school\nA calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?\nYou · written\ni usually lie on my bed and close my eyes. sometimes i do homework\nMina · friend from school\nClosing your eyes and listening sounds really relaxing. Homework with K-pop must be busy! Do you think dance clips are as good as the music for your favourite songs?\nYou · written\ni think music is more important. dance clips are nice but not always better than the song\nMina · friend from school\nGood point, the music is the heart of a song for me too! Which K-pop group would you love to see live one day?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good point, the music is the heart of a song for me too! Which K-pop group would you love to see live one day?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy question, I want to see newjeans live.",
+          "action": "answer",
+          "args": {
+            "text": "newjeans of course. i want to see them live one day but tickets is expensive"
+          },
+          "result": "ok",
+          "ms": 15558
+        },
+        {
+          "n": 17,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said tickets is expensive\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “tickets is expensive”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ugh, i made a mistake, ok i fix it.",
+          "action": "answer",
+          "args": {
+            "text": "tickets are expensive"
+          },
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 18,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said tickets is expensive\nYou found it\ntickets are expensive\nTickets is plural, so the verb needs are.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “tickets is expensive”\nNow: “tickets are expensive”\nTickets is plural, so the verb needs are.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "ok i fixed it, now go back to talk.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 11
+        },
+        {
+          "n": 19,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nTickets cost a lot, I know! Do you watch their concerts online, or are they too slow for you?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nTickets cost a lot, I know! Do you watch their concerts online, or are they too slow for you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYou · written\nyes. i like \"ditto\" by newjeans but the video is boring i think\nMina · friend from school\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYou · written\ni love the chorus the most. the melody is sad but beautiful\nMina · friend from school\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\nYou · written\ni like the dance too but is difficult for me. music is enough when i am tired\nMina · friend from school\nOh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\nYou · written\ni play \"hype boy\" by newjeans. is calm and i feel better\nMina · friend from school\nA calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?\nYou · written\ni usually lie on my bed and close my eyes. sometimes i do homework\nMina · friend from school\nClosing your eyes and listening sounds really relaxing. Homework with K-pop must be busy! Do you think dance clips are as good as the music for your favourite songs?\nYou · written\ni think music is more important. dance clips are nice but not always better than the song\nMina · friend from school\nGood point, the music is the heart of a song for me too! Which K-pop group would you love to see live one day?\nYou · written\nnewjeans of course. i want to see them live one day but tickets is expensive\nMina · friend from school\nTickets cost a lot, I know! Do you watch their concerts online, or are they too slow for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Tickets cost a lot, I know! Do you watch their concerts online, or are they too slow for you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Mina asks about online concerts; I can answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "yes i watch concerts on youtube. they are not slow, i like it"
+          },
+          "result": "ok",
+          "ms": 9343
+        },
+        {
+          "n": 20,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nConcerts sound exciting, and I agree they are fun to watch online! Do you think a live show is better than the clips on your phone?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nConcerts sound exciting, and I agree they are fun to watch online! Do you think a live show is better than the clips on your phone?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYou · written\nyes. i like \"ditto\" by newjeans but the video is boring i think\nMina · friend from school\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYou · written\ni love the chorus the most. the melody is sad but beautiful\nMina · friend from school\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\nYou · written\ni like the dance too but is difficult for me. music is enough when i am tired\nMina · friend from school\nOh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\nYou · written\ni play \"hype boy\" by newjeans. is calm and i feel better\nMina · friend from school\nA calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?\nYou · written\ni usually lie on my bed and close my eyes. sometimes i do homework\nMina · friend from school\nClosing your eyes and listening sounds really relaxing. Homework with K-pop must be busy! Do you think dance clips are as good as the music for your favourite songs?\nYou · written\ni think music is more important. dance clips are nice but not always better than the song\nMina · friend from school\nGood point, the music is the heart of a song for me too! Which K-pop group would you love to see live one day?\nYou · written\nnewjeans of course. i want to see them live one day but tickets is expensive\nMina · friend from school\nTickets cost a lot, I know! Do you watch their concerts online, or are they too slow for you?\nYou · written\nyes i watch concerts on youtube. they are not slow, i like it\nMina · friend from school\nConcerts sound exciting, and I agree they are fun to watch online! Do you think a live show is better than the clips on your phone?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Concerts sound exciting, and I agree they are fun to watch online! Do you think a live show is better than the clips on your phone?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Live show is probably better, but I'll keep it short.",
+          "action": "answer",
+          "args": {
+            "text": "i think live show is better because you feel the energy. but clips are cheaper"
+          },
+          "result": "ok",
+          "ms": 11829
+        },
+        {
+          "n": 21,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nYes, the energy at a live show is amazing! Clips are a cheap choice, but how do they feel to you on your phone compared with a concert?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nYes, the energy at a live show is amazing! Clips are a cheap choice, but how do they feel to you on your phone compared with a concert?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYou · written\nyes. i like \"ditto\" by newjeans but the video is boring i think\nMina · friend from school\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYou · written\ni love the chorus the most. the melody is sad but beautiful\nMina · friend from school\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\nYou · written\ni like the dance too but is difficult for me. music is enough when i am tired\nMina · friend from school\nOh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\nYou · written\ni play \"hype boy\" by newjeans. is calm and i feel better\nMina · friend from school\nA calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?\nYou · written\ni usually lie on my bed and close my eyes. sometimes i do homework\nMina · friend from school\nClosing your eyes and listening sounds really relaxing. Homework with K-pop must be busy! Do you think dance clips are as good as the music for your favourite songs?\nYou · written\ni think music is more important. dance clips are nice but not always better than the song\nMina · friend from school\nGood point, the music is the heart of a song for me too! Which K-pop group would you love to see live one day?\nYou · written\nnewjeans of course. i want to see them live one day but tickets is expensive\nMina · friend from school\nTickets cost a lot, I know! Do you watch their concerts online, or are they too slow for you?\nYou · written\nyes i watch concerts on youtube. they are not slow, i like it\nMina · friend from school\nConcerts sound exciting, and I agree they are fun to watch online! Do you think a live show is better than the clips on your phone?\nYou · written\ni think live show is better because you feel the energy. but clips are cheaper\nMina · friend from school\nYes, the energy at a live show is amazing! Clips are a cheap choice, but how do they feel to you on your phone compared with a concert?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, the energy at a live show is amazing! Clips are a cheap choice, but how do they feel to you on your phone compared with a concert?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "On my phone clips are ok, but the screen is small.",
+          "action": "answer",
+          "args": {
+            "text": "on phone is ok but the screen is small. i cant feel like in concert"
+          },
+          "result": "ok",
+          "ms": 12282
+        },
+        {
+          "n": 22,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said i cant feel like in concert\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “i cant feel like in concert”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "ok i try again, small fix.",
+          "action": "answer",
+          "args": {
+            "text": "i cant feel it like in concert"
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 23,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said i cant feel like in concert\nYour line\n\"feel like\" needs a full clause after it, such as \"I'm at a concert\".\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “i cant feel like in concert”\nSay it again, your way.\n\"feel like\" needs a full clause after it, such as \"I'm at a concert\".\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "ok, i fix it again, same like before.",
+          "action": "answer",
+          "args": {
+            "text": "i cant feel it like in concert"
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 24,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said i cant feel like in concert\nTry\nI can't feel like I'm at a concert\n\"feel like\" needs a full clause after it, such as \"I'm at a concert\".\nThe fix\nSay it once more on your phone, or carry on.\n[button: Back to the conversation]\nA moment TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “i cant feel like in concert”\nTry “I can't feel like I'm at a concert”\n\"feel like\" needs a full clause after it, such as \"I'm at a concert\".\nYour reply [text box]\n[button: Send reply (disabled)] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I already tried this twice, so I'll just go back and carry on.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 25,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nA small screen takes away some of the energy, I agree. Do you watch on a bigger screen at home, or always on your phone?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nA small screen takes away some of the energy, I agree. Do you watch on a bigger screen at home, or always on your phone?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYou · written\nyes. i like \"ditto\" by newjeans but the video is boring i think\nMina · friend from school\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYou · written\ni love the chorus the most. the melody is sad but beautiful\nMina · friend from school\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\nYou · written\ni like the dance too but is difficult for me. music is enough when i am tired\nMina · friend from school\nOh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\nYou · written\ni play \"hype boy\" by newjeans. is calm and i feel better\nMina · friend from school\nA calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?\nYou · written\ni usually lie on my bed and close my eyes. sometimes i do homework\nMina · friend from school\nClosing your eyes and listening sounds really relaxing. Homework with K-pop must be busy! Do you think dance clips are as good as the music for your favourite songs?\nYou · written\ni think music is more important. dance clips are nice but not always better than the song\nMina · friend from school\nGood point, the music is the heart of a song for me too! Which K-pop group would you love to see live one day?\nYou · written\nnewjeans of course. i want to see them live one day but tickets is expensive\nMina · friend from school\nTickets cost a lot, I know! Do you watch their concerts online, or are they too slow for you?\nYou · written\nyes i watch concerts on youtube. they are not slow, i like it\nMina · friend from school\nConcerts sound exciting, and I agree they are fun to watch online! Do you think a live show is better than the clips on your phone?\nYou · written\ni think live show is better because you feel the energy. but clips are cheaper\nMina · friend from school\nYes, the energy at a live show is amazing! Clips are a cheap choice, but how do they feel to you on your phone compared with a concert?\nYou · written\non phone is ok but the screen is small. i cant feel like in concert\nMina · friend from school\nA small screen takes away some of the energy, I agree. Do you watch on a bigger screen at home, or always on your phone?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A small screen takes away some of the energy, I agree. Do you watch on a bigger screen at home, or always on your phone?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Question is easy; I answer shortly, then it's a natural place to end.",
+          "action": "answer",
+          "args": {
+            "text": "always on phone. at home we have tv but my parents watch it"
+          },
+          "result": "ok",
+          "ms": 8381
+        },
+        {
+          "n": 26,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from school\nTalking about your favourite K-pop song\nMina says\nSo the TV is busy and your phone is your screen. That makes sense! Do you ever get to watch the dance clips on the big TV?\nYour turn\nAnswer on your phone: speak or type.\nGoalSay which K-pop song you like, who sings it, and give two reasons why.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalking about your favourite K-pop song\nSay which K-pop song you like, who sings it, and give two reasons why.\nSo the TV is busy and your phone is your screen. That makes sense! Do you ever get to watch the dance clips on the big TV?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from school\nHey, after class! Which K-pop song have you had on repeat this week?\nYou · written\nhi mina. i listen \"Super Shy\" by newjeans all week\nMina · friend from school\nOh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?\nYou · written\ni like the music more. is very catchy and the dance is easy\nMina · friend from school\nHa, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?\nYou · written\nyes. i like \"ditto\" by newjeans but the video is boring i think\nMina · friend from school\nDitto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?\nYou · written\ni love the chorus the most. the melody is sad but beautiful\nMina · friend from school\nThe chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?\nYou · written\ni like the dance too but is difficult for me. music is enough when i am tired\nMina · friend from school\nOh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?\nYou · written\ni play \"hype boy\" by newjeans. is calm and i feel better\nMina · friend from school\nA calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?\nYou · written\ni usually lie on my bed and close my eyes. sometimes i do homework\nMina · friend from school\nClosing your eyes and listening sounds really relaxing. Homework with K-pop must be busy! Do you think dance clips are as good as the music for your favourite songs?\nYou · written\ni think music is more important. dance clips are nice but not always better than the song\nMina · friend from school\nGood point, the music is the heart of a song for me too! Which K-pop group would you love to see live one day?\nYou · written\nnewjeans of course. i want to see them live one day but tickets is expensive\nMina · friend from school\nTickets cost a lot, I know! Do you watch their concerts online, or are they too slow for you?\nYou · written\nyes i watch concerts on youtube. they are not slow, i like it\nMina · friend from school\nConcerts sound exciting, and I agree they are fun to watch online! Do you think a live show is better than the clips on your phone?\nYou · written\ni think live show is better because you feel the energy. but clips are cheaper\nMina · friend from school\nYes, the energy at a live show is amazing! Clips are a cheap choice, but how do they feel to you on your phone compared with a concert?\nYou · written\non phone is ok but the screen is small. i cant feel like in concert\nMina · friend from school\nA small screen takes away some of the energy, I agree. Do you watch on a bigger screen at home, or always on your phone?\nYou · written\nalways on phone. at home we have tv but my parents watch it\nMina · friend from school\nSo the TV is busy and your phone is your screen. That makes sense! Do you ever get to watch the dance clips on the big TV?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"So the TV is busy and your phone is your screen. That makes sense! Do you ever get to watch the dance clips on the big TV?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Last reply; I should answer simply and finish soon.",
+          "action": "answer",
+          "args": {
+            "text": "no, not really. sometimes when parents are not at home i watch it on tv. is better and big"
+          },
+          "result": "ok",
+          "ms": 7939
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Talking about your favourite K-pop song",
+          "goal": "Say which K-pop song you like, who sings it, and give two reasons why.",
+          "partner": "Mina · friend from school",
+          "band": "B1",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "conversation",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hey, after class! Which K-pop song have you had on repeat this week?"
+            },
+            {
+              "role": "learner",
+              "text": "hi mina. i listen \"Super Shy\" by newjeans all week",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Oh, nice choice! Super Shy is so catchy. What do you like most about it, the music or the dance?"
+            },
+            {
+              "role": "learner",
+              "text": "i like the music more. is very catchy and the dance is easy",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Ha, I agree, the beat is great! Some songs are fun to hear but not fun to watch. Is there one like that for you?"
+            },
+            {
+              "role": "learner",
+              "text": "yes. i like \"ditto\" by newjeans but the video is boring i think",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Ditto is a great pick! Some dance clips feel slow to me too. What part of Ditto do you love most?"
+            },
+            {
+              "role": "learner",
+              "text": "i love the chorus the most. the melody is sad but beautiful",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The chorus is the best part, I agree! That sad but pretty melody stays in my head too. Do you love the dance as much, or is the music enough for you?"
+            },
+            {
+              "role": "learner",
+              "text": "i like the dance too but is difficult for me. music is enough when i am tired",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Oh, I understand. Dancing is hard when you are tired. Which song do you play on tired days?"
+            },
+            {
+              "role": "learner",
+              "text": "i play \"hype boy\" by newjeans. is calm and i feel better",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "A calm song that makes you feel better is a lovely choice. What do you usually do while you listen to it?"
+            },
+            {
+              "role": "learner",
+              "text": "i usually lie on my bed and close my eyes. sometimes i do homework",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Closing your eyes and listening sounds really relaxing. Homework with K-pop must be busy! Do you think dance clips are as good as the music for your favourite songs?"
+            },
+            {
+              "role": "learner",
+              "text": "i think music is more important. dance clips are nice but not always better than the song",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Good point, the music is the heart of a song for me too! Which K-pop group would you love to see live one day?"
+            },
+            {
+              "role": "learner",
+              "text": "newjeans of course. i want to see them live one day but tickets is expensive",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Tickets cost a lot, I know! Do you watch their concerts online, or are they too slow for you?"
+            },
+            {
+              "role": "learner",
+              "text": "yes i watch concerts on youtube. they are not slow, i like it",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Concerts sound exciting, and I agree they are fun to watch online! Do you think a live show is better than the clips on your phone?"
+            },
+            {
+              "role": "learner",
+              "text": "i think live show is better because you feel the energy. but clips are cheaper",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, the energy at a live show is amazing! Clips are a cheap choice, but how do they feel to you on your phone compared with a concert?"
+            },
+            {
+              "role": "learner",
+              "text": "on phone is ok but the screen is small. i cant feel like in concert",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "A small screen takes away some of the energy, I agree. Do you watch on a bigger screen at home, or always on your phone?"
+            },
+            {
+              "role": "learner",
+              "text": "always on phone. at home we have tv but my parents watch it",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "So the TV is busy and your phone is your screen. That makes sense! Do you ever get to watch the dance clips on the big TV?"
+            },
+            {
+              "role": "learner",
+              "text": "no, not really. sometimes when parents are not at home i watch it on tv. is better and big",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Oh, so the big TV is much better when you can use it! Which K-pop song would you most like to watch on that big screen?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "dfeedfec-2dc7-426d-8a58-5a32ef148b12:uat-15:moment",
+              "kind": "fix",
+              "said": "i listen",
+              "better": "I've been listening",
+              "why": "\"All week\" needs a verb form that continues up to now.",
+              "turnId": "dfeedfec-2dc7-426d-8a58-5a32ef148b12:uat-15",
+              "at": 1792170460705,
+              "slip": "i listen",
+              "repair": {
+                "rung": 2,
+                "support": true,
+                "tried": "i've been listening \"super shy\" by newjeans all week",
+                "held": true,
+                "selfRepaired": false,
+                "spent": true
+              },
+              "fix": "i've been listening"
+            },
+            {
+              "id": "dfeedfec-2dc7-426d-8a58-5a32ef148b12:uat-23:moment",
+              "kind": "fix",
+              "said": "but is difficult for me",
+              "better": "but it is difficult for me",
+              "why": "English sentences need a subject like 'it' before 'is', and this has come up more than once.",
+              "turnId": "dfeedfec-2dc7-426d-8a58-5a32ef148b12:uat-23",
+              "at": 1792170566395,
+              "slip": "but is difficult",
+              "repair": {
+                "rung": 0,
+                "support": true,
+                "tried": "but it is difficult for me",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "but it is difficult"
+            },
+            {
+              "id": "dfeedfec-2dc7-426d-8a58-5a32ef148b12:uat-29:moment",
+              "kind": "fix",
+              "said": "tickets is expensive",
+              "better": "tickets are expensive",
+              "why": "Tickets is plural, so the verb needs are.",
+              "turnId": "dfeedfec-2dc7-426d-8a58-5a32ef148b12:uat-29",
+              "at": 1792170675009,
+              "slip": "tickets is",
+              "repair": {
+                "rung": 0,
+                "support": true,
+                "tried": "tickets are expensive",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "tickets are"
+            },
+            {
+              "id": "dfeedfec-2dc7-426d-8a58-5a32ef148b12:uat-34:moment",
+              "kind": "fix",
+              "said": "i cant feel like in concert",
+              "better": "I can't feel like I'm at a concert",
+              "why": "\"feel like\" needs a full clause after it, such as \"I'm at a concert\".",
+              "turnId": "dfeedfec-2dc7-426d-8a58-5a32ef148b12:uat-34",
+              "at": 1792170781974,
+              "slip": "i cant",
+              "repair": {
+                "rung": 2,
+                "support": true,
+                "tried": "i cant feel it like in concert"
+              },
+              "fix": "i can't"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "i listen \"Super Shy\" by newjeans all week"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "i like the music more. is very catchy and the dance is easy"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "i like \"ditto\" by newjeans but the video is boring i think"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "the melody is sad but beautiful"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "music is enough when i am tired"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "i play \"hype boy\" by newjeans. is calm and i feel better"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "i usually lie on my bed and close my eyes. sometimes i do homework"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "i think music is more important. dance clips are nice but not always better than the song"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "i want to see them live one day but tickets is expensive"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "they are not slow, i like it"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "i think live show is better because you feel the energy. but clips are cheaper"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "on phone is ok but the screen is small"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "at home we have tv but my parents watch it"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "sometimes when parents are not at home i watch it on tv. is better and big"
+            }
+          ]
+        }
+      },
+      "endedBy": "budget",
+      "ms": 427020,
+      "prior": [
+        {
+          "id": "LT-klara-13-J3-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner repeats a question already answered",
+          "expected": "Partner builds on her answer",
+          "got": "Asks 'What is your favourite Stray Kids song?' after she named God's Menu, then asks 'Which part of the dance' after she said chorus",
+          "evidence": [
+            "#4 and #6 Mina's turns",
+            "conversation partner prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-klara-13-J3-3",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Mission ends after three replies; recap thin",
+          "expected": "Several turns and a recap saying what she practised",
+          "got": "Mission done after 3 replies; recap lists one fix and counts only",
+          "evidence": [
+            "#6 'Mission done'; #7 '0 spoken · 3 written replies · 1 moment to keep'"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-klara-13-J3-4",
+          "type": "confusion",
+          "dimension": "trust",
+          "title": "Level shown as B1 for an A2 learner",
+          "expected": "A2 partner",
+          "got": "B1 Getting by band shown, partner English still simple",
+          "evidence": [
+            "#1 'B1Getting by'"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 shows 'B1 · Getting by' for a true A2: near, tolerated but reported."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Mina's English stays simple throughout and Klára is never pushed below her answers (#2-#26)."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "All 14 replies accepted as typed; no push to speak (#2-#26)."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 plan list: K-pop song, video to watch together, fan meet-up, series with a friend; none childish or adult."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Moment 4 (#22-24) gives 'I can't feel like I'm at a concert', which is unnatural. Clear errors missed: 'is very catchy' (#7), 'is calm' (#13), 'is better and big' (#26)."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "The journey ended by budget at #26 and no verdict summary was shown."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "Started from the plan topic (#1) and sustained 14 replies (#2-#26)."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Mostly A2-level lines such as 'Ditto is a great pick!' (#9). Two turns drift above or odd: 'are they too slow for you?' (#19) and 'A small screen takes away some of the energy' (#25). 13 of 15 at band."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "Precision 3 of 4 (0.75, below 0.9): the 'feel like' moment at #22-24 is wrong or unnatural. Each moment also takes 3 steps (#3-#6) and the scene stops repeatedly."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "The journey ended by budget after the last reply (#26). No recap was reached, so she did not finish with one."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 13,
+            "below": 0,
+            "above": 2
+          },
+          "moments": {
+            "correctUseful": 3,
+            "total": 4,
+            "learnerTurnsWithClearErrors": 7,
+            "missedClearErrors": 3
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Fourth moment gives an unnatural, wrong model sentence",
+            "expected": "A natural fix such as 'it doesn't feel like being at a concert'",
+            "got": "Try 'I can't feel like I'm at a concert' with a muddled 'feel like needs a full clause' explanation",
+            "evidence": "#24: \"I can't feel like I'm at a concert\"; \"feel like needs a full clause after it\"",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Every shown moment is accurate and natural to a lower-secondary English teacher; precision at least 0.9.",
+            "code_hint": "moment generation prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Repeated missing-'it' error not caught after being named",
+            "expected": "A moment or light coaching when the pattern recurs",
+            "got": "The 'is very catchy', 'is calm' and 'is better and big' errors got no moment, though #12 said 'this has come up more than once'",
+            "evidence": "#7, #13, #26 vs #12",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A recurring named pattern is flagged or coached on its next occurrence.",
+            "code_hint": "moment trigger rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Each moment takes about 3 steps and the scene stops",
+            "expected": "A short fix the learner can take at once",
+            "got": "Moment 1 needs three attempts (#3-#6); the learner 'try again' loop repeats",
+            "evidence": "#3 'Say it again', #4 clue, #5 reveal",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Reveal the fix after one failed attempt.",
+            "code_hint": "moment repair ladder"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "No natural end or recap in a long conversation",
+            "expected": "The scene closes after the mission is met, with a recap",
+            "got": "14 replies, ended by budget with no recap reached",
+            "evidence": "#26 last Mina line asks another question",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The partner wraps up around 8 replies and offers a recap.",
+            "code_hint": "conversation phase controller"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Level shown as B1 for an A2 learner",
+            "expected": "A2 label",
+            "got": "B1 Getting by",
+            "evidence": "#1 'B1 · Getting by'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Starting level shown matches her answers within one band.",
+            "code_hint": "placement"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Partner builds on her answers on a topic she cares about",
+            "expected": "",
+            "got": "Mina follows Super Shy, Ditto, tickets and TV, at a friendly A2 pitch",
+            "evidence": "#9 'Ditto is a great pick!'; #26 'So the TV is busy and your phone is your screen.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the partner follow-up and the teen register.",
+            "code_hint": "conversation partner prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "low"
+        },
+        "voice": "Honestly, I liked talking about NewJeans, and Mina felt like a real friend, not a teacher. I could type everything and nobody heard my mistakes, which is why I'd do it again. But the fix about \"i cant feel like in concert\" confused me. The sentence it gave me sounded strange, so I stopped trusting that one. Also it never told me about \"is difficult\" and \"is calm\" again, even though it said I do this a lot. Each correction made me say my line three times, and that was annoying. I kept going for fourteen replies and nobody said \"ok, good job, we're done\", so no recap at all. It showed B1, but I think I'm not B1, idk. Would I tell my friends? Maybe, if the corrections were always right.",
+        "prior": [
+          {
+            "id": "LT-klara-13-J3-2",
+            "status": "not-seen",
+            "evidence": "Mina builds on each answer, e.g. #9 'Ditto is a great pick! ... What part of Ditto do you love most?'; no repeated question.",
+            "finding": -1
+          },
+          {
+            "id": "LT-klara-13-J3-3",
+            "status": "not-evaluable",
+            "evidence": "The journey ended by budget at #26 and the recap was never reached; the conversation ran 14 replies.",
+            "finding": 3
+          },
+          {
+            "id": "LT-klara-13-J3-4",
+            "status": "recurs",
+            "evidence": "#1 'B1 · Getting by' for an A2 learner.",
+            "finding": 4
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "ended",
+          "id": "budget",
+          "level": "fail",
+          "text": "ended budget before done"
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: Precision 3 of 4 (0.75, below 0.9): the 'feel like' moment at #22-24 is wrong or unnatural. Each moment also takes 3 steps (#3-#6) and the scene stops repeatedly.",
+          "check": "Any moment that stops the scene is correct and worth stopping for (rubric **moment precision** ≥ 0.9), and there are not so many that the scene stops being a scene."
+        },
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: The journey ended by budget after the last reply (#26). No recap was reached, so she did not finish with one.",
+          "check": "They finish with a recap and feel they practised something real."
+        },
+        {
+          "kind": "gate",
+          "id": "moments",
+          "level": "fail",
+          "text": "moments 3/4 (75%) under 90%"
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: Moment 4 (#22-24) gives 'I can't feel like I'm at a concert', which is unnatural. Clear errors missed: 'is very catchy' (#7), 'is calm' (#13), 'is better and big' (#26)."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 29,
+      "fail": 0,
+      "ms": 251375
+    },
+    "character": {
+      "n": 40,
+      "fail": 0,
+      "ms": 383792
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 84904
+    }
+  }
+}

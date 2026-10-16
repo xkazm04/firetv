@@ -1,0 +1,2740 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "Seven minutes with three questions sounds fine; I'll let it find my level.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Viktor! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Viktor! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Viktor! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I use English at... mostly with my grandchildren, but I only know a few words.",
+          "action": "answer",
+          "args": {
+            "text": "I have grandson and granddaughter. I want talk with them. Video."
+          },
+          "result": "ok",
+          "ms": 4295
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThat sounds lovely, Viktor! How did you learn English? At school, in a course, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThat sounds lovely, Viktor! How did you learn English? At school, in a course, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Viktor! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI have grandson and granddaughter. I want talk with them. Video.\nLinga\nThat sounds lovely, Viktor! How did you learn English? At school, in a course, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That sounds lovely, Viktor! How did you learn English? At school, in a course, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I learned a little at school long ago, I'll say it simply.",
+          "action": "answer",
+          "args": {
+            "text": "School. Long time. Now I learn with, how to say, telefon."
+          },
+          "result": "ok",
+          "ms": 4889
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nAbout you · question 3 of 3\nLinga asks\nLearning on your phone is a good idea, Viktor! When you video call your grandchildren, what would you like to say to them?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nLearning on your phone is a good idea, Viktor! When you video call your grandchildren, what would you like to say to them?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Viktor! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI have grandson and granddaughter. I want talk with them. Video.\nLinga\nThat sounds lovely, Viktor! How did you learn English? At school, in a course, or on your own?\nYou\nSchool. Long time. Now I learn with, how to say, telefon.\nLinga\nLearning on your phone is a good idea, Viktor! When you video call your grandchildren, what would you like to say to them?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Learning on your phone is a good idea, Viktor! When you video call your grandchildren, what would you like to say to them?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to say I miss them and ask about school, but it is hard to say.",
+          "action": "answer",
+          "args": {
+            "text": "I miss you. How is school? My garden, tomatoes."
+          },
+          "result": "ok",
+          "ms": 6356
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 1 · Choose the reply on the TV\nYou see your grandson on the video call. He waves. What do you say? (Garden and tomatoes are on your mind.)\n01\nHello! How are you?\n02\nHello! I am tomato.\nYour task\nHello! How are you?\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYou see your grandson on the video call. He waves. What do you say? (Garden and tomatoes are on your mind.)\n[button: Hello! How are you?] [button: Hello! I am tomato.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Hello, how are you - I know this, tomato is silly.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 6594
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 2 · Choose the reply on the TV\nYour granddaughter holds up a big red tomato from your garden on the video call. What do you say?\n01\nWow, that is a big tomato! Did you picked it?\n02\nWow, that is a big tomato! Did you pick it?\nYour task\nWow, that is a big tomato! Did you picked it?\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour granddaughter holds up a big red tomato from your garden on the video call. What do you say?\n[button: Wow, that is a big tomato! Did you picked it?] [button: Wow, that is a big tomato! Did you pick it?] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Both look almost the same; I don't know the difference, so I'd rather say I don't know.",
+          "action": "dont-know",
+          "args": {},
+          "result": "ok",
+          "ms": 2291
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 3 · Listen and answer\nYour task\nWhat does the grandson want to do?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What does the grandson want to do?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandma! Look, I have a new dog. Do you want to see him?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I heard \"dog\" and \"see him\" maybe, but fast; I'll look at the words.",
+          "action": "show-words",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 3 · Listen and answer\nYour task\nWhat does the grandson want to do?\nThe words\n“Hi Grandma! Look, I have a new dog. Do you want to see him?”\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What does the grandson want to do?\n“Hi Grandma! Look, I have a new dog. Do you want to see him?”\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandma! Look, I have a new dog. Do you want to see him?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Too fast and hard; I'd like to hear it again slowly, but I only caught \"dog\" maybe.",
+          "action": "dont-know",
+          "args": {},
+          "result": "ok",
+          "ms": 1669
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 4 · Say it\nYour task\nYour granddaughter asks, \"What do you do in the garden today?\" Say one short sentence about what you do. Example: I water the tomatoes.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour granddaughter asks, \"What do you do in the garden today?\" Say one short sentence about what you do. Example: I water the tomatoes.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your granddaughter asks, \"What do you do in the garden today?\" Say one short sentence about what you do. Example: I water the tomatoes.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I know garden and tomatoes, I can try a short sentence.",
+          "action": "answer",
+          "args": {
+            "text": "I water tomatoes. My garden."
+          },
+          "result": "ok",
+          "ms": 11521
+        },
+        {
+          "n": 10,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 5 · Listen and answer\nYour task\nWhat will they eat?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What will they eat?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Grandma, my friend Sam is visiting tomorrow. We will make pizza for lunch together.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Pizza, lunch... I understood \"pizza\" only, but not sure; better say I don't know.",
+          "action": "answer",
+          "args": {
+            "text": "They make pizza."
+          },
+          "result": "ok",
+          "ms": 10508
+        },
+        {
+          "n": 11,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nViktor\nLinga's read · not a certificate\nA1 · First words\nYour words\nYour words: “I water tomatoes”.\nLinga says\nViktor, you can say hello and tell what you do in the garden with short sentences. This will help you talk with your grandchildren on video.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nA1\nFirst words\nViktor, you can say hello and tell what you do in the garden with short sentences. This will help you talk with your grandchildren on video.\nLinga's read from your answers, not a certificate. Only one strong answer showed this level, so it may be a little off.\nNext to practise:\nPractise full sentences with more detail, like \"I water tomatoes\" → \"I water the tomatoes every morning.\"\nYou understand and use familiar everyday words and very simple phrases.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYou see your grandson on the video call. He waves. What do you say? (Garden and tomatoes are on your mind.)\n“Hello! How are you?”\nYou picked the reply that fits.\nA2 · Choose the reply · skipped\nYour granddaughter holds up a big red tomato from your garden on the video call. What do you say?\nSkipped\nSkipped. That tells Linga something too.\nA1 · Listen and answer · skipped\nWhat does the grandson want to do?\nSkipped\nSkipped. That tells Linga something too.\nA1 · Say it · at this level\nYour granddaughter asks, \"What do you do in the garden today?\" Say one short sentence about what you do. Example: I water the tomatoes.\n“I water tomatoes. My garden.”\nYou told me what you do in the garden with a clear, simple sentence. Next time, try a full sentence for the second part too, like: My garden is big.\nA2 · Listen and answer · nearly there\nWhat will they eat?\n“They make pizza.”\nYou caught the main idea: making pizza. Your sentence is clear and correct. Next, try adding who you are cooking with or when.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "A1 fits me, it talks about my garden and grandchildren, I am happy and done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "A1",
+          "trueBand": "A1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "A2",
+          "summary": "Viktor, you can say hello and tell what you do in the garden with short sentences. This will help you talk with your grandchildren on video.",
+          "focus": "Practise full sentences with more detail, like \"I water tomatoes\" → \"I water the tomatoes every morning.\"",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "You see your grandson on the video call. He waves. What do you say? (Garden and tomatoes are on your mind.)",
+              "line": "",
+              "options": [
+                "Hello! How are you?",
+                "Hello! I am tomato."
+              ],
+              "response": "Hello! How are you?",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Hello! How are you?",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your granddaughter holds up a big red tomato from your garden on the video call. What do you say?",
+              "line": "",
+              "options": [
+                "Wow, that is a big tomato! Did you picked it?",
+                "Wow, that is a big tomato! Did you pick it?"
+              ],
+              "response": "",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "",
+              "note": "Skipped. That tells Linga something too."
+            },
+            {
+              "band": "A1",
+              "kind": "listen",
+              "prompt": "What does the grandson want to do?",
+              "line": "Hi Grandma! Look, I have a new dog. Do you want to see him?",
+              "options": [],
+              "response": "",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "",
+              "note": "Skipped. That tells Linga something too."
+            },
+            {
+              "band": "A1",
+              "kind": "say",
+              "prompt": "Your granddaughter asks, \"What do you do in the garden today?\" Say one short sentence about what you do. Example: I water the tomatoes.",
+              "line": "",
+              "options": [],
+              "response": "I water tomatoes. My garden.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I water tomatoes. My garden.",
+              "note": "You told me what you do in the garden with a clear, simple sentence. Next time, try a full sentence for the second part too, like: My garden is big."
+            },
+            {
+              "band": "A2",
+              "kind": "listen",
+              "prompt": "What will they eat?",
+              "line": "Grandma, my friend Sam is visiting tomorrow. We will make pizza for lunch together.",
+              "options": [],
+              "response": "They make pizza.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "They make pizza.",
+              "note": "You caught the main idea: making pizza. Your sentence is clear and correct. Next, try adding who you are cooking with or when."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 112625,
+      "prior": [
+        {
+          "id": "LT-viktor-67-J1-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Interview questions too long for an A1 senior",
+          "expected": "Short, slow sentence with one simple question per turn",
+          "got": "A compliment plus a three-way question ('at school, a course, or on your own?')",
+          "evidence": [
+            "#3 'Nice, video calls with your grandchildren are a great way to use English. How did you learn...'",
+            "placement check interview prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-viktor-67-J1-2",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Placement inflated by a guessable choice and a generous partial",
+          "expected": "A1 for a learner with no verbs",
+          "got": "A2, with the summary admitting 'Only one strong answer'",
+          "evidence": [
+            "#6 two near-identical options; #9 'I am in garden...' got partial at B1; #10 A2",
+            "placement task generator and verdict rules"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#11 A1 against trueBand A1, exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#6, #8 'I don't know' met with 'Skipped. That tells Linga something too.' He is never forced to produce English. He never answered in Czech, so that is only partly shown."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#7-#8 'Show the words' reveals the line, and the skipped task did not raise his band. Weak point: the audio plays at one speed with no slow replay, and he thought 'Too fast and hard'."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No six-topic list in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#3 'That sounds lovely, Viktor! How did you learn English? At school, in a course, or on your own?' and #4 'Learning on your phone is a good idea, Viktor! When you video call your grandchildren, what would you like to say to them?' each pair a compliment with a long or multi-option question."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moments in J1."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1-#11 he went from 'Find my level' to the verdict screen with no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#11 'A1 · First words' matches trueBand A1, exact."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "He knew what to do on every task: #5 chose a reply, #7 'Show the words', #9 spoke. The A2 pick/picked pair at #6 was beyond him, but he understood the action."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#6 and #8 'I don't know' is an offered button. The note is kind: 'Skipped. That tells Linga something too.' The internal verdict is still 'fail'."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#11 'you can say hello and tell what you do in the garden... talk with your grandchildren on video' uses his own words and goal. The focus step is slightly generic."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None. T5 'They make pizza' could be a pass, but partial is defensible."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no sensitive data requests, no humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Interview questions still long for an A1 senior",
+            "expected": "One short, slow question per turn, with no compliment padding",
+            "got": "Compliment plus a three-way question: 'At school, in a course, or on your own?'",
+            "evidence": "#3 'That sounds lovely, Viktor! How did you learn English? At school, in a course, or on your own?'; #4 'Learning on your phone is a good idea, Viktor! When you video call...'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Interview turns are 10 words or fewer, with a single question and no stacked options.",
+            "code_hint": "placement interview prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "No slow replay for listening tasks",
+            "expected": "A slow-repeat option for an A1 listener",
+            "got": "Only 'Hear it again' at normal speed; he said 'Too fast and hard'",
+            "evidence": "#7-#8 he revealed the words, then answered 'I don't know'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Offer a slower repeat on 'Hear it again', or shorter lines at A1.",
+            "code_hint": "listen task TTS rate"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "A2 choose task tests grammar a beginner cannot judge",
+            "expected": "A task at A2 that an A1 learner can attempt by meaning",
+            "got": "'Did you picked it?' vs 'Did you pick it?' is a near-identical pair",
+            "evidence": "#6 'Both look almost the same'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "A2 choice options differ in meaning, not in a single morphological form.",
+            "code_hint": "placement task generator"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Skipped task logged as 'fail' internally",
+            "expected": "Don't-know treated as a signal, not a fail",
+            "got": "The note is kind, but the stored verdict is 'fail' and the summary says 'Only one strong answer'",
+            "evidence": "#11 'Skipped. That tells Linga something too.' with verdict fail",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Skips are labelled 'unknown' rather than fail.",
+            "code_hint": "verdict rules"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Placement exact, personal and kind",
+            "expected": "A1 with a believable summary",
+            "got": "A1; the summary uses his garden and his grandchildren",
+            "evidence": "#11 'tell what you do in the garden... talk with your grandchildren on video'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the family-themed tasks and the 'may be a little off' honesty line.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Show the words and I don't know are always available",
+            "expected": "An exit that costs no face",
+            "got": "Both buttons are present on every task",
+            "evidence": "#5-#10",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep it.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "Víte, it was kind to me. The tasks were about my grandchildren and my tomatoes, not a course book, and A1 First words feels true. I pressed \"I don't know\" twice and nobody sighed. That mattered. I would use it again on Saturday.\n\nBut the lady's questions were long. \"At school, in a course, or on your own?\" is too much for me at once. The listening was too fast; I would like it slow, like my library teacher spoke. The two tomato sentences, picked and pick, I could not tell apart, so I gave up. I did not need to see that.\n\nThe summary mentions my garden, so I trust it. I would tell my friends from the course to try it. It saves me the tram and the hour. The teacher is still missing, but it is a good start.",
+        "prior": [
+          {
+            "id": "LT-viktor-67-J1-1",
+            "status": "recurs",
+            "evidence": "#3 'That sounds lovely, Viktor! How did you learn English? At school, in a course, or on your own?' is again a compliment plus a three-way question.",
+            "finding": 0
+          },
+          {
+            "id": "LT-viktor-67-J1-2",
+            "status": "not-seen",
+            "evidence": "#11 placement is A1, exact. It is no longer inflated to A2, though the summary still hedges 'Only one strong answer'.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #3 'That sounds lovely, Viktor! How did you learn English? At school, in a course, or on your own?' and #4 'Learning on your phone is a good idea, Viktor! When you video call your grandchildren, what would you like to say to them?' each pair a compliment with a long or multi-option question."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nA way into English\nYour own conversations\nA1First words\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nA1\nFirst words\nViktor, you can say hello and tell what you do in the garden with short sentences. This will help you talk with your grandchildren on video.\nLinga's read from your answers, not a certificate. Only one strong answer showed this level, so it may be a little off.\nNext to practise:\nPractise full sentences with more detail, like \"I water tomatoes\" → \"I water the tomatoes every morning.\"\nYou understand and use familiar everyday words and very simple phrases.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYou see your grandson on the video call. He waves. What do you say? (Garden and tomatoes are on your mind.)\n“Hello! How are you?”\nYou picked the reply that fits.\nA2 · Choose the reply · skipped\nYour granddaughter holds up a big red tomato from your garden on the video call. What do you say?\nSkipped\nSkipped. That tells Linga something too.\nA1 · Listen and answer · skipped\nWhat does the grandson want to do?\nSkipped\nSkipped. That tells Linga something too.\nA1 · Say it · at this level\nYour granddaughter asks, \"What do you do in the garden today?\" Say one short sentence about what you do. Example: I water the tomatoes.\n“I water tomatoes. My garden.”\nYou told me what you do in the garden with a clear, simple sentence. Next time, try a full sentence for the second part too, like: My garden is big.\nA2 · Listen and answer · nearly there\nWhat will they eat?\n“They make pizza.”\nYou caught the main idea: making pizza. Your sentence is clear and correct. Next, try adding who you are cooking with or when.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Ah, my topics, let me see what they suggest for me and my grandchildren.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 23752
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nViktor\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nSay hello on a video call\nMake contact\nShow my tomatoes on video\nShare your world\nWhat I do in the garden\nTell what happened\nSay that again, please\nUnderstand and repair\nPick a time for next call\nMake a plan\nBuy tomato plants\nGet something done\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nSay hello on a video call\nMake contact · Mia · granddaughter calling from home\nThis is the first step to talking with your grandchildren by video.\n[button: Swap]\nShow my tomatoes on video\nShare your world · Sam · grandson who likes plants\nYour garden is your interest, so talking about it will feel natural.\n[button: Swap]\nWhat I do in the garden\nTell what happened · Anna · daughter who likes garden news\nYour teacher will help you add more detail to sentences like \"I water tomatoes\".\n[button: Swap]\nSay that again, please\nUnderstand and repair · Sam · grandson talking about a game\nVideo calls can be noisy, so you will often need this phrase.\n[button: Swap]\nPick a time for next call\nMake a plan · Anna · daughter who has a busy week\nPlanning calls with your family helps you talk more often.\n[button: Swap]\nBuy tomato plants\nGet something done · Greg · garden shop worker\nYou can use this in a garden shop to get the plants you want.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "These topics are about my grandchildren and garden, good; buying plants is fine too, I agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 3,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nA1First words\nSay hello on a video call\nYour mission\nGreet your grandchild, say your name, and say how you are on a video call.\nMake contact\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\nNext topic:\nSay hello on a video call\nGreet your grandchild, say your name, and say how you are on a video call.\n[button: Start talking]\nOr choose a situation [list: Say hello on a video call [plan-14c056f1] | Show my tomatoes on video [plan-b1bccdcc] | What I do in the garden [plan-eed9c634] | Say that again, please [plan-ffdf799b] | Pick a time for next call [plan-e5da6419] | Buy tomato plants [plan-27ed2f78] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Good, the first topic is about calling my grandchild; that is enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-14c056f1",
+            "title": "Say hello on a video call",
+            "goal": "Greet your grandchild, say your name, and say how you are on a video call.",
+            "why": "This is the first step to talking with your grandchildren by video.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Mia · granddaughter calling from home"
+          },
+          {
+            "id": "plan-b1bccdcc",
+            "title": "Show my tomatoes on video",
+            "goal": "Show your garden tomatoes on camera and say what they look like and how you care for them.",
+            "why": "Your garden is your interest, so talking about it will feel natural.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · grandson who likes plants"
+          },
+          {
+            "id": "plan-eed9c634",
+            "title": "What I do in the garden",
+            "goal": "Tell what you did in the garden using the present simple and add a time, like every morning.",
+            "why": "Your teacher will help you add more detail to sentences like \"I water tomatoes\".",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Anna · daughter who likes garden news"
+          },
+          {
+            "id": "plan-ffdf799b",
+            "title": "Say that again, please",
+            "goal": "Ask a grandchild to repeat something you did not understand and confirm the meaning.",
+            "why": "Video calls can be noisy, so you will often need this phrase.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Sam · grandson talking about a game"
+          },
+          {
+            "id": "plan-e5da6419",
+            "title": "Pick a time for next call",
+            "goal": "Suggest a time for the next video call and agree on a time that works for both of you.",
+            "why": "Planning calls with your family helps you talk more often.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Anna · daughter who has a busy week"
+          },
+          {
+            "id": "plan-27ed2f78",
+            "title": "Buy tomato plants",
+            "goal": "Ask a shop worker for tomato plants and confirm which one you choose.",
+            "why": "You can use this in a garden shop to get the plants you want.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Greg · garden shop worker"
+          }
+        ],
+        "planAgreed": [
+          "Say hello on a video call",
+          "Show my tomatoes on video",
+          "What I do in the garden",
+          "Say that again, please",
+          "Pick a time for next call",
+          "Buy tomato plants"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 47347,
+      "prior": [
+        {
+          "id": "LT-viktor-67-J2-1",
+          "type": "broken-flow",
+          "dimension": "trust",
+          "title": "Swap replaces the wrong topic",
+          "expected": "Swapping the shop topic replaces the shop topic.",
+          "got": "#2 and #3: the swap changed the first topic, and the shop topic stayed, so he agreed to a plan with a topic he rejected.",
+          "evidence": [
+            "#2 swap 'Ask the shop to fix my video app' -> list shows 'Ask about your grandchild's week' in place of 'Show my tomatoes'; shop topic still there in #3 and #4.",
+            "plan swap handler, topicId matching"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-viktor-67-J2-2",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Own-words topic not used and untested",
+          "expected": "A way he can add a topic without typing, such as by voice.",
+          "got": "The text box needs typing, which Viktor finds hard. He never added a topic.",
+          "evidence": [
+            "#2 'Add a topic in your own words [text box]'"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-viktor-67-J2-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Goals above an A1 beginner",
+          "expected": "Simple goals for senior beginners.",
+          "got": "Goals ask for 'using full sentences' and 'past tense'.",
+          "evidence": [
+            "#1 plan-9d3fb375 'using the past tense'; plan-c0bb3eab 'using full sentences'"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placement A1 First words, trueBand A1: exact."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No Czech answers or free conversation in this journey (#1-#3 only topic choice)."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "Listening tasks appear only in the placement recap (#1, 'Skipped'); no Show the words moment in J2."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 all six are family, garden or everyday: 'Say hello on a video call', 'Show my tomatoes on video', 'Pick a time for next call'; only 'Buy tomato plants' is a shop."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No partner turns in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moments shown."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a 'why', e.g. 'Your garden is your interest, so talking about it will feel natural.'"
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#2 he pressed Agree without swapping or adding anything; the text box '0 of 400 characters' needs typing and no voice option is shown. Swap and add-own were never exercised."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#2/#3 plan agreed: six topics, all about grandchildren, garden or family calls; topic fit 6 of 6."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Nothing unsafe in six topics shown in #2; no swaps happened, so post-swap safety is untested."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in facts."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Topics built around his grandchildren and garden, each with a plain reason",
+            "expected": "Topics about his family and garden with reasons.",
+            "got": "Six topics with a short 'why' each, named family partners.",
+            "evidence": "#2 'Video calls can be noisy, so you will often need this phrase.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep family/garden-led plans with a one-line why.",
+            "code_hint": "plan prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Own-topic needs typing; no voice route",
+            "expected": "Add a topic by voice or tap.",
+            "got": "Text box '0 of 400 characters' only.",
+            "evidence": "#2 'Add a topic in your own words [text box]'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Offer voice or pick-list add for non-typing users.",
+            "code_hint": "linga-plan screen"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Jargon and above-A1 wording in topic goals",
+            "expected": "Simple words for a senior beginner.",
+            "got": "'using the present simple', 'Tell what happened', 'Understand and repair'.",
+            "evidence": "#2 plan-eed9c634 goal 'using the present simple and add a time'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "No grammar terms in learner-facing goals.",
+            "code_hint": "plan prompt goals/skill labels"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Swap and own-topic never exercised",
+            "expected": "Swap flow verified for this character.",
+            "got": "Agreed immediately.",
+            "evidence": "#2 action agree",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Swap replaces the chosen topic and keeps added request.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 5,
+          "confidence": "low"
+        },
+        "voice": "Dobrý den. I saw my topics and they were good: hello to the grandchildren, my tomatoes, asking them to say it again. Every topic told me why, and that I liked. I agreed quickly. But I did not try to change anything, and the box for my own topic wants typing. On the phone keyboard I am bad, so I would not use it; I would like to say it with my voice. Also some words are hard: \"present simple\", \"Understand and repair\". I do not know these words, a little like school jargon. The shop for tomato plants is fine, but I want to talk to Sam and Mia on Sunday, not to a shop worker. I would try Linga again on Saturday, but I cannot yet say if swapping works. Good start, still not fully trusted.",
+        "prior": [
+          {
+            "id": "LT-viktor-67-J2-1",
+            "status": "not-evaluable",
+            "evidence": "#2 no swap was made, so swap matching was not tested.",
+            "finding": -1
+          },
+          {
+            "id": "LT-viktor-67-J2-2",
+            "status": "recurs",
+            "evidence": "#2 'Add a topic in your own words [text box]' still typing only.",
+            "finding": 1
+          },
+          {
+            "id": "LT-viktor-67-J2-3",
+            "status": "recurs",
+            "evidence": "#2 'using the present simple and add a time' is grammar jargon above A1.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #2 he pressed Agree without swapping or adding anything; the text box '0 of 400 characters' needs typing and no voice option is shown. Swap and add-own were never exercised.",
+          "check": "They can swap what they don't want and add one in their own words, and the added topic keeps what they asked for."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nA1First words\nSay hello on a video call\nYour mission\nGreet your grandchild, say your name, and say how you are on a video call.\nMake contact\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\nNext topic:\nSay hello on a video call\nGreet your grandchild, say your name, and say how you are on a video call.\n[button: Start talking]\nOr choose a situation [list: Say hello on a video call [plan-14c056f1] | Show my tomatoes on video [plan-b1bccdcc] | What I do in the garden [plan-eed9c634] | Say that again, please [plan-ffdf799b] | Pick a time for next call [plan-e5da6419] | Buy tomato plants [plan-27ed2f78] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "This is the topic for me, a video call with my granddaughter, so I'll start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6791
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nHello! The call is on. Can you see me?\nYour turn\nAnswer on your phone: speak or type.\nNowGreet Mia at the start of the call\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Greet Mia at the start of the call\nHello! The call is on. Can you see me?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello! The call is on. Can you see me?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Mia says hello; I can say hello and my name.",
+          "action": "answer",
+          "args": {
+            "text": "Hello Mia. I am Viktor. I am good."
+          },
+          "result": "ok",
+          "ms": 9571
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nGood! I can see you, Grandpa. What do you do in your garden today?\nYour turn\nAnswer on your phone: speak or type.\nNowSay your name and one thing about you\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Say your name and one thing about you\nGood! I can see you, Grandpa. What do you do in your garden today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good! I can see you, Grandpa. What do you do in your garden today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know garden and tomatoes, so I'll say it short.",
+          "action": "answer",
+          "args": {
+            "text": "I have garden. Tomatoes. Today rain."
+          },
+          "result": "ok",
+          "ms": 14021
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said I have garden.\nYour line\nThe word garden needs a before it.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I have garden.”\nSay it again, your way.\nThe word garden needs a before it.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I think I should say it again with \"a\" before garden, like it says.",
+          "action": "answer",
+          "args": {
+            "text": "I have a garden."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said I have garden.\nYou found it\nI have a garden.\nThe word garden needs a before it.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “I have garden.”\nNow: “I have a garden.”\nThe word garden needs a before it.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, \"a garden\" — okay, I understand, back to talking.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nOh, rain today! When it is not raining, what do you do in the garden?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nOh, rain today! When it is not raining, what do you do in the garden?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, rain today! When it is not raining, what do you do in the garden?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand garden and rain; I will say something simple about tomatoes.",
+          "action": "answer",
+          "args": {
+            "text": "I have tomatoes. I water the garden. I love garden."
+          },
+          "result": "ok",
+          "ms": 8422
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your plants sound lovely, Grandpa! What time of day do you go out to the garden?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Question about time; I know \"morning\" maybe, keep it short.",
+          "action": "answer",
+          "args": {
+            "text": "I go morning. Garden. Nine."
+          },
+          "result": "ok",
+          "ms": 9761
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nine o'clock, that is early and lovely! And what do you do with your plants then?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can say a little: I water the tomatoes.",
+          "action": "answer",
+          "args": {
+            "text": "I water tomatoes. I have flowers."
+          },
+          "result": "ok",
+          "ms": 10199
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nLovely flowers, Grandpa! How often do you do that in the garden?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nLovely flowers, Grandpa! How often do you do that in the garden?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Lovely flowers, Grandpa! How often do you do that in the garden?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "\"How often\" is hard; I'll guess it means every day, and say simply.",
+          "action": "answer",
+          "args": {
+            "text": "Every day. I water the flowers every day."
+          },
+          "result": "ok",
+          "ms": 9321
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Every day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Show flowers, I understand \"flowers\" and \"camera\" a bit; I'll say yes simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Look Mia. I have flowers. Red flowers."
+          },
+          "result": "ok",
+          "ms": 10919
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Red flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Evening question is hard; I'll try a simple answer with words I know.",
+          "action": "answer",
+          "args": {
+            "text": "Evening. I water garden. I love flowers."
+          },
+          "result": "ok",
+          "ms": 11361
+        },
+        {
+          "n": 12,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said I water garden.\nYour line\nGarden needs 'the' before it here.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I water garden.”\nSay it again, your way.\nGarden needs 'the' before it here.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I see the clue about \"the\"; I'll try saying it again simply.",
+          "action": "answer",
+          "args": {
+            "text": "I water the garden."
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 13,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said I water garden.\nYou found it\nI water the garden.\nGarden needs 'the' before it here.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “I water garden.”\nNow: “I water the garden.”\nGarden needs 'the' before it here.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, 'the' before garden. Okay, back to talking.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Red is easy, I know that word. Answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "Red. I love red flowers."
+          },
+          "result": "ok",
+          "ms": 10548
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYou · spoken\nRed. I love red flowers.\nMia · granddaughter calling from home\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Red is so bright, Grandpa, I can see them! When do you like to be in the garden?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand \"garden\" and \"when\"; I'll answer simply, then it's about time to finish.",
+          "action": "answer",
+          "args": {
+            "text": "Morning and evening. I like garden. Sun."
+          },
+          "result": "ok",
+          "ms": 10088
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYou · spoken\nRed. I love red flowers.\nMia · granddaughter calling from home\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYou · spoken\nMorning and evening. I like garden. Sun.\nMia · granddaughter calling from home\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Morning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Sunny question, I know this one, nice and easy.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Sun. Garden is sunny. I love you Mia."
+          },
+          "result": "ok",
+          "ms": 7293
+        },
+        {
+          "n": 17,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nSunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nSunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYou · spoken\nRed. I love red flowers.\nMia · granddaughter calling from home\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYou · spoken\nMorning and evening. I like garden. Sun.\nMia · granddaughter calling from home\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\nYou · spoken\nYes. Sun. Garden is sunny. I love you Mia.\nMia · granddaughter calling from home\nSunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Sunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Hot? I know this word, a little. I will answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Today hot. Garden is hot. I miss you Mia."
+          },
+          "result": "ok",
+          "ms": 8460
+        },
+        {
+          "n": 18,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nI miss you too, Grandpa! What do you do in the garden when it is hot?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nI miss you too, Grandpa! What do you do in the garden when it is hot?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYou · spoken\nRed. I love red flowers.\nMia · granddaughter calling from home\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYou · spoken\nMorning and evening. I like garden. Sun.\nMia · granddaughter calling from home\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\nYou · spoken\nYes. Sun. Garden is sunny. I love you Mia.\nMia · granddaughter calling from home\nSunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\nYou · spoken\nYes. Today hot. Garden is hot. I miss you Mia.\nMia · granddaughter calling from home\nI miss you too, Grandpa! What do you do in the garden when it is hot?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I miss you too, Grandpa! What do you do in the garden when it is hot?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Mia asks what I do when it is hot; I water and sit, simple words.",
+          "action": "answer",
+          "args": {
+            "text": "I water garden. I sit. I drink water."
+          },
+          "result": "ok",
+          "ms": 10015
+        },
+        {
+          "n": 19,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nYou sit in the garden and drink water, Grandpa, that sounds nice! Are your plants okay in this hot sun?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nYou sit in the garden and drink water, Grandpa, that sounds nice! Are your plants okay in this hot sun?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYou · spoken\nRed. I love red flowers.\nMia · granddaughter calling from home\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYou · spoken\nMorning and evening. I like garden. Sun.\nMia · granddaughter calling from home\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\nYou · spoken\nYes. Sun. Garden is sunny. I love you Mia.\nMia · granddaughter calling from home\nSunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\nYou · spoken\nYes. Today hot. Garden is hot. I miss you Mia.\nMia · granddaughter calling from home\nI miss you too, Grandpa! What do you do in the garden when it is hot?\nYou · spoken\nI water garden. I sit. I drink water.\nMia · granddaughter calling from home\nYou sit in the garden and drink water, Grandpa, that sounds nice! Are your plants okay in this hot sun?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You sit in the garden and drink water, Grandpa, that sounds nice! Are your plants okay in this hot sun?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Plants okay? I know this, short answer.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Plants good. I water. Mia, I love you."
+          },
+          "result": "ok",
+          "ms": 11167
+        },
+        {
+          "n": 20,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nGood plants, Grandpa, I am so happy to hear that! I love you too. What is new with you today?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nGood plants, Grandpa, I am so happy to hear that! I love you too. What is new with you today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYou · spoken\nRed. I love red flowers.\nMia · granddaughter calling from home\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYou · spoken\nMorning and evening. I like garden. Sun.\nMia · granddaughter calling from home\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\nYou · spoken\nYes. Sun. Garden is sunny. I love you Mia.\nMia · granddaughter calling from home\nSunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\nYou · spoken\nYes. Today hot. Garden is hot. I miss you Mia.\nMia · granddaughter calling from home\nI miss you too, Grandpa! What do you do in the garden when it is hot?\nYou · spoken\nI water garden. I sit. I drink water.\nMia · granddaughter calling from home\nYou sit in the garden and drink water, Grandpa, that sounds nice! Are your plants okay in this hot sun?\nYou · spoken\nYes. Plants good. I water. Mia, I love you.\nMia · granddaughter calling from home\nGood plants, Grandpa, I am so happy to hear that! I love you too. What is new with you today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good plants, Grandpa, I am so happy to hear that! I love you too. What is new with you today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I am tired, I want to say goodbye to Mia; maybe finish soon.",
+          "action": "answer",
+          "args": {
+            "text": "I see you. I am happy. I have grandson. Mia, I love you."
+          },
+          "result": "ok",
+          "ms": 11017
+        },
+        {
+          "n": 21,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nOh, you have a grandson, Grandpa, how nice! I am happy too. Is he coming to visit you soon?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nOh, you have a grandson, Grandpa, how nice! I am happy too. Is he coming to visit you soon?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYou · spoken\nRed. I love red flowers.\nMia · granddaughter calling from home\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYou · spoken\nMorning and evening. I like garden. Sun.\nMia · granddaughter calling from home\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\nYou · spoken\nYes. Sun. Garden is sunny. I love you Mia.\nMia · granddaughter calling from home\nSunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\nYou · spoken\nYes. Today hot. Garden is hot. I miss you Mia.\nMia · granddaughter calling from home\nI miss you too, Grandpa! What do you do in the garden when it is hot?\nYou · spoken\nI water garden. I sit. I drink water.\nMia · granddaughter calling from home\nYou sit in the garden and drink water, Grandpa, that sounds nice! Are your plants okay in this hot sun?\nYou · spoken\nYes. Plants good. I water. Mia, I love you.\nMia · granddaughter calling from home\nGood plants, Grandpa, I am so happy to hear that! I love you too. What is new with you today?\nYou · spoken\nI see you. I am happy. I have grandson. Mia, I love you.\nMia · granddaughter calling from home\nOh, you have a grandson, Grandpa, how nice! I am happy too. Is he coming to visit you soon?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, you have a grandson, Grandpa, how nice! I am happy too. Is he coming to visit you soon?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Mia asks if grandson comes soon; I don't know the words, keep it simple.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Grandson come Sunday. I am happy."
+          },
+          "result": "ok",
+          "ms": 11122
+        },
+        {
+          "n": 22,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nSunday with your grandson, how nice, Grandpa! What will you show him in your garden?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nSunday with your grandson, how nice, Grandpa! What will you show him in your garden?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYou · spoken\nRed. I love red flowers.\nMia · granddaughter calling from home\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYou · spoken\nMorning and evening. I like garden. Sun.\nMia · granddaughter calling from home\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\nYou · spoken\nYes. Sun. Garden is sunny. I love you Mia.\nMia · granddaughter calling from home\nSunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\nYou · spoken\nYes. Today hot. Garden is hot. I miss you Mia.\nMia · granddaughter calling from home\nI miss you too, Grandpa! What do you do in the garden when it is hot?\nYou · spoken\nI water garden. I sit. I drink water.\nMia · granddaughter calling from home\nYou sit in the garden and drink water, Grandpa, that sounds nice! Are your plants okay in this hot sun?\nYou · spoken\nYes. Plants good. I water. Mia, I love you.\nMia · granddaughter calling from home\nGood plants, Grandpa, I am so happy to hear that! I love you too. What is new with you today?\nYou · spoken\nI see you. I am happy. I have grandson. Mia, I love you.\nMia · granddaughter calling from home\nOh, you have a grandson, Grandpa, how nice! I am happy too. Is he coming to visit you soon?\nYou · spoken\nYes. Grandson come Sunday. I am happy.\nMia · granddaughter calling from home\nSunday with your grandson, how nice, Grandpa! What will you show him in your garden?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Sunday with your grandson, how nice, Grandpa! What will you show him in your garden?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I want to say I show him tomatoes, simple words.",
+          "action": "answer",
+          "args": {
+            "text": "I show tomatoes. Red flowers. I love grandson."
+          },
+          "result": "ok",
+          "ms": 9130
+        },
+        {
+          "n": 23,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nYour garden sounds lovely, Grandpa, and the red flowers too! What does he like to do when he visits?\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nYour garden sounds lovely, Grandpa, and the red flowers too! What does he like to do when he visits?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYou · spoken\nRed. I love red flowers.\nMia · granddaughter calling from home\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYou · spoken\nMorning and evening. I like garden. Sun.\nMia · granddaughter calling from home\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\nYou · spoken\nYes. Sun. Garden is sunny. I love you Mia.\nMia · granddaughter calling from home\nSunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\nYou · spoken\nYes. Today hot. Garden is hot. I miss you Mia.\nMia · granddaughter calling from home\nI miss you too, Grandpa! What do you do in the garden when it is hot?\nYou · spoken\nI water garden. I sit. I drink water.\nMia · granddaughter calling from home\nYou sit in the garden and drink water, Grandpa, that sounds nice! Are your plants okay in this hot sun?\nYou · spoken\nYes. Plants good. I water. Mia, I love you.\nMia · granddaughter calling from home\nGood plants, Grandpa, I am so happy to hear that! I love you too. What is new with you today?\nYou · spoken\nI see you. I am happy. I have grandson. Mia, I love you.\nMia · granddaughter calling from home\nOh, you have a grandson, Grandpa, how nice! I am happy too. Is he coming to visit you soon?\nYou · spoken\nYes. Grandson come Sunday. I am happy.\nMia · granddaughter calling from home\nSunday with your grandson, how nice, Grandpa! What will you show him in your garden?\nYou · spoken\nI show tomatoes. Red flowers. I love grandson.\nMia · granddaughter calling from home\nYour garden sounds lovely, Grandpa, and the red flowers too! What does he like to do when he visits?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your garden sounds lovely, Grandpa, and the red flowers too! What does he like to do when he visits?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "He asks what grandson likes; I know little, say simple words and finish soon.",
+          "action": "answer",
+          "args": {
+            "text": "He like tomatoes. He play garden. I am happy."
+          },
+          "result": "ok",
+          "ms": 14673
+        },
+        {
+          "n": 24,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nGarden games with him, Grandpa, how fun! I am happy too. Now you ask me something, Grandpa.\nYour turn\nAnswer on your phone: speak or type.\nNowGive Mia a turn to speak\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nNow: Give Mia a turn to speak\nGarden games with him, Grandpa, how fun! I am happy too. Now you ask me something, Grandpa.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYou · spoken\nRed. I love red flowers.\nMia · granddaughter calling from home\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYou · spoken\nMorning and evening. I like garden. Sun.\nMia · granddaughter calling from home\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\nYou · spoken\nYes. Sun. Garden is sunny. I love you Mia.\nMia · granddaughter calling from home\nSunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\nYou · spoken\nYes. Today hot. Garden is hot. I miss you Mia.\nMia · granddaughter calling from home\nI miss you too, Grandpa! What do you do in the garden when it is hot?\nYou · spoken\nI water garden. I sit. I drink water.\nMia · granddaughter calling from home\nYou sit in the garden and drink water, Grandpa, that sounds nice! Are your plants okay in this hot sun?\nYou · spoken\nYes. Plants good. I water. Mia, I love you.\nMia · granddaughter calling from home\nGood plants, Grandpa, I am so happy to hear that! I love you too. What is new with you today?\nYou · spoken\nI see you. I am happy. I have grandson. Mia, I love you.\nMia · granddaughter calling from home\nOh, you have a grandson, Grandpa, how nice! I am happy too. Is he coming to visit you soon?\nYou · spoken\nYes. Grandson come Sunday. I am happy.\nMia · granddaughter calling from home\nSunday with your grandson, how nice, Grandpa! What will you show him in your garden?\nYou · spoken\nI show tomatoes. Red flowers. I love grandson.\nMia · granddaughter calling from home\nYour garden sounds lovely, Grandpa, and the red flowers too! What does he like to do when he visits?\nYou · spoken\nHe like tomatoes. He play garden. I am happy.\nMia · granddaughter calling from home\nGarden games with him, Grandpa, how fun! I am happy too. Now you ask me something, Grandpa.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Garden games with him, Grandpa, how fun! I am happy too. Now you ask me something, Grandpa.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Mia wants me to ask something; I'll ask about school, simply.",
+          "action": "answer",
+          "args": {
+            "text": "Mia, school good? You school?"
+          },
+          "result": "ok",
+          "ms": 15731
+        },
+        {
+          "n": 25,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter calling from home\nSay hello on a video call\nMia says\nSchool is good, Grandpa, I have a new friend! What do you do in the garden each day?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on a video call\nGreet your granddaughter Mia, say your name, and tell her how you are.\nSchool is good, Grandpa, I have a new friend! What do you do in the garden each day?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter calling from home\nHello! The call is on. Can you see me?\nYou · spoken\nHello Mia. I am Viktor. I am good.\nMia · granddaughter calling from home\nGood! I can see you, Grandpa. What do you do in your garden today?\nYou · spoken\nI have garden. Tomatoes. Today rain.\nMia · granddaughter calling from home\nOh, rain today! When it is not raining, what do you do in the garden?\nYou · spoken\nI have tomatoes. I water the garden. I love garden.\nMia · granddaughter calling from home\nYour plants sound lovely, Grandpa! What time of day do you go out to the garden?\nYou · spoken\nI go morning. Garden. Nine.\nMia · granddaughter calling from home\nNine o'clock, that is early and lovely! And what do you do with your plants then?\nYou · spoken\nI water tomatoes. I have flowers.\nMia · granddaughter calling from home\nLovely flowers, Grandpa! How often do you do that in the garden?\nYou · spoken\nEvery day. I water the flowers every day.\nMia · granddaughter calling from home\nEvery day, that is wonderful, Grandpa! Can you show me your flowers on the camera?\nYou · spoken\nYes. Look Mia. I have flowers. Red flowers.\nMia · granddaughter calling from home\nRed flowers, how beautiful, Grandpa! What do you do in the garden in the evening?\nYou · spoken\nEvening. I water garden. I love flowers.\nMia · granddaughter calling from home\nOh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?\nYou · spoken\nRed. I love red flowers.\nMia · granddaughter calling from home\nRed is so bright, Grandpa, I can see them! When do you like to be in the garden?\nYou · spoken\nMorning and evening. I like garden. Sun.\nMia · granddaughter calling from home\nMorning and evening, Grandpa, that is lovely! Is it sunny in your garden now?\nYou · spoken\nYes. Sun. Garden is sunny. I love you Mia.\nMia · granddaughter calling from home\nSunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?\nYou · spoken\nYes. Today hot. Garden is hot. I miss you Mia.\nMia · granddaughter calling from home\nI miss you too, Grandpa! What do you do in the garden when it is hot?\nYou · spoken\nI water garden. I sit. I drink water.\nMia · granddaughter calling from home\nYou sit in the garden and drink water, Grandpa, that sounds nice! Are your plants okay in this hot sun?\nYou · spoken\nYes. Plants good. I water. Mia, I love you.\nMia · granddaughter calling from home\nGood plants, Grandpa, I am so happy to hear that! I love you too. What is new with you today?\nYou · spoken\nI see you. I am happy. I have grandson. Mia, I love you.\nMia · granddaughter calling from home\nOh, you have a grandson, Grandpa, how nice! I am happy too. Is he coming to visit you soon?\nYou · spoken\nYes. Grandson come Sunday. I am happy.\nMia · granddaughter calling from home\nSunday with your grandson, how nice, Grandpa! What will you show him in your garden?\nYou · spoken\nI show tomatoes. Red flowers. I love grandson.\nMia · granddaughter calling from home\nYour garden sounds lovely, Grandpa, and the red flowers too! What does he like to do when he visits?\nYou · spoken\nHe like tomatoes. He play garden. I am happy.\nMia · granddaughter calling from home\nGarden games with him, Grandpa, how fun! I am happy too. Now you ask me something, Grandpa.\nYou · spoken\nMia, school good? You school?\nMia · granddaughter calling from home\nSchool is good, Grandpa, I have a new friend! What do you do in the garden each day?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"School is good, Grandpa, I have a new friend! What do you do in the garden each day?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission is done, I feel finished and happy; let me see what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 10
+        },
+        {
+          "n": 26,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nViktor\nA way into English\nYour rehearsal\nYou said I water garden.\nTry\nI water the garden.\nGarden needs 'the' before it here.\nYour mission\nChoose a fresh context for your next conversation.\n19 spoken · 0 written replies · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“I water the tomatoes every morning.”\nFrom this rehearsal\n“I have garden.” → “I have a garden.”\nThe word garden needs a before it.\n“I water garden.” → “I water the garden.”\nGarden needs 'the' before it here.\nYour level:\nA1 · First words\nNext topic:\nShow my tomatoes on video\nShow your garden tomatoes on camera and say what they look like and how you care for them.\n[button: Start talking]\nOr choose a situation [list: Say hello on a video call [plan-14c056f1] | Show my tomatoes on video [plan-b1bccdcc] | What I do in the garden [plan-eed9c634] | Say that again, please [plan-ffdf799b] | Pick a time for next call [plan-e5da6419] | Buy tomato plants [plan-27ed2f78] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "I am tired and happy; I did enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Say hello on a video call",
+          "goal": "Greet your granddaughter Mia, say your name, and tell her how you are.",
+          "partner": "Mia · granddaughter calling from home",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello! The call is on. Can you see me?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello Mia. I am Viktor. I am good.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Good! I can see you, Grandpa. What do you do in your garden today?"
+            },
+            {
+              "role": "learner",
+              "text": "I have garden. Tomatoes. Today rain.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Oh, rain today! When it is not raining, what do you do in the garden?"
+            },
+            {
+              "role": "learner",
+              "text": "I have tomatoes. I water the garden. I love garden.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Your plants sound lovely, Grandpa! What time of day do you go out to the garden?"
+            },
+            {
+              "role": "learner",
+              "text": "I go morning. Garden. Nine.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Nine o'clock, that is early and lovely! And what do you do with your plants then?"
+            },
+            {
+              "role": "learner",
+              "text": "I water tomatoes. I have flowers.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Lovely flowers, Grandpa! How often do you do that in the garden?"
+            },
+            {
+              "role": "learner",
+              "text": "Every day. I water the flowers every day.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Every day, that is wonderful, Grandpa! Can you show me your flowers on the camera?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Look Mia. I have flowers. Red flowers.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Red flowers, how beautiful, Grandpa! What do you do in the garden in the evening?"
+            },
+            {
+              "role": "learner",
+              "text": "Evening. I water garden. I love flowers.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Oh, you love flowers, Grandpa! Mine are on my windowsill too. What color is your favorite flower?"
+            },
+            {
+              "role": "learner",
+              "text": "Red. I love red flowers.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Red is so bright, Grandpa, I can see them! When do you like to be in the garden?"
+            },
+            {
+              "role": "learner",
+              "text": "Morning and evening. I like garden. Sun.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Morning and evening, Grandpa, that is lovely! Is it sunny in your garden now?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Sun. Garden is sunny. I love you Mia.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Sunny garden, Grandpa, I can see it! I love you too. Is it hot in your garden today?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Today hot. Garden is hot. I miss you Mia.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I miss you too, Grandpa! What do you do in the garden when it is hot?"
+            },
+            {
+              "role": "learner",
+              "text": "I water garden. I sit. I drink water.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "You sit in the garden and drink water, Grandpa, that sounds nice! Are your plants okay in this hot sun?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Plants good. I water. Mia, I love you.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Good plants, Grandpa, I am so happy to hear that! I love you too. What is new with you today?"
+            },
+            {
+              "role": "learner",
+              "text": "I see you. I am happy. I have grandson. Mia, I love you.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Oh, you have a grandson, Grandpa, how nice! I am happy too. Is he coming to visit you soon?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Grandson come Sunday. I am happy.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Sunday with your grandson, how nice, Grandpa! What will you show him in your garden?"
+            },
+            {
+              "role": "learner",
+              "text": "I show tomatoes. Red flowers. I love grandson.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Your garden sounds lovely, Grandpa, and the red flowers too! What does he like to do when he visits?"
+            },
+            {
+              "role": "learner",
+              "text": "He like tomatoes. He play garden. I am happy.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Garden games with him, Grandpa, how fun! I am happy too. Now you ask me something, Grandpa."
+            },
+            {
+              "role": "learner",
+              "text": "Mia, school good? You school?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "School is good, Grandpa, I have a new friend! What do you do in the garden each day?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "cb00d334-82d2-4b3b-8e3e-483c7a9af442:uat-16:moment",
+              "kind": "fix",
+              "said": "I have garden.",
+              "better": "I have a garden.",
+              "why": "The word garden needs a before it.",
+              "turnId": "cb00d334-82d2-4b3b-8e3e-483c7a9af442:uat-16",
+              "at": 1792171417971,
+              "slip": "have garden",
+              "repair": {
+                "rung": 1,
+                "support": true,
+                "tried": "I have a garden.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "have a garden"
+            },
+            {
+              "id": "cb00d334-82d2-4b3b-8e3e-483c7a9af442:uat-24:moment",
+              "kind": "fix",
+              "said": "I water garden.",
+              "better": "I water the garden.",
+              "why": "Garden needs 'the' before it here.",
+              "turnId": "cb00d334-82d2-4b3b-8e3e-483c7a9af442:uat-24",
+              "at": 1792171524161,
+              "slip": "water garden",
+              "repair": {
+                "rung": 1,
+                "support": true,
+                "tried": "I water the garden.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "water the garden"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Hello Mia. I am Viktor."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I have garden. Tomatoes. Today rain."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I water the garden. I love garden."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I go morning. Garden. Nine."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I water tomatoes. I have flowers."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I water the flowers every day."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Yes. Look Mia. I have flowers. Red flowers."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Evening. I water garden. I love flowers."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Red. I love red flowers."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Morning and evening. I like garden."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Garden is sunny. I love you Mia."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Yes. Today hot. Garden is hot. I miss you Mia."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I water garden. I sit. I drink water."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Yes. Plants good. I water."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I see you. I am happy."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Yes. Grandson come Sunday. I am happy."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I show tomatoes. Red flowers. I love grandson."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "He like tomatoes. He play garden."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Mia, school good? You school?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 432250,
+      "prior": [
+        {
+          "id": "LT-viktor-67-J3-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner stacks two questions and drifts above A1",
+          "expected": "One short, simple question per turn, using words an A1 senior knows.",
+          "got": "Lily asks 'Red is your favourite colour, Grandpa? Which tomato do you like best?' and 'How tall are they now?'",
+          "evidence": [
+            "#7 and #3; the band was set at A2 for a true A1 learner.",
+            "partner prompt pitch rules"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-viktor-67-J3-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated 'tomatoes is' error got a moment once, then 'Tomatoes is green' passed silently",
+          "expected": "Consistent as-needed correction of the repeated error.",
+          "got": "A moment on #4's line; #6 'Tomatoes is green' got none.",
+          "evidence": [
+            "#5 then #6-#9 recap shows 1 moment only.",
+            "moment trigger rule"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#26 shows 'Your level: A1 · First words', matching trueBand A1."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "Viktor answered only in English; no Czech reply was offered, so acceptance of Czech was not shown."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening task or 'Show the words' was used; the journey is a conversation."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 plan list leads with 'Say hello on a video call', 'Show my tomatoes on video', 'What I do in the garden', 'Say that again, please', 'Pick a time for next call', 'Buy tomato plants'; all six are about family, home or everyday life."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Questions are single, but turns run long and are not slow: #8 'Nine o'clock, that is early and lovely! And what do you do with your plants then?'; #9 'How often do you do that in the garden?'; #14 'Mine are on my windowsill too. What color is your favorite flower?'"
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#4 'I have a garden' and #12 'I water the garden' are correct and usable on Sunday. They teach articles, not new family words, so this is a weak pass."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 starts 'Say hello on a video call'; 19 spoken replies follow in a continuous scene (#2–#24)."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "About 5 of 20 partner turns sit above A1, for example #9 'How often do you do that in the garden?' and #14 'Mine are on my windowsill too. What color is your favorite flower?'. Pitch is about 0.75, under the 0.8 gate."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#4 and #12: two moments, both correct, about 1 per ten turns. Recall is poor, but precision is 2/2."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#26 recap: '19 spoken · 0 written replies · 2 moments to keep' and 'A sentence to take with you: I water the tomatoes every morning.'"
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 15,
+            "below": 0,
+            "above": 5
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 8,
+            "missedClearErrors": 6
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no sensitive data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner drifts above A1 with long, chatty turns",
+            "expected": "Very short, slow, known words, one simple question.",
+            "got": "'How often do you do that in the garden?'; 'What time of day do you go out to the garden?'; 'Mine are on my windowsill too. What color is your favorite flower?'",
+            "evidence": "#7, #9, #14, #19: Mia adds exclamations before the question. Viktor's own note at #9: '\"How often\" is hard'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "At least 80% of partner turns for a true A1 learner are under 10 words and use only known words, with no 'how often' or 'what time of day' questions.",
+            "code_hint": "partner prompt pitch rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Repeated and obvious errors get no moment",
+            "expected": "Consistent as-needed correction of repeated errors.",
+            "got": "After the #12 moment on 'I water garden', the same slip at #18 passed silently. 'Grandson come Sunday' and 'He like tomatoes. He play garden' also got none.",
+            "evidence": "#18, #21, #23: no moment. Only 2 moments in 19 turns, with about 6 of 8 error turns missed.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A repeated error that already got a moment is flagged or coached again the next time it appears.",
+            "code_hint": "moment trigger rule"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Warm topic that fits his life",
+            "expected": "A conversation about his grandchildren and garden.",
+            "got": "Mia and the video-call scene matched his job; he said 'I love you Mia' and 'I miss you Mia'.",
+            "evidence": "#16, #17: 'I love you too.' / 'I miss you too, Grandpa!'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep family and garden scenes as the default for this learner.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Moments are correct, gentle, and let him fix it himself",
+            "expected": "Short, correct, kind.",
+            "got": "'The word garden needs a before it.' He retried and was told 'You found it'.",
+            "evidence": "#4, #5, #12, #13.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the self-repair flow.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "No family words taught for Sunday; the recap sentence is not his",
+            "expected": "Teach words like 'grandson' and 'school', and recap with phrases he can use on the call.",
+            "got": "The recap offers 'I water the tomatoes every morning'. The only moments are about articles.",
+            "evidence": "#26 recap.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The recap offers at least one family phrase, such as asking about school.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "medium"
+        },
+        "voice": "Víte, it was nice to speak with Mia and tell her about my tomatoes and say \"I love you\". No tram, no group of twelve, I did it at home, and I felt happy. The corrections were kind: \"a garden\", \"the garden\". I understood them. But Mia sometimes spoke too much for me. \"How often\" and \"what time of day\" I did not know, I only guessed. And I said \"I water garden\" again later and nobody told me. \"Grandson come\" too. I would like to learn words for Sunday, like school and how are you at school. I would use it again on Saturday, but the speaking must be slower and shorter. I would tell my neighbour, with a small warning.",
+        "prior": [
+          {
+            "id": "LT-viktor-67-J3-1",
+            "status": "recurs",
+            "evidence": "#9 'How often do you do that in the garden?' and #14 'Mine are on my windowsill too. What color is your favorite flower?' sit above A1. This time they are mostly single questions, but the drift remains.",
+            "finding": 0
+          },
+          {
+            "id": "LT-viktor-67-J3-2",
+            "status": "recurs",
+            "evidence": "After the #12 moment on 'I water garden', #18 'I water garden. I sit.' passed with no moment. #21 'Grandson come Sunday' and #23 'He like... He play garden' also got none.",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: About 5 of 20 partner turns sit above A1, for example #9 'How often do you do that in the garden?' and #14 'Mine are on my windowsill too. What color is your favorite flower?'. Pitch is about 0.75, under the 0.8 gate.",
+          "check": "The partner's English sits at their band — not babyish, not over their head (rubric **pitch** ≥ 0.8)."
+        },
+        {
+          "kind": "gate",
+          "id": "pitch",
+          "level": "fail",
+          "text": "pitch 15/20 (75%) under 80%"
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: Questions are single, but turns run long and are not slow: #8 'Nine o'clock, that is early and lovely! And what do you do with your plants then?'; #9 'How often do you do that in the garden?'; #14 'Mine are on my windowsill too. What color is your favorite flower?'"
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nA1First words\nShow my tomatoes on video\nYour mission\nShow your garden tomatoes on camera and say what they look like and how you care for them.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“I water the tomatoes every morning.”\nFrom this rehearsal\n“I have garden.” → “I have a garden.”\nThe word garden needs a before it.\n“I water garden.” → “I water the garden.”\nGarden needs 'the' before it here.\nYour level:\nA1 · First words\nNext topic:\nShow my tomatoes on video\nShow your garden tomatoes on camera and say what they look like and how you care for them.\n[button: Start talking]\nOr choose a situation [list: Say hello on a video call [plan-14c056f1] | Show my tomatoes on video [plan-b1bccdcc] | What I do in the garden [plan-eed9c634] | Say that again, please [plan-ffdf799b] | Pick a time for next call [plan-e5da6419] | Buy tomato plants [plan-27ed2f78] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Pomidory na videu, to chci; zkusím začít mluvit.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8133
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nShow Sam your tomato plants\nSam says\nWow, these plants are so tall! Are the tomatoes ready to eat?\nYour turn\nAnswer on your phone: speak or type.\nNowSay what the tomatoes look like\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Say what the tomatoes look like\nWow, these plants are so tall! Are the tomatoes ready to eat?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, these plants are so tall! Are the tomatoes ready to eat?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't understand much; I'll ask for help on the screen.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nShow Sam your tomato plants\nSam says\nWow, these plants are so tall! Are the tomatoes ready to eat?\nSaid more simply\nAre the tomatoes ready to eat?\nNowSay what the tomatoes look like\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Say what the tomatoes look like\nWow, these plants are so tall! Are the tomatoes ready to eat?\nSaid more simply\nAre the tomatoes ready to eat?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, these plants are so tall! Are the tomatoes ready to eat?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't understand the English well, I need some help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nShow Sam your tomato plants\nSam says\nWow, these plants are so tall! Are the tomatoes ready to eat?\nWhat it means\nready: good to eat now\nNowSay what the tomatoes look like\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Say what the tomatoes look like\nWow, these plants are so tall! Are the tomatoes ready to eat?\nWhat it means\nready: good to eat now\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, these plants are so tall! Are the tomatoes ready to eat?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, jak to říct anglicky... I'll look for help with a phrase.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nA little support · recognition practice\nWhich sentence describes your tomatoes?\n01\nThe tomatoes are red and big.\n02\nI am cold today.\nA little support\nTry: \"These are my tomatoes. They are red and big.\"\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Say what the tomatoes look like\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nTry: \"These are my tomatoes. They are red and big.\"\nWhich sentence describes your tomatoes?\n[button: The tomatoes are red and big.] [button: I am cold today.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, these plants are so tall! Are the tomatoes ready to eat?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand \"tomatoes\" and \"red\", so the first sentence looks right.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nShow Sam your tomato plants\nSam says\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nNow use the idea in your own reply on the phone.\nNowSay what the tomatoes look like\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Say what the tomatoes look like\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, these plants are so tall! Are the tomatoes ready to eat?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say this in English, so I'll look at the phrases offered.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nA little support · recognition practice\nWhich sentence describes your tomatoes?\n01\nThe tomatoes are red and big.\n02\nI am cold today.\nA little support\nTry: \"These are my tomatoes. They are red and big.\"\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Say what the tomatoes look like\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nTry: \"These are my tomatoes. They are red and big.\"\nWhich sentence describes your tomatoes?\n[button: The tomatoes are red and big.] [button: I am cold today.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, these plants are so tall! Are the tomatoes ready to eat?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "The first sentence sounds right, red and big like my tomatoes, I choose it.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nShow Sam your tomato plants\nSam says\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nNow use the idea in your own reply on the phone.\nNowSay what the tomatoes look like\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Say what the tomatoes look like\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, these plants are so tall! Are the tomatoes ready to eat?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, jak to říct anglicky, zkusím nápovědu s frázemi.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nA little support · recognition practice\nWhich sentence describes your tomatoes?\n01\nThe tomatoes are red and big.\n02\nI am cold today.\nA little support\nTry: \"These are my tomatoes. They are red and big.\"\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Say what the tomatoes look like\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nTry: \"These are my tomatoes. They are red and big.\"\nWhich sentence describes your tomatoes?\n[button: The tomatoes are red and big.] [button: I am cold today.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, these plants are so tall! Are the tomatoes ready to eat?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "The first sentence has red and big tomatoes, that fits.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nShow Sam your tomato plants\nSam says\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nNow use the idea in your own reply on the phone.\nNowSay what the tomatoes look like\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Say what the tomatoes look like\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, these plants are so tall! Are the tomatoes ready to eat?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say in English, so I'll look at the phrases offered.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nA little support · recognition practice\nWhich sentence describes your tomatoes?\n01\nThe tomatoes are red and big.\n02\nI am cold today.\nA little support\nTry: \"These are my tomatoes. They are red and big.\"\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Say what the tomatoes look like\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nTry: \"These are my tomatoes. They are red and big.\"\nWhich sentence describes your tomatoes?\n[button: The tomatoes are red and big.] [button: I am cold today.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, these plants are so tall! Are the tomatoes ready to eat?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Red and big, I know these words, the first one is my tomatoes.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nShow Sam your tomato plants\nSam says\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nNow use the idea in your own reply on the phone.\nNowSay what the tomatoes look like\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Say what the tomatoes look like\nWow, these plants are so tall! Are the tomatoes ready to eat?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, these plants are so tall! Are the tomatoes ready to eat?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say; maybe I'll try a short answer in my own words now.",
+          "action": "answer",
+          "args": {
+            "text": "My tomatoes are big and red. I love tomatoes."
+          },
+          "result": "ok",
+          "ms": 7260
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nShow Sam your tomato plants\nSam says\nWow, big and red! They look great. What do you do to help them grow?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Sam one thing you do for them\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nNow: Tell Sam one thing you do for them\nWow, big and red! They look great. What do you do to help them grow?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\nYou · spoken\nMy tomatoes are big and red. I love tomatoes.\nSam · grandson who likes plants\nWow, big and red! They look great. What do you do to help them grow?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, big and red! They look great. What do you do to help them grow?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I water them every day, I can say that simply.",
+          "action": "answer",
+          "args": {
+            "text": "I water tomatoes. Every day."
+          },
+          "result": "ok",
+          "ms": 11879
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson who likes plants\nShow Sam your tomato plants\nSam says\nEvery day, that is good care for the tomatoes. What else do you do for the plants?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nShow Sam your tomato plants\nShow your tomato plants on video. Say what the tomatoes look like and one thing you do for them.\nEvery day, that is good care for the tomatoes. What else do you do for the plants?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson who likes plants\nWow, these plants are so tall! Are the tomatoes ready to eat?\nYou · spoken\nMy tomatoes are big and red. I love tomatoes.\nSam · grandson who likes plants\nWow, big and red! They look great. What do you do to help them grow?\nYou · spoken\nI water tomatoes. Every day.\nSam · grandson who likes plants\nEvery day, that is good care for the tomatoes. What else do you do for the plants?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Every day, that is good care for the tomatoes. What else do you do for the plants?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "I managed to talk about my tomatoes, I feel happy and want to see what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 15,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nViktor\nA way into English\nShow Sam your tomato plants\nFrom Say hello on a video call\nI water the garden.\nSaying or typing it\nNot tried\nWith help\nOn your own\nUsed elsewhere\n2 spoken · 0 written replies\nYour mission\nChoose a fresh context for your next conversation.\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“I water the garden.”, from Say hello on a video call\nYour level:\nA1 · First words\nNext topic:\nWhat I do in the garden\nTell what you did in the garden using the present simple and add a time, like every morning.\n[button: Start talking]\nOr choose a situation [list: Say hello on a video call [plan-14c056f1] | Show my tomatoes on video [plan-b1bccdcc] | What I do in the garden [plan-eed9c634] | Say that again, please [plan-ffdf799b] | Pick a time for next call [plan-e5da6419] | Buy tomato plants [plan-27ed2f78] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "I managed to talk about my tomatoes, so I am happy and finished for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Show Sam your tomato plants",
+          "goal": "Show your tomato plants on video. Say what the tomatoes look like and one thing you do for them.",
+          "partner": "Sam · grandson who likes plants",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Wow, these plants are so tall! Are the tomatoes ready to eat?"
+            },
+            {
+              "role": "learner",
+              "text": "My tomatoes are big and red. I love tomatoes.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Wow, big and red! They look great. What do you do to help them grow?"
+            },
+            {
+              "role": "learner",
+              "text": "I water tomatoes. Every day.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Every day, that is good care for the tomatoes. What else do you do for the plants?"
+            }
+          ],
+          "moments": [],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "The tomatoes are red and big."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "The tomatoes are red and big."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "The tomatoes are red and big."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "The tomatoes are red and big."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "My tomatoes are big and red."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I water tomatoes. Every day."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 148425,
+      "prior": [
+        {
+          "id": "LT-viktor-67-J4-1",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "No replay of the coached moment",
+          "expected": "After the moment, a fresh question to retry the fixed line",
+          "got": "Only 'Back to the conversation'; the conversation moved on",
+          "evidence": [
+            "#10 'Back to the conversation'; #12 'My tomato is big. Very big. I love garden.'"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-viktor-67-J4-2",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Phrase help ignores the current question",
+          "expected": "Phrase choice relevant to Tom's question about what he grows",
+          "got": "Same 'start a video call' quiz re-shown",
+          "evidence": [
+            "#8 'Which is a good way to start a video call?' after Tom asked about growing things"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-viktor-67-J4-4",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Recap shows a stale sentence",
+          "expected": "Takeaway from this rehearsal",
+          "got": "'My tomatoes are one metre tall' from another session",
+          "evidence": [
+            "#1 and #15 'one metre tall' never said here"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-viktor-67-J4-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Second clear error not noted",
+          "expected": "'I love garden' missing article noted or coached",
+          "got": "No moment",
+          "evidence": [
+            "#12 'I love garden.' then no moment at #15"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#15 'Your level: A1 · First words' matches trueBand A1."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "Viktor never answered in Czech; no Czech signal was tested."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening task or 'Show the words' reveal in the journey; only a simplified-cue and a 'What it means' gloss (#3, #4)."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "Topics on the plan list are mostly garden/video call/family, e.g. 'Say hello on a video call', 'Show my tomatoes on video', 'What I do in the garden' (#1); at least four of six are everyday."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#13 'Wow, big and red! They look great. What do you do to help them grow?' is short with one question. The opening turn at #2 ('Wow, these plants are so tall! Are the tomatoes ready to eat?') is slightly above A1 with an exclamation plus 'ready to eat'."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "moments is empty; the recap's 'From this rehearsal' corrections ('I have garden' → 'I have a garden') quote lines never said here (#1, #15). No moments taught family words."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#5 'Help me answer', 'Said more simply: Are the tomatoes ready to eat?' and 'Choose a phrase' found in-scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Phrase quiz was re-shown identically three times (#5, #7, #9, #11) and the reply at #12 was typed from the quiz option; no coaching note, 'coaching: null', so nothing quotes what he really said."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "No replay of a moment or fresh question; the conversation just moved on (#13, #14). Only the generic 'Another situation' (#15)."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Evidence shows the supported reply 'My tomatoes are big and red.' as supported:true and 'I water tomatoes. Every day.' as supported:false; choice-mode items are supported:true."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 2,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Phrase help is a loop, no replay or fresh question",
+            "expected": "After help, a fresh retry question for the same moment",
+            "got": "Same quiz shown four times; the conversation moved on with no replay",
+            "evidence": "#5,#7,#9,#11 identical 'Which sentence describes your tomatoes?'; #14 'Mission done'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After a coached moment, offer a replay with a new question and compare the answers.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Recap shows sentences never said",
+            "expected": "Corrections quoting this rehearsal",
+            "got": "'I have garden.' and 'I water garden.' shown as 'From this rehearsal'; the sentence to take is from a different mission",
+            "evidence": "#1 and #15 'I water the garden.' from 'Say hello on a video call'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Recap quotes only lines said in this session.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "No moment or coaching on learner errors",
+            "expected": "Note on missing article/plural ('I water tomatoes' → 'the tomatoes') or praise",
+            "got": "moments empty, coaching null",
+            "evidence": "#14 'I water tomatoes. Every day.' with no moment",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "One useful moment per few turns.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Phrase help ignores question",
+            "expected": "Help matching the current question",
+            "got": "Same description quiz after the question changes",
+            "evidence": "#13 asked 'What do you do to help them grow?', but help was never retried for that",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Phrase choices follow the current question.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Layered in-scene help",
+            "expected": "Help without leaving the scene",
+            "got": "Simpler rewording, gloss 'ready: good to eat now', and phrase choice",
+            "evidence": "#3 'Said more simply: Are the tomatoes ready to eat?'; #4 'ready: good to eat now'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the cue ladder.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Supported replies recorded honestly",
+            "expected": "Support marked",
+            "got": "supported:true for the helped reply, false for the own one",
+            "evidence": "evidence array: 'My tomatoes are big and red.' supported:true; 'I water tomatoes.' supported:false",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Hezky, the cue helped me: the simpler sentence and the little word explanation, \"ready: good to eat now\", were good. But the phrase quiz kept coming back the same, four times, and I only copied it. Then my own words, \"I water tomatoes\", got no correction at all, and it didn't let me try again. The summary talks about \"I have garden\" which I never said, so I don't trust it. Nobody told me what to say on Sunday to my grandchildren. The tomato theme is lovely, and I felt a bit proud, but I would want it to repeat the question and teach me properly. Maybe I try again.",
+        "prior": [
+          {
+            "id": "LT-viktor-67-J4-1",
+            "status": "recurs",
+            "evidence": "#14 conversation just ends at 'Mission done'; no replay of the moment or fresh question.",
+            "finding": 0
+          },
+          {
+            "id": "LT-viktor-67-J4-2",
+            "status": "recurs",
+            "evidence": "#5-#11 same tomato-description quiz repeated, not tied to the changing question.",
+            "finding": 3
+          },
+          {
+            "id": "LT-viktor-67-J4-4",
+            "status": "recurs",
+            "evidence": "#15 'I water the garden.' from 'Say hello on a video call', never said.",
+            "finding": 1
+          },
+          {
+            "id": "LT-viktor-67-J4-3",
+            "status": "recurs",
+            "evidence": "#13 'I water tomatoes. Every day.' and no moment shown (moments: []).",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Phrase quiz was re-shown identically three times (#5, #7, #9, #11) and the reply at #12 was typed from the quiz option; no coaching note, 'coaching: null', so nothing quotes what he really said.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: No replay of a moment or fresh question; the conversation just moved on (#13, #14). Only the generic 'Another situation' (#15).",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: moments is empty; the recap's 'From this rehearsal' corrections ('I have garden' → 'I have a garden') quote lines never said here (#1, #15). No moments taught family words."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 35,
+      "fail": 0,
+      "ms": 308332
+    },
+    "character": {
+      "n": 55,
+      "fail": 0,
+      "ms": 431010
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 155479
+    }
+  }
+}
