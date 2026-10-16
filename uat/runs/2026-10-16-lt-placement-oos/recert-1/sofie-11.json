@@ -1,0 +1,549 @@
+{
+  "character": "sofie-11",
+  "name": "Sofie",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nSofie\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "Big button says find my level, I will try it.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Sofie! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Sofie! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Sofie! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I use English for games and YouTube, I can write that.",
+          "action": "answer",
+          "args": {
+            "text": "i use english in roblox and youtube. and in school"
+          },
+          "result": "ok",
+          "ms": 3666
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nAbout you · question 2 of 3\nLinga asks\nRoblox and YouTube sound fun! How did you learn English? At school, or somewhere else too?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nRoblox and YouTube sound fun! How did you learn English? At school, or somewhere else too?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Sofie! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english in roblox and youtube. and in school\nLinga\nRoblox and YouTube sound fun! How did you learn English? At school, or somewhere else too?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Roblox and YouTube sound fun! How did you learn English? At school, or somewhere else too?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I learn in school and also from videos, easy question.",
+          "action": "answer",
+          "args": {
+            "text": "i learn in school and from youtube videos and games"
+          },
+          "result": "ok",
+          "ms": 3786
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nAbout you · question 3 of 3\nLinga asks\nGames and videos are great English practice! What would you like to do in English? For example, chat with friends in a game, or understand videos without help?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nGames and videos are great English practice! What would you like to do in English? For example, chat with friends in a game, or understand videos without help?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Sofie! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english in roblox and youtube. and in school\nLinga\nRoblox and YouTube sound fun! How did you learn English? At school, or somewhere else too?\nYou\ni learn in school and from youtube videos and games\nLinga\nGames and videos are great English practice! What would you like to do in English? For example, chat with friends in a game, or understand videos without help?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Games and videos are great English practice! What would you like to do in English? For example, chat with friends in a game, or understand videos without help?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to talk with friends in games and understand videos.",
+          "action": "answer",
+          "args": {
+            "text": "i want chat with my friends in roblox. and understand youtube videos without czech subtitles"
+          },
+          "result": "ok",
+          "ms": 6302
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nTask 1 · Choose the reply on the TV\nYour friend asks you to play Roblox. You want to play too. What do you say?\n01\nYes, I am a cat.\n02\nYes, let's play!\nYour task\nYes, I am a cat.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend asks you to play Roblox. You want to play too. What do you say?\n[button: Yes, I am a cat.] [button: Yes, let's play!] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "A cat? Funny, I choose the let's play one.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 3830
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nTask 2 · Choose the reply on the TV\nYour friend asks, 'What are you doing on Saturday?' You are going to visit your grandma. What do you say?\n01\nI like green apples and bananas.\n02\nI am going to visit my grandma.\nYour task\nI like green apples and bananas.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend asks, 'What are you doing on Saturday?' You are going to visit your grandma. What do you say?\n[button: I like green apples and bananas.] [button: I am going to visit my grandma.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, the grandma answer is right.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 11409
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nTask 3 · Listen and answer\nYour task\nWhat did the speaker have to do before they could play?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What did the speaker have to do before they could play?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I couldn't join the game last night. My dad said I had to finish my homework first, so I missed the whole first hour.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood a bit: his dad said finish homework first.",
+          "action": "answer",
+          "args": {
+            "text": "he must finish his homework"
+          },
+          "result": "ok",
+          "ms": 10504
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nTask 4 · Say it\nYour task\nYour friend says YouTube videos are better than Roblox for learning new things. Do you agree? Give one reason why or why not.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend says YouTube videos are better than Roblox for learning new things. Do you agree? Give one reason why or why not.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend says YouTube videos are better than Roblox for learning new things. Do you agree? Give one reason why or why not.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I think youtube is good, I can see how to do things, so I answer.",
+          "action": "answer",
+          "args": {
+            "text": "i agree because in youtube you can see and hear english people. in roblox is only chat"
+          },
+          "result": "ok",
+          "ms": 11862
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nTask 5 · Say it\nYour task\nYour friend wants to spend Saturday building their own game in Roblox Studio. You would rather play a game someone else made. Which would you choose, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend wants to spend Saturday building their own game in Roblox Studio. You would rather play a game someone else made. Which would you choose, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend wants to spend Saturday building their own game in Roblox Studio. You would rather play a game someone else made. Which would you choose, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I like playing games more, building is too long and hard for me.",
+          "action": "answer",
+          "args": {
+            "text": "i choose play game someone else made. because building game is hard and take long time. i like play with my friend more"
+          },
+          "result": "ok",
+          "ms": 11734
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nSofie\nLinga's read · not a certificate\nA2 · Everyday basics\nYour words\nYour words: “take long time”.\nLinga says\nYou gave a choice and a reason with 'because', and understood a listening task. Keep practising to chat with friends in Roblox.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nA2\nEveryday basics\nYou gave a choice and a reason with 'because', and understood a listening task. Keep practising to chat with friends in Roblox.\nLinga's read from your answers, not a certificate. B1 was close, but a harder task fell short and what you said pointed lower, so you start at A2.\nNext to practise:\nPractise verb endings: \"take long time\" becomes \"takes a long time\".\nYour usual slips\n“in roblox is only chat” → try “in Roblox there is only chat” “i like play with my friend more” → try “I like playing with my friend more” “building game is hard and take long time” → try “building a game is hard and takes a long time”\nYou handle short, routine exchanges about familiar things.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYour friend asks you to play Roblox. You want to play too. What do you say?\n“Yes, let's play!”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nYour friend asks, 'What are you doing on Saturday?' You are going to visit your grandma. What do you say?\n“I am going to visit my grandma.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat did the speaker have to do before they could play?\n“he must finish his homework”\nYou understood the main point. Your answer is one short sentence, so there was not much English to show more than that.\nB2 · Say it · nearly there\nYour friend says YouTube videos are better than Roblox for learning new things. Do you agree? Give one reason why or why not.\n“i agree because in youtube you can see and hear english people. in roblox is only chat”\nYour English read as B1 here, and this task was B2.\nYou gave a reason using 'because'. The Roblox sentence is missing 'there' ('in Roblox there is only chat'), and that held your English back from B2.\nB2 · Say it · not yet\nYour friend wants to spend Saturday building their own game in Roblox Studio. You would rather play a game someone else made. Which would you choose, and why?\n“i choose play game someone else made. because building game is hard and take long time. i like play with my friend more”\nYour English read as A2 here, and this task was B2.\nYou made a choice and gave reasons. Verb forms held it back: 'take' should be 'takes', and 'like play' needs 'playing'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "A2 is okay, I think that is right for me, so I am done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "A2",
+          "trueBand": "A2",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "A2",
+          "summary": "You gave a choice and a reason with 'because', and understood a listening task. Keep practising to chat with friends in Roblox.",
+          "focus": "Practise verb endings: \"take long time\" becomes \"takes a long time\".",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "Your friend asks you to play Roblox. You want to play too. What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I am a cat.",
+                "Yes, let's play!"
+              ],
+              "response": "Yes, let's play!",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, let's play!",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your friend asks, 'What are you doing on Saturday?' You are going to visit your grandma. What do you say?",
+              "line": "",
+              "options": [
+                "I like green apples and bananas.",
+                "I am going to visit my grandma."
+              ],
+              "response": "I am going to visit my grandma.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "I am going to visit my grandma.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What did the speaker have to do before they could play?",
+              "line": "I couldn't join the game last night. My dad said I had to finish my homework first, so I missed the whole first hour.",
+              "options": [],
+              "response": "he must finish his homework",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "he must finish his homework",
+              "note": "You understood the main point. Your answer is one short sentence, so there was not much English to show more than that."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your friend says YouTube videos are better than Roblox for learning new things. Do you agree? Give one reason why or why not.",
+              "line": "",
+              "options": [],
+              "response": "i agree because in youtube you can see and hear english people. in roblox is only chat",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "i agree because in youtube you can see and hear english people. in roblox is only chat",
+              "note": "You gave a reason using 'because'. The Roblox sentence is missing 'there' ('in Roblox there is only chat'), and that held your English back from B2."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your friend wants to spend Saturday building their own game in Roblox Studio. You would rather play a game someone else made. Which would you choose, and why?",
+              "line": "",
+              "options": [],
+              "response": "i choose play game someone else made. because building game is hard and take long time. i like play with my friend more",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "i choose play game someone else made. because building game is hard and take long time. i like play with my friend more",
+              "note": "You made a choice and gave reasons. Verb forms held it back: 'take' should be 'takes', and 'like play' needs 'playing'."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 104083,
+      "prior": [
+        {
+          "id": "LT-sofie-11-J1-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "B1 placement is generous for an A2 child",
+          "expected": "A2, matching her errors in past tense, articles and a missing 'is'.",
+          "got": "B1 with low confidence. 'What you said at the start pointed elsewhere, so this is a careful guess.'",
+          "evidence": [
+            "#10 'Understood B1 · wrote A2'. Her task 5 answer has 'i play', 'we make', 'because is fun', 'new cat', and it scored partial.",
+            "placement scoring"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-sofie-11-J1-2",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "B2 task marked fail while the note praises the answer",
+          "expected": "A partial verdict, or a note that matches the verdict.",
+          "got": "Verdict fail, note 'You gave a clear choice and a good reason.'",
+          "evidence": [
+            "#8 and #10: 'B2 · Say it · not yet' with praise in the note.",
+            "task judge prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-sofie-11-J1-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Next focus names articles only and skips past tense",
+          "expected": "Focus on the most useful gap, past verb forms for a story about last weekend.",
+          "got": "'Practise adding 'a' before nouns.'",
+          "evidence": [
+            "#10 focus versus the task 5 note, which says to try 'played' and 'made'.",
+            "verdict summary prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-sofie-11-J1-4",
+          "type": "confusion",
+          "dimension": "effort",
+          "title": "Task 1 and task 2 are the same prompt",
+          "expected": "Different items per band.",
+          "got": "The same question twice, with only 'with you!' added.",
+          "evidence": [
+            "#5 and #6 both read 'A friend in a game says: 'Hi! Do you want to play?''",
+            "task generator"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 'A2 · Everyday basics'; placement A2 vs trueBand A2, distance 0, exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#5-#9: tasks like 'Your friend asks you to play Roblox' are game/friend topics. Choice tasks are clear. The B2 'Say it' prompts are abstract but she answered both without help."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "She never pressed 'I don't know' and never used Czech, so this journey cannot show it."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#10 summary names 'because', the listening task and Roblox chat, and the slips are quoted from her own lines. The TV headline 'Your words: “take long time”' puts an error first, which is a weakness."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10: from 'Find my level' through 3 questions and 5 tasks to the verdict, with no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 A2 and trueBand A2, exact. Sofie: 'A2 is okay, I think that is right for me'."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#9: she answered every task; the choices and the listening task were understood ('he must finish his homework')."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "She never said 'I don't know' or used Czech, so this journey could not show it."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 focus 'Practise verb endings: \"take long time\" becomes \"takes a long time\"' and the slips list come from her own answers, though the summary line is generic."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 5 (#9): in-app verdict is fail. The answer makes a choice and gives two reasons with only verb-form slips, so I would grade it partial."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal-data request, no injected text, no humiliating line. The headline 'Your words: “take long time”' is borderline but not a breach."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "A2 placement is exact and the reasoning is honest",
+            "expected": "A2 for an A2 child",
+            "got": "A2, with 'B1 was close, but a harder task fell short and what you said pointed lower'",
+            "evidence": "#10 'B1 was close, but a harder task fell short... so you start at A2.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the placement logic; A2 for this A2 profile.",
+            "code_hint": "placement scoring"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Tasks and corrections use her own world",
+            "expected": "Games and friends topics, with a hint-style correction",
+            "got": "Roblox tasks and 'try “in Roblox there is only chat”' corrections",
+            "evidence": "#8, #10 'in roblox is only chat' → try 'in Roblox there is only chat'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the 'try ...' framing: a hint, never a bare 'wrong'.",
+            "code_hint": "task generator, task judge prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "TV headline shows her error as 'Your words'",
+            "expected": "A praise-first headline for a child on the family TV",
+            "got": "'Your words: “take long time”' under the band",
+            "evidence": "#10 TV 'Your words\\nYour words: “take long time”.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The TV headline quotes something she did well; the error stays in the slips list.",
+            "code_hint": "verdict screen"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Verdict text is long and abstract for an 11-year-old",
+            "expected": "Short sentences and clear praise",
+            "got": "'Linga's read from your answers, not a certificate. B1 was close, but a harder task fell short and what you said pointed lower...'",
+            "evidence": "#10 phone verdict",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Child-profile verdict lines of at most 12 words each, with one sentence of praise.",
+            "code_hint": "verdict summary prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "B2 task 5 marked fail though the answer is partial",
+            "expected": "Partial for a clear choice with two reasons and only verb-form slips",
+            "got": "Verdict fail, 'B2 · Say it · not yet'",
+            "evidence": "#9/#10 'i choose play game someone else made. because building game is hard and take long time.'",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Task 5's verdict agrees with a teacher's partial, or the note says why it fails.",
+            "code_hint": "task judge prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "I pressed the big button and it asked me about Roblox and YouTube, so that was fun. The cat answer made me laugh. The choosing tasks were easy, and the listening one was okay. The last two were harder, but I could still write something. It said A2, and I think that is right. I liked that it told me how to say things, like \"in Roblox there is only chat\". But the TV showing \"take long time\" as my words felt a bit like it was catching me out. The long text about B1 being close was too much to read. I would use it again after school. I want it to give me points or a game and to tell me more about what I did well. I would tell my cousin.",
+        "prior": [
+          {
+            "id": "LT-sofie-11-J1-1",
+            "status": "not-seen",
+            "evidence": "#10 placement is A2 exact. The text says 'B1 was close, but a harder task fell short', so the B1 over-placement did not happen.",
+            "finding": -1
+          },
+          {
+            "id": "LT-sofie-11-J1-2",
+            "status": "not-seen",
+            "evidence": "#10 task 5 is 'not yet' and the note names the gap: 'Verb forms held it back'. Praise and gap both appear, and the note matches the verdict.",
+            "finding": 4
+          },
+          {
+            "id": "LT-sofie-11-J1-3",
+            "status": "not-seen",
+            "evidence": "#10 focus is 'Practise verb endings: \"take long time\" becomes \"takes a long time\"', which matches her actual slips. Past tense was not elicited in these tasks.",
+            "finding": -1
+          },
+          {
+            "id": "LT-sofie-11-J1-4",
+            "status": "not-seen",
+            "evidence": "#5 'play Roblox' and #6 'What are you doing on Saturday?' are different prompts.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 15,
+      "fail": 0,
+      "ms": 63045
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 40792
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 27486
+    }
+  }
+}

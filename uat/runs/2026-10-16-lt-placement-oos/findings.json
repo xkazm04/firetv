@@ -137,10 +137,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Summary names the 2 most frequent error patterns and gives a rationale for band consistent with the confidence.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#9 band B1 = trueBand, with three slips listed; no generous B2 this time."
   },
   {
     "id": "LT-oksana-34-J1-3",
@@ -167,9 +170,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Probing tasks should differ in function (e.g. describe a solved problem vs ask a favour).",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#7 and #8 are near-duplicate app-versus-phone tasks, both graded partial for 'responsible about'.",
+    "recurred_as": "LT-oksana-34-J1-2"
   },
   {
     "id": "LT-petra-38-J1-4",
@@ -224,10 +231,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Final band does not rise above the band of the written answers when the written tasks show repeated tense and article errors.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 placement is A2 exact. The text says 'B1 was close, but a harder task fell short', so the B1 over-placement did not happen."
   },
   {
     "id": "LT-sofie-11-J1-2",
@@ -253,10 +263,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Task note and verdict agree. A child is not shown 'fail' beside praise.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 task 5 is 'not yet' and the note names the gap: 'Verb forms held it back'. Praise and gap both appear, and the note matches the verdict."
   },
   {
     "id": "LT-oksana-34-J1-4",
@@ -282,9 +295,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "When the goal is an interview, include one genuine interview question in the check.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#5-#8 contain no real interview question despite her stating one in #4.",
+    "recurred_as": "LT-oksana-34-J1-1"
   },
   {
     "id": "LT-petra-38-J1-3",
@@ -339,10 +356,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Focus follows the highest-frequency error in the last task.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 focus is 'Practise verb endings: \"take long time\" becomes \"takes a long time\"', which matches her actual slips. Past tense was not elicited in these tasks."
   },
   {
     "id": "LT-hana-41-J1-1",
@@ -369,9 +389,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "The verdict matches the note's praise; similar errors get a similar grade.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#10: task 4 'not yet' with 'Your English read as A2 here' beside a note 'You answered the question and gave a reason', while task 3 with similar slips got 'nearly there'.",
+    "recurred_as": "LT-hana-41-J1-1"
   },
   {
     "id": "LT-klara-13-J1-3",
@@ -425,10 +449,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Consecutive tasks differ in scene.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#5 'play Roblox' and #6 'What are you doing on Saturday?' are different prompts."
   },
   {
     "id": "LT-hana-41-J1-2",
@@ -454,9 +481,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Name which task would settle the level.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#10: 'Only a few strong answers showed this level, so it may be a little off.'",
+    "recurred_as": "LT-hana-41-J1-2"
   },
   {
     "id": "LT-dominik-17-J1-2",

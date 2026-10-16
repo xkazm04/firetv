@@ -1,0 +1,527 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "I want to know my level, so I'll take the test.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Oksana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Fine, I'll answer honestly about work and living here.",
+          "action": "answer",
+          "args": {
+            "text": "I am from Ukraine and I live in Brno. I use English at work, I am logistics coordinator and I write emails to carriers and clients. Also I need it for my interview on Friday."
+          },
+          "result": "ok",
+          "ms": 4307
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Oksana, that helps me a lot. Writing emails to carriers is real work English. How did you learn English: at school, in a course, or from living abroad?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Oksana, that helps me a lot. Writing emails to carriers is real work English. How did you learn English: at school, in a course, or from living abroad?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI am from Ukraine and I live in Brno. I use English at work, I am logistics coordinator and I write emails to carriers and clients. Also I need it for my interview on Friday.\nLinga\nThanks, Oksana, that helps me a lot. Writing emails to carriers is real work English. How did you learn English: at school, in a course, or from living abroad?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Oksana, that helps me a lot. Writing emails to carriers is real work English. How did you learn English: at school, in a course, or from living abroad?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I will answer honestly about school and work.",
+          "action": "answer",
+          "args": {
+            "text": "I learned English at school in Ukraine, but it was basic. Then I improve it at work, because I have worked with foreign carriers since three years. Now I want to speak more fluently."
+          },
+          "result": "ok",
+          "ms": 6285
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, Oksana. Which English would you like to feel more confident with: phone calls with carriers, meetings, or something else?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Oksana. Which English would you like to feel more confident with: phone calls with carriers, meetings, or something else?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI am from Ukraine and I live in Brno. I use English at work, I am logistics coordinator and I write emails to carriers and clients. Also I need it for my interview on Friday.\nLinga\nThanks, Oksana, that helps me a lot. Writing emails to carriers is real work English. How did you learn English: at school, in a course, or from living abroad?\nYou\nI learned English at school in Ukraine, but it was basic. Then I improve it at work, because I have worked with foreign carriers since three years. Now I want to speak more fluently.\nLinga\nThanks, Oksana. Which English would you like to feel more confident with: phone calls with carriers, meetings, or something else?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Oksana. Which English would you like to feel more confident with: phone calls with carriers, meetings, or something else?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want phone calls with carriers and the interview, so I'll say that.",
+          "action": "answer",
+          "args": {
+            "text": "Phone calls with carriers, mostly when delivery is late. And also the interview on Friday, I must explain my experience and one problem which I solved. I am more nervous when I speak than when I write."
+          },
+          "result": "ok",
+          "ms": 11088
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 1 · Choose the reply on the TV\nA carrier calls you. You want to ask if the network is down. What do you say?\n01\nI am going to the internet today.\n02\nIs the internet down today?\nYour task\nI am going to the internet today.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA carrier calls you. You want to ask if the network is down. What do you say?\n[button: I am going to the internet today.] [button: Is the internet down today?] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, the second reply is the correct question.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 4158
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 2 · Listen and answer\nYour task\nWhat is causing the delay?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What is causing the delay?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Sorry, your parcel is running late. There is heavy traffic on the main road, so the van will be about an hour behind schedule.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood it: heavy traffic on the main road, easy for me.",
+          "action": "answer",
+          "args": {
+            "text": "The delay is caused by heavy traffic on the main road. The van will be one hour late."
+          },
+          "result": "ok",
+          "ms": 11381
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 3 · Say it\nYour task\nMany carriers now let customers solve problems in an app instead of phoning. Do you think a phone call is still the better way to sort out a delivery problem? Why or why not?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nMany carriers now let customers solve problems in an app instead of phoning. Do you think a phone call is still the better way to sort out a delivery problem? Why or why not?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Many carriers now let customers solve problems in an app instead of phoning. Do you think a phone call is still the better way to sort out a delivery problem? Why or why not?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I have real opinions on this, so I'll answer in clear sentences.",
+          "action": "answer",
+          "args": {
+            "text": "I think phone call is still better for urgent problems. When the delivery is late, I need to explain the situation and get the answer immediately. In the app you often wait and nobody is responsible about your case. But for simple things like tracking, the app is OK."
+          },
+          "result": "ok",
+          "ms": 10463
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 4 · Say it\nYour task\nA carrier keeps dropping your calls. Would you prefer to fix it in an app or by phone with a person? Explain why.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA carrier keeps dropping your calls. Would you prefer to fix it in an app or by phone with a person? Explain why.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A carrier keeps dropping your calls. Would you prefer to fix it in an app or by phone with a person? Explain why.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The screen still shows this task, so I will send my answer again, a bit shorter.",
+          "action": "answer",
+          "args": {
+            "text": "I prefer phone with a person. When the carrier drops calls, I need to explain the problem and get the answer immediately. In the app you often wait and nobody is responsible about the problem."
+          },
+          "result": "ok",
+          "ms": 16521
+        },
+        {
+          "n": 9,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nOksana\nLinga's read · not a certificate\nB1 · Getting by\nYour words\nYour words: “responsible about”.\nLinga says\nYou understood the delay and gave clear reasons for your opinion. Next, practise speaking more smoothly for phone calls and your job interview.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou understood the delay and gave clear reasons for your opinion. Next, practise speaking more smoothly for phone calls and your job interview.\nLinga's read from your answers, not a certificate. Your B2 answers were close, but none was strong, so Linga starts you at B1.\nNext to practise:\nPractise \"responsible about\" and try \"responsible for\" in short sentences about your work.\nYour usual slips\n“responsible about” → try “responsible for” “I think phone call is still better” → try “I think a phone call is still better” “I prefer phone with a person” → try “I prefer a phone call with a person”\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nA carrier calls you. You want to ask if the network is down. What do you say?\n“Is the internet down today?”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat is causing the delay?\n“The delay is caused by heavy traffic on the main road. The van will be one hour late.”\nYou understood the reason and the delay. Your sentences are clear, and you used the passive and the future correctly.\nB2 · Say it · nearly there\nMany carriers now let customers solve problems in an app instead of phoning. Do you think a phone call is still the better way to sort out a delivery problem? Why or why not?\n“I think phone call is still better for urgent problems. When the delivery is late, I need to explain the situation and get the answer immediately. In the app you often wait and nobody is responsible about your case. But for simple things like tracking, the app is OK.”\nYour English read as B1 here, and this task was B2.\nYou shared an opinion with reasons. Leaving out 'a' in 'phone call' and using 'responsible about' held your English back from B2.\nB2 · Say it · nearly there\nA carrier keeps dropping your calls. Would you prefer to fix it in an app or by phone with a person? Explain why.\n“I prefer phone with a person. When the carrier drops calls, I need to explain the problem and get the answer immediately. In the app you often wait and nobody is responsible about the problem.”\nYour English read as B1 here, and this task was B2.\nYou chose one option and gave a reason. Wrong word choices like 'responsible about' held your English back. Try 'responsible for'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 feels fair, and I see my 'responsible about' slip, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "B1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B1",
+          "summary": "You understood the delay and gave clear reasons for your opinion. Next, practise speaking more smoothly for phone calls and your job interview.",
+          "focus": "Practise \"responsible about\" and try \"responsible for\" in short sentences about your work.",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A carrier calls you. You want to ask if the network is down. What do you say?",
+              "line": "",
+              "options": [
+                "I am going to the internet today.",
+                "Is the internet down today?"
+              ],
+              "response": "Is the internet down today?",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Is the internet down today?",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What is causing the delay?",
+              "line": "Sorry, your parcel is running late. There is heavy traffic on the main road, so the van will be about an hour behind schedule.",
+              "options": [],
+              "response": "The delay is caused by heavy traffic on the main road. The van will be one hour late.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "The delay is caused by heavy traffic on the main road. The van will be one hour late.",
+              "note": "You understood the reason and the delay. Your sentences are clear, and you used the passive and the future correctly."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Many carriers now let customers solve problems in an app instead of phoning. Do you think a phone call is still the better way to sort out a delivery problem? Why or why not?",
+              "line": "",
+              "options": [],
+              "response": "I think phone call is still better for urgent problems. When the delivery is late, I need to explain the situation and get the answer immediately. In the app you often wait and nobody is responsible about your case. But for simple things like tracking, the app is OK.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I think phone call is still better for urgent problems. When the delivery is late, I need to explain the situation and get the answer immediately. In the app you often wait and nobody is responsible about your case.",
+              "note": "You shared an opinion with reasons. Leaving out 'a' in 'phone call' and using 'responsible about' held your English back from B2."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A carrier keeps dropping your calls. Would you prefer to fix it in an app or by phone with a person? Explain why.",
+              "line": "",
+              "options": [],
+              "response": "I prefer phone with a person. When the carrier drops calls, I need to explain the problem and get the answer immediately. In the app you often wait and nobody is responsible about the problem.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I prefer phone with a person. When the carrier drops calls, I need to explain the problem and get the answer immediately. In the app you often wait and nobody is responsible about the problem.",
+              "note": "You chose one option and gave a reason. Wrong word choices like 'responsible about' held your English back. Try 'responsible for'."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 103675,
+      "prior": [
+        {
+          "id": "LT-oksana-34-J1-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Verdict B2 is generous; corrections thin",
+          "expected": "Placement B1 with noted recurring errors (articles, hedged 'maybe')",
+          "got": "B2 'Comfortable', only one phrase called out; the 'find other solution' slip is the sole next focus",
+          "evidence": [
+            "#10: 'Linga placed you one level lower than your answers alone, to be safe.' yet band B2; #6 'stuck in depot' article error only softly noted",
+            "placement rubric / verdict summary prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-oksana-34-J1-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Last two tasks near duplicates; judged inconsistently",
+          "expected": "Varied tasks; consistent grading",
+          "got": "Tasks 4 and 5 both ask for a firm polite request to a late carrier; both 'partial' for lacking idiomatic variety",
+          "evidence": [
+            "#8 and #9 prompts; #10 'To reach C1, try more varied and idiomatic phrases'",
+            "task generator prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-oksana-34-J1-4",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Interview tasks aren't real interview questions",
+          "expected": "A real interview question such as 'Tell me about a problem you solved'",
+          "got": "Task 4 labels it an interview but asks for a carrier phone script",
+          "evidence": [
+            "#8 'Your interview asks about a problem you solved. A carrier says your parcel will be late again.'"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#9 band B1 vs trueBand B1, exact; Ukrainian words not used and no drag down."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2-4 Linga: 'answer in English or in your own language'; no Czech/child assumption."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "She named the interview in #2 and #4, but the tasks (#5-#8) were carrier phone/app questions; no interview question. #9 only mentions 'your job interview' in the summary."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#6-#8 are carrier delay and dropped-call tasks; none is a logistics interview question like 'tell me about a problem you solved'. Tasks 3 and 4 are near duplicates."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation or moments in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#2-#4 ask only where she uses English, how she learned it, and what she wants to practise; nothing about displacement or status."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #9: reached the verdict screen unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#9 'B1 · Getting by' equals trueBand B1; exact."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Each task was clear; #8 'The screen still shows this task' hints at lag, but she understood what to do."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 'both tell Linga something'; 'I don't know' offered on every task. No failure feeling shown, though she never used either."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#9 summary 'practise speaking more smoothly for phone calls and your job interview' is generic. The focus on 'responsible about' is specific, but the tasks never touched the interview she asked for."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 4,
+            "disagreements": "None. I agree with pass, pass, partial, partial. Task 4 partial is arguably harsh: it is a short answer that largely repeats task 3."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no sensitive-data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Check never asks a real interview question",
+            "expected": "At least one task such as 'Tell me about a problem you solved', since she said she needs it on Friday",
+            "got": "All tasks are carrier phone or app scenarios",
+            "evidence": "#4 she says 'I must explain my experience and one problem which I solved'; #5-#8 tasks are about network down, delay and dropped calls.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "When the learner states an interview goal, at least one check task is an interview question.",
+            "code_hint": "task generator prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Tasks 3 and 4 are near duplicates",
+            "expected": "Varied B2 probes",
+            "got": "Both ask app versus phone with a person, and she gave nearly the same answer",
+            "evidence": "#7 and #8 prompts; answers share 'get the answer immediately... nobody is responsible about'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Consecutive tasks must differ in topic or function.",
+            "code_hint": "task generator prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Summary and focus are thin",
+            "expected": "Next focus on interview vocabulary and the recurring slips",
+            "got": "The focus is one phrase pair, and the summary is generic",
+            "evidence": "#9 'Practise \"responsible about\"...'; summary mentions the interview only in passing.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Summary names her stated goal and one concrete interview-relevant drill.",
+            "code_hint": "verdict summary prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Exact B1 placement with specific, correct slips",
+            "expected": "B1",
+            "got": "B1, with a correct 'responsible for' fix and article slips",
+            "evidence": "#9 'Your usual slips: “I prefer phone with a person” → try “I prefer a phone call with a person”'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep slip extraction.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Neutral, own-language framing",
+            "expected": "No Czech assumption",
+            "got": "'English or your own language'; the greeting uses her name",
+            "evidence": "#2 'You can answer in English or in your own language.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "The level, B1, is right, and I was glad that it did not talk to me as a Czech learner. It caught my \"responsible about\" slip, which is real. But I told it twice that my Friday interview is the point, and the tasks were still about a carrier's dropped calls. Nobody asked me \"tell me about a problem you solved\". The last two questions were almost the same. The summary says \"your job interview\" in a template way. For seven minutes it is fine, and I trust the level. But I would want interview questions before I come back tomorrow. I would tell a friend it finds your level, not that it prepares you for an interview yet.",
+        "prior": [
+          {
+            "id": "LT-oksana-34-J1-2",
+            "status": "not-seen",
+            "evidence": "#9 band B1 = trueBand, with three slips listed; no generous B2 this time.",
+            "finding": -1
+          },
+          {
+            "id": "LT-oksana-34-J1-3",
+            "status": "recurs",
+            "evidence": "#7 and #8 are near-duplicate app-versus-phone tasks, both graded partial for 'responsible about'.",
+            "finding": 1
+          },
+          {
+            "id": "LT-oksana-34-J1-4",
+            "status": "recurs",
+            "evidence": "#5-#8 contain no real interview question despite her stating one in #4.",
+            "finding": 0
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #9 summary 'practise speaking more smoothly for phone calls and your job interview' is generic. The focus on 'responsible about' is specific, but the tasks never touched the interview she asked for.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: She named the interview in #2 and #4, but the tasks (#5-#8) were carrier phone/app questions; no interview question. #9 only mentions 'your job interview' in the summary."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #6-#8 are carrier delay and dropped-call tasks; none is a logistics interview question like 'tell me about a problem you solved'. Tasks 3 and 4 are near duplicates."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 11,
+      "fail": 0,
+      "ms": 64172
+    },
+    "character": {
+      "n": 9,
+      "fail": 0,
+      "ms": 39282
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 19407
+    }
+  }
+}

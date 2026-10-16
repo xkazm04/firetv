@@ -1,0 +1,503 @@
+{
+  "character": "hana-41",
+  "name": "Hana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nHana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "I'd like the app to find my level, seven minutes is okay.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Hana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I will write a short safe answer about work.",
+          "action": "answer",
+          "args": {
+            "text": "I use English in my work, I am accountant. I write emails to colleagues and sometimes we have meeting in English. Also when I travel."
+          },
+          "result": "ok",
+          "ms": 6860
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Hana. English for work emails, meetings and travel sounds very useful. How did you learn your English? School, a course, time abroad, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Hana. English for work emails, meetings and travel sounds very useful. How did you learn your English? School, a course, time abroad, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work, I am accountant. I write emails to colleagues and sometimes we have meeting in English. Also when I travel.\nLinga\nThanks, Hana. English for work emails, meetings and travel sounds very useful. How did you learn your English? School, a course, time abroad, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Hana. English for work emails, meetings and travel sounds very useful. How did you learn your English? School, a course, time abroad, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I learned mostly at school and then at work.",
+          "action": "answer",
+          "args": {
+            "text": "I learned English at school and then on a course for two years. Now I learn it mostly in my work."
+          },
+          "result": "ok",
+          "ms": 5895
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, Hana. What would you like to be able to do better in English? For example, speak more easily in meetings, or write emails faster?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Hana. What would you like to be able to do better in English? For example, speak more easily in meetings, or write emails faster?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work, I am accountant. I write emails to colleagues and sometimes we have meeting in English. Also when I travel.\nLinga\nThanks, Hana. English for work emails, meetings and travel sounds very useful. How did you learn your English? School, a course, time abroad, or on your own?\nYou\nI learned English at school and then on a course for two years. Now I learn it mostly in my work.\nLinga\nThanks, Hana. What would you like to be able to do better in English? For example, speak more easily in meetings, or write emails faster?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Hana. What would you like to be able to do better in English? For example, speak more easily in meetings, or write emails faster?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to speak better in meetings and present numbers, a short safe answer.",
+          "action": "answer",
+          "args": {
+            "text": "I would like to speak more easy in meetings and to present numbers to my colleagues. Also small talk with Dutch colleague."
+          },
+          "result": "ok",
+          "ms": 8105
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 1 · Choose the reply on the TV\nA Dutch colleague says: \"Can you help me with the slides for the meeting?\" What do you say?\n01\nYes, I can help you. Let's do it now.\n02\nYes, I can help. Let's go to the beach.\nYour task\nYes, I can help you. Let's do it now.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA Dutch colleague says: \"Can you help me with the slides for the meeting?\" What do you say?\n[button: Yes, I can help you. Let's do it now.] [button: Yes, I can help. Let's go to the beach.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Reply 1 is the sensible one; the beach makes no sense.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 3314
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 2 · Listen and answer\nYour task\nWhy does the speaker want to start the meeting later?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Why does the speaker want to start the meeting later?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Sorry, I'm running late. Could we start at half past two instead, so I can finish the sales numbers first?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood it: she is late and wants to finish the sales numbers first.",
+          "action": "answer",
+          "args": {
+            "text": "She is running late and she want to finish the sales numbers before the meeting."
+          },
+          "result": "ok",
+          "ms": 8056
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 3 · Say it\nYour task\nYour Dutch colleague thinks short daily stand-up meetings work better than one long weekly meeting. Do you agree? Why, or why not?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour Dutch colleague thinks short daily stand-up meetings work better than one long weekly meeting. Do you agree? Why, or why not?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your Dutch colleague thinks short daily stand-up meetings work better than one long weekly meeting. Do you agree? Why, or why not?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I can answer this with a short safe sentence about meetings.",
+          "action": "answer",
+          "args": {
+            "text": "I agree with my colleague. Short meeting every day is better because we know quickly what is the problem. Long meeting in the week is often boring and people lose the focus."
+          },
+          "result": "ok",
+          "ms": 13917
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 4 · Say it\nYour task\nA Dutch colleague always shows sales numbers as charts, but you prefer simple tables. Which do you like better when presenting numbers in a meeting, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA Dutch colleague always shows sales numbers as charts, but you prefer simple tables. Which do you like better when presenting numbers in a meeting, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A Dutch colleague always shows sales numbers as charts, but you prefer simple tables. Which do you like better when presenting numbers in a meeting, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy question, I prefer tables because they are clear.",
+          "action": "answer",
+          "args": {
+            "text": "I like more the simple table. In table everybody can see the exact numbers and compare them. Chart looks nice but sometimes people don't know what is the real number."
+          },
+          "result": "ok",
+          "ms": 11875
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 5 · Say it\nYour task\nYour Dutch colleague asks how you get ready before you present numbers in a meeting. What do you usually do, and why does it help?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour Dutch colleague asks how you get ready before you present numbers in a meeting. What do you usually do, and why does it help?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your Dutch colleague asks how you get ready before you present numbers in a meeting. What do you usually do, and why does it help?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Last task; I'll write a short safe answer about preparing numbers.",
+          "action": "answer",
+          "args": {
+            "text": "Before I present numbers, I check all the data again and I make a short summary with the main points. It helps me because then I am not nervous and I can explain it clearly."
+          },
+          "result": "ok",
+          "ms": 11802
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nHana\nLinga's read · not a certificate\nB1 · Getting by\nYour words\nYour words: “what is the real number”.\nLinga says\nYou explain your steps and reasons clearly, like checking data and making a short summary before you present. That helps your goal of presenting numbers.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou explain your steps and reasons clearly, like checking data and making a short summary before you present. That helps your goal of presenting numbers.\nLinga's read from your answers, not a certificate. Only a few strong answers showed this level, so it may be a little off.\nNext to practise:\nPractise word order in questions: \"what is the real number\" should be \"what the real number is\".\nYour usual slips\n“she want to finish” → try “she wants to finish” “In table everybody can see” → try “In a table everybody can see” “people don't know what is the real number” → try “people don't know what the real number is”\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nA Dutch colleague says: \"Can you help me with the slides for the meeting?\" What do you say?\n“Yes, I can help you. Let's do it now.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhy does the speaker want to start the meeting later?\n“She is running late and she want to finish the sales numbers before the meeting.”\nYou caught both reasons: running late and the sales numbers. Watch the verb: after she or he, add -s, as in 'she wants'.\nB2 · Say it · nearly there\nYour Dutch colleague thinks short daily stand-up meetings work better than one long weekly meeting. Do you agree? Why, or why not?\n“I agree with my colleague. Short meeting every day is better because we know quickly what is the problem. Long meeting in the week is often boring and people lose the focus.”\nYour English read as B1 here, and this task was B2.\nYou gave a reason and used 'because' well. Missing articles, like 'Short meeting' and 'Long meeting', kept your English from B2 level.\nB2 · Say it · not yet\nA Dutch colleague always shows sales numbers as charts, but you prefer simple tables. Which do you like better when presenting numbers in a meeting, and why?\n“I like more the simple table. In table everybody can see the exact numbers and compare them. Chart looks nice but sometimes people don't know what is the real number.”\nYour English read as A2 here, and this task was B2.\nYou answered the question and gave a reason. What held the English back was missing articles, like 'In table' instead of 'In a table', and word order.\nB1 · Say it · at this level\nYour Dutch colleague asks how you get ready before you present numbers in a meeting. What do you usually do, and why does it help?\n“Before I present numbers, I check all the data again and I make a short summary with the main points. It helps me because then I am not nervous and I can explain it clearly.”\nYou explained your steps and your reason clearly, with mostly correct grammar and good words for work.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 feels right for me, \"getting by\" is honest, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "B1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "B1",
+          "summary": "You explain your steps and reasons clearly, like checking data and making a short summary before you present. That helps your goal of presenting numbers.",
+          "focus": "Practise word order in questions: \"what is the real number\" should be \"what the real number is\".",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A Dutch colleague says: \"Can you help me with the slides for the meeting?\" What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I can help you. Let's do it now.",
+                "Yes, I can help. Let's go to the beach."
+              ],
+              "response": "Yes, I can help you. Let's do it now.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, I can help you. Let's do it now.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Why does the speaker want to start the meeting later?",
+              "line": "Sorry, I'm running late. Could we start at half past two instead, so I can finish the sales numbers first?",
+              "options": [],
+              "response": "She is running late and she want to finish the sales numbers before the meeting.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "She is running late and she want to finish the sales numbers before the meeting.",
+              "note": "You caught both reasons: running late and the sales numbers. Watch the verb: after she or he, add -s, as in 'she wants'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your Dutch colleague thinks short daily stand-up meetings work better than one long weekly meeting. Do you agree? Why, or why not?",
+              "line": "",
+              "options": [],
+              "response": "I agree with my colleague. Short meeting every day is better because we know quickly what is the problem. Long meeting in the week is often boring and people lose the focus.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I agree with my colleague. Short meeting every day is better because we know quickly what is the problem. Long meeting in the week is often boring and people lose the focus.",
+              "note": "You gave a reason and used 'because' well. Missing articles, like 'Short meeting' and 'Long meeting', kept your English from B2 level."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A Dutch colleague always shows sales numbers as charts, but you prefer simple tables. Which do you like better when presenting numbers in a meeting, and why?",
+              "line": "",
+              "options": [],
+              "response": "I like more the simple table. In table everybody can see the exact numbers and compare them. Chart looks nice but sometimes people don't know what is the real number.",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "I like more the simple table. In table everybody can see the exact numbers and compare them. Chart looks nice but sometimes people don't know what is the real number.",
+              "note": "You answered the question and gave a reason. What held the English back was missing articles, like 'In table' instead of 'In a table', and word order."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "Your Dutch colleague asks how you get ready before you present numbers in a meeting. What do you usually do, and why does it help?",
+              "line": "",
+              "options": [],
+              "response": "Before I present numbers, I check all the data again and I make a short summary with the main points. It helps me because then I am not nervous and I can explain it clearly.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "Before I present numbers, I check all the data again and I make a short summary with the main points. It helps me because then I am not nervous and I can explain it clearly.",
+              "note": "You explained your steps and your reason clearly, with mostly correct grammar and good words for work."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 115562,
+      "prior": [
+        {
+          "id": "LT-hana-41-J1-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "B2 task graded 'fail' where partial fits",
+          "expected": "A B2 comparison with reasons and minor slips should be partial.",
+          "got": "Task 3 verdict 'fail' with the note 'You compared both options and gave clear reasons.'",
+          "evidence": [
+            "#10: B2 'not yet' beside a note praising the comparison; it conflicts with the 'partial' that task 5 got for similar slips.",
+            "placement judge prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-hana-41-J1-2",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Confidence caveat is vague",
+          "expected": "A clear reason for the uncertainty.",
+          "got": "'Only a few strong answers showed this level, so it may be a little off.'",
+          "evidence": [
+            "#10 phone verdict."
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 band B1 vs trueBand B1, class exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Tasks #5-#9 are office scenarios (slides, meetings, presenting numbers); nothing childish. Option 'Let's go to the beach' is a mild silly distractor but not childish."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "Hana's self-band was B1 and the result is B1; the read matches her answers (#10)."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#10 summary: 'checking data and making a short summary before you present. That helps your goal of presenting numbers.' Specific, professional."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10: Find my level through 3 questions and 5 tasks to the verdict, no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 'B1 · Getting by', placement exact."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Each task had clear instructions, e.g. #6 'Listen to the TV, then answer on your phone.' Hana answered all without confusion."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 'You can answer in English or in your own language'; 'I don't know' button on each task; no failing language."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#10 summary is specific, but the focus 'what the real number is' is a single narrow fix, and the task 4 note ('A2 here', 'not yet') felt harsh and inconsistent beside the praise; the caveat 'may be a little off' is vague."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 4 (B2, in-app fail): her answer gave a clear comparison and reason with article and word-order slips, B1-solid, so I would give partial, matching task 3. Other four agree."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, sensitive data request or humiliating line seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "B2 task graded fail where partial fits",
+            "expected": "Task 4 with a clear comparison and reason and only article/word-order slips should be partial, like task 3.",
+            "got": "Task 4 'not yet' and 'Your English read as A2 here', while the note says 'You answered the question and gave a reason.'",
+            "evidence": "#10: 'Your English read as A2 here, and this task was B2.' Task 3 with similar slips got 'nearly there'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Similar slips in same-band answers get the same verdict; an answer with reason and connected sentences is not read as A2.",
+            "code_hint": "placement judge prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Confidence caveat is vague",
+            "expected": "A clear reason for the uncertainty.",
+            "got": "'Only a few strong answers showed this level, so it may be a little off.'",
+            "evidence": "#10 phone verdict.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The caveat names which evidence was thin, e.g. the B2 tasks were mixed.",
+            "code_hint": "placement summary prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Next focus is narrow and one-sided",
+            "expected": "A focus covering the main recurring slips (articles) with a practical workplace use.",
+            "got": "Focus is only word order in the indirect question; articles, the commonest slip, appear only under 'usual slips'.",
+            "evidence": "#10: 'Practise word order in questions: \"what is the real number\" should be \"what the real number is\".'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Next focus targets the most frequent error pattern across tasks.",
+            "code_hint": "placement focus prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Workplace-relevant tasks and specific corrections",
+            "expected": "Adult professional content.",
+            "got": "Tasks about slides, stand-ups, tables vs charts; corrections quote her own words ('she want' → 'she wants').",
+            "evidence": "#5-#10 tasks and 'Your usual slips'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep office-themed tasks and quoted corrections.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "low"
+        },
+        "voice": "Overall I would use it again. The questions were about my real work, such as slides, meetings and presenting numbers, so I did not feel like a student. B1 \"getting by\" is honest and I accept it. I liked that the corrections quoted my own sentences, like \"she wants\" and \"In a table\". That is something I can use on Monday in emails.\n\nI did not understand why my table answer was marked \"not yet\" and read as A2. It said I answered and gave a reason, and then it said A2. That felt unfair, and the line \"it may be a little off\" does not tell me anything. The next focus, about word order, is only a small part of my mistakes, because articles are much more common. Still, it was fast and about seven minutes, and much cheaper than a course. I would tell a colleague, with that small reservation.",
+        "prior": [
+          {
+            "id": "LT-hana-41-J1-1",
+            "status": "recurs",
+            "evidence": "#10: task 4 'not yet' with 'Your English read as A2 here' beside a note 'You answered the question and gave a reason', while task 3 with similar slips got 'nearly there'.",
+            "finding": 0
+          },
+          {
+            "id": "LT-hana-41-J1-2",
+            "status": "recurs",
+            "evidence": "#10: 'Only a few strong answers showed this level, so it may be a little off.'",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #10 summary is specific, but the focus 'what the real number is' is a single narrow fix, and the task 4 note ('A2 here', 'not yet') felt harsh and inconsistent beside the praise; the caveat 'may be a little off' is vague.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 15,
+      "fail": 0,
+      "ms": 69776
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 45532
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 17570
+    }
+  }
+}
