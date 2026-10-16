@@ -17,7 +17,7 @@ import { markCounts, markOf } from "../rules/marks";
 import type { Evening } from "../../tv/recapRows";
 
 /** The longest note the writer may keep: one or two plain sentences. */
-export const NOTE_MAX = 240;
+const NOTE_MAX = 240;
 
 const SCHEMA = {
   type: "object",
