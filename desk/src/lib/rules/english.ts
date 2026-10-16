@@ -7,7 +7,7 @@
  * never the form the student must produce.
  */
 /** The longest sentence the desk reads in Linga: a longer one is refused in desk words before any run, never cut. */
-export const SENTENCE_MAX = 1000;
+const SENTENCE_MAX = 1000;
 /** Why a Linga sentence is refused before any run, in the desk's words; null when it can be read. */
 export function sentenceProblem(s: unknown): string | null {
   return typeof s === "string" && s.length > SENTENCE_MAX ? `That is longer than ${SENTENCE_MAX} characters. Send one sentence at a time.` : null;
