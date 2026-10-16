@@ -583,6 +583,26 @@ test('LP-R2: a three-paragraph piece read past a switch lands whole in the leave
  store.dispatch({type:'learner.set',id:'ema'});
  s=store.getSession();assert.equal(s.essay.piece.read.length,3);assert.equal(s.essay.summary,a.summary);
 });
+test('LP-R2 A-B-A: a piece whose reader sits back down mid-reading still lands whole on her desk and agrees with her record',async()=>{
+ seatedWithWork('ema');store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
+ const gates=[held1(),held1(),held1()],started=[];
+ answer=async(r)=>{
+  const m=/Judge only paragraph (\d+) of \d+: sentences (\d+) to (\d+)/.exec(r.prompt);const para=Number(m[1])-1;started.push(para);await gates[para].p;
+  const observations=[];for(let n=Number(m[2]);n<=Number(m[3]);n++)observations.push({n,job:'link',note:'x'});
+  return {json:{observations,summary:'s'},provider:'stub',ms:1};};
+ const PIECE=['Schools start too early. Teenagers are tired.','Research found that teens sleep later. This is bad.','Therefore school should start at nine.'].join('\n\n');
+ const p=postAnalyse({kind:'piece',text:PIECE,type:'structure'});
+ gates[0].open();await settle();await until(()=>started.length===2&&store.getSession().essay);
+ store.dispatch({type:'learner.set',id:'jakub'});
+ store.dispatch({type:'learner.set',id:'ema'});
+ gates[1].open();gates[2].open();assert.equal((await p).status,200);await settle();
+ const s=store.getSession();
+ assert.equal(s.learner.id,'ema');
+ const line=getLearnerOf('ema').history.find((h)=>h.kind==='writing');assert.ok(line,'the record has the history line');
+ assert.equal(s.essay.piece.read.length,3,'the desk holds all 3 paragraphs, as the record says');
+ const fixed=s.essay.verdicts.filter((v)=>v.verdict==='faulty').length;
+ assert.equal(line.detail,`${fixed} of ${s.essay.sentences.length} sentences to fix, 3 paragraphs`,'record and desk agree');
+});
 test('LP-R2: a reading the learner replaced himself still drops (a real supersede, not a switch)',()=>{
  const t=fs.readFileSync(src('app/api/analyse/route.ts'),'utf8');
  assert.match(t,/run\.current\(\) \|\| \(getSession\(\)\.learner\?\.id !== undefined/);
