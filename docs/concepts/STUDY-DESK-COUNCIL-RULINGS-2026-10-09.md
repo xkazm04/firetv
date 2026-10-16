@@ -934,6 +934,8 @@ X7, as delivered (commit 34148887, message prefix 'explain: X7'):
 - Nineteen pins that asserted a settle from an explanation were moved to the new rule, each with a comment citing ask d6d87220, in `tools/maths-rules-test.cjs`, `tools/school-marking-test.cjs`, `tools/calc-marking-test.cjs`, `tools/calc-course-test.cjs`, `tools/maths-tv-test.cjs`, `tools/school-stretch-test.cjs` and `tools/week-digest-test.cjs`. A new test in `tools/maths-rules-test.cjs` pins 'I got stuck on five sixths', 'the answer is not eleven twelfths' and a right spoken answer.
 - A lite council round follows, to measure the new state. It is not an approval.
 
+X7-a, the door (commit 95947a8c, 'explain: X7 door'; lite r2 value-1, craft-2, robustness-1): an unsure item took an 'enter your answer' line and no route took one. Built: `/api/second` now takes an unsure item's entered answer, judged by the same code judge (`enteredGo`, no model). The entry settles the item through `practice.settle` with the code verdict (never the typed answer); the reducer restates the history line and digest as it did, skills untouched. The phone draws the typed box for an unsure item too. ENTER_LINE and NOT_HEARD_LINE (en, cz) name the box and carry no value. An explanation still never settles. Stricter reading chosen: an unsure item's entry is its one go, so if it comes back wrong the second go is spent with it and a further entry is refused (a wrong item keeps its single second go). Pinned in `tools/maths-second-test.cjs` and `tools/part-names-test.cjs`. Open for the owner: whether an entered unsure answer should also write the skill attempt, as a marked answer does. A lite r3 follows.
+
 
 ## 6. essay-paragraph-analysis
 

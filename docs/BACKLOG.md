@@ -867,4 +867,5 @@ Drained from `2026-10-14-l1/math-family` and `2026-10-14-l1/math-adult` (L1; Mat
   - recommendation: build, ruled by the owner on ask d6d87220 (2026-10-16): never settle from an explanation. An explanation, spoken or typed, never settles an unsure item. The learner still gets the step, and a line that asks them to enter what they got as their answer. The item settles only from a value entered through the mark or second-go routes
   - owner: delivery X7
   - status: closed, built 34148887 (`explain: X7`). `explainItem` no longer makes a verdict or calls `recordAttempt`; the `/api/explain` route no longer sends `settled` or `saved`; a wrong item still takes the slip the explanation named. craft-1 is closed by construction. A lite council round follows
+  - X7-a (door): built 95947a8c (`explain: X7 door`). An unsure item takes one entered answer on `/api/second` (code judge, no model), the phone shows the box, the closing lines name it; a wrong entry spends the second go. Lite r3 follows.
   - ceiling: a learner who says the right answer aloud now has to enter it once more. `saidIn` stays, but only to pick the reply line (enter it, or the X6-a not-heard line)
