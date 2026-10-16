@@ -97,6 +97,9 @@ export default function Phone() {
   const [pieceId, setPieceId] = useState<string | undefined>(undefined);
   const [keep, setKeep] = useState(true);
   const [notice, setNotice] = useState<string | null>(null);
+  /** Which read the one-time notice interrupted: the whole piece (kept on the shelf) or the single paragraph showing. */
+  const [noticeFor, setNoticeFor] = useState<"piece" | "paragraph">("piece");
+  useEffect(() => { if (notice === null) setNoticeFor("piece"); }, [notice]);
   const [shelfTick, setShelfTick] = useState(0);
   const [pname, setPname] = useState("");
   const [ring, setRing] = useState<{ x: number; y: number } | null>(null);
@@ -304,8 +307,20 @@ export default function Phone() {
       const r = await call("/api/analyse", { kind: "essay", text: one, type: etype });
       if (moved()) return;
       if (r.ok) { setMsg("on the TV"); setReadIx((x) => [...x, pix]); }
-      else { const j = await r.json().catch(() => ({} as { error?: string })); if (moved()) return; setMsg(""); setNote((j as { error?: string }).error ?? "The desk could not read that one. Try again."); }
+      else {
+        const j = await r.json().catch(() => ({} as { error?: string; notice?: boolean })); if (moved()) return; setMsg("");
+        // UD-7: the first paragraph read asks the same one-time notice as the piece path; accepting it reads this paragraph
+        if (r.status === 428 && (j as { notice?: boolean }).notice) { setNoticeFor("paragraph"); setNotice((j as { error?: string }).error ?? ""); return; }
+        setNote((j as { error?: string }).error ?? "The desk could not read that one. Try again.");
+      }
     } catch { if (!moved()) { setMsg(""); setNote("That did not reach the desk."); } } finally { setBusy(false); }
+  };
+  /** The notice that interrupted a single paragraph: accepting it records the notice, then reads the paragraph again. */
+  const acceptParagraphNotice = async () => {
+    const who = seat.current.id, moved = () => seat.current.id !== who;
+    setNotice(null);
+    try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void analyseParagraph(); } catch { /* said on the next line */ }
+    if (!moved()) setNote("That did not reach the desk.");
   };
   /** From the sentence rewrite panel, on to the next paragraph: the TV goes back to the lens home, the phone to its paragraph. */
   const nextFromRewrite = () => { goPara(pix + 1); void post({ type: "nav", screen: "essaytype", focus: Math.max(0, ESSAY_TYPES.findIndex((t) => t.id === etype)) }); };
@@ -699,12 +714,12 @@ export default function Phone() {
           <div className="field"><textarea aria-label="The paragraph the desk will read" value={essay} onChange={(e) => { const v = e.target.value; setEssay(() => v); }} onPaste={onEssayPaste} /></div>
           {note ? <p role="alert" data-role="essay-note" style={{ color: "#B8261A" }}>{note}</p> : info ? <p data-role="essay-info">{info}</p> : null}
           {againBtn}
-          {notice !== null && <TextNotice text={notice} onAccept={() => void acceptNotice()} onDecline={() => { setNotice(null); setKeep(false); void readPiece(false); }} />}
+          {notice !== null && <TextNotice text={notice} onAccept={() => void (noticeFor === "paragraph" ? acceptParagraphNotice() : acceptNotice())} onDecline={() => { setNotice(null); if (noticeFor === "piece") { setKeep(false); void readPiece(false); } }} />}
           {paras.length > 1 && <div className="field" data-role="essay-piece">
             <label className="pkeep"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} data-role="essay-keep" /><span>Keep it on my shelf</span></label>
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()))}>Dictate</button>
-            <button className="pbtn" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || !essay.trim()} onClick={analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button></div>
+            <button className="pbtn" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || notice !== null || !essay.trim()} onClick={analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button></div>
           <EssayShelf learnerId={s?.learner?.id} refresh={shelfTick} onOpen={openKept} /></div>}
 
         {screen === "tonight" && s && <div className="pscreen"><h3>Tonight</h3>
