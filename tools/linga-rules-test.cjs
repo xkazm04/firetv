@@ -473,9 +473,11 @@ test('LG-48: no recert-1 learner moves farther from their true band than the sto
  console.log('LG-48 replay (true / stored / now):\n'+rows.map(r=>`  ${r.who.padEnd(10)} ${r.trueBand}  ${r.stored} ${r.storedConfidence}  ${r.now.band} ${r.now.confidence}`).join('\n'));
  assert.equal(rows.length,10);
  for(const r of rows)assert(far(r.now.band,r.trueBand)<=far(r.stored,r.trueBand),`${r.who}: ${r.stored} -> ${r.now.band}, true ${r.trueBand}`);
- // a strong say pass above a lower fail still holds its band: a 50/50 misclick low on the ladder does not cap a real climber
+ // one strong say pass above a lower fail is thin: the learner leans down to the band under it, which holds a strong pass; a second one holds the band
  const say=(band,verdict)=>({band,verdict,kind:'say',response:'I usually go to school by bus with my friends.'});
- assert.equal(P.staircase('A2',[{band:'A2',verdict:'fail',kind:'choose',response:'x'},{band:'A1',verdict:'pass',kind:'choose',response:'y'},{band:'A2',verdict:'pass',kind:'choose',response:'z'},{band:'B1',verdict:'pass',kind:'listen',response:'He missed the bus'},say('B2','pass')]).band,'B2');
+ assert.equal(P.staircase('A2',[{band:'A2',verdict:'fail',kind:'choose',response:'x'},{band:'A1',verdict:'pass',kind:'choose',response:'y'},{band:'A2',verdict:'pass',kind:'choose',response:'z'},{band:'B1',verdict:'pass',kind:'listen',response:'He missed the bus'},say('B2','pass')]).band,'B1');
+ const climber=P.staircase('A2',[{band:'A2',verdict:'fail',kind:'choose',response:'x'},{band:'A1',verdict:'pass',kind:'choose',response:'y'},{band:'A2',verdict:'pass',kind:'choose',response:'z'},say('B2','pass'),say('B2','pass')]);
+ assert.equal(climber.band,'B2');assert.notEqual(climber.confidence,'high');
 });
 test('S2: spokenBand reads answered say tasks only, at their highest; conversationBand lowers at most one band, only when asked to speak at the level',()=>{
  const say=(band,english,patch={})=>({band,kind:'say',answered:'yes',english,...patch});

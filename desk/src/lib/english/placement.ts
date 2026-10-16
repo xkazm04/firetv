@@ -101,7 +101,7 @@ export const weakPass = (m: Mark) => !m.skipped && m.verdict === "pass" && (m.ki
 const strongPasses = (marks: Mark[], band: Band) => counted(marks).filter(m => m.band === band && m.verdict === "pass" && !weakPass(m)).length;
 
 /** What a confidence rests on; restsLine words each. */
-export type Rests = "scattered" | "partials" | "weak" | "skips" | "floor" | "unchecked" | "thin" | "few" | "read" | "firm";
+export type Rests = "scattered" | "partials" | "weak" | "skips" | "floor" | "unchecked" | "thin" | "few" | "read" | "lean" | "firm";
 /**
  * Strong passes at the placed band that a HIGH confidence needs (with a real fail or partial above, or C2). Two were
  * enough until the 2026-10-14 LT recerts: of the eight placements stored as high across recert-1 and recert-3, six were
@@ -110,6 +110,8 @@ export type Rests = "scattered" | "partials" | "weak" | "skips" | "floor" | "unc
  * five-task check can ask for.
  */
 export const HIGH_STRONG_PASSES = 3;
+/** Strong passes at a band below which its evidence is thin: the ladder may then place the learner one band lower. */
+export const THIN_STRONG_PASSES = 2;
 
 /**
  * Pass goes up a band, fail goes down, partial stays, a skip goes down (the learner is not asked something harder).
@@ -131,6 +133,13 @@ export const HIGH_STRONG_PASSES = 3;
  * is never high when the ladder band differs from it (the talk and the tasks disagree), nor when fewer than
  * HIGH_STRONG_PASSES strong passes hold the band. It caps at medium, or low when the band also has fewer than two
  * strong passes.
+ *
+ * Lean down, never up: when the evidence for the top band is thin (fewer than THIN_STRONG_PASSES strong passes at it,
+ * which two partials or a band of weak passes and skips always are) or the read is lower than the band, and the band
+ * just below holds a strong pass of its own, the learner is placed at that lower band. A lower band with no strong pass
+ * is not evidence, so Ondrej (B1, read A2, A2 held by a choice only) stays at B1. Every miss of the recerts was high, none
+ * low: Adela, Jana (twice) and Lukas (twice) land on their true band, Oksana moves a band nearer. Leaned confidence
+ * is medium, low when the top band was thin.
  */
 export function staircase(start: Band, marks: Mark[], read: Band | null = null): { done: boolean; next: Band; band: Band; confidence: Placement["confidence"]; rests: Rests } {
   const last = marks.at(-1), real = counted(marks);
@@ -150,6 +159,11 @@ export function staircase(start: Band, marks: Mark[], read: Band | null = null):
   const strong = strongPasses(marks, band);
   const ceiling = band === "C2" || real.some(m => m.verdict !== "pass" && BANDS.indexOf(m.band) > BANDS.indexOf(band));
   let rests: Rests;
+  const lowerHeld = band !== "A1" && strongPasses(marks, shift(band, -1)) >= 1;
+  const thin = strong < THIN_STRONG_PASSES;
+  if (lowerHeld && (thin || (read && BANDS.indexOf(read) < BANDS.indexOf(band)))) {
+    return { done, next, band: shift(band, -1), confidence: thin ? "low" : "medium", rests: "lean" };
+  }
   if (scattered) rests = "scattered";
   else if (partialBand) rests = "partials";
   else if (strong === 0) rests = floored ? "floor" : real.some(m => m.band === band && weakPass(m)) ? "weak" : "skips";
@@ -224,6 +238,7 @@ export function restsLine(confidence: Placement["confidence"], tasks: Mark[], re
     case "floor": return "The tasks were too hard, so this is the lowest level.";
     case "unchecked": return skipped ? "A skipped task left the next level up unchecked." : "No task at the next level up was answered.";
     case "read": return "What you said at the start pointed to a different level, so this is a careful guess.";
+    case "lean": return "Linga placed you one level lower than your answers alone, to be safe.";
     case "few": return "Only a few strong answers showed this level, so it may be a little off.";
     case "thin": return "Only one strong answer showed this level, so it may be a little off.";
     default: return "Linga is not sure of this level, so try the check again another day.";
