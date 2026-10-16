@@ -534,6 +534,19 @@ test('S2: a check that heard A2 under a B1 read keeps B1, starts conversations a
  await command('preferences',{preferences:{...l.preferences,level:'B2'},notes:[]});
  l=getLearner('ema').english;assert.equal(l.placement.source,'self');assert.equal(l.placement.band,'B2');
 });
+test('LG-49: the TV home calls the read band "Your level" and names the spoken band only as a second line, only when it differs',()=>{
+ const V=view(),say=(band,english)=>({id:'s'+band+english,band,kind:'say',prompt:'p',line:'',options:[],response:'I like it.',mode:'speech',verdict:'partial',quote:'I like it.',note:'n',at:1,answered:'yes',english});
+ const home=(placement)=>{const v=V.lingaView(sessionOf(fixture('linga',{placement,plan:planned('p-a','p-b'),sessions:played('p-a')})),{});return {v,text:V.viewText(v)};};
+ const split=home({...placed('B1'),tasks:[say('B1','A2')]});
+ assert.equal(split.v.home,'next-topic');
+ assert.match(split.v.hero.kicker,/^B1 · /,'the hero names the read band');
+ assert(!/^A2/.test(split.v.hero.kicker),'the spoken band is not the level');
+ assert.match(split.v.hero.subtitle,/Talking today at A2 · /);
+ assert.match(split.text,/Talking today at A2/);
+ const plain=home({...placed('B1'),tasks:[say('B1','B1')]});
+ assert.match(plain.v.hero.kicker,/^B1 · /);
+ assert(!/Talking today/.test(plain.text),'matching bands: no second line');
+});
 test('S2 view: the verdict shows the read and the band spoken when they differ, and only the read when they agree',()=>{
  const V=view(),say=(band,english,mode='speech')=>({id:'s'+band+english,band,kind:'say',prompt:'p',line:'',options:[],response:'I like it.',mode,verdict:'partial',quote:'I like it.',note:'n',at:1,answered:'yes',english});
  const split={...placed('B1'),tasks:[say('B1','A2')]};

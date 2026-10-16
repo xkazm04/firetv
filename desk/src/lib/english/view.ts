@@ -269,6 +269,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   const p = s.profiles.find(p => p.id === s.learner?.id), l = s.englishLearning, prefs = l.preferences ?? defaultPreferences(p);
   // the band Linga plays at: the placement's, or the lower band the learner spoke at (S2)
   const level: Band = playBand(l.placement, isBand(prefs.level) ? prefs.level : "A1");
+  // LG-49: "Your level" is the read (placement.band) everywhere; the band Linga plays at is a second line, only when it differs
+  const read: Band = l.placement?.band ?? level, talking = l.placement && level !== read ? `Talking today at ${level} · ${BAND_NAME[level]}` : "";
   const scenes = eligibleScenes(p, prefs, l), recommended = recommendFor(p, l), c = s.conversation;
   const lc = activeCheck(s), placement = lc?.placement ?? l.placement;
   const isHome = s.screen === "linga" || s.screen === "tonight", onCheck = CHECK_SCREENS.includes(s.screen);
@@ -330,18 +332,18 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       case "no-plan": {
         const choosing = lc?.stage === "plan";
         tag = "Your topics"; title = "Choose your topics"; caption = "Linga picks conversations for your level and interests. Swap any you don't want.";
-        hero = intro(`${level} · ${BAND_NAME[level]}${self}`, "Conversations picked for you", "plan", "Your own conversations");
+        hero = intro(`${read} · ${BAND_NAME[read]}${self}`, [talking, "Conversations picked for you"].filter(Boolean).join(" · "), "plan", "Your own conversations");
         actions = [act("see-topics", choosing ? "Carry on choosing" : "See my topics", caption, cmd(choosing ? "check-resume" : "plan-propose")), chooseSituation("Skip the topics and pick a situation yourself.")];
         break;
       }
       case "plan-done":
         tag = "Your topics"; title = "Every topic talked through"; caption = "Ask Linga for a fresh set of conversations, or go back to one you enjoyed.";
-        hero = intro(`${level} · ${BAND_NAME[level]}`, `${l.plan!.topics.length} conversations`, "done", "Plan complete");
+        hero = intro(`${read} · ${BAND_NAME[read]}`, [talking, `${l.plan!.topics.length} conversations`].filter(Boolean).join(" · "), "done", "Plan complete");
         actions = [act("new-topics", "New topics", "Linga suggests a fresh set of conversations for your level.", cmd("plan-propose")), act("talk-again", "Talk again", recommended.goal, cmd("start", { sceneId: recommended.id, replace: true }))];
         break;
       case "next-topic":
         title = recommended.name; caption = recommended.goal;
-        hero = intro(`${level} · ${BAND_NAME[level]}${self}`, skillName(recommended.skill), artOf(recommended.id, recommended.skill), recommended.partner);
+        hero = intro(`${read} · ${BAND_NAME[read]}${self}`, [talking, skillName(recommended.skill)].filter(Boolean).join(" · "), artOf(recommended.id, recommended.skill), recommended.partner);
         actions = [act("start-talking", "Start talking", caption, cmd("start", { sceneId: recommended.id, replace: true })), chooseSituation("Choose a goal and practise it in a conversation.")];
         break;
     }
@@ -400,12 +402,12 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (placement.focus && !self) details.push(`On the phone, next to practise: ${placement.focus}`);
     if (!self) details.push(`On the phone: ${restsLine(placement.confidence, placement.tasks)}`);
   } else if (s.screen === "linga-plan" && lc && lc.askGoal) {
-    tag = `Your topics · ${level}`;
+    tag = `Your topics · ${read}`;
     hero = { kind: "message", kicker: "Before Linga picks your topics", text: "What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.", note: "" };
     caption = lc.pending ? "Take a moment." : "Say or type it on your phone, in English or in your own language."; captionTag = "Your turn";
     actions = [act("skip-goal", "Let Linga pick", "Linga picks conversations for your level without a goal. You can swap any of them.", cmd("plan-goal", { skip: true })), act("not-now", "Not now", "Leave for now. Linga asks again when you come back to your topics.", cmd("check-leave"))];
   } else if (s.screen === "linga-plan" && lc) {
-    tag = `Your topics · ${level}`; title = lc.topics.length ? `${lc.topics.length} conversations for you` : "Your topics";
+    tag = `Your topics · ${read}`; title = lc.topics.length ? `${lc.topics.length} conversations for you` : "Your topics";
     hero = { kind: "topics", kicker: lc.pending ? "Linga is working on your topics" : "Swap any topic · add your own on the phone", title, topics: lc.topics.map(t => ({ id: t.id, title: t.title, skill: skillName(t.skill), why: t.why, art: SKILL_ART[t.skill] })), selected: s.focus - 1 };
     caption = lc.pending ? (lc.topics.length ? "Take a moment. Linga is finding another topic." : "Take a moment. Linga is picking conversations for your level and interests.") : lc.error || "Add a topic in your own words on the phone."; captionTag = lc.pending ? "Preparing" : "Your topics";
     actions = lc.pending ? [act("cancel", "Cancel & come back later", "Stop here. Your topics so far are kept.", cmd("check-leave"))]
