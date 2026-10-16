@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence } from "@/lib/desk/essay";
-import { BUSY, blocksRun, refused, runJob } from "@/lib/desk/job";
+import { BUSY, blocksRun, refused, runJob, type JobRun } from "@/lib/desk/job";
 import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, type AnalysisType } from "@/lib/rules/essay";
 import { addPiece, addVersion, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { learnerAge } from "@/lib/rules/voice";
@@ -28,6 +28,18 @@ function refusedWithLine(error: string, essay = true) {
 const KINDS: ReadonlyArray<Body["kind"]> = ["english", "essay", "rewrite", "piece-again", "piece"];
 const NOT_A_READING = "The desk did not get anything to read. Send it again from the phone.";
 const blank = (t: unknown) => typeof t !== "string" || !t.trim();
+
+/**
+ * Whether a reading still belongs to its owner (LP-R2): it is the latest analyse run, or a switch ended its job - the owner
+ * is away or sat back down, someone is seated, and no other reading has taken the job. A reading the owner replaced with a
+ * newer one (the job is another run's), or a reset desk (nobody seated), is dropped.
+ */
+function readingStands(run: JobRun, owner: string): boolean {
+  if (run.current()) return true;
+  const seated = getSession().learner?.id, job = getSession().jobs?.analyse;
+  if (seated === undefined) return false;
+  return job === undefined || job.by !== owner;
+}
 
 export async function POST(req: Request) {
   // a body that is not one of the readings is refused in desk words before any run: never a 500, never a failed job
@@ -83,7 +95,7 @@ export async function POST(req: Request) {
     const r = await runJob("analyse", async (run) => {
       const done = await analysePieceAgain(a, who.id, age, (line) => { notSaved = line; });
       // one report, when the piece is ruled; a reading replaced since leaves the desk as it is now
-      if (run.current() && getSession().essay === a) dispatch({ type: "essay.progress", analysis: done, owner: who.id });
+      if (readingStands(run, who.id) && getSession().essay === a) dispatch({ type: "essay.progress", analysis: done, owner: who.id });
       return done;
     }, { key: "essay", start: "reading the paragraphs that did not come back…", done: (x) => notSaved ?? x.summary.slice(0, 120) });
     return r.ok ? NextResponse.json(r.value) : refused(r);
@@ -110,8 +122,8 @@ export async function POST(req: Request) {
     let first = true;
     const r = await runJob("analyse", async (run) => {
       // LP-R2: a switch ends the job (store.ts switchedFrom) but not the reading: it keeps going into the leaving learner's
-      // away slot (every event here carries owner). A reading the learner replaced, or a reset desk, still drops.
-      const goes = () => run.current() || (getSession().learner?.id !== undefined && getSession().learner?.id !== who.id);
+      // away slot (every event here carries owner), and on to the owner's desk if they sit back down. A reading the learner replaced, or a reset desk, still drops.
+      const goes = () => readingStands(run, who.id);
       dispatch({ type: "essay.type", essayType: body.type, owner: who.id });
       const done = await analysePiece(body.text, body.type, who.id, age, (a) => {
         if (!goes()) return;

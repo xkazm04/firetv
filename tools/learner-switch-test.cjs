@@ -605,7 +605,8 @@ test('LP-R2 A-B-A: a piece whose reader sits back down mid-reading still lands w
 });
 test('LP-R2: a reading the learner replaced himself still drops (a real supersede, not a switch)',()=>{
  const t=fs.readFileSync(src('app/api/analyse/route.ts'),'utf8');
- assert.match(t,/run\.current\(\) \|\| \(getSession\(\)\.learner\?\.id !== undefined/);
+ assert.match(t,/function readingStands[\s\S]*run\.current\(\)[\s\S]*seated === undefined[\s\S]*job\.by !== owner/);
+ assert.equal((t.match(/readingStands\(run, who\.id\)/g)||[]).length,2,'the piece reading and the piece-again report share one predicate');
 });
 // ---- P1: load (last: it swaps the store module out from under the routes) ----
 const reload=(content)=>{
