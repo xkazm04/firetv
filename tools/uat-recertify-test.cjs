@@ -67,7 +67,7 @@ test('case 1: plan() lists the Character x journey pairs with open non-strength 
   const plan = R().plan(path.join(FIXTURES, '2026-09-15-lt-recert2-beginners'));
   assert.deepEqual(plan, { 'klara-13': ['J3'], 'petra-38': ['J3', 'J4'], 'tomas-9': ['J3', 'J4'], 'viktor-67': ['J3', 'J4'] });
   assert.equal(pairCount(plan), 7);
-  const wide = R().plan('2026-09-15-lt-recert');
+  const wide = R().plan(path.join(FIXTURES, '2026-09-15-lt-recert'));
   assert.equal(pairCount(wide), 26);
   assert.equal(Object.keys(wide).length, 10);
   // a fixed row drops out of the plan: stamp every open finding of one pair in a temp copy and plan again
@@ -79,7 +79,7 @@ test('case 1: plan() lists the Character x journey pairs with open non-strength 
 
 // ---- case 2
 test('case 2: metricDelta() recomputes the rubric metrics from each run\'s per-Character JSON and matches both reports', () => {
-  const d = R().metricDelta('2026-09-15-lt', '2026-09-15-lt-recert');
+  const d = R().metricDelta(path.join(FIXTURES, '2026-09-15-lt'), path.join(FIXTURES, '2026-09-15-lt-recert'));
   assert.equal(d.topicFit.before, '209/405 (52%)');
   assert.equal(d.topicFit.after, '63/186 (34%)');
   assert.equal(d.moments.before, '3/3 (100%)');
@@ -91,18 +91,18 @@ test('case 2: metricDelta() recomputes the rubric metrics from each run\'s per-C
   }
   assert.deepEqual([d.topicFit.from, d.topicFit.to], [[209, 405], [63, 186]]);
   // recertify.md reads before over the pairs the rerun ran: lt's J1 judges counted 20 topics the rerun never saw
-  assert.equal(R().metricDelta('2026-09-15-lt', '2026-09-15-lt-recert', { samePairs: true }).topicFit.before, '189/354 (53%)');
+  assert.equal(R().metricDelta(path.join(FIXTURES, '2026-09-15-lt'), path.join(FIXTURES, '2026-09-15-lt-recert'), { samePairs: true }).topicFit.before, '189/354 (53%)');
 });
 
 // ---- case 3
 test('case 3: confounds() flags a changed journey start from the setup record, and notes an unrecorded instrument', () => {
-  const c = R().confounds('2026-09-15-lt', '2026-09-15-lt-recert');
+  const c = R().confounds(path.join(FIXTURES, '2026-09-15-lt'), path.join(FIXTURES, '2026-09-15-lt-recert'));
   const starts = c.confounds.filter(x => x.kind === 'start');
   assert.equal(starts.length, 1, JSON.stringify(c.confounds));
   assert.equal(starts[0].journey, 'J2');
   assert.ok(starts[0].text.includes('after a real J1 for 5 of 10 Characters before, 0 of 10 after (fixture: level set by hand)'), starts[0].text);
   assert.ok(starts[0].metrics.includes('topicFit'), 'the start confound covers the topic-fit metric J2 feeds');
-  const c2 = R().confounds('2026-09-15-lt-recert', '2026-09-15-lt-recert2-goal');
+  const c2 = R().confounds(path.join(FIXTURES, '2026-09-15-lt-recert'), path.join(FIXTURES, '2026-09-15-lt-recert2-goal'));
   assert.equal(c2.confounds.filter(x => x.kind === 'start').length, 0, JSON.stringify(c2.confounds));
   const notes = c2.notes.filter(x => x.kind === 'instrument');
   assert.equal(notes.length, 1);
