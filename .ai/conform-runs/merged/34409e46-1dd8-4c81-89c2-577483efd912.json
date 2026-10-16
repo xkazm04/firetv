@@ -1,0 +1,41 @@
+{
+ "schema": "conform-run/1",
+ "worker": "34409e46-1dd8-4c81-89c2-577483efd912",
+ "subject": "terminal-multiplexing",
+ "evaluatedAt": "2026-10-16T02:03:57.531236+00:00",
+ "provider": "grok",
+ "model": "grok-4.7",
+ "pairs": [
+  {
+   "context": "session",
+   "subject": "terminal-multiplexing",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "desk/src/app/api/session/stream/route.ts:55 The only fan-out this context writes is a JSON snapshot of the study-desk record over SSE, and a search of desk/src and tools for node-pty, xterm, scrollback, conpty, and pseudoterminal found no hits, so there is no pseudo-terminal session for this subject to govern.",
+   "techniques": [],
+   "absenceTerms": [
+    "node-pty",
+    "xterm",
+    "scrollback",
+    "conpty",
+    "pseudoterminal"
+   ],
+   "registryProposal": "The subject's index words session, stream, and state also name an application record. The precondition that gates the subject is a pseudo-terminal opposite a terminal emulator, and that token is what a join should require."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-16T02:03:57.531236+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "terminal-multiplexing"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "session",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  }
+ ]
+}

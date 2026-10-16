@@ -1862,7 +1862,11 @@
           "revision": 7,
           "changedAt": "2026-09-04",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/app/api/session/stream/route.ts:55 The only fan-out this context writes is a JSON snapshot of the study-desk record over SSE, and a search of desk/src and tools for node-pty, xterm, scrollback, conpty, and pseudoterminal found no hits, so there is no pseudo-terminal session for this subject to govern.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:c3ef11aba4a471f5",
+          "evaluatedRevision": 7
         },
         {
           "subject": "stream-proxy-hop",
