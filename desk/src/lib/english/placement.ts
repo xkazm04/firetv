@@ -168,7 +168,7 @@ export const THIN_STRONG_PASSES = 2;
  * (A2, read B1), whose marks are his shape; Hana (B1, read B1) stays B1. A say partial at B1 alone does not lean: a B1
  * learner read at B1 with two strong B1 listens and a B1 say partial (the S2 check) keeps B1.
  */
-export function staircase(start: Band, marks: Mark[], read: Band | null = null): { done: boolean; next: Band; band: Band; confidence: Placement["confidence"]; rests: Rests } {
+export function staircase(start: Band, marks: Mark[], read: Band | null = null): { done: boolean; next: Band; band: Band; confidence: Placement["confidence"]; rests: Rests; lean?: { from: Band; cause: "thin" | "read" | "boundary" } } {
   const last = marks.at(-1), real = counted(marks);
   let next = last ? shift(last.band, last.skipped || last.verdict === "fail" ? -1 : last.verdict === "pass" ? 1 : 0) : start;
   if (last && weakPass(last) && next !== last.band && kindFor(next, marks as Array<{ band: Band; kind: TaskKind }>) === "say") next = last.band;
@@ -189,10 +189,10 @@ export function staircase(start: Band, marks: Mark[], read: Band | null = null):
   const lowerHeld = band !== "A1" && strongPasses(marks, shift(band, -1)) >= 1;
   const thin = strong < THIN_STRONG_PASSES;
   if (lowerHeld && (thin || (read && BANDS.indexOf(read) < BANDS.indexOf(band)))) {
-    return { done, next, band: shift(band, -1), confidence: thin ? "low" : "medium", rests: "lean" };
+    return { done, next, band: shift(band, -1), confidence: thin ? "low" : "medium", rests: "lean", lean: { from: band, cause: thin ? "thin" : "read" } };
   }
   if (band === "B1" && band === top && ceiling && count(marks, "A2", "pass") >= 1 && read && BANDS.indexOf(read) < BANDS.indexOf("B1")) {
-    return { done, next, band: "A2", confidence: "low", rests: "lean" };
+    return { done, next, band: "A2", confidence: "low", rests: "lean", lean: { from: "B1", cause: "boundary" } };
   }
   if (scattered) rests = "scattered";
   else if (partialBand) rests = "partials";
@@ -268,7 +268,13 @@ export function restsLine(confidence: Placement["confidence"], tasks: Mark[], re
     case "floor": return "The tasks were too hard, so this is the lowest level.";
     case "unchecked": return skipped ? "A skipped task left the next level up unchecked." : "No task at the next level up was answered.";
     case "read": return "What you said at the start pointed elsewhere, so this is a careful guess.";
-    case "lean": return "Linga placed you one level lower than your answers alone, to be safe.";
+    case "lean": {
+      const lean = ladder.lean, at = `Linga starts you at ${ladder.band}.`;
+      if (!lean) return `Linga placed you at ${ladder.band}, a level under your answers alone.`;
+      if (lean.cause === "boundary") return `${lean.from} was close, but a harder task fell short and what you said pointed lower, so you start at ${ladder.band}.`;
+      if (lean.cause === "read") return `${lean.from} was close, but what you said first pointed lower, so ${at}`;
+      return `Your ${lean.from} answers were close, but ${strongPasses(tasks, lean.from) ? "only one was" : "none was"} strong, so ${at}`;
+    }
     case "few": return "Only a few strong answers showed this level, so it may be a little off.";
     case "thin": return "Only one strong answer showed this level, so it may be a little off.";
     default: return "Linga is not sure of this level, so try the check again another day.";

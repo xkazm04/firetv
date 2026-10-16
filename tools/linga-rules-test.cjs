@@ -495,7 +495,7 @@ test('placement rework: over recert-1, -2 and -3 no learner moves farther from t
  const agree=[say('B1','pass'),say('B1','pass'),say('B1','pass'),say('B2','fail')];
  assert.equal(P.staircase('B1',agree,'B1').confidence,'high');
  const clash=P.staircase('B1',agree,'A2');assert.equal(clash.band,'B1');assert.equal(clash.rests,'read');assert.equal(clash.confidence,'medium');
- for(const [conf,marks,read,re] of [['medium',[say('B1','pass'),say('B1','pass'),say('B2','fail')],null,/few strong/],['medium',[say('B1','pass'),say('B1','pass'),say('B1','pass'),say('B2','fail'),say('B1','pass')],'B2',/start pointed elsewhere/],['low',[say('B1','pass'),say('B2','pass')],'B1',/one level lower/]])
+ for(const [conf,marks,read,re] of [['medium',[say('B1','pass'),say('B1','pass'),say('B2','fail')],null,/few strong/],['medium',[say('B1','pass'),say('B1','pass'),say('B1','pass'),say('B2','fail'),say('B1','pass')],'B2',/start pointed elsewhere/],['low',[say('B1','pass'),say('B2','pass')],'B1',/only one was strong/]])
   {const line=P.restsLine(conf,marks,read);assert.match(line,re);assert(line.split(' ').length<=16,line);}
  // one strong say pass above a lower fail is thin: the learner leans down to the band under it, which holds a strong pass; a second one holds the band
  assert.equal(P.staircase('A2',[{band:'A2',verdict:'fail',kind:'choose',response:'x'},{band:'A1',verdict:'pass',kind:'choose',response:'y'},{band:'A2',verdict:'pass',kind:'choose',response:'z'},{band:'B1',verdict:'pass',kind:'listen',response:'He missed the bus'},say('B2','pass')]).band,'B1');
