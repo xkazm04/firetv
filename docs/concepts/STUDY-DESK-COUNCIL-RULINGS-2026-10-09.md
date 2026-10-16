@@ -1491,6 +1491,8 @@ Full r3 (round 2026-10-11-learner-profile-multi-learner-switching-r3, run 333437
 
 Next, ruled 2026-10-11 (round 14): the owner decides robustness-2 beside the r3 Approval (ask 28b44148). The options are to finish the reading into the away slot, to stop it at the switch, or to accept it as a known limit. No rework is slotted until he answers.
 
+Ruled 2026-10-16 (ask 28b44148): finish it into his away slot. Delivery LP-R2, b8071b50 (switch: LP-R2). A whole-piece reading that outlives a switch keeps going and finishes into the leaving learner's away slot, with the record, the digest and the away slot all describing the same finished reading. It never writes onto the seated learner's desk. A reading the learner replaced himself still drops. Pinned in tools/learner-switch-test.cjs. Lite r3, the feature's last lite round, follows.
+
 ## 8. tv-phone-pairing
 
 Lite r1: ready, 0.5036. Security-sensitive. A full round follows a clean lite r2.
