@@ -1825,6 +1825,57 @@
           "evidence": "desk/src/english/LingaPhone.tsx:132 Transcript disclosures render their complete turn arrays; the context implements no filtered or merged transcript channel requiring independent subscription and retention."
         }
       ]
+    },
+    "desk-subjects/desk-pipelines/client-fetch-cache": {
+      "context": "desk-pipelines",
+      "subject": "client-fetch-cache",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T21:46:07.032Z",
+      "worker": "0cb73250-98d2-432c-8e0f-a379b7bf5f98",
+      "techniques": [
+        {
+          "technique": "admission-hypothesis",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/library/lessons.ts:18 The transcript cache declares no admission hypothesis; every existing transcript requested is retained without an eviction policy."
+        },
+        {
+          "technique": "cache-key-discipline",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/library/lessons.ts:22 The key contains only the lesson ID, although the file location depends on dataDir(), which reads DESK_DATA_DIR on every call; switching directories can reuse another directory's transcript."
+        },
+        {
+          "technique": "in-flight-dedup",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/library/lessons.ts:108 Concurrent identical query embeddings launch separate engine calls; ensureVectors shares catalog construction, but that registry does not cover query embeddings."
+        },
+        {
+          "technique": "parse-and-derive-caches",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/library/lessons.ts:27 Parsed transcript windows are cached by entity ID rather than content identity, with no content-change check or reset path."
+        },
+        {
+          "technique": "plural-policy-claims",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/library/lessons.ts:93 The shared vector read accepts no consumer-specific freshness or retention options, so competing policy claims do not arise here."
+        },
+        {
+          "technique": "prefetch-and-defer",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/library/lessons.ts:104 A cold lookup for one selected lesson waits for sequential embedding of every available catalog lesson, allowing work for other lessons to delay the blocking result."
+        },
+        {
+          "technique": "similarity-keyed-admission",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/library/lessons.ts:110 Cosine similarity retrieves a transcript window from the corpus; it does not admit a cached answer produced for another query."
+        },
+        {
+          "technique": "swr-design",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/library/lessons.ts:79 Persisted embeddings are content-dependent derivations whose reuse is checked against a digest; their validity calls for content identity rather than freshness windows."
+        }
+      ]
     }
   }
 }

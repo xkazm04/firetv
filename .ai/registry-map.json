@@ -678,7 +678,11 @@
           "revision": 15,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/library/lessons.ts:22 The lesson-picking pipeline reuses parsed transcripts by lesson ID before checking their file or data directory, so changed inputs can receive an earlier derivation.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:20824426732ffb6a",
+          "evaluatedRevision": 15
         },
         {
           "subject": "agent-runtime-assembly",
