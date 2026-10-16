@@ -464,7 +464,11 @@
           "revision": 5,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/english/ReplyBox.tsx:78 The composer disables submission while busy instead of accepting follow-ups into identified queued rows.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:5b4e7d399a4d924e",
+          "evaluatedRevision": 5
         },
         {
           "subject": "conversation-orchestration",

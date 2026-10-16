@@ -1769,6 +1769,62 @@
           "evidence": "desk/src/app/phone/ExplainTalk.tsx:36 The reusable recording control is a focusable native button whose behavior is wired exclusively to pointer events, so keyboard activation does nothing."
         }
       ]
+    },
+    "desk-linga/linga/chat-transcript": {
+      "context": "linga",
+      "subject": "chat-transcript",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T21:22:52.512Z",
+      "worker": "66cba4b6-2dc8-403c-8c06-83d98d9b8205",
+      "techniques": [
+        {
+          "technique": "composer-turn-queue",
+          "verdict": "deviation",
+          "evidence": "desk/src/english/ReplyBox.tsx:78 Busy disables Send; the send handler also refuses busy submissions, and the textarea prevents composing follow-ups."
+        },
+        {
+          "technique": "immutable-model-cached-layout",
+          "verdict": "deviation",
+          "evidence": "desk/src/english/LingaPhone.tsx:315 Settled rows render inline on every parent render without memoized row components; the technique explicitly retains identity-based memoization for short browser-managed lists."
+        },
+        {
+          "technique": "inline-structured-rows",
+          "verdict": "deviation",
+          "evidence": "desk/src/english/LingaPhone.tsx:81 Errors render outside the turn sequence as conversation-level alerts and are cleared by subsequent requests, leaving no durable error row at the failed exchange."
+        },
+        {
+          "technique": "markdown-and-code-rendering",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/english/conversation.ts:108 The protocol requests short plain-text replies, rendered through React text interpolation; this context has no Markdown/code renderer or incrementally rendered markup."
+        },
+        {
+          "technique": "progress-narration",
+          "verdict": "deviation",
+          "evidence": "desk/src/english/LingaPhone.tsx:120 Working-turn narration is a fixed pending message that disappears at settlement, with no inactivity degradation or retained expandable activity trail."
+        },
+        {
+          "technique": "transcript-scroll",
+          "verdict": "deviation",
+          "evidence": "desk/src/english/LingaPhone.tsx:95 History is an unmanaged disclosure containing the full chronological list; no layout-ready positioning, tail-follow state, or unseen-turn affordance implements the scroll contract."
+        },
+        {
+          "technique": "turn-metadata",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:450 Each completion overwrites provider and response duration on the conversation; those facts are not retained on individual turns or disclosed through an attached expandable metadata strip."
+        },
+        {
+          "technique": "turn-model",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:494 Failure clears pending into a conversation-level error without retaining a failed turn; partner turns receive identities only after the model succeeds rather than existing through pending and settlement."
+        },
+        {
+          "technique": "virtual-filtered-channel",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/english/LingaPhone.tsx:132 Transcript disclosures render their complete turn arrays; the context implements no filtered or merged transcript channel requiring independent subscription and retention."
+        }
+      ]
     }
   }
 }
