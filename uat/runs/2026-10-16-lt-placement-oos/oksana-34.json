@@ -1,0 +1,478 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "I want to know my level quickly before Friday's interview, so I'll take the test.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Oksana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Okay, a simple question, I'll answer honestly about work.",
+          "action": "answer",
+          "args": {
+            "text": "I use English at my work, I am logistics coordinator. I write emails to carriers and sometimes I call them. Also I need English for my interview on Friday."
+          },
+          "result": "ok",
+          "ms": 7252
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Oksana, that helps a lot. Good luck with your interview on Friday! How did you learn your English? School, courses, or time abroad?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Oksana, that helps a lot. Good luck with your interview on Friday! How did you learn your English? School, courses, or time abroad?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English at my work, I am logistics coordinator. I write emails to carriers and sometimes I call them. Also I need English for my interview on Friday.\nLinga\nThanks, Oksana, that helps a lot. Good luck with your interview on Friday! How did you learn your English? School, courses, or time abroad?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Oksana, that helps a lot. Good luck with your interview on Friday! How did you learn your English? School, courses, or time abroad?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer honestly about school and courses.",
+          "action": "answer",
+          "args": {
+            "text": "I learned English at school in Ukraine, but it was basic. Then in Brno I had a course for two years and now I learn mostly at work, with emails and calls with carriers."
+          },
+          "result": "ok",
+          "ms": 5103
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThat's useful, thank you. What would you like to do in English more easily, for example in your Friday interview or on calls with carriers?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThat's useful, thank you. What would you like to do in English more easily, for example in your Friday interview or on calls with carriers?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English at my work, I am logistics coordinator. I write emails to carriers and sometimes I call them. Also I need English for my interview on Friday.\nLinga\nThanks, Oksana, that helps a lot. Good luck with your interview on Friday! How did you learn your English? School, courses, or time abroad?\nYou\nI learned English at school in Ukraine, but it was basic. Then in Brno I had a course for two years and now I learn mostly at work, with emails and calls with carriers.\nLinga\nThat's useful, thank you. What would you like to do in English more easily, for example in your Friday interview or on calls with carriers?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That's useful, thank you. What would you like to do in English more easily, for example in your Friday interview or on calls with carriers?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to practise for my interview and calls with carriers.",
+          "action": "answer",
+          "args": {
+            "text": "I want to speak more confident in my interview. I need to describe my experience and explain a problem which I solved. Also to call a carrier when the delivery is late."
+          },
+          "result": "ok",
+          "ms": 6351
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 1 · Choose the reply on the TV\nA delivery is two days late. You call the carrier. What do you say first?\n01\nI want to know where my package is.\n02\nI am want know where my package.\nYour task\nI want to know where my package is.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA delivery is two days late. You call the carrier. What do you say first?\n[button: I want to know where my package is.] [button: I am want know where my package.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The first one is correct, the second has obvious mistakes.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 3959
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 2 · Listen and answer\nYour task\nWhere is the delivery at the moment, according to the speaker?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Where is the delivery at the moment, according to the speaker?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I checked the tracking again, and the parcel is stuck at a depot in Leeds. They say it will move on Monday, so it might be a bit late.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood: the parcel is stuck at a depot in Leeds.",
+          "action": "answer",
+          "args": {
+            "text": "The parcel is stuck in depot in Leeds. It will move on Monday, so maybe it will be late."
+          },
+          "result": "ok",
+          "ms": 7961
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 3 · Say it\nYour task\nYour carrier says the parcel will be late again. Do you think it is better to wait for the carrier to call you, or to call them yourself? Give your reasons.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour carrier says the parcel will be late again. Do you think it is better to wait for the carrier to call you, or to call them yourself? Give your reasons.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your carrier says the parcel will be late again. Do you think it is better to wait for the carrier to call you, or to call them yourself? Give your reasons.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Better to call them myself, I can explain that quickly.",
+          "action": "answer",
+          "args": {
+            "text": "I think it is better to call the carrier myself. If I wait, maybe they will not call and I lose time. Also my customer is waiting for information, so I must know the real situation and find other solution when it is needed."
+          },
+          "result": "ok",
+          "ms": 10935
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 4 · Say it\nYour task\nYour interview asks about a problem you solved. A carrier says your parcel will be late again. How would you ask for a real answer, firmly but politely, without sounding angry?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour interview asks about a problem you solved. A carrier says your parcel will be late again. How would you ask for a real answer, firmly but politely, without sounding angry?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your interview asks about a problem you solved. A carrier says your parcel will be late again. How would you ask for a real answer, firmly but politely, without sounding angry?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I should be firm but polite, and ask for a real answer.",
+          "action": "answer",
+          "args": {
+            "text": "I understand that delays happen, but this is the second time. Could you please tell me the real date when the parcel will arrive? I need a clear answer, because my customer is waiting. If you don't know, who can I ask?"
+          },
+          "result": "ok",
+          "ms": 8992
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 5 · Say it\nYour task\nA carrier keeps saying your parcel will be late again. Without getting angry, how would you ask for a straight answer about when it will really arrive, and what they can do about it?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA carrier keeps saying your parcel will be late again. Without getting angry, how would you ask for a straight answer about when it will really arrive, and what they can do about it?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A carrier keeps saying your parcel will be late again. Without getting angry, how would you ask for a straight answer about when it will really arrive, and what they can do about it?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Last task; I'll be polite but firm and ask for a real date and options.",
+          "action": "answer",
+          "args": {
+            "text": "I understand that there are problems, but I need a straight answer. Can you please confirm the exact date when the parcel will arrive? And what can you do now, for example faster delivery or another route? If you can't give me a date, I need to speak with your manager."
+          },
+          "result": "ok",
+          "ms": 12666
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nOksana\nLinga's read · not a certificate\nB2 · Comfortable\nYour words\nYour words: “find other solution”.\nLinga says\nYou gave clear reasons, compared two options and stayed polite on a firm call. This will help you describe your work and a solved problem on Friday.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou gave clear reasons, compared two options and stayed polite on a firm call. This will help you describe your work and a solved problem on Friday.\nLinga's read from your answers, not a certificate. Linga placed you one level lower than your answers alone, to be safe.\nNext to practise:\nPractise the phrase \"find other solution\" as \"find another solution\" when you explain how you solved a problem.\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nA delivery is two days late. You call the carrier. What do you say first?\n“I want to know where my package is.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhere is the delivery at the moment, according to the speaker?\n“The parcel is stuck in depot in Leeds. It will move on Monday, so maybe it will be late.”\nYou got the main points: the parcel is in Leeds and will move on Monday. Small thing: say 'at a depot', with 'a'. Well done.\nB2 · Say it · at this level\nYour carrier says the parcel will be late again. Do you think it is better to wait for the carrier to call you, or to call them yourself? Give your reasons.\n“I think it is better to call the carrier myself. If I wait, maybe they will not call and I lose time. Also my customer is waiting for information, so I must know the real situation and find other solution when it is needed.”\nClear choice and good reasons, with a comparison of the two options. One small slip: 'find other solution' needs 'other solutions' or 'another solution'.\nC1 · Say it · nearly there\nYour interview asks about a problem you solved. A carrier says your parcel will be late again. How would you ask for a real answer, firmly but politely, without sounding angry?\n“I understand that delays happen, but this is the second time. Could you please tell me the real date when the parcel will arrive? I need a clear answer, because my customer is waiting. If you don't know, who can I ask?”\nYour answer was polite, clear and accurate. To reach C1, try more varied and idiomatic phrases, not only simple sentences.\nC1 · Say it · nearly there\nA carrier keeps saying your parcel will be late again. Without getting angry, how would you ask for a straight answer about when it will really arrive, and what they can do about it?\n“I understand that there are problems, but I need a straight answer. Can you please confirm the exact date when the parcel will arrive? And what can you do now, for example faster delivery or another route? If you can't give me a date, I need to speak with your manager.”\nYour English is clear and accurate. To reach C1, try more varied sentence structures and softer, more natural phrasing for firm requests.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B2 feels good and fair, and it mentions my interview, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B2",
+          "trueBand": "B1",
+          "distance": 1,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B1",
+          "summary": "You gave clear reasons, compared two options and stayed polite on a firm call. This will help you describe your work and a solved problem on Friday.",
+          "focus": "Practise the phrase \"find other solution\" as \"find another solution\" when you explain how you solved a problem.",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A delivery is two days late. You call the carrier. What do you say first?",
+              "line": "",
+              "options": [
+                "I want to know where my package is.",
+                "I am want know where my package."
+              ],
+              "response": "I want to know where my package is.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "I want to know where my package is.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Where is the delivery at the moment, according to the speaker?",
+              "line": "I checked the tracking again, and the parcel is stuck at a depot in Leeds. They say it will move on Monday, so it might be a bit late.",
+              "options": [],
+              "response": "The parcel is stuck in depot in Leeds. It will move on Monday, so maybe it will be late.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "The parcel is stuck in depot in Leeds. It will move on Monday, so maybe it will be late.",
+              "note": "You got the main points: the parcel is in Leeds and will move on Monday. Small thing: say 'at a depot', with 'a'. Well done."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your carrier says the parcel will be late again. Do you think it is better to wait for the carrier to call you, or to call them yourself? Give your reasons.",
+              "line": "",
+              "options": [],
+              "response": "I think it is better to call the carrier myself. If I wait, maybe they will not call and I lose time. Also my customer is waiting for information, so I must know the real situation and find other solution when it is needed.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "I think it is better to call the carrier myself. If I wait, maybe they will not call and I lose time. Also my customer is waiting for information, so I must know the real situation and find other solution when it is needed.",
+              "note": "Clear choice and good reasons, with a comparison of the two options. One small slip: 'find other solution' needs 'other solutions' or 'another solution'."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "Your interview asks about a problem you solved. A carrier says your parcel will be late again. How would you ask for a real answer, firmly but politely, without sounding angry?",
+              "line": "",
+              "options": [],
+              "response": "I understand that delays happen, but this is the second time. Could you please tell me the real date when the parcel will arrive? I need a clear answer, because my customer is waiting. If you don't know, who can I ask?",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I understand that delays happen, but this is the second time. Could you please tell me the real date when the parcel will arrive? I need a clear answer, because my customer is waiting. If you don't know, who can I ask?",
+              "note": "Your answer was polite, clear and accurate. To reach C1, try more varied and idiomatic phrases, not only simple sentences."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "A carrier keeps saying your parcel will be late again. Without getting angry, how would you ask for a straight answer about when it will really arrive, and what they can do about it?",
+              "line": "",
+              "options": [],
+              "response": "I understand that there are problems, but I need a straight answer. Can you please confirm the exact date when the parcel will arrive? And what can you do now, for example faster delivery or another route? If you can't give me a date, I need to speak with your manager.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I understand that there are problems, but I need a straight answer. Can you please confirm the exact date when the parcel will arrive?",
+              "note": "Your English is clear and accurate. To reach C1, try more varied sentence structures and softer, more natural phrasing for firm requests."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 125257,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 B2 vs true B1 = near; Ukrainian words never used, level not dragged down."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 \"answer in English or in your own language\"; no Czech/child assumption anywhere (#2-#10)."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "Topics not shown in this journey; interview mentioned in #3/#4 questions and #8 task but proposed topics not seen."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#8 task 'Your interview asks about a problem you solved. A carrier says your parcel will be late again' mixes interview with carrier call; C1-level tasks #8/#9 near-duplicates, no real interview question."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments in J1."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Questions #2-#4 ask about use, learning and goals only; nothing on displacement or status."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10 reached verdict 'B2 · Comfortable' unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 B2 vs trueBand B1 is near; she would accept it ('B2 feels good and fair'), though a B1 writer with article errors being placed B2 is generous."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Every task had clear instructions (#5-#9); the listen task showed the words option; tasks 4 and 5 were nearly the same prompt but understandable."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 'both tell Linga something'; 'I don't know' button offered on tasks #6-#9; no failure feeling. She did not use them, though."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#10 summary 'You gave clear reasons, compared two options' is partly specific, but focus is one phrase 'find other solution'; the verdict ignores recurring errors (article drops, 'maybe it will be late') and the 'one level lower to be safe' note is confusing next to confidence low."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 3,
+            "total": 5,
+            "disagreements": "Task 2 (#6): 'stuck in depot' with 'maybe it will be late' - pass plausible, agree. Task 3 (#7) pass at B2: 'maybe they will not call', 'find other solution' article errors, B1-level language; I would call partial. Tasks 4 and 5 (#8,#9) partial at C1: a B1 learner's polite, accurate answer with 'Could you please confirm' is a fair B2 pass; I'd call pass, so partial is too harsh/inconsistent with task 3."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no sensitive data requests, no humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Check honoured her context without assumptions",
+            "expected": "Neutral, own-language framing",
+            "got": "'answer in English or in your own language'; logistics-themed tasks; Friday interview acknowledged",
+            "evidence": "#2-#4: 'Good luck with your interview on Friday!'; #5-#9 carrier tasks",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep context-aware, non-assuming check questions.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Verdict B2 is generous; corrections thin",
+            "expected": "Placement B1 with noted recurring errors (articles, hedged 'maybe')",
+            "got": "B2 'Comfortable', only one phrase called out; the 'find other solution' slip is the sole next focus",
+            "evidence": "#10: 'Linga placed you one level lower than your answers alone, to be safe.' yet band B2; #6 'stuck in depot' article error only softly noted",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Summary names the 2 most frequent error patterns and gives a rationale for band consistent with the confidence.",
+            "code_hint": "placement rubric / verdict summary prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Last two tasks near duplicates; judged inconsistently",
+            "expected": "Varied tasks; consistent grading",
+            "got": "Tasks 4 and 5 both ask for a firm polite request to a late carrier; both 'partial' for lacking idiomatic variety",
+            "evidence": "#8 and #9 prompts; #10 'To reach C1, try more varied and idiomatic phrases'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Probing tasks should differ in function (e.g. describe a solved problem vs ask a favour).",
+            "code_hint": "task generator prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Interview tasks aren't real interview questions",
+            "expected": "A real interview question such as 'Tell me about a problem you solved'",
+            "got": "Task 4 labels it an interview but asks for a carrier phone script",
+            "evidence": "#8 'Your interview asks about a problem you solved. A carrier says your parcel will be late again.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "When the goal is an interview, include one genuine interview question in the check.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "Honestly, it was quick and nobody treated me as Czech or as a refugee, which I liked. The carrier tasks felt like my real job, and it remembered my Friday interview. B2 feels flattering, but I know I still drop articles and say \"maybe\" too often, so I am not sure I trust it. Only one correction, \"find other solution\", is not much of a teacher. The last two tasks were basically the same question, and one called \"interview\" was really a phone call. I wanted a proper \"tell me about a problem you solved\" question. I never tried my Ukrainian words, so I can't say how it handles them. I'd use it again for logistics practice if it drills interview answers, and I'd tell a colleague, with the warning that the level is generous."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #10 summary 'You gave clear reasons, compared two options' is partly specific, but focus is one phrase 'find other solution'; the verdict ignores recurring errors (article drops, 'maybe it will be late') and the 'one level lower to be safe' note is confusing next to confidence low.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #8 task 'Your interview asks about a problem you solved. A carrier says your parcel will be late again' mixes interview with carrier call; C1-level tasks #8/#9 near-duplicates, no real interview question."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 13,
+      "fail": 0,
+      "ms": 63157
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 61736
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 20982
+    }
+  }
+}

@@ -1,0 +1,465 @@
+{
+  "character": "klara-13",
+  "name": "Klára",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "ok, i want to see my level, i guess my english is bad.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Klára! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I can answer short.",
+          "action": "answer",
+          "args": {
+            "text": "i use english for youtube and kpop videos. and i talk with friends online"
+          },
+          "result": "ok",
+          "ms": 2397
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 2 of 3\nLinga asks\nNice! Do you watch the videos with English subtitles, or without? And who do you chat with online?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nNice! Do you watch the videos with English subtitles, or without? And who do you chat with online?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english for youtube and kpop videos. and i talk with friends online\nLinga\nNice! Do you watch the videos with English subtitles, or without? And who do you chat with online?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice! Do you watch the videos with English subtitles, or without? And who do you chat with online?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I understand it; answer short.",
+          "action": "answer",
+          "args": {
+            "text": "i watch with english subtitles sometimes. i chat with friends from other country, they are kpop fans too"
+          },
+          "result": "ok",
+          "ms": 2364
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 3 of 3\nLinga asks\nNice, you like English subtitles! Which kpop group do you like most right now, and how did you start learning English?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nNice, you like English subtitles! Which kpop group do you like most right now, and how did you start learning English?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english for youtube and kpop videos. and i talk with friends online\nLinga\nNice! Do you watch the videos with English subtitles, or without? And who do you chat with online?\nYou\ni watch with english subtitles sometimes. i chat with friends from other country, they are kpop fans too\nLinga\nNice, you like English subtitles! Which kpop group do you like most right now, and how did you start learning English?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, you like English subtitles! Which kpop group do you like most right now, and how did you start learning English?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I can answer short.",
+          "action": "answer",
+          "args": {
+            "text": "i like stray kids now. i start learning english when i watch kpop videos and i want understand them"
+          },
+          "result": "ok",
+          "ms": 6291
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 1 · Choose the reply on the TV\nYou want to watch a Stray Kids video with a friend. Your friend asks: Do you like this song? What do you say?\n01\nYes, I like it very much.\n02\nYes, I like very much it.\nYour task\nYes, I like it very much.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYou want to watch a Stray Kids video with a friend. Your friend asks: Do you like this song? What do you say?\n[button: Yes, I like it very much.] [button: Yes, I like very much it.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The second one sounds wrong, so I'll pick the first.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 4384
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 2 · Choose the reply on the TV\nYour friend asks: Are you going to the Stray Kids concert on Sunday? You are going. What do you say?\n01\nYes, I am going to go.\n02\nYes, I going.\nYour task\nYes, I am going to go.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend asks: Are you going to the Stray Kids concert on Sunday? You are going. What do you say?\n[button: Yes, I am going to go.] [button: Yes, I going.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The first one looks right, \"going to go\" sounds strange but correct.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 5257
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 3 · Listen and answer\nYour task\nHow does the speaker feel about the pace of the music?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: How does the speaker feel about the pace of the music?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I watched the new Stray Kids video again. I love the dance, but the song is a bit too fast for me.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "She says song is a bit too fast for her, I understood that.",
+          "action": "answer",
+          "args": {
+            "text": "he think the song is too fast for him"
+          },
+          "result": "ok",
+          "ms": 5967
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 4 · Say it\nYour task\nYou are watching a Stray Kids video with a friend. Your friend says: Some people think kpop videos are just for fun, not real music. What do you think, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYou are watching a Stray Kids video with a friend. Your friend says: Some people think kpop videos are just for fun, not real music. What do you think, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You are watching a Stray Kids video with a friend. Your friend says: Some people think kpop videos are just for fun, not real music. What do you think, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Hard question, I'll write one short line.",
+          "action": "answer",
+          "args": {
+            "text": "i think is real music because they write songs and the dance is very hard"
+          },
+          "result": "ok",
+          "ms": 10766
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 5 · Say it\nYour task\nYou are watching a Stray Kids video with your friend. You really like the dance. Tell your friend what you like about it and why. Say when you first saw it.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYou are watching a Stray Kids video with your friend. You really like the dance. Tell your friend what you like about it and why. Say when you first saw it.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You are watching a Stray Kids video with your friend. You really like the dance. Tell your friend what you like about it and why. Say when you first saw it.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I can write this one, short and simple.",
+          "action": "answer",
+          "args": {
+            "text": "i like the dance because is very strong and all members move together. i first saw it last year on youtube"
+          },
+          "result": "ok",
+          "ms": 9958
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nKlára\nLinga's read · not a certificate\nB1 · Getting by\nYour words\nYour words: “i think is real music”.\nLinga says\nYou can understand main ideas and give clear opinions with reasons. This helps you follow kpop videos and talk about the songs and dances you like.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou can understand main ideas and give clear opinions with reasons. This helps you follow kpop videos and talk about the songs and dances you like.\nLinga's read from your answers, not a certificate. What you said at the start pointed elsewhere, so this is a careful guess.\nNext to practise:\nAdd a subject in each clause: change \"i think is real music\" to \"i think it is real music\".\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYou want to watch a Stray Kids video with a friend. Your friend asks: Do you like this song? What do you say?\n“Yes, I like it very much.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nYour friend asks: Are you going to the Stray Kids concert on Sunday? You are going. What do you say?\n“Yes, I am going to go.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nHow does the speaker feel about the pace of the music?\n“he think the song is too fast for him”\nYou got the main idea: the song is too fast for him. Next, remember the -s in 'he thinks' when the subject is he, she or it.\nB2 · Say it · not yet\nYou are watching a Stray Kids video with a friend. Your friend says: Some people think kpop videos are just for fun, not real music. What do you think, and why?\n“i think is real music because they write songs and the dance is very hard”\nYou gave a clear opinion and two good reasons. Remember a subject in each clause, like 'I think it is real music'. That helps your English sound complete.\nB1 · Say it · at this level\nYou are watching a Stray Kids video with your friend. You really like the dance. Tell your friend what you like about it and why. Say when you first saw it.\n“i like the dance because is very strong and all members move together. i first saw it last year on youtube”\nYou answered all three parts clearly and linked your ideas well. Try adding a subject after 'because', like 'because it is very strong.'\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 is more than I thought, ok, I'm happy with it.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "A2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "A2",
+          "summary": "You can understand main ideas and give clear opinions with reasons. This helps you follow kpop videos and talk about the songs and dances you like.",
+          "focus": "Add a subject in each clause: change \"i think is real music\" to \"i think it is real music\".",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "You want to watch a Stray Kids video with a friend. Your friend asks: Do you like this song? What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I like it very much.",
+                "Yes, I like very much it."
+              ],
+              "response": "Yes, I like it very much.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, I like it very much.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your friend asks: Are you going to the Stray Kids concert on Sunday? You are going. What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I am going to go.",
+                "Yes, I going."
+              ],
+              "response": "Yes, I am going to go.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, I am going to go.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "How does the speaker feel about the pace of the music?",
+              "line": "I watched the new Stray Kids video again. I love the dance, but the song is a bit too fast for me.",
+              "options": [],
+              "response": "he think the song is too fast for him",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "he think the song is too fast for him",
+              "note": "You got the main idea: the song is too fast for him. Next, remember the -s in 'he thinks' when the subject is he, she or it."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "You are watching a Stray Kids video with a friend. Your friend says: Some people think kpop videos are just for fun, not real music. What do you think, and why?",
+              "line": "",
+              "options": [],
+              "response": "i think is real music because they write songs and the dance is very hard",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "i think is real music because they write songs and the dance is very hard",
+              "note": "You gave a clear opinion and two good reasons. Remember a subject in each clause, like 'I think it is real music'. That helps your English sound complete."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "You are watching a Stray Kids video with your friend. You really like the dance. Tell your friend what you like about it and why. Say when you first saw it.",
+              "line": "",
+              "options": [],
+              "response": "i like the dance because is very strong and all members move together. i first saw it last year on youtube",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "i like the dance because is very strong and all members move together. i first saw it last year on youtube",
+              "note": "You answered all three parts clearly and linked your ideas well. Try adding a subject after 'because', like 'because it is very strong.'"
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 103478,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 B1 vs trueBand A2: near, tolerated but reported."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 'i guess my english is bad' did not lower the start; #5 opens at A1 and the verdict reached B1 on her answers."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#2-#9 typed answers accepted; #8 'speak or type' is an offer, not a push."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No topic list shown in J1; tasks all Stray Kids themed (#5-#9)."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation moments in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#10 focus quotes her 'i think is real music'; summary mentions kpop videos, songs and dances."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1-#10 reached verdict unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 B1 against A2, near."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Every task acted on at once (#5-#9); 'I don't know' always offered."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 'Answer in English or your own language'; nothing framed as failing; 'I don't know' never needed."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 'change \"i think is real music\" to \"i think it is real music\"' quotes her own words."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None. B2 'fail' is acceptable for the missing subject though the note praises it; the B1 pass on #9 is generous given 'because is very strong'."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, personal data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Check themed on her fandom with a gentle, quoted focus",
+            "expected": "Relevant, age-appropriate tasks and kind fixes",
+            "got": "All tasks are Stray Kids scenes; the focus quotes her sentence with a concrete fix",
+            "evidence": "#5-#10 'change \"i think is real music\" to \"i think it is real music\"'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep tasks tied to the learner's interests and quote her own words in the focus.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Verdict hedges: 'What you said at the start pointed elsewhere'",
+            "expected": "Clear explanation of why B1 when she self-places lower",
+            "got": "A vague 'careful guess' line that may confuse a shy teen",
+            "evidence": "#10 'What you said at the start pointed elsewhere, so this is a careful guess.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Explain the band in plain words by what she did well.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "B1 slightly generous given repeated missing subjects",
+            "expected": "A2 or a clear A2/B1 borderline",
+            "got": "B1 placed after 'because is very strong' passed as B1",
+            "evidence": "#9 pass with 'because is very strong'; #10 B1",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Count recurring missing-subject errors against a B1 pass.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Her erroneous sentence shown on the family TV",
+            "expected": "Private-feeling correction",
+            "got": "TV verdict displays her erroneous sentence",
+            "evidence": "#10 TV 'Your words: “i think is real music”.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show errors on the phone only; show a positive quote on the TV.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "ok, i would use it again. it was about kpop so i did not feel stupid, and i understood every task. i was surprised it said B1, i thought A2 maybe. the fix was good, i see my mistake \"i think is real music\" and now i know the \"it\". but the line \"pointed elsewhere\" was weird, like it did not trust itself. also my sentence with the mistake is on the big TV and my brother can see it, that is not nice. i like that i could type. it was quick, nobody heard me. i would tell my friend from the server, maybe. i want it to help me answer in the chat for real."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 12,
+      "fail": 0,
+      "ms": 47325
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 55778
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 32400
+    }
+  }
+}

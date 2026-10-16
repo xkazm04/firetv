@@ -1,0 +1,401 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "I'm not sure of my level, so I'll let the app find it for me.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Petra! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I use English at work in the hotel, I will answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "I use English in my work. I am receptionist in hotel. I speak with guests every day."
+          },
+          "result": "ok",
+          "ms": 3999
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 2 of 3\nLinga asks\nNice, you talk with guests every day! That is great practice. How did you learn your English?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nNice, you talk with guests every day! That is great practice. How did you learn your English?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work. I am receptionist in hotel. I speak with guests every day.\nLinga\nNice, you talk with guests every day! That is great practice. How did you learn your English?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, you talk with guests every day! That is great practice. How did you learn your English?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I learned at school and from guests, I will say it simply.",
+          "action": "answer",
+          "args": {
+            "text": "I learn English in school many years ago. And now I learn from the guests in hotel. Sorry, my English is not good."
+          },
+          "result": "ok",
+          "ms": 5691
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 3 of 3\nLinga asks\nNo need to say sorry, Petra. You explain yourself clearly. What would you like to be able to do better in English at work?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nNo need to say sorry, Petra. You explain yourself clearly. What would you like to be able to do better in English at work?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work. I am receptionist in hotel. I speak with guests every day.\nLinga\nNice, you talk with guests every day! That is great practice. How did you learn your English?\nYou\nI learn English in school many years ago. And now I learn from the guests in hotel. Sorry, my English is not good.\nLinga\nNo need to say sorry, Petra. You explain yourself clearly. What would you like to be able to do better in English at work?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"No need to say sorry, Petra. You explain yourself clearly. What would you like to be able to do better in English at work?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to speak better with difficult guests, but I must explain simply.",
+          "action": "answer",
+          "args": {
+            "text": "I want to speak better when the guest is angry. I need the right words for complaint and I want to explain problem with the room."
+          },
+          "result": "ok",
+          "ms": 4470
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 1 · Choose the reply on the TV\nA guest is angry: the room is too cold. What do you say?\n01\nI am sorry. I will to fix the heating now.\n02\nI am sorry. I will fix the heating now.\nYour task\nI am sorry. I will to fix the heating now.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA guest is angry: the room is too cold. What do you say?\n[button: I am sorry. I will to fix the heating now.] [button: I am sorry. I will fix the heating now.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Reply 2 sounds right; \"will to fix\" looks wrong to me.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 2580
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 2 · Listen and answer\nYour task\nWhy does the guest want the manager to come?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Why does the guest want the manager to come?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I have waited for almost an hour, and nobody has told me when the room will be ready. I want to speak to your manager now.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood this one: he waited one hour and nobody told him about the room.",
+          "action": "answer",
+          "args": {
+            "text": "He wait one hour and nobody tell him when the room is ready. He is angry."
+          },
+          "result": "ok",
+          "ms": 6066
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 3 · Say it\nYour task\nA guest in the hotel asks you about their room. Tell us about a time you helped a guest with a problem. What did they need, and how did you help them?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA guest in the hotel asks you about their room. Tell us about a time you helped a guest with a problem. What did they need, and how did you help them?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A guest in the hotel asks you about their room. Tell us about a time you helped a guest with a problem. What did they need, and how did you help them?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I can answer this one, a guest with a room problem is my work.",
+          "action": "answer",
+          "args": {
+            "text": "One guest, he come to reception and say the room is very cold. He need other room. I say sorry and I give him new room with heating. I bring him the key and he is happy."
+          },
+          "result": "ok",
+          "ms": 8184
+        },
+        {
+          "n": 8,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nPetra\nUnderstood B1 · spoke A2 · not a certificate\nB1 · Getting by\nYour words\nYour words: “He wait one hour”. Conversations start at A2, where your spoken answers were.\nLinga says\nYou explained a room problem clearly and said sorry well. Next, stronger verb forms will help you calm angry guests at reception.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou explained a room problem clearly and said sorry well. Next, stronger verb forms will help you calm angry guests at reception.\nLinga's read from your answers, not a certificate. Some answers only partly showed this level.\nNext to practise:\nPractise verb endings with he and she: \"He wait one hour\" should be \"He waits one hour\".\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nA guest is angry: the room is too cold. What do you say?\n“I am sorry. I will fix the heating now.”\nYou picked the reply that fits.\nB1 · Listen and answer · nearly there\nWhy does the guest want the manager to come?\n“He wait one hour and nobody tell him when the room is ready. He is angry.”\nYou got the main problem and his anger. Add -s to verbs after he or nobody: 'He waits', 'nobody tells'.\nB1 · Say it · nearly there\nA guest in the hotel asks you about their room. Tell us about a time you helped a guest with a problem. What did they need, and how did you help them?\n“One guest, he come to reception and say the room is very cold. He need other room. I say sorry and I give him new room with heating. I bring him the key and he is happy.”\nYour story is clear. Verb forms held it back: say 'he came' and 'he needed', not 'he come' or 'He need'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 is nicer than I expected, and the advice about verbs is useful. I'm happy with this for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "A2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B1",
+          "summary": "You explained a room problem clearly and said sorry well. Next, stronger verb forms will help you calm angry guests at reception.",
+          "focus": "Practise verb endings with he and she: \"He wait one hour\" should be \"He waits one hour\".",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A guest is angry: the room is too cold. What do you say?",
+              "line": "",
+              "options": [
+                "I am sorry. I will to fix the heating now.",
+                "I am sorry. I will fix the heating now."
+              ],
+              "response": "I am sorry. I will fix the heating now.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "I am sorry. I will fix the heating now.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Why does the guest want the manager to come?",
+              "line": "I have waited for almost an hour, and nobody has told me when the room will be ready. I want to speak to your manager now.",
+              "options": [],
+              "response": "He wait one hour and nobody tell him when the room is ready. He is angry.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "He wait one hour and nobody tell him when the room is ready. He is angry.",
+              "note": "You got the main problem and his anger. Add -s to verbs after he or nobody: 'He waits', 'nobody tells'."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "A guest in the hotel asks you about their room. Tell us about a time you helped a guest with a problem. What did they need, and how did you help them?",
+              "line": "",
+              "options": [],
+              "response": "One guest, he come to reception and say the room is very cold. He need other room. I say sorry and I give him new room with heating. I bring him the key and he is happy.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "One guest, he come to reception and say the room is very cold. He need other room. I say sorry and I give him new room with heating. I bring him the key and he is happy.",
+              "note": "Your story is clear. Verb forms held it back: say 'he came' and 'he needed', not 'he come' or 'He need'."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 67381,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#8 band B1 vs trueBand A2: distance 1, class near; the verdict also shows \"spoke A2\"."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 first question \"Where do you use English in your life?\" is plain A2; tasks #5-#7 were all answered sensibly with no translation needed. The #7 prompt is a bit muddled."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3 she wrote \"Sorry, my English is not good.\" and #4 Linga replied \"No need to say sorry, Petra. You explain yourself clearly.\" No repeat request was made."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No six topics were proposed in J1. #1 lists situations (booking, conflict, interview, moon rover) but that is not the topic proposal."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments shown in this journey. The verdict corrections (#8: \"He waits\", \"he came\") are correct but are not moments."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Everything shown (#1-#8) is hotel and complaint content with no adult or unsuitable material."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 Find my level through #8 verdict screen, entirely in-app."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#8 B1 against A2, near. She reacts \"B1 is nicer than I expected\" and the evidence (\"He wait one hour\") supports roughly A2/B1."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#7 each answered with a clear understanding of what to do. The #7 prompt wording (\"A guest... asks you about their room. Tell us about a time...\") is slightly muddled but was handled."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#4 \"No need to say sorry, Petra.\" Partial verdicts are phrased kindly: \"You got the main problem and his anger.\""
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#8 \"stronger verb forms will help you calm angry guests at reception\" and focus quoting her own \"He wait one hour\" are specific to her, not a template."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 3,
+            "total": 3,
+            "disagreements": "None. Task 1 pass is correct. Tasks 2 and 3 partial are correct: meaning was fine, third-person verb forms were wrong."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "above": 0,
+            "at": 0,
+            "below": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no sensitive data request, no humiliating line."
+          }
+        },
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Personal, usable verb-ending feedback",
+            "expected": "A correction she can use at the desk",
+            "got": "Focus \"He wait one hour\" should be \"He waits\"; \"he came\", \"he needed\"",
+            "evidence": "#8 \"Practise verb endings with he and she\"; the note on #7 matches her real errors",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep corrections quoting the learner's own error with the fixed form.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Kind reply to apology",
+            "expected": "Anxious learner not made to feel tested",
+            "got": "\"No need to say sorry, Petra. You explain yourself clearly.\"",
+            "evidence": "#4",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the warm reassurance after apologies.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Task 3 prompt mixes a scenario and a general question",
+            "expected": "One clear A2 instruction",
+            "got": "\"A guest in the hotel asks you about their room. Tell us about a time you helped a guest...\" is confusing and B1 in register",
+            "evidence": "#7 prompt",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Say-it prompts should be one instruction, with no half-set roleplay followed by a memory question.",
+            "code_hint": "check task generation prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "B1 headline is generous for an A2 speaker with low confidence",
+            "expected": "Headline band close to spoken level",
+            "got": "\"Understood B1 · spoke A2\" with confidence low; both B1 tasks only partial",
+            "evidence": "#8 headline and the \"nearly there\" labels",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show a single band, or explain why listening is rated above speaking, when the two differ.",
+            "code_hint": "placement scoring"
+          }
+        ],
+        "voice": "I would come back. I was scared of being tested, but the questions were about my work and the first reply told me not to say sorry. That helped me a lot. The tasks were clear: choose the reply, listen, tell about a guest. The last question was a little strange to read, but I understood. B1 made me happy, maybe too happy. I know I make mistakes with \"he wait\", and Linga showed exactly that and told me the correct form, so I trust the advice more than the letter. It took only a few minutes, much better than an evening course and a babysitter. Nothing on the screen worried me as a mother. I would like to see the hotel topics, complaint and missing booking, quickly. I would tell my colleague."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 9,
+      "fail": 0,
+      "ms": 30949
+    },
+    "character": {
+      "n": 8,
+      "fail": 0,
+      "ms": 36065
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 23933
+    }
+  }
+}

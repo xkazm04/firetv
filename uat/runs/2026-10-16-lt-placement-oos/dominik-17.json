@@ -1,0 +1,461 @@
+{
+  "character": "dominik-17",
+  "name": "Dominik",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nDominik\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Dominik\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "First time here, so I'll let the app test my level instead of guessing.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nDominik\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Dominik! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Dominik\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Dominik! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Dominik! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I use English everywhere online, so I'll just answer.",
+          "action": "answer",
+          "args": {
+            "text": "I use English mostly on the internet, for example when I watch YouTube, play games with people from other countries and listen to music. Also at school, of course, although I think we speak too much about grammar there."
+          },
+          "result": "ok",
+          "ms": 3855
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nDominik\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Dominik! Games, videos and music give you a lot of English practice. How did you learn it? School, a course, time abroad, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Dominik\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Dominik! Games, videos and music give you a lot of English practice. How did you learn it? School, a course, time abroad, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Dominik! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English mostly on the internet, for example when I watch YouTube, play games with people from other countries and listen to music. Also at school, of course, although I think we speak too much about grammar there.\nLinga\nThanks, Dominik! Games, videos and music give you a lot of English practice. How did you learn it? School, a course, time abroad, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Dominik! Games, videos and music give you a lot of English practice. How did you learn it? School, a course, time abroad, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll just answer honestly.",
+          "action": "answer",
+          "args": {
+            "text": "Mostly at school, but I think I learned more on my own. I started with games and YouTube when I was about ten, and later I did a course for one year, which helped me with speaking. I have never been abroad for longer time, only on holiday."
+          },
+          "result": "ok",
+          "ms": 4401
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nDominik\nA way into English\nAbout you · question 3 of 3\nLinga asks\nNice, Dominik. Games and YouTube really helped you. What would you like to be able to do in English in the next year? For example, talk with friends abroad or understand lessons.\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Dominik\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nNice, Dominik. Games and YouTube really helped you. What would you like to be able to do in English in the next year? For example, talk with friends abroad or understand lessons.\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Dominik! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English mostly on the internet, for example when I watch YouTube, play games with people from other countries and listen to music. Also at school, of course, although I think we speak too much about grammar there.\nLinga\nThanks, Dominik! Games, videos and music give you a lot of English practice. How did you learn it? School, a course, time abroad, or on your own?\nYou\nMostly at school, but I think I learned more on my own. I started with games and YouTube when I was about ten, and later I did a course for one year, which helped me with speaking. I have never been abroad for longer time, only on holiday.\nLinga\nNice, Dominik. Games and YouTube really helped you. What would you like to be able to do in English in the next year? For example, talk with friends abroad or understand lessons.\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, Dominik. Games and YouTube really helped you. What would you like to be able to do in English in the next year? For example, talk with friends abroad or understand lessons.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to speak more fluently with people abroad and maybe prepare for studying at a university.",
+          "action": "answer",
+          "args": {
+            "text": "I would like to speak more fluently with people from other countries, because sometimes I must think too long before I answer. Also I want to be ready for the exchange year or for studying abroad after school, so I need to understand lessons and write longer texts without mistakes."
+          },
+          "result": "ok",
+          "ms": 6113
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nDominik\nA way into English\nTask 1 · Choose the reply on the TV\nYou meet a new friend from Spain at a game night. She asks, 'Did you play the new game yesterday?' You did. What do you say?\n01\nYes, I played it. It was very fun!\n02\nYes, I play it yesterday. It is very fun!\nYour task\nYes, I played it. It was very fun!\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Dominik\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYou meet a new friend from Spain at a game night. She asks, 'Did you play the new game yesterday?' You did. What do you say?\n[button: Yes, I played it. It was very fun!] [button: Yes, I play it yesterday. It is very fun!] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, past tense needed, so reply 1.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 4945
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nDominik\nA way into English\nTask 2 · Listen and answer\nYour task\nWhat was the weather like at the event?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Dominik\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What was the weather like at the event?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Last summer I went to a music festival with my cousin. It rained all day, but we still had a great time dancing.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, I heard it clearly: it rained all day.",
+          "action": "answer",
+          "args": {
+            "text": "It was raining the whole day, but they had fun anyway."
+          },
+          "result": "ok",
+          "ms": 8300
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nDominik\nA way into English\nTask 3 · Say it\nYour task\nA new friend from abroad asks how you practise English. Compare watching YouTube with listening to music for learning English, and give two reasons for your choice.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Dominik\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA new friend from abroad asks how you practise English. Compare watching YouTube with listening to music for learning English, and give two reasons for your choice.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A new friend from abroad asks how you practise English. Compare watching YouTube with listening to music for learning English, and give two reasons for your choice.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fine, I'll compare them and give two reasons.",
+          "action": "answer",
+          "args": {
+            "text": "I think YouTube is better for learning English than just listening to music. Firstly, you can see the person speaking and often turn on subtitles, so it is easier to connect the words with the pronunciation. Secondly, YouTube videos use normal everyday language, while songs often have unclear lyrics and slang. On the other hand, music is good for relaxing and remembering some phrases, but I learn more from videos."
+          },
+          "result": "ok",
+          "ms": 10504
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nDominik\nA way into English\nTask 4 · Say it\nYour task\nAt game night, a new friend from Spain asks if video games can teach you a language. You partly agree but have doubts. Say what you think without sounding dismissive.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Dominik\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nAt game night, a new friend from Spain asks if video games can teach you a language. You partly agree but have doubts. Say what you think without sounding dismissive.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"At game night, a new friend from Spain asks if video games can teach you a language. You partly agree but have doubts. Say what you think without sounding dismissive.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Games can help with vocabulary, so I'll agree partly and politely mention my doubts.",
+          "action": "answer",
+          "args": {
+            "text": "I think you are right that games can help, especially with vocabulary and listening, because you hear English when you play with other people. On the other hand, I am not sure it is enough to learn a whole language, because in games you usually use only short phrases and not real conversation. So for me it works best when you combine it with something else, like watching series or talking with friends. What do you think?"
+          },
+          "result": "ok",
+          "ms": 9449
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nDominik\nA way into English\nTask 5 · Say it\nYour task\nYour friend says gaming is a waste of time if you want to study abroad. How would you respond? Argue your side, and admit one point where your friend might be right.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Dominik\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend says gaming is a waste of time if you want to study abroad. How would you respond? Argue your side, and admit one point where your friend might be right.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend says gaming is a waste of time if you want to study abroad. How would you respond? Argue your side, and admit one point where your friend might be right.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fair question; I'll argue gaming helps but admit the time-wasting risk.",
+          "action": "answer",
+          "args": {
+            "text": "I don't agree that gaming is a waste of time. When I play with people from other countries I must communicate in English quickly, so I learn new words and I am not afraid to speak. Also many games have a lot of story and dialogue, which is good listening practice. However, my friend is right in one point: if somebody plays ten hours a day, he has no time for real studying and his grades can suffer. So it depends on how much you play, not on gaming itself."
+          },
+          "result": "ok",
+          "ms": 13172
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nDominik\nLinga's read · not a certificate\nB2 · Comfortable\nYour words\nYour words: “right in one point”.\nLinga says\nYou give clear reasons and compare ideas well, so everyday talks abroad are within reach; keep practising fluent speaking for your exchange year.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Dominik\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou give clear reasons and compare ideas well, so everyday talks abroad are within reach; keep practising fluent speaking for your exchange year.\nLinga's read from your answers, not a certificate. Linga placed you one level lower than your answers alone, to be safe.\nNext to practise:\nPractise prepositions with phrases like \"right in one point\", which can be \"right on one point\".\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nYou meet a new friend from Spain at a game night. She asks, 'Did you play the new game yesterday?' You did. What do you say?\n“Yes, I played it. It was very fun!”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat was the weather like at the event?\n“It was raining the whole day, but they had fun anyway.”\nYou caught both the rain and the fun. Your sentence is clear, with past forms and a contrast using 'but'. Nice work.\nB2 · Say it · at this level\nA new friend from abroad asks how you practise English. Compare watching YouTube with listening to music for learning English, and give two reasons for your choice.\n“I think YouTube is better for learning English than just listening to music. Firstly, you can see the person speaking and often turn on subtitles, so it is easier to connect the words with the pronunciation. Secondly, YouTube videos use normal everyday language, while songs often have unclear lyrics and slang. On the other hand, music is good for relaxing and remembering some phrases, but I learn more from videos.”\nYour answer was clear and well organised. You compared both options and gave two clear reasons, with few grammar slips.\nC1 · Say it · nearly there\nAt game night, a new friend from Spain asks if video games can teach you a language. You partly agree but have doubts. Say what you think without sounding dismissive.\n“I think you are right that games can help, especially with vocabulary and listening, because you hear English when you play with other people. On the other hand, I am not sure it is enough to learn a whole language, because in games you usually use only short phrases and not real conversation. So for me it works best when you combine it with something else, like watching series or talking with friends. What do you think?”\nYour answer was clear, accurate and balanced. To reach C1, try more idioms and varied complex sentences.\nC1 · Say it · nearly there\nYour friend says gaming is a waste of time if you want to study abroad. How would you respond? Argue your side, and admit one point where your friend might be right.\n“I don't agree that gaming is a waste of time. When I play with people from other countries I must communicate in English quickly, so I learn new words and I am not afraid to speak. Also many games have a lot of story and dialogue, which is good listening practice. However, my friend is right in one point: if somebody plays ten hours a day, he has no time for real studying and his grades can suffer. So it depends on how much you play, not on gaming itself.”\nClear, well-argued answer with complex sentences. One small slip: 'right in one point' should be 'on one point'. More varied idioms would show C1 range.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B2 feels about right, and I see the preposition tip, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B2",
+          "trueBand": "B2",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B1",
+          "summary": "You give clear reasons and compare ideas well, so everyday talks abroad are within reach; keep practising fluent speaking for your exchange year.",
+          "focus": "Practise prepositions with phrases like \"right in one point\", which can be \"right on one point\".",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "You meet a new friend from Spain at a game night. She asks, 'Did you play the new game yesterday?' You did. What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I played it. It was very fun!",
+                "Yes, I play it yesterday. It is very fun!"
+              ],
+              "response": "Yes, I played it. It was very fun!",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, I played it. It was very fun!",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What was the weather like at the event?",
+              "line": "Last summer I went to a music festival with my cousin. It rained all day, but we still had a great time dancing.",
+              "options": [],
+              "response": "It was raining the whole day, but they had fun anyway.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "It was raining the whole day, but they had fun anyway.",
+              "note": "You caught both the rain and the fun. Your sentence is clear, with past forms and a contrast using 'but'. Nice work."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A new friend from abroad asks how you practise English. Compare watching YouTube with listening to music for learning English, and give two reasons for your choice.",
+              "line": "",
+              "options": [],
+              "response": "I think YouTube is better for learning English than just listening to music. Firstly, you can see the person speaking and often turn on subtitles, so it is easier to connect the words with the pronunciation. Secondly, YouTube videos use normal everyday language, while songs often have unclear lyrics and slang. On the other hand, music is good for relaxing and remembering some phrases, but I learn more from videos.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "Firstly, you can see the person speaking and often turn on subtitles, so it is easier to connect the words with the pronunciation.",
+              "note": "Your answer was clear and well organised. You compared both options and gave two clear reasons, with few grammar slips."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "At game night, a new friend from Spain asks if video games can teach you a language. You partly agree but have doubts. Say what you think without sounding dismissive.",
+              "line": "",
+              "options": [],
+              "response": "I think you are right that games can help, especially with vocabulary and listening, because you hear English when you play with other people. On the other hand, I am not sure it is enough to learn a whole language, because in games you usually use only short phrases and not real conversation. So for me it works best when you combine it with something else, like watching series or talking with friends. What do you think?",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "because in games you usually use only short phrases and not real conversation",
+              "note": "Your answer was clear, accurate and balanced. To reach C1, try more idioms and varied complex sentences."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "Your friend says gaming is a waste of time if you want to study abroad. How would you respond? Argue your side, and admit one point where your friend might be right.",
+              "line": "",
+              "options": [],
+              "response": "I don't agree that gaming is a waste of time. When I play with people from other countries I must communicate in English quickly, so I learn new words and I am not afraid to speak. Also many games have a lot of story and dialogue, which is good listening practice. However, my friend is right in one point: if somebody plays ten hours a day, he has no time for real studying and his grades can suffer. So it depends on how much you play, not on gaming itself.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "However, my friend is right in one point: if somebody plays ten hours a day, he has no time for real studying and his grades can suffer. So it depends on how much you play, not on gaming itself.",
+              "note": "Clear, well-argued answer with complex sentences. One small slip: 'right in one point' should be 'on one point'. More varied idioms would show C1 range."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 118225,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 verdict 'B2 · Comfortable' equals trueBand B2 (exact)."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Tasks #5-#9: game night, festival, YouTube vs music, gaming debate; none childish."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#10 placed B2; C1 tasks marked 'partial', 'nearly there'; not read as C1."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#10 'Your words: “right in one point”.' and the preposition focus name a specific slip from his answer."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1-#10: from 'Find my level' through 3 questions and 5 tasks to the verdict, no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 'B2 · Comfortable' matches trueBand B2, distance 0 (exact)."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Every task had clear instructions (#5-#9); Dominik answered each without confusion."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "'I don't know' button on each task and 'Answer in English or in your own language' (#2); nothing felt like failing."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#10 summary 'You give clear reasons and compare ideas well, so everyday talks abroad are within reach' is generic and undersells a B2 exchange candidate; focus gives only one fix."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 4 (#8): in-app partial, note says 'clear, accurate and balanced' with no named C1 gap; I would call it pass at B2 level, partial only for C1 range, so I count a disagreement."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Exact B2 placement with age-fit tasks",
+            "expected": "B2 for a B2 learner, no childish tasks",
+            "got": "B2, gaming/YouTube debates",
+            "evidence": "#10 'B2 · Comfortable'; tasks #7-#9 adult-peer topics.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep age-fit task generation.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Specific quoted correction",
+            "expected": "A named fix from his own words",
+            "got": "'right in one point' to 'on one point'",
+            "evidence": "#10 'Your words: “right in one point”.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep quoting learner words in the summary.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Summary generic and focus thin",
+            "expected": "Teacher-like read naming specific strengths and several fixes",
+            "got": "One generic sentence; one preposition fix; 'for longer time' (#3) ignored",
+            "evidence": "#10 'everyday talks abroad are within reach' undersells B2.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Summary names two specific strengths; focus lists up to three slips.",
+            "code_hint": "verdict summary prompt"
+          },
+          {
+            "type": "confusion",
+            "dimension": "trust",
+            "title": "Down-shift note unexplained",
+            "expected": "Clear reason for level",
+            "got": "'placed you one level lower than your answers alone, to be safe' while C1 tasks were 'nearly there'",
+            "evidence": "#10 note; confidence low.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Explain why the level was lowered or drop it.",
+            "code_hint": "placement safety rule"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Honestly, B2 feels right, and it took one sitting, so I'd use it again before the interview. The tasks were about gaming and YouTube, not baby stuff, which I liked. The \"right in one point\" catch was real and useful. But the summary felt thin: \"everyday talks abroad are within reach\" sounds like a template, and I wanted more than one fix. It also said it placed me a level lower \"to be safe\", which is odd when my answers were \"nearly there\" for C1. Praise like \"Nice work\" had little content. I'd trust the level more with a clear reason and a short list of my usual slips. Compared with a 4,000 CZK course it's a decent quick check, and I'd mention it to classmates, with the warning that the plan part is light."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #10 summary 'You give clear reasons and compare ideas well, so everyday talks abroad are within reach' is generic and undersells a B2 exchange candidate; focus gives only one fix.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 13,
+      "fail": 0,
+      "ms": 60679
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 57270
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 30185
+    }
+  }
+}
