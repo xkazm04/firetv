@@ -47,8 +47,10 @@ export function firstToLook(items: readonly PracticeItem[]): number {
  * The taped card's one sentence on a ringed item that has had its second go (null with none): a picture is already on the
  * paper, so this is the caption slot's few words. Never the answer, never a value.
  */
-export function secondLine(it: Pick<PracticeItem, "verdict" | "second">): string | null {
+export function secondLine(it: Pick<PracticeItem, "verdict" | "second" | "entered">): string | null {
   if (it.verdict !== "wrong" || !it.second) return null;
+  // an unsure item's one typed answer came back wrong: its own words, not a ringed item's second go
+  if (it.entered) return "Not yet. That was your one typed answer. Tell the desk how you got there.";
   return it.second === "right" ? "That one holds now. The ring stays." : "Not yet. Tell the desk how you got there.";
 }
 

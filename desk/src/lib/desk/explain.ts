@@ -10,7 +10,7 @@
  * An explanation never settles an item (X7, ask d6d87220, craft-1). An unsure item stays unsure and nothing is written to
  * the learner record, whatever the model transcribed. The model's `value` only tells the desk whether the learner said a
  * figure (rules/saidValue, X5): if so the reply ends with ENTER_LINE, which asks them to enter it as their answer; if not,
- * with NOT_HEARD_LINE (X6-a). The item settles only from a value the learner enters (the mark and second-go routes).
+ * with NOT_HEARD_LINE (X6-a). The item settles only from a value the learner enters (route /api/second: the one typed answer of an unsure item).
  * A wrong item only takes the slip the explanation named. Its reply is checked in code
  * for the answer (`leaks`) - a reply that gives it away is replaced by the item's own line.
  *

@@ -117,6 +117,11 @@ export interface PracticeItem {
    */
   second?: "right" | "wrong";
   /**
+   * Set when an unsure item was settled by the answer typed into the box (route /api/second, the X7 door): that entry was its one
+   * go, so a wrong one wears `second: "wrong"` too, but it is not a ringed item's second go and the screens do not call it one.
+   */
+  entered?: true;
+  /**
    * A Calculus item's spec (rules/calc.ts), or a school item's (rules/school.ts, Family W5b): its shape and the parameters
    * its question prints, so marking can judge the learner's answer by recomputing the truth. It holds nothing the
    * question does not already print - no result. Which engine reads it is decided by `spec.shape` alone: a Calculus
@@ -210,7 +215,7 @@ function specShown(x: unknown): CalcSpec | Calc2Spec | SchoolSpec | undefined {
 /** The longest stem a part may carry: a few sentences of a situation. */
 const STEM_MAX = 400;
 /** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
-function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, second, spec, tier, stretch, stem, part }: PracticeItem): PracticeItem {
+function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, second, entered, spec, tier, stretch, stem, part }: PracticeItem): PracticeItem {
   const item: PracticeItem = { n, question };
   if (studentAnswer !== undefined) item.studentAnswer = studentAnswer;
   if (studentWorking !== undefined) item.studentWorking = studentWorking;
@@ -222,6 +227,8 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
   if (at && verdict === "wrong") item.slipAt = at;
   // a second go is a ringed item's alone, and only ever one of its two words (a hand-edited session.json stops here)
   if (verdict === "wrong" && (second === "right" || second === "wrong")) item.second = second;
+  // an entry is an unsure item's own, and only ever true
+  if (entered === true) item.entered = true;
   const sp = specShown(spec);
   if (sp) item.spec = sp;
   if (sp && (tier === 1 || tier === 2 || tier === 3)) item.tier = tier;
@@ -817,7 +824,7 @@ function step(s: Session, e: Event): Session {
     // an explanation: the reply always lands on its item; a verdict only on an item still unsure (a settled item stays settled);
     // on an item already wrong, a slip with no verdict renames it - from the topic's vocabulary only, verdict and pen untouched
     case "practice.settle": if (s.practice) { const topic = s.practice.topic; n.practice = { ...s.practice, items: s.practice.items.map((it) => it.n !== e.n ? it
-      : shown(e.verdict && it.verdict === "unsure" ? { ...it, verdict: e.verdict, slip: e.slip, said: e.said ?? it.said, reply: e.reply, slipAt: e.slipAt }
+      : shown(e.verdict && it.verdict === "unsure" ? { ...it, verdict: e.verdict, slip: e.slip, said: e.said ?? it.said, reply: e.reply, slipAt: e.slipAt, entered: true }
         : !e.verdict && e.slip && it.verdict === "wrong" && slipsFor(topic).some((x) => x.id === e.slip) ? { ...it, slip: e.slip, said: e.said ?? it.said, reply: e.reply }
         : { ...it, reply: e.reply })) }; } break;
     // the one typed second go of a wrong item, judged by the route that checked the answer: set once, and nothing else on the item moves

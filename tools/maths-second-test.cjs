@@ -207,3 +207,31 @@ test('robustness-1 (lite r3): an entered settle whose learner-file write fails d
  assert.equal(j.error,store().SETTLE_NOT_SAVED,'it names the failed save');
  assert.equal(item(4).verdict,'right','the item is settled on the desk, as the sentence says');
 });
+
+test('value-1 / craft-1 (lite r3): an unsure item entered wrong never reads as a "second go" - not in the TV line, not in the refusal; a ringed item\'s real second go still does',async()=>{
+ const {secondLine}=require(src('tv/sheetRows.ts'));
+ const SECOND=/second go/i;
+ seat(markedSet({4:{verdict:'unsure',slip:undefined,said:'The desk is not sure about number 4. How did you get there?'}}),{walkIx:3});
+ const r=await second({n:4,answer:'9'});
+ assert.equal(r.status,200);
+ assert.equal(item(4).verdict,'wrong');
+ const line=secondLine(item(4));
+ assert.ok(line&&plain(line),`the TV still says something plain: ${line}`);
+ assert.doesNotMatch(line,SECOND,'the TV line');
+ const again=await second({n:4,answer:'8'});
+ assert.equal(again.status,409);
+ const refusal=(await again.json()).error;
+ assert.ok(plain(refusal));assert.doesNotMatch(refusal,SECOND,'the refusal');
+ assert.match(refusal,/typed answer/,'it names the one typed answer');
+ // a ringed item's real second go keeps its wording, on the TV and in the refusal
+ seat(markedSet(),{walkIx:1});
+ assert.equal((await second({n:2,answer:'5'})).status,200);
+ assert.equal(item(2).second,'wrong');
+ assert.equal(secondLine(item(2)),'Not yet. Tell the desk how you got there.');
+ const ringed=(await (await second({n:2,answer:'7'})).json()).error;
+ assert.match(ringed,/second go/,'the ringed item\'s refusal still says second go');
+ // the phone: an entered item's panel and aria-label carry the same words (the page is a screen, so its source is the pin)
+ const page=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
+ assert.match(page,/item\.entered/,'the phone tells an entered item from a ringed one');
+ assert.match(page,/"answer" : "second go"/,'the aria-label names an unsure entry an answer, a ringed retry a second go');
+});

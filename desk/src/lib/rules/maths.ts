@@ -158,8 +158,9 @@ export function typedAnswersProblem(answers: unknown, n: number): string | null 
  * go: if it comes back wrong the route spends the second go with it (the stricter reading), so an unsure item never takes two
  * entries and can never be guess-and-check. Otherwise the plain desk sentence for why not; never a value in the sentence.
  */
-export function secondProblem(item: Pick<PracticeItem, "n" | "verdict" | "second">, name: string = String(item.n)): string | null {
+export function secondProblem(item: Pick<PracticeItem, "n" | "verdict" | "second" | "entered">, name: string = String(item.n)): string | null {
   if ((item.verdict === "wrong" && !item.second) || item.verdict === "unsure") return null;
+  if (item.verdict === "wrong" && item.entered) return `Number ${name} has had its one typed answer. Look at where the pen is, or try a new set.`;
   if (item.verdict === "wrong") return `Number ${name} has had its second go. Look at where the pen is, or try a new set.`;
   if (item.verdict === "right") return `Number ${name} came back right, so it needs no second go.`;
   return `Number ${name} has not been marked yet. Mark the set first.`;

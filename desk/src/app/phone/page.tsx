@@ -637,13 +637,13 @@ export default function Phone() {
             <p><b>{right} right.</b> {look ? `${look} to look at${skipped ? ` (${skipped} skipped)` : ""}.` : "Nothing to look at."}</p>
             <p>{s.screen === "walk" ? "Look at the TV — it is walking the set with you." : "Look at the TV — the whole set is on it. Pick a number there to go through it."}</p>
             {(item?.verdict === "wrong" || item?.verdict === "unsure") && (item.second
-              ? <p data-role="second-sent">Your second go is on the TV.</p>
+              ? <p data-role="second-sent">{item.entered ? "Your typed answer is on the TV." : "Your second go is on the TV."}</p>
               : <div className="ptalk" data-role="second-go">
                   <b>{item.verdict === "unsure" ? "Type your answer" : "Try it again"}</b>
                   <p>{item.verdict === "unsure" ? "Type just the answer you got and the desk will check it. You get one go." : "Work it on paper again, then type just your answer. You get one go."}</p>
                   <div className="field">
                     <input type="text" inputMode="text" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} enterKeyHint="send"
-                      maxLength={TYPED_ANSWER_MAX} value={again} disabled={busy} aria-label={`Your second go at question ${itemName(pr.items, s.walkIx)}`}
+                      maxLength={TYPED_ANSWER_MAX} value={again} disabled={busy} aria-label={`Your ${item.verdict === "unsure" || item.entered ? "answer" : "second go"} at question ${itemName(pr.items, s.walkIx)}`}
                       onChange={(e) => setAgain(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); void sendSecond(); } }} />
                     <button className="pbtn" data-signal="true" onClick={sendSecond} disabled={busy || !again.trim()}>Send</button>
                   </div>
