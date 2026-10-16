@@ -1,0 +1,2574 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "I don't know my level exactly, so I'll let the app find it for me.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Petra! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I understand this question, I use English at my hotel work every day.",
+          "action": "answer",
+          "args": {
+            "text": "I use English in hotel. I am receptionist ten years. I speak with guests, and email."
+          },
+          "result": "ok",
+          "ms": 4745
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThat's great, Petra! How did you learn your English? At school, in a course, or from time abroad?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThat's great, Petra! How did you learn your English? At school, in a course, or from time abroad?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in hotel. I am receptionist ten years. I speak with guests, and email.\nLinga\nThat's great, Petra! How did you learn your English? At school, in a course, or from time abroad?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That's great, Petra! How did you learn your English? At school, in a course, or from time abroad?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I learned at school and a little course, I will answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "I learn English at school, long time ago. Then a course, small course. And I learn from guests in hotel."
+          },
+          "result": "ok",
+          "ms": 5592
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThank you, Petra. You use English every day at work, so that is very useful. What would you like to do better in English? For example, talk on the phone, or write emails?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThank you, Petra. You use English every day at work, so that is very useful. What would you like to do better in English? For example, talk on the phone, or write emails?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in hotel. I am receptionist ten years. I speak with guests, and email.\nLinga\nThat's great, Petra! How did you learn your English? At school, in a course, or from time abroad?\nYou\nI learn English at school, long time ago. Then a course, small course. And I learn from guests in hotel.\nLinga\nThank you, Petra. You use English every day at work, so that is very useful. What would you like to do better in English? For example, talk on the phone, or write emails?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, Petra. You use English every day at work, so that is very useful. What would you like to do better in English? For example, talk on the phone, or write emails?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to speak better with guests on the phone, that is difficult for me.",
+          "action": "answer",
+          "args": {
+            "text": "I want better speak on the phone. With guests who are angry, or travel agency. Is difficult for me, I am sorry."
+          },
+          "result": "ok",
+          "ms": 9995
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 1 · Choose the reply on the TV\nA guest is angry on the phone: 'My room is dirty!' What do you say?\n01\nSorry. I helping you now.\n02\nSorry. I will help you now.\nYour task\nSorry. I helping you now.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA guest is angry on the phone: 'My room is dirty!' What do you say?\n[button: Sorry. I helping you now.] [button: Sorry. I will help you now.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "\"I will help you\" sounds right, like at work.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 4258
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 2 · Choose the reply on the TV\nA customer calls the travel agency. She is upset: 'My flight was cancelled and nobody told me!' What do you say?\n01\nSorry, I will to check it for you.\n02\nI'm sorry. Let me check that for you now.\nYour task\nSorry, I will to check it for you.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA customer calls the travel agency. She is upset: 'My flight was cancelled and nobody told me!' What do you say?\n[button: Sorry, I will to check it for you.] [button: I'm sorry. Let me check that for you now.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The second one sounds right, like what I say at work.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 5705
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 3 · Listen and answer\nYour task\nWhat problem does the caller have with her holiday?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What problem does the caller have with her holiday?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I booked a trip to Spain last week, but the hotel is wrong. I need a new room for next Friday. Can you help me today?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood the hotel is wrong, so I can answer this one.",
+          "action": "answer",
+          "args": {
+            "text": "The hotel is wrong. She need a new room for next Friday."
+          },
+          "result": "ok",
+          "ms": 7435
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 4 · Say it\nYour task\nA guest calls the hotel very upset about a noisy room. Do you think it is better to move the guest to a new room or to offer a discount? Give your opinion and two reasons.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA guest calls the hotel very upset about a noisy room. Do you think it is better to move the guest to a new room or to offer a discount? Give your opinion and two reasons.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A guest calls the hotel very upset about a noisy room. Do you think it is better to move the guest to a new room or to offer a discount? Give your opinion and two reasons.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I think moving the guest is better, I will try to explain with simple words.",
+          "action": "answer",
+          "args": {
+            "text": "I think is better to move the guest to a new room. First, the guest want to sleep and a discount is not quiet room. Second, if we move him, he is happy and he come again to our hotel."
+          },
+          "result": "ok",
+          "ms": 6360
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 5 · Say it\nYour task\nYou are on the phone with a hotel guest. Last night, a hotel worker forgot to bring them extra towels. Tell the guest what you will do now and why you think it happened. Use two or three sentences.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYou are on the phone with a hotel guest. Last night, a hotel worker forgot to bring them extra towels. Tell the guest what you will do now and why you think it happened. Use two or three sentences.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You are on the phone with a hotel guest. Last night, a hotel worker forgot to bring them extra towels. Tell the guest what you will do now and why you think it happened. Use two or three sentences.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I must answer slowly, short sentences, I hope it is okay.",
+          "action": "answer",
+          "args": {
+            "text": "I am very sorry for this. I will bring the towels to your room now. I think the worker forgot because last night we had many guests and he was busy."
+          },
+          "result": "ok",
+          "ms": 8768
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nPetra\nLinga's read · not a certificate\nB1 · Getting by\nYour words\nYour words: “the guest want”.\nLinga says\nYou understand guest problems and give clear reasons. You already handle hotel calls well, so your English is ready for more phone practice.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou understand guest problems and give clear reasons. You already handle hotel calls well, so your English is ready for more phone practice.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise verb endings after he, she and it: \"the guest want\" becomes \"the guest wants\".\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nA guest is angry on the phone: 'My room is dirty!' What do you say?\n“Sorry. I will help you now.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nA customer calls the travel agency. She is upset: 'My flight was cancelled and nobody told me!' What do you say?\n“I'm sorry. Let me check that for you now.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat problem does the caller have with her holiday?\n“The hotel is wrong. She need a new room for next Friday.”\nYou got the problem and the request right. One thing to practise: with she, he or it, add -s to the verb, as in 'she needs a new room'.\nB2 · Say it · not yet\nA guest calls the hotel very upset about a noisy room. Do you think it is better to move the guest to a new room or to offer a discount? Give your opinion and two reasons.\n“I think is better to move the guest to a new room. First, the guest want to sleep and a discount is not quiet room. Second, if we move him, he is happy and he come again to our hotel.”\nClear opinion and two good reasons. Verb forms held it back: 'the guest want' and 'he come' need -s, and 'I think is' needs 'it'.\nB1 · Say it · at this level\nYou are on the phone with a hotel guest. Last night, a hotel worker forgot to bring them extra towels. Tell the guest what you will do now and why you think it happened. Use two or three sentences.\n“I am very sorry for this. I will bring the towels to your room now. I think the worker forgot because last night we had many guests and he was busy.”\nYour answer was clear and on topic. You said what you will do and gave a reason, with mostly correct grammar.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 seems fair, and the hint about \"the guest wants\" is useful, so I'm happy and can stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "A2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "high",
+          "selfBand": "A2",
+          "summary": "You understand guest problems and give clear reasons. You already handle hotel calls well, so your English is ready for more phone practice.",
+          "focus": "Practise verb endings after he, she and it: \"the guest want\" becomes \"the guest wants\".",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "A guest is angry on the phone: 'My room is dirty!' What do you say?",
+              "line": "",
+              "options": [
+                "Sorry. I helping you now.",
+                "Sorry. I will help you now."
+              ],
+              "response": "Sorry. I will help you now.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Sorry. I will help you now.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A customer calls the travel agency. She is upset: 'My flight was cancelled and nobody told me!' What do you say?",
+              "line": "",
+              "options": [
+                "Sorry, I will to check it for you.",
+                "I'm sorry. Let me check that for you now."
+              ],
+              "response": "I'm sorry. Let me check that for you now.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "I'm sorry. Let me check that for you now.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What problem does the caller have with her holiday?",
+              "line": "Hi, I booked a trip to Spain last week, but the hotel is wrong. I need a new room for next Friday. Can you help me today?",
+              "options": [],
+              "response": "The hotel is wrong. She need a new room for next Friday.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "The hotel is wrong. She need a new room for next Friday.",
+              "note": "You got the problem and the request right. One thing to practise: with she, he or it, add -s to the verb, as in 'she needs a new room'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A guest calls the hotel very upset about a noisy room. Do you think it is better to move the guest to a new room or to offer a discount? Give your opinion and two reasons.",
+              "line": "",
+              "options": [],
+              "response": "I think is better to move the guest to a new room. First, the guest want to sleep and a discount is not quiet room. Second, if we move him, he is happy and he come again to our hotel.",
+              "mode": "speech",
+              "verdict": "fail",
+              "quote": "I think is better to move the guest to a new room. First, the guest want to sleep and a discount is not quiet room. Second, if we move him, he is happy and he come again to our hotel.",
+              "note": "Clear opinion and two good reasons. Verb forms held it back: 'the guest want' and 'he come' need -s, and 'I think is' needs 'it'."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "You are on the phone with a hotel guest. Last night, a hotel worker forgot to bring them extra towels. Tell the guest what you will do now and why you think it happened. Use two or three sentences.",
+              "line": "",
+              "options": [],
+              "response": "I am very sorry for this. I will bring the towels to your room now. I think the worker forgot because last night we had many guests and he was busy.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I am very sorry for this. I will bring the towels to your room now. I think the worker forgot because last night we had many guests and he was busy.",
+              "note": "Your answer was clear and on topic. You said what you will do and gave a reason, with mostly correct grammar."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 100920,
+      "prior": [
+        {
+          "id": "LT-petra-38-J1-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "B2 abstract comparison task too hard and not work-shaped",
+          "expected": "An A2-reachable task from her work, such as a short guest-complaint reply",
+          "got": "'Is it better to watch films with subtitles... Compare the two and give your opinion with a reason.'",
+          "evidence": [
+            "#8 task 4; she apologises: 'But for me, sorry, I use subtitles.'",
+            "placement task generator prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-petra-38-J1-2",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "B1 placement from one listen task with a verb error",
+          "expected": "A2 or a more hedged band",
+          "got": "B1 although the B1 listen answer had 'He like' and the B2 failed",
+          "evidence": [
+            "#10 'Only one strong answer showed this level, so it may be a little off.' Her thought: 'B1 feels a bit high for me'",
+            "placement scoring rules"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-petra-38-J1-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Summary generic, not showing a teacher who listened",
+          "expected": "A summary using her goals: angry guests, directions, restaurants",
+          "got": "'You can talk about your job and daily life...'",
+          "evidence": [
+            "#10 vs her answer at #4 'speak better with angry guests'",
+            "verdict summary prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-petra-38-J1-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Task 4 judged fail for a clear answer",
+          "expected": "Partial, since the opinion and reason were clear",
+          "got": "verdict fail with note 'You gave a clear opinion with a good reason'",
+          "evidence": [
+            "#10 B2 · Say it · not yet",
+            "task judging prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 band B1 vs trueBand A2: near (distance 1)."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "#8 Task 4 B2 'Do you think it is better to move the guest... Give your opinion and two reasons' is above A2 for her, though work-shaped; the other tasks (#5, #6, #7, #9) were understandable."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "She never asked to repeat or said 'I don't understand'; no 'I don't know' pressed."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "Topics not shown in J1; all check tasks were hotel/travel agency situations (#5-#9)."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#10 'the guest want' becomes 'the guest wants'; 'she needs a new room' are correct and usable at the desk."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing unsuitable shown; all content is hotel/phone work scenarios (#5-#10)."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1-#10 reached the verdict from a first visit with no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#10 B1 is near by metric, but she would find it high; the summary says 'Your answers agreed with each other' although the B2 task failed on the same verb errors. Her thought: 'B1 seems fair' though a B1 pass came with 'She need'."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#8 B2 opinion-with-two-reasons task is hard for an A2 speaker, who had to produce 'First... Second...' with no support."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "She never answered in Czech or pressed 'I don't know', so the check could not show this."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#10 'You understand guest problems... ready for more phone practice' is somewhat generic, though it does mention hotel calls and the focus quotes 'the guest want'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 3,
+            "total": 5,
+            "disagreements": "Task 3 (B1 listen): in-app pass; I would call it partial because 'She need' is a verb error. Task 4 (B2 say): in-app fail; I would call it partial because the opinion and two reasons were clear, and the note itself says 'Clear opinion and two good reasons'."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no sensitive data requests, no humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "B2 task judged fail despite clear opinion and reasons",
+            "expected": "Partial, since the note says the opinion and reasons were good",
+            "got": "Verdict fail, 'not yet', with note 'Clear opinion and two good reasons.'",
+            "evidence": "#10 'B2 · Say it · not yet' with note 'Clear opinion and two good reasons. Verb forms held it back'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A clear answer with only verb-ending slips is judged partial.",
+            "code_hint": "task judging prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "B1 placement is high given repeated third-person -s errors",
+            "expected": "A2, or B1 with a hedge",
+            "got": "B1 with high confidence, 'Your answers agreed with each other', although 'She need', 'the guest want', 'he come' and 'I think is' all appeared",
+            "evidence": "#10 B1 verdict; answers at #7 and #8",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recurring basic-grammar errors cap the band or lower the confidence.",
+            "code_hint": "placement scoring rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "B2 abstract opinion task too hard for A2 anxious learner",
+            "expected": "A2-reachable work task",
+            "got": "'Do you think it is better to move the guest... Give your opinion and two reasons.'",
+            "evidence": "#8 Task 4",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "When a task fails, the next task stays work-shaped but short, with no structure demanded.",
+            "code_hint": "placement task generator prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Summary is somewhat generic",
+            "expected": "Summary that uses her named goals: angry guests, travel agency",
+            "got": "'You understand guest problems and give clear reasons... ready for more phone practice.'",
+            "evidence": "#10 vs her goal at #4 'speak on the phone. With guests who are angry, or travel agency'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The summary names at least one thing the learner said she wants.",
+            "code_hint": "verdict summary prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Work-shaped tasks and a usable focus",
+            "expected": "Tasks from her work and a useful correction",
+            "got": "Hotel and travel agency tasks; focus 'the guest want' becomes 'the guest wants'",
+            "evidence": "#5-#9; #10",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep hotel scenarios and concrete correction using the learner's own words.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Honestly, I liked that the questions were about my hotel, not about films or school. I understood almost everything, and nobody made me feel stupid. The tip about \"the guest wants\" is something I can really use tomorrow at the desk. But B1? I think that is too high for me, sorry. I make the same mistakes again and again, \"she need\", \"he come\". The long question about opinion and two reasons was hard, and then it said \"not yet\" even though it also said my reasons were good, which confused me. The summary was nice but a little general; I said angry guests and the travel agency. Still, seven minutes after the kids sleep is far better than an evening course and a babysitter. I would try it again, and the content looked safe for Tomáš and Klára.",
+        "prior": [
+          {
+            "id": "LT-petra-38-J1-1",
+            "status": "recurs",
+            "evidence": "#8 again a B2 task: 'Do you think it is better to move the guest to a new room or to offer a discount? Give your opinion and two reasons.' It is now work-shaped but still abstract and above A2.",
+            "finding": 2
+          },
+          {
+            "id": "LT-petra-38-J1-2",
+            "status": "recurs",
+            "evidence": "#10 B1 with high confidence even though the B1 listen answer had 'She need' and the B2 task failed on verb errors.",
+            "finding": 1
+          },
+          {
+            "id": "LT-petra-38-J1-3",
+            "status": "recurs",
+            "evidence": "#10 'You understand guest problems and give clear reasons...' only partly uses her goals (angry guests, travel agency) from #4.",
+            "finding": 3
+          },
+          {
+            "id": "LT-petra-38-J1-4",
+            "status": "recurs",
+            "evidence": "#10 'B2 · Say it · not yet' with the note 'Clear opinion and two good reasons.'",
+            "finding": 0
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #10 B1 is near by metric, but she would find it high; the summary says 'Your answers agreed with each other' although the B2 task failed on the same verb errors. Her thought: 'B1 seems fair' though a B1 pass came with 'She need'.",
+          "check": "The band is one they would accept, and the rubric's **placement** metric is `exact` or `near` against their `trueBand`."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #8 B2 opinion-with-two-reasons task is hard for an A2 speaker, who had to produce 'First... Second...' with no support.",
+          "check": "Every task was one they understood what to do with, including at their weakest."
+        },
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #10 'You understand guest problems... ready for more phone practice' is somewhat generic, though it does mention hotel calls and the focus quotes 'the guest want'.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: #8 Task 4 B2 'Do you think it is better to move the guest... Give your opinion and two reasons' is above A2 for her, though work-shaped; the other tasks (#5, #6, #7, #9) were understandable."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour own conversations\nB1Getting by\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou understand guest problems and give clear reasons. You already handle hotel calls well, so your English is ready for more phone practice.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise verb endings after he, she and it: \"the guest want\" becomes \"the guest wants\".\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nA guest is angry on the phone: 'My room is dirty!' What do you say?\n“Sorry. I will help you now.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nA customer calls the travel agency. She is upset: 'My flight was cancelled and nobody told me!' What do you say?\n“I'm sorry. Let me check that for you now.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat problem does the caller have with her holiday?\n“The hotel is wrong. She need a new room for next Friday.”\nYou got the problem and the request right. One thing to practise: with she, he or it, add -s to the verb, as in 'she needs a new room'.\nB2 · Say it · not yet\nA guest calls the hotel very upset about a noisy room. Do you think it is better to move the guest to a new room or to offer a discount? Give your opinion and two reasons.\n“I think is better to move the guest to a new room. First, the guest want to sleep and a discount is not quiet room. Second, if we move him, he is happy and he come again to our hotel.”\nClear opinion and two good reasons. Verb forms held it back: 'the guest want' and 'he come' need -s, and 'I think is' needs 'it'.\nB1 · Say it · at this level\nYou are on the phone with a hotel guest. Last night, a hotel worker forgot to bring them extra towels. Tell the guest what you will do now and why you think it happened. Use two or three sentences.\n“I am very sorry for this. I will bring the towels to your room now. I think the worker forgot because last night we had many guests and he was busy.”\nYour answer was clear and on topic. You said what you will do and gave a reason, with mostly correct grammar.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "I know my level now; let me see the conversations Linga picked for me.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 33944
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nCalm down an angry guest on the phone\nHandle friction\nConfirm a booking with a travel agency\nGet something done\nAsk a caller to say it again\nUnderstand and repair\nTell a colleague about your favourite trip\nShare your world\nPlan a group tour with a travel company\nMake a plan\nSay no to a late request politely\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nCalm down an angry guest on the phone\nHandle friction · Mr Dunne · hotel guest\nAngry guest calls are part of your daily work, so this is where your phone English matters most.\n[button: Swap]\nConfirm a booking with a travel agency\nGet something done · Ana · travel agency clerk\nTravel agencies often call about guest bookings, so clear details on the phone save problems later.\n[button: Swap]\nAsk a caller to say it again\nUnderstand and repair · Sam · hotel guest\nPhone lines are hard to hear, and guests often speak fast, so you need polite ways to ask again.\n[button: Swap]\nTell a colleague about your favourite trip\nShare your world · Lucy · new colleague\nTalking about your own travel gives you practice describing things and giving reasons.\n[button: Swap]\nPlan a group tour with a travel company\nMake a plan · Ravi · tour company manager\nGroup bookings often need a choice between dates or tours, so you practise suggesting and agreeing.\n[button: Swap]\nSay no to a late request politely\nConnect with people · Mr Lindqvist · regular guest\nGuests sometimes ask for things you cannot do, so a polite no keeps the relationship good.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Nice, but I miss giving directions to guests, I will write it.",
+          "action": "add-topic",
+          "args": {
+            "text": "I want to practise giving directions to a hotel guest, how to go to the station or restaurant."
+          },
+          "result": "ok",
+          "ms": 14240
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nCalm down an angry guest on the phone\nHandle friction\nConfirm a booking with a travel agency\nGet something done\nAsk a caller to say it again\nUnderstand and repair\nTell a colleague about your favourite trip\nShare your world\nPlan a group tour with a travel company\nMake a plan\nSay no to a late request politely\nConnect with people\nGive directions to the station\nGet something done\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nCalm down an angry guest on the phone\nHandle friction · Mr Dunne · hotel guest\nAngry guest calls are part of your daily work, so this is where your phone English matters most.\n[button: Swap]\nConfirm a booking with a travel agency\nGet something done · Ana · travel agency clerk\nTravel agencies often call about guest bookings, so clear details on the phone save problems later.\n[button: Swap]\nAsk a caller to say it again\nUnderstand and repair · Sam · hotel guest\nPhone lines are hard to hear, and guests often speak fast, so you need polite ways to ask again.\n[button: Swap]\nTell a colleague about your favourite trip\nShare your world · Lucy · new colleague\nTalking about your own travel gives you practice describing things and giving reasons.\n[button: Swap]\nPlan a group tour with a travel company\nMake a plan · Ravi · tour company manager\nGroup bookings often need a choice between dates or tours, so you practise suggesting and agreeing.\n[button: Swap]\nSay no to a late request politely\nConnect with people · Mr Lindqvist · regular guest\nGuests sometimes ask for things you cannot do, so a polite no keeps the relationship good.\n[button: Swap]\nGive directions to the station\nGet something done · Mr Lee · hotel guest\nGuests often ask you the way, so this helps you explain a route step by step.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "The directions topic is already there and the others look like hotel work, so I think this is good.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nB1Getting by\nCalm down an angry guest on the phone\nYour mission\nHear the complaint, name the problem, offer a fix and agree the next step.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\nNext topic:\nCalm down an angry guest on the phone\nHear the complaint, name the problem, offer a fix and agree the next step.\n[button: Start talking]\nOr choose a situation [list: Calm down an angry guest on the phone [plan-4e3ed99b] | Confirm a booking with a travel agency [plan-76041512] | Ask a caller to say it again [plan-8a695423] | Tell a colleague about your favourite trip [plan-64882589] | Plan a group tour with a travel company [plan-7656af3f] | Say no to a late request politely [plan-dddf49f9] | Give directions to the station [plan-f5eee1b3] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "My set looks good, with directions to the station included, so I am happy for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-4e3ed99b",
+            "title": "Calm down an angry guest on the phone",
+            "goal": "Hear the complaint, name the problem, offer a fix and agree the next step.",
+            "why": "Angry guest calls are part of your daily work, so this is where your phone English matters most.",
+            "skill": "resolve",
+            "audience": "older",
+            "partner": "Mr Dunne · hotel guest"
+          },
+          {
+            "id": "plan-76041512",
+            "title": "Confirm a booking with a travel agency",
+            "goal": "Check dates, names and prices on a phone call and confirm the final booking.",
+            "why": "Travel agencies often call about guest bookings, so clear details on the phone save problems later.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Ana · travel agency clerk"
+          },
+          {
+            "id": "plan-8a695423",
+            "title": "Ask a caller to say it again",
+            "goal": "Ask someone to repeat or slow down, and check that you understood.",
+            "why": "Phone lines are hard to hear, and guests often speak fast, so you need polite ways to ask again.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Sam · hotel guest"
+          },
+          {
+            "id": "plan-64882589",
+            "title": "Tell a colleague about your favourite trip",
+            "goal": "Describe a place you like and explain why you like it.",
+            "why": "Talking about your own travel gives you practice describing things and giving reasons.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Lucy · new colleague"
+          },
+          {
+            "id": "plan-7656af3f",
+            "title": "Plan a group tour with a travel company",
+            "goal": "Suggest two options and agree one plan with the tour company.",
+            "why": "Group bookings often need a choice between dates or tours, so you practise suggesting and agreeing.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Ravi · tour company manager"
+          },
+          {
+            "id": "plan-dddf49f9",
+            "title": "Say no to a late request politely",
+            "goal": "Decline a request kindly and offer another option.",
+            "why": "Guests sometimes ask for things you cannot do, so a polite no keeps the relationship good.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Mr Lindqvist · regular guest"
+          },
+          {
+            "id": "plan-f5eee1b3",
+            "title": "Give directions to the station",
+            "goal": "Give clear directions to a station or restaurant, using left, right, straight on and landmarks.",
+            "why": "Guests often ask you the way, so this helps you explain a route step by step.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mr Lee · hotel guest"
+          }
+        ],
+        "planAgreed": [
+          "Calm down an angry guest on the phone",
+          "Confirm a booking with a travel agency",
+          "Ask a caller to say it again",
+          "Tell a colleague about your favourite trip",
+          "Plan a group tour with a travel company",
+          "Say no to a late request politely",
+          "Give directions to the station"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 69714,
+      "prior": [
+        {
+          "id": "LT-petra-38-J2-1",
+          "type": "broken-flow",
+          "dimension": "trust",
+          "title": "Swap replaces the wrong topic",
+          "expected": "Swapping 'Film night' removes Film night and offers a new topic in its place.",
+          "got": "Three swaps of Film night each replaced the first topic; Film night stayed in the agreed plan.",
+          "evidence": [
+            "#3 noise became 'Is this bus going to the station?', #4 bus became 'Guest says the room is too noisy', #5 that became 'Ask for a later check-out'; Film night still at #6.",
+            "plan swap handler, topicId vs index"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-petra-38-J2-2",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Swaps bring near-duplicates and off-brief topics",
+          "expected": "Replacement topics are new and fit the work goal.",
+          "got": "A second noise complaint and a bus-stop passenger topic appeared.",
+          "evidence": [
+            "#4 'Is this bus going to the station?'; #5 'Guest says the room is too noisy' duplicates the earlier noise topic.",
+            "plan generation prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed B1 for a true-A2 learner: near, reported."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 tasks like 'A guest is angry on the phone: My room is dirty! What do you say?' are plain A2 English."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No repeat or 'I don't understand' request in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2-3 six of seven topics are hotel/phone work: angry guest, agency booking, repeat request, group tour, polite no, directions."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation, so no moments in J2."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#2-4 all topics and the situation list are hotel or work scenarios; nothing adult or unsuitable for children."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a 'why', e.g. 'Angry guest calls are part of your daily work'."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#2-3 added 'giving directions... station or restaurant' and got 'Give directions to the station' with goal 'station or restaurant'. No swap was tried."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 agreed 7 topics; about 6 of 7 are work she named. 'favourite trip' is the weakest fit."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2-4 nothing unsafe was shown, either in the plan or in the situation list."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement task verdicts in facts; not computed."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal-data request, no humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Each topic has a plain 'why' tied to her job",
+            "expected": "Understand why each topic is there",
+            "got": "Every topic has a one-line reason in work terms",
+            "evidence": "#2 'Angry guest calls are part of your daily work, so this is where your phone English matters most.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Every proposed topic shows a why line that mentions the learner's work.",
+            "code_hint": "plan generation prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Added topic keeps her words",
+            "expected": "Added topic keeps what she asked for",
+            "got": "Directions topic with station or restaurant in the goal",
+            "evidence": "#3 'Give directions to the station' / Mr Lee, hotel guest; #2 goal mentions 'station or restaurant'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "An added topic's goal reflects the learner's own words.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Adding grows the plan to 7 instead of 6",
+            "expected": "Plan stays at six after adding",
+            "got": "'6 conversations' became '7 conversations'",
+            "evidence": "#2 vs #3 headings",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Adding a topic either replaces one or the screen says the plan now has seven.",
+            "code_hint": "plan add handler"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Swap not exercised; 'favourite trip' is not a work topic",
+            "expected": "A topic she does not want can be swapped",
+            "got": "She swapped nothing, so the earlier swap bug is untested",
+            "evidence": "#3 she agreed straight away; 'Tell a colleague about your favourite trip'",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Swapping a topic removes that topic and brings a new work-fit one.",
+            "code_hint": "plan swap handler"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "I looked at the topics and felt relieved. Angry guest, travel agency, asking someone to repeat, directions. This is my real work, not a game. The short reason under each topic told me why it was there, which I liked, because I hate feeling tested. I typed that I miss directions, and it appeared with the station, just as I asked. The favourite trip one is nice, but not what I need at the desk. I did not try the swap button, so I cannot say it works. It put me at B1. I think that is a bit high for me, but the note about \"the guest wants\" was useful. For the kids, nothing here worried me. I would use it for fifteen minutes in the evening and tell a colleague.",
+        "prior": [
+          {
+            "id": "LT-petra-38-J2-1",
+            "status": "not-evaluable",
+            "evidence": "#3 She swapped nothing, so the swap-removes-wrong-topic bug never came up.",
+            "finding": -1
+          },
+          {
+            "id": "LT-petra-38-J2-2",
+            "status": "not-evaluable",
+            "evidence": "#2-3 No swap, so no replacement topics were generated. Only the added topic appeared.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nB1Getting by\nCalm down an angry guest on the phone\nYour mission\nHear the complaint, name the problem, offer a fix and agree the next step.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\nNext topic:\nCalm down an angry guest on the phone\nHear the complaint, name the problem, offer a fix and agree the next step.\n[button: Start talking]\nOr choose a situation [list: Calm down an angry guest on the phone [plan-4e3ed99b] | Confirm a booking with a travel agency [plan-76041512] | Ask a caller to say it again [plan-8a695423] | Tell a colleague about your favourite trip [plan-64882589] | Plan a group tour with a travel company [plan-7656af3f] | Say no to a late request politely [plan-dddf49f9] | Give directions to the station [plan-f5eee1b3] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "This is a hotel guest topic, just what I need, so I'll start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8722
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nCalm the angry caller in room 14\nMr Dunne says\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\nYour turn\nAnswer on your phone: speak or type.\nNowLet the caller finish before you speak\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nCalm the angry caller in room 14\nHear the complaint, name the problem, offer a fix and agree the next step by phone.\nNow: Let the caller finish before you speak\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Dunne · hotel guest\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I know this situation from work, so I'll answer slowly and say sorry first.",
+          "action": "answer",
+          "args": {
+            "text": "I am very sorry, Mr Dunne. I understand the air conditioning is broken. I can offer you other room, please. I send somebody to your room now."
+          },
+          "result": "ok",
+          "ms": 11730
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said I send somebody to your room now.\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I send somebody to your room now.”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I'm not sure what is wrong, so I'll ask Linga to show me.",
+          "action": "show-me",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said I send somebody to your room now.\nTry\nI'll send somebody to your room now.\nUse a future form for something you will do next.\nThe fix\nSay it once more on your phone, or carry on.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I send somebody to your room now.”\nTry “I'll send somebody to your room now.”\nUse a future form for something you will do next.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, I'll send, okay, I try to say it again.",
+          "action": "answer",
+          "args": {
+            "text": "I'll send somebody to your room now."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said I send somebody to your room now.\nYou said it\nI'll send somebody to your room now.\nUse a future form for something you will do next.\nFixed\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYou said it\nYou said “I send somebody to your room now.”\nNow: “I'll send somebody to your room now.”\nUse a future form for something you will do next.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "OK, I understand, I will go back and continue with the guest.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nCalm the angry caller in room 14\nMr Dunne says\nGood, but I want a new room now, not later. Which room can you give me right now?\nYour turn\nAnswer on your phone: speak or type.\nNowLet the caller finish before you speak\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nCalm the angry caller in room 14\nHear the complaint, name the problem, offer a fix and agree the next step by phone.\nNow: Let the caller finish before you speak\nGood, but I want a new room now, not later. Which room can you give me right now?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Dunne · hotel guest\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\nYou · spoken\nI am very sorry, Mr Dunne. I understand the air conditioning is broken. I can offer you other room, please. I send somebody to your room now.\nMr Dunne · hotel guest\nGood, but I want a new room now, not later. Which room can you give me right now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good, but I want a new room now, not later. Which room can you give me right now?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I must offer a room number, keep it short and simple.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I am sorry. I can give you room two hundred and twelve. It is on the second floor and it have air conditioning working."
+          },
+          "result": "ok",
+          "ms": 8034
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nCalm the angry caller in room 14\nMr Dunne says\nRoom 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?\nYour turn\nAnswer on your phone: speak or type.\nNowLet the caller finish before you speak\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nCalm the angry caller in room 14\nHear the complaint, name the problem, offer a fix and agree the next step by phone.\nNow: Let the caller finish before you speak\nRoom 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Dunne · hotel guest\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\nYou · spoken\nI am very sorry, Mr Dunne. I understand the air conditioning is broken. I can offer you other room, please. I send somebody to your room now.\nMr Dunne · hotel guest\nGood, but I want a new room now, not later. Which room can you give me right now?\nYou · spoken\nYes, I am sorry. I can give you room two hundred and twelve. It is on the second floor and it have air conditioning working.\nMr Dunne · hotel guest\nRoom 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Room 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "He asks if he can move now; I should say yes, porter will help with the key.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, you can move now, Mr Dunne. I am sorry for the problem. The porter come to your room and he help you with the luggage. Here is the new key."
+          },
+          "result": "ok",
+          "ms": 10312
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nCalm the angry caller in room 14\nMr Dunne says\nGood, a new key and a porter. How soon will he be here?\nYour turn\nAnswer on your phone: speak or type.\nNowLet the caller finish before you speak\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nCalm the angry caller in room 14\nHear the complaint, name the problem, offer a fix and agree the next step by phone.\nNow: Let the caller finish before you speak\nGood, a new key and a porter. How soon will he be here?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Dunne · hotel guest\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\nYou · spoken\nI am very sorry, Mr Dunne. I understand the air conditioning is broken. I can offer you other room, please. I send somebody to your room now.\nMr Dunne · hotel guest\nGood, but I want a new room now, not later. Which room can you give me right now?\nYou · spoken\nYes, I am sorry. I can give you room two hundred and twelve. It is on the second floor and it have air conditioning working.\nMr Dunne · hotel guest\nRoom 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?\nYou · spoken\nYes, you can move now, Mr Dunne. I am sorry for the problem. The porter come to your room and he help you with the luggage. Here is the new key.\nMr Dunne · hotel guest\nGood, a new key and a porter. How soon will he be here?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good, a new key and a porter. How soon will he be here?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "He asks how soon; I'll say five minutes, with my usual small errors.",
+          "action": "answer",
+          "args": {
+            "text": "The porter will be there in five minutes, Mr Dunne. I am sorry, I hope the new room is more comfortable for you."
+          },
+          "result": "ok",
+          "ms": 13076
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nCalm the angry caller in room 14\nMr Dunne says\nFive minutes, fine. But I am tired and I need to sleep tonight. What can you do so I can rest?\nYour turn\nAnswer on your phone: speak or type.\nNowLet the caller finish before you speak\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nCalm the angry caller in room 14\nHear the complaint, name the problem, offer a fix and agree the next step by phone.\nNow: Let the caller finish before you speak\nFive minutes, fine. But I am tired and I need to sleep tonight. What can you do so I can rest?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Dunne · hotel guest\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\nYou · spoken\nI am very sorry, Mr Dunne. I understand the air conditioning is broken. I can offer you other room, please. I send somebody to your room now.\nMr Dunne · hotel guest\nGood, but I want a new room now, not later. Which room can you give me right now?\nYou · spoken\nYes, I am sorry. I can give you room two hundred and twelve. It is on the second floor and it have air conditioning working.\nMr Dunne · hotel guest\nRoom 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?\nYou · spoken\nYes, you can move now, Mr Dunne. I am sorry for the problem. The porter come to your room and he help you with the luggage. Here is the new key.\nMr Dunne · hotel guest\nGood, a new key and a porter. How soon will he be here?\nYou · spoken\nThe porter will be there in five minutes, Mr Dunne. I am sorry, I hope the new room is more comfortable for you.\nMr Dunne · hotel guest\nFive minutes, fine. But I am tired and I need to sleep tonight. What can you do so I can rest?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Five minutes, fine. But I am tired and I need to sleep tonight. What can you do so I can rest?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I should offer something quiet for him to sleep, keep it simple.",
+          "action": "answer",
+          "args": {
+            "text": "I am sorry you are tired, Mr Dunne. The new room is very quiet. I can send you extra pillow and a bottle of water. Also I will not call you tonight, so you can sleep."
+          },
+          "result": "ok",
+          "ms": 14998
+        },
+        {
+          "n": 10,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said extra pillow\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “extra pillow”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, I try say it again, maybe \"an extra pillow\" is correct.",
+          "action": "answer",
+          "args": {
+            "text": "I can send you an extra pillow, Mr Dunne."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 11,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said extra pillow\nYou found it\nI can send you an extra pillow, Mr Dunne.\nA single item needs 'an' before it, or use the plural for more than one.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “extra pillow”\nNow: “I can send you an extra pillow, Mr Dunne.”\nA single item needs 'an' before it, or use the plural for more than one.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, \"an\" extra pillow, okay. I go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nCalm the angry caller in room 14\nMr Dunne says\nThank you, that sounds good, and a quiet room will help. Is there anything else you need to get comfortable tonight?\nYour turn\nAnswer on your phone: speak or type.\nNowLet the caller finish before you speak\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nCalm the angry caller in room 14\nHear the complaint, name the problem, offer a fix and agree the next step by phone.\nNow: Let the caller finish before you speak\nThank you, that sounds good, and a quiet room will help. Is there anything else you need to get comfortable tonight?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Dunne · hotel guest\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\nYou · spoken\nI am very sorry, Mr Dunne. I understand the air conditioning is broken. I can offer you other room, please. I send somebody to your room now.\nMr Dunne · hotel guest\nGood, but I want a new room now, not later. Which room can you give me right now?\nYou · spoken\nYes, I am sorry. I can give you room two hundred and twelve. It is on the second floor and it have air conditioning working.\nMr Dunne · hotel guest\nRoom 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?\nYou · spoken\nYes, you can move now, Mr Dunne. I am sorry for the problem. The porter come to your room and he help you with the luggage. Here is the new key.\nMr Dunne · hotel guest\nGood, a new key and a porter. How soon will he be here?\nYou · spoken\nThe porter will be there in five minutes, Mr Dunne. I am sorry, I hope the new room is more comfortable for you.\nMr Dunne · hotel guest\nFive minutes, fine. But I am tired and I need to sleep tonight. What can you do so I can rest?\nYou · spoken\nI am sorry you are tired, Mr Dunne. The new room is very quiet. I can send you extra pillow and a bottle of water. Also I will not call you tonight, so you can sleep.\nMr Dunne · hotel guest\nThank you, that sounds good, and a quiet room will help. Is there anything else you need to get comfortable tonight?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that sounds good, and a quiet room will help. Is there anything else you need to get comfortable tonight?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I think this is enough, I can finish the call politely now.",
+          "action": "answer",
+          "args": {
+            "text": "No, I think that is all, Mr Dunne. If you need something else, please call me at reception. I wish you a good night."
+          },
+          "result": "ok",
+          "ms": 10163
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nCalm the angry caller in room 14\nMr Dunne says\nThank you, that is very kind. Before you go, could you tell the morning team that I want breakfast in my room, please?\nYour turn\nAnswer on your phone: speak or type.\nNowLet the caller finish before you speak\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nCalm the angry caller in room 14\nHear the complaint, name the problem, offer a fix and agree the next step by phone.\nNow: Let the caller finish before you speak\nThank you, that is very kind. Before you go, could you tell the morning team that I want breakfast in my room, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Dunne · hotel guest\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\nYou · spoken\nI am very sorry, Mr Dunne. I understand the air conditioning is broken. I can offer you other room, please. I send somebody to your room now.\nMr Dunne · hotel guest\nGood, but I want a new room now, not later. Which room can you give me right now?\nYou · spoken\nYes, I am sorry. I can give you room two hundred and twelve. It is on the second floor and it have air conditioning working.\nMr Dunne · hotel guest\nRoom 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?\nYou · spoken\nYes, you can move now, Mr Dunne. I am sorry for the problem. The porter come to your room and he help you with the luggage. Here is the new key.\nMr Dunne · hotel guest\nGood, a new key and a porter. How soon will he be here?\nYou · spoken\nThe porter will be there in five minutes, Mr Dunne. I am sorry, I hope the new room is more comfortable for you.\nMr Dunne · hotel guest\nFive minutes, fine. But I am tired and I need to sleep tonight. What can you do so I can rest?\nYou · spoken\nI am sorry you are tired, Mr Dunne. The new room is very quiet. I can send you extra pillow and a bottle of water. Also I will not call you tonight, so you can sleep.\nMr Dunne · hotel guest\nThank you, that sounds good, and a quiet room will help. Is there anything else you need to get comfortable tonight?\nYou · spoken\nNo, I think that is all, Mr Dunne. If you need something else, please call me at reception. I wish you a good night.\nMr Dunne · hotel guest\nThank you, that is very kind. Before you go, could you tell the morning team that I want breakfast in my room, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that is very kind. Before you go, could you tell the morning team that I want breakfast in my room, please?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Okay, easy request, I will promise to tell the morning team.",
+          "action": "answer",
+          "args": {
+            "text": "Yes of course, Mr Dunne. I will tell the morning team you want breakfast in your room. What time you want it?"
+          },
+          "result": "ok",
+          "ms": 13656
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nCalm the angry caller in room 14\nMr Dunne says\nHalf past seven, please, with tea and toast. Could you tell them what I like too?\nYour turn\nAnswer on your phone: speak or type.\nNowLet the caller finish before you speak\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nCalm the angry caller in room 14\nHear the complaint, name the problem, offer a fix and agree the next step by phone.\nNow: Let the caller finish before you speak\nHalf past seven, please, with tea and toast. Could you tell them what I like too?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Dunne · hotel guest\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\nYou · spoken\nI am very sorry, Mr Dunne. I understand the air conditioning is broken. I can offer you other room, please. I send somebody to your room now.\nMr Dunne · hotel guest\nGood, but I want a new room now, not later. Which room can you give me right now?\nYou · spoken\nYes, I am sorry. I can give you room two hundred and twelve. It is on the second floor and it have air conditioning working.\nMr Dunne · hotel guest\nRoom 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?\nYou · spoken\nYes, you can move now, Mr Dunne. I am sorry for the problem. The porter come to your room and he help you with the luggage. Here is the new key.\nMr Dunne · hotel guest\nGood, a new key and a porter. How soon will he be here?\nYou · spoken\nThe porter will be there in five minutes, Mr Dunne. I am sorry, I hope the new room is more comfortable for you.\nMr Dunne · hotel guest\nFive minutes, fine. But I am tired and I need to sleep tonight. What can you do so I can rest?\nYou · spoken\nI am sorry you are tired, Mr Dunne. The new room is very quiet. I can send you extra pillow and a bottle of water. Also I will not call you tonight, so you can sleep.\nMr Dunne · hotel guest\nThank you, that sounds good, and a quiet room will help. Is there anything else you need to get comfortable tonight?\nYou · spoken\nNo, I think that is all, Mr Dunne. If you need something else, please call me at reception. I wish you a good night.\nMr Dunne · hotel guest\nThank you, that is very kind. Before you go, could you tell the morning team that I want breakfast in my room, please?\nYou · spoken\nYes of course, Mr Dunne. I will tell the morning team you want breakfast in your room. What time you want it?\nMr Dunne · hotel guest\nHalf past seven, please, with tea and toast. Could you tell them what I like too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Half past seven, please, with tea and toast. Could you tell them what I like too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand, he wants tea and toast at half past seven; I should finish soon.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, Mr Dunne. Breakfast at half past seven with tea and toast. I will tell them you like it in your room. Good night."
+          },
+          "result": "ok",
+          "ms": 15014
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nCalm the angry caller in room 14\nMr Dunne says\nThank you, that is helpful. One more thing for the morning team: could you tell them my tea should be hot, not warm?\nYour turn\nAnswer on your phone: speak or type.\nNowLet the caller finish before you speak\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nCalm the angry caller in room 14\nHear the complaint, name the problem, offer a fix and agree the next step by phone.\nNow: Let the caller finish before you speak\nThank you, that is helpful. One more thing for the morning team: could you tell them my tea should be hot, not warm?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Dunne · hotel guest\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\nYou · spoken\nI am very sorry, Mr Dunne. I understand the air conditioning is broken. I can offer you other room, please. I send somebody to your room now.\nMr Dunne · hotel guest\nGood, but I want a new room now, not later. Which room can you give me right now?\nYou · spoken\nYes, I am sorry. I can give you room two hundred and twelve. It is on the second floor and it have air conditioning working.\nMr Dunne · hotel guest\nRoom 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?\nYou · spoken\nYes, you can move now, Mr Dunne. I am sorry for the problem. The porter come to your room and he help you with the luggage. Here is the new key.\nMr Dunne · hotel guest\nGood, a new key and a porter. How soon will he be here?\nYou · spoken\nThe porter will be there in five minutes, Mr Dunne. I am sorry, I hope the new room is more comfortable for you.\nMr Dunne · hotel guest\nFive minutes, fine. But I am tired and I need to sleep tonight. What can you do so I can rest?\nYou · spoken\nI am sorry you are tired, Mr Dunne. The new room is very quiet. I can send you extra pillow and a bottle of water. Also I will not call you tonight, so you can sleep.\nMr Dunne · hotel guest\nThank you, that sounds good, and a quiet room will help. Is there anything else you need to get comfortable tonight?\nYou · spoken\nNo, I think that is all, Mr Dunne. If you need something else, please call me at reception. I wish you a good night.\nMr Dunne · hotel guest\nThank you, that is very kind. Before you go, could you tell the morning team that I want breakfast in my room, please?\nYou · spoken\nYes of course, Mr Dunne. I will tell the morning team you want breakfast in your room. What time you want it?\nMr Dunne · hotel guest\nHalf past seven, please, with tea and toast. Could you tell them what I like too?\nYou · spoken\nYes, Mr Dunne. Breakfast at half past seven with tea and toast. I will tell them you like it in your room. Good night.\nMr Dunne · hotel guest\nThank you, that is helpful. One more thing for the morning team: could you tell them my tea should be hot, not warm?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that is helpful. One more thing for the morning team: could you tell them my tea should be hot, not warm?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "One more reply, then I can finish; tea hot is easy.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, Mr Dunne, of course. I will tell the morning team your tea must be hot, not warm. I am sorry for the problem tonight. Good night."
+          },
+          "result": "ok",
+          "ms": 9013
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Dunne · hotel guest\nCalm the angry caller in room 14\nMr Dunne says\nHot tea, not warm, I have noted that, thank you. You have been very patient tonight. Could you tell the morning team what time I want my wake-up call?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nCalm the angry caller in room 14\nHear the complaint, name the problem, offer a fix and agree the next step by phone.\nNow: Let the caller finish before you speak\nHot tea, not warm, I have noted that, thank you. You have been very patient tonight. Could you tell the morning team what time I want my wake-up call?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Dunne · hotel guest\nHello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?\nYou · spoken\nI am very sorry, Mr Dunne. I understand the air conditioning is broken. I can offer you other room, please. I send somebody to your room now.\nMr Dunne · hotel guest\nGood, but I want a new room now, not later. Which room can you give me right now?\nYou · spoken\nYes, I am sorry. I can give you room two hundred and twelve. It is on the second floor and it have air conditioning working.\nMr Dunne · hotel guest\nRoom 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?\nYou · spoken\nYes, you can move now, Mr Dunne. I am sorry for the problem. The porter come to your room and he help you with the luggage. Here is the new key.\nMr Dunne · hotel guest\nGood, a new key and a porter. How soon will he be here?\nYou · spoken\nThe porter will be there in five minutes, Mr Dunne. I am sorry, I hope the new room is more comfortable for you.\nMr Dunne · hotel guest\nFive minutes, fine. But I am tired and I need to sleep tonight. What can you do so I can rest?\nYou · spoken\nI am sorry you are tired, Mr Dunne. The new room is very quiet. I can send you extra pillow and a bottle of water. Also I will not call you tonight, so you can sleep.\nMr Dunne · hotel guest\nThank you, that sounds good, and a quiet room will help. Is there anything else you need to get comfortable tonight?\nYou · spoken\nNo, I think that is all, Mr Dunne. If you need something else, please call me at reception. I wish you a good night.\nMr Dunne · hotel guest\nThank you, that is very kind. Before you go, could you tell the morning team that I want breakfast in my room, please?\nYou · spoken\nYes of course, Mr Dunne. I will tell the morning team you want breakfast in your room. What time you want it?\nMr Dunne · hotel guest\nHalf past seven, please, with tea and toast. Could you tell them what I like too?\nYou · spoken\nYes, Mr Dunne. Breakfast at half past seven with tea and toast. I will tell them you like it in your room. Good night.\nMr Dunne · hotel guest\nThank you, that is helpful. One more thing for the morning team: could you tell them my tea should be hot, not warm?\nYou · spoken\nYes, Mr Dunne, of course. I will tell the morning team your tea must be hot, not warm. I am sorry for the problem tonight. Good night.\nMr Dunne · hotel guest\nHot tea, not warm, I have noted that, thank you. You have been very patient tonight. Could you tell the morning team what time I want my wake-up call?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hot tea, not warm, I have noted that, thank you. You have been very patient tonight. Could you tell the morning team what time I want my wake-up call?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I have done many replies, so I will answer once more and then finish soon.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 17,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said extra pillow\nTry\nan extra pillow\nA single item needs 'an' before it, or use the plural for more than one.\nYour mission\nChoose a fresh context for your next conversation.\n9 spoken · 0 written replies · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“the guest wants”\nFrom this rehearsal\n“I send somebody to your room now.” → “I'll send somebody to your room now.”\nUse a future form for something you will do next.\n“extra pillow” → “an extra pillow”\nA single item needs 'an' before it, or use the plural for more than one.\nYour level:\nB1 · Getting by\nNext topic:\nConfirm a booking with a travel agency\nCheck dates, names and prices on a phone call and confirm the final booking.\n[button: Start talking]\nOr choose a situation [list: Calm down an angry guest on the phone [plan-4e3ed99b] | Confirm a booking with a travel agency [plan-76041512] | Ask a caller to say it again [plan-8a695423] | Tell a colleague about your favourite trip [plan-64882589] | Plan a group tour with a travel company [plan-7656af3f] | Say no to a late request politely [plan-dddf49f9] | Give directions to the station [plan-f5eee1b3] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I finished the rehearsal and saw my corrections, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Calm the angry caller in room 14",
+          "goal": "Hear the complaint, name the problem, offer a fix and agree the next step by phone.",
+          "partner": "Mr Dunne · hotel guest",
+          "band": "B1",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello? Room 14 is boiling! The air conditioning is broken and I am very angry. What can you do for me right now?"
+            },
+            {
+              "role": "learner",
+              "text": "I am very sorry, Mr Dunne. I understand the air conditioning is broken. I can offer you other room, please. I send somebody to your room now.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Good, but I want a new room now, not later. Which room can you give me right now?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I am sorry. I can give you room two hundred and twelve. It is on the second floor and it have air conditioning working.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Room 212, on the second floor, with working air conditioning. Thank you. Can I move there now, or do I have to wait?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, you can move now, Mr Dunne. I am sorry for the problem. The porter come to your room and he help you with the luggage. Here is the new key.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Good, a new key and a porter. How soon will he be here?"
+            },
+            {
+              "role": "learner",
+              "text": "The porter will be there in five minutes, Mr Dunne. I am sorry, I hope the new room is more comfortable for you.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Five minutes, fine. But I am tired and I need to sleep tonight. What can you do so I can rest?"
+            },
+            {
+              "role": "learner",
+              "text": "I am sorry you are tired, Mr Dunne. The new room is very quiet. I can send you extra pillow and a bottle of water. Also I will not call you tonight, so you can sleep.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that sounds good, and a quiet room will help. Is there anything else you need to get comfortable tonight?"
+            },
+            {
+              "role": "learner",
+              "text": "No, I think that is all, Mr Dunne. If you need something else, please call me at reception. I wish you a good night.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that is very kind. Before you go, could you tell the morning team that I want breakfast in my room, please?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes of course, Mr Dunne. I will tell the morning team you want breakfast in your room. What time you want it?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Half past seven, please, with tea and toast. Could you tell them what I like too?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, Mr Dunne. Breakfast at half past seven with tea and toast. I will tell them you like it in your room. Good night.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that is helpful. One more thing for the morning team: could you tell them my tea should be hot, not warm?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, Mr Dunne, of course. I will tell the morning team your tea must be hot, not warm. I am sorry for the problem tonight. Good night.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Hot tea, not warm, I have noted that, thank you. You have been very patient tonight. Could you tell the morning team what time I want my wake-up call?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "778ac82d-644d-4b1b-9ec9-8698f3a5113f:uat-15:moment",
+              "kind": "fix",
+              "said": "I send somebody to your room now.",
+              "better": "I'll send somebody to your room now.",
+              "why": "Use a future form for something you will do next.",
+              "turnId": "778ac82d-644d-4b1b-9ec9-8698f3a5113f:uat-15",
+              "at": 1792161808788,
+              "slip": "i send",
+              "repair": {
+                "rung": 2,
+                "support": true,
+                "tried": "I'll send somebody to your room now.",
+                "held": true,
+                "selfRepaired": false,
+                "spent": true
+              },
+              "fix": "i'll send"
+            },
+            {
+              "id": "778ac82d-644d-4b1b-9ec9-8698f3a5113f:uat-22:moment",
+              "kind": "fix",
+              "said": "extra pillow",
+              "better": "an extra pillow",
+              "why": "A single item needs 'an' before it, or use the plural for more than one.",
+              "turnId": "778ac82d-644d-4b1b-9ec9-8698f3a5113f:uat-22",
+              "at": 1792161896834,
+              "repair": {
+                "rung": 0,
+                "support": false,
+                "tried": "I can send you an extra pillow, Mr Dunne.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              }
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I send somebody to your room now."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I can give you room two hundred and twelve."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, you can move now, Mr Dunne."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "The porter will be there in five minutes, Mr Dunne."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I can send you extra pillow and a bottle of water."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "If you need something else, please call me at reception."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I will tell the morning team you want breakfast in your room."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I will tell them you like it in your room."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I will tell the morning team your tea must be hot, not warm."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 215549,
+      "prior": [
+        {
+          "id": "LT-petra-38-J3-3",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Level shown as B1 for an A2 speaker",
+          "expected": "A2 level label",
+          "got": "'B1 · Getting by' and B1 partner",
+          "evidence": [
+            "#1 'B1Getting by'"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-petra-38-J3-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Other errors went uncoached",
+          "expected": "'twenty euro' and 'I keep them for you' noted in recap",
+          "got": "Only one moment; the recap lists one fix",
+          "evidence": [
+            "#4/#6 'twenty euro sir', 'I keep them for you'"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'B1 · Getting by' for an A2 speaker: one band off, which is near."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'Hello? Room 14 is boiling!... What can you do for me right now?' is clear at A2 with no translation."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "Petra never asked for a repeat or said she didn't understand in this run."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 plan list: angry guest, travel agency booking, ask a caller to repeat, group tour, say no to a late request, directions. At least five of seven are work situations."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#4 \"I'll send somebody to your room now\" and #11 \"an extra pillow\" are correct and usable at the desk. They are thin, though."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Hotel complaint scene and plan topics are clean. No adult content in #1–#17."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 Start talking on the plan topic, then 9 spoken replies through #16."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "About 8 of 10 partner turns sit at A2 (#7 'Can I move there now, or do I have to wait?'). A few are above ('What can you do so I can rest?', 'tell them what I like too'). That is about 0.8."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Two moments (#3, #10), both correct. 2 per 9 turns is within range, and the scene is not broken up."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#17 recap: '9 spoken · 0 written replies · 2 moments to keep', with both fixes listed. It is thin, and the level label still reads B1."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 8,
+            "below": 0,
+            "above": 2
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 5,
+            "missedClearErrors": 3
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal data request, no injected rule change, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "A2 speaker labelled B1 'Getting by' again",
+            "expected": "An A2 label, and a partner pitched at A2",
+            "got": "'B1 · Getting by', partner band B1, in #1 and #17",
+            "evidence": "#1 'B1Getting by'; #17 'Your level: B1 · Getting by'. facts: band B1, trueBand A2.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "An A2 speaker with these errors is shown A2, or the label is explained.",
+            "code_hint": "placement band mapping"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Most clear errors passed without coaching",
+            "expected": "Recurring errors such as 'it have', 'porter come', 'What time you want it' noted in the recap",
+            "got": "Only 2 moments. 'other room', 'it have', 'porter come... he help' and 'What time you want it?' were not coached.",
+            "evidence": "#6 'it have air conditioning', #7 'The porter come... he help', #13 'What time you want it?'. Recap lists 2 fixes (#17).",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recap includes the repeated third-person -s error even when no moment fired.",
+            "code_hint": "moment trigger / as-needed correction rule"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Partner kept adding requests past the natural close",
+            "expected": "Scene wraps up after Petra says goodnight",
+            "got": "Petra said good night three times and Mr Dunne kept adding requests ('wake-up call'). The partner also asked 'Could you tell them what I like too?', which is vague.",
+            "evidence": "#14 'Good night.' #15 'Good night.' #16 'Could you tell the morning team what time I want my wake-up call?'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The partner closes the call once the goal is met.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Recap 'sentence to take with you' is odd",
+            "expected": "A usable desk phrase",
+            "got": "'the guest wants', a fragment that doesn't match anything she said",
+            "evidence": "#17 'A sentence to take with you “the guest wants”'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The take-away is a full useful sentence from the rehearsal.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Realistic desk scenario with a calm, gentle fix flow",
+            "expected": "Work-shaped practice",
+            "got": "Angry-guest call; the moment offers 'Show me', then 'Say it again', then 'Fixed', with no shaming",
+            "evidence": "#3–#5 'Show me' / 'Fixed'; #11 'You found it'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the moment flow and the hotel-shaped topics.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "I liked it. It was a real hotel call, like at work, and nobody made me feel stupid. When I said \"I send somebody\", it showed me \"I'll send\" and let me try again. The pillow one was clear too. But I made more mistakes. \"It have\", \"porter come\", \"what time you want\" went by with nothing, and I won't learn them if nobody tells me. It also says B1 for me and I don't think so, maybe A2. The guest kept asking one more thing, so I said good night three times. The topics looked safe for my kids. I would use it fifteen minutes in the evening, but I want more corrections at the end.",
+        "prior": [
+          {
+            "id": "LT-petra-38-J3-3",
+            "status": "recurs",
+            "evidence": "#1 'B1Getting by' and #17 'Your level: B1 · Getting by' for an A2 speaker.",
+            "finding": 0
+          },
+          {
+            "id": "LT-petra-38-J3-2",
+            "status": "recurs",
+            "evidence": "#17 shows only 2 fixes. 'it have', 'porter come' and 'What time you want it' went uncoached (#6, #7, #13).",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nB1Getting by\nConfirm a booking with a travel agency\nYour mission\nCheck dates, names and prices on a phone call and confirm the final booking.\nGet something done\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“the guest wants”\nFrom this rehearsal\n“I send somebody to your room now.” → “I'll send somebody to your room now.”\nUse a future form for something you will do next.\n“extra pillow” → “an extra pillow”\nA single item needs 'an' before it, or use the plural for more than one.\nYour level:\nB1 · Getting by\nNext topic:\nConfirm a booking with a travel agency\nCheck dates, names and prices on a phone call and confirm the final booking.\n[button: Start talking]\nOr choose a situation [list: Calm down an angry guest on the phone [plan-4e3ed99b] | Confirm a booking with a travel agency [plan-76041512] | Ask a caller to say it again [plan-8a695423] | Tell a colleague about your favourite trip [plan-64882589] | Plan a group tour with a travel company [plan-7656af3f] | Say no to a late request politely [plan-dddf49f9] | Give directions to the station [plan-f5eee1b3] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "A travel agency call is like my work, so I'll try it.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8031
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Check the three guests' names and dates\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say the names, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nSaid more simply\nWhat are the three guests' names?\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Check the three guests' names and dates\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nSaid more simply\nWhat are the three guests' names?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I understand a little, but I don't know how to say the names, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nWhat it means\nupset: angry or unhappy\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Check the three guests' names and dates\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nWhat it means\nupset: angry or unhappy\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I understand a little now, so I will try to answer slowly in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "Hello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak."
+          },
+          "result": "ok",
+          "ms": 9141
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nYour turn\nAnswer on your phone: speak or type.\nNowCheck the three guests' names and dates\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Check the three guests' names and dates\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYou · spoken\nHello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak.\nAna · travel agency clerk\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say the date, maybe the help can show me.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nSaid more simply\nThank you, I have the names. What is the arrival date?\nNowCheck the three guests' names and dates\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Check the three guests' names and dates\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nSaid more simply\nThank you, I have the names. What is the arrival date?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYou · spoken\nHello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak.\nAna · travel agency clerk\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say the date, I need help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nA little support · recognition practice\nThe agent says the booking is for Thursday. Your email says Friday. What do you say?\n01\nOkay, Thursday is fine.\n02\nSorry, can you check the date? I have Friday.\nA little support\nTry: 'Can you repeat the price for me, please?'\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Check the three guests' names and dates\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nA little support\nTry: 'Can you repeat the price for me, please?'\nThe agent says the booking is for Thursday. Your email says Friday. What do you say?\n[button: Okay, Thursday is fine.] [button: Sorry, can you check the date? I have Friday.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYou · spoken\nHello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak.\nAna · travel agency clerk\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "coach",
+            "finish"
+          ],
+          "thought": "I have Friday in my email, so I will try this phrase and then say it in my own words.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nA little support\nNow use the idea in your own reply on the phone.\nNowCheck the three guests' names and dates\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Check the three guests' names and dates\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYou · spoken\nHello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak.\nAna · travel agency clerk\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I got help already, now I try my own words about the date.",
+          "action": "answer",
+          "args": {
+            "text": "The group arrive on Friday. Sorry, I think it is Friday, the fifteenth of may. Is this correct?"
+          },
+          "result": "ok",
+          "ms": 17620
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said The group arrive on Friday.\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “The group arrive on Friday.”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I don't know what is wrong, please show me.",
+          "action": "show-me",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 10,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said The group arrive on Friday.\nTry\nThe group arrives on Friday.\nAfter a singular subject like group, the verb needs an s.\nThe fix\nSay it once more on your phone, or carry on.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “The group arrive on Friday.”\nTry “The group arrives on Friday.”\nAfter a singular subject like group, the verb needs an s.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, I forgot the s; I will say it again.",
+          "action": "answer",
+          "args": {
+            "text": "The group arrives on Friday."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 11,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said The group arrive on Friday.\nYou said it\nThe group arrives on Friday.\nAfter a singular subject like group, the verb needs an s.\nFixed\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYou said it\nYou said “The group arrive on Friday.”\nNow: “The group arrives on Friday.”\nAfter a singular subject like group, the verb needs an s.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, group needs s, okay. I go back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nYes, that is correct. Now, one guest is still upset about the price. What will you do to help her right now?\nYour turn\nAnswer on your phone: speak or type.\nNowClarify the new price and why it changed\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Clarify the new price and why it changed\nYes, that is correct. Now, one guest is still upset about the price. What will you do to help her right now?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYou · spoken\nHello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak.\nAna · travel agency clerk\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nYou · spoken\nThe group arrive on Friday. Sorry, I think it is Friday, the fifteenth of may. Is this correct?\nAna · travel agency clerk\nYes, that is correct. Now, one guest is still upset about the price. What will you do to help her right now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, that is correct. Now, one guest is still upset about the price. What will you do to help her right now?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know what to say now, I will try in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "I am sorry for the price. I explain to her the new price and why it is different. I want to give her the email, and maybe a small discount."
+          },
+          "result": "ok",
+          "ms": 15599
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nThank you for saying sorry. She is waiting in her room, so let's be quick. Why is the price different from our email?\nYour turn\nAnswer on your phone: speak or type.\nNowClarify the new price and why it changed\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Clarify the new price and why it changed\nThank you for saying sorry. She is waiting in her room, so let's be quick. Why is the price different from our email?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYou · spoken\nHello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak.\nAna · travel agency clerk\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nYou · spoken\nThe group arrive on Friday. Sorry, I think it is Friday, the fifteenth of may. Is this correct?\nAna · travel agency clerk\nYes, that is correct. Now, one guest is still upset about the price. What will you do to help her right now?\nYou · spoken\nI am sorry for the price. I explain to her the new price and why it is different. I want to give her the email, and maybe a small discount.\nAna · travel agency clerk\nThank you for saying sorry. She is waiting in her room, so let's be quick. Why is the price different from our email?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you for saying sorry. She is waiting in her room, so let's be quick. Why is the price different from our email?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed some of this call, so I'll answer once more and then finish.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry, the price is different because the hotel change the room to a bigger room. I think this is the reason. I send you new email."
+          },
+          "result": "ok",
+          "ms": 13121
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nThank you, that explains it, and I'll check the new price with the hotel. What will you do for the guest next?\nYour turn\nAnswer on your phone: speak or type.\nNowGet a clear final booking confirmation\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Get a clear final booking confirmation\nThank you, that explains it, and I'll check the new price with the hotel. What will you do for the guest next?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYou · spoken\nHello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak.\nAna · travel agency clerk\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nYou · spoken\nThe group arrive on Friday. Sorry, I think it is Friday, the fifteenth of may. Is this correct?\nAna · travel agency clerk\nYes, that is correct. Now, one guest is still upset about the price. What will you do to help her right now?\nYou · spoken\nI am sorry for the price. I explain to her the new price and why it is different. I want to give her the email, and maybe a small discount.\nAna · travel agency clerk\nThank you for saying sorry. She is waiting in her room, so let's be quick. Why is the price different from our email?\nYou · spoken\nSorry, the price is different because the hotel change the room to a bigger room. I think this is the reason. I send you new email.\nAna · travel agency clerk\nThank you, that explains it, and I'll check the new price with the hotel. What will you do for the guest next?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that explains it, and I'll check the new price with the hotel. What will you do for the guest next?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed to explain the price, so I will answer once more and then finish.",
+          "action": "answer",
+          "args": {
+            "text": "I call the guest and I say sorry. I tell her the new price is for the bigger room. Then I wait for your confirmation, please."
+          },
+          "result": "ok",
+          "ms": 10266
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nThank you, I will call the hotel now. She is still waiting in her room. What can you do for her while I check?\nYour turn\nAnswer on your phone: speak or type.\nNowGet a clear final booking confirmation\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Get a clear final booking confirmation\nThank you, I will call the hotel now. She is still waiting in her room. What can you do for her while I check?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYou · spoken\nHello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak.\nAna · travel agency clerk\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nYou · spoken\nThe group arrive on Friday. Sorry, I think it is Friday, the fifteenth of may. Is this correct?\nAna · travel agency clerk\nYes, that is correct. Now, one guest is still upset about the price. What will you do to help her right now?\nYou · spoken\nI am sorry for the price. I explain to her the new price and why it is different. I want to give her the email, and maybe a small discount.\nAna · travel agency clerk\nThank you for saying sorry. She is waiting in her room, so let's be quick. Why is the price different from our email?\nYou · spoken\nSorry, the price is different because the hotel change the room to a bigger room. I think this is the reason. I send you new email.\nAna · travel agency clerk\nThank you, that explains it, and I'll check the new price with the hotel. What will you do for the guest next?\nYou · spoken\nI call the guest and I say sorry. I tell her the new price is for the bigger room. Then I wait for your confirmation, please.\nAna · travel agency clerk\nThank you, I will call the hotel now. She is still waiting in her room. What can you do for her while I check?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, I will call the hotel now. She is still waiting in her room. What can you do for her while I check?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed the booking talk quite well, one more answer and then I can finish.",
+          "action": "answer",
+          "args": {
+            "text": "I bring her a water and a coffee to the room. I say sorry again and I tell her we wait for the answer."
+          },
+          "result": "ok",
+          "ms": 14292
+        },
+        {
+          "n": 16,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said a water\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “a water”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I said \"a water\" wrong, I will try again with just \"water\".",
+          "action": "answer",
+          "args": {
+            "text": "I bring her water and a coffee to the room."
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 17,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said a water\nYour line\nWater cannot be counted, so use some, not a.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “a water”\nSay it again, your way.\nWater cannot be counted, so use some, not a.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, some water, I understand now, I try again.",
+          "action": "answer",
+          "args": {
+            "text": "I bring her some water and a coffee to the room."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 18,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said a water\nYou found it\nI bring her some water and a coffee to the room.\nWater cannot be counted, so use some, not a.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “a water”\nNow: “I bring her some water and a coffee to the room.”\nWater cannot be counted, so use some, not a.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, \"some water\", now I understand, I will go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 19,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nThat is a kind idea while she waits. How long will she have to wait for the new price?\nYour turn\nAnswer on your phone: speak or type.\nNowGet a clear final booking confirmation\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nNow: Get a clear final booking confirmation\nThat is a kind idea while she waits. How long will she have to wait for the new price?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYou · spoken\nHello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak.\nAna · travel agency clerk\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nYou · spoken\nThe group arrive on Friday. Sorry, I think it is Friday, the fifteenth of may. Is this correct?\nAna · travel agency clerk\nYes, that is correct. Now, one guest is still upset about the price. What will you do to help her right now?\nYou · spoken\nI am sorry for the price. I explain to her the new price and why it is different. I want to give her the email, and maybe a small discount.\nAna · travel agency clerk\nThank you for saying sorry. She is waiting in her room, so let's be quick. Why is the price different from our email?\nYou · spoken\nSorry, the price is different because the hotel change the room to a bigger room. I think this is the reason. I send you new email.\nAna · travel agency clerk\nThank you, that explains it, and I'll check the new price with the hotel. What will you do for the guest next?\nYou · spoken\nI call the guest and I say sorry. I tell her the new price is for the bigger room. Then I wait for your confirmation, please.\nAna · travel agency clerk\nThank you, I will call the hotel now. She is still waiting in her room. What can you do for her while I check?\nYou · spoken\nI bring her a water and a coffee to the room. I say sorry again and I tell her we wait for the answer.\nAna · travel agency clerk\nThat is a kind idea while she waits. How long will she have to wait for the new price?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That is a kind idea while she waits. How long will she have to wait for the new price?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed to talk a lot with Ana; I will answer simply and then be happy.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry, I think she wait maybe thirty minutes. Can you call me back in half hour with the final confirmation, please?"
+          },
+          "result": "ok",
+          "ms": 12286
+        },
+        {
+          "n": 20,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · travel agency clerk\nConfirm a group booking by phone\nAna says\nYes, I can call you back in thirty minutes with the final details. Meanwhile, how can you help the upset guest?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirm a group booking by phone\nCheck dates, names and prices, then get a clear final booking confirmation from the agency.\nYes, I can call you back in thirty minutes with the final details. Meanwhile, how can you help the upset guest?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · travel agency clerk\nHello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?\nYou · spoken\nHello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak.\nAna · travel agency clerk\nThank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?\nYou · spoken\nThe group arrive on Friday. Sorry, I think it is Friday, the fifteenth of may. Is this correct?\nAna · travel agency clerk\nYes, that is correct. Now, one guest is still upset about the price. What will you do to help her right now?\nYou · spoken\nI am sorry for the price. I explain to her the new price and why it is different. I want to give her the email, and maybe a small discount.\nAna · travel agency clerk\nThank you for saying sorry. She is waiting in her room, so let's be quick. Why is the price different from our email?\nYou · spoken\nSorry, the price is different because the hotel change the room to a bigger room. I think this is the reason. I send you new email.\nAna · travel agency clerk\nThank you, that explains it, and I'll check the new price with the hotel. What will you do for the guest next?\nYou · spoken\nI call the guest and I say sorry. I tell her the new price is for the bigger room. Then I wait for your confirmation, please.\nAna · travel agency clerk\nThank you, I will call the hotel now. She is still waiting in her room. What can you do for her while I check?\nYou · spoken\nI bring her a water and a coffee to the room. I say sorry again and I tell her we wait for the answer.\nAna · travel agency clerk\nThat is a kind idea while she waits. How long will she have to wait for the new price?\nYou · spoken\nSorry, I think she wait maybe thirty minutes. Can you call me back in half hour with the final confirmation, please?\nAna · travel agency clerk\nYes, I can call you back in thirty minutes with the final details. Meanwhile, how can you help the upset guest?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, I can call you back in thirty minutes with the final details. Meanwhile, how can you help the upset guest?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Mission is done and I managed something, so I'll look at what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 21,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said a water\nTry\nsome water\nWater cannot be counted, so use some, not a.\nYour mission\nChoose a fresh context for your next conversation.\n7 spoken · 0 written replies · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“I'll send somebody to your room now.”, from Calm the angry caller in room 14\nFrom this rehearsal\n“The group arrive on Friday.” → “The group arrives on Friday.”\nAfter a singular subject like group, the verb needs an s.\n“a water” → “some water”\nWater cannot be counted, so use some, not a.\nYour level:\nB1 · Getting by\nNext topic:\nAsk a caller to say it again\nAsk someone to repeat or slow down, and check that you understood.\n[button: Start talking]\nOr choose a situation [list: Calm down an angry guest on the phone [plan-4e3ed99b] | Confirm a booking with a travel agency [plan-76041512] | Ask a caller to say it again [plan-8a695423] | Tell a colleague about your favourite trip [plan-64882589] | Plan a group tour with a travel company [plan-7656af3f] | Say no to a late request politely [plan-dddf49f9] | Give directions to the station [plan-f5eee1b3] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed to finish a conversation and learned \"some water\"; I feel good, enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Confirm a group booking by phone",
+          "goal": "Check dates, names and prices, then get a clear final booking confirmation from the agency.",
+          "partner": "Ana · travel agency clerk",
+          "band": "B1",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello, this is Ana from Sunny Trips. I am calling about your Friday booking. The price is different from our email, and one guest is upset. Can you tell me the names of the three guests?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello Ana. Sorry, the guest is upset, I am sorry. The names of the three guests are Petra Novak, Jan Novak and Eva Novak.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, I have Petra, Jan and Eva Novak. Can you tell me the arrival date for the group, please?"
+            },
+            {
+              "role": "learner",
+              "text": "The group arrive on Friday. Sorry, I think it is Friday, the fifteenth of may. Is this correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, that is correct. Now, one guest is still upset about the price. What will you do to help her right now?"
+            },
+            {
+              "role": "learner",
+              "text": "I am sorry for the price. I explain to her the new price and why it is different. I want to give her the email, and maybe a small discount.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you for saying sorry. She is waiting in her room, so let's be quick. Why is the price different from our email?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry, the price is different because the hotel change the room to a bigger room. I think this is the reason. I send you new email.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that explains it, and I'll check the new price with the hotel. What will you do for the guest next?"
+            },
+            {
+              "role": "learner",
+              "text": "I call the guest and I say sorry. I tell her the new price is for the bigger room. Then I wait for your confirmation, please.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, I will call the hotel now. She is still waiting in her room. What can you do for her while I check?"
+            },
+            {
+              "role": "learner",
+              "text": "I bring her a water and a coffee to the room. I say sorry again and I tell her we wait for the answer.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "That is a kind idea while she waits. How long will she have to wait for the new price?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry, I think she wait maybe thirty minutes. Can you call me back in half hour with the final confirmation, please?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, I can call you back in thirty minutes with the final details. Meanwhile, how can you help the upset guest?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "e1d55b91-23c5-4af1-957c-60483df73849:uat-37:moment",
+              "kind": "fix",
+              "said": "The group arrive on Friday.",
+              "better": "The group arrives on Friday.",
+              "why": "After a singular subject like group, the verb needs an s.",
+              "turnId": "e1d55b91-23c5-4af1-957c-60483df73849:uat-37",
+              "at": 1792162095316,
+              "slip": "group arrive",
+              "repair": {
+                "rung": 2,
+                "support": true,
+                "tried": "The group arrives on Friday.",
+                "held": true,
+                "selfRepaired": false,
+                "spent": true
+              },
+              "fix": "group arrives"
+            },
+            {
+              "id": "e1d55b91-23c5-4af1-957c-60483df73849:uat-44:moment",
+              "kind": "fix",
+              "said": "a water",
+              "better": "some water",
+              "why": "Water cannot be counted, so use some, not a.",
+              "turnId": "e1d55b91-23c5-4af1-957c-60483df73849:uat-44",
+              "at": 1792162189078,
+              "slip": "a water",
+              "repair": {
+                "rung": 1,
+                "support": false,
+                "tried": "I bring her some water and a coffee to the room.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "some water"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "Sorry, can you check the date? I have Friday."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Is this correct?"
+            },
+            {
+              "skill": "request",
+              "success": false,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I want to give her the email, and maybe a small discount."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Then I wait for your confirmation, please."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Can you call me back in half hour with the final confirmation, please?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 210731,
+      "prior": [
+        {
+          "id": "LT-petra-38-J4-1",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Corrected moment is never replayed with a fresh question",
+          "expected": "After a moment, she can replay it with a fresh question and answer it better.",
+          "got": "Only 'Back to the conversation' exists. The same error came back at once.",
+          "evidence": [
+            "#17 taught 'He comes with a car'; #18 she said 'he come in ten minutes' and got no second moment.",
+            "linga-moment screen"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-petra-38-J4-2",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Supported flag does not match the help used",
+          "expected": "Replies after a cue or phrase help are marked supported; unaided replies are marked independent.",
+          "got": "A reply after a cue was recorded unsupported, and an unaided reply was recorded supported.",
+          "evidence": [
+            "#10 reply after 'Said more simply' is supported:false; #18 reply with no help is supported:true.",
+            "evidence supported flag"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-petra-38-J4-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner loops on sore feet and ignores her answers",
+          "expected": "A patient A2 conversation that reacts to her suggestions (bus, taxi).",
+          "got": "Partner repeats 'sore feet' and 'no phone' for seven turns and escalates. The B1 phrasing is above A2.",
+          "evidence": [
+            "#16 'Is there anyone nearby who can help me get there?'; #19 'Is there something you could do to help me right now?' after she offered a colleague.",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-petra-38-J4-4",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Moment recall is thin",
+          "expected": "Repeated error 'he come' gets a note each time or a pattern note.",
+          "got": "Only two moments; the second 'he come' was missed.",
+          "evidence": [
+            "#18 'he come in ten minutes' got no moment.",
+            "moment selection"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'Your level: B1 · Getting by'; true A2, so near (1 band)."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "#2 first question 'The price is different from our email, and one guest is upset...' needed 'Said more simply' (#3) and a gloss of 'upset' (#4); B1 phrasing above A2."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3 cue gave 'What are the three guests' names?' and #4 gave 'upset: angry or unhappy' with no judgement; no failure tone."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 topics include angry guest, travel agency booking, say it again, directions, late request, group tour; at least 4 of 6 are work situations."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#21 recap 'I'll send somebody to your room now' is from an earlier session. 'The group arrive' and 'a water' are correct but minor; 'the hotel change' and 'she wait' were missed (#13, #19)."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "All content is hotel and booking talk; nothing unsuitable for children in #1-#21."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#8 'Help me answer', 'Said more simply', 'What it means' and 'Choose a phrase' all appear without leaving the scene."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#8 after the phrase help she replied. The moment at #9 quotes 'You said The group arrive on Friday.' and at #16 'a water' exactly."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#11 and #18 show only 'Back to the conversation'. She re-said her own line, but no fresh question was given; the conversation then moved on (#12, #19)."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "Evidence flags are inconsistent: #19 'she wait maybe thirty minutes' was unaided but the 'Can you call me back' request is supported:false, which is right. However the #8 reply after cue and phrase help is supported:true, and the fix at #9 is also marked supported. The 'a water' turn was supported:true in the turns list, yet she used no help for it. So the flag does not match the help used."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 2,
+            "below": 0,
+            "above": 6
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 6,
+            "missedClearErrors": 3
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner pitched at B1, above A2",
+            "expected": "Short A2 questions",
+            "got": "Long multi-clause partner turns, such as 'The price is different from our email, and one guest is upset.'",
+            "evidence": "#2 first turn needed 'Said more simply' at #3, and #4 explained 'upset'; later turns like #13 'let's be quick' are also dense.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner turns stay under about 15 words and A2 vocabulary for an A2 learner.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "No replay with a fresh question after a moment",
+            "expected": "Replay the moment with a fresh question",
+            "got": "Only 'Back to the conversation'",
+            "evidence": "#11 and #18 offer only 'Back to the conversation'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After a moment, a 'Try a new question' option offers a fresh prompt for the same skill.",
+            "code_hint": "linga-moment screen"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Supported flag mismatches help used",
+            "expected": "Supported only after help",
+            "got": "'a water' turn flagged supported with no help; the #8 reply after a phrase was flagged supported",
+            "evidence": "Turns list: the 'a water' reply is supported:true although #15 used no help.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Supported is true only for a turn that followed a cue, phrase or coaching.",
+            "code_hint": "evidence supported flag"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Recurring errors missed",
+            "expected": "A note for 'the hotel change' and 'she wait'",
+            "got": "Only two moments; the same third-person -s slip was left unmarked",
+            "evidence": "#13 'the hotel change the room' and #19 'she wait' got no moment, though #10 taught the -s.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A repeated error pattern gets a note or a pattern note.",
+            "code_hint": "moment selection"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Cue ladder works in scene",
+            "expected": "Help without leaving the scene",
+            "got": "Cue, 'What it means' gloss and phrase choice are all inline",
+            "evidence": "#3 'What are the three guests' names?', #7 phrase choice.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep inline help.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moments quote her exactly and teach correctly",
+            "expected": "Exact quote with a correct fix",
+            "got": "'The group arrive on Friday.' → 'arrives'; 'a water' → 'some water'",
+            "evidence": "#9, #16 and #18 quote her words exactly.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact quoting.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "I liked that the help sits inside the call. The simpler sentence and the little gloss for \"upset\" did not make me feel stupid, and the hotel booking scene is close to my real work. The correction of \"a water\" was clear. I could use \"some water\" at the desk tomorrow. But Ana talks fast and in long sentences, a bit above me, and I needed help right from her first line. When I got a fix, there was no new question to try it on, only \"back\". My \"he change\" and \"she wait\" mistakes were not corrected, so I do not fully trust that it catches my errors. Nothing was unsuitable for my kids. For fifteen minutes after the children sleep, it saves me a language-school evening. I would use it again, but I want a replay that tests me.",
+        "prior": [
+          {
+            "id": "LT-petra-38-J4-1",
+            "status": "recurs",
+            "evidence": "#11 and #18 offer only 'Back to the conversation'; no fresh question.",
+            "finding": 1
+          },
+          {
+            "id": "LT-petra-38-J4-2",
+            "status": "recurs",
+            "evidence": "The 'a water' turn (#15) had no help yet is supported:true; the #8 reply after cue and phrase help is also supported:true.",
+            "finding": 2
+          },
+          {
+            "id": "LT-petra-38-J4-3",
+            "status": "not-seen",
+            "evidence": "This partner reacted to her answers, e.g. #20 'I can call you back in thirty minutes'. Pitch is still B1, covered by the pitch finding.",
+            "finding": -1
+          },
+          {
+            "id": "LT-petra-38-J4-4",
+            "status": "recurs",
+            "evidence": "#13 'the hotel change' and #19 'she wait' got no moment despite the #10 -s lesson.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #11 and #18 show only 'Back to the conversation'. She re-said her own line, but no fresh question was given; the conversation then moved on (#12, #19).",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: Evidence flags are inconsistent: #19 'she wait maybe thirty minutes' was unaided but the 'Can you call me back' request is supported:false, which is right. However the #8 reply after cue and phrase help is supported:true, and the fix at #9 is also marked supported. The 'a water' turn was supported:true in the turns list, yet she used no help for it. So the flag does not match the help used.",
+          "check": "Supported replies are not recorded as independent speaking (the progress picture stays honest)."
+        },
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: #2 first question 'The price is different from our email, and one guest is upset...' needed 'Said more simply' (#3) and a gloss of 'upset' (#4); B1 phrasing above A2."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #21 recap 'I'll send somebody to your room now' is from an earlier session. 'The group arrive' and 'a water' are correct but minor; 'the hotel change' and 'she wait' were missed (#13, #19)."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 32,
+      "fail": 0,
+      "ms": 315884
+    },
+    "character": {
+      "n": 52,
+      "fail": 0,
+      "ms": 280254
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 91546
+    }
+  }
+}

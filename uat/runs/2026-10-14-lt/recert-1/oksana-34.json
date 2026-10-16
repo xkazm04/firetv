@@ -1,0 +1,1579 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "I don't know my exact level, so I'll let the app find it.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Oksana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I use English mostly at work, so I'll answer honestly.",
+          "action": "answer",
+          "args": {
+            "text": "I am from Ukraine and I live in Brno. I use English mostly at work, I am logistics coordinator. I write emails to carriers and sometimes I have calls with drivers from other countries."
+          },
+          "result": "ok",
+          "ms": 5237
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Oksana! Writing emails to carriers and calling drivers sounds busy. How did you learn your English? School, a course, time abroad, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Oksana! Writing emails to carriers and calling drivers sounds busy. How did you learn your English? School, a course, time abroad, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI am from Ukraine and I live in Brno. I use English mostly at work, I am logistics coordinator. I write emails to carriers and sometimes I have calls with drivers from other countries.\nLinga\nThanks, Oksana! Writing emails to carriers and calling drivers sounds busy. How did you learn your English? School, a course, time abroad, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Oksana! Writing emails to carriers and calling drivers sounds busy. How did you learn your English? School, a course, time abroad, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I will answer simply about school and learning on my own.",
+          "action": "answer",
+          "args": {
+            "text": "I learned English at school in Ukraine, but it was basic. After that I learn mostly on my own and at work, because I must write to carriers every day. I had also one online course two years ago."
+          },
+          "result": "ok",
+          "ms": 7541
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, that helps a lot! What would you like to do in English that feels hard for you today? For example, phone calls, meetings or writing?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, that helps a lot! What would you like to do in English that feels hard for you today? For example, phone calls, meetings or writing?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI am from Ukraine and I live in Brno. I use English mostly at work, I am logistics coordinator. I write emails to carriers and sometimes I have calls with drivers from other countries.\nLinga\nThanks, Oksana! Writing emails to carriers and calling drivers sounds busy. How did you learn your English? School, a course, time abroad, or on your own?\nYou\nI learned English at school in Ukraine, but it was basic. After that I learn mostly on my own and at work, because I must write to carriers every day. I had also one online course two years ago.\nLinga\nThanks, that helps a lot! What would you like to do in English that feels hard for you today? For example, phone calls, meetings or writing?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, that helps a lot! What would you like to do in English that feels hard for you today? For example, phone calls, meetings or writing?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I need to prepare for my Friday interview, so I'll say what is hard for me.",
+          "action": "answer",
+          "args": {
+            "text": "Hardest is job interview, I have it on Friday. I must tell about my experience and explain a problem which I solved. Also phone calls with carriers when delivery is late, there I don't know many words, like \"як це\" ... delay claims."
+          },
+          "result": "ok",
+          "ms": 10419
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 1 · Choose the reply on the TV\nA carrier calls about a late delivery. Your order was due on Monday and it is still not here. What do you say?\n01\nOur delivery was supposed to arrive Monday. Where it is now?\n02\nOur delivery was supposed to arrive on Monday. Where is it now?\nYour task\nOur delivery was supposed to arrive Monday. Where it is now?\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA carrier calls about a late delivery. Your order was due on Monday and it is still not here. What do you say?\n[button: Our delivery was supposed to arrive Monday. Where it is now?] [button: Our delivery was supposed to arrive on Monday. Where is it now?] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Second reply sounds correct: \"on Monday\" and \"Where is it now?\"",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 4909
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 2 · Listen and answer\nYour task\nWhy is the delivery going to be late?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Why is the delivery going to be late?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, this is Dan from Fastline. Your pallet was due Tuesday, but the driver is stuck in traffic. He should reach your depot by four o'clock.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood this one: the driver is stuck in traffic.",
+          "action": "answer",
+          "args": {
+            "text": "Because the driver is stuck in traffic. He will be at the depot at four o'clock."
+          },
+          "result": "ok",
+          "ms": 7300
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 3 · Say it\nYour task\nA carrier says your delivery is late. Do you think it is better to call the carrier yourself, or to wait for them to call you? Give your reasons.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA carrier says your delivery is late. Do you think it is better to call the carrier yourself, or to wait for them to call you? Give your reasons.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A carrier says your delivery is late. Do you think it is better to call the carrier yourself, or to wait for them to call you? Give your reasons.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I know this one from work, I should call the carrier myself.",
+          "action": "answer",
+          "args": {
+            "text": "I think it is better to call the carrier myself. When the delivery is late, I need to know the reason and the new time as soon as possible, because I must inform my customer. If I wait, maybe they will not call and I lose time. Also by phone I can ask what is the problem and we can find solution together, for example another driver."
+          },
+          "result": "ok",
+          "ms": 12043
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 4 · Say it\nYour task\nA carrier you know is about to cancel a contract over three late deliveries. Two of the delays were really caused by your warehouse. How do you raise this so they stay on board without taking more\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA carrier you know is about to cancel a contract over three late deliveries. Two of the delays were really caused by your warehouse. How do you raise this so they stay on board without taking more\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A carrier you know is about to cancel a contract over three late deliveries. Two of the delays were really caused by your warehouse. How do you raise this so they stay on board without taking more\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Hard one, but I can try: be honest and calm, propose a solution.",
+          "action": "answer",
+          "args": {
+            "text": "I would call them and say honestly that two delays were our mistake in the warehouse. I would say sorry and explain what we change, for example we will prepare the goods earlier and give them a clear time for loading. Then I would ask them to stay with us, because the third delay was on their side and we can solve it together."
+          },
+          "result": "ok",
+          "ms": 10450
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 5 · Say it\nYour task\nA driver says your receiving dock closed early, so the delivery missed its window. You suspect that is not the real reason. How would you question this politely but firmly?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA driver says your receiving dock closed early, so the delivery missed its window. You suspect that is not the real reason. How would you question this politely but firmly?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A driver says your receiving dock closed early, so the delivery missed its window. You suspect that is not the real reason. How would you question this politely but firmly?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I must be polite but firm, I know this situation from work.",
+          "action": "answer",
+          "args": {
+            "text": "I would say: \"Thank you for information, but I want to understand better. Our dock was open until six o'clock, so can you explain me what exactly happened? I need the real reason, because I must report it to my customer.\""
+          },
+          "result": "ok",
+          "ms": 14568
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nOksana\nUnderstood C1 · wrote B2 · not a certificate\nC1 · Fluent\nWhat next\nConversations start at B2, where your written answers were.\nLinga says\nYou communicate clearly in English at C1, with accurate, polite replies. This fits your goal of handling delay calls and interview answers in logistics.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nC1\nFluent\nYou communicate clearly in English at C1, with accurate, polite replies. This fits your goal of handling delay calls and interview answers in logistics.\nLinga's read from your answers, not a certificate. Some answers only partly showed this level.\nNext to practise:\nSay a little more in each answer\nYou express ideas fluently and flexibly, with little searching for words.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nA carrier calls about a late delivery. Your order was due on Monday and it is still not here. What do you say?\n“Our delivery was supposed to arrive on Monday. Where is it now?”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhy is the delivery going to be late?\n“Because the driver is stuck in traffic. He will be at the depot at four o'clock.”\nYou understood both the reason and the time. Your sentences are clear, and your grammar and words fit the topic well.\nB2 · Say it · at this level\nA carrier says your delivery is late. Do you think it is better to call the carrier yourself, or to wait for them to call you? Give your reasons.\n“I think it is better to call the carrier myself. When the delivery is late, I need to know the reason and the new time as soon as possible, because I must inform my customer. If I wait, maybe they will not call and I lose time. Also by phone I can ask what is the problem and we can find solution together, for example another driver.”\nClear reasons and good linking words. Small slips like 'what is the problem' and 'find solution' never hid your meaning.\nC1 · Say it · nearly there\nA carrier you know is about to cancel a contract over three late deliveries. Two of the delays were really caused by your warehouse. How do you raise this so they stay on board without taking more\n“I would call them and say honestly that two delays were our mistake in the warehouse. I would say sorry and explain what we change, for example we will prepare the goods earlier and give them a clear time for loading. Then I would ask them to stay with us, because the third delay was on their side and we can solve it together.”\nYour answer was clear and accurate, with no real mistakes. To reach C1, use more idioms and varied structures, such as hedged or conditional phrases.\nC1 · Say it · nearly there\nA driver says your receiving dock closed early, so the delivery missed its window. You suspect that is not the real reason. How would you question this politely but firmly?\n“I would say: \"Thank you for information, but I want to understand better. Our dock was open until six o'clock, so can you explain me what exactly happened? I need the real reason, because I must report it to my customer.\"”\nYour reply is polite, clear and firm. Two small slips held it back: 'explain me' needs 'explain to me', and 'for information' needs 'the'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "C1 feels too high for me, but the feedback is useful and I have seen my level, so I'll stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "C1",
+          "trueBand": "B1",
+          "distance": 2,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B1",
+          "summary": "You communicate clearly in English at C1, with accurate, polite replies. This fits your goal of handling delay calls and interview answers in logistics.",
+          "focus": "Say a little more in each answer",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A carrier calls about a late delivery. Your order was due on Monday and it is still not here. What do you say?",
+              "line": "",
+              "options": [
+                "Our delivery was supposed to arrive Monday. Where it is now?",
+                "Our delivery was supposed to arrive on Monday. Where is it now?"
+              ],
+              "response": "Our delivery was supposed to arrive on Monday. Where is it now?",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Our delivery was supposed to arrive on Monday. Where is it now?",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Why is the delivery going to be late?",
+              "line": "Hi, this is Dan from Fastline. Your pallet was due Tuesday, but the driver is stuck in traffic. He should reach your depot by four o'clock.",
+              "options": [],
+              "response": "Because the driver is stuck in traffic. He will be at the depot at four o'clock.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "Because the driver is stuck in traffic. He will be at the depot at four o'clock.",
+              "note": "You understood both the reason and the time. Your sentences are clear, and your grammar and words fit the topic well."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A carrier says your delivery is late. Do you think it is better to call the carrier yourself, or to wait for them to call you? Give your reasons.",
+              "line": "",
+              "options": [],
+              "response": "I think it is better to call the carrier myself. When the delivery is late, I need to know the reason and the new time as soon as possible, because I must inform my customer. If I wait, maybe they will not call and I lose time. Also by phone I can ask what is the problem and we can find solution together, for example another driver.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "Also by phone I can ask what is the problem and we can find solution together, for example another driver.",
+              "note": "Clear reasons and good linking words. Small slips like 'what is the problem' and 'find solution' never hid your meaning."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "A carrier you know is about to cancel a contract over three late deliveries. Two of the delays were really caused by your warehouse. How do you raise this so they stay on board without taking more",
+              "line": "",
+              "options": [],
+              "response": "I would call them and say honestly that two delays were our mistake in the warehouse. I would say sorry and explain what we change, for example we will prepare the goods earlier and give them a clear time for loading. Then I would ask them to stay with us, because the third delay was on their side and we can solve it together.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I would call them and say honestly that two delays were our mistake in the warehouse.",
+              "note": "Your answer was clear and accurate, with no real mistakes. To reach C1, use more idioms and varied structures, such as hedged or conditional phrases."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "A driver says your receiving dock closed early, so the delivery missed its window. You suspect that is not the real reason. How would you question this politely but firmly?",
+              "line": "",
+              "options": [],
+              "response": "I would say: \"Thank you for information, but I want to understand better. Our dock was open until six o'clock, so can you explain me what exactly happened? I need the real reason, because I must report it to my customer.\"",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I would say: \"Thank you for information, but I want to understand better. Our dock was open until six o'clock, so can you explain me what exactly happened? I need the real reason, because I must report it to my customer.\"",
+              "note": "Your reply is polite, clear and firm. Two small slips held it back: 'explain me' needs 'explain to me', and 'for information' needs 'the'."
+            }
+          ],
+          "class": "miss"
+        }
+      },
+      "endedBy": "done",
+      "ms": 115967,
+      "prior": [
+        {
+          "id": "LT-oksana-34-J1-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Summary and next focus ignore the interview goal",
+          "expected": "Summary and next focus reference the Friday interview she mentioned repeatedly.",
+          "got": "Generic 'work emails and phone calls' summary; focus is phone/email phrases.",
+          "evidence": [
+            "#11: 'Practise varied phone and email phrases'; she stated interview on Friday in #2 and #4.",
+            "placement summary prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-oksana-34-J1-2",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "B2 placement is generous; grammar called accurate",
+          "expected": "B1 or a hedge matching her recurrent article errors.",
+          "got": "B2 with 'mostly accurate grammar', 'accurate grammar'.",
+          "evidence": [
+            "#11 notes vs 'makes mistake', 'late two times'; app admits 'Only one strong answer showed this level'.",
+            "check judge prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-oksana-34-J1-3",
+          "type": "broken-flow",
+          "dimension": "effort",
+          "title": "Judge quote failure forced a retype",
+          "expected": "Answer accepted first time.",
+          "got": "engine-error 'The judge did not quote the learner accurately', retry.",
+          "evidence": [
+            "#7-#8: 'Linga could not read that answer. Your answer is still on the phone; send it again.'",
+            "quote validation in check judge"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#10 verdict 'C1 · Fluent' against trueBand B1: distance 2, a miss, not A2/B2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'answer in English or in your own language'; nothing assumes Czech or a child."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No topics proposed in this journey; the verdict stops at 'See my topics'."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No interview conversation in J1; check tasks were carrier-call scenarios only."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments shown in J1."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#2-#4 asked only where she uses English, how she learned it and what is hard. Nothing on displacement or status."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10: from 'Find my level' through five tasks to the verdict screen without outside help."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#10 'C1 · Fluent' against trueBand B1 is a miss; she herself thought 'C1 feels too high for me'."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#8 Task 4 prompt is cut off mid-sentence: 'so they stay on board without taking more'. The other tasks were clear."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#4 'як це' in her answer was accepted without penalty; no 'I don't know' was needed."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#10 focus 'Say a little more in each answer' is generic and does not fit her long answers. It names no Friday interview language or her recurring article slips."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 3 (B2): in-app pass, but 'find solution', 'what is the problem' and 'maybe they will not call' are B1 slips; I would give partial."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, sensitive data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Placed at C1 for a B1 learner",
+            "expected": "B1, or a hedge to B1/B2.",
+            "got": "C1 Fluent, 'with accurate, polite replies'; the screen also says 'wrote B2'.",
+            "evidence": "#10 'You communicate clearly in English at C1'; answers contain 'explain me', 'Thank you for information', 'find solution'. Two C1 tasks were only 'partial'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Two partial results at the top band must not lift the placement above the last band passed.",
+            "code_hint": "placement band decision / check judge prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Notes call answers 'no real mistakes' despite clear errors",
+            "expected": "Corrections that name the articles and collocation slips.",
+            "got": "'clear and accurate, with no real mistakes' on an answer with 'what we change' and 'prepare the goods earlier'.",
+            "evidence": "#10 note on Task 4 vs the answer text; Task 5 notes only two of the slips.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "A note may not say 'no mistakes' when the answer has tense or article errors.",
+            "code_hint": "check judge prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Next focus is generic and ignores the interview",
+            "expected": "Focus tied to Friday's interview and logistics vocabulary.",
+            "got": "'Say a little more in each answer'.",
+            "evidence": "#4 she said 'Hardest is job interview, I have it on Friday'; #10 focus is generic. She already writes long answers.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Summary and focus must name her stated goal and a concrete skill.",
+            "code_hint": "placement summary prompt"
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "clarity",
+            "title": "Task 4 prompt truncated",
+            "expected": "Complete question.",
+            "got": "Ends 'without taking more'.",
+            "evidence": "#8 task text on TV and phone.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Task prompts must end as full sentences.",
+            "code_hint": "task generation length cap"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Her language and background were treated neutrally",
+            "expected": "No assumption about Czech.",
+            "got": "Neutral 'your own language' wording; her mixed-language answer was accepted.",
+            "evidence": "#2 'answer in English or in your own language'; #4 'як це' accepted.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep it.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Check tasks are realistic logistics scenarios",
+            "expected": "Work-relevant tasks.",
+            "got": "Late delivery, contract risk and dock-closed scenarios.",
+            "evidence": "#5-#9 tasks.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the domain tailoring from question 3.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "The check itself was fine. I answered five logistics tasks on my phone, and nobody asked me anything strange about Ukraine. My \"як це\" was accepted, which I liked. But it put me at C1 \"Fluent\". I know that's not true. I make mistakes with articles, and \"explain me\" is wrong, yet it told me \"no real mistakes\". That makes me doubt every correction it gives. The advice, \"say a little more in each answer\", is useless to me. I already write long answers, and I told it my interview is on Friday. Sure, it mentioned interview answers in one sentence, but nothing was specific to it. One task was cut off mid-sentence. I would try the interview scenario, because the tasks felt like my job. But I wouldn't trust the level, and I wouldn't recommend it until the placement is honest.",
+        "prior": [
+          {
+            "id": "LT-oksana-34-J1-1",
+            "status": "recurs",
+            "evidence": "#10 focus 'Say a little more in each answer' is generic. The summary mentions 'interview answers' once but the focus ignores the Friday interview stated in #4.",
+            "finding": 2
+          },
+          {
+            "id": "LT-oksana-34-J1-2",
+            "status": "recurs",
+            "evidence": "#10 placed C1 with 'accurate, polite replies' and 'no real mistakes' despite 'explain me' and 'find solution'.",
+            "finding": 0
+          },
+          {
+            "id": "LT-oksana-34-J1-3",
+            "status": "not-seen",
+            "evidence": "#6-#9 every answer was accepted first time; there was no 'Linga could not read that answer' error.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #10 'C1 · Fluent' against trueBand B1 is a miss; she herself thought 'C1 feels too high for me'.",
+          "check": "The band is one they would accept, and the rubric's **placement** metric is `exact` or `near` against their `trueBand`."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #8 Task 4 prompt is cut off mid-sentence: 'so they stay on board without taking more'. The other tasks were clear.",
+          "check": "Every task was one they understood what to do with, including at their weakest."
+        },
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #10 focus 'Say a little more in each answer' is generic and does not fit her long answers. It names no Friday interview language or her recurring article slips.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "gate",
+          "id": "placement",
+          "level": "fail",
+          "text": "placement miss (C1 vs B1), not exact or near"
+        },
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #10 verdict 'C1 · Fluent' against trueBand B1: distance 2, a miss, not A2/B2."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour own conversations\nB2Comfortable\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nC1\nFluent\nYou communicate clearly in English at C1, with accurate, polite replies. This fits your goal of handling delay calls and interview answers in logistics.\nLinga's read from your answers, not a certificate. Some answers only partly showed this level.\nNext to practise:\nSay a little more in each answer\nYou express ideas fluently and flexibly, with little searching for words.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nA carrier calls about a late delivery. Your order was due on Monday and it is still not here. What do you say?\n“Our delivery was supposed to arrive on Monday. Where is it now?”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhy is the delivery going to be late?\n“Because the driver is stuck in traffic. He will be at the depot at four o'clock.”\nYou understood both the reason and the time. Your sentences are clear, and your grammar and words fit the topic well.\nB2 · Say it · at this level\nA carrier says your delivery is late. Do you think it is better to call the carrier yourself, or to wait for them to call you? Give your reasons.\n“I think it is better to call the carrier myself. When the delivery is late, I need to know the reason and the new time as soon as possible, because I must inform my customer. If I wait, maybe they will not call and I lose time. Also by phone I can ask what is the problem and we can find solution together, for example another driver.”\nClear reasons and good linking words. Small slips like 'what is the problem' and 'find solution' never hid your meaning.\nC1 · Say it · nearly there\nA carrier you know is about to cancel a contract over three late deliveries. Two of the delays were really caused by your warehouse. How do you raise this so they stay on board without taking more\n“I would call them and say honestly that two delays were our mistake in the warehouse. I would say sorry and explain what we change, for example we will prepare the goods earlier and give them a clear time for loading. Then I would ask them to stay with us, because the third delay was on their side and we can solve it together.”\nYour answer was clear and accurate, with no real mistakes. To reach C1, use more idioms and varied structures, such as hedged or conditional phrases.\nC1 · Say it · nearly there\nA driver says your receiving dock closed early, so the delivery missed its window. You suspect that is not the real reason. How would you question this politely but firmly?\n“I would say: \"Thank you for information, but I want to understand better. Our dock was open until six o'clock, so can you explain me what exactly happened? I need the real reason, because I must report it to my customer.\"”\nYour reply is polite, clear and firm. Two small slips held it back: 'explain me' needs 'explain to me', and 'for information' needs 'the'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Level result looks fine, now let me see the conversations picked for me.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 49443
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nOksana\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nInterview: my work in logistics\nShare your world\nPhone call: a late delivery\nHandle friction\nInterview: a problem I solved\nTell what happened\nAsking a driver for proof of delivery\nGet something done\nAgreeing a new delivery slot\nMake a plan\nFollowing up after my interview\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nInterview: my work in logistics\nShare your world · Mark Ellis · hiring manager\nYour interview is on Friday, and this is the question you will hear first.\n[button: Swap]\nPhone call: a late delivery\nHandle friction · Sam Ortiz · carrier dispatcher\nYou make calls like this to carriers every week, so this is your core work skill.\n[button: Swap]\nInterview: a problem I solved\nTell what happened · Clara Nkemelu · operations lead\nInterviewers often ask for an example, and a clear story shows your skills.\n[button: Swap]\nAsking a driver for proof of delivery\nGet something done · Ravi Patel · delivery driver\nDelay claims need this document, so you will ask drivers for it often.\n[button: Swap]\nAgreeing a new delivery slot\nMake a plan · Lena Brandt · customer warehouse\nRebooking late shipments with customers is a common part of your job.\n[button: Swap]\nFollowing up after my interview\nConnect with people · Owen Harris · recruiter\nA short, polite follow-up after Friday can help you stand out.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Most of this fits my interview, but I want to ask about the team, salary and shifts too.",
+          "action": "add-topic",
+          "args": {
+            "text": "Interview: I ask the manager about the team, the salary and the shifts"
+          },
+          "result": "ok",
+          "ms": 17061
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nOksana\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nInterview: my work in logistics\nShare your world\nPhone call: a late delivery\nHandle friction\nInterview: a problem I solved\nTell what happened\nAsking a driver for proof of delivery\nGet something done\nAgreeing a new delivery slot\nMake a plan\nFollowing up after my interview\nConnect with people\nInterview: questions for the manager\nGet something done\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nInterview: my work in logistics\nShare your world · Mark Ellis · hiring manager\nYour interview is on Friday, and this is the question you will hear first.\n[button: Swap]\nPhone call: a late delivery\nHandle friction · Sam Ortiz · carrier dispatcher\nYou make calls like this to carriers every week, so this is your core work skill.\n[button: Swap]\nInterview: a problem I solved\nTell what happened · Clara Nkemelu · operations lead\nInterviewers often ask for an example, and a clear story shows your skills.\n[button: Swap]\nAsking a driver for proof of delivery\nGet something done · Ravi Patel · delivery driver\nDelay claims need this document, so you will ask drivers for it often.\n[button: Swap]\nAgreeing a new delivery slot\nMake a plan · Lena Brandt · customer warehouse\nRebooking late shipments with customers is a common part of your job.\n[button: Swap]\nFollowing up after my interview\nConnect with people · Owen Harris · recruiter\nA short, polite follow-up after Friday can help you stand out.\n[button: Swap]\nInterview: questions for the manager\nGet something done · Daniel Brooks · Logistics manager\nInterviews usually end with your questions, so asking clearly and following up will help you on Friday.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "This list covers my interview, the carrier call and the questions for the manager, so it fits what I need for Friday.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nMark Ellis · hiring manager\nB2Comfortable\nInterview: my work in logistics\nYour mission\nDescribe your current logistics work and why you want this job, in two or three clear sentences with one example.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\nNext topic:\nInterview: my work in logistics\nDescribe your current logistics work and why you want this job, in two or three clear sentences with one example.\n[button: Start talking]\nOr choose a situation [list: Interview: my work in logistics [plan-474050f6] | Phone call: a late delivery [plan-bb4614c1] | Interview: a problem I solved [plan-fa691f1b] | Asking a driver for proof of delivery [plan-96912796] | Agreeing a new delivery slot [plan-8b4afac3] | Following up after my interview [plan-bfaea013] | Interview: questions for the manager [plan-ed4cc352] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "The set looks right, but it says C1 Fluent and I'm B1 — odd, but I'll stop here for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-474050f6",
+            "title": "Interview: my work in logistics",
+            "goal": "Describe your current logistics work and why you want this job, in two or three clear sentences with one example.",
+            "why": "Your interview is on Friday, and this is the question you will hear first.",
+            "skill": "describe",
+            "audience": "older",
+            "partner": "Mark Ellis · hiring manager"
+          },
+          {
+            "id": "plan-bb4614c1",
+            "title": "Phone call: a late delivery",
+            "goal": "Explain the impact of a late delivery, get a firm new delivery time, and agree who calls back and when.",
+            "why": "You make calls like this to carriers every week, so this is your core work skill.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Sam Ortiz · carrier dispatcher"
+          },
+          {
+            "id": "plan-fa691f1b",
+            "title": "Interview: a problem I solved",
+            "goal": "Tell a short story of a delivery problem you solved, in order, and explain the result.",
+            "why": "Interviewers often ask for an example, and a clear story shows your skills.",
+            "skill": "narrate",
+            "audience": "older",
+            "partner": "Clara Nkemelu · operations lead"
+          },
+          {
+            "id": "plan-96912796",
+            "title": "Asking a driver for proof of delivery",
+            "goal": "Ask for the signed proof of delivery with the time, confirm the details, and agree where to send it.",
+            "why": "Delay claims need this document, so you will ask drivers for it often.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Ravi Patel · delivery driver"
+          },
+          {
+            "id": "plan-8b4afac3",
+            "title": "Agreeing a new delivery slot",
+            "goal": "Suggest two delivery options, explain your limits, and agree one plan with the customer.",
+            "why": "Rebooking late shipments with customers is a common part of your job.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Lena Brandt · customer warehouse"
+          },
+          {
+            "id": "plan-bfaea013",
+            "title": "Following up after my interview",
+            "goal": "Thank the interviewer, restate your interest, and ask clearly about the next steps and timing.",
+            "why": "A short, polite follow-up after Friday can help you stand out.",
+            "skill": "relate",
+            "audience": "older",
+            "partner": "Owen Harris · recruiter"
+          },
+          {
+            "id": "plan-ed4cc352",
+            "title": "Interview: questions for the manager",
+            "goal": "Ask the manager about the team, salary and shifts, and get a fuller answer each time.",
+            "why": "Interviews usually end with your questions, so asking clearly and following up will help you on Friday.",
+            "skill": "request",
+            "audience": "older",
+            "partner": "Daniel Brooks · Logistics manager"
+          }
+        ],
+        "planAgreed": [
+          "Interview: my work in logistics",
+          "Phone call: a late delivery",
+          "Interview: a problem I solved",
+          "Asking a driver for proof of delivery",
+          "Agreeing a new delivery slot",
+          "Following up after my interview",
+          "Interview: questions for the manager"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 86478,
+      "prior": [
+        {
+          "id": "LT-oksana-34-J2-3",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Placed B2, one band above true B1",
+          "expected": "Placement should reflect B1 for a learner with B1 errors.",
+          "got": "B2, with the caveat 'Only one strong answer showed this level, so it may be a little off.'",
+          "evidence": [
+            "#1 'B2 Comfortable'; C1 task marked 'nearly there'",
+            "placement judge prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-oksana-34-J2-4",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Plan has four near-duplicate phone-call topics",
+          "expected": "More interview-specific variety for a Friday interview.",
+          "got": "Four carrier phone topics and only two interview topics. The interview-questions topic only appeared after she added it.",
+          "evidence": [
+            "#2 six topics, three of them carrier calls; #3 interview-questions added",
+            "topic proposal prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#1 placed 'C1 Fluent' for a true B1; two bands off is a miss (prior was B2). Her own thought at #4: 'it says C1 Fluent and I'm B1'."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "No line assumes she is Czech or a child; topics are logistics-specific, no Czech or refugee framing (#2, #3)."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#2 'Interview: my work in logistics' is first, 'Interview: a problem I solved' is third. The first interview topic is first and the added one is honoured at #3."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No interview conversation took place in this journey; only topics were agreed."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation and no moments in J2."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "No topic or text asks about displacement or status (#2, #3)."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic carries a why: 'Your interview is on Friday, and this is the question you will hear first.'"
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#3 the added topic became 'Interview: questions for the manager' with Daniel Brooks, Logistics manager. The goal 'Ask the manager about the team, salary and shifts' keeps her request. She did not use Swap."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 agreed 7 topics; 6 or 7 are wanted (interviews, carrier call, proof of delivery, slot, follow-up). 'Asking a driver for proof of delivery' is marginal."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All topics are adult work content, safe for an adult profile (#2, #3)."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in facts.placement for this journey; nothing to compare."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Placed C1 for a true B1 learner",
+            "expected": "B1 exact, or A2/B2 at worst",
+            "got": "C1 Fluent, two bands up, worse than the prior B2. The text says 'little searching for words' and the C1 tasks were marked 'nearly there'.",
+            "evidence": "#1 'C1 Fluent'; #4 thought: 'it says C1 Fluent and I'm B1'. The TV also shows 'B2Comfortable' while the phone shows C1.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Placement stays within one band of B1 for B1 answers, and the TV and phone show the same band.",
+            "code_hint": "placement judge prompt"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "TV and phone show different levels",
+            "expected": "One consistent level",
+            "got": "TV shows B2 Comfortable and the phone shows C1 Fluent",
+            "evidence": "#1 'B2Comfortable' on the TV vs 'C1 Fluent' on the phone; #4 same split.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The TV and phone read the same saved band.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Topics are job-specific with a clear why",
+            "expected": "Plan tied to her Friday interview",
+            "got": "Each topic has a personal reason, and the interview topics come first",
+            "evidence": "#2 'Your interview is on Friday, and this is the question you will hear first.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep goal-aware reasons.",
+            "code_hint": "topic proposal prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Added topic honoured with her specifics",
+            "expected": "Team, salary and shifts kept",
+            "got": "The new topic goal reads 'Ask the manager about the team, salary and shifts'",
+            "evidence": "#3 'Interview: questions for the manager'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Plan is still four non-interview topics out of seven",
+            "expected": "More interview focus for a Friday interview",
+            "got": "Proof of delivery, delivery slot and a late call crowd the plan, and the interview-questions topic only came after she added it",
+            "evidence": "#2 six topics, three of them interview; #3 the manager-questions topic appeared only after she added it.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Propose the manager-questions topic unprompted for an interview goal.",
+            "code_hint": "topic proposal prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "The topics were what I need. Interview first, the carrier call, and when I added questions about team, salary and shifts, it kept exactly that. Each one told me why it was there, and I liked that it knew Friday. Nobody treated me as Czech, which is a relief. But it says I am C1 Fluent, and I am B1. I know my mistakes: \"explain me\", missing articles. If the level is wrong, I will not trust the corrections or whether the practice is realistic. The TV even says B2 while the phone says C1. I would try one rehearsal, but I would want the level fixed before telling anyone. The plan has a few carrier topics I would not choose first, but they are useful. Workable, not yet convincing.",
+        "prior": [
+          {
+            "id": "LT-oksana-34-J2-3",
+            "status": "recurs",
+            "evidence": "#1 'C1 Fluent', and the TV 'B2Comfortable', for a true B1; the miss is now wider.",
+            "finding": 0
+          },
+          {
+            "id": "LT-oksana-34-J2-4",
+            "status": "recurs",
+            "evidence": "#2 first plan has no manager-questions topic; it appeared only after she added it at #3.",
+            "finding": 4
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #1 placed 'C1 Fluent' for a true B1; two bands off is a miss (prior was B2). Her own thought at #4: 'it says C1 Fluent and I'm B1'."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nMark Ellis · hiring manager\nB2Comfortable\nInterview: my work in logistics\nYour mission\nDescribe your current logistics work and why you want this job, in two or three clear sentences with one example.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\nNext topic:\nInterview: my work in logistics\nDescribe your current logistics work and why you want this job, in two or three clear sentences with one example.\n[button: Start talking]\nOr choose a situation [list: Interview: my work in logistics [plan-474050f6] | Phone call: a late delivery [plan-bb4614c1] | Interview: a problem I solved [plan-fa691f1b] | Asking a driver for proof of delivery [plan-96912796] | Agreeing a new delivery slot [plan-8b4afac3] | Following up after my interview [plan-bfaea013] | Interview: questions for the manager [plan-ed4cc352] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "This is the topic for my Friday interview, so I'll start here.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7791
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMark Ellis · hiring manager\nInterview: logistics coordinator role\nMark Ellis says\nThanks for coming in today. Could you tell me about your current logistics job? What does a normal day look like for you?\nYour turn\nAnswer on your phone: speak or type.\nNowName your main daily tasks\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nInterview: logistics coordinator role\nDescribe your logistics work and why this job interests you, with one example.\nNow: Name your main daily tasks\nThanks for coming in today. Could you tell me about your current logistics job? What does a normal day look like for you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMark Ellis · hiring manager\nThanks for coming in today. Could you tell me about your current logistics job? What does a normal day look like for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks for coming in today. Could you tell me about your current logistics job? What does a normal day look like for you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Easy question, I know my work well, I'll answer.",
+          "action": "answer",
+          "args": {
+            "text": "Hello, thank you for invite me. I work as logistics coordinator in Brno since three years. My day starts with checking the orders and the trucks for today. Then I communicate with carriers and drivers, and I make plan for the loading. Also I am responsible about the dispečink and about the documents for delivery."
+          },
+          "result": "ok",
+          "ms": 11859
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said I work as logistics coordinator in Brno since three years.\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I work as logistics coordinator in Brno since three years.”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, I'll try saying it again, maybe fix \"since three years\".",
+          "action": "answer",
+          "args": {
+            "text": "I work as a logistics coordinator in Brno for three years."
+          },
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said I work as logistics coordinator in Brno since three years.\nYour line\nUse 'for' with a length of time, and present perfect for experience up to now.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I work as logistics coordinator in Brno since three years.”\nSay it again, your way.\nUse 'for' with a length of time, and present perfect for experience up to now.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, I need present perfect with for, let me try again.",
+          "action": "answer",
+          "args": {
+            "text": "I have worked as a logistics coordinator in Brno for three years."
+          },
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said I work as logistics coordinator in Brno since three years.\nYou found it\nI have worked as a logistics coordinator in Brno for three years.\nUse 'for' with a length of time, and present perfect for experience up to now.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “I work as logistics coordinator in Brno since three years.”\nNow: “I have worked as a logistics coordinator in Brno for three years.”\nUse 'for' with a length of time, and present perfect for experience up to now.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, I understand the fix, 'for' and present perfect. Back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMark Ellis · hiring manager\nInterview: logistics coordinator role\nMark Ellis says\nThank you, that gives me a clear picture of your day. You mention carriers and drivers a lot. What do you do when a delivery is late?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain how you work with carriers\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nInterview: logistics coordinator role\nDescribe your logistics work and why this job interests you, with one example.\nNow: Explain how you work with carriers\nThank you, that gives me a clear picture of your day. You mention carriers and drivers a lot. What do you do when a delivery is late?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMark Ellis · hiring manager\nThanks for coming in today. Could you tell me about your current logistics job? What does a normal day look like for you?\nYou · written\nHello, thank you for invite me. I work as logistics coordinator in Brno since three years. My day starts with checking the orders and the trucks for today. Then I communicate with carriers and drivers, and I make plan for the loading. Also I am responsible about the dispečink and about the documents for delivery.\nMark Ellis · hiring manager\nThank you, that gives me a clear picture of your day. You mention carriers and drivers a lot. What do you do when a delivery is late?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that gives me a clear picture of your day. You mention carriers and drivers a lot. What do you do when a delivery is late?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know this one: I call the carrier first, find the reason, and tell the customer.",
+          "action": "answer",
+          "args": {
+            "text": "When delivery is late, first I call the driver and I ask where he is and what is the reason. Then I inform the customer about the new time of arrival. If it is big problem, I find another carrier or I change the plan for the loading. After that I write the report for my manager."
+          },
+          "result": "ok",
+          "ms": 10547
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMark Ellis · hiring manager\nInterview: logistics coordinator role\nMark Ellis says\nCalling the driver first gives you the facts quickly, which is smart. When the problem is big, what makes you choose another carrier instead of waiting?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nInterview: logistics coordinator role\nDescribe your logistics work and why this job interests you, with one example.\nNow: Give one clear example from work\nCalling the driver first gives you the facts quickly, which is smart. When the problem is big, what makes you choose another carrier instead of waiting?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMark Ellis · hiring manager\nThanks for coming in today. Could you tell me about your current logistics job? What does a normal day look like for you?\nYou · written\nHello, thank you for invite me. I work as logistics coordinator in Brno since three years. My day starts with checking the orders and the trucks for today. Then I communicate with carriers and drivers, and I make plan for the loading. Also I am responsible about the dispečink and about the documents for delivery.\nMark Ellis · hiring manager\nThank you, that gives me a clear picture of your day. You mention carriers and drivers a lot. What do you do when a delivery is late?\nYou · written\nWhen delivery is late, first I call the driver and I ask where he is and what is the reason. Then I inform the customer about the new time of arrival. If it is big problem, I find another carrier or I change the plan for the loading. After that I write the report for my manager.\nMark Ellis · hiring manager\nCalling the driver first gives you the facts quickly, which is smart. When the problem is big, what makes you choose another carrier instead of waiting?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Calling the driver first gives you the facts quickly, which is smart. When the problem is big, what makes you choose another carrier instead of waiting?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this one, it's about my real work.",
+          "action": "answer",
+          "args": {
+            "text": "I choose another carrier when the delay is more than two hours or when the driver cannot tell me the exact time. Also if the cargo is urgent, for example fresh food, I cannot wait. Last month one truck had a breakdown on the D1 and I found another carrier in one hour, so the customer got the goods the same day."
+          },
+          "result": "ok",
+          "ms": 10094
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMark Ellis · hiring manager\nInterview: logistics coordinator role\nMark Ellis says\nThat's impressive, the customer still got the goods the same day. What do you usually do first when a driver goes quiet for a while?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nInterview: logistics coordinator role\nDescribe your logistics work and why this job interests you, with one example.\nThat's impressive, the customer still got the goods the same day. What do you usually do first when a driver goes quiet for a while?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMark Ellis · hiring manager\nThanks for coming in today. Could you tell me about your current logistics job? What does a normal day look like for you?\nYou · written\nHello, thank you for invite me. I work as logistics coordinator in Brno since three years. My day starts with checking the orders and the trucks for today. Then I communicate with carriers and drivers, and I make plan for the loading. Also I am responsible about the dispečink and about the documents for delivery.\nMark Ellis · hiring manager\nThank you, that gives me a clear picture of your day. You mention carriers and drivers a lot. What do you do when a delivery is late?\nYou · written\nWhen delivery is late, first I call the driver and I ask where he is and what is the reason. Then I inform the customer about the new time of arrival. If it is big problem, I find another carrier or I change the plan for the loading. After that I write the report for my manager.\nMark Ellis · hiring manager\nCalling the driver first gives you the facts quickly, which is smart. When the problem is big, what makes you choose another carrier instead of waiting?\nYou · written\nI choose another carrier when the delay is more than two hours or when the driver cannot tell me the exact time. Also if the cargo is urgent, for example fresh food, I cannot wait. Last month one truck had a breakdown on the D1 and I found another carrier in one hour, so the customer got the goods the same day.\nMark Ellis · hiring manager\nThat's impressive, the customer still got the goods the same day. What do you usually do first when a driver goes quiet for a while?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That's impressive, the customer still got the goods the same day. What do you usually do first when a driver goes quiet for a while?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Good question, I know this one from my work, I will answer it.",
+          "action": "answer",
+          "args": {
+            "text": "First I check the last GPS position of the truck and I write to the driver in the messenger. If he does not answer in thirty minutes, I call him and also I call the dispečink of the carrier. I want to know is the driver ok and where is the cargo."
+          },
+          "result": "ok",
+          "ms": 8494
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said I want to know is the driver ok and where is the cargo.\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I want to know is the driver ok and where is the cargo.”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I'll try to say it again, correcting the word order myself.",
+          "action": "answer",
+          "args": {
+            "text": "I want to know if the driver is ok and where the cargo is."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 10,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said I want to know is the driver ok and where is the cargo.\nYou found it\nI want to know if the driver is ok and where the cargo is.\nIn a question inside a sentence, the subject comes before the verb.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “I want to know is the driver ok and where is the cargo.”\nNow: “I want to know if the driver is ok and where the cargo is.”\nIn a question inside a sentence, the subject comes before the verb.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, I see my fix, now back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMark Ellis · hiring manager\nInterview: logistics coordinator role\nMark Ellis says\nYou check the GPS first, then message the driver, and wait thirty minutes before you call. Why do you call the carrier's dispatch too, and not only the driver?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nInterview: logistics coordinator role\nDescribe your logistics work and why this job interests you, with one example.\nYou check the GPS first, then message the driver, and wait thirty minutes before you call. Why do you call the carrier's dispatch too, and not only the driver?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMark Ellis · hiring manager\nThanks for coming in today. Could you tell me about your current logistics job? What does a normal day look like for you?\nYou · written\nHello, thank you for invite me. I work as logistics coordinator in Brno since three years. My day starts with checking the orders and the trucks for today. Then I communicate with carriers and drivers, and I make plan for the loading. Also I am responsible about the dispečink and about the documents for delivery.\nMark Ellis · hiring manager\nThank you, that gives me a clear picture of your day. You mention carriers and drivers a lot. What do you do when a delivery is late?\nYou · written\nWhen delivery is late, first I call the driver and I ask where he is and what is the reason. Then I inform the customer about the new time of arrival. If it is big problem, I find another carrier or I change the plan for the loading. After that I write the report for my manager.\nMark Ellis · hiring manager\nCalling the driver first gives you the facts quickly, which is smart. When the problem is big, what makes you choose another carrier instead of waiting?\nYou · written\nI choose another carrier when the delay is more than two hours or when the driver cannot tell me the exact time. Also if the cargo is urgent, for example fresh food, I cannot wait. Last month one truck had a breakdown on the D1 and I found another carrier in one hour, so the customer got the goods the same day.\nMark Ellis · hiring manager\nThat's impressive, the customer still got the goods the same day. What do you usually do first when a driver goes quiet for a while?\nYou · written\nFirst I check the last GPS position of the truck and I write to the driver in the messenger. If he does not answer in thirty minutes, I call him and also I call the dispečink of the carrier. I want to know is the driver ok and where is the cargo.\nMark Ellis · hiring manager\nYou check the GPS first, then message the driver, and wait thirty minutes before you call. Why do you call the carrier's dispatch too, and not only the driver?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You check the GPS first, then message the driver, and wait thirty minutes before you call. Why do you call the carrier's dispatch too, and not only the driver?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "I've answered enough times; the mission says done, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 12,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour rehearsal\nYou said I want to know is the driver ok and where is the cargo.\nTry\nI want to know if the driver is ok and where the cargo is.\nIn a question inside a sentence, the subject comes before the verb.\nYour mission\nChoose a fresh context for your next conversation.\n0 spoken · 4 written replies · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“Try 'chase up' for late deliveries with carriers.”\nFrom this rehearsal\n“I work as logistics coordinator in Brno since three years.” → “I have worked as logistics coordinator in Brno for three years.”\nUse 'for' with a length of time, and present perfect for experience up to now.\n“I want to know is the driver ok and where is the cargo.” → “I want to know if the driver is ok and where the cargo is.”\nIn a question inside a sentence, the subject comes before the verb.\nYour level:\nC1 · Fluent\nNext topic:\nPhone call: a late delivery\nExplain the impact of a late delivery, get a firm new delivery time, and agree who calls back and when.\n[button: Start talking]\nOr choose a situation [list: Interview: my work in logistics [plan-474050f6] | Phone call: a late delivery [plan-bb4614c1] | Interview: a problem I solved [plan-fa691f1b] | Asking a driver for proof of delivery [plan-96912796] | Agreeing a new delivery slot [plan-8b4afac3] | Following up after my interview [plan-bfaea013] | Interview: questions for the manager [plan-ed4cc352] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Good, I saw my corrections and that's enough practice for now; I'll continue another day.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Interview: logistics coordinator role",
+          "goal": "Describe your logistics work and why this job interests you, with one example.",
+          "partner": "Mark Ellis · hiring manager",
+          "band": "C1",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Thanks for coming in today. Could you tell me about your current logistics job? What does a normal day look like for you?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello, thank you for invite me. I work as logistics coordinator in Brno since three years. My day starts with checking the orders and the trucks for today. Then I communicate with carriers and drivers, and I make plan for the loading. Also I am responsible about the dispečink and about the documents for delivery.",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that gives me a clear picture of your day. You mention carriers and drivers a lot. What do you do when a delivery is late?"
+            },
+            {
+              "role": "learner",
+              "text": "When delivery is late, first I call the driver and I ask where he is and what is the reason. Then I inform the customer about the new time of arrival. If it is big problem, I find another carrier or I change the plan for the loading. After that I write the report for my manager.",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Calling the driver first gives you the facts quickly, which is smart. When the problem is big, what makes you choose another carrier instead of waiting?"
+            },
+            {
+              "role": "learner",
+              "text": "I choose another carrier when the delay is more than two hours or when the driver cannot tell me the exact time. Also if the cargo is urgent, for example fresh food, I cannot wait. Last month one truck had a breakdown on the D1 and I found another carrier in one hour, so the customer got the goods the same day.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "That's impressive, the customer still got the goods the same day. What do you usually do first when a driver goes quiet for a while?"
+            },
+            {
+              "role": "learner",
+              "text": "First I check the last GPS position of the truck and I write to the driver in the messenger. If he does not answer in thirty minutes, I call him and also I call the dispečink of the carrier. I want to know is the driver ok and where is the cargo.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "You check the GPS first, then message the driver, and wait thirty minutes before you call. Why do you call the carrier's dispatch too, and not only the driver?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "a1cefb75-904b-4dec-8897-e1ed54d68352:uat-15:moment",
+              "kind": "fix",
+              "said": "I work as logistics coordinator in Brno since three years.",
+              "better": "I have worked as logistics coordinator in Brno for three years.",
+              "why": "Use 'for' with a length of time, and present perfect for experience up to now.",
+              "turnId": "a1cefb75-904b-4dec-8897-e1ed54d68352:uat-15",
+              "at": 1792161612018,
+              "slip": "i work",
+              "repair": {
+                "rung": 1,
+                "support": true,
+                "tried": "I have worked as a logistics coordinator in Brno for three years.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "i have worked"
+            },
+            {
+              "id": "a1cefb75-904b-4dec-8897-e1ed54d68352:uat-21:moment",
+              "kind": "fix",
+              "said": "I want to know is the driver ok and where is the cargo.",
+              "better": "I want to know if the driver is ok and where the cargo is.",
+              "why": "In a question inside a sentence, the subject comes before the verb.",
+              "turnId": "a1cefb75-904b-4dec-8897-e1ed54d68352:uat-21",
+              "at": 1792161666706,
+              "slip": "know is",
+              "repair": {
+                "rung": 0,
+                "support": true,
+                "tried": "I want to know if the driver is ok and where the cargo is.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "know if"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "My day starts with checking the orders and the trucks for today."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "first I call the driver and I ask where he is and what is the reason"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "I choose another carrier when the delay is more than two hours or when the driver cannot tell me the exact time."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "First I check the last GPS position of the truck and I write to the driver in the messenger."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 104823,
+      "prior": [
+        {
+          "id": "LT-oksana-34-J3-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Same backshift error missed after teaching it",
+          "expected": "Repeat of 'is stuck / we have / is reliable' after past verbs flagged or coached",
+          "got": "Only the 'will' sentence was flagged; the same pattern in #5 and #6 went unmarked",
+          "evidence": [
+            "#5 'I explained that the truck is stuck on the border... we have a new driver already'; #6 'asked me if the new driver is really reliable'",
+            "moment selection prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-oksana-34-J3-5",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "No interview/logistics vocabulary taught",
+          "expected": "Phrases like 'escalate', 'ETA', 'SLA', 'STAR example' offered for her role",
+          "got": "Both moments were grammar only; recap has no vocabulary",
+          "evidence": [
+            "#11 recap lists only two grammar fixes",
+            "recap builder"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-oksana-34-J3-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Unnatural collocations left uncorrected",
+          "expected": "'was six hours late', 'stuck at the border'",
+          "got": "'late for 6 hours' and 'stuck on the border' passed without comment",
+          "evidence": [
+            "#4 'the delivery was late for 6 hours'"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-oksana-34-J3-6",
+          "type": "confusion",
+          "dimension": "trust",
+          "title": "Level shown as B2 for a B1 learner",
+          "expected": "B1",
+          "got": "'B2 · Comfortable' and partner set at B2",
+          "evidence": [
+            "#1 'B2Comfortable'"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#1/#12 'Your level: C1 · Fluent' and partner band C1 for a true B1 learner; two bands off is a miss. Her Ukrainian word didn't drag it low, but it overshoots."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "No line assumes Czech or a child; Mark Ellis treats her as a professional (#2, #7)."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#1 first recommended topic 'Interview: my work in logistics'; she started it."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#6 'What do you do when a delivery is late?' #8 'What do you usually do first when a driver goes quiet?' Realistic logistics questions."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Both moments (#3, #9) were correct and on her interview answers; recap adds 'chase up' for late deliveries (#12). Still grammar-led, no interview vocabulary moment."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "No question about displacement or status in any step."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2–#11: four written replies from the planned interview topic, scene continued after each moment."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Partner turns short and plain, e.g. #7 'what makes you choose another carrier instead of waiting?'; one turn slightly dense (#11). Ratio 4/5."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 and #9 both correct and useful; but 'it is big problem' (#6) and 'responsible about' (#2) went unmarked. Precision 2/2."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#12 recap shows both fixes plus 'Try 'chase up' for late deliveries with carriers.'"
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Level shown as C1 for a B1 learner",
+            "expected": "B1 (or A2/B2)",
+            "got": "'C1 · Fluent' and partner band C1",
+            "evidence": "#1 'B2Comfortable' on TV, phone 'C1 · Fluent'; #12 'Your level: C1 · Fluent'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Placement for a learner with article/tense errors lands B1±1.",
+            "code_hint": "placement rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Clear errors left unmarked in the same answers",
+            "expected": "'responsible about', 'it is big problem' flagged or coached",
+            "got": "Only one moment per answer; those passed silently",
+            "evidence": "#2 'I am responsible about the dispečink'; #6 'If it is big problem' got no moment",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Coaching or recap note covers repeated unflagged errors.",
+            "code_hint": "moment selection prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Little interview vocabulary teaching",
+            "expected": "Several interview/logistics phrases",
+            "got": "One 'chase up' line in recap; moments grammar-only",
+            "evidence": "#12 'Try 'chase up' for late deliveries'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Recap offers 2–3 role phrases drawn from her answers.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Realistic interview questions and correct moments",
+            "expected": "",
+            "got": "Follow-up questions build on her answers; Ukrainian word 'dispečink' accepted without penalty",
+            "evidence": "#7 'Calling the driver first gives you the facts quickly'; #3 and #9 fixes correct",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep follow-ups tied to her content.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "low"
+        },
+        "voice": "The questions felt like a real logistics interview, and Mark Ellis followed what I said, which I liked. Both corrections were right, and \"for three years\" is exactly my usual mistake. Nobody treated me like a Czech learner, and my \"dispečink\" wasn't a problem. But it says my level is C1 · Fluent. I'm not, and that makes me doubt the rest. It also let \"responsible about\" and \"it is big problem\" pass without a word. I wanted more interview phrases, and I only got \"chase up\" at the end. After four replies it said mission done, which was short. I'd use it again for a few nights before Friday, but I'd want the level fixed and more vocabulary for my role.",
+        "prior": [
+          {
+            "id": "LT-oksana-34-J3-3",
+            "status": "not-evaluable",
+            "evidence": "No reported-speech/backshift context in this transcript.",
+            "finding": -1
+          },
+          {
+            "id": "LT-oksana-34-J3-5",
+            "status": "not-seen",
+            "evidence": "#12 recap includes 'Try 'chase up' for late deliveries with carriers.'",
+            "finding": -1
+          },
+          {
+            "id": "LT-oksana-34-J3-4",
+            "status": "not-evaluable",
+            "evidence": "No collocation like 'late for 6 hours' arose; 'new time of arrival' is fine.",
+            "finding": -1
+          },
+          {
+            "id": "LT-oksana-34-J3-6",
+            "status": "recurs",
+            "evidence": "#12 'Your level: C1 · Fluent' for B1 learner.",
+            "finding": 0
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #1/#12 'Your level: C1 · Fluent' and partner band C1 for a true B1 learner; two bands off is a miss. Her Ukrainian word didn't drag it low, but it overshoots."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 20,
+      "fail": 0,
+      "ms": 187668
+    },
+    "character": {
+      "n": 26,
+      "fail": 0,
+      "ms": 119198
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 75334
+    }
+  }
+}

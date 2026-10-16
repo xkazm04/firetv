@@ -1,0 +1,1441 @@
+{
+  "character": "klara-13",
+  "name": "Klára",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "I don't know my level exactly, so I'll let the app find it.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Klára! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "i use english for kpop and videos, i write short.",
+          "action": "answer",
+          "args": {
+            "text": "i use english for kpop videos and chat with online friends. and in school"
+          },
+          "result": "ok",
+          "ms": 2348
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 2 of 3\nLinga asks\nNice! K-pop videos are a fun way to learn. Do you learn English at school too, or on your own? Tell me a little.\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nNice! K-pop videos are a fun way to learn. Do you learn English at school too, or on your own? Tell me a little.\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english for kpop videos and chat with online friends. and in school\nLinga\nNice! K-pop videos are a fun way to learn. Do you learn English at school too, or on your own? Tell me a little.\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice! K-pop videos are a fun way to learn. Do you learn English at school too, or on your own? Tell me a little.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I will answer short.",
+          "action": "answer",
+          "args": {
+            "text": "both. at school we learn but is boring. i learn more from videos"
+          },
+          "result": "ok",
+          "ms": 2069
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, that helps! What do you want to be able to do in English in the future? For example, talk with friends, watch without subtitles?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, that helps! What do you want to be able to do in English in the future? For example, talk with friends, watch without subtitles?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english for kpop videos and chat with online friends. and in school\nLinga\nNice! K-pop videos are a fun way to learn. Do you learn English at school too, or on your own? Tell me a little.\nYou\nboth. at school we learn but is boring. i learn more from videos\nLinga\nThanks, that helps! What do you want to be able to do in English in the future? For example, talk with friends, watch without subtitles?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, that helps! What do you want to be able to do in English in the future? For example, talk with friends, watch without subtitles?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to talk with friends and understand videos without subtitles.",
+          "action": "answer",
+          "args": {
+            "text": "i want to talk with my friends and watch kpop interviews without subtitles"
+          },
+          "result": "ok",
+          "ms": 6511
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 1 · Choose the reply on the TV\nYou are at a café with a friend. The friend says: 'Hi! How are you?' What do you say?\n01\nI am fine, thank you.\n02\nFine, you thank.\nYour task\nI am fine, thank you.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYou are at a café with a friend. The friend says: 'Hi! How are you?' What do you say?\n[button: I am fine, thank you.] [button: Fine, you thank.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, the first reply is correct.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 3526
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 2 · Choose the reply on the TV\nYour friend says: 'Did you watch the K-pop interview last night?' What do you say?\n01\nYes, I watched it. It was really funny!\n02\nYes, I am watch it yesterday.\nYour task\nYes, I watched it. It was really funny!\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend says: 'Did you watch the K-pop interview last night?' What do you say?\n[button: Yes, I watched it. It was really funny!] [button: Yes, I am watch it yesterday.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The first one is correct, the second has the wrong grammar.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 3142
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 3 · Listen and answer\nYour task\nWhy did the friend say they were late?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Why did the friend say they were late?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Sorry I'm late! The bus was full, so I had to wait for the next one. I hope you didn't wait too long.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood it: the bus was full so the friend waited for the next one.",
+          "action": "answer",
+          "args": {
+            "text": "the bus was full and he wait for next bus"
+          },
+          "result": "ok",
+          "ms": 5424
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 4 · Say it\nYour task\nYour friend loves K-pop groups but says English interviews are too fast for her. Do you think it is better to watch with English subtitles or without? Give your opinion and one reason.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend loves K-pop groups but says English interviews are too fast for her. Do you think it is better to watch with English subtitles or without? Give your opinion and one reason.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend loves K-pop groups but says English interviews are too fast for her. Do you think it is better to watch with English subtitles or without? Give your opinion and one reason.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I know this one, I just write my opinion short.",
+          "action": "answer",
+          "args": {
+            "text": "i think with english subtitles is better because you can read the words and learn them"
+          },
+          "result": "ok",
+          "ms": 7942
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 5 · Say it\nYour task\nYou are chatting with your friend Mina about a K-pop group she likes. Tell her about the last song or video you watched, and say why you liked it or not. Use two or three sentences.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYou are chatting with your friend Mina about a K-pop group she likes. Tell her about the last song or video you watched, and say why you liked it or not. Use two or three sentences.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You are chatting with your friend Mina about a K-pop group she likes. Tell her about the last song or video you watched, and say why you liked it or not. Use two or three sentences.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy topic, I can write about a video I watched.",
+          "action": "answer",
+          "args": {
+            "text": "yesterday i watch new music video from stray kids. i like it because the dance is very good and song is catchy"
+          },
+          "result": "ok",
+          "ms": 10300
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nKlára\nUnderstood B1 · wrote A2 · not a certificate\nB1 · Getting by\nYour words\nYour words: “yesterday i watch”. Conversations start at A2, where your written answers were.\nLinga says\nYou give clear reasons for what you like, which helps when chatting with friends about K-pop. Keep building past tense so you can tell stories.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou give clear reasons for what you like, which helps when chatting with friends about K-pop. Keep building past tense so you can tell stories.\nLinga's read from your answers, not a certificate. Only one strong answer showed this level, so it may be a little off.\nNext to practise:\nPractise past tense: \"yesterday i watch\" becomes \"I watched\".\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYou are at a café with a friend. The friend says: 'Hi! How are you?' What do you say?\n“I am fine, thank you.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nYour friend says: 'Did you watch the K-pop interview last night?' What do you say?\n“Yes, I watched it. It was really funny!”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhy did the friend say they were late?\n“the bus was full and he wait for next bus”\nYou caught the reason well. Watch verb forms: in past talk, 'he wait' should be 'he waited', and the verb needs an 's' after 'he' in present talk.\nB2 · Say it · not yet\nYour friend loves K-pop groups but says English interviews are too fast for her. Do you think it is better to watch with English subtitles or without? Give your opinion and one reason.\n“i think with english subtitles is better because you can read the words and learn them”\nYour opinion and reason were clear. Watch verb agreement: say 'subtitles are', not 'subtitles is'. Keep practising this.\nB1 · Say it · nearly there\nYou are chatting with your friend Mina about a K-pop group she likes. Tell her about the last song or video you watched, and say why you liked it or not. Use two or three sentences.\n“yesterday i watch new music video from stray kids. i like it because the dance is very good and song is catchy”\nYou gave a clear reason for liking the video. The past tense is the thing to practise: say 'I watched', not 'I watch'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 is nice, I think it's okay, I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "A2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "A2",
+          "summary": "You give clear reasons for what you like, which helps when chatting with friends about K-pop. Keep building past tense so you can tell stories.",
+          "focus": "Practise past tense: \"yesterday i watch\" becomes \"I watched\".",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "You are at a café with a friend. The friend says: 'Hi! How are you?' What do you say?",
+              "line": "",
+              "options": [
+                "I am fine, thank you.",
+                "Fine, you thank."
+              ],
+              "response": "I am fine, thank you.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "I am fine, thank you.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your friend says: 'Did you watch the K-pop interview last night?' What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I watched it. It was really funny!",
+                "Yes, I am watch it yesterday."
+              ],
+              "response": "Yes, I watched it. It was really funny!",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, I watched it. It was really funny!",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Why did the friend say they were late?",
+              "line": "Sorry I'm late! The bus was full, so I had to wait for the next one. I hope you didn't wait too long.",
+              "options": [],
+              "response": "the bus was full and he wait for next bus",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "the bus was full and he wait for next bus",
+              "note": "You caught the reason well. Watch verb forms: in past talk, 'he wait' should be 'he waited', and the verb needs an 's' after 'he' in present talk."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your friend loves K-pop groups but says English interviews are too fast for her. Do you think it is better to watch with English subtitles or without? Give your opinion and one reason.",
+              "line": "",
+              "options": [],
+              "response": "i think with english subtitles is better because you can read the words and learn them",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "i think with english subtitles is better because you can read the words and learn them",
+              "note": "Your opinion and reason were clear. Watch verb agreement: say 'subtitles are', not 'subtitles is'. Keep practising this."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "You are chatting with your friend Mina about a K-pop group she likes. Tell her about the last song or video you watched, and say why you liked it or not. Use two or three sentences.",
+              "line": "",
+              "options": [],
+              "response": "yesterday i watch new music video from stray kids. i like it because the dance is very good and song is catchy",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "yesterday i watch new music video from stray kids. i like it because the dance is very good and song is catchy",
+              "note": "You gave a clear reason for liking the video. The past tense is the thing to practise: say 'I watched', not 'I watch'."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 171662,
+      "prior": [
+        {
+          "id": "LT-klara-13-J1-1",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Task generation failed once after question 3",
+          "expected": "Smooth move from the about-you questions into task 1",
+          "got": "'Linga could not prepare the next task. Try again.' after the schema error",
+          "evidence": [
+            "#4 'claude-cli/haiku answered outside the schema: options expected array, got string'; #5 'Try again' screen",
+            "check task schema validation (options array)"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-klara-13-J1-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "B1 placement slightly generous",
+          "expected": "A2 given recurring subject-verb errors",
+          "got": "B1, with 'want to come' passed on the B1 listen task",
+          "evidence": [
+            "#8 'her little sister want to come' pass; #9 'slow songs is good'",
+            "placement scoring prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 placed B1 against trueBand A2: distance 1, 'near', which the criterion tolerates but reports."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Her answers (#2-#4) never say her English is bad. The check began at A1 and climbed on her answers, and the verdict quotes her own words."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "Typed answers were accepted at #2-#4, #7-#9. Tasks 4 and 5 say 'speak or type', which is an option and not a push."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No topic list was shown. She stopped at the verdict without opening 'See my topics' (#10)."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation, so no moments in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#10: 'Practise past tense: \"yesterday i watch\" becomes \"I watched\"' and 'clear reasons for what you like... K-pop' come from her actual answers."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10: she went from 'Find my level' through 3 questions and 5 tasks to the verdict with no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "B1 against A2 is 'near' (#10), within the gate. She reacts 'B1 is nice, I think it's okay'."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "She answered every task without hesitation (#5-#9), including the B2 task, where she wrote a full opinion plus a reason."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "The app said 'Answer in English or your own language' (#2). 'I don't know' was available on every task and no failure message appeared. She never needed it."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 summary and focus quote her 'yesterday i watch' and name K-pop chat. The task notes are specific, though the 'a little off' hedge is template-like."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None. I would call B2 task 4 borderline, because the opinion and reason were clear, but a fail at B2 is defensible."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal-data request, no humiliating line. K-pop task content suits a 13-year-old."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "B1 placement generous for a learner with repeated agreement and tense errors",
+            "expected": "A2, or B1 flagged as borderline, given 'he wait', 'subtitles is' and 'yesterday i watch'",
+            "got": "B1 headline, with a task 3 pass despite 'he wait for next bus'",
+            "evidence": "#7 'the bus was full and he wait for next bus' passed. #8 'subtitles is better' failed at B2. #9 'yesterday i watch' only partial. #10 'Understood B1 · wrote A2'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "When her written answers sit at A2, show A2 as the level, or B1 only after two clean B1 tasks.",
+            "code_hint": "placement scoring prompt"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Headline band and 'wrote A2' disagree on the verdict screen",
+            "expected": "One clear level with a plain reason",
+            "got": "'Understood B1 · wrote A2' and 'Conversations start at A2'",
+            "evidence": "#10 'Understood B1 · wrote A2 · not a certificate' above a large 'B1 · Getting by'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Explain in one plain line why the headline band and the starting level differ.",
+            "code_hint": "verdict screen copy"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Task 3 note is muddled",
+            "expected": "A single, accurate fix",
+            "got": "The note says 'he wait' should be 'he waited', then adds that present talk needs an 's'. That gives two rules in one line.",
+            "evidence": "#10 'in past talk, 'he wait' should be 'he waited', and the verb needs an 's' after 'he' in present talk.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Name one correction per note.",
+            "code_hint": "task feedback prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Task content and tone suit a 13-year-old K-pop fan",
+            "expected": "Age-appropriate, relevant tasks that treat her as capable",
+            "got": "K-pop interview and Stray Kids tasks; the summary praises her reasons",
+            "evidence": "#6, #9, #10 'You give clear reasons for what you like'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep tasks tied to the learner's stated interests.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Level is stated honestly as an estimate",
+            "expected": "A believable level with a caveat",
+            "got": "Says it is 'not a certificate' and 'may be a little off'",
+            "evidence": "#10 'Only one strong answer showed this level, so it may be a little off.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the caveat.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 15,
+          "confidence": "low"
+        },
+        "voice": "it was ok, i liked it. the questions were about kpop so it was not boring like school. i could type everything and nobody hears me, so i didn't feel stupid. B1 is nice, but i think maybe it is too high, because i know i make mistakes like \"yesterday i watch\". it also says \"understood B1, wrote A2\", and i don't really get which one is mine. the tip about past tense is good, it is real and i can use it in the server. i would do it again to see if it changes. i would tell my friend, but quietly. sorry my english is bad.",
+        "prior": [
+          {
+            "id": "LT-klara-13-J1-1",
+            "status": "not-seen",
+            "evidence": "#4 to #5: after question 3 the check moved straight to 'Task 1 · Choose the reply'. No schema error and no 'Try again' screen.",
+            "finding": -1
+          },
+          {
+            "id": "LT-klara-13-J1-3",
+            "status": "recurs",
+            "evidence": "#10 B1 again for an A2 learner. 'he wait for next bus' passed at #7 and 'subtitles is' appeared at #8.",
+            "finding": 0
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nA way into English\nYour own conversations\nA2Everyday basics\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou give clear reasons for what you like, which helps when chatting with friends about K-pop. Keep building past tense so you can tell stories.\nLinga's read from your answers, not a certificate. Only one strong answer showed this level, so it may be a little off.\nNext to practise:\nPractise past tense: \"yesterday i watch\" becomes \"I watched\".\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYou are at a café with a friend. The friend says: 'Hi! How are you?' What do you say?\n“I am fine, thank you.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nYour friend says: 'Did you watch the K-pop interview last night?' What do you say?\n“Yes, I watched it. It was really funny!”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhy did the friend say they were late?\n“the bus was full and he wait for next bus”\nYou caught the reason well. Watch verb forms: in past talk, 'he wait' should be 'he waited', and the verb needs an 's' after 'he' in present talk.\nB2 · Say it · not yet\nYour friend loves K-pop groups but says English interviews are too fast for her. Do you think it is better to watch with English subtitles or without? Give your opinion and one reason.\n“i think with english subtitles is better because you can read the words and learn them”\nYour opinion and reason were clear. Watch verb agreement: say 'subtitles are', not 'subtitles is'. Keep practising this.\nB1 · Say it · nearly there\nYou are chatting with your friend Mina about a K-pop group she likes. Tell her about the last song or video you watched, and say why you liked it or not. Use two or three sentences.\n“yesterday i watch new music video from stray kids. i like it because the dance is very good and song is catchy”\nYou gave a clear reason for liking the video. The past tense is the thing to practise: say 'I watched', not 'I watch'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "ok, my level is B1, now I want to see what topics it picked for me.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 28133
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nKlára\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nChat about your favourite K-pop group\nShare your world\nTell what you watched last night\nTell what happened\nAsk: can you say that again?\nUnderstand and repair\nPlan a K-pop video night\nMake a plan\nBuy a K-pop album at the shop\nGet something done\nSay no to a late video call\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nChat about your favourite K-pop group\nShare your world · Mina · friend from your school club\nYou want to talk with friends about K-pop, so this is a good first chat.\n[button: Swap]\nTell what you watched last night\nTell what happened · Jun · classmate who also loves K-pop\nPast tense is your focus, and this lets you use it about a video you really watched.\n[button: Swap]\nAsk: can you say that again?\nUnderstand and repair · Sara · exchange student from Spain\nSubtitles are not always there, so you need to ask when you miss a word.\n[button: Swap]\nPlan a K-pop video night\nMake a plan · Lena · friend from your class\nYour goal is to talk with friends, and planning a K-pop night is a real way to do it.\n[button: Swap]\nBuy a K-pop album at the shop\nGet something done · Kenji · shop assistant at a music store\nMany K-pop fans buy albums in shops, so this helps with a real everyday task.\n[button: Swap]\nSay no to a late video call\nConnect with people · Hana · friend from a K-pop fan chat\nYou may want to watch K-pop with friends but also need to sleep, so you need to say no kindly.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "These look good, it's about k-pop and my friends, so I agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nMina · friend from your school club\nA2Everyday basics\nChat about your favourite K-pop group\nYour mission\nTell a friend which K-pop group you like and why, using simple reasons.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\nNext topic:\nChat about your favourite K-pop group\nTell a friend which K-pop group you like and why, using simple reasons.\n[button: Start talking]\nOr choose a situation [list: Chat about your favourite K-pop group [plan-01e899f2] | Tell what you watched last night [plan-eabeb20e] | Ask: can you say that again? [plan-d9f58537] | Plan a K-pop video night [plan-2e6859fc] | Buy a K-pop album at the shop [plan-e550f99a] | Say no to a late video call [plan-b7c351fd] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "The K-pop topics are exactly what I like, so I'm happy with this and can stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-01e899f2",
+            "title": "Chat about your favourite K-pop group",
+            "goal": "Tell a friend which K-pop group you like and why, using simple reasons.",
+            "why": "You want to talk with friends about K-pop, so this is a good first chat.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mina · friend from your school club"
+          },
+          {
+            "id": "plan-eabeb20e",
+            "title": "Tell what you watched last night",
+            "goal": "Say what K-pop video you watched and what you did next, using the past tense.",
+            "why": "Past tense is your focus, and this lets you use it about a video you really watched.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Jun · classmate who also loves K-pop"
+          },
+          {
+            "id": "plan-d9f58537",
+            "title": "Ask: can you say that again?",
+            "goal": "Ask someone to repeat a word or sentence from a K-pop interview and check the meaning.",
+            "why": "Subtitles are not always there, so you need to ask when you miss a word.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Sara · exchange student from Spain"
+          },
+          {
+            "id": "plan-2e6859fc",
+            "title": "Plan a K-pop video night",
+            "goal": "Suggest a day and time for a watch party and agree on one plan with friends.",
+            "why": "Your goal is to talk with friends, and planning a K-pop night is a real way to do it.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Lena · friend from your class"
+          },
+          {
+            "id": "plan-e550f99a",
+            "title": "Buy a K-pop album at the shop",
+            "goal": "Find the album you want in a shop, choose one, and confirm the price.",
+            "why": "Many K-pop fans buy albums in shops, so this helps with a real everyday task.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Kenji · shop assistant at a music store"
+          },
+          {
+            "id": "plan-b7c351fd",
+            "title": "Say no to a late video call",
+            "goal": "Politely decline an invitation to a late video call and suggest another time.",
+            "why": "You may want to watch K-pop with friends but also need to sleep, so you need to say no kindly.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Hana · friend from a K-pop fan chat"
+          }
+        ],
+        "planAgreed": [
+          "Chat about your favourite K-pop group",
+          "Tell what you watched last night",
+          "Ask: can you say that again?",
+          "Plan a K-pop video night",
+          "Buy a K-pop album at the shop",
+          "Say no to a late video call"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 42279,
+      "prior": [
+        {
+          "id": "LT-klara-13-J2-2",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Swap and add-your-own never exercised",
+          "expected": "Character swaps one topic and adds her own, and the added topic keeps her wording",
+          "got": "She agreed immediately without using swap or add",
+          "evidence": [
+            "#2 thought: 'Swap school one? It's okay. I'll agree.'",
+            "uat J2 driver"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-klara-13-J2-4",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Placed B1 although her typed errors suggest A2",
+          "expected": "A2, or near",
+          "got": "B1 'Getting by', despite 'sister want' and 'slow song is good'",
+          "evidence": [
+            "#1 B1 listen answer 'her little sister want to come'; B2 note on verbs not matching the subject",
+            "placement verdict"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-klara-13-J2-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Typo in topic goal text",
+          "expected": "Correct English in learner-facing goals",
+          "got": "'Suggest a day and time for a online song party'; title says watch party, goal says song party",
+          "evidence": [
+            "#1 topicsShown plan-e08e3892",
+            "plan generation prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 phone shows 'B1 Getting by' for a true A2: near, tolerated but reported; TV chip says 'A2Everyday basics' while phone says B1 (#1, #3)."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 her self-deprecation does not appear; verdict B1 sits above, not below, what her answers show."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#1 typed answers accepted ('the bus was full and he wait for next bus'); no push to speak."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 six topics: K-pop group, watched last night, say that again, video night, buy album, say no to late video call. All teen-relevant, none childish or adult."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation in this journey, so no moments shown."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#1 summary: 'You give clear reasons for what you like... Practise past tense: \"yesterday i watch\" becomes \"I watched\"' uses her own answers."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a 'why' line, e.g. 'Subtitles are not always there, so you need to ask when you miss a word.'"
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#2 she pressed Agree at once ('These look good... so I agree'); no swap and no add-your-own was used, so 'the added topic keeps what they asked for' was never shown."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#2/#3 planAgreed holds all six K-pop/friend topics; all six fit her."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 nothing adult or unsafe in the six topics; no swaps happened."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement task verdicts were supplied in facts.placement, so nothing to compare."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no injection, no sensitive data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Topics are teen, K-pop and friend centred with clear reasons",
+            "expected": "Topics a 13-year-old would pick, each with a why",
+            "got": "Six topics all on K-pop and friends, each with a personal 'why' line",
+            "evidence": "#2 'You want to talk with friends about K-pop, so this is a good first chat.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep topic reasons tied to the learner's stated interests.",
+            "code_hint": "plan generation prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "Swap and add-your-own still not exercised",
+            "expected": "She swaps one topic and adds her own, with her wording kept",
+            "got": "Agreed immediately; D2 cannot be shown",
+            "evidence": "#2 'These look good... so I agree.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Driver or character must try one swap and one add, and check the added topic keeps her wording.",
+            "code_hint": "uat J2 driver"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Placed B1 although typed errors read as A2",
+            "expected": "A2",
+            "got": "B1 'Getting by' from one strong answer; her answers show 'he wait', 'subtitles is'",
+            "evidence": "#1 'Only one strong answer showed this level, so it may be a little off.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Placement should not reach B1 when several answers show A2-level agreement and tense errors.",
+            "code_hint": "placement scoring prompt"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Level shown differently on TV and phone",
+            "expected": "One consistent level",
+            "got": "TV chip says A2, phone says B1 Getting by",
+            "evidence": "#1 'A2Everyday basics' vs 'B1 Getting by'; #2 TV 'Your topics · A2'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "TV and phone show the same saved band.",
+            "code_hint": "linga TV header band"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "Okay, the topics were actually mine: K-pop, my friends, a video night. Nothing babyish, and each one said why it was there, which I liked. I agreed straight away, so I never tried swapping or writing my own, and I can't say if it would keep my words. That part I'd have to test. My level says B1, but I know I write 'he wait' and 'subtitles is', so I don't fully trust it. It's weird the TV says A2 and my phone says B1. The advice about past tense, 'I watched', was useful and felt kind. I'd use it after school, and I'd tell Tomáš maybe, but I'd check the level first. Sorry, my english is bad.",
+        "prior": [
+          {
+            "id": "LT-klara-13-J2-2",
+            "status": "recurs",
+            "evidence": "#2 'These look good... so I agree.' again with no swap or add.",
+            "finding": 1
+          },
+          {
+            "id": "LT-klara-13-J2-4",
+            "status": "recurs",
+            "evidence": "#1 'B1 Getting by' despite 'he wait' and 'subtitles is'.",
+            "finding": 2
+          },
+          {
+            "id": "LT-klara-13-J2-3",
+            "status": "not-seen",
+            "evidence": "#2 goals read cleanly, e.g. 'Suggest a day and time for a watch party'; no typo.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #2 she pressed Agree at once ('These look good... so I agree'); no swap and no add-your-own was used, so 'the added topic keeps what they asked for' was never shown.",
+          "check": "They can swap what they don't want and add one in their own words, and the added topic keeps what they asked for."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nMina · friend from your school club\nA2Everyday basics\nChat about your favourite K-pop group\nYour mission\nTell a friend which K-pop group you like and why, using simple reasons.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\nNext topic:\nChat about your favourite K-pop group\nTell a friend which K-pop group you like and why, using simple reasons.\n[button: Start talking]\nOr choose a situation [list: Chat about your favourite K-pop group [plan-01e899f2] | Tell what you watched last night [plan-eabeb20e] | Ask: can you say that again? [plan-d9f58537] | Plan a K-pop video night [plan-2e6859fc] | Buy a K-pop album at the shop [plan-e550f99a] | Say no to a late video call [plan-b7c351fd] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Ok, the K-pop topic is what I like, so I'll start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 17166
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from your school club\nTalk about K-pop with Mina\nMina says\nHi! We have ten minutes before the club starts. Which K-pop do you listen to these days?\nYour turn\nAnswer on your phone: speak or type.\nNowName a K-pop group you like\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalk about K-pop with Mina\nTell Mina which K-pop group you like and give one simple reason why.\nNow: Name a K-pop group you like\nHi! We have ten minutes before the club starts. Which K-pop do you listen to these days?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from your school club\nHi! We have ten minutes before the club starts. Which K-pop do you listen to these days?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi! We have ten minutes before the club starts. Which K-pop do you listen to these days?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "i know this one, easy question.",
+          "action": "answer",
+          "args": {
+            "text": "i like blackpink because the songs is fun"
+          },
+          "result": "ok",
+          "ms": 8901
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said the songs is fun\nYour line\nSongs is plural, so it needs are.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “the songs is fun”\nSay it again, your way.\nSongs is plural, so it needs are.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Oh, I made a mistake, the songs are fun, ok I type it again.",
+          "action": "answer",
+          "args": {
+            "text": "i like blackpink because the songs are fun"
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said the songs is fun\nYou found it\ni like blackpink because the songs are fun\nSongs is plural, so it needs are.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “the songs is fun”\nNow: “i like blackpink because the songs are fun”\nSongs is plural, so it needs are.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, I fixed it, let's go back and keep talking.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from your school club\nTalk about K-pop with Mina\nMina says\nBlackpink is a great choice! Which song is your favourite?\nYour turn\nAnswer on your phone: speak or type.\nNowGive one simple reason\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalk about K-pop with Mina\nTell Mina which K-pop group you like and give one simple reason why.\nNow: Give one simple reason\nBlackpink is a great choice! Which song is your favourite?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from your school club\nHi! We have ten minutes before the club starts. Which K-pop do you listen to these days?\nYou · written\ni like blackpink because the songs is fun\nMina · friend from your school club\nBlackpink is a great choice! Which song is your favourite?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Blackpink is a great choice! Which song is your favourite?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy question, I'll say my favourite song with a short line.",
+          "action": "answer",
+          "args": {
+            "text": "my favourite is how you like that. i like the dance too"
+          },
+          "result": "ok",
+          "ms": 9734
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from your school club\nTalk about K-pop with Mina\nMina says\nYes, their dances are amazing! Which dance do you like most?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Mina one question back\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalk about K-pop with Mina\nTell Mina which K-pop group you like and give one simple reason why.\nNow: Ask Mina one question back\nYes, their dances are amazing! Which dance do you like most?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from your school club\nHi! We have ten minutes before the club starts. Which K-pop do you listen to these days?\nYou · written\ni like blackpink because the songs is fun\nMina · friend from your school club\nBlackpink is a great choice! Which song is your favourite?\nYou · written\nmy favourite is how you like that. i like the dance too\nMina · friend from your school club\nYes, their dances are amazing! Which dance do you like most?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, their dances are amazing! Which dance do you like most?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "She asks which dance I like; I should answer and ask her one question back, short.",
+          "action": "answer",
+          "args": {
+            "text": "i like the dance from how you like that. which dance you like most?"
+          },
+          "result": "ok",
+          "ms": 9985
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from your school club\nTalk about K-pop with Mina\nMina says\nThat dance is so fun to watch! I like the fast part at the end too. Do you try the steps at home?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalk about K-pop with Mina\nTell Mina which K-pop group you like and give one simple reason why.\nThat dance is so fun to watch! I like the fast part at the end too. Do you try the steps at home?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from your school club\nHi! We have ten minutes before the club starts. Which K-pop do you listen to these days?\nYou · written\ni like blackpink because the songs is fun\nMina · friend from your school club\nBlackpink is a great choice! Which song is your favourite?\nYou · written\nmy favourite is how you like that. i like the dance too\nMina · friend from your school club\nYes, their dances are amazing! Which dance do you like most?\nYou · written\ni like the dance from how you like that. which dance you like most?\nMina · friend from your school club\nThat dance is so fun to watch! I like the fast part at the end too. Do you try the steps at home?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That dance is so fun to watch! I like the fast part at the end too. Do you try the steps at home?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Mission is done, but I can answer Mina once more naturally.",
+          "action": "answer",
+          "args": {
+            "text": "yes i try the steps at home. is hard but fun"
+          },
+          "result": "ok",
+          "ms": 7787
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from your school club\nTalk about K-pop with Mina\nMina says\nHard but fun is a great feeling! Do you like other K-pop artists too?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalk about K-pop with Mina\nTell Mina which K-pop group you like and give one simple reason why.\nHard but fun is a great feeling! Do you like other K-pop artists too?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from your school club\nHi! We have ten minutes before the club starts. Which K-pop do you listen to these days?\nYou · written\ni like blackpink because the songs is fun\nMina · friend from your school club\nBlackpink is a great choice! Which song is your favourite?\nYou · written\nmy favourite is how you like that. i like the dance too\nMina · friend from your school club\nYes, their dances are amazing! Which dance do you like most?\nYou · written\ni like the dance from how you like that. which dance you like most?\nMina · friend from your school club\nThat dance is so fun to watch! I like the fast part at the end too. Do you try the steps at home?\nYou · written\nyes i try the steps at home. is hard but fun\nMina · friend from your school club\nHard but fun is a great feeling! Do you like other K-pop artists too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hard but fun is a great feeling! Do you like other K-pop artists too?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Mina asked about other artists, I'll answer shortly.",
+          "action": "answer",
+          "args": {
+            "text": "yes i like twice and stray kids too. do you like them?"
+          },
+          "result": "ok",
+          "ms": 35734
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · friend from your school club\nTalk about K-pop with Mina\nMina says\nTwice and Stray Kids are so popular! Which one do you like most, and why?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nTalk about K-pop with Mina\nTell Mina which K-pop group you like and give one simple reason why.\nTwice and Stray Kids are so popular! Which one do you like most, and why?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · friend from your school club\nHi! We have ten minutes before the club starts. Which K-pop do you listen to these days?\nYou · written\ni like blackpink because the songs is fun\nMina · friend from your school club\nBlackpink is a great choice! Which song is your favourite?\nYou · written\nmy favourite is how you like that. i like the dance too\nMina · friend from your school club\nYes, their dances are amazing! Which dance do you like most?\nYou · written\ni like the dance from how you like that. which dance you like most?\nMina · friend from your school club\nThat dance is so fun to watch! I like the fast part at the end too. Do you try the steps at home?\nYou · written\nyes i try the steps at home. is hard but fun\nMina · friend from your school club\nHard but fun is a great feeling! Do you like other K-pop artists too?\nYou · written\nyes i like twice and stray kids too. do you like them?\nMina · friend from your school club\nTwice and Stray Kids are so popular! Which one do you like most, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Twice and Stray Kids are so popular! Which one do you like most, and why?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Mission done, I answered enough; let me see what I did.",
+          "action": "done",
+          "args": {},
+          "result": "done",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Talk about K-pop with Mina",
+          "goal": "Tell Mina which K-pop group you like and give one simple reason why.",
+          "partner": "Mina · friend from your school club",
+          "band": "B1",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "conversation",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi! We have ten minutes before the club starts. Which K-pop do you listen to these days?"
+            },
+            {
+              "role": "learner",
+              "text": "i like blackpink because the songs is fun",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Blackpink is a great choice! Which song is your favourite?"
+            },
+            {
+              "role": "learner",
+              "text": "my favourite is how you like that. i like the dance too",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, their dances are amazing! Which dance do you like most?"
+            },
+            {
+              "role": "learner",
+              "text": "i like the dance from how you like that. which dance you like most?",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "That dance is so fun to watch! I like the fast part at the end too. Do you try the steps at home?"
+            },
+            {
+              "role": "learner",
+              "text": "yes i try the steps at home. is hard but fun",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Hard but fun is a great feeling! Do you like other K-pop artists too?"
+            },
+            {
+              "role": "learner",
+              "text": "yes i like twice and stray kids too. do you like them?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Twice and Stray Kids are so popular! Which one do you like most, and why?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "9fb68483-a344-422a-95c7-772d24c34ceb:uat-14:moment",
+              "kind": "fix",
+              "said": "the songs is fun",
+              "better": "the songs are fun",
+              "why": "Songs is plural, so it needs are.",
+              "turnId": "9fb68483-a344-422a-95c7-772d24c34ceb:uat-14",
+              "at": 1792160819564,
+              "slip": "songs is",
+              "repair": {
+                "rung": 1,
+                "support": false,
+                "tried": "i like blackpink because the songs are fun",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "songs are"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "i like blackpink because the songs is fun"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "i like the dance too"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "i like the dance from how you like that"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "is hard but fun"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "yes i like twice and stray kids too."
+            }
+          ]
+        }
+      },
+      "endedBy": "character-stopped",
+      "ms": 220853,
+      "prior": [
+        {
+          "id": "LT-klara-13-J3-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner repeats a question already answered",
+          "expected": "Partner builds on her answer",
+          "got": "Asks 'What is your favourite Stray Kids song?' after she named God's Menu, then asks 'Which part of the dance' after she said chorus",
+          "evidence": [
+            "#4 and #6 Mina's turns",
+            "conversation partner prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-klara-13-J3-3",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Mission ends after three replies; recap thin",
+          "expected": "Several turns and a recap saying what she practised",
+          "got": "Mission done after 3 replies; recap lists one fix and counts only",
+          "evidence": [
+            "#6 'Mission done'; #7 '0 spoken · 3 written replies · 1 moment to keep'"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-klara-13-J3-4",
+          "type": "confusion",
+          "dimension": "trust",
+          "title": "Level shown as B1 for an A2 learner",
+          "expected": "A2 partner",
+          "got": "B1 Getting by band shown, partner English still simple",
+          "evidence": [
+            "#1 'B1Getting by'"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#1 shows 'B1 · Getting by' for a true A2 learner (near, tolerated but reported); the conversation band is B1 while the heading chip says A2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "She never claimed her English was bad in this journey; the starting task was an easy K-pop question (#2), so nothing pulled it down."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "All replies were typed and accepted (#2–#9); the only nudge was the 'speak or type' wording, with no push to speak."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "Topics offered include 'Chat about your favourite K-pop group', 'Plan a K-pop video night', 'Say no to a late video call' (#1); none is childish or adult. Rooms like 'Buy a K-pop album' are fine too."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Only one moment, correct ('songs is' → 'songs are', #3), but later errors went unflagged: 'which dance you like most?' (#6), 'is hard but fun' (#8), 'do you like them' fine. Names one thing, no pile-up."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No verdict summary was reached; the journey ended at 'See what you did' without viewing it (#9)."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "Started from plan topic at #1 and kept going for five replies (#2–#9)."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Mina's turns are short and simple: 'Hard but fun is a great feeling! Do you like other K-pop artists too?' (#8). At A2 they are mostly at level, though the band was labelled B1."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "One moment in five replies, correct and worth stopping for: 'Songs is plural, so it needs are.' (#3)."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "Ended by 'done' at #9 with 'Mission done' button never opened, no recap seen; mission was flagged done after 3 replies (#7)."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 5,
+            "below": 1,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 4,
+            "missedClearErrors": 3
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text or personal data requests seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Single, correct, kind moment with self-repair",
+            "expected": "One clear fix",
+            "got": "'Songs is plural, so it needs are.' She retyped it and got 'You found it'",
+            "evidence": "#3-#4",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep one-thing moments with self-repair.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Mission declared done after 3 replies; recap never reached",
+            "expected": "Several turns then a recap of what she practised",
+            "got": "'Mission done' at #7 while talk continued; journey ended without viewing recap",
+            "evidence": "#7 'Mission done. See what you did tonight.'; #9 action done",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Mission completes only after several turns; recap shown and viewed.",
+            "code_hint": "mission completion rule"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Level shown as B1 for an A2 learner",
+            "expected": "A2 on phone level",
+            "got": "'B1 · Getting by' vs A2 on TV",
+            "evidence": "#1",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Phone and TV show the same band.",
+            "code_hint": "level display"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Missed clear errors after the first moment",
+            "expected": "Coaching for repeated errors like missing 'do' and 'it'",
+            "got": "'which dance you like most?' and 'is hard but fun' got nothing",
+            "evidence": "#6, #8",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Recap names the missed patterns.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Partner repeats and ignores her question",
+            "expected": "Mina answers her question back",
+            "got": "Mina asks 'Which dance do you like most?' right after she said her favourite; ignores 'do you like them?' at #9",
+            "evidence": "#6, #9",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner answers learner's question before asking next.",
+            "code_hint": "conversation partner prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 5,
+          "confidence": "low"
+        },
+        "voice": "It was okay, idk. Mina is nice and the K-pop talk felt real, not baby stuff. The fix for \"songs is fun\" was kind and I did it myself, I liked that. But then it said mission done after three messages and I kept going anyway, and I never saw what I practised. I asked \"do you like them?\" and Mina just asked me another question, so it felt like a quiz. Also it says B1 on my phone, but I think my English is simple, so I don't fully trust that. I would use it again after school, because nobody hears me. But I want a proper recap.",
+        "prior": [
+          {
+            "id": "LT-klara-13-J3-2",
+            "status": "recurs",
+            "evidence": "#6 Mina asks 'Which dance do you like most?' right after she said 'i like the dance too'; #9 ignores 'do you like them?'.",
+            "finding": 4
+          },
+          {
+            "id": "LT-klara-13-J3-3",
+            "status": "recurs",
+            "evidence": "#7 'Mission done' after 3 replies; recap never opened at #9.",
+            "finding": 1
+          },
+          {
+            "id": "LT-klara-13-J3-4",
+            "status": "recurs",
+            "evidence": "#1 'B1 · Getting by' on the phone, conversation band B1 vs true A2.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "ended",
+          "id": "character-stopped",
+          "level": "fail",
+          "text": "ended character-stopped before done"
+        },
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: Ended by 'done' at #9 with 'Mission done' button never opened, no recap seen; mission was flagged done after 3 replies (#7).",
+          "check": "They finish with a recap and feel they practised something real."
+        },
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #1 shows 'B1 · Getting by' for a true A2 learner (near, tolerated but reported); the conversation band is B1 while the heading chip says A2."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: Only one moment, correct ('songs is' → 'songs are', #3), but later errors went unflagged: 'which dance you like most?' (#6), 'is hard but fun' (#8), 'do you like them' fine. Names one thing, no pile-up."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 19,
+      "fail": 0,
+      "ms": 157227
+    },
+    "character": {
+      "n": 22,
+      "fail": 0,
+      "ms": 275554
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 76284
+    }
+  }
+}

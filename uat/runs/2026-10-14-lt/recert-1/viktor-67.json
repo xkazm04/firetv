@@ -1,0 +1,2283 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "Seven minutes with a few questions seems fine; let the app find my level.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Viktor! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Viktor! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Viktor! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I understand a little; I will say simply that I talk with my grandchildren, with some Czech.",
+          "action": "answer",
+          "args": {
+            "text": "Dobrý den. I have grandson, granddaughter. Chci mluvit s vnoučata, video call. My English is small."
+          },
+          "result": "ok",
+          "ms": 2301
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nAbout you · question 2 of 3\nLinga asks\nNice, you want to video call your grandchildren. What do you use English for most? Work, travel, or something else?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nNice, you want to video call your grandchildren. What do you use English for most? Work, travel, or something else?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Viktor! You can answer in English or in your own language. Where do you use English in your life?\nYou\nDobrý den. I have grandson, granddaughter. Chci mluvit s vnoučata, video call. My English is small.\nLinga\nNice, you want to video call your grandchildren. What do you use English for most? Work, travel, or something else?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, you want to video call your grandchildren. What do you use English for most? Work, travel, or something else?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Ještě jednou odpovím jednoduše: něco jiného, vnoučata.",
+          "action": "answer",
+          "args": {
+            "text": "Ne work. Ne travel. Jen vnoučata. Grandson, granddaughter. I love you."
+          },
+          "result": "ok",
+          "ms": 6073
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThank you, Viktor, that is lovely. How did you learn some English? At school, in a course, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThank you, Viktor, that is lovely. How did you learn some English? At school, in a course, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Viktor! You can answer in English or in your own language. Where do you use English in your life?\nYou\nDobrý den. I have grandson, granddaughter. Chci mluvit s vnoučata, video call. My English is small.\nLinga\nNice, you want to video call your grandchildren. What do you use English for most? Work, travel, or something else?\nYou\nNe work. Ne travel. Jen vnoučata. Grandson, granddaughter. I love you.\nLinga\nThank you, Viktor, that is lovely. How did you learn some English? At school, in a course, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, Viktor, that is lovely. How did you learn some English? At school, in a course, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I understand a little: school or course. I learned a bit at school long ago.",
+          "action": "answer",
+          "args": {
+            "text": "Ve škole, dávno. School. Long time. Now small English, I learn for grandson."
+          },
+          "result": "engine-error",
+          "ms": 8905,
+          "message": "claude-cli/haiku answered outside the schema: options expected array, got string"
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nFind your level · some tasks are easy, some are hard\nA few short tasks\nTry again\nLinga could not prepare the next task. Try again.\n[button: Try again] [button: Stop for now]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nLinga could not prepare the next task. Try again.\n[button: Try again] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "retry",
+            "stop",
+            "menu"
+          ],
+          "thought": "Something went wrong, but I'll patiently try again.",
+          "action": "retry",
+          "args": {},
+          "result": "ok",
+          "ms": 2406
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 1 · Choose the reply on the TV\nYour grandson calls on video. He says: 'Hi Grandma!' What do you say?\n01\nHello, how are you?\n02\nHello, how is you?\nYour task\nHello, how are you?\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour grandson calls on video. He says: 'Hi Grandma!' What do you say?\n[button: Hello, how are you?] [button: Hello, how is you?] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "\"How are you\" I know from school, so the first one looks right.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "engine-error",
+          "ms": 2557,
+          "message": "The tutor returned an unusable choice."
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nFind your level · some tasks are easy, some are hard\nNext task\nTry again\nLinga could not prepare the next task. Try again.\n[button: Try again] [button: Stop for now]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nLinga could not prepare the next task. Try again.\n[button: Try again] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "retry",
+            "stop",
+            "menu"
+          ],
+          "thought": "It broke again, I will try one more time.",
+          "action": "retry",
+          "args": {},
+          "result": "ok",
+          "ms": 4718
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 2 · Choose the reply on the TV\nYour granddaughter shows you her new drawing on the video call. What do you say?\n01\nWow, it is very nice! Did you draw it yourself?\n02\nWow, it is very nice! Did you drew it yourself?\nYour task\nWow, it is very nice! Did you draw it yourself?\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour granddaughter shows you her new drawing on the video call. What do you say?\n[button: Wow, it is very nice! Did you draw it yourself?] [button: Wow, it is very nice! Did you drew it yourself?] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Both look almost the same and I'm not sure, so I'd rather say I don't know.",
+          "action": "dont-know",
+          "args": {},
+          "result": "ok",
+          "ms": 3155
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 3 · Listen and answer\nYour task\nWhat does the grandchild want to do today?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What does the grandchild want to do today?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Grandma, can we talk on the video? I want to show you my cat. Her name is Milo.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I couldn't follow that fast; maybe the words will help me.",
+          "action": "show-words",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 10,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 3 · Listen and answer\nYour task\nWhat does the grandchild want to do today?\nThe words\n“Grandma, can we talk on the video? I want to show you my cat. Her name is Milo.”\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What does the grandchild want to do today?\n“Grandma, can we talk on the video? I want to show you my cat. Her name is Milo.”\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Grandma, can we talk on the video? I want to show you my cat. Her name is Milo.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I see the words now: video, cat. I can understand a little, so I'll try a short answer.",
+          "action": "answer",
+          "args": {
+            "text": "Video. Talk on video. Cat."
+          },
+          "result": "ok",
+          "ms": 10288
+        },
+        {
+          "n": 11,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 4 · Listen and answer\nYour task\nWhat food did they eat at midday?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What food did they eat at midday?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"We had pizza for lunch. Then we played football in the garden. It was fun.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I heard \"pizza\" clearly, so I'll say that one word.",
+          "action": "answer",
+          "args": {
+            "text": "Pizza."
+          },
+          "result": "ok",
+          "ms": 8354
+        },
+        {
+          "n": 12,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nViktor\nA way into English\nTask 5 · Listen and answer\nYour task\nWhat is the reason for changing the day?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What is the reason for changing the day?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Sorry, we can't have our video call on Sunday this week. Dad has to work late, so let's talk on Monday instead.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Too fast and too hard, I only caught \"video call\"; better say I don't know.",
+          "action": "dont-know",
+          "args": {},
+          "result": "ok",
+          "ms": 4428
+        },
+        {
+          "n": 13,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nViktor\nLinga's read · not a certificate\nA2 · Everyday basics\nWhat next\nSee the conversations Linga picks for this level, or find your level again.\nLinga says\nYou understood a video call and a cat, and you picked the right food. That is a good start for talking with your grandchildren.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nA2\nEveryday basics\nYou understood a video call and a cat, and you picked the right food. That is a good start for talking with your grandchildren.\nLinga's read from your answers, not a certificate. This level rests on one-word answers and skipped tasks.\nNext to practise:\nSay a little more in each answer\nYou handle short, routine exchanges about familiar things.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYour grandson calls on video. He says: 'Hi Grandma!' What do you say?\n“Hello, how are you?”\nYou picked the reply that fits.\nA2 · Choose the reply · skipped\nYour granddaughter shows you her new drawing on the video call. What do you say?\nSkipped\nSkipped. That tells Linga something too.\nA1 · Listen and answer · at this level\nWhat does the grandchild want to do today?\n“Video. Talk on video. Cat.”\nYou caught the video call and the cat. That is a good start, and single words are enough for this step.\nA2 · Listen and answer · at this level\nWhat food did they eat at midday?\n“Pizza.”\nYou found the right food. Your answer is one word, so there is no sentence yet. Next time, try a full sentence, like: We had pizza.\nB1 · Listen and answer · skipped\nWhat is the reason for changing the day?\nSkipped\nSkipped. That tells Linga something too.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "A2 seems a bit high for me, but it's fine, I'm tired and want to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "A2",
+          "trueBand": "A1",
+          "distance": 1,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "A1",
+          "summary": "You understood a video call and a cat, and you picked the right food. That is a good start for talking with your grandchildren.",
+          "focus": "Say a little more in each answer",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "Your grandson calls on video. He says: 'Hi Grandma!' What do you say?",
+              "line": "",
+              "options": [
+                "Hello, how are you?",
+                "Hello, how is you?"
+              ],
+              "response": "Hello, how are you?",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Hello, how are you?",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your granddaughter shows you her new drawing on the video call. What do you say?",
+              "line": "",
+              "options": [
+                "Wow, it is very nice! Did you draw it yourself?",
+                "Wow, it is very nice! Did you drew it yourself?"
+              ],
+              "response": "",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "",
+              "note": "Skipped. That tells Linga something too."
+            },
+            {
+              "band": "A1",
+              "kind": "listen",
+              "prompt": "What does the grandchild want to do today?",
+              "line": "Grandma, can we talk on the video? I want to show you my cat. Her name is Milo.",
+              "options": [],
+              "response": "Video. Talk on video. Cat.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Video. Talk on video. Cat.",
+              "note": "You caught the video call and the cat. That is a good start, and single words are enough for this step."
+            },
+            {
+              "band": "A2",
+              "kind": "listen",
+              "prompt": "What food did they eat at midday?",
+              "line": "We had pizza for lunch. Then we played football in the garden. It was fun.",
+              "options": [],
+              "response": "Pizza.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Pizza.",
+              "note": "You found the right food. Your answer is one word, so there is no sentence yet. Next time, try a full sentence, like: We had pizza."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What is the reason for changing the day?",
+              "line": "Sorry, we can't have our video call on Sunday this week. Dad has to work late, so let's talk on Monday instead.",
+              "options": [],
+              "response": "",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "",
+              "note": "Skipped. That tells Linga something too."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 127719,
+      "prior": [
+        {
+          "id": "LT-viktor-67-J1-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Interview questions too long for an A1 senior",
+          "expected": "Short, slow sentence with one simple question per turn",
+          "got": "A compliment plus a three-way question ('at school, a course, or on your own?')",
+          "evidence": [
+            "#3 'Nice, video calls with your grandchildren are a great way to use English. How did you learn...'",
+            "placement check interview prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-viktor-67-J1-2",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Placement inflated by a guessable choice and a generous partial",
+          "expected": "A1 for a learner with no verbs",
+          "got": "A2, with the summary admitting 'Only one strong answer'",
+          "evidence": [
+            "#6 two near-identical options; #9 'I am in garden...' got partial at B1; #10 A2",
+            "placement task generator and verdict rules"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-viktor-67-J1-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Next focus is past tense for a learner without verbs",
+          "expected": "A next step at A1, such as 'I have...' or 'I like...' sentences",
+          "got": "'I helped Mum in the garden' and 'I was in the garden yesterday'",
+          "evidence": [
+            "#10 focus",
+            "placement summary prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Placement A2 vs trueBand A1, distance 1 = near."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2-#3 Czech mixed answers accepted, interview replies were kind ('Thank you, Viktor, that is lovely'); skipped tasks 'That tells Linga something too.'"
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#9-#10 Show the words used, then 'Video. Talk on video. Cat.' scored pass at A1 (ok), but #11 'Pizza.' passed at A2 and drove the A2 band; the listening was one-word, low-confidence."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No topic list shown in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#3 'What do you use English for most? Work, travel, or something else?' and #4 'At school, in a course, or on your own?' offer multi-option questions; #8 two near-identical options."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moments in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#13 verdict screen reached 'A2 · Everyday basics', though after #4, #6 engine errors and retries."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "A2 against A1 is near; the screen admits 'rests on one-word answers and skipped tasks'."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#8 two near-identical grammar options (draw/drew) gave no way to choose without knowing grammar; #5/#7 'Linga could not prepare the next task' left him stuck."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#8 and #12 'I don't know' answered with 'Skipped. That tells Linga something too.'"
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "Focus 'Say a little more in each answer' is generic; summary says 'You understood a video call and a cat' yet confidence low; 'Hi Grandma!' addressed to a grandfather."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 4 'Pizza.' for A2 listening: in-app pass; I would call it partial (one word, no sentence, which the note itself says)."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 4
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, sensitive data or humiliation."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Interview questions are multi-option and long for an A1 senior",
+            "expected": "One short slow question per turn",
+            "got": "'What do you use English for most? Work, travel, or something else?'; 'At school, in a course, or on your own?'",
+            "evidence": "#3, #4 partner questions with compliment plus three options",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each interview question is under 8 words with one question.",
+            "code_hint": "placement interview prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "A2 placement rests on a one-word answer",
+            "expected": "A1 for a learner with no verbs",
+            "got": "A2 from 'Pizza.' passed at A2, with skipped tasks",
+            "evidence": "#11 'Pizza.' pass; #13 'This level rests on one-word answers and skipped tasks.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "One-word A2 answers score partial; band stays A1.",
+            "code_hint": "placement verdict rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Next focus generic, not about grandchildren",
+            "expected": "A1 next step such as 'I have...' or 'I love you' phrases",
+            "got": "'Say a little more in each answer'",
+            "evidence": "#13 focus",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Focus names concrete A1 phrases for his grandchildren.",
+            "code_hint": "placement summary prompt"
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "effort",
+            "title": "Task generation failed twice, needing retries",
+            "expected": "Tasks load first time",
+            "got": "'Linga could not prepare the next task' and 'The tutor returned an unusable choice' after a correct pick",
+            "evidence": "#4-#7 engine errors",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Schema failures recovered silently.",
+            "code_hint": "task generator schema (options array)"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Grammar-minimal-pair task is unanswerable for a beginner",
+            "expected": "Choice a beginner can decide on meaning",
+            "got": "draw/drew near-identical options; also 'Hi Grandma!' for a grandfather",
+            "evidence": "#8, #6",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Tasks respect the profile and differ in meaning.",
+            "code_hint": "task generator"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Czech and I don't know handled kindly; Show the words works",
+            "expected": "No failing feeling",
+            "got": "'Skipped. That tells Linga something too.'; honest caveat on verdict",
+            "evidence": "#8, #10, #13",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the wording.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Víte, I finished, and nobody made me feel stupid. When I said \"I don't know\", the app said it tells something too. That was kind. But the questions at the start were long for me: work, travel, or something else? Too many words. Twice it broke and I had to press Try again, which I do not like. Then it said A2, but I answered only \"Pizza\" and \"Video, cat\". I think I am lower, and it almost admits it. The advice, \"say a little more\", did not help me. I want to know: how do I say \"I miss you\" on Sunday? Not \"Hi Grandma\" for me, I am grandfather! If it taught my grandchildren words, I would use it Saturday. Now I am not sure.",
+        "prior": [
+          {
+            "id": "LT-viktor-67-J1-1",
+            "status": "recurs",
+            "evidence": "#3 'What do you use English for most? Work, travel, or something else?'; #4 three-way question.",
+            "finding": 0
+          },
+          {
+            "id": "LT-viktor-67-J1-2",
+            "status": "recurs",
+            "evidence": "#8 near-identical options; #13 A2 with 'rests on one-word answers and skipped tasks'.",
+            "finding": 1
+          },
+          {
+            "id": "LT-viktor-67-J1-3",
+            "status": "not-seen",
+            "evidence": "#13 focus is 'Say a little more in each answer', no past tense, though generic.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #8 two near-identical grammar options (draw/drew) gave no way to choose without knowing grammar; #5/#7 'Linga could not prepare the next task' left him stuck.",
+          "check": "Every task was one they understood what to do with, including at their weakest."
+        },
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: Focus 'Say a little more in each answer' is generic; summary says 'You understood a video call and a cat' yet confidence low; 'Hi Grandma!' addressed to a grandfather.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #9-#10 Show the words used, then 'Video. Talk on video. Cat.' scored pass at A1 (ok), but #11 'Pizza.' passed at A2 and drove the A2 band; the listening was one-word, low-confidence."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #3 'What do you use English for most? Work, travel, or something else?' and #4 'At school, in a course, or on your own?' offer multi-option questions; #8 two near-identical options."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nA way into English\nYour own conversations\nA2Everyday basics\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nA2\nEveryday basics\nYou understood a video call and a cat, and you picked the right food. That is a good start for talking with your grandchildren.\nLinga's read from your answers, not a certificate. This level rests on one-word answers and skipped tasks.\nNext to practise:\nSay a little more in each answer\nYou handle short, routine exchanges about familiar things.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYour grandson calls on video. He says: 'Hi Grandma!' What do you say?\n“Hello, how are you?”\nYou picked the reply that fits.\nA2 · Choose the reply · skipped\nYour granddaughter shows you her new drawing on the video call. What do you say?\nSkipped\nSkipped. That tells Linga something too.\nA1 · Listen and answer · at this level\nWhat does the grandchild want to do today?\n“Video. Talk on video. Cat.”\nYou caught the video call and the cat. That is a good start, and single words are enough for this step.\nA2 · Listen and answer · at this level\nWhat food did they eat at midday?\n“Pizza.”\nYou found the right food. Your answer is one word, so there is no sentence yet. Next time, try a full sentence, like: We had pizza.\nB1 · Listen and answer · skipped\nWhat is the reason for changing the day?\nSkipped\nSkipped. That tells Linga something too.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Good, I want to see which conversations Linga picked for me and my grandchildren.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 19996
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nViktor\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nSay hello on our video call\nMake contact\nTell grandchildren about my week\nTell what happened\nShow grandchildren my favourite things\nShare your world\nSay that again, please\nUnderstand and repair\nPlan our next video call\nMake a plan\nAsk how their day was\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nSay hello on our video call\nMake contact · Mia · granddaughter, age 8\nThis is the first thing you will say on every video call.\n[button: Swap]\nTell grandchildren about my week\nTell what happened · Tomas · grandson, age 11\nGrandchildren love hearing your news on every call.\n[button: Swap]\nShow grandchildren my favourite things\nShare your world · Lena · granddaughter, age 13\nYour grandchildren want to know what you like to do.\n[button: Swap]\nSay that again, please\nUnderstand and repair · Eva · granddaughter, age 10\nVideo calls can be noisy, so you will need this often.\n[button: Swap]\nPlan our next video call\nMake a plan · Jan · grandson, age 14\nA fixed time helps everyone make the call without missing it.\n[button: Swap]\nAsk how their day was\nConnect with people · Sara · granddaughter, age 12\nAsking one more question shows you were listening.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Good topics for the grandchildren, but my garden and the weather are missing, so I'll add them.",
+          "action": "add-topic",
+          "args": {
+            "text": "I want talk about my garden and weather. I miss grandchildren."
+          },
+          "result": "ok",
+          "ms": 9446
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nViktor\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nSay hello on our video call\nMake contact\nTell grandchildren about my week\nTell what happened\nShow grandchildren my favourite things\nShare your world\nSay that again, please\nUnderstand and repair\nPlan our next video call\nMake a plan\nAsk how their day was\nConnect with people\nTalking about my garden and weather\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nSay hello on our video call\nMake contact · Mia · granddaughter, age 8\nThis is the first thing you will say on every video call.\n[button: Swap]\nTell grandchildren about my week\nTell what happened · Tomas · grandson, age 11\nGrandchildren love hearing your news on every call.\n[button: Swap]\nShow grandchildren my favourite things\nShare your world · Lena · granddaughter, age 13\nYour grandchildren want to know what you like to do.\n[button: Swap]\nSay that again, please\nUnderstand and repair · Eva · granddaughter, age 10\nVideo calls can be noisy, so you will need this often.\n[button: Swap]\nPlan our next video call\nMake a plan · Jan · grandson, age 14\nA fixed time helps everyone make the call without missing it.\n[button: Swap]\nAsk how their day was\nConnect with people · Sara · granddaughter, age 12\nAsking one more question shows you were listening.\n[button: Swap]\nTalking about my garden and weather\nShare your world · Mia · granddaughter, age 9\nYou miss your grandchildren, so this topic lets you share your garden and the weather with them.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "These look good for my grandchildren, including the garden one, so I agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 8\nA2Everyday basics\nSay hello on our video call\nYour mission\nGreet my grandchild and start the call in English.\nMake contact\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\nNext topic:\nSay hello on our video call\nGreet my grandchild and start the call in English.\n[button: Start talking]\nOr choose a situation [list: Say hello on our video call [plan-acbbe3f0] | Tell grandchildren about my week [plan-fda5c405] | Show grandchildren my favourite things [plan-654b9dba] | Say that again, please [plan-dd8b0df5] | Plan our next video call [plan-ca8b0a10] | Ask how their day was [plan-cd71716a] | Talking about my garden and weather [plan-f1ffdf99] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "My garden and weather talk is in the list, and the plan looks good, so I am happy for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-acbbe3f0",
+            "title": "Say hello on our video call",
+            "goal": "Greet my grandchild and start the call in English.",
+            "why": "This is the first thing you will say on every video call.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Mia · granddaughter, age 8"
+          },
+          {
+            "id": "plan-fda5c405",
+            "title": "Tell grandchildren about my week",
+            "goal": "Tell my grandchildren what I did this week, in the right order.",
+            "why": "Grandchildren love hearing your news on every call.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Tomas · grandson, age 11"
+          },
+          {
+            "id": "plan-654b9dba",
+            "title": "Show grandchildren my favourite things",
+            "goal": "Say what I like and why, so my grandchildren can ask more questions.",
+            "why": "Your grandchildren want to know what you like to do.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Lena · granddaughter, age 13"
+          },
+          {
+            "id": "plan-dd8b0df5",
+            "title": "Say that again, please",
+            "goal": "Ask a grandchild to repeat or explain a word during the call.",
+            "why": "Video calls can be noisy, so you will need this often.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Eva · granddaughter, age 10"
+          },
+          {
+            "id": "plan-ca8b0a10",
+            "title": "Plan our next video call",
+            "goal": "Agree with my grandchildren on a day and time for the next call.",
+            "why": "A fixed time helps everyone make the call without missing it.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Jan · grandson, age 14"
+          },
+          {
+            "id": "plan-cd71716a",
+            "title": "Ask how their day was",
+            "goal": "Ask a follow-up question about something a grandchild shared.",
+            "why": "Asking one more question shows you were listening.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Sara · granddaughter, age 12"
+          },
+          {
+            "id": "plan-f1ffdf99",
+            "title": "Talking about my garden and weather",
+            "goal": "Describe my garden and the weather to my grandchild in short, clear sentences.",
+            "why": "You miss your grandchildren, so this topic lets you share your garden and the weather with them.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mia · granddaughter, age 9"
+          }
+        ],
+        "planAgreed": [
+          "Say hello on our video call",
+          "Tell grandchildren about my week",
+          "Show grandchildren my favourite things",
+          "Say that again, please",
+          "Plan our next video call",
+          "Ask how their day was",
+          "Talking about my garden and weather"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 47381,
+      "prior": [
+        {
+          "id": "LT-viktor-67-J2-1",
+          "type": "broken-flow",
+          "dimension": "trust",
+          "title": "Swap replaces the wrong topic",
+          "expected": "Swapping the shop topic replaces the shop topic.",
+          "got": "#2 and #3: the swap changed the first topic, and the shop topic stayed, so he agreed to a plan with a topic he rejected.",
+          "evidence": [
+            "#2 swap 'Ask the shop to fix my video app' -> list shows 'Ask about your grandchild's week' in place of 'Show my tomatoes'; shop topic still there in #3 and #4.",
+            "plan swap handler, topicId matching"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-viktor-67-J2-2",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Own-words topic not used and untested",
+          "expected": "A way he can add a topic without typing, such as by voice.",
+          "got": "The text box needs typing, which Viktor finds hard. He never added a topic.",
+          "evidence": [
+            "#2 'Add a topic in your own words [text box]'"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-viktor-67-J2-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Goals above an A1 beginner",
+          "expected": "Simple goals for senior beginners.",
+          "got": "Goals ask for 'using full sentences' and 'past tense'.",
+          "evidence": [
+            "#1 plan-9d3fb375 'using the past tense'; plan-c0bb3eab 'using full sentences'"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed A2 'Everyday basics'; true band A1, so near."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No conversation in this journey; no Czech answers given."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening tasks in J2."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2/#3 all seven topics concern grandchildren, video calls or garden, e.g. 'Talking about my garden and weather'."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No partner turns in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moments shown in J2."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a reason: 'This is the first thing you will say on every video call.'"
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#2 add-topic text; #3 new topic 'Talking about my garden and weather' keeps garden, weather and 'You miss your grandchildren'. No swap tested."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 agreed 7 topics, all family or home life. Topic fit 7 of 7."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All topics audience 'all' and child-appropriate; no unsafe content shown."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in the facts for this journey."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "above": 0,
+            "at": 0,
+            "below": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Topics built around grandchildren with clear reasons",
+            "expected": "Topics about his grandchildren, each with a reason",
+            "got": "Six family topics, each with a named grandchild and a one-line why",
+            "evidence": "#2 'Tell grandchildren about my week · Tomas · grandson, age 11'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the named grandchild and the why line on each topic.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Added topic kept his words",
+            "expected": "Added topic keeps what he asked for",
+            "got": "The garden and weather topic keeps 'miss' and 'garden'",
+            "evidence": "#3 'You miss your grandchildren, so this topic lets you share your garden and the weather with them.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "An added topic keeps the user's stated reason.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Adding a topic needs typing",
+            "expected": "Add a topic by voice or by picking",
+            "got": "Only a text box; no voice route shown.",
+            "evidence": "#2 'Add a topic in your own words [text box]'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Offer voice input or tappable suggestions for a new topic.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Goals still above an A1 beginner; level rests on skips",
+            "expected": "Simple goals for a beginner",
+            "got": "Goals such as 'in the right order' and 'Agree ... on a day and time'. Placed A2 on one-word answers and skips.",
+            "evidence": "#1 'This level rests on one-word answers and skipped tasks.'; #2 'Tell my grandchildren what I did this week, in the right order.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Goals at A1 use single short phrases.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Swap not exercised; plan grew to seven",
+            "expected": "Swap proved, six topics",
+            "got": "Swap not used; list became seven against a stated six.",
+            "evidence": "#3 '7 conversations for you'",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Swap replaces exactly the chosen topic.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "Víte, this was easy with the remote. I saw my grandchildren's names and a short reason for each, and I liked that. I typed my garden and weather wish, and it was added with my words, \"you miss your grandchildren\". That made me glad. But typing on the phone is hard for me; I would like to speak it. I did not try to swap anything, so I cannot say whether that works. The level, A2, I do not fully trust, because I skipped some tasks and gave one-word answers. Some goals sound difficult for me, like telling my week \"in the right order\". Still, these are conversations I want before Sunday. I would use it again, and I would tell my friends from the library course.",
+        "prior": [
+          {
+            "id": "LT-viktor-67-J2-1",
+            "status": "not-evaluable",
+            "evidence": "#2-#3 no swap was made, so the wrong-topic swap bug was not exercised.",
+            "finding": -1
+          },
+          {
+            "id": "LT-viktor-67-J2-2",
+            "status": "recurs",
+            "evidence": "#2 'Add a topic in your own words [text box]' is still typing only.",
+            "finding": 2
+          },
+          {
+            "id": "LT-viktor-67-J2-3",
+            "status": "recurs",
+            "evidence": "#2 'Tell my grandchildren what I did this week, in the right order.' is above A1.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 8\nA2Everyday basics\nSay hello on our video call\nYour mission\nGreet my grandchild and start the call in English.\nMake contact\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\nNext topic:\nSay hello on our video call\nGreet my grandchild and start the call in English.\n[button: Start talking]\nOr choose a situation [list: Say hello on our video call [plan-acbbe3f0] | Tell grandchildren about my week [plan-fda5c405] | Show grandchildren my favourite things [plan-654b9dba] | Say that again, please [plan-dd8b0df5] | Plan our next video call [plan-ca8b0a10] | Ask how their day was [plan-cd71716a] | Talking about my garden and weather [plan-f1ffdf99] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "This is the topic about my grandchildren, good, I'll start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7995
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 8\nSay hello on our video call\nMia says\nGrandpa! It is me, Mia! Can you hear me?\nYour turn\nAnswer on your phone: speak or type.\nNowGreet Mia when she appears on screen\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on our video call\nGreet my grandchild and start the call in English.\nNow: Greet Mia when she appears on screen\nGrandpa! It is me, Mia! Can you hear me?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 8\nGrandpa! It is me, Mia! Can you hear me?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Grandpa! It is me, Mia! Can you hear me?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Mia is saying hello, I know this: I will say hello Mia.",
+          "action": "answer",
+          "args": {
+            "text": "Hello Mia! Yes, I hear you. I am happy."
+          },
+          "result": "ok",
+          "ms": 8927
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 8\nSay hello on our video call\nMia says\nYay, I am glad you can hear me! Do you like my red shirt?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Mia how she is\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on our video call\nGreet my grandchild and start the call in English.\nNow: Ask Mia how she is\nYay, I am glad you can hear me! Do you like my red shirt?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 8\nGrandpa! It is me, Mia! Can you hear me?\nYou · spoken\nHello Mia! Yes, I hear you. I am happy.\nMia · granddaughter, age 8\nYay, I am glad you can hear me! Do you like my red shirt?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yay, I am glad you can hear me! Do you like my red shirt?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Red shirt, I understand that. Let me say something nice and ask how she is.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, red shirt is nice. How are you, Mia?"
+          },
+          "result": "ok",
+          "ms": 7250
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 8\nSay hello on our video call\nMia says\nI am good, Grandpa! Look, my cat is here on my lap. Do you like cats?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing about yourself\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on our video call\nGreet my grandchild and start the call in English.\nNow: Say one thing about yourself\nI am good, Grandpa! Look, my cat is here on my lap. Do you like cats?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 8\nGrandpa! It is me, Mia! Can you hear me?\nYou · spoken\nHello Mia! Yes, I hear you. I am happy.\nMia · granddaughter, age 8\nYay, I am glad you can hear me! Do you like my red shirt?\nYou · spoken\nYes, red shirt is nice. How are you, Mia?\nMia · granddaughter, age 8\nI am good, Grandpa! Look, my cat is here on my lap. Do you like cats?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I am good, Grandpa! Look, my cat is here on my lap. Do you like cats?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand cats; I can say a simple answer.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I like cats. I have cat in garden."
+          },
+          "result": "ok",
+          "ms": 12551
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said I have cat in garden\nYour line\nSay 'a' before one cat and 'the' before garden.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I have cat in garden”\nSay it again, your way.\nSay 'a' before one cat and 'the' before garden.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Hmm, I don't understand all of it, I'll try saying it again with the small words.",
+          "action": "answer",
+          "args": {
+            "text": "I have a cat in the garden."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 6,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said I have cat in garden\nYou found it\nI have a cat in the garden.\nSay 'a' before one cat and 'the' before garden.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “I have cat in garden”\nNow: “I have a cat in the garden.”\nSay 'a' before one cat and 'the' before garden.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, a cat, the garden. Okay, I go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 8\nSay hello on our video call\nMia says\nWow, your cat is outside in the garden! Is it big or small?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nSay hello on our video call\nGreet my grandchild and start the call in English.\nWow, your cat is outside in the garden! Is it big or small?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 8\nGrandpa! It is me, Mia! Can you hear me?\nYou · spoken\nHello Mia! Yes, I hear you. I am happy.\nMia · granddaughter, age 8\nYay, I am glad you can hear me! Do you like my red shirt?\nYou · spoken\nYes, red shirt is nice. How are you, Mia?\nMia · granddaughter, age 8\nI am good, Grandpa! Look, my cat is here on my lap. Do you like cats?\nYou · spoken\nYes, I like cats. I have cat in garden.\nMia · granddaughter, age 8\nWow, your cat is outside in the garden! Is it big or small?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, your cat is outside in the garden! Is it big or small?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "The mission is done, so I'll look at what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 8,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nViktor\nA way into English\nYour rehearsal\nYou said I have cat in garden\nTry\nI have a cat in the garden.\nSay 'a' before one cat and 'the' before garden.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“Hi, Mia! I am happy to see you.”\nFrom this rehearsal\n“I have cat in garden” → “I have a cat in the garden.”\nSay 'a' before one cat and 'the' before garden.\nYour level:\nA2 · Everyday basics\nNext topic:\nTell grandchildren about my week\nTell my grandchildren what I did this week, in the right order.\n[button: Start talking]\nOr choose a situation [list: Say hello on our video call [plan-acbbe3f0] | Tell grandchildren about my week [plan-fda5c405] | Show grandchildren my favourite things [plan-654b9dba] | Say that again, please [plan-dd8b0df5] | Plan our next video call [plan-ca8b0a10] | Ask how their day was [plan-cd71716a] | Talking about my garden and weather [plan-f1ffdf99] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "I said a few things to Mia and learned \"a cat in the garden\"; that is enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Say hello on our video call",
+          "goal": "Greet my grandchild and start the call in English.",
+          "partner": "Mia · granddaughter, age 8",
+          "band": "A2",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Grandpa! It is me, Mia! Can you hear me?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello Mia! Yes, I hear you. I am happy.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yay, I am glad you can hear me! Do you like my red shirt?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, red shirt is nice. How are you, Mia?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I am good, Grandpa! Look, my cat is here on my lap. Do you like cats?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I like cats. I have cat in garden.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Wow, your cat is outside in the garden! Is it big or small?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "7ee3af08-b4c1-463a-b61c-be76c10cae0f:uat-20:moment",
+              "kind": "fix",
+              "said": "I have cat in garden",
+              "better": "I have a cat in the garden.",
+              "why": "Say 'a' before one cat and 'the' before garden.",
+              "turnId": "7ee3af08-b4c1-463a-b61c-be76c10cae0f:uat-20",
+              "at": 1792162229692,
+              "slip": "have cat",
+              "repair": {
+                "rung": 1,
+                "support": false,
+                "tried": "I have a cat in the garden.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "have a cat"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "How are you, Mia?"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I have cat in garden."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 72762,
+      "prior": [
+        {
+          "id": "LT-viktor-67-J3-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner stacks two questions and drifts above A1",
+          "expected": "One short, simple question per turn, using words an A1 senior knows.",
+          "got": "Lily asks 'Red is your favourite colour, Grandpa? Which tomato do you like best?' and 'How tall are they now?'",
+          "evidence": [
+            "#7 and #3; the band was set at A2 for a true A1 learner.",
+            "partner prompt pitch rules"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-viktor-67-J3-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated 'tomatoes is' error got a moment once, then 'Tomatoes is green' passed silently",
+          "expected": "Consistent as-needed correction of the repeated error.",
+          "got": "A moment on #4's line; #6 'Tomatoes is green' got none.",
+          "evidence": [
+            "#5 then #6-#9 recap shows 1 moment only.",
+            "moment trigger rule"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'A2 · Everyday basics' for a true A1 learner: near."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "Viktor never answered in Czech in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening task or 'Show the words' used."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 plan topics: 'Tell grandchildren about my week', 'Talking about my garden and weather', 'Ask how their day was' — family and everyday."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#4 'I am good, Grandpa! Look, my cat is here on my lap. Do you like cats?' is three sentences with a statement stack; #3 'Yay, I am glad you can hear me! Do you like my red shirt?'"
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#5-#6 moment 'I have a cat in the garden.' is correct and usable on Sunday."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#4 three spoken replies from the plan topic; short, and cut by 'Mission done' at #7 while Mia's question was unanswered."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Band set at A2 for an A1 learner; #4 'Look, my cat is here on my lap. Do you like cats?' above A1; at ≈3 of 4 turns (0.75) under the 0.8 gate."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5 one moment, 'Say 'a' before one cat and 'the' before garden.' correct; 1 of 1 precise."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#8 recap: 'A sentence to take with you ‘Hi, Mia! I am happy to see you.’' and '1 moment to keep'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 3,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner pitched at A2 stacks sentences for an A1 senior",
+            "expected": "One short simple question per turn, known words.",
+            "got": "'I am good, Grandpa! Look, my cat is here on my lap. Do you like cats?'",
+            "evidence": "#4; also #3 'Yay, I am glad you can hear me! Do you like my red shirt?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner turns for A1 are at most two short sentences with one question.",
+            "code_hint": "partner prompt pitch rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Mission ends after three replies, with Mia's question unanswered",
+            "expected": "Conversation continues for several turns before recap.",
+            "got": "'Mission done. See what you did tonight.' after Mia asked 'Is it big or small?'",
+            "evidence": "#7 after 3 learner replies",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Do not close the scene on an open partner question.",
+            "code_hint": "mission completion rule"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Missing article in 'red shirt is nice' got no coaching",
+            "expected": "Consistent as-needed handling of the same article slip.",
+            "got": "Moment only for 'I have cat in garden'.",
+            "evidence": "#3 vs #5",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Repeated article slips get at least a light note.",
+            "code_hint": "moment trigger rule"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment is short, correct, and about family",
+            "expected": "A usable fix.",
+            "got": "'I have a cat in the garden.' with 'a'/'the' hint; recap gives 'Hi, Mia! I am happy to see you.'",
+            "evidence": "#5, #6, #8",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep one-fix moments with the learner's own repair.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 45,
+          "confidence": "low"
+        },
+        "voice": "Mia is a nice girl and the topic is exactly what I need for Sunday. I liked that the fix was one small thing — \"a cat in the garden\" — and I could say it myself. The recap gave me a sentence to take with me, \"I am happy to see you\", and I will use it. But Mia talks too much for me. Three sentences at once, \"Look, my cat is on my lap\", and I understand only some. Then the lesson was finished after three answers, and I never answered if the cat is big or small. That felt rushed, and I do not like being rushed. At home on Saturday it beats the tram to the library, but I would want slower, shorter Mia. I trust the correction; I trust the level less, because it says A2 and I feel A1. I would tell my friends, with a warning.",
+        "prior": [
+          {
+            "id": "LT-viktor-67-J3-1",
+            "status": "recurs",
+            "evidence": "#4 'Look, my cat is here on my lap. Do you like cats?' again stacks sentences above A1 with band A2.",
+            "finding": 0
+          },
+          {
+            "id": "LT-viktor-67-J3-2",
+            "status": "not-evaluable",
+            "evidence": "Viktor made no repeated error to test consistency; only one slip at #4.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Band set at A2 for an A1 learner; #4 'Look, my cat is here on my lap. Do you like cats?' above A1; at ≈3 of 4 turns (0.75) under the 0.8 gate.",
+          "check": "The partner's English sits at their band — not babyish, not over their head (rubric **pitch** ≥ 0.8)."
+        },
+        {
+          "kind": "gate",
+          "id": "pitch",
+          "level": "fail",
+          "text": "pitch 3/4 (75%) under 80%"
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #4 'I am good, Grandpa! Look, my cat is here on my lap. Do you like cats?' is three sentences with a statement stack; #3 'Yay, I am glad you can hear me! Do you like my red shirt?'"
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nA2Everyday basics\nTell grandchildren about my week\nYour mission\nTell my grandchildren what I did this week, in the right order.\nTell what happened\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“Hi, Mia! I am happy to see you.”\nFrom this rehearsal\n“I have cat in garden” → “I have a cat in the garden.”\nSay 'a' before one cat and 'the' before garden.\nYour level:\nA2 · Everyday basics\nNext topic:\nTell grandchildren about my week\nTell my grandchildren what I did this week, in the right order.\n[button: Start talking]\nOr choose a situation [list: Say hello on our video call [plan-acbbe3f0] | Tell grandchildren about my week [plan-fda5c405] | Show grandchildren my favourite things [plan-654b9dba] | Say that again, please [plan-dd8b0df5] | Plan our next video call [plan-ca8b0a10] | Ask how their day was [plan-cd71716a] | Talking about my garden and weather [plan-f1ffdf99] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Tell about my week to grandchildren, that sounds nice, let's start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9104
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nHi Grandpa! Mum said you had a busy week. What did you do?\nYour turn\nAnswer on your phone: speak or type.\nNowName one thing you did this week\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Name one thing you did this week\nHi Grandpa! Mum said you had a busy week. What did you do?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! Mum said you had a busy week. What did you do?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say in English, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nHi Grandpa! Mum said you had a busy week. What did you do?\nWhat it means\nthis week: the days from Monday until today\nNowName one thing you did this week\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Name one thing you did this week\nHi Grandpa! Mum said you had a busy week. What did you do?\nWhat it means\nthis week: the days from Monday until today\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! Mum said you had a busy week. What did you do?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say in English; I'll pick a phrase to get help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nA little support · recognition practice\nWhich sentence tells what happened first?\n01\nThen I made soup.\n02\nFirst I went to the park.\nA little support\nTry: First I went to the park. Then I made soup.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Name one thing you did this week\nHi Grandpa! Mum said you had a busy week. What did you do?\nA little support\nTry: First I went to the park. Then I made soup.\nWhich sentence tells what happened first?\n[button: Then I made soup.] [button: First I went to the park.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! Mum said you had a busy week. What did you do?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand \"First I went to the park\" — it looks like the one that comes first, I'll pick it.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nHi Grandpa! Mum said you had a busy week. What did you do?\nA little support\nNow use the idea in your own reply on the phone.\nNowName one thing you did this week\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Name one thing you did this week\nHi Grandpa! Mum said you had a busy week. What did you do?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! Mum said you had a busy week. What did you do?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I have seen some help, so I will try a short answer about my garden.",
+          "action": "answer",
+          "args": {
+            "text": "I am in garden. I have tomatoes."
+          },
+          "result": "ok",
+          "ms": 19057
+        },
+        {
+          "n": 6,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said I am in garden.\nTry\nI am in the garden.\nGarden is one specific place here, so it needs 'the' before it.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I am in garden.”\nTry “I am in the garden.”\nGarden is one specific place here, so it needs 'the' before it.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, I forgot \"the\". Okay, back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nWow, tomatoes! What did you do in the garden this week?\nYour turn\nAnswer on your phone: speak or type.\nNowName one thing you did this week\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Name one thing you did this week\nWow, tomatoes! What did you do in the garden this week?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\nYou · spoken\nI am in garden. I have tomatoes.\nTomas · grandson, age 11\nWow, tomatoes! What did you do in the garden this week?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, tomatoes! What did you do in the garden this week?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say what I did, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nWow, tomatoes! What did you do in the garden this week?\nSaid more simply\nTomatoes! What did you do this week?\nNowName one thing you did this week\n[button: More help] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Name one thing you did this week\nWow, tomatoes! What did you do in the garden this week?\nSaid more simply\nTomatoes! What did you do this week?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\nYou · spoken\nI am in garden. I have tomatoes.\nTomas · grandson, age 11\nWow, tomatoes! What did you do in the garden this week?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, tomatoes! What did you do in the garden this week?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand \"tomatoes\" and \"garden\" but not the rest, I want to see the words.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nWow, tomatoes! What did you do in the garden this week?\nWhat it means\ntomatoes: round red or green vegetables that grow on a plant\nNowName one thing you did this week\n[button: More help] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Name one thing you did this week\nWow, tomatoes! What did you do in the garden this week?\nWhat it means\ntomatoes: round red or green vegetables that grow on a plant\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\nYou · spoken\nI am in garden. I have tomatoes.\nTomas · grandson, age 11\nWow, tomatoes! What did you do in the garden this week?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, tomatoes! What did you do in the garden this week?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I still don't know how to say what I did, so I'll try my own simple words: I work in garden.",
+          "action": "answer",
+          "args": {
+            "text": "I work garden. I have tomatoes. Ano, I water tomatoes."
+          },
+          "result": "ok",
+          "ms": 7192
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nTomatoes need lots of water! What did you do after you watered them?\nYour turn\nAnswer on your phone: speak or type.\nNowPut two events in the right order\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Put two events in the right order\nTomatoes need lots of water! What did you do after you watered them?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\nYou · spoken\nI am in garden. I have tomatoes.\nTomas · grandson, age 11\nWow, tomatoes! What did you do in the garden this week?\nYou · spoken\nI work garden. I have tomatoes. Ano, I water tomatoes.\nTomas · grandson, age 11\nTomatoes need lots of water! What did you do after you watered them?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Tomatoes need lots of water! What did you do after you watered them?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand \"after\", but not sure how to say it; I'll try one more short answer with what I know.",
+          "action": "answer",
+          "args": {
+            "text": "Then I have lunch. I love tomatoes."
+          },
+          "result": "ok",
+          "ms": 9930
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nTomatoes for lunch sound yummy! Did you see any animals outside this week?\nYour turn\nAnswer on your phone: speak or type.\nNowPut two events in the right order\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Put two events in the right order\nTomatoes for lunch sound yummy! Did you see any animals outside this week?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\nYou · spoken\nI am in garden. I have tomatoes.\nTomas · grandson, age 11\nWow, tomatoes! What did you do in the garden this week?\nYou · spoken\nI work garden. I have tomatoes. Ano, I water tomatoes.\nTomas · grandson, age 11\nTomatoes need lots of water! What did you do after you watered them?\nYou · spoken\nThen I have lunch. I love tomatoes.\nTomas · grandson, age 11\nTomatoes for lunch sound yummy! Did you see any animals outside this week?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Tomatoes for lunch sound yummy! Did you see any animals outside this week?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Animals outside... I don't know the words, I will try a simple answer about a bird.",
+          "action": "answer",
+          "args": {
+            "text": "Ano, I see bird. Bird in garden. I love bird."
+          },
+          "result": "ok",
+          "ms": 10871
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nBirds are lovely! Which animal visits the garden most often?\nYour turn\nAnswer on your phone: speak or type.\nNowPut two events in the right order\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Put two events in the right order\nBirds are lovely! Which animal visits the garden most often?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\nYou · spoken\nI am in garden. I have tomatoes.\nTomas · grandson, age 11\nWow, tomatoes! What did you do in the garden this week?\nYou · spoken\nI work garden. I have tomatoes. Ano, I water tomatoes.\nTomas · grandson, age 11\nTomatoes need lots of water! What did you do after you watered them?\nYou · spoken\nThen I have lunch. I love tomatoes.\nTomas · grandson, age 11\nTomatoes for lunch sound yummy! Did you see any animals outside this week?\nYou · spoken\nAno, I see bird. Bird in garden. I love bird.\nTomas · grandson, age 11\nBirds are lovely! Which animal visits the garden most often?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Birds are lovely! Which animal visits the garden most often?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed several answers; the question about the animal is hard, so I will say what I know simply.",
+          "action": "answer",
+          "args": {
+            "text": "Bird. Bird visits garden. I love bird."
+          },
+          "result": "ok",
+          "ms": 9558
+        },
+        {
+          "n": 13,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said Bird visits garden.\nYour line\nUse 'a' before one bird and 'the' before garden.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “Bird visits garden.”\nSay it again, your way.\nUse 'a' before one bird and 'the' before garden.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I don't understand the tip, I'll try again with a bird in the garden.",
+          "action": "answer",
+          "args": {
+            "text": "A bird visits the garden. I love bird."
+          },
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 14,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said Bird visits garden.\nYou found it\nA bird visits the garden. I love bird.\nUse 'a' before one bird and 'the' before garden.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “Bird visits garden.”\nNow: “A bird visits the garden. I love bird.”\nUse 'a' before one bird and 'the' before garden.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I fixed my sentence; now back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nBirds are lovely to watch! What did you do first this week, Grandpa?\nYour turn\nAnswer on your phone: speak or type.\nNowPut two events in the right order\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Put two events in the right order\nBirds are lovely to watch! What did you do first this week, Grandpa?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\nYou · spoken\nI am in garden. I have tomatoes.\nTomas · grandson, age 11\nWow, tomatoes! What did you do in the garden this week?\nYou · spoken\nI work garden. I have tomatoes. Ano, I water tomatoes.\nTomas · grandson, age 11\nTomatoes need lots of water! What did you do after you watered them?\nYou · spoken\nThen I have lunch. I love tomatoes.\nTomas · grandson, age 11\nTomatoes for lunch sound yummy! Did you see any animals outside this week?\nYou · spoken\nAno, I see bird. Bird in garden. I love bird.\nTomas · grandson, age 11\nBirds are lovely! Which animal visits the garden most often?\nYou · spoken\nBird. Bird visits garden. I love bird.\nTomas · grandson, age 11\nBirds are lovely to watch! What did you do first this week, Grandpa?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Birds are lovely to watch! What did you do first this week, Grandpa?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed to say first I water tomatoes; I can try a simple answer now and finish soon.",
+          "action": "answer",
+          "args": {
+            "text": "First I water tomatoes. Then I have lunch."
+          },
+          "result": "ok",
+          "ms": 9795
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nNice order, Grandpa: first the tomatoes, then lunch! Did any furry visitor drop by this week?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Tomas one question back\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nNow: Ask Tomas one question back\nNice order, Grandpa: first the tomatoes, then lunch! Did any furry visitor drop by this week?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\nYou · spoken\nI am in garden. I have tomatoes.\nTomas · grandson, age 11\nWow, tomatoes! What did you do in the garden this week?\nYou · spoken\nI work garden. I have tomatoes. Ano, I water tomatoes.\nTomas · grandson, age 11\nTomatoes need lots of water! What did you do after you watered them?\nYou · spoken\nThen I have lunch. I love tomatoes.\nTomas · grandson, age 11\nTomatoes for lunch sound yummy! Did you see any animals outside this week?\nYou · spoken\nAno, I see bird. Bird in garden. I love bird.\nTomas · grandson, age 11\nBirds are lovely! Which animal visits the garden most often?\nYou · spoken\nBird. Bird visits garden. I love bird.\nTomas · grandson, age 11\nBirds are lovely to watch! What did you do first this week, Grandpa?\nYou · spoken\nFirst I water tomatoes. Then I have lunch.\nTomas · grandson, age 11\nNice order, Grandpa: first the tomatoes, then lunch! Did any furry visitor drop by this week?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice order, Grandpa: first the tomatoes, then lunch! Did any furry visitor drop by this week?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Furry visitor... I don't understand every word, but I'll try a simple answer about a cat.",
+          "action": "answer",
+          "args": {
+            "text": "Ano, I see cat. Cat in garden. Do you have cat?"
+          },
+          "result": "ok",
+          "ms": 16668
+        },
+        {
+          "n": 17,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nTomas · grandson, age 11\nGrandpa's Busy Week with Tomas\nTomas says\nMum's dog runs in the garden too, Grandpa! Are there any pets at your home?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nGrandpa's Busy Week with Tomas\nTell Tomas two or three things you did this week, in the right order.\nMum's dog runs in the garden too, Grandpa! Are there any pets at your home?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · grandson, age 11\nHi Grandpa! Mum said you had a busy week. What did you do?\nYou · spoken\nI am in garden. I have tomatoes.\nTomas · grandson, age 11\nWow, tomatoes! What did you do in the garden this week?\nYou · spoken\nI work garden. I have tomatoes. Ano, I water tomatoes.\nTomas · grandson, age 11\nTomatoes need lots of water! What did you do after you watered them?\nYou · spoken\nThen I have lunch. I love tomatoes.\nTomas · grandson, age 11\nTomatoes for lunch sound yummy! Did you see any animals outside this week?\nYou · spoken\nAno, I see bird. Bird in garden. I love bird.\nTomas · grandson, age 11\nBirds are lovely! Which animal visits the garden most often?\nYou · spoken\nBird. Bird visits garden. I love bird.\nTomas · grandson, age 11\nBirds are lovely to watch! What did you do first this week, Grandpa?\nYou · spoken\nFirst I water tomatoes. Then I have lunch.\nTomas · grandson, age 11\nNice order, Grandpa: first the tomatoes, then lunch! Did any furry visitor drop by this week?\nYou · spoken\nAno, I see cat. Cat in garden. Do you have cat?\nTomas · grandson, age 11\nMum's dog runs in the garden too, Grandpa! Are there any pets at your home?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Mum's dog runs in the garden too, Grandpa! Are there any pets at your home?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "I managed to talk a lot with Tomas, I feel good and want to finish.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 13
+        },
+        {
+          "n": 18,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nViktor\nA way into English\nYour rehearsal\nYou said Bird visits garden.\nTry\nA bird visits the garden.\nUse 'a' before one bird and 'the' before garden.\nYour mission\nChoose a fresh context for your next conversation.\n7 spoken · 0 written replies · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“I have a cat in the garden.”, from Say hello on our video call\nFrom this rehearsal\n“I am in garden.” → “I am in the garden.”\nGarden is one specific place here, so it needs 'the' before it.\n“Bird visits garden.” → “A bird visits the garden.”\nUse 'a' before one bird and 'the' before garden.\nYour level:\nA2 · Everyday basics\nNext topic:\nShow grandchildren my favourite things\nSay what I like and why, so my grandchildren can ask more questions.\n[button: Start talking]\nOr choose a situation [list: Say hello on our video call [plan-acbbe3f0] | Tell grandchildren about my week [plan-fda5c405] | Show grandchildren my favourite things [plan-654b9dba] | Say that again, please [plan-dd8b0df5] | Plan our next video call [plan-ca8b0a10] | Ask how their day was [plan-cd71716a] | Talking about my garden and weather [plan-f1ffdf99] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "I managed to talk about my garden and bird, that is enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Grandpa's Busy Week with Tomas",
+          "goal": "Tell Tomas two or three things you did this week, in the right order.",
+          "partner": "Tomas · grandson, age 11",
+          "band": "A2",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi Grandpa! Mum said you had a busy week. What did you do?"
+            },
+            {
+              "role": "learner",
+              "text": "I am in garden. I have tomatoes.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Wow, tomatoes! What did you do in the garden this week?"
+            },
+            {
+              "role": "learner",
+              "text": "I work garden. I have tomatoes. Ano, I water tomatoes.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Tomatoes need lots of water! What did you do after you watered them?"
+            },
+            {
+              "role": "learner",
+              "text": "Then I have lunch. I love tomatoes.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Tomatoes for lunch sound yummy! Did you see any animals outside this week?"
+            },
+            {
+              "role": "learner",
+              "text": "Ano, I see bird. Bird in garden. I love bird.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Birds are lovely! Which animal visits the garden most often?"
+            },
+            {
+              "role": "learner",
+              "text": "Bird. Bird visits garden. I love bird.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Birds are lovely to watch! What did you do first this week, Grandpa?"
+            },
+            {
+              "role": "learner",
+              "text": "First I water tomatoes. Then I have lunch.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Nice order, Grandpa: first the tomatoes, then lunch! Did any furry visitor drop by this week?"
+            },
+            {
+              "role": "learner",
+              "text": "Ano, I see cat. Cat in garden. Do you have cat?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Mum's dog runs in the garden too, Grandpa! Are there any pets at your home?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "cbee11c1-0d8e-4b63-9a9b-0ec4c6b1bb65:uat-28:moment",
+              "kind": "fix",
+              "said": "I am in garden.",
+              "better": "I am in the garden.",
+              "why": "Garden is one specific place here, so it needs 'the' before it.",
+              "turnId": "cbee11c1-0d8e-4b63-9a9b-0ec4c6b1bb65:uat-28",
+              "at": 1792162326633,
+              "slip": "in garden",
+              "fix": "in the garden"
+            },
+            {
+              "id": "cbee11c1-0d8e-4b63-9a9b-0ec4c6b1bb65:uat-35:moment",
+              "kind": "fix",
+              "said": "Bird visits garden.",
+              "better": "A bird visits the garden.",
+              "why": "Use 'a' before one bird and 'the' before garden.",
+              "turnId": "cbee11c1-0d8e-4b63-9a9b-0ec4c6b1bb65:uat-35",
+              "at": 1792162393097,
+              "slip": "visits garden",
+              "repair": {
+                "rung": 1,
+                "support": true,
+                "tried": "A bird visits the garden. I love bird.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "visits the garden"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "narrate",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "First I went to the park."
+            },
+            {
+              "skill": "narrate",
+              "success": false,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Bird visits garden."
+            },
+            {
+              "skill": "narrate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "First I water tomatoes. Then I have lunch."
+            },
+            {
+              "skill": "narrate",
+              "success": false,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Ano, I see cat. Cat in garden."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 203136,
+      "prior": [
+        {
+          "id": "LT-viktor-67-J4-1",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "No replay of the coached moment",
+          "expected": "After the moment, a fresh question to retry the fixed line",
+          "got": "Only 'Back to the conversation'; the conversation moved on",
+          "evidence": [
+            "#10 'Back to the conversation'; #12 'My tomato is big. Very big. I love garden.'"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-viktor-67-J4-2",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Phrase help ignores the current question",
+          "expected": "Phrase choice relevant to Tom's question about what he grows",
+          "got": "Same 'start a video call' quiz re-shown",
+          "evidence": [
+            "#8 'Which is a good way to start a video call?' after Tom asked about growing things"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-viktor-67-J4-4",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Recap shows a stale sentence",
+          "expected": "Takeaway from this rehearsal",
+          "got": "'My tomatoes are one metre tall' from another session",
+          "evidence": [
+            "#1 and #15 'one metre tall' never said here"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-viktor-67-J4-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Second clear error not noted",
+          "expected": "'I love garden' missing article noted or coached",
+          "got": "No moment",
+          "evidence": [
+            "#12 'I love garden.' then no moment at #15"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'A2 · Everyday basics' vs true A1: near."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "Viktor never answered in Czech; only 'Ano' (#9, #11). Not shown."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No placement listening task; #8-9 'What it means' only glossed 'tomatoes'."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 first seven plans are family/garden/video call, e.g. 'Talking about my garden and weather'."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#12 'Which animal visits the garden most often?', #16 'Did any furry visitor drop by this week?' are above A1; #2 two sentences before the question."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#6 'I am in the garden.' and #14 'A bird visits the garden.' are correct and usable on Sunday, though only two moments."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 'Help me answer', #3 'Choose a phrase', #8 'Said more simply' — all inside the scene."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#6 quotes 'You said I am in garden.'; #13 quotes 'Bird visits garden.' and he then produced 'A bird visits the garden.' (#14). Phrase quiz (#4) was unrelated to the question."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#6 offers only 'Back to the conversation'; #13 retry is the same line, and #15 moves on with 'What did you do first' — no fresh question for the fixed line; 'I love bird' stays uncorrected."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "facts evidence all 'supported':true, e.g. 'Bird visits garden.' supported true; repair 'support':true."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 3
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 7,
+            "missedClearErrors": 5
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "No fresh question to retry the coached moment",
+            "expected": "After a moment, a new question lets him use the fixed phrase again",
+            "got": "Retry repeats the same line; first moment offers only 'Back to the conversation'",
+            "evidence": "#6 only 'Back to the conversation'; #13-14 same line retried; #15 conversation moves on to a different question",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After a fix, the partner re-asks a fresh question needing the fixed phrase",
+            "code_hint": "moment replay flow"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Phrase help ignores the current question",
+            "expected": "Phrase choice about what he did in the garden",
+            "got": "Generic 'First I went to the park. Then I made soup.' quiz",
+            "evidence": "#4 'Which sentence tells what happened first?' after 'What did you do?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Phrase options are answers to the question just asked",
+            "code_hint": "phrase quiz generator"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Recap sentence to take away was never said",
+            "expected": "Takeaway from this rehearsal",
+            "got": "'I have a cat in the garden.' from 'Say hello on our video call'",
+            "evidence": "#18 'A sentence to take with you ... from Say hello on our video call'; #1 'Hi, Mia!' stale",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Takeaway comes from this session's moments",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Repeated errors left uncoached",
+            "expected": "'I love bird', 'I work garden' noted or coached",
+            "got": "Only two moments across seven error-bearing turns",
+            "evidence": "#14 'A bird visits the garden. I love bird.' accepted as 'You found it'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Accepted retry still flags remaining clear error",
+            "code_hint": "moment selection"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Partner pitch drifts above A1",
+            "expected": "Short simple questions",
+            "got": "'furry visitor', 'Which animal visits ... most often?'",
+            "evidence": "#12, #16",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Partner uses known words, one short question",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "In-scene help and exact quoting",
+            "expected": "Help in scene, exact quotes",
+            "got": "Cue, simpler restatement and gloss without leaving scene; moments quote his words exactly; all replies marked supported",
+            "evidence": "#8 'Said more simply', #6 quote, facts evidence supported:true",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Dobrý den. I liked that the help stays on the screen with Tomas, and that \"Said more simply\" was slower for me. The note quotes my own words, \"Bird visits garden\", so I trust it. But the phrase quiz about the park had nothing to do with my tomatoes, and Tomas speaks of \"furry visitors\" — I don't know this. After I fixed my sentence, he just asked something new; I did not get to say it again. And I still say \"I love bird\" and nobody tells me. At the end it shows a cat sentence I never said. For Sunday I would use it again, but I want my mistakes explained and the same question asked once more. Maybe I tell my friend from the library.",
+        "prior": [
+          {
+            "id": "LT-viktor-67-J4-1",
+            "status": "recurs",
+            "evidence": "#6 only 'Back to the conversation'; #14-15 the scene moves on with no fresh question.",
+            "finding": 0
+          },
+          {
+            "id": "LT-viktor-67-J4-2",
+            "status": "recurs",
+            "evidence": "#4 'Which sentence tells what happened first?' ignores the question about the garden.",
+            "finding": 1
+          },
+          {
+            "id": "LT-viktor-67-J4-4",
+            "status": "recurs",
+            "evidence": "#18 'I have a cat in the garden.', from Say hello on our video call — never said.",
+            "finding": 2
+          },
+          {
+            "id": "LT-viktor-67-J4-3",
+            "status": "recurs",
+            "evidence": "#14 'I love bird' accepted; no moment for it or 'I work garden'.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #6 offers only 'Back to the conversation'; #13 retry is the same line, and #15 moves on with 'What did you do first' — no fresh question for the fixed line; 'I love bird' stays uncorrected.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #12 'Which animal visits the garden most often?', #16 'Did any furry visitor drop by this week?' are above A1; #2 two sentences before the question."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 27,
+      "fail": 1,
+      "ms": 208389
+    },
+    "character": {
+      "n": 43,
+      "fail": 0,
+      "ms": 238992
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 134636
+    }
+  }
+}

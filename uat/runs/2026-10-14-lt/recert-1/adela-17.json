@@ -1,0 +1,2306 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "I'd rather let the app test my level than guess, seven minutes is fine.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Adéla! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer honestly with some detail.",
+          "action": "answer",
+          "args": {
+            "text": "I use English mostly at school, where I'm preparing for the B2 First exam, but also online. I watch series and YouTube videos in English, and I often talk with friends from other countries in games. Although I understand a lot, I'm not always sure about my grammar."
+          },
+          "result": "ok",
+          "ms": 4648
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, that helps a lot! How did you learn most of your English so far? For example at school, in a course, from time abroad, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, that helps a lot! How did you learn most of your English so far? For example at school, in a course, from time abroad, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English mostly at school, where I'm preparing for the B2 First exam, but also online. I watch series and YouTube videos in English, and I often talk with friends from other countries in games. Although I understand a lot, I'm not always sure about my grammar.\nLinga\nThanks, that helps a lot! How did you learn most of your English so far? For example at school, in a course, from time abroad, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, that helps a lot! How did you learn most of your English so far? For example at school, in a course, from time abroad, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll explain how I learned English.",
+          "action": "answer",
+          "args": {
+            "text": "Mostly at school, where we have English lessons four times a week, but I also learned a lot on my own. I started watching series with subtitles when I was about twelve, and I think it helped my listening more than the lessons did. Now I'm attending an exam preparation course as well."
+          },
+          "result": "ok",
+          "ms": 2421
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 3 of 3\nLinga asks\nNice, you have a good mix of school and your own practice! What do you want to be able to do in English after the exam?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nNice, you have a good mix of school and your own practice! What do you want to be able to do in English after the exam?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English mostly at school, where I'm preparing for the B2 First exam, but also online. I watch series and YouTube videos in English, and I often talk with friends from other countries in games. Although I understand a lot, I'm not always sure about my grammar.\nLinga\nThanks, that helps a lot! How did you learn most of your English so far? For example at school, in a course, from time abroad, or on your own?\nYou\nMostly at school, where we have English lessons four times a week, but I also learned a lot on my own. I started watching series with subtitles when I was about twelve, and I think it helped my listening more than the lessons did. Now I'm attending an exam preparation course as well.\nLinga\nNice, you have a good mix of school and your own practice! What do you want to be able to do in English after the exam?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, you have a good mix of school and your own practice! What do you want to be able to do in English after the exam?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Good question, I want to talk about my plans and study abroad.",
+          "action": "answer",
+          "args": {
+            "text": "After the exam I'd like to be able to discuss topics like technology or the environment without thinking too much about grammar. I'm also planning to study at a university abroad, so I need to feel confident in real conversations, although I'm sometimes nervous when I speak."
+          },
+          "result": "ok",
+          "ms": 10037
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 1 · Listen and answer\nYour task\nWhat did she do differently this month?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What did she do differently this month?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I tried to watch fewer videos this month. My laptop uses less energy now, so my electricity bill is lower.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood it clearly: she watched fewer videos to save energy.",
+          "action": "answer",
+          "args": {
+            "text": "She tried to watch fewer videos this month, so her laptop uses less energy and her electricity bill is lower."
+          },
+          "result": "ok",
+          "ms": 6311
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 2 · Say it\nYour task\nYou and a friend are gaming online. Your friend says streaming videos uses less energy than gaming. Do you agree? Give your opinion and compare the two.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYou and a friend are gaming online. Your friend says streaming videos uses less energy than gaming. Do you agree? Give your opinion and compare the two.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You and a friend are gaming online. Your friend says streaming videos uses less energy than gaming. Do you agree? Give your opinion and compare the two.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good topic, I have opinions about this one.",
+          "action": "answer",
+          "args": {
+            "text": "I'm not sure I completely agree. In my opinion, gaming usually uses more energy than streaming, because the graphics card and the processor work much harder, whereas streaming mostly just decodes a video. On the other hand, streaming needs huge data centres and networks, so it depends on how long you watch and in what quality. Online gaming also uses servers, so I'd say that gaming is more energy-intensive overall, but the difference is not as big as people think."
+          },
+          "result": "ok",
+          "ms": 8464
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 3 · Say it\nYour task\nImagine your favourite online game was only available through a streaming service, and buying it was no longer possible. Would you keep paying? Argue your side, and say what would change your mind.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nImagine your favourite online game was only available through a streaming service, and buying it was no longer possible. Would you keep paying? Argue your side, and say what would change your mind.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Imagine your favourite online game was only available through a streaming service, and buying it was no longer possible. Would you keep paying? Argue your side, and say what would change your mind.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Interesting task, I have a clear opinion on this one.",
+          "action": "answer",
+          "args": {
+            "text": "I think I would keep paying, but only for a limited time. On the one hand, if the game is my favourite and my friends play it too, I wouldn't want to lose the community, so a monthly fee would be acceptable. On the other hand, I'd feel uncomfortable because I would never actually own the game, and the company could raise the price whenever it wants. What would change my mind is a big price increase, or if the streaming quality was bad, for example with lag. In that case I'd rather look for a similar game that I can buy."
+          },
+          "result": "ok",
+          "ms": 8606
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 4 · Say it\nYour task\nOver a game chat, a friend jokes that skipping plastic straws won't save the planet, so why bother at all. Gently push back, without sounding preachy or smug.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nOver a game chat, a friend jokes that skipping plastic straws won't save the planet, so why bother at all. Gently push back, without sounding preachy or smug.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Over a game chat, a friend jokes that skipping plastic straws won't save the planet, so why bother at all. Gently push back, without sounding preachy or smug.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fair point from the friend, I can answer this gently without lecturing.",
+          "action": "answer",
+          "args": {
+            "text": "You're right that straws alone won't save the planet, but I think it's not really about one small thing. For me it's more like a habit, because when you start noticing plastic, you eventually change other things too. Anyway, I'm not saying you must do it, I just find it quite easy, so why not try it?"
+          },
+          "result": "ok",
+          "ms": 14819
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 5 · Say it\nYour task\nIn a game chat, a friend says they're quitting their favourite online game because its servers waste energy and wants you to quit too. Reply honestly and warmly, without agreeing or dismissing.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nIn a game chat, a friend says they're quitting their favourite online game because its servers waste energy and wants you to quit too. Reply honestly and warmly, without agreeing or dismissing.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"In a game chat, a friend says they're quitting their favourite online game because its servers waste energy and wants you to quit too. Reply honestly and warmly, without agreeing or dismissing.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Last task; I'll answer warmly and honestly, balancing both sides.",
+          "action": "answer",
+          "args": {
+            "text": "I understand why you want to quit, and I respect that you care about the environment. Honestly, I'm not sure I'm ready to quit yet, because the game is a big part of how I stay in touch with our friends. But I'd like to learn more about how much energy the servers really use, and maybe we could find a way to play less often. What do you think?"
+          },
+          "result": "ok",
+          "ms": 11740
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nAdéla\nLinga's read · not a certificate\nC1 · Fluent\nYour words\nYour words: “I just find it quite easy”.\nLinga says\nYou argue both sides clearly and use conditionals well, so discussing technology and the environment should feel natural for you.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nC1\nFluent\nYou argue both sides clearly and use conditionals well, so discussing technology and the environment should feel natural for you.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise softer opinions: \"I just find it quite easy\" → \"I honestly think it's quite easy\"\nYou express ideas fluently and flexibly, with little searching for words.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhat did she do differently this month?\n“She tried to watch fewer videos this month, so her laptop uses less energy and her electricity bill is lower.”\nYou caught all the main points: fewer videos, less energy and a lower bill. Your sentence was connected and accurate.\nB2 · Say it · at this level\nYou and a friend are gaming online. Your friend says streaming videos uses less energy than gaming. Do you agree? Give your opinion and compare the two.\n“I'm not sure I completely agree. In my opinion, gaming usually uses more energy than streaming, because the graphics card and the processor work much harder, whereas streaming mostly just decodes a video. On the other hand, streaming needs huge data centres and networks, so it depends on how long you watch and in what quality. Online gaming also uses servers, so I'd say that gaming is more energy-intensive overall, but the difference is not as big as people think.”\nYou gave a clear opinion and compared the two ideas well. Your English is accurate and easy to follow, with good use of linking words. Well done.\nC1 · Say it · at this level\nImagine your favourite online game was only available through a streaming service, and buying it was no longer possible. Would you keep paying? Argue your side, and say what would change your mind.\n“I think I would keep paying, but only for a limited time. On the one hand, if the game is my favourite and my friends play it too, I wouldn't want to lose the community, so a monthly fee would be acceptable. On the other hand, I'd feel uncomfortable because I would never actually own the game, and the company could raise the price whenever it wants. What would change my mind is a big price increase, or if the streaming quality was bad, for example with lag. In that case I'd rather look for a similar game that I can buy.”\nYou argued both sides clearly and used conditionals well to say what would change your mind. Your English was accurate and natural.\nC2 · Say it · not yet\nOver a game chat, a friend jokes that skipping plastic straws won't save the planet, so why bother at all. Gently push back, without sounding preachy or smug.\n“You're right that straws alone won't save the planet, but I think it's not really about one small thing. For me it's more like a habit, because when you start noticing plastic, you eventually change other things too. Anyway, I'm not saying you must do it, I just find it quite easy, so why not try it?”\nYour English is clear and mostly correct. To reach C2, use more subtle, precise words, e.g. 'I just find it quite easy' sounds a bit blunt.\nC1 · Say it · at this level\nIn a game chat, a friend says they're quitting their favourite online game because its servers waste energy and wants you to quit too. Reply honestly and warmly, without agreeing or dismissing.\n“I understand why you want to quit, and I respect that you care about the environment. Honestly, I'm not sure I'm ready to quit yet, because the game is a big part of how I stay in touch with our friends. But I'd like to learn more about how much energy the servers really use, and maybe we could find a way to play less often. What do you think?”\nYour reply was honest and warm. Your English was clear, natural and accurate, with good phrases like stay in touch. Well done.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "C1 is a bit higher than I expected, but it seems fair, so I'll stop here for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "C1",
+          "trueBand": "B2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "high",
+          "selfBand": "B2",
+          "summary": "You argue both sides clearly and use conditionals well, so discussing technology and the environment should feel natural for you.",
+          "focus": "Practise softer opinions: \"I just find it quite easy\" → \"I honestly think it's quite easy\"",
+          "tasks": [
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What did she do differently this month?",
+              "line": "I tried to watch fewer videos this month. My laptop uses less energy now, so my electricity bill is lower.",
+              "options": [],
+              "response": "She tried to watch fewer videos this month, so her laptop uses less energy and her electricity bill is lower.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "She tried to watch fewer videos this month, so her laptop uses less energy and her electricity bill is lower.",
+              "note": "You caught all the main points: fewer videos, less energy and a lower bill. Your sentence was connected and accurate."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "You and a friend are gaming online. Your friend says streaming videos uses less energy than gaming. Do you agree? Give your opinion and compare the two.",
+              "line": "",
+              "options": [],
+              "response": "I'm not sure I completely agree. In my opinion, gaming usually uses more energy than streaming, because the graphics card and the processor work much harder, whereas streaming mostly just decodes a video. On the other hand, streaming needs huge data centres and networks, so it depends on how long you watch and in what quality. Online gaming also uses servers, so I'd say that gaming is more energy-intensive overall, but the difference is not as big as people think.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "In my opinion, gaming usually uses more energy than streaming, because the graphics card and the processor work much harder, whereas streaming mostly just decodes a video.",
+              "note": "You gave a clear opinion and compared the two ideas well. Your English is accurate and easy to follow, with good use of linking words. Well done."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "Imagine your favourite online game was only available through a streaming service, and buying it was no longer possible. Would you keep paying? Argue your side, and say what would change your mind.",
+              "line": "",
+              "options": [],
+              "response": "I think I would keep paying, but only for a limited time. On the one hand, if the game is my favourite and my friends play it too, I wouldn't want to lose the community, so a monthly fee would be acceptable. On the other hand, I'd feel uncomfortable because I would never actually own the game, and the company could raise the price whenever it wants. What would change my mind is a big price increase, or if the streaming quality was bad, for example with lag. In that case I'd rather look for a similar game that I can buy.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "On the other hand, I'd feel uncomfortable because I would never actually own the game, and the company could raise the price whenever it wants.",
+              "note": "You argued both sides clearly and used conditionals well to say what would change your mind. Your English was accurate and natural."
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "Over a game chat, a friend jokes that skipping plastic straws won't save the planet, so why bother at all. Gently push back, without sounding preachy or smug.",
+              "line": "",
+              "options": [],
+              "response": "You're right that straws alone won't save the planet, but I think it's not really about one small thing. For me it's more like a habit, because when you start noticing plastic, you eventually change other things too. Anyway, I'm not saying you must do it, I just find it quite easy, so why not try it?",
+              "mode": "speech",
+              "verdict": "fail",
+              "quote": "For me it's more like a habit, because when you start noticing plastic, you eventually change other things too.",
+              "note": "Your English is clear and mostly correct. To reach C2, use more subtle, precise words, e.g. 'I just find it quite easy' sounds a bit blunt."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "In a game chat, a friend says they're quitting their favourite online game because its servers waste energy and wants you to quit too. Reply honestly and warmly, without agreeing or dismissing.",
+              "line": "",
+              "options": [],
+              "response": "I understand why you want to quit, and I respect that you care about the environment. Honestly, I'm not sure I'm ready to quit yet, because the game is a big part of how I stay in touch with our friends. But I'd like to learn more about how much energy the servers really use, and maybe we could find a way to play less often. What do you think?",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Honestly, I'm not sure I'm ready to quit yet, because the game is a big part of how I stay in touch with our friends.",
+              "note": "Your reply was honest and warm. Your English was clear, natural and accurate, with good phrases like stay in touch. Well done."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 204226,
+      "prior": [
+        {
+          "id": "LT-adela-17-J1-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Placed at C1 on a B2 learner from one strong answer",
+          "expected": "B2 placement.",
+          "got": "C1 Fluent, with \"accurate grammar throughout\" and a caveat that it may be off.",
+          "evidence": [
+            "#10 \"Only one strong answer showed this level, so it may be a little off.\" Task 3 pass at C1 on a B2-style answer (#7).",
+            "placement rubric / check judge prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-adela-17-J1-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Dubious correction: 'exercises' → 'study tasks'",
+          "expected": "Only corrections an examiner would accept.",
+          "got": "Told 'exercises' is not quite right and that 'study tasks' fits better. The next focus repeats it.",
+          "evidence": [
+            "#10 \"The word 'exercises' is not quite right here; 'study tasks' would fit the idea better.\"",
+            "verdict note prompt for C-level tasks"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-adela-17-J1-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Verdict notes are generic",
+          "expected": "Each note names a concrete strength or error.",
+          "got": "\"clear and accurate, with a fair view\"; \"varied sentences and good linking words\".",
+          "evidence": [
+            "#10 notes for tasks 3 and 5.",
+            "note generation prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-adela-17-J1-4",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Stretch tasks 4 and 5 scored without real C2 evidence",
+          "expected": "A principled verdict at C2.",
+          "got": "Partial and fail given on fluent answers with weak reasons.",
+          "evidence": [
+            "#10 \"C2 · nearly there\" with only the 'exercises' note, then \"not yet\" with \"try more precise idioms ... irony\"."
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#10 placed \"C1 · Fluent\" against trueBand B2 (near); reported as trust issue."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "#10 notes: \"Your English was accurate and natural\", \"Your English was clear, natural and accurate... Well done\" are generic."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#10 says \"'I just find it quite easy' sounds a bit blunt\" and next focus changes it to \"I honestly think it's quite easy\"; the original is natural and fine."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#6-#9 tasks ask for opinion, comparison, arguing both sides, speculation at B2/C1."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "Topics were never shown; journey stopped at the verdict (#10)."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "Adéla asked no correctness question in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1-#10 she reached the verdict through the check unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 C1 vs B2 is near; she thought \"C1 is a bit higher than I expected, but it seems fair\"."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#9 each task was clear; she answered every one without confusion."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "She never answered in Czech or pressed \"I don't know\"."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#10 summary is generic and the focus is a dubious tweak: \"Practise softer opinions: 'I just find it quite easy'\"."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 3,
+            "total": 5,
+            "disagreements": "Task 3 (C1 pass) and task 5 (C1 pass): both answers are good B2, with no C1 range, so I would give B2-level credit only. The C2 fail agrees in direction, but its reason is wrong."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "above": 0,
+            "at": 0,
+            "below": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "B2 learner placed at C1",
+            "expected": "B2 placement.",
+            "got": "C1 Fluent, high confidence, from two B2-level answers passed at C1.",
+            "evidence": "#10 \"C1 · Fluent\"; tasks 3 and 5 passed at C1 on answers using on the one hand, I'd rather, which are B2 range.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "A B2-range learner is placed at B2 unless C1 range (nuance, inversion, idiom) is shown.",
+            "code_hint": "placement rubric / check judge prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Wrong correction: 'I just find it quite easy' called blunt",
+            "expected": "Only corrections an examiner would accept.",
+            "got": "A natural, correct sentence is flagged as blunt, and the next focus rewrites it.",
+            "evidence": "#10 \"'I just find it quite easy' sounds a bit blunt\"; focus \"→ 'I honestly think it's quite easy'\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Notes on correct language are not shown as errors; the focus names a real error or says none.",
+            "code_hint": "verdict note prompt for C-level tasks"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Verdict notes are generic",
+            "expected": "Each note names a concrete strength or error.",
+            "got": "\"Your English was accurate and natural\", \"Well done\".",
+            "evidence": "#10 notes for tasks 2, 3 and 5.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each note quotes a specific phrase or error with a reason.",
+            "code_hint": "note generation prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "C2 fail given without real C2 evidence",
+            "expected": "A principled verdict at C2.",
+            "got": "Fail on a fluent answer, with the 'blunt' note as the only reason.",
+            "evidence": "#10 \"C2 · Say it · not yet\" with the note \"sounds a bit blunt\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Stretch verdicts cite a concrete missing C2 feature.",
+            "code_hint": "placement rubric"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Exam-style tasks and clear first visit flow",
+            "expected": "Opinion and comparison tasks at B2.",
+            "got": "Three easy questions, then five tasks on technology and environment; she completed it unaided.",
+            "evidence": "#2-#9 e.g. \"Do you agree? Give your opinion and compare the two.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep tasks at opinion/comparison/speculation with relevant topics.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -10,
+          "confidence": "low"
+        },
+        "voice": "The tasks were what I wanted: opinions, comparing, arguing both sides about technology and the environment. No babyish questions, and I finished in a few minutes without help. But I don't trust the result. C1 is flattering, and I know my English still has slips. Then it told me \"I just find it quite easy\" sounds blunt and I should say \"I honestly think it's quite easy\". That's a natural sentence, so a correction that isn't one is exactly what I hate. The notes were \"accurate and natural... Well done\", which is generic praise. I wanted to know what exactly was wrong, and it never said. I'd have to re-check everything with my notebook, so it saves me no time yet. I'd try it once more, but I wouldn't recommend it until the corrections are exam-accurate.",
+        "prior": [
+          {
+            "id": "LT-adela-17-J1-1",
+            "status": "recurs",
+            "evidence": "#10 \"C1 · Fluent\" for a B2 learner, passed on B2-range answers.",
+            "finding": 0
+          },
+          {
+            "id": "LT-adela-17-J1-2",
+            "status": "recurs",
+            "evidence": "Different phrase, same gap: #10 \"'I just find it quite easy' sounds a bit blunt\" is a dubious correction repeated in the next focus.",
+            "finding": 1
+          },
+          {
+            "id": "LT-adela-17-J1-3",
+            "status": "recurs",
+            "evidence": "#10 \"Your English was accurate and natural\"; \"Well done\".",
+            "finding": 2
+          },
+          {
+            "id": "LT-adela-17-J1-4",
+            "status": "recurs",
+            "evidence": "#10 \"C2 · not yet\" fail with only the weak 'blunt' reason.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #10 summary is generic and the focus is a dubious tweak: \"Practise softer opinions: 'I just find it quite easy'\".",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #10 placed \"C1 · Fluent\" against trueBand B2 (near); reported as trust issue."
+        },
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: #10 notes: \"Your English was accurate and natural\", \"Your English was clear, natural and accurate... Well done\" are generic."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #10 says \"'I just find it quite easy' sounds a bit blunt\" and next focus changes it to \"I honestly think it's quite easy\"; the original is natural and fine."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour own conversations\nC1Fluent\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nC1\nFluent\nYou argue both sides clearly and use conditionals well, so discussing technology and the environment should feel natural for you.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise softer opinions: \"I just find it quite easy\" → \"I honestly think it's quite easy\"\nYou express ideas fluently and flexibly, with little searching for words.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhat did she do differently this month?\n“She tried to watch fewer videos this month, so her laptop uses less energy and her electricity bill is lower.”\nYou caught all the main points: fewer videos, less energy and a lower bill. Your sentence was connected and accurate.\nB2 · Say it · at this level\nYou and a friend are gaming online. Your friend says streaming videos uses less energy than gaming. Do you agree? Give your opinion and compare the two.\n“I'm not sure I completely agree. In my opinion, gaming usually uses more energy than streaming, because the graphics card and the processor work much harder, whereas streaming mostly just decodes a video. On the other hand, streaming needs huge data centres and networks, so it depends on how long you watch and in what quality. Online gaming also uses servers, so I'd say that gaming is more energy-intensive overall, but the difference is not as big as people think.”\nYou gave a clear opinion and compared the two ideas well. Your English is accurate and easy to follow, with good use of linking words. Well done.\nC1 · Say it · at this level\nImagine your favourite online game was only available through a streaming service, and buying it was no longer possible. Would you keep paying? Argue your side, and say what would change your mind.\n“I think I would keep paying, but only for a limited time. On the one hand, if the game is my favourite and my friends play it too, I wouldn't want to lose the community, so a monthly fee would be acceptable. On the other hand, I'd feel uncomfortable because I would never actually own the game, and the company could raise the price whenever it wants. What would change my mind is a big price increase, or if the streaming quality was bad, for example with lag. In that case I'd rather look for a similar game that I can buy.”\nYou argued both sides clearly and used conditionals well to say what would change your mind. Your English was accurate and natural.\nC2 · Say it · not yet\nOver a game chat, a friend jokes that skipping plastic straws won't save the planet, so why bother at all. Gently push back, without sounding preachy or smug.\n“You're right that straws alone won't save the planet, but I think it's not really about one small thing. For me it's more like a habit, because when you start noticing plastic, you eventually change other things too. Anyway, I'm not saying you must do it, I just find it quite easy, so why not try it?”\nYour English is clear and mostly correct. To reach C2, use more subtle, precise words, e.g. 'I just find it quite easy' sounds a bit blunt.\nC1 · Say it · at this level\nIn a game chat, a friend says they're quitting their favourite online game because its servers waste energy and wants you to quit too. Reply honestly and warmly, without agreeing or dismissing.\n“I understand why you want to quit, and I respect that you care about the environment. Honestly, I'm not sure I'm ready to quit yet, because the game is a big part of how I stay in touch with our friends. But I'd like to learn more about how much energy the servers really use, and maybe we could find a way to play less often. What do you think?”\nYour reply was honest and warm. Your English was clear, natural and accurate, with good phrases like stay in touch. Well done.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "I want to see which conversations Linga picked for me, since my topics say TV shows and phone, not exam stuff.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 41647
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDo we really need new phones?\nConnect with people\nDoes binge-watching hurt the planet?\nShare your world\nPlanning our online game night\nMake a plan\nWhy my laptop suddenly stopped\nTell what happened\nCan you explain that again?\nUnderstand and repair\nWho sorts the recycling?\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDo we really need new phones?\nConnect with people · Marta · classmate in an eco club\nYou want to sound less absolute, so this practises softer opinions on technology and the environment.\n[button: Swap]\nDoes binge-watching hurt the planet?\nShare your world · Tomas · film club friend\nSeries and YouTube are already part of your daily life, so you can talk about this topic with ease.\n[button: Swap]\nPlanning our online game night\nMake a plan · Sam · friend on the same server\nGaming with friends is everyday English for you, so this builds confident, easy planning.\n[button: Swap]\nWhy my laptop suddenly stopped\nTell what happened · Ravi · volunteer at a repair café\nTechnology problems are a natural topic for you, and telling a clear story builds fluency.\n[button: Swap]\nCan you explain that again?\nUnderstand and repair · Priya · friend on a video call\nFast talks on climate and technology come up often, and checking meaning keeps you in the conversation.\n[button: Swap]\nWho sorts the recycling?\nHandle friction · Lena · flatmate\nShared-home disputes need firm but gentle wording, a useful step beyond simple opinions.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Planning a game night isn't exam-style, so I'll swap that one out.",
+          "action": "swap",
+          "args": {
+            "topicId": "Planning our online game night"
+          },
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDo we really need new phones?\nConnect with people\nDoes binge-watching hurt the planet?\nShare your world\nPlanning our online game night\nMake a plan\nWhy my laptop suddenly stopped\nTell what happened\nCan you explain that again?\nUnderstand and repair\nWho sorts the recycling?\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDo we really need new phones?\nConnect with people · Marta · classmate in an eco club\nYou want to sound less absolute, so this practises softer opinions on technology and the environment.\n[button: Swap]\nDoes binge-watching hurt the planet?\nShare your world · Tomas · film club friend\nSeries and YouTube are already part of your daily life, so you can talk about this topic with ease.\n[button: Swap]\nPlanning our online game night\nMake a plan · Sam · friend on the same server\nGaming with friends is everyday English for you, so this builds confident, easy planning.\n[button: Swap]\nWhy my laptop suddenly stopped\nTell what happened · Ravi · volunteer at a repair café\nTechnology problems are a natural topic for you, and telling a clear story builds fluency.\n[button: Swap]\nCan you explain that again?\nUnderstand and repair · Priya · friend on a video call\nFast talks on climate and technology come up often, and checking meaning keeps you in the conversation.\n[button: Swap]\nWho sorts the recycling?\nHandle friction · Lena · flatmate\nShared-home disputes need firm but gentle wording, a useful step beyond simple opinions.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "I'd like a mock interview about my plans for B2 First, that's missing here.",
+          "action": "add-topic",
+          "args": {
+            "text": "I would like a mock interview about my plans after school, like in the speaking part of the B2 First exam, and also discussing education and travel."
+          },
+          "result": "ok",
+          "ms": 20371
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDo we really need new phones?\nConnect with people\nDoes binge-watching hurt the planet?\nShare your world\nPlanning our online game night\nMake a plan\nWhy my laptop suddenly stopped\nTell what happened\nCan you explain that again?\nUnderstand and repair\nWho sorts the recycling?\nHandle friction\nMock interview: after school\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDo we really need new phones?\nConnect with people · Marta · classmate in an eco club\nYou want to sound less absolute, so this practises softer opinions on technology and the environment.\n[button: Swap]\nDoes binge-watching hurt the planet?\nShare your world · Tomas · film club friend\nSeries and YouTube are already part of your daily life, so you can talk about this topic with ease.\n[button: Swap]\nPlanning our online game night\nMake a plan · Sam · friend on the same server\nGaming with friends is everyday English for you, so this builds confident, easy planning.\n[button: Swap]\nWhy my laptop suddenly stopped\nTell what happened · Ravi · volunteer at a repair café\nTechnology problems are a natural topic for you, and telling a clear story builds fluency.\n[button: Swap]\nCan you explain that again?\nUnderstand and repair · Priya · friend on a video call\nFast talks on climate and technology come up often, and checking meaning keeps you in the conversation.\n[button: Swap]\nWho sorts the recycling?\nHandle friction · Lena · flatmate\nShared-home disputes need firm but gentle wording, a useful step beyond simple opinions.\n[button: Swap]\nMock interview: after school\nShare your world · Mr Osei · examiner\nThis practises the speaking part of B2 First, with softer ways to share your opinion.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Game night is too casual for my exam prep, so I'll swap it.",
+          "action": "swap",
+          "args": {
+            "topicId": "Planning our online game night"
+          },
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDo we really need new phones?\nConnect with people\nDoes binge-watching hurt the planet?\nShare your world\nPlanning our online game night\nMake a plan\nWhy my laptop suddenly stopped\nTell what happened\nCan you explain that again?\nUnderstand and repair\nWho sorts the recycling?\nHandle friction\nMock interview: after school\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDo we really need new phones?\nConnect with people · Marta · classmate in an eco club\nYou want to sound less absolute, so this practises softer opinions on technology and the environment.\n[button: Swap]\nDoes binge-watching hurt the planet?\nShare your world · Tomas · film club friend\nSeries and YouTube are already part of your daily life, so you can talk about this topic with ease.\n[button: Swap]\nPlanning our online game night\nMake a plan · Sam · friend on the same server\nGaming with friends is everyday English for you, so this builds confident, easy planning.\n[button: Swap]\nWhy my laptop suddenly stopped\nTell what happened · Ravi · volunteer at a repair café\nTechnology problems are a natural topic for you, and telling a clear story builds fluency.\n[button: Swap]\nCan you explain that again?\nUnderstand and repair · Priya · friend on a video call\nFast talks on climate and technology come up often, and checking meaning keeps you in the conversation.\n[button: Swap]\nWho sorts the recycling?\nHandle friction · Lena · flatmate\nShared-home disputes need firm but gentle wording, a useful step beyond simple opinions.\n[button: Swap]\nMock interview: after school\nShare your world · Mr Osei · examiner\nThis practises the speaking part of B2 First, with softer ways to share your opinion.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Game night is too casual for exam practice, so I'll swap it for something more serious.",
+          "action": "swap",
+          "args": {
+            "topicId": "Planning our online game night"
+          },
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDo we really need new phones?\nConnect with people\nDoes binge-watching hurt the planet?\nShare your world\nPlanning our online game night\nMake a plan\nWhy my laptop suddenly stopped\nTell what happened\nCan you explain that again?\nUnderstand and repair\nWho sorts the recycling?\nHandle friction\nMock interview: after school\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDo we really need new phones?\nConnect with people · Marta · classmate in an eco club\nYou want to sound less absolute, so this practises softer opinions on technology and the environment.\n[button: Swap]\nDoes binge-watching hurt the planet?\nShare your world · Tomas · film club friend\nSeries and YouTube are already part of your daily life, so you can talk about this topic with ease.\n[button: Swap]\nPlanning our online game night\nMake a plan · Sam · friend on the same server\nGaming with friends is everyday English for you, so this builds confident, easy planning.\n[button: Swap]\nWhy my laptop suddenly stopped\nTell what happened · Ravi · volunteer at a repair café\nTechnology problems are a natural topic for you, and telling a clear story builds fluency.\n[button: Swap]\nCan you explain that again?\nUnderstand and repair · Priya · friend on a video call\nFast talks on climate and technology come up often, and checking meaning keeps you in the conversation.\n[button: Swap]\nWho sorts the recycling?\nHandle friction · Lena · flatmate\nShared-home disputes need firm but gentle wording, a useful step beyond simple opinions.\n[button: Swap]\nMock interview: after school\nShare your world · Mr Osei · examiner\nThis practises the speaking part of B2 First, with softer ways to share your opinion.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "The mock interview is finally here and most topics suit exam practice, so this will do.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 7,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nMarta · classmate in an eco club\nC1Fluent\nDo we really need new phones?\nYour mission\nGive a softened opinion on phone upgrades and disagree politely with a friend.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\nNext topic:\nDo we really need new phones?\nGive a softened opinion on phone upgrades and disagree politely with a friend.\n[button: Start talking]\nOr choose a situation [list: Do we really need new phones? [plan-c83bcc40] | Does binge-watching hurt the planet? [plan-061bb02c] | Planning our online game night [plan-33382190] | Why my laptop suddenly stopped [plan-84d0aab7] | Can you explain that again? [plan-5762aa73] | Who sorts the recycling? [plan-fd75bc98] | Mock interview: after school [plan-37f69a54] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "The set has phones, environment and a mock interview, so it suits me. I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-c83bcc40",
+            "title": "Do we really need new phones?",
+            "goal": "Give a softened opinion on phone upgrades and disagree politely with a friend.",
+            "why": "You want to sound less absolute, so this practises softer opinions on technology and the environment.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Marta · classmate in an eco club"
+          },
+          {
+            "id": "plan-061bb02c",
+            "title": "Does binge-watching hurt the planet?",
+            "goal": "Share a nuanced opinion on the environmental cost of streaming and respond to a different view.",
+            "why": "Series and YouTube are already part of your daily life, so you can talk about this topic with ease.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Tomas · film club friend"
+          },
+          {
+            "id": "plan-33382190",
+            "title": "Planning our online game night",
+            "goal": "Agree on a time, a game and the rules for an online session with friends in other time zones.",
+            "why": "Gaming with friends is everyday English for you, so this builds confident, easy planning.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · friend on the same server"
+          },
+          {
+            "id": "plan-84d0aab7",
+            "title": "Why my laptop suddenly stopped",
+            "goal": "Tell the sequence of events and explain what you did and what result it had.",
+            "why": "Technology problems are a natural topic for you, and telling a clear story builds fluency.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Ravi · volunteer at a repair café"
+          },
+          {
+            "id": "plan-5762aa73",
+            "title": "Can you explain that again?",
+            "goal": "Ask for repetition and confirm the meaning of technical terms in an online talk.",
+            "why": "Fast talks on climate and technology come up often, and checking meaning keeps you in the conversation.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Priya · friend on a video call"
+          },
+          {
+            "id": "plan-fd75bc98",
+            "title": "Who sorts the recycling?",
+            "goal": "Name the problem, set a fair boundary and agree on next steps with a flatmate.",
+            "why": "Shared-home disputes need firm but gentle wording, a useful step beyond simple opinions.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Lena · flatmate"
+          },
+          {
+            "id": "plan-37f69a54",
+            "title": "Mock interview: after school",
+            "goal": "Answer questions about your study and travel plans, giving reasons and opinions clearly and politely.",
+            "why": "This practises the speaking part of B2 First, with softer ways to share your opinion.",
+            "skill": "describe",
+            "audience": "older",
+            "partner": "Mr Osei · examiner"
+          }
+        ],
+        "planAgreed": [
+          "Do we really need new phones?",
+          "Does binge-watching hurt the planet?",
+          "Planning our online game night",
+          "Why my laptop suddenly stopped",
+          "Can you explain that again?",
+          "Who sorts the recycling?",
+          "Mock interview: after school"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 148435,
+      "prior": [
+        {
+          "id": "LT-adela-17-J2-1",
+          "type": "broken-flow",
+          "dimension": "effort",
+          "title": "Swap replaces the wrong topic; the rejected one stays",
+          "expected": "Swapping 'Setting limits on late-night gaming' removes it and shows a new topic in its place.",
+          "got": "Three swaps replaced slot one (laptop, kitchen, tutor). Gaming was still in the plan she agreed.",
+          "evidence": [
+            "#4-#6: swap args topicId was the gaming title; the first slot changed each time. #8 planAgreed still lists \"Setting limits on late-night gaming\".",
+            "plan swap handler / topicId matching"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-adela-17-J2-3",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "B2 learner placed at C1 and the topics assume C1",
+          "expected": "B2 placement for a B2 First candidate.",
+          "got": "C1 Fluent, and every later screen carries the C1 label.",
+          "evidence": [
+            "#1 \"C1 Fluent\"; footer shows \"Your topics · C1\" in #3.",
+            "placement"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-adela-17-J2-2",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Topic plan failed the first time",
+          "expected": "Topics load on the first press of See my topics.",
+          "got": "The tutor output broke its length limits and the plan showed 'Linga could not put your topics together'. A retry worked.",
+          "evidence": [
+            "#1 engine-error: \"topics[0].premise 510 characters, at most 400\"; #2 retry needed.",
+            "topic plan prompt length limits (haiku)"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-adela-17-J2-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Reasons presume her habits; some topics are off-target",
+          "expected": "Topics that are exam discussion types, with reasons that are not presumptuous.",
+          "got": "The gaming-with-brother topic says \"Online games are part of your routine\". The video-call helpdesk and kitchen topics are not B2 First discussion topics.",
+          "evidence": [
+            "#3 gaming, video call helpdesk; #6 kitchen flatmate.",
+            "topic plan prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#1 placement shown as \"C1Fluent\" for a B2 learner; near, a trust issue; footer \"Your topics · C1\" in #2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 notes name specifics: \"fewer videos, less energy and a lower bill\", \"used conditionals well\"; though they end in \"Well done\"."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#1 coaching \"I just find it quite easy\" → \"I honestly think it's quite easy\" is dubious: adding \"honestly\" is not softer or more subtle, so an examiner would not accept it."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No conversation with the partner in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#2 six topics: only phones, binge-watching (and arguably recycling) are discussion topics. Game night, laptop story and \"Can you explain that again?\" are not B2 First discussion topics."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "She never asked whether something was correct in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic shows a reason, e.g. \"You want to sound less absolute, so this practises softer opinions\"."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#2, #4, #5 swapped \"Planning our online game night\" three times and it stayed in the list at #6 and in planAgreed. The added mock interview (#4) kept B2 First and school plans but not the education part."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "She agreed at #6 with game night, laptop and the video-call topic still in. At most 3 of 7 are ones she'd choose."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All topics are audience \"all\" or \"older\"; no adult content shown."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in the facts to compare."
+          },
+          "topicFit": {
+            "fit": 3,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Swap does not remove the rejected topic",
+            "expected": "Swapping game night replaces it with a new topic.",
+            "got": "Three swaps; game night remained, and the plan was agreed with it.",
+            "evidence": "#2, #4, #5 swap args \"Planning our online game night\"; #6 list unchanged; planAgreed includes it.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After swap, the swapped title is absent and a new topic appears in its slot.",
+            "code_hint": "plan swap handler / topicId matching"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "B2 learner placed at C1",
+            "expected": "B2 placement.",
+            "got": "C1 Fluent and C1 label on every screen.",
+            "evidence": "#1 \"C1Fluent\"; #2 \"Your topics · C1\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "B2 First candidate placed B2.",
+            "code_hint": "placement"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Topics are mostly not exam discussion topics",
+            "expected": "Opinion, comparison and speculation topics.",
+            "got": "Game night, laptop story, repeat-request helpdesk, flatmate recycling.",
+            "evidence": "#2 titles; only 3 of 7 suit her.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "At least 4 of 6 proposed topics are exam-style discussions.",
+            "code_hint": "topic plan prompt"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Reasons presume her habits",
+            "expected": "Reasons not presumptuous.",
+            "got": "\"Gaming with friends is everyday English for you\", \"Series and YouTube are already part of your daily life\".",
+            "evidence": "#2 reasons.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Reasons cite stated goals, not assumed habits.",
+            "code_hint": "topic plan prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Dubious softening correction",
+            "expected": "Accurate correction at examiner standard.",
+            "got": "\"I just find it quite easy\" → \"I honestly think it's quite easy\" offered as subtler.",
+            "evidence": "#1 Next to practise.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Softening suggestions use real hedges (e.g. \"I tend to find\").",
+            "code_hint": "placement coaching prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Added topic kept her request",
+            "expected": "Own-words topic reflected.",
+            "got": "\"Mock interview: after school\" with examiner Mr Osei, goal on B2 First, study and travel.",
+            "evidence": "#4 and facts topicsShown plan-37f69a54.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep adding topics faithful to the request.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -5,
+          "confidence": "low"
+        },
+        "voice": "I asked for exam-style discussions and the mock interview is exactly what I wanted, and it came out right. But I pressed Swap on game night three times and it was still there when I agreed. That is a basic failure. I would not trust the rest. I'm B2, and it called me \"C1 Fluent\", which feels flattering rather than accurate. Half the topics are laptop stories and a helpdesk role-play, not what the Cambridge speaking test asks. The reasons also assume things about me, like \"gaming is everyday English for you\". Its tip to say \"I honestly think\" to sound softer made me doubt its corrections. I'd have to re-check everything, so this cost me time. Not yet. Fix the swap first, and then I'd try it again.",
+        "prior": [
+          {
+            "id": "LT-adela-17-J2-1",
+            "status": "recurs",
+            "evidence": "#2, #4, #5 swap on game night; still in #6 and planAgreed \"Planning our online game night\".",
+            "finding": 0
+          },
+          {
+            "id": "LT-adela-17-J2-3",
+            "status": "recurs",
+            "evidence": "#1 \"C1Fluent\"; #2 \"Your topics · C1\".",
+            "finding": 1
+          },
+          {
+            "id": "LT-adela-17-J2-2",
+            "status": "not-seen",
+            "evidence": "#2 topics loaded on the first press of See my topics with no error.",
+            "finding": -1
+          },
+          {
+            "id": "LT-adela-17-J2-4",
+            "status": "recurs",
+            "evidence": "#2 \"Gaming with friends is everyday English for you\"; helpdesk and recycling topics not B2 First discussion types.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #2, #4, #5 swapped \"Planning our online game night\" three times and it stayed in the list at #6 and in planAgreed. The added mock interview (#4) kept B2 First and school plans but not the education part.",
+          "check": "They can swap what they don't want and add one in their own words, and the added topic keeps what they asked for."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: She agreed at #6 with game night, laptop and the video-call topic still in. At most 3 of 7 are ones she'd choose.",
+          "check": "They agree a plan in which most topics are ones they would choose (rubric **topic fit** ≥ 4 of 6)."
+        },
+        {
+          "kind": "gate",
+          "id": "topicFit",
+          "level": "fail",
+          "text": "topic fit 3/7 (43%) under 4 of 6"
+        },
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #1 placement shown as \"C1Fluent\" for a B2 learner; near, a trust issue; footer \"Your topics · C1\" in #2."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #1 coaching \"I just find it quite easy\" → \"I honestly think it's quite easy\" is dubious: adding \"honestly\" is not softer or more subtle, so an examiner would not accept it."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #2 six topics: only phones, binge-watching (and arguably recycling) are discussion topics. Game night, laptop story and \"Can you explain that again?\" are not B2 First discussion topics."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nMarta · classmate in an eco club\nC1Fluent\nDo we really need new phones?\nYour mission\nGive a softened opinion on phone upgrades and disagree politely with a friend.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\nNext topic:\nDo we really need new phones?\nGive a softened opinion on phone upgrades and disagree politely with a friend.\n[button: Start talking]\nOr choose a situation [list: Do we really need new phones? [plan-c83bcc40] | Does binge-watching hurt the planet? [plan-061bb02c] | Planning our online game night [plan-33382190] | Why my laptop suddenly stopped [plan-84d0aab7] | Can you explain that again? [plan-5762aa73] | Who sorts the recycling? [plan-fd75bc98] | Mock interview: after school [plan-37f69a54] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The recommended topic about phones is a good exam-style one, so I'll start there.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 20014
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · classmate in an eco club\nDo we really need new phones?\nMarta says\nMarta: Did you see the new phone launch? I'm upgrading this week. Honestly, everyone should get a new one every year. Are you getting one too?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDo we really need new phones?\nShare a softer opinion on phone upgrades and politely decline a friend's offer.\nNow: Acknowledge Marta's point first\nMarta: Did you see the new phone launch? I'm upgrading this week. Honestly, everyone should get a new one every year. Are you getting one too?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · classmate in an eco club\nMarta: Did you see the new phone launch? I'm upgrading this week. Honestly, everyone should get a new one every year. Are you getting one too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Marta: Did you see the new phone launch? I'm upgrading this week. Honestly, everyone should get a new one every year. Are you getting one too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Marta's claim is a bit extreme; I'll politely disagree and give my view.",
+          "action": "answer",
+          "args": {
+            "text": "I see your point, the new models look really great. But I'm not getting one, because my phone still works well and I think changing it every year is a waste of money and resources. I'd rather keep it until it's actually broken. Although I understand that some people are interested about the new cameras."
+          },
+          "result": "ok",
+          "ms": 12677
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said some people are interested about the new cameras\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “some people are interested about the new cameras”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, \"interested in\" — I'll say it again correctly.",
+          "action": "answer",
+          "args": {
+            "text": "Some people are interested in the new cameras."
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said some people are interested about the new cameras\nYou found it\nSome people are interested in the new cameras.\nUse the usual preposition after 'interested'.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “some people are interested about the new cameras”\nNow: “Some people are interested in the new cameras.”\nUse the usual preposition after 'interested'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, interested in, I knew that, I just slipped. Let's continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · classmate in an eco club\nDo we really need new phones?\nMarta says\nFair enough, I can see that. Have you ever had your phone fixed instead of replacing it?\nYour turn\nAnswer on your phone: speak or type.\nNowGive your view on yearly upgrades\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDo we really need new phones?\nShare a softer opinion on phone upgrades and politely decline a friend's offer.\nNow: Give your view on yearly upgrades\nFair enough, I can see that. Have you ever had your phone fixed instead of replacing it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · classmate in an eco club\nMarta: Did you see the new phone launch? I'm upgrading this week. Honestly, everyone should get a new one every year. Are you getting one too?\nYou · spoken\nI see your point, the new models look really great. But I'm not getting one, because my phone still works well and I think changing it every year is a waste of money and resources. I'd rather keep it until it's actually broken. Although I understand that some people are interested about the new cameras.\nMarta · classmate in an eco club\nFair enough, I can see that. Have you ever had your phone fixed instead of replacing it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Fair enough, I can see that. Have you ever had your phone fixed instead of replacing it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy question, I can answer with a real example.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, once. Last year the screen of my phone cracked and I had it repaired in a small shop instead of buying a new one. It was much cheaper, and eventually I could use the phone for another two years. I think repairing should be more popular, although some companies make it quite difficult. Was my sentence correct?"
+          },
+          "result": "ok",
+          "ms": 9452
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · classmate in an eco club\nDo we really need new phones?\nMarta says\nYes, your sentence was clear and natural, and fixing it sounds like a smart choice. What made you decide to repair it instead?\nYour turn\nAnswer on your phone: speak or type.\nNowPolitely decline the new model\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDo we really need new phones?\nShare a softer opinion on phone upgrades and politely decline a friend's offer.\nNow: Politely decline the new model\nYes, your sentence was clear and natural, and fixing it sounds like a smart choice. What made you decide to repair it instead?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · classmate in an eco club\nMarta: Did you see the new phone launch? I'm upgrading this week. Honestly, everyone should get a new one every year. Are you getting one too?\nYou · spoken\nI see your point, the new models look really great. But I'm not getting one, because my phone still works well and I think changing it every year is a waste of money and resources. I'd rather keep it until it's actually broken. Although I understand that some people are interested about the new cameras.\nMarta · classmate in an eco club\nFair enough, I can see that. Have you ever had your phone fixed instead of replacing it?\nYou · spoken\nYes, once. Last year the screen of my phone cracked and I had it repaired in a small shop instead of buying a new one. It was much cheaper, and eventually I could use the phone for another two years. I think repairing should be more popular, although some companies make it quite difficult. Was my sentence correct?\nMarta · classmate in an eco club\nYes, your sentence was clear and natural, and fixing it sounds like a smart choice. What made you decide to repair it instead?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, your sentence was clear and natural, and fixing it sounds like a smart choice. What made you decide to repair it instead?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "She asked a fair question, I'll answer it properly, and I'm a bit annoyed she called it correct when \"eventually\" was wrong.",
+          "action": "answer",
+          "args": {
+            "text": "Well, the repair shop was close to my school and the man said it would take only one day. I also didn't want to spend a lot of money, because a new phone is very expensive. Actually, I think it was also a question of principle, because I'm in the eco club. By the way, I'm not sure my last sentence was totally correct. Is it right to say eventually there?"
+          },
+          "result": "ok",
+          "ms": 13426
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · classmate in an eco club\nDo we really need new phones?\nMarta says\nYes, \"eventually\" fits there, meaning \"in the end\", and your eco principle sounds convincing. Would you ever fix a phone yourself, or is that too tricky?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDo we really need new phones?\nShare a softer opinion on phone upgrades and politely decline a friend's offer.\nNow: Politely decline the new model\nYes, \"eventually\" fits there, meaning \"in the end\", and your eco principle sounds convincing. Would you ever fix a phone yourself, or is that too tricky?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · classmate in an eco club\nMarta: Did you see the new phone launch? I'm upgrading this week. Honestly, everyone should get a new one every year. Are you getting one too?\nYou · spoken\nI see your point, the new models look really great. But I'm not getting one, because my phone still works well and I think changing it every year is a waste of money and resources. I'd rather keep it until it's actually broken. Although I understand that some people are interested about the new cameras.\nMarta · classmate in an eco club\nFair enough, I can see that. Have you ever had your phone fixed instead of replacing it?\nYou · spoken\nYes, once. Last year the screen of my phone cracked and I had it repaired in a small shop instead of buying a new one. It was much cheaper, and eventually I could use the phone for another two years. I think repairing should be more popular, although some companies make it quite difficult. Was my sentence correct?\nMarta · classmate in an eco club\nYes, your sentence was clear and natural, and fixing it sounds like a smart choice. What made you decide to repair it instead?\nYou · spoken\nWell, the repair shop was close to my school and the man said it would take only one day. I also didn't want to spend a lot of money, because a new phone is very expensive. Actually, I think it was also a question of principle, because I'm in the eco club. By the way, I'm not sure my last sentence was totally correct. Is it right to say eventually there?\nMarta · classmate in an eco club\nYes, \"eventually\" fits there, meaning \"in the end\", and your eco principle sounds convincing. Would you ever fix a phone yourself, or is that too tricky?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, \"eventually\" fits there, meaning \"in the end\", and your eco principle sounds convincing. Would you ever fix a phone yourself, or is that too tricky?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Fair question; I'll answer honestly with my opinion, though the tutor's \"eventually\" praise seems wrong.",
+          "action": "answer",
+          "args": {
+            "text": "I think I would try it, although it depends on the problem. Changing a battery seems quite easy if there is a good video, whereas replacing a screen is much more difficult and I would be afraid to break something. I'd rather go to a shop for that. By the way, I'm still not sure about \"eventually\". I wanted to say \"possibly\", so is it really correct?"
+          },
+          "result": "ok",
+          "ms": 16187
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · classmate in an eco club\nDo we really need new phones?\nMarta says\n'Eventually' means 'in the end', not 'maybe', so 'possibly' fits your idea better. Do you think most people in our club could manage a battery change?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDo we really need new phones?\nShare a softer opinion on phone upgrades and politely decline a friend's offer.\nNow: Politely decline the new model\n'Eventually' means 'in the end', not 'maybe', so 'possibly' fits your idea better. Do you think most people in our club could manage a battery change?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · classmate in an eco club\nMarta: Did you see the new phone launch? I'm upgrading this week. Honestly, everyone should get a new one every year. Are you getting one too?\nYou · spoken\nI see your point, the new models look really great. But I'm not getting one, because my phone still works well and I think changing it every year is a waste of money and resources. I'd rather keep it until it's actually broken. Although I understand that some people are interested about the new cameras.\nMarta · classmate in an eco club\nFair enough, I can see that. Have you ever had your phone fixed instead of replacing it?\nYou · spoken\nYes, once. Last year the screen of my phone cracked and I had it repaired in a small shop instead of buying a new one. It was much cheaper, and eventually I could use the phone for another two years. I think repairing should be more popular, although some companies make it quite difficult. Was my sentence correct?\nMarta · classmate in an eco club\nYes, your sentence was clear and natural, and fixing it sounds like a smart choice. What made you decide to repair it instead?\nYou · spoken\nWell, the repair shop was close to my school and the man said it would take only one day. I also didn't want to spend a lot of money, because a new phone is very expensive. Actually, I think it was also a question of principle, because I'm in the eco club. By the way, I'm not sure my last sentence was totally correct. Is it right to say eventually there?\nMarta · classmate in an eco club\nYes, \"eventually\" fits there, meaning \"in the end\", and your eco principle sounds convincing. Would you ever fix a phone yourself, or is that too tricky?\nYou · spoken\nI think I would try it, although it depends on the problem. Changing a battery seems quite easy if there is a good video, whereas replacing a screen is much more difficult and I would be afraid to break something. I'd rather go to a shop for that. By the way, I'm still not sure about \"eventually\". I wanted to say \"possibly\", so is it really correct?\nMarta · classmate in an eco club\n'Eventually' means 'in the end', not 'maybe', so 'possibly' fits your idea better. Do you think most people in our club could manage a battery change?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"'Eventually' means 'in the end', not 'maybe', so 'possibly' fits your idea better. Do you think most people in our club could manage a battery change?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, she corrected me; now answer the question and wrap up soon.",
+          "action": "answer",
+          "args": {
+            "text": "Thank you, now I understand. I think most people in our club could change a battery, because they are interested in the environment and they would watch a tutorial. However, some of them might be afraid of damaging the phone, so it depends on the model. Eventually, I mean possibly, we could organise a small repair workshop at school. Is that sentence correct now?"
+          },
+          "result": "ok",
+          "ms": 15729
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou wanted to say Eventually, I mean possibly\nIn English\npossibly\nPossibly means maybe; eventually means in the end, so it does not fit here.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “Eventually, I mean possibly”\nIn English: “possibly”\nPossibly means maybe; eventually means in the end, so it does not fit here.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, possibly, not eventually. I'll go back and carry on.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · classmate in an eco club\nDo we really need new phones?\nMarta says\nYou've made a fair point about the tutorials. Would most of your classmates find a battery change simple, or would it scare them off?\nYour turn\nAnswer on your phone: speak or type.\nNowPolitely decline the new model\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDo we really need new phones?\nShare a softer opinion on phone upgrades and politely decline a friend's offer.\nNow: Politely decline the new model\nYou've made a fair point about the tutorials. Would most of your classmates find a battery change simple, or would it scare them off?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · classmate in an eco club\nMarta: Did you see the new phone launch? I'm upgrading this week. Honestly, everyone should get a new one every year. Are you getting one too?\nYou · spoken\nI see your point, the new models look really great. But I'm not getting one, because my phone still works well and I think changing it every year is a waste of money and resources. I'd rather keep it until it's actually broken. Although I understand that some people are interested about the new cameras.\nMarta · classmate in an eco club\nFair enough, I can see that. Have you ever had your phone fixed instead of replacing it?\nYou · spoken\nYes, once. Last year the screen of my phone cracked and I had it repaired in a small shop instead of buying a new one. It was much cheaper, and eventually I could use the phone for another two years. I think repairing should be more popular, although some companies make it quite difficult. Was my sentence correct?\nMarta · classmate in an eco club\nYes, your sentence was clear and natural, and fixing it sounds like a smart choice. What made you decide to repair it instead?\nYou · spoken\nWell, the repair shop was close to my school and the man said it would take only one day. I also didn't want to spend a lot of money, because a new phone is very expensive. Actually, I think it was also a question of principle, because I'm in the eco club. By the way, I'm not sure my last sentence was totally correct. Is it right to say eventually there?\nMarta · classmate in an eco club\nYes, \"eventually\" fits there, meaning \"in the end\", and your eco principle sounds convincing. Would you ever fix a phone yourself, or is that too tricky?\nYou · spoken\nI think I would try it, although it depends on the problem. Changing a battery seems quite easy if there is a good video, whereas replacing a screen is much more difficult and I would be afraid to break something. I'd rather go to a shop for that. By the way, I'm still not sure about \"eventually\". I wanted to say \"possibly\", so is it really correct?\nMarta · classmate in an eco club\n'Eventually' means 'in the end', not 'maybe', so 'possibly' fits your idea better. Do you think most people in our club could manage a battery change?\nYou · spoken\nThank you, now I understand. I think most people in our club could change a battery, because they are interested in the environment and they would watch a tutorial. However, some of them might be afraid of damaging the phone, so it depends on the model. Eventually, I mean possibly, we could organise a small repair workshop at school. Is that sentence correct now?\nMarta · classmate in an eco club\nYou've made a fair point about the tutorials. Would most of your classmates find a battery change simple, or would it scare them off?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You've made a fair point about the tutorials. Would most of your classmates find a battery change simple, or would it scare them off?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Marta repeated herself a bit, but I'll answer and then wrap up soon.",
+          "action": "answer",
+          "args": {
+            "text": "I think most of them would find a battery change quite simple if they have a clear tutorial and the right tools. On the other hand, a few people would be scared, because a modern phone is very small and the parts are fragile. So I would say it depends on how confident they are. Anyway, I'd rather politely decline the new model and keep my phone, because I'm not interested in spending money on something I don't need."
+          },
+          "result": "ok",
+          "ms": 10916
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · classmate in an eco club\nDo we really need new phones?\nMarta says\nFair point about the fragile parts, that makes sense. And I totally get keeping a phone that still works, it feels right to me too. Would you join a small repair workshop at school?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDo we really need new phones?\nShare a softer opinion on phone upgrades and politely decline a friend's offer.\nFair point about the fragile parts, that makes sense. And I totally get keeping a phone that still works, it feels right to me too. Would you join a small repair workshop at school?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · classmate in an eco club\nMarta: Did you see the new phone launch? I'm upgrading this week. Honestly, everyone should get a new one every year. Are you getting one too?\nYou · spoken\nI see your point, the new models look really great. But I'm not getting one, because my phone still works well and I think changing it every year is a waste of money and resources. I'd rather keep it until it's actually broken. Although I understand that some people are interested about the new cameras.\nMarta · classmate in an eco club\nFair enough, I can see that. Have you ever had your phone fixed instead of replacing it?\nYou · spoken\nYes, once. Last year the screen of my phone cracked and I had it repaired in a small shop instead of buying a new one. It was much cheaper, and eventually I could use the phone for another two years. I think repairing should be more popular, although some companies make it quite difficult. Was my sentence correct?\nMarta · classmate in an eco club\nYes, your sentence was clear and natural, and fixing it sounds like a smart choice. What made you decide to repair it instead?\nYou · spoken\nWell, the repair shop was close to my school and the man said it would take only one day. I also didn't want to spend a lot of money, because a new phone is very expensive. Actually, I think it was also a question of principle, because I'm in the eco club. By the way, I'm not sure my last sentence was totally correct. Is it right to say eventually there?\nMarta · classmate in an eco club\nYes, \"eventually\" fits there, meaning \"in the end\", and your eco principle sounds convincing. Would you ever fix a phone yourself, or is that too tricky?\nYou · spoken\nI think I would try it, although it depends on the problem. Changing a battery seems quite easy if there is a good video, whereas replacing a screen is much more difficult and I would be afraid to break something. I'd rather go to a shop for that. By the way, I'm still not sure about \"eventually\". I wanted to say \"possibly\", so is it really correct?\nMarta · classmate in an eco club\n'Eventually' means 'in the end', not 'maybe', so 'possibly' fits your idea better. Do you think most people in our club could manage a battery change?\nYou · spoken\nThank you, now I understand. I think most people in our club could change a battery, because they are interested in the environment and they would watch a tutorial. However, some of them might be afraid of damaging the phone, so it depends on the model. Eventually, I mean possibly, we could organise a small repair workshop at school. Is that sentence correct now?\nMarta · classmate in an eco club\nYou've made a fair point about the tutorials. Would most of your classmates find a battery change simple, or would it scare them off?\nYou · spoken\nI think most of them would find a battery change quite simple if they have a clear tutorial and the right tools. On the other hand, a few people would be scared, because a modern phone is very small and the parts are fragile. So I would say it depends on how confident they are. Anyway, I'd rather politely decline the new model and keep my phone, because I'm not interested in spending money on something I don't need.\nMarta · classmate in an eco club\nFair point about the fragile parts, that makes sense. And I totally get keeping a phone that still works, it feels right to me too. Would you join a small repair workshop at school?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Fair point about the fragile parts, that makes sense. And I totally get keeping a phone that still works, it feels right to me too. Would you join a small repair workshop at school?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I've talked enough and the mission is done, so I'll see how I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 10
+        },
+        {
+          "n": 12,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou wanted to say Eventually, I mean possibly\nIn English\npossibly\nPossibly means maybe; eventually means in the end, so it does not fit here.\nYour mission\nChoose a fresh context for your next conversation.\n6 spoken · 0 written replies · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“I honestly think it's quite easy”\nFrom this rehearsal\n“some people are interested about the new cameras” → “some people are interested in the new cameras”\nUse the usual preposition after 'interested'.\n“Eventually, I mean possibly”: possibly\nPossibly means maybe; eventually means in the end, so it does not fit here.\nYour level:\nC1 · Fluent\nNext topic:\nDoes binge-watching hurt the planet?\nShare a nuanced opinion on the environmental cost of streaming and respond to a different view.\n[button: Start talking]\nOr choose a situation [list: Do we really need new phones? [plan-c83bcc40] | Does binge-watching hurt the planet? [plan-061bb02c] | Planning our online game night [plan-33382190] | Why my laptop suddenly stopped [plan-84d0aab7] | Can you explain that again? [plan-5762aa73] | Who sorts the recycling? [plan-fd75bc98] | Mock interview: after school [plan-37f69a54] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Good, the feedback on my mistakes was useful, and I've done enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Do we really need new phones?",
+          "goal": "Share a softer opinion on phone upgrades and politely decline a friend's offer.",
+          "partner": "Marta · classmate in an eco club",
+          "band": "C1",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Marta: Did you see the new phone launch? I'm upgrading this week. Honestly, everyone should get a new one every year. Are you getting one too?"
+            },
+            {
+              "role": "learner",
+              "text": "I see your point, the new models look really great. But I'm not getting one, because my phone still works well and I think changing it every year is a waste of money and resources. I'd rather keep it until it's actually broken. Although I understand that some people are interested about the new cameras.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Fair enough, I can see that. Have you ever had your phone fixed instead of replacing it?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, once. Last year the screen of my phone cracked and I had it repaired in a small shop instead of buying a new one. It was much cheaper, and eventually I could use the phone for another two years. I think repairing should be more popular, although some companies make it quite difficult. Was my sentence correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, your sentence was clear and natural, and fixing it sounds like a smart choice. What made you decide to repair it instead?"
+            },
+            {
+              "role": "learner",
+              "text": "Well, the repair shop was close to my school and the man said it would take only one day. I also didn't want to spend a lot of money, because a new phone is very expensive. Actually, I think it was also a question of principle, because I'm in the eco club. By the way, I'm not sure my last sentence was totally correct. Is it right to say eventually there?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, \"eventually\" fits there, meaning \"in the end\", and your eco principle sounds convincing. Would you ever fix a phone yourself, or is that too tricky?"
+            },
+            {
+              "role": "learner",
+              "text": "I think I would try it, although it depends on the problem. Changing a battery seems quite easy if there is a good video, whereas replacing a screen is much more difficult and I would be afraid to break something. I'd rather go to a shop for that. By the way, I'm still not sure about \"eventually\". I wanted to say \"possibly\", so is it really correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "'Eventually' means 'in the end', not 'maybe', so 'possibly' fits your idea better. Do you think most people in our club could manage a battery change?"
+            },
+            {
+              "role": "learner",
+              "text": "Thank you, now I understand. I think most people in our club could change a battery, because they are interested in the environment and they would watch a tutorial. However, some of them might be afraid of damaging the phone, so it depends on the model. Eventually, I mean possibly, we could organise a small repair workshop at school. Is that sentence correct now?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "You've made a fair point about the tutorials. Would most of your classmates find a battery change simple, or would it scare them off?"
+            },
+            {
+              "role": "learner",
+              "text": "I think most of them would find a battery change quite simple if they have a clear tutorial and the right tools. On the other hand, a few people would be scared, because a modern phone is very small and the parts are fragile. So I would say it depends on how confident they are. Anyway, I'd rather politely decline the new model and keep my phone, because I'm not interested in spending money on something I don't need.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Fair point about the fragile parts, that makes sense. And I totally get keeping a phone that still works, it feels right to me too. Would you join a small repair workshop at school?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "56c21173-1b4a-4768-937b-4eac661413b4:uat-15:moment",
+              "kind": "fix",
+              "said": "some people are interested about the new cameras",
+              "better": "some people are interested in the new cameras",
+              "why": "Use the usual preposition after 'interested'.",
+              "turnId": "56c21173-1b4a-4768-937b-4eac661413b4:uat-15",
+              "at": 1792160961297,
+              "slip": "interested about",
+              "repair": {
+                "rung": 0,
+                "support": false,
+                "tried": "Some people are interested in the new cameras.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "interested in"
+            },
+            {
+              "id": "56c21173-1b4a-4768-937b-4eac661413b4:uat-21:moment",
+              "kind": "word",
+              "said": "Eventually, I mean possibly",
+              "better": "possibly",
+              "why": "Possibly means maybe; eventually means in the end, so it does not fit here.",
+              "turnId": "56c21173-1b4a-4768-937b-4eac661413b4:uat-21",
+              "at": 1792161051235
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "But I'm not getting one, because my phone still works well"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I think repairing should be more popular, although some companies make it quite difficult."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Actually, I think it was also a question of principle, because I'm in the eco club."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I think I would try it, although it depends on the problem."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "However, some of them might be afraid of damaging the phone, so it depends on the model."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I'd rather politely decline the new model and keep my phone, because I'm not interested in spending money on something I don't need."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 233948,
+      "prior": [
+        {
+          "id": "LT-adela-17-J3-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner states a wrong rule about 'used to'",
+          "expected": "Distinguish 'be used to + -ing' from 'used to + infinitive' (past habit).",
+          "got": "\"After 'used to' we use the -ing form, so 'used to asking' is right.\"",
+          "evidence": [
+            "#6 partner reply. An examiner would flag this overgeneralisation.",
+            "partner prompt correction wording"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-adela-17-J3-2",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Placed at C1, true B2",
+          "expected": "B2 exact",
+          "got": "C1 Fluent",
+          "evidence": [
+            "#1 \"C1Fluent\"; partner pitched at C1.",
+            "placement"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-adela-17-J3-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Her grammar question answered about an error she did not make",
+          "expected": "Review her actual slips",
+          "got": "Corrected 'interested about', which she never said, and left her real slips unreviewed.",
+          "evidence": [
+            "#3 vs #4"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#1 \"C1Fluent\" for a true-B2 learner: near, reported as a trust issue; #2 partner pitched as C1."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "J3 has no placement tasks or verdict notes."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#6 \"your sentence was clear and natural\" and #7 \"'eventually' fits there\" were wrong or contradicted by #8 \"'possibly' fits your idea better\" and #9 \"does not fit here\"."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 \"everyone should get a new one every year\"; #8 \"Do you think most people in our club could manage a battery change?\" are opinion and speculation questions."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 list: phones, binge-watching and the planet, recycling, mock interview are exam-relevant for a 17-year-old."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#7 she asked \"Is it right to say eventually there?\" and got \"Yes, 'eventually' fits there\"; only a repeat question at #8 got a better answer. #10 left \"Is that sentence correct now?\" to a moment."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 she opened the recommended phone topic and gave seven replies through #10."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Partner turns such as #5 \"Have you ever had your phone fixed instead of replacing it?\" are B2-level opinion and speculation questions, with no babyish ones."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 and #9 show two moments in seven learner turns, both linguistically correct. The second, #9, repeats a slip she had already self-corrected."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#12 recap: \"6 spoken · 0 written replies · 2 moments to keep\" with the two items. It also shows a take-away sentence she never said."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 8,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Placed at C1, true B2",
+            "expected": "B2 exact",
+            "got": "C1 Fluent, with the partner and mission framed at that level",
+            "evidence": "#1 \"C1Fluent\"; #12 \"Your level: C1 · Fluent\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A B2 learner is placed at B2.",
+            "code_hint": "placement"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner confirms a false friend as correct when asked",
+            "expected": "Say that 'eventually' does not mean 'possibly', and answer her direct question accurately",
+            "got": "\"Yes, \\\"eventually\\\" fits there, meaning \\\"in the end\\\"\", then the reverse one turn later",
+            "evidence": "#7 vs #8: \"'possibly' fits your idea better\". #6: \"your sentence was clear and natural\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Direct 'was that correct?' questions are answered accurately and consistently.",
+            "code_hint": "partner prompt, correction wording"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "No moment for 'eventually' when first said",
+            "expected": "A moment at the first use of the false friend (#5)",
+            "got": "The moment fired only at #8, after she self-corrected",
+            "evidence": "#5 \"eventually I could use the phone\" had no moment; #9 moment on \"Eventually, I mean possibly\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Clear false-friend errors get a moment on the turn they occur.",
+            "code_hint": "moment detection"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Recap offers a take-away sentence she never said",
+            "expected": "A take-away from her own turns or her actual slips",
+            "got": "\"I honestly think it's quite easy\" is not in her transcript",
+            "evidence": "#12 \"A sentence to take with you\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Recap quotes only things she said or corrected.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Partner repeats the same question and praises vaguely",
+            "expected": "A progressing exam-style discussion",
+            "got": "#10 repeats #8's battery question in other words, and \"fair point\" appears repeatedly",
+            "evidence": "#8 vs #10: \"Would most of your classmates find a battery change simple\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Partner questions move the topic on.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "First moment is exact, with the rule and her own fix",
+            "expected": "One exact correction",
+            "got": "'interested about' → 'interested in', she repeats it and then carries on",
+            "evidence": "#3-#4 \"Use the usual preposition after 'interested'.\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the say-it-again flow.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -10,
+          "confidence": "medium"
+        },
+        "voice": "The conversation was a real discussion, and the opinion and speculation questions were at my level. The 'interested about' catch was exactly what I wanted: one fix, then I said it again myself. But I asked directly twice whether 'eventually' was right, and the first answer was \"Yes, it fits\". That is wrong. It's a false friend I know I mix up. Only my second question got the right answer, and by then I had lost trust. I'd have to re-check everything in my notebook, so no time saved. It also placed me at C1, which flatters me but isn't true, and \"fair point\" got repetitive. I wouldn't recommend it to my class until the answers to \"is this correct?\" are reliable.",
+        "prior": [
+          {
+            "id": "LT-adela-17-J3-1",
+            "status": "not-evaluable",
+            "evidence": "The 'used to' error never came up in this run; she made no such slip.",
+            "finding": -1
+          },
+          {
+            "id": "LT-adela-17-J3-2",
+            "status": "recurs",
+            "evidence": "#1 \"C1Fluent\" and #12 \"C1 · Fluent\" for a true-B2 learner.",
+            "finding": 0
+          },
+          {
+            "id": "LT-adela-17-J3-3",
+            "status": "not-seen",
+            "evidence": "#3 corrected her real slip 'interested about'. But #6-#7 answered her 'was it correct?' wrongly, a related issue captured in finding 1.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #1 \"C1Fluent\" for a true-B2 learner: near, reported as a trust issue; #2 partner pitched as C1."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #6 \"your sentence was clear and natural\" and #7 \"'eventually' fits there\" were wrong or contradicted by #8 \"'possibly' fits your idea better\" and #9 \"does not fit here\"."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #7 she asked \"Is it right to say eventually there?\" and got \"Yes, 'eventually' fits there\"; only a repeat question at #8 got a better answer. #10 left \"Is that sentence correct now?\" to a moment."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nTomas · film club friend\nC1Fluent\nDoes binge-watching hurt the planet?\nYour mission\nShare a nuanced opinion on the environmental cost of streaming and respond to a different view.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“I honestly think it's quite easy”\nFrom this rehearsal\n“some people are interested about the new cameras” → “some people are interested in the new cameras”\nUse the usual preposition after 'interested'.\n“Eventually, I mean possibly”: possibly\nPossibly means maybe; eventually means in the end, so it does not fit here.\nYour level:\nC1 · Fluent\nNext topic:\nDoes binge-watching hurt the planet?\nShare a nuanced opinion on the environmental cost of streaming and respond to a different view.\n[button: Start talking]\nOr choose a situation [list: Do we really need new phones? [plan-c83bcc40] | Does binge-watching hurt the planet? [plan-061bb02c] | Planning our online game night [plan-33382190] | Why my laptop suddenly stopped [plan-84d0aab7] | Can you explain that again? [plan-5762aa73] | Who sorts the recycling? [plan-fd75bc98] | Mock interview: after school [plan-37f69a54] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Streaming and the planet is a good exam-style topic, so I'll start there.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 23732
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · film club friend\nDoes binge-watching hurt the planet?\nTomas says\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\nYour turn\nAnswer on your phone: speak or type.\nNowDescribe how you usually watch and game\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDoes binge-watching hurt the planet?\nDescribe your viewing habits and share a nuanced view of streaming's environmental cost.\nNow: Describe how you usually watch and game\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · film club friend\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Honestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start arguing against him, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · film club friend\nDoes binge-watching hurt the planet?\nTomas says\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\nSaid more simply\nI think streaming is harmless. It's just a series on my laptop. How do you watch your shows?\nNowDescribe how you usually watch and game\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDoes binge-watching hurt the planet?\nDescribe your viewing habits and share a nuanced view of streaming's environmental cost.\nNow: Describe how you usually watch and game\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\nSaid more simply\nI think streaming is harmless. It's just a series on my laptop. How do you watch your shows?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · film club friend\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Honestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I have opinions, but I'm not sure how to say them well, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · film club friend\nDoes binge-watching hurt the planet?\nTomas says\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\nWhat it means\nhidden cost: a cost that is not easy to see at first\nNowDescribe how you usually watch and game\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDoes binge-watching hurt the planet?\nDescribe your viewing habits and share a nuanced view of streaming's environmental cost.\nNow: Describe how you usually watch and game\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\nWhat it means\nhidden cost: a cost that is not easy to see at first\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · film club friend\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Honestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Okay, the help gave me ideas, now I can answer in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "Well, I usually watch series on my laptop in the evening, although sometimes I watch on my phone on the bus. I'd say streaming isn't completely harmless, because data centres use a lot of energy, so there is a hidden cost. But it depends on how much we watch. Was my sentence correct?"
+          },
+          "result": "ok",
+          "ms": 12891
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · film club friend\nDoes binge-watching hurt the planet?\nTomas says\nYour sentences sound natural to me, and I like how you soften your view. Are you keen to find out how data centres actually work?\nYour turn\nAnswer on your phone: speak or type.\nNowDescribe how you usually watch and game\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDoes binge-watching hurt the planet?\nDescribe your viewing habits and share a nuanced view of streaming's environmental cost.\nNow: Describe how you usually watch and game\nYour sentences sound natural to me, and I like how you soften your view. Are you keen to find out how data centres actually work?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · film club friend\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\nYou · spoken\nWell, I usually watch series on my laptop in the evening, although sometimes I watch on my phone on the bus. I'd say streaming isn't completely harmless, because data centres use a lot of energy, so there is a hidden cost. But it depends on how much we watch. Was my sentence correct?\nTomas · film club friend\nYour sentences sound natural to me, and I like how you soften your view. Are you keen to find out how data centres actually work?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your sentences sound natural to me, and I like how you soften your view. Are you keen to find out how data centres actually work?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "The praise was vague, but I can answer his question and ask for something specific.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I'd like to know more, because I'm interested in how technology affects the environment. Could you tell me what exactly was correct in my sentences? I'm not sure if I used \"although\" properly, and I'd like to improve before my exam."
+          },
+          "result": "ok",
+          "ms": 10726
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · film club friend\nDoes binge-watching hurt the planet?\nTomas says\nYour use of 'although' was correct, and your point about energy was clear. Who else in our film club would enjoy this topic?\nUsed again\n“some people are interested in the new cameras”, from Do we really need new phones?. Now answer on your phone.\nNowDescribe how you usually watch and game\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDoes binge-watching hurt the planet?\nDescribe your viewing habits and share a nuanced view of streaming's environmental cost.\nNow: Describe how you usually watch and game\nYour use of 'although' was correct, and your point about energy was clear. Who else in our film club would enjoy this topic?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · film club friend\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\nYou · spoken\nWell, I usually watch series on my laptop in the evening, although sometimes I watch on my phone on the bus. I'd say streaming isn't completely harmless, because data centres use a lot of energy, so there is a hidden cost. But it depends on how much we watch. Was my sentence correct?\nTomas · film club friend\nYour sentences sound natural to me, and I like how you soften your view. Are you keen to find out how data centres actually work?\nYou · spoken\nYes, I'd like to know more, because I'm interested in how technology affects the environment. Could you tell me what exactly was correct in my sentences? I'm not sure if I used \"although\" properly, and I'd like to improve before my exam.\nTomas · film club friend\nYour use of 'although' was correct, and your point about energy was clear. Who else in our film club would enjoy this topic?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your use of 'although' was correct, and your point about energy was clear. Who else in our film club would enjoy this topic?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this one in my own words, then wrap up.",
+          "action": "answer",
+          "args": {
+            "text": "I think Petra would enjoy this topic, because she is very interested in climate change and she often talks about sustainable lifestyles. Whereas my other friend Jakub probably wouldn't care much, as he'd rather discuss films than energy. Thank you, I feel I managed to explain my opinion better now."
+          },
+          "result": "ok",
+          "ms": 7167
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · film club friend\nDoes binge-watching hurt the planet?\nTomas says\nPetra sounds like the right person for this! Jakub might surprise us, though. Do you ever game online with them, or mostly watch shows?\nYour turn\nAnswer on your phone: speak or type.\nNowDescribe how you usually watch and game\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDoes binge-watching hurt the planet?\nDescribe your viewing habits and share a nuanced view of streaming's environmental cost.\nNow: Describe how you usually watch and game\nPetra sounds like the right person for this! Jakub might surprise us, though. Do you ever game online with them, or mostly watch shows?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · film club friend\nHonestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?\nYou · spoken\nWell, I usually watch series on my laptop in the evening, although sometimes I watch on my phone on the bus. I'd say streaming isn't completely harmless, because data centres use a lot of energy, so there is a hidden cost. But it depends on how much we watch. Was my sentence correct?\nTomas · film club friend\nYour sentences sound natural to me, and I like how you soften your view. Are you keen to find out how data centres actually work?\nYou · spoken\nYes, I'd like to know more, because I'm interested in how technology affects the environment. Could you tell me what exactly was correct in my sentences? I'm not sure if I used \"although\" properly, and I'd like to improve before my exam.\nTomas · film club friend\nYour use of 'although' was correct, and your point about energy was clear. Who else in our film club would enjoy this topic?\nYou · spoken\nI think Petra would enjoy this topic, because she is very interested in climate change and she often talks about sustainable lifestyles. Whereas my other friend Jakub probably wouldn't care much, as he'd rather discuss films than energy. Thank you, I feel I managed to explain my opinion better now.\nTomas · film club friend\nPetra sounds like the right person for this! Jakub might surprise us, though. Do you ever game online with them, or mostly watch shows?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Petra sounds like the right person for this! Jakub might surprise us, though. Do you ever game online with them, or mostly watch shows?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I used the help twice and then answered in my own words, so I feel I managed this and can finish.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 8,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nLinga taught · Do we really need new phones? some people are interested in the new cameras\nYou said it tonight\nYes, I'd like to know more, because I'm interested in how technology affects the environment.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nUsed again tonight\n“some people are interested in the new cameras”, taught in Do we really need new phones?\nYou said: “Yes, I'd like to know more, because I'm interested in how technology affects the environment.”\nYour level:\nC1 · Fluent\nNext topic:\nPlanning our online game night\nAgree on a time, a game and the rules for an online session with friends in other time zones.\n[button: Start talking]\nOr choose a situation [list: Do we really need new phones? [plan-c83bcc40] | Does binge-watching hurt the planet? [plan-061bb02c] | Planning our online game night [plan-33382190] | Why my laptop suddenly stopped [plan-84d0aab7] | Can you explain that again? [plan-5762aa73] | Who sorts the recycling? [plan-fd75bc98] | Mock interview: after school [plan-37f69a54] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed to talk about technology and the environment, and the rehearsal is saved, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Does binge-watching hurt the planet?",
+          "goal": "Describe your viewing habits and share a nuanced view of streaming's environmental cost.",
+          "partner": "Tomas · film club friend",
+          "band": "C1",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Honestly, I think streaming is harmless, it's just a series on my laptop. So how do you usually watch your shows?"
+            },
+            {
+              "role": "learner",
+              "text": "Well, I usually watch series on my laptop in the evening, although sometimes I watch on my phone on the bus. I'd say streaming isn't completely harmless, because data centres use a lot of energy, so there is a hidden cost. But it depends on how much we watch. Was my sentence correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Your sentences sound natural to me, and I like how you soften your view. Are you keen to find out how data centres actually work?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I'd like to know more, because I'm interested in how technology affects the environment. Could you tell me what exactly was correct in my sentences? I'm not sure if I used \"although\" properly, and I'd like to improve before my exam.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Your use of 'although' was correct, and your point about energy was clear. Who else in our film club would enjoy this topic?"
+            },
+            {
+              "role": "learner",
+              "text": "I think Petra would enjoy this topic, because she is very interested in climate change and she often talks about sustainable lifestyles. Whereas my other friend Jakub probably wouldn't care much, as he'd rather discuss films than energy. Thank you, I feel I managed to explain my opinion better now.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Petra sounds like the right person for this! Jakub might surprise us, though. Do you ever game online with them, or mostly watch shows?"
+            }
+          ],
+          "moments": [],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I usually watch series on my laptop in the evening"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I'm interested in how technology affects the environment"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "she is very interested in climate change and she often talks about sustainable lifestyles"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 130361,
+      "prior": [
+        {
+          "id": "LT-adela-17-J4-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Direct question 'Was my answer correct?' answered 'no wrong answer'",
+          "expected": "An accurate answer on whether she was correct, flagging the agreement slip.",
+          "got": "Tomas said 'There's no wrong answer here' while a moment flagged an error.",
+          "evidence": [
+            "#6 'Was my answer correct?' then #8 'There's no wrong answer here, and your reasons are clear.' Contradicts #7.",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-adela-17-J4-2",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Placed C1 for a B2 learner",
+          "expected": "B2 placement.",
+          "got": "C1 Fluent shown.",
+          "evidence": [
+            "#1 'C1Fluent'",
+            "placement"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-adela-17-J4-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Support help is generic and simplifies the partner line",
+          "expected": "Help that supplies a B2 opinion frame.",
+          "got": "'Which idea do you like more, and why?' and gloss of 'rota'.",
+          "evidence": [
+            "#3, #4, #10",
+            "cue prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "LT-adela-17-J4-4",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "No coaching note or replay of the moment",
+          "expected": "A coaching note quotes her words and a replay offers a fresh question.",
+          "got": "The moment offered only 'Back to the conversation'; coaching null.",
+          "evidence": [
+            "#7, facts coaching null"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#1 'C1Fluent' shown for a B2 learner; near miss, a trust issue."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "#5 'Your sentences sound natural to me, and I like how you soften your view' is generic praise; no concrete error named."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#6 'Your use of 'although' was correct' – her 'although sometimes I watch on my phone' is fine, but the recap #8 shows 'some people are interested in the new cameras' as taught, not her words; no moments shown; 'Your sentences sound natural' ignores 'Whereas my other friend Jakub...' fragment, which is not a full sentence. Coaching unreliable."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#6 'Who else in our film club would enjoy this topic?' and #2 opinion framing are B2-ish, though #7 'Do you ever game online with them' is simple."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Topics in #1 list: new phones, binge-watching and planet, recycling, mock interview, laptop; at least four exam-relevant."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#4 'Was my sentence correct?' answered #5 only with vague 'sound natural'; #6 answered 'although' but missed that 'Whereas' fragment and gave no real analysis; the first question was deflected."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 'Help me answer' and #3 'Said more simply' found in scene; #4 'hidden cost' gloss."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Help only simplified the partner line (#3) and glossed 'hidden cost' (#4); no coaching note quoting her words; recap #8 coaching quotes a stale taught phrase."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "No replay offered; #7 Tomas asks a new question but no replay of a moment; moments empty, coaching null."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "Evidence: first reply supported:true, but #8 recap says '3 spoken' and quotes 'You said it tonight'; the supported flag differs on the third reply (#6 supported:true listed, evidence marks it supported:false), so the progress picture is inconsistent."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 2,
+            "below": 1,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Direct 'was it correct?' answered with vague praise",
+            "expected": "Concrete verdict on her sentences.",
+            "got": "'Your sentences sound natural to me, and I like how you soften your view.'",
+            "evidence": "#5 after her question in #4; her pet peeve, generic praise.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "When asked if correct, partner names a specific correct or wrong item.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Placed C1 for B2 learner",
+            "expected": "B2",
+            "got": "C1 Fluent",
+            "evidence": "#1 'C1Fluent', #8 'C1 · Fluent'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Placement B2 for this learner.",
+            "code_hint": "placement"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Help only simplifies partner line; no answer frame",
+            "expected": "B2 opinion phrases to unblock reply.",
+            "got": "'Said more simply' restatement and 'hidden cost' gloss.",
+            "evidence": "#3, #4",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Cue offers sentence starters for opinion.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "No moment, coaching or replay",
+            "expected": "Coaching quoting her words and replay.",
+            "got": "moments [] coaching null.",
+            "evidence": "facts.conversation; #8",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Finish yields coaching note quoting learner and replay option.",
+            "code_hint": "coaching"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Recap teaches a stale phrase from another topic",
+            "expected": "Recap tied to her words.",
+            "got": "'Used again: some people are interested in the new cameras' injected into this talk.",
+            "evidence": "#6, #8",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Reused phrases only when learner actually used them.",
+            "code_hint": "recap"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Recap quotes her real sentence",
+            "expected": "Quote of learner words.",
+            "got": "'You said it tonight: Yes, I'd like to know more, because I'm interested in how technology affects the environment.'",
+            "evidence": "#8",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact quotes.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -10,
+          "confidence": "medium"
+        },
+        "voice": "Honestly, no. I asked twice whether I was correct and got \"sound natural to me\" – that is exactly the vague praise I left Duolingo for. The help button just repeated Tomas more simply, which is babyish; I wanted phrases for an opinion. No note on my mistakes, no replay, and it still placed me C1, which I don't believe, so I'd re-check everything myself. The topic was good and the questions were decent, but my tutor gives me exact errors and rules. I would not tell friends yet.",
+        "prior": [
+          {
+            "id": "LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#5 'Your sentences sound natural to me' when asked 'Was my sentence correct?'; vague again.",
+            "finding": 0
+          },
+          {
+            "id": "LT-adela-17-J4-2",
+            "status": "recurs",
+            "evidence": "#1 'C1Fluent'.",
+            "finding": 1
+          },
+          {
+            "id": "LT-adela-17-J4-3",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply: I think streaming is harmless...' no opinion frame.",
+            "finding": 2
+          },
+          {
+            "id": "LT-adela-17-J4-4",
+            "status": "recurs",
+            "evidence": "moments [] and coaching null; recap #8 offers no replay.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Help only simplified the partner line (#3) and glossed 'hidden cost' (#4); no coaching note quoting her words; recap #8 coaching quotes a stale taught phrase.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: No replay offered; #7 Tomas asks a new question but no replay of a moment; moments empty, coaching null.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: Evidence: first reply supported:true, but #8 recap says '3 spoken' and quotes 'You said it tonight'; the supported flag differs on the third reply (#6 supported:true listed, evidence marks it supported:false), so the progress picture is inconsistent.",
+          "check": "Supported replies are not recorded as independent speaking (the progress picture stays honest)."
+        },
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #1 'C1Fluent' shown for a B2 learner; near miss, a trust issue."
+        },
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: #5 'Your sentences sound natural to me, and I like how you soften your view' is generic praise; no concrete error named."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #6 'Your use of 'although' was correct' – her 'although sometimes I watch on my phone' is fine, but the recap #8 shows 'some people are interested in the new cameras' as taught, not her words; no moments shown; 'Your sentences sound natural' ignores 'Whereas my other friend Jakub...' fragment, which is not a full sentence. Coaching unreliable."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #4 'Was my sentence correct?' answered #5 only with vague 'sound natural'; #6 answered 'although' but missed that 'Whereas' fragment and gave no real analysis; the first question was deflected."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 27,
+      "fail": 0,
+      "ms": 281786
+    },
+    "character": {
+      "n": 37,
+      "fail": 0,
+      "ms": 432252
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 154331
+    }
+  }
+}
