@@ -257,21 +257,19 @@ async function adultPass(){
    const t0=Date.now();
    await analyse.click();
    if(noticeDue){
-    // the dialog (data-role="essay-notice") when the phone shows it; the paragraph path of the desk answers 428 into the alert line instead
-    const seen=await Promise.race([
-     phone.locator('[data-role="essay-notice"]').waitFor({timeout:20000}).then(()=>'dialog'),
-     phone.locator('[data-role="essay-note"]').waitFor({timeout:20000}).then(()=>'alert')]);
-    noticeVia=seen;
-    noticeSeen=await phone.locator(seen==='dialog'?'[data-role="essay-notice"]':'[data-role="essay-note"]').innerText();
+    // the single-paragraph path must show the same notice dialog (data-role="essay-notice") with its accept button; no API shortcut
+    await phone.locator('[data-role="essay-notice"]').waitFor({timeout:20000});
+    noticeVia='dialog';
+    noticeSeen=await phone.locator('[data-role="essay-notice"]').innerText();
     // nothing was analysed before the notice was accepted
     const before=await current();
     assert.notEqual(before.screen,'forensic','the TV opened the forensic page before the notice was accepted');
     assert.ok(!before.essay?.sentences?.length,'a paragraph was analysed before the notice was accepted');
     assert.equal((await call('GET','/api/texts')).j.noticed,false,'the notice was recorded as accepted before anyone accepted it');
-    if(seen==='dialog')await phone.getByRole('button',{name:'I understand, keep it',exact:true}).click();
-    else assert.equal((await call('POST','/api/texts',{notice:true})).j.noticed,true,'accepting the notice');
-    if(seen==='alert')await analyse.click();
-    else await sleep(500);
+    await phone.getByRole('button',{name:'I understand, keep it',exact:true}).click();
+    // the click alone records the acceptance and the analyse goes through, with no second press on Analyse
+    await until(s=>s.screen==='forensic'&&s.essay?.sentences?.length>0,'the forensic page with sentences after the accept click');
+    assert.equal((await call('GET','/api/texts')).j.noticed,true,'the notice was not recorded as accepted after the click');
    }
    await until(s=>s.screen==='forensic'&&s.essay?.sentences?.length>0,'the forensic page with sentences');
    const ms=Date.now()-t0;const s=await current();reading=s.essay;
