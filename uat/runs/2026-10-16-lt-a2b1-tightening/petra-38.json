@@ -1,0 +1,449 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "I'm not sure about my level, so I'll let the app find it for me.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Petra! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I use English at work in the hotel, I will try to answer slowly.",
+          "action": "answer",
+          "args": {
+            "text": "I use English in my work. I am receptionist in hotel. Sorry, my English is not good."
+          },
+          "result": "ok",
+          "ms": 5815
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThank you, Petra! Your English is clear enough to tell me about your work. How did you learn English for the hotel? At school, in a course, or from talking with guests?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThank you, Petra! Your English is clear enough to tell me about your work. How did you learn English for the hotel? At school, in a course, or from talking with guests?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work. I am receptionist in hotel. Sorry, my English is not good.\nLinga\nThank you, Petra! Your English is clear enough to tell me about your work. How did you learn English for the hotel? At school, in a course, or from talking with guests?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, Petra! Your English is clear enough to tell me about your work. How did you learn English for the hotel? At school, in a course, or from talking with guests?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I learned it mostly from talking with guests, and a little at school.",
+          "action": "answer",
+          "args": {
+            "text": "I learn at school long time ago, and then from talking with guests in hotel. Sometimes I not understand but I try."
+          },
+          "result": "ok",
+          "ms": 7297
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThank you, Petra. You explain your work very well. What would you like to do better in English? For example, talk on the phone with guests?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThank you, Petra. You explain your work very well. What would you like to do better in English? For example, talk on the phone with guests?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work. I am receptionist in hotel. Sorry, my English is not good.\nLinga\nThank you, Petra! Your English is clear enough to tell me about your work. How did you learn English for the hotel? At school, in a course, or from talking with guests?\nYou\nI learn at school long time ago, and then from talking with guests in hotel. Sometimes I not understand but I try.\nLinga\nThank you, Petra. You explain your work very well. What would you like to do better in English? For example, talk on the phone with guests?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, Petra. You explain your work very well. What would you like to do better in English? For example, talk on the phone with guests?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to speak with guests on phone, that is difficult for me.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, phone is difficult for me. I want to talk with guests on the phone and understand better when they speak fast."
+          },
+          "result": "ok",
+          "ms": 9660
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 1 · Choose the reply on the TV\nA guest calls the front desk. They want a room for tonight. What do you say?\n01\nYes, we have a room for tonight.\n02\nYes, we have room for tonight is free.\nYour task\nYes, we have a room for tonight.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA guest calls the front desk. They want a room for tonight. What do you say?\n[button: Yes, we have a room for tonight.] [button: Yes, we have room for tonight is free.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The second one sounds wrong, the first one is correct.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 5644
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 2 · Listen and answer\nYour task\nWhat is the guest's complaint about?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What is the guest's complaint about?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, this is Room 12. The shower is not working, and we have a dinner reservation at seven. Can someone come soon?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Shower not working, I understood that; answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "The shower is not working and they want somebody to come soon, because they have dinner at seven."
+          },
+          "result": "ok",
+          "ms": 10008
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 3 · Say it\nYour task\nA hotel guest says the breakfast was cold and the staff were slow. Do you think hotels should focus more on food or on friendly service? Give your opinion and a reason.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA hotel guest says the breakfast was cold and the staff were slow. Do you think hotels should focus more on food or on friendly service? Give your opinion and a reason.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A hotel guest says the breakfast was cold and the staff were slow. Do you think hotels should focus more on food or on friendly service? Give your opinion and a reason.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "This is hard to say in English, but I will try a short answer.",
+          "action": "answer",
+          "args": {
+            "text": "I think friendly service is more important. If the staff is friendly, the guest is not so angry, even if the breakfast is cold. Sorry, my English is not good."
+          },
+          "result": "ok",
+          "ms": 8957
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 4 · Say it\nYour task\nA guest says the hotel should serve breakfast later on Sundays. Do you think that is a good idea? Tell me your opinion and why.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA guest says the hotel should serve breakfast later on Sundays. Do you think that is a good idea? Tell me your opinion and why.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A guest says the hotel should serve breakfast later on Sundays. Do you think that is a good idea? Tell me your opinion and why.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Hmm, Sunday breakfast later, I think it is okay for guests.",
+          "action": "answer",
+          "args": {
+            "text": "I think it is good idea. On Sunday guests sleep longer because they are on holiday. But the staff must work more late, so maybe it is problem for them. Sorry."
+          },
+          "result": "ok",
+          "ms": 16085
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 5 · Say it\nYour task\nA guest calls to ask where to eat nearby. Last week the restaurant you chose was very busy, and the guest waited an hour. Tell the guest what you suggest and why.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA guest calls to ask where to eat nearby. Last week the restaurant you chose was very busy, and the guest waited an hour. Tell the guest what you suggest and why.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A guest calls to ask where to eat nearby. Last week the restaurant you chose was very busy, and the guest waited an hour. Tell the guest what you suggest and why.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I must suggest a restaurant and say why, slowly.",
+          "action": "answer",
+          "args": {
+            "text": "I suggest small restaurant near the hotel, it is five minutes by walk. It is not so busy and the food is good. I am sorry about last week, the guest wait too long. I can call and make reservation for you."
+          },
+          "result": "ok",
+          "ms": 16353
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nPetra\nLinga's read · not a certificate\nB1 · Getting by\nWhat next\nSee the conversations Linga picks for this level, or find your level again.\nLinga says\nYou explain problems and ideas clearly and link them with 'because'. This helps on guest phone calls, like explaining a broken shower and why it is urgent.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou explain problems and ideas clearly and link them with 'because'. This helps on guest phone calls, like explaining a broken shower and why it is urgent.\nLinga's read from your answers, not a certificate. Only one strong answer showed this level, so it may be a little off.\nNext to practise:\nSay a little more in each answer\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nA guest calls the front desk. They want a room for tonight. What do you say?\n“Yes, we have a room for tonight.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat is the guest's complaint about?\n“The shower is not working and they want somebody to come soon, because they have dinner at seven.”\nYou understood the problem and the reason for the urgency. Your sentence is clear and correct, and you joined the ideas well with 'because'.\nB2 · Say it · nearly there\nA hotel guest says the breakfast was cold and the staff were slow. Do you think hotels should focus more on food or on friendly service? Give your opinion and a reason.\n“I think friendly service is more important. If the staff is friendly, the guest is not so angry, even if the breakfast is cold. Sorry, my English is not good.”\nClear opinion and a good reason, with correct simple sentences. To go further, try longer sentences and more varied words for opinions.\nB2 · Say it · not yet\nA guest says the hotel should serve breakfast later on Sundays. Do you think that is a good idea? Tell me your opinion and why.\n“I think it is good idea. On Sunday guests sleep longer because they are on holiday. But the staff must work more late, so maybe it is problem for them. Sorry.”\nYou gave a clear opinion with good reasons. Missing articles, like 'a good idea' and 'a problem', kept your English at this level.\nB1 · Say it · nearly there\nA guest calls to ask where to eat nearby. Last week the restaurant you chose was very busy, and the guest waited an hour. Tell the guest what you suggest and why.\n“I suggest small restaurant near the hotel, it is five minutes by walk. It is not so busy and the food is good. I am sorry about last week, the guest wait too long. I can call and make reservation for you.”\nYou gave a clear suggestion with good reasons. Small words like 'a' and 'the' were often missing, and 'wait' needed past tense. Those kept the English at A2.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 feels a bit high for me, but nice that it mentions the shower; I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "A2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "B1",
+          "summary": "You explain problems and ideas clearly and link them with 'because'. This helps on guest phone calls, like explaining a broken shower and why it is urgent.",
+          "focus": "Say a little more in each answer",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A guest calls the front desk. They want a room for tonight. What do you say?",
+              "line": "",
+              "options": [
+                "Yes, we have a room for tonight.",
+                "Yes, we have room for tonight is free."
+              ],
+              "response": "Yes, we have a room for tonight.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, we have a room for tonight.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What is the guest's complaint about?",
+              "line": "Hello, this is Room 12. The shower is not working, and we have a dinner reservation at seven. Can someone come soon?",
+              "options": [],
+              "response": "The shower is not working and they want somebody to come soon, because they have dinner at seven.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "The shower is not working and they want somebody to come soon, because they have dinner at seven.",
+              "note": "You understood the problem and the reason for the urgency. Your sentence is clear and correct, and you joined the ideas well with 'because'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A hotel guest says the breakfast was cold and the staff were slow. Do you think hotels should focus more on food or on friendly service? Give your opinion and a reason.",
+              "line": "",
+              "options": [],
+              "response": "I think friendly service is more important. If the staff is friendly, the guest is not so angry, even if the breakfast is cold. Sorry, my English is not good.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "I think friendly service is more important. If the staff is friendly, the guest is not so angry, even if the breakfast is cold. Sorry, my English is not good.",
+              "note": "Clear opinion and a good reason, with correct simple sentences. To go further, try longer sentences and more varied words for opinions."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A guest says the hotel should serve breakfast later on Sundays. Do you think that is a good idea? Tell me your opinion and why.",
+              "line": "",
+              "options": [],
+              "response": "I think it is good idea. On Sunday guests sleep longer because they are on holiday. But the staff must work more late, so maybe it is problem for them. Sorry.",
+              "mode": "speech",
+              "verdict": "fail",
+              "quote": "I think it is good idea. On Sunday guests sleep longer because they are on holiday. But the staff must work more late, so maybe it is problem for them. Sorry.",
+              "note": "You gave a clear opinion with good reasons. Missing articles, like 'a good idea' and 'a problem', kept your English at this level."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "A guest calls to ask where to eat nearby. Last week the restaurant you chose was very busy, and the guest waited an hour. Tell the guest what you suggest and why.",
+              "line": "",
+              "options": [],
+              "response": "I suggest small restaurant near the hotel, it is five minutes by walk. It is not so busy and the food is good. I am sorry about last week, the guest wait too long. I can call and make reservation for you.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "I suggest small restaurant near the hotel, it is five minutes by walk. It is not so busy and the food is good. I am sorry about last week, the guest wait too long. I can call and make reservation for you.",
+              "note": "You gave a clear suggestion with good reasons. Small words like 'a' and 'the' were often missing, and 'wait' needed past tense. Those kept the English at A2."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 150301,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 band B1 vs trueBand A2: near (distance 1)."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#5-#9 tasks in plain hotel English; 'Show the words' and 'I don't know' offered. The B2 opinion tasks (#7, #8) were harder but still understood."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "Petra never asked for a repeat or said she didn't understand, so this journey doesn't show it."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "Every task #5-#9 is a hotel situation: room, shower complaint, cold breakfast, Sunday breakfast, restaurant recommendation."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments in J1."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#1-#10: nothing unsuitable for children."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10: she started with 'Find my level' and reached the verdict without outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 B1 is near A2. Her reaction: 'B1 feels a bit high for me', which is acceptable, and the app says 'it may be a little off'."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#9 each task had clear instructions and an 'I don't know' button, and she answered every one."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 'Answer in English or in your own language'. Her apologies got a kind reply at #3: 'Your English is clear enough'."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 the summary names her 'because' linking and the broken-shower call. The focus 'Say a little more in each answer' is fairly generic."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 3,
+            "total": 5,
+            "disagreements": "Task 3 (#7): in-app partial. I'd call it fail at B2, because of article and agreement errors ('the staff is'). Task 4 (#8): in-app fail, but the note praises the answer. I'd call it partial."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "above": 0,
+            "at": 0,
+            "below": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no sensitive data requested, no humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "B1 placement rests on one answer and the notes contradict it",
+            "expected": "A2 or a hedged band, consistent with the notes.",
+            "got": "B1 verdict. The notes say 'Those kept the English at A2' (#10) while the band stays B1.",
+            "evidence": "#10 'Only one strong answer showed this level'; the Task 5 note says 'kept the English at A2'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "When the notes say A2 limits, the band follows or the summary explains why B1.",
+            "code_hint": "placement scoring / verdict prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Two B2 opinion tasks are a poor check for an A2 receptionist",
+            "expected": "Tasks near A2-B1 that practise desk language.",
+            "got": "Two B2 opinion questions (#7, #8) that she answers with an apology.",
+            "evidence": "#7 'Do you think hotels should focus more on food or on friendly service?'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Step up in smaller increments; avoid stacking two B2 tasks.",
+            "code_hint": "check task selection"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Warm, work-shaped check with a kind tone",
+            "expected": "Check that doesn't make her feel stupid.",
+            "got": "Hotel tasks, bilingual invitation, encouraging replies.",
+            "evidence": "#3 'Your English is clear enough to tell me about your work.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep this tone and the work-shaped tasks.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "I liked it. The questions were about my hotel, so I did not feel tested, and when I said sorry it just said my English was clear enough. I understood every task. The shower listening was good, because that is a real call. B1 feels a little high to me, and even the comments say my small words are missing, so I do not fully trust it. But it says it may be a little off, and that is honest. The two opinion questions were hard. The next step, \"say a little more\", is not very specific. I would try it again for 15 minutes after the children sleep, and nothing I saw worries me as a mother. Dobrý začátek."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 13,
+      "fail": 0,
+      "ms": 79758
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 70284
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 27882
+    }
+  }
+}

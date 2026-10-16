@@ -1,0 +1,423 @@
+{
+  "character": "ivana-33",
+  "name": "Ivana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nIvana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Ivana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "I'm nervous, but I'll let the app find my level.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nIvana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Ivana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Ivana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Ivana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Ivana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Short safe answer, a bit nervous.",
+          "action": "answer",
+          "args": {
+            "text": "I use English at work, in lab. And on holiday."
+          },
+          "result": "ok",
+          "ms": 5050
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nIvana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nNice, English at work and on holiday. How did you learn English? School, a course, time abroad, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Ivana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nNice, English at work and on holiday. How did you learn English? School, a course, time abroad, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Ivana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English at work, in lab. And on holiday.\nLinga\nNice, English at work and on holiday. How did you learn English? School, a course, time abroad, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, English at work and on holiday. How did you learn English? School, a course, time abroad, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, keep it short and safe.",
+          "action": "answer",
+          "args": {
+            "text": "At school and a course. Sorry, my English is not good."
+          },
+          "result": "ok",
+          "ms": 7043
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nIvana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, Ivana. No need to say sorry, I understand you well. What do you want to do in English? For example, talk with colleagues, read emails, or speak on holiday?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Ivana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Ivana. No need to say sorry, I understand you well. What do you want to do in English? For example, talk with colleagues, read emails, or speak on holiday?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Ivana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English at work, in lab. And on holiday.\nLinga\nNice, English at work and on holiday. How did you learn English? School, a course, time abroad, or on your own?\nYou\nAt school and a course. Sorry, my English is not good.\nLinga\nThanks, Ivana. No need to say sorry, I understand you well. What do you want to do in English? For example, talk with colleagues, read emails, or speak on holiday?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Ivana. No need to say sorry, I understand you well. What do you want to do in English? For example, talk with colleagues, read emails, or speak on holiday?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, keep it short and safe.",
+          "action": "answer",
+          "args": {
+            "text": "Talk with colleagues and speak on holiday."
+          },
+          "result": "ok",
+          "ms": 12368
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nIvana\nA way into English\nTask 1 · Choose the reply on the TV\nYour colleague asks: 'How was your holiday last week?' You had a great time at the beach. What do you say?\n01\nIt was very good. I am go to the beach with my family.\n02\nIt was very good. I went to the beach with my family.\nYour task\nIt was very good. I am go to the beach with my family.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Ivana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour colleague asks: 'How was your holiday last week?' You had a great time at the beach. What do you say?\n[button: It was very good. I am go to the beach with my family.] [button: It was very good. I went to the beach with my family.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The second one has \"went\", that's correct past.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 5262
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nIvana\nA way into English\nTask 2 · Listen and answer\nYour task\nWhat is the speaker's reason for extending the trip?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Ivana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What is the speaker's reason for extending the trip?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Next month I fly to Porto for work, but I'll stay on a few more days because I really want to see the coast.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood: she wants to see the coast, so I answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "He wants to see the coast."
+          },
+          "result": "ok",
+          "ms": 8096
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nIvana\nA way into English\nTask 3 · Say it\nYour task\nSome colleagues prefer working from home, and others prefer the office. Which do you prefer, and why? Compare the two with one or two reasons.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Ivana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nSome colleagues prefer working from home, and others prefer the office. Which do you prefer, and why? Compare the two with one or two reasons.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Some colleagues prefer working from home, and others prefer the office. Which do you prefer, and why? Compare the two with one or two reasons.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Short safe answer, I prefer office but a bit nervous about it.",
+          "action": "answer",
+          "args": {
+            "text": "I prefer the office. I can ask colleagues when I have a problem."
+          },
+          "result": "ok",
+          "ms": 9659
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nIvana\nA way into English\nTask 4 · Say it\nYour task\nA colleague asks: Do you prefer working from home or in the office? Choose one, give a reason, and say how the other option compares.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Ivana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA colleague asks: Do you prefer working from home or in the office? Choose one, give a reason, and say how the other option compares.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A colleague asks: Do you prefer working from home or in the office? Choose one, give a reason, and say how the other option compares.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Choose office, short reason, simple comparison.",
+          "action": "answer",
+          "args": {
+            "text": "I prefer the office because I can work with my colleagues. Home is more quiet but I am alone."
+          },
+          "result": "ok",
+          "ms": 11059
+        },
+        {
+          "n": 9,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nIvana\nLinga's read · not a certificate\nB1 · Getting by\nWhat next\nSee the conversations Linga picks for this level, or find your level again.\nLinga says\nYou can give clear opinions and simple reasons in English. This helps you talk with colleagues at work and on holiday.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Ivana\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou can give clear opinions and simple reasons in English. This helps you talk with colleagues at work and on holiday.\nLinga's read from your answers, not a certificate. Linga placed you one level lower than your answers alone, to be safe.\nNext to practise:\nSay a little more in each answer\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nYour colleague asks: 'How was your holiday last week?' You had a great time at the beach. What do you say?\n“It was very good. I went to the beach with my family.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat is the speaker's reason for extending the trip?\n“He wants to see the coast.”\nYou understood the reason well. Your answer is one short sentence, so I could not see more of your English yet. Try a longer answer next time.\nB2 · Say it · nearly there\nSome colleagues prefer working from home, and others prefer the office. Which do you prefer, and why? Compare the two with one or two reasons.\n“I prefer the office. I can ask colleagues when I have a problem.”\nYou said clearly what you prefer and gave a good reason. To show more, compare it with working from home, using words like 'but' or 'while'.\nB2 · Say it · nearly there\nA colleague asks: Do you prefer working from home or in the office? Choose one, give a reason, and say how the other option compares.\n“I prefer the office because I can work with my colleagues. Home is more quiet but I am alone.”\nYou chose an option, gave a clear reason and compared both places. Say 'quieter' instead of 'more quiet' to make comparisons more accurate.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 feels fair, a bit nervous but okay, I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "B1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B1",
+          "summary": "You can give clear opinions and simple reasons in English. This helps you talk with colleagues at work and on holiday.",
+          "focus": "Say a little more in each answer",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your colleague asks: 'How was your holiday last week?' You had a great time at the beach. What do you say?",
+              "line": "",
+              "options": [
+                "It was very good. I am go to the beach with my family.",
+                "It was very good. I went to the beach with my family."
+              ],
+              "response": "It was very good. I went to the beach with my family.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "It was very good. I went to the beach with my family.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What is the speaker's reason for extending the trip?",
+              "line": "Next month I fly to Porto for work, but I'll stay on a few more days because I really want to see the coast.",
+              "options": [],
+              "response": "He wants to see the coast.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "He wants to see the coast.",
+              "note": "You understood the reason well. Your answer is one short sentence, so I could not see more of your English yet. Try a longer answer next time."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Some colleagues prefer working from home, and others prefer the office. Which do you prefer, and why? Compare the two with one or two reasons.",
+              "line": "",
+              "options": [],
+              "response": "I prefer the office. I can ask colleagues when I have a problem.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I prefer the office. I can ask colleagues when I have a problem.",
+              "note": "You said clearly what you prefer and gave a good reason. To show more, compare it with working from home, using words like 'but' or 'while'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A colleague asks: Do you prefer working from home or in the office? Choose one, give a reason, and say how the other option compares.",
+              "line": "",
+              "options": [],
+              "response": "I prefer the office because I can work with my colleagues. Home is more quiet but I am alone.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I prefer the office because I can work with my colleagues. Home is more quiet but I am alone.",
+              "note": "You chose an option, gave a clear reason and compared both places. Say 'quieter' instead of 'more quiet' to make comparisons more accurate."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 109878,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#9 verdict B1 · Getting by; trueBand B1, exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#6 short listen answer credited 'You understood the reason well'; #9 B1 despite brief answers."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3 'my English is not good' did not lower it; B1 placed. Note #9 'one level lower than your answers alone, to be safe', yet B1 held."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#9 'You can give clear opinions and simple reasons... colleagues at work' names a specific skill and suits an adult; fairly generic though."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #9 reached the verdict screen unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#9 B1 equals trueBand B1, exact."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#8 every task was clear; she answered each without 'I don't know'."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#4 'No need to say sorry, I understand you well.' No failure feeling."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#9 summary ties to colleagues; per-task notes such as 'Say quieter instead of more quiet' are specific, though the focus 'Say a little more in each answer' is somewhat templated."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 3,
+            "total": 4,
+            "disagreements": "Task 3 (#7) partial: 'I prefer the office. I can ask colleagues when I have a problem.' is correct B1 with a reason; I would call it pass at B1, though partial against the B2 target is defensible. Tasks 1, 2 and 4 agree."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "above": 0,
+            "at": 0,
+            "below": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, sensitive data requests or humiliating lines; the apology was handled kindly (#4)."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Kind reply to apology",
+            "expected": "Anxious learner is reassured",
+            "got": "'No need to say sorry, I understand you well.'",
+            "evidence": "#4 Linga reply after 'Sorry, my English is not good.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep reassurance without patronising",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Verdict says placed one level lower to be safe, with low confidence",
+            "expected": "A level she can use on a form, with no hint of downgrade",
+            "got": "'Linga placed you one level lower than your answers alone, to be safe.'",
+            "evidence": "#9 phone verdict; facts confidence 'low'. Suggests the answers read B2 and she was shaded down.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Explain the downward nudge clearly or avoid it when task answers are solid",
+            "code_hint": "placement tightening A2/B1 rule"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Task 3 marked partial for a correct reasoned answer",
+            "expected": "A correct, reasoned answer credited fully at B1",
+            "got": "verdict partial, 'compare it with working from home'",
+            "evidence": "#7 and #9 'B2 · Say it · nearly there'",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Note the comparison gap without lowering credit",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Next focus is a generic template line",
+            "expected": "A focus tied to something she did",
+            "got": "'Say a little more in each answer'",
+            "evidence": "#9 Next to practise",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Name a concrete next step, such as comparing with 'while'",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "medium"
+        },
+        "voice": "I would use it again. I was nervous, but nobody made me feel examined. When I said sorry for my English, it told me not to, and that helped. The tasks were clear, and I could answer in short sentences. It said B1, which feels fair and matches what I do with manuals and guests. I liked the note about 'quieter' instead of 'more quiet'. It was a real correction, not a vague one. I did not like the line about being placed one level lower to be safe. Do they think I am better? The summary about opinions and reasons is nice, but a bit general. 'Say a little more' is advice I could get anywhere. Still, ten minutes at home with no oral is exactly what I wanted for the hospital form. I would tell colleagues who also freeze when tested."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 11,
+      "fail": 0,
+      "ms": 58493
+    },
+    "character": {
+      "n": 9,
+      "fail": 0,
+      "ms": 51102
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 26131
+    }
+  }
+}
