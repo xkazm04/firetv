@@ -1,0 +1,92 @@
+{
+  "schema": "conform-run/1",
+  "worker": "7e11cef7-e30c-4956-8063-12ca878d0934",
+  "subject": "page-load-pipeline",
+  "evaluatedAt": "2026-10-16T00:53:18.795531+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [
+    {
+      "context": "tv-app",
+      "subject": "page-load-pipeline",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "companion/index.html:213 The served companion page returns immediately when hidden without closing its WebSocket and lacks page-hide/page-show lifecycle handling, violating the connection cleanup required for navigation reuse.",
+      "techniques": [
+        {
+          "technique": "discoverable-critical-resources",
+          "verdict": "not-applicable",
+          "evidence": "companion/index.html:78 The initial interface and styles are inline in served HTML; subsequent thumbnails are session data rather than first-render subresources."
+        },
+        {
+          "technique": "font-loading-discipline",
+          "verdict": "not-applicable",
+          "evidence": "companion/index.html:14 The companion uses system fonts, which the technique explicitly exempts."
+        },
+        {
+          "technique": "layout-stability-by-reservation",
+          "verdict": "deviation",
+          "evidence": "companion/index.html:257 An initial pairing refusal reveals a form above the drawing surface; its default display:none reserves no space, so the late response changes the layout."
+        },
+        {
+          "technique": "navigation-reuse",
+          "verdict": "deviation",
+          "evidence": "companion/index.html:181 The page opens a long-lived socket but has no pagehide cleanup or pageshow restoration handler; visibilitychange only reconnects."
+        },
+        {
+          "technique": "priority-is-declared-not-hoped",
+          "verdict": "not-applicable",
+          "evidence": "companion/index.html:338 The later thumbnail is a data URL supplied by the session; the initial document has no competing fetched images, fonts, or scripts requiring priority hints."
+        }
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "page-load-pipeline",
+      "context": "vision-lab",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor tools/lab-bench.cjs:289 is the `module.exports` line, which doesn't show that no browser document exists, so it is incidental; the absence terms searched (fetchpriority, font-display, largest-contentful-paint, layout-shift) are page-load tuning keywords, not evidence that the context serv"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-16T00:53:18.795531+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "page-load-pipeline"
+      ],
+      "techniques": [
+        "discoverable-critical-resources",
+        "field-measured-load-budget",
+        "font-loading-discipline",
+        "layout-stability-by-reservation",
+        "navigation-reuse",
+        "priority-is-declared-not-hoped",
+        "render-blocking-budget",
+        "script-cost-is-main-thread-time"
+      ],
+      "deviations": 0,
+      "context": "vision-lab",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-16T00:53:18.795531+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "page-load-pipeline"
+      ],
+      "techniques": [
+        "discoverable-critical-resources",
+        "font-loading-discipline",
+        "layout-stability-by-reservation",
+        "navigation-reuse",
+        "priority-is-declared-not-hoped"
+      ],
+      "deviations": 1,
+      "context": "tv-app",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

@@ -1508,6 +1508,98 @@
           "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:163 The connection gate authenticates a pen PIN; it neither identifies upstream implementations nor imports their inventories."
         }
       ]
+    },
+    "lab/vision-lab/page-load-pipeline": {
+      "context": "vision-lab",
+      "subject": "page-load-pipeline",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T00:53:18.795Z",
+      "techniques": [
+        {
+          "technique": "discoverable-critical-resources",
+          "verdict": "not-applicable",
+          "evidence": "vision/vlm.py:68 The network request targets model inference, not a browser document or critical subresource."
+        },
+        {
+          "technique": "field-measured-load-budget",
+          "verdict": "not-applicable",
+          "evidence": "tools/lab-bench.cjs:201 The benchmark gates hint correctness rather than page-load experience."
+        },
+        {
+          "technique": "font-loading-discipline",
+          "verdict": "not-applicable",
+          "evidence": "vision/poc_ocr.py:85 Pillow loads a font to generate worksheet pixels; no web font is loaded into a document."
+        },
+        {
+          "technique": "layout-stability-by-reservation",
+          "verdict": "not-applicable",
+          "evidence": "vision/poc_ocr.py:93 Worksheet rendering produces a fixed bitmap rather than asynchronously populated browser layout."
+        },
+        {
+          "technique": "navigation-reuse",
+          "verdict": "not-applicable",
+          "evidence": "vision/vlm.py:73 This Python HTTP client reads JSON; browser navigation restoration has no role."
+        },
+        {
+          "technique": "priority-is-declared-not-hoped",
+          "verdict": "not-applicable",
+          "evidence": "vision/point.py:62 The image becomes an inference input, not a browser-scheduled first-viewport resource."
+        },
+        {
+          "technique": "render-blocking-budget",
+          "verdict": "not-applicable",
+          "evidence": "tools/lab-corpus.cjs:14 Corpus resources are read by Node from disk; they do not block document parsing or painting."
+        },
+        {
+          "technique": "script-cost-is-main-thread-time",
+          "verdict": "not-applicable",
+          "evidence": "tools/lab-bench.cjs:46 The CLI loads production inference modules into Node, not a browser's first-load script bundle."
+        }
+      ],
+      "withdrawn": {
+        "worker": "7e11cef7-e30c-4956-8063-12ca878d0934",
+        "state": "not-applicable",
+        "at": "2026-10-16T00:53:39.287585+00:00",
+        "reason": "reviewer (sonnet): The anchor tools/lab-bench.cjs:289 is the `module.exports` line, which doesn't show that no browser document exists, so it is incidental; the absence terms searched (fetchpriority, font-display, largest-contentful-paint, layout-shift) are page-load tuning keywords, not evidence that the context serv"
+      }
+    },
+    "telestrator/tv-app/page-load-pipeline": {
+      "context": "tv-app",
+      "subject": "page-load-pipeline",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T00:53:18.795Z",
+      "worker": "7e11cef7-e30c-4956-8063-12ca878d0934",
+      "techniques": [
+        {
+          "technique": "discoverable-critical-resources",
+          "verdict": "not-applicable",
+          "evidence": "companion/index.html:78 The initial interface and styles are inline in served HTML; subsequent thumbnails are session data rather than first-render subresources."
+        },
+        {
+          "technique": "font-loading-discipline",
+          "verdict": "not-applicable",
+          "evidence": "companion/index.html:14 The companion uses system fonts, which the technique explicitly exempts."
+        },
+        {
+          "technique": "layout-stability-by-reservation",
+          "verdict": "deviation",
+          "evidence": "companion/index.html:257 An initial pairing refusal reveals a form above the drawing surface; its default display:none reserves no space, so the late response changes the layout."
+        },
+        {
+          "technique": "navigation-reuse",
+          "verdict": "deviation",
+          "evidence": "companion/index.html:181 The page opens a long-lived socket but has no pagehide cleanup or pageshow restoration handler; visibilitychange only reconnects."
+        },
+        {
+          "technique": "priority-is-declared-not-hoped",
+          "verdict": "not-applicable",
+          "evidence": "companion/index.html:338 The later thumbnail is a data URL supplied by the session; the initial document has no competing fetched images, fonts, or scripts requiring priority hints."
+        }
+      ]
     }
   }
 }

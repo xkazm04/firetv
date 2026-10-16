@@ -2444,7 +2444,11 @@
           "revision": 3,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "companion/index.html:213 The served companion page returns immediately when hidden without closing its WebSocket and lacks page-hide/page-show lifecycle handling, violating the connection cleanup required for navigation reuse.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:f51109a4fa17ac48",
+          "evaluatedRevision": 3
         }
       ],
       "governance": "governed"
