@@ -2788,8 +2788,8 @@ test('LG-51: a direct correctness question gets the line quoted, a yes or no, an
  assert(/quote the line or the words in question exactly/.test(r),'quotes exactly: '+r);
  assert(/say plainly yes or no/.test(r),'plain yes or no: '+r);
  assert(/if no, give the one change that matters most/.test(r),'the one change: '+r);
- assert(/never answer with general praise such as "sounds natural"/.test(r),'no general praise: '+r);
- assert(/do not reverse a verdict from an earlier turn without saying you are correcting yourself/.test(r),'no silent reversal: '+r);
- assert(/then carry on in the scene/.test(r),'carries on: '+r);
- assert(/keep the quote short/.test(r)&&/230 characters/.test(r),'says how to fit the reply limits: '+r);
+ assert(/never answer with general praise such as "sounds natural"/i.test(r),'no general praise: '+r);
+ assert(/do not reverse a verdict from an earlier turn without saying you are correcting yourself/i.test(r),'no silent reversal: '+r);
+ assert(/then carry on in the scene/i.test(r),'carries on: '+r);
+ assert(/keep the quote short/i.test(r)&&/230 characters/.test(r),'says how to fit the reply limits: '+r);
 });
