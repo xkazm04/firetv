@@ -573,6 +573,16 @@ test('LG-49: the TV home calls the read band "Your level" and names the spoken b
  assert.match(plain.v.hero.kicker,/^B1 · /);
  assert(!/Talking today/.test(plain.text),'matching bands: no second line');
 });
+test('LG-49: the TV menu entry "My level" describes the read (placed) band, not the band Linga plays at',()=>{
+ const V=view(),say=(band,english)=>({id:'s'+band+english,band,kind:'say',prompt:'p',line:'',options:[],response:'I like it.',mode:'speech',verdict:'partial',quote:'I like it.',note:'n',at:1,answered:'yes',english});
+ const entry=(placement)=>V.lingaView(sessionOf(fixture('linga',{placement,plan:planned('p-a','p-b'),sessions:played('p-a')})),{menu:true}).actions.find(a=>a.id==='my-level');
+ const split=entry({...placed('B1'),tasks:[say('B1','A2')]});
+ assert(split.help.startsWith(`B1 · ${P.BAND_NAME.B1}.`),split.help);
+ // the spoken band lowers what Linga plays at; the menu still names the read
+ const lowered=entry({...placed('B1'),tasks:[say('B1','A2')]});
+ assert(!/A2/.test(lowered.help),'the spoken band is not the level');
+ assert(entry(placed('C1')).help.startsWith(`C1 · ${P.BAND_NAME.C1}.`));
+});
 test('S2 view: the verdict shows the read and the band spoken when they differ, and only the read when they agree',()=>{
  const V=view(),say=(band,english,mode='speech')=>({id:'s'+band+english,band,kind:'say',prompt:'p',line:'',options:[],response:'I like it.',mode,verdict:'partial',quote:'I like it.',note:'n',at:1,answered:'yes',english});
  const split={...placed('B1'),tasks:[say('B1','A2')]};

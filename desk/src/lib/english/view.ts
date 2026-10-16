@@ -587,7 +587,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       act("menu-back", "Back to the scene", "Return to where you were.", { ui: close, focus: -1 }),
       act("learning-map", "Learning map", "Explore the abilities you can practise and your progress in each.", go("linga-map")),
       chooseSituation("Choose a new scene; your existing evidence stays saved."),
-      act("my-level", "My level", l.placement ? `${level} · ${BAND_NAME[level]}. See it, find it again, or pick it yourself.` : "Find your level with three questions and a few short tasks.", l.placement ? go("linga-verdict") : { ...cmd("check-start"), ui: close }),
+      act("my-level", "My level", l.placement ? `${l.placement.band} · ${BAND_NAME[l.placement.band]}. See it, find it again, or pick it yourself.` : "Find your level with three questions and a few short tasks.", l.placement ? go("linga-verdict") : { ...cmd("check-start"), ui: close }),
       // the door opens for any learner with a record of checks: a held certificate opens by command, none held is the outline
       ...(l.certificates?.length ? [act("my-certificate", "My certificate", "See your newest certificate, issued by Linga from your own words.", { ...cmd("cert-open"), ui: { ...close, cert: null } })]
         : l.placements?.length ? [act("my-certificate", "My certificate", "See what a certificate still needs from you.", { ...go("linga-cert"), ui: { ...close, cert: null } })] : []),
