@@ -162,10 +162,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "After Pip is named, offer a tiny response about Pip or the ball; demonstrate that it unblocks the next reply.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Cues differ per turn (#3, #4, #10); none repeats an answered question."
   },
   {
     "id": "LT-tomas-9-J4-3",
@@ -191,9 +194,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Use familiar language such as \"A yellow ball! Do you like it?\" and give one simple question every turn.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#12-#13 long final partner turns with new words ('mob')."
   },
   {
     "id": "LT-viktor-67-J4-3",
@@ -442,10 +448,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Give a tiny bilingual explanation or model one manageable chunk, with at least 90% of moments understandable and useful for this learner.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#4 \"Try I like creepers.\" is short and fits his level."
   },
   {
     "id": "LT-tomas-9-J3-2",
@@ -471,9 +480,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Support unfamiliar vocabulary with a tiny explanation or offer a familiar choice when he cannot understand.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#8 \"Do they help you fight?\" and #9 \"shiny thing\" use words beyond his known set."
   },
   {
     "id": "LT-tomas-9-J3-3",
@@ -498,10 +510,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Include one or two short phrases from his scene in the recap, with beginner-friendly support.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 recap shows reusable English: \"I like creepers.\""
   },
   {
     "id": "LT-tomas-9-J4-2",
@@ -527,9 +542,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Offer an accessible replay and capture a fresh, improved answer without a cue before claiming this journey complete.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#13-#14 end with no replay or independent attempt."
   },
   {
     "id": "LT-viktor-67-J3-3",
@@ -639,9 +657,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Present the short phrase in the scene and allow an immediate spoken retry.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#7 separate moment screen needs 'Back to the conversation'."
   },
   {
     "id": "LT-tomas-9-J4-6",

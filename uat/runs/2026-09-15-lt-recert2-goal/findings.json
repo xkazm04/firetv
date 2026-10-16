@@ -106,10 +106,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Cover each distinct explicitly requested situation before filling slots with adjacent work activities.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#2 the initial set already includes 'Politely disagreeing about a fix'."
   },
   {
     "id": "LT-oksana-34-J2-3",
@@ -191,9 +194,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Use one tiny question, familiar words and short topic cards; verify that this beginner can understand each topic and its reason.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#2 \"Get something done\", \"Understand and repair\", \"Make contact\"."
   },
   {
     "id": "LT-tomas-9-J2-2",
@@ -218,10 +224,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Show the new topic explicitly before agreement and capture the complete review display. Exercise one swap to verify that remaining part of the journey.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#3 the added card is visible: \"My dog and my football… You said dog and football\"."
   },
   {
     "id": "LT-adela-17-J2-3",
@@ -247,9 +256,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Include explicitly requested activity formats in the initial proposals when compatible with the profile.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#2 she has to add \"A mock interview about my plans after school\"; absent from the initial six.",
+    "recurred_as": "LT-adela-17-J2-3"
   },
   {
     "id": "LT-lukas-24-J2-3",

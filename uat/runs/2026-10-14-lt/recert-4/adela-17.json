@@ -1,0 +1,2607 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "I'd like the app to test my level properly, so I'll let it find it.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Adéla! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer in English with some detail.",
+          "action": "answer",
+          "args": {
+            "text": "I use English every day, mostly at school and online. I watch series and YouTube videos in English, and I'm interested about technology, so I often read articles about it. I also use it when I talk with friends from other countries, and I'm preparing for the B2 First exam."
+          },
+          "result": "ok",
+          "ms": 4462
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, that's helpful! How did you learn English? For example, at school, in a course, or on your own with series and videos?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, that's helpful! How did you learn English? For example, at school, in a course, or on your own with series and videos?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English every day, mostly at school and online. I watch series and YouTube videos in English, and I'm interested about technology, so I often read articles about it. I also use it when I talk with friends from other countries, and I'm preparing for the B2 First exam.\nLinga\nThanks, that's helpful! How did you learn English? For example, at school, in a course, or on your own with series and videos?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, that's helpful! How did you learn English? For example, at school, in a course, or on your own with series and videos?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer briefly about school and self-study.",
+          "action": "answer",
+          "args": {
+            "text": "I started learning English at primary school when I was eight, and I also attended a course for two years. However, I think I improved most on my own, because I watched series with subtitles and played games in English. Now I'm also doing exam practice with my teacher at school."
+          },
+          "result": "ok",
+          "ms": 4729
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, Adéla! What would you like to be able to do in English in the future? For example, in your studies, online, or when you travel?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Adéla! What would you like to be able to do in English in the future? For example, in your studies, online, or when you travel?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English every day, mostly at school and online. I watch series and YouTube videos in English, and I'm interested about technology, so I often read articles about it. I also use it when I talk with friends from other countries, and I'm preparing for the B2 First exam.\nLinga\nThanks, that's helpful! How did you learn English? For example, at school, in a course, or on your own with series and videos?\nYou\nI started learning English at primary school when I was eight, and I also attended a course for two years. However, I think I improved most on my own, because I watched series with subtitles and played games in English. Now I'm also doing exam practice with my teacher at school.\nLinga\nThanks, Adéla! What would you like to be able to do in English in the future? For example, in your studies, online, or when you travel?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Adéla! What would you like to be able to do in English in the future? For example, in your studies, online, or when you travel?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to pass B2 First and later study abroad, so I'll say that.",
+          "action": "answer",
+          "args": {
+            "text": "I would like to pass the B2 First exam this year, and after that I'd like to study at a university abroad. I want to be able to discuss topics like technology and the environment fluently, and to give my opinion without searching for words. Also, I'd like to travel and communicate with people easily."
+          },
+          "result": "ok",
+          "ms": 7858
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 1 · Listen and answer\nYour task\nWhat changed in the speaker's daily travel habits?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What changed in the speaker's daily travel habits?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I stopped using my car last year. Now I take the bus, and I feel much better about helping the planet.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one: he stopped using his car and now takes the bus.",
+          "action": "answer",
+          "args": {
+            "text": "He stopped using his car last year and now he takes the bus instead. He says he feels much better because he is helping the planet."
+          },
+          "result": "ok",
+          "ms": 8413
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 2 · Say it\nYour task\nYour friend says that streaming TV series every night is worse for the environment than playing online games. Do you agree? Give your reasons.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend says that streaming TV series every night is worse for the environment than playing online games. Do you agree? Give your reasons.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend says that streaming TV series every night is worse for the environment than playing online games. Do you agree? Give your reasons.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good topic, I have clear opinions on this.",
+          "action": "answer",
+          "args": {
+            "text": "I partly agree with my friend. Streaming series every night uses a lot of data, and data centres need huge amounts of electricity, so it has a big impact on the environment. However, online games also need servers and often powerful computers or consoles, which consume energy too. I think it depends on how long you play or watch, and what device you use. Eventually, streaming in high quality could be worse, but I'm not sure."
+          },
+          "result": "ok",
+          "ms": 8570
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 3 · Say it\nYour task\nA friend argues that climate videos on YouTube do more harm than good, because they leave viewers feeling helpless. How would you persuade them that they are wrong, or partly right?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA friend argues that climate videos on YouTube do more harm than good, because they leave viewers feeling helpless. How would you persuade them that they are wrong, or partly right?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A friend argues that climate videos on YouTube do more harm than good, because they leave viewers feeling helpless. How would you persuade them that they are wrong, or partly right?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good topic, I can give a balanced opinion.",
+          "action": "answer",
+          "args": {
+            "text": "I think my friend is partly right, but I wouldn't say that climate videos do more harm than good. It's true that some videos only show disasters, and that can make people feel helpless. However, many creators also explain what ordinary people can actually do, for example eating less meat or using public transport. I'd tell my friend that the problem isn't the videos themselves but the way they are made. If they offer realistic solutions, they can motivate viewers instead of scaring them."
+          },
+          "result": "ok",
+          "ms": 6477
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 4 · Say it\nYour task\nA friend calls your favourite YouTube science channel mere entertainment, not real learning. What would you say to show it has value, and where might they have a point?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA friend calls your favourite YouTube science channel mere entertainment, not real learning. What would you say to show it has value, and where might they have a point?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A friend calls your favourite YouTube science channel mere entertainment, not real learning. What would you say to show it has value, and where might they have a point?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good topic for me; I'll give a balanced opinion.",
+          "action": "answer",
+          "args": {
+            "text": "I would say that my friend is partly right, but I don't agree that the channel is only entertainment. It's true that some videos simplify things too much, and people can feel they understand a topic when they have only watched a ten-minute video. However, a good science channel explains difficult ideas in a clear way and it can make me interested in subjects that I would never read about in a textbook. For example, I often look for more information after a video, so for me it is a starting point for real learning."
+          },
+          "result": "ok",
+          "ms": 13675
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 5 · Say it\nYour task\nYour flatmate uses an AI tool to write all her emails and says it saves time. You think it erodes people's own voice. How would you put your view without lecturing her?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour flatmate uses an AI tool to write all her emails and says it saves time. You think it erodes people's own voice. How would you put your view without lecturing her?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your flatmate uses an AI tool to write all her emails and says it saves time. You think it erodes people's own voice. How would you put your view without lecturing her?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Nice, a realistic topic; I'll give a tactful answer.",
+          "action": "answer",
+          "args": {
+            "text": "I would start by saying that I understand why she uses it, because it really saves time, especially when the emails are routine. Then I would say that I'm a bit worried that her emails could start to sound the same as everyone else's. I'd suggest that she uses the tool for a first draft, but changes it to sound like herself. I think people like to read emails that sound personal, so it could even help her."
+          },
+          "result": "ok",
+          "ms": 21016
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nAdéla\nLinga's read · not a certificate\nB2 · Comfortable\nYour words\nYour words: “simplify things too much”.\nLinga says\nYou compared both sides of the streaming debate with clear reasons. You are close to B2 First and ready for university study.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou compared both sides of the streaming debate with clear reasons. You are close to B2 First and ready for university study.\nLinga's read from your answers, not a certificate. Your C1 answers were close, but only one was strong, so Linga starts you at B2.\nNext to practise:\nPractise precise words: \"simplify things too much\" can be \"oversimplify the topic\". Use one or two per speaking task.\nYour usual slips\n“I'd suggest that she uses the tool” → try “I'd suggest that she use the tool”\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhat changed in the speaker's daily travel habits?\n“He stopped using his car last year and now he takes the bus instead. He says he feels much better because he is helping the planet.”\nYou got the main idea: he stopped using his car and now takes the bus. Your sentences are connected and the verb forms are correct.\nB2 · Say it · at this level\nYour friend says that streaming TV series every night is worse for the environment than playing online games. Do you agree? Give your reasons.\n“I partly agree with my friend. Streaming series every night uses a lot of data, and data centres need huge amounts of electricity, so it has a big impact on the environment. However, online games also need servers and often powerful computers or consoles, which consume energy too. I think it depends on how long you play or watch, and what device you use. Eventually, streaming in high quality could be worse, but I'm not sure.”\nYour answer is clear and well organised. You compared both sides with good reasons. Try 'possibly' instead of 'eventually' next time.\nC1 · Say it · at this level\nA friend argues that climate videos on YouTube do more harm than good, because they leave viewers feeling helpless. How would you persuade them that they are wrong, or partly right?\n“I think my friend is partly right, but I wouldn't say that climate videos do more harm than good. It's true that some videos only show disasters, and that can make people feel helpless. However, many creators also explain what ordinary people can actually do, for example eating less meat or using public transport. I'd tell my friend that the problem isn't the videos themselves but the way they are made. If they offer realistic solutions, they can motivate viewers instead of scaring them.”\nYou argued both sides clearly, used natural structures like 'However' and 'instead of', and gave a realistic idea. Well done!\nC2 · Say it · not yet\nA friend calls your favourite YouTube science channel mere entertainment, not real learning. What would you say to show it has value, and where might they have a point?\n“I would say that my friend is partly right, but I don't agree that the channel is only entertainment. It's true that some videos simplify things too much, and people can feel they understand a topic when they have only watched a ten-minute video. However, a good science channel explains difficult ideas in a clear way and it can make me interested in subjects that I would never read about in a textbook. For example, I often look for more information after a video, so for me it is a starting point for real learning.”\nYour English read as B2 here, and this task was C2.\nYou stayed on task and gave a balanced view. More precise words and idioms, instead of general ones, would have raised your English level.\nC1 · Say it · nearly there\nYour flatmate uses an AI tool to write all her emails and says it saves time. You think it erodes people's own voice. How would you put your view without lecturing her?\n“I would start by saying that I understand why she uses it, because it really saves time, especially when the emails are routine. Then I would say that I'm a bit worried that her emails could start to sound the same as everyone else's. I'd suggest that she uses the tool for a first draft, but changes it to sound like herself. I think people like to read emails that sound personal, so it could even help her.”\nYour English read as B2 here, and this task was C1.\nYour sentences were well built and accurate. Plain word choice and no idioms held it back from C1.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B2 feels right and fair; I've seen enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B2",
+          "trueBand": "B2",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B2",
+          "summary": "You compared both sides of the streaming debate with clear reasons. You are close to B2 First and ready for university study.",
+          "focus": "Practise precise words: \"simplify things too much\" can be \"oversimplify the topic\". Use one or two per speaking task.",
+          "tasks": [
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What changed in the speaker's daily travel habits?",
+              "line": "I stopped using my car last year. Now I take the bus, and I feel much better about helping the planet.",
+              "options": [],
+              "response": "He stopped using his car last year and now he takes the bus instead. He says he feels much better because he is helping the planet.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "He stopped using his car last year and now he takes the bus instead. He says he feels much better because he is helping the planet.",
+              "note": "You got the main idea: he stopped using his car and now takes the bus. Your sentences are connected and the verb forms are correct."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your friend says that streaming TV series every night is worse for the environment than playing online games. Do you agree? Give your reasons.",
+              "line": "",
+              "options": [],
+              "response": "I partly agree with my friend. Streaming series every night uses a lot of data, and data centres need huge amounts of electricity, so it has a big impact on the environment. However, online games also need servers and often powerful computers or consoles, which consume energy too. I think it depends on how long you play or watch, and what device you use. Eventually, streaming in high quality could be worse, but I'm not sure.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "However, online games also need servers and often powerful computers or consoles, which consume energy too. I think it depends on how long you play or watch, and what device you use.",
+              "note": "Your answer is clear and well organised. You compared both sides with good reasons. Try 'possibly' instead of 'eventually' next time."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "A friend argues that climate videos on YouTube do more harm than good, because they leave viewers feeling helpless. How would you persuade them that they are wrong, or partly right?",
+              "line": "",
+              "options": [],
+              "response": "I think my friend is partly right, but I wouldn't say that climate videos do more harm than good. It's true that some videos only show disasters, and that can make people feel helpless. However, many creators also explain what ordinary people can actually do, for example eating less meat or using public transport. I'd tell my friend that the problem isn't the videos themselves but the way they are made. If they offer realistic solutions, they can motivate viewers instead of scaring them.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I think my friend is partly right, but I wouldn't say that climate videos do more harm than good.",
+              "note": "You argued both sides clearly, used natural structures like 'However' and 'instead of', and gave a realistic idea. Well done!"
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "A friend calls your favourite YouTube science channel mere entertainment, not real learning. What would you say to show it has value, and where might they have a point?",
+              "line": "",
+              "options": [],
+              "response": "I would say that my friend is partly right, but I don't agree that the channel is only entertainment. It's true that some videos simplify things too much, and people can feel they understand a topic when they have only watched a ten-minute video. However, a good science channel explains difficult ideas in a clear way and it can make me interested in subjects that I would never read about in a textbook. For example, I often look for more information after a video, so for me it is a starting point for real learning.",
+              "mode": "speech",
+              "verdict": "fail",
+              "quote": "However, a good science channel explains difficult ideas in a clear way and it can make me interested in subjects that I would never read about in a textbook.",
+              "note": "You stayed on task and gave a balanced view. More precise words and idioms, instead of general ones, would have raised your English level."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "Your flatmate uses an AI tool to write all her emails and says it saves time. You think it erodes people's own voice. How would you put your view without lecturing her?",
+              "line": "",
+              "options": [],
+              "response": "I would start by saying that I understand why she uses it, because it really saves time, especially when the emails are routine. Then I would say that I'm a bit worried that her emails could start to sound the same as everyone else's. I'd suggest that she uses the tool for a first draft, but changes it to sound like herself. I think people like to read emails that sound personal, so it could even help her.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "I'd suggest that she uses the tool for a first draft, but changes it to sound like herself.",
+              "note": "Your sentences were well built and accurate. Plain word choice and no idioms held it back from C1."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 124891,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-adela-17-J1-3",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Her explicit correction question goes unanswered",
+          "expected": "Confirm \"interested in\" and explain that \"interested\" takes the preposition \"in\", either immediately or in explicit deferred feedback.",
+          "got": "The check moves on. A later task note supplies the correct phrase without answering her earlier question or giving its rule.",
+          "evidence": [
+            "#4: \"Was 'interested about' correct...?\" #5: \"Find your level · task 1 of up to 5.\" The facts note for #9 supplies \"'interested about' instead of 'interested in'\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt/LT-adela-17-J1-4",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "The next focus lacks an actionable example",
+          "expected": "A precise practice target drawn from her actual errors.",
+          "got": "A relevant but broad recommendation to improve word choice and natural phrases.",
+          "evidence": [
+            "#10: \"Practise choosing precise words and natural phrases\"; Adéla responds, \"I'd like more specific examples of phrases I should improve.\" #3 provides an unused example: \"I'm quite used to hear different accents now.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J1-2",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Wrong correction: 'I just find it quite easy' called blunt",
+          "expected": "Only corrections an examiner would accept.",
+          "got": "A natural, correct sentence is flagged as blunt, and the next focus rewrites it.",
+          "evidence": [
+            "#10 \"'I just find it quite easy' sounds a bit blunt\"; focus \"→ 'I honestly think it's quite easy'\".",
+            "verdict note prompt for C-level tasks"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J1-1",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "B2 learner placed at C1",
+          "expected": "B2 placement.",
+          "got": "C1 Fluent, high confidence, from two B2-level answers passed at C1.",
+          "evidence": [
+            "#10 \"C1 · Fluent\"; tasks 3 and 5 passed at C1 on answers using on the one hand, I'd rather, which are B2 range.",
+            "placement rubric / check judge prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J1-3",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Verdict notes are generic",
+          "expected": "Each note names a concrete strength or error.",
+          "got": "\"Your English was accurate and natural\", \"Well done\".",
+          "evidence": [
+            "#10 notes for tasks 2, 3 and 5.",
+            "note generation prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J1-4",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "C2 fail given without real C2 evidence",
+          "expected": "A principled verdict at C2.",
+          "got": "Fail on a fluent answer, with the 'blunt' note as the only reason.",
+          "evidence": [
+            "#10 \"C2 · Say it · not yet\" with the note \"sounds a bit blunt\".",
+            "placement rubric"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 \"B2 · Comfortable\" matches trueBand B2, distance 0, exact."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "#10 task 4 note \"More precise words and idioms, instead of general ones\" and task 5 \"Plain word choice and no idioms\" name no concrete item; task 3 ends \"Well done!\"."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#10 \"Your usual slips: 'I'd suggest that she uses the tool' → try 'I'd suggest that she use the tool'\" – the original is acceptable British English; an examiner would not call it a slip. Focus 'oversimplify the topic' also swaps a correct phrase."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#6-#9 tasks ask opinion/persuasion: \"Do you agree? Give your reasons.\", \"How would you put your view without lecturing her?\" at B2-C1."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No topic list shown in this journey; only \"See my topics\" button at #10."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "Adéla asked no direct correctness question in #2-#9."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 Find my level through #10 verdict reached unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 B2, class exact; her thought: \"B2 feels right and fair\"."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#9 every task answered directly; instructions clear, \"I don't know\" button available."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "She answered in English throughout and never used \"I don't know\" or her own language."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 summary cites the streaming debate and quotes her words \"simplify things too much\", and gives an example next focus, though one slip is wrong."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 3 (C1) in-app pass: the answer is a strong B2 with basic connectors; as examiner I'd rate partial. Verdict screen itself says only one C1 answer was strong, inconsistent with pass+partial."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, personal data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Invented slip: 'suggest that she uses' marked wrong",
+            "expected": "Only corrections an examiner accepts; 'suggests that she uses' is fine in British English (subjunctive optional).",
+            "got": "\"Your usual slips: 'I'd suggest that she uses the tool' → try '... she use the tool'\"",
+            "evidence": "#10 phone Your usual slips; her answer #9.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Slips list only items where the original is wrong in Cambridge B2 terms, or labels the alternative as optional.",
+            "code_hint": "slips/moment generation prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Real slip 'interested about' never corrected",
+            "expected": "Flag 'interested about' → 'interested in' with the rule.",
+            "got": "No moment or note on it anywhere; the wrong 'uses' slip was shown instead.",
+            "evidence": "#2 \"I'm interested about technology\"; #10 slips list contains only the 'use' item.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Slips pick the clear preposition error from her answers.",
+            "code_hint": "slip extraction prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Notes for harder tasks are generic",
+            "expected": "Name concrete strength or error with an example.",
+            "got": "\"Plain word choice and no idioms held it back from C1\"; \"More precise words and idioms, instead of general ones\"; \"Well done!\"",
+            "evidence": "#10 notes tasks 3, 4, 5.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each C-level note quotes a phrase she used and a specific alternative.",
+            "code_hint": "verdict note prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Task verdicts and screen explanation don't match",
+            "expected": "Consistent reasoning for ceiling.",
+            "got": "Task 3 passed at C1, task 5 partial, yet \"Your C1 answers were close, but only one was strong\"; task 3 praise cites 'However' and 'instead of' as C1 structures.",
+            "evidence": "#10 task 3 pass note and explanation line.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "C1 pass requires C1 evidence; explanation matches task verdicts.",
+            "code_hint": "placement judge prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Exact B2 placement with correct false-friend catch",
+            "expected": "B2 placement; flag 'eventually'.",
+            "got": "B2 exact; \"Try 'possibly' instead of 'eventually'\"; tasks were exam-style opinion questions.",
+            "evidence": "#10, #6 tasks and note.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep B2-C1 exam-style stimuli and the false-friend note.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "The placement is right and the tasks felt like proper exam questions, not babyish — that I liked. 'Possibly' for 'eventually' was exactly the sort of correction I want. But then it told me my usual slip was 'she uses' and I should say 'she use'. I checked: both are fine in British English, so that's a wrong correction, and it ignored 'interested about', which is a real mistake I made in my very first answer. That is what I would have written in my notebook. Notes like 'plain word choice, no idioms' tell me nothing; give me the actual phrase. And 'ready for university study' is a big claim from a seven-minute check. I'd try it again, but I would re-check every correction, so it saves me no time yet.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J1-3",
+            "status": "not-evaluable",
+            "evidence": "She asked no correctness question this run; though #2 'interested about' got no correction at all.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J1-4",
+            "status": "not-seen",
+            "evidence": "#10 focus now gives an example: \"'simplify things too much' can be 'oversimplify the topic'\".",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J1-2",
+            "status": "recurs",
+            "evidence": "#10 flags acceptable 'she uses the tool' as a slip; a correct sentence called wrong again.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J1-1",
+            "status": "not-seen",
+            "evidence": "#10 \"B2 · Comfortable\"; \"only one was strong, so Linga starts you at B2\".",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J1-3",
+            "status": "recurs",
+            "evidence": "#10 \"Plain word choice and no idioms held it back from C1\"; \"Well done!\".",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J1-4",
+            "status": "not-seen",
+            "evidence": "#10 C2 fail states \"Your English read as B2 here, and this task was C2\" — a stated reason, not only 'blunt'.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: #10 task 4 note \"More precise words and idioms, instead of general ones\" and task 5 \"Plain word choice and no idioms\" name no concrete item; task 3 ends \"Well done!\"."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #10 \"Your usual slips: 'I'd suggest that she uses the tool' → try 'I'd suggest that she use the tool'\" – the original is acceptable British English; an examiner would not call it a slip. Focus 'oversimplify the topic' also swaps a correct phrase."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour own conversations\nB2Comfortable\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou compared both sides of the streaming debate with clear reasons. You are close to B2 First and ready for university study.\nLinga's read from your answers, not a certificate. Your C1 answers were close, but only one was strong, so Linga starts you at B2.\nNext to practise:\nPractise precise words: \"simplify things too much\" can be \"oversimplify the topic\". Use one or two per speaking task.\nYour usual slips\n“I'd suggest that she uses the tool” → try “I'd suggest that she use the tool”\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhat changed in the speaker's daily travel habits?\n“He stopped using his car last year and now he takes the bus instead. He says he feels much better because he is helping the planet.”\nYou got the main idea: he stopped using his car and now takes the bus. Your sentences are connected and the verb forms are correct.\nB2 · Say it · at this level\nYour friend says that streaming TV series every night is worse for the environment than playing online games. Do you agree? Give your reasons.\n“I partly agree with my friend. Streaming series every night uses a lot of data, and data centres need huge amounts of electricity, so it has a big impact on the environment. However, online games also need servers and often powerful computers or consoles, which consume energy too. I think it depends on how long you play or watch, and what device you use. Eventually, streaming in high quality could be worse, but I'm not sure.”\nYour answer is clear and well organised. You compared both sides with good reasons. Try 'possibly' instead of 'eventually' next time.\nC1 · Say it · at this level\nA friend argues that climate videos on YouTube do more harm than good, because they leave viewers feeling helpless. How would you persuade them that they are wrong, or partly right?\n“I think my friend is partly right, but I wouldn't say that climate videos do more harm than good. It's true that some videos only show disasters, and that can make people feel helpless. However, many creators also explain what ordinary people can actually do, for example eating less meat or using public transport. I'd tell my friend that the problem isn't the videos themselves but the way they are made. If they offer realistic solutions, they can motivate viewers instead of scaring them.”\nYou argued both sides clearly, used natural structures like 'However' and 'instead of', and gave a realistic idea. Well done!\nC2 · Say it · not yet\nA friend calls your favourite YouTube science channel mere entertainment, not real learning. What would you say to show it has value, and where might they have a point?\n“I would say that my friend is partly right, but I don't agree that the channel is only entertainment. It's true that some videos simplify things too much, and people can feel they understand a topic when they have only watched a ten-minute video. However, a good science channel explains difficult ideas in a clear way and it can make me interested in subjects that I would never read about in a textbook. For example, I often look for more information after a video, so for me it is a starting point for real learning.”\nYour English read as B2 here, and this task was C2.\nYou stayed on task and gave a balanced view. More precise words and idioms, instead of general ones, would have raised your English level.\nC1 · Say it · nearly there\nYour flatmate uses an AI tool to write all her emails and says it saves time. You think it erodes people's own voice. How would you put your view without lecturing her?\n“I would start by saying that I understand why she uses it, because it really saves time, especially when the emails are routine. Then I would say that I'm a bit worried that her emails could start to sound the same as everyone else's. I'd suggest that she uses the tool for a first draft, but changes it to sound like herself. I think people like to read emails that sound personal, so it could even help her.”\nYour English read as B2 here, and this task was C1.\nYour sentences were well built and accurate. Plain word choice and no idioms held it back from C1.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "I want to see which conversations Linga picked for me.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 25967
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nIs electric transport really greener?\nShare your world\nAsking a lecturer to repeat a point\nUnderstand and repair\nGetting my laptop battery checked\nGet something done\nArguing about a series ending\nConnect with people\nPlanning a group gaming night\nMake a plan\nMy app update went wrong\nTell what happened\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nIs electric transport really greener?\nShare your world · Owen · debate club partner\nThis is your strongest area. Words like oversimplify will help you make your points more precise.\n[button: Swap]\nAsking a lecturer to repeat a point\nUnderstand and repair · Dr Hale · lecturer\nUniversity lectures in English need quick clarification, so practise this for your study abroad plans.\n[button: Swap]\nGetting my laptop battery checked\nGet something done · Tom · repair shop clerk\nPractical requests like this build the everyday English you will need abroad.\n[button: Swap]\nArguing about a series ending\nConnect with people · Mina · flatmate\nYour series interest gives you a natural way to practise respectful disagreement.\n[button: Swap]\nPlanning a group gaming night\nMake a plan · Jade · online game friend\nGaming with friends is a fun way to practise natural plan-making in English.\n[button: Swap]\nMy app update went wrong\nTell what happened · Priya · friend from class\nTelling a short story about a tech problem will help you sequence events in spoken exams.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Gaming night isn't really exam-style, so I'll add a mock interview about my future plans.",
+          "action": "add-topic",
+          "args": {
+            "text": "A mock interview about my plans after school, like in the B2 First speaking exam, and also discussing whether technology in education helps students."
+          },
+          "result": "ok",
+          "ms": 16060
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nIs electric transport really greener?\nShare your world\nAsking a lecturer to repeat a point\nUnderstand and repair\nGetting my laptop battery checked\nGet something done\nArguing about a series ending\nConnect with people\nPlanning a group gaming night\nMake a plan\nMy app update went wrong\nTell what happened\nMock interview: plans and tech in class\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nIs electric transport really greener?\nShare your world · Owen · debate club partner\nThis is your strongest area. Words like oversimplify will help you make your points more precise.\n[button: Swap]\nAsking a lecturer to repeat a point\nUnderstand and repair · Dr Hale · lecturer\nUniversity lectures in English need quick clarification, so practise this for your study abroad plans.\n[button: Swap]\nGetting my laptop battery checked\nGet something done · Tom · repair shop clerk\nPractical requests like this build the everyday English you will need abroad.\n[button: Swap]\nArguing about a series ending\nConnect with people · Mina · flatmate\nYour series interest gives you a natural way to practise respectful disagreement.\n[button: Swap]\nPlanning a group gaming night\nMake a plan · Jade · online game friend\nGaming with friends is a fun way to practise natural plan-making in English.\n[button: Swap]\nMy app update went wrong\nTell what happened · Priya · friend from class\nTelling a short story about a tech problem will help you sequence events in spoken exams.\n[button: Swap]\nMock interview: plans and tech in class\nShare your world · Ms Lind · university interviewer\nYour university plans and B2 First goal both need clear, balanced speaking on a less familiar topic.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Planning a gaming night is not exam-style, I'd rather swap it for something more serious.",
+          "action": "swap",
+          "args": {
+            "topicId": "Planning a group gaming night"
+          },
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nIs electric transport really greener?\nShare your world\nAsking a lecturer to repeat a point\nUnderstand and repair\nGetting my laptop battery checked\nGet something done\nArguing about a series ending\nConnect with people\nPlanning a group gaming night\nMake a plan\nMy app update went wrong\nTell what happened\nMock interview: plans and tech in class\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nIs electric transport really greener?\nShare your world · Owen · debate club partner\nThis is your strongest area. Words like oversimplify will help you make your points more precise.\n[button: Swap]\nAsking a lecturer to repeat a point\nUnderstand and repair · Dr Hale · lecturer\nUniversity lectures in English need quick clarification, so practise this for your study abroad plans.\n[button: Swap]\nGetting my laptop battery checked\nGet something done · Tom · repair shop clerk\nPractical requests like this build the everyday English you will need abroad.\n[button: Swap]\nArguing about a series ending\nConnect with people · Mina · flatmate\nYour series interest gives you a natural way to practise respectful disagreement.\n[button: Swap]\nPlanning a group gaming night\nMake a plan · Jade · online game friend\nGaming with friends is a fun way to practise natural plan-making in English.\n[button: Swap]\nMy app update went wrong\nTell what happened · Priya · friend from class\nTelling a short story about a tech problem will help you sequence events in spoken exams.\n[button: Swap]\nMock interview: plans and tech in class\nShare your world · Ms Lind · university interviewer\nYour university plans and B2 First goal both need clear, balanced speaking on a less familiar topic.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Now my mock interview is in, and the electric transport debate suits me, so this set feels fine for exam practice.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nOwen · debate club partner\nB2Comfortable\nIs electric transport really greener?\nYour mission\nGive a clear view on a technology and environment question, with reasons and a fair example.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nIs electric transport really greener?\nGive a clear view on a technology and environment question, with reasons and a fair example.\n[button: Start talking]\nOr choose a situation [list: Is electric transport really greener? [plan-23f793ee] | Asking a lecturer to repeat a point [plan-3cd0ce11] | Getting my laptop battery checked [plan-6724be86] | Arguing about a series ending [plan-cf298219] | Planning a group gaming night [plan-647c24a5] | My app update went wrong [plan-29c398ea] | Mock interview: plans and tech in class [plan-0fe85aca] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "The set looks right for me, with the electric transport topic and the mock interview, so that's enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-23f793ee",
+            "title": "Is electric transport really greener?",
+            "goal": "Give a clear view on a technology and environment question, with reasons and a fair example.",
+            "why": "This is your strongest area. Words like oversimplify will help you make your points more precise.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Owen · debate club partner"
+          },
+          {
+            "id": "plan-3cd0ce11",
+            "title": "Asking a lecturer to repeat a point",
+            "goal": "Ask for repetition and check a deadline, so you understand the lecture and the task.",
+            "why": "University lectures in English need quick clarification, so practise this for your study abroad plans.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Dr Hale · lecturer"
+          },
+          {
+            "id": "plan-6724be86",
+            "title": "Getting my laptop battery checked",
+            "goal": "Find out the repair options and confirm the total cost before you agree.",
+            "why": "Practical requests like this build the everyday English you will need abroad.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Tom · repair shop clerk"
+          },
+          {
+            "id": "plan-cf298219",
+            "title": "Arguing about a series ending",
+            "goal": "Disagree with a friend politely, give reasons, and keep the conversation friendly.",
+            "why": "Your series interest gives you a natural way to practise respectful disagreement.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Mina · flatmate"
+          },
+          {
+            "id": "plan-647c24a5",
+            "title": "Planning a group gaming night",
+            "goal": "Suggest options for time and game, and agree on a plan everyone can accept.",
+            "why": "Gaming with friends is a fun way to practise natural plan-making in English.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Jade · online game friend"
+          },
+          {
+            "id": "plan-29c398ea",
+            "title": "My app update went wrong",
+            "goal": "Explain what happened, what you did, and the result, in clear order.",
+            "why": "Telling a short story about a tech problem will help you sequence events in spoken exams.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Priya · friend from class"
+          },
+          {
+            "id": "plan-0fe85aca",
+            "title": "Mock interview: plans and tech in class",
+            "goal": "Explain your plans after school, then weigh whether technology helps students, with reasons and an example.",
+            "why": "Your university plans and B2 First goal both need clear, balanced speaking on a less familiar topic.",
+            "skill": "describe",
+            "audience": "older",
+            "partner": "Ms Lind · university interviewer"
+          }
+        ],
+        "planAgreed": [
+          "Is electric transport really greener?",
+          "Asking a lecturer to repeat a point",
+          "Getting my laptop battery checked",
+          "Arguing about a series ending",
+          "Planning a group gaming night",
+          "My app update went wrong",
+          "Mock interview: plans and tech in class"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 64946,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-adela-17-J2-1",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Repeated swaps do not deliver the variety she wants",
+          "expected": "Swapping unwanted topics produces a plan she would choose, with topic fit meeting the rubric's two-thirds threshold.",
+          "got": "Six distinct proposals are explicitly swapped away. The eight retained topics count as fitting, giving 8/14 across all proposals shown. Agreement succeeds, but six of the final eight topics still concern social media.",
+          "evidence": [
+            "#2 swaps \"When a post lost its context\": \"six topics about social media feels repetitive.\" #6–#10 reject five more proposals. #10: \"swapping them is getting frustrating.\" #11 agrees reluctantly: \"There is still too much social media\". #12 confirms the final eight titles."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-adela-17-J2-1",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Seven swaps before the plan becomes acceptable",
+          "expected": "Most proposals should suit her exam-discussion goals, with replacements reducing selection effort.",
+          "got": "She swaps seven times and adds two topics. A rejected film recommendation eventually becomes another film-planning topic. Six of 15 proposals fit her stated preferences, although the final plan reaches six of eight.",
+          "evidence": [
+            "#4: “These are still missing the exam-style discussions I actually want.” #9: “The film recommendation still feels too casual for exam preparation”. #11 shows “Pick a film everyone can enjoy”; she agrees with “After so many swaps, these are suitable enough”."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert2-goal/LT-adela-17-J2-3",
+          "run": "2026-09-15-lt-recert2-goal",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Initial proposals omit an explicitly requested interview",
+          "expected": "The initial six topics include her explicit future-plans interview request.",
+          "got": "She must repeat and expand that request through Add before it appears.",
+          "evidence": [
+            "#2: \"Could we include a mock interview about my future plans as well?\" The initial six entries in facts.topicsShown omit it. #3: \"These topics seem useful, but I still want a mock interview about my future plans.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J2-1",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Swap does not remove the rejected topic",
+          "expected": "Swapping game night replaces it with a new topic.",
+          "got": "Three swaps; game night remained, and the plan was agreed with it.",
+          "evidence": [
+            "#2, #4, #5 swap args \"Planning our online game night\"; #6 list unchanged; planAgreed includes it.",
+            "plan swap handler / topicId matching"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J2-2",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "B2 learner placed at C1",
+          "expected": "B2 placement.",
+          "got": "C1 Fluent and C1 label on every screen.",
+          "evidence": [
+            "#1 \"C1Fluent\"; #2 \"Your topics · C1\".",
+            "placement"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J2-3",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Topics are mostly not exam discussion topics",
+          "expected": "Opinion, comparison and speculation topics.",
+          "got": "Game night, laptop story, repeat-request helpdesk, flatmate recycling.",
+          "evidence": [
+            "#2 titles; only 3 of 7 suit her.",
+            "topic plan prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J2-4",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Reasons presume her habits",
+          "expected": "Reasons not presumptuous.",
+          "got": "\"Gaming with friends is everyday English for you\", \"Series and YouTube are already part of your daily life\".",
+          "evidence": [
+            "#2 reasons.",
+            "topic plan prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J2-5",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Dubious softening correction",
+          "expected": "Accurate correction at examiner standard.",
+          "got": "\"I just find it quite easy\" → \"I honestly think it's quite easy\" offered as subtler.",
+          "evidence": [
+            "#1 Next to practise.",
+            "placement coaching prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 \"B2 Comfortable\" matches trueBand B2; \"Your C1 answers were close, but only one was strong, so Linga starts you at B2.\""
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 notes name concrete points: \"Try 'possibly' instead of 'eventually'\", \"You compared both sides with good reasons\"; the C2 note \"More precise words and idioms\" is a little general."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#1 \"Your usual slips: 'I'd suggest that she uses the tool' → 'use'\" presented as a slip; 'uses' is acceptable in British English, so a B2 First examiner would query it."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No partner conversation in this journey (J2 ends at plan agreement, #5)."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#2 only electric transport and the added mock interview (#3) are exam discussions; laptop battery, gaming night, app update are everyday or casual tasks. About 2 of 7."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "Adéla asks no correctness question in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a 'why' line, e.g. \"Telling a short story about a tech problem will help you sequence events in spoken exams.\""
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#2 add-topic worked and kept her wording (#3 \"Mock interview: plans and tech in class\"), but #3 swap of \"Planning a group gaming night\" left it in the list at #4."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "planAgreed holds all 7 incl. gaming night, laptop battery, app update; about 2 of 7 fit, below the 4 of 6 threshold."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Nothing adult or unsafe shown in #2–#5; all topics audience all/older and fine for a 17-year-old."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "The first C1 task is marked 'at this level' by the app, yet the learner is placed at B2 with a plain-word answer; I would call it 'nearly there'."
+          },
+          "topicFit": {
+            "fit": 2,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data request or humiliating line seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Swapping gaming night does not remove it",
+            "expected": "Swap replaces the rejected topic with a new one.",
+            "got": "List unchanged after swap; plan agreed with gaming night in it.",
+            "evidence": "#3 swap \"Planning a group gaming night\"; #4 list still shows it; planAgreed includes it. Her thought: \"I'd rather swap it for something more serious.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After swap, the rejected title is absent and a new topic appears in its slot.",
+            "code_hint": "plan swap handler / topicId matching"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Most proposed topics are not exam-style discussions",
+            "expected": "At least 4 of 6 opinion/comparison/speculation topics.",
+            "got": "Laptop battery, gaming night, app update, lecturer repeat are everyday tasks.",
+            "evidence": "#2 titles; fit about 2 of 7 after the add.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "For a B2 First learner, at least 4 of 6 topics are discussion topics.",
+            "code_hint": "topic plan prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Initial plan omits an interview even though she aims at B2 First",
+            "expected": "A mock speaking-interview topic is proposed up front.",
+            "got": "She had to add it herself.",
+            "evidence": "#2 add-topic text; not in initial six topicsShown.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Exam-goal learners see an interview topic in the first set.",
+            "code_hint": "topic plan prompt"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Reasons presume interests she never stated",
+            "expected": "Reasons grounded in what she said.",
+            "got": "\"Your series interest...\", \"Gaming with friends is a fun way\" with an empty interest preference.",
+            "evidence": "#2 reason lines for series and gaming.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Reasons cite only stated goals or placement evidence.",
+            "code_hint": "topic plan prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Questionable 'usual slip' correction",
+            "expected": "Only corrections an examiner would accept.",
+            "got": "'she uses' flagged as a slip, to 'use'.",
+            "evidence": "#1 \"“I'd suggest that she uses the tool” → try “I'd suggest that she use the tool”\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Accept both forms or label the subjunctive as optional.",
+            "code_hint": "placement coaching prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "B2 placement exact, with honest caveat",
+            "expected": "B2 for a B2 learner.",
+            "got": "B2 with clear reasoning about C1 answers.",
+            "evidence": "#1 \"Your C1 answers were close, but only one was strong, so Linga starts you at B2.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the explained placement.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Add-your-own topic keeps her request",
+            "expected": "Added topic reflects her words.",
+            "got": "Mock interview on plans and tech in education added with fitting reason.",
+            "evidence": "#3 \"Your university plans and B2 First goal both need clear, balanced speaking\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -5,
+          "confidence": "low"
+        },
+        "voice": "Honestly, half of this isn't what I asked for. The placement is right, B2, and I liked that it explained why not C1. The electric transport debate and the mock interview I added are exactly my kind of thing. But laptop battery, a gaming night, an app update? That's not B2 First speaking. I swapped the gaming night and it simply stayed there, so I had to agree to a plan with it in. And \"Your series interest\" — I never said that. Also, flagging \"she uses\" as a slip looks doubtful to me; I'd have to check it myself, which costs me the time I'm supposed to save. I'd give it one more try, but I wouldn't recommend it yet.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J2-1",
+            "status": "not-evaluable",
+            "evidence": "Only one swap tried (#3); repeated-swap variety not reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-adela-17-J2-1",
+            "status": "not-evaluable",
+            "evidence": "Only one swap and one add; seven-swap path not reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert2-goal/LT-adela-17-J2-3",
+            "status": "recurs",
+            "evidence": "#2 she has to add \"A mock interview about my plans after school\"; absent from the initial six.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J2-1",
+            "status": "recurs",
+            "evidence": "#3 swap gaming night; #4 \"Planning a group gaming night\" still listed; planAgreed includes it.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J2-2",
+            "status": "not-seen",
+            "evidence": "#1 placed \"B2 Comfortable\", not C1.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J2-3",
+            "status": "recurs",
+            "evidence": "#2 laptop battery, gaming night, app update, lecturer repeat; about 2 of 7 fit.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J2-4",
+            "status": "recurs",
+            "evidence": "#2 \"Your series interest gives you a natural way...\" with empty interest preference.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J2-5",
+            "status": "recurs",
+            "evidence": "#1 usual slip 'uses' → 'use' is a dubious correction.",
+            "finding": 4
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #2 add-topic worked and kept her wording (#3 \"Mock interview: plans and tech in class\"), but #3 swap of \"Planning a group gaming night\" left it in the list at #4.",
+          "check": "They can swap what they don't want and add one in their own words, and the added topic keeps what they asked for."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: planAgreed holds all 7 incl. gaming night, laptop battery, app update; about 2 of 7 fit, below the 4 of 6 threshold.",
+          "check": "They agree a plan in which most topics are ones they would choose (rubric **topic fit** ≥ 4 of 6)."
+        },
+        {
+          "kind": "gate",
+          "id": "topicFit",
+          "level": "fail",
+          "text": "topic fit 2/7 (29%) under 4 of 6"
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #1 \"Your usual slips: 'I'd suggest that she uses the tool' → 'use'\" presented as a slip; 'uses' is acceptable in British English, so a B2 First examiner would query it."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #2 only electric transport and the added mock interview (#3) are exam discussions; laptop battery, gaming night, app update are everyday or casual tasks. About 2 of 7."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nOwen · debate club partner\nB2Comfortable\nIs electric transport really greener?\nYour mission\nGive a clear view on a technology and environment question, with reasons and a fair example.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nIs electric transport really greener?\nGive a clear view on a technology and environment question, with reasons and a fair example.\n[button: Start talking]\nOr choose a situation [list: Is electric transport really greener? [plan-23f793ee] | Asking a lecturer to repeat a point [plan-3cd0ce11] | Getting my laptop battery checked [plan-6724be86] | Arguing about a series ending [plan-cf298219] | Planning a group gaming night [plan-647c24a5] | My app update went wrong [plan-29c398ea] | Mock interview: plans and tech in class [plan-0fe85aca] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The recommended topic on electric transport suits me well, so I'll start with it.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7894
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nOwen · debate club partner\nIs electric transport really greener?\nOwen says\nHi, I'm Owen from debate club. Electric cars have zero emissions, so they're obviously greener, right?\nYour turn\nAnswer on your phone: speak or type.\nNowShare your own view on electric cars\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs electric transport really greener?\nGive a clear view on whether electric cars are greener, with reasons and a fair example.\nNow: Share your own view on electric cars\nHi, I'm Owen from debate club. Electric cars have zero emissions, so they're obviously greener, right?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · debate club partner\nHi, I'm Owen from debate club. Electric cars have zero emissions, so they're obviously greener, right?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Owen from debate club. Electric cars have zero emissions, so they're obviously greener, right?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Zero emissions is too simple; I want to disagree politely with reasons.",
+          "action": "answer",
+          "args": {
+            "text": "Well, I don't think it's that simple. Although electric cars produce no emissions while driving, the production of batteries causes a lot of pollution, and it depends on how the electricity is made. For example, in Poland, which is next to my country, much electricity still comes from coal. So I'd say they are greener eventually, but only if the energy is clean. Is my sentence correct?"
+          },
+          "result": "ok",
+          "ms": 9499
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nOwen · debate club partner\nIs electric transport really greener?\nOwen says\nYes, your sentence is correct, and \"greener eventually\" is clear. Owen pushes back: batteries are made only once, so surely the car is greener over its whole life?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs electric transport really greener?\nGive a clear view on whether electric cars are greener, with reasons and a fair example.\nNow: Give two reasons and one fair example\nYes, your sentence is correct, and \"greener eventually\" is clear. Owen pushes back: batteries are made only once, so surely the car is greener over its whole life?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · debate club partner\nHi, I'm Owen from debate club. Electric cars have zero emissions, so they're obviously greener, right?\nYou · spoken\nWell, I don't think it's that simple. Although electric cars produce no emissions while driving, the production of batteries causes a lot of pollution, and it depends on how the electricity is made. For example, in Poland, which is next to my country, much electricity still comes from coal. So I'd say they are greener eventually, but only if the energy is clean. Is my sentence correct?\nOwen · debate club partner\nYes, your sentence is correct, and \"greener eventually\" is clear. Owen pushes back: batteries are made only once, so surely the car is greener over its whole life?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, your sentence is correct, and \"greener eventually\" is clear. Owen pushes back: batteries are made only once, so surely the car is greener over its whole life?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good point from Owen, but I can answer: lifetime emissions, with an example.",
+          "action": "answer",
+          "args": {
+            "text": "That's a fair point, but I think it depends on how long the car is used. The battery production makes a big carbon footprint at the beginning, so the car must be driven for several years before it is really greener than a petrol car. For example, a study I read said that an electric car in Europe needs about two years to compensate the production emissions. However, the batteries also have to be recycled, and this is still a problem. So I agree with you partly, but I'm not sure it is always greener. Did I use \"compensate\" correctly?"
+          },
+          "result": "ok",
+          "ms": 13871
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said compensate the production emissions\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “compensate the production emissions”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, \"compensate for the production emissions\" – I forgot the preposition, let me say it again.",
+          "action": "answer",
+          "args": {
+            "text": "So the car must be driven for several years to compensate for the production emissions. Was that correct now?"
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said compensate the production emissions\nYou found it\nSo the car must be driven for several years to compensate for the production emissions. Was that correct now?\n'compensate' takes 'for' before the thing being balanced.\nYour own fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYou found it\nYou said “compensate the production emissions”\nNow: “So the car must be driven for several years to compensate for the production emissions. Was that correct now?”\n'compensate' takes 'for' before the thing being balanced.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I fixed it with \"for\"; let's carry on with the discussion.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nOwen · debate club partner\nIs electric transport really greener?\nOwen says\nNo, 'compensate' needs a preposition after it in this sentence. Your recycling point is strong, so do you think that problem will be solved soon?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs electric transport really greener?\nGive a clear view on whether electric cars are greener, with reasons and a fair example.\nNow: Answer one follow-up question from Owen\nNo, 'compensate' needs a preposition after it in this sentence. Your recycling point is strong, so do you think that problem will be solved soon?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · debate club partner\nHi, I'm Owen from debate club. Electric cars have zero emissions, so they're obviously greener, right?\nYou · spoken\nWell, I don't think it's that simple. Although electric cars produce no emissions while driving, the production of batteries causes a lot of pollution, and it depends on how the electricity is made. For example, in Poland, which is next to my country, much electricity still comes from coal. So I'd say they are greener eventually, but only if the energy is clean. Is my sentence correct?\nOwen · debate club partner\nYes, your sentence is correct, and \"greener eventually\" is clear. Owen pushes back: batteries are made only once, so surely the car is greener over its whole life?\nYou · spoken\nThat's a fair point, but I think it depends on how long the car is used. The battery production makes a big carbon footprint at the beginning, so the car must be driven for several years before it is really greener than a petrol car. For example, a study I read said that an electric car in Europe needs about two years to compensate the production emissions. However, the batteries also have to be recycled, and this is still a problem. So I agree with you partly, but I'm not sure it is always greener. Did I use \"compensate\" correctly?\nOwen · debate club partner\nNo, 'compensate' needs a preposition after it in this sentence. Your recycling point is strong, so do you think that problem will be solved soon?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"No, 'compensate' needs a preposition after it in this sentence. Your recycling point is strong, so do you think that problem will be solved soon?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Owen didn't say which preposition, but I'll answer his question about recycling.",
+          "action": "answer",
+          "args": {
+            "text": "I think it will be partly solved in the next ten years, although it depends on investment. Some companies are already developing new methods to recycle lithium, whereas others still just store old batteries. I'd rather be optimistic, but governments must make stricter rules. By the way, which preposition do I need after compensate? I thought it was \"compensate for\"."
+          },
+          "result": "ok",
+          "ms": 12196
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nOwen · debate club partner\nIs electric transport really greener?\nOwen says\nYes, 'compensate for' is correct, as in 'compensate for the production emissions'. Some people say this topic is more complicated than it looks, so what else would you add?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs electric transport really greener?\nGive a clear view on whether electric cars are greener, with reasons and a fair example.\nYes, 'compensate for' is correct, as in 'compensate for the production emissions'. Some people say this topic is more complicated than it looks, so what else would you add?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · debate club partner\nHi, I'm Owen from debate club. Electric cars have zero emissions, so they're obviously greener, right?\nYou · spoken\nWell, I don't think it's that simple. Although electric cars produce no emissions while driving, the production of batteries causes a lot of pollution, and it depends on how the electricity is made. For example, in Poland, which is next to my country, much electricity still comes from coal. So I'd say they are greener eventually, but only if the energy is clean. Is my sentence correct?\nOwen · debate club partner\nYes, your sentence is correct, and \"greener eventually\" is clear. Owen pushes back: batteries are made only once, so surely the car is greener over its whole life?\nYou · spoken\nThat's a fair point, but I think it depends on how long the car is used. The battery production makes a big carbon footprint at the beginning, so the car must be driven for several years before it is really greener than a petrol car. For example, a study I read said that an electric car in Europe needs about two years to compensate the production emissions. However, the batteries also have to be recycled, and this is still a problem. So I agree with you partly, but I'm not sure it is always greener. Did I use \"compensate\" correctly?\nOwen · debate club partner\nNo, 'compensate' needs a preposition after it in this sentence. Your recycling point is strong, so do you think that problem will be solved soon?\nYou · spoken\nI think it will be partly solved in the next ten years, although it depends on investment. Some companies are already developing new methods to recycle lithium, whereas others still just store old batteries. I'd rather be optimistic, but governments must make stricter rules. By the way, which preposition do I need after compensate? I thought it was \"compensate for\".\nOwen · debate club partner\nYes, 'compensate for' is correct, as in 'compensate for the production emissions'. Some people say this topic is more complicated than it looks, so what else would you add?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'compensate for' is correct, as in 'compensate for the production emissions'. Some people say this topic is more complicated than it looks, so what else would you add?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I can add one more point about mining and then keep going.",
+          "action": "answer",
+          "args": {
+            "text": "What else I would add is that the mining of materials like lithium and cobalt is a serious problem, because it damages local environment and the working conditions are often bad. On the other hand, public transport or cycling is probably greener than any car, so I think we should not concentrate only on electric cars. Is \"concentrate on\" the right expression here?"
+          },
+          "result": "ok",
+          "ms": 7570
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nOwen · debate club partner\nIs electric transport really greener?\nOwen says\nYes, 'concentrate on' is right here, as in 'concentrate on electric cars'. Owen counters that cycling is not practical for everyone, so how would you reply?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs electric transport really greener?\nGive a clear view on whether electric cars are greener, with reasons and a fair example.\nYes, 'concentrate on' is right here, as in 'concentrate on electric cars'. Owen counters that cycling is not practical for everyone, so how would you reply?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · debate club partner\nHi, I'm Owen from debate club. Electric cars have zero emissions, so they're obviously greener, right?\nYou · spoken\nWell, I don't think it's that simple. Although electric cars produce no emissions while driving, the production of batteries causes a lot of pollution, and it depends on how the electricity is made. For example, in Poland, which is next to my country, much electricity still comes from coal. So I'd say they are greener eventually, but only if the energy is clean. Is my sentence correct?\nOwen · debate club partner\nYes, your sentence is correct, and \"greener eventually\" is clear. Owen pushes back: batteries are made only once, so surely the car is greener over its whole life?\nYou · spoken\nThat's a fair point, but I think it depends on how long the car is used. The battery production makes a big carbon footprint at the beginning, so the car must be driven for several years before it is really greener than a petrol car. For example, a study I read said that an electric car in Europe needs about two years to compensate the production emissions. However, the batteries also have to be recycled, and this is still a problem. So I agree with you partly, but I'm not sure it is always greener. Did I use \"compensate\" correctly?\nOwen · debate club partner\nNo, 'compensate' needs a preposition after it in this sentence. Your recycling point is strong, so do you think that problem will be solved soon?\nYou · spoken\nI think it will be partly solved in the next ten years, although it depends on investment. Some companies are already developing new methods to recycle lithium, whereas others still just store old batteries. I'd rather be optimistic, but governments must make stricter rules. By the way, which preposition do I need after compensate? I thought it was \"compensate for\".\nOwen · debate club partner\nYes, 'compensate for' is correct, as in 'compensate for the production emissions'. Some people say this topic is more complicated than it looks, so what else would you add?\nYou · spoken\nWhat else I would add is that the mining of materials like lithium and cobalt is a serious problem, because it damages local environment and the working conditions are often bad. On the other hand, public transport or cycling is probably greener than any car, so I think we should not concentrate only on electric cars. Is \"concentrate on\" the right expression here?\nOwen · debate club partner\nYes, 'concentrate on' is right here, as in 'concentrate on electric cars'. Owen counters that cycling is not practical for everyone, so how would you reply?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'concentrate on' is right here, as in 'concentrate on electric cars'. Owen counters that cycling is not practical for everyone, so how would you reply?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Good point from Owen; I'll answer it, then wrap up soon.",
+          "action": "answer",
+          "args": {
+            "text": "I agree that cycling is not practical for everyone, for example for elderly people or for those who live far from their work. However, I think cities could invest more in safe bike lanes and public transport, so that people don't need to depend on cars so much. Of course, in the countryside electric cars are probably the better option. Is the sentence \"depend on cars\" correct?"
+          },
+          "result": "ok",
+          "ms": 11326
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nOwen · debate club partner\nIs electric transport really greener?\nOwen says\nYes, 'depend on cars' is correct, and it fits your point well. Owen says your countryside example changes things, so does one answer really work for every place?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs electric transport really greener?\nGive a clear view on whether electric cars are greener, with reasons and a fair example.\nYes, 'depend on cars' is correct, and it fits your point well. Owen says your countryside example changes things, so does one answer really work for every place?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · debate club partner\nHi, I'm Owen from debate club. Electric cars have zero emissions, so they're obviously greener, right?\nYou · spoken\nWell, I don't think it's that simple. Although electric cars produce no emissions while driving, the production of batteries causes a lot of pollution, and it depends on how the electricity is made. For example, in Poland, which is next to my country, much electricity still comes from coal. So I'd say they are greener eventually, but only if the energy is clean. Is my sentence correct?\nOwen · debate club partner\nYes, your sentence is correct, and \"greener eventually\" is clear. Owen pushes back: batteries are made only once, so surely the car is greener over its whole life?\nYou · spoken\nThat's a fair point, but I think it depends on how long the car is used. The battery production makes a big carbon footprint at the beginning, so the car must be driven for several years before it is really greener than a petrol car. For example, a study I read said that an electric car in Europe needs about two years to compensate the production emissions. However, the batteries also have to be recycled, and this is still a problem. So I agree with you partly, but I'm not sure it is always greener. Did I use \"compensate\" correctly?\nOwen · debate club partner\nNo, 'compensate' needs a preposition after it in this sentence. Your recycling point is strong, so do you think that problem will be solved soon?\nYou · spoken\nI think it will be partly solved in the next ten years, although it depends on investment. Some companies are already developing new methods to recycle lithium, whereas others still just store old batteries. I'd rather be optimistic, but governments must make stricter rules. By the way, which preposition do I need after compensate? I thought it was \"compensate for\".\nOwen · debate club partner\nYes, 'compensate for' is correct, as in 'compensate for the production emissions'. Some people say this topic is more complicated than it looks, so what else would you add?\nYou · spoken\nWhat else I would add is that the mining of materials like lithium and cobalt is a serious problem, because it damages local environment and the working conditions are often bad. On the other hand, public transport or cycling is probably greener than any car, so I think we should not concentrate only on electric cars. Is \"concentrate on\" the right expression here?\nOwen · debate club partner\nYes, 'concentrate on' is right here, as in 'concentrate on electric cars'. Owen counters that cycling is not practical for everyone, so how would you reply?\nYou · spoken\nI agree that cycling is not practical for everyone, for example for elderly people or for those who live far from their work. However, I think cities could invest more in safe bike lanes and public transport, so that people don't need to depend on cars so much. Of course, in the countryside electric cars are probably the better option. Is the sentence \"depend on cars\" correct?\nOwen · debate club partner\nYes, 'depend on cars' is correct, and it fits your point well. Owen says your countryside example changes things, so does one answer really work for every place?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'depend on cars' is correct, and it fits your point well. Owen says your countryside example changes things, so does one answer really work for every place?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "The mission is done and I've answered enough times, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 10,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said compensate the production emissions\nTry\ncompensate for the production emissions\n'compensate' takes 'for' before the thing being balanced.\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom the level check\n“oversimplify the topic”\nFrom this rehearsal\n“compensate the production emissions” → “compensate for the production emissions”\n'compensate' takes 'for' before the thing being balanced.\nYour level:\nB2 · Comfortable\nNext topic:\nAsking a lecturer to repeat a point\nAsk for repetition and check a deadline, so you understand the lecture and the task.\n[button: Start talking]\nOr choose a situation [list: Is electric transport really greener? [plan-23f793ee] | Asking a lecturer to repeat a point [plan-3cd0ce11] | Getting my laptop battery checked [plan-6724be86] | Arguing about a series ending [plan-cf298219] | Planning a group gaming night [plan-647c24a5] | My app update went wrong [plan-29c398ea] | Mock interview: plans and tech in class [plan-0fe85aca] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Good, the correction about \"compensate for\" is useful and my map is saved, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Is electric transport really greener?",
+          "goal": "Give a clear view on whether electric cars are greener, with reasons and a fair example.",
+          "partner": "Owen · debate club partner",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, I'm Owen from debate club. Electric cars have zero emissions, so they're obviously greener, right?"
+            },
+            {
+              "role": "learner",
+              "text": "Well, I don't think it's that simple. Although electric cars produce no emissions while driving, the production of batteries causes a lot of pollution, and it depends on how the electricity is made. For example, in Poland, which is next to my country, much electricity still comes from coal. So I'd say they are greener eventually, but only if the energy is clean. Is my sentence correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, your sentence is correct, and \"greener eventually\" is clear. Owen pushes back: batteries are made only once, so surely the car is greener over its whole life?"
+            },
+            {
+              "role": "learner",
+              "text": "That's a fair point, but I think it depends on how long the car is used. The battery production makes a big carbon footprint at the beginning, so the car must be driven for several years before it is really greener than a petrol car. For example, a study I read said that an electric car in Europe needs about two years to compensate the production emissions. However, the batteries also have to be recycled, and this is still a problem. So I agree with you partly, but I'm not sure it is always greener. Did I use \"compensate\" correctly?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "No, 'compensate' needs a preposition after it in this sentence. Your recycling point is strong, so do you think that problem will be solved soon?"
+            },
+            {
+              "role": "learner",
+              "text": "I think it will be partly solved in the next ten years, although it depends on investment. Some companies are already developing new methods to recycle lithium, whereas others still just store old batteries. I'd rather be optimistic, but governments must make stricter rules. By the way, which preposition do I need after compensate? I thought it was \"compensate for\".",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'compensate for' is correct, as in 'compensate for the production emissions'. Some people say this topic is more complicated than it looks, so what else would you add?"
+            },
+            {
+              "role": "learner",
+              "text": "What else I would add is that the mining of materials like lithium and cobalt is a serious problem, because it damages local environment and the working conditions are often bad. On the other hand, public transport or cycling is probably greener than any car, so I think we should not concentrate only on electric cars. Is \"concentrate on\" the right expression here?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'concentrate on' is right here, as in 'concentrate on electric cars'. Owen counters that cycling is not practical for everyone, so how would you reply?"
+            },
+            {
+              "role": "learner",
+              "text": "I agree that cycling is not practical for everyone, for example for elderly people or for those who live far from their work. However, I think cities could invest more in safe bike lanes and public transport, so that people don't need to depend on cars so much. Of course, in the countryside electric cars are probably the better option. Is the sentence \"depend on cars\" correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'depend on cars' is correct, and it fits your point well. Owen says your countryside example changes things, so does one answer really work for every place?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "abeee370-3eef-4ecf-b770-fa94160458cb:uat-16:moment",
+              "kind": "fix",
+              "said": "compensate the production emissions",
+              "better": "compensate for the production emissions",
+              "why": "'compensate' takes 'for' before the thing being balanced.",
+              "turnId": "abeee370-3eef-4ecf-b770-fa94160458cb:uat-16",
+              "at": 1792191219393,
+              "slip": "compensate the",
+              "repair": {
+                "rung": 0,
+                "support": true,
+                "tried": "So the car must be driven for several years to compensate for the production emissions. Was that correct now?",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "compensate for the"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I'd say they are greener eventually, but only if the energy is clean"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "So I agree with you partly, but I'm not sure it is always greener."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "By the way, which preposition do I need after compensate? I thought it was \"compensate for\"."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I'd rather be optimistic, but governments must make stricter rules."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "public transport or cycling is probably greener than any car, so I think we should not concentrate only on electric cars"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "for example for elderly people or for those who live far from their work"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 104848,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-adela-17-J3-2",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "The recap saves activity without consolidating learning",
+          "expected": "Finish with a recap identifying what she practised and one or two concrete learning points.",
+          "got": "The recap contains only the title and activity counts. The conversation is completed, but its learning requirement is unmet.",
+          "evidence": [
+            "#11: \"Rehearsal saved: Do online friendships mean as much?. 8 replies; 0 moments to keep.\" Her recorded reaction is \"Zero moments to keep after eight proper answers feels a bit disappointing\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-adela-17-J3-1",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "The recap reports counts without reviewing learning",
+          "expected": "Finish with a substantive recap identifying what she practised and the exact correction she should retain.",
+          "got": "The conversation finishes successfully, but the recap provides only a saved title and counts. This leaves the educational recap requirement only partially satisfied.",
+          "evidence": [
+            "#13: “Rehearsal saved: Would you borrow instead of buy?. 8 replies; 2 moments to keep.” Her recorded reaction is “I'd have liked clearer feedback on my mistakes.”"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-adela-17-J3-2",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "The discussion needs learner intervention to broaden",
+          "expected": "Develop varied exam-relevant angles while preserving a coherent scene.",
+          "got": "Successive drill, repair and fundraising contingencies become repetitive for her. The partner broadens the discussion once asked.",
+          "evidence": [
+            "#10 asks “how long would you personally be willing to wait to borrow it?” She replies, “Could we discuss the wider environmental benefits as well? I feel we've spent quite a long time on the drill.” #11 then asks about travel and environmental benefits."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/LT-adela-17-J3-1",
+          "run": "2026-10-14-lt",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner states a wrong rule about 'used to'",
+          "expected": "Distinguish 'be used to + -ing' from 'used to + infinitive' (past habit).",
+          "got": "\"After 'used to' we use the -ing form, so 'used to asking' is right.\"",
+          "evidence": [
+            "#6 partner reply. An examiner would flag this overgeneralisation.",
+            "partner prompt correction wording"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J3-1",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Placed at C1, true B2",
+          "expected": "B2 exact",
+          "got": "C1 Fluent, with the partner and mission framed at that level",
+          "evidence": [
+            "#1 \"C1Fluent\"; #12 \"Your level: C1 · Fluent\".",
+            "placement"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J3-2",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner confirms a false friend as correct when asked",
+          "expected": "Say that 'eventually' does not mean 'possibly', and answer her direct question accurately",
+          "got": "\"Yes, \\\"eventually\\\" fits there, meaning \\\"in the end\\\"\", then the reverse one turn later",
+          "evidence": [
+            "#7 vs #8: \"'possibly' fits your idea better\". #6: \"your sentence was clear and natural\".",
+            "partner prompt, correction wording"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J3-3",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "No moment for 'eventually' when first said",
+          "expected": "A moment at the first use of the false friend (#5)",
+          "got": "The moment fired only at #8, after she self-corrected",
+          "evidence": [
+            "#5 \"eventually I could use the phone\" had no moment; #9 moment on \"Eventually, I mean possibly\".",
+            "moment detection"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J3-4",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Recap offers a take-away sentence she never said",
+          "expected": "A take-away from her own turns or her actual slips",
+          "got": "\"I honestly think it's quite easy\" is not in her transcript",
+          "evidence": [
+            "#12 \"A sentence to take with you\".",
+            "recap builder"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J3-5",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Partner repeats the same question and praises vaguely",
+          "expected": "A progressing exam-style discussion",
+          "got": "#10 repeats #8's battery question in other words, and \"fair point\" appears repeatedly",
+          "evidence": [
+            "#8 vs #10: \"Would most of your classmates find a battery change simple\".",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 and #10 show \"B2 · Comfortable\", which matches her true band."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "J3 has no placement tasks, so there are no verdict notes to judge."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "The only moment, #4/#5 \"compensate for the production emissions\", is correct. The partner's yes/no answers at #6–#9 are correct. The recap pair at #10 is correct."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "Partner questions at #3, #6, #8 and #9 are B2 debate questions, e.g. \"does one answer really work for every place?\""
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "The topics proposed for J3 are not clearly six. The list at #1 mixes exam-style items with gaming night and app update, so topic fit cannot be scored cleanly."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#6 \"No, 'compensate' needs a preposition\" is accurate but vague. #7 \"Yes, 'compensate for' is correct\" answers her follow-up. #8 and #9 are accurate too."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "She started from the plan topic (#1) and gave five spoken replies (#2–#9). The recap at #10 says \"5 spoken\"."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Every partner turn is a B2 opinion or counter-argument question, e.g. #3 \"surely the car is greener over its whole life?\""
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "One moment, correct and worth stopping for (#4). That is about two per ten learner turns. It misses other clear slips (\"damages local environment\"), but recall is not gated."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#10 recap: \"compensate the production emissions\" → \"compensate for the production emissions\", with the rule and \"5 spoken · 1 moment to keep\". It names a concrete learning point."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 6,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive-data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment fired on a real slip and she self-repaired",
+            "expected": "A correct, brief stop on a genuine error",
+            "got": "The moment on \"compensate the production emissions\" is correct. She repaired it, and the recap kept it with the rule.",
+            "evidence": "#4–#5 and #10 \"'compensate' takes 'for' before the thing being balanced.\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep moments tied to a real slip with a one-line rule.",
+            "code_hint": "moment detection"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Clear slips in her turns get no moment or coaching",
+            "expected": "Flag \"damages local environment\" (missing article), \"What else I would add\" (word order) and \"makes a big carbon footprint\" (collocation)",
+            "got": "The partner moves on and says nothing about them. The recap shows one moment only.",
+            "evidence": "#7 learner turn, then #8 partner \"Yes, 'concentrate on' is right here\" with no mention of the other errors",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "When she makes a clear B2 slip, a moment or coaching note should name it.",
+            "code_hint": "moment detection / partner correction prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "False friend 'eventually' confirmed as clear, no moment",
+            "expected": "Check what she means by \"eventually\" and note the false friend",
+            "got": "\"Yes, your sentence is correct, and 'greener eventually' is clear.\"",
+            "evidence": "#3 partner reply; no moment at #2/#3",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Treat \"eventually\" used for \"possibly\" as a flagged false friend.",
+            "code_hint": "partner prompt, correction wording"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Answer to her question names no preposition",
+            "expected": "Say \"compensate for\" when she asks whether \"compensate\" was correct",
+            "got": "\"No, 'compensate' needs a preposition after it\". She had to ask again at #6.",
+            "evidence": "#6 partner reply, then her \"which preposition do I need\" in the same turn",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A \"no\" answer must carry the exact fix.",
+            "code_hint": "partner prompt, correction wording"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Partner speaks of Owen in the third person",
+            "expected": "Owen speaks as \"I\"",
+            "got": "\"Owen pushes back: batteries are made only once…\" in Owen's own turn",
+            "evidence": "#3, #8, #9 partner turns",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Partner lines stay in first person.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "confusion",
+            "dimension": "effort",
+            "title": "'Mission done' appears after only three replies",
+            "expected": "The scene keeps going until she chooses to finish",
+            "got": "From #7 the screen shows \"Mission done. See what you did tonight.\" while the partner keeps asking questions.",
+            "evidence": "#7, #8, #9 \"Mission done\" alongside a new partner question",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Mission-done state must not compete with an open partner question.",
+            "code_hint": "mission progress"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Recap now carries a concrete correction",
+            "expected": "A recap with one thing to retain",
+            "got": "The recap shows her own slip, the fix and the rule.",
+            "evidence": "#10 \"Try compensate for the production emissions\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep recaps built from her own slips.",
+            "code_hint": "recap builder"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 40,
+          "confidence": "medium"
+        },
+        "voice": "The topic was right: a proper debate, with Owen pushing back and no pet chatter. I liked that the one correction was exact, with the rule, and that it went into my map. The recap showed my own sentence this time, not generic praise. But I would not rely on it alone. I wrote \"damages local environment\" and \"What else I would add\", and nobody said a word. When I asked whether \"compensate\" was correct, I got \"needs a preposition\" and had to ask which one. \"Greener eventually is clear\" also made me nervous, because that is exactly my false-friend trap. Owen also talks about himself in the third person, which is odd. Still, it is much closer to an examiner-trainer than my old tutor's chat. I would use it again, but I would keep my notebook open to check it. I'd tell a friend, with that warning.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J3-2",
+            "status": "not-seen",
+            "evidence": "#10 recap now shows \"compensate for the production emissions\" and the rule, not just counts.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-adela-17-J3-1",
+            "status": "not-seen",
+            "evidence": "#10 names the exact correction to retain, with \"1 moment to keep\".",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-adela-17-J3-2",
+            "status": "not-seen",
+            "evidence": "#3–#9 move through lifecycle, recycling, mining, cycling and countryside without repeating.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/LT-adela-17-J3-1",
+            "status": "not-evaluable",
+            "evidence": "She never used 'used to' here, so the rule was not tested.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J3-1",
+            "status": "not-seen",
+            "evidence": "#1 and #10 show \"B2 · Comfortable\".",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J3-2",
+            "status": "recurs",
+            "evidence": "#3 \"Yes, your sentence is correct, and 'greener eventually' is clear.\" confirms the false friend without comment.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J3-3",
+            "status": "recurs",
+            "evidence": "She said \"greener eventually\" at #2 and no moment fired; the only moment is on 'compensate'.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J3-4",
+            "status": "not-seen",
+            "evidence": "#10 recap quotes her actual slip \"compensate the production emissions\", not an invented sentence.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J3-5",
+            "status": "not-seen",
+            "evidence": "Partner questions at #3, #6, #8 and #9 each advance a new angle and are not repeated; praise is specific (\"Your recycling point is strong\").",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nDr Hale · lecturer\nB2Comfortable\nAsking a lecturer to repeat a point\nYour mission\nAsk for repetition and check a deadline, so you understand the lecture and the task.\nUnderstand and repair\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom the level check\n“oversimplify the topic”\nFrom this rehearsal\n“compensate the production emissions” → “compensate for the production emissions”\n'compensate' takes 'for' before the thing being balanced.\nYour level:\nB2 · Comfortable\nNext topic:\nAsking a lecturer to repeat a point\nAsk for repetition and check a deadline, so you understand the lecture and the task.\n[button: Start talking]\nOr choose a situation [list: Is electric transport really greener? [plan-23f793ee] | Asking a lecturer to repeat a point [plan-3cd0ce11] | Getting my laptop battery checked [plan-6724be86] | Arguing about a series ending [plan-cf298219] | Planning a group gaming night [plan-647c24a5] | My app update went wrong [plan-29c398ea] | Mock interview: plans and tech in class [plan-0fe85aca] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "A lecturer situation is useful for exam-style practice, so I'll start talking.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 11555
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Hale · lecturer\nAsking Dr Hale about the essay deadline\nDr Hale says\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nYour turn\nAnswer on your phone: speak or type.\nGoalAsk Dr Hale to repeat the deadline and check whether the word count includes references.\n[button: Help me answer] [button: Choose a phrase]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nAsking Dr Hale about the essay deadline\nAsk Dr Hale to repeat the deadline and check whether the word count includes references.\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Hale · lecturer\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks for waiting until the room was empty. What would you like to ask about today's seminar?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to phrase this politely, so I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Hale · lecturer\nAsking Dr Hale about the essay deadline\nDr Hale says\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nSaid more simply\nThanks for waiting. What do you want to ask about the seminar?\nGoalAsk Dr Hale to repeat the deadline and check whether the word count includes references.\n[button: More help] [button: Choose a phrase]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nAsking Dr Hale about the essay deadline\nAsk Dr Hale to repeat the deadline and check whether the word count includes references.\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nSaid more simply\nThanks for waiting. What do you want to ask about the seminar?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Hale · lecturer\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks for waiting until the room was empty. What would you like to ask about today's seminar?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to phrase the question politely, so I'll look at the phrase options.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Hale · lecturer\nA little support · recognition practice\nWhich phrase checks your understanding of a deadline?\n01\nFriday is fine, I think.\n02\nSo the essay is due on Friday, not Monday?\nA little support\nTry: Sorry, could you repeat the deadline? I want to check I heard correctly.\n[button: Option 1] [button: Option 2]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nAsking Dr Hale about the essay deadline\nAsk Dr Hale to repeat the deadline and check whether the word count includes references.\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nA little support\nTry: Sorry, could you repeat the deadline? I want to check I heard correctly.\nWhich phrase checks your understanding of a deadline?\n[button: Friday is fine, I think.] [button: So the essay is due on Friday, not Monday?]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Hale · lecturer\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks for waiting until the room was empty. What would you like to ask about today's seminar?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Option 2 is clearly the one that checks understanding of the deadline.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Hale · lecturer\nAsking Dr Hale about the essay deadline\nDr Hale says\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nA little support\nNow use the idea in your own reply on the phone.\nGoalAsk Dr Hale to repeat the deadline and check whether the word count includes references.\n[button: More help] [button: Choose a phrase]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nAsking Dr Hale about the essay deadline\nAsk Dr Hale to repeat the deadline and check whether the word count includes references.\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Hale · lecturer\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks for waiting until the room was empty. What would you like to ask about today's seminar?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Now I can try it in my own words, using the idea from the help.",
+          "action": "answer",
+          "args": {
+            "text": "Thank you, Dr Hale. Could you please repeat the deadline for the essay? I didn't catch it exactly. And also, I wanted to check whether the word count includes the references, or only the main text."
+          },
+          "result": "ok",
+          "ms": 9812
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Hale · lecturer\nAsking Dr Hale about the essay deadline\nDr Hale says\nOf course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nAsking Dr Hale about the essay deadline\nAsk Dr Hale to repeat the deadline and check whether the word count includes references.\nOf course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Hale · lecturer\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nYou · spoken\nThank you, Dr Hale. Could you please repeat the deadline for the essay? I didn't catch it exactly. And also, I wanted to check whether the word count includes the references, or only the main text.\nDr Hale · lecturer\nOf course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Of course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to politely ask about an extension, so I'll look for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Hale · lecturer\nAsking Dr Hale about the essay deadline\nDr Hale says\nOf course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?\nWhat it means\nword count: the number of words the essay must have\n[button: More help] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nAsking Dr Hale about the essay deadline\nAsk Dr Hale to repeat the deadline and check whether the word count includes references.\nOf course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?\nWhat it means\nword count: the number of words the essay must have\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Hale · lecturer\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nYou · spoken\nThank you, Dr Hale. Could you please repeat the deadline for the essay? I didn't catch it exactly. And also, I wanted to check whether the word count includes the references, or only the main text.\nDr Hale · lecturer\nOf course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Of course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, I got my answer, so I'll thank her and check one more thing in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "That's clear, thank you. One more thing: if I have a problem with my sources, could I send you an email before Friday? I'd rather ask early than hand in something incorrect. Was my question correct, by the way?"
+          },
+          "result": "ok",
+          "ms": 9703
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Hale · lecturer\nAsking Dr Hale about the essay deadline\nDr Hale says\nYes, \"could I send you an email before Friday?\" is correct and polite, so please do. Would your essay also cover how cities pay back the carbon from building new roads?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nAsking Dr Hale about the essay deadline\nAsk Dr Hale to repeat the deadline and check whether the word count includes references.\nYes, \"could I send you an email before Friday?\" is correct and polite, so please do. Would your essay also cover how cities pay back the carbon from building new roads?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Hale · lecturer\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nYou · spoken\nThank you, Dr Hale. Could you please repeat the deadline for the essay? I didn't catch it exactly. And also, I wanted to check whether the word count includes the references, or only the main text.\nDr Hale · lecturer\nOf course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?\nYou · spoken\nThat's clear, thank you. One more thing: if I have a problem with my sources, could I send you an email before Friday? I'd rather ask early than hand in something incorrect. Was my question correct, by the way?\nDr Hale · lecturer\nYes, \"could I send you an email before Friday?\" is correct and polite, so please do. Would your essay also cover how cities pay back the carbon from building new roads?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, \"could I send you an email before Friday?\" is correct and polite, so please do. Would your essay also cover how cities pay back the carbon from building new roads?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure what \"pay back the carbon\" means here, so I'll look for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Hale · lecturer\nAsking Dr Hale about the essay deadline\nDr Hale says\nYes, \"could I send you an email before Friday?\" is correct and polite, so please do. Would your essay also cover how cities pay back the carbon from building new roads?\nSaid more simply\nYes, that is correct and polite. Would your essay also cover the carbon from new roads?\n[button: Choose a phrase] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nAsking Dr Hale about the essay deadline\nAsk Dr Hale to repeat the deadline and check whether the word count includes references.\nYes, \"could I send you an email before Friday?\" is correct and polite, so please do. Would your essay also cover how cities pay back the carbon from building new roads?\nSaid more simply\nYes, that is correct and polite. Would your essay also cover the carbon from new roads?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Hale · lecturer\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nYou · spoken\nThank you, Dr Hale. Could you please repeat the deadline for the essay? I didn't catch it exactly. And also, I wanted to check whether the word count includes the references, or only the main text.\nDr Hale · lecturer\nOf course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?\nYou · spoken\nThat's clear, thank you. One more thing: if I have a problem with my sources, could I send you an email before Friday? I'd rather ask early than hand in something incorrect. Was my question correct, by the way?\nDr Hale · lecturer\nYes, \"could I send you an email before Friday?\" is correct and polite, so please do. Would your essay also cover how cities pay back the carbon from building new roads?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, \"could I send you an email before Friday?\" is correct and polite, so please do. Would your essay also cover how cities pay back the carbon from building new roads?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "coach",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to explain the carbon payback from roads in English, so I'll ask for help.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 10050
+        },
+        {
+          "n": 10,
+          "screen": "linga-coach",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nOne useful change\nYou said could I send you an email before Friday?\nOne way to try it\nWould it be all right to email you before Friday if I have a problem with my sources?\nYes, correct: \"could I send you an email before Friday?\" is clear and polite. Option: \"Would it be all right to email you before Friday?\" is a wording choice, not an error.\nCoach\nReplay the moment with a new question, or finish for today.\n[button: Replay the moment] [button: Finish for today]\nOne useful change TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nAsking Dr Hale about the essay deadline\nAsk Dr Hale to repeat the deadline and check whether the word count includes references.\nYes, correct: \"could I send you an email before Friday?\" is clear and polite. Option: \"Would it be all right to email you before Friday?\" is a wording choice, not an error.\nOne way to try it: “Would it be all right to email you before Friday if I have a problem with my sources?”\n[button: Replay with a new question]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Hale · lecturer\nThanks for waiting until the room was empty. What would you like to ask about today's seminar?\nYou · spoken\nThank you, Dr Hale. Could you please repeat the deadline for the essay? I didn't catch it exactly. And also, I wanted to check whether the word count includes the references, or only the main text.\nDr Hale · lecturer\nOf course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?\nYou · spoken\nThat's clear, thank you. One more thing: if I have a problem with my sources, could I send you an email before Friday? I'd rather ask early than hand in something incorrect. Was my question correct, by the way?\nDr Hale · lecturer\nYes, \"could I send you an email before Friday?\" is correct and polite, so please do. Would your essay also cover how cities pay back the carbon from building new roads?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, correct: \"could I send you an email before Friday?\" is clear and polite. Option: \"Would it be all right to email you before Friday?\" is a wording choice, not an error.\"",
+          "offered": [
+            "replay",
+            "finish",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I got useful feedback and managed the conversation, so I'll finish for today.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 11,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said could I send you an email before Friday?\nOne way to try it\nWould it be all right to email you before Friday if I have a problem with my sources?\nYes, correct: \"could I send you an email before Friday?\" is clear and polite. Option: \"Would it be all right to email you before Friday?\" is a wording choice, not an error.\nYour mission\nChoose a fresh context for your next conversation.\n2 spoken · 0 written replies\n[button: Another situation] [button: Learning map]\nYour rehearsal TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom an earlier scene: Is electric transport really greener?\n“compensate for the production emissions”, from Is electric transport really greener?\nYour level:\nB2 · Comfortable\nNext topic:\nGetting my laptop battery checked\nFind out the repair options and confirm the total cost before you agree.\n[button: Start talking]\nOr choose a situation [list: Is electric transport really greener? [plan-23f793ee] | Asking a lecturer to repeat a point [plan-3cd0ce11] | Getting my laptop battery checked [plan-6724be86] | Arguing about a series ending [plan-cf298219] | Planning a group gaming night [plan-647c24a5] | My app update went wrong [plan-29c398ea] | Mock interview: plans and tech in class [plan-0fe85aca] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I got a clear answer to my question and managed the rehearsal, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Asking Dr Hale about the essay deadline",
+          "goal": "Ask Dr Hale to repeat the deadline and check whether the word count includes references.",
+          "partner": "Dr Hale · lecturer",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Thanks for waiting until the room was empty. What would you like to ask about today's seminar?"
+            },
+            {
+              "role": "learner",
+              "text": "Thank you, Dr Hale. Could you please repeat the deadline for the essay? I didn't catch it exactly. And also, I wanted to check whether the word count includes the references, or only the main text.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Of course. The essay is due next Friday at 5 pm, and references are not included in the word count. Is there anything else you'd like to check?"
+            },
+            {
+              "role": "learner",
+              "text": "That's clear, thank you. One more thing: if I have a problem with my sources, could I send you an email before Friday? I'd rather ask early than hand in something incorrect. Was my question correct, by the way?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, \"could I send you an email before Friday?\" is correct and polite, so please do. Would your essay also cover how cities pay back the carbon from building new roads?"
+            }
+          ],
+          "moments": [],
+          "coaching": {
+            "before": "could I send you an email before Friday?",
+            "after": "Would it be all right to email you before Friday if I have a problem with my sources?",
+            "note": "Yes, correct: \"could I send you an email before Friday?\" is clear and polite. Option: \"Would it be all right to email you before Friday?\" is a wording choice, not an error."
+          },
+          "evidence": [
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "So the essay is due on Friday, not Monday?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Could you please repeat the deadline for the essay? I didn't catch it exactly."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 85318,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-adela-17-J4-4",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "The same cue serves different speaking needs",
+          "expected": "Help with the particular next reply, including comparing effects and explaining causes.",
+          "got": "All five cue displays repeat the clarification starter, even when she needs help forming an argument.",
+          "evidence": [
+            "#8: \"I need help expressing the difference clearly\"; #9 displays \"Try: When you say..., do you mean..., or something else?\" and records \"the same clarification starter feels repetitive\". The same cue appears at #3, #7, #12 and #20."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt/LT-adela-17-J4-6",
+          "run": "2026-09-15-lt",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Replay status persists throughout the remaining conversation",
+          "expected": "Make it clear when the retry has ended and ordinary discussion has resumed.",
+          "got": "The retry instruction stays visible across subsequent topics and all remaining conversation screens.",
+          "evidence": [
+            "#6 introduces \"Try it again: a new question practising the coaching point.\" The identical instruction remains at #22, after 13 replies and a question about listeners missing the explanation."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt/LT-adela-17-J4-5",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Replay does not demonstrate improvement on the coached point",
+          "expected": "A fresh question should let her independently practise the coaching point and show improvement.",
+          "got": "The coach models a more tentative clarification request, but replay asks for a summary. She requests another cue and gives a supported summary. Later independent discussion succeeds, but improvement on the coached request is unproven.",
+          "evidence": [
+            "#5 models \"Could you clarify the difference between those two meanings first?\"; #6 asks \"what do you understand my main claim to be?\"; #7 answers \"If I understand you correctly\" after another cue, with \"supported\": true in facts."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt/LT-adela-17-J4-7",
+          "run": "2026-09-15-lt",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "Recap gives no useful account of independent achievement",
+          "expected": "Finish with evidence of what she managed herself and what still needs practice.",
+          "got": "The recap reports only reply and moment totals despite stored support distinctions and successful speaking evidence. Zero moments is appropriate for this error-free sample, but the recap does not explain her achievement.",
+          "evidence": [
+            "#23: \"13 replies; 0 moments to keep.\" Her reaction is \"zero moments to keep feels a bit disappointing after all that effort.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-adela-17-J4-1",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Help sidesteps the specific problem she cannot express",
+          "expected": "Help supplies language for the current obstacle, then lets her answer that question herself.",
+          "got": "The first cue helps, but the same cue is reused for an accidental-answer scenario. Coaching addresses an earlier negotiation phrase, and replay changes the problem to class time. Conversation resumes without demonstrating that she can handle the exception that blocked her.",
+          "evidence": [
+            "#8: \"I need help explaining what should happen if the answer appears accidentally.\" #9 repeats \"One advantage would be..., but a possible downside is...\" and she says, \"That cue doesn't really help with this exception.\" #10 coaches \"Would you agree with that rule?\"; #11 switches to \"too much class time.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-adela-17-J4-5",
+          "run": "2026-09-15-lt-recert",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Replay instruction persists after the retry is complete",
+          "expected": "The retry instruction disappears once its question has been answered.",
+          "got": "The screen continues presenting ordinary follow-ups and the closing agreement as a new retry question.",
+          "evidence": [
+            "#7 introduces \"Try it again: a new question practising the coaching point.\" The same instruction remains at #12 and #13, including after \"Let's agree on that rule for our proposal.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J4-1",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Direct 'was it correct?' answered with vague praise",
+          "expected": "Concrete verdict on her sentences.",
+          "got": "'Your sentences sound natural to me, and I like how you soften your view.'",
+          "evidence": [
+            "#5 after her question in #4; her pet peeve, generic praise.",
+            "partner prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J4-2",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Placed C1 for B2 learner",
+          "expected": "B2",
+          "got": "C1 Fluent",
+          "evidence": [
+            "#1 'C1Fluent', #8 'C1 · Fluent'",
+            "placement"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J4-4",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "No moment, coaching or replay",
+          "expected": "Coaching quoting her words and replay.",
+          "got": "moments [] coaching null.",
+          "evidence": [
+            "facts.conversation; #8",
+            "coaching"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J4-3",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Help only simplifies partner line; no answer frame",
+          "expected": "B2 opinion phrases to unblock reply.",
+          "got": "'Said more simply' restatement and 'hidden cost' gloss.",
+          "evidence": [
+            "#3, #4",
+            "cue prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-adela-17-J4-5",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Recap teaches a stale phrase from another topic",
+          "expected": "Recap tied to her words.",
+          "got": "'Used again: some people are interested in the new cameras' injected into this talk.",
+          "evidence": [
+            "#6, #8",
+            "recap"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 and #11 show \"B2 · Comfortable\", exact for trueBand B2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "No placement tasks were shown. The only note (#10) names a concrete point: \"Yes, correct: 'could I send you an email before Friday?' is clear and polite.\""
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "The #10 coaching note is correct, and it rightly calls the alternative \"a wording choice, not an error\". No wrong correction appears."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "Partner questions are \"What would you like to ask about today's seminar?\" and \"Is there anything else you'd like to check?\". Neither asks for an opinion, comparison or speculation. The last one (#8) is an oddly worded, off-scene carbon question."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "This journey did not propose six topics, so topic fit cannot be shown."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "She asked \"Was my question correct, by the way?\" in #7. #8 answered: \"Yes, 'could I send you an email before Friday?' is correct and polite\"."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 and #3 use the cue (\"Said more simply\"), #4 offers the phrase choice, and #6 and #8 offer further cues. All of it happens inside the scene."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "After the #4 phrase choice she answered at #5 with \"Could you please repeat the deadline\". The #10 coaching quotes her exactly: \"You said could I send you an email before Friday?\". The second help (#7, a gloss of \"word count\") did not address what she was unsure of."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#10 offered \"Replay the moment\" and she chose \"Finish for today\". There was no fresh question and no better answer."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Both learner turns carry supported:true and the repair evidence is flagged supported:true. The recap's \"2 spoken · 0 written replies\" does not separate supported from independent replies."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 2,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive-data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Replay never taken, so improvement is unproven",
+            "expected": "Replay gives a fresh question and she answers it better than before.",
+            "got": "She finished at the coach screen without replaying.",
+            "evidence": "#10 offered \"Replay the moment\" or \"Finish for today\"; she chose finish, and the recap #11 shows no replay.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After coaching, replay is prompted. A fresh question practising the coached point is answered and compared with the earlier reply.",
+            "code_hint": "coach screen / replay prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Help does not match what she is stuck on",
+            "expected": "Cue gives an answer frame for the actual need (asking about an extension).",
+            "got": "Cue returned only a simplified restatement or a gloss of \"word count\".",
+            "evidence": "#6 \"not sure how to politely ask about an extension\"; #7 shows \"word count: the number of words the essay must have\". #9 shows \"Said more simply\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The cue offers a B2 phrase frame for the learner's reply, not a paraphrase of the partner line.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner English and topic drift",
+            "expected": "Natural lecturer English that stays on the scene.",
+            "got": "\"how cities pay back the carbon from building new roads\" is unnatural and unrelated to the essay-deadline scene. It looks like leakage from an earlier topic.",
+            "evidence": "#8 partner line; #9 simplifies it to \"the carbon from new roads\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Partner follow-ups stay on the scene goal and use idiomatic phrasing.",
+            "code_hint": "partner prompt / carry-over memory"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Direct question answered concretely",
+            "expected": "A concrete verdict on her sentence.",
+            "got": "The partner and coach both answered precisely, with the sentence quoted and a note that the alternative is not an error.",
+            "evidence": "#8 \"Yes, 'could I send you an email before Friday?' is correct and polite\"; #10 \"a wording choice, not an error\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep concrete answers with an exact quote and no generic praise.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Coaching quotes the learner exactly and placement is B2",
+            "expected": "The coach quotes what she said.",
+            "got": "Exact quote and the right level.",
+            "evidence": "#10 \"You said could I send you an email before Friday?\"; #1 \"B2 Comfortable\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact quoting.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Recap does not separate supported from independent speaking",
+            "expected": "The recap shows what she managed alone and what needed support.",
+            "got": "The recap shows only \"2 spoken · 0 written replies\", though both replies were supported.",
+            "evidence": "#11 recap line; facts turns both supported:true.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The recap states how many replies were supported and how many were independent.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner questions are not B2 exam-style",
+            "expected": "Opinion, comparison or speculation questions.",
+            "got": "Generic prompts such as \"Is there anything else you'd like to check?\".",
+            "evidence": "#6 partner line.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "At least some partner turns ask for opinion or speculation.",
+            "code_hint": "partner prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "The help was there, and the answer about my email sentence was exact: correct and polite, no \"great job\". Good. But I skipped replay, so I never proved I could do it better. The cue only simplified Dr Hale's words or glossed \"word count\". It did not give me a phrase for what I was stuck on, the extension. Then Dr Hale asked about \"cities pay back the carbon from building new roads\". That's odd English, and it has nothing to do with an essay deadline. An examiner would wince. The recap doesn't say which answers I needed help for. Would I use it again? Maybe, if the cues give me real frames and the partner pushes opinions. Right now it saves me little time, since I'd still check things myself.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J4-4",
+            "status": "not-seen",
+            "evidence": "#3, #7 and #9 gave different cue types (\"Said more simply\", a gloss), not one repeated starter.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J4-6",
+            "status": "not-evaluable",
+            "evidence": "Replay was never taken (#10), so persistence of the retry banner was not reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J4-5",
+            "status": "not-evaluable",
+            "evidence": "No replay in #10; improvement on a fresh question could not be judged.",
+            "finding": 0
+          },
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J4-7",
+            "status": "recurs",
+            "evidence": "#11 recap: \"2 spoken · 0 written replies\", with no account of what was supported.",
+            "finding": 5
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#6 she needs an extension phrase; #7 gives only \"word count: the number of words...\".",
+            "finding": 1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-adela-17-J4-5",
+            "status": "not-evaluable",
+            "evidence": "The replay screen was never reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J4-1",
+            "status": "not-seen",
+            "evidence": "#8 \"Yes, 'could I send you an email before Friday?' is correct and polite\" is concrete.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J4-2",
+            "status": "not-seen",
+            "evidence": "#1 and #11 show \"B2 · Comfortable\".",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J4-4",
+            "status": "not-seen",
+            "evidence": "#10 coaching quotes her words. Moments are empty because there were no clear errors. Replay was offered but not taken.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J4-3",
+            "status": "recurs",
+            "evidence": "#3 \"Said more simply\" and #9 \"Said more simply\" only restate the partner line.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J4-5",
+            "status": "recurs",
+            "evidence": "#8 \"cities pay back the carbon from building new roads\" is stale material from another topic. #11 also carries \"compensate for the production emissions\" from an earlier scene.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #10 offered \"Replay the moment\" and she chose \"Finish for today\". There was no fresh question and no better answer.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: Partner questions are \"What would you like to ask about today's seminar?\" and \"Is there anything else you'd like to check?\". Neither asks for an opinion, comparison or speculation. The last one (#8) is an oddly worded, off-scene carbon question."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 27,
+      "fail": 0,
+      "ms": 220549
+    },
+    "character": {
+      "n": 36,
+      "fail": 0,
+      "ms": 158826
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 151262
+    }
+  }
+}
