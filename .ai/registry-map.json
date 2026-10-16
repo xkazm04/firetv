@@ -2031,7 +2031,11 @@
           "revision": 17,
           "changedAt": "2026-09-30",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/library/lessons.ts:111 Window selection returns the cosine winner regardless of relevance, so an unrelated query can still receive a confident-looking seek target.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:a49d27f889212d3f",
+          "evaluatedRevision": 19
         },
         {
           "subject": "supply-chain",
@@ -2966,7 +2970,11 @@
           "revision": 17,
           "changedAt": "2026-09-30",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "vision/vtt.py:80 Transcript chunks end at elapsed-time boundaries rather than semantic seams, so a retrieved window can split an explanation.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:a49d27f889212d3f",
+          "evaluatedRevision": 19
         },
         {
           "subject": "prompt-assembly",

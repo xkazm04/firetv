@@ -1600,6 +1600,118 @@
           "evidence": "companion/index.html:338 The later thumbnail is a data URL supplied by the session; the initial document has no competing fetched images, fonts, or scripts requiring priority hints."
         }
       ]
+    },
+    "lab/vision-lab/retrieval": {
+      "context": "vision-lab",
+      "subject": "retrieval",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T01:35:12.003Z",
+      "worker": "c3eac28c-36f4-4649-b438-bcbc73b41bbc",
+      "techniques": [
+        {
+          "technique": "chunking-and-indexing",
+          "verdict": "deviation",
+          "evidence": "vision/vtt.py:80 Chunk boundaries depend on elapsed seconds, without sentence or topic boundary detection."
+        },
+        {
+          "technique": "embedding-lifecycle",
+          "verdict": "not-applicable",
+          "evidence": "vision/poc_retrieval.py:86 The Python retrieval index derives token counts, not stored embeddings; the bench deliberately does not exercise embeddings."
+        },
+        {
+          "technique": "named-period-vote",
+          "verdict": "not-applicable",
+          "evidence": "vision/poc_retrieval.py:130 Indexed records contain video identity, playback offset and text, without trustworthy event dates for a period vote."
+        },
+        {
+          "technique": "padded-slots-are-misses",
+          "verdict": "not-applicable",
+          "evidence": "vision/poc_retrieval.py:117 Results slice a list of actual scored document positions; no fixed-width nearest-neighbour response or sentinel is involved."
+        },
+        {
+          "technique": "query-decomposition-before-the-lanes",
+          "verdict": "not-applicable",
+          "evidence": "vision/poc_retrieval.py:101 The search has one window-level lexical index; concept expansion does not address separate thematic or relational indexes."
+        },
+        {
+          "technique": "relationship-proximity-lane",
+          "verdict": "not-applicable",
+          "evidence": "vision/poc_retrieval.py:129 Recall indexes transcript windows; video membership supplies source grouping, without typed relations requiring result-seeded expansion."
+        },
+        {
+          "technique": "relevance-floors",
+          "verdict": "deviation",
+          "evidence": "vision/poc_retrieval.py:204 The syllabus-pick arm accepts its best window without NO_HIT testing and manufactures a zero-offset target when no window qualified."
+        },
+        {
+          "technique": "retrieval-evaluation",
+          "verdict": "deviation",
+          "evidence": "tools/lab-bench.cjs:20 Labeled lesson judgments exist, but the bench excludes transcript indexing and embedding-based window selection, leaving that retrieval stage unmeasured."
+        },
+        {
+          "technique": "second-pass-rescoring",
+          "verdict": "not-applicable",
+          "evidence": "vision/poc_retrieval.py:116 This sorts first-pass lexical scores; no model rescores an already-fused candidate pool."
+        },
+        {
+          "technique": "structural-centrality-lane",
+          "verdict": "not-applicable",
+          "evidence": "vision/poc_retrieval.py:147 The eight-title teaching fixture fits a complete readable menu, satisfying the technique's small-corpus exclusion."
+        }
+      ]
+    },
+    "desk-platform/library/retrieval": {
+      "context": "library",
+      "subject": "retrieval",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T01:35:12.003Z",
+      "worker": "c3eac28c-36f4-4649-b438-bcbc73b41bbc",
+      "techniques": [
+        {
+          "technique": "chunking-and-indexing",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/library/vtt.ts:42 Chunk boundaries follow elapsed time without detecting sentence or topic seams."
+        },
+        {
+          "technique": "embedding-lifecycle",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/library/lessons.ts:61 The cache stamps its format version and configured model name, but lacks an embedding-model revision and declared dimension checked against the active query embedder."
+        },
+        {
+          "technique": "named-period-vote",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/library/vtt.ts:17 The indexed timestamp is a playback offset parsed from captions, not an event date usable for historical-period voting."
+        },
+        {
+          "technique": "padded-slots-are-misses",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/library/lessons.ts:109 Selection computes an argmax over stored vectors directly; no nearest-neighbour engine returns padded identifiers."
+        },
+        {
+          "technique": "relationship-proximity-lane",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/library/syllabus.ts:292 Prerequisites serve an eligibility filter for curriculum progression, rather than result-seeded retrieval expansion."
+        },
+        {
+          "technique": "relevance-floors",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/library/lessons.ts:111 The nearest window is returned without a minimum cosine score; weak matches cannot produce an honest empty."
+        },
+        {
+          "technique": "second-pass-rescoring",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/desk/pick.ts:44 The model selects a lesson before window search; it does not rerank an already-fused candidate pool."
+        },
+        {
+          "technique": "structural-centrality-lane",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/library/syllabus.ts:38 The curriculum graph has seventeen topics, within the technique's explicit small-corpus exclusion."
+        }
+      ]
     }
   }
 }
