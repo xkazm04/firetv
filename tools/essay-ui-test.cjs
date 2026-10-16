@@ -248,13 +248,36 @@ async function adultPass(){
    await phone.locator('[data-role="essay-paragraph"]').waitFor();
    await phone.locator('.types label',{hasText:/^Evidence$/}).click();
    await phone.getByLabel('The paragraph the desk will read',{exact:true}).fill(PARAGRAPH);
+   const analyse=phone.getByRole('button',{name:'Analyse on the TV',exact:true});
+   // UD-7: the first paragraph read asks the one-time notice (428) before any run, as keeping a piece does (E3 of the Adult pass)
+   const call=(method,url,body)=>phone.evaluate(async([method,url,body])=>{const r=await fetch(url,{method,headers:{'content-type':'application/json'},body:body?JSON.stringify(body):undefined});let j=null;try{j=await r.json();}catch{}return{status:r.status,j};},[method,url,body]);
+   const shelf=await call('GET','/api/texts');assert.equal(shelf.status,200);
+   const noticeDue=shelf.j.noticed===false;
+   let noticeSeen=null,noticeVia=null;
    const t0=Date.now();
-   await phone.getByRole('button',{name:'Analyse on the TV',exact:true}).click();
+   await analyse.click();
+   if(noticeDue){
+    // the dialog (data-role="essay-notice") when the phone shows it; the paragraph path of the desk answers 428 into the alert line instead
+    const seen=await Promise.race([
+     phone.locator('[data-role="essay-notice"]').waitFor({timeout:20000}).then(()=>'dialog'),
+     phone.locator('[data-role="essay-note"]').waitFor({timeout:20000}).then(()=>'alert')]);
+    noticeVia=seen;
+    noticeSeen=await phone.locator(seen==='dialog'?'[data-role="essay-notice"]':'[data-role="essay-note"]').innerText();
+    // nothing was analysed before the notice was accepted
+    const before=await current();
+    assert.notEqual(before.screen,'forensic','the TV opened the forensic page before the notice was accepted');
+    assert.ok(!before.essay?.sentences?.length,'a paragraph was analysed before the notice was accepted');
+    assert.equal((await call('GET','/api/texts')).j.noticed,false,'the notice was recorded as accepted before anyone accepted it');
+    if(seen==='dialog')await phone.getByRole('button',{name:'I understand, keep it',exact:true}).click();
+    else assert.equal((await call('POST','/api/texts',{notice:true})).j.noticed,true,'accepting the notice');
+    if(seen==='alert')await analyse.click();
+    else await sleep(500);
+   }
    await until(s=>s.screen==='forensic'&&s.essay?.sentences?.length>0,'the forensic page with sentences');
    const ms=Date.now()-t0;const s=await current();reading=s.essay;
-   note('W3',{analyseMs:ms,provider:reading.provider,lens:reading.type,sentences:reading.sentences.length});
+   note('W3',{analyseMs:ms,provider:reading.provider,lens:reading.type,sentences:reading.sentences.length,noticeDue,noticeVia});
    assert.equal(reading.type,'evidence');
-   return{analyseMs:ms,provider:reading.provider,lens:reading.type,sentences:reading.sentences.length};
+   return{analyseMs:ms,provider:reading.provider,lens:reading.type,sentences:reading.sentences.length,noticeDue,noticeVia,notice:noticeSeen};
   });
 
   await run('W4',async()=>{
