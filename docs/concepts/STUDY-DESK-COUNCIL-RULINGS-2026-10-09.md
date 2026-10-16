@@ -2205,3 +2205,10 @@ Supersessions that are resolved, not open: MK2 by MK5, MK3 by MK8, the lite r2 a
    - Ruling X1a: the squared total on its own stays legitimate; only the squared total under a root is a leak.
    - `docs/BACKLOG.md` MB-B16: "for a Pythagoras spec the leak profile also refuses the squared answer (1156)", and its tests pin lines such as "c squared is 1156." as leaks. The test pin `tools/school-rules-test.cjs:1628` keeps 'The sum of the squares is 100.' legitimate.
    - Ruling: on a Pythagoras item, take the value the root is taken of: x^2+y^2 for the longest side, x^2-y^2 for a shorter side. Stated on its own, that value stays legitimate: 'c squared is 1156.', 'The sum of the squares is 100.' and '36 + 64 = 100' pass. A line leaks when it puts the value under a root ('the square root of 1156', '√1156', 'odmocnina z 1156'). It also leaks when it states the value with a root instruction in the same line ('c² = 16² + 30² = 1156, teď odmocni.'). 'Then take the square root of the total.' stays legitimate. MB-B16's text that refuses the squared total itself is superseded. Delivered: part 2, run a1f30e71, merged at 1c38f546 (X1a 9def48b2, MB-B16 66602171, with the BACKLOG note at 1c38f546).
+
+## Mark snapped sheets (ask e78baa5a, 2026-10-16)
+
+- Question: should a snapped maths page whose items read as specs be markable from a photo of the working, by the same code judge as a desk set, with items that do not read being not sure?
+- Ruling: Mark snapped sheets. Answered by Athena under the operator delegation.
+- Terms: the code judge decides; an item that does not read is not sure and never wrong; the desk never states an answer. Build and test on stubbed vision first.
+- Status: built as MB-B35 (200dab86). Validation on real photos stays open (MB-B17) and is not claimed.
