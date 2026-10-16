@@ -58,7 +58,10 @@
       "suggested_acceptance": "For a cz (and de) learner, read · as ×, : between two fractions as ÷, a decimal comma in a task, a Czech instruction lead (Vypočítej/Sečti/Zkrať...) and Czech number words in leaksSchool; a repro of e1/e2 then shows a spec and leak=true",
       "ceiling": "Only the instruction verbs in taskText INSTRUCTION are stripped; 'Sečti', 'Odečti', 'Vynásob', 'Zkrať', 'Urči', 'Převeď', 'Rozděl' and 'Kolik je ...' still read as nothing (new row L1-nela-12-MB1-8).",
       "repro": "scratch leak.cjs",
-      "rank": 27
+      "rank": 27,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/taskText.ts:15-48 strips cz verbs (Sečti, Zkrať, Převeď, Rozděl...), reads · and : and the decimal comma; the ceiling verbs are now covered",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB1-2",
@@ -94,7 +97,10 @@
       },
       "suggested_acceptance": "On a new evening (or once a page is older than today), the homework door issues page.ask; older sheets remain reachable from the page's Left/Right or the continue card",
       "ceiling": "A sheet snapped just before midnight is yesterday's after midnight; older sheets stay reachable with Left/Right on the page screen.",
-      "rank": 9
+      "rank": 9,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/tv/mathsRows.ts:21 tonightsSheet keeps only a page with day == today; tv/keys.ts:339-341 else issues page.ask",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB1-3",
@@ -130,7 +136,10 @@
       "suggested_acceptance": "Each withheld line is ≤25 words (one method step and \"The answer is yours\")",
       "ceiling": "hint.ts:176 shows a model line that is only too long after the re-ask (a value rule, not a safety rule), so C4 is not guaranteed for live hints: L2 measures it.",
       "l2_priority": "Environment precondition: the text engine (claude CLI; CLAUDE_FAST_MODEL for hints) reachable, and a profile of the Character's own system (cz for Nela/Radka, uk for Owen) in an isolated DESK_DATA_DIR.",
-      "rank": 3
+      "rank": 3,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "tools/school-rules-test.cjs:491 pins every SCHOOL_WITHHELD line at 25 words or fewer (school.ts:4463), suite passes",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB1-4",
@@ -167,7 +176,10 @@
       "suggested_acceptance": "MB-READ ≥4/5: system and notation, topic, age in the prompt; a string label for lettered items",
       "ceiling": "What the vision model returns for a Czech sheet, a lettered part or a two-column page is unmeasured until a vision host runs.",
       "l2_priority": "Environment precondition: vision on local Ollama with the qwen 27B model pulled (uat/env.md, Math Buddy L2). Without that host this resolves uncertain, 'needs Ollama qwen host' - never pass, never refuted.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/desk/read.ts:27-45 mathsContext carries notation, course, age/stage, lettered label; app/api/read/route.ts:37 passes who",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB1-5",
@@ -203,7 +215,10 @@
       },
       "suggested_acceptance": "MB-HINT ≥6/8 for a read school task",
       "ceiling": "H5 (school path) and H7 (the learner's working) stay absent: a hint is asked before they have answered. On a task no reader reads it is 4/8.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/desk/hint.ts:122-135 groundFor adds notation, recorded slips and the unit method; app/api/hint/route.ts:39 calls it",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB2-1",
@@ -239,7 +254,10 @@
       },
       "suggested_acceptance": "An unsure school item carries check().why (or a short form of it) as its line; ASK is used only where the desk did compute a different value",
       "ceiling": "A linear item that is unsure still says 'How did you get there?' (no engine reason).",
-      "rank": 12
+      "rank": 12,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/kinds.ts:151-158 unsureLine gives the checker reason or BLANK; rules/maths.ts:110 NOT_SURE(n, why)",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB2-2",
@@ -276,7 +294,10 @@
       "suggested_acceptance": "The recogniser language follows the profile (cs-CZ for cz), and a \"type it instead\" link is always shown",
       "ceiling": "How well the browser's Czech recogniser hears a 12-year-old is L2; the typed box's placeholder is English ('What did you do first?').",
       "l2_priority": "Environment precondition: the text engine (claude CLI; CLAUDE_FAST_MODEL for hints) reachable, and a profile of the Character's own system (cz for Nela/Radka, uk for Owen) in an isolated DESK_DATA_DIR.",
-      "rank": 12
+      "rank": 12,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/app/phone/recogniserLang.ts:7 cs-CZ for cz; ExplainTalk.tsx:38 Type it button",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB2-3",
@@ -311,7 +332,10 @@
       },
       "suggested_acceptance": "MB-EXPLAIN ≥6/8: studentAnswer, studentWorking and the slip name are added (the reply is still checked by leaksSchool)",
       "ceiling": "X7 (school system) and X8 (history on the topic) are absent.",
-      "rank": 4
+      "rank": 4,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/desk/explain.ts:56-70,246 Seen carries answer, working, slip and line into the prompt",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB2-4",
@@ -336,7 +360,7 @@
       ],
       "code_check": "confirmed-absent",
       "verdict": "confirmed",
-      "resolution": "open",
+      "resolution": "fixed",
       "carried_from": "2026-10-09-maths-l1/L1-nela-12-MB2-4",
       "backlog": "MB-B4",
       "recertified": {
@@ -349,7 +373,11 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/school.ts:1433 question(spec, system) prints decimal comma and Kč/€/£ per system; lib/desk/items.ts:480,567 and worked.ts:29 pass system; school-rules MB-B4 tests pass",
+      "recertify_status": "fixed",
+      "resolution_prior": "open"
     },
     {
       "id": "L1-nela-12-MB2-5",
@@ -384,7 +412,10 @@
       },
       "suggested_acceptance": "Every SCHOOL_SLIPS.says ≤25 words (a test pins it)",
       "ceiling": "Slip lines say what the slip is in a sentence; they stay English only.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "tools/school-rules-test.cjs:487,491 pins every SCHOOL_SLIPS.says and SCHOOL_WITHHELD line at 25 words or fewer (91/91 pass)",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB2-6",
@@ -421,7 +452,9 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 6
+      "rank": 6,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "mapped row MB-B37 is not marked built in docs/BACKLOG.md"
     },
     {
       "id": "L1-nela-12-MB2-7",
@@ -459,7 +492,9 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 6
+      "rank": 6,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "mapped row MB-B42 (concept-doc) is not marked built in docs/BACKLOG.md"
     },
     {
       "id": "L1-nela-12-MB5-1",
@@ -495,7 +530,10 @@
       },
       "suggested_acceptance": "recapCaption says \"all of it right\" only when at least one item was marked and none is wrong or unsure; a hints-only evening gets its own sentence",
       "ceiling": "The caption is a count in words; it cannot say which problems were hard.",
-      "rank": 27
+      "rank": 27,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/tv/recapRows.ts:233-236 all of it right only when a set was marked; hints-only and Linga-only evenings get own sentences",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB5-2",
@@ -530,7 +568,10 @@
       },
       "suggested_acceptance": "The log is per evening (reset at the first event of a new day, or at session.end once the recap is read), with a repro of e5 showing 0 hints on evening 2",
       "ceiling": "session.end is exempt from the clearing (store.ts:620): a day-2 evening whose very first event is End session still shows yesterday's hints (new row L1-nela-12-MB5-7).",
-      "rank": 18
+      "rank": 18,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/session/store.ts:659-668 dayed() clears log and away logs on the first event of a later day, End session included (UD-13)",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB5-3",
@@ -567,7 +608,10 @@
       },
       "suggested_acceptance": "Homework evenings (sheets, problems, second hints) reach the digest and the week page as counts",
       "ceiling": "Counts only; never a problem, and not per child beyond the seated learner's digest.",
-      "rank": 12
+      "rank": 12,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/week.ts:230-233 and homeworkLine at :289 put homework sheets, hints, second hints and papers on the Sunday page",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB5-4",
@@ -605,7 +649,9 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 6
+      "rank": 6,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "mapped row MB-B21 is not marked built in docs/BACKLOG.md"
     },
     {
       "id": "L1-nela-12-MB5-5",
@@ -643,7 +689,9 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 3
+      "rank": 3,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "mapped row MB-B21 is not marked built in docs/BACKLOG.md"
     },
     {
       "id": "L1-owen-17-MB2-1",
@@ -679,7 +727,10 @@
       },
       "suggested_acceptance": "Every linear-item answer that reads as a mixed number (a b/c, -a b/c) is judged as a + b/c, or is unsure; two bare numbers separated by a space are unsure. A test pins 4x + 2 = 5 with \"1 3/4\" -> wrong and 7 - 2x = 3x + 1 with \"1 1/5\" -> right, on the typed, second-go and photo paths.",
       "ceiling": "Photo marking of a linear sheet is still the model's own value of x (see L1-owen-17-MB2-7).",
-      "rank": 18
+      "rank": 18,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/desk/verify.ts:155-177 mixedNumber reads a b/c as a+b/c and two bare numbers as null before substitute",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-owen-17-MB2-2",
@@ -714,7 +765,10 @@
       },
       "suggested_acceptance": "Same fix as owen-17-MB2-1; false rings on the linear battery = 0.",
       "ceiling": "Typed route only.",
-      "rank": 12
+      "rank": 12,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/desk/verify.ts:155-177 mixedNumber makes 1 1/5 = 6/5 so it is ticked",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-owen-17-MB2-3",
@@ -752,7 +806,9 @@
       "recurrence": 2,
       "severity_2026_10_09": "major",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 9
+      "rank": 9,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "mapped row MB-B20 is not marked built in docs/BACKLOG.md"
     },
     {
       "id": "L1-owen-17-MB2-4",
@@ -788,7 +844,10 @@
       },
       "suggested_acceptance": "Every slip line the walk shows is <= 25 words (split the \"what happened\" from the \"what to do\" if needed); line-length share >= 0.9.",
       "ceiling": "Model-written hint lines are only re-asked once for length (hint.ts:176).",
-      "rank": 9
+      "rank": 9,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "tools/school-rules-test.cjs:487,491 pins every SCHOOL_SLIPS.says and SCHOOL_WITHHELD line at 25 words or fewer (91/91 pass)",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-owen-17-MB2-5",
@@ -813,7 +872,7 @@
       ],
       "code_check": "confirmed-absent",
       "verdict": "confirmed",
-      "resolution": "open",
+      "resolution": "fixed",
       "carried_from": "2026-10-09-maths-l1/L1-owen-17-MB2-5",
       "backlog": "MB-B4",
       "recertified": {
@@ -826,7 +885,11 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/school.ts:156 cm squared/sq cm/square cm read as cm2, :1345 money units are system-aware (£ in uk), school-rules MB-B4 tests pass",
+      "recertify_status": "fixed",
+      "resolution_prior": "open"
     },
     {
       "id": "L1-owen-17-MB2-6",
@@ -861,7 +924,10 @@
       },
       "suggested_acceptance": "The unsure line names why in desk words, with no value (\"the desk could not tell from a rounded answer\", \"no answer here yet\").",
       "ceiling": "Linear unsure items keep the generic question.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/kinds.ts:151-158 unsure school items carry their own reason or BLANK; ASK (maths.ts:107) is for a wrong linear item only",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-owen-17-MB2-7",
@@ -899,7 +965,10 @@
       "recurrence": 1,
       "severity_2026_10_09": "major",
       "l2_priority": "Environment precondition: vision on local Ollama with the qwen 27B model pulled (uat/env.md, Math Buddy L2). Without that host this resolves uncertain, 'needs Ollama qwen host' - never pass, never refuted.",
-      "rank": 12
+      "rank": 12,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/desk/mark.ts:167,170 linear photo prompt still asks for a plain number or simple fraction and the model's own solution; handwriting read is an L2 measure",
+      "recertify_status": "still-open"
     },
     {
       "id": "L1-owen-17-MB2-8",
@@ -935,7 +1004,10 @@
       },
       "suggested_acceptance": "From the recovery route, a topic with a worked lesson offers it (one press, skippable) before the set.",
       "ceiling": "14 of 17 school units have a worked lesson; the three linear-equation units (his A17 rows) have none (new row L1-owen-17-MB2-11).",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/tv/keys.ts:513-529 prepare question opens on See how first for a unit with a lesson (choicesFor in tv/prepareRows.ts:57)",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-owen-17-MB2-9",
@@ -970,7 +1042,10 @@
       },
       "suggested_acceptance": "X2 and X3 reach the explain prompt; MB-EXPLAIN >= 5/8.",
       "ceiling": "School system and topic history absent.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/desk/explain.ts:56-70,246 Seen reaches the prompt (answer, working, slip)",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-owen-17-MB4-1",
@@ -1006,7 +1081,10 @@
       },
       "suggested_acceptance": "A topic row shows only what its questions tested: a statement that touches several units is split by what the question practised (or the learner confirms the unit), and the rows' losses never add up to more than the paper lost; Owen's mock yields <= 8 rows, none for decimals.",
       "ceiling": "A topic's 'N lost' is an apportioned share, not a count of marks lost on that topic, and nothing on the TV says so (new row L1-owen-17-MB4-10).",
-      "rank": 18
+      "rank": 18,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/recovery.ts:195-232 shares add up but split evenly across destinations (not by what the question practised); the finding's own got shows 14 topic rows, acceptance asks <=8 and none for decimals",
+      "recertify_status": "still-open"
     },
     {
       "id": "L1-owen-17-MB4-2",
@@ -1043,7 +1121,10 @@
       },
       "suggested_acceptance": "Every off-desk statement is reachable by name on the TV (a walkable second column or a page), most lost first.",
       "ceiling": "A statement the desk has no topic for cannot be practised (primes, simultaneous equations, area under a graph); Select there does nothing.",
-      "rank": 18
+      "rank": 18,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/tv/keys.ts:534-545 walks the off-desk statements after the topics; paperRows.ts offCountLine; MathsTV.tsx:735 lists each by name",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-owen-17-MB4-3",
@@ -1078,7 +1159,10 @@
       },
       "suggested_acceptance": "Select on a recovery row opens The usual / A step up for that topic (or prepare focused on it); presses from list to set <= 3.",
       "ceiling": "The set that follows is the generic unit set (L1-radka-41-MB4-9).",
-      "rank": 9
+      "rank": 9,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/tv/keys.ts:534-545 Select on a recovery row opens Get ready for school on that unit with the question open",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-owen-17-MB4-4",
@@ -1114,7 +1198,10 @@
       },
       "suggested_acceptance": "Among equal losses a Foundation statement comes before a flagged one; a flagged statement never takes a visible slot ahead of a Foundation statement with the same loss.",
       "ceiling": "A higher-tier statement still sorts by marks lost first.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/recovery.ts:246-247 sorts Foundation before flagged on equal loss; MathsTV.tsx:735 flag reads a harder statement",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-owen-17-MB4-5",
@@ -1150,7 +1237,10 @@
       },
       "suggested_acceptance": "A search/filter by word, or a short \"what this paper usually tests\" list; a pick that leads to more than one unit says which.",
       "ceiling": "The list is still 97 GCSE statements by area, and percentages stay under 'Ratio, proportion and rates of change'. Three fraction statements (N2, N8, N12) still lead to different rows.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/app/phone/PaperPanel.tsx:28 Find by words search box narrows the statements",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-owen-17-MB4-6",
@@ -1187,7 +1277,9 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 6
+      "rank": 6,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "mapped row MB-B22 (ruling RP5) is not marked built in docs/BACKLOG.md"
     },
     {
       "id": "L1-owen-17-MB4-7",
@@ -1223,7 +1315,10 @@
       },
       "suggested_acceptance": "For a learner whose school year is past the unit's, the card omits the year (or says \"foundations\").",
       "ceiling": "He still starts on the school path's last unit, not on a Foundation-resit path.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/maths/MathsTV.tsx:689 omits the year when pastPathEnd; tv/prepareRows.ts:97-109 pastPathEnd and pathEndsLine",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB1-1",
@@ -1259,7 +1354,10 @@
       },
       "suggested_acceptance": "readQuestion/equationOf read an item after stripping a leading instruction in cz/en ('Řeš (rovnici)', 'Vypočítej', 'Solve' with or without a colon), and the school reader accepts '·' and the learner's decimal comma (school system passed in). A suite row per form proves leaks() catches 'x = 11' / '11/12' / '0,12' on each.",
       "ceiling": "Czech instruction verbs outside the list still read as nothing (new row L1-radka-41-MB1-6).",
-      "rank": 18
+      "rank": 18,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/taskText.ts:15-48 and kinds.ts readQuestion(text, system) read cz instruction leads, · and : and decimal commas so leaks sees the item",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB1-2",
@@ -1294,7 +1392,10 @@
       },
       "suggested_acceptance": "With no marked set tonight, the caption says what was done without a verdict (e.g. 'A sheet worked through with 3 hints; nothing was marked.'); 'all of it right' only when at least one set was marked and every item is right. A recapRows test pins the homework-only branch.",
       "ceiling": "A count in words, not which problems.",
-      "rank": 27
+      "rank": 27,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/tv/recapRows.ts:233-236 hints-only night says Worked through with N hints; nothing was marked",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB1-3",
@@ -1329,7 +1430,10 @@
       },
       "suggested_acceptance": "The hint call receives the learner's school system (notation) and recorded slips for the item's unit; an unread item gets a neutral stance, not 'factoring and linear-equations'.",
       "ceiling": "H5 and H7 absent.",
-      "rank": 9
+      "rank": 9,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/desk/hint.ts:86,91-102,122-135 neutral stance for an unread task and groundFor carries notation, slips, method",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB1-4",
@@ -1365,7 +1469,10 @@
       "suggested_acceptance": "The read prompt names the learner's notation (decimal comma, '·') and accepts a lettered part label; page read rate >= 0.9 on three Czech worksheets.",
       "ceiling": "Vision behaviour unmeasured.",
       "l2_priority": "Environment precondition: vision on local Ollama with the qwen 27B model pulled (uat/env.md, Math Buddy L2). Without that host this resolves uncertain, 'needs Ollama qwen host' - never pass, never refuted.",
-      "rank": 12
+      "rank": 12,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/desk/read.ts:37-45 mathsContext names notation, course, age and lettered label",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB4-1",
@@ -1400,7 +1507,10 @@
       },
       "suggested_acceptance": "When unmapped questions lost marks, the list and caption say e.g. '28 marks lost on 16 questions with no statement picked: pick what they test on the phone to see topics.' A paperRows test covers all-unmapped and mapped-full + unmapped-lost.",
       "ceiling": "The desk cannot tell her which statement a question tests.",
-      "rank": 18
+      "rank": 18,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/tv/paperRows.ts:106-112 paperCaption states N marks lost on questions that name no statement; paperNone likewise",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB4-2",
@@ -1436,7 +1546,10 @@
       },
       "suggested_acceptance": "An item's loss is shared, not copied, across the topics it touches (the rows add up to the paper's loss); the caption names the biggest loss and says separately which base unit comes first; A4 no longer maps expression questions onto an equations unit. A senior teacher signs off the order on two real CERMAT-style mocks.",
       "ceiling": "A 9th-grader's mock still goes through the desk's school path and UK statement wording, and each topic's number is a share.",
-      "rank": 18
+      "rank": 18,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/recovery.ts:195-232 shares make rows add up; tv/paperRows.ts:117 caption says Start with X, the base for Y (teacher sign-off is human)",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB4-3",
@@ -1471,7 +1584,10 @@
       },
       "suggested_acceptance": "Select on a lit recovery row asks The usual / A step up and writes that unit's set (as Prepare does): 2 presses from the list.",
       "ceiling": "Same as L1-owen-17-MB4-3.",
-      "rank": 9
+      "rank": 9,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/tv/keys.ts:534-545 Select on a recovery row opens that unit's question (two presses to the set or lesson)",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB4-4",
@@ -1510,7 +1626,9 @@
       "severity_2026_10_09": "major",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
       "scope_note": "Out-of-segment default bias: Radka's mock is a Czech entrance exam. The plan builds GCSE Foundation for 14-16 (b. Math Buddy, Family); a CERMAT list is not a planned slice. Routed to concept-doc, not a defect against the planned product.",
-      "rank": 9
+      "rank": 9,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "mapped row MB-B7 (owner) is not marked built in docs/BACKLOG.md"
     },
     {
       "id": "L1-radka-41-MB4-5",
@@ -1546,7 +1664,10 @@
       },
       "suggested_acceptance": "An empty Scored reads as 'Type 0 if nothing was scored'; the TV score card says 'k questions left out on the phone' when the stored paper is smaller than the rows typed.",
       "ceiling": "A dropped row is still not stored; the TV total is of what was kept.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/paperEntry.ts:34 Type 0 if nothing was scored; tv/paperRows.ts leftOutLine says questions left out on the phone",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB4-6",
@@ -1582,7 +1703,10 @@
       },
       "suggested_acceptance": "The caps are worded as the desk's limits ('The desk takes questions of up to 6 marks') and 'Foundation' is not shown to a cz learner.",
       "ceiling": "The 6- and 80-mark limits are GCSE facts presented as the desk's limits; a 50-point mock never hits them.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/app/phone/PaperPanel.tsx:36 and maths/MathsTV.tsx:735 say a harder statement; recovery.ts:91,96 caps worded as the desk takes at most N marks",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB4-7",
@@ -1617,7 +1741,10 @@
       },
       "suggested_acceptance": "The tag says what to do with the disagreement ('The desk had this as secure; the paper says otherwise') or is replaced by a plain 'worth a recheck'.",
       "ceiling": "It stays in the list (ruling 2) so a parent sees the desk's record disagree with the paper.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/maths/MathsTV.tsx:752 a secure topic with lost marks reads Worth a recheck",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB4-8",
@@ -1652,7 +1779,10 @@
       },
       "suggested_acceptance": "The panel's heading and Send button name the seated learner.",
       "ceiling": "Names the seated learner, not a choice.",
-      "rank": 4
+      "rank": 4,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/app/phone/PaperPanel.tsx:15-16 paperHeading and paperSend name the seated learner",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB4-9",
@@ -1677,7 +1807,7 @@
       ],
       "code_check": "confirmed-absent",
       "verdict": "confirmed",
-      "resolution": "open",
+      "resolution": "fixed",
       "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB4-9",
       "backlog": "MB-B40",
       "recertified": {
@@ -1690,7 +1820,11 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "Environment precondition: the text engine (claude CLI; CLAUDE_FAST_MODEL for hints) reachable, and a profile of the Character's own system (cz for Nela/Radka, uk for Owen) in an isolated DESK_DATA_DIR.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/app/api/practice/route.ts:45 aimOf(paper items, topic) steers the set from a recovery row (Session.paperAim, keys.ts paper Select); items.ts learnerBlock/aimBlock give age, system and statements; paper-aim tests pass",
+      "recertify_status": "fixed",
+      "resolution_prior": "open"
     },
     {
       "id": "L1-radka-41-MB5-1",
@@ -1725,7 +1859,10 @@
       },
       "suggested_acceptance": "The log (problems, hints, hard, minutes, started) is cleared at the start of a new day or after the recap is left, for every learner slot; a reducer test runs two evenings and asserts the second recap is 'A quiet evening.'",
       "ceiling": "End session as the first event of a later day shows yesterday's log (new row L1-radka-41-MB5-10).",
-      "rank": 27
+      "rank": 27,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/session/store.ts:659-668 dayed() clears the log for every slot on a later day, End session included",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB5-2",
@@ -1761,7 +1898,10 @@
       },
       "suggested_acceptance": "A homework session (pages read, hints, second hints) and a paper entered each write a digest entry; the Sunday page has a line for them ('Two homework sheets, 5 hints, 2 needed a second.').",
       "ceiling": "Seated learner only.",
-      "rank": 18
+      "rank": 18,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/week.ts:230-233 homework and paper digest entries reach the Sunday page",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-radka-41-MB5-4",
@@ -1798,7 +1938,9 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 6
+      "rank": 6,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "mapped row MB-B21 is not marked built in docs/BACKLOG.md"
     },
     {
       "id": "L1-radka-41-MB5-5",
@@ -1822,7 +1964,7 @@
       ],
       "code_check": "confirmed-absent",
       "verdict": "confirmed",
-      "resolution": "open",
+      "resolution": "fixed",
       "carried_from": "2026-10-09-maths-l1/L1-radka-41-MB5-5",
       "backlog": "MB-B4",
       "recertified": {
@@ -1835,7 +1977,11 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/school.ts:1433 question(spec, system) prints comma and Kč for cz; items.ts:567 passes system",
+      "recertify_status": "fixed",
+      "resolution_prior": "open"
     },
     {
       "id": "L1-radka-41-MB5-6",
@@ -1873,7 +2019,9 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 6
+      "rank": 6,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "mapped row MB-B1 (blank half) is not marked built in docs/BACKLOG.md"
     },
     {
       "id": "L1-radka-41-MB5-7",
@@ -1911,7 +2059,9 @@
       "recurrence": 2,
       "severity_2026_10_09": "minor",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
-      "rank": 6
+      "rank": 6,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "mapped row MB-B23 is not marked built in docs/BACKLOG.md"
     },
     {
       "id": "L1-radka-41-MB5-8",
@@ -1946,7 +2096,10 @@
       },
       "suggested_acceptance": "The unit line names the not-sure count when it is above 0.",
       "ceiling": "Last set only.",
-      "rank": 6
+      "rank": 6,
+      "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+      "recertify_evidence": "desk/src/lib/rules/week.ts:163 unitLine prints , N not sure when above 0",
+      "recertify_status": "fixed"
     },
     {
       "id": "L1-nela-12-MB1-8",
@@ -1979,7 +2132,9 @@
       "suggested_acceptance": "readQuestion reads the verbs and shapes a Czech worksheet prints for fractions, decimals, percent and ratio (a repro over 'Sečti/Odečti/Vynásob/Vyděl/Zkrať/Urči/Převeď/Rozděl' and 'Kolik je ... z ...?') into a school spec, or a task no reader reads is checked by a general rule that refuses a line stating a result.",
       "l2_priority": "Environment precondition: the text engine (claude CLI; CLAUDE_FAST_MODEL for hints) reachable, and a profile of the Character's own system (cz for Nela/Radka, uk for Owen) in an isolated DESK_DATA_DIR. Ask 3 hints on 'Kolik je 3/4 z 20?' and 'Zkrať zlomek 18/24' and count lines that state or complete the result; the live model usually obeys the prompt, so the number is the point.",
       "cert_level": "L1",
-      "rank": 18
+      "rank": 18,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
     },
     {
       "id": "L1-radka-41-MB1-6",
@@ -2007,7 +2162,9 @@
       "suggested_acceptance": "As L1-nela-12-MB1-8.",
       "l2_priority": "Environment precondition: the text engine (claude CLI; CLAUDE_FAST_MODEL for hints) reachable, and a profile of the Character's own system (cz for Nela/Radka, uk for Owen) in an isolated DESK_DATA_DIR.",
       "cert_level": "L1",
-      "rank": 18
+      "rank": 18,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
     },
     {
       "id": "L1-nela-12-MB5-7",
@@ -2038,7 +2195,9 @@
       "suggested_acceptance": "recapRows counts hints only from a log whose day is today (or dayed() runs for session.end too, clearing before it stamps endedAt); the repro then reads 'A quiet evening.'",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
       "cert_level": "L1",
-      "rank": 9
+      "rank": 9,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
     },
     {
       "id": "L1-radka-41-MB5-10",
@@ -2065,7 +2224,9 @@
       "suggested_acceptance": "As L1-nela-12-MB5-7.",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
       "cert_level": "L1",
-      "rank": 9
+      "rank": 9,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
     },
     {
       "id": "L1-radka-41-MB4-11",
@@ -2096,7 +2257,9 @@
       "suggested_acceptance": "The score card or a caption line says that a question that tests several topics gives each a share of its lost marks; or the row's 'From' lists each question with its own loss, or shows the statement (RecoveryTopic.codes) behind the share.",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
       "cert_level": "L1",
-      "rank": 18
+      "rank": 18,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
     },
     {
       "id": "L1-owen-17-MB4-10",
@@ -2123,7 +2286,9 @@
       "suggested_acceptance": "As L1-radka-41-MB4-11.",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
       "cert_level": "L1",
-      "rank": 18
+      "rank": 18,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
     },
     {
       "id": "L1-owen-17-MB2-11",
@@ -2153,7 +2318,9 @@
       "suggested_acceptance": "A worked lesson for the three equation units, authored in library/worked.ts with code-drawn examples (the M1 shape), or the Prepare card says 'no lesson yet' in its own words.",
       "l2_priority": "No L2 precondition: code-decided and deterministic; L2 needs only a Math harness with the Character's profile (isolated DESK_DATA_DIR, never desk/data).",
       "cert_level": "L1",
-      "rank": 6
+      "rank": 6,
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
     },
     {
       "id": "L1-nela-12-MB1-6",
@@ -2182,7 +2349,9 @@
         "at": "2026-10-14",
         "base": "12592a71",
         "head": "4af25199"
-      }
+      },
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "resolution is n-a: nothing to recheck"
     },
     {
       "id": "L1-nela-12-MB1-7",
@@ -2210,7 +2379,9 @@
         "at": "2026-10-14",
         "base": "12592a71",
         "head": "4af25199"
-      }
+      },
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "resolution is n-a: nothing to recheck"
     },
     {
       "id": "L1-nela-12-MB2-8",
@@ -2238,7 +2409,9 @@
         "at": "2026-10-14",
         "base": "12592a71",
         "head": "4af25199"
-      }
+      },
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "resolution is n-a: nothing to recheck"
     },
     {
       "id": "L1-nela-12-MB2-9",
@@ -2266,7 +2439,9 @@
         "at": "2026-10-14",
         "base": "12592a71",
         "head": "4af25199"
-      }
+      },
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "resolution is n-a: nothing to recheck"
     },
     {
       "id": "L1-nela-12-MB5-6",
@@ -2294,7 +2469,9 @@
         "at": "2026-10-14",
         "base": "12592a71",
         "head": "4af25199"
-      }
+      },
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "resolution is n-a: nothing to recheck"
     },
     {
       "id": "L1-owen-17-MB2-10",
@@ -2322,7 +2499,9 @@
         "at": "2026-10-14",
         "base": "12592a71",
         "head": "4af25199"
-      }
+      },
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "resolution is n-a: nothing to recheck"
     },
     {
       "id": "L1-owen-17-MB4-8",
@@ -2350,7 +2529,9 @@
         "at": "2026-10-14",
         "base": "12592a71",
         "head": "4af25199"
-      }
+      },
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "resolution is n-a: nothing to recheck"
     },
     {
       "id": "L1-owen-17-MB4-9",
@@ -2378,7 +2559,9 @@
         "at": "2026-10-14",
         "base": "12592a71",
         "head": "4af25199"
-      }
+      },
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "resolution is n-a: nothing to recheck"
     },
     {
       "id": "L1-radka-41-MB1-5",
@@ -2406,7 +2589,9 @@
         "at": "2026-10-14",
         "base": "12592a71",
         "head": "4af25199"
-      }
+      },
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "resolution is n-a: nothing to recheck"
     },
     {
       "id": "L1-radka-41-MB4-10",
@@ -2434,7 +2619,9 @@
         "at": "2026-10-14",
         "base": "12592a71",
         "head": "4af25199"
-      }
+      },
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "resolution is n-a: nothing to recheck"
     },
     {
       "id": "L1-radka-41-MB5-9",
@@ -2462,7 +2649,9 @@
         "at": "2026-10-14",
         "base": "12592a71",
         "head": "4af25199"
-      }
+      },
+      "recertify_status": "not-rechecked",
+      "recertify_reason": "resolution is n-a: nothing to recheck"
     }
   ]
 }

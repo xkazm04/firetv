@@ -30,7 +30,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-barbora-43-EM1-2",
@@ -63,7 +65,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-barbora-43-EM1-3",
@@ -95,7 +99,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-barbora-43-EM1-4",
@@ -127,7 +133,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-barbora-43-EM1-5",
@@ -160,7 +168,10 @@
   "base": "main HEAD 4af25199",
   "ceiling": "See L1-kristyna-17-EM1-11: the language check is a heuristic with a bypass.",
   "l2_priority": "Confirm live that the fix is reachable and unblocks the job: L1 speaks only to \"landed\" (fix landed != reachable != unblocks the job).",
-  "rank": 4
+  "rank": 4,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/app/api/analyse/route.ts:109,146 refuse with NOT_ENGLISH_LINE (rules/essay.ts:138,171 paragraphIsEnglish) before any model call; heuristic bypass tracked separately (EM1-11).",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-barbora-43-EM1-6",
@@ -192,7 +203,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-barbora-43-EM1-7",
@@ -224,7 +237,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-barbora-43-EM1-8",
@@ -258,7 +273,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-barbora-43-EM1-9",
@@ -289,7 +306,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-barbora-43-EM4-1",
@@ -322,7 +341,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "The phone Recap still shows \"Arrives when the session ends.\" on an evening with no work and no End session; the TV leaving the recap no longer clears it.",
-  "rank": 12
+  "rank": 12,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/app/phone/page.tsx:726 shows 'Arrives when the session ends.' only when no tile has work and the session has not ended since local midnight.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-barbora-43-EM4-2",
@@ -356,7 +378,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "The recap says \"one reading\" for a piece while the Sunday page says \"One piece\" (L1-barbora-43-EM4-7); the recap line does not name the paragraph count.",
-  "rank": 12
+  "rank": 12,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/tv/recapRows.ts:56 parseDetail accepts the ', N paragraphs' suffix and desk/src/lib/rules/week.ts:253 counts a piece by paragraphs>1 for the Sunday line.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-barbora-43-EM4-3",
@@ -391,7 +416,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "The caption sentence still counts the last reading only (\"two to look at together\" for 1 of 4, 1 of 4, 2 of 5); the Sunday digest keeps the first count.",
-  "rank": 12
+  "rank": 12,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/lib/desk/essay.ts:265,277 restateReading writes ', k fixed' to the history line and desk/src/tv/recapRows.ts:56,281 reads it as 'k fixed tonight'.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-barbora-43-EM4-4",
@@ -427,7 +455,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 12
+  "rank": 12,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-barbora-43-EM4-5",
@@ -458,7 +488,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-barbora-43-EM4-6",
@@ -490,7 +522,10 @@
   "base": "main HEAD 4af25199",
   "ceiling": "On an evening with a maths tile the second-hint line is still shown.",
   "l2_priority": "Confirm live that the fix is reachable and unblocks the job: L1 speaks only to \"landed\" (fix landed != reachable != unblocks the job).",
-  "rank": 6
+  "rank": 6,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/app/phone/page.tsx:732 renders the hinted/slipped list only for a maths tile that is not empty.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-barbora-43-EM4-7",
@@ -522,7 +557,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 2
+  "rank": 2,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-barbora-43-EM4-8",
@@ -556,7 +593,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-barbora-43-EM4-9",
@@ -588,7 +627,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-daniel-15-EM2-1",
@@ -622,7 +663,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "The Evidence lens has its own false hold (L1-eliska-12-EM2-1). A rewrite is ruled against first-pass regex roles and kept links, not against the model's observations of the other sentences.",
-  "rank": 12
+  "rank": 12,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/lib/desk/essay.ts:176 rules a piece once over all paragraphs' observations and :260 rules the rewrite with contextObservations over next.sentences (same whole-piece scope).",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-daniel-15-EM2-2",
@@ -656,7 +700,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "A strong or neutral sentence still shows the model's note, which can name a gap or praise something else; note-verdict consistency there is an L2 reader count.",
-  "rank": 12
+  "rank": 12,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/lib/rules/essay.ts:426 sets a faulty verdict's note to the failed check's own line, never the model's note.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-daniel-15-EM2-3",
@@ -689,7 +736,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 12
+  "rank": 12,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM2-4",
@@ -722,7 +771,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM2-5",
@@ -755,7 +806,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 12
+  "rank": 12,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM2-6",
@@ -788,7 +841,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-daniel-15-EM3-1",
@@ -823,7 +878,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "Fixed for Structure only when the model names the claim each topic sentence backs (L1-daniel-15-EM3-16); under Evidence the intro and conclusion are still false faults (L1-daniel-15-EM3-15).",
-  "rank": 18
+  "rank": 18,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "Whole-piece decideVerdicts (desk/src/lib/desk/essay.ts:176) fixes Structure only when the model names the supports chain (rules/essay.ts:402-409), and the Evidence lens still marks intro/conclusion opinions faulty per paragraph (rules/essay.ts:399 !marks.length; open L1-daniel-15-EM3-15/-16).",
+  "recertify_status": "still-open"
  },
  {
   "id": "L1-daniel-15-EM3-2",
@@ -857,7 +915,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-3",
@@ -890,7 +950,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 12
+  "rank": 12,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-4",
@@ -924,7 +986,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-5",
@@ -957,7 +1021,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 12
+  "rank": 12,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-6",
@@ -990,7 +1056,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-7",
@@ -1024,7 +1092,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-8",
@@ -1059,7 +1129,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "Send-again is refused after any rewrite (\"Read the whole piece again\"), which re-reads the original (L1-daniel-15-EM2-5). A paragraph still being read is drawn \"Neutral\" on the page (L1-daniel-15-EM3-13).",
-  "rank": 6
+  "rank": 6,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/lib/rules/essay.ts:481 paragraphState gives not-read/not-english, desk/src/essay/EssayTV.tsx:266,413 draws and captions 'Not read', phone page.tsx:283,317 names it and offers 'Read the paragraphs that did not come back'.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-daniel-15-EM3-9",
@@ -1091,7 +1164,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-10",
@@ -1123,7 +1198,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 3
+  "rank": 3,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-11",
@@ -1156,7 +1233,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-12",
@@ -1190,7 +1269,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-eliska-12-EM1-1",
@@ -1226,7 +1307,10 @@
   "base": "main HEAD 4af25199",
   "recert_note": "Walked P1 and P2 with links named: the planted sentence is the faulty one under both lenses, wherever it stands.",
   "ceiling": "Fixed only for model-correct labels: the link fields (supports/backs) are optional in the schema, so a model that omits them reopens the miss (L1-eliska-12-EM1-12). Not yet seen on the live model.",
-  "rank": 18
+  "rank": 18,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/lib/rules/essay.ts:360-366 linkOf/backsOf credit evidence to the claim it names so a planted claim is faulty at any position for model-correct labels (still model-link dependent, EM1-12 open).",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-eliska-12-EM1-2",
@@ -1261,7 +1345,9 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "recert_note": "Still open and wider than last run: the Structure lens does it too.",
-  "rank": 12
+  "rank": 12,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM1-3",
@@ -1294,7 +1380,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM1-4",
@@ -1328,7 +1416,9 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "recert_note": "Faulty-note and summary halves fixed (E6, E9); strong/neutral notes open.",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM1-5",
@@ -1362,7 +1452,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM1-6",
@@ -1396,7 +1488,10 @@
   "base": "main HEAD 4af25199",
   "recert_note": "E6 removed the model note from every faulty sentence.",
   "ceiling": "Praise-led text can still appear in the note of a strong or neutral sentence (cleanNote strips only a leading label), where praise is allowed; a note that contradicts its neutral verdict is not checked (note-verdict consistency stays an L2 reader count).",
-  "rank": 6
+  "rank": 6,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/lib/rules/essay.ts:426 replaces the note on a faulty sentence with the code's check line, so praise-led model notes cannot appear under a faulty verdict.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-eliska-12-EM1-7",
@@ -1428,7 +1523,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM1-8",
@@ -1459,7 +1556,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 2
+  "rank": 2,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM1-9",
@@ -1492,7 +1591,10 @@
   "base": "main HEAD 4af25199",
   "ceiling": "Language detection is a word-list heuristic with floors set on a small corpus; see L1-kristyna-17-EM1-11 for what slips through. Not Eliska's path.",
   "l2_priority": "Confirm live that the fix is reachable and unblocks the job: L1 speaks only to \"landed\" (fix landed != reachable != unblocks the job).",
-  "rank": 2
+  "rank": 2,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/lib/rules/essay.ts:138,171 NOT_ENGLISH_LINE/paragraphIsEnglish and desk/src/app/api/analyse/route.ts:109,146 refuse before any run.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-eliska-12-EM1-10",
@@ -1524,7 +1626,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-eliska-12-EM1-11",
@@ -1557,7 +1661,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-eliska-12-EM2-1",
@@ -1593,7 +1699,9 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "recert_note": "Raised from major to blocker by rank: Evidence is her lens and the failure is deterministic.",
-  "rank": 18
+  "rank": 18,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM2-2",
@@ -1627,7 +1735,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 12
+  "rank": 12,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM2-3",
@@ -1658,7 +1768,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM2-4",
@@ -1689,7 +1801,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 3
+  "rank": 3,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM2-5",
@@ -1721,7 +1835,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM2-6",
@@ -1754,7 +1870,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-kristyna-17-EM1-1",
@@ -1788,7 +1906,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "The check is a word-list heuristic, run only on paragraphs of 6 or more words; see L1-kristyna-17-EM1-11. Nothing on the phone says in advance that the desk reads English; she learns it from the refusal.",
-  "rank": 27
+  "rank": 27,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/app/api/analyse/route.ts:109,146 refuse a non-English paragraph with 'Essay Master reads English writing...' before any call; no advance copy on the Essay tab (acceptance's second half) is evidenced.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-kristyna-17-EM1-2",
@@ -1821,7 +1942,10 @@
   "base": "main HEAD 4af25199",
   "ceiling": "Sentence boundary only; abbreviation handling is English (rules/essay.ts:18).",
   "l2_priority": "Confirm live that the fix is reachable and unblocks the job: L1 speaks only to \"landed\" (fix landed != reachable != unblocks the job).",
-  "rank": 27
+  "rank": 27,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/lib/rules/essay.ts:35 splits before (?=[p{Lu}\"“„]) so diacritic-initial and quote-opening sentences no longer fuse.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-kristyna-17-EM1-3",
@@ -1854,7 +1978,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "Holds only for paragraphs the language check refuses; a Czech paragraph that passes it is still ruled on English word lists (L1-kristyna-17-EM1-11).",
-  "rank": 27
+  "rank": 27,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "Czech text is refused before the English word lists (rules/essay.ts:13-15) can rule it, desk/src/app/api/analyse/route.ts:109,146; a Czech paragraph passing the heuristic still hits them (EM1-11).",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-kristyna-17-EM1-4",
@@ -1887,7 +2014,10 @@
   "base": "main HEAD 4af25199",
   "ceiling": "The plan refusal text still says \"capital\" without naming accents; none are needed now.",
   "l2_priority": "Confirm live that the fix is reachable and unblocks the job: L1 speaks only to \"landed\" (fix landed != reachable != unblocks the job).",
-  "rank": 18
+  "rank": 18,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/lib/rules/essay.ts:652 planFill accepts /^[\"“„]?p{Lu}/u so 'Šest...' and 'Žáci...' fill their slots.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-kristyna-17-EM1-5",
@@ -1918,7 +2048,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM1-6",
@@ -1950,7 +2082,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "Only for text the check refuses; an English text gets English notes, which is what she is told to expect.",
-  "rank": 12
+  "rank": 12,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "No prompt or code fixes the language of notes/moves/summary (only the refusal at desk/src/app/api/analyse/route.ts:146); a Czech paragraph passing paragraphIsEnglish still gets English notes beside Czech text.",
+  "recertify_status": "still-open"
  },
  {
   "id": "L1-kristyna-17-EM1-7",
@@ -1983,7 +2118,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM1-8",
@@ -2014,7 +2151,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 3
+  "rank": 3,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM1-9",
@@ -2045,7 +2184,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 3
+  "rank": 3,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM1-10",
@@ -2077,7 +2218,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-kristyna-17-EM3-1",
@@ -2111,7 +2254,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "A Czech paragraph that passes the language check still counts as English sentences.",
-  "rank": 27
+  "rank": 27,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/lib/rules/essay.ts:35 split fix plus :464,530 ruledSentences exclude failed/not-English paragraphs from the counts; a non-English piece is refused at route.ts:109.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-kristyna-17-EM3-2",
@@ -2146,7 +2292,10 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "ceiling": "A paragraph still being read is drawn \"Neutral · Nothing flagged.\" on the sentence page (L1-daniel-15-EM3-13).",
-  "rank": 18
+  "rank": 18,
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_evidence": "desk/src/lib/rules/essay.ts:481 paragraphState not-read, desk/src/essay/EssayTV.tsx:413 'Not read' caption, desk/src/app/phone/page.tsx:317 'Read the paragraphs that did not come back' re-reads only those into the same piece.",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-kristyna-17-EM3-3",
@@ -2179,7 +2328,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM3-4",
@@ -2212,7 +2363,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM3-5",
@@ -2244,7 +2397,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 6
+  "rank": 6,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM3-6",
@@ -2274,7 +2429,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 3
+  "rank": 3,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM3-7",
@@ -2304,7 +2461,9 @@
   "prior_resolution": "open",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 3
+  "rank": 3,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM3-8",
@@ -2337,7 +2496,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-kristyna-17-EM3-9",
@@ -2369,7 +2530,9 @@
   "recert_note": "strength re-read on main HEAD 4af25199; still holds",
   "standard": "none",
   "base": "main HEAD 4af25199",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-eliska-12-EM1-12",
@@ -2402,7 +2565,9 @@
   "suggested_acceptance": "Make supports / backs required for evidence-job and checkable sentences, or have code refuse a reading with an evidence sentence that names nothing instead of ruling on it.",
   "l2_priority": "Run P2 live under both lenses 5 times and count how often the model emits supports / backs. Precondition: live claude CLI (sonnet), any age.",
   "rank": 9,
-  "severity": "major"
+  "severity": "major",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-eliska-12-EM1-13",
@@ -2432,7 +2597,9 @@
   "code_check": "n-a",
   "verdict": "confirmed",
   "ceiling": "Strong and neutral notes and the slot frame are still the model's.",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-daniel-15-EM2-7",
@@ -2463,7 +2630,9 @@
   "suggested_acceptance": "The Essay, rewrite and plan panels listen in en-US whatever the school system; the Math Buddy explain door keeps the school system's language.",
   "l2_priority": "On a real phone with a cz profile, dictate \"Sleep matters because teenagers need eight hours\" into the Essay tab and read what lands in the box. Precondition: phone browser with Web Speech; cz profile.",
   "rank": 6,
-  "severity": "minor"
+  "severity": "minor",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-13",
@@ -2494,7 +2663,9 @@
   "suggested_acceptance": "A pending paragraph's sentence page shows \"Reading · paragraph k of N\" in the caption slot, and the crumb says which paragraph.",
   "l2_priority": "Read a 4-paragraph piece and open sentence 1 while paragraph 2 is still out; quote the caption. Precondition: live model, piece of 4 or more paragraphs.",
   "rank": 9,
-  "severity": "major"
+  "severity": "major",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-14",
@@ -2526,7 +2697,9 @@
   "suggested_acceptance": "Either show the paragraph's own observations as provisional marks while reading, or put \"Reading paragraph k of N\" and the paragraphs back so far on the forensic page; amend C3 if the owner keeps rule-once.",
   "l2_priority": "Time a 4-paragraph piece from \"Read the whole piece\" to the first verdict on screen. Precondition: live model; L2 harness extended with a piece (EM3 has no L2).",
   "rank": 9,
-  "severity": "major"
+  "severity": "major",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-15",
@@ -2556,7 +2729,9 @@
   "suggested_acceptance": "The Evidence lens judges the thesis and conclusion paragraphs against the body's evidence (the piece context), or treats a paragraph of only opinions as neutral when the piece has marked evidence elsewhere.",
   "l2_priority": "Run a 4-paragraph opinion essay with a title through the Evidence lens live and list the faulty sentences a Czech gymnazium teacher would not mark. Precondition: Evidence lens, a piece.",
   "rank": 12,
-  "severity": "major"
+  "severity": "major",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-daniel-15-EM3-16",
@@ -2587,7 +2762,9 @@
   "suggested_acceptance": "A thesis in a piece with marked evidence in its body is neutral, not unsupported, when no sentence names it.",
   "l2_priority": "Read the 5-block essay live under Structure 5 times; count how often supports links topic sentences to the thesis. Precondition: live model, Structure lens.",
   "rank": 9,
-  "severity": "major"
+  "severity": "major",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM1-11",
@@ -2618,7 +2795,9 @@
   "suggested_acceptance": "A rules test with at least 50 Czech paragraphs of mixed length (including titles and function-word-heavy sentences) holds the refusal at 0.95 or better; a short paragraph with Czech letters is refused.",
   "l2_priority": "Send five of her real Czech essay paragraphs (not author-written) and count refusals. Precondition: any live desk; the check is code, no model needed.",
   "rank": 9,
-  "severity": "major"
+  "severity": "major",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM3-10",
@@ -2649,7 +2828,9 @@
   "suggested_acceptance": "A one-line paragraph before a blank line with no closing full stop is a title: not read, not counted.",
   "l2_priority": "Read a Czech piece with a title and quote the summary. Precondition: none beyond a desk.",
   "rank": 6,
-  "severity": "minor"
+  "severity": "minor",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-kristyna-17-EM3-11",
@@ -2679,7 +2860,9 @@
   "code_check": "n-a",
   "verdict": "confirmed",
   "ceiling": "Heuristic; see L1-kristyna-17-EM1-11.",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-barbora-43-EM4-10",
@@ -2709,6 +2892,8 @@
   "code_check": "n-a",
   "verdict": "confirmed",
   "ceiling": "The caption number counts the last reading only; the recap says reading where Sunday says piece.",
-  "rank": 9
+  "rank": 9,
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  }
 ]

@@ -37,7 +37,9 @@
   "suggested_acceptance": "An Adult-mode reading's system prompt names an adult writer (no age, no 'student'); a rules test pins voiceOf/withManner output for mode adult.",
   "l2_priority": "Read the strong/neutral notes and the fix moves of one Adult-mode reading and count any that address her as a student or teenager. Needs the claude CLI on PATH and signed in, DESK_TEXT_ENGINE unset, an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B11",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B11 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM1-2",
@@ -71,7 +73,9 @@
   "suggested_acceptance": "A Language-lens length verdict teaches a split move/pattern (code-built), not the Paragraph playbook; a rules test pins it.",
   "l2_priority": "Open the forensic page on a >35-word email sentence under the Language lens and read the move and pattern drawn. Needs the claude CLI on PATH and signed in, DESK_TEXT_ENGINE unset, an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B8",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B8 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM1-3",
@@ -101,11 +105,14 @@
   "resolution": "fixed",
   "ceiling": "Landed, not confirmed live. Strong and neutral sentences still keep the model's note, so praise on a neutral sentence is still possible. \"is doing too little here\" is a school register for a client email.",
   "recurrence": 1,
-  "recertify_evidence": "4158321b (E6) in the range 12592a71..4af25199; executed 2026-10-14 on main HEAD",
+  "recertify_evidence": "desk/src/lib/rules/essay.ts:426 (note = verdict===\"faulty\" ? check : said) with the length rule at :423 and CHECKS.long/word at :309-310; later commits since 4af25199 did not alter this.",
   "suggested_acceptance": "(met) A faulty sentence never shows a model-written note.",
   "l2_priority": "Confirm the live Language reading shows only check lines on faulty sentences. Needs the claude CLI on PATH and signed in, DESK_TEXT_ENGINE unset, an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B6",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_evidence_prior": "4158321b (E6) in the range 12592a71..4af25199; executed 2026-10-14 on main HEAD",
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-helena-46-EM1-4",
@@ -137,7 +144,9 @@
   "suggested_acceptance": "Adult mode shows no school-example text on the lens home, playbook or x-ray.",
   "l2_priority": "Screenshot the lens home, playbook and x-ray in Adult mode. Needs no model call; an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B11",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B11 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM1-5",
@@ -168,7 +177,9 @@
   "recurrence": 2,
   "suggested_acceptance": "A wiring test names each stats field with a reader or removes it.",
   "backlog": "EM-B5",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B5 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM1-6",
@@ -200,7 +211,9 @@
   "recurrence": 2,
   "suggested_acceptance": "The phone and /drop name the same file types, or the phone says .docx goes through the PC page.",
   "backlog": "EM-B39",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B39 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM1-7",
@@ -230,11 +243,14 @@
   "resolution": "fixed",
   "ceiling": "Czech only (the detector needs czech >= 0.25 of the words). A German or Dutch paragraph goes to the model and is judged by English rules. Helena writes English to German and Dutch clients, so this does not touch her path; it would touch a pasted German reply.",
   "recurrence": 1,
-  "recertify_evidence": "803c6075, 706588fe, 4a2fbbc9 (E3); executed 2026-10-14",
+  "recertify_evidence": "desk/src/lib/rules/essay.ts:138,171-175 paragraphIsEnglish plus desk/src/app/api/analyse/route.ts:109 (piece) and :146 (paragraph) refuse with NOT_ENGLISH_LINE before any run; Czech only, German/Dutch still pass by design (the finding's own ceiling).",
   "suggested_acceptance": "(met for Czech) A non-English paragraph is refused in one plain sentence before any run.",
   "l2_priority": "Send a German paragraph and confirm what is read. Needs the claude CLI on PATH and signed in, DESK_TEXT_ENGINE unset, an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B4",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_evidence_prior": "803c6075, 706588fe, 4a2fbbc9 (E3); executed 2026-10-14",
+  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
+  "recertify_status": "fixed"
  },
  {
   "id": "L1-helena-46-EM1-8",
@@ -266,7 +282,9 @@
   "ceiling": "wordIn matches one word, so a phrase the model reports is silently dropped, and only the first valid issue per sentence is shown.",
   "recurrence": 1,
   "suggested_acceptance": "Keep.",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-helena-46-EM5-1",
@@ -300,7 +318,9 @@
   "suggested_acceptance": "No title is derived from the first line of an email or message; an untitled piece reads 'Untitled <format>' plus its date; a test keeps three first-line emails and asserts no title equals a line of the text.",
   "l2_priority": "Keep three short emails with no title on /drop and read the Workroom on /tv. Needs no model call; an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B27",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B27 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM5-2",
@@ -334,7 +354,9 @@
   "suggested_acceptance": "directness rises with the hedge rate; a rules test pins one hedger at >= 4 and one terse writer at <= 2.",
   "l2_priority": "Download the card from an isolated desk after keeping three hedged and three terse emails and compare the dims words. Needs no model call; an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B23",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B23 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM5-3",
@@ -368,7 +390,9 @@
   "suggested_acceptance": "Greeting and sign-off lines are excluded from sentence length and do not alone move formality; a trainer reads three fixtures and agrees with the words.",
   "l2_priority": "A person (business-writing trainer) reads the level words for three fixture emails. Needs no model call; an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B25",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B25 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM5-4",
@@ -403,7 +427,9 @@
   "suggested_acceptance": "Delete-all (and delete-one by pieceId) clears the seated learner's reading and its away slot; a test asserts session.json no longer holds the text.",
   "l2_priority": "Read a kept email on the TV, delete everything on /drop, reopen Essay Master. Needs the claude CLI on PATH and signed in, DESK_TEXT_ENGINE unset, an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B9",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B9 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM5-5",
@@ -436,7 +462,9 @@
   "suggested_acceptance": "Adult Back from the lens home goes to the Workroom, or Select on Essay Master opens the Workroom whenever the piece on the desk was kept.",
   "l2_priority": "Press the remote from landing through a reading and back. Needs the claude CLI on PATH and signed in, DESK_TEXT_ENGINE unset, an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B33",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B33 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM5-6",
@@ -468,7 +496,9 @@
   "suggested_acceptance": "OK on a Workroom piece, or a Read button on the /drop shelf, opens that piece for a reading.",
   "l2_priority": "Press OK on a piece row. Needs no model call; an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B33",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B33 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM5-7",
@@ -501,7 +531,9 @@
   "l2_priority": "Photograph the TV during a read and the lens home after it. Needs the claude CLI on PATH and signed in, DESK_TEXT_ENGINE unset, an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "scope_note": "Drawing the sentence on the forensic page is the reading surface by design (the TV is the page); the finding is the unwarned client text and the lens-home opening words, not the page itself.",
   "backlog": "EM-B30",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B30 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM5-8",
@@ -535,7 +567,9 @@
   "suggested_acceptance": "The shelf shows the format; /drop remembers or asks the format; a phone-kept email can be marked Email.",
   "l2_priority": "Keep three emails on /drop with the default radio and read the Workroom channels. Needs no model call; an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B31",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B31 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM5-9",
@@ -569,7 +603,9 @@
   "suggested_acceptance": "Lines starting \">\" and \"On ... wrote:\" blocks are dropped before measuring and before exemplars; a test keeps a quoted reply and finds none of the quoted text in the card.",
   "l2_priority": "Download the card from three emails with a quoted reply and grep it. Needs no model call; an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "backlog": "EM-B29",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B29 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM5-10",
@@ -599,7 +635,9 @@
   "recurrence": 2,
   "suggested_acceptance": "/drop passes its own decline and empty-shelf words.",
   "backlog": "EM-B39",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B39 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM5-11",
@@ -630,7 +668,9 @@
   "recurrence": 2,
   "suggested_acceptance": "The copy says \"leave out of the exemplars only\", or excluded pieces are left out of the measure too.",
   "backlog": "EM-B29",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B29 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM5-12",
@@ -662,7 +702,9 @@
   "ceiling": "The curtain holds for the Workroom payload but not for titles (EM5-1) or the read piece (EM5-4); the card gate is Adult-only but the portrait is not (EM5-13).",
   "recurrence": 1,
   "suggested_acceptance": "Keep.",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is n-a: nothing to recheck"
  },
  {
   "id": "L1-helena-46-EM1-9",
@@ -699,7 +741,9 @@
    "EM-B9"
   ],
   "backlog": "EM-B9",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "mapped row EM-B9 is not marked built in docs/BACKLOG.md"
  },
  {
   "id": "L1-helena-46-EM1-10",
@@ -730,7 +774,9 @@
   "recurrence": 1,
   "suggested_acceptance": "A one-paragraph opened piece either adds a version on read or the line does not promise one.",
   "l2_priority": "Open a one-paragraph kept piece on a phone, change it, Analyse, and list versions on the shelf. Needs the claude CLI on PATH and signed in, DESK_TEXT_ENGINE unset, an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-helena-46-EM3-1",
@@ -762,7 +808,9 @@
   "recurrence": 1,
   "suggested_acceptance": "Keep, with the notice naming the default.",
   "walked_as": "Helena (type other, Adult, no age) sending a 4-paragraph proposal",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "resolution is by-design: nothing to recheck"
  },
  {
   "id": "L1-helena-46-EM5-13",
@@ -799,7 +847,9 @@
   "l2_priority": "Join /drop with a Family-mode profile seated and press Show the Workroom on the TV. Needs no model; an isolated desk with a high-school age-13 profile and an 18+ Family profile.",
   "scope_note": "Owner decision needed: is the portrait (not the card) meant for Family? If yes, retitle the screen out of Adult copy; if no, gate GET/POST /api/twin and the /drop twin section on modeOf === adult.",
   "walked_as": "out-of-segment sample for the Adult gate: type high-school age 13 no mode; type other age 40 mode family",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-helena-46-EM5-14",
@@ -831,7 +881,9 @@
   "suggested_acceptance": "A self-introduction (\"This is <Name> from <Org>\") is excluded; a fixture pins it.",
   "l2_priority": "n/a until T4 wires the detectors.",
   "scope_note": "T4 (born, Sitting, Spot yourself) is not started (docs/concepts/STUDY-DESK-V2-PLAN.md row 22) and habits.ts is deliberately wired to nothing (row 19). The unwired module is not a defect; the false positive is a note for when it is wired.",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-helena-46-EM5-15",
@@ -859,7 +911,9 @@
   "resolution": "open",
   "recurrence": 1,
   "suggested_acceptance": "noBreakHyphen reads as \"-\"; a table row reads as one line.",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  },
  {
   "id": "L1-helena-46-EM5-16",
@@ -891,6 +945,8 @@
   "suggested_acceptance": "The phone offers a title field (or uses the file name) and the shelf row shows the date.",
   "l2_priority": "Keep two multi-paragraph pieces from the phone and read the shelf. Needs the claude CLI on PATH and signed in, DESK_TEXT_ENGINE unset, an isolated DESK_DATA_DIR (never desk/data), a profile type other + Mode Adult (18+) with no age.",
   "scope_note": "depends on L1-helena-46-EM5-1",
-  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)"
+  "standard": "none (registry declared; desk/src/lib/twin/** and desk/src/app/drop are in no registry-map context)",
+  "recertify_status": "not-rechecked",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
  }
 ]
