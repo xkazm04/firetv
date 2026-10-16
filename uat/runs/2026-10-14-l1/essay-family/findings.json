@@ -407,7 +407,7 @@
   ],
   "code_check": "n-a",
   "verdict": "confirmed",
-  "resolution": "fixed",
+  "resolution": "resolved-verified",
   "recurrence": 1,
   "suggested_acceptance": "The recap says how many of the sentences to fix she rewrote and how many now hold (counted from rewriteState on the reading in the session or a recorded count), without changing the reading count.",
   "l2_priority": "Confirm live that the fix is reachable and unblocks the job: L1 speaks only to \"landed\" (fix landed != reachable != unblocks the job).",
@@ -417,9 +417,10 @@
   "base": "main HEAD 4af25199",
   "ceiling": "The caption sentence still counts the last reading only (\"two to look at together\" for 1 of 4, 1 of 4, 2 of 5); the Sunday digest keeps the first count.",
   "rank": 12,
-  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
-  "recertify_evidence": "desk/src/lib/desk/essay.ts:265,277 restateReading writes ', k fixed' to the history line and desk/src/tv/recapRows.ts:56,281 reads it as 'k fixed tonight'.",
-  "recertify_status": "fixed"
+  "recertify_run": "2026-10-14-l1/essay-family L2 recertify 2026-10-16 (tools/essay-ui-test.cjs W1-W8 live, claude CLI sonnet, main 3e494e0c)",
+  "recertify_evidence": "W5 rewrote sentence 4 (faulty -> strong); W6 phone recap read 'Essay Master - one reading (Evidence): 0 of 5 sentences to fix, 1 fixed tonight'; W7 learners.json history detail '0 of 5 sentences to fix, 1 fixed'. The first reading had 1 of 5 to fix; the recap now reflects the rewrite.",
+  "recertify_status": "resolved-verified",
+  "recert_note": "Observed on the harness learner Sam (15, one paragraph), not the originating Character Barbora: the mechanism and the reachable recap are verified, her read of the words is not."
  },
  {
   "id": "L1-barbora-43-EM4-4",
@@ -448,7 +449,7 @@
   "code_check": "present-broken",
   "verdict": "confirmed",
   "resolution": "open",
-  "recurrence": 2,
+  "recurrence": 3,
   "suggested_acceptance": "The engine sentence shows once per learner before the first reading of any kind. The Recap tab carries a 'Where the writing is' line and a delete that also clears the paragraph on the desk (s.essay and away slots). The shelf stays reachable whatever the TV shows.",
   "l2_priority": "Parent role on a paragraph-only evening: look for the notice and a delete without help; then inspect session.json for the paragraph after delete-all.",
   "carried_from": "2026-10-09-essay-l1",
@@ -456,8 +457,11 @@
   "standard": "none",
   "base": "main HEAD 4af25199",
   "rank": 12,
-  "recertify_status": "not-rechecked",
-  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk"
+  "recertify_status": "still-open",
+  "recertify_reason": "no BACKLOG row built for it and it was still open at the 2026-10-14 walk",
+  "recertify_run": "2026-10-14-l1/essay-family L2 recertify 2026-10-16 (tools/essay-ui-test.cjs W1-W8 live, claude CLI sonnet, main 3e494e0c)",
+  "recertify_evidence": "W3 live: the first 'Analyse on the TV' (one paragraph) answered 428 and the phone showed the notice words ('...Claude, through the command line on this computer...') in the red alert line data-role=essay-note, so the engine is now named before the first reading (first half moved). But there is no accept control on that path: data-role=essay-notice never appeared, and the harness had to POST /api/texts {notice:true} to go on. After the reading, session.json in the data dir still holds the paragraph text ('Seattle'). The Recap-tab delete was not exercised.",
+  "recert_note": "Partly moved, still open: the paragraph stays in session.json, no delete reaches it, and the notice has no accept button on the paragraph path (see L2-essay-browser-teen-W3-1)."
  },
  {
   "id": "L1-barbora-43-EM4-5",
@@ -513,7 +517,7 @@
   ],
   "code_check": "n-a",
   "verdict": "confirmed",
-  "resolution": "fixed",
+  "resolution": "resolved-verified",
   "recurrence": 1,
   "suggested_acceptance": "The hint line shows only when the maths tile is not empty.",
   "carried_from": "2026-10-09-essay-l1",
@@ -523,9 +527,10 @@
   "ceiling": "On an evening with a maths tile the second-hint line is still shown.",
   "l2_priority": "Confirm live that the fix is reachable and unblocks the job: L1 speaks only to \"landed\" (fix landed != reachable != unblocks the job).",
   "rank": 6,
-  "recertify_run": "2026-10-14-l1/recert-1 (L1 code re-walk on main 5899cf6c)",
-  "recertify_evidence": "desk/src/app/phone/page.tsx:732 renders the hinted/slipped list only for a maths tile that is not empty.",
-  "recertify_status": "fixed"
+  "recertify_run": "2026-10-14-l1/essay-family L2 recertify 2026-10-16 (tools/essay-ui-test.cjs W1-W8 live, claude CLI sonnet, main 3e494e0c)",
+  "recertify_evidence": "W6 phone recap after an Essay-only evening (no maths work) read 'Sam, tonight / Math Buddy - not tonight / Linga - not tonight / Essay Master - one reading ... / Read through; nothing to fix.' with no 'Nothing needed a second hint.' line.",
+  "recertify_status": "resolved-verified",
+  "recert_note": "Observed on the harness learner Sam, not Barbora. The ceiling (the line still shows on an evening with a maths tile) was not run."
  },
  {
   "id": "L1-barbora-43-EM4-7",
@@ -2895,5 +2900,41 @@
   "rank": 9,
   "recertify_status": "not-rechecked",
   "recertify_reason": "resolution is n-a: nothing to recheck"
+ },
+ {
+  "id": "L2-essay-browser-teen-W3-1",
+  "journey": "EM1",
+  "character": "essay-browser-teen",
+  "cert_level": "L2",
+  "type": "broken-flow",
+  "severity": "major",
+  "impact": {
+   "frequency": "high",
+   "reachability": "high",
+   "trust_erosion": "med"
+  },
+  "dimension": "completion",
+  "title": "A learner's first single paragraph is answered with the notice as a red error line and no way to accept it",
+  "expected": "UD-7: the first paragraph read asks the one-time notice with a way to accept, as keeping a piece does, and the reading goes on.",
+  "got": "POST /api/analyse kind essay answers 428 {notice:true} (route.ts:148). analyseParagraph (phone/page.tsx:296-310) puts j.error into the alert line; setNotice and TextNotice are reached only from readPiece, whose button exists only with more than one paragraph (page.tsx:705). On one paragraph the notice has no Accept button and every further 'Analyse on the TV' gets the same 428. The harness got past it only by POSTing /api/texts {notice:true} itself.",
+  "evidence": [
+   "tools/essay-ui-test.cjs W3 (noticeVia: alert)",
+   "desk/src/app/api/analyse/route.ts:148",
+   "desk/src/app/phone/page.tsx:296-310,705",
+   "desk/src/app/phone/EssayShelf.tsx:55-63 TextNotice"
+  ],
+  "code_check": "present-broken",
+  "verdict": "confirmed",
+  "resolution": "open",
+  "recurrence": 1,
+  "suggested_acceptance": "The paragraph path shows TextNotice with 'I understand' (POST /api/texts {notice:true}, then analyse the paragraph) and a decline; a first-time learner reads one paragraph without the PC page.",
+  "carried_from": null,
+  "prior_resolution": null,
+  "standard": "none",
+  "base": "main HEAD 3e494e0c",
+  "rank": 0,
+  "recertify_run": "2026-10-14-l1/essay-family L2 recertify 2026-10-16 (tools/essay-ui-test.cjs W1-W8 live, claude CLI sonnet, main 3e494e0c)",
+  "recertify_status": "new",
+  "recertify_evidence": "W3 live, 2026-10-16."
  }
 ]
