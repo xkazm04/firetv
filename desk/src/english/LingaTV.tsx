@@ -195,7 +195,7 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
       return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{goal&&<DataLine><span className="lo-data-key">{h.take?"Take Two of":h.kind==="scene"&&h.steps?"Now":"Goal"}</span>{goal}</DataLine>}</>;
     }
     // On the recap, the phrase this scene invited and the learner has yet to use stands where the title would be.
-    case "track":return <><Kicker text={h.kicker}/>{h.sentence?<SentenceCard className="lo-compact" label={h.from?`From ${h.from}`:"A sentence to take with you"} text={h.sentence}/>:<Title text={h.title}/>}<Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;
+    case "track":return <><Kicker text={h.kicker}/>{h.sentence?<SentenceCard className="lo-compact" label={h.label??"A sentence for you"} text={h.sentence}/>:<Title text={h.title}/>}<Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;
     // a fix moment (K2): the slip the learner repaired is struck (Take Two's mark), and a fix still withheld leaves the after slot an empty frame
     case "comparison":return <><Kicker text={h.kicker??v.tag}/><div className="lo-compare linga-comparison">
       <div className="lo-before"><span>{h.before.kicker}</span><q>{struck(h.before.quote,h.before.struck)}</q></div>

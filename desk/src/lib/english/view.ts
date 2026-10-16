@@ -16,7 +16,7 @@ import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, conversationBand, easyBand, isBan
 import { currentStep, missionDone } from "./mission";
 import { isPitchId } from "./pitch";
 import { NOTE_LABEL } from "./notes";
-import { CHECK_TITLE, focusParts } from "./line";
+import { CHECK_TITLE, focusParts, originLabel } from "./line";
 import { modeOf } from "../rules/mode";
 import { accepts, refusal, turnState } from "./turn";
 import { runningTake, takeSpent } from "./take";
@@ -129,7 +129,9 @@ export type Hero =
       /** on the recap: the taught phrase this scene invited and the learner did not use, to take with them */
       sentence?: string;
       /** the scene that taught it, so the sentence is not read as one the learner said tonight */
-      from?: string }
+      from?: string;
+      /** what the sentence is, by origin: never the bare "A sentence to take with you" */
+      label?: string }
   | { kind: "comparison"; before: { kicker: string; quote: string;
       /** a fix the learner repaired (K2): the excerpt of the quote struck through, the slip they found; never a count */
       struck?: string }; after: { kicker: string; quote: string }; note: string;
@@ -536,7 +538,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       hero = co
         ? { kind: "comparison", before: { kicker: "You said", quote: co.before }, after: { kicker: "One way to try it", quote: co.after }, note: co.note, art: "done", data: counts }
         : { kind: "comparison", before: { kicker: m!.kind === "fix" ? "You said" : "You wanted to say", quote: m!.said }, after: { kicker: m!.kind === "fix" ? "Try" : "In English", quote: m!.better }, note: m!.why, art: "done", data: counts };
-    } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better, from: rv.fromTitle.slice(0, 40) } : ln && !ln.found ? { sentence: ln.text!, ...(ln.source === "check" ? { from: CHECK_TITLE.toLowerCase() } : {}) } : {}) };
+    } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better, from: rv.fromTitle.slice(0, 40), label: originLabel({ review: rv }) } : ln && !ln.found ? { sentence: ln.text!, label: originLabel({ line: ln }), ...(ln.source === "check" ? { from: CHECK_TITLE.toLowerCase() } : {}) } : {}) };
     // a line the hero does not carry is still the learner's to take, on the phone
     if (ln && hero.kind !== "track" && !(hero.kind === "comparison" && hero.before.quote === ln.text)) details.push(ln.found ? `On the phone, the line in this room: "${ln.text}". You said: "${ln.found}"` : `On the phone, a sentence to take with you: "${ln.text}"`);
     actions = [chooseSituation("Choose a fresh context for your next conversation.", "Another situation"), act("learning-map", "Learning map", "See saved evidence for each ability; printing is on the phone.", go("linga-map"))];
@@ -742,7 +744,7 @@ export function viewText(v: LingaView): string {
     case "choices": out.push(h.kicker, h.prompt, ...h.options.map((x, i) => `  option ${i}: ${x}`)); break;
     case "topics": out.push(h.kicker, ...h.topics.map(t => `  [${t.id}] ${t.title} — ${t.skill}\n      why: ${t.why}`)); break;
     case "scene": out.push(...(h.own ? ["Your own scene"] : []), h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : []), ...(h.lost ? [lostLine(h.lost)] : [])); break;
-    case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
+    case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`${h.label ?? "A sentence for you"}: "${h.sentence}"`] : [])); break;
     case "comparison": out.push(...(h.kicker ? [h.kicker] : []), `${h.before.kicker}: "${h.before.quote}"${h.before.struck ? `, "${h.before.struck}" struck through` : ""}`, h.open ? `${h.after.kicker}: an empty frame, waiting for your line` : `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
     case "tape": out.push(h.kicker, h.title, ...h.pins.map((x, i) => `  pin ${i + 1} · ${x.label}: "${x.quote}"${x.better ? ` → "${x.better}"` : ""}\n      note: ${x.note}${x.mark ? `\n      Take Two: ${TAKE_MARK_WORDS[x.mark]}` : ""}`),

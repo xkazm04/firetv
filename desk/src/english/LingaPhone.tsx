@@ -12,6 +12,7 @@ import { currentStep } from "@/lib/english/mission";
 import { accepts, turnState } from "@/lib/english/turn";
 import { runningTake } from "@/lib/english/take";
 import { beatOf, COSTAR_MAX } from "@/lib/english/duet";
+import { originLabel } from "@/lib/english/line";
 import { LOST_SCENE } from "@/lib/english/lostfound";
 import { activeCheck, helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
@@ -265,10 +266,10 @@ function StartPanel({s,learning,run:send,busy,list,pitch,takeTwo}:{s:Session;lea
     {c?.phase==="finished"&&<>
       <p className="linga-status">Rehearsal saved. Your map shows the evidence you collected.</p>
       {c.review?.used&&<div className="linga-transcript"><b>Used again tonight</b><p>“{c.review.better}”, taught in {c.review.fromTitle}<br/><small>You said: “{c.review.used}”</small></p></div>}
-      {c.review&&!c.review.used&&<div className="linga-transcript"><b>A sentence to take with you</b><p>“{c.review.better}”, from {c.review.fromTitle}</p></div>}
+      {c.review&&!c.review.used&&<div className="linga-transcript"><b>{originLabel({review:c.review})}</b><p>“{c.review.better}”, from {c.review.fromTitle}</p></div>}
       {/* K4: the line this room hid, once earned: found in the learner's words, or handed over to take */}
       {c.line?.text&&c.line.found&&<div className="linga-transcript" data-role="linga-line"><b>You found the line in this room</b><p>“{c.line.text}”<br/><small>You said: “{c.line.found}”</small></p></div>}
-      {c.line?.text&&!c.line.found&&<div className="linga-transcript" data-role="linga-line"><b>A sentence to take with you</b><p>“{c.line.text}”</p></div>}
+      {c.line?.text&&!c.line.found&&<div className="linga-transcript" data-role="linga-line"><b>{originLabel({line:c.line})}</b><p>“{c.line.text}”</p></div>}
       {c.cut&&c.cut.notes.length===0&&c.cut.clean&&<div className="linga-transcript" data-role="linga-cut-clean"><b>{c.cut.clean}</b></div>}
       {c.cut&&c.cut.notes.length>0&&<div className="linga-transcript" data-role="linga-cut-notes"><b>Notes on your take</b>{c.cut.notes.map((n,i)=>{
         // Take Two (v2 L4): a held note is struck, an undecided one says so, an open one stays as it was; never a count

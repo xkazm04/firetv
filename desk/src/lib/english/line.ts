@@ -34,6 +34,12 @@ export const CHECK_TITLE = "Your level check";
 export const OFFER_BANDS: readonly string[] = ["B2", "C1", "C2"];
 const LINES_CAP = 200;
 
+/** What a recap sentence is, said plainly: a room line the learner did not find, or a phrase taught in an earlier scene. */
+export function originLabel(c: { review?: { fromTitle: string } | null; line?: { source: LineSource } | null }): string {
+  if (c.review) return `From an earlier scene: ${c.review.fromTitle.slice(0, 40)}`;
+  return c.line?.source === "check" ? "From the level check" : "The line hidden in this room";
+}
+
 /** The line a scene hides, as the server holds it: never on the session. */
 export interface HiddenLine {
   source: LineSource; text: string;

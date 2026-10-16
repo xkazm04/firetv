@@ -951,7 +951,7 @@ test('UD-15: the TV recap\'s track hero names the scene the brought-back sentenc
  const v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),taught:[TAUGHT_A],conversation:convo({phase:'finished',turns,review:REVIEW})})),{});
  assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,'I have a booking');assert.equal(v.hero.from,REVIEW.fromTitle);
  const tv=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
- assert.match(tv,/label=\{h\.from\?`From \$\{h\.from\}`:"A sentence to take with you"\}/,'the card labels its source');
+ assert.equal(v.hero.label,'From an earlier scene: A hotel booking');assert.match(tv,/label=\{h\.label\?\?/,'the card labels its source');
 });
 test('review case 5: withholding - during the scene the phrase is on no screen until the learner has used it',()=>{
  const V=view();
@@ -1249,7 +1249,7 @@ test('K4 case 3: a zero-moment scene\'s recap hands over the line as the sentenc
  await reply('I go left at the big tree.');await command('finish');
  const s=getSession(),c=s.conversation;assert.equal(c.moments.length,0);assert.equal(c.line.text,BRIDGE);assert.equal(c.line.found,undefined);
  const v=view().lingaView(s,{});assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,BRIDGE);assert.equal('from' in v.hero,false);
- assert(view().viewText(v).includes(`A sentence to take with you: "${BRIDGE}"`));
+ assert(view().viewText(v).includes(`The line hidden in this room: "${BRIDGE}"`));
  const item=getLearner('ema').english.taught.at(-1);assert.equal(item.better,BRIDGE);assert.equal(item.offered,1);assert.equal(item.misses,1);assert.equal(typeof item.offeredAt,'number');assert.equal(item.reusedAt,undefined);
  // today, with no review and no line, the recap is a track with no sentence
  const bare=view().lingaView(sessionOf(fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',turns:REPLIED})})),{});
