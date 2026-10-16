@@ -1,0 +1,31 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[107,107],"rejected":[0,0],"hostPumpStalls":0}
+{"second":70,"accepted":[2110,2110],"rejected":[0,0],"hostPumpStalls":0}
+{"second":120,"accepted":[3604,3604],"rejected":[0,0],"hostPumpStalls":0}
+{
+  "error": "AssertionError [ERR_ASSERTION]: Every class activated and reported ACTIVE\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/90b34845/deathride/tools/ability-stick-probe.mjs:127:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 120.1338506,
+  "rounds": 2,
+  "classUses": {
+    "Needle": 9,
+    "Line": 7,
+    "Bastion": 2,
+    "Comet": 4
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 3604,
+      "accepted": 3604,
+      "rejected": 0,
+      "hz": 29.999870827415233
+    },
+    {
+      "slot": 1,
+      "sent": 3604,
+      "accepted": 3604,
+      "rejected": 0,
+      "hz": 29.999870827415233
+    }
+  ]
+}
