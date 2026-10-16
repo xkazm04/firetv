@@ -1,0 +1,112 @@
+{
+ "schema": "conform-run/1",
+ "worker": "bc4220b9-ce23-40d2-830a-3fdbfc42a951",
+ "subject": "multi-provider-gateway-plane",
+ "evaluatedAt": "2026-10-16T00:13:15.076493+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "pen-core",
+   "subject": "multi-provider-gateway-plane",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:28 Context and repository searches located provider machinery in the desk engines but found no provider, upstream, or failover terms anywhere under core, whose inspected implementation handles pen input and annotations rather than interchangeable upstreams.",
+   "techniques": [
+    {
+     "technique": "adapter-direction-asymmetry",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:7 This is a pen-protocol state machine, without upstream request and response adapters."
+    },
+    {
+     "technique": "caller-scoped-normalization-strictness",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:7 The context owns a phone-to-TV protocol rather than normalize heterogeneous upstream responses for external client populations."
+    },
+    {
+     "technique": "exclusive-authorship-of-a-measured-decision",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:16 The decision produces player actions, not a measured upstream selection."
+    },
+    {
+     "technique": "join-breadth-follows-the-wrong-match-cost",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/HitTest.kt:30 Matching is spatial annotation selection, without a catalog-to-upstream naming join."
+    },
+    {
+     "technique": "named-members-over-a-uniform-collection",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:56 The collection holds committed annotations, not contributors to an upstream inventory."
+    },
+    {
+     "technique": "one-typed-carrier-for-echoed-state",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:39 The application retains its own operation history; it is not a stateless gateway relying on clients to preserve upstream tokens."
+    },
+    {
+     "technique": "per-provider-stream-framing",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:167 The core decodes complete pen-message strings using one owned protocol, without provider-specific byte framing."
+    },
+    {
+     "technique": "policy-verdict-in-the-status-space",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:234 Pairing refusals use a typed protocol message; no status-integer gateway consumer requires a private status code."
+    },
+    {
+     "technique": "router-versus-candidate-failure",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:174 Accepted input is delivered to the session without attempting alternative upstream candidates."
+    },
+    {
+     "technique": "strategy-tree-with-inherited-policy",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:41 Command dispatch controls playback, without a provider strategy tree or inherited execution policy."
+    },
+    {
+     "technique": "upstream-identity-before-inventory",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:163 The connection gate authenticates a pen PIN; it neither identifies upstream implementations nor imports their inventories."
+    }
+   ],
+   "absenceTerms": [
+    "provider",
+    "upstream",
+    "failover"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "multi-provider-gateway-plane",
+   "context": "engines",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-16T00:13:15.076493+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "multi-provider-gateway-plane"
+   ],
+   "techniques": [
+    "adapter-direction-asymmetry",
+    "caller-scoped-normalization-strictness",
+    "exclusive-authorship-of-a-measured-decision",
+    "join-breadth-follows-the-wrong-match-cost",
+    "named-members-over-a-uniform-collection",
+    "one-typed-carrier-for-echoed-state",
+    "per-provider-stream-framing",
+    "policy-verdict-in-the-status-space",
+    "router-versus-candidate-failure",
+    "strategy-tree-with-inherited-policy",
+    "upstream-identity-before-inventory"
+   ],
+   "deviations": 0,
+   "context": "pen-core",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

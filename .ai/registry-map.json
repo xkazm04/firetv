@@ -2255,7 +2255,11 @@
           "revision": 9,
           "changedAt": "2026-09-09",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:28 Context and repository searches located provider machinery in the desk engines but found no provider, upstream, or failover terms anywhere under core, whose inspected implementation handles pen input and annotations rather than interchangeable upstreams.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:f268193750c0a517",
+          "evaluatedRevision": 9
         }
       ],
       "governance": "governed"

@@ -1442,6 +1442,72 @@
           "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:94 Connections retain the original PairingDesk reference; searches and source inspection found no runner lane that copies an existing shared carrier across a fork or worker boundary."
         }
       ]
+    },
+    "telestrator/pen-core/multi-provider-gateway-plane": {
+      "context": "pen-core",
+      "subject": "multi-provider-gateway-plane",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T00:13:15.076Z",
+      "worker": "bc4220b9-ce23-40d2-830a-3fdbfc42a951",
+      "techniques": [
+        {
+          "technique": "adapter-direction-asymmetry",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:7 This is a pen-protocol state machine, without upstream request and response adapters."
+        },
+        {
+          "technique": "caller-scoped-normalization-strictness",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:7 The context owns a phone-to-TV protocol rather than normalize heterogeneous upstream responses for external client populations."
+        },
+        {
+          "technique": "exclusive-authorship-of-a-measured-decision",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:16 The decision produces player actions, not a measured upstream selection."
+        },
+        {
+          "technique": "join-breadth-follows-the-wrong-match-cost",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/HitTest.kt:30 Matching is spatial annotation selection, without a catalog-to-upstream naming join."
+        },
+        {
+          "technique": "named-members-over-a-uniform-collection",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:56 The collection holds committed annotations, not contributors to an upstream inventory."
+        },
+        {
+          "technique": "one-typed-carrier-for-echoed-state",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:39 The application retains its own operation history; it is not a stateless gateway relying on clients to preserve upstream tokens."
+        },
+        {
+          "technique": "per-provider-stream-framing",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:167 The core decodes complete pen-message strings using one owned protocol, without provider-specific byte framing."
+        },
+        {
+          "technique": "policy-verdict-in-the-status-space",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:234 Pairing refusals use a typed protocol message; no status-integer gateway consumer requires a private status code."
+        },
+        {
+          "technique": "router-versus-candidate-failure",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:174 Accepted input is delivered to the session without attempting alternative upstream candidates."
+        },
+        {
+          "technique": "strategy-tree-with-inherited-policy",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:41 Command dispatch controls playback, without a provider strategy tree or inherited execution policy."
+        },
+        {
+          "technique": "upstream-identity-before-inventory",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:163 The connection gate authenticates a pen PIN; it neither identifies upstream implementations nor imports their inventories."
+        }
+      ]
     }
   }
 }
