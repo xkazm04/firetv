@@ -444,6 +444,38 @@ test('S2: the ten stored LT placements - Lukas spoke B2 under a C1 read, Petra A
  // the placement's own band is the staircase's, untouched: Lukas is still placed C1
  const lukas=ltPlacements().find(x=>x.who==='lukas').placement;assert.equal(lukas.band,'C1');assert.equal(P.playBand(lukas,'C1'),'C1','his own pick of the read still wins');assert.equal(P.playBand(lukas,'A1'),'B2');
 });
+// ---- LG-48: the recert's stored placements (2026-10-14-lt/recert-1), replayed through the ladder; no model call ----
+const RECERT_RUN=path.join(LT_RUN,'recert-1'),BANDS=['A1','A2','B1','B2','C1','C2'];
+/** Each recert-1 Character's J1 placement as ladder marks. The facts keep no `skipped` flag: a task with no response whose note starts "Skipped" was one. */
+function recertMarks(){
+ return fs.readdirSync(RECERT_RUN).filter(f=>/-\d+\.json$/.test(f)).map(f=>{
+  const j=JSON.parse(fs.readFileSync(path.join(RECERT_RUN,f),'utf8'));
+  const p=Object.values(j.journeys).map(J=>J.facts&&J.facts.placement).find(Boolean);assert(p,f+' holds a placement');
+  const marks=p.tasks.map(t=>({band:t.band,verdict:t.verdict,kind:t.kind,response:t.response,...(t.skipped||(t.response===''&&/^Skipped/.test(t.note))?{skipped:true}:{})}));
+  return {who:f.replace(/\.json$/,''),trueBand:j.trueBand,stored:p.band,storedConfidence:p.confidence,marks};
+ });
+}
+test('LG-48: Tomas (A1, age 9) is placed no higher than A2 on his stored marks, and not with high confidence',()=>{
+ const tomas=recertMarks().find(r=>r.who==='tomas-9');
+ // the stored J1 check (J2-J4 carry it): A1 choose fail on "want play", A1 listen pass in Czech and English, A2 choose
+ // pass, B1 listen pass on the two words "Creeper! Boom.", B2 say skipped. Stored: B1, low.
+ assert.deepEqual(tomas.marks.map(m=>`${m.band} ${m.kind} ${m.skipped?'skip':m.verdict}`),['A1 choose fail','A1 listen pass','A2 choose pass','B1 listen pass','B2 say skip']);
+ assert.equal(tomas.marks[3].response,'Creeper! Boom.');
+ const st=P.staircase('A2',tomas.marks);
+ assert(BANDS.indexOf(st.band)<=BANDS.indexOf('A2'),`Tomas placed ${st.band}, true A1`);
+ assert.notEqual(st.confidence,'high');
+ assert(P.weakPass(tomas.marks[3]),'a two-word listening pass is weak');
+});
+test('LG-48: no recert-1 learner moves farther from their true band than the stored (HEAD) placement',()=>{
+ const far=(a,b)=>Math.abs(BANDS.indexOf(a)-BANDS.indexOf(b));
+ const rows=recertMarks().map(r=>({...r,now:P.staircase('A2',r.marks)}));
+ console.log('LG-48 replay (true / stored / now):\n'+rows.map(r=>`  ${r.who.padEnd(10)} ${r.trueBand}  ${r.stored} ${r.storedConfidence}  ${r.now.band} ${r.now.confidence}`).join('\n'));
+ assert.equal(rows.length,10);
+ for(const r of rows)assert(far(r.now.band,r.trueBand)<=far(r.stored,r.trueBand),`${r.who}: ${r.stored} -> ${r.now.band}, true ${r.trueBand}`);
+ // a strong say pass above a lower fail still holds its band: a 50/50 misclick low on the ladder does not cap a real climber
+ const say=(band,verdict)=>({band,verdict,kind:'say',response:'I usually go to school by bus with my friends.'});
+ assert.equal(P.staircase('A2',[{band:'A2',verdict:'fail',kind:'choose',response:'x'},{band:'A1',verdict:'pass',kind:'choose',response:'y'},{band:'A2',verdict:'pass',kind:'choose',response:'z'},{band:'B1',verdict:'pass',kind:'listen',response:'He missed the bus'},say('B2','pass')]).band,'B2');
+});
 test('S2: spokenBand reads answered say tasks only, at their highest; conversationBand lowers at most one band, only when asked to speak at the level',()=>{
  const say=(band,english,patch={})=>({band,kind:'say',answered:'yes',english,...patch});
  assert.equal(P.spokenBand([]),null);

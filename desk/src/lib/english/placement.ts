@@ -91,9 +91,13 @@ export interface Mark { band: Band; verdict: TaskVerdict; kind?: TaskKind; respo
 /** A skip is no evidence: no count of passes, partials or fails includes it. */
 const counted = (marks: Mark[]) => marks.filter(m => !m.skipped);
 const count = (marks: Mark[], band: Band, verdict: TaskVerdict) => counted(marks).filter(m => m.band === band && m.verdict === verdict).length;
-const oneWord = (response: string | undefined) => (response ?? "").trim().split(/\s+/).filter(Boolean).length === 1;
-/** A weak pass is a choice between two options, or a listening answer of one word; every other pass is strong, a spoken one included. */
-export const weakPass = (m: Mark) => !m.skipped && m.verdict === "pass" && (m.kind === "choose" || (m.kind === "listen" && oneWord(m.response)));
+const wordsIn = (response: string | undefined) => (response ?? "").trim().split(/\s+/).filter(Boolean).length;
+/**
+ * A weak pass is a choice between two options, or a listening answer of one or two words; every other pass is strong, a
+ * spoken one included. Two words, not one, since LG-48: Tomas (A1, age 9) named the monster with "Creeper! Boom.", and
+ * that strong B1 pass placed him at B1. Naming the thing shows the line was heard, not that it was followed at that band.
+ */
+export const weakPass = (m: Mark) => !m.skipped && m.verdict === "pass" && (m.kind === "choose" || (m.kind === "listen" && wordsIn(m.response) <= 2));
 const strongPasses = (marks: Mark[], band: Band) => counted(marks).filter(m => m.band === band && m.verdict === "pass" && !weakPass(m)).length;
 
 /** What a confidence rests on; restsLine words each. */
@@ -106,6 +110,14 @@ export type Rests = "scattered" | "partials" | "weak" | "skips" | "floor" | "unc
  * above it (or C2 holds two passes). The band is the highest one with more passes than failures; with none, one below
  * the lowest band tried, or the band of two partials. Confidence is high only with two strong passes at the band and
  * a real fail or partial above it (or C2); a band resting on weak passes or skips alone reads low.
+ *
+ * When the answers disagree (a pass above a lower real fail), a band more than one above the lowest failed band holds
+ * only on a strong pass there (LG-48). The ladder cannot tell a lucky pass from an unlucky fail, and every near miss of
+ * the 2026-10-14 LT run was one band high, so on disagreement it reads low: Tomas (A1, age 9) failed an A1 choice,
+ * then passed an A2 choice and a two-word B1 listen, and was placed B1; he is now A2, still low. A strong say pass
+ * above a misclicked 50/50 still holds its band, which is why this is not a flat cap at one band above the fail. The
+ * two-word weak pass is the other half: without it "Creeper! Boom." is strong and B1 still holds. Replayed on the ten
+ * stored recert-1 placements, no other band or confidence moves.
  */
 export function staircase(start: Band, marks: Mark[]): { done: boolean; next: Band; band: Band; confidence: Placement["confidence"]; rests: Rests } {
   const last = marks.at(-1), real = counted(marks);
@@ -115,12 +127,13 @@ export function staircase(start: Band, marks: Mark[]): { done: boolean; next: Ba
   const floored = count(marks, "A1", "fail") >= 2;
   const partialBand = [...BANDS].reverse().find(b => count(marks, b, "partial") >= 2);
   const done = marks.length >= MAX_TASKS || bracketed || floored || !!partialBand;
-  const held = BANDS.filter(b => count(marks, b, "pass") > count(marks, b, "fail"));
+  // a pass above a failure means the answers disagree with each other
+  const scattered = real.some(a => a.verdict === "pass" && real.some(b => b.verdict === "fail" && BANDS.indexOf(b.band) < BANDS.indexOf(a.band)));
+  const failedAt = Math.min(...real.filter(m => m.verdict === "fail").map(m => BANDS.indexOf(m.band)));
+  const held = BANDS.filter((b, i) => count(marks, b, "pass") > count(marks, b, "fail") && (!scattered || i <= failedAt + 1 || strongPasses(marks, b) > 0));
   const lowest = marks.length ? BANDS[Math.min(...marks.map(m => BANDS.indexOf(m.band)))] : start;
   const top = held.length ? held[held.length - 1] : null;
   const band = partialBand && (!top || BANDS.indexOf(top) < BANDS.indexOf(partialBand)) ? partialBand : top ?? shift(lowest, -1);
-  // a pass above a failure means the answers disagree with each other
-  const scattered = real.some(a => a.verdict === "pass" && real.some(b => b.verdict === "fail" && BANDS.indexOf(b.band) < BANDS.indexOf(a.band)));
   const strong = strongPasses(marks, band);
   const ceiling = band === "C2" || real.some(m => m.verdict !== "pass" && BANDS.indexOf(m.band) > BANDS.indexOf(band));
   let rests: Rests;
@@ -188,7 +201,8 @@ export function restsLine(confidence: Placement["confidence"], tasks: Mark[]): s
     case "partials": return "Some answers only partly showed this level.";
     case "weak": {
       const atBand = tasks.filter(m => m.band === ladder.band && weakPass(m)), choices = atBand.some(m => m.kind === "choose"), words = atBand.some(m => m.kind === "listen");
-      const what = choices && words ? "answers chosen from two options and one-word answers" : choices ? "answers chosen from two options" : "one-word answers";
+      const short = atBand.some(m => m.kind === "listen" && wordsIn(m.response) > 1) ? "very short answers" : "one-word answers";
+      const what = choices && words ? `answers chosen from two options and ${short}` : choices ? "answers chosen from two options" : short;
       return `This level rests on ${what}${skipped ? " and skipped tasks" : ""}.`;
     }
     case "skips": return "Some tasks were skipped, so this level is a careful guess.";
