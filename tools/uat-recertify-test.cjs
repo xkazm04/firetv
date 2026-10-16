@@ -3,13 +3,13 @@
  * metric deltas and confounds from the runs' own JSON, stamp the ORIGINATING run's findings.json, write recertify.md.
  * Run with npm test in desk/ (directly: node tools/uat-recertify-test.cjs).
  *
- * Reads the committed runs under uat/runs/ as fixtures and never writes there: every write goes to a copy in the OS
+ * Reads the frozen copies under tools/fixtures/uat-runs/ as fixtures and never writes there (nor to the live uat/runs/): every write goes to a copy in the OS
  * temp dir, and the suite asserts the committed files are byte-identical at the end. All three model roles are
  * stubbed: the tutor at the registry, the Character, judge and synthesis by replacing the driver's claude seam (claude.call). No claude is launched.
  */
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), crypto = require('node:crypto'), assert = require('node:assert/strict');
 const { test, after } = require('node:test');
-const root = path.resolve(__dirname, '../desk'), RUNS = path.resolve(__dirname, '../uat/runs');
+const root = path.resolve(__dirname, '../desk'), RUNS = path.resolve(__dirname, '../uat/runs'), FIXTURES = path.resolve(__dirname, 'fixtures/uat-runs');
 const RECERTIFY = path.resolve(__dirname, '../uat/driver/recertify.cjs'), DRIVER = path.resolve(__dirname, '../uat/driver/linga-text.cjs');
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'uat-recertify-'));
 process.env.DESK_DATA_DIR = path.join(tmp, 'desk-data');
@@ -24,7 +24,7 @@ const digest = (dir = RUNS) => {
   }
   return h.digest('hex');
 };
-const before = digest();
+const before = digest(), fixBefore = digest(FIXTURES);
 
 // the driver's require hooks (@/ into desk/src, TS and TSX through desk's typescript), then the three roles stubbed
 require(path.resolve(__dirname, '../uat/driver/surface.cjs')).install();
@@ -47,6 +47,7 @@ after(() => {
   fs.rmSync(tmp, { recursive: true, force: true });
   assert.equal(calls.tutor, 0, 'no tutor call');
   assert.equal(digest(), before, 'the committed runs under uat/runs/ are unchanged');
+  assert.equal(digest(FIXTURES), fixBefore, 'the frozen fixtures under tools/fixtures/uat-runs/ are unchanged');
 });
 
 const R = () => require(RECERTIFY), D = () => require(DRIVER);
@@ -55,15 +56,15 @@ const readJson = p => JSON.parse(fs.readFileSync(p, 'utf8'));
 function copyRun(id, as = id) {
   const dst = path.join(tmp, `${as}-${crypto.randomUUID().slice(0, 8)}`);
   fs.mkdirSync(dst, { recursive: true });
-  for (const f of fs.readdirSync(path.join(RUNS, id))) { const p = path.join(RUNS, id, f); if (fs.statSync(p).isFile()) fs.copyFileSync(p, path.join(dst, f)); }
+  for (const f of fs.readdirSync(path.join(FIXTURES, id))) { const p = path.join(FIXTURES, id, f); if (fs.statSync(p).isFile()) fs.copyFileSync(p, path.join(dst, f)); }
   return dst;
 }
-const metricLine = (id, name) => fs.readFileSync(path.join(RUNS, id, 'report.md'), 'utf8').split('\n').find(l => l.startsWith(`- **${name}:**`));
+const metricLine = (id, name) => fs.readFileSync(path.join(FIXTURES, id, 'report.md'), 'utf8').split('\n').find(l => l.startsWith(`- **${name}:**`));
 const pairCount = plan => Object.values(plan).reduce((n, js) => n + js.length, 0);
 
 // ---- case 1
 test('case 1: plan() lists the Character x journey pairs with open non-strength findings, and only those', () => {
-  const plan = R().plan(path.join(RUNS, '2026-09-15-lt-recert2-beginners'));
+  const plan = R().plan(path.join(FIXTURES, '2026-09-15-lt-recert2-beginners'));
   assert.deepEqual(plan, { 'klara-13': ['J3'], 'petra-38': ['J3', 'J4'], 'tomas-9': ['J3', 'J4'], 'viktor-67': ['J3', 'J4'] });
   assert.equal(pairCount(plan), 7);
   const wide = R().plan('2026-09-15-lt-recert');
@@ -128,7 +129,7 @@ function stubFinding(patch) {
 async function recertifyTomasJ3() {
   const prior = copyRun(BEGINNERS), rerun = path.join(prior, 'recert-1');
   fs.mkdirSync(rerun, { recursive: true });
-  const committed = readJson(path.join(RUNS, BEGINNERS, 'tomas-9.json'));
+  const committed = readJson(path.join(FIXTURES, BEGINNERS, 'tomas-9.json'));
   const { judge, ...record } = committed.journeys.find(j => j.id === 'J3');
   record.prior = R().openFindings(prior, 'tomas-9', 'J3');
   const metrics = { ...judge.metrics, moments: { correctUseful: 0, total: 2, learnerTurnsWithClearErrors: 8, missedClearErrors: 6 } };
@@ -291,7 +292,7 @@ test('case 7b: a duplicated recurs row cannot carry one prior finding forward tw
 // ---- case 9
 test('case 9: report.md\'s Metrics section holds one bullet per registry metric, and moment recall is reported', async () => {
   const dir = path.join(tmp, `recall-${crypto.randomUUID().slice(0, 8)}`); fs.mkdirSync(dir, { recursive: true });
-  const committed = readJson(path.join(RUNS, BEGINNERS, 'tomas-9.json')), j = committed.journeys.find(x => x.id === 'J3');
+  const committed = readJson(path.join(FIXTURES, BEGINNERS, 'tomas-9.json')), j = committed.journeys.find(x => x.id === 'J3');
   const moments = { correctUseful: 1, total: 2, learnerTurnsWithClearErrors: 8, missedClearErrors: 6 };
   const result = { ...committed, journeys: [{ ...j, judge: { ...j.judge, metrics: { ...j.judge.metrics, moments } } }], calls: {} };
   await D().synthesize(dir, 'recall', [result], [], 0);
@@ -329,7 +330,7 @@ test('fault 2: synthesize() killed mid-write leaves an existing findings.json pa
   const dir = path.join(tmp, `fault-${crypto.randomUUID().slice(0, 8)}`); fs.mkdirSync(dir, { recursive: true });
   const file = path.join(dir, 'findings.json'), original = JSON.stringify([{ id: 'OLD-1', type: 'gap' }], null, 2);
   fs.writeFileSync(file, original);
-  const committed = readJson(path.join(RUNS, BEGINNERS, 'tomas-9.json')), j = committed.journeys.find(x => x.id === 'J3');
+  const committed = readJson(path.join(FIXTURES, BEGINNERS, 'tomas-9.json')), j = committed.journeys.find(x => x.id === 'J3');
   const result = { ...committed, journeys: [j], calls: {} };
   const r = await tearFindingsWrites(() => D().synthesize(dir, 'fault', [result], [], 0));
   assert.ok(r.threw && r.torn.length === 1, 'the stub tore the write');
@@ -345,7 +346,7 @@ const runDir = (name, record, run) => {
   if (run) fs.writeFileSync(path.join(d, 'run.json'), JSON.stringify(run));
   return d;
 };
-const J4 = readJson(path.join(RUNS, BEGINNERS, 'tomas-9.json')).journeys.find(j => j.id === 'J4');
+const J4 = readJson(path.join(FIXTURES, BEGINNERS, 'tomas-9.json')).journeys.find(j => j.id === 'J4');
 const fileMap = (n, moved = []) => Object.fromEntries(Array.from({ length: n }, (_, i) => [`desk/src/f${i}.ts`, moved.includes(i) ? `moved${i}` : `blob${i}`]));
 const INSTRUMENT = { model: 'gpt-6-astra', efforts: { tutor: 'medium', character: 'medium', judge: 'high' }, judgeScreenCap: 900, driver: { 'linga-text.cjs': 'x' } };
 const stamp = (n, moved) => ({ commit: 'c1', dirty: false, files: fileMap(n, moved) });
