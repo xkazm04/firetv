@@ -661,7 +661,7 @@ const loggedIn = (l: { problems: string[]; hints: number; hard: string[] }) => !
  * clears the old log first (UD-13). A log from before the stamp is dated by
  * the day its timer started.
  */
-function dayed(s: Session, e: Event, now = Date.now()): Session {
+function dayed(s: Session, _e: Event, now = Date.now()): Session {
   const today = dayOf(now), was = s.log.day ?? (s.log.started ? dayOf(s.log.started) : undefined);
   if (!was || was === today) return s;
   const away = s.away ? Object.fromEntries(Object.entries(s.away).map(([k, x]) => [k, { ...x, log: { problems: [], hints: 0, hard: [] } }])) : undefined;
