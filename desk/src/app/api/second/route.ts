@@ -11,7 +11,7 @@
  * draws what the go came to, the phone says nothing about it.
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
+import { SETTLE_NOT_SAVED, dispatch, getSession, NOBODY_AT_DESK, settleSaved } from "@/lib/session/store";
 import { enteredGo, secondGo } from "@/lib/desk/mark";
 import { TYPED_ANSWER_MAX, secondProblem } from "@/lib/rules/maths";
 import { learnerSystem } from "@/lib/rules/school";
@@ -43,7 +43,10 @@ export async function POST(req: Request) {
     const j = enteredGo(item, body.answer, practice.topic, learnerSystem(s));
     if (!j) return NextResponse.json({ error: UNREADABLE }, { status: 400 });
     dispatch({ type: "practice.settle", n: item.n, reply: item.reply ?? "", verdict: j.verdict, slip: j.slip, said: j.said, slipAt: j.slipAt });
+    // read before the next event: the item is settled on the desk, but a restate the disk refused is said, never ok (WD9)
+    const saved = settleSaved();
     if (j.verdict === "wrong") dispatch({ type: "practice.second", n: item.n, verdict: "wrong" });
+    if (!saved) return NextResponse.json({ error: SETTLE_NOT_SAVED }, { status: 500 });
     return NextResponse.json({ ok: true });
   }
   const verdict = secondGo(item, body.answer, practice.topic, learnerSystem(s));

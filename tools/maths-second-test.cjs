@@ -186,3 +186,24 @@ test('value-2 (lite r3, nela-12 C3): a linear item reads the learner\'s decimal 
  assert.equal(go('0,5','uk'),null,'uk: today\'s result - the comma is not read, the go is not spent');
  assert.equal(go('0.5','uk')?.verdict,'right');
 });
+
+test('robustness-1 (lite r3): an entered settle whose learner-file write fails does not answer ok - the route says so in the desk\'s own sentence (SETTLE_NOT_SAVED)',async()=>{
+ const real=fs.renameSync;let tried=0;
+ const errs=[],e0=console.error;
+ // a history line marking wrote, so the settle has a line to restate (the write is what fails)
+ seat(markedSet({4:{verdict:'unsure',slip:undefined,studentAnswer:'?',said:'The desk is not sure about number 4. How did you get there?'}}),{walkIx:3});
+ const L=require(src('lib/session/learners.ts'));
+ L.saveLearner(L.withHistory(L.getLearner(ID),{at:Date.now(),kind:'practice',label:require(src('lib/library/paths.ts')).topicIn(TOPIC)?.name??TOPIC,detail:'3 of 6 right, 1 not sure'}));
+ fs.renameSync=function(from,to,...rest){
+  if(String(to).endsWith('learners.json')){tried++;throw Object.assign(new Error(`EPERM: operation not permitted, rename '${from}' -> '${to}'`),{code:'EPERM'});}
+  return real.call(this,from,to,...rest);
+ };
+ console.error=(...a)=>errs.push(a.join(' '));
+ let r,j;
+ try{r=await second({n:4,answer:'8'});j=await r.json();}finally{fs.renameSync=real;console.error=e0;}
+ assert.ok(tried>0,'the restate tried to write the learner file');
+ assert.notEqual(j.ok,true,'the route does not answer ok when the save failed');
+ assert.ok(r.status>=500,`a failure status, got ${r.status}`);
+ assert.equal(j.error,store().SETTLE_NOT_SAVED,'it names the failed save');
+ assert.equal(item(4).verdict,'right','the item is settled on the desk, as the sentence says');
+});
