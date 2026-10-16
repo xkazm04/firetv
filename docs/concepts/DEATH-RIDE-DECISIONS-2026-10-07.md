@@ -308,3 +308,11 @@ By extension: 109 json, 19 txt, 15 log, 1 md. No refused extension, no logcat na
   active p95 on the screen (one refresh, 16.68 ms), the median (16-18 ms), PSS (< 192 MiB), or zero rejected inputs.
 - The max line alone does not reopen it; the known limit stands until the owner or the operator delegate rules otherwise.
 - The owner may overrule any of these.
+
+## 16. The Wi-Fi stall card (P22 reading)
+
+- **Who decided:** the App Master, under the operator's delegation, 2026-10-16. The owner may overrule it.
+- **Context:** the early-probe Wi-Fi delivery stall card (optimize-2026-10-06-deathride, findings-L line 18) entered the ledger by section 9 ruling 4 and was to be read again at the next goal-1 soak (section 8 ruling 4). That soak was P22 (c6e08fb4, 900 s, sound on, deathride/main a443f12f). P22 rejected 0 inputs: 27,003 of 27,003 per seat were accepted (`docs/concepts/deathride/P22-soak.md`, the Rejected inputs row).
+- **The ruling, verbatim:** "The Wi-Fi stall card is descoped for the 10-23 deadline. It was to be read again at the next goal-1 soak (decisions section 8 ruling 4, section 9 ruling 4). That soak was P22 (c6e08fb4, 900 s, sound on, deathride/main a443f12f). P22 rejected 0 inputs: 27,003 of 27,003 per seat were accepted (docs/concepts/deathride/P22-soak.md, the Rejected inputs row). One clean soak does not prove that bursts are gone, so the card is not declined. The synchronized capture it names (perf-rejection-trace.py, perf-icmp.py) is not run before 10-23. Reverse: any later graded run or soak voided by a rejection burst reopens the card. The stale-input threshold does not change (N3, I2)."
+- **Effect:** the ledger closes at 42 built + 15 declined + 2 descoped + 0 open = 59.
+- **Reverse:** any later graded run or soak voided by a rejection burst reopens the card. The stale-input threshold does not change (N3, I2).
