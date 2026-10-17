@@ -279,6 +279,8 @@ function StartPanel({s,learning,run:send,busy,list,pitch,takeTwo}:{s:Session;lea
           {a&&<><br/><button className="pbtn" data-secondary="true" disabled={busy||a.disabled} onClick={()=>run("take-two",{note:i})}>{a.label}</button>{a.disabled&&<small className="linga-note" data-role="linga-take-refusal">{a.help}</small>}</>}
         </p>;})}</div>}
       {(c.moments??[]).length>0&&<div className="linga-transcript"><b>From this rehearsal</b>{c.moments.map(m=><p key={m.id}>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/><small>{m.why}</small></p>)}</div>}
+      {/* LG-23: the fixes held for the end, apart from the moments that stopped the scene; on no screen before the recap */}
+      {(c.heldFixes??[]).length>0&&<div className="linga-transcript" data-role="linga-held"><b>Saved for the end</b>{c.heldFixes!.map(m=><p key={m.id}>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/><small>{m.why}</small></p>)}</div>}
     </>}
     {body}
     {together}

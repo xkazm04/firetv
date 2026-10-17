@@ -98,6 +98,13 @@ export interface Moment {
    */
   repair?: MomentRepair;
 }
+/**
+ * A fix held for the recap (LG-23 Option 1, delegate ruling 2026-10-17): the turn's one fix on a reply where the moment gap
+ * or cap shut the stop, held to the same checks as a moment (parseMoment's exact excerpt, the audience gate). Never a stop:
+ * it never sets the moment, no screen shows it during the scene, and it is not a taught item. The recap lists it apart from
+ * the moments; turnId is the learner turn it is on.
+ */
+export type HeldFix = Pick<Moment, "id" | "kind" | "said" | "better" | "why" | "turnId" | "at">;
 /** Where a fix's self-repair stands (repair.ts). Written by code only; the try is never evidence. */
 export interface MomentRepair {
   /** the rung on screen: 0 say it again, 1 the why as a clue, 2 the fix shown */
@@ -169,7 +176,8 @@ export interface Review {
 export interface EnglishLearning {
   preferences: EnglishPreferences | null; notes: string[];
   evidence: EnglishEvidence[]; achievements: Partial<Record<SkillId, Progress>>;
-  sessions: Array<{ id: string; sceneId: string; title: string; at: number; turns: number }>;
+  /** `held`: the scene's held fixes (LG-23), apart from its moments, which are kept as taught items; absent when none */
+  sessions: Array<{ id: string; sceneId: string; title: string; at: number; turns: number; held?: HeldFix[] }>;
   placement: Placement | null; plan: Plan | null; taught: Taught[];
   /** every level check and hand-picked band, oldest first, append-only (placement.ts appendPlacement, capped) */
   placements: PlacementRecord[];
@@ -246,6 +254,8 @@ export interface Conversation {
   scene?: EnglishScene;
   turns: ConversationTurn[]; coaching: Coaching | null;
   moment: Moment | null; moments: Moment[];
+  /** LG-23: fixes held for the recap on turns the gap or cap kept from stopping, oldest first; absent when none. Never a stop. */
+  heldFixes?: HeldFix[];
   phase: "conversation" | "coaching" | "replay" | "finished";
   pending: string | null; error: string; paused: boolean;
   capture: boolean; captureAt: number; audioNonce: number;

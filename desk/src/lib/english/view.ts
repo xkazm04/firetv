@@ -104,7 +104,9 @@ export interface Answer { id: "answer"; action: "check-answer" | "check-task" | 
   speaker?: "learner" | "costar"; }
 /** The line the TV speaks. A new key plays it again; blocked keeps it silent. */
 export interface Spoken { line: string; key: string; blocked: boolean; slow: boolean; speaker: string; }
-export interface Recap { title: string; replies: number; spoken: number; /** replies said after help the learner used (a cue, the quiz, any help rung) or reading back a shown line: the turns' flags */ supported: number; /** replies said with none */ independent: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
+export interface Recap { title: string; replies: number; spoken: number; /** replies said after help the learner used (a cue, the quiz, any help rung) or reading back a shown line: the turns' flags */ supported: number; /** replies said with none */ independent: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>;
+  /** LG-23: the fixes held for the end on turns that did not stop, apart from the moments that did */
+  held: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
 export type Hero =
   /** `yours` (L1): the learner's owned phrases on home, no count and no digit; Family draws them as Open Door objects, Adult as a progress line (X2) */
   | { kind: "intro"; kicker: string; title: string; subtitle: string; art: ArtKey; nameTag: string; yours?: { phrases: string[]; style: "objects" | "list" } }
@@ -514,9 +516,9 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       : act("take-end", "Back to the notes", "End this take and go back to the notes on your take.", cmd("take-end"), { disabled: refused("take-end") })];
   } else if (c && s.screen === "linga-recap") {
     tag = "Your rehearsal"; title = "Take it somewhere new";
-    const attempts = c.turns.filter(t => t.role === "learner"), spokenCount = attempts.filter(t => t.mode === "speech").length, moments = c.moments ?? [];
+    const attempts = c.turns.filter(t => t.role === "learner"), spokenCount = attempts.filter(t => t.mode === "speech").length, moments = c.moments ?? [], held = c.heldFixes ?? [];
     const helped = attempts.filter(t => t.supported).length;
-    recap = { title: c.title, replies: attempts.length, spoken: spokenCount, supported: helped, independent: attempts.length - helped, moments: moments.map(({ kind, said, better, why }) => ({ kind, said, better, why })) };
+    recap = { title: c.title, replies: attempts.length, spoken: spokenCount, supported: helped, independent: attempts.length - helped, moments: moments.map(({ kind, said, better, why }) => ({ kind, said, better, why })), held: held.map(({ kind, said, better, why }) => ({ kind, said, better, why })) };
     const counts = `${spokenCount} spoken · ${attempts.length - spokenCount} written replies${attempts.length ? ` · ${attempts.length - helped} on your own · ${helped} with help` : ""}${moments.length ? ` · ${moments.length} ${moments.length === 1 ? "moment" : "moments"} to keep` : ""}`;
     const rv = c.review, notes = c.cut?.notes ?? [], ln = c.line?.text ? c.line : null;
     caption = attempts.length ? `Next, try ${recommended.name.toLowerCase()}. Your notes and learning map are on the phone.` : "You explored the scene. Try a reply next time; no progress was recorded.";
@@ -548,9 +550,10 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       title = "You found it";
       hero = { kind: "comparison", before: { kicker: ln.source === "check" ? `From ${CHECK_TITLE.toLowerCase()}` : "The line in this room", quote: ln.text! }, after: { kicker: "You said it tonight", quote: ln.found }, note: "", art: "done", data: counts };
       caption = `You found it without help. Next, try ${recommended.name.toLowerCase()}.`;
-    } else if (c.coaching || moments.length) {
+    } else if (c.coaching || moments.length || held.length) {
       // One thing learned tonight, as the picture. A coaching change carries no time, so when the order is unknown it wins.
-      const m = moments.at(-1), co = c.coaching;
+      // A stop's moment comes before a fix held for the end (LG-23); a held fix is on screen only now, the scene over.
+      const m = moments.at(-1) ?? held.at(-1), co = c.coaching;
       hero = co
         ? { kind: "comparison", before: { kicker: "You said", quote: co.before }, after: { kicker: "One way to try it", quote: co.after }, note: co.note, art: "done", data: counts }
         : { kind: "comparison", before: { kicker: m!.kind === "fix" ? "You said" : "You wanted to say", quote: m!.said }, after: { kicker: m!.kind === "fix" ? "Try" : "In English", quote: m!.better }, note: m!.why, art: "done", data: counts };
@@ -781,7 +784,10 @@ export function viewText(v: LingaView): string {
   if (v.error) out.push(`Error on screen: ${v.error}`);
   if (v.recap) {
     out.push(`Rehearsal saved: ${v.recap.title}. ${v.recap.replies} ${v.recap.replies === 1 ? "reply" : "replies"}, ${v.recap.spoken} spoken.`);
-    if (v.recap.moments.length) out.push("On the phone, from this rehearsal:", ...v.recap.moments.map(m => m.kind === "fix" ? `  "${m.said}" → "${m.better}" (${m.why})` : `  "${m.said}": ${m.better} (${m.why})`));
+    const listed = (m: Recap["held"][number]) => m.kind === "fix" ? `  "${m.said}" → "${m.better}" (${m.why})` : `  "${m.said}": ${m.better} (${m.why})`;
+    if (v.recap.moments.length) out.push("On the phone, from this rehearsal:", ...v.recap.moments.map(listed));
+    // LG-23: the fixes held for the end, listed apart from the moments that stopped the scene
+    if (v.recap.held.length) out.push("On the phone, saved for the end:", ...v.recap.held.map(listed));
   }
   out.push(...v.details);
   if (v.answer) out.push(`On the phone: ${v.answer.label}, by speaking or typing.`);

@@ -31,8 +31,14 @@ export function cleanEnglish(value: unknown): EnglishLearning {
   // optional (v2 L3): only a record that holds a pitch carries the field
   const pitches = cleanPitches(v.pitches);
   if (pitches.length) result.pitches = pitches;
-  result.sessions = Array.isArray(v.sessions) ? v.sessions.filter((s): s is EnglishLearning["sessions"][number] => {const x=obj(s);return typeof x.id === "string" && typeof x.sceneId === "string" && typeof x.title === "string" && typeof x.at === "number" && typeof x.turns === "number";}).slice(-30) : [];
+  result.sessions = Array.isArray(v.sessions) ? v.sessions.filter((s): s is EnglishLearning["sessions"][number] => {const x=obj(s);return typeof x.id === "string" && typeof x.sceneId === "string" && typeof x.title === "string" && typeof x.at === "number" && typeof x.turns === "number";}).map(cleanSession).slice(-30) : [];
   return result;
+}
+/** A sessions entry with its held fixes (LG-23) kept only where each is whole; an entry with none carries no field. */
+function cleanSession(s: EnglishLearning["sessions"][number]): EnglishLearning["sessions"][number] {
+  const { held, ...rest } = s, str = (v: unknown) => typeof v === "string" && v.length > 0;
+  const kept = Array.isArray(held) ? held.filter(h => { const x = obj(h); return (x.kind === "fix" || x.kind === "word") && [x.id, x.said, x.better, x.why, x.turnId].every(str) && typeof x.at === "number"; }) : [];
+  return kept.length ? { ...rest, held: kept } : rest;
 }
 /**
  * The modes that count toward progress. Spoken and typed replies are both the learner's own words (owner decision D4,

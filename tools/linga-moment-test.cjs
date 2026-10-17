@@ -52,3 +52,175 @@ test('the moment task: a beginner may stop on a repeated grammar slip; B1 and ab
   assert.ok(!/beginner/.test(b));
   for(const t of [a,b])assert.match(t,/Never stop for a valid alternative, a style or register choice/);
 });
+
+// ---- LG-23 Option 1, save fixes for the end (delegate ruling 2026-10-17): the limiter rows of
+// uat/runs/2026-10-17-lt-swap-2/recert-3/limiter.md, replayed on the gate as it runs, with the tutor's fix as the model gave it
+const C=require(path.join(root,'src/lib/english/conversation.ts'));
+const {keywordAudience}=require(path.join(root,'src/lib/english/gate.ts'));
+/** the audience gate for a learner who is not an adult (gate.ts keywordAudience, as conversation.ts audienceFor holds it) */
+const minorSafe=x=>{const a=keywordAudience(x);return a!==null&&a!=='adult';};
+/** A transcript as the run kept it: partner first, then learner and partner lines in turn; moments on the named learner lines. */
+function run(level,partnerOpening,pairs,moments){
+  const turns=[{id:'p0',role:'partner',text:partnerOpening}];
+  pairs.forEach(([l,p],i)=>{turns.push(learner(i+1,l));if(p)turns.push(partner(i+1,p));});
+  return {preferences:{correction:'as-needed',level},turns,moments};
+}
+/** The gate exactly as englishCommand runs it on a turn (conversation.ts): stopsRepeat, the fossil, mayStop. */
+function gate(c,reply){
+  const stopsRepeat=C.momentAllowed(c,true),fossil=stopsRepeat?fossilOf(reply,c,slipsAgain(reply,c,[])):null;
+  return {fossil,mayStop:stopsRepeat&&(!!fossil||C.momentAllowed(c))};
+}
+/** What the turn kept before LG-23 for the same model output: a moment only where mayStop, nothing otherwise. */
+const before=(g,o)=>g.mayStop?C.momentOutcome(o.c,{...o,...g}).moment:null;
+const word=(turnId,said,better)=>({...fix(turnId,said,better),kind:'word'});
+
+// ondrej-16 J3 L3 (limiter row 6, class A gap): B1, 0 learner turns since the L2 moment
+const ONDREJ_L3='maybe on saturday? I have no school then, so we can play more long. after I finish my football training';
+const ondrej=()=>run('B1','Hey! Ranked matches tonight? I\'m thinking we play all night, like until the sun comes up. What do you think?',[
+  ['all night? no way man, I have school tomorrow and my mom will kill me. I can play only to ten maybe','That\'s so early! Fine, but can we finish one more match first?'],
+  ['ok one more match is fine. but only two matches after, then I must go. I don\'t want my mom be angry','Deal, two matches after this one! So when can we play next time?'],
+],[fix('t2','I don\'t want my mom be angry','I don\'t want my mom to be angry')]);
+// martin-45 J3 L3 (limiter row 1, class A gap): B2, 0 learner turns since the L2 moment
+const MARTIN_L3='On our side the owner will be Petr, he is our logistic coordinator. He don\'t have a problem to prepare the summary until Friday, but we need from you the new delivery date. Can you confirm it today, please?';
+const martin=()=>run('B2','Hi, thanks for setting this up. Our packaging summary is late, and I know your director also wants to talk about quality. Where would you like to start?',[
+  ['Hello Elena, thank you for coming. I think we should start with the packaging summary, because this delay is making a problem for our production.','Ten minutes each sounds fair to me. What is the biggest effect of this delay on your production?'],
+  ['The biggest effect is that we was waiting for your packaging material already two weeks, so our line is staying idle.','Two weeks with your line stopped is serious. Who on our side should take the packaging summary?'],
+],[fix('t2','we was waiting for your packaging material already two weeks','we have been waiting for your packaging material for two weeks')]);
+// tomas-9 J3 L7 (limiter row 21, class A cap): A1, two word moments (L1, L5), the A1 cap
+const TOMAS_L7='Rex. My dog Rex. Je to brown dog';
+const tomas=()=>run('A1','What is in your world?',[
+  ['creeper. I like creeper. A dům... house','What colour is it?'],['green. Creeper is green','What did you make?'],
+  ['I make house. Dům je green. Creeper','Where is it?'],['Minecraft. Je to v... house. Green house','Oh, green! Is it near the water?'],
+  ['Ano... yes. Water. Je to blue water','Blue water is cool! Is there a dog too?'],['Yes! Dog. I like dog. Pes je brown.','What is your dog called?'],
+],[word('t1','A dům... house','house'),word('t5','Je to blue water','It is blue water')]);
+const ROWS=[
+  {name:'ondrej-16 J3 L3 (row 6, gap)',c:ondrej,reply:ONDREJ_L3,turnId:'t3',raw:{kind:'fix',said:'we can play more long',better:'we can play longer',why:'One word: longer.'},why:'gap'},
+  {name:'martin-45 J3 L3 (row 1, gap)',c:martin,reply:MARTIN_L3,turnId:'t3',raw:{kind:'fix',said:'He don\'t have a problem',better:'He doesn\'t have a problem',why:'He goes with doesn\'t.'},why:'gap'},
+  {name:'tomas-9 J3 L7 (row 21, cap)',c:tomas,reply:TOMAS_L7,turnId:'t7',raw:{kind:'word',said:'Je to brown dog',better:'It is a brown dog',why:'Je to means it is.'},why:'cap'},
+];
+for(const r of ROWS)test(`LG-23 ${r.name}: the gate still says no; the fix is held, is not a stop, and the screen and stop count do not move`,()=>{
+  const c=r.c(),g=gate(c,r.reply);
+  assert.equal(g.mayStop,false,'the gate blocks this turn, as in the run');assert.equal(g.fossil,null);
+  if(r.why==='cap')assert.equal(C.momentAllowed(c,true),false,'the cap is what blocks');else assert.equal(C.momentAllowed(c,true),true,'only the gap blocks');
+  const o={c,raw:r.raw,reply:r.reply,turnId:r.turnId,safe:minorSafe},out=C.momentOutcome(c,{...o,...g});
+  assert.equal(before(g,o),null,'before LG-23 the fix was thrown away');
+  assert.equal(out.moment,null,'never a stop: no moment, so the screen stays linga-talk');
+  assert.deepEqual(out.held,{id:`${r.turnId}:held`,kind:r.raw.kind,said:r.raw.said,better:r.raw.better,why:r.raw.why,turnId:r.turnId,at:out.held.at},'held, with its turn id');
+  // the next turn's gate reads the moments only: holding a fix spends no gap and no cap
+  const after={...c,turns:[...c.turns,learner(r.turnId.slice(1),r.reply)],heldFixes:C.keepHeld(c.heldFixes,out.held)};
+  assert.equal(C.momentAllowed(after),C.momentAllowed({...after,heldFixes:undefined}));
+  assert.equal(C.momentAllowed(after,true),C.momentAllowed({...after,heldFixes:undefined},true));
+  assert.equal(after.moments.length,c.moments.length,'the stop count is unchanged');
+  // (3) said not an exact excerpt of the reply: dropped, as a moment would be
+  assert.equal(C.momentOutcome(c,{...o,...g,raw:{...r.raw,kind:'fix',said:r.raw.said+' really'}}).held,null);
+  // (4) a field the audience gate holds: dropped, as a moment would be
+  for(const k of ['better','why'])assert.equal(C.momentOutcome(c,{...o,...g,raw:{...r.raw,[k]:`${r.raw[k]} and a beer`}}).held,null,`${k} held by the audience gate`);
+  const beer={...o,...g,reply:`${r.reply} and a beer`,raw:{...r.raw,kind:'fix',said:'and a beer'}};
+  assert.equal(C.momentOutcome(c,beer).held,null,'said held by the audience gate');
+  assert.ok(C.momentOutcome(c,{...beer,safe:()=>true}).held,'for an adult the same fix is held: the gate is what dropped it');
+  // (6) correction off: nothing is held, and no stop either
+  const off={...c,preferences:{...c.preferences,correction:'pauses'}},go=gate(off,r.reply);
+  assert.deepEqual(C.momentOutcome(off,{...o,...go,c:off}),{moment:null,held:null});
+});
+
+test('LG-23: where the gate lets a stop through, the turn is a moment exactly as before and nothing is held; a fossil still stops',()=>{
+  // ondrej-16 J3 L2, the run's caught moment: no moment yet, so the gate is open
+  const c=ondrej();c.moments=[];c.turns=c.turns.slice(0,4);
+  const reply=c.turns[3].text;c.turns=c.turns.slice(0,3);
+  const g=gate(c,reply);assert.equal(g.mayStop,true);
+  const o={c,raw:{kind:'fix',said:'I don\'t want my mom be angry',better:'I don\'t want my mom to be angry',why:'want someone to be.'},reply,turnId:'t2',safe:minorSafe};
+  const out=C.momentOutcome(c,{...o,...g});
+  assert.equal(out.held,null);assert.equal(out.moment.said,o.raw.said);assert.deepEqual(out.moment,{...before(g,o),at:out.moment.at});
+  // martin: "he don't agree" said again after its moment, one turn later: code's fossil stops inside the gap, over the model's fix
+  const m=scene('B1',['I think he don\'t agree.','What do you mean?'],[fix('t0','he don\'t agree','he doesn\'t agree')]),gm=gate(m,MARTIN);
+  assert.equal(gm.mayStop,true);assert.ok(gm.fossil);
+  const fo=C.momentOutcome(m,{c:m,raw:{kind:'fix',said:'with the plan',better:'with this plan',why:'x'},reply:MARTIN,turnId:'t2',safe:minorSafe,...gm});
+  assert.equal(fo.held,null);assert.deepEqual(fo.moment,{...require(path.join(root,'src/lib/english/review.ts')).fossilMoment(gm.fossil,'t2'),at:fo.moment.at},'the moment is the fossil, never the model fix');
+});
+
+test('LG-23: the held-fix task asks for the one fix and says the scene does not stop; the stop task is unchanged',()=>{
+  for(const b of [true,false]){
+    const h=C.heldTaskFor(b);assert.ok(h.startsWith(C.momentTaskFor(b)),'the same criteria as a stop');
+    assert.match(h,/does not stop the scene/);assert.match(h,/held for the end of the scene/);assert.doesNotMatch(h,/—/);
+  }
+  assert.doesNotMatch(C.momentTaskFor(false),/held for the end/);
+});
+
+test('LG-23: the same words held twice are listed once, oldest first',()=>{
+  const a={id:'t1:held',kind:'fix',said:'more long',better:'longer',why:'x',turnId:'t1',at:1},b={...a,id:'t3:held',turnId:'t3'};
+  assert.deepEqual(C.keepHeld(undefined,null),[]);assert.deepEqual(C.keepHeld(undefined,a),[a]);
+  assert.deepEqual(C.keepHeld([a],b),[a]);const other={...b,said:'is ok for you',better:'is that ok for you'};
+  assert.deepEqual(C.keepHeld([a],other),[a,other]);
+});
+
+// ---- LG-23 wired: the ondrej-16 J3 run replayed through englishCommand, the engine stubbed (no model is called)
+const ONDREJ_LINES=[
+  ['all night? no way man, I have school tomorrow and my mom will kill me. I can play only to ten maybe','That\'s so early! Fine, but can we finish one more match first?',{kind:'none',said:'',better:'',why:''}],
+  ['ok one more match is fine. but only two matches after, then I must go. I don\'t want my mom be angry','Deal, two matches after this one! So when can we play next time?',{kind:'fix',said:'I don\'t want my mom be angry',better:'I don\'t want my mom to be angry',why:'want someone to do something.'}],
+  [ONDREJ_L3,'Saturday works for me! So tonight, what time do you want to finish?',{kind:'fix',said:'we can play more long',better:'we can play longer',why:'One word: longer.'}],
+  ['tonight we finish at ten, no more. and next time saturday at six, after I eat dinner. is ok for you?','Deal, we stop at ten, no more!',{kind:'fix',said:'is ok for you?',better:'is that ok for you?',why:'A question needs its subject.'}],
+];
+async function replayOndrej(correction){
+  const engine=require(path.join(root,'src/lib/engines/text.ts')),real=engine.text,prompts=[];
+  const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
+  const {getLearner,saveEnglish}=require(path.join(root,'src/lib/session/learners.ts'));
+  const {emptyEnglish}=require(path.join(root,'src/lib/english/types.ts')),{defaultPreferences}=require(path.join(root,'src/lib/english/curriculum.ts'));
+  dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});dispatch({type:'subject',subject:'english'});
+  const profile=getSession().profiles.find(p=>p.id==='ema');
+  saveEnglish('ema',{...emptyEnglish(),preferences:{...defaultPreferences(profile),level:'B1',correction}});
+  engine.text=async req=>{
+    const p=JSON.parse(req.prompt);prompts.push(p);
+    if(!p.submittedReply)return {json:{title:'Ranked tonight',goal:'Agree when to stop playing.',opening:'Hey! Ranked matches tonight? What do you think?'},provider:'test',ms:1};
+    const [,reply,moment]=ONDREJ_LINES.find(l=>l[0]===p.submittedReply);
+    return {json:{reply,observations:[],moment},provider:'test',ms:1};
+  };
+  let n=0;const cmd=(action,extra={})=>{const s=getSession();return C.englishCommand({action,learnerId:'ema',episodeId:s.conversation?.id,commandId:`lg23-${correction}-${++n}`,...extra});};
+  const screens=[];
+  try{
+    await cmd('start',{sceneId:'booking',replace:true});
+    for(const [text] of ONDREJ_LINES){
+      await cmd('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+      screens.push(getSession().screen);
+      if(getSession().conversation.moment)await cmd('moment-done');
+    }
+    const live=getSession().conversation;
+    await cmd('finish');
+    return {prompts,screens,live,done:getSession(),learning:getLearner('ema').english};
+  }finally{engine.text=real;}
+}
+
+test('LG-23 wired (ondrej-16 J3, rows 6 and 7): one stop as before, the two gap-blocked fixes held, on no screen until the recap, which lists them apart',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts'));
+  const {prompts,screens,live,done,learning}=await replayOndrej('as-needed');
+  assert.deepEqual(screens,['linga-talk','linga-moment','linga-talk','linga-talk'],'the stop is on L2 only, as in the run');
+  assert.match(prompts[3].task,/does not stop the scene/,'L3: the gate shut, the fix is still asked for');assert.match(prompts[4].task,/does not stop the scene/);
+  assert.doesNotMatch(prompts[2].task,/does not stop the scene/,'L2: the stop task as before');
+  assert.equal(live.moments.length,1,'one stop, as in the run');assert.equal(live.moment,null);
+  assert.deepEqual(live.heldFixes.map(h=>[h.said,h.better,h.turnId]),[['we can play more long','we can play longer',live.turns[5].id],['is ok for you?','is that ok for you?',live.turns[7].id]]);
+  // (5) the recap view-model: the held fixes, apart from the moments
+  const v=V.lingaView(done,{});
+  assert.deepEqual(v.recap.moments.map(m=>m.said),['I don\'t want my mom be angry']);
+  assert.deepEqual(v.recap.held,[{kind:'fix',said:'we can play more long',better:'we can play longer',why:'One word: longer.'},{kind:'fix',said:'is ok for you?',better:'is that ok for you?',why:'A question needs its subject.'}]);
+  const text=V.viewText(v);
+  assert.match(text,/On the phone, from this rehearsal:\n  "I don't want my mom be angry"/);
+  assert.match(text,/On the phone, saved for the end:\n  "we can play more long" → "we can play longer" \(One word: longer\.\)\n  "is ok for you\?" → "is that ok for you\?"/);
+  // the record: the held fixes on the sessions entry, the one moment the only taught item
+  assert.deepEqual(learning.sessions.at(-1).held.map(h=>h.said),['we can play more long','is ok for you?']);
+  assert.deepEqual(learning.taught.filter(t=>!t.line).map(t=>t.said),['I don\'t want my mom be angry'],'the room line (K4) aside');
+  const {cleanEnglish}=require(path.join(root,'src/lib/english/rules.ts'));
+  assert.deepEqual(cleanEnglish(JSON.parse(JSON.stringify(learning))).sessions.at(-1).held,learning.sessions.at(-1).held,'a reload keeps them');
+});
+
+test('LG-23 wired: during the scene no view lists a held fix; with correction off nothing is held and nothing stops',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts'));
+  const on=await replayOndrej('as-needed');
+  const talking={...on.done,screen:'linga-talk',conversation:{...on.live,phase:'conversation'}};
+  const shown=V.viewText(V.lingaView(talking,{}));
+  assert.doesNotMatch(shown,/play longer|is that ok for you/,'the talk screen shows no held fix');
+  assert.equal(V.lingaView(talking,{}).recap,null);
+  const off=await replayOndrej('pauses');
+  assert.equal(off.live.heldFixes,undefined);assert.equal(off.live.moments.length,0);
+  assert.ok(off.prompts.slice(1).every(p=>/moment: kind none with empty fields/.test(p.task)),'no fix is asked for');
+  assert.equal(off.learning.sessions.at(-1).held,undefined);
+  assert.deepEqual(V.lingaView(off.done,{}).recap.held,[]);
+});
