@@ -270,7 +270,7 @@ test('a moment needs an exact quote, holds the scene, is spaced out, and never m
  await assert.rejects(command('turn',{text:'Another reply',mode:'text',lastTurnId:c.turns.at(-1).id}),e=>e.status===409);
  await command('moment-done');c=getSession().conversation;assert.equal(c.moment,null);assert.equal(getSession().screen,'linga-talk');
  assert.equal(getLearner('ema').english.taught.length,taught+1,'kept when it closes');assert.equal(c.moments.at(-1).better,'I have a booking');
- await command('turn',{text:'I have booking for Friday, yes.',mode:'text',lastTurnId:c.turns.at(-1).id});
+ await command('turn',{text:'The room is nice, yes.',mode:'text',lastTurnId:c.turns.at(-1).id});
  assert.equal(getSession().conversation.moment,null,'no second moment on the very next turn');
 });
 test('an optional moment or observation that overruns its limit is dropped, and the turn still lands (real text(), stub provider)',async()=>{
@@ -309,9 +309,10 @@ test('beginners meet fewer moments: at most two a rehearsal, three replies apart
  await command('preferences',{preferences:{...defaultPreferences({type:'other'}),level:'A2',correction:'as-needed'},notes:[]});
  answer=async()=>({json:{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'},provider:'test',ms:1});
  await command('start',{sceneId:'booking',replace:true});
- answer=async()=>({json:{reply:'I see. Anything else?',observations:[],moment:{kind:'fix',said:'I has booking',better:'I have a booking',why:'"I" goes with "have".'}},provider:'test',ms:1});
+ // a different slip every reply, so the gap and cap are what is tested (a slip said again may stop inside the gap: linga-moment-test.cjs)
+ let n=0;answer=async()=>({json:{reply:'I see. Anything else?',observations:[],moment:{kind:'fix',said:`Room${n} are cold`,better:`Room${n} is cold`,why:'One room takes "is".'}},provider:'test',ms:1});
  const stoppedAt=[];
- for(let i=1;i<=10;i++){const c=getSession().conversation;await command('turn',{text:'I has booking number '+i+'.',mode:'text',lastTurnId:c.turns.at(-1).id});if(getSession().conversation.moment){stoppedAt.push(i);await command('moment-done');}}
+ for(let i=1;i<=10;i++){const c=getSession().conversation;n=i;await command('turn',{text:`Room${i} are cold.`,mode:'text',lastTurnId:c.turns.at(-1).id});if(getSession().conversation.moment){stoppedAt.push(i);await command('moment-done');}}
  assert.deepEqual(stoppedAt,[1,5]);
 });
 test('topics for a learner with no known goal wait for one, and the goal they give reaches the plan',async()=>{
