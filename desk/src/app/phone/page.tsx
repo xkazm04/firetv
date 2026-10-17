@@ -234,6 +234,9 @@ export default function Phone() {
   // the TV is on one sentence of the paragraph: the Essay tab offers that sentence, the learner's own words, to rewrite
   const onSentence = s?.screen === "forensic" && s.essay?.sentences.length ? s.essay.sentences[forensicAt(s)] : null;
   const [rewrite, setRewrite] = useState("");
+  /** The TV holds a reading of the whole piece: a paragraph it already read must not be read alone over it (essay.set would replace the piece). */
+  const pieceHeld = !!s?.essay?.piece && paras.length > 1;
+  const pieceCovers = (ix: number) => pieceHeld && (s?.essay?.piece?.read ?? []).includes(ix);
   // E2-b: while the piece is still being read a sentence cannot be rewritten
   const rewriting = pieceBeingRead(s?.essay?.piece);
   // the TV is on the plan: the Essay tab writes the slot its caret is on, one sentence, in the learner's own words
@@ -328,7 +331,13 @@ export default function Phone() {
     if (!moved()) setNote("That did not reach the desk.");
   };
   /** From the sentence rewrite panel, on to the next paragraph: the TV goes back to the lens home, the phone to its paragraph. */
-  const nextFromRewrite = () => { goPara(pix + 1); void post({ type: "nav", screen: "essaytype", focus: Math.max(0, ESSAY_TYPES.findIndex((t) => t.id === etype)) }); };
+  const nextFromRewrite = () => {
+    // a piece reading on the TV is walked, not replaced: the TV goes to the next paragraph's first sentence (essay.at) and keeps the reading
+    const first = pieceHeld ? s?.essay?.sentences.find((x) => (x.para ?? 0) === pix + 1) : undefined;
+    goPara(pix + 1);
+    if (first) void post({ type: "essay.at", n: first.n });
+    else void post({ type: "nav", screen: "essaytype", focus: Math.max(0, ESSAY_TYPES.findIndex((t) => t.id === etype)) });
+  };
   /** E4-a: a piece that is done with a paragraph that did not come back offers to read just those again (the desk checks it in code). */
   const pieceAgain = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("the desk is reading them again…");
     try { const r = await call("/api/analyse", { kind: "piece-again" }); const j = await r.json().catch(() => ({} as { error?: string }));
@@ -725,7 +734,7 @@ export default function Phone() {
             {stranded > 0 && <p className="pnote" data-role="essay-rewrites-stay" aria-live="polite">{rewriteStaysLine(stranded)}</p>}
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()))}>Dictate</button>
-            <button className="pbtn" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || notice !== null || !essay.trim()} onClick={analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button></div>
+            {!pieceCovers(pix) && <button className="pbtn" data-role="essay-analyse-one" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || notice !== null || !essay.trim()} onClick={analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button>}</div>
           <EssayShelf learnerId={s?.learner?.id} refresh={shelfTick} onOpen={openKept} /></div>}
 
         {screen === "tonight" && s && <div className="pscreen"><h3>Tonight</h3>
