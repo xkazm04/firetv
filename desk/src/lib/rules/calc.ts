@@ -37,9 +37,17 @@ export type CalcSpec =
   | { shape: "extremum"; f: string; on: [Num, Num]; kind: "max" | "min" }
   | { shape: "newton-step"; f: string; x0: Num; steps: number };
 
-export type CalcShape = CalcSpec["shape"];
+/**
+ * Implicit differentiation (L1-matyas-19-MB3-3): `f` is an EQUATION in x and y written with one '=' ('x^2 + y^2 = 25',
+ * 'x*y + y^2 = 7'), y a function of x; the question is dy/dx - as an expression in x and y, or its value at `point` (x, y)
+ * on the curve. Kept out of CalcSpec, whose `f` is a function of x every Calculus 1 reader compiles: the section
+ * 'implicit differentiation' below reads it, and each public function sends it there on its first line.
+ */
+export type ImplicitSpec = { shape: "implicit-derivative"; f: string; point?: [Num, Num] };
 
-export const CALC_SHAPES: readonly CalcShape[] = ["evaluate", "derivative", "derivative-at", "antiderivative", "definite-integral", "limit", "critical-point", "extremum", "newton-step"];
+export type CalcShape = CalcSpec["shape"] | ImplicitSpec["shape"];
+
+export const CALC_SHAPES: readonly CalcShape[] = ["evaluate", "derivative", "derivative-at", "antiderivative", "definite-integral", "limit", "critical-point", "extremum", "newton-step", "implicit-derivative"];
 
 // ------------------------------------------------------------------ tolerances, each with its reason
 
@@ -62,6 +70,7 @@ export const TOLERANCE: Readonly<Record<Exclude<CalcShape, "derivative" | "antid
   "definite-integral": { exact: 1e-6, rounded: 5e-3 },
   limit: { exact: 1e-6, rounded: 5e-3 },
   "newton-step": { exact: 5e-3, rounded: 5e-3 },
+  "implicit-derivative": { exact: 1e-6, rounded: 1e-6 },
 };
 /** Function shapes compare at the samples to 1e-6: the numeric derivative is good to 1e-7 relative, so 10x margin. */
 export const FUNCTION_TOL = 1e-6;
@@ -126,6 +135,11 @@ const REJECT = {
   extremumAtEnd: "The extremum is at an endpoint, not where the derivative is zero.",
   newtonUndefined: "A Newton step is not finite: the tangent is flat or the function undefined.",
   newtonConverged: "The asked-for iterate cannot be told from the next one (or the one before) at the shape's tolerance.",
+  equation: "The equation is not one '=' between two sides in x and y the desk can read.",
+  noY: "The equation has no y in it, or no x.",
+  offCurve: "The point is not on the curve.",
+  curveSparse: "The desk finds too few points on the curve to check an answer.",
+  slopeConstant: "The slope is the same everywhere: the curve is a straight line.",
 } as const;
 
 // ------------------------------------------------------------------ reading a spec
@@ -173,7 +187,7 @@ function newtonIterates(f: Expr, x0: number, n: number): number[] | null {
 }
 
 function read(spec: unknown): Read {
-  if (!spec || typeof spec !== "object" || !isShape((spec as { shape?: unknown }).shape)) return { ok: false, why: REJECT.shape };
+  if (!spec || typeof spec !== "object" || !isShape((spec as { shape?: unknown }).shape) || isImplicitSpec(spec)) return { ok: false, why: REJECT.shape };
   const s = spec as CalcSpec & Record<string, unknown>;
   if (["answer", "truth", "solution", "value"].some((k) => k in s)) return { ok: false, why: REJECT.answer };
   const f = typeof s.f === "string" ? compile(s.f) : null;
@@ -286,6 +300,7 @@ function read(spec: unknown): Read {
  */
 export function wellFormed(spec: unknown): { ok: true } | { ok: false; why: string } {
   if (isCalc2Spec(spec)) return calc2WellFormed(spec);
+  if (isImplicitSpec(spec)) { const r = readImplicit(spec); return r.ok ? { ok: true } : { ok: false, why: r.why }; }
   const r = read(spec);
   return r.ok ? { ok: true } : { ok: false, why: r.why };
 }
@@ -308,7 +323,7 @@ const approachTex = (at: Num | "inf" | "-inf", side?: "+" | "-") => (at === "inf
  * only, never the truth: a degenerate question still prints (wellFormed refuses it), a malformed one never throws.
  */
 function printable(spec: unknown): { s: CalcSpec; f: Expr } | null {
-  if (!spec || typeof spec !== "object" || !isShape((spec as { shape?: unknown }).shape)) return null;
+  if (!spec || typeof spec !== "object" || !isShape((spec as { shape?: unknown }).shape) || isImplicitSpec(spec)) return null;
   const s = spec as CalcSpec & Record<string, unknown>;
   if (["answer", "truth", "solution", "value"].some((k) => k in s)) return null;
   const f = typeof s.f === "string" ? compile(s.f) : null;
@@ -349,6 +364,7 @@ export function question(spec: unknown, system?: SchoolSystem): { plain: string;
     return question(ln);
   }
   if (isCalc2Spec(spec)) return calc2Question(spec);
+  if (isImplicitSpec(spec)) return implicitQuestion(spec);
   const p = printable(spec);
   if (!p) return null;
   const { s, f } = p;
@@ -430,6 +446,7 @@ function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, wr
  */
 export function checkAnswer(spec: unknown, studentAnswer: unknown, system?: SchoolSystem): CalcVerdict {
   if (isCalc2Spec(spec)) return calc2CheckAnswer(spec, studentAnswer, system);
+  if (isImplicitSpec(spec)) return implicitCheck(spec, studentAnswer, system);
   const r = read(spec);
   if (!r.ok) return verdict("unsure", WHY.badSpec);
   if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
@@ -537,6 +554,8 @@ export function meetsRequirement(spec: unknown, requirement?: string): boolean {
   if (requirement === undefined) return true;
   const f = spec && typeof spec === "object" ? (spec as { f?: unknown }).f : undefined;
   if (typeof f !== "string") return false;
+  // an implicit equation applies the chain rule to y wherever y sits in a power or inside a function (y^2, sin(y), e^y)
+  if (isImplicitSpec(spec)) return requirement === "composition" && yInside(spec);
   return requirement === "composition" ? isComposition(f) : false;
 }
 
@@ -640,6 +659,7 @@ const LONG_WINDOW = 24;
  */
 export function leaksCalc(spec: unknown, line: unknown): boolean {
   if (isCalc2Spec(spec)) return calc2LeaksCalc(spec, line);
+  if (isImplicitSpec(spec)) return leaksImplicit(spec, line) || (typeof line === "string" && pointForComma(line) !== line && leaksImplicit(spec, pointForComma(line)));
   if (leaksCalcOnce(spec, line)) return true;
   if (typeof line !== "string") return false;
   const pointed = pointForComma(line);
@@ -749,7 +769,7 @@ function leaksCalcOnce(spec: unknown, line: unknown): boolean {
 /** `name` is the slip's title, `says` the desk's line, `points` where to look - none carries a value. */
 export interface CalcSlip { id: string; name: string; says: string; points: string; shapes: readonly CalcShape[]; }
 
-const DIFF: CalcShape[] = ["derivative", "derivative-at", "critical-point", "extremum", "newton-step"];
+const DIFF: CalcShape[] = ["derivative", "derivative-at", "critical-point", "extremum", "newton-step", "implicit-derivative"];
 const INTEGRAL: CalcShape[] = ["antiderivative", "definite-integral"];
 
 export const CALC_SLIPS: readonly CalcSlip[] = [
@@ -1029,7 +1049,7 @@ function definiteSpec(fText: string, aText: string, bText: string): CalcSpec | n
  * rule, never checked against a guess. A definite integral that is zero is read as the symmetry question it is
  * (`zero: true`). Pure and deterministic: a fresh object per call.
  */
-function calc1SpecFromQuestion(text: unknown): CalcSpec | null {
+function calc1SpecFromQuestion(text: unknown): CalcSpec | ImplicitSpec | null {
   if (typeof text !== "string" || !text.trim() || text.length > MAX_QUESTION) return null;
   const t = normalQuestion(text);
   for (const [pattern, make] of READERS) {
@@ -1045,14 +1065,15 @@ function calc1SpecFromQuestion(text: unknown): CalcSpec | null {
     }
     return null;
   }
-  return null;
+  // implicit differentiation last, so no text an earlier phrasing reads changes its spec (L1-matyas-19-MB3-3)
+  return implicitFromQuestion(t);
 }
 
 /**
  * The spec a printed Calculus task is: Calculus 1's reading first and unchanged (above); only a text that reading returns
  * null for is offered to rules/calc2 (v2 M3b-3b ruling 31), on the same normalised text.
  */
-function specOnce(text: unknown): CalcSpec | Calc2Spec | null {
+function specOnce(text: unknown): CalcSpec | ImplicitSpec | Calc2Spec | null {
   const own = calc1SpecFromQuestion(text);
   if (own || typeof text !== "string" || !text.trim() || text.length > MAX_QUESTION) return own;
   return calc2SpecFromQuestion(normalQuestion(text));
@@ -1068,7 +1089,7 @@ const logsOfSystem = (text: unknown, system?: SchoolSystem) =>
   typeof text === "string" && commaSystem(system) ? systemLogs(text, system) : text;
 
 /** The spec a printed Calculus task is. `system` is the learner's school system: with it a decimal comma reads as a point; an instruction in front ('Derivujte:', 'Vypočtěte') is set aside (MB-B2); a log reads in the system's base (logsOfSystem). */
-export const specFromQuestion = (text: unknown, system?: SchoolSystem): CalcSpec | Calc2Spec | null => readTask(logsOfSystem(text, system), system, specOnce);
+export const specFromQuestion = (text: unknown, system?: SchoolSystem): CalcSpec | ImplicitSpec | Calc2Spec | null => readTask(logsOfSystem(text, system), system, specOnce);
 
 const MAX_WORDS = String.raw`(?:absolute\s+|global\s+)?(maximum|max|largest|greatest)`;
 const MIN_WORDS = String.raw`(?:absolute\s+|global\s+)?(minimum|min|smallest|least)`;
@@ -1103,6 +1124,340 @@ function partsOnce(text: unknown): CalcSpec[] | null {
 /** The parts a printed multi-part Calculus task is, read as specFromQuestion reads (MB-B2). */
 export const partsFromQuestion = (text: unknown, system?: SchoolSystem): CalcSpec[] | null => readTask(logsOfSystem(text, system), system, partsOnce);
 
+// ------------------------------------------------------------------ implicit differentiation (L1-matyas-19-MB3-3)
+
+/** Is this an implicit-derivative spec by its shape? */
+export const isImplicitSpec = (spec: unknown): spec is ImplicitSpec =>
+  !!spec && typeof spec === "object" && (spec as { shape?: unknown }).shape === "implicit-derivative";
+
+/**
+ * y as the engine reads it: the engine knows one letter, x, so each y (no function name has one) is written as this
+ * number, which no question or answer writes, and found again in the reading by its source text. Every reading of an
+ * expression in x and y below is one compile, then evaluated with x and y put back as numbers or as the variable.
+ */
+const Y_MARK = "7.718281828459045";
+const yMarked = (src: string) => src.replace(/[yY]/g, `(${Y_MARK})`);
+const numNode = (v: number): Node => ({ k: "num", v, s: String(v) });
+const X_NODE: Node = { k: "x" };
+/** The reading with x as `x` and y as `y`: each a number held, or the engine's variable. */
+function put(n: Node, x: Node, y: Node): Node {
+  const p = (m: Node) => put(m, x, y);
+  switch (n.k) {
+    case "x": return x;
+    case "num": return n.s === Y_MARK ? y : n;
+    case "const": return n;
+    case "neg": return { ...n, a: p(n.a) };
+    case "fn": return n.base ? { ...n, arg: p(n.arg), base: p(n.base) } : { ...n, arg: p(n.arg) };
+    default: return { ...n, a: p(n.a), b: p(n.b) };
+  }
+}
+const hasY = (n: Node): boolean => {
+  switch (n.k) {
+    case "num": return n.s === Y_MARK;
+    case "x": case "const": return false;
+    case "neg": return hasY(n.a);
+    case "fn": return hasY(n.arg) || (!!n.base && hasY(n.base));
+    default: return hasY(n.a) || hasY(n.b);
+  }
+};
+/** An expression in x and y, read once: null when the engine cannot read it. */
+type XY = { node: Node; usesX: boolean; usesY: boolean; constant: boolean };
+function readXY(src: unknown): XY | null {
+  if (typeof src !== "string") return null;
+  const e = compile(yMarked(src));
+  return e ? { node: e.node, usesX: e.usesX, usesY: hasY(e.node), constant: e.constant } : null;
+}
+/** The expression along x with y held at `y`, and along y (as the engine's x) with x held at `x`. */
+const alongX = (e: XY, y: number) => evalNode(put(e.node, X_NODE, numNode(y)));
+const alongY = (e: XY, x: number) => evalNode(put(e.node, numNode(x), X_NODE));
+const valueXY = (e: XY, x: number, y: number) => { const v = alongX(e, y)(x); return fin(v) ? v : NaN; };
+
+/** The window the curve's points are searched in, on each axis. */
+const CURVE_SPAN = 10;
+/** Most curve points the desk compares an answer at. */
+const CURVE_POINTS = 12;
+/** Least curve points a question needs: as many samples as a function shape compares (comparable). */
+const CURVE_LEAST = 3;
+/** A point whose |dF/dy| is within this of zero (relative to max(1, |dF/dx|)) has a vertical tangent: no slope there. */
+const FLAT = 1e-6;
+/** A point is on the curve when the two sides agree to this, relative to max(1, each side). */
+const ON_CURVE = 1e-9;
+
+/** The slope dy/dx = -F_x / F_y at (x, y), or null where it does not exist (a vertical tangent, a corner). */
+function slopeAt(F: XY, x: number, y: number): number | null {
+  const fx = derivativeAt(alongX(F, y), x), fy = derivativeAt(alongY(F, x), y);
+  if (fx === null || fy === null || Math.abs(fy) <= FLAT * Math.max(1, Math.abs(fx))) return null;
+  const m = -fx / fy;
+  return fin(m) ? m : null;
+}
+
+/**
+ * Points of the curve F = 0 with their slopes: the roots of F along the lines y = k and x = k, k each of the fixed
+ * SAMPLES, inside [-CURVE_SPAN, CURVE_SPAN]; a point with no slope is left out; at most CURVE_POINTS, spread over the
+ * list found.
+ */
+function curvePoints(F: XY): { x: number; y: number; m: number }[] {
+  const out: { x: number; y: number; m: number }[] = [];
+  const add = (x: number, y: number) => {
+    if (out.some((p) => withinRel(p.x, x, 1e-7) && withinRel(p.y, y, 1e-7))) return;
+    const m = slopeAt(F, x, y);
+    if (m !== null) out.push({ x, y, m });
+  };
+  for (const k of SAMPLES) {
+    for (const x of rootsIn(alongX(F, k), -CURVE_SPAN, CURVE_SPAN)) add(x, k);
+    for (const y of rootsIn(alongY(F, k), -CURVE_SPAN, CURVE_SPAN)) add(k, y);
+  }
+  if (out.length <= CURVE_POINTS) return out;
+  return Array.from({ length: CURVE_POINTS }, (_, i) => out[Math.floor((i * out.length) / CURVE_POINTS)]);
+}
+
+/** An equation's two sides, or null: one '=', each side an expression in x and y the engine reads, with no +C. */
+function sidesOf(eq: unknown): [string, string] | null {
+  if (typeof eq !== "string") return null;
+  const parts = eq.split("=");
+  if (parts.length !== 2) return null;
+  const [l, r] = parts.map(tidy);
+  if (!l || !r || /[<>!≤≥]$/.test(l)) return null;
+  const a = readXY(l), b = readXY(r);
+  return a && b && !a.constant && !b.constant ? [l, r] : null;
+}
+
+/** The point (x, y) a spec carries, as numbers; null when it is absent, undefined when it does not read. */
+function pointOf(s: ImplicitSpec): [number, number] | null | undefined {
+  if (s.point === undefined) return null;
+  if (!Array.isArray(s.point) || s.point.length !== 2) return undefined;
+  const x = num(s.point[0]), y = num(s.point[1]);
+  return x === null || y === null ? undefined : [x, y];
+}
+
+type ImplicitTruth = { kind: "slope"; pts: { x: number; y: number; m: number }[] } | { kind: "number"; v: number };
+type ImplicitRead = { ok: true; s: ImplicitSpec; F: XY; sides: [string, string]; truth: ImplicitTruth } | { ok: false; why: string };
+
+/** Readings already made, by spec: the curve search is the costly part, and a leak check reads the same spec per line. */
+const IMPLICIT_SEEN = new Map<string, ImplicitRead>();
+const IMPLICIT_SEEN_MAX = 64;
+
+/**
+ * Is this implicit spec a question the desk can judge? The equation is one '=' between two sides it reads, with both x and
+ * y in it, and no answer field. With a point: the point is on the curve and the slope there exists. With none: at least
+ * CURVE_LEAST points of the curve have a slope, and the slope is not the same at all of them (a straight line).
+ */
+function readImplicit(spec: ImplicitSpec): ImplicitRead {
+  const key = JSON.stringify([spec.f, spec.point, ["answer", "truth", "solution", "value"].some((k) => k in spec)]);
+  const seen = IMPLICIT_SEEN.get(key);
+  if (seen) return seen.ok ? { ...seen, s: spec } : seen;
+  const r = readImplicitOnce(spec);
+  if (IMPLICIT_SEEN.size >= IMPLICIT_SEEN_MAX) IMPLICIT_SEEN.delete(IMPLICIT_SEEN.keys().next().value!);
+  IMPLICIT_SEEN.set(key, r);
+  return r;
+}
+function readImplicitOnce(s: ImplicitSpec): ImplicitRead {
+  if (["answer", "truth", "solution", "value"].some((k) => k in s)) return { ok: false, why: REJECT.answer };
+  const sides = sidesOf(s.f);
+  if (!sides) return { ok: false, why: REJECT.equation };
+  const F = readXY(`(${sides[0]}) - (${sides[1]})`);
+  if (!F) return { ok: false, why: REJECT.equation };
+  if (!F.usesX || !F.usesY) return { ok: false, why: REJECT.noY };
+  const at = pointOf(s);
+  if (at === undefined) return { ok: false, why: REJECT.number };
+  if (at) {
+    const [x, y] = at, L = readXY(sides[0])!, R = readXY(sides[1])!;
+    const l = valueXY(L, x, y), r = valueXY(R, x, y);
+    if (!fin(l) || !fin(r) || Math.abs(l - r) > ON_CURVE * Math.max(1, Math.abs(l), Math.abs(r))) return { ok: false, why: REJECT.offCurve };
+    const m = slopeAt(F, x, y);
+    return m === null ? { ok: false, why: REJECT.derivativeUndefined } : { ok: true, s, F, sides, truth: { kind: "number", v: m } };
+  }
+  const pts = curvePoints(F);
+  if (pts.length < CURVE_LEAST) return { ok: false, why: REJECT.curveSparse };
+  if (pts.every((p) => withinRel(p.m, pts[0].m, FUNCTION_TOL))) return { ok: false, why: REJECT.slopeConstant };
+  return { ok: true, s, F, sides, truth: { kind: "slope", pts } };
+}
+
+/**
+ * Does y sit in a power or inside a function (y^2, sin(y), e^y, x*y^2), so differentiating the equation applies the chain
+ * rule to y? True when dF/dy changes with y; false for an equation linear in y (x*y + x = 3) and one the desk cannot read.
+ */
+function yInside(s: ImplicitSpec): boolean {
+  const sides = sidesOf(s.f), F = sides && readXY(`(${sides[0]}) - (${sides[1]})`);
+  if (!F || !F.usesY) return false;
+  for (const x of [SAMPLES[4], SAMPLES[6]]) {
+    const ds = SAMPLES.map((y) => derivativeAt(alongY(F, x), y)).filter(fin);
+    if (ds.some((d) => !withinRel(d, ds[0], ZERO_REL))) return true;
+  }
+  return false;
+}
+
+/** A side in TeX: y printed where the engine read its marker, a number or a letter before y written straight on (2y, xy). */
+function texXY(side: string): string {
+  const e = compile(yMarked(side));
+  if (!e) return tidy(side);
+  return toTex(e).split(Y_MARK).join("y").replace(/([0-9a-z}]) \\cdot y(?![a-z])/g, "$1y");
+}
+
+/** 'Find dy/dx if x^2 + y^2 = 25.', 'Find dy/dx at (3, 4) if x^2 + y^2 = 25.' - null when the spec is malformed. */
+function implicitQuestion(s: ImplicitSpec): { plain: string; tex: string } | null {
+  if (["answer", "truth", "solution", "value"].some((k) => k in s)) return null;
+  const sides = sidesOf(s.f), at = pointOf(s);
+  if (!sides || at === undefined) return null;
+  const [l, r] = sides;
+  const pt = at && s.point ? s.point : null;
+  return {
+    plain: `Find dy/dx${pt ? ` at (${numPlain(pt[0])}, ${numPlain(pt[1])})` : ""} if ${l} = ${r}.`,
+    tex: `\\text{Find } \\frac{dy}{dx}${pt ? ` \\text{ at } (${numTex(pt[0])}, ${numTex(pt[1])})` : ""} \\text{ if } ${texXY(l)} = ${texXY(r)}.`,
+  };
+}
+
+/**
+ * The verdict on an answer to an implicit item, from the spec alone:
+ *   - dy/dx as an expression: read in x and y ('-x/y', 'x/(-y)', "y' = -x/y") and compared with -F_x/F_y at the curve's
+ *     points, so any form equal ON THE CURVE is right (one rewritten by the equation too); its negation is slip 'sign'; a
+ *     +C is wrong; an answer undefined at a point where the slope exists, but right elsewhere, is 'unsure' (domain);
+ *   - at a point: a number, judged as derivative-at's (TOLERANCE); an answer still in x or y is 'unsure'.
+ * The `why` is the desk's fixed sentence. A cz or de learner's answer is read as calc's checkAnswer reads it.
+ */
+function implicitCheck(spec: ImplicitSpec, studentAnswer: unknown, system?: SchoolSystem): CalcVerdict {
+  const r = readImplicit(spec);
+  if (!r.ok) return verdict("unsure", WHY.badSpec);
+  if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
+  let ans = cleanAnswer(studentAnswer);
+  if (!ans) return verdict("unsure", WHY.empty);
+  const { truth } = r;
+  if (commaSystem(system)) ans = czechAnswer(truth.kind === "number" ? oneNumberComma(ans) : ans, system);
+  const e = readXY(ans);
+  if (!e) return verdict("unsure", WHY.unreadable);
+  if (truth.kind === "number") {
+    if (e.constant) return verdict("unsure", WHY.unreadable);
+    if (e.usesX || e.usesY) return verdict("unsure", WHY.notNumber);
+    const v = valueXY(e, 0, 0);
+    return fin(v) ? judgeNumber("implicit-derivative", truth.v, v, ans) : verdict("unsure", WHY.notFinite);
+  }
+  const at = truth.pts.map((p) => ({ m: p.m, a: valueXY(e, p.x, p.y) }));
+  const both = at.filter((p) => fin(p.a));
+  if (both.length < CURVE_LEAST) return verdict("unsure", WHY.noCompare);
+  if (both.every((p) => withinRel(p.a, p.m, FUNCTION_TOL))) return e.constant ? verdict("wrong", WHY.extraConstant) : both.length < at.length ? verdict("unsure", WHY.domain) : verdict("right", WHY.right);
+  if (both.every((p) => withinRel(-p.a, p.m, FUNCTION_TOL))) return verdict("wrong", WHY.sign, "sign");
+  return verdict("wrong", WHY.wrong);
+}
+
+/** Does an expression read in x and y give the slope: every comparable curve point agrees (a number never: the slope varies)? */
+function slopeRight(e: XY, pts: { x: number; y: number; m: number }[]): boolean {
+  if (!e.usesX && !e.usesY) return false;
+  const both = pts.map((p) => ({ m: p.m, a: valueXY(e, p.x, p.y) })).filter((p) => fin(p.a));
+  return both.length >= CURVE_LEAST && both.every((p) => withinRel(p.a, p.m, FUNCTION_TOL));
+}
+
+/** A window without a bracket it does not close ('(-3/4', '-x/y)'): prose wraps an answer in brackets. */
+const unwrapped = (t: string) => {
+  const open = (t.match(/\(/g) ?? []).length, close = (t.match(/\)/g) ?? []).length;
+  return open > close ? t.replace(/^\(+/, "") : close > open ? t.replace(/\)+$/, "") : t;
+};
+
+/**
+ * Does this hint or explanation line state an implicit item's answer? It reads the line as leaksCalc does (as it would be
+ * said, 'over' and 'divided by' as /), sets aside the question's own pieces (the equation, each side, the point and its
+ * coordinates), and reads it in windows of up to WINDOW tokens, the longest the engine reads at each place, then a long
+ * pass of WINDOW + 1 up to LONG_WINDOW tokens over the line both with and without those pieces:
+ *   - dy/dx as an expression: a window that agrees with the slope at the curve's points ('-x/y', 'x/(-y)');
+ *   - at a point: a window whose value is the slope to ROUNDED_CLOSE, or a negative number whose size is.
+ */
+function leaksImplicit(spec: ImplicitSpec, line: unknown): boolean {
+  if (typeof line !== "string" || !line.trim()) return false;
+  const r = readImplicit(spec);
+  if (!r.ok) return false;
+  const { truth } = r;
+  let text = algebraSaid(spoken(line)).replace(/\s+(?:over|divided\s+by)\s+/g, " / ").replace(/\b(?:minus|negative)\s+(?=[xy(])/g, "-");
+  const raw = text;
+  const pieces = [spec.f, ...r.sides];
+  if (spec.point) {
+    const [a, b] = spec.point.map(numPlain);
+    pieces.push(`(${a}, ${b})`, `x = ${a}`, `y = ${b}`);
+  }
+  for (const p of pieces) text = text.replace(piecePattern(p.toLowerCase()), " ");
+  const right = (said: string): boolean => {
+    const bare = unwrapped(said), e = readXY(bare);
+    if (!e) return false;
+    if (truth.kind === "slope") return !e.constant && slopeRight(e, truth.pts);
+    if (e.usesX || e.usesY || e.constant) return false;
+    const v = valueXY(e, 0, 0);
+    return fin(v) && (withinRel(v, truth.v, ROUNDED_CLOSE) || (bare.startsWith("-") && withinRel(-v, truth.v, ROUNDED_CLOSE)));
+  };
+  const tokenize = (t: string): string[] => t.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/).map((w) => w.replace(/\.+$/, "")).filter(Boolean);
+  const longRight = (tokens: string[]): boolean => {
+    for (let i = 0; i < tokens.length; i++) {
+      for (let n = WINDOW + 1; n <= Math.min(LONG_WINDOW, tokens.length - i); n++) if (right(tokens.slice(i, i + n).join(" "))) return true;
+    }
+    return false;
+  };
+  const tokens = tokenize(text);
+  for (let i = 0; i < tokens.length;) {
+    let took = 0;
+    for (let n = Math.min(WINDOW, tokens.length - i); n >= 1; n--) {
+      const said = tokens.slice(i, i + n).join(" ");
+      if (!readXY(unwrapped(said))) continue;
+      if (right(said)) return true;
+      took = n;
+      break;
+    }
+    i += Math.max(1, took);
+  }
+  return longRight(tokens) || (raw !== text && longRight(tokenize(raw)));
+}
+
+const DYDX = String.raw`(?:dy\s*/\s*dx|y')`;
+/** A point as a page writes it: (3, 4), [3; 4], the point (3, 4), A = [3; 4]. */
+const POINT_AT = String.raw`(?:the\s+point\s+)?(?:[A-Z]\s*=?\s*)?([[(][^\])]*[\])])`;
+const IMPLICITLY = String.raw`(?:\s+(?:by\s+implicit\s+differentiation|implicitly))?`;
+const CZ_VERB = String.raw`(?:ur[čc]ete|ur[čc]i|najd[ěe]te|najdi|vypo[čc]t[ěe]te|vypo[čc][íi]tejte|spo[čc]t[ěe]te|spo[čc][íi]tejte|spo[čc]ti(?:te)?)`;
+const CZ_POINT = String.raw`(?:\s*,?\s+v\s+bod[ěe]\s+${POINT_AT})?`;
+const IMPLICITNE = String.raw`implicitn[ěe]`;
+const CZ_GIVEN = String.raw`(?:funkce\s+(?:y\s+)?)?(?:${IMPLICITNE}\s+zadan[ée]\s+(?:funkce\s+)?(?:y\s+)?|zadan[ée]\s+${IMPLICITNE}\s+)(?:rovnic[íi]\s*)?:?\s*`;
+
+/** The implicit phrasings, each a pattern, the group of its equation, and the groups its point may be in. */
+const IMPLICIT_READERS: [RegExp, number, number[]][] = [
+  // Find dy/dx (at (3, 4)) if x^2 + y^2 = 25 (at the point (3, 4)); Use implicit differentiation to find y' for ...
+  [re(`(?:use\\s+implicit\\s+differentiation\\s+to\\s+)?${VERB}\\s+${DYDX}${IMPLICITLY}(?:\\s+at\\s+${POINT_AT})?\\s+(?:${GIVEN}|on\\s+the\\s+curve|for\\s+the\\s+curve)\\s+(.+?)(?:\\s*,?\\s+at\\s+${POINT_AT})?${IMPLICITLY}`), 2, [1, 3]],
+  // Differentiate x^2 + y^2 = 25 implicitly; Differentiate implicitly: x^2 + y^2 = 25
+  [re(`differentiate\\s+implicitly\\s*:?\\s+(?:the\\s+equation\\s+|the\\s+curve\\s+)?(.+?)`), 1, []],
+  [re(`differentiate\\s+(?:the\\s+equation\\s+|the\\s+curve\\s+)?(.+?)\\s+implicitly(?:\\s+with\\s+respect\\s+to\\s+x)?`), 1, []],
+  // Find the slope of the tangent to the curve x^2 + y^2 = 25 at (3, 4)
+  [re(`${VERB}\\s+the\\s+slope\\s+of\\s+the\\s+tangent(?:\\s+line)?\\s+to\\s+(?:the\\s+curve\\s+)?(.+?)\\s+at\\s+${POINT_AT}`), 1, [2]],
+  // Implicitně derivujte (rovnici) x^2 + y^2 = 25 (v bodě [3; 4]); Derivujte implicitně: ...
+  [re(`(?:${IMPLICITNE}\\s+derivuj(?:te)?|derivuj(?:te)?\\s+${IMPLICITNE})\\s*:?\\s+(?:rovnici\\s+|k[řr]ivku\\s+)?(.+?)${CZ_POINT}`), 1, [2]],
+  // Určete derivaci implicitně zadané funkce x^2 + y^2 = 25; Určete y' funkce y zadané implicitně rovnicí ...; v bodě [3; 4]
+  [re(`${CZ_VERB}\\s+(?:derivaci|${DYDX})\\s+${CZ_GIVEN}(.+?)${CZ_POINT}`), 1, [2]],
+  // the same once taskText has taken 'Určete derivaci' off: 'Differentiate implicitně zadané funkce ...'
+  [re(`differentiate\\s+${CZ_GIVEN}(.+?)${CZ_POINT}`), 1, [2]],
+];
+
+/** '(3, 4)' or '[3; 4]' as two parameters, or null. A ';' separates when there is one (a Czech page), else the one ','. */
+function pairOf(t: string): [Num, Num] | null {
+  const inner = tidy(t).slice(1, -1), parts = inner.includes(";") ? inner.split(";") : inner.split(",");
+  if (parts.length !== 2) return null;
+  const a = paramOf(parts[0]), b = paramOf(parts[1]);
+  return a === null || b === null ? null : [a, b];
+}
+
+/**
+ * An implicit item read from a page's text (normalQuestion's spelling), or null: the first phrasing that matches decides,
+ * and its equation and point must read and make a well-formed spec. Its `f` is the equation as two tidied sides.
+ */
+function implicitFromQuestion(t: string): ImplicitSpec | null {
+  for (const [pattern, eqAt, pointAt] of IMPLICIT_READERS) {
+    const m = pattern.exec(t);
+    if (!m) continue;
+    const sides = sidesOf(m[eqAt]);
+    if (!sides) return null;
+    const pts = pointAt.map((k) => m[k]).filter((p): p is string => p !== undefined);
+    if (pts.length > 1) return null;
+    const point = pts.length ? pairOf(pts[0]) : null;
+    if (pts.length && !point) return null;
+    const f = `${sides[0]} = ${sides[1]}`;
+    const spec: ImplicitSpec = point ? { shape: "implicit-derivative", f, point } : { shape: "implicit-derivative", f };
+    return readImplicit(spec).ok ? spec : null;
+  }
+  return null;
+}
+
 // ------------------------------------------------------------------ the line when a hint gave the answer away twice
 
 /**
@@ -1120,6 +1475,7 @@ export const CALC_WITHHELD: Readonly<Record<CalcShape, string>> = {
   "critical-point": "Find where the derivative vanishes inside the interval. The point is yours to find.",
   extremum: "Find where the derivative vanishes inside the interval, then compare the function's values there and at the ends.",
   "newton-step": "Write the Newton step from the function and its derivative, then apply it from the value you have, step by step.",
+  "implicit-derivative": "Differentiate both sides with respect to x, with y a function of x, then gather the dy/dx terms. The slope is yours to find.",
 };
 const WITHHELD_ANY = "Go back to the last step you are sure of and take the next. The answer stays yours to find.";
 

@@ -26,7 +26,7 @@
  */
 import { checkerFault } from "./fault";
 import { compile, derivativeAt, limitAt, limitInf, SAMPLES, SAME_REL, toPlain, type Expr, type FnName, type Limit, type Node } from "./calc-expr";
-import { FUNCTION_TOL, ROUNDED_CLOSE, type CalcSpec } from "./calc";
+import { FUNCTION_TOL, ROUNDED_CLOSE, isImplicitSpec, type CalcSpec } from "./calc";
 import { isCalc2Spec } from "./calc2";
 import { czechAnswer } from "./calc-read";
 import { commaSystem, type SchoolSystem } from "./taskText";
@@ -523,11 +523,12 @@ const asWritten = (working: readonly string[], system?: SchoolSystem): readonly 
 
 /**
  * Each working line of a Calculus item checked against its own spec: true, false or null per line. A Calculus 2 spec
- * (rules/calc2) has no chain: every line is null, so its working stays bare (v2 M3b-3b ruling 32). `system` is the
+ * (rules/calc2) has no chain: every line is null, so its working stays bare (v2 M3b-3b ruling 32); nor has an implicit one
+ * (rules/calc ImplicitSpec): its lines are equations in x and y, which the chain does not read. `system` is the
  * learner's school system: a cz learner's tg(x) line is read as tan(x) (asWritten); with none the lines are read as before.
  */
 export function chainChecks(spec: unknown, working: readonly string[], system?: SchoolSystem): ChainResult[] {
-  if (!spec || typeof spec !== "object" || !working.length || isCalc2Spec(spec)) return working.map(() => null);
+  if (!spec || typeof spec !== "object" || !working.length || isCalc2Spec(spec) || isImplicitSpec(spec)) return working.map(() => null);
   try {
     const tagged = tagLines(spec as CalcSpec, asWritten(working, system));
     return checkChain(tagged.lines, { from: tagged.from ?? undefined, definite: tagged.definite });

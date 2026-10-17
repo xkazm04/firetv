@@ -245,7 +245,7 @@ type Param = "at" | "a" | "b" | "side" | "on" | "kind" | "x0" | "steps" | "piece
 /** The parameters each shape takes beyond its function: what its question prints, nothing more. */
 const PARAMS: Record<CalcShape | Calc2SpecShape, readonly Param[]> = {
   evaluate: ["at"], derivative: [], "derivative-at": ["at"], antiderivative: [], "definite-integral": ["a", "b"],
-  limit: ["at", "side"], "critical-point": ["on"], extremum: ["on", "kind"], "newton-step": ["x0", "steps"],
+  limit: ["at", "side"], "critical-point": ["on"], extremum: ["on", "kind"], "newton-step": ["x0", "steps"], "implicit-derivative": [],
   "approx-integral": ["a", "b", "pieces", "rule"], "sequence-limit": [],
 };
 /**
@@ -274,6 +274,7 @@ const SHAPE_LINES: Record<CalcShape | Calc2SpecShape, string> = {
   "critical-point": "critical-point: f and on [lo, hi] - the question is to find the critical point of f on that interval; exactly one turning point of f lies in the interval, well inside it and not near either end.",
   extremum: "extremum: f, on [lo, hi] and kind (max or min) - the question is to find that extreme value of f on the interval; it is reached at a turning point well inside the interval, not near an end.",
   "newton-step": "newton-step: f, x0 and steps (1 or 2) - the question is that many Newton's method steps on f(x) = 0 from x0; pick x0 clearly away from the root so the steps differ visibly.",
+  "implicit-derivative": "implicit-derivative: f, an equation in x and y with one = sign, such as x^2 + y^2 = 25 or x*y + y^2 = 7 - the question is to find dy/dx by implicit differentiation; y must sit inside a power or a function (y^2, sin(y), e^y), and the curve must not be a straight line.",
   "approx-integral": "approx-integral: f, a, b, pieces (2 to 10, even for simpson) and rule (trapezoid, midpoint or simpson) - the question is that rule with that many subintervals, given to four decimal places.",
   "sequence-limit": "sequence-limit: f, a function of x that the desk prints with n in place of x. The question is the limit of a_n = f(n) as n grows. Pick one that is defined for every real x >= 1 and that has a limit or grows without bound.",
 };
@@ -337,6 +338,8 @@ function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory
         `- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n` +
         `- Every question must be workable by hand in a few minutes.\n` +
         (requires ? REQUIREMENT_LINES[requires] : "") +
+        // an equation in x and y is no function of x: its chain rule is y inside a power or a function (rules/calc meetsRequirement)
+        (requires === "composition" && shapes.includes("implicit-derivative") ? "- An implicit-derivative equation meets this with y inside a power or a function (y^2, sin(y), e^y).\n" : "") +
         `- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n` +
         (leavesUnused(shapes) ? `- A field the shape does not use is left as an empty string (0 for steps).\n` : "") +
         `- Do not work any question out: give the specs only.`),

@@ -183,7 +183,7 @@ const STATEMENT_CODES = new Set(STATEMENTS.map((x) => x.code));
 /** The screens the paper's aim lasts across (MB-B40): Get ready for school and the worked lesson it opens. */
 const AIM_KEEPS = new Set<Screen>(["prepare", "worked"]);
 /** A spec's own parameters, by name: the ones its question prints. `zero` (the result, for a symmetry item) is not one. */
-const SPEC_KEYS = ["f", "at", "a", "b", "side", "on", "kind", "x0", "steps", "pieces", "rule"] as const;
+const SPEC_KEYS = ["f", "at", "a", "b", "side", "on", "kind", "x0", "steps", "pieces", "rule", "point"] as const;
 /**
  * A school spec's own parameters (rules/school.ts SchoolSpec): the expression, the form and unit asked for, the sign flag,
  * and the form a conversion asks for (`to`, Family W7 batch 2: "Write 3/8 as a decimal").
@@ -207,7 +207,8 @@ function specShown(x: unknown): CalcSpec | Calc2Spec | SchoolSpec | undefined {
   const out: Record<string, unknown> = { shape: o.shape };
   for (const k of SPEC_KEYS) {
     const v = o[k];
-    if (k === "on") { if (Array.isArray(v) && v.length === 2 && v.every(plainValue)) out.on = [v[0], v[1]]; }
+    // an interval, and an implicit item's point (x, y) (rules/calc ImplicitSpec, L1-matyas-19-MB3-3): two plain values
+    if (k === "on" || k === "point") { if (Array.isArray(v) && v.length === 2 && v.every(plainValue)) out[k] = [v[0], v[1]]; }
     else if (plainValue(v)) out[k] = v;
   }
   return out as unknown as CalcSpec;

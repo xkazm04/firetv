@@ -76,6 +76,10 @@ const FIX=[
   bad:[S('extremum','2x + 1',{on:['0','3'],kind:'max'},1),S('extremum','x^2',{on:['0'],kind:'min'},1),S('extremum','x(10 - x)',{on:['0','10'],kind:'max'},1)]},
  {topic:'calc1-newton',good:[S('newton-step','x^2 - 2',{x0:'1',steps:1},1),S('newton-step','x^2 - 3',{x0:'2',steps:1},2),S('newton-step','x^3 - 2',{x0:'1',steps:1},3),S('newton-step','x^2 - 7',{x0:'3',steps:1},2),S('newton-step','x^3 - x - 1',{x0:'1',steps:1},4),S('newton-step','cos(x) - x',{x0:'1',steps:1},5)],
   bad:[S('newton-step','x^2 - 2',{x0:'0',steps:1},1),S('newton-step','x^2 - 2',{x0:'1',steps:9},1),S('newton-step','x^2 - 2',{x0:'1',steps:1},1)]},
+ // L1-matyas-19-MB3-3: the chain-rule topic sets implicit items beside its compositions; a straight line, an equation linear in y
+ // (no chain rule on y: the topic's requirement) and a duplicate are dropped
+ {topic:'calc1-chain',good:[S('implicit-derivative','x^2 + y^2 = 25',{},1),S('derivative','sin(x^2)',{},1),S('implicit-derivative','e^y = x',{},2),S('implicit-derivative','x*y + y^2 = 7',{},3),S('implicit-derivative','sin(y) + x^2 = 1',{},4),S('implicit-derivative','x^3 + y^3 = 6x y',{},5)],
+  bad:[S('implicit-derivative','x + y = 3',{},1),S('implicit-derivative','x*y + x^2 = 3',{},1),S('implicit-derivative','x^2 + y^2 = 25',{},1)]},
  {topic:'calc1-antiderivatives',good:[S('antiderivative','x',{},1),S('antiderivative','3x^2 + 2x',{},2),S('antiderivative','cos(x)',{},2),S('antiderivative','e^(2x)',{},4),S('antiderivative','sin(x) + x^3',{},3),S('antiderivative','4x^3 - 6x',{},3)],
   bad:[S('antiderivative','0x',{},1),S('definite-integral','x',{a:'0',b:'1'},1),S('antiderivative','cos(x)',{},1)]},
  {topic:'calc1-definite-integral',good:[S('definite-integral','x^2',{a:'0',b:'1'},1),S('definite-integral','2x',{a:'0',b:'3'},1),S('definite-integral','x^3',{a:'1',b:'2'},2),S('definite-integral','sin(x)',{a:'0',b:'pi'},4),S('definite-integral','e^x',{a:'0',b:'1'},3),S('definite-integral','3x^2 + 1',{a:'-1',b:'2'},3)],

@@ -3,6 +3,10 @@
  * calc suites use, written to tools/calc1-frozen.json BEFORE the seam moves any code, and compared byte for byte by
  * tools/calc2-seam-test.cjs afterwards. The seam (and every later slice) must leave it equal; a change to a Calculus 1
  * word is made openly (OLD/NEW, with the reason) by regenerating it in the commit that changes the word.
+ * Regenerated on purpose (L1-matyas-19-MB3-3), rows kept as they were: the tenth shape, implicit-derivative, joined
+ * CALC_SHAPES, TOLERANCE, CALC_WITHHELD, slipsFor and the shape lists of the slips that name every derivative shape
+ * (sign, arithmetic-slip, forgot-chain, product-as-product, quotient-order, power-off-by-one, wrong-trig-sign). OLD: no
+ * such entries; NEW: those entries, and calls 3954 -> 3955. No row moved.
  *
  * Specs are collected from the suites' own sources (see SOURCES): the sweep spec per topic and CHECKS in
  * calc-rules-test.cjs (with each answer the suite pairs with a spec), plus every object literal `{shape: '<calc shape>' ...}`

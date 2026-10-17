@@ -6,6 +6,9 @@
  * topic sends the model exactly the words it sent. Never regenerate it to make a row green.
  * Regenerated once on purpose (cycle 13): calc1-chain's prompt gained its requirement line (the spine's `requires`); the
  * learner section is absent on every row, since the frozen learners carry no age and no system. No other row moved.
+ * Regenerated on purpose again (L1-matyas-19-MB3-3): calc1-chain sets implicit-derivative beside derivative, so its prompt
+ * lists the shape (and the line saying how an equation meets the composition requirement) and its schema's enum has it.
+ * No other row moved.
  *
  * Each topic gets a fresh learner on its own path in a disposable DESK_DATA_DIR; makeItems(topic, learner, 3, {word: false})
  * runs with the text provider stubbed to record the request and reply {specs: []} (the empty set fails; the failure is

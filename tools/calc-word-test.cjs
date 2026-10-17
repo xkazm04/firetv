@@ -144,7 +144,7 @@ test('M3a sweep: the table',()=>{
 
 // ---------------------------------------------------------------- the corpus table (docs/CALCULUS-1-SYLLABUS.md, "What a photographed page reads into")
 
-test('M3a corpus: what the printed questions read into - 13 of 31 single specs as before, and the multi-part reader (c13-q1 refused: its maximum is at an end)',()=>{
+test('M3a corpus: what the printed questions read into - 14 of 31 single specs (c10-q1 the implicit one since L1-matyas-19-MB3-3), and the multi-part reader (c13-q1 refused: its maximum is at an end)',()=>{
  const {CALCULUS_1}=require(path.join(root,'src/lib/library/calculus1.ts'));
  const all=CALCULUS_1.topics.flatMap((t)=>t.examples);
  const qs=all.filter((e)=>e.kind==='question'),pages=all.filter((e)=>e.kind==='page');
@@ -156,10 +156,13 @@ test('M3a corpus: what the printed questions read into - 13 of 31 single specs a
   `| ${qs.length} questions (plain) | ${by('single').length} | ${by('parts').length} | ${Object.entries(shapes).map(([s,ids])=>`${s} ${ids.length} (${ids.join(', ')})`).join(', ')} |`,
   `| ${pages.length} page lines (plain) | ${pages.filter((e)=>C.specFromQuestion(e.plain)).length} | ${pages.filter((e)=>C.partsFromQuestion(e.plain)).length} | - |`,
   `| ${[...qs,...pages].filter((e)=>e.tex).length} TeX forms of the above | ${[...qs,...pages].filter((e)=>e.tex&&C.specFromQuestion(e.tex)).length} | ${[...qs,...pages].filter((e)=>e.tex&&C.partsFromQuestion(e.tex)).length} | - |`].join('\n'));
- // the single reads are exactly the thirteen the doc lists: no question that read before changes its spec
+ // the single reads are the thirteen the doc lists, and c10-q1 (Find dy/dx if x^2 + y^2 = 25) since implicit differentiation
+ // reads (L1-matyas-19-MB3-3): no question that read before changes its spec
  assert.equal(qs.length,31);
- assert.deepEqual(by('single').map((x)=>x.id),['c04-q1','c05-q1','c05-q2','c05-q3','c07-q1','c08-q1','c09-q1','c10-q2','c11-q1','c11-q2','c14-q1','c20-q1','c21-q1']);
- assert.deepEqual(Object.fromEntries(Object.entries(shapes).map(([s,ids])=>[s,ids.length])),{limit:5,derivative:6,'definite-integral':2});
+ assert.deepEqual(by('single').map((x)=>x.id),['c04-q1','c05-q1','c05-q2','c05-q3','c07-q1','c08-q1','c09-q1','c10-q1','c10-q2','c11-q1','c11-q2','c14-q1','c20-q1','c21-q1']);
+ assert.deepEqual(Object.fromEntries(Object.entries(shapes).map(([s,ids])=>[s,ids.length])),{limit:5,derivative:6,'implicit-derivative':1,'definite-integral':2});
+ assert.deepEqual(C.specFromQuestion(qs.find((e)=>e.id==='c10-q1').plain),{shape:'implicit-derivative',f:'x^2 + y^2 = 25'});
+ assert.equal(C.checkAnswer({shape:'implicit-derivative',f:'x^2 + y^2 = 25'},qs.find((e)=>e.id==='c10-q1').answer).verdict,'right','the corpus answer is right by code');
  assert.deepEqual(by('parts'),[],'no corpus question reads into parts today');
  // c13-q1 is the multi-part phrasing, read and refused whole: its maximum (65) is at the end x = 5, which an extremum refuses
  const c13=qs.find((e)=>e.id==='c13-q1');

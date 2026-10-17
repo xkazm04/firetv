@@ -42,6 +42,10 @@ const LI={shape:'limit',f:'1/x^2',at:0};
 const CP={shape:'critical-point',f:'x^2 - 4x + 1',on:[0,5]};
 const EX={shape:'extremum',f:'x^3 - 12x',on:[-3,0],kind:'max'};
 const NW={shape:'newton-step',f:'x^2 - 2',x0:1,steps:1};
+// implicit differentiation (L1-matyas-19-MB3-3): an equation in x and y, dy/dx as an expression or at a point
+const IM={shape:'implicit-derivative',f:'x^2 + y^2 = 25'};
+const IMP={shape:'implicit-derivative',f:'x^2 + y^2 = 25',point:[3,4]};
+const IM2={shape:'implicit-derivative',f:'x*y + y^2 = 7'};
 
 /** [spec, the learner's answer, verdict, slip] - every shape, right / wrong / unsure / rounding / sign / lost-constant. */
 const CHECKS=[
@@ -79,6 +83,11 @@ const CHECKS=[
  [NW,'3/2','right'],[NW,'1.5','right'],[NW,'1.4','wrong'],[NW,'-3/2','wrong','sign'],[NW,'1.41421','wrong'],
  [{shape:'newton-step',f:'x^3 - x - 1',x0:1,steps:2},'1.3478','right'],[{shape:'newton-step',f:'x^3 - x - 1',x0:1,steps:2},'31/23','right'],
  [{shape:'derivative',f:'y + 1'},'1','unsure'],[{shape:'limit',f:'|x|/x',at:0},'0','unsure'],
+ [IM,'-x/y','right'],[IM,'x/(-y)','right'],[IM,'dy/dx = -x/y','right'],[IM,"y' = -x/y",'right'],[IM,'-2x/(2y)','right'],
+ [IM,'x/y','wrong','sign'],[IM,'-y/x','wrong'],[IM,'-x/y + C','wrong'],[IM,'-x/sqrt(25 - x^2)','wrong'],[IM,'','unsure'],[IM,'banana','unsure'],
+ [IM2,'-y/(x + 2y)','right'],[IM2,'y/(-x - 2y)','right'],[IM2,'y/(x + 2y)','wrong','sign'],[IM2,'-y/(x + y)','wrong'],
+ [{shape:'implicit-derivative',f:'e^y = x'},'1/x','right'],[{shape:'implicit-derivative',f:'e^y = x'},'e^(-y)','right'],
+ [IMP,'-3/4','right'],[IMP,'-0.75','right'],[IMP,'3/4','wrong','sign'],[IMP,'-1','wrong'],[IMP,'-x/y','unsure'],[IMP,'-0.7501','unsure'],
 ];
 
 test('1: checkAnswer - every shape, right / wrong / unsure / rounding / sign / lost-constant, the why never carries a value',()=>{
@@ -161,6 +170,10 @@ test('4: question() prints every shape in the typesetter\'s notation, and every 
   [{shape:'definite-integral',f:'x^2 + 1',a:-1,b:2},'Evaluate int_(-1)^2 (x^2 + 1) dx.',null],
   [EX,'Find the maximum value of f(x) = x^3 - 12x on [-3, 0].',null],
   [NW,"Use Newton's method on x^2 - 2 = 0 with x_1 = 1 to find x_2.","\\text{Use Newton's method on } x^{2} - 2 = 0 \\text{ with } x_1 = 1 \\text{ to find } x_{2}."],
+  [IM,'Find dy/dx if x^2 + y^2 = 25.','\\text{Find } \\frac{dy}{dx} \\text{ if } x^{2} + y^{2} = 25.'],
+  [IMP,'Find dy/dx at (3, 4) if x^2 + y^2 = 25.','\\text{Find } \\frac{dy}{dx} \\text{ at } (3, 4) \\text{ if } x^{2} + y^{2} = 25.'],
+  [IM2,'Find dy/dx if x*y + y^2 = 7.','\\text{Find } \\frac{dy}{dx} \\text{ if } xy + y^{2} = 7.'],
+  [{shape:'implicit-derivative',f:'x^3 + y^3 = 6x y'},'Find dy/dx if x^3 + y^3 = 6x y.','\\text{Find } \\frac{dy}{dx} \\text{ if } x^{3} + y^{3} = 6xy.'],
  ];
  const bad=[];
  for(const [spec,plain,tex] of want){
@@ -699,4 +712,89 @@ test('MB-B30: a composition is read by the same sites the forgot-chain check use
  assert.equal(C.meetsRequirement({shape:'derivative-at',f:'(3x - 1)^4',at:1},'composition'),true);
  assert.equal(C.meetsRequirement({shape:'derivative',f:'sin(x^2)'},'nope'),false);
  assert.equal(C.meetsRequirement(null,'composition'),false);
+});
+
+// ------------------------------------------------------------------ L1-matyas-19-MB3-3: implicit differentiation
+
+test('L1-matyas-19-MB3-3 1: an implicit item is set only when the desk can judge it - an equation in x and y, a curve with points, a slope that varies',()=>{
+ for(const s of [IM,IMP,IM2,{shape:'implicit-derivative',f:'e^y = x'},{shape:'implicit-derivative',f:'sin(y) + x = 1'},{shape:'implicit-derivative',f:'x^2 y + y^3 = 2'},{shape:'implicit-derivative',f:'x*y + y^2 = 7',point:[6,1]}])assert.deepEqual(C.wellFormed(s),{ok:true},s.f);
+ const why=(s)=>C.wellFormed(s).why;
+ assert.equal(why({shape:'implicit-derivative',f:'x + y = 3'}),'The slope is the same everywhere: the curve is a straight line.');
+ assert.equal(why({shape:'implicit-derivative',f:'x^2 + y^2 = -1'}),'The desk finds too few points on the curve to check an answer.');
+ assert.equal(why({shape:'implicit-derivative',f:'x^2 + y^2 = 25',point:[3,5]}),'The point is not on the curve.');
+ assert.equal(why({shape:'implicit-derivative',f:'x^2 + y^2 = 25',point:[5,0]}),'The derivative there does not exist or is not finite.','a vertical tangent has no slope');
+ assert.equal(why({shape:'implicit-derivative',f:'x^2 = 4'}),'The equation has no y in it, or no x.');
+ for(const f of ['x^2 + y^2','x^2 + y^2 = 25 = 5','x^2 + z^2 = 25','x^2 + y^2 <= 25','x^2 + y^2 = 25 + C',42])assert.ok(!C.wellFormed({shape:'implicit-derivative',f}).ok,String(f));
+ assert.equal(why({...IM,answer:'-x/y'}),'A spec carries no answer field: the desk works the answer out itself.');
+ assert.equal(why({...IM,point:[3]}),'A parameter is not a finite number the desk can read.');
+ assert.ok(C.CALC_SHAPES.includes('implicit-derivative'));
+ assert.deepEqual(C.TOLERANCE['implicit-derivative'],{exact:1e-6,rounded:1e-6});
+ // the chain-rule topic's requirement: y inside a power or a function
+ assert.equal(C.meetsRequirement(IM,'composition'),true);assert.equal(C.meetsRequirement({shape:'implicit-derivative',f:'sin(y) + x = 1'},'composition'),true);
+ assert.equal(C.meetsRequirement({shape:'implicit-derivative',f:'x*y + x^2 = 3'},'composition'),false,'linear in y: no chain rule on y');
+ assert.equal(C.meetsRequirement(IM,'nope'),false);
+ // the slips: the derivative ones, the chain rule's among them
+ assert.deepEqual(C.slipsFor('implicit-derivative'),['sign','forgot-chain','product-as-product','quotient-order','power-off-by-one','wrong-trig-sign','arithmetic-slip']);
+});
+
+/** [page text, the spec it reads as] - English and Czech, with and without a point; null where it must stay unread. */
+const IMPLICIT_PAGES=[
+ ['Find dy/dx if x^2 + y^2 = 25.',IM],
+ ['Find dy/dx at (3, 4) if x^2 + y^2 = 25.',IMP],
+ ['Find dy/dx if x^2 + y^2 = 25 at the point (3, 4).',IMP],
+ ["Find y' if x^2 + y^2 = 25",IM],
+ ['3. Use implicit differentiation to find dy/dx if xy + y^2 = 7.',{shape:'implicit-derivative',f:'xy + y^2 = 7'}],
+ ['Find dy/dx by implicit differentiation for x^3 + y^3 = 6xy.',{shape:'implicit-derivative',f:'x^3 + y^3 = 6xy'}],
+ ['Differentiate x^2 + y^2 = 25 implicitly.',IM],
+ ['Differentiate implicitly: x^2 + y^2 = 25',IM],
+ ['Find the slope of the tangent to the curve x^2 + y^2 = 25 at (3, 4).',IMP],
+ ['Implicitně derivujte x^2 + y^2 = 25.',IM],
+ ['Derivujte implicitně: x^2 + y^2 = 25',IM],
+ ['Určete derivaci implicitně zadané funkce x^2 + y^2 = 25.',IM],
+ ['Najděte derivaci implicitně zadané funkce x^2 + y^2 = 25 v bodě [3; 4].',IMP],
+ ['Určete derivaci funkce y zadané implicitně rovnicí xy + y^2 = 7 v bodě [6; 1].',{shape:'implicit-derivative',f:'xy + y^2 = 7',point:[6,1]}],
+ // an explicit y = f(x) keeps its derivative reading; what cannot be judged stays unread
+ ['Find dy/dx if y = x^2.',{shape:'derivative',f:'x^2'}],
+ ['Find dy/dx at (3, 5) if x^2 + y^2 = 25.',null],
+ ['Find dy/dx if x + y = 3.',null],
+ ['Find dy/dx if x^2 + z^2 = 25.',null],
+ ['Find the equation of the tangent to x^2 + y^2 = 25 at (3, 4).',null],
+ ['Určete derivaci implicitně zadané funkce x^2 + y^2 = 25 v bodě [3; 5].',null],
+];
+
+test('L1-matyas-19-MB3-3 2: an implicit task is read from a page in English and Czech, with or without a point, and what the desk prints reads back',()=>{
+ const bad=[];
+ for(const [text,want] of IMPLICIT_PAGES)for(const system of [undefined,'cz','uk']){
+  const got=C.specFromQuestion(text,system);
+  try{assert.deepEqual(got,want);}catch{bad.push(`${system}: ${JSON.stringify(text)} -> ${JSON.stringify(got)} (want ${JSON.stringify(want)})`);}
+ }
+ assert.deepEqual(bad,[]);
+ for(const s of [IM,IMP,IM2]){const q=C.question(s);assert.deepEqual(C.specFromQuestion(q.plain),s,q.plain);}
+ assert.deepEqual(C.question(IMP,'cz'),C.question(IMP),'a cz learner gets the same question: no log to print');
+ // the kind reader and the judge dispatch take an implicit spec as a Calculus one
+ const M=require(path.join(root,'src/lib/rules/maths.ts')),K=require(path.join(root,'src/lib/rules/kinds.ts'));
+ assert.equal(M.isCalcSpec(IM),true);assert.equal(K.kindOfQuestion('Určete derivaci implicitně zadané funkce x^2 + y^2 = 25.','cz'),'calc');
+ assert.equal(M.judgeSpec(1,IM,'x/(-y)',null,'calc1-chain').verdict,'right');
+ const w=M.judgeSpec(1,IM,'x/y',null,'calc1-chain');assert.deepEqual([w.verdict,w.slip],['wrong','sign']);
+ assert.equal(M.judgeSpec(1,IMP,'-0,75',null,'calc1-chain','cz').verdict,'right','a cz learner writes the decimal comma');
+ // the working chain does not read an equation in x and y: every line is null, never a false ring
+ const CH=require(path.join(root,'src/lib/rules/chain.ts'));
+ assert.deepEqual(CH.chainChecks(IM,['2x + 2y dy/dx = 0','dy/dx = -x/y']),[null,null]);
+});
+
+test('L1-matyas-19-MB3-3 3: a hint that states the slope is refused - the expression in any equal form, the value at a point - and the question quoted back is not',()=>{
+ const rows=[
+  [IM,'The derivative is -x/y.',true],[IM,'dy/dx = x/(-y)',true],[IM,'minus x over y',true],[IM,'So you get -2x/(2y).',true],[IM,'(-x/y)',true],
+  [IM,'Differentiate both sides: 2x + 2y dy/dx = 0.',false],[IM,'Start with x^2 + y^2 = 25.',false],[IM,'Treat y as a function of x and use the chain rule on y^2.',false],
+  [IM2,'It comes to -y/(x + 2y).',true],[IM2,'The slope is y/(-x - 2y).',true],[IM2,'Use the product rule on x*y.',false],
+  [IMP,'The slope is -3/4.',true],[IMP,'It is -0.75',true],[IMP,'It is -0,75',true],[IMP,'minus 0.75',true],
+  [IMP,'At (3, 4) put x = 3 and y = 4 into your derivative.',false],[IMP,'Find dy/dx first, then use the point.',false],
+ ];
+ const bad=rows.filter(([s,l,want])=>C.leaksCalc(s,l)!==want).map(([s,l,want])=>`${s.f}${s.point?` at ${s.point}`:''} :: ${l} (want ${want})`);
+ assert.deepEqual(bad,[]);
+ for(const s of [IM,IMP,IM2]){
+  assert.equal(C.withheldCalc(s),C.CALC_WITHHELD['implicit-derivative']);
+  assert.equal(C.leaksCalc(s,C.withheldCalc(s)),false,'the withheld line never leaks');
+  assert.equal(C.leaksCalc(s,C.question(s).plain),false,'the question quoted back never leaks');
+ }
 });

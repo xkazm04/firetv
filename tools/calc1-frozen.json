@@ -8,7 +8,8 @@
   "limit",
   "critical-point",
   "extremum",
-  "newton-step"
+  "newton-step",
+  "implicit-derivative"
  ],
  "tolerance": {
   "evaluate": {
@@ -38,6 +39,10 @@
   "newton-step": {
    "exact": 0.005,
    "rounded": 0.005
+  },
+  "implicit-derivative": {
+   "exact": 0.000001,
+   "rounded": 0.000001
   }
  },
  "withheld": {
@@ -49,7 +54,8 @@
   "limit": "Say what the expression does as x approaches its target, then name the step that makes it clear. The limit is yours to find.",
   "critical-point": "Find where the derivative vanishes inside the interval. The point is yours to find.",
   "extremum": "Find where the derivative vanishes inside the interval, then compare the function's values there and at the ends.",
-  "newton-step": "Write the Newton step from the function and its derivative, then apply it from the value you have, step by step."
+  "newton-step": "Write the Newton step from the function and its derivative, then apply it from the value you have, step by step.",
+  "implicit-derivative": "Differentiate both sides with respect to x, with y a function of x, then gather the dy/dx terms. The slope is yours to find."
  },
  "slips": [
   {
@@ -75,7 +81,8 @@
     "limit",
     "critical-point",
     "extremum",
-    "newton-step"
+    "newton-step",
+    "implicit-derivative"
    ]
   },
   {
@@ -88,7 +95,8 @@
     "derivative-at",
     "critical-point",
     "extremum",
-    "newton-step"
+    "newton-step",
+    "implicit-derivative"
    ]
   },
   {
@@ -101,7 +109,8 @@
     "derivative-at",
     "critical-point",
     "extremum",
-    "newton-step"
+    "newton-step",
+    "implicit-derivative"
    ]
   },
   {
@@ -114,7 +123,8 @@
     "derivative-at",
     "critical-point",
     "extremum",
-    "newton-step"
+    "newton-step",
+    "implicit-derivative"
    ]
   },
   {
@@ -128,6 +138,7 @@
     "critical-point",
     "extremum",
     "newton-step",
+    "implicit-derivative",
     "antiderivative",
     "definite-integral"
    ]
@@ -143,6 +154,7 @@
     "critical-point",
     "extremum",
     "newton-step",
+    "implicit-derivative",
     "antiderivative",
     "definite-integral"
    ]
@@ -208,7 +220,8 @@
     "limit",
     "critical-point",
     "extremum",
-    "newton-step"
+    "newton-step",
+    "implicit-derivative"
    ]
   }
  ],
@@ -285,10 +298,19 @@
    "wrong-trig-sign",
    "decimal-newton-slip",
    "arithmetic-slip"
+  ],
+  "implicit-derivative": [
+   "sign",
+   "forgot-chain",
+   "product-as-product",
+   "quotient-order",
+   "power-off-by-one",
+   "wrong-trig-sign",
+   "arithmetic-slip"
   ]
  },
  "specs": 175,
- "calls": 3954,
+ "calls": 3955,
  "rows": [
   {
    "spec": {

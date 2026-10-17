@@ -150,7 +150,14 @@ const PHRASES=[
  ['Solve e^(2x) = 7.',null],
  ['Evaluate log_2(8) + log_3(1/9).',null],
  ['Find c so that f is continuous: f(x) = { cx + 1 if x < 2;  x^2 - c if x >= 2 }',null],
- ['Find dy/dx if x^2 + y^2 = 25.',null],
+ // L1-matyas-19-MB3-3: implicit differentiation reads (it was null here); a curve with no real points, a point off the
+ // curve, a straight line and a third letter stay null
+ ['Find dy/dx if x^2 + y^2 = 25.',{shape:'implicit-derivative',f:'x^2 + y^2 = 25'}],
+ ['Find dy/dx at (3, 4) if x^2 + y^2 = 25.',{shape:'implicit-derivative',f:'x^2 + y^2 = 25',point:[3,4]}],
+ ['Find dy/dx if x^2 + y^2 = -1.',null],
+ ['Find dy/dx at (3, 5) if x^2 + y^2 = 25.',null],
+ ['Find dy/dx if x + y = 3.',null],
+ ['Find dy/dx if x^2 + z^2 = 25.',null],
  ['Find lim_(theta->0) (1 - cos(theta))/theta.',null],
  ['Air fills a sphere at 100 cm^3/s. How fast is r growing when r = 5 cm?',null],
  ['Find the absolute maximum and minimum of f(x) = x^3 - 12x on [-3, 5].',null],
@@ -297,6 +304,25 @@ test('5: a Calculus page\'s hint that states the derivative is re-asked once; a 
  stub({hint:'Look at each term.',what_to_try_next:"so f'(x) = x(3x + 2)"},clean);
  h=await hint('maths',DIFF,{});
  assert.equal(seen.length,2);assert.match(seen[1].prompt,/what to try next/i);assert.equal(h.hint,clean.hint);
+});
+
+test('L1-matyas-19-MB3-3: an implicit page task (English or Czech) is leak-checked against its slope; a second leak gets the implicit line',async()=>{
+ const IMP='Find dy/dx if x^2 + y^2 = 25.',CZ='Určete derivaci implicitně zadané funkce x^2 + y^2 = 25.';
+ const clean={hint:'Differentiate both sides, with y a function of x.',what_to_try_next:'Collect the terms with dy/dx in them.'};
+ for(const page of [IMP,CZ]){
+  stub({hint:'So dy/dx = x/(-y).',what_to_try_next:'Check it.'},clean);
+  let h=await hint('maths',page,{path:'calc1'});
+  assert.equal(seen.length,2,`${page}: exactly one re-ask`);
+  assert.deepEqual([h.hint,h.next],[clean.hint,clean.what_to_try_next]);
+  stub({hint:'It comes to -x/y.',what_to_try_next:'Check it.'},{hint:'Minus x over y.',what_to_try_next:'Done.'});
+  h=await hint('maths',page,{path:'calc1'});
+  assert.equal(seen.length,2,'no third model call');
+  assert.deepEqual([h.hint,h.next],[C.CALC_WITHHELD['implicit-derivative'],'']);
+ }
+ // at a point the value is refused, in figures and with a decimal comma
+ stub({hint:'The slope there is -0,75.',what_to_try_next:'Check it.'},clean);
+ const h=await hint('maths','Find dy/dx at (3, 4) if x^2 + y^2 = 25.',{path:'calc1'});
+ assert.equal(seen.length,2);assert.equal(h.hint,clean.hint);
 });
 
 test('M3a: a two-part page task (the maximum and the minimum) is leak-checked against both parts; a second leak gets the extremum line',async()=>{

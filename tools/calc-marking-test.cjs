@@ -66,6 +66,8 @@ const FIX=[
  {topic:'calc1-extrema',spec:spec({shape:'critical-point',f:'x^2 - 4x + 1',on:['0','5']}),right:'4/2',wrong:'3',wrong2:'1',sign:'-2',truth:'2',inVocab:'forgot-second-derivative-check',outVocab:'limit-substituted-early'},
  {topic:'calc1-optimisation',spec:spec({shape:'extremum',f:'-x^2 + 4x',on:['0','5'],kind:'max'}),right:'8/2',wrong:'5',wrong2:'3',sign:'-4',truth:'4',inVocab:'forgot-second-derivative-check',outVocab:'lost-constant'},
  {topic:'calc1-newton',spec:spec({shape:'newton-step',f:'x^2 - 2',x0:'1',steps:1}),right:'3/2',wrong:'2',wrong2:'1.25',sign:'-1.5',truth:'1.5',inVocab:'decimal-newton-slip',outVocab:'bounds-swapped'},
+ // L1-matyas-19-MB3-3: an implicit item, its right answer written in an equal form
+ {topic:'calc1-chain',spec:spec({shape:'implicit-derivative',f:'x^2 + y^2 = 25'}),right:'x/(-y)',wrong:'-y/x',wrong2:'-x',sign:'x/y',truth:'-x/y',inVocab:'forgot-chain',outVocab:'bounds-swapped'},
  {topic:'calc1-antiderivatives',spec:spec({shape:'antiderivative',f:'2x'}),right:'x^2 + C',wrong:'x^2/2 + C',wrong2:'2x^2 + C',sign:'-x^2 + C',bare:'x^2',truth:'x^2 + C',inVocab:'power-off-by-one',outVocab:'forgot-chain'},
  {topic:'calc1-definite-integral',spec:spec({shape:'definite-integral',f:'2x',a:'0',b:'3'}),right:'18/2',wrong:'6',wrong2:'3',sign:'-9',truth:'9',inVocab:'bounds-swapped',outVocab:'limit-substituted-early'},
 ];
@@ -388,9 +390,13 @@ test('MK11: a Calculus photo read with no answer to any question is refused (502
   assert.equal(store.getSession().practice.marked,true);assert.equal(lines(),l0+1);assert.equal(digests(),d0+1);
  }
  // the ruled limit: one non-blank answer of the set lands the set
- seat();setOn(fx.topic,fx.spec,3);const l1=lines();
+ // the history is capped (learners.ts capped): by here this suite's sets may have filled it, so the new line is told by the
+ // newest entry, not by the count (the tenth FIX topic, calc1-chain, L1-matyas-19-MB3-3, filled it)
+ const newest=()=>JSON.stringify(learners.getLearner(LEARNER).history.at(-1));
+ seat();setOn(fx.topic,fx.spec,3);const h1=newest();
  stubVision(()=>({items:[{n:1,studentAnswer:'?',studentWorking:'',slip:'unclear'}]}));
- assert.equal((await post('mark',PHOTO)).status,200);assert.equal(lines(),l1+1);
+ assert.equal((await post('mark',PHOTO)).status,200);
+ assert.notEqual(newest(),h1,'a new history line');assert.equal(learners.getLearner(LEARNER).history.at(-1).kind,'practice');
 });
 
 test('MK4: settleSpec reads a decimal comma in a one-number answer only for a cz or de learner',()=>{
@@ -442,4 +448,16 @@ test('MB-B1 (b): a wrong item with no slip says its checker\'s own reason; a pla
  assert.equal(C2.calc2CheckAnswer({shape:'sequence-limit',f:'(2x + 1)/x'},'7').why,MK.DISAGREES);
  const sv=S.check({shape:'compute',expr:'3/4 ÷ 2/3'},'1/8','uk');
  assert.deepEqual([sv.verdict,sv.slip,sv.why],['wrong',undefined,MK.DISAGREES],'a school wrong answer with no slip disagrees plainly');
+});
+
+test('L1-matyas-19-MB3-3: the session keeps an implicit item point as two plain values and drops an answer riding with it; the item marks by code',()=>{
+ seat();
+ const q='Find dy/dx at (3, 4) if x^2 + y^2 = 25.';
+ store.dispatch({type:'practice.set',practice:{topic:'calc1-chain',marked:false,items:[{n:1,question:q,spec:{shape:'implicit-derivative',f:'x^2 + y^2 = 25',point:[3,4],answer:'-3/4'}}]}});
+ const kept=store.getSession().practice.items[0].spec;
+ assert.deepEqual(kept,{shape:'implicit-derivative',f:'x^2 + y^2 = 25',point:[3,4]});
+ assert.equal(C.question(kept).plain,q);
+ assert.equal(M.judgeSpec(1,kept,'-3/4',null,'calc1-chain').verdict,'right');
+ store.dispatch({type:'practice.set',practice:{topic:'calc1-chain',marked:false,items:[{n:1,question:q,spec:{shape:'implicit-derivative',f:'x^2 + y^2 = 25',point:[3,{v:4}]}}]}});
+ assert.deepEqual(store.getSession().practice.items[0].spec,{shape:'implicit-derivative',f:'x^2 + y^2 = 25'},'a point that is not two plain values stops here');
 });

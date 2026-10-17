@@ -11,7 +11,7 @@
  */
 
 /**
- * A practice shape: the kind of question the Calculus expression engine can set and check for a topic. The nine ids
+ * A practice shape: the kind of question the Calculus expression engine can set and check for a topic. The ten ids
  * are a CONTRACT with desk/src/lib/rules/calc.ts (and are listed again in tools/maths-paths-test.cjs): a shape added
  * here needs a generator there.
  */
@@ -24,7 +24,9 @@ export type CalcShape =
   | "limit"
   | "critical-point"
   | "extremum"
-  | "newton-step";
+  | "newton-step"
+  /** dy/dx of an equation in x and y (rules/calc ImplicitSpec, L1-matyas-19-MB3-3). */
+  | "implicit-derivative";
 
 export interface CalcSpineTopic {
   id: string;
@@ -116,7 +118,7 @@ export const CALC1_SPINE: CalcSpineTopic[] = [
     name: "The chain rule and implicit differentiation", strand: "Derivatives",
     blurb: "The chain rule differentiates a function inside a function, and implicit differentiation applies it to y as a function of x.",
     prereq: ["calc1-rules"],
-    shapes: ["derivative"],
+    shapes: ["derivative", "implicit-derivative"],
     requires: "composition",
   },
   {

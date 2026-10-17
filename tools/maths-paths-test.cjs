@@ -19,7 +19,7 @@ const {CALCULUS_1}=require(path.join(LIB,'calculus1.ts'));
  * expression engine that generates and checks each shape): a shape added here needs a generator there, and a shape
  * renamed there must be renamed here. Deliberately not imported from calc.ts - the spine is client-safe data.
  */
-const SHAPES=['evaluate','derivative','derivative-at','antiderivative','definite-integral','limit','critical-point','extremum','newton-step'];
+const SHAPES=['evaluate','derivative','derivative-at','antiderivative','definite-integral','limit','critical-point','extremum','newton-step','implicit-derivative'];
 const SPINE_KEYS=['blurb','id','name','prereq','sections','sessions','shapes','strand'];
 
 /** Source with comments removed, so a word in a comment never passes or fails a scan. */
@@ -65,11 +65,11 @@ test('3: each path\'s prerequisite graph is a DAG that only points at earlier to
  }
 });
 
-test('4: every Calculus topic has at least one shape, each one of the nine the engine knows (the contract with rules/calc.ts)',()=>{
+test('4: every Calculus topic has at least one shape, each one of the ten the engine knows (the contract with rules/calc.ts)',()=>{
  const want={
   'calc1-functions':['evaluate'],'calc1-trig':['evaluate'],'calc1-exp-log':['evaluate'],
   'calc1-limit-idea':['limit'],'calc1-limit-laws':['limit'],'calc1-continuity':['limit'],
-  'calc1-derivative':['derivative','derivative-at'],'calc1-rules':['derivative'],'calc1-trig-derivatives':['derivative'],'calc1-chain':['derivative'],
+  'calc1-derivative':['derivative','derivative-at'],'calc1-rules':['derivative'],'calc1-trig-derivatives':['derivative'],'calc1-chain':['derivative','implicit-derivative'],
   'calc1-log-derivative':['derivative','derivative-at'],'calc1-related-rates':['derivative-at'],
   'calc1-extrema':['critical-point','extremum'],'calc1-shape':['limit'],'calc1-optimisation':['extremum'],'calc1-newton':['newton-step'],
   'calc1-antiderivatives':['antiderivative'],'calc1-definite-integral':['definite-integral'],'calc1-area-so-far':['definite-integral'],
@@ -78,11 +78,11 @@ test('4: every Calculus topic has at least one shape, each one of the nine the e
  assert.deepEqual(CALC1_SPINE.map(t=>t.id),Object.keys(want),'the spine keeps the order of calculus1.ts');
  for(const t of CALC1_SPINE){
   assert.ok(Array.isArray(t.shapes)&&t.shapes.length>=1,`${t.id} has a shape`);
-  for(const s of t.shapes)assert.ok(SHAPES.includes(s),`${t.id}: ${s} is not one of the nine shapes`);
+  for(const s of t.shapes)assert.ok(SHAPES.includes(s),`${t.id}: ${s} is not one of the ten shapes`);
   assert.equal(new Set(t.shapes).size,t.shapes.length,`${t.id}: a shape listed twice`);
   assert.deepEqual(t.shapes,want[t.id],`${t.id} shapes`);
  }
- assert.deepEqual([...new Set(CALC1_SPINE.flatMap(t=>t.shapes))].sort(),[...SHAPES].sort(),'every one of the nine shapes is practised somewhere');
+ assert.deepEqual([...new Set(CALC1_SPINE.flatMap(t=>t.shapes))].sort(),[...SHAPES].sort(),'every one of the ten shapes is practised somewhere');
 });
 
 test('5: the spine is small and carries no examples or answers - exactly the eight spine fields per topic',()=>{
