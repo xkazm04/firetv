@@ -129,6 +129,14 @@ For open-language evaluation, code validation is necessary but insufficient: a m
 
 An adult says “Give me another time” when rescheduling. The meaning is clear; grammar is acceptable. The partner offers a time, so the conversation succeeds. At the pause, the coach asks whether the learner wants it warmer or more formal, demonstrates “Could we find another time?”, and replays the exchange. The learner then handles a different availability question without the phrase visible. Store requesting evidence and chosen register practice separately. Do not mark the original sentence grammatically wrong or the learner rude.
 
+### Self-repair (K2): what a held try claims
+
+A fix moment asks for the learner's line again before it shows the fix (`desk/src/lib/english/repair.ts`). Code judges the try by the taught slip only: the slip's words must be gone and the fix's words said (`judgeTry`). Ruling on LG-53 (the operator's delegate):
+
+- A held try claims **only the thing the learner fixed**, as in "You fixed “tomatoes are”". It never claims the whole line. The learner's try is shown under a neutral label ("Your try"), never as a corrected line, because code did not read the rest of it. "You found it" belongs to the K4 lost-line find alone.
+- The fixed words are the moment's fix key once it is revealed, else the changed words of its better against what was said.
+- A second error left in the try is never called found. **It is not raised from the try**: a try is never a turn and never evidence, so it does not reach the moment pipeline (`review.ts`, `conversation.ts`). That is the ceiling. It can only become a moment if the learner says the same words again in a later normal reply, which the existing review reads like any other learner turn. No path that reviews tries is built.
+
 ## 8. Language plus communication style
 
 Coach three separate questions: **Was the message understandable? Was the language effective? Did the phrasing fit the learner's chosen intention and context?** Feedback describes likely effects, with uncertainty, rather than asserting what another person feels.
