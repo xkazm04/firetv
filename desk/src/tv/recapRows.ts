@@ -8,6 +8,7 @@
  */
 import type { Session, Subject, Task } from "@/lib/session/store";
 import { landingModules } from "@/tv/landingRows";
+import { dayOf } from "@/tv/mathsRows";
 import { BRAND } from "@/tv/profileRows";
 import { MARKS, type Mark } from "@/lib/rules/marks";
 import { slip as slipById } from "@/lib/rules/maths";
@@ -62,8 +63,19 @@ export function parseDetail(kind: string, detail: string): Detail {
 /** Local midnight of the day `now` falls in: tonight is everything since. */
 export function startOfDay(now: number): number { const d = new Date(now); d.setHours(0, 0, 0, 0); return d.getTime(); }
 
+/**
+ * The evening log as tonight's: the session's own log when its day (`log.day`, or failing that the day its timer started,
+ * the rule store.dayed uses) is the local day of `now`, else an empty one. The store clears a stale log only on the first
+ * event of a later day, so a recap opened before any event would otherwise show yesterday's hints as tonight's.
+ */
+export function tonightsLog(s: Pick<Session, "log">, now: number): Session["log"] {
+  const l = s.log, day = l?.day ?? (l?.started ? dayOf(l.started) : undefined);
+  return l && (!day || day === dayOf(now)) ? l : { problems: [], hints: 0, hard: [], minutes: 0, started: null };
+}
+
 /** One tile per app on the learner's profile, in the desk's left-to-right order, each drawn from tonight's work only. */
-export function recapRows(s: Session, now: number): RecapTile[] {
+export function recapRows(session: Session, now: number): RecapTile[] {
+  const s: Session = { ...session, log: tonightsLog(session, now) };
   const from = startOfDay(now), tonight = (at: number) => at >= from && at <= now;
   const lines = (s.history ?? []).filter((h) => tonight(h.at));
   return landingModules(s).map((app): RecapTile => {

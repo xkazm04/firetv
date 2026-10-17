@@ -16,7 +16,7 @@ import { LingaPhone } from "@/english/LingaPhone";
 import { deskLine, follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
 import { forensicAt, planAt, switchEndsLine } from "@/tv/keys";
 import { dayOf } from "@/tv/mathsRows";
-import { counted, hintedLine, recapCaption, recapLine, recapRows, slippedLine, startOfDay, tasksLine } from "@/tv/recapRows";
+import { counted, hintedLine, recapCaption, recapLine, recapRows, slippedLine, startOfDay, tasksLine, tonightsLog } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
 import { markCounts } from "@/lib/rules/marks";
@@ -745,8 +745,8 @@ export default function Phone() {
             // It shows whenever tonight has a tile with work, or the evening ended since local midnight - whatever the TV shows.
             const now = Date.now(), tiles = recapRows(s, now);
             if (!(tiles.some((t) => !t.empty) || (s.log.endedAt ?? 0) >= startOfDay(now))) return <p>Arrives when the session ends.</p>;
-            const mins = Math.round(s.log.minutes), list = tasksLine(s.tasks);
-            const tally = [mins > 0 ? counted(mins, "minute") + " on task" : "", s.log.problems.length ? counted(s.log.problems.length, "problem") : "", s.log.hints ? counted(s.log.hints, "hint") : ""].filter(Boolean).join(" · ");
+            const log = tonightsLog(s, now), mins = Math.round(log.minutes), list = tasksLine(s.tasks);
+            const tally = [mins > 0 ? counted(mins, "minute") + " on task" : "", log.problems.length ? counted(log.problems.length, "problem") : "", log.hints ? counted(log.hints, "hint") : ""].filter(Boolean).join(" · ");
             return <div className="precap" data-role="phone-recap"><b>{s.learner ? `${s.learner.name}, tonight` : "Tonight"}</b>{tally}
               <ul>{tiles.map((t) => <li key={t.app} data-app={t.app}>{recapLine(t)}</li>)}{list && <li data-app="tasks">{list}</li>}</ul>
               <p style={{ margin: "10px 0 0", fontWeight: 600 }}>{recapCaption(tiles)}</p>

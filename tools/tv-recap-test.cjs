@@ -848,9 +848,9 @@ test('MB-B23 rows 4: the names are the seated learner\'s - a learner switch take
  const {reduce}=store(),{hintedLine}=recap();
  const s=session({profiles:[EMA,{...JAKUB,modules:['maths','english','essay']}],pages:[SHEET],log:{started:null,minutes:0,problems:['pA:3'],hard:[],hints:1}});
  const j=reduce(s,{type:'learner.set',id:'jakub'});
- assert.equal(hintedLine(recap().recapRows(j,NOW).find((t)=>t.app==='maths')),'No hints tonight.');
+ assert.equal(hintedLine(recap().recapRows(j,Date.now()).find((t)=>t.app==='maths')),'No hints tonight.');
  const back=reduce(j,{type:'learner.set',id:'ema'});
- assert.equal(hintedLine(recap().recapRows(back,NOW).find((t)=>t.app==='maths')),'A hint on 3; none needed a second.');
+ assert.equal(hintedLine(recap().recapRows(back,Date.now()).find((t)=>t.app==='maths')),'A hint on 3; none needed a second.');
 });
 const lampsOf=(html)=>[...html.matchAll(/<span class="rc-lamp"( data-second="true")?(?: data-page="(\d+)")?><b><\/b><em>([^<]*)(?:<small>.*?<\/small>)?<\/em><\/span>/g)].map((m)=>`${m[3]}${m[2]?` p${m[2]}`:''}${m[1]?'!':''}`);
 test('MB-B23 TV: a lamp per hinted problem with its name beneath, the second-hint lamp ringed, five at most then "k more"',()=>{
@@ -1016,4 +1016,17 @@ test('cycle 23 words: slippedLine names tonight\'s slips by number and short, tw
  assert.equal(slippedLine(maths(pctEvening({practice:{...PCT,items:PCT.items.filter((i)=>!i.slip)}}))),null,'rings with no slip: no line');
  const line=slippedLine(maths(pctEvening()));
  for(const i of PCT.items){assert.ok(!line.includes(i.question),i.question);assert.doesNotMatch(line,new RegExp(`\\b${i.studentAnswer}\\b`),i.studentAnswer);}
+});
+
+test("MB5-3: a log from an earlier day is not tonight's - yesterday's hints do not open a new day's recap",()=>{
+ const {recapRows,tonightsLog}=recap();
+ const m=(s)=>recapRows(s,NOW).find((t)=>t.app==='maths');
+ const yd=(patch)=>session({learner:EMA,history:[],log:{started:YESTERDAY,minutes:42,problems:['k1'],hard:HARD,hints:3,...patch}});
+ const stale=m(yd({day:'2026-9-23'}));
+ assert.equal(stale.empty,'Not tonight');assert.equal(stale.hints,0);assert.equal(stale.second,0);assert.deepEqual(stale.hinted,[]);
+ const fresh=m(yd({day:'2026-9-24',started:TODAY(16)}));
+ assert.equal(fresh.hints,3);assert.equal(fresh.second,1);assert.equal(fresh.empty,null);
+ const undated=m(yd({}));
+ assert.equal(undated.hints,0,'no day, started yesterday: it is yesterday log');assert.equal(undated.empty,'Not tonight');
+ assert.equal(tonightsLog(yd({}),NOW).hints,0);assert.equal(tonightsLog(yd({day:'2026-9-24'}),NOW).hints,3);
 });
