@@ -71,9 +71,16 @@ const TEEN: Record<VoiceSubject, string> = {
   english: "a Czech teenager",
 };
 
+/** A maths teen named by the age the profile holds ("an 18-year-old"); the article follows the spoken number. */
+const ageWho = (age: number): string => {
+  const n = Math.round(age);
+  return `${/^(8|11|18)/.test(String(n)) ? "an" : "a"} ${n}-year-old`;
+};
+
 /** The voice for `subject` at `age`. Same input, same output. */
 export function voiceOf(subject: VoiceSubject, age?: number | null): Voice {
   if (bandOf(age) === "young") return { band: "young", ...YOUNG[subject] };
+  if (subject === "maths" && typeof age === "number" && Number.isFinite(age)) return { band: "teen", who: ageWho(age), manner: "" };
   return { band: "teen", who: TEEN[subject], manner: "" };
 }
 

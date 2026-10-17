@@ -175,9 +175,14 @@ test('M3a: judgeSet judges a word problem part by part - each part by its own sp
 test('HL2 case 1: a maths task no reader reads gets the neutral stance, never the factoring one; an equation keeps today\'s text',async()=>{
  const NEUTRAL=(who)=>`a maths tutor for ${who}. This is a school maths task; prefer the simplest method a school course would use over heavier ones.`;
  const who=voiceOf('maths',13).who;
- for(const q of ['Solve the inequality x^2 - 5x + 6 < 0','Find the 10th term of the arithmetic sequence 3, 7, 11, ...','Find the equation of the line through (1, 2) and (3, 8)']){
+ // the maturita kinds name their method (recert-2/L1-vojtech-18-MB1-1); a task no reader reads keeps the neutral stance
+ for(const [q,method] of [['Solve the inequality x^2 - 5x + 6 < 0','This is an inequality;'],['Find the 10th term of the arithmetic sequence 3, 7, 11, ...','This is an arithmetic or geometric sequence task;'],['Find the equation of the line through (1, 2) and (3, 8)','This is a line through two points;']]){
   const {system}=await ask(q,{path:'school',age:13});
-  assert.ok(system.includes(`You are ${NEUTRAL(who)}`),`${q}: neutral`);assert.doesNotMatch(system,/factoring/);
+  assert.ok(system.includes(`You are a maths tutor for ${who}. ${method}`),`${q}: method named`);assert.doesNotMatch(system,/factoring/);
+ }
+ {
+  const {system}=await ask('Simplify the ratio 12 : 18 and explain what it means',{path:'school',age:13});
+  assert.ok(system.includes(`You are ${NEUTRAL(who)}`),'an unread task: neutral');assert.doesNotMatch(system,/factoring/);
  }
  const {system}=await ask('Solve for x: 3x - 7 = 11',{path:'school',age:13});
  assert.ok(system.includes(`You are a maths tutor for ${who}. This sheet is a factoring and linear-equations unit; prefer the unit's methods over heavier ones.`),'an equation keeps today\'s text');

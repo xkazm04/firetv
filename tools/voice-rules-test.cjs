@@ -79,6 +79,8 @@ async function prompts(age){
  return o;
 }
 const TEEN_AGES=[undefined,14,15,17,25],YOUNG_AGES=[12,13];
+/** The maths teen's name-words: the profile's age when it is known, today's fixed 15 when it is not. */
+const mathsWho=(a)=>a===undefined?'a 15-year-old':`${[8,11,18].includes(a)?'an':'a'} ${a}-year-old`;
 const CALC_KEYS=['hint.maths.calc','explain.calc'];
 
 // ------------------------------------------------------------------ 1: the module
@@ -91,7 +93,7 @@ test('1: voiceOf - the bands, today\'s words for teen, a different voice for you
  for(const subject of ['maths','essay','english']){
   for(const a of TEEN_AGES){
    const v=V.voiceOf(subject,a);
-   assert.deepEqual(v,{band:'teen',who:TODAY_WHO[subject],manner:''},`${subject} at ${a}: today's words, nothing added`);
+   assert.deepEqual(v,{band:'teen',who:subject==='maths'?mathsWho(a):TODAY_WHO[subject],manner:''},`${subject} at ${a}: the maths teen is named by a known age, essay and english stay today's words`);
   }
   const teen=V.voiceOf(subject),young=V.voiceOf(subject,12);
   assert.equal(young.band,'young');
@@ -122,11 +124,11 @@ test('2: learnerAge reads the seated profile, undefined for nobody, no profile o
 });
 
 // ------------------------------------------------------------------ 3: 14+ and no age: byte for byte
-test('3: 14, 15, 17, 25 and no age get today\'s prompts byte for byte',async()=>{
+test('3: 15 and no age get today\'s prompts byte for byte; a known maths age is named, essay and english do not move',async()=>{
  for(const age of TEEN_AGES){
   const got=await prompts(age);
-  for(const k of Object.keys(TODAY))assert.equal(got[k],TODAY[k],`${k} at age ${age}`);
-  assert.equal(got['hint.maths.2'],TODAY['hint.maths.1'],'hint 2 shares hint 1\'s system prompt');
+  for(const k of Object.keys(TODAY))assert.equal(got[k],SUBJECT[k]==='maths'?TODAY[k].replace('a 15-year-old',mathsWho(age)):TODAY[k],`${k} at age ${age}`);
+  assert.equal(got['hint.maths.2'],got['hint.maths.1'],'hint 2 shares hint 1\'s system prompt');
  }
  // the fragment itself, once each
  assert.ok(TODAY['hint.maths.1'].startsWith('You are a maths tutor for a 15-year-old. This sheet is a factoring and linear-equations unit; prefer the unit\'s methods over heavier ones.. Socratic rules, absolute:'),'today\'s text, its double stop included');
@@ -201,14 +203,14 @@ test('6: routes - api/hint and api/analyse voice the seated profile\'s age; 14+ 
   assert.equal((await post('hint',{})).status,200);await drain();
   const hintSystem=systems.find((x)=>x.startsWith('You are '));
   assert.ok(hintSystem,'a hint prompt was sent');
-  assert.equal(hintSystem===TODAY['hint.maths.1'],!young,`hint at age ${age}`);
+  assert.equal(hintSystem===TODAY['hint.maths.1'].replace('a 15-year-old',mathsWho(age)),!young,`hint at age ${age}`);
   assert.equal(hintSystem.includes(V.voiceOf('maths',12).manner),young);
-  if(!young)assert.match(hintSystem,/a maths tutor for a 15-year-old/);
+  if(!young)assert.ok(hintSystem.includes(`a maths tutor for ${mathsWho(age)}.`));
   else assert.match(hintSystem,/a maths tutor for a learner aged 11 to 13/);
   // the second hint (still stuck) is voiced the same way
   systems=captureSystems();
   assert.equal((await post('hint',{stage:2})).status,200);await drain();
-  assert.equal(systems.find((x)=>x.startsWith('You are '))===TODAY['hint.maths.1'],!young,`hint 2 at age ${age}`);
+  assert.equal(systems.find((x)=>x.startsWith('You are '))===TODAY['hint.maths.1'].replace('a 15-year-old',mathsWho(age)),!young,`hint 2 at age ${age}`);
   // an essay reading
   seat(`voice-essay-${age}`,age);require(src('lib/session/texts.ts')).markNoticed(`voice-essay-${age}`);
   systems=captureSystems();
@@ -237,4 +239,25 @@ test('7: routes - api/explain voices the seated profile\'s age on a school item,
    if(young&&!calc)assert.equal(systems[0],today+'\n\n'+V.voiceOf('maths',age).manner);
   }
  }
+});
+
+// ------------------------------------------------------------------ 8: a maturita task - the 18-year-old is named and the method is (recert-2/L1-vojtech-18-MB1-1)
+test('8: an 18-year-old\'s maturita line and sequence task name the age and the method and no number from the task; an unread task keeps the neutral stance',async()=>{
+ const NEUTRAL=(who)=>`a maths tutor for ${who}. This is a school maths task; prefer the simplest method a school course would use over heavier ones.`;
+ for(const [q,method,numbers] of [
+  ['Find the equation of the line through (1, 2) and (3, 8)',/a line through two points; use the gradient and y = mx \+ c/,['1','2','3','8']],
+  ['Find the 10th term of the arithmetic sequence 3, 7, 11, ...',/an arithmetic or geometric sequence task; use the nth-term formula/,['10','3','7','11']],
+ ]){
+  const got=await sys(()=>H.hint('maths',q,{age:18}));
+  const stance=got.slice(0,got.indexOf(' Socratic rules'));
+  assert.match(stance,/^You are a maths tutor for an 18-year-old./,q);
+  assert.match(stance,method,q);
+  assert.doesNotMatch(stance,/15-year-old/);
+  for(const n of numbers)assert.doesNotMatch(stance.replace(/y = mx \+ c/,''),new RegExp('(?<![0-9.])'+n+'(?![0-9.])'),`${q}: no ${n} in the stance`);
+  assert.ok(got.includes(H.HINT_WITHHOLD),'the withholding clause is untouched');
+  // an unknown age keeps the old words, the method still named
+  assert.match(await sys(()=>H.hint('maths',q,{})),/^You are a maths tutor for a 15-year-old. This is /,q);
+ }
+ const unread=await sys(()=>H.hint('maths','Simplify the ratio 12 : 18 and explain what it means',{age:18}));
+ assert.ok(unread.startsWith('You are '+NEUTRAL('an 18-year-old')),'an unread task keeps the neutral stance');
 });

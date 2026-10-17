@@ -28,6 +28,7 @@ import { equationOf, expressionOf, leaks, withheldLine } from "../rules/maths";
 import { leaksCalc, withheldCalc } from "../rules/calc";
 import { leaksSchool, unitOf, withheldSchool } from "../rules/school";
 import { readQuestion, type ItemKind, type Question } from "../rules/kinds";
+import { inequalityOf, lineOf, sequenceTermOf } from "../rules/maturita";
 import { calcWordsOf, judgeOf, topicIn, type MathPath } from "../library/paths";
 import { voiceOf, withManner, type Voice } from "../rules/voice";
 import { SCHOOL_SLIPS } from "../rules/school";
@@ -87,6 +88,16 @@ const unitStance = (v: Voice, unit: string) => `a maths tutor for ${v.who}. This
 const neutralStance = (v: Voice) => `a maths tutor for ${v.who}. This is a school maths task; prefer the simplest method a school course would use over heavier ones.`;
 
 /**
+ * The method a maturita task names (rules/maturita readers), in words that carry no value from the task; null when the text
+ * reads as none of the three kinds.
+ */
+const maturitaMethod = (problem: string): string | null =>
+  sequenceTermOf(problem) ? "This is an arithmetic or geometric sequence task; use the nth-term formula"
+  : lineOf(problem) ? "This is a line through two points; use the gradient and y = mx + c"
+  : inequalityOf(problem) ? "This is an inequality; find where the expression changes sign, then read off the solution set"
+  : null;
+
+/**
  * The stance: a maths task's own kind first (Calculus, or the school unit it belongs to), the learner's path only where the text reads as neither.
  * A task the linear rule reads (an equation or an expression, rules/maths) keeps the linear-equations sheet; any other maths task is neutral.
  */
@@ -95,7 +106,8 @@ const stanceOf = (subject: Subject, voice: Voice, kind: ItemKind, problem: strin
     : kind === "calc" ? calcStance(path)
     : kind === "school" && unit ? unitStance(voice, unit)
     : judgeOf(path) === "calc" ? calcStance(path)
-    : equationOf(problem, system) || expressionOf(problem, system) ? STANCE.maths(voice) : neutralStance(voice);
+    : equationOf(problem, system) || expressionOf(problem, system) ? STANCE.maths(voice)
+    : maturitaMethod(problem) ? `a maths tutor for ${voice.who}. ${maturitaMethod(problem)}` : neutralStance(voice);
 
 /**
  * The specs a maths task reads as (rules/kinds readQuestion): a Calculus one, a school one, or the parts of a multi-part
