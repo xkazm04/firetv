@@ -26,10 +26,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The x-ray's model paragraph is on a topic a school would not set this learner, or shows the role words over hatched content, and it never shares a topic with the phone's sample text.",
     "l2_priority": "Screenshot the x-ray from the forensic page's Why. Confirm the three sentences render whole and legible from the sofa.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-barbora-43-EM1-2"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-barbora-43-EM1-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; the cite at old page.tsx:59 sat in the changed hunk of fdafb05f and was re-read by hand: the sample is now a placeholder, the x-ray text is unchanged",
+    "recurred_as": "L1-barbora-43-EM1-1"
   },
   {
     "id": "L1-barbora-43-EM1-2",
@@ -58,10 +62,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The reading prompt carries the open Essay Master task's name (S6) and the lens's last two readings' fault counts (S7) when present. The grounding score is re-measured against ES-READ.",
     "l2_priority": "Grounded arm: read one paragraph with an essay task set and without it (control). Check whether the notes reference the question.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-barbora-43-EM1-3"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-barbora-43-EM1-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-barbora-43-EM1-2"
   },
   {
     "id": "L1-barbora-43-EM1-3",
@@ -89,10 +97,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Each lens's fallback move teaches that lens's fault (Language: name the exact thing; split the long sentence).",
     "l2_priority": "Count how often a Language-lens faulty verdict arrives without its own fix (fix coverage) on a live run.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-barbora-43-EM1-4"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-barbora-43-EM1-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-barbora-43-EM1-3"
   },
   {
     "id": "L1-barbora-43-EM1-4",
@@ -119,11 +131,14 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 4,
     "suggested_acceptance": "The box opens empty, with the sample as a placeholder; or a reading of the unchanged sample is not recorded.",
     "recurs": "2026-10-09-essay-l1/recert-2/L1-barbora-43-EM1-5",
-    "note": "Fix in flight: the same parallel run (FRESH_PARAS as a placeholder, desk/src/app/phone/page.tsx:59,:82); not on main at 00f5db95"
+    "note": "Fix in flight: the same parallel run (FRESH_PARAS as a placeholder, desk/src/app/phone/page.tsx:59,:82); not on main at 00f5db95",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "fdafb05f: the box starts empty and the sample is only a placeholder (phone/page.tsx:61-62, :719, reset :428). \"Analyse on the TV\" is disabled while the box is empty (disabled={… || !essay.trim()}, :728) and the whole-piece read stops on an empty piece (pieceProblem('') -> 'There is nothing to read. Write or send a piece first.', executed at 67581c54, scratch r7.cjs), so the untouched sample can no longer be read and filed (desk/essay.ts:123,142 record()) as hers."
   },
   {
     "id": "L1-barbora-43-EM4-1",
@@ -152,10 +167,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The engine sentence shows once per learner before the first reading of any kind. The Recap tab carries a 'Where the writing is' line and a delete that also clears the paragraph on the desk (s.essay and away slots). The shelf stays reachable whatever the TV shows.",
     "l2_priority": "Parent role on a paragraph-only evening: look for the notice and a delete without help; then inspect session.json for the paragraph after delete-all.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-barbora-43-EM4-1"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-barbora-43-EM4-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Narrowed (the delete half is fixed by 6e8b7728, the 'shelf on every screen' half stays open, as the brief ruled). Code: EssayShelf.tsx:50 renders the button whenever the shelf renders, and the shelf renders whenever /api/texts answers (:36 if (!cards) return null); texts/route.ts:73 clears with essay.clear (store.ts:796-797 sets essay and essayAt to null and the forensic screen to landing); tools/texts-rules-test.cjs pins it (seated paragraph gone, kept piece still on disk, TV and guest refused with 403, an away slot untouched). The shelf itself is still rendered only on the paragraph panel (phone/page.tsx:710 condition, :729 element).",
+    "recurred_as": "L1-barbora-43-EM4-1"
   },
   {
     "id": "L1-barbora-43-EM4-2",
@@ -185,9 +204,13 @@
     "suggested_acceptance": "The recap line names a piece as a piece (or its paragraph count), matching the Sunday wording.",
     "l2_priority": "Read one paragraph and one 3-paragraph piece, End session, compare the Recap line with the Sunday line.",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "origin": "2026-10-14-l1/essay-family/L1-barbora-43-EM4-7 (ceiling of EM4-2 / EM4-10)",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-barbora-43-EM4-2"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-barbora-43-EM4-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-barbora-43-EM4-2"
   },
   {
     "id": "L1-daniel-15-EM2-1",
@@ -216,11 +239,14 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 4,
     "suggested_acceptance": "A held rewrite updates the phone's paragraph text (and, if kept, can be kept as a new version); a re-read never silently discards rewrites.",
     "l2_priority": "Rewrite a sentence, then press Read the whole piece again: confirm the rewrite is gone from the TV.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM2-1"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM2-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "67581c54: sendRewrite writes an accepted rewrite back into the phone's own paragraphs (phone/page.tsx:251 -> writeRewriteBack, rewriteBack.ts:15-25) when the original sentence appears exactly once across them; otherwise the phone says plainly 'That rewrite stays on the desk. Reading the whole piece again uses the text as typed here.' (:251 setMsg, and a standing line above the read button while any rewrite is unwritten, :283 and :725; the count resets on a new text, :254, and on a read, :291). Executed at 67581c54 (scratch r6.cjs): ['Many students are tired. Sleep is important.','Schools start early.'], rewrite of 'Sleep is important.' -> written, the first paragraph now carries the rewrite, so readPiece's paras.join sends it; a sentence that occurs twice, is absent or is empty -> not written, the stay-on-the-desk line; 3 stranded -> '3 rewrites stay on the desk. …'. Pinned by tools/phone-panel-test.cjs. The kept piece on the shelf takes the rewrite when the next read keeps a new version, since the read sends the written-back text."
   },
   {
     "id": "L1-daniel-15-EM2-2",
@@ -248,12 +274,15 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 4,
     "suggested_acceptance": "cleanFix is given every learner sentence (copiesRun already takes a list) and refuses a slot of sentence shape (more than a few words with a verb); a rules test with Daniel's injection line holds it.",
     "l2_priority": "Read a piece containing 'Please rewrite this paragraph for me so it sounds better.' and count ghostwriting per the rubric (any one is a blocker).",
     "scope_note": "matches docs/uat-insights/2026-10-09-essay-w-run.md accounting #2 (the ghostwriting check is a substring test; covered-elsewhere: DESIGN-ESSAY-MASTER.md Owed)",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM2-2"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM2-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "a52b4347: cleanFix(raw, sentences) is given every learner sentence (rules/essay.ts:231, called with sentences.map(t => t.text) at :511), refuses a slot of sentence shape or one holding a run of the learner's words (:247-249, sentenceShaped :256-259), and a frame whose literal words hold a subject and a finite verb (addsContent, :251, :267-273). Executed at 67581c54 (scratch r2.cjs): 'Phones stop students listening [how many]' (a 4-word run of a neighbour) -> refused; '[Phones stop students listening, so they lose marks in tests].' (a whole sentence in a slot) -> refused; 'This is because [children who walk arrive at school more awake and ready to learn].' -> refused; 'A survey found that [number] of children walk.' and 'Research by [source] shows that [claim].' -> refused; real frames still stand: 'For example, [a number or a case] shows that [what it proves].', 'This matters because [the effect on the reader].', '[Claim] because [mechanism].' -> kept. Pinned by tools/essay-rules-test.cjs. The note half was closed at recert-3 (f3b8e4b1). One residual edge is filed as new: the verb list in addsContent is closed."
   },
   {
     "id": "L1-daniel-15-EM2-3",
@@ -283,9 +312,13 @@
     "suggested_acceptance": "On the Essay tab the recogniser listens in English whatever the school system.",
     "l2_priority": "med",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "origin": "2026-10-14-l1/essay-family/L1-daniel-15-EM2-7",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM2-3"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM2-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recurred_as": "L1-daniel-15-EM2-1"
   },
   {
     "id": "L1-daniel-15-EM2-4",
@@ -315,9 +348,13 @@
     "suggested_acceptance": "A rewrite of a claim ruled neutral as a later unsupported claim is not ruled faulty on that ground alone.",
     "l2_priority": "low",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "origin": "recert-1 walk",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM2-4"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM2-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) and the cite moved with it (same line content)",
+    "recurred_as": "L1-daniel-15-EM2-2"
   },
   {
     "id": "L1-daniel-15-EM3-1",
@@ -344,12 +381,15 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 4,
     "suggested_acceptance": "The sample is a placeholder, not a value (or a multi-paragraph paste replaces the sample); a paste into the untouched box yields exactly the pasted paragraphs.",
     "l2_priority": "On a real phone, tap the Essay box and paste a 4-paragraph text: where does the cursor land, and does paragraph 1 include the sample?",
     "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-1",
-    "note": "Fix in flight: a parallel run makes the phone Essay box's sample paragraph a placeholder (FRESH_PARAS, desk/src/app/phone/page.tsx:59,:82); not on main at 00f5db95"
+    "note": "Fix in flight: a parallel run makes the phone Essay box's sample paragraph a placeholder (FRESH_PARAS, desk/src/app/phone/page.tsx:59,:82); not on main at 00f5db95",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "fdafb05f makes the Essay box start and reset empty: FRESH_PARAS = [\"\"] (phone/page.tsx:61), the sample is ESSAY_PLACEHOLDER (:62), shown as the textarea's placeholder (:719), and a learner switch resets to the same empty state (:428). Executed at 67581c54 (scratch r7.cjs): onEssayPaste builds paragraphsOf(before + pasted + after) (:272-278); with an empty box a two-paragraph paste gives exactly [\"Paragraph one is here.\",\"Paragraph two follows.\"], where the old sample as value gave [\"Many students are tired. Sleep is important. Schools start early. This is bad.Paragraph one is here.\",\"Paragraph two follows.\"] (fused). Pinned by tools/phone-panel-test.cjs."
   },
   {
     "id": "L1-daniel-15-EM3-2",
@@ -379,10 +419,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "When the TV holds a piece reading, the rewrite panel's next step walks the TV to the next paragraph's first sentence (essay.at), and 'This paragraph only' is not offered for a paragraph the piece already read.",
     "l2_priority": "After a piece read, press 'Next paragraph' on the phone: where do the TV and the phone go?",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-2"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recurred_as": "L1-daniel-15-EM3-1"
   },
   {
     "id": "L1-daniel-15-EM3-3",
@@ -411,11 +455,15 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "A paste whose text matches a kept piece's title or most of its paragraphs offers 'new version of <title>'; a question title is kept as the title; no piece is kept when the read is refused.",
     "l2_priority": "Paste, read with Keep, change one paragraph on the laptop, paste again, read: count shelf cards.",
     "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-3",
-    "note": "390d9408 is a partial: it fixes the curtain/title-from-text side, not the version link."
+    "note": "390d9408 is a partial: it fixes the curtain/title-from-text side, not the version link.",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recurred_as": "L1-daniel-15-EM3-2"
   },
   {
     "id": "L1-daniel-15-EM3-4",
@@ -445,10 +493,14 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The forensic page carries 'paragraph k of n' while a piece is being read and the piece's 'Start with paragraph k' once it is done; the page does not move once shown; the waiting caption says 'piece' for a piece.",
     "l2_priority": "precondition: harness sends a piece — screenshot the forensic page at each essay.progress and after the last paragraph.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-4"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-daniel-15-EM3-3"
   },
   {
     "id": "L1-daniel-15-EM3-5",
@@ -477,10 +529,14 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The rewrite panel carries 'Send a new piece' / 'Your shelf' that brings the TV to the lens home, or the shelf and box stay reachable below the rewrite panel.",
     "l2_priority": "Reopen Essay Master the next evening with last night's reading on the desk: can the phone paste a new piece without the remote?",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-5"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recurred_as": "L1-daniel-15-EM3-4"
   },
   {
     "id": "L1-daniel-15-EM3-6",
@@ -508,10 +564,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "A short first line with no full stop, or a question line followed by a paragraph, is taken as the title: shown as such, not read as a paragraph, and passed to the reading prompt as the task.",
     "l2_priority": "Send Daniel's piece with a title line both ways; record the paragraph count, call count and the title's verdict.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-6"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) but not at the cited lines",
+    "recurred_as": "L1-daniel-15-EM3-5"
   },
   {
     "id": "L1-daniel-15-EM3-7",
@@ -539,10 +599,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "One line on the lens home or the forensic page says the desk reads structure, argument, evidence and word choice, not grammar or spelling.",
     "l2_priority": "optional: check whether any live note comments on grammar despite the lens.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-7"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-7",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) but not at the cited lines",
+    "recurred_as": "L1-daniel-15-EM3-6"
   },
   {
     "id": "L1-daniel-15-EM3-8",
@@ -571,10 +635,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Deleting a piece clears the phone's pieceId when it is the one open; the route falls back to addPiece on a missing id.",
     "l2_priority": "Open a kept piece, delete it on the shelf, press Read the whole piece with Keep on.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-8"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-8",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; EssayShelf.tsx changed since 00f5db95 (6e8b7728) and the cite moved with it (same line content); page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recurred_as": "L1-daniel-15-EM3-7"
   },
   {
     "id": "L1-daniel-15-EM3-9",
@@ -603,9 +671,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Either draw them (e.g. the shelf says whether the notice is accepted) or stop computing them.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-9"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-9",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; route.ts changed since 00f5db95 (6e8b7728) but not at the cited lines; essay.ts changed since 00f5db95 (a52b4347) but not at the cited lines",
+    "recurred_as": "L1-daniel-15-EM3-8"
   },
   {
     "id": "L1-daniel-15-EM3-10",
@@ -636,9 +708,13 @@
     "suggested_acceptance": "Each paragraph shows a provisional verdict as it lands, or the wait screen says plainly that verdicts come when the whole piece is read and how far it has got.",
     "l2_priority": "high",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "origin": "2026-10-14-l1/essay-family/L1-daniel-15-EM3-14",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-10"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-daniel-15-EM3-10",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) and the cite moved with it (same line content)",
+    "recurred_as": "L1-daniel-15-EM3-9"
   },
   {
     "id": "L1-eliska-12-EM1-1",
@@ -666,12 +742,15 @@
     ],
     "code_check": "present-broken",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 4,
     "suggested_acceptance": "cleanFix drops a pattern whose literal words form a clause with a subject and a verb (e.g. 'A survey found that'), or that holds a content word from her sentence. A test holds the two E7 'KEPT' examples to 'dropped'. If L2 shows one of these on screen, it is a ghostwriting blocker.",
     "l2_priority": "Count fix.pattern texts that supply a claim or a finding over several Evidence-lens readings of 12-year-old paragraphs (ghostwriting (b)).",
     "scope_note": "matches docs/uat-insights/2026-10-09-essay-w-run.md accounting #2 (the ghostwriting check is a substring test; covered-elsewhere: DESIGN-ESSAY-MASTER.md Owed)",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM1-2"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM1-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "a52b4347 closes the pattern half: the two repros of the recert-3 insight now fail. Executed at 67581c54 (scratch r2.cjs): 'A survey found that [number] of children walk.' -> refused (addsContent: subject 'a survey' before the finite verb 'found'); 'Research by [source] shows that [claim].' -> refused ('research' before 'shows'); a frame made of a neighbour's words ('Schools start early in the [time]') -> refused when the whole paragraph is passed and kept with the faulty sentence alone, which decideVerdicts no longer does (:511). If L2 shows a frame with an open-class verb on screen it is a ghostwriting blocker (see the new row)."
   },
   {
     "id": "L1-eliska-12-EM1-2",
@@ -700,11 +779,15 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "CHECKS and planFit have a young wording ('This says what you think, but gives nothing a reader could check.'; 'That reads as a claim.').",
     "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM1-4",
     "severity_prior": "minor",
-    "severity_why": "Since E6 every faulty note is a fixed CHECKS line, so the unvoiced wording shows on every fault, not only when the model's note is empty."
+    "severity_why": "Since E6 every faulty note is a fixed CHECKS line, so the unvoiced wording shows on every fault, not only when the model's note is empty.",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) and the cite moved with it (same line content)",
+    "recurred_as": "L1-eliska-12-EM1-1"
   },
   {
     "id": "L1-eliska-12-EM1-3",
@@ -732,10 +815,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The page names the job the lens observed (or none), never the first-pass guess, or labels the guess as such.",
     "l2_priority": "Screenshot the forensic page on P3's sentence 3 under Evidence.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM1-5"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM1-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) but not at the cited lines",
+    "recurred_as": "L1-eliska-12-EM1-2"
   },
   {
     "id": "L1-eliska-12-EM1-4",
@@ -763,9 +850,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Either the table shows links, or the field is dropped from the computed stats.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM1-6"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM1-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) but not at the cited lines",
+    "recurred_as": "L1-eliska-12-EM1-3"
   },
   {
     "id": "L1-eliska-12-EM1-5",
@@ -796,9 +887,13 @@
     "suggested_acceptance": "Make supports / backs required for evidence-job and checkable sentences, or have code refuse a reading whose evidence sentence names nothing instead of ruling on it.",
     "l2_priority": "Run P2 live under Structure and Evidence 5 times each and count how often the model emits supports / backs.",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "origin": "2026-10-14-l1/essay-family/L1-eliska-12-EM1-12",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM1-7"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM1-7",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) and the cite moved with it (same line content)",
+    "recurred_as": "L1-eliska-12-EM1-4"
   },
   {
     "character": "eliska-12",
@@ -830,7 +925,11 @@
     "walker_key": "eliska-12-EM1-6",
     "cert_level": "L1",
     "resolution": "open",
-    "recurrence": 1
+    "recurrence": 2,
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) and the cite moved with it (same line content)",
+    "recurred_as": "L1-eliska-12-EM1-5"
   },
   {
     "id": "L1-eliska-12-EM2-1",
@@ -857,10 +956,14 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "A kept faulty verdict that the rule would now clear carries a line ('Your new sentence 2 may cover this: read the paragraph again'), and the others are still not re-asked.",
     "scope_note": "matches EM-B3 (docs/BACKLOG.md, declined): a rewrite re-judges only its own sentence, so a kept verdict goes stale; raised here independently by a learner's walk",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM2-2"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM2-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-eliska-12-EM2-1"
   },
   {
     "id": "L1-eliska-12-EM2-2",
@@ -888,9 +991,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "'Next sentence' after a held rewrite goes to the next faulty sentence.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM2-3"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM2-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-eliska-12-EM2-2"
   },
   {
     "id": "L1-eliska-12-EM2-3",
@@ -918,10 +1025,14 @@
     "code_check": "present-broken",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The refusal reads 'Start sentence 3 with a capital letter and end it with a full stop, so it stays one sentence.' A dictated rewrite gets its first letter capitalised and a full stop added before the check.",
     "l2_priority": "What the Web Speech transcript looks like on her phone (capital, punctuation).",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM2-4"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-eliska-12-EM2-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) and the cite moved with it (same line content); page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recurred_as": "L1-eliska-12-EM2-3"
   },
   {
     "id": "L1-helena-46-EM1-1",
@@ -952,10 +1063,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The reading prompt carries the piece's format (message / email / essay); the Language lens's fallback is a language move with a slotted pattern, and a length-faulty sentence is taught to split, never claim-evidence-link.",
     "l2_priority": "Read one long client email through Language: which move and pattern does the long sentence show, and would a business-writing trainer accept it?",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-1"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) and the cite moved with it (same line content)",
+    "recurred_as": "L1-helena-46-EM1-1"
   },
   {
     "id": "L1-helena-46-EM1-2",
@@ -986,12 +1101,16 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "An Adult-mode reading's system prompt names an adult writer (no age, no 'student'), and a rules test pins voiceOf/withManner output for mode adult.",
     "l2_priority": "Read the notes and summary of one Adult-mode reading: does any line address her as a student or a teenager?",
     "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-2",
     "severity_prior": "major",
-    "severity_why": "The faulty notes and the summary, which lead the caption and the spoken line, are code's own lines since 4158321b, so trust erosion drops to low."
+    "severity_why": "The faulty notes and the summary, which lead the caption and the spoken line, are code's own lines since 4158321b, so trust erosion drops to low.",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-helena-46-EM1-2"
   },
   {
     "id": "L1-helena-46-EM1-3",
@@ -1021,9 +1140,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "In Adult mode the lens home's captions and the playbook speak of messages and emails (or the playbook is hidden), checked by a render test.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-3"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-helena-46-EM1-3"
   },
   {
     "id": "L1-helena-46-EM1-4",
@@ -1051,9 +1174,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Either the table or a caption shows which engine read the text (her notice names Claude), or the fields are dropped from the user-facing shape.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-4"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-helena-46-EM1-4"
   },
   {
     "id": "L1-helena-46-EM1-5",
@@ -1082,9 +1209,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The phone's refusal names the PC page for .docx, or the phone reads .docx through the same docxText.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-5"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) but not at the cited lines; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recurred_as": "L1-helena-46-EM1-5"
   },
   {
     "id": "L1-helena-46-EM1-6",
@@ -1112,10 +1243,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "A non-English paragraph gets the desk's sentence before any model call.",
     "scope_note": "Helena writes to clients in English; low reachability for her.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-6"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) but not at the cited lines",
+    "recurred_as": "L1-helena-46-EM1-6"
   },
   {
     "id": "L1-helena-46-EM1-7",
@@ -1147,9 +1282,13 @@
     "suggested_acceptance": "A one-paragraph opened piece adds a version when read, or the phone line does not promise one.",
     "l2_priority": "Open a one-paragraph kept piece on a phone, change it, Analyse, and list versions on the shelf.",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM1-10",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-7"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM1-7",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recurred_as": "L1-helena-46-EM1-7"
   },
   {
     "id": "L1-helena-46-EM5-1",
@@ -1178,10 +1317,14 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "In Adult mode a reading of a kept piece can be shown on the PC page (sentences and verdicts there, marks on the TV), or the TV asks before showing text.",
     "scope_note": "By design the curtain covers the Workroom, recap and Sunday page only (rubric curtain unit); this is the design tension, not a curtain count.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-1"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-helena-46-EM5-1"
   },
   {
     "id": "L1-helena-46-EM5-2",
@@ -1211,10 +1354,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The phone's keep asks message / email / essay, /drop has no silent default (or remembers the last), and both shelves show the format tag.",
     "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-2",
-    "note": "390d9408 added the route parameter only; no UI sends it."
+    "note": "390d9408 added the route parameter only; no UI sends it.",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content); EssayShelf.tsx changed since 00f5db95 (6e8b7728) and the cite moved with it (same line content)",
+    "recurred_as": "L1-helena-46-EM5-2"
   },
   {
     "id": "L1-helena-46-EM5-3",
@@ -1244,9 +1391,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Lines starting '>' and everything after an 'On … wrote:' line are dropped before measuring and exporting; the copy on /drop and the Workroom says the card carries up to five of her own texts, and she reviews them.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-3"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-helena-46-EM5-3"
   },
   {
     "id": "L1-helena-46-EM5-4",
@@ -1275,9 +1426,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "In Adult mode Back from the lens home (or a Workroom stop on it) returns to the Workroom; a keys test walks landing -> forensic -> Workroom.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-4"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-helena-46-EM5-4"
   },
   {
     "id": "L1-helena-46-EM5-5",
@@ -1306,9 +1461,13 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "OK on a Workroom piece (or a Read button on /drop) reads that piece's latest version through the chosen lens.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-5"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recurred_as": "L1-helena-46-EM5-5"
   },
   {
     "id": "L1-helena-46-EM5-6",
@@ -1337,9 +1496,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "On /drop the decline reads 'Not now' and the empty shelf names 'Keep it' on this page.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-6"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; EssayShelf.tsx changed since 00f5db95 (6e8b7728) and the cite moved with it (same line content)",
+    "recurred_as": "L1-helena-46-EM5-6"
   },
   {
     "id": "L1-helena-46-EM5-7",
@@ -1367,9 +1530,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Either excluded pieces leave the measure too, or the copy says they still count toward the style numbers.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-7"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-7",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-helena-46-EM5-7"
   },
   {
     "id": "L1-helena-46-EM5-8",
@@ -1401,10 +1568,14 @@
     "suggested_acceptance": "The phone offers a title field or uses the file name, and two phone-kept pieces can be told apart on the shelf.",
     "l2_priority": "Keep two multi-paragraph pieces from the phone and read the shelf.",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM5-16",
     "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-8",
-    "note": "Severity kept; the curtain side effect is gone (EM5-8) but naming is still absent."
+    "note": "Severity kept; the curtain side effect is gone (EM5-8) but naming is still absent.",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recurred_as": "L1-helena-46-EM5-8"
   },
   {
     "id": "L1-helena-46-EM5-9",
@@ -1435,9 +1606,13 @@
     "suggested_acceptance": "/api/twin answers 403 and /drop hides the twin panel when modeOf is not adult; a test opens it as a 13-year-old and as an 18+ Family profile and expects 403.",
     "l2_priority": "Join /drop with a Family-mode profile seated and press Show the Workroom on the TV.",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM5-13",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-9"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-9",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-helena-46-EM5-9"
   },
   {
     "id": "L1-helena-46-EM5-10",
@@ -1466,9 +1641,13 @@
     "suggested_acceptance": "noBreakHyphen reads as '-'; a table row reads as one line; a fixture pins both.",
     "l2_priority": "Keep a .docx with a table and a non-breaking hyphen on /drop and open it.",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM5-15",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-10"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-helena-46-EM5-10",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-helena-46-EM5-10"
   },
   {
     "id": "L1-kristyna-17-EM1-1",
@@ -1499,12 +1678,16 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Either the reading is refused for a non-English text (EM1-1), or the rules take the text's language: no code verdict on a Czech text is decided by an English-only word list.",
     "l2_priority": "With a Czech paragraph, record verdicts and notes under Argument and Structure; a Czech marker reads them (verdict agreement).",
     "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-1",
     "severity_prior": "blocker",
-    "severity_why": "Blocker to major: the refusal now stops most Czech paragraphs before the word lists, so only a paragraph that leaks past the check is mis-ruled."
+    "severity_why": "Blocker to major: the refusal now stops most Czech paragraphs before the word lists, so only a paragraph that leaks past the check is mis-ruled.",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) and the cite moved with it (same line content)",
+    "recurred_as": "L1-kristyna-17-EM1-1"
   },
   {
     "id": "L1-kristyna-17-EM1-2",
@@ -1532,9 +1715,13 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "ES-READ ≥ 5/8: the task (when given), the kind, and the learner's recurring faults reach the prompt.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-2"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-kristyna-17-EM1-2"
   },
   {
     "id": "L1-kristyna-17-EM1-3",
@@ -1563,12 +1750,16 @@
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Whatever the language decision, the notes, moves and patterns on one page are in one language the learner chose.",
     "l2_priority": "Read a Czech paragraph live (claude-cli/sonnet): record the language of every note, fix and the summary.",
     "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-3",
     "severity_prior": "major",
-    "severity_why": "Major to minor: only a Czech paragraph that leaks past the language check can reach the model now."
+    "severity_why": "Major to minor: only a Czech paragraph that leaks past the language check can reach the model now.",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) and the cite moved with it (same line content)",
+    "recurred_as": "L1-kristyna-17-EM1-3"
   },
   {
     "id": "L1-kristyna-17-EM1-4",
@@ -1596,9 +1787,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The teen band names 'a teenager' or the real age.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-4"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-kristyna-17-EM1-4"
   },
   {
     "id": "L1-kristyna-17-EM1-5",
@@ -1626,9 +1821,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Links shown on the Table (the Structure lens's third job), or the field dropped.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-5"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) but not at the cited lines",
+    "recurred_as": "L1-kristyna-17-EM1-5"
   },
   {
     "id": "L1-kristyna-17-EM1-6",
@@ -1659,9 +1858,13 @@
     "suggested_acceptance": "A rules test with at least 50 Czech paragraphs of mixed length, including function-word-heavy ones, holds the refusal at 0.95 or better.",
     "l2_priority": "Send five of her real Czech paragraphs and count refusals; code only, no model needed.",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "origin": "2026-10-14-l1/essay-family/L1-kristyna-17-EM1-11 (short-title half fixed by 0a53e75e UD-19)",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-6"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) but not at the cited lines",
+    "recurred_as": "L1-kristyna-17-EM1-6"
   },
   {
     "id": "L1-kristyna-17-EM1-7",
@@ -1694,9 +1897,13 @@
     "suggested_acceptance": "The Essay tab and the plan caption say once 'Essay Master reads English writing' for a profile whose system is not uk/us.",
     "l2_priority": "From a cz profile open the plan and write slot 1 in Czech: is she told before Read it?",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "origin": "recert-1 walk (second half of the original EM1-1 acceptance)",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-7"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM1-7",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content); profileRows.ts changed since 00f5db95 (5da74e9a) but not at the cited lines; essay.ts changed since 00f5db95 (a52b4347) and the cite moved with it (same line content)",
+    "recurred_as": "L1-kristyna-17-EM1-7"
   },
   {
     "id": "L1-kristyna-17-EM3-1",
@@ -1727,10 +1934,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The forensic crumb reads 'Paragraph p · Sentence n'; the forensic page shows the piece's 'start with paragraph P' line; the landing keeps it.",
     "l2_priority": "Send a 4-paragraph piece with faults in paragraphs 2 and 4: can a reader name paragraph and move from the forensic page alone?",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM3-1"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM3-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) and the cite moved with it (same line content)",
+    "recurred_as": "L1-kristyna-17-EM3-1"
   },
   {
     "id": "L1-kristyna-17-EM3-2",
@@ -1759,10 +1970,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Delete (one or all) clears the panel's pieceId when it matches; the next keep-and-read creates a new piece.",
     "l2_priority": "Open a kept piece, delete it, press Read the whole piece with Keep ticked.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM3-2"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM3-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; EssayShelf.tsx changed since 00f5db95 (6e8b7728) and the cite moved with it (same line content); page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recurred_as": "L1-kristyna-17-EM3-2"
   },
   {
     "id": "L1-kristyna-17-EM3-3",
@@ -1790,10 +2005,14 @@
     "code_check": "present-broken",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "A short unpunctuated first line above more text (the shelf's own titleOf rule) is the title, not paragraph 1.",
     "l2_priority": "Send a titled piece under Structure: is the title observed as claim, and does the page open on it?",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM3-3"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM3-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; essay.ts changed since 00f5db95 (a52b4347) but not at the cited lines",
+    "recurred_as": "L1-kristyna-17-EM3-3"
   },
   {
     "id": "L1-kristyna-17-EM3-4",
@@ -1820,9 +2039,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The caption reads the running job (its start line says 'reading your piece, N paragraphs').",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM3-4"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM3-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-kristyna-17-EM3-4"
   },
   {
     "id": "L1-kristyna-17-EM3-5",
@@ -1850,8 +2073,12 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Either the shelf shows the notice line (where the text goes) or the fields are dropped.",
-    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM3-5"
+    "recurs": "2026-10-09-essay-l1/recert-2/L1-kristyna-17-EM3-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "cited lines re-found at 67581c54; route.ts changed since 00f5db95 (6e8b7728) and the cite moved with it (same line content); EssayShelf.tsx changed since 00f5db95 (6e8b7728) and the cite moved with it (same line content)",
+    "recurred_as": "L1-kristyna-17-EM3-5"
   }
 ]

@@ -95,12 +95,12 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "A snapped page whose items read as Calculus specs (specFromQuestion) can be marked from a photo of his working, by the same code judge as a desk set, items that do not read being \"not sure\".",
     "l2_priority": "precondition: vision host (env.md, Math Buddy) — none until built; then page read rate and handwriting read on a real MA1 sheet.",
-    "recertify_run": "2026-10-09-maths-l1/recert-3",
+    "recertify_run": "2026-10-09-maths-l1/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
+    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
     "recurred_as": "L1-matyas-19-MB1-1"
   },
   {
@@ -1037,12 +1037,12 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "A teacher signs off the tier-2 denominator range for cz 6. ročník",
     "l2_priority": "Set fit judged by a Czech maths teacher on 3 drawn sets",
-    "recertify_run": "2026-10-09-maths-l1/recert-3",
+    "recertify_run": "2026-10-09-maths-l1/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
     "recurred_as": "L1-nela-12-MB2-1"
   },
   {
@@ -1071,12 +1071,12 @@
     "code_check": "by-design",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Owner ruling: either the add/sub questions say \"simplest form\" (unsure, not wrong, for 6/4), or the lesson drops \"then simplify\"",
     "l2_priority": "Owner/teacher ruling on unsimplified results for cz",
-    "recertify_run": "2026-10-09-maths-l1/recert-3",
+    "recertify_run": "2026-10-09-maths-l1/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
     "recurred_as": "L1-nela-12-MB2-2"
   },
   {
@@ -1264,12 +1264,12 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 4,
     "suggested_acceptance": "The blurb names the number format (\"0,5 is a half\"), or Save asks for a system",
-    "recertify_run": "2026-10-09-maths-l1/recert-3",
-    "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
+    "recertify_run": "2026-10-09-maths-l1/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "5da74e9a makes the School system blurbs name the number convention (profileRows.ts:26-31: cz 'Progress is shown against Czech ročníky. 0,5 is a half (decimal comma).', uk and us 'decimal point', de 'decimal comma') and the Save cell name the system it will save (saveBlurb, :71-76, used at :87). Executed at 67581c54 (scratch r5.cjs): profileRows(null) Save -> 'Saves as United Kingdom (0.5 is a half); pick a school system above to change it.'; system uk -> 'Saves as United Kingdom (0.5 is a half).'; cz -> 'Saves as Czech Republic (0,5 is a half).'; de -> 'Saves as Germany (0,5 is a half).'. The default is still UK (DEFAULT_SYSTEM, :24) but no longer silent. Pinned by tools/tv-keys-test.cjs:543.",
     "recurred_as": "L1-nela-12-MB5-1"
   },
   {
@@ -1298,12 +1298,12 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "A school-year pick on the profile, or the cut-off applied",
-    "recertify_run": "2026-10-09-maths-l1/recert-3",
+    "recertify_run": "2026-10-09-maths-l1/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
-    "recurred_as": "L1-nela-12-MB5-2"
+    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recurred_as": "L1-nela-12-MB5-1"
   },
   {
     "id": "L1-nela-12-MB5-6",
@@ -1857,12 +1857,12 @@
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The draft paper persists on the phone until sent.",
     "l2_priority": "Lock the phone mid-entry on iOS/Android browsers; does the draft survive?",
-    "recertify_run": "2026-10-09-maths-l1/recert-3",
+    "recertify_run": "2026-10-09-maths-l1/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
+    "recertify_evidence": "cited lines re-found at 67581c54; the cite at old :543 sits in a changed hunk and was re-read by hand: 258cc1bf added the system prop to the PaperPanel line, and the rows are still React state (paperRows, :71)",
     "recurred_as": "L1-owen-17-MB4-1"
   },
   {
@@ -2243,13 +2243,13 @@
     ],
     "code_check": "by-design",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 4,
     "suggested_acceptance": "For a cz learner the panel offers task-shaped statements a parent recognises (e.g. 'simplify an expression with brackets', 'a construction with ruler and compasses'), mapped to the same codes; no 'Foundation paper' wording.",
     "l2_priority": "Time a non-specialist typing the 16-question mock (C3, <= 15 min) and count questions left with no pick.",
-    "recertify_run": "2026-10-09-maths-l1/recert-3",
-    "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
+    "recertify_run": "2026-10-09-maths-l1/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "258cc1bf gives the picker a Czech list: library/gcse-cz.ts (AREAS_CZ and CAN_CZ, 97 labels for the 97 STATEMENTS codes, none missing or extra), statementChoices(system) and canOf(code, system) (paperEntry.ts:51-62), choicesMatching(query, system) (:71-80), and the panel is handed the seated profile's system (phone/page.tsx:548 -> PaperPanel.tsx:22-37, :61). Executed at 67581c54 (scratch r4.cjs): statementChoices('cz') -> the six areas in Czech (Čísla a početní operace 16, Algebra 25, Poměr, úměrnost a procenta 16, Geometrie a měření 25, Pravděpodobnost 9, Statistika a práce s daty 6) with the codes unchanged; N1 reads 'Porovnávání a uspořádání celých čísel, desetinných čísel a zlomků; znaky =, ≠, <, >, ≤, ≥'; the find box for cz: 'nejmensi' and 'nejmenší' -> N4, 'nsn' -> N4, 'plocha pod grafem' -> A15, 'histogram' -> S3, and the English 'lcm' -> N4 and 'standard form' -> N9, A5 still find their statements; uk, de, us and no system keep the English list ('nejmensi' for uk finds nothing). Pinned by tools/phone-panel-test.cjs. What stays English for a cz parent is filed as a new row.",
     "recurred_as": "L1-radka-41-MB4-1"
   },
   {
@@ -2540,11 +2540,11 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The picks can be made on the phone (where the name is typed), or the TV rows start on the likely value (age row near the type's middle; course row skipped when the school path is the only sensible one).",
-    "recertify_run": "2026-10-09-maths-l1/recert-3",
+    "recertify_run": "2026-10-09-maths-l1/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
+    "recertify_evidence": "Narrowed, not fixed (the row cannot be split, so it is kept whole and restated smaller). 5da74e9a closes the system half: Save now reads 'Saves as United Kingdom (0.5 is a half); pick a school system above to change it.' for a skipped row (executed, scratch r5.cjs). The 24-press half is untouched: profileRows(null) is still Type 3, Age 5, School system 4, Interested in 3, Maths course 3, Save/Back 2 cells in six rows (profileRows.ts:79-87), and the phone profile still has only the Name field (phone/page.tsx:543).",
     "recurred_as": "L1-radka-41-MB5-1"
   },
   {
@@ -2637,11 +2637,11 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "The phone Recap lists every learner with work tonight, one block each.",
-    "recertify_run": "2026-10-09-maths-l1/recert-3",
+    "recertify_run": "2026-10-09-maths-l1/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 00f5db95; store.ts changed since 90e032f2 (fd9f5ca5) but not at the cited lines",
+    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
     "recurred_as": "L1-radka-41-MB5-2"
   },
   {
@@ -3436,15 +3436,15 @@
     ],
     "code_check": "by-design",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 4,
     "suggested_acceptance": "The picker offers a short area-level choice first (numbers, equations, functions, sequences, geometry, probability and statistics), with the statements as an optional refinement. The tier flag reads 'harder than this list covers'.",
     "l2_priority": "Time a B1 reader picking statements for 10 maturita questions.",
     "scope_note": "Out of segment: the map is GCSE Foundation by owner decision; the cost falls on a non-UK learner.",
-    "recertify_run": "2026-10-09-maths-l1/recert-3",
-    "recertify_status": "recurs",
+    "recertify_run": "2026-10-09-maths-l1/recert-4",
+    "recertify_status": "not-seen",
     "recurred_as": "L1-vojtech-18-MB4-1",
-    "recertify_evidence": "cited lines re-found at 00f5db95; gcse.ts changed since 90e032f2 (7107748f) but not at the cited lines"
+    "recertify_evidence": "Same fix as L1-radka-41-MB4-1 (258cc1bf): the picker, the 'Tests: …' summary and the find box are Czech for a cz profile, accent-free (executed at 67581c54, scratch r4.cjs: 'nejmensi' -> N4, 'plocha pod grafem' -> A15, 'histogram' -> S3; 97 of 97 codes labelled). Carried out of this row rather than lost, and filed as new rows: the TV still echoes the English statement text and the '· a harder statement' flag (MathsTV.tsx:735), and the only inequality statement is still the linear A22 (gcse.ts:78)."
   },
   {
     "id": "L1-vojtech-18-MB4-6",
@@ -3472,12 +3472,12 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Each topic row names the statement's can text it came through.",
-    "recertify_run": "2026-10-09-maths-l1/recert-3",
+    "recertify_run": "2026-10-09-maths-l1/recert-4",
     "recertify_status": "recurs",
-    "recurred_as": "L1-vojtech-18-MB4-2",
-    "recertify_evidence": "cited lines re-found at 00f5db95; recovery.ts changed since 90e032f2 (7107748f) but not at the cited lines"
+    "recurred_as": "L1-vojtech-18-MB4-1",
+    "recertify_evidence": "cited lines re-found at 67581c54; recovery.ts changed since 00f5db95 (7c8a497c) but not at the cited lines"
   },
   {
     "id": "L1-vojtech-18-MB4-7",
