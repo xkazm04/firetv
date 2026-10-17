@@ -137,6 +137,21 @@ export const STATEMENTS: Statement[] = [
   s("S6", "Scatter graphs, correlation, lines of best fit; correlation is not causation"),
 ].map((x) => ({ ...x, source: SPEC.source })) as (Statement & { source: string })[];
 
+/**
+ * The touched units that cover a statement WHOLE, not a part of it. `touches` claims only that a unit practises part of a
+ * statement; an id here is one a person reads as the unit being what the statement asks. Recovery uses it for a learner
+ * past a unit's year: a partial link to such a unit is not a place their lost marks go (MB4-2), a whole one is.
+ * Every id listed is also in that statement's `touches`.
+ */
+export const WHOLE: Record<string, string[]> = {
+  N10: ["dec-convert"],
+  N12: ["frac-of-amount", "pct-of-amount"],
+  A17: ["linear-one-step", "linear-two-step", "linear-both-sides"],
+  R4: ["ratio-share"],
+  R5: ["ratio-share"],
+  R9: ["dec-convert", "pct-of-amount", "pct-change"],
+};
+
 /** The Foundation statements only. */
 export const FOUNDATION = STATEMENTS.filter((x) => x.foundation);
 

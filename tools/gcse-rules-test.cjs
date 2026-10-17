@@ -46,3 +46,11 @@ test('the claim stays off while unverified, and no screen names GCSE', () => {
   const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : /\.tsx$/.test(e.name) ? [path.join(d, e.name)] : []));
   for (const f of walk(path.join(root, 'src'))) assert.doesNotMatch(fs.readFileSync(f, 'utf8'), /GCSE|1MA1|Edexcel/, path.relative(root, f));
 });
+
+test('WHOLE names only units a statement touches', () => {
+  for (const [code, units] of Object.entries(G.WHOLE)) {
+    const st = G.STATEMENTS.find((x) => x.code === code);
+    assert(st, code);
+    for (const u of units) assert(st.touches.includes(u), code + ' ' + u);
+  }
+});

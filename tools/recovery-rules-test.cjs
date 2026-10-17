@@ -237,3 +237,26 @@ test('RP7: an expression question (A4) is not on the desk yet, not a share of an
   assert.deepEqual(b.topics.map((t) => [t.id, t.lost]).sort(), [['linear-both-sides', 1], ['linear-one-step', 1], ['linear-two-step', 1]]);
   assert.deepEqual(b.notOnDesk.map((o) => [o.code, o.lost]), [['A4', 1]]);
 });
+
+test('MB4-2: a maturita learner past a unit does not have a partial link send their marks to it', () => {
+  const cz18 = { system: 'cz', age: 18 }, cz7 = { system: 'cz', age: 10 };
+  // (a) a cylinder volume (G17 touches only Area of rectangles) is not on the desk, not an Area of rectangles row
+  const cyl = R.recovery([it('4', 0, 3, ['G17'])], cz18);
+  assert.deepEqual([ids(cyl), cyl.notOnDesk.map((o) => [o.code, o.lost])], [[], [['G17', 3]]]);
+  assert.deepEqual(R.reachOf(['G17'], cz18), { topics: [], off: ['G17'] });
+  // (b) an inequality (N1 touches only Equivalent fractions) is not on the desk
+  const ineq = R.recovery([it('6', 1, 3, ['N1'])], cz18);
+  assert.deepEqual([ids(ineq), ineq.notOnDesk.map((o) => [o.code, o.lost])], [[], [['N1', 2]]]);
+  // (c) a statement a unit covers whole still routes to it, and so does the same partial link for a learner in the unit's year
+  assert.deepEqual(R.reachOf(['A17'], cz18), R.reachOf(['A17']));
+  assert.deepEqual(R.reachOf(['N10', 'R5'], cz18), { topics: ['dec-convert', 'ratio-share'], off: [] });
+  assert.deepEqual(R.reachOf(['G17', 'N1'], cz7), R.reachOf(['G17', 'N1']));
+  assert.deepEqual(ids(R.recovery([it('4', 0, 3, ['G17'])], cz7)), ['area']);
+  // a code with a unit still at or above the learner's year keeps that unit; the lost marks share across what stays
+  const mix = R.recovery([it('7', 0, 2, ['G17', 'A17'])], cz18);
+  assert.deepEqual(mix.notOnDesk.map((o) => o.code), ['G17']);
+  assert.equal(mix.topics.reduce((n, t) => n + t.lost, 0) + mix.notOnDesk.reduce((n, o) => n + o.lost, 0), mix.totals.lost);
+  // no reader: nothing changes
+  assert.deepEqual(ids(R.recovery([it('4', 0, 3, ['G17'])])), ['area']);
+  assert.deepEqual(R.aimOf([it('4', 0, 3, ['G17'])], 'area', cz18), []);
+});

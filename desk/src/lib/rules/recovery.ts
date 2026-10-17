@@ -17,7 +17,9 @@
  *
  * Pure: types and library data only; no store, no engine, no fs, no model.
  */
-import { STATEMENTS, gcseClaimAllowed, type Statement } from "../library/gcse";
+import { STATEMENTS, WHOLE, gcseClaimAllowed, type Statement } from "../library/gcse";
+import { schoolYear } from "../library/syllabus";
+import type { SchoolSystem } from "../session/store";
 import { topicsOf, type PathTopic } from "../library/paths";
 
 /**
@@ -159,11 +161,20 @@ export function prereqsOf(id: string): Set<string> {
   return all;
 }
 
+/**
+ * Who sat the paper, when the caller knows: the school system and age of the seated learner. With it, a statement that only
+ * PARTLY links (gcse.ts WHOLE) to a unit below the learner's school year does not send their lost marks to that unit; it
+ * is not on the desk. Absent, every touched unit is a destination, as before.
+ */
+export interface Reader { system: SchoolSystem; age: number; }
+
 /** A place an item's lost marks can go: a school-path topic, or a statement the path has no topic for. */
 interface Dest { kind: "topic" | "off"; id: string; codes: string[]; }
 
 /** The destinations of one cleaned item's codes, in the item's order; a place reached twice is kept once, at its first place. */
-function destinations(codes: string[]): Dest[] {
+function destinations(codes: string[], at?: Reader): Dest[] {
+  const year = at ? schoolYear(at.system, at.age) : -Infinity;
+  const past = (id: string) => (SCHOOL[AT.get(id)!].year?.[at?.system ?? "uk"] ?? Infinity) < year;
   const out: Dest[] = [];
   const put = (kind: Dest["kind"], id: string, code: string) => {
     const d = out.find((x) => x.kind === kind && x.id === id);
@@ -172,7 +183,8 @@ function destinations(codes: string[]): Dest[] {
   for (const code of codes) {
     const st = BY_CODE.get(code);
     if (!st) continue;
-    const ids = st.touches.filter((id) => AT.has(id));
+    // a partial link to a unit the learner is past is no place for the marks; a unit that covers the statement whole stays
+    const ids = st.touches.filter((id) => AT.has(id) && (!past(id) || WHOLE[code]?.includes(id)));
     if (!ids.length) put("off", code, code);
     else for (const id of ids) put("topic", id, code);
   }
@@ -184,8 +196,8 @@ function destinations(codes: string[]): Dest[] {
  * destination order. A code leads to the path topics its statement's `touches` lists, in that order; a code with none is
  * its own destination. A place reached twice is listed once, at its first place.
  */
-export function reachOf(codes: string[]): { topics: string[]; off: string[] } {
-  const d = destinations(codes);
+export function reachOf(codes: string[], at?: Reader): { topics: string[]; off: string[] } {
+  const d = destinations(codes, at);
   return { topics: d.filter((x) => x.kind === "topic").map((x) => x.id), off: d.filter((x) => x.kind === "off").map((x) => x.id) };
 }
 
@@ -204,7 +216,7 @@ export function reachOf(codes: string[]): { topics: string[]; off: string[] } {
  *     losses a Foundation statement comes before a flagged one, then STATEMENTS order; `foundation: false` is kept and flagged.
  *   - Totals are over every kept item, `unmapped` included.
  */
-export function recovery(raw: unknown): Recovery {
+export function recovery(raw: unknown, at?: Reader): Recovery {
   const clean = cleanPaper(raw);
   const all = [...clean.items, ...clean.unmapped];
   const totals: Totals = { marks: 0, outOf: 0, lost: 0 };
@@ -215,7 +227,7 @@ export function recovery(raw: unknown): Recovery {
   for (const it of clean.items) {
     const lost = it.outOf - it.marks;
     if (lost <= 0) continue;
-    const dests = destinations(it.codes), n = dests.length, base = Math.floor(lost / n), extra = lost % n;
+    const dests = destinations(it.codes, at), n = dests.length, base = Math.floor(lost / n), extra = lost % n;
     dests.forEach((d, i) => {
       const share = base + (i < extra ? 1 : 0);
       if (share <= 0) return;
@@ -252,6 +264,6 @@ export function recovery(raw: unknown): Recovery {
  * gave the topic lost marks, in recovery()'s order of them; empty when the topic lost none on this paper. Statements only:
  * never a question's label, its marks or its wording - a set is aimed at a statement, and cannot repeat the question.
  */
-export function aimOf(raw: unknown, topicId: string): string[] {
-  return [...(recovery(raw).topics.find((t) => t.id === topicId)?.codes ?? [])];
+export function aimOf(raw: unknown, topicId: string, at?: Reader): string[] {
+  return [...(recovery(raw, at).topics.find((t) => t.id === topicId)?.codes ?? [])];
 }
