@@ -242,6 +242,19 @@ test('cleanFix is the one rule: the TV and the engine read the same shape',()=>{
  assert.deepEqual(cleanFix({move:'Claim, then evidence',pattern:'[Your claim]. For example, [the evidence].'}),{move:'Claim, then evidence',pattern:'[Your claim]. For example, [the evidence].'},'a pattern may open on a slot');
  assert.equal(cleanFix(undefined),undefined);
 });
+test('cleanFix refuses a frame that hands over a neighbour sentence, a sentence in a slot, or new content (recert-3/L1-daniel-15-EM2-2, L1-eliska-12-EM1-1)',()=>{
+ const {cleanFix}=require(path.join(root,'src/lib/rules/essay.ts'));
+ const mv='Name the source',walk='Walking also makes children happier than going by car.';
+ const mine=['Phones stop students listening in class.',walk,'Teachers should collect phones at the door.'];
+ const fix=(pattern)=>cleanFix({move:mv,pattern},mine);
+ assert.equal(fix('Phones stop students listening [how many]'),undefined,'a 4-word run of a neighbour sentence');
+ assert.equal(fix('[Phones stop students listening, so they lose marks in tests].'),undefined,'a whole sentence in a slot');
+ assert.equal(fix('[They lose marks in tests.]'),undefined,'a slot ending in terminal punctuation');
+ assert.equal(fix('A survey found that [number] of children walk.'),undefined,'a new-content clause');
+ assert.equal(fix('Research by [source] shows that [claim].'),undefined,'a new-content clause');
+ for(const pattern of ['Because [reason], [claim].','Although [the other side], [why your claim still holds].','According to [who], [what they found].','This shows [the link back].','[Your claim], for example [the evidence], so this shows [the link back].','First, [your strongest argument], then [the next one].','So [what the introduction promised], because [what you showed].','[Who] says [what they found].'])
+  assert.deepEqual(fix(pattern),{move:mv,pattern},pattern);
+});
 test('with no fix of its own, a faulty sentence falls back to its lens\'s playbook lesson: a named move and a slotted pattern',()=>{
  const {PLAYBOOK,ESSAY_TYPES,playFor}=require(path.join(root,'src/lib/library/lessons.data.ts'));
  const {cleanFix}=require(path.join(root,'src/lib/rules/essay.ts'));

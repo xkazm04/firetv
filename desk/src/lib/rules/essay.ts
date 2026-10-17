@@ -228,7 +228,7 @@ export const FIX_LIMITS = { moveWords: [2, 6], moveChars: 48, patternChars: 160,
 const wordsOf = (t: string) => t.toLowerCase().match(/[a-z0-9']+/g) ?? [];
 
 /** The model's `fix`, cleaned, or undefined when it is not a move and a slotted pattern. Never throws. */
-export function cleanFix(raw: unknown, sentence = ""): Fix | undefined {
+export function cleanFix(raw: unknown, sentences: string | readonly string[] = []): Fix | undefined {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined;
   const { move, pattern } = raw as Record<string, unknown>;
   if (typeof move !== "string" || typeof pattern !== "string") return undefined;
@@ -242,8 +242,34 @@ export function cleanFix(raw: unknown, sentence = ""): Fix | undefined {
   const lit = wordsOf(literal);
   if (lit.length > FIX_LIMITS.literalWords) return undefined;
   // a run of the learner's own words in the frame is their sentence rewritten around a slot
-  if (copiesRun([sentence], lit)) return undefined;
+  const own = typeof sentences === "string" ? [sentences] : [...sentences];
+  if (copiesRun(own, lit)) return undefined;
+  // a slot names what goes there; a slot holding a sentence (or a run of the learner's words) is the sentence handed over
+  const slots = (p.match(SLOT) ?? []).map((x) => x.slice(1, -1).trim());
+  if (slots.some((x) => sentenceShaped(x) || copiesRun(own, wordsOf(x)))) return undefined;
+  // the frame's own words may scaffold (a connector, a move) but not state a clause that adds content
+  if (addsContent(p)) return undefined;
   return { move: m, pattern: p };
+}
+
+/** Whether a slot's label reads as a sentence: it ends in terminal punctuation, or is a comma-joined clause, or runs long. */
+function sentenceShaped(slot: string): boolean {
+  const n = wordsOf(slot).length;
+  return /[.!?]$/.test(slot) || (n >= 5 && slot.includes(",")) || n >= 8;
+}
+
+/** Words that open or join a frame without adding content: pronouns, determiners, connectors, prepositions. */
+const SCAFFOLD = new Set(("this that these those it they he she we you i there here so thus therefore however because although though while whereas since if when then also and but or yet for example instance first second third next finally lastly in addition moreover furthermore according to by of the a an as who what which why how whom whose not no only even just still now such one both either neither another other each every all some many most more").split(" "));
+/** Finite verbs a frame might use to state a claim of its own. */
+const FINITE = /^(?:is|are|was|were|has|have|had|does|do|did|can|could|will|would|may|might|must|should|shows?|showed|found|finds?|says?|said|proves?|proved|makes?|made|means?|meant|causes?|caused|leads?|led|helps?|helped|stops?|stopped|walks?|walked|argues?|argued|claims?|claimed|suggests?|suggested|reveals?|revealed|states?|stated|reports?|reported|notes?|noted|explains?|explained|believes?|believed|thinks?|thought|agrees?|agreed|proved|demonstrates?|demonstrated|confirms?|confirmed|reduces?|reduced|increases?|increased)$/;
+
+/** Whether a frame's literal words hold a subject of their own and a finite verb after it, a slot standing for a noun in between (a clause that adds content). */
+function addsContent(pattern: string): boolean {
+  return pattern.split(/[.!?;,]/).some((clause) => {
+    const ws = wordsOf(clause.replace(SLOT, " slot "));
+    const v = ws.findIndex((w) => FINITE.test(w));
+    return v > 0 && ws.slice(0, v).some((w) => w !== "slot" && !SCAFFOLD.has(w));
+  });
 }
 
 /** Whether `words` hold a run of FIX_LIMITS.copiedRun or more consecutive words of any of the learner's `sentences`. */
@@ -482,7 +508,7 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
     const said = typeof o?.note === "string" ? cleanNote(o.note) : "";
     // every note passes one guard (C1): a note that hands over a sentence falls back to the check's line, or to none
     const note = guardNote(verdict === "faulty" ? check : said, sentences.map((t) => t.text), check);
-    const fix = verdict === "faulty" ? cleanFix(o?.fix, s.text) : undefined;
+    const fix = verdict === "faulty" ? cleanFix(o?.fix, sentences.map((t) => t.text)) : undefined;
     const supports = lens === "evidence" ? backsOf(s) : linkOf(s);
     out.push({ n: s.n, verdict, note, ...(fix ? { fix } : {}), ...(supports !== undefined ? { supports } : {}) });
   });
