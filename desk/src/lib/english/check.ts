@@ -19,7 +19,7 @@ import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from
 import { withCertificate } from "./cert";
 import { ConversationError, lingaLine } from "./errors";
 import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, conversationBand, firstQuestion, interestWords, isBand, keepHeldBack, kindFor, PLAN_MAX, PLAN_SIZE, playBand, sameTask, startBand, goalAim, goalTaskDue, questionSituation, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
-import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
+import { BANDS, type Audience, type Band, type EnglishPreferences, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
 // The right option of a "choose" task. Server memory only: the session reaches every screen.
 const g = globalThis as unknown as { __lingaKeys?: Map<string, number> };
@@ -29,6 +29,8 @@ const keys = g.__lingaKeys ??= new Map<string, number>();
 const required = (value: unknown, name: string, max = 160) => fit(value, max, () => new ConversationError(`Invalid ${name}.`));
 const line = (value: unknown, max: number) => fit(value, max, () => new Error("The tutor returned a line that does not fit the screen."));
 const optional = (value: unknown, max: number) => typeof value === "string" ? value.trim().slice(0, max) : "";
+/** LG-56: a level a check or the learner has set is no longer the unset default (types.ts levelUnset). */
+const withoutUnset = (p: EnglishPreferences): EnglishPreferences => { const { levelUnset: _unset, ...rest } = p; return rest; };
 
 const aboutSchema = schema({ reply: str(230), selfBand: { type: "string", enum: BANDS }, goal: str(160, 0), interest: str(160, 0), language: { type: "string", enum: ["english", "mixed", "other", "none"] }, read: str(300) });
 const taskSchema = schema({ prompt: str(200), line: str(230, 0), options: { type: "array", maxItems: 2, items: str(120) }, correct: { type: "integer", enum: [0, 1] } });
@@ -225,7 +227,7 @@ Your previous answer ("${line(r.json.prompt, 120)}") was not set in the learner'
           // the live placement is overwritten as before; the check is also appended to the record of checks (W10).
           // Conversations start at the band the learner spoke when that is lower (S2, conversationBand); the placement's
           // band stays the check's read
-          saveEnglish(now.learnerId, { ...learning, placement, placements: appendPlacement(learning.placements, placement), preferences: { ...prefs, level: conversationBand(placement), goal: prefs.goal || now.goal, interest: prefs.interest || now.interest } });
+          saveEnglish(now.learnerId, { ...learning, placement, placements: appendPlacement(learning.placements, placement), preferences: { ...withoutUnset(prefs), level: conversationBand(placement), goal: prefs.goal || now.goal, interest: prefs.interest || now.interest } });
           // a finished check can complete a certificate from evidence already on the record (cert.ts); the check's own
           // tasks are never evidence, so they add nothing to it
           const earned = withCertificate(getLearner(now.learnerId).english, placement.at);
@@ -347,7 +349,7 @@ export async function checkCommand(action: string, input: Record<string, unknown
     const old = learning.placement;
     const placement: Placement = { at: Date.now(), band: input.band, selfBand: input.band, confidence: "low", source: "self", summary: "", focus: old?.focus ?? "", tasks: old?.tasks ?? [] };
     // recorded as "self": kept in the record of checks, never certifying (cert.ts)
-    saveEnglish(learnerId, { ...learning, placement, placements: appendPlacement(learning.placements, placement), preferences: { ...prefs, level: input.band } });
+    saveEnglish(learnerId, { ...learning, placement, placements: appendPlacement(learning.placements, placement), preferences: { ...withoutUnset(prefs), level: input.band } });
     commit(null, "linga-verdict");
     return true;
   }
@@ -451,7 +453,7 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
     if (said.length > TOPIC_ASK_MAX) throw new ConversationError(`Say it in up to ${TOPIC_ASK_MAX} characters.`);
     // Kept as the learner's goal, so the next plan does not ask again; the phone's Set up shows it.
     const now = getLearner(learnerId).english, nowPrefs = now.preferences ?? defaultPreferences(profile);
-    if (said) saveEnglish(learnerId, { ...now, preferences: { ...nowPrefs, goal: said.slice(0, 160) } });
+    if (said) saveEnglish(learnerId, { ...now, preferences: { ...nowPrefs, goal: said.slice(0, 160), ...(now.preferences ? {} : { levelUnset: true as const }) } });
     const next: LevelCheck = { ...k, askGoal: false, goal: said || k.goal };
     commit(next, "linga-plan");
     await advance(next, { ...ctx, learning: getLearner(learnerId).english }, commandId);

@@ -8,6 +8,8 @@ export interface EnglishPreferences {
   creativity: "familiar" | "playful" | "surprising";
   challenge: "supportive" | "realistic" | "stretch";
   correction: "pauses" | "as-needed"; adultConfirmed: boolean;
+  /** LG-56: set only where preferences were saved on top of defaultPreferences (the plan goal), so `level` is the default A1 and nobody chose it; every door that sets a level leaves it out. */
+  levelUnset?: true;
 }
 export type EvidenceMode = "speech" | "text" | "choice";
 export interface EnglishEvidence {

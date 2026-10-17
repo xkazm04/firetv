@@ -3060,6 +3060,32 @@ test('LG-56: a tomas-9-like A1 partner is held at the opening and on a turn thro
  await reply('I keep my bike in it.');
  assert.deepEqual(partnerSaid(),[LENKA,long],'B1 is not held');
 });
+test('LG-56: no band hold for an unplaced learner with no level set',async()=>{
+ const long='Wow, that is a really big and beautiful house you built for all your friends and pets! What do you keep in it?';
+ const turn=()=>({reply:long,supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''}});
+ const noHold=async(label)=>{
+  const seen=[];
+  answer=async req=>{const p=JSON.parse(req.prompt);seen.push({system:req.system,prompt:p});return {json:p.submittedReply?turn():{title:'Minecraft house',goal:'Show your house.',opening:long,supportProvided:false,help:{simpler:'',meaning:'',starter:''}},provider:'test',ms:1};};
+  await command('start',{sceneId:'booking',replace:true});
+  assert.doesNotMatch(seen[0].system,/plays at/,label+': no band sentence');
+  assert.match(seen[0].system,/Level: A1 on the CEFR scale/,label+': the Level line is unchanged');
+  await reply('I keep my bike in it.');
+  assert.deepEqual(partnerSaid(),[long,long],label+': the over-band line reaches the learner unchanged');
+ };
+ fresh();dispatch({type:'learner.set',id:'ema'});dispatch({type:'subject',subject:'english'});
+ saveEnglish('ema',{...emptyEnglish()});
+ await noHold('never set up');
+ // plan-goal saves a goal on top of the defaults: a non-null preferences that still carries only the defaulted A1
+ fresh();dispatch({type:'learner.set',id:'ema'});dispatch({type:'subject',subject:'english'});
+ saveEnglish('ema',{...emptyEnglish(),preferences:{...defaultPreferences(getSession().profiles.find(p=>p.id==='ema')),goal:'travel',levelUnset:true}});
+ await noHold('goal saved over the defaults');
+ assert.equal(cleanEnglish(getLearner('ema').english).preferences.levelUnset,true,'the marker survives a reload');
+ // a KNOWN A1 (set by hand) is still held
+ const seen=await bandStart('ema','A1',LENKA,turn);
+ assert.match(seen[0].system,/This learner plays at A1/);
+ await reply('I keep my bike in it.');
+ assert.notEqual(partnerSaid().at(-1),long,'an explicit A1 is held');
+});
 test('LG-57: a martin-45-like error said twice in one scene stops the scene with a code-made moment; the partner is told to leave the fix to it',async()=>{
  const {FOSSIL_TASK,FOSSIL_WHY}=review();
  const seen=await bandStart('jakub','B1','Hello, how can I help?',()=>({reply:'I see. When do you need them?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''}}));

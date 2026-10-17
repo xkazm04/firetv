@@ -13,7 +13,7 @@ export function parsePreferences(value: unknown): EnglishPreferences {
   const v = obj(value), level = LEGACY_LEVEL[String(v.level)] ?? v.level;
   if (!isBand(level) || !["familiar", "playful", "surprising"].includes(String(v.creativity)) || !["supportive", "realistic", "stretch"].includes(String(v.challenge)) || !["pauses", "as-needed"].includes(String(v.correction)) || typeof v.adultConfirmed !== "boolean") throw new Error("Choose the learning preferences again.");
   for (const key of ["interest", "goal"]) if (typeof v[key] !== "string" || (v[key] as string).length > 160) throw new Error("Keep interests and goals under 160 characters.");
-  return { level, creativity: v.creativity, challenge: v.challenge, correction: v.correction, adultConfirmed: v.adultConfirmed, interest: (v.interest as string).trim(), goal: (v.goal as string).trim() } as EnglishPreferences;
+  return { level, creativity: v.creativity, challenge: v.challenge, correction: v.correction, adultConfirmed: v.adultConfirmed, interest: (v.interest as string).trim(), goal: (v.goal as string).trim(), ...(v.levelUnset === true ? { levelUnset: true } : {}) } as EnglishPreferences;
 }
 /** Strict enough to discard corrupt entries; never infer speech from a missing modality. */
 export function cleanEnglish(value: unknown): EnglishLearning {
