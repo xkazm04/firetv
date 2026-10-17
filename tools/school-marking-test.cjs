@@ -1284,3 +1284,13 @@ test('X5: a model-written value the learner did not say gets the not-heard line;
  const wr=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'wrong'},'I got five',lin,LEARNER,()=>true,12);
  assert.ok(!wr.reply.includes(X.NOT_HEARD_LINE.en),'X6-a: no line on a wrong item');
 });
+
+// ------------------------------------------------------------------ MB2-7 / MB2-8: the school reading prompt carries the learner's notation
+test('13: schoolPrompt names the learner notation: decimal comma for cz, decimal point for uk and by default',()=>{
+ const {schoolPrompt}=require(path.join(root,'src/lib/desk/mark.ts'));
+ const practice={topic:'frac-add-sub',marked:false,items:[{n:1,question:'Work out 3/4 + 1/6'}]};
+ assert.match(schoolPrompt(practice,'cz'),/Czech Republic school system, whose notation uses a decimal comma \(3,5\)/);
+ assert.match(schoolPrompt(practice,'uk'),/a decimal point \(3\.5\)/);
+ assert.doesNotMatch(schoolPrompt(practice,'uk'),/decimal comma/);
+ assert.equal(schoolPrompt(practice),schoolPrompt(practice,'uk'),'the system is optional and defaults to the UK one');
+});

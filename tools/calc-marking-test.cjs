@@ -352,7 +352,7 @@ test('M3a 2: the same parts typed are judged as the photo judges them, with no m
  const fx=FIX[0];setOn(fx.topic,fx.spec,3);
  stubVision(()=>({items:[]}));await post('mark',PHOTO);
  const sheet=[1,2,3].map((n)=>`${n}. ${question(fx.spec)}`).join('\n');
- assert.ok(seenVision[0].prompt.startsWith(`This is a photo of a student's handwritten working on these 3 Calculus questions:\n${sheet}\n\nRead the page. For each numbered item, report:\n`));
+ assert.ok(seenVision[0].prompt.startsWith(`This is a photo of a student's handwritten working on these 3 Calculus questions:\n${sheet}\n\nThe learner is in the United Kingdom school system, whose notation uses a decimal point (3.5).\nRead the page. For each numbered item, report:\n`));
  assert.doesNotMatch(seenVision[0].prompt,/in parts|Part \(/);
 });
 

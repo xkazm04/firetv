@@ -35,6 +35,7 @@
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
 import { vision } from "../engines/vision";
+import { notationLine } from "./read";
 import { DeskSaid } from "./job";
 import { NOT_SURE, rightLine, slipVocabulary, type Settled } from "../rules/maths";
 import { DEFAULT_SCHOOL_SYSTEM, unitOf } from "../rules/school";
@@ -108,10 +109,11 @@ function calcSheet(items: readonly PracticeItem[]): { sheet: string; parts: stri
   return { sheet: lines.join("\n"), parts };
 }
 
-function calcPrompt(practice: Practice, vocab: string): string {
+function calcPrompt(practice: Practice, vocab: string, system: SchoolSystem): string {
   const { sheet, parts } = calcSheet(practice.items);
   return `This is a photo of a student's handwritten working on these ${practice.items.length} Calculus ${parts ? "items" : "questions"}:\n${sheet}\n\n` +
     parts +
+    `${notationLine(system)}\n` +
     `Read the page. For each numbered item, report:\n` +
     `- n: the item number.\n` +
     `- studentAnswer: the final answer the student wrote, as plain text: an expression in x using ^ for powers, sqrt(), e^, ln, sin, cos and so on, ` +
@@ -143,9 +145,10 @@ const SCHOOL_SCHEMA = {
 };
 
 /** The reading prompt for a school sheet: the child's working and final answer as written, never an expression in x. */
-export function schoolPrompt(practice: Practice): string {
+export function schoolPrompt(practice: Practice, system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM): string {
   const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
   return `This is a photo of a student's handwritten working on these ${practice.items.length} school maths questions:\n${sheet}\n\n` +
+    `${notationLine(system)}\n` +
     `Read the page. For each numbered item, report:\n` +
     `- n: the item number.\n` +
     `- studentAnswer: the final answer the student wrote, copied exactly as written: a whole number, a fraction such as 5/12, ` +
@@ -159,12 +162,13 @@ export function schoolPrompt(practice: Practice): string {
 }
 
 /** The linear reading prompt: the model's own value of x is asked for, as the trust gate in rules/kinds judgeItem needs it. */
-function linearPrompt(practice: Practice, vocab: string): string {
+function linearPrompt(practice: Practice, vocab: string, system: SchoolSystem): string {
   const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
   return `This is a photo of a student's handwritten working on these ${practice.items.length} equations:\n${sheet}\n\n` +
+    `${notationLine(system)}\n` +
     `For each numbered item, report:\n` +
     `- n: the item number.\n` +
-    `- studentAnswer: the final value of x the student wrote, as a plain number or simple fraction. Empty string if they wrote none.\n` +
+    `- studentAnswer: the final value of x the student wrote, copied exactly as the student wrote it: with their decimal comma or point, a fraction or a mixed number, not converted or simplified. Empty string if they wrote none.\n` +
     `- studentWorking: their working transcribed exactly as written, one step per line (a newline between steps), or an empty string if there is none.\n` +
     `- verdict: "right" if you believe their final value is correct, "wrong" otherwise.\n` +
     `- solution: YOUR OWN value of x for that equation, worked out yourself, as a plain number or simple fraction.\n` +
@@ -188,7 +192,7 @@ export async function markSet(
   /** The seated learner's school system, for reading a school item's answer (rules/school readNumber). UK when not given. */
   system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM,
 ): Promise<MarkResult> {
-  const { reads, provider, ms } = await readSheet(imageBase64, practice, slipVocabulary(practice.topic));
+  const { reads, provider, ms } = await readSheet(imageBase64, practice, slipVocabulary(practice.topic), system);
   return markReads(practice, learnerId, stillSame, reads, { topic: practice.topic, system }, { provider, ms });
 }
 
@@ -197,11 +201,11 @@ export async function markSet(
  * linear reading offers. Only what each reader asks for is kept - never a verdict, a solution only from the linear reading -
  * and a page with no answer to any of its questions is the failed mark MK11 names (EMPTY_MARK). Shared by a desk set and a page.
  */
-async function readSheet(imageBase64: string, practice: Practice, vocab: string): Promise<{ reads: Read[]; provider: string; ms: number }> {
+async function readSheet(imageBase64: string, practice: Practice, vocab: string, system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM): Promise<{ reads: Read[]; provider: string; ms: number }> {
   const kind = kindOfSheet(practice.items);
-  const reading = kind === "school" ? { prompt: schoolPrompt(practice), schema: SCHOOL_SCHEMA }
-    : kind === "calc" ? { prompt: calcPrompt(practice, vocab), schema: CALC_SCHEMA }
-    : { prompt: linearPrompt(practice, vocab), schema: SCHEMA };
+  const reading = kind === "school" ? { prompt: schoolPrompt(practice, system), schema: SCHOOL_SCHEMA }
+    : kind === "calc" ? { prompt: calcPrompt(practice, vocab, system), schema: CALC_SCHEMA }
+    : { prompt: linearPrompt(practice, vocab, system), schema: SCHEMA };
   const { json, provider, ms } = await vision<{ items: Read[] }>({ imageBase64, ...reading, use: "mark" });
 
   // only what each reader asks for is read: never a verdict, and a solution only from the linear reading (the trust gate)
@@ -353,7 +357,7 @@ export async function markPage(
   const readable = page.items.filter((i) => specs.has(i.n)).map((i): PracticeItem => ({ n: i.n, question: i.text, spec: specs.get(i.n)!.spec as PracticeItem["spec"] }));
   // the slips a reading may offer: the lists of the topics these items sit on
   const vocab = Array.from(new Set(readable.flatMap((i) => slipVocabulary(specs.get(i.n)!.topic).split(NL)).filter(Boolean))).join(NL);
-  const { reads, provider, ms } = await readSheet(imageBase64, { topic: "", items: readable, marked: false }, vocab);
+  const { reads, provider, ms } = await readSheet(imageBase64, { topic: "", items: readable, marked: false }, vocab, system);
   const readFor = new Map(reads.map((r) => [r.n, r]));
   const items = page.items.map((it): PracticeItem => {
     const at = specs.get(it.n), read: Read = readFor.get(it.n) ?? {};

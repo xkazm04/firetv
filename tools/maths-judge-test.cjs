@@ -249,3 +249,16 @@ test('MB-B26: the linear battery - every form of a right answer is right, every 
  console.log(`linear battery: ${judged} answers judged, ${falseRings} false rings, ${falseTicks} false ticks`);
  assert.ok(judged>1000);assert.equal(falseRings,0);assert.equal(falseTicks,0);
 });
+
+test('MB2-8: the linear photo prompt for a cz learner carries the notation sentence and asks for the answer as written',async()=>{
+ const sheet={topic:'linear-two-step',marked:false,items:[{n:1,question:'x+3=7'}]};
+ looked=reply({items:[{n:1,studentAnswer:'4,5',studentWorking:'',verdict:'right',solution:'4',slip:'unclear'}]});
+ seenVision.length=0;
+ await markSet('img',sheet,'judge-linear-cz',()=>true,'cz');
+ const prompt=seenVision[0].prompt;
+ assert.match(prompt,/Czech Republic school system, whose notation uses a decimal comma \(3,5\)/);
+ assert.match(prompt,/copied exactly as the student wrote it/);
+ assert.match(prompt,/decimal comma or point, a fraction or a mixed number, not converted or simplified/);
+ assert.doesNotMatch(prompt,/as a plain number or simple fraction\. Empty/,'the answer is no longer asked for as a plain number');
+ assert.match(prompt,/YOUR OWN value of x/,'the model own solution is still asked for (the trust gate)');
+});
