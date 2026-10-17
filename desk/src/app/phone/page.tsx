@@ -56,7 +56,9 @@ function inOrder() {
   };
 }
 /** What a fresh page load holds in the Essay and Say panels: a new learner in the seat starts from these. */
-const FRESH_PARAS = ["Many students are tired. Sleep is important. Schools start early. This is bad."];
+/** The Essay box starts empty: one empty paragraph (setEssay maps over it), never a sample a paste could fuse into. */
+const FRESH_PARAS = [""];
+const ESSAY_PLACEHOLDER = "Many students are tired. Sleep is important. Schools start early. This is bad.";
 const FRESH_SENTENCE = "I have gone to school yesterday.";
 export default function Phone() {
   const { s, connected, post, reconnect } = useSession();
@@ -711,7 +713,7 @@ export default function Phone() {
             <button className="pbtn" data-secondary="true" aria-label="Previous paragraph" disabled={pix === 0} onClick={() => goPara(pix - 1)}>Previous</button>
             <b aria-live="polite">Paragraph {pix + 1} of {paras.length}</b>
             <button className="pbtn" data-signal={readIx.includes(pix) ? "true" : undefined} data-secondary={readIx.includes(pix) ? undefined : "true"} aria-label="Next paragraph" disabled={pix + 1 >= paras.length} onClick={() => goPara(pix + 1)}>Next</button></div>}
-          <div className="field"><textarea aria-label="The paragraph the desk will read" value={essay} onChange={(e) => { const v = e.target.value; setEssay(() => v); }} onPaste={onEssayPaste} /></div>
+          <div className="field"><textarea aria-label="The paragraph the desk will read" placeholder={ESSAY_PLACEHOLDER} value={essay} onChange={(e) => { const v = e.target.value; setEssay(() => v); }} onPaste={onEssayPaste} /></div>
           {note ? <p role="alert" data-role="essay-note" style={{ color: "#B8261A" }}>{note}</p> : info ? <p data-role="essay-info">{info}</p> : null}
           {againBtn}
           {notice !== null && <TextNotice text={notice} mode={noticeFor} onAccept={() => void (noticeFor === "paragraph" ? acceptParagraphNotice() : acceptNotice())} onDecline={() => { setNotice(null); if (noticeFor === "piece") { setKeep(false); void readPiece(false); } }} />}

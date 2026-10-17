@@ -943,3 +943,33 @@ test('PH-ENDTWICE: a second tap on End session before the first returns posts no
  const again=t.fn();await again;
  assert.equal(t.posts.length,2,'after it finished, a later tap ends again (the guard is released)');
 });
+
+// ---- Essay recert-2 L1-daniel-15-EM3-1 / L1-barbora-43-EM1-5: the sample paragraph is a placeholder, never a value
+test('the Essay box starts and resets empty; the sample is only a placeholder; a paste into it yields exactly the pasted paragraphs',()=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const fresh=/const FRESH_PARAS = (\[[^\]]*\]);/.exec(src);assert.ok(fresh,'FRESH_PARAS is where the test expects it');
+ const FRESH=new Function(`return ${fresh[1]};`)();
+ assert.deepEqual(FRESH,[''],'one empty paragraph (setEssay maps over it), no sample text');
+ assert.match(src,/useState<string\[\]>\(FRESH_PARAS\)/,'the initial paras are the empty ones');
+ assert.match(src,/setParas\(FRESH_PARAS\)/,'the reset uses the same empty ones');
+ const sample=/const ESSAY_PLACEHOLDER = "([^"]+)";/.exec(src);assert.ok(sample&&sample[1].length>20,'the sample lives in a placeholder constant');
+ assert.ok(!fresh[1].includes(sample[1].slice(0,20)),'the sample is not in the paras');
+ assert.match(src,/<textarea[^>]*placeholder=\{ESSAY_PLACEHOLDER\}[^>]*value=\{essay\}/,'the textarea shows the sample as its placeholder');
+ // onEssayPaste cut out and run against stubs
+ const a=src.indexOf('const onEssayPaste'),e=src.indexOf('/** The whole piece to the TV',a);assert.ok(a>0&&e>a);
+ const js=ts.transpileModule(src.slice(a,src.lastIndexOf('\n',e)),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const {paragraphsOf}=require(path.join(SRC,'lib/rules/essay.ts'));
+ const run=(value,pasted)=>{
+  const loaded=[];let prevented=false;
+  const f=new Function('paragraphsOf','setSource','setPieceId','loadParagraphs',`${js}\nreturn onEssayPaste;`)(paragraphsOf,()=>{},()=>{},(ps)=>loaded.push(ps));
+  f({preventDefault(){prevented=true;},clipboardData:{getData:()=>pasted},currentTarget:{value,selectionStart:value.length,selectionEnd:value.length}});
+  return {loaded,prevented};
+ };
+ const pasted='First paragraph of mine.\n\nSecond paragraph of mine.';
+ for(const box of [FRESH[0],''])assert.deepEqual(run(box,pasted).loaded,[paragraphsOf(pasted)],'exactly the pasted paragraphs, nothing of the sample');
+ assert.deepEqual(run(FRESH[0],pasted).loaded[0],['First paragraph of mine.','Second paragraph of mine.']);
+ assert.equal(run('',pasted).prevented,true);
+ assert.equal(run('','one line only').prevented,false,'a paste without a blank line is left to the browser');
+ // reading an empty box stays refused
+ assert.match(src,/disabled=\{busy \|\| notice !== null \|\| !essay\.trim\(\)\} onClick=\{analyseParagraph\}/,'an empty box cannot be sent');
+});
