@@ -1267,7 +1267,7 @@ test('K4 case 4: the check focus \'Try "he needs" instead of "he need"\' - the v
  assert.equal(quotedFocus('Try "he needs" or "he wants" for "he need"',[task]),L.FOCUS_FALLBACK,'two unheld spans: a misquote');
  assert.equal(quotedFocus('Try "he need a new bike please" not "he need"',[task]),L.FOCUS_FALLBACK,'a line that holds the learner\'s words');
  let v=view().lingaView(sessionOf(fixture('linga-verdict',{placement:pl,check:checkOf({stage:'verdict',turns:[],placement:pl})})),{});
- assert.equal(v.caption,'Your words: “he need”.');assert.equal(v.captionTag,'Your words');assert(view().viewText(v).includes('he need'));
+ assert.equal(v.caption,'Try saying: “he needs”.');assert.equal(v.captionTag,'Try saying');assert(!view().viewText(v).includes('Your words'));
  v=view().lingaView(sessionOf(fixture('linga-verdict',{placement:{...pl,focus:L.FOCUS_FALLBACK}})),{});
  assert(!v.caption.includes(L.FOCUS_FALLBACK),'the fallback focus is never the caption');
  // the first room: no taught item due, so the check's line is hidden, keyed on its fix key, its slip absent
@@ -2835,7 +2835,28 @@ test('LG-8 focus: follows the first slip when it quotes none of it, keeps one th
  assert.equal(C.focusFollowsSlip('x',slips,tasks,l=>!/a meeting/.test(l)),F.FOCUS_FALLBACK,'refused by the audience gate');
 });
 test('LG-8 slips: the TV never shows them (view.ts and LingaTV.tsx do not reference slips)',()=>{
- for(const f of ['src/lib/english/view.ts','src/english/LingaTV.tsx'])assert(!/slips/.test(fs.readFileSync(path.join(root,f),"utf8")),f);
+ for(const f of ['src/lib/english/view.ts','src/english/LingaTV.tsx']){const src=fs.readFileSync(path.join(root,f),"utf8");
+  assert(!/\bslips\b/.test(src),f);
+  assert(!/Your words:|"Your words"/.test(src),f+' still captions a learner\'s own words on the shared TV');}
+});
+test('recert-4 / LT-sofie-11-J1-2: the shared TV never headlines a learner\'s own error as "Your words"; the phone keeps it beside the better form',()=>{
+ const task={id:'s1',band:'A2',kind:'say',prompt:'What do you do at work?',line:'',options:[],response:'In my job we build spaceship every year.',mode:'speech',verdict:'partial',quote:'we build spaceship',note:'n',at:1};
+ const withLine='Try "we build spaceships" instead of "we build spaceship"',without='Practise "we build spaceship"';
+ const run=(focus,summary)=>{const pl={...placed('A2'),focus,summary:summary??'You can talk about your job.',tasks:[task]};
+  return view().lingaView(sessionOf(fixture('linga-verdict',{placement:pl,check:checkOf({stage:'verdict',turns:[],placement:pl})})),{});};
+ for(const focus of [withLine,without]){
+  const v=run(focus),tvText=view().viewText(v).split('\n').filter(x=>!/^On the phone/.test(x)).join('\n');
+  assert(!/Your words/.test(v.caption+v.captionTag+tvText),v.caption+' | '+v.captionTag);
+  assert(!/“we build spaceship”|"we build spaceship"/.test(v.caption+tvText),'the TV quotes the error: '+v.caption+tvText);}
+ assert.equal(run(withLine).caption,'Try saying: “we build spaceships”.');assert.equal(run(withLine).captionTag,'Try saying');
+ assert.equal(run(without).captionTag,'What next');
+ // a model-written summary that quotes the learner's words is not the TV's hero note
+ const v=run(without,'You said "we build spaceship" and kept going.');
+ assert(!v.hero.note.includes('we build spaceship'),v.hero.note);assert.equal(v.hero.note,P.BAND_CAN.A2);
+ assert.equal(run(without,'You talk about your work well.').hero.note,'You talk about your work well.','a summary quoting nothing stays');
+ // the phone verdict carries the quote next to the better form
+ const phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8');
+ assert(/Next to practise:<\/b> \{placement\.focus\}/.test(phone)&&/“\{s\.said\}” → try “\{s\.better\}”/.test(phone),'the phone verdict shows the quote and the better form');
 });
 test('LG-50/LG-34: an unfound room line and a brought-back review sentence name their origin, never the bare "A sentence to take with you"',()=>{
  const V=view(),L=lineMod(),BARE='A sentence to take with you',turns=convo().turns;

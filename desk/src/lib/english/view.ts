@@ -409,11 +409,12 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const start = conversationBand(placement), spoke = start !== b ? spokenBand(placement.tasks) : null;
     const said = spoke && spokenTasks(placement.tasks).every(t => t.mode === "text") ? "wrote" : "spoke";
     tag = "Your level"; title = `${b} · ${BAND_NAME[b]}`;
-    hero = { kind: "ladder", kicker: self ? "Self-chosen" : spoke ? `Understood ${b} · ${said} ${spoke} · not a certificate` : "Linga's read · not a certificate", title, band: b, note: placement.summary || BAND_CAN[b], ...(spoke ? { spoke } : {}) };
-    // K4 (P17): the words the read rests on, quoted from the learner's own answers in code (line.ts focusParts), lead the caption
-    const quote = self ? undefined : focusParts(placement.focus, placement.tasks).quote;
+    hero = { kind: "ladder", kicker: self ? "Self-chosen" : spoke ? `Understood ${b} · ${said} ${spoke} · not a certificate` : "Linga's read · not a certificate", title, band: b, note: (!self && quotesLearner(placement.summary, placement.tasks) ? "" : placement.summary) || BAND_CAN[b], ...(spoke ? { spoke } : {}) };
+    // The shared TV never headlines a learner's own error (delegate ruling 2026-10-17, recert-4/LT-sofie-11-J1-2): the caption
+    // leads with the better form the check offers (line.ts focusParts), and the learner's words stay on the phone.
+    const line = self ? undefined : focusParts(placement.focus, placement.tasks).line;
     const starts = spoke ? `Conversations start at ${start}, ${start === spoke ? `where your ${said === "wrote" ? "written" : "spoken"} answers were` : "one step below the level you understood"}.` : "";
-    caption = self ? "This is the level you picked." : quote ? `Your words: “${quote}”.${starts ? ` ${starts}` : ""}` : starts || "See the conversations Linga picks for this level, or find your level again."; captionTag = self ? "Your pick" : quote ? "Your words" : "What next";
+    caption = self ? "This is the level you picked." : line ? `Try saying: “${line}”.${starts ? ` ${starts}` : ""}` : starts || "See the conversations Linga picks for this level, or find your level again."; captionTag = self ? "Your pick" : line ? "Try saying" : "What next";
     actions = [act("see-topics", "See my topics", "Linga picks conversations for this level. Swap any you don't want.", cmd(l.plan && lc?.stage !== "verdict" ? "plan-open" : "plan-propose")), act("check-again", self ? "Find my level with Linga" : "Find my level again", "Three questions and a few short tasks, about seven minutes.", cmd("check-start")), act("pick-level", "Pick it myself", "Choose a level from A1 to C2 yourself.", pickAt(b))];
     if (placement.focus && !self) details.push(`On the phone, next to practise: ${placement.focus}`);
     if (!self) details.push(`On the phone: ${restsLine(placement.confidence, placement.tasks, placement.selfBand)}`);
@@ -737,6 +738,12 @@ export function progressDots(s: Session): Dot[] | null {
     return topics.map((t, i) => started.has(t.id) ? "done" : i === next ? "current" : "open");
   }
   return null;
+}
+
+/** True when a quoted span of the text is held in one of the learner's answers: a model-written read may not put their words on the TV. */
+function quotesLearner(text: string, tasks: readonly { response: string }[]): boolean {
+  const norm = (x: string) => x.toLowerCase().replace(/[s"“”]+/g, " ").trim(), said = tasks.map(t => norm(t.response)).join(" | ");
+  return [...text.matchAll(/["“]([^"”]{2,})["”]/g)].some(m => said.includes(norm(m[1])));
 }
 
 /** A Take Two mark in words, for a reader who cannot see the struck quote. */
