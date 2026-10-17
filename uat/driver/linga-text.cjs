@@ -35,7 +35,7 @@
  */
 const fs = require('node:fs'), path = require('node:path'), { spawn } = require('node:child_process');
 const uat = path.resolve(__dirname, '..'), desk = path.resolve(uat, '../desk');
-const V = require('./verdict.cjs'), M = require('./metrics.cjs');
+const RM = require('./raw-moments.cjs'), V = require('./verdict.cjs'), M = require('./metrics.cjs');
 const BANDS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 /** The model each driver-owned role asks the desk's claude-cli provider for; the tutor's is chosen by the desk per request. */
 const ROLES = { character: { model: 'best', thinking: false }, judge: { model: 'best', thinking: true } };
@@ -446,12 +446,14 @@ async function child(characterId) {
   const character = characters().find(c => c.sim.id === characterId), C = character.sim, J = journeys();
   const calls = { tutor: { n: 0, fail: 0, ms: 0 }, character: { n: 0, fail: 0, ms: 0 }, judge: { n: 0, fail: 0, ms: 0 } };
   const engines = {}, engine = require(path.join(desk, 'src/lib/engines/text.ts')), real = engine.text;
-  engine.text = async req => { calls.tutor.n++; const t = Date.now(); try { const r = await real(req); calls.tutor.ms += Date.now() - t; engines.tutor = r.provider; return r; } catch (e) { calls.tutor.fail++; throw e; } };
+  const rawTurns = [];
+  engine.text = async req => { calls.tutor.n++; const t = Date.now(); try { const r = await real(req); calls.tutor.ms += Date.now() - t; engines.tutor = r.provider; const rec = RM.recordOf(req, r.json, rawTurns.length + 1); if (rec) rawTurns.push(rec); return r; } catch (e) { calls.tutor.fail++; throw e; } };
   const role = async (name, req) => { calls[name].n++; const t = Date.now(); try { const r = await claude.call({ ...ROLES[name], ...req }); calls[name].ms += Date.now() - t; engines[name] = r.provider; return r; } catch (e) { calls[name].fail++; throw e; } };
   const { englishCommand } = require(path.join(desk, 'src/lib/english/conversation.ts'));
   const { dispatch, getSession } = require(path.join(desk, 'src/lib/session/store.ts'));
   const cur = require(path.join(desk, 'src/lib/english/curriculum.ts')), P = require(path.join(desk, 'src/lib/english/placement.ts'));
   const rubric = fs.readFileSync(path.join(uat, 'rubric.md'), 'utf8');
+  const rawMark = () => rawTurns.length;
   const result = { character: C.id, name: C.name, trueBand: C.trueBand, engine: `claude-cli/${BEST}`, engines, journeys: [], calls };
   const save = () => { fs.writeFileSync(path.join(dir, `${C.id}.json`), JSON.stringify(result, null, 2)); fs.writeFileSync(path.join(dir, `${C.id}.md`), characterReport(result, character)); };
 
@@ -520,6 +522,7 @@ If the screen looks broken or confusing, react as this person would: retry, go b
     l = getSession().englishLearning;
     if (Jn.sim.start === 'planned' && !l.plan) { await cmd('plan-propose'); if (getSession().check?.askGoal) await cmd('plan-goal', { text: C.wants.slice(0, P.TOPIC_ASK_MAX) }); await cmd('plan-agree'); record.setup.push('fixture: goal from the Character file, topics proposed and agreed without the Character'); }
     dispatch({ type: 'nav', screen: 'linga' }); Object.assign(ui, V.NO_UI);
+    const rawFrom = rawMark();
     const done = () => {
       const s = getSession(), l = s.englishLearning;
       if (jid === 'J1') return !!(l.placement && l.placement.source === 'check' && l.placement.at >= started);
@@ -571,7 +574,7 @@ If the screen looks broken or confusing, react as this person would: retry, go b
     if (jid === 'J2') { record.facts.topicsShown = [...seenTopics.values()].map(({ id, title, goal, why, skill, audience, partner }) => ({ id, title, goal, why, skill, audience, partner })); record.facts.planAgreed = l.plan?.topics.map(t => t.title) ?? null; }
     if (['J3', 'J4', 'J5'].includes(jid) && lastConversation) {
       const cv = lastConversation;
-      record.facts.conversation = { title: cv.title, goal: cv.goal, partner: cv.partner, band: l.placement?.band ?? null, trueBand: C.trueBand, correction: cv.preferences.correction, phase: cv.phase, turns: cv.turns.map(t => ({ role: t.role, text: t.text, mode: t.mode, supported: t.supported })), moments: cv.moments ?? [], coaching: cv.coaching, evidence: cv.evidence.map(e => ({ skill: e.skill, success: e.success, supported: e.supported, mode: e.mode, quote: e.quote })) };
+      record.facts.conversation = { title: cv.title, goal: cv.goal, partner: cv.partner, band: l.placement?.band ?? null, trueBand: C.trueBand, correction: cv.preferences.correction, phase: cv.phase, turns: cv.turns.map(t => ({ role: t.role, text: t.text, mode: t.mode, supported: t.supported })), moments: cv.moments ?? [], heldFixes: Array.isArray(cv.heldFixes) ? cv.heldFixes : [], rawMoments: RM.keyToTurns(cv.turns, rawTurns.slice(rawFrom), [...(cv.moments ?? []), ...(cv.moment ? [cv.moment] : [])]), coaching: cv.coaching, evidence: cv.evidence.map(e => ({ skill: e.skill, success: e.success, supported: e.supported, mode: e.mode, quote: e.quote })) };
     }
     return record;
   }
@@ -614,6 +617,10 @@ function characterReport(r, character) {
       out.push(`Metrics: ${M.series().filter(s => s.brief).map(s => s.brief(m)).join(' · ')}${m.judgeAgreement.disagreements ? `\n\nDisagreements: ${m.judgeAgreement.disagreements}` : ''}`, '');
       out.push('### Findings', '', ...(jd.findings.length ? jd.findings.map(f => `- **${f.type}** (${f.dimension}, ${f.frequency}/${f.reachability}/${f.trust_erosion}) ${f.title} — got: ${f.got} · evidence: ${f.evidence}`) : ['None.']), '');
       out.push('### Voice (LT)', '', `> ${jd.voice.replace(/\n+/g, '\n> ')}`, '', `Time saved: ${jd.timeSaved.minutes} min · ${jd.timeSaved.confidence}`, '');
+    }
+    if (j.facts.conversation) {
+      const cvf = j.facts.conversation, raws = cvf.rawMoments ?? [];
+      out.push(`Moments shown ${cvf.moments?.length ?? 0} · held fixes ${Array.isArray(cvf.heldFixes) ? cvf.heldFixes.length : 0} · raw moments returned ${raws.filter(x => x.present && x.raw && x.raw.kind !== 'none').length} of ${raws.length} tutor turns`, '', ...raws.map(x => `- learner turn ${x.turn === null ? '?' : x.turn + 1} "${String(x.reply).slice(0, 60)}": ${RM.lineOf(x)}`), '');
     }
     out.push('<details><summary>Transcript</summary>', '', ...j.steps.map(s => `**#${s.n} ${s.screen}**\n\n${s.shown.split('\n').map(x => `    ${x}`).join('\n')}\n\n*${s.thought}* → \`${s.action}\`${s.args.text ? ` "${s.args.text}"` : ''}${Object.keys(s.args).filter(k => k !== 'text').map(k => ` ${k}=${s.args[k]}`).join('')} · ${s.result}${s.message ? ` (${s.message})` : ''} · ${Math.round(s.ms / 1000)}s\n`), '</details>', '');
   }
