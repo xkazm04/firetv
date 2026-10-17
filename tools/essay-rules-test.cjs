@@ -1119,6 +1119,38 @@ test('a note never carries a verdict label: the verdict is code\'s',async()=>{
  const r=await reviseSentence(R3(),2,STUDY);
  assert.equal(r.verdicts.find(v=>v.n===2).note,'Names the study.');
 });
+// Essay recert-2 row 1 (L1-barbora-43-EM1-1, L1-eliska-12-EM1-3, EM1-2, L1-daniel-15-EM2-2): a strong or neutral note is the
+// model's words on the TV, so it passes the guard a pattern passes; one that hands over a sentence falls back, never shown
+test('C1: every note passes one guard: a note that supplies a sentence falls back to the check\'s line, or to none',async()=>{
+ const TWO='Sleep matters a lot for teenagers. In 2019 a study found that pupils who slept nine hours got better marks.';
+ const one=async(lens,o,n=1)=>{answer=obsReply([1,2].map(k=>k===n?{n:k,...o}:{n:k,...FULL_FIELD[lens],note:'x'}));const a=await analyseEssay(TWO,lens,'oa-ghost');const v=a.verdicts.find(v=>v.n===n);return [v.verdict,v.note,a.summary];};
+ // a strong note quoting a 4-word run of the learner's own sentence falls back
+ assert.deepEqual((await one('argument',{side:'pushes',note:'Good: "sleep matters a lot" takes a side.'})).slice(0,2),['strong','']);
+ // a run from ANOTHER sentence of the text counts too: the whole text is the learner's
+ assert.deepEqual((await one('argument',{side:'pushes',note:'Add that pupils who slept nine hours did better.'})).slice(0,2),['strong','']);
+ // a neutral note that supplies a full new sentence falls back; the summary never carries it
+ const [verdict,note,summary]=await one('evidence',{support:'context',note:'Write: Teenagers who go to bed early feel calmer at school.'});
+ assert.deepEqual([verdict,note],['neutral','']);
+ assert.ok(!summary.includes('calmer'),summary);
+ // a clean strong note is kept as written
+ assert.deepEqual((await one('argument',{side:'pushes',note:'This claim takes a clear side.'})).slice(0,2),['strong','This claim takes a clear side.']);
+ // a quoted frame (quotes around [slots]) is teaching, not a sentence: kept
+ const FRAME='Try "In [year], [a source] found that [a result], so it is clear that [the claim]."';
+ assert.deepEqual((await one('argument',{side:'pushes',note:FRAME})).slice(0,2),['strong',FRAME]);
+ // a faulty sentence's note is the check's own line whatever the model wrote
+ assert.deepEqual((await one('argument',{side:'wanders',note:'Write: Teenagers who go to bed early feel calmer at school.'})).slice(0,2),['faulty','This sentence wanders from the side the paragraph takes.']);
+ // the guard itself: the copied run cleanFix refuses in a pattern, the declarative outside a frame, and what passes
+ const {suppliesSentence,guardNote}=rules();
+ const S=['Walking also makes children happier than going by car.'];
+ assert.equal(suppliesSentence('Write: Walking also makes children happier, because a 2020 survey found 7 in 10 walkers feel calm at school.',S),true,'E8 of the L1 run');
+ assert.equal(suppliesSentence('Phones stop students listening, so they lose marks in tests.',S),true,'a new declarative, no quote, no slot');
+ assert.equal(suppliesSentence("'Phones stop students listening, so they lose marks in tests.'",S),true,'quotes alone are no frame: a quoted sentence is still handed over');
+ assert.equal(suppliesSentence('Which survey backs how much happier walkers are?',S),false,'a question hands over nothing');
+ for(const ok of ['A clear claim.','Strong evidence: the study names its year.','Good use of a number.','Your "happier than" needs a reason after it.'])
+  assert.equal(suppliesSentence(ok,S),false,ok);
+ assert.equal(guardNote('Walking also makes children happier.',S,'The check.'),'The check.');
+ assert.equal(guardNote('A clear claim.',S,'The check.'),'A clear claim.');
+});
 
 // ---- E1 (council rulings 2026-10-09 section 6): under Structure an evidence observation names the claim it backs ----
 const RE=require(path.join(root,'src/lib/rules/essay.ts'));

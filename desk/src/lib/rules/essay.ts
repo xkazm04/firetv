@@ -242,12 +242,45 @@ export function cleanFix(raw: unknown, sentence = ""): Fix | undefined {
   const lit = wordsOf(literal);
   if (lit.length > FIX_LIMITS.literalWords) return undefined;
   // a run of the learner's own words in the frame is their sentence rewritten around a slot
-  const own = wordsOf(sentence), k = FIX_LIMITS.copiedRun;
-  if (own.length >= k) {
-    const runs = new Set(own.slice(0, own.length - k + 1).map((_, i) => own.slice(i, i + k).join(" ")));
-    for (let i = 0; i + k <= lit.length; i++) if (runs.has(lit.slice(i, i + k).join(" "))) return undefined;
-  }
+  if (copiesRun([sentence], lit)) return undefined;
   return { move: m, pattern: p };
+}
+
+/** Whether `words` hold a run of FIX_LIMITS.copiedRun or more consecutive words of any of the learner's `sentences`. */
+function copiesRun(sentences: string[], words: string[]): boolean {
+  const k = FIX_LIMITS.copiedRun, runs = new Set<string>();
+  for (const own of sentences.map(wordsOf)) for (let i = 0; i + k <= own.length; i++) runs.add(own.slice(i, i + k).join(" "));
+  for (let i = 0; i + k <= words.length; i++) if (runs.has(words.slice(i, i + k).join(" "))) return true;
+  return false;
+}
+
+/** A note's words that speak about the writing rather than supply it: a piece of a note with none of them is content. */
+const ADDRESSES = /\b(?:this|these|those|here|you|your|yours|sentences?|paragraphs?|claims?|points?|evidence|links?|readers?|writers?|words?|opinions?|examples?|sides?|arguments?|reasons?|sources?|numbers?|facts?|connectors?|verbs?|moves?|patterns?|frames?|slots?|turns?|details?|names|naming|checkable|vague|specific|concrete)\b/i;
+/** A piece of a note this long that names nothing of the writing reads as a sentence handed over. */
+export const SUPPLIED_WORDS = 5;
+const QUOTED = /"[^"]*"|“[^”]*”|‘[^’]*’|(?<![a-z0-9])'[^']*'(?![a-z0-9])/gi;
+
+/**
+ * Whether a line the model wrote would hand the learner a sentence (C1: teaching, not ghostwriting). One guard for every
+ * note: it supplies one when (a) its words hold a run of FIX_LIMITS.copiedRun or more words of any of the learner's
+ * `sentences` (the copied-run check cleanFix applies to a pattern, here against the whole text), or (b) outside a quoted
+ * frame (quotes around a [slot]) and outside the slots, a piece of it (split at . ! ? ; : so 'Write: ...' is read
+ * alone) runs to SUPPLIED_WORDS or more words, is not a question, and names nothing of the writing (ADDRESSES): a
+ * complete declarative sentence about the topic, not about the text. Code cannot see every way a model can hand over
+ * a sentence; how often one does is L2's count.
+ */
+export function suppliesSentence(note: string, sentences: string[]): boolean {
+  if (copiesRun(sentences, wordsOf(note.replace(SLOT, " ")))) return true;
+  const bare = note.replace(QUOTED, (q) => (q.match(SLOT) ? " | " : q)).replace(SLOT, " ");
+  return bare.split(/(?<=[.!?;:])\s+|[;:]/).some((piece) => {
+    const t = piece.replace(/["“”‘’']/g, " ").trim();
+    return !t.endsWith("?") && wordsOf(t).length >= SUPPLIED_WORDS && !ADDRESSES.test(t);
+  });
+}
+
+/** The note a learner sees: the line as written when it supplies no sentence, else `fallback` (the check's own line, or '' where there is none). */
+export function guardNote(note: string, sentences: string[], fallback = ""): string {
+  return suppliesSentence(note, sentences) ? fallback : note;
 }
 
 // ---- the verdicts: the model observes, code rules ----
@@ -329,7 +362,7 @@ export function cleanNote(note: string): string {
  * A sentence gets an entry when it was observed (an observation the lens cannot read is neutral) or when code alone
  * rules it faulty (a Language sentence over LONG_SENTENCE_WORDS). Under a verdict code decided the words are code's:
  * a faulty sentence's note is always the failed check's own line, never the model's; a strong or neutral sentence keeps
- * the model's note. A fix rides only on a faulty sentence, through cleanFix.
+ * the model's note only when it supplies no sentence (guardNote), else it has none. A fix rides only on a faulty sentence, through cleanFix.
  *  structure: an observation may carry `supports: n` (evidence, or a claim backing an earlier claim); code accepts n
  *    only when n is another sentence the model observed as a claim, and anything else is no link. A claim is strong
  *    when a marked evidence observation (carrying an EVIDENCE marker) names it, or when a claim that is strong that
@@ -447,7 +480,8 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
     if (lens === "language" && verdict !== "faulty" && s.words > LONG_SENTENCE_WORDS) { verdict = "faulty"; check = CHECKS.long(s.words); }
     if (!o && verdict === "neutral") return;
     const said = typeof o?.note === "string" ? cleanNote(o.note) : "";
-    const note = verdict === "faulty" ? check : said;
+    // every note passes one guard (C1): a note that hands over a sentence falls back to the check's line, or to none
+    const note = guardNote(verdict === "faulty" ? check : said, sentences.map((t) => t.text), check);
     const fix = verdict === "faulty" ? cleanFix(o?.fix, s.text) : undefined;
     const supports = lens === "evidence" ? backsOf(s) : linkOf(s);
     out.push({ n: s.n, verdict, note, ...(fix ? { fix } : {}), ...(supports !== undefined ? { supports } : {}) });
