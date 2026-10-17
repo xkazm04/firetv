@@ -2723,11 +2723,40 @@ test('sameTask: a reworded repeat is the same task, two situations on one intere
  assert(!P.sameTask('Go home now',['Go to school']),'short prompts sharing a word');
  assert(!P.sameTask('',['anything at all here']));assert(!P.sameTask('Tell me about your day at school',[]));
 });
+const OKSANA=['A carrier calls you. You want to ask if the network is down. What do you say?','Your parcel is late. What do you say to the carrier on the phone?','Many carriers now let customers solve problems in an app instead of phoning. Do you think a phone call is still the better way to sort out a delivery problem? Why or why not?','A carrier keeps dropping your calls. Would you prefer to fix it in an app or by phone with a person? Explain why.'];
+test('LG-55 second pass: a reworded app-versus-phone comparison is the same task, other situations are not',()=>{
+ assert(P.sameTask(OKSANA[3],[OKSANA[2]]),'the oksana-34 #7/#8 pair');assert(P.sameTask(OKSANA[2],[OKSANA[0],OKSANA[3]]),'either way round');
+ assert(!P.sameTask('What are you doing on Saturday?',['Would you prefer to play Roblox or watch a film with your friends? Say why.']),'sofie-11 Roblox versus Saturday');
+ assert(!P.sameTask('A football match is on tonight. Would you prefer to go or stay home? Say why.',['Tell me about your favourite football team and why you follow them.']),'one shared word, one prompt not a comparison');
+ assert(!P.sameTask('Would you prefer to eat pizza or pasta? Why?',['Would you prefer to travel by train or by bus? Why?']),'two different choices');
+});
+test('LG-55 second pass: an interview goal is untouched by the carrier prompts, touched by an interview prompt',()=>{
+ const goal='I need English for a job interview on Friday';
+ assert(P.goalUntouched(goal,OKSANA));assert(!P.goalUntouched(goal,[...OKSANA,'Tell me about a problem you solved at work, as you would in an interview.']));
+ assert(!P.goalUntouched('',OKSANA),'no goal, nothing required');assert(P.goalUntouched(goal,[]));
+ assert(P.goalUntouched(goal,['What are you doing on Friday?']),'a day word is not the goal');
+ assert(P.goalTaskDue(goal,'B1','say',OKSANA));assert(!P.goalTaskDue(goal,'A2','say',OKSANA),'below B1');assert(!P.goalTaskDue(goal,'B2','listen',OKSANA));
+});
+test('LG-55 second pass: the task request carries the goal instruction exactly when the goal is untouched, and a miss is asked once more',async()=>{
+ const run=async(goalText,prompts)=>{fresh();const asks=[];let n=0;
+  answer=wrap(req=>{const p=JSON.parse(req.prompt);
+   if(p.step==='about')return {...checkAnswer(req),selfBand:'C1',goal:goalText};
+   if(p.step==='task'){asks.push(p);return {prompt:prompts[Math.min(n++,prompts.length-1)],line:'',options:[],correct:0};}
+   return checkAnswer(req);});
+  await command('check-start');await answerAbout(3);return {asks,k:()=>getSession().check};};
+ const GOAL=/set this task in that goal/;
+ let r=await run('a job interview on Friday',['A carrier keeps dropping your calls. Do you want to fix it?','Your parcel is late. What do you tell the carrier?']);
+ assert.equal(r.asks.length,2);assert.match(r.asks[0].task,GOAL);assert.match(r.asks[1].task,/not set in the learner's goal/);assert.equal(r.k().task.prompt,'Your parcel is late. What do you tell the carrier?');
+ r=await run('a job interview on Friday',['Tell me about a problem you solved at work, as you would in an interview.']);
+ assert.equal(r.asks.length,1);assert.match(r.asks[0].task,GOAL);
+ r=await run('',['A carrier keeps dropping your calls. Do you want to fix it?']);
+ assert.equal(r.asks.length,1);assert.doesNotMatch(r.asks[0].task,GOAL);
+});
 test('a level-check task that repeats an earlier prompt is asked once more, with the earlier prompt named (LG-55)',async()=>{
  fresh();const same='Tell me about a trip you took with your family and what you enjoyed most.',other='Describe your favourite place in town and say why you go there.';
  const asks=[];
  answer=wrap(req=>{const p=JSON.parse(req.prompt);
-  if(p.step==='about')return {...checkAnswer(req),selfBand:'C1'};
+  if(p.step==='about')return {...checkAnswer(req),selfBand:'C1',goal:''};
   if(p.step==='task'){asks.push(p);const retry=/previous answer repeated/.test(p.task);return {prompt:retry?other:same,line:p.kind==='listen'?'I left my bag on the bus this morning.':'',options:[],correct:0};}
   return checkAnswer(req);});
  await command('check-start');await answerAbout(3);

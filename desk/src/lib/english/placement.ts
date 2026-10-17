@@ -425,8 +425,28 @@ export function sameTask(prompt: string, earlier: string[]): boolean {
     const theirs = taskWords(e);
     if (!theirs.size) return false;
     const shared = [...mine].filter(w => theirs.has(w)).length;
-    return shared === mine.size && shared === theirs.size || (shared >= SAME_TASK_WORDS && shared / Math.min(mine.size, theirs.size) >= SAME_TASK_SHARE);
+    return shared === mine.size && shared === theirs.size || (shared >= SAME_TASK_WORDS && shared / Math.min(mine.size, theirs.size) >= SAME_TASK_SHARE)
+      || (asksComparison(prompt) && asksComparison(e) && shared >= SAME_TASK_WORDS);
   });
+}
+/** A prompt framed as a comparison or a preference (prefer / better / instead / rather / versus / "X or Y"): the same choice reworded shares few words but the same two things. */
+const COMPARISON = /\b(prefer\w*|better|best|instead|rather|versus|vs)\b|\b[a-z]+ or [a-z]+\b/i;
+const asksComparison = (text: string) => COMPARISON.test(text);
+
+/** Words of a goal that name a day or month, not a situation: "an interview on Friday" is about the interview. */
+const GOAL_STOP = new Set("monday tuesday wednesday thursday friday saturday sunday today tomorrow tonight week weekend month next soon january february march april may june july august september october november december".split(" "));
+/**
+ * Is a stated goal still unreached: it has content words, and no earlier task prompt (or line) touches any of them?
+ * Same word check as touchesInterest, so the same limits hold (no synonyms: a "meeting" prompt does not touch an
+ * "interview" goal). Empty goal: nothing is required, false.
+ */
+export function goalUntouched(goal: string, earlier: string[]): boolean {
+  const stems = [...new Set(words(goal).filter(w => !GOAL_STOP.has(w)).map(stemWord))];
+  return stems.length > 0 && !earlier.some(e => touchesInterest({ title: e, premise: "" }, stems));
+}
+/** The next task must be set in the learner's goal: a say task at B1 or above, while no task so far touches it. */
+export function goalTaskDue(goal: string, band: Band, kind: TaskKind, earlier: string[]): boolean {
+  return kind === "say" && BANDS.indexOf(band) >= BANDS.indexOf("B1") && goalUntouched(goal, earlier);
 }
 export function cleanPlan(value: unknown): Plan | null {
   const p = obj(value);
