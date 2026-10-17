@@ -1,0 +1,120 @@
+[
+  {
+    "id": "LT-sofie-11-J1-2",
+    "journey": "J1",
+    "character": "sofie-11",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "TV headline shows her error as 'Your words'",
+    "expected": "Praise-first headline for a child",
+    "got": "'Your words: “we build spaceship”.'",
+    "evidence": [
+      "#10 TV 'Your words\\nYour words: “we build spaceship”.'",
+      "verdict screen builder"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 2,
+    "recurs": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-5",
+    "suggested_acceptance": "Headline quotes something she did well, or the corrected form.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-sofie-11-J1-3",
+    "journey": "J1",
+    "character": "sofie-11",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "Level explanation abstract for an 11-year-old",
+    "expected": "Short, plain sentences",
+    "got": "'B1 was close, but a harder task fell short and what you said pointed lower, so you start at A2.'",
+    "evidence": [
+      "#10 phone verdict",
+      "verdict summary prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 2,
+    "recurs": "2026-10-16-lt-placement-oos/recert-1/LT-sofie-11-J1-4",
+    "suggested_acceptance": "Reason in two short child-friendly sentences.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-sofie-11-J1-1",
+    "journey": "J1",
+    "character": "sofie-11",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "B2 task marked fail though answer has idea and reason",
+    "expected": "Partial for a clear idea with a reason and only article slips",
+    "got": "B2 · Say it · not yet, while the note says 'You gave an idea and a reason.'",
+    "evidence": [
+      "#10 'B2 · Say it · not yet ... You gave an idea and a reason.' for 'i think we build spaceship because it is more fun and we can fly.'",
+      "task judge prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 2,
+    "recurs": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-4",
+    "suggested_acceptance": "Verdict and note agree; an answer with idea plus reason is at least partial.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-sofie-11-J1-4",
+    "journey": "J1",
+    "character": "sofie-11",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Tasks themed on her world, exact placement",
+    "expected": "Child-fit tasks",
+    "got": "Roblox, shop and listening tasks; A2 exact; slips shown with corrected forms",
+    "evidence": [
+      "#5-#10 'today i build a big house' → 'today I built a big house'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep game-themed tasks and concrete corrections.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  }
+]

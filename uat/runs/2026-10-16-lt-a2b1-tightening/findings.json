@@ -81,10 +81,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Listen questions must reuse words from the audio and not point at unseen context.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#7 listen task 'What was the problem that made the speaker give up?' matches the heard line 'I quit that game last week.'"
   },
   {
     "id": "LT-sofie-11-J1-4",
@@ -110,9 +113,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Show a 'not yet' task as 'a bit more next time'; do not label a clear answer as a fail.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#10 'B2 · Say it · not yet' with 'You gave an idea and a reason.'",
+    "recurred_as": "LT-sofie-11-J1-1"
   },
   {
     "id": "LT-ivana-33-J1-4",
@@ -195,10 +202,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Child-profile hard tasks use concrete, short scenarios, for example 'Which game is better, and why?'",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#8 B2 task is simple: 'you would rather build a spaceship. Which idea would you suggest...'"
   },
   {
     "id": "LT-sofie-11-J1-5",
@@ -224,9 +234,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Show the correct form first, or a positive quote, for child profiles.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#10 TV 'Your words: “we build spaceship”.'",
+    "recurred_as": "LT-sofie-11-J1-2"
   },
   {
     "id": "LT-ivana-33-J1-3",
@@ -279,10 +293,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Explain the lowering in child words or leave it out of her screen.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 no 'one level lower to be safe' line; placement A2 matches answers (confidence low though)."
   },
   {
     "id": "LT-petra-38-J1-3",

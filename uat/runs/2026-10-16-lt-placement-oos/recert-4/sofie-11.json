@@ -1,0 +1,623 @@
+{
+  "character": "sofie-11",
+  "name": "Sofie",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nSofie\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "Find my level sounds good, I will try it.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Sofie! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Sofie! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Sofie! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I use English at school and on Roblox and YouTube.",
+          "action": "answer",
+          "args": {
+            "text": "i use english in roblox and youtube. and in school"
+          },
+          "result": "ok",
+          "ms": 3683
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nAbout you · question 2 of 3\nLinga asks\nNice, Roblox and YouTube are fun ways to use English! How did you learn English? At school, or somewhere else?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nNice, Roblox and YouTube are fun ways to use English! How did you learn English? At school, or somewhere else?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Sofie! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english in roblox and youtube. and in school\nLinga\nNice, Roblox and YouTube are fun ways to use English! How did you learn English? At school, or somewhere else?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, Roblox and YouTube are fun ways to use English! How did you learn English? At school, or somewhere else?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I learn it mostly in school and from games, easy question.",
+          "action": "answer",
+          "args": {
+            "text": "i learn in school and also from youtube and games"
+          },
+          "result": "ok",
+          "ms": 3545
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nAbout you · question 3 of 3\nLinga asks\nCool, school and games both help a lot! What do you want to be able to do in English one day?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nCool, school and games both help a lot! What do you want to be able to do in English one day?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Sofie! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english in roblox and youtube. and in school\nLinga\nNice, Roblox and YouTube are fun ways to use English! How did you learn English? At school, or somewhere else?\nYou\ni learn in school and also from youtube and games\nLinga\nCool, school and games both help a lot! What do you want to be able to do in English one day?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Cool, school and games both help a lot! What do you want to be able to do in English one day?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to talk with people in games and understand YouTube.",
+          "action": "answer",
+          "args": {
+            "text": "i want talk with people in roblox and understand english youtube without czech subtitles"
+          },
+          "result": "ok",
+          "ms": 5439
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nTask 1 · Choose the reply on the TV\nYour friend in a game types: 'Hi! Do you want to play?' What do you say?\n01\nYes, let's play!\n02\nIt is a big red bus.\nYour task\nYes, let's play!\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend in a game types: 'Hi! Do you want to play?' What do you say?\n[button: Yes, let's play!] [button: It is a big red bus.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, she wants to play, so reply 1.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 3799
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nTask 2 · Choose the reply on the TV\nYou are at a shop. The shopkeeper asks: 'Can I help you?' You want a bottle of water. What do you say?\n01\nI want a bottle of water, please.\n02\nI went to school yesterday.\nYour task\nI want a bottle of water, please.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYou are at a shop. The shopkeeper asks: 'Can I help you?' You want a bottle of water. What do you say?\n[button: I want a bottle of water, please.] [button: I went to school yesterday.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy, I want water, so the first one.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 4135
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nTask 3 · Listen and answer\nYour task\nWhat was the problem that made the speaker give up?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What was the problem that made the speaker give up?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I quit that game last week. It was just too hard for me, so now I watch cooking videos instead.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood it: the game was too hard, so he quit.",
+          "action": "answer",
+          "args": {
+            "text": "the game was too hard for him"
+          },
+          "result": "ok",
+          "ms": 11735
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nTask 4 · Say it\nYour task\nIn a Roblox build game, your teammate wants to build a castle, but you would rather build a spaceship. Which idea would you suggest to the team, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nIn a Roblox build game, your teammate wants to build a castle, but you would rather build a spaceship. Which idea would you suggest to the team, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"In a Roblox build game, your teammate wants to build a castle, but you would rather build a spaceship. Which idea would you suggest to the team, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Hard question, but I can write a short answer about the spaceship.",
+          "action": "answer",
+          "args": {
+            "text": "i think we build spaceship because it is more fun and we can fly. castle is boring"
+          },
+          "result": "ok",
+          "ms": 9853
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nSofie\nA way into English\nTask 5 · Say it\nYour task\nYou are playing a Roblox game with a new friend. They ask, \"What did you do in the game today?\" Tell them about one thing you did or saw, and why you liked it.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYou are playing a Roblox game with a new friend. They ask, \"What did you do in the game today?\" Tell them about one thing you did or saw, and why you liked it.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You are playing a Roblox game with a new friend. They ask, \"What did you do in the game today?\" Tell them about one thing you did or saw, and why you liked it.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I can tell them about building a base in Roblox, easy enough.",
+          "action": "answer",
+          "args": {
+            "text": "today i build a big house in roblox with my friend. i liked it because we make it together and it was funny"
+          },
+          "result": "ok",
+          "ms": 13883
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nSofie\nLinga's read · not a certificate\nA2 · Everyday basics\nYour words\nYour words: “we build spaceship”.\nLinga says\nYou can say what you did, like building a house in Roblox with a friend. Keep practising to chat with people in Roblox.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Sofie\n[button: Talk] [button: Set up] [button: My map]\nA2\nEveryday basics\nYou can say what you did, like building a house in Roblox with a friend. Keep practising to chat with people in Roblox.\nLinga's read from your answers, not a certificate. B1 was close, but a harder task fell short and what you said pointed lower, so you start at A2.\nNext to practise:\nPractise putting 'a' or 'the' before nouns: \"we build spaceship\" should be \"we build a spaceship\".\nYour usual slips\n“we build spaceship” → try “we build a spaceship” “castle is boring” → try “a castle is boring” “today i build a big house” → try “today I built a big house”\nYou handle short, routine exchanges about familiar things.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYour friend in a game types: 'Hi! Do you want to play?' What do you say?\n“Yes, let's play!”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nYou are at a shop. The shopkeeper asks: 'Can I help you?' You want a bottle of water. What do you say?\n“I want a bottle of water, please.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat was the problem that made the speaker give up?\n“the game was too hard for him”\nOnly one short sentence, so there was little room to show more English. Next time, try joining two ideas with because or so.\nB2 · Say it · not yet\nIn a Roblox build game, your teammate wants to build a castle, but you would rather build a spaceship. Which idea would you suggest to the team, and why?\n“i think we build spaceship because it is more fun and we can fly. castle is boring”\nYour English read as A2 here, and this task was B2. Held back: \"we build spaceship\".\nYou gave an idea and a reason. Next, practise small words: say 'a spaceship' and 'a castle', because singular nouns need 'a' or 'the'.\nB1 · Say it · nearly there\nYou are playing a Roblox game with a new friend. They ask, \"What did you do in the game today?\" Tell them about one thing you did or saw, and why you liked it.\n“today i build a big house in roblox with my friend. i liked it because we make it together and it was funny”\nYour English read as A2 here, and this task was B1. Held back: \"today i build a big house\".\nYou told us what you did and why you liked it. Next, try the past form of verbs: built and made, not build and make, for today.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "A2 sounds right, I got it, okay for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "A2",
+          "trueBand": "A2",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "A2",
+          "summary": "You can say what you did, like building a house in Roblox with a friend. Keep practising to chat with people in Roblox.",
+          "focus": "Practise putting 'a' or 'the' before nouns: \"we build spaceship\" should be \"we build a spaceship\".",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "Your friend in a game types: 'Hi! Do you want to play?' What do you say?",
+              "line": "",
+              "options": [
+                "Yes, let's play!",
+                "It is a big red bus."
+              ],
+              "response": "Yes, let's play!",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, let's play!",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "You are at a shop. The shopkeeper asks: 'Can I help you?' You want a bottle of water. What do you say?",
+              "line": "",
+              "options": [
+                "I want a bottle of water, please.",
+                "I went to school yesterday."
+              ],
+              "response": "I want a bottle of water, please.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "I want a bottle of water, please.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What was the problem that made the speaker give up?",
+              "line": "I quit that game last week. It was just too hard for me, so now I watch cooking videos instead.",
+              "options": [],
+              "response": "the game was too hard for him",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "the game was too hard for him",
+              "note": "Only one short sentence, so there was little room to show more English. Next time, try joining two ideas with because or so."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "In a Roblox build game, your teammate wants to build a castle, but you would rather build a spaceship. Which idea would you suggest to the team, and why?",
+              "line": "",
+              "options": [],
+              "response": "i think we build spaceship because it is more fun and we can fly. castle is boring",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "i think we build spaceship because it is more fun and we can fly. castle is boring",
+              "note": "You gave an idea and a reason. Next, practise small words: say 'a spaceship' and 'a castle', because singular nouns need 'a' or 'the'."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "You are playing a Roblox game with a new friend. They ask, \"What did you do in the game today?\" Tell them about one thing you did or saw, and why you liked it.",
+              "line": "",
+              "options": [],
+              "response": "today i build a big house in roblox with my friend. i liked it because we make it together and it was funny",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "today i build a big house in roblox with my friend. i liked it because we make it together and it was funny",
+              "note": "You told us what you did and why you liked it. Next, try the past form of verbs: built and made, not build and make, for today."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 99134,
+      "prior": [
+        {
+          "id": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-2",
+          "run": "2026-10-16-lt-a2b1-tightening",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Listen task refers to 'the first one' that was never said",
+          "expected": "Question answerable from the audio alone",
+          "got": "'What made the speaker give up on the first one?' while the audio says 'that jumping game'",
+          "evidence": [
+            "#7 prompt versus heard line 'I stopped playing that jumping game last month.'",
+            "check task generation prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-4",
+          "run": "2026-10-16-lt-a2b1-tightening",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Note praises the answer while the verdict is fail",
+          "expected": "Feedback that matches the verdict, framed kindly",
+          "got": "B2 'not yet' with the note 'gave a clear reason'; a child may read it as failing",
+          "evidence": [
+            "#10 B2 · Say it · not yet"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-3",
+          "run": "2026-10-16-lt-a2b1-tightening",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "B2 task wording too abstract for an 11-year-old",
+          "expected": "Simple wording for a child at the top of the ladder",
+          "got": "'a game by one creator... another creator's version of the same game'",
+          "evidence": [
+            "#8 task text",
+            "elementary profile task prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-5",
+          "run": "2026-10-16-lt-a2b1-tightening",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Verdict quotes her error as 'Your words'",
+          "expected": "Warm headline for a child",
+          "got": "'Your words: \"i want play it\"' shown as the focus quote",
+          "evidence": [
+            "#10 TV 'Your words'"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-6",
+          "run": "2026-10-16-lt-a2b1-tightening",
+          "type": "confusion",
+          "dimension": "trust",
+          "title": "Placement lowered one level 'to be safe', confidence low",
+          "expected": "Clear, plain reason for the level",
+          "got": "'Linga placed you one level lower than your answers alone, to be safe.'",
+          "evidence": [
+            "#10 phone verdict"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-16-lt-placement-oos/recert-1/LT-sofie-11-J1-3",
+          "run": "2026-10-16-lt-placement-oos/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "TV headline shows her error as 'Your words'",
+          "expected": "A praise-first headline for a child on the family TV",
+          "got": "'Your words: “take long time”' under the band",
+          "evidence": [
+            "#10 TV 'Your words\\nYour words: “take long time”.'",
+            "verdict screen"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-16-lt-placement-oos/recert-1/LT-sofie-11-J1-4",
+          "run": "2026-10-16-lt-placement-oos/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Verdict text is long and abstract for an 11-year-old",
+          "expected": "Short sentences and clear praise",
+          "got": "'Linga's read from your answers, not a certificate. B1 was close, but a harder task fell short and what you said pointed lower...'",
+          "evidence": [
+            "#10 phone verdict",
+            "verdict summary prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-16-lt-placement-oos/recert-1/LT-sofie-11-J1-5",
+          "run": "2026-10-16-lt-placement-oos/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "B2 task 5 marked fail though the answer is partial",
+          "expected": "Partial for a clear choice with two reasons and only verb-form slips",
+          "got": "Verdict fail, 'B2 · Say it · not yet'",
+          "evidence": [
+            "#9/#10 'i choose play game someone else made. because building game is hard and take long time.'",
+            "task judge prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 A2 · Everyday basics against trueBand A2, distance 0, class exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#5-#9 tasks use Roblox, shop and a short listen line ('I quit that game last week...'); simple wording, no translation needed."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "She never pressed 'I don't know' or wrote Czech in #2-#9, so kindness to it is not shown."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#10 headline 'Your words: “we build spaceship”.' puts her error on the TV; phone text 'a harder task fell short and what you said pointed lower' is abstract for an 11-year-old. Summary is specific (Roblox house) but praise is thin."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1-#10 from Find my level through three questions and five tasks to the verdict without outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 A2 equals trueBand A2; exact."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#9 each task had clear options or a text box; she answered every one."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "No 'I don't know' or Czech used in the journey."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 'You can say what you did, like building a house in Roblox with a friend' and focus quotes her own 'we build spaceship'; specific, though partly templated."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "B2 spaceship task marked fail in-app; with an idea, a reason and only article slips I would give partial."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "above": 0,
+            "at": 0,
+            "below": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "B2 task marked fail though answer has idea and reason",
+            "expected": "Partial for a clear idea with a reason and only article slips",
+            "got": "B2 · Say it · not yet, while the note says 'You gave an idea and a reason.'",
+            "evidence": "#10 'B2 · Say it · not yet ... You gave an idea and a reason.' for 'i think we build spaceship because it is more fun and we can fly.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Verdict and note agree; an answer with idea plus reason is at least partial.",
+            "code_hint": "task judge prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "TV headline shows her error as 'Your words'",
+            "expected": "Praise-first headline for a child",
+            "got": "'Your words: “we build spaceship”.'",
+            "evidence": "#10 TV 'Your words\\nYour words: “we build spaceship”.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Headline quotes something she did well, or the corrected form.",
+            "code_hint": "verdict screen builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Level explanation abstract for an 11-year-old",
+            "expected": "Short, plain sentences",
+            "got": "'B1 was close, but a harder task fell short and what you said pointed lower, so you start at A2.'",
+            "evidence": "#10 phone verdict",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Reason in two short child-friendly sentences.",
+            "code_hint": "verdict summary prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Tasks themed on her world, exact placement",
+            "expected": "Child-fit tasks",
+            "got": "Roblox, shop and listening tasks; A2 exact; slips shown with corrected forms",
+            "evidence": "#5-#10 'today i build a big house' → 'today I built a big house'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep game-themed tasks and concrete corrections.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "It was fun that it talked about Roblox and YouTube, and the tasks were easy to understand. I did all of it on my phone and it said A2, which feels right. I liked the part where it showed 'built' instead of 'build'. But the TV showing my mistake, 'we build spaceship', as my words was a bit embarrassing, and the long sentence about a harder task falling short I did not really read. It also said 'not yet' for my spaceship answer and then said I gave an idea and a reason, which is confusing. I would use it again for ten minutes after school, but I want more praise first.",
+        "prior": [
+          {
+            "id": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-2",
+            "status": "not-seen",
+            "evidence": "#7 listen task 'What was the problem that made the speaker give up?' matches the heard line 'I quit that game last week.'",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-4",
+            "status": "recurs",
+            "evidence": "#10 'B2 · Say it · not yet' with 'You gave an idea and a reason.'",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-3",
+            "status": "not-seen",
+            "evidence": "#8 B2 task is simple: 'you would rather build a spaceship. Which idea would you suggest...'",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-5",
+            "status": "recurs",
+            "evidence": "#10 TV 'Your words: “we build spaceship”.'",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-16-lt-a2b1-tightening/LT-sofie-11-J1-6",
+            "status": "not-seen",
+            "evidence": "#10 no 'one level lower to be safe' line; placement A2 matches answers (confidence low though).",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-16-lt-placement-oos/recert-1/LT-sofie-11-J1-3",
+            "status": "recurs",
+            "evidence": "#10 'Your words: “we build spaceship”.' under the band",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-16-lt-placement-oos/recert-1/LT-sofie-11-J1-4",
+            "status": "recurs",
+            "evidence": "#10 'B1 was close, but a harder task fell short and what you said pointed lower, so you start at A2.'",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-16-lt-placement-oos/recert-1/LT-sofie-11-J1-5",
+            "status": "recurs",
+            "evidence": "#10 B2 task 'not yet' for an idea plus reason answer",
+            "finding": 0
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #10 headline 'Your words: “we build spaceship”.' puts her error on the TV; phone text 'a harder task fell short and what you said pointed lower' is abstract for an 11-year-old. Summary is specific (Roblox house) but praise is thin."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 14,
+      "fail": 0,
+      "ms": 56021
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 42866
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 24522
+    }
+  }
+}

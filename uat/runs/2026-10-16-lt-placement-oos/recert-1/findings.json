@@ -54,9 +54,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "The TV headline quotes something she did well; the error stays in the slips list.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#10 'Your words: “we build spaceship”.' under the band"
   },
   {
     "id": "LT-hana-41-J1-1",
@@ -231,9 +234,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Child-profile verdict lines of at most 12 words each, with one sentence of praise.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#10 'B1 was close, but a harder task fell short and what you said pointed lower, so you start at A2.'",
+    "recurred_as": "LT-sofie-11-J1-3"
   },
   {
     "id": "LT-sofie-11-J1-5",
@@ -260,9 +267,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Task 5's verdict agrees with a teacher's partial, or the note says why it fails.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#10 B2 task 'not yet' for an idea plus reason answer"
   },
   {
     "id": "LT-hana-41-J1-4",
