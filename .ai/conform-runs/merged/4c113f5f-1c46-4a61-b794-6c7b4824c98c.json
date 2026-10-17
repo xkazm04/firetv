@@ -1,0 +1,40 @@
+{
+  "schema": "conform-run/1",
+  "worker": "4c113f5f-1c46-4a61-b794-6c7b4824c98c",
+  "subject": "document-text-extraction",
+  "evaluatedAt": "2026-10-17T22:38:42.213208+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "document-text-extraction",
+      "context": "math-buddy",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor (context-map.json:128) is only the context's description and does not show that extraction is absent. I did not find the claimed searches or the transcription code outside this context: the searched names (extractText, textLayer, unreadableRegions) look invented, and no search was run on "
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-17T22:38:42.213208+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "document-text-extraction"
+      ],
+      "techniques": [
+        "band-calibration-by-construction",
+        "context-decided-escaping",
+        "escalation-adjudication",
+        "extraction-yield-bands",
+        "recognition-boundary-and-escalation",
+        "screen-then-confirm-detection",
+        "structural-amplification-caps",
+        "structure-saturation-guard",
+        "unreadable-region-refusal"
+      ],
+      "deviations": 0,
+      "context": "math-buddy",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

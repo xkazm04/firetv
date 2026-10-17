@@ -1983,6 +1983,67 @@
           "evidence": "desk/src/lib/session/store.ts:559 The initial demo roster and tasks are handwritten constants, with no generated fixture population or series to seed; live timestamps and the actual pairing PIN serve operational behavior."
         }
       ]
+    },
+    "desk-subjects/math-buddy/document-text-extraction": {
+      "context": "math-buddy",
+      "subject": "document-text-extraction",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-17",
+      "evaluatedTs": "2026-10-17T22:38:42.213Z",
+      "techniques": [
+        {
+          "technique": "band-calibration-by-construction",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/mathsRows.ts:245 The local threshold controls rendered font sizing, not extraction-quality bands."
+        },
+        {
+          "technique": "context-decided-escaping",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathText.tsx:61 Text becomes a React child; this context does not serialize extracted document text into lightweight markup."
+        },
+        {
+          "technique": "escalation-adjudication",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/typeset.ts:557 The fallback changes notation parsers for an existing string, rather than re-extracting a document with another reader."
+        },
+        {
+          "technique": "extraction-yield-bands",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathsTV.tsx:1002 The band's coordinates position a photo highlight; they do not classify extraction yield."
+        },
+        {
+          "technique": "recognition-boundary-and-escalation",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathsTV.tsx:1027 The page renderer receives transcribed item text and does not select an extraction or recognition engine."
+        },
+        {
+          "technique": "screen-then-confirm-detection",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathsTV.tsx:994 This screen consumes stored job states rather than screening document regions and confirming readability."
+        },
+        {
+          "technique": "structural-amplification-caps",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/typeset.ts:250 This code parses explicit TeX cells from supplied text, not compressed document containers or their repeat/reference constructs."
+        },
+        {
+          "technique": "structure-saturation-guard",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/typeset.ts:599 The classifier determines mathematical line height from syntax nodes, not inferred document headings or lists."
+        },
+        {
+          "technique": "unreadable-region-refusal",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/maths/MathsTV.tsx:999 The UI displays an upstream missing-item list; it does not assess document completeness or issue extraction refusals."
+        }
+      ],
+      "withdrawn": {
+        "worker": "4c113f5f-1c46-4a61-b794-6c7b4824c98c",
+        "state": "not-applicable",
+        "at": "2026-10-17T22:40:55.103770+00:00",
+        "reason": "reviewer (sonnet): The anchor (context-map.json:128) is only the context's description and does not show that extraction is absent. I did not find the claimed searches or the transcription code outside this context: the searched names (extractText, textLayer, unreadableRegions) look invented, and no search was run on "
+      }
     }
   }
 }
