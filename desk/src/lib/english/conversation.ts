@@ -38,6 +38,8 @@ const line=(value:unknown,max=230)=>fit(value,max,()=>new Error("The tutor retur
 // help.ts drops a rung that does not do its job, and a bad ladder never costs the line.
 const helpSchema=schema({simpler:str(SIMPLER_MAX,0),meaning:str(MEANING_MAX,0),starter:str(STARTER_MAX,0)});
 const loose=(props:Record<string,unknown>)=>({...schema(props),properties:{...props,help:{}}});
+// supportProvided stays in the answer's shape, but code never reads it: it is the model's report of its own line, not help
+// the learner used (lt-swap-2/recert-1). A reply that copies modelled wording is caught by code (credit.ts copiesShown).
 const openingProps={title:str(70),goal:str(120),opening:str(230),supportProvided:{type:"boolean"}};
 // A scene with no authored steps asks the opening for two or three; mission.ts keeps them only if they fit, and a bad list never costs the scene.
 const stepsSchema={type:"array",maxItems:3,items:str(STEP_MAX)};
@@ -330,7 +332,7 @@ export async function englishCommand(raw:unknown){
       const steps=Array.isArray(result.json.steps)?result.json.steps.filter(x=>typeof x!=="string"||audienceSafe(c,x)!==null):result.json.steps;
       // the offer, kept only when line.ts and the audience gate pass it; else the quiz answer is the room's line
       const offered=askOffer?safe(offerLine(result.json.offer,scene,profile.name))??safe(quizLine(scene)):null;
-      commit({...c,...(offered?{line:holdLine(c.id,offered)}:{}),title:safeTitle??scene.name,goal:safeGoal??scene.goal,turns:[opening],...(()=>{const m=missionOf(scene,steps);return m?{mission:m}:{};})(),supported:result.json.supportProvided===true,help:keepLadder(opening.id,validLadder(openingHeld?result.json.help:undefined,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
+      commit({...c,...(offered?{line:holdLine(c.id,offered)}:{}),title:safeTitle??scene.name,goal:safeGoal??scene.goal,turns:[opening],...(()=>{const m=missionOf(scene,steps);return m?{mission:m}:{};})(),supported:false,help:keepLadder(opening.id,validLadder(openingHeld?result.json.help:undefined,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
       return getSession();
     }catch(e){try{const now=checkCurrent(c,commandId);commit({...now,pending:null,error:lingaLine(e,"The scene could not be prepared. Try again or choose another situation.")});}catch{/* superseded */}throw e;}
   }
@@ -366,7 +368,7 @@ export async function englishCommand(raw:unknown){
     if(!fix){commit({...c,moment:{...m,repair:{...r,lost:true}},capture:false,commands},"linga-moment");return getSession();}
     const shown=r.rung>=2,held=judgeTry(fix,said,shown)===true,repair=afterTry(r,triedLine(said,fix.fix),held);
     // the fix reaches the session once a try held or the rungs reached it; a self-repair frees the next reply (repair.ts)
-    commit({...c,moment:{...(held||repair.rung>=2?fix:m),repair},capture:false,supported:held&&!shown?r.support:c.supported,commands},"linga-moment");return getSession();
+    commit({...c,moment:{...(held||repair.rung>=2?fix:m),repair},capture:false,commands},"linga-moment");return getSession();
   }
   if(action==="moment-show"){
     // Show me: the withheld fix, from server memory; one more try follows (repair.ts). A restart that lost it says so.
@@ -472,8 +474,8 @@ export async function englishCommand(raw:unknown){
       const partnerReply=partnerSays(c,result.json.reply,undefined,result.json.help),replyHeld=partnerReply===line(result.json.reply),turnId=pair?pair.learner.id:`${c.id}:${commandId}`;
       const skills=[...new Set([c.focusSkill,c.reviewSkill??"repair","repair"])] as SkillId[];
       const observations=validateObservations(result.json.observations,{episodeId:c.id,turnId,sceneId:c.sceneId,at:Date.now(),mode,supported:judged.supported,text:reply,shown:shownLines(judged),skills});
-      // a reply read back from the partner's last line is supported: code can add support, never remove it
-      const copied=copiesShown(reply,c.turns.filter(t=>t.role==="partner").slice(-1).map(t=>t.text));
+      // a reply read back from a line the scene showed (the partner's, the cue, a moment's fix, the coached line) is supported
+      const copied=copiesShown(reply,shownLines(c));
       // a fossil's moment is code's (LG-57) and wins over the model's: a repeated error is the one that matters most
       const parsed=fossil?fossilMoment(fossil,turnId):mayStop?parseMoment(result.json.moment,reply,turnId):null;
       const moment=parsed&&[parsed.said,parsed.better,parsed.why].every(x=>audienceSafe(c,x)!==null)?parsed:null;
@@ -491,25 +493,27 @@ export async function englishCommand(raw:unknown){
       if(found)forgetLine(c.id);
       // K2 (repair.ts): a fix is withheld, its better and fix key in server memory, unless its own why, the partner's line or
       // an observation note already said them; a word, as before, shows at once. A1-A2 learners start on the clue.
-      const support=result.json.supportProvided===true;let onScreen:Moment|null=null;
+      let onScreen:Moment|null=null;
       if(moment){
         remember(moment,counted);
         const says=(x:string)=>findPhrase(x,moment.better)!==null||(!!moment.fix&&findKey(x,moment.fix)!==null);
-        onScreen=moment.kind==="fix"&&![moment.why,partnerReply,...observations.map(o=>o.note)].some(says)?withhold(moment,beginner(c)?1:0,support):moment;
+        onScreen=moment.kind==="fix"&&![moment.why,partnerReply,...observations.map(o=>o.note)].some(says)?withhold(moment,beginner(c)?1:0):moment;
       }
       // a co-star who is a learner profile: observations of their own line, on their own record (duet.ts); a named co-star earns nothing
       const coStar=pair?coStarEvidence(c,pair,result.json.coStarObservations,skills,Date.now()):[];
       if(coStar.length&&c.duet?.coStarLearnerId)saveEnglish(c.duet.coStarLearnerId,mergeEvidence(getLearner(c.duet.coStarLearnerId).english,coStar));
-      // a moment models wording, so the reply after it is supported practice (a self-repair frees it again, repair.ts)
+      // SUPPORTED (lt-swap-2/recert-1): this reply's flag is the help the learner used for it (c.supported: a cue, the quiz, a
+      // starter rung) or a read-back of a shown line. Once it is recorded the next reply starts unhelped: neither the model's
+      // supportProvided about its own line nor a moment makes a reply the learner then says on their own a helped one.
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
-      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,...(pair?[pair.learner,pair.coStar]:[{id:turnId,role:"learner" as const,text:reply,mode,supported:c.supported||copied}]),partner],...(pair&&c.duet?{duet:afterPair(c.duet)}:{}),supported:moment?true:support,moment:onScreen,moments:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{}),...(found&&hidden&&c.line?{line:{...c.line,found:usedLine(reply,found),foundTurn:turnId,text:hidden.text}}:{})};
+      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,...(pair?[pair.learner,pair.coStar]:[{id:turnId,role:"learner" as const,text:reply,mode,supported:c.supported||copied}]),partner],...(pair&&c.duet?{duet:afterPair(c.duet)}:{}),supported:false,moment:onScreen,moments:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{}),...(found&&hidden&&c.line?{line:{...c.line,found:usedLine(reply,found),foundTurn:turnId,text:hidden.text}}:{})};
     }else if(action==="coach"){
       const before=line(result.json.before,180);
       if(audienceSafe(c,line(result.json.after,180))===null||audienceSafe(c,line(result.json.note,220))===null)throw new Error("The coach note did not fit this learner.");if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
-      next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},supported:true,quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
+      next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
     }else{
       const partner={id:randomUUID(),role:"partner" as const,text:partnerSays(c,result.json.reply,undefined,result.json.help)},replayHeld=partner.text===line(result.json.reply);
-      next={...next,phase:"replay",supported:true,turns:[...c.turns,partner],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replayHeld?result.json.help:undefined,partner.text),c.help?.forTurn)};
+      next={...next,phase:"replay",supported:false,turns:[...c.turns,partner],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replayHeld?result.json.help:undefined,partner.text),c.help?.forTurn)};
     }
     commit(next,screenFor(next));return getSession();
   }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:lingaLine(e,"The tutor could not complete that turn. Your reply is still on the phone; please retry.")});}catch{/* newer episode owns the UI */}throw e;}

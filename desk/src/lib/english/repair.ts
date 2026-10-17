@@ -21,9 +21,9 @@
  *   better (P26, P03: the parrot is closed).
  * Undecided and not held both move to the next rung; the picture never counts tries.
  *
- * Support. A moment models wording, so the reply after it is supported (as before). A try held before the fix was
- * shown is the learner's own repair: the next reply is as supported as the partner's line after the moment made it,
- * so it can earn own-words credit. A fix that had to be shown keeps the next reply supported. A try is never evidence.
+ * Support (lt-swap-2/recert-1). A moment, a try and Show me help the repair of the line the moment stopped, never the
+ * next reply: that reply is supported only when the learner used help for it (conversation.ts) or reads back a shown
+ * line, the fix included (credit.ts copiesShown over review.ts shownLines). A try is never evidence.
  *
  * Fallbacks. A word moment (a missing English word) shows its better at once, as before. The "pauses" preference never
  * stops a scene, so it never meets a withheld fix. A fix whose words its own why, the partner's line or an observation
@@ -58,9 +58,9 @@ export const heldFor = (id: string): HeldFix | undefined => memory().get(id);
 export function forget(id: string): void { memory().delete(id); }
 
 /** The moment as the session may carry it while its fix is withheld: no better, no fix key, and the repair at its first rung. */
-export function withhold(m: Moment, rung: 0 | 1, support: boolean): Moment {
+export function withhold(m: Moment, rung: 0 | 1): Moment {
   const { fix: _fix, ...rest } = m;
-  return { ...rest, better: "", repair: { rung, support } };
+  return { ...rest, better: "", repair: { rung } };
 }
 /** The moment with its fix back on it, from memory; null when a restart lost it. */
 export function revealed(m: Moment): Moment | null {

@@ -104,7 +104,7 @@ export interface Answer { id: "answer"; action: "check-answer" | "check-task" | 
   speaker?: "learner" | "costar"; }
 /** The line the TV speaks. A new key plays it again; blocked keeps it silent. */
 export interface Spoken { line: string; key: string; blocked: boolean; slow: boolean; speaker: string; }
-export interface Recap { title: string; replies: number; spoken: number; /** replies said after help (a cue, a quiz, a moment, a copied line) */ supported: number; /** replies said with none */ independent: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
+export interface Recap { title: string; replies: number; spoken: number; /** replies said after help the learner used (a cue, the quiz, a starter rung) or reading back a shown line: the turns' flags */ supported: number; /** replies said with none */ independent: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
 export type Hero =
   /** `yours` (L1): the learner's owned phrases on home, no count and no digit; Family draws them as Open Door objects, Adult as a progress line (X2) */
   | { kind: "intro"; kicker: string; title: string; subtitle: string; art: ArtKey; nameTag: string; yours?: { phrases: string[]; style: "objects" | "list" } }
@@ -498,7 +498,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     tag = "One useful change";
     hero = { kind: "comparison", before: { kicker: "You said", quote: c.coaching.before }, after: { kicker: "One way to try it", quote: c.coaching.after }, note: c.coaching.note };
     caption = "Replay the moment with a new question, or finish for today."; captionTag = "Coach";
-    actions = [act("replay", "Replay the moment", "Try the same intention with a new question. The first retry is supported practice.", cmd("replay"), { disabled: refused("replay") }), act("finish", "Finish for today", "Save this rehearsal and see what you practised.", cmd("finish"), { disabled: refused("finish") })];
+    actions = [act("replay", "Replay the moment", "Try the same intention with a new question.", cmd("replay"), { disabled: refused("replay") }), act("finish", "Finish for today", "Save this rehearsal and see what you practised.", cmd("finish"), { disabled: refused("finish") })];
   } else if (c && take && s.screen === "linga-talk") {
     // Take Two (v2 L4): the partner's line again, then the cast's; the learner answers on the phone. Nothing else of the
     // scene is offered here (turn.ts): no help, quiz, coach, Cut, pause or finish. Back to the notes ends the take. A take that
@@ -696,7 +696,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       : act("repeat", "Repeat audio", "Hear the last line again.", cmd("repeat"), { disabled: refused("repeat") }));
   } else if (panel === "talk" && c) {
     if (c.paused) onPhone(act("resume", "Resume conversation", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }));
-    else if (st === "coaching") onPhone(act("replay", "Replay with a new question", "Try the same intention with a new question. The first retry is supported practice.", cmd("replay"), { disabled: refused("replay") }));
+    else if (st === "coaching") onPhone(act("replay", "Replay with a new question", "Try the same intention with a new question.", cmd("replay"), { disabled: refused("replay") }));
     else {
       const help = helpOf(c), scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId);
       if (help.offered) onPhone(act("cue", help.label, help.help, cmd("cue"), { disabled: waiting || refused("cue") }));

@@ -102,8 +102,6 @@ export interface Moment {
 export interface MomentRepair {
   /** the rung on screen: 0 say it again, 1 the why as a clue, 2 the fix shown */
   rung: 0 | 1 | 2;
-  /** whether the partner's line after the moment supplied wording: a self-repair leaves the next reply this supported */
-  support: boolean;
   /** the learner's latest try, in their words */
   tried?: string;
   /** a try held (repair.ts judgeTry) */

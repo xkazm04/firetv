@@ -254,7 +254,7 @@ test('a hand-picked level is stored as self-chosen, and old three-word levels re
  assert.equal(cleanEnglish({preferences:{level:'developing',interest:'',goal:'',creativity:'familiar',challenge:'supportive',correction:'pauses',adultConfirmed:false}}).preferences.level,'B1');
  assert.equal(cleanEnglish({placement:{band:'Q1',at:1}}).placement,null);assert.equal(cleanEnglish({plan:{band:'B1',at:1,topics:[{title:'no id'}]}}).plan,null);
 });
-test('a moment needs an exact quote, holds the scene, is spaced out, and makes the next reply supported',async()=>{
+test('a moment needs an exact quote, holds the scene, is spaced out, and never makes the next reply supported by itself',async()=>{
  fresh();answer=async()=>({json:{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'},provider:'test',ms:1});
  await command('start',{sceneId:'booking',replace:true});let c=getSession().conversation;
  answer=async()=>({json:{reply:'Sure, what name?',observations:[],moment:{kind:'fix',said:'not in the reply',better:'x',why:'y'}},provider:'test',ms:1});
@@ -265,7 +265,7 @@ test('a moment needs an exact quote, holds the scene, is spaced out, and makes t
  await command('turn',{text:'I have booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});
  // K2 revised this row on purpose: a fix waits for the learner's try (repair.ts), so its better is not on the moment and its
  // Taught item is written when the moment closes; it read better on the moment and taught+1 at once before
- c=getSession().conversation;assert.equal(getSession().screen,'linga-moment');assert.equal(c.moment.better,'','the fix waits for a try');assert.equal(c.supported,true);
+ c=getSession().conversation;assert.equal(getSession().screen,'linga-moment');assert.equal(c.moment.better,'','the fix waits for a try');assert.equal(c.supported,false,'a moment is not help the learner used (lt-swap-2/recert-1: it read true before)');
  assert.equal(getLearner('ema').english.taught.length,taught,'nothing kept while the moment is open');
  await assert.rejects(command('turn',{text:'Another reply',mode:'text',lastTurnId:c.turns.at(-1).id}),e=>e.status===409);
  await command('moment-done');c=getSession().conversation;assert.equal(c.moment,null);assert.equal(getSession().screen,'linga-talk');
@@ -863,9 +863,9 @@ test('turn case 4: in every state the view offers, an enabled conversation actio
  const sweep={...SWEEP,...Object.fromEntries(Object.entries(TURN_STATES).map(([name,[screen,c]])=>['turn '+name,fixture(screen,{placement:placed(),conversation:c})])),
   'paused+pending':fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED,paused:true,pending:'held'})}),
   // K2: a fix moment withheld, on its clue, shown, and held (repair.ts)
-  ...Object.fromEntries([0,1].map(rung=>[`moment withheld ${rung}`,fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,better:'',fix:undefined,slip:'am work',repair:{rung,support:false}}})})])),
-  'moment shown':fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,repair:{rung:2,support:false}}})}),
-  'moment held':fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,repair:{rung:0,support:false,tried:'I work in a hotel.',held:true,selfRepaired:true,spent:true}}})})};
+  ...Object.fromEntries([0,1].map(rung=>[`moment withheld ${rung}`,fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,better:'',fix:undefined,slip:'am work',repair:{rung}}})})])),
+  'moment shown':fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,repair:{rung:2}}})}),
+  'moment held':fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...MOMENT,repair:{rung:0,tried:'I work in a hotel.',held:true,selfRepaired:true,spent:true}}})})};
  let checked=0;
  for(const [name,fx] of Object.entries(sweep))for(const ui of [{},{menu:true}]){
   const v=V.lingaView(sessionOf(fx),ui);
@@ -1276,7 +1276,7 @@ test('K4 case 2: no find after a partner line said it, after the quiz showed it,
  await command('quiz');assert.equal(getSession().conversation.line.shown,true,'the quiz put it on screen');
  await reply('I go to the river.');await reply('Which bridge do you mean?');
  assert.equal(getSession().conversation.line.found,undefined,'shown by the quiz two turns ago');assert.equal(prompts.at(-1).roomLine,undefined);
- c=await roomStart({},{...ROVER_OPENING,supportProvided:true});
+ c=await roomStart();await command('cue');// help the learner used (lt-swap-2/recert-1: the opening's supportProvided:true is no longer help)
  await reply('Which bridge do you mean?');assert.equal(getSession().conversation.line.found,undefined,'a supported reply');
  assert.deepEqual(getSession().conversation.line,{source:'quiz'},'not found, not handed over: the session holds no words of it');
 });
@@ -2426,7 +2426,7 @@ function withheldEverywhere(where){
 test('K2 case 1 GATE: the session has no better until a try holds; "My tomatoes are one metre." holds before the fix is shown, frees the next reply, with no model call',async()=>{
  let c=await k2Moment();
  assert.equal(getSession().screen,'linga-moment');assert.equal(c.moment.kind,'fix');assert.equal(c.moment.slip,'tomatoes is');
- assert.deepEqual(c.moment.repair,{rung:0,support:false},'B1 starts at "say it again"');assert.equal(c.supported,true,'a moment models wording');
+ assert.deepEqual(c.moment.repair,{rung:0},'B1 starts at "say it again"');assert.equal(c.supported,false,'a moment alone supports no reply (lt-swap-2/recert-1)');
  withheldEverywhere('after the turn');
  assert.equal(c.moments.length,0,'not one of the scene\'s moments while open');assert.equal(getLearner('ema').english.taught.length,0,'not on the record while open');
  const V=view();let v=V.lingaView(getSession());
@@ -2463,7 +2463,7 @@ test('K2 case 2: "My tomatoes is one metre." is not held; misses climb to the cl
  withheldEverywhere('after a miss');assert.equal(V.lingaView(getSession()).hero.note,TOMATO.why,'the why is the clue');
  await momentTry('My plants are one metre.');c=getSession().conversation;
  assert.equal(c.moment.repair.held,undefined,'undecided: the fix key is not said');assert.equal(c.moment.repair.rung,2);
- assert.equal(c.moment.better,TOMATO.better,'a second miss shows the fix');assert.equal(c.supported,true);
+ assert.equal(c.moment.better,TOMATO.better,'a second miss shows the fix');assert.equal(c.supported,false,'the shown fix helps the try, not the next reply');
  const v=V.lingaView(getSession());assert.deepEqual(v.hero.after,{kicker:'Try',quote:TOMATO.better});assert.equal(v.answer.label,'Say it once more');assert.deepEqual(v.actions.map(a=>a.id),['back']);
  await momentTry('My tomatoes is one metre!');c=getSession().conversation;
  assert.equal(c.moment.repair.spent,true);assert.equal(c.moment.repair.held,undefined);
@@ -2471,19 +2471,22 @@ test('K2 case 2: "My tomatoes is one metre." is not held; misses climb to the cl
  assert.equal(k2Calls,0);
  await command('moment-done');
  const t=getLearner('ema').english.taught[0];assert.equal(t.selfRepaired,false);assert.equal(t.tried,'My tomatoes is one metre!');
- assert.equal(getSession().conversation.supported,true,'a revealed fix keeps the next reply supported');
+ assert.equal(getSession().conversation.supported,false,'a revealed fix alone leaves the next reply unhelped (lt-swap-2/recert-1)');
+ // the next reply that reads the revealed fix back is supported, by code (credit.ts copiesShown over the scene's shown lines)
+ answer=async()=>({json:{reply:'And the beans?',supportProvided:false,observations:[]},provider:'test',ms:1});
+ await reply('Yes, my tomatoes are one metre.');assert.equal(getSession().conversation.turns.filter(t=>t.role==='learner').at(-1).supported,true,'a read-back of the fix');
  console.log(`# K2 case 2: "My tomatoes is one metre." not held -> rung 1; undecided -> rung 2 (shown); one more try, then spent; modelCalls=${k2Calls}`);
 });
-test('K2 case 3: after Show me, a bare repeat of the fix key is not held and supported stays true; the learner\'s sentence holds, unshown never',async()=>{
+test('K2 case 3: after Show me, a bare repeat of the fix key is not held; the learner\'s sentence holds, unshown never; Show me supports no next reply',async()=>{
  let c=await k2Moment();
  await command('moment-show');c=getSession().conversation;
  assert.equal(c.moment.better,TOMATO.better);assert.equal(c.moment.fix,'tomatoes are');assert.equal(c.moment.repair.rung,2);
  await momentTry('tomatoes are');c=getSession().conversation;
- assert.equal(c.moment.repair.held,undefined,'the bare fix key read off the card is no repair');assert.equal(c.supported,true);assert.equal(c.moment.repair.spent,true);
+ assert.equal(c.moment.repair.held,undefined,'the bare fix key read off the card is no repair');assert.equal(c.supported,false,'Show me helps the try, not the next reply');assert.equal(c.moment.repair.spent,true);
  await command('moment-done');assert.equal(getLearner('ema').english.taught[0].selfRepaired,false);
- // the full sentence after the fix was shown holds, but it was shown: no self-repair, still supported
+ // the full sentence after the fix was shown holds, but it was shown: no self-repair
  await k2Moment();await command('moment-show');await momentTry('My tomatoes are one metre.');c=getSession().conversation;
- assert.equal(c.moment.repair.held,true);assert.equal(c.moment.repair.selfRepaired,false);assert.equal(c.supported,true);
+ assert.equal(c.moment.repair.held,true);assert.equal(c.moment.repair.selfRepaired,false);assert.equal(c.supported,false);
  assert.equal(view().lingaView(getSession()).hero.after.kicker,'Your try');
  // the judge itself (repair.ts judgeTry), on the 10-14 LT pairs
  const {judgeTry}=require(path.join(root,'src/lib/english/repair.ts')),S=slipMod();
@@ -2541,7 +2544,7 @@ test('K2 case 6: a self-repaired fix is not a shown line; Finish over an open mo
 });
 test('K2 case 7: the server refuses exactly what the table refuses on a fix moment at every rung',async()=>{
  const T=turn(),wrong=[];
- const fixes={'withheld 0':{rung:0,support:false},'withheld 1':{rung:1,support:false},shown:{rung:2,support:false},spent:{rung:2,support:false,tried:'x',spent:true},held:{rung:0,support:false,tried:'I work.',held:true,selfRepaired:true,spent:true},lost:{rung:0,support:false,lost:true}};
+ const fixes={'withheld 0':{rung:0},'withheld 1':{rung:1},shown:{rung:2},spent:{rung:2,tried:'x',spent:true},held:{rung:0,tried:'I work.',held:true,selfRepaired:true,spent:true},lost:{rung:0,lost:true}};
  for(const [name,repair] of Object.entries(fixes))for(const action of CONVERSATION_ACTIONS){
   const withheld=repair.rung<2&&!repair.held;
   const c=convo({turns:REPLIED,moment:{...MOMENT,...(withheld?{better:'',fix:undefined}:{}),repair}});
@@ -2984,7 +2987,7 @@ test('LG-53: a held self-repair claims the fixed words, not the whole try that k
  const V=view(),said='Okay, I want to discuss the delay of our last delivery. So, without about.',tried='Okay, I want to discuss the delay of our last delivery. So, without about. But this is very small mistake, I think.';
  const mo={id:'l1:moment',kind:'fix',said:'Okay, I want to discuss the delay of our last delivery. So, without about.',better:'Okay, I want to discuss the delay of our last delivery. So, about it.',why:'Say about it.',turnId:'l1',at:1,slip:'without about',fix:'about it'};
  for(const selfRepaired of [true,false]){
-  const v=V.lingaView(sessionOf(fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...mo,repair:{rung:selfRepaired?0:2,support:false,tried,held:true,selfRepaired,spent:true}}})})));
+  const v=V.lingaView(sessionOf(fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...mo,repair:{rung:selfRepaired?0:2,tried,held:true,selfRepaired,spent:true}}})})));
   const text=JSON.stringify([v.hero.after,v.captionTag,v.caption]);
   assert.doesNotMatch(text,/You found it|You said it|Your own fix/,'no claim on the whole line');
   assert.match(v.captionTag,/about it/,'the caption tag names the fixed words');
@@ -3165,15 +3168,104 @@ test('supported flag: a cue then a reply is supported; the next unhelped reply i
  assert.equal(l.supported,false);assert(c.evidence.filter(e=>e.turnId===l.id).length&&c.evidence.filter(e=>e.turnId===l.id).every(e=>e.supported===false));
  assert.equal(c.supported,false);
 });
-test('supported flag: an explicit supportProvided:true from the model still supports the next reply',async()=>{
- await booked(said('Which date do you need?',{supportProvided:true}));
- assert.equal(getSession().conversation.supported,false,'the opening said nothing');
- await reply('Could you check my booking?');
- assert.equal(getSession().conversation.supported,true,'the model supplied wording');
-});
 test('supported flag: the recap splits supported from independent replies',()=>{
  const V=view(),turns=[{id:'p1',role:'partner',text:'Hello.'},{id:'l1',role:'learner',text:'Hello',mode:'speech',supported:true},{id:'p2',role:'partner',text:'Name?'},{id:'l2',role:'learner',text:'Eva',mode:'speech',supported:false},{id:'p3',role:'partner',text:'Date?'},{id:'l3',role:'learner',text:'Friday',mode:'text',supported:false}];
  const v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',turns})})),{});
  assert.equal(v.recap.supported,1);assert.equal(v.recap.independent,2);assert.equal(v.recap.replies,3);
  assert.match(v.hero.data??JSON.stringify(v),/2 on your own · 1 with help/);
+});
+// lt-swap-2/recert-1 (LT-tomas-9-J4-2, recorded against LT-tomas-9-J4-3; LT-adela-17-J4-3, LT-petra-38-J4-3, LT-jana-29-J3-3):
+// a learner turn is supported only when that reply came after help the learner used (a cue, a quiz opened or answered, a
+// starter rung) or reads back a line the scene showed. Never the model's supportProvided, never a moment, coaching or replay alone.
+/** A stubbed engine for a recert-1 scene: turns answer with `turn(p)`, coach with `coach`, replay with `again`; every line claims supportProvided:true. */
+function recertEngine(turn,{coach,again}={}){
+ answer=async req=>{const p=JSON.parse(req.prompt);
+  if(String(p.task??'').startsWith('Coach'))return {json:coach,provider:'test',ms:1};
+  if(p.coaching)return {json:{reply:again,supportProvided:true},provider:'test',ms:1};
+  return {json:p.submittedReply?{supportProvided:true,observations:[],...turn(p)}:{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?',supportProvided:true},provider:'test',ms:1};};
+}
+async function recertScene(turn,more){fresh();saveEnglish('ema',emptyEnglish());recertEngine(turn,more);await command('start',{sceneId:'booking',replace:true});}
+const lastLearner=()=>[...getSession().conversation.turns].reverse().find(t=>t.role==='learner');
+const flags=()=>getSession().conversation.turns.filter(t=>t.role==='learner').map(t=>t.supported);
+test('supported flag 1 (jana-29 J3, tomas-9 J4 #12): an opening and partner lines that claim supportProvided:true never support an unhelped reply',async()=>{
+ await recertScene(p=>({reply:p.submittedReply.startsWith('Thanks')?'Could we agree on a fixed day that works for both of us?':'What day would be workable for you?',observations:observed(p.submittedReply)}));
+ assert.equal(getSession().conversation.supported,false,'the opening\'s supportProvided:true is the model\'s claim about its own line, not help the learner used (jana-29 #2)');
+ await reply('Could we agree on a firmer handover date?');
+ assert.equal(lastLearner().supported,false);assert.equal(getSession().conversation.supported,false,'the partner line\'s supportProvided:true is not carried to the next reply');
+ await reply('Thanks, Wednesday end of day would suit me.');
+ await reply('How about Thursday morning then?');
+ assert.deepEqual(flags(),[false,false,false],'jana-29 J3: three own replies, none helped');
+ const ev=getSession().conversation.evidence;assert.equal(ev.length,3);assert(ev.every(e=>e.supported===false),'own-words evidence stays unsupported');
+});
+test('supported flag 2 (adela-17 J4 #7, petra-38 J4 #8 #12 #18, tomas-9 J4 #10): a moment, coaching or a replay alone does not support the next reply',async()=>{
+ // a fix moment, Back, then an own reply (adela-17 #6-#7, tomas-9 #9-#10)
+ await recertScene(p=>p.submittedReply.includes('interested about')?{reply:'What would make you fly anyway?',moment:{kind:'fix',said:'interested about',better:'interested in',why:'We say interested in.'}}:{reply:'And what else?'});
+ await reply('I am interested about the environment.');
+ assert.equal(getSession().screen,'linga-moment');assert.equal(getSession().conversation.supported,false,'a moment is not help the learner used');
+ await command('moment-done');assert.equal(getSession().conversation.supported,false);
+ await reply('I would fly only for very long trips.');
+ assert.deepEqual(flags(),[false,false],'the reply after the moment is the learner\'s own');
+ // Show me on a fix moment, then an own reply on the new question (petra-38 #9-#12, #15-#18): the shown fix helped the try, not the next answer
+ await recertScene(p=>p.submittedReply.includes('arrive yesterday')?{reply:'What did you do after that?',moment:{kind:'fix',said:'you arrive yesterday',better:'you arrived yesterday',why:'A finished event takes the past.'}}:{reply:'And then?'});
+ await reply('I think you arrive yesterday at four.');
+ await command('moment-show');assert.equal(getSession().conversation.supported,false,'Show me helps the try, not the next reply');
+ await momentTry('I think you arrived yesterday at four.');await command('moment-done');
+ assert.equal(getSession().conversation.supported,false);
+ await reply('After that I go to my room and sleep.');
+ assert.deepEqual(flags(),[false,false],'petra-38 #12: no help used for this answer');
+ // ...but a reply that reads back the shown fix is supported (copiesShown over the scene's shown lines)
+ await recertScene(p=>p.submittedReply.includes('arrive yesterday')?{reply:'Is that right?',moment:{kind:'fix',said:'you arrive yesterday at four',better:'you arrived yesterday at four o\'clock',why:'A finished event takes the past.'}}:{reply:'Good.'});
+ await reply('I think you arrive yesterday at four.');await command('moment-show');await command('moment-done');
+ await reply('Yes, you arrived yesterday at four o\'clock.');
+ assert.equal(lastLearner().supported,true,'a line copied from what was shown is help used');
+ // coaching then a replay, then an own reply (petra-38 #6-#8)
+ await recertScene(()=>({reply:'Were you here yesterday?'}),{coach:{before:'How can I help you',after:'How can I help you? Can you hear me clearly?',note:'Clear opening.'},again:'What time did you arrive yesterday?'});
+ await reply('Good morning, Grand Harbour Hotel. How can I help you?');
+ await command('coach');assert.equal(getSession().conversation.phase,'coaching');assert.equal(getSession().conversation.supported,false,'coaching alone is not help for the next reply');
+ await command('replay');assert.equal(getSession().conversation.phase,'replay');assert.equal(getSession().conversation.supported,false,'a replay alone is not help');
+ await reply('I am sorry, I think you came at four.');
+ assert.deepEqual(flags(),[false,false],'petra-38 #8: the replay answer is the learner\'s own');
+ // the replay answer that reads back the coached line is supported
+ await recertScene(()=>({reply:'Were you here yesterday?'}),{coach:{before:'How can I help you',after:'How can I help you? Can you hear me clearly?',note:'Clear opening.'},again:'Can you start the call again?'});
+ await reply('Good morning, Grand Harbour Hotel. How can I help you?');await command('coach');await command('replay');
+ await reply('Good morning. How can I help you? Can you hear me clearly?');
+ assert.equal(lastLearner().supported,true,'the coached line read back is help used');
+});
+test('supported flag 3 (tomas-9 J4 #2-#8, petra-38 J4 #3-#4): a used cue, an opened or answered quiz and a starter rung support the reply; the flag resets after it',async()=>{
+ await recertScene(()=>({reply:'Which date do you need?',help:LADDER}));
+ await command('cue');await reply('I like the room.');// the scene cue: the opening had no ladder (tomas-9 #2-#4)
+ assert.equal(lastLearner().supported,true,'a cue the learner pressed');assert.equal(getSession().conversation.supported,false,'reset once the reply is recorded');
+ await reply('Yes. Friday.');assert.equal(lastLearner().supported,false,'tomas-9 #5: no help between the partner line and this reply');
+ await command('quiz');await command('choice',{option:1});await reply('My room is big.');
+ assert.equal(lastLearner().supported,true,'tomas-9 #6-#8: a quiz opened and answered');
+ await command('quiz');await reply('A room for two.');assert.equal(lastLearner().supported,true,'petra-38 #3-#4: a quiz opened, not answered');
+ await command('cue');await command('cue');await command('cue');await reply('I need the room on Friday night.');
+ assert.equal(lastLearner().supported,true,'a revealed starter rung');
+ await reply('Thank you so much.');assert.equal(lastLearner().supported,false);
+ assert.deepEqual(flags(),[true,false,true,true,true,false]);
+});
+test('supported flag 4 (tomas-9 J4 #14): the recap\'s on-your-own and with-help counts are the turns\' flags',async()=>{
+ await recertScene(p=>p.submittedReply.startsWith('My house')?{reply:'What is in your garden?',moment:{kind:'word',said:'Můj',better:'my',why:'Můj means my.'}}:{reply:'Do you know what Rex likes to eat?'});
+ await command('cue');await reply('I like Minecraft.');// #4: helped
+ await reply('Yes. Minecraft creeper.');// #5: own
+ await command('quiz');await command('choice',{option:1});await reply('My house... Můj house big.');// #8: helped
+ if(getSession().screen==='linga-moment')await command('moment-done');
+ await reply('Dog. Dog v garden. I like dog.');// #10: own, after a moment
+ await reply('Dog... Rex. My dog Rex.');// #11: own
+ await reply('Rex like... maso. Dog like meat.');// #12: own, after a partner line that claimed supportProvided:true
+ assert.deepEqual(flags(),[true,false,true,false,false,false]);
+ await command('finish');
+ const v=view().lingaView(getSession(),{});
+ assert.equal(v.recap.supported,2);assert.equal(v.recap.independent,4);assert.equal(v.recap.replies,6);
+ assert.match(JSON.stringify(v),/4 on your own · 2 with help/);
+});
+test('supported flag 5: cert credit is unchanged for genuinely unhelped evidence, and helped evidence still earns none',async()=>{
+ const {evidenceProgress}=require(path.join(root,'src/lib/english/rules.ts'));
+ await recertScene(p=>({reply:'Which date?',observations:observed(p.submittedReply)}));
+ await reply('Could you check my booking?');await reply('Could you look for Friday?');
+ await command('cue');await reply('Could you find the room?');
+ const ev=getSession().conversation.evidence;
+ assert.deepEqual(ev.map(e=>e.supported),[false,false,true],'the two own replies count on their own, the cued one is helped');
+ assert.equal(evidenceProgress(ev,'request'),'independent','two unhelped typed replies are "on your own", as before');
+ assert.equal(evidenceProgress(ev.filter(e=>e.supported),'request'),'with-help','a helped reply alone is only "with help"');
 });
