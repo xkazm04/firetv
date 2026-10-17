@@ -42,6 +42,8 @@ export interface PlacementTask {
    */
   answered?: "yes" | "partly" | "no";
   english?: Band | "none";
+  /** LG-54: an exact excerpt of the response that kept the English under the task band; code-checked, absent on older tasks */
+  heldBack?: string;
 }
 export interface Placement {
   at: number; band: Band; selfBand: Band | null;

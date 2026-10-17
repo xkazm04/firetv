@@ -2672,6 +2672,47 @@ test('verdict reason: a non-pass task names why before the note',()=>{
  assert.equal(P.verdictReason({kind:'say',band:'B2',verdict:'fail'}),'');
 });
 
+test('LG-54 held back: a below-band partial task names the excerpt, a stored task without it keeps the old line',()=>{
+ const t=(p)=>({kind:'say',band:'B1',verdict:'partial',answered:'yes',english:'A2',...p});
+ const old=P.verdictReason(t({}));
+ assert.equal(old,'Your English read as A2 here, and this task was B1.');
+ const held=P.verdictReason(t({heldBack:'he go to school yesterday'}));
+ assert.equal(held,old+' Held back: "he go to school yesterday".');
+ const long=P.verdictReason(t({heldBack:'I think that the first option is better because he go to the shop every day and he buy many things there'}));
+ assert(/…".$/.test(long)&&long.length<=old.length+100,long);
+ assert.equal(P.verdictReason(t({heldBack:'x',english:'B1'})),'','at the band: no gap line');
+ const task={id:'a',band:'B1',kind:'say',prompt:'p',line:'',options:[],response:'r',mode:'text',verdict:'partial',quote:'r',note:'n',at:1,answered:'yes',english:'A2'};
+ const clean=(x)=>P.cleanPlacement({at:1,band:'A2',confidence:'low',source:'check',summary:'s',focus:'f',tasks:[x]}).tasks[0];
+ assert.equal('heldBack' in clean(task),false,'an older stored task still loads');
+ assert.equal(clean({...task,heldBack:'he go'}).heldBack,'he go');
+ assert.equal('heldBack' in clean({...task,heldBack:42}),false,'a non-string is dropped');
+ assert.equal(P.verdictReason(clean(task)),old);
+});
+test('LG-54 held back: the excerpt is kept only when the response holds it and the English sits below the band',()=>{
+ const r='I think he go to school yesterday and it was fine.';
+ assert.equal(P.keepHeldBack('he go to school',r,'A2','B1'),'he go to school');
+ assert.equal(P.keepHeldBack('she goes to school',r,'A2','B1'),'','not in the response: dropped');
+ assert.equal(P.keepHeldBack('he go to school',r,'B1','B1'),'','at the band: ignored');
+ assert.equal(P.keepHeldBack('he go to school',r,'B2','B1'),'','above the band: ignored');
+ assert.equal(P.keepHeldBack('he go to school',r,'none','B1'),'');
+ assert.equal(P.keepHeldBack(undefined,r,'A2','B1'),'');
+ assert.equal(P.keepHeldBack('',r,'A2','B1'),'');
+});
+test('LG-54 held back: the judge step stores a found excerpt, drops a missing one and never fails the call',async()=>{
+ const run=async(heldBack)=>{
+  fresh();answer=wrap(req=>{const p=JSON.parse(req.prompt);if(p.step==='about')return {...checkAnswer(req),selfBand:'C1'};if(p.step==='judge')return {answered:'yes',english:'A2',quote:p.response.slice(0,10),heldBack,note:'x'};return checkAnswer(req);});
+  await command('check-start');await answerAbout(3);
+  const k=getSession().check,t=k.task;assert.equal(t.kind,'say');
+  await command('check-task',{checkId:k.id,taskId:t.id,text:'I would argue that it depend on the day.',mode:'text'});
+  return getSession().check.tasks[0];
+ };
+ const good=await run('it depend on');
+ assert.equal(good.heldBack,'it depend on');assert.match(P.verdictReason(good),/Held back: "it depend on"\./);
+ const bad=await run('words never said');
+ assert.equal('heldBack' in bad,false);assert.equal(P.verdictReason(bad),'Your English read as A2 here, and this task was B2.');
+ const none=await run(undefined);
+ assert.equal('heldBack' in none,false);
+});
 test('sameTask: a reworded repeat is the same task, two situations on one interest are not',()=>{
  const sofie='You are at a cafe with a friend. Tell me what you like to do at the weekend and why.';
  assert(P.sameTask(sofie,[sofie]),'identical prompts');

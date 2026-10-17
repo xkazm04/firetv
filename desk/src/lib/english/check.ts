@@ -18,7 +18,7 @@ import { FOCUS_FALLBACK, focusParts } from "./line";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
 import { ConversationError, lingaLine } from "./errors";
-import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, conversationBand, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, playBand, sameTask, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
+import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, conversationBand, firstQuestion, interestWords, isBand, keepHeldBack, kindFor, PLAN_MAX, PLAN_SIZE, playBand, sameTask, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
 // The right option of a "choose" task. Server memory only: the session reaches every screen.
@@ -32,7 +32,7 @@ const optional = (value: unknown, max: number) => typeof value === "string" ? va
 
 const aboutSchema = schema({ reply: str(230), selfBand: { type: "string", enum: BANDS }, goal: str(160, 0), interest: str(160, 0), language: { type: "string", enum: ["english", "mixed", "other", "none"] }, read: str(300) });
 const taskSchema = schema({ prompt: str(200), line: str(230, 0), options: { type: "array", maxItems: 2, items: str(120) }, correct: { type: "integer", enum: [0, 1] } });
-const judgeSchema = schema({ answered: { type: "string", enum: ["yes", "partly", "no"] }, english: { type: "string", enum: [...BANDS, "none"] }, quote: str(240, 0), note: str(160) });
+const judgeSchema = schema({ answered: { type: "string", enum: ["yes", "partly", "no"] }, english: { type: "string", enum: [...BANDS, "none"] }, quote: str(240, 0), heldBack: str(120, 0), note: str(160) });
 const summarySchema = schema({ summary: str(160), focus: str(120), slips: { type: "array", maxItems: 3, items: schema({ said: str(120), better: str(120) }) } });
 const topicSchema = schema({ title: str(48), goal: str(120), why: str(120), skill: { type: "string", enum: ENGLISH_SKILLS.map(s => s.id) }, audience: { type: "string", enum: ["all", "older", "adult"] }, partner: str(40), premise: str(400), cue: str(90), quiz: schema({ question: str(90), options: { type: "array", minItems: 2, maxItems: 2, items: str(90) }, correct: { type: "integer", enum: [0, 1] } }) });
 const planSchema = (count: number) => schema({ topics: { type: "array", minItems: 1, maxItems: count, items: topicSchema } });
@@ -402,12 +402,15 @@ Then your read of everything so far. selfBand: your best estimate of their band 
 answered: ${task.kind === "listen" ? "does the response show the spoken line was understood? yes, partly (some of it), or no. An answer in another language counts if it shows understanding." : "does the response do what the task asks? yes, partly, or no (off-task, empty, or no real answer)."}
 english: the band the English in the response itself shows, using languageBands: grammatical control and vocabulary range. Rate the language, never the ideas, the length or the confidence. A long, fluent, well-argued answer full of systematic basic errors is A2. A response can only show what it contains: one or two words are at most A1, a single simple sentence at most A2. none when the response has no English.
 quote: an exact excerpt of the response, copied character for character, that the english rating rests on (the whole response when it is short).
-note: one plain, kind sentence to the learner about what their answer showed; when the English sits below ${task.band}, name the one thing that held it back, and never call the answer clear, strong or good then. At most 160 characters, simple English.`,
+heldBack: when the english sits below ${task.band}, an exact excerpt of the response, copied character for character, showing the one thing that kept the English below ${task.band}; empty when the english is at or above ${task.band}, or is none.
+note: one plain, kind sentence to the learner about what their answer showed; when the English sits below ${task.band}, name the one thing that held it back, never call the answer clear, strong or good then, and do not open with praise of the content. At most 160 characters, simple English.`,
       }, judgeSchema);
       const answered = r.json.answered as "yes" | "partly" | "no", english = r.json.english as Band | "none", quote = optional(r.json.quote, 240);
       if (!["yes", "partly", "no"].includes(answered) || !(english === "none" || isBand(english)) || !quote || !response.includes(quote)) throw new Error("The judge did not quote the learner accurately.");
       // the judge's two readings are kept beside the verdict (S2): code derives the band the learner spoke from them
       const t: PlacementTask = { ...judged(verdictFor(task, answered, english), response, mode, quote, line(r.json.note, 160)), answered, english };
+      const heldBack = keepHeldBack(r.json.heldBack, response, english, task.band);
+      if (heldBack) t.heldBack = heldBack;
       return { apply: now => ({ ...now, task: null, tasks: [...now.tasks, t] }), provider: r.provider, ms: r.ms };
     });
     await advance(next, ctx, `${commandId}:next`);

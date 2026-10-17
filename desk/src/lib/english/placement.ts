@@ -83,12 +83,31 @@ export function verdictFor(task: { kind: TaskKind; band: Band; revealed?: boolea
   return answered === "partly" && verdict === "pass" ? "partial" : verdict;
 }
 
+/** The longest excerpt the held-back line prints; a longer one is cut on a word boundary with an ellipsis. */
+const HELD_BACK_SHOWN = 80;
+function trimExcerpt(value: string, max: number): string {
+  const one = value.replace(/\s+/g, " ").trim();
+  if ([...one].length <= max) return one;
+  const cut = [...one].slice(0, max).join("");
+  const at = cut.lastIndexOf(" ");
+  return `${(at > 0 ? cut.slice(0, at) : cut).replace(/[\s,.;:!?]+$/, "")}…`;
+}
+/**
+ * LG-54: the judge points at the words that kept the English under the task band; code keeps the pointer only when
+ * the response holds those exact words and the English sits below the band. Anything else is dropped, never thrown.
+ */
+export function keepHeldBack(raw: unknown, response: string, english: Band | "none", band: Band): string {
+  if (typeof raw !== "string" || english === "none" || BANDS.indexOf(english) >= BANDS.indexOf(band)) return "";
+  const held = raw.trim().slice(0, 120);
+  return held && response.includes(held) ? held : "";
+}
+
 /**
  * One plain line, written by code, for a task that did not pass: why the verdict is what it is. The judge's note is a
  * free sentence written without the verdict and often rates the ideas, so a "fail" could sit beside praise (LG-54).
  * Empty for a pass, a skip, a choice (its note says which reply fits) and a task stored before the judge's readings were kept.
  */
-export function verdictReason(task: { kind: TaskKind; band: Band; verdict: TaskVerdict; answered?: "yes" | "partly" | "no"; english?: Band | "none"; skipped?: boolean }): string {
+export function verdictReason(task: { kind: TaskKind; band: Band; verdict: TaskVerdict; answered?: "yes" | "partly" | "no"; english?: Band | "none"; skipped?: boolean; heldBack?: string }): string {
   const { kind, band, verdict, answered, english } = task;
   if (task.skipped || verdict === "pass" || kind === "choose" || !answered || !english) return "";
   if (answered === "no") return kind === "listen" ? "Linga did not find that you understood the line." : "The answer did not do what the task asked.";
@@ -97,7 +116,11 @@ export function verdictReason(task: { kind: TaskKind; band: Band; verdict: TaskV
     return english === "none" ? "There was no English in this answer." : "You read the line instead of hearing it, so it counts as nearly there.";
   }
   if (english === "none") return "There was no English in this answer.";
-  if (BANDS.indexOf(band) > BANDS.indexOf(english)) return `Your English read as ${english} here, and this task was ${band}.`;
+  if (BANDS.indexOf(band) > BANDS.indexOf(english)) {
+    const gap = `Your English read as ${english} here, and this task was ${band}.`;
+    const held = task.heldBack ? trimExcerpt(task.heldBack, HELD_BACK_SHOWN) : "";
+    return held ? `${gap} Held back: "${held}".` : gap;
+  }
   return answered === "partly" ? "The answer was only partly on the task." : "";
 }
 
@@ -298,7 +321,7 @@ function cleanTask(value: unknown): PlacementTask | null {
   // the judge's readings (S2) are optional: absent on older tasks; a malformed one is dropped, the task kept
   const answered = ANSWERS.includes(t.answered as typeof ANSWERS[number]) ? t.answered as typeof ANSWERS[number] : undefined;
   const english = t.english === "none" || isBand(t.english) ? t.english as Band | "none" : undefined;
-  return { id: t.id as string, band: t.band, kind: t.kind as TaskKind, prompt: t.prompt as string, line: t.line as string, options, response: t.response as string, mode: t.mode as EvidenceMode, verdict: t.verdict as TaskVerdict, quote: t.quote as string, note: t.note as string, at: t.at, ...(t.skipped === true ? { skipped: true } : {}), ...(answered ? { answered } : {}), ...(english ? { english } : {}) };
+  return { id: t.id as string, band: t.band, kind: t.kind as TaskKind, prompt: t.prompt as string, line: t.line as string, options, response: t.response as string, mode: t.mode as EvidenceMode, verdict: t.verdict as TaskVerdict, quote: t.quote as string, note: t.note as string, at: t.at, ...(t.skipped === true ? { skipped: true } : {}), ...(answered ? { answered } : {}), ...(english ? { english } : {}), ...(typeof t.heldBack === "string" && t.heldBack.trim() && t.heldBack.length <= 120 ? { heldBack: t.heldBack } : {}) };
 }
 export function cleanPlacement(value: unknown): Placement | null {
   const p = obj(value);
