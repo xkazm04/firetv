@@ -129,6 +129,12 @@ For open-language evaluation, code validation is necessary but insufficient: a m
 
 An adult says “Give me another time” when rescheduling. The meaning is clear; grammar is acceptable. The partner offers a time, so the conversation succeeds. At the pause, the coach asks whether the learner wants it warmer or more formal, demonstrates “Could we find another time?”, and replays the exchange. The learner then handles a different availability question without the phrase visible. Store requesting evidence and chosen register practice separately. Do not mark the original sentence grammatically wrong or the learner rude.
 
+### Taught slip said again (K1)
+
+Original rule: when a slip Linga already taught comes back, the partner models the right form once in the conversation and **never stops the scene for it** (`SLIP_AGAIN_TASK`, `review.ts`).
+
+**(amended 17 Oct 2026)** Operator ruling, accepting LG-57. A taught slip said again, and a known slip said twice in one scene, becomes a moment when the moment gap and cap allow one: code makes the fix moment itself (`fossilMoment`), the fix is withheld for the learner's try, and the partner is told to leave the fix to it (`FOSSIL_TASK`). When no moment is allowed, the soft recast stays (`SLIP_AGAIN_TASK`, the original rule). Why: a fossilised error that passes with no moment is never fixed; council-lite r2 8f1a2cda value-2, LT-martin-45-J3-1 and LT-adela-17-J3-1, with the value-2 Characters adela-17, martin-45, viktor-67 and petra-38.
+
 ### Self-repair (K2): what a held try claims
 
 A fix moment asks for the learner's line again before it shows the fix (`desk/src/lib/english/repair.ts`). Code judges the try by the taught slip only: the slip's words must be gone and the fix's words said (`judgeTry`). Ruling on LG-53 (the operator's delegate):

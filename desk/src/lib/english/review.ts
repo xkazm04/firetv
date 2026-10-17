@@ -298,7 +298,7 @@ export function askedAboutFor(reply: string, c: Conversation, taught: readonly T
   if (!line) return undefined;
   return { line, slips: slipsAgain(line, c, taught).map(h => ({ said: h.said, better: h.better })) };
 }
-/** What the partner is told when a taught slip comes back: model the right form once, and never stop the scene for it. */
+/** What the partner is told when a taught slip comes back and no moment is allowed (the moment gap or cap, LG-57; K1 amended 17 Oct 2026): model the right form once and do not stop the scene. When a moment is allowed, code makes it instead (FOSSIL_TASK). */
 export const SLIP_AGAIN_TASK = "The learner just said again a form Linga already taught: said is their words, better is the right form. In your reply, use the right form naturally once, as you would in conversation, without pointing it out, correcting them or asking them to repeat it. Do not stop the scene for it.";
 
 /** The taught fix a slip key belongs to: the oldest fix whose own slip key is the same slip. */
