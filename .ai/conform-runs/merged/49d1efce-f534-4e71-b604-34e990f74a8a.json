@@ -1,0 +1,17 @@
+{
+ "schema": "conform-run/1",
+ "worker": "49d1efce-f534-4e71-b604-34e990f74a8a",
+ "subject": "embedded-preview",
+ "evaluatedAt": "2026-10-17T23:13:38.480041+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "embedded-preview",
+   "context": "tv-app",
+   "reason": "tv-app is a native Fire TV Android application providing video playback (ExoPlayer) and Compose Canvas telestration with a companion PWA served over LAN/relay WebSockets; it does not host an embedded preview frame or child dev server process for guest applications, so embedded-preview does not apply, and not-applicable is not accepted from this seat."
+  }
+ ],
+ "consults": []
+}
