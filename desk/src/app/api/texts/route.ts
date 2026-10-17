@@ -10,6 +10,7 @@
  * POST {id, text, source?}                  a new version of that piece
  * POST {docx: base64, ...}                  the same, the text read from a .docx (v2 P4, lib/rules/docx.ts)
  * DELETE ?id=       one piece;  DELETE ?all=1  everything this learner kept
+ *   DELETE ?paragraph=1  only tonight's paragraph reading in the session; no kept piece is touched
  */
 import { NextResponse } from "next/server";
 import { getSession, NOBODY_AT_DESK } from "@/lib/session/store";
@@ -69,6 +70,7 @@ export async function DELETE(req: Request) {
   const who = seated(req); if (who instanceof NextResponse) return who;
   const q = new URL(req.url).searchParams;
   const clear = () => { try { dispatch({ type: "essay.clear", owner: who.id }); } catch { /* the TV catches up on its next read */ } };
+  if (q.get("paragraph") === "1") { clear(); return NextResponse.json({ cleared: true }); }
   if (q.get("all") === "1") { const deleted = deleteAll(who.id); clear(); refresh(who.id); return NextResponse.json({ deleted }); }
   const id = q.get("id") ?? "";
   if (!deletePiece(who.id, id)) return NextResponse.json({ error: "That piece is not on your shelf." }, { status: 404 });

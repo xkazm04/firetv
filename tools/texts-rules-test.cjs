@@ -142,6 +142,26 @@ test('UD-6: deleting a piece or all pieces clears the essay reading on the desk 
     assert.equal(getSession().essayAt ?? null, null);
   }
 });
+test('EM4-1: DELETE ?paragraph=1 clears the seated paragraph, keeps every piece, refuses a TV or guest, leaves an away slot', async () => {
+  const reading = (t) => ({ text: t, type: 'structure', sentences: [{ n: 1, text: t, words: 3, connectors: [], role: 'claim' }], stats: {}, verdicts: [], summary: '' });
+  seat('jakub'); dispatch({ type: 'essay.set', analysis: reading('Jakub wrote this.'), owner: 'jakub' });
+  seat('ema'); await route.POST(req('POST', '', { notice: true }));
+  const made = await (await route.POST(req('POST', '', { text: PIECE }))).json();
+  dispatch({ type: 'essay.set', analysis: reading('Ema wrote this.'), owner: 'ema' });
+  for (const role of ['tv', 'guest']) {
+    assert.equal((await route.DELETE(req('DELETE', '?paragraph=1', undefined, { 'x-desk-role': role }))).status, 403);
+    assert.equal(getSession().essay.text, 'Ema wrote this.', `${role} cleared nothing`);
+  }
+  const r = await route.DELETE(req('DELETE', '?paragraph=1'));
+  assert.equal(r.status, 200); assert.deepEqual(await r.json(), { cleared: true });
+  assert.equal(getSession().essay, null, 'the paragraph is gone from the session');
+  assert.equal((await route.GET(req('GET', `?id=${made.id}`))).status, 200, 'the kept piece is still on disk');
+  assert.equal(fs.readdirSync(folder('ema')).some(f => f.startsWith('t-')), true);
+  seat('jakub');
+  assert.equal(getSession().essay?.text, 'Jakub wrote this.', 'the away slot was not cleared');
+  seat('ema'); await route.DELETE(req('DELETE', '?all=1'));
+  seat('jakub'); dispatch({ type: 'essay.clear', owner: 'jakub' });
+});
 test('UD-14: an email or a message never takes a title from a body line', () => {
   assert.equal(T.addPiece('ema', { text: 'Running late\n\nBack in ten', format: 'message' }).value.title, 'Untitled message 1');
   assert.equal(T.addPiece('ema', { text: 'Meeting notes\n\nSee attached', format: 'email' }).value.title, 'Untitled email 1');

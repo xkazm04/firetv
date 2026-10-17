@@ -2,7 +2,8 @@
 /**
  * The learner's shelf on the phone's Essay tab (v2 P3; lib/session/texts.ts, /api/texts): the pieces they kept, by
  * title and counts, never shown on the TV. Open loads the latest version into the Essay panel; Delete removes one;
- * "Delete everything I kept" removes all of it (a second press confirms). The one-time notice (TextNotice) says where
+ * "Delete everything I kept" removes all of it (a second press confirms). "Forget tonight's paragraph" is always there and clears
+ * only the reading in the session, so a paragraph-only evening can be removed too. The one-time notice (TextNotice) says where
  * the text goes before the first piece is kept.
  */
 import { useCallback, useEffect, useState } from "react";
@@ -45,6 +46,7 @@ export function EssayShelf({ learnerId, refresh, onOpen }: { learnerId: string |
       {cards.length > 0 && (sure
         ? <button className="pbtn" data-role="essay-delete-all" onClick={() => void remove("all=1", "Everything you kept is deleted.")}>Yes, delete everything I kept</button>
         : <button className="pbtn" data-secondary="true" data-role="essay-delete-all" onClick={() => setSure(true)}>Delete everything I kept</button>)}
+      <button className="pbtn" data-secondary="true" data-role="essay-forget-paragraph" onClick={() => void remove("paragraph=1", "Tonight's paragraph is gone from the desk and the TV.")}>Forget tonight's paragraph</button>
       {say && <p data-role="essay-shelf-note" aria-live="polite">{say}</p>}
     </div>
   );
