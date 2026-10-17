@@ -2405,7 +2405,7 @@ test('K2 case 1 GATE: the session has no better until a try holds; "My tomatoes 
  assert.equal(c.turns.filter(t=>t.role==='learner').length,1,'a try is never a turn');assert.equal(getLearner('ema').english.evidence.length,0,'nor evidence');
  v=V.lingaView(getSession());
  assert.deepEqual(v.hero.before,{kicker:'You said',quote:TOMATO.said,struck:'tomatoes is'},'the slip struck');
- assert.deepEqual(v.hero.after,{kicker:'You found it',quote:'My tomatoes are one metre.'},'the learner\'s own line in the after slot');
+ assert.deepEqual(v.hero.after,{kicker:'Your try',quote:'My tomatoes are one metre.'},'the learner own line, under a neutral label');assert.equal(v.captionTag,'You fixed “tomatoes are”','the claim is the fixed words');
  assert.equal(v.hero.open,undefined);assert.equal(v.answer,null,'no more tries');assert.deepEqual(v.actions.map(a=>a.id),['back']);
  assert.doesNotMatch(JSON.stringify(v.hero)+v.caption,/\d+ (of|tries|try)/,'a picture, no count');
  await command('moment-done');c=getSession().conversation;
@@ -2447,7 +2447,7 @@ test('K2 case 3: after Show me, a bare repeat of the fix key is not held and sup
  // the full sentence after the fix was shown holds, but it was shown: no self-repair, still supported
  await k2Moment();await command('moment-show');await momentTry('My tomatoes are one metre.');c=getSession().conversation;
  assert.equal(c.moment.repair.held,true);assert.equal(c.moment.repair.selfRepaired,false);assert.equal(c.supported,true);
- assert.equal(view().lingaView(getSession()).hero.after.kicker,'You said it');
+ assert.equal(view().lingaView(getSession()).hero.after.kicker,'Your try');
  // the judge itself (repair.ts judgeTry), on the 10-14 LT pairs
  const {judgeTry}=require(path.join(root,'src/lib/english/repair.ts')),S=slipMod();
  const tom={...TOMATO,...S.slipOf(TOMATO.said,TOMATO.better)};
@@ -2921,6 +2921,18 @@ test('LG-51 meaning: the prompt checks meaning and false friends from a teacher-
  assert(/on a yes as well as a no/i.test(r),'quotes on a yes too: '+r);
  assert(/askedAbout\.slips is not empty, the answer is no/i.test(r),'askedAbout slips decide the no: '+r);
  assert(/at most 230 characters/.test(r),'the reply limit stays');
+});
+test('LG-53: a held self-repair claims the fixed words, not the whole try that keeps another error',()=>{
+ const V=view(),said='Okay, I want to discuss the delay of our last delivery. So, without about.',tried='Okay, I want to discuss the delay of our last delivery. So, without about. But this is very small mistake, I think.';
+ const mo={id:'l1:moment',kind:'fix',said:'Okay, I want to discuss the delay of our last delivery. So, without about.',better:'Okay, I want to discuss the delay of our last delivery. So, about it.',why:'Say about it.',turnId:'l1',at:1,slip:'without about',fix:'about it'};
+ for(const selfRepaired of [true,false]){
+  const v=V.lingaView(sessionOf(fixture('linga-moment',{placement:placed(),conversation:convo({turns:REPLIED,moment:{...mo,repair:{rung:selfRepaired?0:2,support:false,tried,held:true,selfRepaired,spent:true}}})})));
+  const text=JSON.stringify([v.hero.after,v.captionTag,v.caption]);
+  assert.doesNotMatch(text,/You found it|You said it|Your own fix/,'no claim on the whole line');
+  assert.match(v.captionTag,/about it/,'the caption tag names the fixed words');
+  assert.equal(v.hero.after.kicker,'Your try');assert.equal(v.hero.after.quote,tried);
+ }
+ assert.equal(V.fixedClaim({said:'My tomatoes is one metre',better:'My tomatoes are one metre'}),'You fixed “are”','without a fix key, the changed words of better');
 });
 test('LG-51 detector: a direct correctness question is found, an ordinary reply is not',()=>{
  const {asksCorrectness}=require(path.join(root,'src/lib/english/review.ts'));

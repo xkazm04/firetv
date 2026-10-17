@@ -265,6 +265,20 @@ function answerOf(s: Session, lc: LevelCheck | null, c: Conversation | null): An
   return null;
 }
 
+/**
+ * What a held try claims (LG-53): only the words the learner fixed, never the whole try. The fix key when the moment holds
+ * it, else the words of better that differ from said; the claim is bare when neither is known.
+ */
+export function fixedClaim(m: { said: string; better: string; fix?: string }): string {
+  const words = (t: string) => t.split(/\s+/).filter(Boolean), a = words(m.said), b = words(m.better);
+  let i = 0, j = 0;
+  while (i < a.length && i < b.length && a[i].toLowerCase() === b[i].toLowerCase()) i++;
+  while (j < a.length - i && j < b.length - i && a[a.length - 1 - j].toLowerCase() === b[b.length - 1 - j].toLowerCase()) j++;
+  const changed = b.slice(i, b.length - j).join(" ").replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, "");
+  const key = m.fix || changed;
+  return key ? `You fixed “${key}”` : "You fixed it";
+}
+
 export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   const ui: LingaUi = { ...NO_UI, ...Object.fromEntries(Object.entries(input).filter(([k, v]) => k in NO_UI && v !== undefined)) };
   const { menu, picking, sceneIndex, chapter } = ui;
@@ -469,9 +483,9 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       // holds (the slip struck, their own line in the slot) or the fix is shown. The why is the clue. A picture, no count.
       const shown = !!m.better && !r.held, open = !r.held && !shown;
       hero = { kind: "comparison", before: { kicker: "You said", quote: m.said, ...(r.held ? { struck: (m.slip && slipStands(m.said, m.slip)) || m.said } : {}) },
-        after: r.held ? { kicker: r.selfRepaired ? "You found it" : "You said it", quote: r.tried ?? "" } : shown ? { kicker: "Try", quote: m.better } : { kicker: "Your line", quote: "" },
+        after: r.held ? { kicker: "Your try", quote: r.tried ?? "" } : shown ? { kicker: "Try", quote: m.better } : { kicker: "Your line", quote: "" },
         note: r.rung >= 1 || r.held || r.lost ? m.why : "", ...(open ? { open: true } : {}) };
-      captionTag = r.held ? (r.selfRepaired ? "Your own fix" : "Fixed") : r.lost ? "One thing to fix" : shown ? "The fix" : r.rung === 1 ? "A clue" : "One thing to fix";
+      captionTag = r.held ? fixedClaim(m) : r.lost ? "One thing to fix" : shown ? "The fix" : r.rung === 1 ? "A clue" : "One thing to fix";
       caption = r.lost ? "Linga lost this fix when the desk restarted. Carry on from where the scene stopped."
         : r.held ? "Then carry on from where the scene stopped."
         : r.spent ? "Then carry on from where the scene stopped."

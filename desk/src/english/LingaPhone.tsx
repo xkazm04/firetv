@@ -14,7 +14,7 @@ import { runningTake } from "@/lib/english/take";
 import { beatOf, COSTAR_MAX } from "@/lib/english/duet";
 import { originLabel } from "@/lib/english/line";
 import { LOST_SCENE } from "@/lib/english/lostfound";
-import { activeCheck, helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
+import { activeCheck, fixedClaim, helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
 import { LostPicture } from "./LostPicture";
 import { useEnglish } from "./useEnglish";
@@ -334,8 +334,8 @@ function MomentPanel({c,run,busy}:{c:Conversation;run:Run;busy:boolean}){
   </>;
   const shown=!!m.better&&!r.held;
   return <>
-    <p><b>{r.held?(r.selfRepaired?"You found it":"You said it"):"One thing to fix"}</b></p>
-    <div className="linga-status" aria-live="polite">{r.held?<>You said <s>“{m.said}”</s><br/>Now: “{r.tried}”</>:shown?<>You said “{m.said}”<br/>Try “{m.better}”</>:<>You said “{m.said}”<br/>{r.lost?"Linga lost this fix when the desk restarted.":"Say it again, your way."}</>}</div>
+    <p><b>{r.held?fixedClaim(m):"One thing to fix"}</b></p>
+    <div className="linga-status" aria-live="polite">{r.held?<>You said <s>“{m.said}”</s><br/>Your try: “{r.tried}”</>:shown?<>You said “{m.said}”<br/>Try “{m.better}”</>:<>You said “{m.said}”<br/>{r.lost?"Linga lost this fix when the desk restarted.":"Say it again, your way."}</>}</div>
     {(r.rung>=1||r.held||r.lost)&&<p>{m.why}</p>}
     {accepts(c,"moment-try")&&<ReplyBox ready={!busy} busy={busy} question={m.turnId} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
       onSend={(text,mode,question,attempt)=>run("moment-try",{text,mode,lastTurnId:question,commandId:attempt})} note="A try is practice: it is not recorded as evidence."/>}
