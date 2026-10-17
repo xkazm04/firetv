@@ -22,10 +22,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "After adding a topic, display its title and reason before agreement; make every agreed topic and its reason inspectable.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#3 the phone list shows \"Tell them I miss you\" with its reason."
   },
   {
     "id": "LT-jana-29-J2-1",
@@ -51,9 +54,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Cover all five explicitly requested situations within the initial six suggestions before adding adjacent design scenarios.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#2 'Nothing here about disagreeing with a senior designer in a critique'; she had to add it.",
+    "recurred_as": "LT-jana-29-J2-3"
   },
   {
     "id": "LT-klara-13-J2-3",
@@ -140,7 +147,10 @@
     "resolution": "open",
     "recurrence": 1,
     "suggested_acceptance": "Include the explicitly requested carrier call in the initial six topics.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "not-evaluable",
+    "recertify_evidence": "In #2 she asked only for the interview and did not request a carrier call. Carrier topics were proposed anyway (#2)."
   },
   {
     "id": "LT-petra-38-J2-4",
@@ -165,10 +175,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Demonstrate that every title and explanation can be reviewed before agreement, and exercise a swap to verify that remaining journey requirement.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#2 and #3 show full titles and explanations including the added topic."
   },
   {
     "id": "LT-tomas-9-J2-1",
@@ -194,12 +207,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Use one tiny question, familiar words and short topic cards; verify that this beginner can understand each topic and its reason.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-6",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
     "recertify_status": "recurs",
-    "recertify_evidence": "#2 labels \"Understand and repair\", \"Get something done\", \"Connect with people\" are still abstract.",
+    "recertify_evidence": "#3 added topic labelled 'Share your world'; 'Understand and repair' still shown.",
     "recurred_as": "LT-tomas-9-J2-2"
   },
   {
@@ -257,13 +270,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Include explicitly requested activity formats in the initial proposals when compatible with the profile.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-6",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
     "recertify_status": "recurs",
-    "recertify_evidence": "#2 no interview topic in initial six; she had to add her own at #2.",
-    "recurred_as": "LT-adela-17-J2-3"
+    "recertify_evidence": "#4 \"Beyond the rehearsed answer [interview]\" only in the situation list, not proposed in #2.",
+    "recurred_as": "LT-adela-17-J2-2"
   },
   {
     "id": "LT-lukas-24-J2-3",
@@ -291,7 +304,10 @@
     "resolution": "open",
     "recurrence": 1,
     "suggested_acceptance": "Retain uncovered explicit goals when generating replacements, or let the learner specify what a swap should offer.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "not-evaluable",
+    "recertify_evidence": "He did not request an interview in #2 and made no swaps."
   },
   {
     "id": "LT-ondrej-16-J2-4",
@@ -319,7 +335,10 @@
     "resolution": "open",
     "recurrence": 1,
     "suggested_acceptance": "Make a replacement differ in situation as well as wording from the topic just rejected.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "not-evaluable",
+    "recertify_evidence": "He never swapped a role topic (#2-#4)."
   },
   {
     "id": "LT-petra-38-J2-3",
@@ -347,7 +366,10 @@
     "resolution": "open",
     "recurrence": 1,
     "suggested_acceptance": "Include all six explicitly requested, suitable situations before introducing a generic alternative.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "not-evaluable",
+    "recertify_evidence": "Her goal field is empty and she requested only the restaurant topic, which was added."
   },
   {
     "id": "LT-martin-45-J2-1",

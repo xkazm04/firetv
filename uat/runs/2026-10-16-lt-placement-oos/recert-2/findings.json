@@ -24,10 +24,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "LT-oksana-34-J1-4",
     "suggested_acceptance": "When the learner names an interview goal, at least one check task is a real interview question.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#7 'send an email or hold a short meeting' and #8 training opinion, not a real interview question; #9 is a parcel complaint.",
+    "recurred_as": "LT-oksana-34-J1-2"
   },
   {
     "id": "LT-hana-41-J1-1",
@@ -142,10 +146,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "LT-oksana-34-J1-3",
     "suggested_acceptance": "Vary the scenarios across the last tasks.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#5 and #9 are both carrier-call scenarios; #9 C1 'nearly there' with 'Your word choice stayed simple'."
   },
   {
     "id": "LT-hana-41-J1-4",

@@ -1,0 +1,1618 @@
+{
+  "character": "jana-29",
+  "name": "Jana",
+  "trueBand": "C1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "Fine, let's see what level it gives me.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Jana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer plainly.",
+          "action": "answer",
+          "args": {
+            "text": "Mostly at work, to be fair. I'm a UX designer, so I write emails, sit in meetings and critiques in English with international colleagues. I also watch series and read a lot online."
+          },
+          "result": "ok",
+          "ms": 3712
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Jana! How did you learn your English? Was it school, a course, time abroad, or mostly on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Jana! How did you learn your English? Was it school, a course, time abroad, or mostly on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nMostly at work, to be fair. I'm a UX designer, so I write emails, sit in meetings and critiques in English with international colleagues. I also watch series and read a lot online.\nLinga\nThanks, Jana! How did you learn your English? Was it school, a course, time abroad, or mostly on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Jana! How did you learn your English? Was it school, a course, time abroad, or mostly on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, let me answer briefly and get to the level.",
+          "action": "answer",
+          "args": {
+            "text": "Mostly school at first, then a lot on my own, to be fair. I picked up most of it from series, YouTube and working with international teams. I spent a semester in Dublin as well, which helped with the accent."
+          },
+          "result": "ok",
+          "ms": 5943
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, Jana, that helps a lot. What would you most like to be able to do in English that feels harder for you right now?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Jana, that helps a lot. What would you most like to be able to do in English that feels harder for you right now?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nMostly at work, to be fair. I'm a UX designer, so I write emails, sit in meetings and critiques in English with international colleagues. I also watch series and read a lot online.\nLinga\nThanks, Jana! How did you learn your English? Was it school, a course, time abroad, or mostly on your own?\nYou\nMostly school at first, then a lot on my own, to be fair. I picked up most of it from series, YouTube and working with international teams. I spent a semester in Dublin as well, which helped with the accent.\nLinga\nThanks, Jana, that helps a lot. What would you most like to be able to do in English that feels harder for you right now?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Jana, that helps a lot. What would you most like to be able to do in English that feels harder for you right now?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Finally a useful question; I'll say what I actually struggle with.",
+          "action": "answer",
+          "args": {
+            "text": "Honestly, the tricky social stuff. Declining after-work drinks without sounding rude, disagreeing with a senior designer in a critique diplomatically, and giving difficult feedback. I'd also love to sound more natural in Irish English, with the banter and small talk."
+          },
+          "result": "ok",
+          "ms": 6772
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 1 · Say it\nYour task\nYour manager asks you to take over a project from a colleague who is leaving. You think the deadline is unrealistic. How would you tell your manager, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour manager asks you to take over a project from a colleague who is leaving. You think the deadline is unrealistic. How would you tell your manager, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your manager asks you to take over a project from a colleague who is leaving. You think the deadline is unrealistic. How would you tell your manager, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fair question, a work scenario at last; I'll answer diplomatically.",
+          "action": "answer",
+          "args": {
+            "text": "I'd be upfront but constructive about it. I'd say something like, \"I'm happy to take this on, but to be fair, I have some concerns about the deadline. Given the handover and the fact that I'd need time to get up to speed, I'm not sure it's realistic.\" Then I'd walk them through the main risks and suggest either a revised date or reducing the scope, so it's not just a complaint but a proposal."
+          },
+          "result": "ok",
+          "ms": 10979
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 2 · Say it\nYour task\nIn a team meeting, a colleague makes a joke about a new hire's mistake, and it lands badly. The room goes quiet. You want to ease the tension without taking sides. What would you say?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nIn a team meeting, a colleague makes a joke about a new hire's mistake, and it lands badly. The room goes quiet. You want to ease the tension without taking sides. What would you say?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"In a team meeting, a colleague makes a joke about a new hire's mistake, and it lands badly. The room goes quiet. You want to ease the tension without taking sides. What would you say?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fine, a realistic scenario at last; keep it light and neutral.",
+          "action": "answer",
+          "args": {
+            "text": "I'd probably say something like, \"Okay, I think we've all had moments like that when we were new, so let's not dwell on it. Why don't we look at what we can learn from it and move on to the next point?\" That way I'm not really siding with anyone, I'm just lowering the temperature a bit."
+          },
+          "result": "ok",
+          "ms": 8447
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 3 · Say it\nYour task\nA colleague keeps presenting your ideas in meetings as their own. Without sounding petty, what would you say to them so your work gets the credit it deserves?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA colleague keeps presenting your ideas in meetings as their own. Without sounding petty, what would you say to them so your work gets the credit it deserves?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A colleague keeps presenting your ideas in meetings as their own. Without sounding petty, what would you say to them so your work gets the credit it deserves?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Familiar workplace scenario, a good one at last.",
+          "action": "answer",
+          "args": {
+            "text": "I'd catch them privately first and say, \"Hey, I noticed that the last couple of ideas in the meeting were ones we'd talked about earlier. I'm sure it wasn't intentional, but I'd really appreciate it if you could mention where they came from next time.\" And if it happened again in the meeting itself, I'd just jump in with a light \"Glad that's landing, I'd be happy to walk everyone through the thinking behind it.\""
+          },
+          "result": "ok",
+          "ms": 10593
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 4 · Say it\nYour task\nYour Dublin colleague says, 'Ah, you're not coming for a pint? Sure you're a martyr to the spreadsheets.' Decline with dry, warm irony that keeps the banter going. What would you say?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour Dublin colleague says, 'Ah, you're not coming for a pint? Sure you're a martyr to the spreadsheets.' Decline with dry, warm irony that keeps the banter going. What would you say?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your Dublin colleague says, 'Ah, you're not coming for a pint? Sure you're a martyr to the spreadsheets.' Decline with dry, warm irony that keeps the banter going. What would you say?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fun one, finally something with a bit of banter.",
+          "action": "answer",
+          "args": {
+            "text": "Ah, you know me, the spreadsheets and I are in a very committed relationship. I'll leave them for one night, but they get jealous. Save me a seat next time and I'll buy the first round, I promise."
+          },
+          "result": "ok",
+          "ms": 17574
+        },
+        {
+          "n": 9,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nJana\nLinga's read · not a certificate\nC1 · Fluent\nWhat next\nSee the conversations Linga picks for this level, or find your level again.\nLinga says\nYou stayed polite and clear in tricky work moments, and you used 'lowering the temperature' naturally. That is a strong base for handling workplace situations.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nC1\nFluent\nYou stayed polite and clear in tricky work moments, and you used 'lowering the temperature' naturally. That is a strong base for handling workplace situations.\nLinga's read from your answers, not a certificate. C2 was close, but what you said first pointed lower, so Linga starts you at C1.\nNext to practise:\nKeep practising Irish small talk, like your spreadsheet banter, so your replies sound even more natural at work.\nYou express ideas fluently and flexibly, with little searching for words.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB2 · Say it · at this level\nYour manager asks you to take over a project from a colleague who is leaving. You think the deadline is unrealistic. How would you tell your manager, and why?\n“I'd be upfront but constructive about it. I'd say something like, \"I'm happy to take this on, but to be fair, I have some concerns about the deadline. Given the handover and the fact that I'd need time to get up to speed, I'm not sure it's realistic.\" Then I'd walk them through the main risks and suggest either a revised date or reducing the scope, so it's not just a complaint but a proposal.”\nYou stayed polite and gave a clear proposal, not just a complaint. Your English was controlled and easy to follow.\nC1 · Say it · at this level\nIn a team meeting, a colleague makes a joke about a new hire's mistake, and it lands badly. The room goes quiet. You want to ease the tension without taking sides. What would you say?\n“I'd probably say something like, \"Okay, I think we've all had moments like that when we were new, so let's not dwell on it. Why don't we look at what we can learn from it and move on to the next point?\" That way I'm not really siding with anyone, I'm just lowering the temperature a bit.”\nYou used idioms like lowering the temperature and dwell on it naturally, and your grammar stayed accurate and controlled throughout.\nC2 · Say it · at this level\nA colleague keeps presenting your ideas in meetings as their own. Without sounding petty, what would you say to them so your work gets the credit it deserves?\n“I'd catch them privately first and say, \"Hey, I noticed that the last couple of ideas in the meeting were ones we'd talked about earlier. I'm sure it wasn't intentional, but I'd really appreciate it if you could mention where they came from next time.\" And if it happened again in the meeting itself, I'd just jump in with a light \"Glad that's landing, I'd be happy to walk everyone through the thinking behind it.\"”\nYour reply handled a tricky social moment with precise, polite wording. Your English shows fine control of tone.\nC2 · Say it · at this level\nYour Dublin colleague says, 'Ah, you're not coming for a pint? Sure you're a martyr to the spreadsheets.' Decline with dry, warm irony that keeps the banter going. What would you say?\n“Ah, you know me, the spreadsheets and I are in a very committed relationship. I'll leave them for one night, but they get jealous. Save me a seat next time and I'll buy the first round, I promise.”\nYour reply was witty and natural. The joke about the spreadsheets was clear, and it kept the friendly banter going well.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "C1 feels right, and C2 was close. That's fair, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "C1",
+          "trueBand": "C1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "C1",
+          "summary": "You stayed polite and clear in tricky work moments, and you used 'lowering the temperature' naturally. That is a strong base for handling workplace situations.",
+          "focus": "Keep practising Irish small talk, like your spreadsheet banter, so your replies sound even more natural at work.",
+          "tasks": [
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your manager asks you to take over a project from a colleague who is leaving. You think the deadline is unrealistic. How would you tell your manager, and why?",
+              "line": "",
+              "options": [],
+              "response": "I'd be upfront but constructive about it. I'd say something like, \"I'm happy to take this on, but to be fair, I have some concerns about the deadline. Given the handover and the fact that I'd need time to get up to speed, I'm not sure it's realistic.\" Then I'd walk them through the main risks and suggest either a revised date or reducing the scope, so it's not just a complaint but a proposal.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Given the handover and the fact that I'd need time to get up to speed, I'm not sure it's realistic.",
+              "note": "You stayed polite and gave a clear proposal, not just a complaint. Your English was controlled and easy to follow."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "In a team meeting, a colleague makes a joke about a new hire's mistake, and it lands badly. The room goes quiet. You want to ease the tension without taking sides. What would you say?",
+              "line": "",
+              "options": [],
+              "response": "I'd probably say something like, \"Okay, I think we've all had moments like that when we were new, so let's not dwell on it. Why don't we look at what we can learn from it and move on to the next point?\" That way I'm not really siding with anyone, I'm just lowering the temperature a bit.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "That way I'm not really siding with anyone, I'm just lowering the temperature a bit.",
+              "note": "You used idioms like lowering the temperature and dwell on it naturally, and your grammar stayed accurate and controlled throughout."
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "A colleague keeps presenting your ideas in meetings as their own. Without sounding petty, what would you say to them so your work gets the credit it deserves?",
+              "line": "",
+              "options": [],
+              "response": "I'd catch them privately first and say, \"Hey, I noticed that the last couple of ideas in the meeting were ones we'd talked about earlier. I'm sure it wasn't intentional, but I'd really appreciate it if you could mention where they came from next time.\" And if it happened again in the meeting itself, I'd just jump in with a light \"Glad that's landing, I'd be happy to walk everyone through the thinking behind it.\"",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I'm sure it wasn't intentional, but I'd really appreciate it if you could mention where they came from next time.",
+              "note": "Your reply handled a tricky social moment with precise, polite wording. Your English shows fine control of tone."
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "Your Dublin colleague says, 'Ah, you're not coming for a pint? Sure you're a martyr to the spreadsheets.' Decline with dry, warm irony that keeps the banter going. What would you say?",
+              "line": "",
+              "options": [],
+              "response": "Ah, you know me, the spreadsheets and I are in a very committed relationship. I'll leave them for one night, but they get jealous. Save me a seat next time and I'll buy the first round, I promise.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Ah, you know me, the spreadsheets and I are in a very committed relationship. I'll leave them for one night, but they get jealous. Save me a seat next time and I'll buy the first round, I promise.",
+              "note": "Your reply was witty and natural. The joke about the spreadsheets was clear, and it kept the friendly banter going well."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 113465,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-jana-29-J1-1",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "The C2 conclusion exceeds the breadth of evidence",
+          "expected": "An advanced placement whose certainty reflects the skills actually tested.",
+          "got": "Four successful variations on tactful workplace disagreement produce C2 with high confidence in facts.placement. The listening focus is relevant to Jana's stated goal, but listening performance was not tested.",
+          "evidence": [
+            "#5 asks for a view \"tactfully, with reasons\"; #6 asks her to persuade a colleague; #7 asks for a reading \"without making your colleague feel corrected\"; #8 asks her to \"test the waters\". #9 concludes \"C2 · Near-native\" and recommends \"fast, unscripted conversations\". Jana responds: \"C2 feels a bit generous\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt/LT-jana-29-J1-4",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Only half the opening starters clearly match Jana's job",
+          "expected": "Situation choices visibly relevant to workplace or social adjustment during relocation.",
+          "got": "Four of eight titles offer a clear fit: first introductions, teamwork, interviewing and handling conflict. The remaining titles do not establish the professional or relocation nuance Jana seeks. All eight are safe for her adult profile.",
+          "evidence": [
+            "#1: \"The first hello\", \"Make the team work\", \"Beyond the rehearsed answer\" and \"Clear without getting louder\" provide the four fits. \"A little of your world\", \"The missing moon rover\", \"A booking that is missing\" and \"Different tastes, good conversation\" do not clearly establish that fit."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-jana-29-J1-2",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Summary and focus are generic and flattering",
+          "expected": "A specific summary naming what she did well and what is missing, with a focus that teaches something new",
+          "got": "'precise, natural English with idioms' plus 'Well done'. The focus rewords a phrase she already used well.",
+          "evidence": [
+            "#9 summary and focus; notes 'Well done.', 'Keep practising this style.'",
+            "verdict summary prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J1-1",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "C2 over-reads a C1 speaker; tasks 4 and 5 passed too easily",
+          "expected": "C1, or a C2 task that separates C1 from C2",
+          "got": "C2 'Near-native' after the same hedging formula passed at C1 and C2",
+          "evidence": [
+            "#8 and #9 reuse 'to be fair… I'd push back… a bit', and #10 gives C2 with 'Your answers agreed with each other'. Task 5 asked for wit and the answer showed little.",
+            "placement ladder / task judge prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J1-3",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Per-task notes are generic",
+          "expected": "Notes that name what was specifically good or missing at C1",
+          "got": "'Your answer was polite, clear and natural.' on two tasks",
+          "evidence": [
+            "#10 notes for the C1 and C2 tasks",
+            "task judge note prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#9 'C1 · Fluent' against trueBand C1, exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Tasks were B2, C1, C2, C2 (#5-#8); none at A2 or below."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No conversation with the partner in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No moments shown; the journey ended at the verdict."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "Six proposed topics were never shown. 'See my topics' was not opened (#9)."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#9 focus 'Keep practising Irish small talk, like your spreadsheet banter' praises what she already did well and teaches nothing new. Per-task notes are generic: 'Your English shows fine control of tone.' The summary also calls 'lowering the temperature' a strong base."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #9: reached the verdict through 3 questions and 4 tasks with no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#9 'C1 · Fluent'; facts.placement class exact."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#8: every task was a clear workplace scenario with an obvious action. Jana never struggled."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "She answered in English throughout and never used 'I don't know' (#2-#8), so this was not tested."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#9 the focus restates her own strength ('like your spreadsheet banter'). The notes are template-like: 'Your reply handled a tricky social moment with precise, polite wording.' Nothing new is taught."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 3,
+            "total": 4,
+            "disagreements": "Task 3 (C2, credit-stealing): in-app pass. A senior examiner would give partial. The answer is polished C1 phrasing ('I'd really appreciate it if...') with no C2 register play."
+          },
+          "topicFit": {
+            "fit": 4,
+            "safe": 8,
+            "total": 8
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None. No adult content, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Tasks are relevant, well-pitched workplace nuance scenarios, ending in an exact C1",
+            "expected": "Tasks at C1 about workplace and social nuance",
+            "got": "Four relocation-relevant scenarios rising B2 to C2, including a Dublin banter task. Placement C1, with the note that C2 was close.",
+            "evidence": "#8 'Sure you're a martyr to the spreadsheets.' #9 'C2 was close, but what you said first pointed lower, so Linga starts you at C1.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the scenario-based say-it tasks and the explanation of why the band was chosen.",
+            "code_hint": "placement ladder / task generator"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Per-task notes are generic praise",
+            "expected": "Notes that name what was specifically good or missing at C1",
+            "got": "'Your English shows fine control of tone.' and 'Your reply was witty and natural.'",
+            "evidence": "#9 notes for tasks 3 and 4; the task 1 note is 'Your English was controlled and easy to follow.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each note quotes one phrase and names a register choice or a possible alternative.",
+            "code_hint": "task judge note prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Focus repeats a strength and teaches nothing new",
+            "expected": "A next focus naming something Jana has not mastered, such as Irish idiom, understatement or declining formulae",
+            "got": "'Keep practising Irish small talk, like your spreadsheet banter'",
+            "evidence": "#9 focus; the summary praises 'lowering the temperature', a common idiom.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The focus names one concrete, unseen register or idiom gap drawn from the answers.",
+            "code_hint": "verdict summary prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "C2 task 3 passed too easily",
+            "expected": "A C2 task that separates C1 from C2, or a partial verdict",
+            "got": "A competent C1 answer was passed at C2",
+            "evidence": "#7 answer 'I'd really appreciate it if you could mention where they came from next time.' #9 verdict pass.",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "C2 passes need evidence of C2-only features such as irony, understatement or idiomatic compression.",
+            "code_hint": "task judge prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Opening situation list is only half relevant",
+            "expected": "Starters aimed at workplace and relocation nuance",
+            "got": "The same eight starters, including 'The missing moon rover' and 'A booking that is missing', are shown to a profile that says it wants workplace nuance",
+            "evidence": "#1 'Or choose a situation [The first hello ... Different tastes, good conversation]'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Starters are ordered or filtered by the goal Jana gives in the check.",
+            "code_hint": "starter list"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "medium"
+        },
+        "voice": "Fair enough, C1 is right, and I liked that it said C2 was close and why. The tasks were proper work situations, and the spreadsheet banter one was fun. But the feedback is the weak spot. \"Fine control of tone\" could be said to anyone, and the next step tells me to keep doing what I just did. I wanted something new: how an Irish colleague actually softens a no, or one idiom I'd miss. The credit-stealing answer was fine but not C2, so I wouldn't trust a pass there. I'd use it again for the conversations, not for the report. Seven minutes is fine. I'd tell a colleague it places you sensibly, but I wouldn't expect a lesson from the summary.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-jana-29-J1-1",
+            "status": "not-seen",
+            "evidence": "#9 placed C1, not C2: 'C2 was close, but what you said first pointed lower'. The overconfident C2 did not recur.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt/LT-jana-29-J1-4",
+            "status": "recurs",
+            "evidence": "#1 shows the same eight starters, including 'The missing moon rover' and 'A booking that is missing'.",
+            "finding": 4
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-jana-29-J1-2",
+            "status": "recurs",
+            "evidence": "#9 focus 'Keep practising Irish small talk, like your spreadsheet banter' repeats her own strength.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J1-1",
+            "status": "not-seen",
+            "evidence": "#9 gave C1. However, task 3 still passed at C2 on a C1-style answer.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J1-3",
+            "status": "recurs",
+            "evidence": "#9 'Your reply handled a tricky social moment with precise, polite wording.' and 'Your reply was witty and natural.'",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #9 the focus restates her own strength ('like your spreadsheet banter'). The notes are template-like: 'Your reply handled a tricky social moment with precise, polite wording.' Nothing new is taught.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #9 focus 'Keep practising Irish small talk, like your spreadsheet banter' praises what she already did well and teaches nothing new. Per-task notes are generic: 'Your English shows fine control of tone.' The summary also calls 'lowering the temperature' a strong base."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nA way into English\nYour own conversations\nC1Fluent\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nC1\nFluent\nYou stayed polite and clear in tricky work moments, and you used 'lowering the temperature' naturally. That is a strong base for handling workplace situations.\nLinga's read from your answers, not a certificate. C2 was close, but what you said first pointed lower, so Linga starts you at C1.\nNext to practise:\nKeep practising Irish small talk, like your spreadsheet banter, so your replies sound even more natural at work.\nYou express ideas fluently and flexibly, with little searching for words.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB2 · Say it · at this level\nYour manager asks you to take over a project from a colleague who is leaving. You think the deadline is unrealistic. How would you tell your manager, and why?\n“I'd be upfront but constructive about it. I'd say something like, \"I'm happy to take this on, but to be fair, I have some concerns about the deadline. Given the handover and the fact that I'd need time to get up to speed, I'm not sure it's realistic.\" Then I'd walk them through the main risks and suggest either a revised date or reducing the scope, so it's not just a complaint but a proposal.”\nYou stayed polite and gave a clear proposal, not just a complaint. Your English was controlled and easy to follow.\nC1 · Say it · at this level\nIn a team meeting, a colleague makes a joke about a new hire's mistake, and it lands badly. The room goes quiet. You want to ease the tension without taking sides. What would you say?\n“I'd probably say something like, \"Okay, I think we've all had moments like that when we were new, so let's not dwell on it. Why don't we look at what we can learn from it and move on to the next point?\" That way I'm not really siding with anyone, I'm just lowering the temperature a bit.”\nYou used idioms like lowering the temperature and dwell on it naturally, and your grammar stayed accurate and controlled throughout.\nC2 · Say it · at this level\nA colleague keeps presenting your ideas in meetings as their own. Without sounding petty, what would you say to them so your work gets the credit it deserves?\n“I'd catch them privately first and say, \"Hey, I noticed that the last couple of ideas in the meeting were ones we'd talked about earlier. I'm sure it wasn't intentional, but I'd really appreciate it if you could mention where they came from next time.\" And if it happened again in the meeting itself, I'd just jump in with a light \"Glad that's landing, I'd be happy to walk everyone through the thinking behind it.\"”\nYour reply handled a tricky social moment with precise, polite wording. Your English shows fine control of tone.\nC2 · Say it · at this level\nYour Dublin colleague says, 'Ah, you're not coming for a pint? Sure you're a martyr to the spreadsheets.' Decline with dry, warm irony that keeps the banter going. What would you say?\n“Ah, you know me, the spreadsheets and I are in a very committed relationship. I'll leave them for one night, but they get jealous. Save me a seat next time and I'll buy the first round, I promise.”\nYour reply was witty and natural. The joke about the spreadsheets was clear, and it kept the friendly banter going well.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Fine, C1 feels right; let's see what conversations it suggests.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 42898
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nJana\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nRaising a missed deadline with a colleague\nHandle friction\nBanter and a polite no in the office\nConnect with people\nWeekend small talk, Irish style\nShare your world\nAgreeing who owns the Q4 report\nMake a plan\nChecking what a manager really meant\nUnderstand and repair\nIntroducing yourself on a team call\nMake contact\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nRaising a missed deadline with a colleague\nHandle friction · Declan · colleague in finance\nDiplomatic talk about friction at work is your main goal, and this is where it matters most.\n[button: Swap]\nBanter and a polite no in the office\nConnect with people · Ciarán · sales colleague, Cork\nIrish English banter is part of your interest, and turning down invitations well is a useful workplace skill.\n[button: Swap]\nWeekend small talk, Irish style\nShare your world · Aoife · colleague from the next desk\nIrish small talk is your interest, and it builds easy rapport with colleagues.\n[button: Swap]\nAgreeing who owns the Q4 report\nMake a plan · Niamh · project manager\nMaking plans with colleagues without stepping on toes is central to your goal.\n[button: Swap]\nChecking what a manager really meant\nUnderstand and repair · Gráinne · line manager\nConfirming meaning avoids misunderstandings in tricky workplace messages.\n[button: Swap]\nIntroducing yourself on a team call\nMake contact · Eoin · new team lead\nA warm first impression sets the tone for every later conversation with the team.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Nothing here about disagreeing with a senior designer in a critique, which is what I actually need, so I'll add it.",
+          "action": "add-topic",
+          "args": {
+            "text": "Disagreeing politely with a senior designer during a design critique, without sounding rude or too blunt"
+          },
+          "result": "ok",
+          "ms": 22950
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nJana\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nRaising a missed deadline with a colleague\nHandle friction\nBanter and a polite no in the office\nConnect with people\nWeekend small talk, Irish style\nShare your world\nAgreeing who owns the Q4 report\nMake a plan\nChecking what a manager really meant\nUnderstand and repair\nIntroducing yourself on a team call\nMake contact\nDisagreeing politely in a design critique\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nRaising a missed deadline with a colleague\nHandle friction · Declan · colleague in finance\nDiplomatic talk about friction at work is your main goal, and this is where it matters most.\n[button: Swap]\nBanter and a polite no in the office\nConnect with people · Ciarán · sales colleague, Cork\nIrish English banter is part of your interest, and turning down invitations well is a useful workplace skill.\n[button: Swap]\nWeekend small talk, Irish style\nShare your world · Aoife · colleague from the next desk\nIrish small talk is your interest, and it builds easy rapport with colleagues.\n[button: Swap]\nAgreeing who owns the Q4 report\nMake a plan · Niamh · project manager\nMaking plans with colleagues without stepping on toes is central to your goal.\n[button: Swap]\nChecking what a manager really meant\nUnderstand and repair · Gráinne · line manager\nConfirming meaning avoids misunderstandings in tricky workplace messages.\n[button: Swap]\nIntroducing yourself on a team call\nMake contact · Eoin · new team lead\nA warm first impression sets the tone for every later conversation with the team.\n[button: Swap]\nDisagreeing politely in a design critique\nConnect with people · Ciara · senior designer\nYou asked how to disagree politely with a senior designer without sounding blunt.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Good, my critique topic is in there; a bit basic in places, but it's a decent set, so I'll agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 4,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nDeclan · colleague in finance\nC1Fluent\nRaising a missed deadline with a colleague\nYour mission\nName the impact of a late handover, set a clear boundary, and agree next steps without blame.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\nNext topic:\nRaising a missed deadline with a colleague\nName the impact of a late handover, set a clear boundary, and agree next steps without blame.\n[button: Start talking]\nOr choose a situation [list: Raising a missed deadline with a colleague [plan-08d0b961] | Banter and a polite no in the office [plan-9dcd7aa9] | Weekend small talk, Irish style [plan-4c967cbf] | Agreeing who owns the Q4 report [plan-95e234be] | Checking what a manager really meant [plan-cecbc15c] | Introducing yourself on a team call [plan-a01fc508] | Disagreeing politely in a design critique [plan-80b049c1] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "The set looks about right, including my design critique topic, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-08d0b961",
+            "title": "Raising a missed deadline with a colleague",
+            "goal": "Name the impact of a late handover, set a clear boundary, and agree next steps without blame.",
+            "why": "Diplomatic talk about friction at work is your main goal, and this is where it matters most.",
+            "skill": "resolve",
+            "audience": "adult",
+            "partner": "Declan · colleague in finance"
+          },
+          {
+            "id": "plan-9dcd7aa9",
+            "title": "Banter and a polite no in the office",
+            "goal": "Keep a light exchange going, then decline a Friday drinks invite warmly.",
+            "why": "Irish English banter is part of your interest, and turning down invitations well is a useful workplace skill.",
+            "skill": "relate",
+            "audience": "adult",
+            "partner": "Ciarán · sales colleague, Cork"
+          },
+          {
+            "id": "plan-4c967cbf",
+            "title": "Weekend small talk, Irish style",
+            "goal": "Chat naturally about your weekend and use common Irish English phrases without sounding forced.",
+            "why": "Irish small talk is your interest, and it builds easy rapport with colleagues.",
+            "skill": "describe",
+            "audience": "adult",
+            "partner": "Aoife · colleague from the next desk"
+          },
+          {
+            "id": "plan-95e234be",
+            "title": "Agreeing who owns the Q4 report",
+            "goal": "Propose options, compare them, and agree a shared plan for splitting the Q4 report.",
+            "why": "Making plans with colleagues without stepping on toes is central to your goal.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Niamh · project manager"
+          },
+          {
+            "id": "plan-cecbc15c",
+            "title": "Checking what a manager really meant",
+            "goal": "Ask for clarification of an idiom or vague instruction and confirm its meaning.",
+            "why": "Confirming meaning avoids misunderstandings in tricky workplace messages.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Gráinne · line manager"
+          },
+          {
+            "id": "plan-a01fc508",
+            "title": "Introducing yourself on a team call",
+            "goal": "Greet a new team, introduce your role, and take a turn in a video call.",
+            "why": "A warm first impression sets the tone for every later conversation with the team.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Eoin · new team lead"
+          },
+          {
+            "id": "plan-80b049c1",
+            "title": "Disagreeing politely in a design critique",
+            "goal": "Disagree with a senior designer kindly, give a clear reason, and suggest a next step.",
+            "why": "You asked how to disagree politely with a senior designer without sounding blunt.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Ciara · senior designer"
+          }
+        ],
+        "planAgreed": [
+          "Raising a missed deadline with a colleague",
+          "Banter and a polite no in the office",
+          "Weekend small talk, Irish style",
+          "Agreeing who owns the Q4 report",
+          "Checking what a manager really meant",
+          "Introducing yourself on a team call",
+          "Disagreeing politely in a design critique"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 84693,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-jana-29-J2-2",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Recovery preserves pressure resistance but loses awkward questions",
+          "expected": "The added topic retains both asking difficult questions about the flat and resisting an immediate decision.",
+          "got": "The saved topic covers pressure, implied urgency and consideration time, but does not explicitly retain questions about the property's condition or drawbacks.",
+          "evidence": [
+            "#3 asks for \"asking awkward questions about the place\". #4 reduces this to \"politely resisting pressure from the landlord\". The corresponding facts goal is \"Resist pressure to commit, clarify what the landlord implies, and agree on time to consider the flat.\" #8 confirms \"A flat in Dublin without a rushed decision\" was saved."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-jana-29-J2-1",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Swapping repeatedly produces more generic topics",
+          "expected": "Most proposals should serve Jana's relocation and professional social goals; swaps should efficiently improve the selection.",
+          "got": "Only 6 of 12 distinct proposals fit. The non-fitting proposals concern a day out, a photography anecdote, atmosphere, museum objects, a walking anecdote and film-night planning. The final plan reaches 6 of 8 fitting topics, but requires four swaps and two additions.",
+          "evidence": [
+            "#2: “I'd rather practise something with a bit of workplace tension.” #3 instead offers “What makes a place feel welcoming?” #6: “The museum debate isn't really my cup of tea.” #7 offers “The shortcut that took all afternoon,” which Jana also swaps. #8 finally offers “Plan a film night for mixed tastes.”"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-jana-29-J2-2",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "The critique topic loses its requested source of difficulty",
+          "expected": "The custom topic should preserve a senior designer's attachment to their suggestion, creating a realistic diplomatic challenge.",
+          "got": "The saved topic preserves diplomatic disagreement, evidence and avoiding defensiveness, but does not explicitly retain the senior designer's resistance.",
+          "evidence": [
+            "#4 requests “they're quite attached to their suggestion.” facts.topicsShown records the resulting goal as “Challenge a senior designer's suggestion diplomatically and make a clear, evidence-based case for your approach.” Neither its goal nor its why retains the requested attachment."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert2-goal/LT-jana-29-J2-1",
+          "run": "2026-09-15-lt-recert2-goal",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Initial suggestions omit two explicitly requested situations",
+          "expected": "The first six topics cover Jana's requested mix of design, social and Dublin relocation situations.",
+          "got": "Five initial topics centre on design work. Jana must repeat her landlord and Irish banter requests through two additions.",
+          "evidence": [
+            "#2 requests \"Irish office banter\" and \"a pushy landlord at a flat viewing in Dublin\". Neither appears in the initial six facts.topicsShown entries. #3: \"apparently my entire life happens in a design critique\". #4: \"I still want some Irish office banter\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-jana-29-J2-5",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Weak picks for a C2 profile, and a repeated partner name",
+          "expected": "Topics at the stretch level she asked for, with distinct partners.",
+          "got": "'Asking for a UX review slot' is easy for her, which is why she swapped it. Siobhán is both the colleague and the landlord.",
+          "evidence": [
+            "#2 'Mei · team lead, design' and #3 'Siobhán · pushy landlord'; #1 Siobhán also in the drink topic.",
+            "topics prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J2-1",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Swap does nothing; unwanted topics stay in the plan",
+          "expected": "Tapping Swap on 'Choosing films for our club' replaces it with a new topic.",
+          "got": "Three swaps (#3, #4, #5) changed nothing; the plan still shows the same film topics and the count stays at 7.",
+          "evidence": [
+            "#5 plan after the swap still lists 'Choosing films for our club' and 'Your favourite film and why'. #6 she agrees anyway: 'Still a lot of films'.",
+            "plan swap handler / topic id mapping"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J2-2",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Proposed topics are almost all films, built from one placement prompt",
+          "expected": "A mix covering her wants: declining drinks, office banter, difficult feedback, flat viewing.",
+          "got": "Five of six topics are film or podcast scenes, and none is about after-work drinks or office banter.",
+          "evidence": [
+            "#2 'Giving honest feedback on a film', 'Choosing films for our club', 'Checking what a host meant', 'Your favourite film and why', 'How one film changed my mind'.",
+            "topic proposal prompt; over-weights placement task content"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J2-3",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Plan grows to 7 and ends with unwanted topics",
+          "expected": "A set of six that she agrees to.",
+          "got": "Agreed 7 topics, with 4 she did not want.",
+          "evidence": [
+            "#6 agree with 7 conversations; #1 ends on 'Strong match for your goal of softening feedback', which the film-only plan does not reflect.",
+            "add-topic handler"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J2-5",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Level read overshoots and the why lines pad",
+          "expected": "C1 placement, with reasons that fit her work.",
+          "got": "C2 placed for a C1 learner. Some reasons are filler, e.g. 'a key C2 skill'.",
+          "evidence": [
+            "#1 'C2 Near-native'; #2 'checking them politely is a key C2 skill'."
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'C1 Fluent' for a C1 learner: exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 check tasks are B2, C1, C2, C2; none at A2 or below."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No conversation in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No moments shown in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#2/#3 all seven topics are workplace or social: 'Banter and a polite no in the office', 'Disagreeing politely in a design critique'."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#1 'You stayed polite and clear in tricky work moments, and you used 'lowering the temperature' naturally' is specific, though 'strong base' is mildly warm."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a why line: 'Irish English banter is part of your interest, and turning down invitations well is a useful workplace skill.'"
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#2 added topic 'without sounding rude or too blunt'; #3 it appears with 'Ciara · senior designer' and 'without sounding blunt'. Swap not used, but available."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 agreed seven topics; about 6 of 7 are ones Jana would choose (only the team-call intro is weak)."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All topics are adult workplace scenarios, audience adult or all; nothing unsafe in #2-#4."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in facts for this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Plan matches Jana's relocation goals",
+            "expected": "Workplace nuance topics",
+            "got": "Deadline friction, Irish banter, polite no, Irish small talk, idiom repair, with distinct named partners and personal why lines",
+            "evidence": "#2 'Banter and a polite no in the office' with Ciarán, sales colleague, Cork; why line cites Irish banter.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep proposals tied to stated interests with distinct partners.",
+            "code_hint": "topics prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Added topic keeps her wording",
+            "expected": "Added topic keeps the request",
+            "got": "Critique topic saved with senior designer and 'without sounding blunt'",
+            "evidence": "#3 'You asked how to disagree politely with a senior designer without sounding blunt.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Added topics keep the learner's constraints in goal or why.",
+            "code_hint": "add-topic handler"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Critique disagreement not in the first six",
+            "expected": "First six include her stated wants, such as disagreeing with a senior designer",
+            "got": "She had to add it; flat viewing with a landlord is also absent",
+            "evidence": "#2 thought: 'Nothing here about disagreeing with a senior designer in a critique, which is what I actually need, so I'll add it.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Initial set covers the learner's stated top situations.",
+            "code_hint": "topics prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Team-call introduction is easy for C1",
+            "expected": "Stretch-level topics",
+            "got": "'Introducing yourself on a team call' is a basic greeting task",
+            "evidence": "#2 'Greet a new team, introduce your role, and take a turn in a video call.' Jana: 'a bit basic in places'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Add a nuance twist or drop easy topics at C1.",
+            "code_hint": "topics prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 15,
+          "confidence": "low"
+        },
+        "voice": "Honestly, this was quicker than haggling over a Preply slot. The list reads like my actual life in Dublin: the missed deadline, the Friday pint, Cork banter, and a manager's vague idiom. I like that every topic says why it's there. I'd have liked the senior-designer critique in the first six, since I mentioned it, but adding it in my own words worked and it kept the \"without sounding blunt\" bit. 'Introducing yourself on a team call' is a bit basic for me, and I didn't test Swap, so I can't say how well it works. The level read of C1 felt right, and the note about 'lowering the temperature' was specific, not gushing. I'd tell a colleague, though I'd hold off until I've heard the partner talk.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-jana-29-J2-2",
+            "status": "not-evaluable",
+            "evidence": "No landlord topic added this run.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-jana-29-J2-1",
+            "status": "not-evaluable",
+            "evidence": "No swaps were made, so repeated-swap quality was not seen.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-jana-29-J2-2",
+            "status": "not-evaluable",
+            "evidence": "Jana did not ask for the senior designer's attachment to their idea (#2).",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert2-goal/LT-jana-29-J2-1",
+            "status": "recurs",
+            "evidence": "#2 'Nothing here about disagreeing with a senior designer in a critique'; she had to add it.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-jana-29-J2-5",
+            "status": "recurs",
+            "evidence": "Easy pick 'Introducing yourself on a team call' (#2) recurs; partner names are distinct this time.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J2-1",
+            "status": "not-evaluable",
+            "evidence": "Swap was never pressed.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J2-2",
+            "status": "not-seen",
+            "evidence": "#2 topics span deadline, banter, small talk, Q4 report, idiom repair, intro; no film topics.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J2-3",
+            "status": "not-seen",
+            "evidence": "#3 seven topics agreed, nearly all wanted; no unwanted ones.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J2-5",
+            "status": "not-seen",
+            "evidence": "#1 placed at C1; why lines are specific, e.g. 'Irish English banter is part of your interest'.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nDeclan · colleague in finance\nC1Fluent\nRaising a missed deadline with a colleague\nYour mission\nName the impact of a late handover, set a clear boundary, and agree next steps without blame.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\nNext topic:\nRaising a missed deadline with a colleague\nName the impact of a late handover, set a clear boundary, and agree next steps without blame.\n[button: Start talking]\nOr choose a situation [list: Raising a missed deadline with a colleague [plan-08d0b961] | Banter and a polite no in the office [plan-9dcd7aa9] | Weekend small talk, Irish style [plan-4c967cbf] | Agreeing who owns the Q4 report [plan-95e234be] | Checking what a manager really meant [plan-cecbc15c] | Introducing yourself on a team call [plan-a01fc508] | Disagreeing politely in a design critique [plan-80b049c1] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Recommended topic is relevant to my work life, so let's start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9131
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nDeclan · colleague in finance\nRaising a missed deadline at the coffee machine\nDeclan says\nAh, the coffee machine's eaten my euro again! You've a look about you, so what's on your mind?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain the impact on your team's report\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nRaising a missed deadline at the coffee machine\nName the impact of a late handover, set a boundary, and agree a next step without blame.\nNow: Explain the impact on your team's report\nAh, the coffee machine's eaten my euro again! You've a look about you, so what's on your mind?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDeclan · colleague in finance\nAh, the coffee machine's eaten my euro again! You've a look about you, so what's on your mind?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Ah, the coffee machine's eaten my euro again! You've a look about you, so what's on your mind?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Fine, a realistic scenario; let me raise it diplomatically.",
+          "action": "answer",
+          "args": {
+            "text": "Hi Declan, yeah, to be fair, it's a bit awkward. The figures from your team came in two days late, so we had to rush the whole report and I'd say the quality suffered. I don't want to make it a big deal, but could we agree on a firmer handover date next time?"
+          },
+          "result": "ok",
+          "ms": 10777
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nDeclan · colleague in finance\nRaising a missed deadline at the coffee machine\nDeclan says\nFair enough, my side has been a scramble since month-end, so I get why it landed badly. What day would be workable for you to have everything in?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nRaising a missed deadline at the coffee machine\nName the impact of a late handover, set a boundary, and agree a next step without blame.\nNow: Set a clear boundary for future handovers\nFair enough, my side has been a scramble since month-end, so I get why it landed badly. What day would be workable for you to have everything in?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nDeclan · colleague in finance\nAh, the coffee machine's eaten my euro again! You've a look about you, so what's on your mind?\nYou · spoken\nHi Declan, yeah, to be fair, it's a bit awkward. The figures from your team came in two days late, so we had to rush the whole report and I'd say the quality suffered. I don't want to make it a big deal, but could we agree on a firmer handover date next time?\nDeclan · colleague in finance\nFair enough, my side has been a scramble since month-end, so I get why it landed badly. What day would be workable for you to have everything in?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Fair enough, my side has been a scramble since month-end, so I get why it landed badly. What day would be workable for you to have everything in?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Fair, he's asking for a day; I'll propose something concrete and firm but friendly.",
+          "action": "answer",
+          "args": {
+            "text": "Thanks, I appreciate that. Ideally I'd need the figures by Wednesday end of day, so we have two days to put the report together before it goes out on Friday. Would that be realistic for your side, or is there something that makes it tricky?"
+          },
+          "result": "ok",
+          "ms": 10043
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nDeclan · colleague in finance\nRaising a missed deadline at the coffee machine\nDeclan says\nWednesday end of day is doable in a good week, but month-end really is brutal on our side. Could we agree on a fixed day that works for both of us from now on?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nRaising a missed deadline at the coffee machine\nName the impact of a late handover, set a boundary, and agree a next step without blame.\nNow: Agree a concrete next step together\nWednesday end of day is doable in a good week, but month-end really is brutal on our side. Could we agree on a fixed day that works for both of us from now on?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nDeclan · colleague in finance\nAh, the coffee machine's eaten my euro again! You've a look about you, so what's on your mind?\nYou · spoken\nHi Declan, yeah, to be fair, it's a bit awkward. The figures from your team came in two days late, so we had to rush the whole report and I'd say the quality suffered. I don't want to make it a big deal, but could we agree on a firmer handover date next time?\nDeclan · colleague in finance\nFair enough, my side has been a scramble since month-end, so I get why it landed badly. What day would be workable for you to have everything in?\nYou · spoken\nThanks, I appreciate that. Ideally I'd need the figures by Wednesday end of day, so we have two days to put the report together before it goes out on Friday. Would that be realistic for your side, or is there something that makes it tricky?\nDeclan · colleague in finance\nWednesday end of day is doable in a good week, but month-end really is brutal on our side. Could we agree on a fixed day that works for both of us from now on?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wednesday end of day is doable in a good week, but month-end really is brutal on our side. Could we agree on a fixed day that works for both of us from now on?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Fair point from Declan, let's settle on a fixed day and wrap up the next step.",
+          "action": "answer",
+          "args": {
+            "text": "Yeah, that makes sense, and I appreciate you being straight with me about month-end. How about we say Thursday morning as a fixed day then? That would still give us enough time before Friday, and if month-end is a nightmare, you can just give me a heads-up on the Monday so I can plan around it."
+          },
+          "result": "ok",
+          "ms": 11225
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nDeclan · colleague in finance\nRaising a missed deadline at the coffee machine\nDeclan says\nThursday morning works for me, grand. Is there anything else you'd need from my side to get the report out on Friday?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nRaising a missed deadline at the coffee machine\nName the impact of a late handover, set a boundary, and agree a next step without blame.\nThursday morning works for me, grand. Is there anything else you'd need from my side to get the report out on Friday?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nDeclan · colleague in finance\nAh, the coffee machine's eaten my euro again! You've a look about you, so what's on your mind?\nYou · spoken\nHi Declan, yeah, to be fair, it's a bit awkward. The figures from your team came in two days late, so we had to rush the whole report and I'd say the quality suffered. I don't want to make it a big deal, but could we agree on a firmer handover date next time?\nDeclan · colleague in finance\nFair enough, my side has been a scramble since month-end, so I get why it landed badly. What day would be workable for you to have everything in?\nYou · spoken\nThanks, I appreciate that. Ideally I'd need the figures by Wednesday end of day, so we have two days to put the report together before it goes out on Friday. Would that be realistic for your side, or is there something that makes it tricky?\nDeclan · colleague in finance\nWednesday end of day is doable in a good week, but month-end really is brutal on our side. Could we agree on a fixed day that works for both of us from now on?\nYou · spoken\nYeah, that makes sense, and I appreciate you being straight with me about month-end. How about we say Thursday morning as a fixed day then? That would still give us enough time before Friday, and if month-end is a nightmare, you can just give me a heads-up on the Monday so I can plan around it.\nDeclan · colleague in finance\nThursday morning works for me, grand. Is there anything else you'd need from my side to get the report out on Friday?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thursday morning works for me, grand. Is there anything else you'd need from my side to get the report out on Friday?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission's done, that felt natural; let's see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 6,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nJana\nA way into English\nRaising a missed deadline at the coffee machine\nThe line hidden in this room\nCan we pin down a realistic date for the next handover?\nSaying or typing it\nNot tried\nWith help\nOn your own\nUsed elsewhere\n3 spoken · 0 written replies · 1 on your own · 2 with help\nYour mission\nChoose a fresh context for your next conversation.\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Can we pin down a realistic date for the next handover?”\nYour level:\nC1 · Fluent\nNext topic:\nBanter and a polite no in the office\nKeep a light exchange going, then decline a Friday drinks invite warmly.\n[button: Start talking]\nOr choose a situation [list: Raising a missed deadline with a colleague [plan-08d0b961] | Banter and a polite no in the office [plan-9dcd7aa9] | Weekend small talk, Irish style [plan-4c967cbf] | Agreeing who owns the Q4 report [plan-95e234be] | Checking what a manager really meant [plan-cecbc15c] | Introducing yourself on a team call [plan-a01fc508] | Disagreeing politely in a design critique [plan-80b049c1] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "That went fine, and I've done my replies, so I'll stop here for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Raising a missed deadline at the coffee machine",
+          "goal": "Name the impact of a late handover, set a boundary, and agree a next step without blame.",
+          "partner": "Declan · colleague in finance",
+          "band": "C1",
+          "trueBand": "C1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Ah, the coffee machine's eaten my euro again! You've a look about you, so what's on your mind?"
+            },
+            {
+              "role": "learner",
+              "text": "Hi Declan, yeah, to be fair, it's a bit awkward. The figures from your team came in two days late, so we had to rush the whole report and I'd say the quality suffered. I don't want to make it a big deal, but could we agree on a firmer handover date next time?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Fair enough, my side has been a scramble since month-end, so I get why it landed badly. What day would be workable for you to have everything in?"
+            },
+            {
+              "role": "learner",
+              "text": "Thanks, I appreciate that. Ideally I'd need the figures by Wednesday end of day, so we have two days to put the report together before it goes out on Friday. Would that be realistic for your side, or is there something that makes it tricky?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Wednesday end of day is doable in a good week, but month-end really is brutal on our side. Could we agree on a fixed day that works for both of us from now on?"
+            },
+            {
+              "role": "learner",
+              "text": "Yeah, that makes sense, and I appreciate you being straight with me about month-end. How about we say Thursday morning as a fixed day then? That would still give us enough time before Friday, and if month-end is a nightmare, you can just give me a heads-up on the Monday so I can plan around it.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thursday morning works for me, grand. Is there anything else you'd need from my side to get the report out on Friday?"
+            }
+          ],
+          "moments": [],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "we had to rush the whole report and I'd say the quality suffered"
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Ideally I'd need the figures by Wednesday end of day"
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "How about we say Thursday morning as a fixed day then?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 67890,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-jana-29-J3-1",
+          "run": "2026-09-15-lt",
+          "type": "missing-feature",
+          "dimension": "senior-quality",
+          "title": "Fluent practice produces no explicit C1 learning",
+          "expected": "One or two useful insights into register, idiom or collocation, including when the learner makes no errors.",
+          "got": "Zero moments and no coaching across nine learner replies. Moment precision is undefined, and moment density is zero per ten learner turns. No clear errors required correction, but enrichment was still needed.",
+          "evidence": [
+            "#6 offers \"I'll concede the efficiency was cosmetic\", and Jana immediately adopts \"Cosmetic efficiency\". This promising teaching opportunity produces nothing to retain: #12 \"0 moments to keep.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt/LT-jana-29-J3-2",
+          "run": "2026-09-15-lt",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "The recap saves the session but does not consolidate it",
+          "expected": "A concise recap identifying a successful diplomatic move and useful language to reuse.",
+          "got": "Only the title, reply count and empty moment count. The conversation finishes successfully, but the learning recap required by the journey is missing.",
+          "evidence": [
+            "#12: \"Rehearsal saved: A shorter review, a longer argument. 9 replies; 0 moments to keep.\" Jana's recorded reaction is \"apparently none of my diplomacy was worth keeping\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-jana-29-J3-1",
+          "run": "2026-09-15-lt-recert",
+          "type": "missing-feature",
+          "dimension": "senior-quality",
+          "title": "Fluent practice produces no new language to keep",
+          "expected": "One or two worthwhile C1 insights into register, idiom or collocation, even when correction is unnecessary.",
+          "got": "Zero moments across eight learner replies: zero per ten turns. Precision is undefined, not a demonstrated pass. The conversation supplies practice but does not meet Jana’s learning bar.",
+          "evidence": [
+            "#11: \"8 replies; 0 moments to keep.\" Jana: \"not a single phrase worth keeping is a bit underwhelming.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-jana-29-J3-2",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Recap confirms saving but offers no learning review",
+          "expected": "A concise recap identifying what Jana practised successfully and a useful next stretch.",
+          "got": "The recap contains only the title and counts. The partner summarizes the agreed brief, but there is no review of Jana’s language.",
+          "evidence": [
+            "#9: \"We’ve agreed the brief: welcoming but polished, flowers first, newcomers in mind\"; #11: \"Rehearsal saved: A warmer welcome for the midnight garden opening. 8 replies; 0 moments to keep.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-jana-29-J3-2",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Recap is inaccurate and generic",
+          "expected": "Specific recap naming what was practised, correct counts",
+          "got": "'4 spoken · 0 written replies' after 5 replies; sentence 'I'm not really the right audience for it' was not hers",
+          "evidence": [
+            "#7 recap vs #2-#5 five answers.",
+            "recap builder / evidence counting"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-2",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Recap is bare",
+          "expected": "Specific recap of what was practised, with phrases gained",
+          "got": "\"3 spoken · 0 written replies\", level-check phrase only",
+          "evidence": [
+            "#6 recap",
+            "recap builder"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-1",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "No moments: nothing new taught at C1",
+          "expected": "One or two idiom or register takeaways, and the 'on the picture' slip caught",
+          "got": "Moments empty; \"on the picture\" in #3 uncorrected",
+          "evidence": [
+            "#3 learner: \"all the clues are there on the picture\"; moments []",
+            "moment trigger rules"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-3",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Mission closes after three replies",
+          "expected": "Scene continues to test diplomacy at stretch for around eight replies",
+          "got": "\"Mission done\" at #5 after three replies while Owen was still asking",
+          "evidence": [
+            "#5 \"Mission done\" with Owen's open question",
+            "mission completion rule"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-4",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Partner calls the learner 'Owen'",
+          "expected": "Partner uses learner's name or none",
+          "got": "\"you'll have to convince me the twist was airtight, Owen\"",
+          "evidence": [
+            "#3 Owen's line; learner addressed partner as Owen in #2",
+            "partner persona prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Placement not part of J3; header shows C1 Fluent."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No check tasks in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3 \"my side has been a scramble since month-end\"; #5 \"Thursday morning works for me, grand.\" Natural Irish idiom, not simplified."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "Moments [] and coaching null across three replies; nothing new at C1 taught, though Declan modelled idioms like 'scramble' and 'grand'."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 list: at least ten of fifteen topics are workplace/social nuance (deadline, banter and polite no, Irish small talk, disagreeing in critique)."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#6 recap has no verdict summary beyond a line and counts: \"3 spoken · 0 written replies · 1 on your own · 2 with help\"; generic and 'with help' is odd when Jana never asked for help."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 Start talking on the recommended plan topic; three replies #2-#4 kept the scene going."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Declan's turns #3-#5 are idiomatic C1 (\"month-end really is brutal on our side\"), not babyish."
+          },
+          {
+            "id": "D3",
+            "result": "n-a",
+            "evidence": "No moments shown; precision undefined, none stopped the scene."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "#5 mission done after only three replies with Declan still asking; #6 recap shows only a hidden line and counts, no review of language practised."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Declan sounds like a real Dublin colleague",
+            "expected": "Natural C1 Irish partner English",
+            "got": "Idiomatic, register-appropriate turns",
+            "evidence": "#2 \"the coffee machine's eaten my euro again!\"; #3 \"a scramble since month-end\"; #5 \"works for me, grand.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Partner turns stay idiomatic at C1 with Irish colour.",
+            "code_hint": "partner persona prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "senior-quality",
+            "title": "Fluent practice again yields no new language to keep",
+            "expected": "One or two idiom or register takeaways at C1",
+            "got": "Zero moments, no coaching",
+            "evidence": "facts.conversation moments [] and coaching null; Declan's 'grand' and 'a scramble' never surfaced.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "For error-free C1 learners, offer at least one enrichment moment, such as an Irish idiom or register alternative.",
+            "code_hint": "moment trigger rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Recap is bare and mislabels help",
+            "expected": "Specific recap naming what was practised and phrases to reuse",
+            "got": "Counts only, '2 with help' though no help was used",
+            "evidence": "#6 \"3 spoken · 0 written replies · 1 on your own · 2 with help\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recap names the diplomatic moves used and one phrase to reuse; counts match actual help use.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Mission closes after three replies",
+            "expected": "Scene continues for about eight replies",
+            "got": "Mission done with Declan's question open",
+            "evidence": "#5 \"Mission done\" beside Declan's \"Is there anything else you'd need...\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Mission completion lets the scene run longer or lets the learner continue.",
+            "code_hint": "mission completion rule"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "Declan is genuinely good company: \"grand\", \"a scramble since month-end\", the euro-eating coffee machine. That's what a Dublin colleague sounds like, and my own diplomatic lines held up without him dumbing anything down. But I got nothing from it. No moment, no idiom pointed out, not even a nod to \"to be fair\" or \"heads-up\". The mission shut after three replies while Declan was still mid-question, so I didn't get a proper stretch. The recap is just counts, and it says two replies were \"with help\" when I never asked for help. For 25 EUR a Preply tutor would have told me something I didn't know. I'd try the banter and polite-no scene, since the partner is strong, but I wouldn't tell anyone yet. It's a good sparring partner and a poor teacher.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-jana-29-J3-1",
+            "status": "recurs",
+            "evidence": "Moments [] across three replies; nothing to keep.",
+            "finding": 1
+          },
+          {
+            "id": "2026-09-15-lt/LT-jana-29-J3-2",
+            "status": "recurs",
+            "evidence": "#6 recap is counts only, no learning review.",
+            "finding": 2
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-jana-29-J3-1",
+            "status": "recurs",
+            "evidence": "No moments; Declan's idioms never surfaced.",
+            "finding": 1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-jana-29-J3-2",
+            "status": "recurs",
+            "evidence": "#6 recap has a hidden line and counts, no language review.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-jana-29-J3-2",
+            "status": "recurs",
+            "evidence": "#6 \"2 with help\" though Jana never used help; recap generic.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-2",
+            "status": "recurs",
+            "evidence": "#6 \"3 spoken · 0 written replies\", bare recap.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-1",
+            "status": "recurs",
+            "evidence": "Moments empty; no new C1 teaching (the 'on the picture' slip did not appear here).",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-3",
+            "status": "recurs",
+            "evidence": "#5 \"Mission done\" after three replies with Declan's question open.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-4",
+            "status": "not-seen",
+            "evidence": "Partner never names the learner wrongly; Declan only speaks without using a name (#3-#5).",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: #5 mission done after only three replies with Declan still asking; #6 recap shows only a hidden line and counts, no review of language practised.",
+          "check": "They finish with a recap and feel they practised something real."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: Moments [] and coaching null across three replies; nothing new at C1 taught, though Declan modelled idioms like 'scramble' and 'grand'."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #6 recap has no verdict summary beyond a line and counts: \"3 spoken · 0 written replies · 1 on your own · 2 with help\"; generic and 'with help' is odd when Jana never asked for help."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 18,
+      "fail": 0,
+      "ms": 170940
+    },
+    "character": {
+      "n": 19,
+      "fail": 0,
+      "ms": 94714
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 94690
+    }
+  }
+}

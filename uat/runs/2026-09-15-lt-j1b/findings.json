@@ -23,12 +23,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Keep the complete task reading load near 15 words and demonstrate that this beginner understands the requested action, including after Czech or don't-know responses.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-6",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
     "recertify_status": "recurs",
-    "recertify_evidence": "#7 28-word listening line, #8 28-word Say-it task; #9 thought 'Too long and hard... want to stop'",
+    "recertify_evidence": "#7 24-word listening line; thought 'Too fast and long'.",
     "recurred_as": "LT-tomas-9-J1-1"
   },
   {
@@ -55,9 +55,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Explain the mixed skill evidence and uncertainty in plain language; avoid claiming agreement without reconciling the A2 observation with B1.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#9 B1 shown while notes say 'Your English read as B1 here' and the corrections are A2 slips; she says 'maybe a bit high'.",
+    "recurred_as": "LT-petra-38-J1-1"
   },
   {
     "id": "LT-lukas-24-J1-1",
@@ -83,9 +87,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Tie the next focus to one quoted response and provide one natural alternative or short exercise relevant to his stated social goal, without treating ordinary conversational language as an error.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#9 focus is one preposition slip, not tied to dating anxiety.",
+    "recurred_as": "LT-lukas-24-J1-3"
   },
   {
     "id": "LT-oksana-34-J1-1",
@@ -110,10 +118,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Summarise demonstrated delivery planning and reason-giving; reserve past problem-solving claims for an answer that actually demonstrates them.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 summary credits only 'because', 'when', 'so' linking, which the answers show."
   },
   {
     "id": "LT-ondrej-16-J1-1",
@@ -139,9 +150,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Grade this response pass at B1 while retaining verb-form feedback; distinguish communicative success from grammatical accuracy.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#10 connected B1 answer 'it helped me because my aim was more better' marked partial, 'nearly there'.",
+    "recurred_as": "LT-ondrej-16-J1-1"
   },
   {
     "id": "LT-petra-38-J1-2",
@@ -167,9 +182,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Give one concrete next exercise or useful phrase grounded in her answers, such as practising a guest complaint over the phone.",
-    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)"
+    "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#9 focus 'Say a little more in each answer' ignores her phone-comprehension goal at #4.",
+    "recurred_as": "LT-petra-38-J1-4"
   },
   {
     "id": "LT-tomas-9-J1-2",
@@ -195,12 +214,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Offer one short, immediately repeatable phrase using familiar words before expanding to an activity sentence.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-6",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
     "recertify_status": "recurs",
-    "recertify_evidence": "#10 focus 'The creeper blew up the wall.' and 'Your words: “Creeper... bum!”.' stray punctuation",
+    "recertify_evidence": "#10 focus on articles ('adding a before a noun'), beyond like/is level and unnatural.",
     "recurred_as": "LT-tomas-9-J1-3"
   },
   {

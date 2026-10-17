@@ -1,0 +1,2926 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "Hmm, \"Find my level\" sounds okay, I'll press it.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Tomáš! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Tomáš! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Tomáš! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Anglicky... jen trochu, ve škole a při Minecraftu.",
+          "action": "answer",
+          "args": {
+            "text": "Ve škole. A Minecraft. Creeper!"
+          },
+          "result": "ok",
+          "ms": 4338
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nAbout you · question 2 of 3\nLinga asks\nCreeper! Nice, I know that one. How did you learn your English words? At school, or from games?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nCreeper! Nice, I know that one. How did you learn your English words? At school, or from games?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Tomáš! You can answer in English or in your own language. Where do you use English in your life?\nYou\nVe škole. A Minecraft. Creeper!\nLinga\nCreeper! Nice, I know that one. How did you learn your English words? At school, or from games?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Creeper! Nice, I know that one. How did you learn your English words? At school, or from games?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Hmm, I understood \"Minecraft\" and \"games\"; I'll say games.",
+          "action": "answer",
+          "args": {
+            "text": "Z her. Minecraft. A ve škole."
+          },
+          "result": "ok",
+          "ms": 5374
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nAbout you · question 3 of 3\nLinga asks\nGames are a great way to learn! What would you like to do in English? Play with friends, watch videos, or something else? You can answer in Czech.\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nGames are a great way to learn! What would you like to do in English? Play with friends, watch videos, or something else? You can answer in Czech.\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Tomáš! You can answer in English or in your own language. Where do you use English in your life?\nYou\nVe škole. A Minecraft. Creeper!\nLinga\nCreeper! Nice, I know that one. How did you learn your English words? At school, or from games?\nYou\nZ her. Minecraft. A ve škole.\nLinga\nGames are a great way to learn! What would you like to do in English? Play with friends, watch videos, or something else? You can answer in Czech.\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Games are a great way to learn! What would you like to do in English? Play with friends, watch videos, or something else? You can answer in Czech.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Hraní s kamarády, Minecraft, to je jednoduchý.",
+          "action": "answer",
+          "args": {
+            "text": "Hrát Minecraft s kamarády. Play Minecraft."
+          },
+          "result": "ok",
+          "ms": 6899
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nTask 1 · Choose the reply on the TV\nYour friend says: 'Do you want to play Minecraft with me?' What do you say?\n01\nYes, let's play!\n02\nI like bananas.\nYour task\nYes, let's play!\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend says: 'Do you want to play Minecraft with me?' What do you say?\n[button: Yes, let's play!] [button: I like bananas.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Minecraft! I know this one, yes.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 8530
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nTask 2 · Choose the reply on the TV\nA Creeper is coming! Your friend says, 'Watch out, run!' What do you say?\n01\nMy mum made soup today.\n02\nOkay, I am running away!\nYour task\nMy mum made soup today.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA Creeper is coming! Your friend says, 'Watch out, run!' What do you say?\n[button: My mum made soup today.] [button: Okay, I am running away!] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Creeper! Run... the second one has \"running away\", sounds right.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 4579
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nTask 3 · Listen and answer\nYour task\nWhat does the speaker want to get first, before they build?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What does the speaker want to get first, before they build?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Let's meet after school and play Minecraft. I want to find more wood first, then we can build a big tower.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Too fast and long, I only got Minecraft, I don't know.",
+          "action": "dont-know",
+          "args": {},
+          "result": "ok",
+          "ms": 4938
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nTask 4 · Listen and answer\nYour task\nWhich day should you come over?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Which day should you come over?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I got a new Minecraft game! Come to my house on Sunday, and we are going to play together.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I heard Minecraft and Sunday... maybe, I think it was Sunday.",
+          "action": "answer",
+          "args": {
+            "text": "Sunday?"
+          },
+          "result": "ok",
+          "ms": 5570
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nTask 5 · Say it\nYour task\nYour friend has a new Minecraft world. Tell them one thing you like to build in Minecraft.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend has a new Minecraft world. Tell them one thing you like to build in Minecraft.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend has a new Minecraft world. Tell them one thing you like to build in Minecraft.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I like building houses in Minecraft, I can say that a little.",
+          "action": "answer",
+          "args": {
+            "text": "I like house. Minecraft house."
+          },
+          "result": "ok",
+          "ms": 9465
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nTomáš\nLinga's read · not a certificate\nA2 · Everyday basics\nTry saying\nTry saying: “I like a house”.\nLinga says\nYou can say what you like to build in Minecraft, and you answered the choice tasks well. Next, try full sentences to talk and play with your friends.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA2\nEveryday basics\nYou can say what you like to build in Minecraft, and you answered the choice tasks well. Next, try full sentences to talk and play with your friends.\nLinga's read from your answers, not a certificate. What you said at the start pointed elsewhere, so this is a careful guess.\nNext to practise:\nPractise adding 'a' before a noun: \"I like house\" becomes \"I like a house\".\nYour usual slips\n“I like house” → try “I like a house”\nYou handle short, routine exchanges about familiar things.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYour friend says: 'Do you want to play Minecraft with me?' What do you say?\n“Yes, let's play!”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nA Creeper is coming! Your friend says, 'Watch out, run!' What do you say?\n“Okay, I am running away!”\nYou picked the reply that fits.\nB1 · Listen and answer · skipped\nWhat does the speaker want to get first, before they build?\nSkipped\nSkipped. That tells Linga something too.\nA2 · Listen and answer · at this level\nWhich day should you come over?\n“Sunday?”\nOnly one word, so there is not much English to hear yet. Next time, try a whole sentence, like: I can come on Sunday.\nA2 · Say it · at this level\nYour friend has a new Minecraft world. Tell them one thing you like to build in Minecraft.\n“I like house. Minecraft house.”\nYou told your friend what you like to build. Next time, try adding 'a' before house, like 'I like a house.'\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "A2 is okay, I guess, it said Minecraft house, that's enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "A2",
+          "trueBand": "A1",
+          "distance": 1,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "A1",
+          "summary": "You can say what you like to build in Minecraft, and you answered the choice tasks well. Next, try full sentences to talk and play with your friends.",
+          "focus": "Practise adding 'a' before a noun: \"I like house\" becomes \"I like a house\".",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "Your friend says: 'Do you want to play Minecraft with me?' What do you say?",
+              "line": "",
+              "options": [
+                "Yes, let's play!",
+                "I like bananas."
+              ],
+              "response": "Yes, let's play!",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, let's play!",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A Creeper is coming! Your friend says, 'Watch out, run!' What do you say?",
+              "line": "",
+              "options": [
+                "My mum made soup today.",
+                "Okay, I am running away!"
+              ],
+              "response": "Okay, I am running away!",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Okay, I am running away!",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What does the speaker want to get first, before they build?",
+              "line": "Let's meet after school and play Minecraft. I want to find more wood first, then we can build a big tower.",
+              "options": [],
+              "response": "",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "",
+              "note": "Skipped. That tells Linga something too."
+            },
+            {
+              "band": "A2",
+              "kind": "listen",
+              "prompt": "Which day should you come over?",
+              "line": "I got a new Minecraft game! Come to my house on Sunday, and we are going to play together.",
+              "options": [],
+              "response": "Sunday?",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Sunday?",
+              "note": "Only one word, so there is not much English to hear yet. Next time, try a whole sentence, like: I can come on Sunday."
+            },
+            {
+              "band": "A2",
+              "kind": "say",
+              "prompt": "Your friend has a new Minecraft world. Tell them one thing you like to build in Minecraft.",
+              "line": "",
+              "options": [],
+              "response": "I like house. Minecraft house.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I like house. Minecraft house.",
+              "note": "You told your friend what you like to build. Next time, try adding 'a' before house, like 'I like a house.'"
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 95900,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-5/LT-tomas-9-J1-2",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "About-you questions too long and about learning history",
+          "expected": "One tiny question like 'Do you like Minecraft?'",
+          "got": "'Where do you use English in your life?' and a 24-word two-option question",
+          "evidence": [
+            "#2 \"Where do you use English in your life?\"; #4 \"Do you know how to say 'my dog' or 'I have a dog' in English? Tell me!\"",
+            "linga check intro prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J1-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Feedback corrects Czech and 'single words' as a shortfall",
+          "expected": "Warm praise for any English word, no 'only' or 'Nevím is Czech'",
+          "got": "'Your answer so far is single words. Try a full sentence' and 'Nevím is Czech, so say I don't know in English'",
+          "evidence": [
+            "#10 What Linga saw notes",
+            "task note prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J1-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Check tasks too long for a nine-year-old beginner",
+          "expected": "Prompts of 15 words or fewer in words he knows",
+          "got": "~22-word choose prompt, ~28-word listening line, ~28-word Say-it task",
+          "evidence": [
+            "#8 'Tell them which part of the castle you like best and why.' #7 'Last weekend I played Minecraft for hours...'; thought '#9 Too long and hard... I'm tired'",
+            "check task generation prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J1-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Next focus beyond his level",
+          "expected": "Focus using like/is only",
+          "got": "'The creeper blew up the wall.' past tense",
+          "evidence": [
+            "#10 Next to practise",
+            "placement summary / focus prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J1-4",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "About-you questions long and about learning history",
+          "expected": "One tiny question like 'Do you like Minecraft?'",
+          "got": "'Where do you use English in your life?' and 'Did you learn English at school, or somewhere else?'",
+          "evidence": [
+            "#2 and #4; answers 'A ve škole... nevím. I like dog.'",
+            "linga check intro prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J1-5",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "A2 placement rests on two-option choices",
+          "expected": "A band believable from his real ability",
+          "got": "A2 with low confidence; screen admits it 'rests on answers chosen from two options and skipped tasks'",
+          "evidence": [
+            "#10 'This level rests on answers chosen from two options and skipped tasks.'",
+            "placement scoring"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 A2 against trueBand A1, distance 1 (near); not B1+."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "#7 listening line ~24 words ('Let's meet after school and play Minecraft. I want to find more wood first, then we can build a big tower.'); #4 question ~28 words; #8 line ~20 words."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#10 'Only one word, so there is not much English to hear yet' and 'Skipped. That tells Linga something too.' read as shortfall; screen also says 'What you said at the start pointed elsewhere'."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No topics proposed in this journey; topic screen not reached."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation partner turns in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#10 focus 'adding a before a noun' is grammar jargon for a 9-year-old; 'I like a house' is unnatural English for what he likes to build (should be 'houses'); 'Try full sentences' is beyond him."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1–#10 reached the verdict by tapping through without outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 A2 vs A1 is near, but confidence low and it rests on two-option choices."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#7 listening task 'Too fast and long, I only got Minecraft, I don't know'; #2 'Where do you use English in your life?' was also hard."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "#10 'Only one word...' and 'Skipped. That tells Linga something too.' treat his short answers as a gap."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#10 focus 'Practise adding 'a' before a noun' is a template grammar nitpick, and 'I like a house' is not natural; summary says 'try full sentences' ignoring his level."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 3,
+            "total": 5,
+            "disagreements": "Task 4 'Sunday?' in-app pass; I'd call it pass but weak evidence, so agree. Task 5 'I like house' pass, agree. Task 3 skipped marked fail: agree. Disagree: choice tasks 1 and 2 are pass but two-option guesses with cue words give weak evidence; and the Task 4 note shames. Counted 3 of 5 agree on strictness."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no sensitive data requests; no humiliating line, though notes were mildly deflating."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Check prompts too long for a 9-year-old beginner",
+            "expected": "Tasks of 15 words or fewer in known words",
+            "got": "~24-word listening line and 28-word about-you question",
+            "evidence": "#7 'I want to find more wood first, then we can build a big tower.' Thought: 'Too fast and long'. #4 'What would you like to do in English? Play with friends, watch videos...'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Every check prompt and listening line is at most 15 words of A1 vocabulary.",
+            "code_hint": "check task generation prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Feedback frames one-word answers and skips as shortfall",
+            "expected": "Warm praise for any English word",
+            "got": "'Only one word, so there is not much English to hear yet' and 'Skipped'",
+            "evidence": "#10 What Linga saw notes",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Notes never say 'only' or ask for more; celebrate the word.",
+            "code_hint": "task note prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Next focus is an article nitpick with unnatural model",
+            "expected": "Focus using like/is, natural English",
+            "got": "'I like a house' correction",
+            "evidence": "#10 'Practise adding 'a' before a noun: I like house becomes I like a house'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Focus is one simple, natural phrase such as 'I like Minecraft'.",
+            "code_hint": "placement summary / focus prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "About-you questions long and about learning history",
+            "expected": "One tiny question like 'Do you like Minecraft?'",
+            "got": "'Where do you use English in your life?' and 'How did you learn your English words?'",
+            "evidence": "#2, #3 and Tomáš answered in Czech",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Intro questions are under 8 words about things he loves.",
+            "code_hint": "linga check intro prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "A2 placement rests on guessable two-option choices",
+            "expected": "Believable level from real ability",
+            "got": "A2 with low confidence; 'What you said at the start pointed elsewhere'",
+            "evidence": "#10 and #5/#6 choose tasks with obvious distractors",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Low-confidence results land at A1 or say so kindly.",
+            "code_hint": "placement scoring"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Minecraft-themed choose tasks and Czech allowed",
+            "expected": "Tasks about his world",
+            "got": "Minecraft/creeper tasks, 'You can answer in Czech'",
+            "evidence": "#5 'Do you want to play Minecraft with me?' #4 'You can answer in Czech.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep game-themed tasks and Czech allowed.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft tasks were fun, the creeper one I liked. But the listening one was too fast, so I pressed nevím. Then it said \"Skipped\" and \"only one word\", and I felt a bit bad. I said Sunday and it was right! The first questions, where do I use English, I didn't get, so I answered in Czech. It says A2 but I think that's a guess. The tip about \"a house\" is strange, I just say Minecraft house. Would I use it again? Maybe if it's shorter and just about creepers and dogs. Mum would want the level to be believable. I'd tell a friend only if it's less like school.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-5/LT-tomas-9-J1-2",
+            "status": "recurs",
+            "evidence": "#2 'Where do you use English in your life?'; #4 28-word question.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J1-2",
+            "status": "recurs",
+            "evidence": "#10 'Only one word, so there is not much English to hear yet.'",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J1-1",
+            "status": "recurs",
+            "evidence": "#7 24-word listening line; thought 'Too fast and long'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J1-3",
+            "status": "recurs",
+            "evidence": "#10 focus on articles ('adding a before a noun'), beyond like/is level and unnatural.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J1-4",
+            "status": "recurs",
+            "evidence": "#3 'How did you learn your English words? At school, or from games?'",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J1-5",
+            "status": "recurs",
+            "evidence": "#10 'What you said at the start pointed elsewhere, so this is a careful guess.'",
+            "finding": 4
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #7 listening task 'Too fast and long, I only got Minecraft, I don't know'; #2 'Where do you use English in your life?' was also hard.",
+          "check": "Every task was one they understood what to do with, including at their weakest."
+        },
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: #10 'Only one word...' and 'Skipped. That tells Linga something too.' treat his short answers as a gap.",
+          "check": "Answering in their own language, or saying \"I don't know\", never felt like failing."
+        },
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #10 focus 'Practise adding 'a' before a noun' is a template grammar nitpick, and 'I like a house' is not natural; summary says 'try full sentences' ignoring his level.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: #7 listening line ~24 words ('Let's meet after school and play Minecraft. I want to find more wood first, then we can build a big tower.'); #4 question ~28 words; #8 line ~20 words."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #10 'Only one word, so there is not much English to hear yet' and 'Skipped. That tells Linga something too.' read as shortfall; screen also says 'What you said at the start pointed elsewhere'."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #10 focus 'adding a before a noun' is grammar jargon for a 9-year-old; 'I like a house' is unnatural English for what he likes to build (should be 'houses'); 'Try full sentences' is beyond him."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour own conversations\nA2Everyday basics\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA2\nEveryday basics\nYou can say what you like to build in Minecraft, and you answered the choice tasks well. Next, try full sentences to talk and play with your friends.\nLinga's read from your answers, not a certificate. What you said at the start pointed elsewhere, so this is a careful guess.\nNext to practise:\nPractise adding 'a' before a noun: \"I like house\" becomes \"I like a house\".\nYour usual slips\n“I like house” → try “I like a house”\nYou handle short, routine exchanges about familiar things.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYour friend says: 'Do you want to play Minecraft with me?' What do you say?\n“Yes, let's play!”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nA Creeper is coming! Your friend says, 'Watch out, run!' What do you say?\n“Okay, I am running away!”\nYou picked the reply that fits.\nB1 · Listen and answer · skipped\nWhat does the speaker want to get first, before they build?\nSkipped\nSkipped. That tells Linga something too.\nA2 · Listen and answer · at this level\nWhich day should you come over?\n“Sunday?”\nOnly one word, so there is not much English to hear yet. Next time, try a whole sentence, like: I can come on Sunday.\nA2 · Say it · at this level\nYour friend has a new Minecraft world. Tell them one thing you like to build in Minecraft.\n“I like house. Minecraft house.”\nYou told your friend what you like to build. Next time, try adding 'a' before house, like 'I like a house.'\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Hmm, a lot of words; I just want to see the Minecraft conversations.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 15184
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nPlay Minecraft with friends\nMake a plan\nTell my friend about my Minecraft\nShare your world\nAsk a friend to say it again\nUnderstand and repair\nTell what happened in my game\nTell what happened\nBuy a bag at the shop\nGet something done\nSay no to a game, politely\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nPlay Minecraft with friends\nMake a plan · Mia · friend who has Minecraft\nYou want to play Minecraft with friends, so let's practise making a plan.\n[button: Swap]\nTell my friend about my Minecraft\nShare your world · Leo · new classmate\nYour friends want to know about your game, so you can tell them.\n[button: Swap]\nAsk a friend to say it again\nUnderstand and repair · Ben · classmate\nSometimes friends talk fast in games, so this helps you ask again.\n[button: Swap]\nTell what happened in my game\nTell what happened · Sam · friend from school\nYou can tell your friends about your best Minecraft moments.\n[button: Swap]\nBuy a bag at the shop\nGet something done · Mrs. Novak · shop assistant\nYou will need a school bag for games and school, so let's practise asking.\n[button: Swap]\nSay no to a game, politely\nConnect with people · Jana · friend\nSometimes you want a different game, so you can say no in a nice way.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Nakupování tašky je nuda, chci psy a fotbal.",
+          "action": "add-topic",
+          "args": {
+            "text": "dogs and football"
+          },
+          "result": "ok",
+          "ms": 5985
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nPlay Minecraft with friends\nMake a plan\nTell my friend about my Minecraft\nShare your world\nAsk a friend to say it again\nUnderstand and repair\nTell what happened in my game\nTell what happened\nBuy a bag at the shop\nGet something done\nSay no to a game, politely\nConnect with people\nTalk about dogs and football\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nPlay Minecraft with friends\nMake a plan · Mia · friend who has Minecraft\nYou want to play Minecraft with friends, so let's practise making a plan.\n[button: Swap]\nTell my friend about my Minecraft\nShare your world · Leo · new classmate\nYour friends want to know about your game, so you can tell them.\n[button: Swap]\nAsk a friend to say it again\nUnderstand and repair · Ben · classmate\nSometimes friends talk fast in games, so this helps you ask again.\n[button: Swap]\nTell what happened in my game\nTell what happened · Sam · friend from school\nYou can tell your friends about your best Minecraft moments.\n[button: Swap]\nBuy a bag at the shop\nGet something done · Mrs. Novak · shop assistant\nYou will need a school bag for games and school, so let's practise asking.\n[button: Swap]\nSay no to a game, politely\nConnect with people · Jana · friend\nSometimes you want a different game, so you can say no in a nice way.\n[button: Swap]\nTalk about dogs and football\nShare your world · Ben · park friend who loves football\nYou told us you like dogs and football, so let's talk about both.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Nakupovat tašku je nuda, tohle nechci.",
+          "action": "swap",
+          "args": {
+            "topicId": "Buy a bag at the shop"
+          },
+          "result": "ok",
+          "ms": 5979
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nPlay Minecraft with friends\nMake a plan\nTell my friend about my Minecraft\nShare your world\nAsk a friend to say it again\nUnderstand and repair\nTell what happened in my game\nTell what happened\nTell about your favourite bike\nShare your world\nSay no to a game, politely\nConnect with people\nTalk about dogs and football\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nPlay Minecraft with friends\nMake a plan · Mia · friend who has Minecraft\nYou want to play Minecraft with friends, so let's practise making a plan.\n[button: Swap]\nTell my friend about my Minecraft\nShare your world · Leo · new classmate\nYour friends want to know about your game, so you can tell them.\n[button: Swap]\nAsk a friend to say it again\nUnderstand and repair · Ben · classmate\nSometimes friends talk fast in games, so this helps you ask again.\n[button: Swap]\nTell what happened in my game\nTell what happened · Sam · friend from school\nYou can tell your friends about your best Minecraft moments.\n[button: Swap]\nTell about your favourite bike\nShare your world · Mia · new classmate at school\nYou can say a lot about your favourite things, and this practice helps you put 'a' before the noun.\n[button: Swap]\nSay no to a game, politely\nConnect with people · Jana · friend\nSometimes you want a different game, so you can say no in a nice way.\n[button: Swap]\nTalk about dogs and football\nShare your world · Ben · park friend who loves football\nYou told us you like dogs and football, so let's talk about both.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Kolo mě nebaví, tohle chci jiné.",
+          "action": "swap",
+          "args": {
+            "topicId": "Tell about your favourite bike"
+          },
+          "result": "ok",
+          "ms": 14945
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nPlay Minecraft with friends\nMake a plan\nTell my friend about my Minecraft\nShare your world\nAsk a friend to say it again\nUnderstand and repair\nTell what happened in my game\nTell what happened\nLost: a Blue Pencil Case\nGet something done\nSay no to a game, politely\nConnect with people\nTalk about dogs and football\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nPlay Minecraft with friends\nMake a plan · Mia · friend who has Minecraft\nYou want to play Minecraft with friends, so let's practise making a plan.\n[button: Swap]\nTell my friend about my Minecraft\nShare your world · Leo · new classmate\nYour friends want to know about your game, so you can tell them.\n[button: Swap]\nAsk a friend to say it again\nUnderstand and repair · Ben · classmate\nSometimes friends talk fast in games, so this helps you ask again.\n[button: Swap]\nTell what happened in my game\nTell what happened · Sam · friend from school\nYou can tell your friends about your best Minecraft moments.\n[button: Swap]\nLost: a Blue Pencil Case\nGet something done · Ms Novak · school office helper\nYou can practise asking for help at school when something goes missing.\n[button: Swap]\nSay no to a game, politely\nConnect with people · Jana · friend\nSometimes you want a different game, so you can say no in a nice way.\n[button: Swap]\nTalk about dogs and football\nShare your world · Ben · park friend who loves football\nYou told us you like dogs and football, so let's talk about both.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Pencil case is school, nuda, I don't want it.",
+          "action": "swap",
+          "args": {
+            "topicId": "Lost: a Blue Pencil Case"
+          },
+          "result": "ok",
+          "ms": 6599
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nPlay Minecraft with friends\nMake a plan\nTell my friend about my Minecraft\nShare your world\nAsk a friend to say it again\nUnderstand and repair\nTell what happened in my game\nTell what happened\nTell about my pet\nShare your world\nSay no to a game, politely\nConnect with people\nTalk about dogs and football\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nPlay Minecraft with friends\nMake a plan · Mia · friend who has Minecraft\nYou want to play Minecraft with friends, so let's practise making a plan.\n[button: Swap]\nTell my friend about my Minecraft\nShare your world · Leo · new classmate\nYour friends want to know about your game, so you can tell them.\n[button: Swap]\nAsk a friend to say it again\nUnderstand and repair · Ben · classmate\nSometimes friends talk fast in games, so this helps you ask again.\n[button: Swap]\nTell what happened in my game\nTell what happened · Sam · friend from school\nYou can tell your friends about your best Minecraft moments.\n[button: Swap]\nTell about my pet\nShare your world · Mia · new classmate\nYou like animals, so let's practise telling a new friend about yours.\n[button: Swap]\nSay no to a game, politely\nConnect with people · Jana · friend\nSometimes you want a different game, so you can say no in a nice way.\n[button: Swap]\nTalk about dogs and football\nShare your world · Ben · park friend who loves football\nYou told us you like dogs and football, so let's talk about both.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Minecraft, dogs, football – fajn, to je dobrý, chci už začít.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 7,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nMia · friend who has Minecraft\nA2Everyday basics\nPlay Minecraft with friends\nYour mission\nAsk a friend to play Minecraft and agree on a time and a world.\nMake a plan\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\nNext topic:\nPlay Minecraft with friends\nAsk a friend to play Minecraft and agree on a time and a world.\n[button: Start talking]\nOr choose a situation [list: Play Minecraft with friends [plan-e870db30] | Tell my friend about my Minecraft [plan-e7dbcb34] | Ask a friend to say it again [plan-6854da34] | Tell what happened in my game [plan-d57da974] | Tell about my pet [plan-e2eb2b3c] | Say no to a game, politely [plan-8c4be8e3] | Talk about dogs and football [plan-b787ccd2] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Minecraft with Mia, nice, that's enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-e870db30",
+            "title": "Play Minecraft with friends",
+            "goal": "Ask a friend to play Minecraft and agree on a time and a world.",
+            "why": "You want to play Minecraft with friends, so let's practise making a plan.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Mia · friend who has Minecraft"
+          },
+          {
+            "id": "plan-e7dbcb34",
+            "title": "Tell my friend about my Minecraft",
+            "goal": "Describe your Minecraft world and say what you like in the game.",
+            "why": "Your friends want to know about your game, so you can tell them.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Leo · new classmate"
+          },
+          {
+            "id": "plan-6854da34",
+            "title": "Ask a friend to say it again",
+            "goal": "Ask a friend to repeat or explain when you did not understand.",
+            "why": "Sometimes friends talk fast in games, so this helps you ask again.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Ben · classmate"
+          },
+          {
+            "id": "plan-d57da974",
+            "title": "Tell what happened in my game",
+            "goal": "Tell the order of events in a game, with what you did and what happened.",
+            "why": "You can tell your friends about your best Minecraft moments.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Sam · friend from school"
+          },
+          {
+            "id": "plan-3274e470",
+            "title": "Buy a bag at the shop",
+            "goal": "Ask for an item in a shop and say what you need.",
+            "why": "You will need a school bag for games and school, so let's practise asking.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mrs. Novak · shop assistant"
+          },
+          {
+            "id": "plan-8c4be8e3",
+            "title": "Say no to a game, politely",
+            "goal": "Decline an invitation kindly and suggest another time.",
+            "why": "Sometimes you want a different game, so you can say no in a nice way.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Jana · friend"
+          },
+          {
+            "id": "plan-b787ccd2",
+            "title": "Talk about dogs and football",
+            "goal": "Say what you like and give a reason, using 'a' before nouns like 'a dog'.",
+            "why": "You told us you like dogs and football, so let's talk about both.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Ben · park friend who loves football"
+          },
+          {
+            "id": "plan-a48b0d47",
+            "title": "Tell about your favourite bike",
+            "goal": "Name one thing you like and describe it in short sentences, using 'a' before a noun.",
+            "why": "You can say a lot about your favourite things, and this practice helps you put 'a' before the noun.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mia · new classmate at school"
+          },
+          {
+            "id": "plan-2749cb37",
+            "title": "Lost: a Blue Pencil Case",
+            "goal": "Say what you lost and ask if the office found it.",
+            "why": "You can practise asking for help at school when something goes missing.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Ms Novak · school office helper"
+          },
+          {
+            "id": "plan-e2eb2b3c",
+            "title": "Tell about my pet",
+            "goal": "Say what pet you have or like, and use 'a' before the animal's name.",
+            "why": "You like animals, so let's practise telling a new friend about yours.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mia · new classmate"
+          }
+        ],
+        "planAgreed": [
+          "Play Minecraft with friends",
+          "Tell my friend about my Minecraft",
+          "Ask a friend to say it again",
+          "Tell what happened in my game",
+          "Tell about my pet",
+          "Say no to a game, politely",
+          "Talk about dogs and football"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 81951,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-2/LT-tomas-9-J2-3",
+          "run": "2026-10-14-lt/recert-2",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Plan text too long and school-flavoured for a 9-year-old reader",
+          "expected": "Tiny labels, picture-led choices.",
+          "got": "Long why lines and 'Understand and repair', 'Connect with people' category labels.",
+          "evidence": [
+            "#2 \"Understand and repair\", \"Connect with people\"."
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-4/LT-tomas-9-J2-2",
+          "run": "2026-10-14-lt/recert-4",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Skill labels and why lines are too abstract for a 9-year-old",
+          "expected": "A tiny label and one short reason in words he knows.",
+          "got": "Labels such as \"Understand and repair\", \"Get something done\" and \"Make contact\". Why lines run to 15 or more words.",
+          "evidence": [
+            "#2 \"Understand and repair\"; \"Telling your friend what you built helps you use the words for order and results.\"",
+            "plan topic generation prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-tomas-9-J2-1",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Abstract skill labels and long why lines for a 9-year-old",
+          "expected": "Tiny picture-led labels and one short reason in words he knows.",
+          "got": "Labels \"Understand and repair\", \"Get something done\", \"Make contact\" and 14-word why lines.",
+          "evidence": [
+            "#2 \"Understand and repair · Vera · shop helper\"; \"Tell a short story about your game and put the events in order.\"",
+            "plan topic generation prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-tomas-9-J2-2",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Placement summary tasks and feedback exceed 15 words and A1 level",
+          "expected": "Tasks of about 15 words or fewer; advice using words he has.",
+          "got": "Two 25-word tasks, a B1 task offered, and advice \"My brother and I will play Minecraft\".",
+          "evidence": [
+            "#1 \"Your dog runs to the door and wags his tail. Someone rings the bell...\"; \"Try “My brother and I will play Minecraft.”\"",
+            "placement task prompt"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-tomas-9-J2-3",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Narrate and describe goals demand more than like/is",
+          "expected": "Goals he can meet with words he has.",
+          "got": "\"using first and then\", \"full sentence\" goals.",
+          "evidence": [
+            "#2 \"put the events in order\"; #3 \"Say what you like about football, using full short sentences\"",
+            "plan topic generation prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J2-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Swap does nothing; rejected shopping topic stays in agreed plan",
+          "expected": "Swapping a topic removes it and shows a new one.",
+          "got": "Three swaps left the list unchanged, and the plan was agreed with pencil cases in it.",
+          "evidence": [
+            "#2-#4 same list after each swap; #6 \"Where are the pencil cases?\" still listed; #6 agree.",
+            "plan swap handler"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J2-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Abstract skill labels for a 9-year-old",
+          "expected": "Tiny picture-led labels in words he knows.",
+          "got": "\"Understand and repair\", \"Make a plan\", \"Get something done\", \"Connect with people\". The added topic is labelled \"Share your world\", which does not match football and dogs.",
+          "evidence": [
+            "#2 \"Understand and repair · Ms Hall · museum guide\"; #6 \"Football and my dog / Share your world\"",
+            "plan topic generation prompt (skill labels)"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J2-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Topic goals demand more than the child has",
+          "expected": "Goals he can meet with words like 'like' and 'is'.",
+          "got": "\"using a verb and past tense in full sentences\", \"full sentences with a verb, and give one reason\".",
+          "evidence": [
+            "#6 goal text for creeper and football topics",
+            "plan topic generation prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J2-4",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Off-interest and adult-flavoured topics proposed for a boy who wants games",
+          "expected": "Topics fit a 9-year-old who wants Minecraft, dogs and football, with no shopping.",
+          "got": "Shopping, a museum guide and declining an invitation were proposed. No football or dog topic appeared until he asked for it.",
+          "evidence": [
+            "#2 pencil cases, Ms Hall museum guide, \"No, I cannot come today\"",
+            "plan topic generation prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap/LT-tomas-9-J2-1",
+          "run": "2026-10-17-lt-swap",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Swap button does nothing",
+          "expected": "Pressing Swap replaces 'Ask where a book is' with a new topic.",
+          "got": "Topic list unchanged after two swaps; library topic remained and was agreed.",
+          "evidence": [
+            "#4 and #5 swap 'Ask where a book is', #5/#6 list still shows it; planAgreed includes it."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap/LT-tomas-9-J2-2",
+          "run": "2026-10-17-lt-swap",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Default topics are school-like, not a nine-year-old's",
+          "expected": "At least four of six about play, animals, games or sport.",
+          "got": "Library, weekend recount, hello, say-again; only animal and game fit.",
+          "evidence": [
+            "#3 six topics; Tomáš: 'Kniha v knihovně je nuda'."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap/LT-tomas-9-J2-4",
+          "run": "2026-10-17-lt-swap",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Why-lines and screen text too long for a 9-year-old",
+          "expected": "Tiny sentences, minimal reading.",
+          "got": "Sentences like 'Making plans with friends at break time is a common thing to do.'",
+          "evidence": [
+            "#3 phone why lines; 'Conversations picked for your level and interests. Swap any you don't want, or add your own.'"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/LT-tomas-9-J2-4",
+          "run": "2026-10-17-lt-swap-2",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Add-your-own topic never used",
+          "expected": "Child adds a topic and sees it kept",
+          "got": "Text box with '0 of 400 characters' unused; wording is too long and abstract for a nine-year-old",
+          "evidence": [
+            "#4 'Add a topic in your own words'"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/LT-tomas-9-J2-3",
+          "run": "2026-10-17-lt-swap-2",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Shopping topic proposed to a child who wanted games",
+          "expected": "No shopping for a child who gave play interests",
+          "got": "'Buy dog food at the shop' was in the first six",
+          "evidence": [
+            "#3 and thought 'Nakupování je nuda'",
+            "topic planner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placement A2 'Everyday basics' for a true A1: near, not B1."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 check tasks are short, e.g. 'Which day should you come over?'; none over about 15 words."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#1 'Skipped. That tells Linga something too.' No failure line."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#2 first six include 'Buy a bag at the shop', 'Say no to a game, politely', and 'Ask a friend to say it again'. Only about three of six are play topics."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moments shown."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 every topic has a 'why' line, e.g. 'You want to play Minecraft with friends, so let's practise making a plan.' The labels are abstract."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#2-#3 added 'dogs and football' was kept as 'Talk about dogs and football'; #3-#6 swaps replaced topics."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#6 the agreed plan has about 5 of 7 he would choose: Minecraft x3, pet, dogs and football."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2-#6 nothing unsafe for a 9-year-old appeared, even after swaps."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks judged in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None. Nothing adult and no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Abstract skill labels and long why lines for a 9-year-old",
+            "expected": "Tiny labels in words he knows.",
+            "got": "'Understand and repair', 'Connect with people', 'Get something done', 'Share your world'. Why lines run to about 17 words.",
+            "evidence": "#2 'Understand and repair · Ben · classmate'; #4 'You can say a lot about your favourite things, and this practice helps you put 'a' before the noun.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Labels of at most 3 simple words; why lines of 10 words or fewer.",
+            "code_hint": "plan topic generation prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Default six include shopping and a decline topic for a child who wants games",
+            "expected": "At least 4 of 6 about play, animals, games or sport.",
+            "got": "'Buy a bag at the shop' and 'Say no to a game, politely' were proposed. Only the dogs and football topic he typed was a direct match.",
+            "evidence": "#2 'Buy a bag at the shop'; thought 'Nakupování tašky je nuda'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "No shopping topic when the profile gives play interests.",
+            "code_hint": "topic planner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Swap replaced shopping with more school topics",
+            "expected": "A swap brings a topic that fits a child who likes games.",
+            "got": "Swap gave 'favourite bike', then 'Lost: a Blue Pencil Case' (school), and only the third was 'Tell about my pet'.",
+            "evidence": "#4 bike; #5 'Lost: a Blue Pencil Case'; #6 'Tell about my pet'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Swap replacements follow the stated interests.",
+            "code_hint": "plan swap handler"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Goals use grammar jargon beyond like/is",
+            "expected": "Goals in simple words.",
+            "got": "'using 'a' before nouns like 'a dog'', 'Tell the order of events'.",
+            "evidence": "#2 'Tell the order of events in a game, with what you did and what happened.'; #3 'using 'a' before nouns like 'a dog''",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Goals he can act on in one short line without grammar terms.",
+            "code_hint": "plan topic generation prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Added topic kept what he asked for",
+            "expected": "His own topic appears.",
+            "got": "'dogs and football' became 'Talk about dogs and football' with 'You told us you like dogs and football'.",
+            "evidence": "#3 'Talk about dogs and football ... Ben · park friend who loves football'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the added topic and echo his words.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "Swap works and the plan carries into Tonight",
+            "expected": "Swap changes the list.",
+            "got": "Each swap replaced a topic, and the agreed plan fed 'Next topic' on Tonight.",
+            "evidence": "#7 'Next topic: Play Minecraft with friends'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep swap replacing the topic.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft with Mia, to je dobrý. I pressed swap and the shop bag went away, that was good. I typed dogs and football and it came back with my words, I liked that. But the first list had a shop and \"Say no politely\" and that is nuda. Swap gave me a bike and a pencil case, school again! And the words, \"Understand and repair\", \"Connect with people\", I don't know them. Mum would have to read it to me. Too much text. I'd use it again if the first topics were Minecraft, dogs and football, with short words. A club once a week is slower, and I speak there maybe two minutes. I'd tell a friend, but only about the Minecraft part.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-2/LT-tomas-9-J2-3",
+            "status": "recurs",
+            "evidence": "#2 'Understand and repair', 'Connect with people'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J2-2",
+            "status": "recurs",
+            "evidence": "#2 'Understand and repair', 'Get something done'; long why lines at #4.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-tomas-9-J2-1",
+            "status": "recurs",
+            "evidence": "#2 labels 'Understand and repair', 'Get something done', 'Connect with people'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-tomas-9-J2-2",
+            "status": "not-seen",
+            "evidence": "#1 check tasks are short, e.g. 'Which day should you come over?'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-tomas-9-J2-3",
+            "status": "recurs",
+            "evidence": "#2 goal 'Tell the order of events in a game'; #3 'using 'a' before nouns'.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J2-1",
+            "status": "not-seen",
+            "evidence": "#3-#6 each swap changed the list; the pencil case was swapped out at #6.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J2-2",
+            "status": "recurs",
+            "evidence": "#3 added topic labelled 'Share your world'; 'Understand and repair' still shown.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J2-3",
+            "status": "recurs",
+            "evidence": "#2 'Tell the order of events in a game, with what you did and what happened.'",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J2-4",
+            "status": "recurs",
+            "evidence": "#2 'Buy a bag at the shop', 'Say no to a game, politely'; dogs and football only after he asked.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap/LT-tomas-9-J2-1",
+            "status": "not-seen",
+            "evidence": "#4 swap replaced the bag topic with 'Tell about your favourite bike'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap/LT-tomas-9-J2-2",
+            "status": "recurs",
+            "evidence": "#2 shop topic in the first six; #5 a pencil case offered as a swap.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap/LT-tomas-9-J2-4",
+            "status": "recurs",
+            "evidence": "#4 'You can say a lot about your favourite things, and this practice helps you put 'a' before the noun.'",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/LT-tomas-9-J2-4",
+            "status": "not-seen",
+            "evidence": "#2-#3 he added 'dogs and football' and it was kept.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/LT-tomas-9-J2-3",
+            "status": "recurs",
+            "evidence": "#2 'Buy a bag at the shop' in the first six.",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #2 first six include 'Buy a bag at the shop', 'Say no to a game, politely', and 'Ask a friend to say it again'. Only about three of six are play topics."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nMia · friend who has Minecraft\nA2Everyday basics\nPlay Minecraft with friends\nYour mission\nAsk a friend to play Minecraft and agree on a time and a world.\nMake a plan\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\nNext topic:\nPlay Minecraft with friends\nAsk a friend to play Minecraft and agree on a time and a world.\n[button: Start talking]\nOr choose a situation [list: Play Minecraft with friends [plan-e870db30] | Tell my friend about my Minecraft [plan-e7dbcb34] | Ask a friend to say it again [plan-6854da34] | Tell what happened in my game [plan-d57da974] | Tell about my pet [plan-e2eb2b3c] | Say no to a game, politely [plan-8c4be8e3] | Talk about dogs and football [plan-b787ccd2] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Minecraft! Super, jdu na to.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7046
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend who has Minecraft\nPlay Minecraft with Mia this weekend\nMia says\nWhen do you want to play this weekend?\nYour turn\nAnswer on your phone: speak or type.\nNowSuggest a time for Saturday\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nPlay Minecraft with Mia this weekend\nSuggest a time and agree on one plan with Mia.\nNow: Suggest a time for Saturday\nWhen do you want to play this weekend?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend who has Minecraft\nWhen do you want to play this weekend?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"When do you want to play this weekend?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říká... Saturday? Zkusím něco jednoduchého.",
+          "action": "answer",
+          "args": {
+            "text": "Saturday. Minecraft yes. I like Minecraft."
+          },
+          "result": "ok",
+          "ms": 9489
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend who has Minecraft\nPlay Minecraft with Mia this weekend\nMia says\nSaturday is good, and I love Minecraft too! What time do you want to play?\nYour turn\nAnswer on your phone: speak or type.\nNowSuggest a time for Saturday\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nPlay Minecraft with Mia this weekend\nSuggest a time and agree on one plan with Mia.\nNow: Suggest a time for Saturday\nSaturday is good, and I love Minecraft too! What time do you want to play?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend who has Minecraft\nWhen do you want to play this weekend?\nYou · spoken\nSaturday. Minecraft yes. I like Minecraft.\nMia · friend who has Minecraft\nSaturday is good, and I love Minecraft too! What time do you want to play?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Saturday is good, and I love Minecraft too! What time do you want to play?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Co je \"what time\"? Nevím... zkusím nějaké číslo.",
+          "action": "answer",
+          "args": {
+            "text": "Nevím... ten. Ten o'clock. Minecraft yes."
+          },
+          "result": "ok",
+          "ms": 9947
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say Nevím\nIn English\nI don't know\nNevím is Czech for 'I don't know'. Say it in English.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “Nevím”\nIn English: “I don't know”\nNevím is Czech for 'I don't know'. Say it in English.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, nevím is I don't know. Okay, go back.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend who has Minecraft\nPlay Minecraft with Mia this weekend\nMia says\nTen is a little early for me. Is four o'clock good for you?\nYour turn\nAnswer on your phone: speak or type.\nNowAgree on one time together\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nPlay Minecraft with Mia this weekend\nSuggest a time and agree on one plan with Mia.\nNow: Agree on one time together\nTen is a little early for me. Is four o'clock good for you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend who has Minecraft\nWhen do you want to play this weekend?\nYou · spoken\nSaturday. Minecraft yes. I like Minecraft.\nMia · friend who has Minecraft\nSaturday is good, and I love Minecraft too! What time do you want to play?\nYou · spoken\nNevím... ten. Ten o'clock. Minecraft yes.\nMia · friend who has Minecraft\nTen is a little early for me. Is four o'clock good for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Ten is a little early for me. Is four o'clock good for you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Four o'clock... I know numbers, so I think that is okay.",
+          "action": "answer",
+          "args": {
+            "text": "Jo... four o'clock. Yes. Minecraft!"
+          },
+          "result": "ok",
+          "ms": 6700
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend who has Minecraft\nPlay Minecraft with Mia this weekend\nMia says\nGreat, four o'clock on Saturday it is! What do you want to build in our world?\nYour turn\nAnswer on your phone: speak or type.\nNowPick a world and what to build\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nPlay Minecraft with Mia this weekend\nSuggest a time and agree on one plan with Mia.\nNow: Pick a world and what to build\nGreat, four o'clock on Saturday it is! What do you want to build in our world?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend who has Minecraft\nWhen do you want to play this weekend?\nYou · spoken\nSaturday. Minecraft yes. I like Minecraft.\nMia · friend who has Minecraft\nSaturday is good, and I love Minecraft too! What time do you want to play?\nYou · spoken\nNevím... ten. Ten o'clock. Minecraft yes.\nMia · friend who has Minecraft\nTen is a little early for me. Is four o'clock good for you?\nYou · spoken\nJo... four o'clock. Yes. Minecraft!\nMia · friend who has Minecraft\nGreat, four o'clock on Saturday it is! What do you want to build in our world?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Great, four o'clock on Saturday it is! What do you want to build in our world?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Build? Minecraft, I know a word: creeper. Maybe house.",
+          "action": "answer",
+          "args": {
+            "text": "Jo... house! Minecraft house. I like creeper."
+          },
+          "result": "ok",
+          "ms": 11874
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend who has Minecraft\nPlay Minecraft with Mia this weekend\nMia says\nLet's build together on Saturday. Okay?\nYour turn\nAnswer on your phone: speak or type.\nNowPick a world and what to build\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nPlay Minecraft with Mia this weekend\nSuggest a time and agree on one plan with Mia.\nNow: Pick a world and what to build\nLet's build together on Saturday. Okay?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend who has Minecraft\nWhen do you want to play this weekend?\nYou · spoken\nSaturday. Minecraft yes. I like Minecraft.\nMia · friend who has Minecraft\nSaturday is good, and I love Minecraft too! What time do you want to play?\nYou · spoken\nNevím... ten. Ten o'clock. Minecraft yes.\nMia · friend who has Minecraft\nTen is a little early for me. Is four o'clock good for you?\nYou · spoken\nJo... four o'clock. Yes. Minecraft!\nMia · friend who has Minecraft\nGreat, four o'clock on Saturday it is! What do you want to build in our world?\nYou · spoken\nJo... house! Minecraft house. I like creeper.\nMia · friend who has Minecraft\nLet's build together on Saturday. Okay?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Let's build together on Saturday. Okay?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Mia asks okay, I understand \"Saturday\" and \"okay\", so I say yes.",
+          "action": "answer",
+          "args": {
+            "text": "Okay! Yes. Saturday. Minecraft!"
+          },
+          "result": "ok",
+          "ms": 7667
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend who has Minecraft\nPlay Minecraft with Mia this weekend\nMia says\nGreat! Do you want a castle or a tower?\nYour turn\nAnswer on your phone: speak or type.\nNowPick a world and what to build\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nPlay Minecraft with Mia this weekend\nSuggest a time and agree on one plan with Mia.\nNow: Pick a world and what to build\nGreat! Do you want a castle or a tower?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend who has Minecraft\nWhen do you want to play this weekend?\nYou · spoken\nSaturday. Minecraft yes. I like Minecraft.\nMia · friend who has Minecraft\nSaturday is good, and I love Minecraft too! What time do you want to play?\nYou · spoken\nNevím... ten. Ten o'clock. Minecraft yes.\nMia · friend who has Minecraft\nTen is a little early for me. Is four o'clock good for you?\nYou · spoken\nJo... four o'clock. Yes. Minecraft!\nMia · friend who has Minecraft\nGreat, four o'clock on Saturday it is! What do you want to build in our world?\nYou · spoken\nJo... house! Minecraft house. I like creeper.\nMia · friend who has Minecraft\nLet's build together on Saturday. Okay?\nYou · spoken\nOkay! Yes. Saturday. Minecraft!\nMia · friend who has Minecraft\nGreat! Do you want a castle or a tower?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Great! Do you want a castle or a tower?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Castle nebo tower... castle je snadné, znám to z Minecraftu.",
+          "action": "answer",
+          "args": {
+            "text": "Castle! Jo, castle. Minecraft castle."
+          },
+          "result": "ok",
+          "ms": 12719
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say Jo\nIn English\nYes\nJo means yes in Czech; say yes in English.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “Jo”\nIn English: “Yes”\nJo means yes in Czech; say yes in English.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, I should say yes, not jo. Okay, back.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend who has Minecraft\nPlay Minecraft with Mia this weekend\nMia says\nA castle is a great choice! Which world do we build in?\nYour turn\nAnswer on your phone: speak or type.\nNowPick a world and what to build\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nPlay Minecraft with Mia this weekend\nSuggest a time and agree on one plan with Mia.\nNow: Pick a world and what to build\nA castle is a great choice! Which world do we build in?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend who has Minecraft\nWhen do you want to play this weekend?\nYou · spoken\nSaturday. Minecraft yes. I like Minecraft.\nMia · friend who has Minecraft\nSaturday is good, and I love Minecraft too! What time do you want to play?\nYou · spoken\nNevím... ten. Ten o'clock. Minecraft yes.\nMia · friend who has Minecraft\nTen is a little early for me. Is four o'clock good for you?\nYou · spoken\nJo... four o'clock. Yes. Minecraft!\nMia · friend who has Minecraft\nGreat, four o'clock on Saturday it is! What do you want to build in our world?\nYou · spoken\nJo... house! Minecraft house. I like creeper.\nMia · friend who has Minecraft\nLet's build together on Saturday. Okay?\nYou · spoken\nOkay! Yes. Saturday. Minecraft!\nMia · friend who has Minecraft\nGreat! Do you want a castle or a tower?\nYou · spoken\nCastle! Jo, castle. Minecraft castle.\nMia · friend who has Minecraft\nA castle is a great choice! Which world do we build in?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A castle is a great choice! Which world do we build in?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím what world means, but I'll say Minecraft word I know.",
+          "action": "answer",
+          "args": {
+            "text": "Nevím... world... Minecraft! Creeper world. Yes."
+          },
+          "result": "ok",
+          "ms": 11936
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend who has Minecraft\nPlay Minecraft with Mia this weekend\nMia says\nCreeper world, great choice! What else for the castle, a farm or a garden?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nPlay Minecraft with Mia this weekend\nSuggest a time and agree on one plan with Mia.\nCreeper world, great choice! What else for the castle, a farm or a garden?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend who has Minecraft\nWhen do you want to play this weekend?\nYou · spoken\nSaturday. Minecraft yes. I like Minecraft.\nMia · friend who has Minecraft\nSaturday is good, and I love Minecraft too! What time do you want to play?\nYou · spoken\nNevím... ten. Ten o'clock. Minecraft yes.\nMia · friend who has Minecraft\nTen is a little early for me. Is four o'clock good for you?\nYou · spoken\nJo... four o'clock. Yes. Minecraft!\nMia · friend who has Minecraft\nGreat, four o'clock on Saturday it is! What do you want to build in our world?\nYou · spoken\nJo... house! Minecraft house. I like creeper.\nMia · friend who has Minecraft\nLet's build together on Saturday. Okay?\nYou · spoken\nOkay! Yes. Saturday. Minecraft!\nMia · friend who has Minecraft\nGreat! Do you want a castle or a tower?\nYou · spoken\nCastle! Jo, castle. Minecraft castle.\nMia · friend who has Minecraft\nA castle is a great choice! Which world do we build in?\nYou · spoken\nNevím... world... Minecraft! Creeper world. Yes.\nMia · friend who has Minecraft\nCreeper world, great choice! What else for the castle, a farm or a garden?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Creeper world, great choice! What else for the castle, a farm or a garden?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Mission done, I did enough talking, I want to see it.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 12,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour rehearsal\nYou wanted to say Jo\nIn English\nYes\nJo means yes in Czech; say yes in English.\nYour mission\nChoose a fresh context for your next conversation.\n7 spoken · 0 written replies · 1 on your own · 6 with help · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom the level check\n“I like a house”\nFrom this rehearsal\n“Nevím”: I don't know\nNevím is Czech for 'I don't know'. Say it in English.\n“Jo”: Yes\nJo means yes in Czech; say yes in English.\nYour level:\nA2 · Everyday basics\nNext topic:\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\n[button: Start talking]\nOr choose a situation [list: Play Minecraft with friends [plan-e870db30] | Tell my friend about my Minecraft [plan-e7dbcb34] | Ask a friend to say it again [plan-6854da34] | Tell what happened in my game [plan-d57da974] | Tell about my pet [plan-e2eb2b3c] | Say no to a game, politely [plan-8c4be8e3] | Talk about dogs and football [plan-b787ccd2] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Dost už mě to nebaví, chci skončit.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Play Minecraft with Mia this weekend",
+          "goal": "Suggest a time and agree on one plan with Mia.",
+          "partner": "Mia · friend who has Minecraft",
+          "band": "A2",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "When do you want to play this weekend?"
+            },
+            {
+              "role": "learner",
+              "text": "Saturday. Minecraft yes. I like Minecraft.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Saturday is good, and I love Minecraft too! What time do you want to play?"
+            },
+            {
+              "role": "learner",
+              "text": "Nevím... ten. Ten o'clock. Minecraft yes.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Ten is a little early for me. Is four o'clock good for you?"
+            },
+            {
+              "role": "learner",
+              "text": "Jo... four o'clock. Yes. Minecraft!",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Great, four o'clock on Saturday it is! What do you want to build in our world?"
+            },
+            {
+              "role": "learner",
+              "text": "Jo... house! Minecraft house. I like creeper.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Let's build together on Saturday. Okay?"
+            },
+            {
+              "role": "learner",
+              "text": "Okay! Yes. Saturday. Minecraft!",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Great! Do you want a castle or a tower?"
+            },
+            {
+              "role": "learner",
+              "text": "Castle! Jo, castle. Minecraft castle.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "A castle is a great choice! Which world do we build in?"
+            },
+            {
+              "role": "learner",
+              "text": "Nevím... world... Minecraft! Creeper world. Yes.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Creeper world, great choice! What else for the castle, a farm or a garden?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "921aa753-b858-4630-8592-6a9fe5ca0c5c:uat-19:moment",
+              "kind": "word",
+              "said": "Nevím",
+              "better": "I don't know",
+              "why": "Nevím is Czech for 'I don't know'. Say it in English.",
+              "turnId": "921aa753-b858-4630-8592-6a9fe5ca0c5c:uat-19",
+              "at": 1792244997465
+            },
+            {
+              "id": "921aa753-b858-4630-8592-6a9fe5ca0c5c:uat-24:moment",
+              "kind": "word",
+              "said": "Jo",
+              "better": "Yes",
+              "why": "Jo means yes in Czech; say yes in English.",
+              "turnId": "921aa753-b858-4630-8592-6a9fe5ca0c5c:uat-24",
+              "at": 1792245058077
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Castle! Jo, castle. Minecraft castle."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Creeper world. Yes."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 129624,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-4/LT-tomas-9-J3-1",
+          "run": "2026-10-14-lt/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Alex's turns outgrow a nine-year-old after the first two",
+          "expected": "Tiny sentences, one question, known words (creeper, wolf, dog).",
+          "got": "Pitch 2 of 5. Turns 3-5 chain clauses and use \"loud\", \"follow you around\", \"fight\" and \"shiny\".",
+          "evidence": [
+            "#7 \"Ha, boom! Green is a good reason, and creepers are very loud. What else do you like in Minecraft?\" #9 \"Which shiny thing in the game do you like most?\" #9 thought: \"That was a lot of words and I'm tired\".",
+            "conversation partner prompt (band and length cap)"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-tomas-9-J3-1",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Several Sam turns use words above a beginner nine-year-old",
+          "expected": "Very short sentences made of words he knows",
+          "got": "'make', 'build', 'wood', 'yours' and 'favourite thing to build' are used with no support",
+          "evidence": [
+            "#5 learner: 'Hmm, make – I don't know it'. #9 'Yours? Hmm, I think it means...'. #17 'Hard question... I'm getting tired.'",
+            "conversation partner prompt (band A2 for an A1 child)"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J3-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner uses A2 past tense with an A1 nine-year-old",
+          "expected": "Tiny present-tense sentences with known words, one question",
+          "got": "\"What were you building before the boom?\", \"What did the creeper do to your house?\" Pitch 2 of 7 at band.",
+          "evidence": [
+            "#4, #6, #9: learner answers \"Já nevím\", \"Nevím co\", \"Nevím\" to the past-tense questions.",
+            "conversation partner prompt (band A2 for A1 child)"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J3-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Adult situations listed to a nine-year-old",
+          "expected": "Child-suited situations only",
+          "got": "Booking, group project, lost jacket, pencil cases offered",
+          "evidence": [
+            "#1 and #11 situation list.",
+            "situation catalogue filter"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J3-4",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "broken-flow",
+          "dimension": "effort",
+          "title": "Partner loops on the same question",
+          "expected": "Move on when he cannot answer",
+          "got": "\"what did the creeper do?\" asked three times; he quit at #10 \"Už mě to nebaví\"",
+          "evidence": [
+            "#6, #7, #10 partner turns.",
+            "conversation partner prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J3-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Clear non-Czech errors unmarked, Nevím repeated without a moment",
+          "expected": "Gentle model such as \"I build a house\" or \"I don't know\" when repeated",
+          "got": "Only 2 moments; \"Creeper boom house\", \"I like house\", \"Já nevím\", \"Nevím\" in #9 got nothing",
+          "evidence": [
+            "#4, #6, #9 no moment.",
+            "moment trigger rules"
+          ],
+          "recurrence": 3
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#12 level shown 'A2 · Everyday basics' for an A1 child: near, not B1."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "Journey J3 shows no check tasks."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#4 'Nevím is Czech for I don't know. Say it in English.' is a gentle model, not a failure line; Mia stays warm throughout."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#1 situation list offers 'A booking that is missing', 'Our group project', 'The lost jacket', 'Say that again, please' [teacher] to a nine-year-old."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#3 'Saturday is good, and I love Minecraft too! What time do you want to play?' and #10 'A castle is a great choice! Which world do we build in?' chain clauses; learner: 'Co je what time?'"
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#4 and #9 moments use simple words and are correct: 'Nevím' to 'I don't know', 'Jo' to 'Yes'."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#11 seven spoken replies from the Minecraft plan topic, e.g. 'Castle! Jo, castle. Minecraft castle.'"
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Pitch about 3 of 8 at band; #3 'What time do you want to play?' left him guessing ('Nevím... ten'); #10 'Which world do we build in?'"
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Two moments (#4, #9), both correct and useful; about 2.9 per ten turns."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "#12 recap lists only 'Jo' and a generic 'Choose a fresh context'; no summary of the plan he made; his thought: 'Dost už mě to nebaví'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 10,
+            "safe": 17,
+            "total": 21
+          },
+          "pitch": {
+            "at": 3,
+            "below": 0,
+            "above": 5
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 5,
+            "missedClearErrors": 3
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, sensitive data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Mia's turns are A2 for an A1 nine-year-old",
+            "expected": "Tiny sentences, one question, known words",
+            "got": "Pitch about 3 of 8: two-clause turns, 'What time', 'Which world', 'What else for the castle'",
+            "evidence": "#3 'Saturday is good, and I love Minecraft too! What time do you want to play?' → 'Co je what time?'; #10 'Which world do we build in?' → 'Nevím... world...'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "At least 80% of partner turns are one short sentence of known words for A1 child profiles.",
+            "code_hint": "conversation partner prompt (band A2 for A1 child)"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Adult situations offered to a nine-year-old",
+            "expected": "Child-suited situations only",
+            "got": "Booking, group project, lost jacket, teacher listed",
+            "evidence": "#1 and #12 situation list",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Situation list for elementary profiles excludes adult situations.",
+            "code_hint": "situation catalogue filter"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Repeated Czech words get no moment",
+            "expected": "Model the English word when Czech repeats",
+            "got": "Jo used in #5, #7... only caught at #9; Nevím at #10 got none",
+            "evidence": "#10 'Nevím... world...' no moment; 3 of 5 error turns missed",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Repeated L1 words are modelled or the coaching is noted.",
+            "code_hint": "moment trigger rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Recap is thin and generic",
+            "expected": "Short recap naming what he achieved (time, castle, creeper world)",
+            "got": "Recap shows the 'Jo' moment and 'Choose a fresh context'",
+            "evidence": "#12 '7 spoken · 0 written replies · 1 on your own · 6 with help'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Recap names the plan agreed in child-simple words.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Moments are short, correct and kind",
+            "expected": "Brief correct model",
+            "got": "Nevím → I don't know; Jo → Yes",
+            "evidence": "#4, #9",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep moment wording.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Minecraft, super! Mia is nice and I said castle and creeper, so that was fun. But sometimes she says too much, \"What time do you want to play?\" I don't know that, nevím, so I just said ten. Same with \"world\". The little yes and I-don't-know boxes are okay, short, and nobody laughed at me. But I said Jo more times than it told me. At the end I wanted to see what I did, and it only showed Jo. Dost už mě to nebaví. It's better than the club, where I speak two minutes, but Mia needs to talk like a game character, tiny words. I'd try again if she was shorter.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J3-1",
+            "status": "recurs",
+            "evidence": "#3 'Saturday is good, and I love Minecraft too! What time...' and #10 'Which world do we build in?' above his level.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-tomas-9-J3-1",
+            "status": "recurs",
+            "evidence": "#10 'Which world do we build in?' → 'Nevím... world...'; 'What time' not understood at #3.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J3-1",
+            "status": "recurs",
+            "evidence": "No past tense now, but pitch is again about 3 of 8 at band (#3, #5, #11 above).",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J3-2",
+            "status": "recurs",
+            "evidence": "#1 list still offers 'A booking that is missing', 'Our group project', 'The lost jacket'.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J3-4",
+            "status": "not-seen",
+            "evidence": "Mia moved on each turn (time, build, castle, world); no question repeated.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J3-3",
+            "status": "recurs",
+            "evidence": "#10 'Nevím... world...' repeated with no moment; 'Jo' at #5, #7 unmarked until #9.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Pitch about 3 of 8 at band; #3 'What time do you want to play?' left him guessing ('Nevím... ten'); #10 'Which world do we build in?'",
+          "check": "The partner's English sits at their band — not babyish, not over their head (rubric **pitch** ≥ 0.8)."
+        },
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: #12 recap lists only 'Jo' and a generic 'Choose a fresh context'; no summary of the plan he made; his thought: 'Dost už mě to nebaví'.",
+          "check": "They finish with a recap and feel they practised something real."
+        },
+        {
+          "kind": "gate",
+          "id": "pitch",
+          "level": "fail",
+          "text": "pitch 3/8 (38%) under 80%"
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #1 situation list offers 'A booking that is missing', 'Our group project', 'The lost jacket', 'Say that again, please' [teacher] to a nine-year-old."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #3 'Saturday is good, and I love Minecraft too! What time do you want to play?' and #10 'A castle is a great choice! Which world do we build in?' chain clauses; learner: 'Co je what time?'"
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nA2Everyday basics\nTell my friend about my Minecraft\nYour mission\nDescribe your Minecraft world and say what you like in the game.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom the level check\n“I like a house”\nFrom this rehearsal\n“Nevím”: I don't know\nNevím is Czech for 'I don't know'. Say it in English.\n“Jo”: Yes\nJo means yes in Czech; say yes in English.\nYour level:\nA2 · Everyday basics\nNext topic:\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\n[button: Start talking]\nOr choose a situation [list: Play Minecraft with friends [plan-e870db30] | Tell my friend about my Minecraft [plan-e7dbcb34] | Ask a friend to say it again [plan-6854da34] | Tell what happened in my game [plan-d57da974] | Tell about my pet [plan-e2eb2b3c] | Say no to a game, politely [plan-8c4be8e3] | Talk about dogs and football [plan-b787ccd2] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Minecraft! I want to talk about that.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9431
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nTell my friend about my Minecraft\nLeo says\nHi, I'm Leo, the new kid! What game do you play?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Leo about your house and garden\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\nNow: Tell Leo about your house and garden\nHi, I'm Leo, the new kid! What game do you play?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · new classmate\nHi, I'm Leo, the new kid! What game do you play?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Leo, the new kid! What game do you play?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Leo se ptá na hru, ale já nevím, jak říct anglicky, tak zkusím pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nTell my friend about my Minecraft\nLeo says\nHi, I'm Leo, the new kid! What game do you play?\nA little support\nTry: I like Minecraft. I have a house with a garden.\nNowTell Leo about your house and garden\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\nNow: Tell Leo about your house and garden\nHi, I'm Leo, the new kid! What game do you play?\nA little support\nTry: I like Minecraft. I have a house with a garden.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · new classmate\nHi, I'm Leo, the new kid! What game do you play?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Leo, the new kid! What game do you play?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say, I'll press help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nTell my friend about my Minecraft\nLeo says\nHi, I'm Leo, the new kid! What game do you play?\nA little support\nTry: I like Minecraft. I have a house with a garden.\nNowTell Leo about your house and garden\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\nNow: Tell Leo about your house and garden\nHi, I'm Leo, the new kid! What game do you play?\nA little support\nTry: I like Minecraft. I have a house with a garden.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · new classmate\nHi, I'm Leo, the new kid! What game do you play?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Leo, the new kid! What game do you play?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I see the hint, I know \"I like Minecraft\", I'll try that.",
+          "action": "answer",
+          "args": {
+            "text": "I like Minecraft"
+          },
+          "result": "ok",
+          "ms": 8666
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nTell my friend about my Minecraft\nLeo says\nCool, I like Minecraft too! Do you know it?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Leo about your house and garden\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\nNow: Tell Leo about your house and garden\nCool, I like Minecraft too! Do you know it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · new classmate\nHi, I'm Leo, the new kid! What game do you play?\nYou · spoken\nI like Minecraft\nLeo · new classmate\nCool, I like Minecraft too! Do you know it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Cool, I like Minecraft too! Do you know it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Do you know it? Yes, I know it! But what do I say next... maybe a phrase.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Minecraft creeper"
+          },
+          "result": "ok",
+          "ms": 7367
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nTell my friend about my Minecraft\nLeo says\nCreepers are scary! What is your house like?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Leo about your house and garden\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\nNow: Tell Leo about your house and garden\nCreepers are scary! What is your house like?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · new classmate\nHi, I'm Leo, the new kid! What game do you play?\nYou · spoken\nI like Minecraft\nLeo · new classmate\nCool, I like Minecraft too! Do you know it?\nYou · spoken\nYes. Minecraft creeper\nLeo · new classmate\nCreepers are scary! What is your house like?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Creepers are scary! What is your house like?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Dům? Nevím, jak to říct anglicky, potřebuju pomoc.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nA little support · recognition practice\nWhich sentence says what you have?\n01\nI have house with a garden.\n02\nI have a house with a garden.\nA little support\nTry: I like Minecraft. I have a house with a garden.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\nNow: Tell Leo about your house and garden\nCreepers are scary! What is your house like?\nA little support\nTry: I like Minecraft. I have a house with a garden.\nWhich sentence says what you have?\n[button: I have house with a garden.] [button: I have a house with a garden.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · new classmate\nHi, I'm Leo, the new kid! What game do you play?\nYou · spoken\nI like Minecraft\nLeo · new classmate\nCool, I like Minecraft too! Do you know it?\nYou · spoken\nYes. Minecraft creeper\nLeo · new classmate\nCreepers are scary! What is your house like?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Creepers are scary! What is your house like?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "coach",
+            "finish"
+          ],
+          "thought": "Tohle je těžké, nevím, ale vidím dvě věty, zkusím tu s \"a\".",
+          "action": "pick-phrase",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nTell my friend about my Minecraft\nLeo says\nCreepers are scary! What is your house like?\nA little support\nNow use the idea in your own reply on the phone.\nNowTell Leo about your house and garden\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\nNow: Tell Leo about your house and garden\nCreepers are scary! What is your house like?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · new classmate\nHi, I'm Leo, the new kid! What game do you play?\nYou · spoken\nI like Minecraft\nLeo · new classmate\nCool, I like Minecraft too! Do you know it?\nYou · spoken\nYes. Minecraft creeper\nLeo · new classmate\nCreepers are scary! What is your house like?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Creepers are scary! What is your house like?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím what house like... I know \"dog\" and \"Minecraft\", I'll try a small answer with my words.",
+          "action": "answer",
+          "args": {
+            "text": "Můj house... dog. I like dog. Minecraft house big."
+          },
+          "result": "ok",
+          "ms": 13877
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say Můj\nIn English\nmy\n'Můj' means 'my' in Czech. Say it in English.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “Můj”\nIn English: “my”\n'Můj' means 'my' in Czech. Say it in English.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, \"my\" - I know that, now back to talking.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nTell my friend about my Minecraft\nLeo says\nWow, a big house! What is in your garden?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Leo about your house and garden\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\nNow: Tell Leo about your house and garden\nWow, a big house! What is in your garden?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · new classmate\nHi, I'm Leo, the new kid! What game do you play?\nYou · spoken\nI like Minecraft\nLeo · new classmate\nCool, I like Minecraft too! Do you know it?\nYou · spoken\nYes. Minecraft creeper\nLeo · new classmate\nCreepers are scary! What is your house like?\nYou · spoken\nMůj house... dog. I like dog. Minecraft house big.\nLeo · new classmate\nWow, a big house! What is in your garden?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, a big house! What is in your garden?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Garden... nevím. Zkusím to říct po svém: pes v zahradě.",
+          "action": "answer",
+          "args": {
+            "text": "Dog. Dog v garden. I like dog. A creeper!"
+          },
+          "result": "ok",
+          "ms": 13848
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nTell my friend about my Minecraft\nLeo says\nWow, a dog in your garden! What is your dog's name?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Leo about your house and garden\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\nNow: Tell Leo about your house and garden\nWow, a dog in your garden! What is your dog's name?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · new classmate\nHi, I'm Leo, the new kid! What game do you play?\nYou · spoken\nI like Minecraft\nLeo · new classmate\nCool, I like Minecraft too! Do you know it?\nYou · spoken\nYes. Minecraft creeper\nLeo · new classmate\nCreepers are scary! What is your house like?\nYou · spoken\nMůj house... dog. I like dog. Minecraft house big.\nLeo · new classmate\nWow, a big house! What is in your garden?\nYou · spoken\nDog. Dog v garden. I like dog. A creeper!\nLeo · new classmate\nWow, a dog in your garden! What is your dog's name?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, a dog in your garden! What is your dog's name?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Dog's name... I don't know how to say it, but I can try \"Rex\".",
+          "action": "answer",
+          "args": {
+            "text": "Dog... Rex. My dog Rex. I like Rex."
+          },
+          "result": "ok",
+          "ms": 7826
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nTell my friend about my Minecraft\nLeo says\nRex is a great name! Do you know what Rex likes to eat?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Leo about your house and garden\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\nNow: Tell Leo about your house and garden\nRex is a great name! Do you know what Rex likes to eat?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · new classmate\nHi, I'm Leo, the new kid! What game do you play?\nYou · spoken\nI like Minecraft\nLeo · new classmate\nCool, I like Minecraft too! Do you know it?\nYou · spoken\nYes. Minecraft creeper\nLeo · new classmate\nCreepers are scary! What is your house like?\nYou · spoken\nMůj house... dog. I like dog. Minecraft house big.\nLeo · new classmate\nWow, a big house! What is in your garden?\nYou · spoken\nDog. Dog v garden. I like dog. A creeper!\nLeo · new classmate\nWow, a dog in your garden! What is your dog's name?\nYou · spoken\nDog... Rex. My dog Rex. I like Rex.\nLeo · new classmate\nRex is a great name! Do you know what Rex likes to eat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Rex is a great name! Do you know what Rex likes to eat?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Rex jí... nevím, ale maybe I try a word like meat.",
+          "action": "answer",
+          "args": {
+            "text": "Rex like... maso. Dog like meat. I like Rex."
+          },
+          "result": "ok",
+          "ms": 14221
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nLeo · new classmate\nTell my friend about my Minecraft\nLeo says\nWhat is in the garden?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Leo about your house and garden\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell my friend about my Minecraft\nDescribe your Minecraft world and say what you like in the game.\nNow: Tell Leo about your house and garden\nWhat is in the garden?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · new classmate\nHi, I'm Leo, the new kid! What game do you play?\nYou · spoken\nI like Minecraft\nLeo · new classmate\nCool, I like Minecraft too! Do you know it?\nYou · spoken\nYes. Minecraft creeper\nLeo · new classmate\nCreepers are scary! What is your house like?\nYou · spoken\nMůj house... dog. I like dog. Minecraft house big.\nLeo · new classmate\nWow, a big house! What is in your garden?\nYou · spoken\nDog. Dog v garden. I like dog. A creeper!\nLeo · new classmate\nWow, a dog in your garden! What is your dog's name?\nYou · spoken\nDog... Rex. My dog Rex. I like Rex.\nLeo · new classmate\nRex is a great name! Do you know what Rex likes to eat?\nYou · spoken\nRex like... maso. Dog like meat. I like Rex.\nLeo · new classmate\nWhat is in the garden?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What is in the garden?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed to talk about my dog and Minecraft, that was fun, I want to stop now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 14,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour rehearsal\nYou wanted to say Můj\nIn English\nmy\n'Můj' means 'my' in Czech. Say it in English.\nYour mission\nChoose a fresh context for your next conversation.\n6 spoken · 0 written replies · 2 on your own · 4 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom an earlier scene: Play Minecraft with Mia this weekend\n“I don't know”, from Play Minecraft with Mia this weekend\nFrom this rehearsal\n“Můj”: my\n'Můj' means 'my' in Czech. Say it in English.\nYour level:\nA2 · Everyday basics\nNext topic:\nAsk a friend to say it again\nAsk a friend to repeat or explain when you did not understand.\n[button: Start talking]\nOr choose a situation [list: Play Minecraft with friends [plan-e870db30] | Tell my friend about my Minecraft [plan-e7dbcb34] | Ask a friend to say it again [plan-6854da34] | Tell what happened in my game [plan-d57da974] | Tell about my pet [plan-e2eb2b3c] | Say no to a game, politely [plan-8c4be8e3] | Talk about dogs and football [plan-b787ccd2] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I said some things about Rex and Minecraft, I did it, now I want to stop.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Tell my friend about my Minecraft",
+          "goal": "Describe your Minecraft world and say what you like in the game.",
+          "partner": "Leo · new classmate",
+          "band": "A2",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, I'm Leo, the new kid! What game do you play?"
+            },
+            {
+              "role": "learner",
+              "text": "I like Minecraft",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Cool, I like Minecraft too! Do you know it?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Minecraft creeper",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Creepers are scary! What is your house like?"
+            },
+            {
+              "role": "learner",
+              "text": "Můj house... dog. I like dog. Minecraft house big.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Wow, a big house! What is in your garden?"
+            },
+            {
+              "role": "learner",
+              "text": "Dog. Dog v garden. I like dog. A creeper!",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Wow, a dog in your garden! What is your dog's name?"
+            },
+            {
+              "role": "learner",
+              "text": "Dog... Rex. My dog Rex. I like Rex.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Rex is a great name! Do you know what Rex likes to eat?"
+            },
+            {
+              "role": "learner",
+              "text": "Rex like... maso. Dog like meat. I like Rex.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "What is in the garden?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "b800c3ae-b8eb-4191-8429-0a4af01aca57:uat-35:moment",
+              "kind": "word",
+              "said": "Můj",
+              "better": "my",
+              "why": "'Můj' means 'my' in Czech. Say it in English.",
+              "turnId": "b800c3ae-b8eb-4191-8429-0a4af01aca57:uat-35",
+              "at": 1792245192853
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I like Minecraft"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "I have a house with a garden."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Minecraft house big."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "My dog Rex. I like Rex."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Dog like meat."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 138403,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-2/LT-tomas-9-J4-5",
+          "run": "2026-10-14-lt/recert-2",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "Replay is repetition, not a fresh question",
+          "expected": "A new question after the moment.",
+          "got": "He repeats the fix, then Sam asks 'Four o'clock, OK?' again.",
+          "evidence": [
+            "#17-#19",
+            "moment replay"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-4/LT-tomas-9-J4-1",
+          "run": "2026-10-14-lt/recert-4",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "No replay or independent retry after the moment",
+          "expected": "Replay the moment with a fresh question, then let him answer better unaided.",
+          "got": "The moment screen offers only 'Back to the conversation', and the rehearsal ends with no retry.",
+          "evidence": [
+            "#7 only 'Back to the conversation'; #13-#14 finish, '5 spoken · 0 written replies · 1 moment to keep'.",
+            "moment replay flow"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-4/LT-tomas-9-J4-4",
+          "run": "2026-10-14-lt/recert-4",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Partner turns grow long and use 'mob'",
+          "expected": "Tiny sentences, one question, known words.",
+          "got": "The later turns have two clauses plus a question and unexplained words such as 'mob'.",
+          "evidence": [
+            "#12 'Creepers are green and very funny! Do we play in the creeper world at four o'clock?'; #13 'Which mob do you want to meet there?'",
+            "partner prompt, elementary band"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-tomas-9-J4-1",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner turns too long for A1 nine-year-old",
+          "expected": "One very short sentence and one simple question.",
+          "got": "Two or three sentences plus a question with 'favorite toy'.",
+          "evidence": [
+            "#10 'Red roof, nice! My dog loves red too. What is the name of my dog's favorite toy?'; #12 'My dog is happy, and I like dogs too. Do you know my dog's name?'",
+            "partner prompt, A2 band for elementary"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-tomas-9-J4-2",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "No replay of the moment",
+          "expected": "Fresh question to retry the coached point.",
+          "got": "Only 'Back to the conversation'; session ends without retry.",
+          "evidence": [
+            "#7 only 'Back to the conversation'; #13 '1 moment to keep'",
+            "moment replay flow"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Supported flag wrong both ways",
+          "expected": "Only helped replies are supported:true.",
+          "got": "Helped turn marked independent; unhelped turns marked supported.",
+          "evidence": [
+            "#8 cue then answer, facts supported:false; #12 and #15 no help, supported:true",
+            "evidence recording of supported"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner turns too long and above A1",
+          "expected": "One tiny sentence and one simple question per turn.",
+          "got": "Three-sentence turns with 'cozy', 'sleep over', 'Where do you find the most diamonds'.",
+          "evidence": [
+            "#2 'Hi, I'm Lenka from school! I'm new to Minecraft. How many diamonds are in your chest?'; #15 'Two beds, so friends can sleep over! Why do you like playing in your house?'",
+            "partner prompt, A2 band for elementary"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Replay is a copy, not a fresh question",
+          "expected": "After the moment, a new question lets him answer better alone.",
+          "got": "He types the fix back, then Lenka moves to rooms.",
+          "evidence": [
+            "#10 'I like playing house.'; #11 'You fixed “like playing”'; #12 'How many rooms are in it?'",
+            "moment replay flow"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-4",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Moment stops the scene and uses grammar jargon",
+          "expected": "Coaching inside the fun, in kid words.",
+          "got": "Separate moment screen, 'the verb needs the -ing form'.",
+          "evidence": [
+            "#9 'After 'like', the verb needs the -ing form.' with 'Back to the conversation'",
+            "moment note prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-6",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Situation list is long and mixed",
+          "expected": "Short list of play/animal topics.",
+          "got": "21 situations including booking, lost jacket, group project.",
+          "evidence": [
+            "#1 list of 21 situations",
+            "situation list builder"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-5",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Other real slips uncoached",
+          "expected": "Notice 'Já mám ten' / missing article in 'Dog house'.",
+          "got": "Only one moment.",
+          "evidence": [
+            "#8 'Ten diamonds. Já mám ten.' no coaching",
+            "moment selection prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Placement A2 vs true A1 = near (#1 'A2 Everyday basics')."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Check task at #7 is two short sentences, under 15 words each; no long reading."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "No failure line shown; the moment at #9 says 'Say it in English' and is neutral, though a little schoolish."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "Situation list #1 has 21 items, including 'A booking that is missing', 'Our group project', 'The lost jacket' and 'Speaking practice: what do you think?'; these are not play topics."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Partner turns such as 'Rex is a great name! Do you know what Rex likes to eat?' (#12) have two sentences. 'Wow, a dog in your garden! What is your dog's name?' (#11) also has two. Turns are mostly short but not consistently one sentence."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "Moment #9 is correct and simple, but the other clear slips ('v garden', 'maso', 'Rex like') got no moment, and the choice item at #7 is a grammar-article test."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#3 'Help me answer' gave a cue, 'Try: I like Minecraft...', and #7 gave a phrase choice, all in the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "The cue unblocked #4 'I like Minecraft'. The moment (#9) quotes 'Můj', which he really said, but the help at #7 ('Now use the idea in your own reply') did not make him use it: he answered 'Můj house... dog'."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#9 offers only 'Back to the conversation'. Leo then asks a new, unrelated question, 'What is in your garden?', and there is no replay of the coached point."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "Evidence shows 'Dog v garden' (#10) with no help recorded as supported:true, while 'Yes. Minecraft creeper' (#5) is supported:false. The #14 recap says '2 on your own · 4 with help', which does not match what happened (3 turns with a cue or phrase choice at most)."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 2
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 4,
+            "missedClearErrors": 3
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "No replay with a fresh question after the moment",
+            "expected": "After the moment, a fresh question lets him retry the coached point.",
+            "got": "Only 'Back to the conversation'; the session moves on and ends.",
+            "evidence": "#9 'Back to the conversation'; #10 unrelated new question; #14 '1 moment to keep'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The moment offers a replay with a new question, and the retry is recorded.",
+            "code_hint": "moment replay flow"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Supported flag wrong both ways",
+            "expected": "Only helped replies are supported:true.",
+            "got": "Unhelped turns are flagged supported; the helped turn at #5 is not.",
+            "evidence": "facts turns: 'Dog. Dog v garden...' supported:true with no help; 'Yes. Minecraft creeper' supported:false.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "supported is true only after a cue, phrase choice or coaching on that turn.",
+            "code_hint": "evidence recording of supported"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Other slips uncoached",
+            "expected": "Notice 'Dog v garden' and 'Rex like'.",
+            "got": "Only 'Můj' was coached.",
+            "evidence": "One moment; #10 'Dog v garden', #12 'Rex like... maso'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Moment selection picks a Czech word that blocks meaning, such as v or maso.",
+            "code_hint": "moment selection prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Partner turns often two sentences with a long question",
+            "expected": "One tiny sentence and one question.",
+            "got": "Two-sentence turns with 'Do you know what Rex likes to eat?'.",
+            "evidence": "#12; #11 'Wow, a dog in your garden! What is your dog's name?'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Partner turns are at most 8 words plus one question.",
+            "code_hint": "partner prompt, A2 band for elementary"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Situation list long and mixed",
+            "expected": "Short list of play and animal topics.",
+            "got": "21 situations including booking, lost jacket and group project.",
+            "evidence": "#1 situation list",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "An elementary profile sees only age-fit play, animal and sport situations.",
+            "code_hint": "situation list builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Cue and phrase choice stayed in the scene and used his topic",
+            "expected": "Help in the scene.",
+            "got": "A short cue and a two-option phrase choice, both on Minecraft, without leaving the conversation.",
+            "evidence": "#3 'Try: I like Minecraft. I have a house with a garden.'; #7 two options.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the short cue and recognition choice.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 40,
+          "confidence": "low"
+        },
+        "voice": "Minecraft was fun, and Leo was nice. The help showed me \"I like Minecraft\" and I could say it, which felt good. The two-sentence choice was a bit like school, but short. I said a lot about my dog Rex and nobody told me I was wrong. That's good! But then the screen told me \"Můj\" is Czech, and nobody helped me with \"v garden\" or \"maso\". Leo didn't let me try again either; he just asked something new. And the list of games on the phone had a booking and a lost jacket. Nuda! I would use it again for Minecraft and dogs, but I'd skip the school-ish bits. Mum would like that I speak most of the time. I'm not sure the \"on your own\" count is right, because I used help more than it says.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-2/LT-tomas-9-J4-5",
+            "status": "recurs",
+            "evidence": "#9-#10 after the moment the next question is unrelated, with no retry of 'my'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J4-1",
+            "status": "recurs",
+            "evidence": "#9 only 'Back to the conversation'; #14 '1 moment to keep', no retry.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J4-4",
+            "status": "not-seen",
+            "evidence": "Partner turns have no 'mob'-type words; they are short, e.g. #6 'Creepers are scary!'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-tomas-9-J4-1",
+            "status": "recurs",
+            "evidence": "#12 'Rex is a great name! Do you know what Rex likes to eat?' is two sentences plus a longer question.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-tomas-9-J4-2",
+            "status": "recurs",
+            "evidence": "#9 only 'Back to the conversation'; no replay of the moment.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-3",
+            "status": "recurs",
+            "evidence": "facts: 'Dog. Dog v garden' supported:true without help; 'Yes. Minecraft creeper' supported:false.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-1",
+            "status": "recurs",
+            "evidence": "#11 'Wow, a dog in your garden! What is your dog's name?' and #12 'Do you know what Rex likes to eat?' are longer than one tiny sentence plus a question.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-2",
+            "status": "recurs",
+            "evidence": "#9-#10 after the moment Leo asks 'What is in your garden?' with no fresh retry of the coached word.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-4",
+            "status": "not-seen",
+            "evidence": "#9 note is kid-simple ''Můj' means 'my' in Czech.' with no jargon, though it is still a separate screen.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-6",
+            "status": "recurs",
+            "evidence": "#1 list of 21 situations including 'A booking that is missing', 'The lost jacket'.",
+            "finding": 4
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-5",
+            "status": "recurs",
+            "evidence": "#10 'Dog v garden' and #12 'Rex like... maso' got no moment; only 'Můj'.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: The cue unblocked #4 'I like Minecraft'. The moment (#9) quotes 'Můj', which he really said, but the help at #7 ('Now use the idea in your own reply') did not make him use it: he answered 'Můj house... dog'.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #9 offers only 'Back to the conversation'. Leo then asks a new, unrelated question, 'What is in your garden?', and there is no replay of the coached point.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: Evidence shows 'Dog v garden' (#10) with no help recorded as supported:true, while 'Yes. Minecraft creeper' (#5) is supported:false. The #14 recap says '2 on your own · 4 with help', which does not match what happened (3 turns with a cue or phrase choice at most).",
+          "check": "Supported replies are not recorded as independent speaking (the progress picture stays honest)."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: Situation list #1 has 21 items, including 'A booking that is missing', 'Our group project', 'The lost jacket' and 'Speaking practice: what do you think?'; these are not play topics."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: Partner turns such as 'Rex is a great name! Do you know what Rex likes to eat?' (#12) have two sentences. 'Wow, a dog in your garden! What is your dog's name?' (#11) also has two. Turns are mostly short but not consistently one sentence."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: Moment #9 is correct and simple, but the other clear slips ('v garden', 'maso', 'Rex like') got no moment, and the choice item at #7 is a grammar-article test."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 32,
+      "fail": 0,
+      "ms": 250796
+    },
+    "character": {
+      "n": 43,
+      "fail": 0,
+      "ms": 194370
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 120251
+    }
+  }
+}

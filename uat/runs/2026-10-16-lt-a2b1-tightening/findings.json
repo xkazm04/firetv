@@ -52,10 +52,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "When the notes say A2 limits, the band follows or the summary explains why B1.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#9 B1 stands with a rationale 'Your B2 answers were close, but none was strong'; notes do not say 'kept at A2'. The band is still generous."
   },
   {
     "id": "LT-sofie-11-J1-2",
@@ -174,9 +177,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Step up in smaller increments; avoid stacking two B2 tasks.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#7 and #8 are both B2 'Say it' tasks; #7 is an opinion task and she answers with an apology."
   },
   {
     "id": "LT-sofie-11-J1-3",

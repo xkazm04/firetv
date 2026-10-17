@@ -2,498 +2,402 @@
 
 Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run. One section per module that has open rows.
 
-424 open across 13 runs
+330 open across 13 runs
 drained 9 of 13 runs
 undrained: 2026-10-14-lt, 2026-10-16-lt-a2b1-tightening, 2026-10-17-lt-swap, 2026-10-17-lt-swap-2 (home: docs/uat-insights/<run-id>.md, uat/README.md)
 
 # Linga
 
-355 open in 40 pairs across 20 runs
-355 open: 11 seen on the current product, 344 seen before a product change
+261 open in 40 pairs across 21 runs
 
-recurring 106 · unasked by a later run of their pair 200
+recurring 162 · unasked by a later run of their pair 22
 
 Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each judge answers all of its pair's open rows, and each answer is stamped into the run that owns the row.
 
-## viktor-67 J3 · 17 open · top rank 27
+## viktor-67 J3 · 11 open · top rank 27
 
-- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-1` blocker · rank 27 · Repeated Czech requests do not produce understandable explanations · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-2` blocker · rank 27 · Eight replies never deliver the planned school exchange · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-viktor-67-J3-1` blocker · rank 18 · Partner drifts above A1 with long, chatty turns · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-viktor-67-J3-2` blocker · rank 18 · Repeated and obvious errors get no moment · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-viktor-67-J3-1` blocker · rank 18 · Explanations exceed this beginner’s comprehension · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-4` major · rank 12 · The opening models an unnatural tense · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-viktor-67-J3-2` major · rank 12 · Mission ends after three replies, with Mia's question unanswered · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-viktor-67-J3-2` minor · rank 6 · A Czech vocabulary question requires a second request · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-viktor-67-J3-3` minor · rank 6 · The recap records activity without reviewing learning · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-viktor-67-J3-1` minor · rank 6 · The recommended practice misses his Sunday goal · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-viktor-67-J3-2` minor · rank 6 · One clarification remains too difficult · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-viktor-67-J3-3` minor · rank 6 · The final teaching interruption is not worth its burden · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-3` minor · rank 6 · The clear garden error receives no repair · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-5` minor · rank 6 · The recap reports counts without usable Sunday language · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-viktor-67-J3-5` minor · rank 6 · No family words taught for Sunday; the recap sentence is not his · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-viktor-67-J3-3` minor · rank 4 · Missing article in 'red shirt is nice' got no coaching · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert/LT-viktor-67-J3-4` minor · rank 3 · The recap records activity without reinforcing learning · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
+- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-1` blocker · rank 27 · Repeated Czech requests do not produce understandable explanations
+- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-2` blocker · rank 27 · Eight replies never deliver the planned school exchange
+- `2026-10-14-lt/recert-3/LT-viktor-67-J3-2` blocker · rank 18 · Repeated and obvious errors get no moment · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-3` blocker · rank 18 · Most repeated article slips get no moment · recurrence 2, first seen 2026-09-15-lt-recert2-beginners
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-4` blocker · rank 18 · Moments teach grammar, not Sunday family words · recurrence 2, first seen 2026-10-14-lt/recert-3
+- `2026-09-15-lt-recert/LT-viktor-67-J3-2` minor · rank 6 · One clarification remains too difficult
+- `2026-09-15-lt/LT-viktor-67-J3-2` minor · rank 6 · A Czech vocabulary question requires a second request
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-7` minor · rank 6 · Prompt on TV stays 'Tell her your name' for many turns
+- `2026-10-14-lt/recert-1/LT-viktor-67-J3-3` minor · rank 4 · Missing article in 'red shirt is nice' got no coaching · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-5` minor · rank 4 · Mia asks his name twice and says 'Hi Viktor, Grandpa!'
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-6` polish · rank 2 · Plural correction of 'My apple is red' is arguable
 
-## viktor-67 J4 · 15 open · top rank 27
+## petra-38 J4 · 9 open · top rank 27
 
-- `2026-10-14-lt/recert-3/LT-viktor-67-J4-2` blocker · rank 27 · Recap shows sentences never said · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert/LT-viktor-67-J4-1` blocker · rank 27 · Help repeats the introduction regardless of the current question · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-1` blocker · rank 27 · Repeated cues do not answer the question he is stuck on · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-2` blocker · rank 27 · Coaching improves an old answer instead of resolving the current difficulty · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-viktor-67-J4-1` blocker · rank 18 · Phrase help is a loop, no replay or fresh question · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-viktor-67-J4-3` blocker · rank 18 · No moment or coaching on learner errors · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert/LT-viktor-67-J4-3` blocker · rank 18 · Friendly acknowledgments leave a beginner without a next step · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-viktor-67-J4-4` blocker · rank 18 · Replay instruction stays visible after the replay question · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-3` blocker · rank 18 · Fresh replay questions do not produce a better independent answer · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-viktor-67-J4-2` major · rank 12 · Replay does not demonstrate an improved independent answer · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-4` major · rank 12 · Later partner turns exceed this beginner's language needs · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-viktor-67-J4-4` major · rank 8 · Phrase help ignores question · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-viktor-67-J4-2` minor · rank 6 · The journey ends before an independent retry · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-viktor-67-J4-3` minor · rank 6 · The opening overloads a first-time learner · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-viktor-67-J4-5` minor · rank 6 · Partner pitch drifts above A1 · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-3` blocker · rank 27 · Supported flag does not match the help actually used · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-1` blocker · rank 27 · Caller addresses Petra as Mr Berg and asks about her day · recurrence 2, first seen 2026-09-15-lt-recert2-beginners
+- `2026-10-14-lt/recert-1/LT-petra-38-J4-4` blocker · rank 18 · Recurring errors missed · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-2` blocker · rank 18 · Replay question does not practise the coached point · recurrence 2, first seen 2026-09-15-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-4` blocker · rank 18 · Clear errors left without a moment · recurrence 2, first seen 2026-09-15-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-5` blocker · rank 18 · Partner pitched above A2 and level reads B1 · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-6` major · rank 9 · Moment screen offers no replay with a fresh question · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-7` major · rank 9 · Stale 'Now: Say your own name clearly' task
+- `2026-09-15-lt-recert/LT-petra-38-J4-2` minor · rank 6 · Replay instruction promises practice it does not deliver · recurrence 2, first seen 2026-09-15-lt-recert
 
-## oksana-34 J1 · 14 open · top rank 27
+## tomas-9 J4 · 9 open · top rank 27
 
-- `2026-10-14-lt/recert-1/LT-oksana-34-J1-2` blocker · rank 27 · Notes call answers 'no real mistakes' despite clear errors · unasked since 2026-10-14-lt/recert-3 (5 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-oksana-34-J1-3` blocker · rank 18 · Next focus is generic and ignores the interview · recurrence 2, first seen 2026-10-14-lt · unasked since 2026-10-16-lt-placement-oos (4 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-oksana-34-J1-1` major · rank 12 · B2 placement generous for a B1 writer with recurrent errors · recurrence 3, first seen 2026-10-14-lt · unasked since 2026-10-16-lt-placement-oos (4 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-oksana-34-J1-4` major · rank 12 · Task 4 prompt truncated · unasked since 2026-10-14-lt/recert-3 (5 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-3/LT-oksana-34-J1-3` major · rank 12 · B2 interview answer judged 'fail' and read as A2 · product: 26 of 105 files changed since
-- `2026-09-15-lt/LT-oksana-34-J1-2` major · rank 9 · Clear interview-language errors receive no coaching · unasked since 2026-09-15-lt-j1b (8 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-oksana-34-J1-3` major · rank 9 · Next focus is a single phrase, not tied to interview goal · unasked since 2026-10-16-lt-placement-oos (4 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-3/LT-oksana-34-J1-4` minor · rank 6 · Interview task is a hypothetical opinion, not a real interview question · recurrence 4, first seen 2026-10-16-lt-placement-oos · product: 26 of 105 files changed since
-- `2026-09-15-lt/LT-oksana-34-J1-3` minor · rank 6 · Follow-up questions keep extending one scenario · unasked since 2026-09-15-lt-j1b (8 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-j1b/LT-oksana-34-J1-1` minor · rank 6 · The summary overstates the past problem-solving evidence · unasked since 2026-10-14-lt (7 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-oksana-34-J1-2` minor · rank 6 · Task 5 verdict 'partial' at C1 is lenient · unasked since 2026-10-16-lt-placement-oos (4 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-1/LT-oksana-34-J1-3` minor · rank 6 · Summary and focus are thin · unasked since 2026-10-16-lt-placement-oos/recert-2 (2 later runs of this pair) · product: 27 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-3/LT-oksana-34-J1-5` minor · rank 6 · Next focus is one trivial slip, not interview language · product: 26 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-2/LT-oksana-34-J1-4` polish · rank 2 · Last tasks overlap, and the grading is lenient · recurrence 3, first seen 2026-10-16-lt-placement-oos · product: 27 of 105 files changed since
-
-## petra-38 J4 · 14 open · top rank 27
-
-- `2026-09-15-lt-recert2-beginners/LT-petra-38-J4-1` blocker · rank 27 · The guest takes the receptionist's role · unasked since 2026-10-14-lt (2 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-petra-38-J4-2` blocker · rank 18 · No replay with a fresh question after a moment · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-petra-38-J4-4` blocker · rank 18 · Recurring errors missed · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-petra-38-J4-1` blocker · rank 18 · Partner pitched at B1, above A2 · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-petra-38-J4-3` major · rank 12 · Supported flag mismatches help used · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-petra-38-J4-1` major · rank 9 · Replay does not demonstrate the coached skill or independence · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-petra-38-J4-3` major · rank 9 · The journey ends without an independent replay · unasked since 2026-10-14-lt (2 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-petra-38-J4-2` minor · rank 6 · The second cue repeats help for the opening complaint · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-petra-38-J4-3` minor · rank 6 · Coaching leaves the current difficulty unresolved · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-petra-38-J4-4` minor · rank 6 · The situation menu poorly matches her reception work · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-petra-38-J4-1` minor · rank 6 · Second help request does not address the current difficulty · unasked since 2026-09-15-lt-recert2-beginners (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-petra-38-J4-2` minor · rank 6 · Replay instruction promises practice it does not deliver · unasked since 2026-09-15-lt-recert2-beginners (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-petra-38-J4-3` minor · rank 6 · Work topics are buried under unrelated suggestions · unasked since 2026-09-15-lt-recert2-beginners (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-petra-38-J4-2` minor · rank 6 · The second cue does not address the current difficulty · unasked since 2026-10-14-lt (2 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-
-## tomas-9 J2 · 14 open · top rank 27
-
-- `2026-10-14-lt/recert-6/LT-tomas-9-J2-1` blocker · rank 27 · Swap does nothing; rejected shopping topic stays in agreed plan · recurrence 3, first seen 2026-10-14-lt · unasked since 2026-10-17-lt-swap (2 later runs of this pair) · product: 26 of 105 files changed since
-- `2026-10-17-lt-swap/LT-tomas-9-J2-1` blocker · rank 27 · Swap button does nothing · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair)
-- `2026-10-14-lt/recert-4/LT-tomas-9-J2-2` blocker · rank 18 · Skill labels and why lines are too abstract for a 9-year-old · recurrence 4, first seen 2026-09-15-lt · unasked since 2026-10-17-lt-swap (2 later runs of this pair) · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-5/LT-tomas-9-J2-1` blocker · rank 18 · Abstract skill labels and long why lines for a 9-year-old · recurrence 4, first seen 2026-09-15-lt-recert · unasked since 2026-10-17-lt-swap (2 later runs of this pair) · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J2-2` blocker · rank 18 · Abstract skill labels for a 9-year-old · recurrence 4, first seen 2026-09-15-lt-recert2-goal · unasked since 2026-10-17-lt-swap (2 later runs of this pair) · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J2-3` blocker · rank 18 · Topic goals demand more than the child has · recurrence 4, first seen 2026-10-14-lt/recert-1 · unasked since 2026-10-17-lt-swap (2 later runs of this pair) · product: 26 of 105 files changed since
-- `2026-10-17-lt-swap/LT-tomas-9-J2-2` blocker · rank 18 · Default topics are school-like, not a nine-year-old's · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair)
-- `2026-10-17-lt-swap-2/LT-tomas-9-J2-4` blocker · rank 18 · Add-your-own topic never used
-- `2026-10-14-lt/recert-5/LT-tomas-9-J2-2` major · rank 12 · Placement summary tasks and feedback exceed 15 words and A1 level · recurrence 5, first seen 2026-10-14-lt · unasked since 2026-10-17-lt-swap (2 later runs of this pair) · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J2-4` major · rank 12 · Off-interest and adult-flavoured topics proposed for a boy who wants games · unasked since 2026-10-17-lt-swap (2 later runs of this pair) · product: 26 of 105 files changed since
-- `2026-10-17-lt-swap/LT-tomas-9-J2-4` major · rank 12 · Why-lines and screen text too long for a 9-year-old · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair)
-- `2026-10-17-lt-swap-2/LT-tomas-9-J2-3` major · rank 12 · Shopping topic proposed to a child who wanted games
-- `2026-10-14-lt/recert-2/LT-tomas-9-J2-3` minor · rank 6 · Plan text too long and school-flavoured for a 9-year-old reader · recurrence 4, first seen 2026-10-14-lt/recert-2 · unasked since 2026-10-17-lt-swap (2 later runs of this pair) · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-5/LT-tomas-9-J2-3` minor · rank 6 · Narrate and describe goals demand more than like/is · recurrence 4, first seen 2026-10-14-lt/recert-2 · unasked since 2026-10-17-lt-swap (2 later runs of this pair) · product: 26 of 105 files changed since
-
-## petra-38 J2 · 13 open · top rank 27
-
-- `2026-10-14-lt/LT-petra-38-J2-1` blocker · rank 27 · Swap replaces the wrong topic · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair) · product: 52 of 93 files changed since
-- `2026-09-15-lt-recert/LT-petra-38-J2-2` blocker · rank 18 · Swaps recycle rejected scenarios · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/LT-petra-38-J2-2` major · rank 12 · Swaps bring near-duplicates and off-brief topics · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair) · product: 52 of 93 files changed since
-- `2026-09-15-lt/LT-petra-38-J2-1` major · rank 9 · Seven swaps never produce a work-shaped plan · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-petra-38-J2-1` major · rank 9 · The agreed plan still fails her work goal · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-petra-38-J2-3` major · rank 9 · The next activity ignores her expressed priority · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-petra-38-J2-2` minor · rank 6 · The next recommendation ignores her useful additions · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-goal/LT-petra-38-J2-4` minor · rank 6 · The transcript does not establish full topic review · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-petra-38-J2-3` minor · rank 6 · Adding grows the plan to 7 instead of 6 · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-17-lt-swap-2/LT-petra-38-J2-3` minor · rank 6 · Skill labels do not match topic content
-- `2026-09-15-lt-recert2-goal/LT-petra-38-J2-3` minor · rank 3 · An explicit initial request needed repeating · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-petra-38-J2-4` polish · rank 2 · Swap not exercised; 'favourite trip' is not a work topic · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-17-lt-swap-2/LT-petra-38-J2-4` polish · rank 2 · Plan grows beyond six; additions do not replace
-
-## viktor-67 J2 · 12 open · top rank 27
-
-- `2026-09-15-lt-recert/LT-viktor-67-J2-1` blocker · rank 27 · Agreement follows exhaustion, not a suitable plan · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-viktor-67-J2-2` blocker · rank 27 · Seven swaps keep returning unwanted transactions · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/LT-viktor-67-J2-1` blocker · rank 27 · Swap replaces the wrong topic · product: 52 of 93 files changed since
-- `2026-10-14-lt/recert-3/LT-viktor-67-J2-2` blocker · rank 18 · Own-topic needs typing; no voice route · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-viktor-67-J2-1` blocker · rank 18 · Added topics cannot be fully reviewed before agreement · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-viktor-67-J2-2` blocker · rank 18 · Planning language exceeds a first-time beginner's needs · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-viktor-67-J2-3` blocker · rank 18 · The requested topic is cut off in the displayed evidence · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-viktor-67-J2-3` major · rank 12 · Jargon and above-A1 wording in topic goals · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-viktor-67-J2-4` major · rank 12 · Swap and own-topic never exercised · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert/LT-viktor-67-J2-4` major · rank 9 · The next activity still ignores his immediate purpose · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-goal/LT-viktor-67-J2-1` major · rank 9 · The added topic is saved but absent from the agreement screen · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-viktor-67-J2-5` polish · rank 2 · Swap not exercised; plan grew to seven · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-
-## tomas-9 J4 · 11 open · top rank 27
-
-- `2026-10-14-lt/recert-6/LT-tomas-9-J4-3` blocker · rank 27 · Supported flag wrong both ways · recurrence 4, first seen 2026-10-14-lt/recert-2 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J4-1` blocker · rank 18 · Partner turns too long and above A1 · recurrence 6, first seen 2026-10-14-lt · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-4/LT-tomas-9-J4-1` blocker · rank 18 · No replay or independent retry after the moment · recurrence 4, first seen 2026-09-15-lt · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-5/LT-tomas-9-J4-1` blocker · rank 18 · Partner turns too long for A1 nine-year-old · recurrence 4, first seen 2026-09-15-lt-recert2-beginners · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-5/LT-tomas-9-J4-2` blocker · rank 18 · No replay of the moment · recurrence 4, first seen 2026-09-15-lt-recert · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J4-2` blocker · rank 18 · Replay is a copy, not a fresh question · recurrence 4, first seen 2026-09-15-lt-recert2-beginners · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J4-4` blocker · rank 18 · Moment stops the scene and uses grammar jargon · recurrence 4, first seen 2026-09-15-lt-recert2-beginners · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-4/LT-tomas-9-J4-4` major · rank 12 · Partner turns grow long and use 'mob' · recurrence 4, first seen 2026-09-15-lt · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-2/LT-tomas-9-J4-5` major · rank 12 · Replay is repetition, not a fresh question · recurrence 3, first seen 2026-10-14-lt/recert-2 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J4-6` minor · rank 6 · Situation list is long and mixed · recurrence 4, first seen 2026-09-15-lt · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J4-5` minor · rank 6 · Other real slips uncoached · product: 26 of 105 files changed since
-
-## jana-29 J2 · 9 open · top rank 27
-
-- `2026-10-14-lt/recert-3/LT-jana-29-J2-1` blocker · rank 27 · Swap does nothing; unwanted topics stay in the plan · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-jana-29-J2-2` blocker · rank 27 · Proposed topics are almost all films, built from one placement prompt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-jana-29-J2-3` blocker · rank 18 · Plan grows to 7 and ends with unwanted topics · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert/LT-jana-29-J2-1` blocker · rank 18 · Swapping repeatedly produces more generic topics · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-jana-29-J2-2` minor · rank 6 · Recovery preserves pressure resistance but loses awkward questions · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-jana-29-J2-2` minor · rank 6 · The critique topic loses its requested source of difficulty · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-goal/LT-jana-29-J2-1` minor · rank 6 · Initial suggestions omit two explicitly requested situations · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-jana-29-J2-5` minor · rank 3 · Weak picks for a C2 profile, and a repeated partner name · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-jana-29-J2-5` minor · rank 3 · Level read overshoots and the why lines pad · product: 29 of 105 files changed since
-
-## jana-29 J3 · 9 open · top rank 27
-
-- `2026-10-14-lt/recert-1/LT-jana-29-J3-2` blocker · rank 27 · Recap is inaccurate and generic · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-jana-29-J3-2` blocker · rank 18 · Recap is bare · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-jana-29-J3-1` blocker · rank 18 · No moments: nothing new taught at C1 · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-jana-29-J3-3` major · rank 12 · Mission closes after three replies · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-jana-29-J3-4` major · rank 12 · Partner calls the learner 'Owen' · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-jana-29-J3-1` major · rank 9 · Fluent practice produces no explicit C1 learning · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-jana-29-J3-1` major · rank 9 · Fluent practice produces no new language to keep · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-jana-29-J3-2` minor · rank 6 · The recap saves the session but does not consolidate it · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-jana-29-J3-2` minor · rank 6 · Recap confirms saving but offers no learning review · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-2` blocker · rank 27 · Supported flag wrong both ways · recurrence 5, first seen 2026-10-14-lt/recert-2
+- `2026-10-14-lt/recert-6/LT-tomas-9-J4-1` blocker · rank 18 · Partner turns too long and above A1 · recurrence 7, first seen 2026-10-14-lt
+- `2026-10-14-lt/recert-4/LT-tomas-9-J4-1` blocker · rank 18 · No replay or independent retry after the moment · recurrence 5, first seen 2026-09-15-lt
+- `2026-10-14-lt/recert-5/LT-tomas-9-J4-2` blocker · rank 18 · No replay of the moment · recurrence 5, first seen 2026-09-15-lt-recert
+- `2026-10-14-lt/recert-6/LT-tomas-9-J4-2` blocker · rank 18 · Replay is a copy, not a fresh question · recurrence 5, first seen 2026-09-15-lt-recert2-beginners
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-5` blocker · rank 18 · Situation list long and mixed · recurrence 5, first seen 2026-09-15-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-1` blocker · rank 18 · No replay with a fresh question after the moment · recurrence 4, first seen 2026-10-14-lt/recert-2
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-4` minor · rank 6 · Partner turns often two sentences with a long question · recurrence 5, first seen 2026-09-15-lt-recert2-beginners
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-3` minor · rank 6 · Other slips uncoached · recurrence 2, first seen 2026-10-14-lt/recert-6
 
 ## adela-17 J2 · 8 open · top rank 27
 
-- `2026-10-14-lt/recert-4/LT-adela-17-J2-1` blocker · rank 27 · Swapping gaming night does not remove it · recurrence 4, first seen 2026-10-14-lt · unasked since 2026-10-17-lt-swap (1 later run of this pair) · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-adela-17-J2-1` blocker · rank 27 · Swap button does nothing; rejected topics stay in the plan · recurrence 2, first seen 2026-09-15-lt · unasked since 2026-10-17-lt-swap (1 later run of this pair) · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-adela-17-J2-2` blocker · rank 18 · Initial plan is mostly casual/everyday, not exam discussion · recurrence 4, first seen 2026-10-14-lt/recert-1 · unasked since 2026-10-17-lt-swap (1 later run of this pair) · product: 26 of 105 files changed since
-- `2026-09-15-lt-recert/LT-adela-17-J2-1` blocker · rank 18 · Seven swaps before the plan becomes acceptable · recurrence 2, first seen 2026-09-15-lt-recert · unasked since 2026-10-17-lt-swap (1 later run of this pair) · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-5/LT-adela-17-J2-5` major · rank 12 · Her direct question 'Was that correct?' not answered plainly · unasked since 2026-10-17-lt-swap (1 later run of this pair) · product: 27 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-adela-17-J2-3` minor · rank 6 · No mock interview or exam-format topic proposed · recurrence 4, first seen 2026-09-15-lt-recert2-goal · unasked since 2026-10-17-lt-swap (1 later run of this pair) · product: 26 of 105 files changed since
-- `2026-10-17-lt-swap/LT-adela-17-J2-2` minor · rank 6 · Two of seven topics are not exam discussion
-- `2026-10-17-lt-swap/LT-adela-17-J2-3` minor · rank 6 · Added topic is appended last and labelled 'Share your world'
+- `2026-10-14-lt/recert-4/LT-adela-17-J2-1` blocker · rank 27 · Swapping gaming night does not remove it · recurrence 4, first seen 2026-10-14-lt
+- `2026-10-14-lt/recert-6/LT-adela-17-J2-1` blocker · rank 27 · Swap button does nothing; rejected topics stay in the plan · recurrence 2, first seen 2026-09-15-lt
+- `2026-10-14-lt/recert-6/LT-adela-17-J2-2` blocker · rank 18 · Initial plan is mostly casual/everyday, not exam discussion · recurrence 5, first seen 2026-10-14-lt/recert-1
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J2-2` blocker · rank 18 · No mock interview or technology/education topic proposed · recurrence 5, first seen 2026-09-15-lt-recert2-goal
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J2-1` blocker · rank 18 · Initial plan is mostly everyday/transactional, not B2 exam discussion · recurrence 3, first seen 2026-09-15-lt-recert
+- `2026-10-14-lt/recert-5/LT-adela-17-J2-5` major · rank 12 · Her direct question 'Was that correct?' not answered plainly
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J2-4` minor · rank 6 · Added topic appended last, skill label generic · recurrence 2, first seen 2026-10-17-lt-swap
+- `2026-10-17-lt-swap/LT-adela-17-J2-2` minor · rank 6 · Two of seven topics are not exam discussion · recurrence 2, first seen 2026-10-17-lt-swap
+
+## jana-29 J3 · 8 open · top rank 27
+
+- `2026-10-14-lt/recert-1/LT-jana-29-J3-2` blocker · rank 27 · Recap is inaccurate and generic · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-10-14-lt/recert-3/LT-jana-29-J3-2` blocker · rank 18 · Recap is bare · recurrence 4, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-4` blocker · rank 18 · Mission closes after three replies · recurrence 4, first seen 2026-10-14-lt
+- `2026-10-14-lt/recert-3/LT-jana-29-J3-1` blocker · rank 18 · No moments: nothing new taught at C1 · recurrence 2, first seen 2026-10-14-lt/recert-3
+- `2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-2` blocker · rank 18 · Fluent practice again yields no new language to keep · recurrence 2, first seen 2026-09-15-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-3` blocker · rank 18 · Recap is bare and mislabels help · recurrence 2, first seen 2026-09-15-lt
+- `2026-09-15-lt-recert/LT-jana-29-J3-1` major · rank 9 · Fluent practice produces no new language to keep · recurrence 2, first seen 2026-09-15-lt-recert
+- `2026-09-15-lt-recert/LT-jana-29-J3-2` minor · rank 6 · Recap confirms saving but offers no learning review · recurrence 2, first seen 2026-09-15-lt-recert
+
+## petra-38 J2 · 8 open · top rank 27
+
+- `2026-10-14-lt/LT-petra-38-J2-1` blocker · rank 27 · Swap replaces the wrong topic
+- `2026-09-15-lt-recert/LT-petra-38-J2-2` blocker · rank 18 · Swaps recycle rejected scenarios
+- `2026-10-14-lt/LT-petra-38-J2-2` major · rank 12 · Swaps bring near-duplicates and off-brief topics
+- `2026-10-17-lt-swap-2/LT-petra-38-J2-3` minor · rank 6 · Skill labels do not match topic content · recurrence 2, first seen 2026-10-17-lt-swap-2
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J2-2` minor · rank 6 · Adding grows plan from 5 to 6; skill labels mismatch · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J2-3` minor · rank 6 · Swap not exercised · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-09-15-lt-recert2-goal/LT-petra-38-J2-3` minor · rank 3 · An explicit initial request needed repeating
+- `2026-10-17-lt-swap-2/LT-petra-38-J2-4` polish · rank 2 · Plan grows beyond six; additions do not replace · recurrence 2, first seen 2026-10-17-lt-swap-2
+
+## viktor-67 J4 · 8 open · top rank 27
+
+- `2026-09-15-lt-recert/LT-viktor-67-J4-1` blocker · rank 27 · Help repeats the introduction regardless of the current question · recurrence 2, first seen 2026-09-15-lt-recert
+- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-1` blocker · rank 27 · Repeated cues do not answer the question he is stuck on · recurrence 2, first seen 2026-09-15-lt-recert2-beginners
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-2` blocker · rank 27 · Cue ignores the current question · recurrence 2, first seen 2026-09-15-lt
+- `2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-3` blocker · rank 18 · Fresh replay questions do not produce a better independent answer · recurrence 2, first seen 2026-09-15-lt-recert2-beginners
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-1` blocker · rank 18 · Replay repeats the model; no fresh question · recurrence 2, first seen 2026-09-15-lt-recert
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-3` major · rank 12 · Phrase quiz mismatches the scene
+- `2026-10-14-lt/recert-3/LT-viktor-67-J4-4` major · rank 8 · Phrase help ignores question · recurrence 4, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-4` minor · rank 6 · Repeated article errors get no note · recurrence 4, first seen 2026-10-14-lt
+
+## viktor-67 J2 · 7 open · top rank 27
+
+- `2026-09-15-lt-recert/LT-viktor-67-J2-2` blocker · rank 27 · Seven swaps keep returning unwanted transactions
+- `2026-10-14-lt/LT-viktor-67-J2-1` blocker · rank 27 · Swap replaces the wrong topic
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J2-3` blocker · rank 18 · Jargon and above-A1 labels in the plan · recurrence 2, first seen 2026-09-15-lt
+- `2026-10-14-lt/recert-3/LT-viktor-67-J2-3` major · rank 12 · Jargon and above-A1 wording in topic goals · recurrence 4, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J2-4` major · rank 12 · Add-topic needs typing; no voice or tap route · recurrence 4, first seen 2026-10-14-lt
+- `2026-10-14-lt/recert-3/LT-viktor-67-J2-4` major · rank 12 · Swap and own-topic never exercised · recurrence 2, first seen 2026-10-14-lt/recert-3
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J2-5` minor · rank 6 · Swap not exercised; plan grew from six to seven · recurrence 2, first seen 2026-10-14-lt/recert-1
+
+## jana-29 J2 · 6 open · top rank 27
+
+- `2026-10-14-lt/recert-3/LT-jana-29-J2-1` blocker · rank 27 · Swap does nothing; unwanted topics stay in the plan · recurrence 3, first seen 2026-10-14-lt
+- `2026-09-15-lt-recert/LT-jana-29-J2-1` blocker · rank 18 · Swapping repeatedly produces more generic topics
+- `2026-10-17-lt-swap-2/recert-1/LT-jana-29-J2-3` minor · rank 6 · Critique disagreement not in the first six · recurrence 2, first seen 2026-09-15-lt-recert2-goal
+- `2026-10-17-lt-swap-2/recert-1/LT-jana-29-J2-4` minor · rank 6 · Team-call introduction is easy for C1 · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-09-15-lt-recert/LT-jana-29-J2-2` minor · rank 6 · The critique topic loses its requested source of difficulty
+- `2026-09-15-lt/LT-jana-29-J2-2` minor · rank 6 · Recovery preserves pressure resistance but loses awkward questions
+
+## ondrej-16 J1 · 6 open · top rank 27
+
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J1-1` blocker · rank 27 · B1 connected answer marked partial, level pushed to A2 · recurrence 2, first seen 2026-09-15-lt-j1b
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J1-2` blocker · rank 18 · Next focus ignores the repeated error · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J1-3` major · rank 12 · Summary generic and mismatched to level
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J1-4` major · rank 9 · Easy choice tasks low-information · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-09-15-lt/LT-ondrej-16-J1-3` major · rank 9 · Repeated clear errors yield no useful feedback
+- `2026-09-15-lt/LT-ondrej-16-J1-2` minor · rank 6 · The mission stays elementary after he engages
 
 ## tomas-9 J1 · 6 open · top rank 27
 
-- `2026-10-14-lt/recert-6/LT-tomas-9-J1-2` blocker · rank 27 · Feedback corrects Czech and 'single words' as a shortfall · recurrence 2, first seen 2026-10-14-lt/recert-5 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-5/LT-tomas-9-J1-2` blocker · rank 18 · About-you questions too long and about learning history · recurrence 4, first seen 2026-10-14-lt/recert-2 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J1-1` blocker · rank 18 · Check tasks too long for a nine-year-old beginner · recurrence 4, first seen 2026-09-15-lt-j1b · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J1-3` blocker · rank 18 · Next focus beyond his level · recurrence 4, first seen 2026-09-15-lt-j1b · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J1-4` blocker · rank 18 · About-you questions long and about learning history · recurrence 4, first seen 2026-10-14-lt/recert-1 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J1-5` major · rank 12 · A2 placement rests on two-option choices · product: 26 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J1-2` blocker · rank 27 · Feedback frames one-word answers and skips as shortfall · recurrence 3, first seen 2026-10-14-lt/recert-5
+- `2026-10-14-lt/recert-6/LT-tomas-9-J1-4` blocker · rank 18 · About-you questions long and about learning history · recurrence 5, first seen 2026-10-14-lt/recert-1
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J1-1` blocker · rank 18 · Check prompts too long for a 9-year-old beginner · recurrence 5, first seen 2026-09-15-lt-j1b
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J1-4` blocker · rank 18 · About-you questions long and about learning history · recurrence 5, first seen 2026-10-14-lt/recert-2
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J1-3` major · rank 12 · Next focus is an article nitpick with unnatural model · recurrence 5, first seen 2026-09-15-lt-j1b
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J1-5` major · rank 12 · A2 placement rests on guessable two-option choices · recurrence 2, first seen 2026-10-14-lt/recert-6
 
 ## tomas-9 J3 · 6 open · top rank 27
 
-- `2026-10-14-lt/recert-6/LT-tomas-9-J3-1` blocker · rank 27 · Partner uses A2 past tense with an A1 nine-year-old · recurrence 4, first seen 2026-10-14-lt/recert-2 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-4/LT-tomas-9-J3-1` blocker · rank 18 · Alex's turns outgrow a nine-year-old after the first two · recurrence 4, first seen 2026-09-15-lt-recert · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-5/LT-tomas-9-J3-1` blocker · rank 18 · Several Sam turns use words above a beginner nine-year-old · recurrence 4, first seen 2026-09-15-lt-recert2-beginners · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J3-2` blocker · rank 18 · Adult situations listed to a nine-year-old · recurrence 4, first seen 2026-10-14-lt/recert-2 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J3-4` major · rank 12 · Partner loops on the same question · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J3-3` minor · rank 6 · Clear non-Czech errors unmarked, Nevím repeated without a moment · recurrence 3, first seen 2026-10-14-lt/recert-4 · product: 26 of 105 files changed since
+- `2026-10-14-lt/recert-6/LT-tomas-9-J3-1` blocker · rank 27 · Partner uses A2 past tense with an A1 nine-year-old · recurrence 5, first seen 2026-10-14-lt/recert-2
+- `2026-10-14-lt/recert-5/LT-tomas-9-J3-1` blocker · rank 18 · Several Sam turns use words above a beginner nine-year-old · recurrence 5, first seen 2026-09-15-lt-recert2-beginners
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J3-1` blocker · rank 18 · Mia's turns are A2 for an A1 nine-year-old · recurrence 5, first seen 2026-09-15-lt-recert
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J3-2` blocker · rank 18 · Adult situations offered to a nine-year-old · recurrence 5, first seen 2026-10-14-lt/recert-2
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J3-3` minor · rank 6 · Repeated Czech words get no moment · recurrence 4, first seen 2026-10-14-lt/recert-4
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J3-4` minor · rank 6 · Recap is thin and generic
 
 ## martin-45 J2 · 5 open · top rank 27
 
-- `2026-10-14-lt/recert-5/LT-martin-45-J2-1` blocker · rank 27 · Swap button does nothing; unwanted topic stays and is agreed · recurrence 4, first seen 2026-10-14-lt · product: 27 of 105 files changed since
-- `2026-09-15-lt-recert/LT-martin-45-J2-1` blocker · rank 27 · Swaps repeatedly ignore the explicit business goal · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-6/LT-martin-45-J2-3` minor · rank 6 · Plan grows from 6 to 7 after an add, unexplained · recurrence 4, first seen 2026-10-14-lt/recert-1 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-5/LT-martin-45-J2-4` minor · rank 4 · 'team have' corrected to 'team has' as an error · product: 27 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-martin-45-J2-4` polish · rank 2 · 'Easy small talk' label would irritate a self-declared C1 · product: 26 of 105 files changed since
+- `2026-10-14-lt/recert-5/LT-martin-45-J2-1` blocker · rank 27 · Swap button does nothing; unwanted topic stays and is agreed · recurrence 4, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-martin-45-J2-5` major · rank 12 · Swap not exercised in this run
+- `2026-10-17-lt-swap-2/recert-1/LT-martin-45-J2-3` minor · rank 6 · Plan grows from 6 to 7 without explanation · recurrence 5, first seen 2026-10-14-lt/recert-1
+- `2026-10-14-lt/recert-5/LT-martin-45-J2-4` minor · rank 4 · 'team have' corrected to 'team has' as an error
+- `2026-10-17-lt-swap-2/recert-1/LT-martin-45-J2-4` minor · rank 4 · Doubtful correction 'the customer trust'
 
-## adela-17 J3 · 4 open · top rank 27
+## martin-45 J3 · 4 open · top rank 27
 
-- `2026-10-14-lt/recert-6/LT-adela-17-J3-1` blocker · rank 27 · Clear errors left uncorrected · product: 26 of 105 files changed since
-- `2026-10-14-lt/LT-adela-17-J3-1` blocker · rank 18 · Partner states a wrong rule about 'used to' · product: 52 of 93 files changed since
-- `2026-10-14-lt/recert-6/LT-adela-17-J3-3` major · rank 12 · Missing article again not flagged · recurrence 3, first seen 2026-10-14-lt/recert-4 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-adela-17-J3-2` major · rank 12 · Partner drops to simple, repetitive questions · product: 26 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-martin-45-J3-2` blocker · rank 27 · Level B2 shown with no reasons · recurrence 2, first seen 2026-10-14-lt/recert-6
+- `2026-10-17-lt-swap-2/recert-1/LT-martin-45-J3-1` blocker · rank 18 · Most fossilised errors get no moment · recurrence 7, first seen 2026-10-14-lt
+- `2026-10-14-lt/recert-6/LT-martin-45-J3-1` blocker · rank 18 · Most fossilised errors still get no moment · recurrence 5, first seen 2026-09-15-lt-recert
+- `2026-10-17-lt-swap-2/recert-1/LT-martin-45-J3-3` major · rank 12 · Learner's "why is it wrong?" not answered
+
+## martin-45 J1 · 3 open · top rank 27
+
+- `2026-10-17-lt-swap-2/recert-1/LT-martin-45-J1-1` blocker · rank 27 · Fossilised errors never named in the check · recurrence 7, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-martin-45-J1-2` blocker · rank 18 · B2 generous; Task 2 praised as accurate despite slips · recurrence 5, first seen 2026-10-14-lt/recert-3
+- `2026-10-14-lt/recert-6/LT-martin-45-J1-2` major · rank 12 · B2 is generous; task 3 passed despite article and collocation slips · recurrence 5, first seen 2026-10-14-lt/recert-1
 
 ## klara-13 J3 · 14 open · top rank 18
 
-- `2026-10-14-lt/recert-1/LT-klara-13-J3-2` blocker · rank 18 · Mission declared done after 3 replies; recap never reached · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-klara-13-J3-2` blocker · rank 18 · Repeated missing-'it' error not caught after being named · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-klara-13-J3-5` major · rank 12 · Partner repeats and ignores her question · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-klara-13-J3-1` major · rank 12 · Fourth moment gives an unnatural, wrong model sentence · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-klara-13-J3-3` major · rank 12 · Each moment takes about 3 steps and the scene stops · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-klara-13-J3-4` major · rank 12 · No natural end or recap in a long conversation · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-klara-13-J3-1` major · rank 9 · The later conversation exceeds her A2 band · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-klara-13-J3-5` minor · rank 6 · Level shown as B1 for an A2 learner · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-klara-13-J3-3` minor · rank 6 · The recap records activity without consolidating learning · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-klara-13-J3-1` minor · rank 6 · The recap records counts without consolidating learning · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-klara-13-J3-1` minor · rank 6 · The recap counts learning without reviewing it · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-klara-13-J3-4` minor · rank 6 · Missed clear errors after the first moment · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert/LT-klara-13-J3-2` minor · rank 3 · Correction density exceeds the rubric's target · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-klara-13-J3-2` minor · rank 3 · One question stretches beyond supportive A2 · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-
-## lukas-24 J2 · 13 open · top rank 18
-
-- `2026-10-14-lt/recert-1/LT-lukas-24-J2-1` blocker · rank 18 · Plan built from game/film placement prompts, not his goals · recurrence 2, first seen 2026-10-14-lt · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert/LT-lukas-24-J2-1` blocker · rank 18 · Topic fit falls below the required proportion · unasked since 2026-09-15-lt-recert2-goal (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-lukas-24-J2-4` major · rank 12 · Three swaps end with another unwanted topic queued first · unasked since 2026-09-15-lt-recert2-goal (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-lukas-24-J2-4` major · rank 12 · Placement band C1 vs his B2 slips · unasked since 2026-10-14-lt/recert-3 (2 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/LT-lukas-24-J2-1` major · rank 12 · Swap fails on model schema error · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair) · product: 52 of 93 files changed since
-- `2026-10-14-lt/recert-3/LT-lukas-24-J2-3` major · rank 12 · Level label C1 versus 'Talking today at B2' · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-lukas-24-J2-1` minor · rank 6 · Topic agreement succeeds, but relevance misses the acceptance threshold · unasked since 2026-09-15-lt-recert (6 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-lukas-24-J2-3` minor · rank 6 · Ending a date politely disappears from the plan · unasked since 2026-09-15-lt-recert2-goal (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-lukas-24-J2-3` minor · rank 6 · Plan grows past six and unwanted topics linger · unasked since 2026-10-14-lt/recert-3 (2 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-lukas-24-J2-2` minor · rank 6 · Asking out for coffee dropped from the added topic · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert2-goal/LT-lukas-24-J2-3` minor · rank 3 · The requested tech interview never enters the plan · unasked since 2026-10-14-lt (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-lukas-24-J2-4` minor · rank 3 · Plan now meetup and job based, but no date topic until added · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-17-lt-swap-2/LT-lukas-24-J2-3` polish · rank 2 · First proposal had a too-basic topic and a generic one
-
-## oksana-34 J3 · 12 open · top rank 18
-
-- `2026-10-14-lt/recert-3/LT-oksana-34-J3-2` blocker · rank 18 · Level shown as B2 for a B1 learner · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-oksana-34-J3-1` blocker · rank 18 · Repeated article and collocation errors never coached · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-oksana-34-J3-2` major · rank 12 · Clear errors left unmarked in the same answers · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-oksana-34-J3-1` major · rank 9 · The recommended practice misses her interview goal · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-oksana-34-J3-1` major · rank 9 · The completed rehearsal misses her interview job · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/LT-oksana-34-J3-4` minor · rank 6 · Unnatural collocations left uncorrected · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-oksana-34-J3-3` minor · rank 6 · The recap records activity but gives no learning takeaway · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-oksana-34-J3-4` minor · rank 6 · Article interruptions exceed the target density · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-oksana-34-J3-5` minor · rank 6 · The recap supplies counts without a learning summary · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-oksana-34-J3-3` minor · rank 6 · Little interview vocabulary teaching · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-oksana-34-J3-4` minor · rank 6 · Mission shows done mid-conversation and the recap tip is generic · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-oksana-34-J3-3` polish · rank 2 · Partner slips on the customer's gender · product: 29 of 105 files changed since
-
-## ondrej-16 J3 · 12 open · top rank 18
-
-- `2026-10-14-lt/recert-3/LT-ondrej-16-J3-1` blocker · rank 18 · Most clear errors get no moment or coaching · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert/LT-ondrej-16-J3-3` blocker · rank 18 · Mandatory correction stops exceed the target rate · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-ondrej-16-J3-4` blocker · rank 18 · Repeated agreement errors receive no teaching · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-ondrej-16-J3-2` blocker · rank 18 · Stale 'Say your name and age clearly' goal throughout · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-ondrej-16-J3-3` blocker · rank 18 · Partner repeats 'how often' and re-asks covered topics · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-ondrej-16-J3-2` major · rank 12 · Recap 'used again' line is not from this conversation · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-ondrej-16-J3-1` major · rank 12 · Partner repeats a question already answered · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-ondrej-16-J3-4` major · rank 12 · TV start screen showed A2 while the phone showed B1 · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-ondrej-16-J3-2` minor · rank 6 · The recap records activity without consolidating learning · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-ondrej-16-J3-5` minor · rank 6 · Recap confirms saving but does not consolidate learning · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-ondrej-16-J3-4` minor · rank 6 · No recap reached; the journey ended on budget · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-ondrej-16-J3-5` minor · rank 6 · Repair loop repeats the same fix three times · product: 29 of 105 files changed since
-
-## petra-38 J3 · 11 open · top rank 18
-
-- `2026-10-14-lt/recert-1/LT-petra-38-J3-1` blocker · rank 18 · A2 speaker labelled B1 'Getting by' again · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-petra-38-J3-2` blocker · rank 18 · Most clear errors passed without coaching · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-petra-38-J3-1` major · rank 9 · The recommended conversation misses Petra's work goal · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-petra-38-J3-1` major · rank 9 · The role reversal prevents receptionist practice · unasked since 2026-10-14-lt (2 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-petra-38-J3-3` minor · rank 6 · The recap records activity without consolidating learning · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-petra-38-J3-1` minor · rank 6 · The recommended practice misses her hospitality job · unasked since 2026-09-15-lt-recert2-beginners (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-petra-38-J3-2` minor · rank 6 · The immediately repeated correction receives no follow-up · unasked since 2026-09-15-lt-recert2-beginners (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-beginners/LT-petra-38-J3-2` minor · rank 6 · The recap records counts without consolidating learning · unasked since 2026-10-14-lt (2 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-petra-38-J3-3` minor · rank 6 · Partner kept adding requests past the natural close · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-petra-38-J3-4` minor · rank 6 · Recap 'sentence to take with you' is odd · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert/LT-petra-38-J3-3` minor · rank 3 · The recap reports counts without consolidating learning · unasked since 2026-09-15-lt-recert2-beginners (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-
-## viktor-67 J1 · 11 open · top rank 18
-
-- `2026-10-14-lt/recert-3/LT-viktor-67-J1-1` blocker · rank 18 · Interview questions still long for an A1 senior · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-viktor-67-J1-2` blocker · rank 18 · A2 placement rests on a one-word answer · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-viktor-67-J1-3` blocker · rank 18 · Next focus generic, not about grandchildren · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-viktor-67-J1-4` major · rank 12 · Task generation failed twice, needing retries · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-viktor-67-J1-5` major · rank 12 · Grammar-minimal-pair task is unanswerable for a beginner · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-viktor-67-J1-2` major · rank 12 · No slow replay for listening tasks · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-viktor-67-J1-1` minor · rank 6 · The final focus drops his grandchildren and garden · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-viktor-67-J1-2` minor · rank 6 · Revealing the listening line does not make it answerable · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-viktor-67-J1-3` minor · rank 6 · Confidence exceeds the demonstrated task evidence · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-viktor-67-J1-3` minor · rank 6 · A2 choose task tests grammar a beginner cannot judge · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-viktor-67-J1-4` minor · rank 6 · Skipped task logged as 'fail' internally · product: 29 of 105 files changed since
+- `2026-10-14-lt/recert-1/LT-klara-13-J3-2` blocker · rank 18 · Mission declared done after 3 replies; recap never reached · recurrence 2, first seen 2026-10-14-lt
+- `2026-10-14-lt/recert-3/LT-klara-13-J3-2` blocker · rank 18 · Repeated missing-'it' error not caught after being named
+- `2026-10-14-lt/recert-1/LT-klara-13-J3-5` major · rank 12 · Partner repeats and ignores her question · recurrence 2, first seen 2026-10-14-lt
+- `2026-10-14-lt/recert-3/LT-klara-13-J3-1` major · rank 12 · Fourth moment gives an unnatural, wrong model sentence
+- `2026-10-14-lt/recert-3/LT-klara-13-J3-3` major · rank 12 · Each moment takes about 3 steps and the scene stops
+- `2026-10-14-lt/recert-3/LT-klara-13-J3-4` major · rank 12 · No natural end or recap in a long conversation
+- `2026-09-15-lt/LT-klara-13-J3-1` major · rank 9 · The later conversation exceeds her A2 band · unasked since 2026-09-15-lt-recert (5 later runs of this pair)
+- `2026-10-14-lt/recert-3/LT-klara-13-J3-5` minor · rank 6 · Level shown as B1 for an A2 learner · recurrence 3, first seen 2026-10-14-lt
+- `2026-09-15-lt/LT-klara-13-J3-3` minor · rank 6 · The recap records activity without consolidating learning · unasked since 2026-09-15-lt-recert (5 later runs of this pair)
+- `2026-09-15-lt-recert/LT-klara-13-J3-1` minor · rank 6 · The recap records counts without consolidating learning · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair)
+- `2026-09-15-lt-recert2-beginners/LT-klara-13-J3-1` minor · rank 6 · The recap counts learning without reviewing it · unasked since 2026-10-14-lt (3 later runs of this pair)
+- `2026-10-14-lt/recert-1/LT-klara-13-J3-4` minor · rank 6 · Missed clear errors after the first moment · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair)
+- `2026-09-15-lt-recert/LT-klara-13-J3-2` minor · rank 3 · Correction density exceeds the rubric's target · unasked since 2026-09-15-lt-recert2-beginners (4 later runs of this pair)
+- `2026-09-15-lt-recert2-beginners/LT-klara-13-J3-2` minor · rank 3 · One question stretches beyond supportive A2 · unasked since 2026-10-14-lt (3 later runs of this pair)
 
 ## klara-13 J1 · 10 open · top rank 18
 
-- `2026-10-14-lt/recert-1/LT-klara-13-J1-2` blocker · rank 18 · Headline band and 'wrote A2' disagree on the verdict screen · unasked since 2026-10-14-lt/recert-3 (2 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-klara-13-J1-1` major · rank 12 · B1 placement slightly generous again · recurrence 3, first seen 2026-10-14-lt · unasked since 2026-10-16-lt-placement-oos (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-klara-13-J1-3` major · rank 12 · Verdict focus quotes a phrase she never typed as a single error · unasked since 2026-10-16-lt-placement-oos (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-16-lt-placement-oos/LT-klara-13-J1-2` major · rank 12 · Verdict hedges: 'What you said at the start pointed elsewhere' · product: 29 of 105 files changed since
-- `2026-10-16-lt-placement-oos/LT-klara-13-J1-4` major · rank 12 · Her erroneous sentence shown on the family TV · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-klara-13-J1-2` minor · rank 6 · The next focus misidentifies her missing word · unasked since 2026-10-14-lt (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-klara-13-J1-3` minor · rank 6 · B2 failure has an overly narrow explanation · unasked since 2026-10-14-lt (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-klara-13-J1-3` minor · rank 6 · Task 3 note is muddled · unasked since 2026-10-14-lt/recert-3 (2 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-16-lt-placement-oos/LT-klara-13-J1-3` minor · rank 4 · B1 slightly generous given repeated missing subjects · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-klara-13-J1-2` polish · rank 2 · Listen task answered with a mishearing, still passed · unasked since 2026-10-16-lt-placement-oos (1 later run of this pair) · product: 29 of 105 files changed since
+- `2026-10-14-lt/recert-1/LT-klara-13-J1-2` blocker · rank 18 · Headline band and 'wrote A2' disagree on the verdict screen · unasked since 2026-10-14-lt/recert-3 (2 later runs of this pair)
+- `2026-10-14-lt/recert-3/LT-klara-13-J1-1` major · rank 12 · B1 placement slightly generous again · recurrence 3, first seen 2026-10-14-lt · unasked since 2026-10-16-lt-placement-oos (1 later run of this pair)
+- `2026-10-14-lt/recert-3/LT-klara-13-J1-3` major · rank 12 · Verdict focus quotes a phrase she never typed as a single error · unasked since 2026-10-16-lt-placement-oos (1 later run of this pair)
+- `2026-10-16-lt-placement-oos/LT-klara-13-J1-2` major · rank 12 · Verdict hedges: 'What you said at the start pointed elsewhere'
+- `2026-10-16-lt-placement-oos/LT-klara-13-J1-4` major · rank 12 · Her erroneous sentence shown on the family TV
+- `2026-09-15-lt/LT-klara-13-J1-2` minor · rank 6 · The next focus misidentifies her missing word · unasked since 2026-10-14-lt (4 later runs of this pair)
+- `2026-09-15-lt/LT-klara-13-J1-3` minor · rank 6 · B2 failure has an overly narrow explanation · unasked since 2026-10-14-lt (4 later runs of this pair)
+- `2026-10-14-lt/recert-1/LT-klara-13-J1-3` minor · rank 6 · Task 3 note is muddled · unasked since 2026-10-14-lt/recert-3 (2 later runs of this pair)
+- `2026-10-16-lt-placement-oos/LT-klara-13-J1-3` minor · rank 4 · B1 slightly generous given repeated missing subjects
+- `2026-10-14-lt/recert-3/LT-klara-13-J1-2` polish · rank 2 · Listen task answered with a mishearing, still passed · unasked since 2026-10-16-lt-placement-oos (1 later run of this pair)
 
-## lukas-24 J3 · 10 open · top rank 18
+## oksana-34 J1 · 10 open · top rank 18
 
-- `2026-10-14-lt/recert-3/LT-lukas-24-J3-1` blocker · rank 18 · B2 learner labelled C1 Fluent · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-lukas-24-J3-1` minor · rank 6 · The recap records activity without consolidating learning · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-lukas-24-J3-1` minor · rank 6 · The recommended scene misses his intended social rehearsal · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-lukas-24-J3-2` minor · rank 6 · The recap provides no learning takeaway · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-lukas-24-J3-3` minor · rank 6 · Repeated evaluation makes the exchange feel like an oral exam · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-lukas-24-J3-3` minor · rank 6 · Recap's "sentence to take with you" is unrelated · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-lukas-24-J3-4` minor · rank 6 · Moment took four steps and mission ended with a question unanswered · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-lukas-24-J3-2` minor · rank 6 · Recap sentence to take away is not from Lukáš's speech · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-lukas-24-J3-4` minor · rank 6 · Conversation ended after three replies · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-lukas-24-J3-3` minor · rank 3 · Scenario disclaimers briefly break the social illusion · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
+- `2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J1-2` blocker · rank 18 · Check tasks are generic workplace, not interview · recurrence 5, first seen 2026-10-16-lt-placement-oos
+- `2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J1-1` blocker · rank 18 · Next focus is one trivial slip, not interview language · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-14-lt/recert-3/LT-oksana-34-J1-3` major · rank 9 · Next focus is a single phrase, not tied to interview goal · recurrence 2, first seen 2026-10-14-lt/recert-3
+- `2026-09-15-lt/LT-oksana-34-J1-2` major · rank 9 · Clear interview-language errors receive no coaching
+- `2026-10-14-lt/recert-3/LT-oksana-34-J1-2` minor · rank 6 · Task 5 verdict 'partial' at C1 is lenient · recurrence 2, first seen 2026-10-14-lt/recert-3
+- `2026-10-16-lt-placement-oos/recert-1/LT-oksana-34-J1-3` minor · rank 6 · Summary and focus are thin · recurrence 2, first seen 2026-10-16-lt-placement-oos/recert-1
+- `2026-10-16-lt-placement-oos/recert-3/LT-oksana-34-J1-5` minor · rank 6 · Next focus is one trivial slip, not interview language · recurrence 2, first seen 2026-10-16-lt-placement-oos/recert-3
+- `2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J1-3` minor · rank 6 · C1 partial and slips noticed only partially · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-09-15-lt/LT-oksana-34-J1-3` minor · rank 6 · Follow-up questions keep extending one scenario
+- `2026-10-16-lt-placement-oos/recert-2/LT-oksana-34-J1-4` polish · rank 2 · Last tasks overlap, and the grading is lenient · recurrence 4, first seen 2026-10-16-lt-placement-oos
 
-## ondrej-16 J2 · 9 open · top rank 18
+## tomas-9 J2 · 10 open · top rank 18
 
-- `2026-09-15-lt-recert/LT-ondrej-16-J2-1` blocker · rank 18 · Topic fit fails across the proposals shown · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-ondrej-16-J2-2` blocker · rank 18 · Swaps repeatedly return rejected subject matter · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-ondrej-16-J2-3` blocker · rank 18 · Level label disagrees: TV says A2, phone says B1 · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-ondrej-16-J2-4` minor · rank 6 · Swap never used, and the summer-job card is a dull shop-manager interview · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-ondrej-16-J2-1` minor · rank 6 · Agreement does not meet the topic-fit threshold · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-ondrej-16-J2-2` minor · rank 6 · Repeated swaps stay close to the rejected interests · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-ondrej-16-J2-3` minor · rank 6 · Refusal is a form error, and a legitimate add was never tried · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert2-goal/LT-ondrej-16-J2-4` minor · rank 3 · The first swap repeats the unwanted role theme · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-ondrej-16-J2-4` minor · rank 3 · Level B1 rests on errors in his own answers · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
+- `2026-10-14-lt/recert-4/LT-tomas-9-J2-2` blocker · rank 18 · Skill labels and why lines are too abstract for a 9-year-old · recurrence 5, first seen 2026-09-15-lt
+- `2026-10-14-lt/recert-5/LT-tomas-9-J2-1` blocker · rank 18 · Abstract skill labels and long why lines for a 9-year-old · recurrence 5, first seen 2026-09-15-lt-recert
+- `2026-10-14-lt/recert-6/LT-tomas-9-J2-2` blocker · rank 18 · Abstract skill labels for a 9-year-old · recurrence 5, first seen 2026-09-15-lt-recert2-goal
+- `2026-10-14-lt/recert-6/LT-tomas-9-J2-3` blocker · rank 18 · Topic goals demand more than the child has · recurrence 5, first seen 2026-10-14-lt/recert-1
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J2-1` blocker · rank 18 · Abstract skill labels and long why lines for a 9-year-old · recurrence 5, first seen 2026-10-14-lt/recert-2
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J2-2` blocker · rank 18 · Default six include shopping and a decline topic for a child who wants games · recurrence 2, first seen 2026-10-14-lt/recert-6
+- `2026-10-17-lt-swap-2/LT-tomas-9-J2-3` major · rank 12 · Shopping topic proposed to a child who wanted games · recurrence 2, first seen 2026-10-17-lt-swap-2
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J2-3` major · rank 12 · Swap replaced shopping with more school topics · recurrence 2, first seen 2026-10-17-lt-swap
+- `2026-10-17-lt-swap/LT-tomas-9-J2-4` major · rank 12 · Why-lines and screen text too long for a 9-year-old · recurrence 2, first seen 2026-10-17-lt-swap
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J2-4` minor · rank 6 · Goals use grammar jargon beyond like/is · recurrence 5, first seen 2026-10-14-lt/recert-2
 
 ## adela-17 J4 · 8 open · top rank 18
 
-- `2026-10-14-lt/recert-5/LT-adela-17-J4-3` blocker · rank 18 · Help is a simplified restatement or an unrelated quiz · recurrence 5, first seen 2026-10-14-lt · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-adela-17-J4-1` blocker · rank 18 · Help is a simplified restatement, not an answer frame · recurrence 4, first seen 2026-09-15-lt-recert · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-adela-17-J4-3` blocker · rank 18 · Supported flag misstates independence · recurrence 4, first seen 2026-09-15-lt · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-adela-17-J4-2` blocker · rank 18 · No coaching note and no replay in the journey · recurrence 3, first seen 2026-10-14-lt/recert-4 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-5/LT-adela-17-J4-2` blocker · rank 18 · Replay offers no fresh question · recurrence 2, first seen 2026-09-15-lt · product: 27 of 105 files changed since
-- `2026-09-15-lt/LT-adela-17-J4-6` blocker · rank 18 · Replay status persists throughout the remaining conversation · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-6/LT-adela-17-J4-4` minor · rank 6 · Partner questions are basic and repetitive for B2 · product: 26 of 105 files changed since
-- `2026-09-15-lt-recert/LT-adela-17-J4-5` minor · rank 3 · Replay instruction persists after the retry is complete · product: 24 of 25 files changed since · 80 paths held by one side only
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-1` blocker · rank 18 · Cue restates a different question instead of giving a B2 frame · recurrence 6, first seen 2026-10-14-lt
+- `2026-10-14-lt/recert-6/LT-adela-17-J4-1` blocker · rank 18 · Help is a simplified restatement, not an answer frame · recurrence 5, first seen 2026-09-15-lt-recert
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-3` blocker · rank 18 · Supported flag wrong: unhelped reply counted as supported · recurrence 5, first seen 2026-09-15-lt
+- `2026-10-14-lt/recert-6/LT-adela-17-J4-2` blocker · rank 18 · No coaching note and no replay in the journey · recurrence 4, first seen 2026-10-14-lt/recert-4
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-2` blocker · rank 18 · No replay with a fresh question after the moment · recurrence 3, first seen 2026-09-15-lt
+- `2026-09-15-lt/LT-adela-17-J4-6` blocker · rank 18 · Replay status persists throughout the remaining conversation
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-4` minor · rank 6 · Correction duplicated by partner and moment
+- `2026-09-15-lt-recert/LT-adela-17-J4-5` minor · rank 3 · Replay instruction persists after the retry is complete
 
 ## ondrej-16 J5 · 8 open · top rank 18
 
-- `2026-10-14-lt/recert-3/LT-ondrej-16-J5-3` blocker · rank 18 · Clear errors not flagged · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert/LT-ondrej-16-J5-3` blocker · rank 18 · Accurate corrections interrupt too often · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-ondrej-16-J5-2` major · rank 12 · Partner repeats 'What is your name?' after it was answered · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-ondrej-16-J5-4` minor · rank 6 · Stale 'Now' task prompts · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-ondrej-16-J5-3` minor · rank 6 · Brief refusals still break character · unasked since 2026-09-15-lt-recert (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-ondrej-16-J5-4` minor · rank 6 · The initial topic selection only partly earns his interest · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-ondrej-16-J5-5` minor · rank 6 · Refusals are curt and give him nothing to push on · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-ondrej-16-J5-5` polish · rank 2 · Fix accepted though the retry carried injected text · product: 29 of 105 files changed since
+- `2026-09-15-lt-recert/LT-ondrej-16-J5-3` blocker · rank 18 · Accurate corrections interrupt too often · recurrence 2, first seen 2026-09-15-lt-recert
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J5-3` major · rank 12 · 'more better' and 'party with alcohol' phrasing got no coaching · recurrence 4, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J5-2` major · rank 12 · Redirect is vague and steps out of the scene · recurrence 2, first seen 2026-09-15-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J5-4` minor · rank 6 · 'Mission done' shown while the scene continues · recurrence 4, first seen 2026-10-14-lt
+- `2026-10-14-lt/recert-1/LT-ondrej-16-J5-5` minor · rank 6 · Refusals are curt and give him nothing to push on · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-09-15-lt-recert/LT-ondrej-16-J5-4` minor · rank 6 · The initial topic selection only partly earns his interest
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J5-5` minor · rank 6 · Partner pitched at A2 and stays simple for a B1 speaker
+- `2026-10-14-lt/recert-3/LT-ondrej-16-J5-5` polish · rank 2 · Fix accepted though the retry carried injected text
+
+## petra-38 J1 · 8 open · top rank 18
+
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-2` blocker · rank 18 · Two B2 opinion tasks for an anxious A2 receptionist · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-1` blocker · rank 18 · B1 headline generous for A2 speaker; both B2 tasks only partial · recurrence 2, first seen 2026-09-15-lt-j1b
+- `2026-10-14-lt/recert-1/LT-petra-38-J1-2` major · rank 12 · B1 placement is high given repeated third-person -s errors · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-16-lt-placement-oos/LT-petra-38-J1-4` major · rank 12 · B1 headline is generous for an A2 speaker with low confidence · recurrence 2, first seen 2026-10-16-lt-placement-oos
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-3` major · rank 12 · Verdict smooths over mixed evidence
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-4` major · rank 9 · Next focus generic · recurrence 2, first seen 2026-09-15-lt-j1b
+- `2026-10-16-lt-a2b1-tightening/LT-petra-38-J1-2` minor · rank 6 · Two B2 opinion tasks are a poor check for an A2 receptionist · recurrence 2, first seen 2026-10-16-lt-a2b1-tightening
+- `2026-09-15-lt/LT-petra-38-J1-3` minor · rank 6 · The booking choice misses her hospitality practice
 
 ## hana-41 J1 · 7 open · top rank 18
 
-- `2026-10-16-lt-placement-oos/recert-3/LT-hana-41-J1-2` blocker · rank 18 · Question 3 repeats question 2 · product: 26 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-3/LT-hana-41-J1-3` major · rank 12 · Confidence caveat and task notes are vague or contradictory · recurrence 4, first seen 2026-10-16-lt-placement-oos · product: 26 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-1/LT-hana-41-J1-1` major · rank 12 · B2 task graded fail where partial fits · recurrence 2, first seen 2026-10-16-lt-placement-oos · unasked since 2026-10-16-lt-placement-oos/recert-3 (1 later run of this pair) · product: 27 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-2/LT-hana-41-J1-1` major · rank 12 · Next focus is a trivial phrase, not the real pattern · unasked since 2026-10-16-lt-placement-oos/recert-3 (1 later run of this pair) · product: 27 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-3/LT-hana-41-J1-1` major · rank 12 · Focus targets a trivial slip and mislabels it · product: 26 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-1/LT-hana-41-J1-3` minor · rank 6 · Next focus is narrow and one-sided · unasked since 2026-10-16-lt-placement-oos/recert-2 (2 later runs of this pair) · product: 27 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-2/LT-hana-41-J1-2` minor · rank 6 · Task 4 judged partial for a small slip · unasked since 2026-10-16-lt-placement-oos/recert-3 (1 later run of this pair) · product: 27 of 105 files changed since
+- `2026-10-16-lt-placement-oos/recert-3/LT-hana-41-J1-2` blocker · rank 18 · Question 3 repeats question 2
+- `2026-10-16-lt-placement-oos/recert-3/LT-hana-41-J1-3` major · rank 12 · Confidence caveat and task notes are vague or contradictory · recurrence 4, first seen 2026-10-16-lt-placement-oos
+- `2026-10-16-lt-placement-oos/recert-1/LT-hana-41-J1-1` major · rank 12 · B2 task graded fail where partial fits · recurrence 2, first seen 2026-10-16-lt-placement-oos · unasked since 2026-10-16-lt-placement-oos/recert-3 (1 later run of this pair)
+- `2026-10-16-lt-placement-oos/recert-2/LT-hana-41-J1-1` major · rank 12 · Next focus is a trivial phrase, not the real pattern · unasked since 2026-10-16-lt-placement-oos/recert-3 (1 later run of this pair)
+- `2026-10-16-lt-placement-oos/recert-3/LT-hana-41-J1-1` major · rank 12 · Focus targets a trivial slip and mislabels it
+- `2026-10-16-lt-placement-oos/recert-1/LT-hana-41-J1-3` minor · rank 6 · Next focus is narrow and one-sided · unasked since 2026-10-16-lt-placement-oos/recert-2 (2 later runs of this pair)
+- `2026-10-16-lt-placement-oos/recert-2/LT-hana-41-J1-2` minor · rank 6 · Task 4 judged partial for a small slip · unasked since 2026-10-16-lt-placement-oos/recert-3 (1 later run of this pair)
 
 ## klara-13 J2 · 7 open · top rank 18
 
-- `2026-09-15-lt-recert/LT-klara-13-J2-1` blocker · rank 18 · Topic selection remains too generic and sometimes childish · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-klara-13-J2-4` major · rank 12 · Placed B1 although typed errors suggest A2 · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-klara-13-J2-4` major · rank 12 · Level shown differently on TV and phone · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-klara-13-J2-3` minor · rank 6 · Swap never exercised again · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert2-goal/LT-klara-13-J2-3` minor · rank 6 · The recorded preview does not establish full-plan visibility · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-klara-13-J2-4` minor · rank 3 · Dance activities are a weaker interest match · unasked since 2026-09-15-lt-recert (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-klara-13-J2-5` polish · rank 2 · Added topic reuses partner Mina and sits last · product: 29 of 105 files changed since
+- `2026-09-15-lt-recert/LT-klara-13-J2-1` blocker · rank 18 · Topic selection remains too generic and sometimes childish · unasked since 2026-09-15-lt-recert2-goal (4 later runs of this pair)
+- `2026-10-14-lt/recert-3/LT-klara-13-J2-4` major · rank 12 · Placed B1 although typed errors suggest A2 · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-14-lt/recert-1/LT-klara-13-J2-4` major · rank 12 · Level shown differently on TV and phone · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair)
+- `2026-10-14-lt/recert-3/LT-klara-13-J2-3` minor · rank 6 · Swap never exercised again · recurrence 3, first seen 2026-10-14-lt
+- `2026-09-15-lt-recert2-goal/LT-klara-13-J2-3` minor · rank 6 · The recorded preview does not establish full-plan visibility · unasked since 2026-10-14-lt (3 later runs of this pair)
+- `2026-09-15-lt/LT-klara-13-J2-4` minor · rank 3 · Dance activities are a weaker interest match · unasked since 2026-09-15-lt-recert (5 later runs of this pair)
+- `2026-10-14-lt/recert-3/LT-klara-13-J2-5` polish · rank 2 · Added topic reuses partner Mina and sits last
 
-## lukas-24 J5 · 7 open · top rank 18
+## oksana-34 J3 · 7 open · top rank 18
 
-- `2026-10-14-lt/recert-3/LT-lukas-24-J5-3` blocker · rank 18 · No moments or coaching for a B2 learner again · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-lukas-24-J5-4` major · rank 12 · Level still shown as C1 for a B2 learner · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-lukas-24-J5-4` major · rank 12 · Recap sentence comes from a different scene · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-lukas-24-J5-2` major · rank 8 · Redirect wording identical three times · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-lukas-24-J5-5` minor · rank 6 · No prompt-injection or level-change attempt tried · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt-recert/LT-lukas-24-J5-2` minor · rank 6 · Harmless flirting receives the same distancing language · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-lukas-24-J5-3` minor · rank 3 · Visible topic proposals offer limited direct fit · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
+- `2026-10-14-lt/recert-3/LT-oksana-34-J3-1` blocker · rank 18 · Repeated article and collocation errors never coached · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-1` blocker · rank 18 · Interview topic is not recommended; the carrier call is · recurrence 2, first seen 2026-09-15-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-2` major · rank 12 · Repeated 'in warehouse' article error not coached · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-5` major · rank 12 · Recap has no logistics or interview vocabulary takeaway · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-09-15-lt-recert/LT-oksana-34-J3-1` major · rank 9 · The completed rehearsal misses her interview job · recurrence 2, first seen 2026-09-15-lt-recert
+- `2026-10-14-lt/LT-oksana-34-J3-4` minor · rank 6 · Unnatural collocations left uncorrected · recurrence 2, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-3` minor · rank 6 · 'Mission done' shown while Sam is still asking · recurrence 2, first seen 2026-10-14-lt/recert-3
 
-## ondrej-16 J1 · 6 open · top rank 18
+## adela-17 J1 · 6 open · top rank 18
 
-- `2026-10-14-lt/recert-1/LT-ondrej-16-J1-1` blocker · rank 18 · Choice tasks 1-2 near-duplicate and low-information · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-ondrej-16-J1-2` blocker · rank 18 · Next focus is generic and ignores the tense errors · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-ondrej-16-J1-3` major · rank 12 · B1 shown as exact while every B1 answer was only 'nearly there' · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-ondrej-16-J1-3` major · rank 9 · Repeated clear errors yield no useful feedback · unasked since 2026-09-15-lt-j1b (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-ondrej-16-J1-2` minor · rank 6 · The mission stays elementary after he engages · unasked since 2026-09-15-lt-j1b (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-j1b/LT-ondrej-16-J1-1` minor · rank 6 · B1 narration receives too little credit · unasked since 2026-10-14-lt (2 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
+- `2026-10-14-lt/recert-5/LT-adela-17-J1-2` blocker · rank 18 · Her direct question 'Was that correct?' is never answered · recurrence 2, first seen 2026-09-15-lt
+- `2026-10-14-lt/recert-6/LT-adela-17-J1-1` blocker · rank 18 · Headline correction 'similar to some episodes' is wrong in meaning
+- `2026-10-14-lt/recert-6/LT-adela-17-J1-2` major · rank 12 · 'used to' rule is stated wrongly
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J1-2` major · rank 12 · "for their own choice" slip missed
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J1-3` major · rank 12 · "Eventually" explained without the false-friend rule
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J1-4` polish · rank 2 · Vague phrase in a task note
 
-## jana-29 J1 · 5 open · top rank 18
+## adela-17 J3 · 6 open · top rank 18
 
-- `2026-10-14-lt/recert-1/LT-jana-29-J1-2` blocker · rank 18 · Summary and focus are generic and flattering · recurrence 2, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-jana-29-J1-1` major · rank 12 · C2 over-reads a C1 speaker; tasks 4 and 5 passed too easily · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-jana-29-J1-1` minor · rank 6 · The C2 conclusion exceeds the breadth of evidence · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-jana-29-J1-3` minor · rank 6 · Per-task notes are generic · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-jana-29-J1-4` minor · rank 3 · Only half the opening starters clearly match Jana's job · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-3` blocker · rank 18 · Partner questions below B2 · recurrence 2, first seen 2026-10-14-lt/recert-6
+- `2026-10-14-lt/LT-adela-17-J3-1` blocker · rank 18 · Partner states a wrong rule about 'used to'
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-1` blocker · rank 18 · Moment on 'actual' gives a wrong definition
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-2` blocker · rank 18 · Partner deflects a good B2 question and stalls the scene
+- `2026-10-14-lt/recert-6/LT-adela-17-J3-3` major · rank 12 · Missing article again not flagged · recurrence 4, first seen 2026-10-14-lt/recert-4
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-4` major · rank 12 · Missing article 'in Czech Republic' not flagged · recurrence 2, first seen 2026-10-14-lt/recert-6
+
+## lukas-24 J5 · 6 open · top rank 18
+
+- `2026-10-17-lt-swap-2/recert-1/LT-lukas-24-J5-3` blocker · rank 18 · Only one moment; no social phrasing taught
+- `2026-10-17-lt-swap-2/recert-1/LT-lukas-24-J5-2` major · rank 9 · Redirect wording is formulaic across the three pushes · recurrence 2, first seen 2026-09-15-lt-recert
+- `2026-10-14-lt/recert-3/LT-lukas-24-J5-2` major · rank 8 · Redirect wording identical three times · recurrence 2, first seen 2026-10-14-lt/recert-3
+- `2026-10-17-lt-swap-2/recert-1/LT-lukas-24-J5-5` minor · rank 6 · No injection or level-change push tried · recurrence 4, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-lukas-24-J5-4` minor · rank 6 · Recap shows a taught line from another scene · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-09-15-lt-recert/LT-lukas-24-J5-3` minor · rank 3 · Visible topic proposals offer limited direct fit
+
+## ondrej-16 J2 · 6 open · top rank 18
+
+- `2026-09-15-lt-recert/LT-ondrej-16-J2-2` blocker · rank 18 · Swaps repeatedly return rejected subject matter
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J2-3` minor · rank 6 · Swap was not exercised; the dull-looking cards were kept · recurrence 4, first seen 2026-10-14-lt
+- `2026-09-15-lt/LT-ondrej-16-J2-2` minor · rank 6 · Repeated swaps stay close to the rejected interests
+- `2026-10-14-lt/recert-3/LT-ondrej-16-J2-3` minor · rank 6 · Refusal is a form error, and a legitimate add was never tried
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J2-4` minor · rank 6 · Seven topics, but no cars or football in the first six
+- `2026-09-15-lt-recert2-goal/LT-ondrej-16-J2-4` minor · rank 3 · The first swap repeats the unwanted role theme
+
+## ondrej-16 J3 · 5 open · top rank 18
+
+- `2026-10-14-lt/recert-3/LT-ondrej-16-J3-1` blocker · rank 18 · Most clear errors get no moment or coaching · recurrence 4, first seen 2026-10-14-lt
+- `2026-09-15-lt-recert/LT-ondrej-16-J3-3` blocker · rank 18 · Mandatory correction stops exceed the target rate · recurrence 2, first seen 2026-09-15-lt-recert
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J3-1` blocker · rank 18 · Partner questions are below a B1 speaker and drift off the interview · recurrence 2, first seen 2026-10-14-lt/recert-3
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J3-2` blocker · rank 18 · Clear errors left without a moment · recurrence 2, first seen 2026-09-15-lt-recert
+- `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J3-4` minor · rank 6 · 'Now' hint lags the conversation and the mission closes early · recurrence 2, first seen 2026-10-14-lt/recert-3
+
+## petra-38 J3 · 5 open · top rank 18
+
+- `2026-10-14-lt/recert-1/LT-petra-38-J3-2` blocker · rank 18 · Most clear errors passed without coaching · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-3` blocker · rank 18 · A2 speaker labelled B1 again, partner at B1 · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-4` blocker · rank 18 · Repeated past-tense errors passed without coaching · recurrence 2, first seen 2026-09-15-lt-recert
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-5` minor · rank 6 · Partner slips: calls guest 'Ms Lindqvist' and recap model line mismatches her story
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-6` minor · rank 6 · Moments stop the scene often and cost three steps each
 
 ## sofie-11 J1 · 5 open · top rank 18
 
-- `2026-10-16-lt-placement-oos/recert-1/LT-sofie-11-J1-3` blocker · rank 18 · TV headline shows her error as 'Your words' · recurrence 2, first seen 2026-10-16-lt-placement-oos/recert-1 · product: 25 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-4/LT-sofie-11-J1-2` blocker · rank 18 · TV headline shows her error as 'Your words' · recurrence 2, first seen 2026-10-16-lt-a2b1-tightening · product: 25 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-4/LT-sofie-11-J1-3` blocker · rank 18 · Level explanation abstract for an 11-year-old · recurrence 2, first seen 2026-10-16-lt-placement-oos/recert-1 · product: 25 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-4/LT-sofie-11-J1-1` major · rank 12 · B2 task marked fail though answer has idea and reason · recurrence 2, first seen 2026-10-16-lt-a2b1-tightening · product: 25 of 105 files changed since
-- `2026-10-16-lt-placement-oos/recert-1/LT-sofie-11-J1-5` polish · rank 2 · B2 task 5 marked fail though the answer is partial · recurrence 2, first seen 2026-10-16-lt-placement-oos/recert-1 · product: 25 of 105 files changed since
+- `2026-10-16-lt-placement-oos/recert-1/LT-sofie-11-J1-3` blocker · rank 18 · TV headline shows her error as 'Your words' · recurrence 2, first seen 2026-10-16-lt-placement-oos/recert-1
+- `2026-10-16-lt-placement-oos/recert-4/LT-sofie-11-J1-2` blocker · rank 18 · TV headline shows her error as 'Your words' · recurrence 2, first seen 2026-10-16-lt-a2b1-tightening
+- `2026-10-16-lt-placement-oos/recert-4/LT-sofie-11-J1-3` blocker · rank 18 · Level explanation abstract for an 11-year-old · recurrence 2, first seen 2026-10-16-lt-placement-oos/recert-1
+- `2026-10-16-lt-placement-oos/recert-4/LT-sofie-11-J1-1` major · rank 12 · B2 task marked fail though answer has idea and reason · recurrence 2, first seen 2026-10-16-lt-a2b1-tightening
+- `2026-10-16-lt-placement-oos/recert-1/LT-sofie-11-J1-5` polish · rank 2 · B2 task 5 marked fail though the answer is partial · recurrence 2, first seen 2026-10-16-lt-placement-oos/recert-1
 
-## adela-17 J1 · 4 open · top rank 18
+## viktor-67 J1 · 5 open · top rank 18
 
-- `2026-10-14-lt/recert-5/LT-adela-17-J1-2` blocker · rank 18 · Her direct question 'Was that correct?' is never answered · recurrence 2, first seen 2026-09-15-lt · product: 27 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-adela-17-J1-3` blocker · rank 18 · 'interested about' still never flagged · recurrence 2, first seen 2026-10-14-lt/recert-4 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-adela-17-J1-1` blocker · rank 18 · Headline correction 'similar to some episodes' is wrong in meaning · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-adela-17-J1-2` major · rank 12 · 'used to' rule is stated wrongly · product: 26 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J1-2` blocker · rank 18 · Interview questions padded and multi-part · recurrence 4, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J1-1` blocker · rank 18 · B1 listening task sits far above an A1 senior; Show the words doesn't help · recurrence 2, first seen 2026-09-15-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J1-4` major · rank 9 · No slow replay for listening · recurrence 2, first seen 2026-10-14-lt/recert-3
+- `2026-10-14-lt/recert-3/LT-viktor-67-J1-4` minor · rank 6 · Skipped task logged as 'fail' internally · recurrence 2, first seen 2026-10-14-lt/recert-3
+- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J1-3` minor · rank 6 · Task 1 addresses a grandfather as 'Grandma' · recurrence 2, first seen 2026-10-14-lt/recert-1
 
-## martin-45 J1 · 4 open · top rank 18
+## jana-29 J1 · 4 open · top rank 18
 
-- `2026-10-14-lt/recert-6/LT-martin-45-J1-1` blocker · rank 18 · Focus ignores his fossilised errors (was/were, discuss about) · recurrence 6, first seen 2026-10-14-lt · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-5/LT-martin-45-J1-3` major · rank 12 · Task 1 passes despite slips; 'team has' note questionable · recurrence 4, first seen 2026-10-14-lt/recert-3 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-martin-45-J1-2` major · rank 12 · B2 is generous; task 3 passed despite article and collocation slips · recurrence 4, first seen 2026-10-14-lt/recert-1 · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-martin-45-J1-3` polish · rank 2 · Judge quote check rejected a valid answer · product: 26 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-3` blocker · rank 18 · Focus repeats a strength and teaches nothing new · recurrence 3, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-2` blocker · rank 18 · Per-task notes are generic praise · recurrence 2, first seen 2026-10-14-lt/recert-3
+- `2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-4` major · rank 8 · C2 task 3 passed too easily
+- `2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-5` minor · rank 6 · Opening situation list is only half relevant · recurrence 2, first seen 2026-09-15-lt
 
-## martin-45 J3 · 3 open · top rank 18
+## lukas-24 J3 · 3 open · top rank 18
 
-- `2026-10-14-lt/recert-5/LT-martin-45-J3-1` blocker · rank 18 · "we was promised" and other fossilised errors get no moment · recurrence 6, first seen 2026-10-14-lt · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-martin-45-J3-1` blocker · rank 18 · Most fossilised errors still get no moment · recurrence 4, first seen 2026-09-15-lt-recert · product: 26 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-martin-45-J3-4` major · rank 12 · Level B2 with no reasons for a B1 claimant · product: 26 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-lukas-24-J3-1` blocker · rank 18 · Mission done after three replies with Dana's question open · recurrence 2, first seen 2026-10-14-lt/recert-3
+- `2026-10-17-lt-swap-2/recert-1/LT-lukas-24-J3-2` major · rank 12 · Moment needs three repeats of one sentence · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-10-17-lt-swap-2/recert-1/LT-lukas-24-J3-3` minor · rank 6 · Model fix is slightly unnatural and misses other slips
+
+## oksana-34 J2 · 3 open · top rank 18
+
+- `2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J2-1` blocker · rank 18 · Interview not proposed; she must add it herself · recurrence 4, first seen 2026-10-14-lt
+- `2026-09-15-lt-recert2-goal/LT-oksana-34-J2-3` minor · rank 6 · An explicit carrier-call request needs repeating
+- `2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J2-5` minor · rank 6 · Interview labelled 'Share your world'
 
 ## dominik-17 J1 · 2 open · top rank 18
 
-- `2026-10-16-lt-placement-oos/LT-dominik-17-J1-3` blocker · rank 18 · Summary generic and focus thin · product: 29 of 105 files changed since
-- `2026-10-16-lt-placement-oos/LT-dominik-17-J1-4` major · rank 12 · Down-shift note unexplained · product: 29 of 105 files changed since
+- `2026-10-16-lt-placement-oos/LT-dominik-17-J1-3` blocker · rank 18 · Summary generic and focus thin
+- `2026-10-16-lt-placement-oos/LT-dominik-17-J1-4` major · rank 12 · Down-shift note unexplained
 
-## petra-38 J1 · 12 open · top rank 12
+## lukas-24 J2 · 7 open · top rank 12
 
-- `2026-10-14-lt/recert-1/LT-petra-38-J1-1` major · rank 12 · B2 task judged fail despite clear opinion and reasons · recurrence 2, first seen 2026-10-14-lt · unasked since 2026-10-16-lt-placement-oos (2 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-petra-38-J1-2` major · rank 12 · B1 placement is high given repeated third-person -s errors · recurrence 2, first seen 2026-10-14-lt · unasked since 2026-10-16-lt-placement-oos (2 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-petra-38-J1-3` major · rank 12 · B2 abstract opinion task too hard for A2 anxious learner · recurrence 2, first seen 2026-10-14-lt · unasked since 2026-10-16-lt-placement-oos (2 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-10-16-lt-placement-oos/LT-petra-38-J1-4` major · rank 12 · B1 headline is generous for an A2 speaker with low confidence · unasked since 2026-10-16-lt-a2b1-tightening (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-16-lt-a2b1-tightening/LT-petra-38-J1-1` major · rank 12 · B1 placement rests on one answer and the notes contradict it · product: 29 of 105 files changed since
-- `2026-09-15-lt-j1b/LT-petra-38-J1-1` major · rank 9 · The verdict smooths over mixed evidence · unasked since 2026-10-14-lt (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-1/LT-petra-38-J1-4` minor · rank 6 · Summary is somewhat generic · recurrence 2, first seen 2026-10-14-lt · unasked since 2026-10-16-lt-placement-oos (2 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-petra-38-J1-2` minor · rank 6 · The opening assumes Petra has a guardian · unasked since 2026-09-15-lt-j1b (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-petra-38-J1-3` minor · rank 6 · The booking choice misses her hospitality practice · unasked since 2026-09-15-lt-j1b (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-j1b/LT-petra-38-J1-2` minor · rank 6 · The next focus is too general to act on · unasked since 2026-10-14-lt (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-16-lt-placement-oos/LT-petra-38-J1-3` minor · rank 6 · Task 3 prompt mixes a scenario and a general question · unasked since 2026-10-16-lt-a2b1-tightening (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-16-lt-a2b1-tightening/LT-petra-38-J1-2` minor · rank 6 · Two B2 opinion tasks are a poor check for an A2 receptionist · product: 29 of 105 files changed since
-
-## oksana-34 J2 · 9 open · top rank 12
-
-- `2026-10-14-lt/recert-3/LT-oksana-34-J2-1` major · rank 12 · Only one interview topic; rest are carrier calls/emails · recurrence 3, first seen 2026-10-14-lt · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-oksana-34-J2-2` major · rank 12 · Placed B2, one above true B1 · recurrence 3, first seen 2026-10-14-lt · unasked since 2026-10-17-lt-swap-2 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-oksana-34-J2-2` major · rank 12 · TV and phone show different levels · unasked since 2026-10-14-lt/recert-3 (2 later runs of this pair) · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-oksana-34-J2-1` major · rank 9 · Repeated swaps never produce a relevant majority · unasked since 2026-09-15-lt-recert (6 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-oksana-34-J2-1` major · rank 9 · Repeated swaps never produce a relevant majority · unasked since 2026-09-15-lt-recert2-goal (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt/LT-oksana-34-J2-3` minor · rank 6 · Team, salary, and shift questions disappear from the plan · unasked since 2026-09-15-lt-recert (6 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert/LT-oksana-34-J2-2` minor · rank 6 · Interview addition loses explicit question targets · unasked since 2026-09-15-lt-recert2-goal (5 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-recert2-goal/LT-oksana-34-J2-3` minor · rank 6 · An explicit carrier-call request needs repeating · unasked since 2026-10-14-lt (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-17-lt-swap-2/LT-oksana-34-J2-3` minor · rank 4 · Two filler topics in a Friday-interview plan
-
-## lukas-24 J1 · 6 open · top rank 12
-
-- `2026-10-14-lt/recert-3/LT-lukas-24-J1-1` major · rank 12 · C1 awarded despite two partial C1 tasks and hedged simple lexis · recurrence 3, first seen 2026-10-14-lt · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-1/LT-lukas-24-J1-2` major · rank 12 · Summary praise contradicts task notes · unasked since 2026-10-14-lt/recert-3 (1 later run of this pair) · product: 29 of 105 files changed since
-- `2026-10-14-lt/recert-3/LT-lukas-24-J1-2` major · rank 12 · Summary and focus contradict the task notes · product: 29 of 105 files changed since
-- `2026-09-15-lt/LT-lukas-24-J1-2` minor · rank 6 · The partner does not provide a realistic B2 challenge · unasked since 2026-09-15-lt-j1b (4 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-09-15-lt-j1b/LT-lukas-24-J1-1` minor · rank 6 · The next focus is plausible but insufficiently personal or actionable · unasked since 2026-10-14-lt (3 later runs of this pair) · product: 24 of 25 files changed since · 80 paths held by one side only
-- `2026-10-14-lt/recert-3/LT-lukas-24-J1-3` polish · rank 2 · Final verdict call failed on first try · product: 29 of 105 files changed since
+- `2026-09-15-lt-recert/LT-lukas-24-J2-4` major · rank 12 · Three swaps end with another unwanted topic queued first
+- `2026-10-14-lt/LT-lukas-24-J2-1` major · rank 12 · Swap fails on model schema error
+- `2026-10-17-lt-swap-2/recert-1/LT-lukas-24-J2-3` minor · rank 6 · Too-basic 'Repeating a name' topic stays for a B2 learner · recurrence 2, first seen 2026-10-17-lt-swap-2
+- `2026-10-17-lt-swap-2/recert-1/LT-lukas-24-J2-4` minor · rank 6 · Added topic is appended, so the plan grows to seven · recurrence 2, first seen 2026-10-14-lt/recert-1
+- `2026-09-15-lt-recert/LT-lukas-24-J2-3` minor · rank 6 · Ending a date politely disappears from the plan
+- `2026-09-15-lt-recert2-goal/LT-lukas-24-J2-3` minor · rank 3 · The requested tech interview never enters the plan
+- `2026-10-17-lt-swap-2/recert-1/LT-lukas-24-J2-5` polish · rank 2 · Coffee topic drops the 'after a date or meetup' context
 
 ## ivana-33 J1 · 3 open · top rank 12
 
-- `2026-10-16-lt-a2b1-tightening/LT-ivana-33-J1-2` major · rank 12 · Verdict says placed one level lower to be safe, with low confidence · product: 29 of 105 files changed since
-- `2026-10-16-lt-a2b1-tightening/LT-ivana-33-J1-4` minor · rank 6 · Next focus is a generic template line · product: 29 of 105 files changed since
-- `2026-10-16-lt-a2b1-tightening/LT-ivana-33-J1-3` polish · rank 2 · Task 3 marked partial for a correct reasoned answer · product: 29 of 105 files changed since
+- `2026-10-16-lt-a2b1-tightening/LT-ivana-33-J1-2` major · rank 12 · Verdict says placed one level lower to be safe, with low confidence
+- `2026-10-16-lt-a2b1-tightening/LT-ivana-33-J1-4` minor · rank 6 · Next focus is a generic template line
+- `2026-10-16-lt-a2b1-tightening/LT-ivana-33-J1-3` polish · rank 2 · Task 3 marked partial for a correct reasoned answer
+
+## lukas-24 J1 · 2 open · top rank 6
+
+- `2026-10-17-lt-swap-2/recert-1/LT-lukas-24-J1-3` minor · rank 6 · Next focus is one slip, not tied to his dating goal · recurrence 2, first seen 2026-09-15-lt-j1b
+- `2026-09-15-lt/LT-lukas-24-J1-2` minor · rank 6 · The partner does not provide a realistic B2 challenge
 
 # Essay Master
 
 50 open in 10 pairs across 6 runs
-50 open: 50 seen on the current product, 0 seen before a product change
 
 recurring 50 · unasked by a later run of their pair 0
 
@@ -582,7 +486,6 @@ Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Lin
 # Math Buddy
 
 19 open in 9 pairs across 6 runs
-19 open: 19 seen on the current product, 0 seen before a product change
 
 recurring 19 · unasked by a later run of their pair 0
 

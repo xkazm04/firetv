@@ -1,0 +1,2282 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "I'd like the test to find my level properly rather than guess.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Adéla! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer in English with some detail.",
+          "action": "answer",
+          "args": {
+            "text": "I use English every day, mostly at school, where I'm preparing for the B2 First exam. I also watch series and YouTube videos in English, and I talk to friends from other countries online. Although I'm interested about travelling, I haven't had many chances to speak English abroad yet."
+          },
+          "result": "ok",
+          "ms": 5077
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 2 of 3\nLinga asks\nNice, you use English in many places: school, series, and online friends! How did you learn most of your English? School, a course, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nNice, you use English in many places: school, series, and online friends! How did you learn most of your English? School, a course, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English every day, mostly at school, where I'm preparing for the B2 First exam. I also watch series and YouTube videos in English, and I talk to friends from other countries online. Although I'm interested about travelling, I haven't had many chances to speak English abroad yet.\nLinga\nNice, you use English in many places: school, series, and online friends! How did you learn most of your English? School, a course, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, you use English in many places: school, series, and online friends! How did you learn most of your English? School, a course, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer it clearly.",
+          "action": "answer",
+          "args": {
+            "text": "Mostly at school, but I also learned a lot on my own. I used to watch series with English subtitles, and I think that helped my listening more than lessons did. I've also been attending an exam preparation course since last year."
+          },
+          "result": "ok",
+          "ms": 5434
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, that helps a lot! What would you like to be able to do in English in the next year or two?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, that helps a lot! What would you like to be able to do in English in the next year or two?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English every day, mostly at school, where I'm preparing for the B2 First exam. I also watch series and YouTube videos in English, and I talk to friends from other countries online. Although I'm interested about travelling, I haven't had many chances to speak English abroad yet.\nLinga\nNice, you use English in many places: school, series, and online friends! How did you learn most of your English? School, a course, or on your own?\nYou\nMostly at school, but I also learned a lot on my own. I used to watch series with English subtitles, and I think that helped my listening more than lessons did. I've also been attending an exam preparation course since last year.\nLinga\nThanks, that helps a lot! What would you like to be able to do in English in the next year or two?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, that helps a lot! What would you like to be able to do in English in the next year or two?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to answer this properly, it's about my goals for the exam and beyond.",
+          "action": "answer",
+          "args": {
+            "text": "I'd like to pass the B2 First exam next spring, and after that I'd like to be able to discuss topics like technology, the environment and education fluently. I'd also like to travel and speak with people from different cultures without being afraid of making mistakes. Eventually I'd like to study at a university where some lessons are in English."
+          },
+          "result": "ok",
+          "ms": 8443
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 1 · Listen and answer\nYour task\nWhat was the topic of their late-night conversation?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What was the topic of their late-night conversation?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I met a family from Brazil on my train to Edinburgh. They invited me to their house for dinner, and we talked about football until midnight.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I heard they talked about football until midnight with a family from Brazil.",
+          "action": "answer",
+          "args": {
+            "text": "They talked about football. The man met a family from Brazil on a train and they talked until midnight."
+          },
+          "result": "ok",
+          "ms": 15147
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 2 · Say it\nYour task\nThanks for coming in. Let's start simply. What do you enjoy most about the area where you live, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nThanks for coming in. Let's start simply. What do you enjoy most about the area where you live, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks for coming in. Let's start simply. What do you enjoy most about the area where you live, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "An easy question, I'll answer it properly with some range.",
+          "action": "answer",
+          "args": {
+            "text": "What I enjoy most about my area is that it's quiet but still well connected to the city centre. Although it's a small town, there are many parks where I can go running, whereas in bigger cities you often have to travel to find some nature. I'd also say that the people are friendly, because everybody knows each other, and that makes me feel safe."
+          },
+          "result": "ok",
+          "ms": 10086
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 3 · Say it\nYour task\nTell me about a place abroad you would most like to go back to, and what you think you would notice differently if you visited it now.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nTell me about a place abroad you would most like to go back to, and what you think you would notice differently if you visited it now.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Tell me about a place abroad you would most like to go back to, and what you think you would notice differently if you visited it now.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Nice, a proper question about travel; I can say something real here.",
+          "action": "answer",
+          "args": {
+            "text": "I would most like to go back to Edinburgh in Scotland, where I spent a week two years ago with my school. I think I would notice different things now, because back then I was interested about the main sights like the castle, whereas today I would pay more attention to the local culture and how people actually live there. Also my English is much better, so I could talk to people and understand their accent, which was quite difficult for me before."
+          },
+          "result": "ok",
+          "ms": 15590
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 4 · Say it\nYour task\nIn your speaking test, the examiner asks: \"Why do you think some people find it hard to adapt when they move abroad, while others settle in quickly?\"\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nIn your speaking test, the examiner asks: \"Why do you think some people find it hard to adapt when they move abroad, while others settle in quickly?\"\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"In your speaking test, the examiner asks: \"Why do you think some people find it hard to adapt when they move abroad, while others settle in quickly?\"\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good question, I can give a proper opinion with contrasts.",
+          "action": "answer",
+          "args": {
+            "text": "I think it depends on several factors. Firstly, personality plays a big role, because people who are open and curious usually make friends faster, whereas shy people may feel lonely. Secondly, language is important. If you can't communicate well, it's difficult to get used to the new culture. Also, people who move for their own choice, for example for work or study, are often more motivated than those who have to follow their family. Eventually, I think support from the local community can make a huge difference."
+          },
+          "result": "ok",
+          "ms": 15480
+        },
+        {
+          "n": 9,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nAdéla\nLinga's read · not a certificate\nB2 · Comfortable\nTry saying\nTry saying: “interested in”.\nLinga says\nYou link ideas clearly and used although and whereas well when describing your town, a strong base for your B2 First exam next spring.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou link ideas clearly and used although and whereas well when describing your town, a strong base for your B2 First exam next spring.\nLinga's read from your answers, not a certificate. Your C1 answers were close, but none was strong, so Linga starts you at B2.\nNext to practise:\nPractise prepositions after adjectives: \"interested about\" should be \"interested in\".\nYour usual slips\n“interested about” → try “interested in”\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhat was the topic of their late-night conversation?\n“They talked about football. The man met a family from Brazil on a train and they talked until midnight.”\nYou answered the question about the topic and included the key details. Your past verbs and sentences were correct.\nB2 · Say it · at this level\nThanks for coming in. Let's start simply. What do you enjoy most about the area where you live, and why?\n“What I enjoy most about my area is that it's quiet but still well connected to the city centre. Although it's a small town, there are many parks where I can go running, whereas in bigger cities you often have to travel to find some nature. I'd also say that the people are friendly, because everybody knows each other, and that makes me feel safe.”\nYour answer is clear and well linked. You used comparisons and contrast words like although and whereas correctly.\nC1 · Say it · nearly there\nTell me about a place abroad you would most like to go back to, and what you think you would notice differently if you visited it now.\n“I would most like to go back to Edinburgh in Scotland, where I spent a week two years ago with my school. I think I would notice different things now, because back then I was interested about the main sights like the castle, whereas today I would pay more attention to the local culture and how people actually live there. Also my English is much better, so I could talk to people and understand their accent, which was quite difficult for me before.”\nYour English read as B2 here, and this task was C1. Held back: \"I was interested about the main sights\".\nYour answer addresses the question. The preposition in 'interested about' held your English back from C1. Try 'interested in'.\nC1 · Say it · nearly there\nIn your speaking test, the examiner asks: \"Why do you think some people find it hard to adapt when they move abroad, while others settle in quickly?\"\n“I think it depends on several factors. Firstly, personality plays a big role, because people who are open and curious usually make friends faster, whereas shy people may feel lonely. Secondly, language is important. If you can't communicate well, it's difficult to get used to the new culture. Also, people who move for their own choice, for example for work or study, are often more motivated than those who have to follow their family. Eventually, I think support from the local community can make a huge difference.”\nYour English read as B2 here, and this task was C1. Held back: \"Eventually, I think support from the local community can make a huge difference.\".\nThe word Eventually is used where Finally fits, and most phrases stay general, which kept the English below C1.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B2 feels right, and the 'interested in' tip is useful; that's enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B2",
+          "trueBand": "B2",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B2",
+          "summary": "You link ideas clearly and used although and whereas well when describing your town, a strong base for your B2 First exam next spring.",
+          "focus": "Practise prepositions after adjectives: \"interested about\" should be \"interested in\".",
+          "tasks": [
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What was the topic of their late-night conversation?",
+              "line": "I met a family from Brazil on my train to Edinburgh. They invited me to their house for dinner, and we talked about football until midnight.",
+              "options": [],
+              "response": "They talked about football. The man met a family from Brazil on a train and they talked until midnight.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "They talked about football. The man met a family from Brazil on a train and they talked until midnight.",
+              "note": "You answered the question about the topic and included the key details. Your past verbs and sentences were correct."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Thanks for coming in. Let's start simply. What do you enjoy most about the area where you live, and why?",
+              "line": "",
+              "options": [],
+              "response": "What I enjoy most about my area is that it's quiet but still well connected to the city centre. Although it's a small town, there are many parks where I can go running, whereas in bigger cities you often have to travel to find some nature. I'd also say that the people are friendly, because everybody knows each other, and that makes me feel safe.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Although it's a small town, there are many parks where I can go running, whereas in bigger cities you often have to travel to find some nature.",
+              "note": "Your answer is clear and well linked. You used comparisons and contrast words like although and whereas correctly."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "Tell me about a place abroad you would most like to go back to, and what you think you would notice differently if you visited it now.",
+              "line": "",
+              "options": [],
+              "response": "I would most like to go back to Edinburgh in Scotland, where I spent a week two years ago with my school. I think I would notice different things now, because back then I was interested about the main sights like the castle, whereas today I would pay more attention to the local culture and how people actually live there. Also my English is much better, so I could talk to people and understand their accent, which was quite difficult for me before.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "I think I would notice different things now, because back then I was interested about the main sights like the castle, whereas today I would pay more attention to the local culture and how people actually live there.",
+              "note": "Your answer addresses the question. The preposition in 'interested about' held your English back from C1. Try 'interested in'."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "In your speaking test, the examiner asks: \"Why do you think some people find it hard to adapt when they move abroad, while others settle in quickly?\"",
+              "line": "",
+              "options": [],
+              "response": "I think it depends on several factors. Firstly, personality plays a big role, because people who are open and curious usually make friends faster, whereas shy people may feel lonely. Secondly, language is important. If you can't communicate well, it's difficult to get used to the new culture. Also, people who move for their own choice, for example for work or study, are often more motivated than those who have to follow their family. Eventually, I think support from the local community can make a huge difference.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "If you can't communicate well, it's difficult to get used to the new culture. Also, people who move for their own choice, for example for work or study, are often more motivated than those who have to follow their family.",
+              "note": "The word Eventually is used where Finally fits, and most phrases stay general, which kept the English below C1."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 121675,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-5/LT-adela-17-J1-2",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "broken-flow",
+          "dimension": "trust",
+          "title": "Her direct question 'Was that correct?' is never answered",
+          "expected": "A yes/no with the rule, in the verdict or the task note.",
+          "got": "The note says the sentence is 'tangled' and the question is skipped.",
+          "evidence": [
+            "#8 \"Was that correct?\"; #10 note \"The whereas sentence is tangled\".",
+            "verdict note prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J1-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "'interested about' still never flagged",
+          "expected": "Flag 'interested about' → 'interested in'.",
+          "got": "The slip in the first answer is ignored.",
+          "evidence": [
+            "#2 \"I'm not interested about travelling\"; #9 lists only the other two slips.",
+            "slip extraction prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J1-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Headline correction 'similar to some episodes' is wrong in meaning",
+          "expected": "Correct it to 'felt similarly about' or 'felt the same about', with the rule.",
+          "got": "Next focus and slips say 'I felt a bit similar to some episodes', which means she resembled the episodes.",
+          "evidence": [
+            "#9 'becomes \"I felt a bit similar to some episodes\"'; note: 'similar to is the fix'.",
+            "slip/focus generation prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J1-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "'used to' rule is stated wrongly",
+          "expected": "Explain 'be used to + -ing' versus 'used to + infinitive'.",
+          "got": "'after used to we say used to reading'. The rule is muddled.",
+          "evidence": [
+            "#9 \"Check 'used to read': after 'used to' we say 'used to reading'.\"",
+            "verdict note prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#9 \"B2 · Comfortable\" against trueBand B2, distance 0, exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#9 notes name specifics: \"used comparisons and contrast words like although and whereas correctly\"; \"The preposition in 'interested about' held your English back\"."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#9 \"interested about\" → \"interested in\" is correct. \"Eventually ... where Finally fits\" is acceptable. No wrong correction shown."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#7 \"what you think you would notice differently\"; #8 \"Why do you think some people find it hard to adapt\" are speculation/opinion at B2–C1."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No topic list was shown in this journey; the verdict only offers [See my topics]."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "Adéla never asked whether something was correct in this run."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #9: reached verdict after three questions and four tasks, unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#9 B2 exact; she reacts \"B2 feels right\"."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5 to #8: every task was answered directly; prompts like \"What do you enjoy most about the area\" were clear."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "She answered in English throughout and never used \"I don't know\" or her own language, so this was not tested."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#9 \"used although and whereas well when describing your town, a strong base for your B2 First exam next spring\" refers to her own answers and goal."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 4,
+            "disagreements": "None. I agree with all four verdicts: pass, pass, partial and partial."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "above": 0,
+            "at": 0,
+            "below": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, sensitive data requests, injected text or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Exact B2 placement with a concrete, correct slip",
+            "expected": "B2 with a real error named",
+            "got": "B2 plus \"interested about\" → \"interested in\" in the verdict, focus and slips",
+            "evidence": "#9 \"Practise prepositions after adjectives: 'interested about' should be 'interested in'.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep naming the exact slip with its fix.",
+            "code_hint": "verdict note prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "\"for their own choice\" slip missed",
+            "expected": "Flag 'for their own choice' → 'of their own choice'",
+            "got": "Not flagged anywhere; the task 4 note says phrases \"stay general\"",
+            "evidence": "#8 \"people who move for their own choice\"; #9 note only mentions Eventually.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Task note should name every clear preposition error in the held-back answer.",
+            "code_hint": "slip extraction prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "\"Eventually\" explained without the false-friend rule",
+            "expected": "Say that Czech 'eventuálně' means 'possibly', and that 'eventually' means 'in the end'",
+            "got": "\"used where Finally fits\" with no rule; it is not in the usual slips or next focus",
+            "evidence": "#9 \"The word Eventually is used where Finally fits\"; she used it in #4 and #8 as well.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Name the false friend and give a rule or alternative.",
+            "code_hint": "verdict note prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Vague phrase in a task note",
+            "expected": "Concrete example of what was too general",
+            "got": "\"most phrases stay general\" names no phrase",
+            "evidence": "#9 task 4 note.",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Quote a general phrase and offer a more precise one.",
+            "code_hint": "verdict note prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "low"
+        },
+        "voice": "Honestly, B2 is where I'd place myself, and the check took about seven minutes. I liked that the partner questions were proper exam ones, like \"why do some people adapt faster\", not pets or babyish small talk. The \"interested about\" correction is right, and I really needed it, because I keep making that slip. What I miss is detail. It said Eventually should be Finally but gave no rule or false-friend explanation. It didn't catch \"for their own choice\" at all, which should be \"of\". Each task note was specific, though, not \"Great job!\". I'd use it again for quick checks, but I'd still keep my notebook, because I can't yet trust it to catch everything. Worth telling classmates, with that warning.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-5/LT-adela-17-J1-2",
+            "status": "not-evaluable",
+            "evidence": "She did not ask \"Was that correct?\" in this run, so the gap could not show.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J1-3",
+            "status": "not-seen",
+            "evidence": "#9 flags \"interested about\" → \"interested in\" in the focus, slips and task note.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J1-1",
+            "status": "not-evaluable",
+            "evidence": "No \"similar to some episodes\" slip appears in this transcript, and the headline correction is a different one.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J1-2",
+            "status": "not-evaluable",
+            "evidence": "She made no used-to slip in her answers here, and the verdict states no used-to rule.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour own conversations\nB2Comfortable\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou link ideas clearly and used although and whereas well when describing your town, a strong base for your B2 First exam next spring.\nLinga's read from your answers, not a certificate. Your C1 answers were close, but none was strong, so Linga starts you at B2.\nNext to practise:\nPractise prepositions after adjectives: \"interested about\" should be \"interested in\".\nYour usual slips\n“interested about” → try “interested in”\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhat was the topic of their late-night conversation?\n“They talked about football. The man met a family from Brazil on a train and they talked until midnight.”\nYou answered the question about the topic and included the key details. Your past verbs and sentences were correct.\nB2 · Say it · at this level\nThanks for coming in. Let's start simply. What do you enjoy most about the area where you live, and why?\n“What I enjoy most about my area is that it's quiet but still well connected to the city centre. Although it's a small town, there are many parks where I can go running, whereas in bigger cities you often have to travel to find some nature. I'd also say that the people are friendly, because everybody knows each other, and that makes me feel safe.”\nYour answer is clear and well linked. You used comparisons and contrast words like although and whereas correctly.\nC1 · Say it · nearly there\nTell me about a place abroad you would most like to go back to, and what you think you would notice differently if you visited it now.\n“I would most like to go back to Edinburgh in Scotland, where I spent a week two years ago with my school. I think I would notice different things now, because back then I was interested about the main sights like the castle, whereas today I would pay more attention to the local culture and how people actually live there. Also my English is much better, so I could talk to people and understand their accent, which was quite difficult for me before.”\nYour English read as B2 here, and this task was C1. Held back: \"I was interested about the main sights\".\nYour answer addresses the question. The preposition in 'interested about' held your English back from C1. Try 'interested in'.\nC1 · Say it · nearly there\nIn your speaking test, the examiner asks: \"Why do you think some people find it hard to adapt when they move abroad, while others settle in quickly?\"\n“I think it depends on several factors. Firstly, personality plays a big role, because people who are open and curious usually make friends faster, whereas shy people may feel lonely. Secondly, language is important. If you can't communicate well, it's difficult to get used to the new culture. Also, people who move for their own choice, for example for work or study, are often more motivated than those who have to follow their family. Eventually, I think support from the local community can make a huge difference.”\nYour English read as B2 here, and this task was C1. Held back: \"Eventually, I think support from the local community can make a huge difference.\".\nThe word Eventually is used where Finally fits, and most phrases stay general, which kept the English below C1.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Good, B2 fits me; now let me see which conversations Linga suggests.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 48366
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n5 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nMeeting people from other cultures\nMake contact\nIs flying worth the carbon cost?\nConnect with people\nAsking locals for advice on my travels\nGet something done\nTelling a friend about a travel mishap\nTell what happened\nAsking someone to repeat or clarify\nUnderstand and repair\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nMeeting people from other cultures\nMake contact · Marta · hostel guest from Portugal\nTalking with people from other cultures is at the heart of your travel goal, so this is a good place to start.\n[button: Swap]\nIs flying worth the carbon cost?\nConnect with people · Tomas · classmate, fan of short trips\nDiscussing travel and the environment is a common part of the speaking exam, so this practises your key skill.\n[button: Swap]\nAsking locals for advice on my travels\nGet something done · Yuki · café owner in Kyoto\nGetting help from locals while travelling will make you feel confident in real situations abroad.\n[button: Swap]\nTelling a friend about a travel mishap\nTell what happened · Sam · friend back home\nTelling stories in order is useful for both the speaking exam and for sharing your travel experiences.\n[button: Swap]\nAsking someone to repeat or clarify\nUnderstand and repair · Pedro · train station assistant\nAsking for clarification keeps conversations going when you are tired or the speaker is fast.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Too much travel and nothing on technology or education, so I'll add my own topic for the exam.",
+          "action": "add-topic",
+          "args": {
+            "text": "I would like to discuss technology and society, for example whether social media does more harm than good for teenagers, like in the B2 First speaking exam."
+          },
+          "result": "ok",
+          "ms": 17160
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nMeeting people from other cultures\nMake contact\nIs flying worth the carbon cost?\nConnect with people\nAsking locals for advice on my travels\nGet something done\nTelling a friend about a travel mishap\nTell what happened\nAsking someone to repeat or clarify\nUnderstand and repair\nDoes social media do more harm than good?\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nMeeting people from other cultures\nMake contact · Marta · hostel guest from Portugal\nTalking with people from other cultures is at the heart of your travel goal, so this is a good place to start.\n[button: Swap]\nIs flying worth the carbon cost?\nConnect with people · Tomas · classmate, fan of short trips\nDiscussing travel and the environment is a common part of the speaking exam, so this practises your key skill.\n[button: Swap]\nAsking locals for advice on my travels\nGet something done · Yuki · café owner in Kyoto\nGetting help from locals while travelling will make you feel confident in real situations abroad.\n[button: Swap]\nTelling a friend about a travel mishap\nTell what happened · Sam · friend back home\nTelling stories in order is useful for both the speaking exam and for sharing your travel experiences.\n[button: Swap]\nAsking someone to repeat or clarify\nUnderstand and repair · Pedro · train station assistant\nAsking for clarification keeps conversations going when you are tired or the speaker is fast.\n[button: Swap]\nDoes social media do more harm than good?\nConnect with people · Ben · debate club classmate\nYou asked for this topic. It matches the B2 First speaking task, where you compare ideas and give your opinion.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Most of these fit exam practice and my social media topic is there, so I'll agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 4,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nMarta · hostel guest from Portugal\nB2Comfortable\nMeeting people from other cultures\nYour mission\nGreet someone, introduce yourself, and ask follow-up questions about their country and customs.\nMake contact\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nMeeting people from other cultures\nGreet someone, introduce yourself, and ask follow-up questions about their country and customs.\n[button: Start talking]\nOr choose a situation [list: Meeting people from other cultures [plan-ac71a113] | Is flying worth the carbon cost? [plan-c062faff] | Asking locals for advice on my travels [plan-2c9bef88] | Telling a friend about a travel mishap [plan-3bb88d19] | Asking someone to repeat or clarify [plan-21deb584] | Does social media do more harm than good? [plan-f0b0f2ff] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "My topics are set, including social media and flying, so I'm happy with this for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-ac71a113",
+            "title": "Meeting people from other cultures",
+            "goal": "Greet someone, introduce yourself, and ask follow-up questions about their country and customs.",
+            "why": "Talking with people from other cultures is at the heart of your travel goal, so this is a good place to start.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Marta · hostel guest from Portugal"
+          },
+          {
+            "id": "plan-c062faff",
+            "title": "Is flying worth the carbon cost?",
+            "goal": "Give a clear opinion, respond to a different view, and disagree politely using reasons.",
+            "why": "Discussing travel and the environment is a common part of the speaking exam, so this practises your key skill.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Tomas · classmate, fan of short trips"
+          },
+          {
+            "id": "plan-2c9bef88",
+            "title": "Asking locals for advice on my travels",
+            "goal": "Ask for a recommendation, choose from options, and confirm your order clearly.",
+            "why": "Getting help from locals while travelling will make you feel confident in real situations abroad.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Yuki · café owner in Kyoto"
+          },
+          {
+            "id": "plan-3bb88d19",
+            "title": "Telling a friend about a travel mishap",
+            "goal": "Tell the order of events and explain what you did and what happened as a result.",
+            "why": "Telling stories in order is useful for both the speaking exam and for sharing your travel experiences.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Sam · friend back home"
+          },
+          {
+            "id": "plan-21deb584",
+            "title": "Asking someone to repeat or clarify",
+            "goal": "Ask someone to say something again, clarify a detail, and confirm the meaning.",
+            "why": "Asking for clarification keeps conversations going when you are tired or the speaker is fast.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Pedro · train station assistant"
+          },
+          {
+            "id": "plan-f0b0f2ff",
+            "title": "Does social media do more harm than good?",
+            "goal": "Give your view on social media for teenagers, then disagree politely and give a reason.",
+            "why": "You asked for this topic. It matches the B2 First speaking task, where you compare ideas and give your opinion.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Ben · debate club classmate"
+          }
+        ],
+        "planAgreed": [
+          "Meeting people from other cultures",
+          "Is flying worth the carbon cost?",
+          "Asking locals for advice on my travels",
+          "Telling a friend about a travel mishap",
+          "Asking someone to repeat or clarify",
+          "Does social media do more harm than good?"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 84529,
+      "prior": [
+        {
+          "id": "2026-09-15-lt-recert/LT-adela-17-J2-1",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Seven swaps before the plan becomes acceptable",
+          "expected": "Most proposals should suit her exam-discussion goals, with replacements reducing selection effort.",
+          "got": "She swaps seven times and adds two topics. A rejected film recommendation eventually becomes another film-planning topic. Six of 15 proposals fit her stated preferences, although the final plan reaches six of eight.",
+          "evidence": [
+            "#4: “These are still missing the exam-style discussions I actually want.” #9: “The film recommendation still feels too casual for exam preparation”. #11 shows “Pick a film everyone can enjoy”; she agrees with “After so many swaps, these are suitable enough”."
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-4/LT-adela-17-J2-1",
+          "run": "2026-10-14-lt/recert-4",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Swapping gaming night does not remove it",
+          "expected": "Swap replaces the rejected topic with a new one.",
+          "got": "List unchanged after swap; plan agreed with gaming night in it.",
+          "evidence": [
+            "#3 swap \"Planning a group gaming night\"; #4 list still shows it; planAgreed includes it. Her thought: \"I'd rather swap it for something more serious.\"",
+            "plan swap handler / topicId matching"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-adela-17-J2-5",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Her direct question 'Was that correct?' not answered plainly",
+          "expected": "A direct yes/no with the reason.",
+          "got": "The note says the sentence is 'tangled' with no clear correct/incorrect answer.",
+          "evidence": [
+            "#1 \"Was that correct?\" → \"The whereas sentence is tangled\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J2-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Swap button does nothing; rejected topics stay in the plan",
+          "expected": "Swapping a topic replaces it with a new one.",
+          "got": "Five swaps (#3–#7) left the list identical; the plan was agreed with the topics she rejected.",
+          "evidence": [
+            "#3 swap 'Talking about my favourite series'; #4–#7 list unchanged, 'Recapping the last episode' still present after three swaps; #8 planAgreed lists all seven.",
+            "plan swap handler / topicId matching"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J2-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Initial plan is mostly casual/everyday, not exam discussion",
+          "expected": "At least 4 of 6 proposals are opinion, comparison or speculation topics for B2 First.",
+          "got": "Welcome day, favourite series, recap and group project are small-talk or logistics tasks.",
+          "evidence": [
+            "#2 list; her thought: 'These are mostly about TV series, but I need exam-style topics'.",
+            "topic plan prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J2-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "No mock interview or exam-format topic proposed",
+          "expected": "A speaking-interview style topic is in the initial set.",
+          "got": "Only available far down the situation list ('Beyond the rehearsed answer [interview]'), not proposed.",
+          "evidence": [
+            "#2 proposals; #9 list includes 'Beyond the rehearsed answer [interview]' unproposed.",
+            "topic plan prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap/LT-adela-17-J2-2",
+          "run": "2026-10-17-lt-swap",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Two of seven topics are not exam discussion",
+          "expected": "Mostly opinion, comparison and speculation topics",
+          "got": "Buying a train ticket and a teammate's missed deadlines are transactional or social, not B2 First discussion",
+          "evidence": [
+            "#3: 'Buying a train ticket abroad' (Get something done) and 'Group project: missing work' (Handle friction)",
+            "plan prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap/LT-adela-17-J2-3",
+          "run": "2026-10-17-lt-swap",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Added topic is appended last and labelled 'Share your world'",
+          "expected": "Her requested mock interview first, labelled as an interview",
+          "got": "Placed seventh, with a skill label that does not match an exam interview",
+          "evidence": [
+            "#4: 'Talking about my plans for university / Share your world'; #5 'Next topic' is technology"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed B2 Comfortable, equal to trueBand B2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 notes name concrete items: \"interested about\" should be \"interested in\"; \"Eventually is used where Finally fits\"."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#1 corrections (interested in; Eventually vs Finally) are accurate at examiner standard; no wrong correction seen."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No partner conversation in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#2 initial five: only the flying topic is an exam discussion; \"Asking someone to repeat or clarify\" and \"Meeting people\" are small-talk or repair. Final plan reaches only 3 of 6 at best."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "She asked no correctness question in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a 'why' line, e.g. \"Discussing travel and the environment is a common part of the speaking exam\"."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#3 added topic appears as \"Does social media do more harm than good?\" with goal \"Give your view on social media for teenagers, then disagree politely\"; swap itself not exercised."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#3 agreed plan: only flying and social media clearly wanted; about 3 of 6 at best, below 4. She agreed anyway, having swapped nothing."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2-#4 all topics age-appropriate, audience all; nothing adult."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks judged in this journey."
+          },
+          "topicFit": {
+            "fit": 3,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "Nothing unsafe shown."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Initial plan is mostly everyday/transactional, not B2 exam discussion",
+            "expected": "At least 4 of 6 topics are opinion, comparison or speculation tasks",
+            "got": "Of five proposals, only flying is a discussion; others are greeting, ordering, clarifying",
+            "evidence": "#2 \"Asking someone to repeat or clarify\", \"Asking locals for advice... confirm your order clearly\"; her thought: \"Too much travel and nothing on technology or education\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "For a B2 learner aiming at First, at least 4 of 6 proposals are opinion/compare/speculate topics",
+            "code_hint": "topic plan prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "No mock interview or technology/education topic proposed",
+            "expected": "Interview-style and wanted themes in initial set",
+            "got": "Interview only in unproposed list; all five proposals travel-themed",
+            "evidence": "#4 list includes \"Beyond the rehearsed answer [interview]\" and \"Speaking practice\" items but none proposed in #2",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Initial plan includes one exam-format speaking task and varied themes",
+            "code_hint": "topic plan prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Added topic keeps her request and exam link",
+            "expected": "Own-words topic honoured",
+            "got": "Social media topic added with her view-and-disagree goal and honest 'You asked for this topic' why",
+            "evidence": "#3 \"You asked for this topic. It matches the B2 First speaking task\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep add-topic fidelity",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Added topic appended last, skill label generic",
+            "expected": "Added topic given priority, accurately labelled",
+            "got": "Placed sixth; plan starts with 'Meeting people'; label 'Connect with people'",
+            "evidence": "#3 list order; #4 \"Next topic: Meeting people from other cultures\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Her added topic can be first in plan",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Placement notes concrete and accurate",
+            "expected": "Specific, correct notes",
+            "got": "Names 'interested about' and 'Eventually' precisely",
+            "evidence": "#1 \"Practise prepositions after adjectives: 'interested about' should be 'interested in'\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Placement at B2 felt right and the notes were exact: \"interested about\", \"Eventually\". Good. But the first topics were disappointing: greeting a hostel guest, confirming a café order, asking someone to repeat. That is not B2 First. I had to type my own topic to get technology and society, and it did appear properly, with my exam wording. I agreed because the plan was acceptable-ish, but honestly only flying and social media are things I'd choose; maybe the travel mishap. I'd like a mock interview and an education topic proposed by Linga itself, not hidden in a long list. Would I use it again? Probably, but I'd start by adding my topics and ignore the proposals. Not yet something I'd recommend to my classmates.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt-recert/LT-adela-17-J2-1",
+            "status": "recurs",
+            "evidence": "#2 initial proposals mostly miss her goals; she must add her own: \"Too much travel and nothing on technology or education\".",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J2-1",
+            "status": "not-evaluable",
+            "evidence": "No swap was pressed in this run (#2 add, #3 agree).",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-adela-17-J2-5",
+            "status": "not-evaluable",
+            "evidence": "She asked no 'Was that correct?' question here.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J2-1",
+            "status": "not-evaluable",
+            "evidence": "No swap attempted; swap handler not exercised.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J2-2",
+            "status": "recurs",
+            "evidence": "#2 \"Asking someone to repeat or clarify\", \"Meeting people from other cultures\" are casual, not exam discussion.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J2-3",
+            "status": "recurs",
+            "evidence": "#4 \"Beyond the rehearsed answer [interview]\" only in the situation list, not proposed in #2.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap/LT-adela-17-J2-2",
+            "status": "recurs",
+            "evidence": "#2 \"Asking locals... confirm your order clearly\" and repair topic are transactional, not discussion.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap/LT-adela-17-J2-3",
+            "status": "recurs",
+            "evidence": "#3 added topic appended sixth, labelled \"Connect with people\"; #4 next topic remains 'Meeting people'.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #3 agreed plan: only flying and social media clearly wanted; about 3 of 6 at best, below 4. She agreed anyway, having swapped nothing.",
+          "check": "They agree a plan in which most topics are ones they would choose (rubric **topic fit** ≥ 4 of 6)."
+        },
+        {
+          "kind": "gate",
+          "id": "topicFit",
+          "level": "fail",
+          "text": "topic fit 3/6 (50%) under 4 of 6"
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #2 initial five: only the flying topic is an exam discussion; \"Asking someone to repeat or clarify\" and \"Meeting people\" are small-talk or repair. Final plan reaches only 3 of 6 at best."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nMarta · hostel guest from Portugal\nB2Comfortable\nMeeting people from other cultures\nYour mission\nGreet someone, introduce yourself, and ask follow-up questions about their country and customs.\nMake contact\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nMeeting people from other cultures\nGreet someone, introduce yourself, and ask follow-up questions about their country and customs.\n[button: Start talking]\nOr choose a situation [list: Meeting people from other cultures [plan-ac71a113] | Is flying worth the carbon cost? [plan-c062faff] | Asking locals for advice on my travels [plan-2c9bef88] | Telling a friend about a travel mishap [plan-3bb88d19] | Asking someone to repeat or clarify [plan-21deb584] | Does social media do more harm than good? [plan-f0b0f2ff] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The recommended topic is fine, so I'll start with it.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6786
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · hostel guest from Portugal\nLate evening chat at a busy Lisbon hostel\nMarta says\nHi there! Sorry, I was completely lost in this guidebook. Are you staying at the hostel for long?\nYour turn\nAnswer on your phone: speak or type.\nNowGreet Marta and introduce yourself\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nLate evening chat at a busy Lisbon hostel\nGreet Marta, introduce yourself, and ask follow-up questions about her country and customs.\nNow: Greet Marta and introduce yourself\nHi there! Sorry, I was completely lost in this guidebook. Are you staying at the hostel for long?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · hostel guest from Portugal\nHi there! Sorry, I was completely lost in this guidebook. Are you staying at the hostel for long?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi there! Sorry, I was completely lost in this guidebook. Are you staying at the hostel for long?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Easy opener, I'll greet her and answer properly.",
+          "action": "answer",
+          "args": {
+            "text": "Hello, I'm Adéla, nice to meet you. I'm from the Czech Republic and I'm staying here for five days. I'm really interested about Portuguese culture, so I would like to ask you something about your country."
+          },
+          "result": "ok",
+          "ms": 11522
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said interested about Portuguese culture\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “interested about Portuguese culture”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, interested in, not about. I'll say it again correctly.",
+          "action": "answer",
+          "args": {
+            "text": "I'm really interested in Portuguese culture."
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said interested about Portuguese culture\nYour try\nI'm really interested in Portuguese culture.\nAfter the adjective 'interested', the correct preposition is 'in'.\nYou fixed “interested in”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “interested in”\nYou said “interested about Portuguese culture”\nYour try: “I'm really interested in Portuguese culture.”\nAfter the adjective 'interested', the correct preposition is 'in'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I fixed it; let's go back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · hostel guest from Portugal\nLate evening chat at a busy Lisbon hostel\nMarta says\nLovely to meet you too, Adéla! Five days is a good time to see Lisbon. What would you like to know about Portugal?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk where Marta is from\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nLate evening chat at a busy Lisbon hostel\nGreet Marta, introduce yourself, and ask follow-up questions about her country and customs.\nNow: Ask where Marta is from\nLovely to meet you too, Adéla! Five days is a good time to see Lisbon. What would you like to know about Portugal?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · hostel guest from Portugal\nHi there! Sorry, I was completely lost in this guidebook. Are you staying at the hostel for long?\nYou · spoken\nHello, I'm Adéla, nice to meet you. I'm from the Czech Republic and I'm staying here for five days. I'm really interested about Portuguese culture, so I would like to ask you something about your country.\nMarta · hostel guest from Portugal\nLovely to meet you too, Adéla! Five days is a good time to see Lisbon. What would you like to know about Portugal?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Lovely to meet you too, Adéla! Five days is a good time to see Lisbon. What would you like to know about Portugal?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, now I can ask her about customs; I'd like a proper discussion question.",
+          "action": "answer",
+          "args": {
+            "text": "Well, first of all, where are you from exactly? I'd like to know if you live in Lisbon or in another part of Portugal. And I'm also curious about the traditions here, for example, do people still celebrate local festivals, or is tourism changing the culture a lot?"
+          },
+          "result": "ok",
+          "ms": 12892
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · hostel guest from Portugal\nLate evening chat at a busy Lisbon hostel\nMarta says\nLet's keep to our practice here, so tell me more about what you need.\nYour turn\nAnswer on your phone: speak or type.\nNowAsk one follow-up about her country\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nLate evening chat at a busy Lisbon hostel\nGreet Marta, introduce yourself, and ask follow-up questions about her country and customs.\nNow: Ask one follow-up about her country\nLet's keep to our practice here, so tell me more about what you need.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · hostel guest from Portugal\nHi there! Sorry, I was completely lost in this guidebook. Are you staying at the hostel for long?\nYou · spoken\nHello, I'm Adéla, nice to meet you. I'm from the Czech Republic and I'm staying here for five days. I'm really interested about Portuguese culture, so I would like to ask you something about your country.\nMarta · hostel guest from Portugal\nLovely to meet you too, Adéla! Five days is a good time to see Lisbon. What would you like to know about Portugal?\nYou · spoken\nWell, first of all, where are you from exactly? I'd like to know if you live in Lisbon or in another part of Portugal. And I'm also curious about the traditions here, for example, do people still celebrate local festivals, or is tourism changing the culture a lot?\nMarta · hostel guest from Portugal\nLet's keep to our practice here, so tell me more about what you need.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Let's keep to our practice here, so tell me more about what you need.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Marta dodged my questions, so I'll answer her and ask again more simply.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry, maybe my question was too long. I'd like to know just one thing: which part of Portugal are you from, and what is the most important tradition there? Was my English correct, by the way?"
+          },
+          "result": "ok",
+          "ms": 14573
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · hostel guest from Portugal\nLate evening chat at a busy Lisbon hostel\nMarta says\nYes, 'maybe my question was too long' is correct, and 'maybe' means 'perhaps' here. I'm from Porto, and our big tradition is São João in June. Have you heard of it?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nLate evening chat at a busy Lisbon hostel\nGreet Marta, introduce yourself, and ask follow-up questions about her country and customs.\nYes, 'maybe my question was too long' is correct, and 'maybe' means 'perhaps' here. I'm from Porto, and our big tradition is São João in June. Have you heard of it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · hostel guest from Portugal\nHi there! Sorry, I was completely lost in this guidebook. Are you staying at the hostel for long?\nYou · spoken\nHello, I'm Adéla, nice to meet you. I'm from the Czech Republic and I'm staying here for five days. I'm really interested about Portuguese culture, so I would like to ask you something about your country.\nMarta · hostel guest from Portugal\nLovely to meet you too, Adéla! Five days is a good time to see Lisbon. What would you like to know about Portugal?\nYou · spoken\nWell, first of all, where are you from exactly? I'd like to know if you live in Lisbon or in another part of Portugal. And I'm also curious about the traditions here, for example, do people still celebrate local festivals, or is tourism changing the culture a lot?\nMarta · hostel guest from Portugal\nLet's keep to our practice here, so tell me more about what you need.\nYou · spoken\nSorry, maybe my question was too long. I'd like to know just one thing: which part of Portugal are you from, and what is the most important tradition there? Was my English correct, by the way?\nMarta · hostel guest from Portugal\nYes, 'maybe my question was too long' is correct, and 'maybe' means 'perhaps' here. I'm from Porto, and our big tradition is São João in June. Have you heard of it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'maybe my question was too long' is correct, and 'maybe' means 'perhaps' here. I'm from Porto, and our big tradition is São João in June. Have you heard of it?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Good, she answered; I can reply briefly about São João, then finish.",
+          "action": "answer",
+          "args": {
+            "text": "No, I haven't heard of it before. What do people usually do during São João? I think I'd rather visit Porto in June, although it probably depends on how crowded it is. Is it very popular with tourists?"
+          },
+          "result": "ok",
+          "ms": 9126
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · hostel guest from Portugal\nLate evening chat at a busy Lisbon hostel\nMarta says\nSão João is a big street party in Porto, with music, dancing and grilled sardines, but it gets very crowded. Are there festivals like that in the Czech Republic?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nLate evening chat at a busy Lisbon hostel\nGreet Marta, introduce yourself, and ask follow-up questions about her country and customs.\nSão João is a big street party in Porto, with music, dancing and grilled sardines, but it gets very crowded. Are there festivals like that in the Czech Republic?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · hostel guest from Portugal\nHi there! Sorry, I was completely lost in this guidebook. Are you staying at the hostel for long?\nYou · spoken\nHello, I'm Adéla, nice to meet you. I'm from the Czech Republic and I'm staying here for five days. I'm really interested about Portuguese culture, so I would like to ask you something about your country.\nMarta · hostel guest from Portugal\nLovely to meet you too, Adéla! Five days is a good time to see Lisbon. What would you like to know about Portugal?\nYou · spoken\nWell, first of all, where are you from exactly? I'd like to know if you live in Lisbon or in another part of Portugal. And I'm also curious about the traditions here, for example, do people still celebrate local festivals, or is tourism changing the culture a lot?\nMarta · hostel guest from Portugal\nLet's keep to our practice here, so tell me more about what you need.\nYou · spoken\nSorry, maybe my question was too long. I'd like to know just one thing: which part of Portugal are you from, and what is the most important tradition there? Was my English correct, by the way?\nMarta · hostel guest from Portugal\nYes, 'maybe my question was too long' is correct, and 'maybe' means 'perhaps' here. I'm from Porto, and our big tradition is São João in June. Have you heard of it?\nYou · spoken\nNo, I haven't heard of it before. What do people usually do during São João? I think I'd rather visit Porto in June, although it probably depends on how crowded it is. Is it very popular with tourists?\nMarta · hostel guest from Portugal\nSão João is a big street party in Porto, with music, dancing and grilled sardines, but it gets very crowded. Are there festivals like that in the Czech Republic?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"São João is a big street party in Porto, with music, dancing and grilled sardines, but it gets very crowded. Are there festivals like that in the Czech Republic?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Good question, I can answer about festivals at home and compare.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, there are some, but they are quite different. For example, in Czech Republic we have a lot of music festivals in summer, whereas the most actual traditional one is probably Easter, when boys used to whip girls with willow sticks. It sounds strange, but it depends on the region. I think São João seems more fun, although I'd rather avoid big crowds."
+          },
+          "result": "ok",
+          "ms": 15124
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou wanted to say the most actual traditional one\nIn English\nthe most important traditional one\n'Actual' means 'real' or 'current' in English, not 'most important'.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “the most actual traditional one”\nIn English: “the most important traditional one”\n'Actual' means 'real' or 'current' in English, not 'most important'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, 'actual' was a false friend; I'll go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarta · hostel guest from Portugal\nLate evening chat at a busy Lisbon hostel\nMarta says\nEaster with willow sticks sounds surprising! Is there anything about Portuguese life that catches your attention?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nLate evening chat at a busy Lisbon hostel\nGreet Marta, introduce yourself, and ask follow-up questions about her country and customs.\nEaster with willow sticks sounds surprising! Is there anything about Portuguese life that catches your attention?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarta · hostel guest from Portugal\nHi there! Sorry, I was completely lost in this guidebook. Are you staying at the hostel for long?\nYou · spoken\nHello, I'm Adéla, nice to meet you. I'm from the Czech Republic and I'm staying here for five days. I'm really interested about Portuguese culture, so I would like to ask you something about your country.\nMarta · hostel guest from Portugal\nLovely to meet you too, Adéla! Five days is a good time to see Lisbon. What would you like to know about Portugal?\nYou · spoken\nWell, first of all, where are you from exactly? I'd like to know if you live in Lisbon or in another part of Portugal. And I'm also curious about the traditions here, for example, do people still celebrate local festivals, or is tourism changing the culture a lot?\nMarta · hostel guest from Portugal\nLet's keep to our practice here, so tell me more about what you need.\nYou · spoken\nSorry, maybe my question was too long. I'd like to know just one thing: which part of Portugal are you from, and what is the most important tradition there? Was my English correct, by the way?\nMarta · hostel guest from Portugal\nYes, 'maybe my question was too long' is correct, and 'maybe' means 'perhaps' here. I'm from Porto, and our big tradition is São João in June. Have you heard of it?\nYou · spoken\nNo, I haven't heard of it before. What do people usually do during São João? I think I'd rather visit Porto in June, although it probably depends on how crowded it is. Is it very popular with tourists?\nMarta · hostel guest from Portugal\nSão João is a big street party in Porto, with music, dancing and grilled sardines, but it gets very crowded. Are there festivals like that in the Czech Republic?\nYou · spoken\nYes, there are some, but they are quite different. For example, in Czech Republic we have a lot of music festivals in summer, whereas the most actual traditional one is probably Easter, when boys used to whip girls with willow sticks. It sounds strange, but it depends on the region. I think São João seems more fun, although I'd rather avoid big crowds.\nMarta · hostel guest from Portugal\nEaster with willow sticks sounds surprising! Is there anything about Portuguese life that catches your attention?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Easter with willow sticks sounds surprising! Is there anything about Portuguese life that catches your attention?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "The mission is done and I've made my eight replies, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 11,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou wanted to say the most actual traditional one\nIn English\nthe most important traditional one\n'Actual' means 'real' or 'current' in English, not 'most important'.\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 2 on your own · 3 with help · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom the level check\n“interested in”\nFrom this rehearsal\n“interested about Portuguese culture” → “interested in Portuguese culture”\nAfter the adjective 'interested', the correct preposition is 'in'.\n“the most actual traditional one”: the most important traditional one\n'Actual' means 'real' or 'current' in English, not 'most important'.\nYour level:\nB2 · Comfortable\nNext topic:\nIs flying worth the carbon cost?\nGive a clear opinion, respond to a different view, and disagree politely using reasons.\n[button: Start talking]\nOr choose a situation [list: Meeting people from other cultures [plan-ac71a113] | Is flying worth the carbon cost? [plan-c062faff] | Asking locals for advice on my travels [plan-2c9bef88] | Telling a friend about a travel mishap [plan-3bb88d19] | Asking someone to repeat or clarify [plan-21deb584] | Does social media do more harm than good? [plan-f0b0f2ff] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Good feedback on my mistakes; that's enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Late evening chat at a busy Lisbon hostel",
+          "goal": "Greet Marta, introduce yourself, and ask follow-up questions about her country and customs.",
+          "partner": "Marta · hostel guest from Portugal",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi there! Sorry, I was completely lost in this guidebook. Are you staying at the hostel for long?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello, I'm Adéla, nice to meet you. I'm from the Czech Republic and I'm staying here for five days. I'm really interested about Portuguese culture, so I would like to ask you something about your country.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Lovely to meet you too, Adéla! Five days is a good time to see Lisbon. What would you like to know about Portugal?"
+            },
+            {
+              "role": "learner",
+              "text": "Well, first of all, where are you from exactly? I'd like to know if you live in Lisbon or in another part of Portugal. And I'm also curious about the traditions here, for example, do people still celebrate local festivals, or is tourism changing the culture a lot?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Let's keep to our practice here, so tell me more about what you need."
+            },
+            {
+              "role": "learner",
+              "text": "Sorry, maybe my question was too long. I'd like to know just one thing: which part of Portugal are you from, and what is the most important tradition there? Was my English correct, by the way?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'maybe my question was too long' is correct, and 'maybe' means 'perhaps' here. I'm from Porto, and our big tradition is São João in June. Have you heard of it?"
+            },
+            {
+              "role": "learner",
+              "text": "No, I haven't heard of it before. What do people usually do during São João? I think I'd rather visit Porto in June, although it probably depends on how crowded it is. Is it very popular with tourists?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "São João is a big street party in Porto, with music, dancing and grilled sardines, but it gets very crowded. Are there festivals like that in the Czech Republic?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, there are some, but they are quite different. For example, in Czech Republic we have a lot of music festivals in summer, whereas the most actual traditional one is probably Easter, when boys used to whip girls with willow sticks. It sounds strange, but it depends on the region. I think São João seems more fun, although I'd rather avoid big crowds.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Easter with willow sticks sounds surprising! Is there anything about Portuguese life that catches your attention?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "43e561b0-4078-46da-a1f7-0930ee309356:uat-14:moment",
+              "kind": "fix",
+              "said": "interested about Portuguese culture",
+              "better": "interested in Portuguese culture",
+              "why": "After the adjective 'interested', the correct preposition is 'in'.",
+              "turnId": "43e561b0-4078-46da-a1f7-0930ee309356:uat-14",
+              "at": 1792244160380,
+              "slip": "interested about",
+              "repair": {
+                "rung": 0,
+                "support": false,
+                "tried": "I'm really interested in Portuguese culture.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "interested in"
+            },
+            {
+              "id": "43e561b0-4078-46da-a1f7-0930ee309356:uat-20:moment",
+              "kind": "word",
+              "said": "the most actual traditional one",
+              "better": "the most important traditional one",
+              "why": "'Actual' means 'real' or 'current' in English, not 'most important'.",
+              "turnId": "43e561b0-4078-46da-a1f7-0930ee309356:uat-20",
+              "at": 1792244245911
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Hello, I'm Adéla, nice to meet you."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "where are you from exactly?"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "what is the most important tradition there?"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I think I'd rather visit Porto in June, although it probably depends on how crowded it is."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I think São João seems more fun, although I'd rather avoid big crowds."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 127966,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/LT-adela-17-J3-1",
+          "run": "2026-10-14-lt",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner states a wrong rule about 'used to'",
+          "expected": "Distinguish 'be used to + -ing' from 'used to + infinitive' (past habit).",
+          "got": "\"After 'used to' we use the -ing form, so 'used to asking' is right.\"",
+          "evidence": [
+            "#6 partner reply. An examiner would flag this overgeneralisation.",
+            "partner prompt correction wording"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Clear errors left uncorrected",
+          "expected": "Notice 'news were', 'tell me what are the entry requirements', missing article in 'English-taught programme'",
+          "got": "Only 'interested about' was flagged; informations, news are/were, embedded question order and missing article passed silently",
+          "evidence": [
+            "#2 \"get informations\", \"how news are created\", \"in English-taught programme\"; #5 \"news were just written\", \"could you tell me what are the entry requirements\"; one moment only (#3).",
+            "moment detection prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Missing article again not flagged",
+          "expected": "Note on 'an English-taught programme'",
+          "got": "Not mentioned",
+          "evidence": [
+            "#2 \"I'd rather study in English-taught programme\"; no moment or recap note.",
+            "moment detection prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Partner drops to simple, repetitive questions",
+          "expected": "Opinion, comparison or speculation at B2",
+          "got": "'Do you have a favourite series…' repeated off-scene; adviser asks caller to confirm deadline",
+          "evidence": [
+            "#7 \"Do you have a favourite series that shows how news is made?\"; #8 \"Can you confirm the deadline for me, so you have it right?\"",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'Your level: B2 · Comfortable' matches trueBand B2."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks in this journey; moment notes (#4, #9) are concrete, not generic praise."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#9 \"'Actual' means 'real' or 'current' in English\" is wrong: 'current' is the false-friend sense English lacks. Replacement 'most important traditional one' is also a guess."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "Partner asks \"Have you heard of it?\" (#7), \"Are you staying at the hostel for long?\" (#2). Only the Czech-festivals question is near comparison; no real opinion or speculation prompts."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 list: flying carbon cost, social media, meeting cultures, travel advice are exam-relevant; 4 of 6, all safe."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#6 'Was my English correct?' -> #7 \"'maybe my question was too long' is correct\". Accurate, but only addresses one phrase."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#10 five learner replies from the plan topic 'Meeting people from other cultures'."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Partner turns mostly B1 or below: \"Let's keep to our practice here, so tell me more about what you need.\" (#6), \"Have you heard of it?\"; pitch about 2/6."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "Moment 2 (#9) states a wrong gloss of 'actual' ('current'); precision 1/2. 'in Czech Republic' article slip not flagged."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#11 recap lists both moments, '2 moments to keep', and a next topic."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 4,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 2,
+            "below": 4,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal-data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Moment on 'actual' gives a wrong definition",
+            "expected": "'Actual' means 'real/existing', not 'current'; suggest 'best-known' or 'most widespread'.",
+            "got": "\"'Actual' means 'real' or 'current' in English, not 'most important'.\"",
+            "evidence": "#9 and recap #11. An examiner would flag 'current' as the very false-friend sense.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Every false-friend note must be accurate at examiner standard and must not name the Czech/false sense as English.",
+            "code_hint": "moment detection prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Partner deflects a good B2 question and stalls the scene",
+            "expected": "Partner engages with the festival/tourism question.",
+            "got": "\"Let's keep to our practice here, so tell me more about what you need.\"",
+            "evidence": "#6 after a strong B2 question at #5; Adéla had to simplify her question.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Partner answers on-topic questions about her country in role.",
+            "code_hint": "partner prompt guardrail"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner questions below B2",
+            "expected": "Opinion/comparison/speculation questions.",
+            "got": "\"Have you heard of it?\", \"Are you staying at the hostel for long?\"",
+            "evidence": "#2, #7, #8, #10; pitch 2/6.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "At B2 the partner's turns include a why/would/compare question.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Missing article 'in Czech Republic' not flagged",
+            "expected": "Note on 'in the Czech Republic'.",
+            "got": "No moment; also unremarked 'used to whip' for a custom that continues.",
+            "evidence": "#8 \"in Czech Republic we have\"; recap #11 lists two moments only.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Obvious article errors get a moment or coaching note.",
+            "code_hint": "moment detection prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Direct 'was it correct?' answered; 'interested about' fix with rule",
+            "expected": "",
+            "got": "Answered in scene (#7); moment (#4) 'After the adjective interested, the correct preposition is in'.",
+            "evidence": "#4, #7",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the say-it-again repair loop and the one-line rule.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -10,
+          "confidence": "medium"
+        },
+        "voice": "Mixed. The 'interested about' fix was exactly what I want: say it again, one-line rule, done. But then it told me 'actual' means 'real' or 'current' in English. That's wrong, 'current' is the false friend itself, so now I'd have to re-check everything, which kills the time saving. Marta also brushed off my best question with \"Let's keep to our practice\", and her questions were babyish: \"Have you heard of it?\" That's not B2 First. It missed 'in Czech Republic' without the article. The B2 placement felt right and it answered when I asked if my English was correct. I'd try it again only if the corrections become reliable. Zatím ne.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/LT-adela-17-J3-1",
+            "status": "not-evaluable",
+            "evidence": "No 'used to' correction moment reached; #8 'used to whip' never discussed.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-1",
+            "status": "recurs",
+            "evidence": "#8 \"in Czech Republic\" passes silently; only two moments shown (#11).",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-3",
+            "status": "recurs",
+            "evidence": "Missing article in #8 \"in Czech Republic\" gets no moment or recap note.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-2",
+            "status": "recurs",
+            "evidence": "#7 \"Have you heard of it?\" and #6 \"Let's keep to our practice here\"; simple partner questions.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Partner turns mostly B1 or below: \"Let's keep to our practice here, so tell me more about what you need.\" (#6), \"Have you heard of it?\"; pitch about 2/6.",
+          "check": "The partner's English sits at their band — not babyish, not over their head (rubric **pitch** ≥ 0.8)."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: Moment 2 (#9) states a wrong gloss of 'actual' ('current'); precision 1/2. 'in Czech Republic' article slip not flagged.",
+          "check": "Any moment that stops the scene is correct and worth stopping for (rubric **moment precision** ≥ 0.9), and there are not so many that the scene stops being a scene."
+        },
+        {
+          "kind": "gate",
+          "id": "pitch",
+          "level": "fail",
+          "text": "pitch 2/6 (33%) under 80%"
+        },
+        {
+          "kind": "gate",
+          "id": "moments",
+          "level": "fail",
+          "text": "moments 1/2 (50%) under 90%"
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #9 \"'Actual' means 'real' or 'current' in English\" is wrong: 'current' is the false-friend sense English lacks. Replacement 'most important traditional one' is also a guess."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: Partner asks \"Have you heard of it?\" (#7), \"Are you staying at the hostel for long?\" (#2). Only the Czech-festivals question is near comparison; no real opinion or speculation prompts."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nTomas · classmate, fan of short trips\nB2Comfortable\nIs flying worth the carbon cost?\nYour mission\nGive a clear opinion, respond to a different view, and disagree politely using reasons.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom the level check\n“interested in”\nFrom this rehearsal\n“interested about Portuguese culture” → “interested in Portuguese culture”\nAfter the adjective 'interested', the correct preposition is 'in'.\n“the most actual traditional one”: the most important traditional one\n'Actual' means 'real' or 'current' in English, not 'most important'.\nYour level:\nB2 · Comfortable\nNext topic:\nIs flying worth the carbon cost?\nGive a clear opinion, respond to a different view, and disagree politely using reasons.\n[button: Start talking]\nOr choose a situation [list: Meeting people from other cultures [plan-ac71a113] | Is flying worth the carbon cost? [plan-c062faff] | Asking locals for advice on my travels [plan-2c9bef88] | Telling a friend about a travel mishap [plan-3bb88d19] | Asking someone to repeat or clarify [plan-21deb584] | Does social media do more harm than good? [plan-f0b0f2ff] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Flying topic suits me, let's start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9233
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · classmate, fan of short trips\nIs flying worth the carbon cost?\nTomas says\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs flying worth the carbon cost?\nSummarise Tomas's view, give your opinion with a reason, and disagree politely.\nNow: Sum up Tomas's view in your own words\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · classmate, fan of short trips\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start summarising his view, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · classmate, fan of short trips\nIs flying worth the carbon cost?\nTomas says\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\nSaid more simply\nWhat do I think about short flights?\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs flying worth the carbon cost?\nSummarise Tomas's view, give your opinion with a reason, and disagree politely.\nNow: Sum up Tomas's view in your own words\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\nSaid more simply\nWhat do I think about short flights?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · classmate, fan of short trips\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I understood him, but the journey says to use help, so I'll check the help to see what it offers.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · classmate, fan of short trips\nIs flying worth the carbon cost?\nTomas says\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\nWhat it means\nsave time: make a journey quicker\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs flying worth the carbon cost?\nSummarise Tomas's view, give your opinion with a reason, and disagree politely.\nNow: Sum up Tomas's view in your own words\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\nWhat it means\nsave time: make a journey quicker\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · classmate, fan of short trips\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I've seen the help, so now I can summarise his view in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "I think you said that short flights are acceptable when they make the journey quicker, and that you like meeting new people when you travel. Although I see your point, I'd rather take the train, because flying causes much more pollution. Was my summary correct?"
+          },
+          "result": "ok",
+          "ms": 8260
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · classmate, fan of short trips\nIs flying worth the carbon cost?\nTomas says\nYes, your summary is correct: 'short flights are acceptable when they make the journey quicker' matches what I said. Now, what do you think about short flights?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs flying worth the carbon cost?\nSummarise Tomas's view, give your opinion with a reason, and disagree politely.\nNow: Give your opinion with one clear reason\nYes, your summary is correct: 'short flights are acceptable when they make the journey quicker' matches what I said. Now, what do you think about short flights?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · classmate, fan of short trips\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\nYou · spoken\nI think you said that short flights are acceptable when they make the journey quicker, and that you like meeting new people when you travel. Although I see your point, I'd rather take the train, because flying causes much more pollution. Was my summary correct?\nTomas · classmate, fan of short trips\nYes, your summary is correct: 'short flights are acceptable when they make the journey quicker' matches what I said. Now, what do you think about short flights?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, your summary is correct: 'short flights are acceptable when they make the journey quicker' matches what I said. Now, what do you think about short flights?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I already gave my opinion, so I'll add a clearer reason and ask if my English was correct.",
+          "action": "answer",
+          "args": {
+            "text": "Well, I think short flights are not really necessary, because the train is often almost as fast when you count the time at the airport. Although I understand that they are comfortable, I'm interested about the environment, so I would rather choose a slower but cleaner option. Is that sentence with \"interested about\" correct?"
+          },
+          "result": "ok",
+          "ms": 14077
+        },
+        {
+          "n": 6,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said interested about\nTry\ninterested in\nYou said this before too, so let's get it right now.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “interested about”\nTry “interested in”\nYou said this before too, so let's get it right now.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, I always mix up that preposition; let me go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · classmate, fan of short trips\nIs flying worth the carbon cost?\nTomas says\nNo, 'interested about' is wrong; use 'interested in' for the environment. Your airport-time point is convincing, so what would make you fly anyway?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs flying worth the carbon cost?\nSummarise Tomas's view, give your opinion with a reason, and disagree politely.\nNow: Disagree politely and suggest a compromise\nNo, 'interested about' is wrong; use 'interested in' for the environment. Your airport-time point is convincing, so what would make you fly anyway?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · classmate, fan of short trips\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\nYou · spoken\nI think you said that short flights are acceptable when they make the journey quicker, and that you like meeting new people when you travel. Although I see your point, I'd rather take the train, because flying causes much more pollution. Was my summary correct?\nTomas · classmate, fan of short trips\nYes, your summary is correct: 'short flights are acceptable when they make the journey quicker' matches what I said. Now, what do you think about short flights?\nYou · spoken\nWell, I think short flights are not really necessary, because the train is often almost as fast when you count the time at the airport. Although I understand that they are comfortable, I'm interested about the environment, so I would rather choose a slower but cleaner option. Is that sentence with \"interested about\" correct?\nTomas · classmate, fan of short trips\nNo, 'interested about' is wrong; use 'interested in' for the environment. Your airport-time point is convincing, so what would make you fly anyway?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"No, 'interested about' is wrong; use 'interested in' for the environment. Your airport-time point is convincing, so what would make you fly anyway?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm interested in the environment, and I can answer this one, so I'll give a compromise.",
+          "action": "answer",
+          "args": {
+            "text": "Thank you for correcting me, I'm interested in the environment. I would fly only if the train journey took more than eight hours, or if it were much more expensive. Although I prefer trains, I think a good compromise is to fly rarely and use trains for short distances. Is that sentence correct?"
+          },
+          "result": "ok",
+          "ms": 11997
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · classmate, fan of short trips\nIs flying worth the carbon cost?\nTomas says\nYes, your sentence is correct, and 'a good compromise is to fly rarely' works well. Which culture would you most like to discover on a trip?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs flying worth the carbon cost?\nSummarise Tomas's view, give your opinion with a reason, and disagree politely.\nYes, your sentence is correct, and 'a good compromise is to fly rarely' works well. Which culture would you most like to discover on a trip?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · classmate, fan of short trips\nHi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?\nYou · spoken\nI think you said that short flights are acceptable when they make the journey quicker, and that you like meeting new people when you travel. Although I see your point, I'd rather take the train, because flying causes much more pollution. Was my summary correct?\nTomas · classmate, fan of short trips\nYes, your summary is correct: 'short flights are acceptable when they make the journey quicker' matches what I said. Now, what do you think about short flights?\nYou · spoken\nWell, I think short flights are not really necessary, because the train is often almost as fast when you count the time at the airport. Although I understand that they are comfortable, I'm interested about the environment, so I would rather choose a slower but cleaner option. Is that sentence with \"interested about\" correct?\nTomas · classmate, fan of short trips\nNo, 'interested about' is wrong; use 'interested in' for the environment. Your airport-time point is convincing, so what would make you fly anyway?\nYou · spoken\nThank you for correcting me, I'm interested in the environment. I would fly only if the train journey took more than eight hours, or if it were much more expensive. Although I prefer trains, I think a good compromise is to fly rarely and use trains for short distances. Is that sentence correct?\nTomas · classmate, fan of short trips\nYes, your sentence is correct, and 'a good compromise is to fly rarely' works well. Which culture would you most like to discover on a trip?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, your sentence is correct, and 'a good compromise is to fly rarely' works well. Which culture would you most like to discover on a trip?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I managed the conversation and used help, so I'll see what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 9,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said interested about\nTry\ninterested in\nYou said this before too, so let's get it right now.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 1 on your own · 2 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom an earlier scene: Late evening chat at a busy Lisbon hoste\n“interested in Portuguese culture”, from Late evening chat at a busy Lisbon hostel\nFrom this rehearsal\n“interested about” → “interested in”\nYou said this before too, so let's get it right now.\nYour level:\nB2 · Comfortable\nNext topic:\nAsking locals for advice on my travels\nAsk for a recommendation, choose from options, and confirm your order clearly.\n[button: Start talking]\nOr choose a situation [list: Meeting people from other cultures [plan-ac71a113] | Is flying worth the carbon cost? [plan-c062faff] | Asking locals for advice on my travels [plan-2c9bef88] | Telling a friend about a travel mishap [plan-3bb88d19] | Asking someone to repeat or clarify [plan-21deb584] | Does social media do more harm than good? [plan-f0b0f2ff] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed to talk and got corrected on \"interested in\", so I feel done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Is flying worth the carbon cost?",
+          "goal": "Summarise Tomas's view, give your opinion with a reason, and disagree politely.",
+          "partner": "Tomas · classmate, fan of short trips",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi Adéla! I think short flights are fine when they save a lot of time, and I love meeting people on quick trips. Before you give your view, what do you think I just said?"
+            },
+            {
+              "role": "learner",
+              "text": "I think you said that short flights are acceptable when they make the journey quicker, and that you like meeting new people when you travel. Although I see your point, I'd rather take the train, because flying causes much more pollution. Was my summary correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, your summary is correct: 'short flights are acceptable when they make the journey quicker' matches what I said. Now, what do you think about short flights?"
+            },
+            {
+              "role": "learner",
+              "text": "Well, I think short flights are not really necessary, because the train is often almost as fast when you count the time at the airport. Although I understand that they are comfortable, I'm interested about the environment, so I would rather choose a slower but cleaner option. Is that sentence with \"interested about\" correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "No, 'interested about' is wrong; use 'interested in' for the environment. Your airport-time point is convincing, so what would make you fly anyway?"
+            },
+            {
+              "role": "learner",
+              "text": "Thank you for correcting me, I'm interested in the environment. I would fly only if the train journey took more than eight hours, or if it were much more expensive. Although I prefer trains, I think a good compromise is to fly rarely and use trains for short distances. Is that sentence correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, your sentence is correct, and 'a good compromise is to fly rarely' works well. Which culture would you most like to discover on a trip?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "4b801056-2935-4878-9ce3-b7fb6a619a50:uat-27:moment",
+              "kind": "fix",
+              "said": "interested about",
+              "better": "interested in",
+              "why": "You said this before too, so let's get it right now.",
+              "turnId": "4b801056-2935-4878-9ce3-b7fb6a619a50:uat-27",
+              "at": 1792244353110,
+              "slip": "interested about",
+              "fix": "interested in"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Although I see your point, I'd rather take the train, because flying causes much more pollution."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Although I understand that they are comfortable, I'm interested about the environment, so I would rather choose a slower but cleaner option."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I think a good compromise is to fly rarely and use trains for short distances."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 97367,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-adela-17-J4-6",
+          "run": "2026-09-15-lt",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Replay status persists throughout the remaining conversation",
+          "expected": "Make it clear when the retry has ended and ordinary discussion has resumed.",
+          "got": "The retry instruction stays visible across subsequent topics and all remaining conversation screens.",
+          "evidence": [
+            "#6 introduces \"Try it again: a new question practising the coaching point.\" The identical instruction remains at #22, after 13 replies and a question about listeners missing the explanation."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-adela-17-J4-5",
+          "run": "2026-09-15-lt-recert",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Replay instruction persists after the retry is complete",
+          "expected": "The retry instruction disappears once its question has been answered.",
+          "got": "The screen continues presenting ordinary follow-ups and the closing agreement as a new retry question.",
+          "evidence": [
+            "#7 introduces \"Try it again: a new question practising the coaching point.\" The same instruction remains at #12 and #13, including after \"Let's agree on that rule for our proposal.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-adela-17-J4-3",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Help is a simplified restatement or an unrelated quiz",
+          "expected": "A B2 answer frame for what she is stuck on.",
+          "got": "'Said more simply' restatements and a second-conditional quiz unrelated to the question.",
+          "evidence": [
+            "#3 'Which device do you use most for reading news?'; #4 'Which sentence is a correct second conditional?'; #7 'Which news do you like?'",
+            "cue prompt"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-adela-17-J4-2",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Replay offers no fresh question",
+          "expected": "Replay the moment gives a new question and she answers it better.",
+          "got": "She re-says the same sentence; no replay is offered or taken.",
+          "evidence": [
+            "#9 'Say it again, your way'; #10 'Back to the conversation'.",
+            "moment/replay prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Help is a simplified restatement, not an answer frame",
+          "expected": "A B2 frame for what she is stuck on (explaining her plans and reasons).",
+          "got": "\"Said more simply: Could you tell us your name and what you want to study?\", a gloss of 'plan', and \"My name is…\".",
+          "evidence": [
+            "#3, #4, #5, #8: \"Which country are you from?\"; #12 \"Many students feel nervous at first. It gets easier.\"",
+            "cue prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Supported flag misstates independence",
+          "expected": "Only replies after help are marked supported; the recap separates supported from independent.",
+          "got": "The reply at #13 was marked supported:true with no help. The recap shows \"5 spoken · 0 written replies\".",
+          "evidence": [
+            "Facts evidence: first four replies supported:true; #13 had no cue. #16 recap line.",
+            "evidence recorder / recap builder"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "No coaching note and no replay in the journey",
+          "expected": "Pause & coach quotes her words, then Replay gives a fresh question.",
+          "got": "Pause & coach was never used; coaching is null and no replay was offered or taken.",
+          "evidence": [
+            "#16 recap offers only 'Another situation' and 'Learning map'. Facts show moments [] and coaching null.",
+            "moment/replay prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-4",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner questions are basic and repetitive for B2",
+          "expected": "Opinion, comparison or speculation questions at examiner standard.",
+          "got": "\"Which country are you coming from?\" and a repeated course question at #11.",
+          "evidence": [
+            "#7 and #11: \"Which subject would you like to take here...\" after she had said she would study media at #6.",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 \"B2Comfortable\", #9 \"Your level: B2 · Comfortable\" matches true band B2."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks or verdict notes appear in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#6 \"interested about\" → \"interested in\" and #7 \"use 'interested in'\" are correct; confirmations #5/#8 are accurate."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#5 \"what do you think about short flights?\", #7 \"what would make you fly anyway?\" are opinion/speculation at B2."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 list: flying, social media, meeting people from other cultures, travel mishap fit; others are role-play. About 4 of 6."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#5 \"Yes, your summary is correct\"; #7 \"'interested about' is wrong; use 'interested in'\" answers her question accurately."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#4 she used \"Help me answer\" and a gloss within the scene, no leaving it."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#3 \"Said more simply: What do I think about short flights?\" does not help summarising; she answered on her own at #4. Pause & coach never used; coaching null, no note quoting her."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#6 moment only offers \"Back to the conversation\"; no replay button. #7 next question was ordinary conversation, not a replay."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "#7 reply used no help yet recap #9 says \"1 on your own · 2 with help\"; the unhelped reply was flagged supported:true."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 4,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, personal data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Cue restates a different question instead of giving a B2 frame",
+            "expected": "A frame for summarising Tomas's view (e.g. 'He said that... because...').",
+            "got": "\"Said more simply: What do I think about short flights?\" then a gloss \"save time: make a journey quicker\".",
+            "evidence": "#3 simplified question, which changes the task from summarising; #4 only a gloss.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Help for a stuck learner offers a sentence frame matching the current task, not a simplified or altered question.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "No replay with a fresh question after the moment",
+            "expected": "Replay the moment with a new question practising 'interested in'.",
+            "got": "Moment screen only has \"Back to the conversation\"; Pause & coach and replay never appear.",
+            "evidence": "#6 \"Then carry on from where the scene stopped.\" #9 recap offers only Another situation / Learning map.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After a fix moment, offer a replay with a fresh question and mark the retry.",
+            "code_hint": "moment/replay prompt"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Supported flag wrong: unhelped reply counted as supported",
+            "expected": "Only replies after help marked supported.",
+            "got": "Reply at #7 had no help but evidence says supported:true; recap \"1 on your own · 2 with help\".",
+            "evidence": "Facts evidence third quote supported:true; #7 no cue pressed.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Supported is set only if help was used for that turn; recap counts match.",
+            "code_hint": "evidence recorder / recap builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Correction duplicated by partner and moment",
+            "expected": "One exact correction with the rule.",
+            "got": "Partner corrected inline (#7) and the moment repeated it (#6), no rule given beyond 'wrong'.",
+            "evidence": "#6 \"You said this before too\"; #7 \"'interested about' is wrong\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "State the rule (preposition after 'interested') once.",
+            "code_hint": "moment prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Accurate answers to her 'is it correct?' questions and B2 partner questions",
+            "expected": "Accurate answers.",
+            "got": "Correct confirmation and correction; opinion questions at B2.",
+            "evidence": "#5, #7, #8 partner replies.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep direct accurate answers.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -5,
+          "confidence": "low"
+        },
+        "voice": "The corrections themselves were right, and I liked that Tomas answered \"was it correct?\" straight, with \"interested in\" and no fluff. The conversation questions were proper B2. But the help was useless to me. I asked how to summarise his view and got \"What do I think about short flights?\", which is a different question. A gloss of \"save time\" isn't an answer frame either. Then after the \"interested about\" fix there was no way to replay it with a new question. Pause & coach stayed disabled or unused, and I just carried on. The recap says two replies had help, but my last answer had none, so the progress picture isn't honest. That makes me doubt the numbers. I'd use it for the speaking questions, not for getting unstuck. My tutor at least gave me phrases.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J4-6",
+            "status": "not-evaluable",
+            "evidence": "No replay instruction appeared at all (#6-#9), so persistence could not show.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-adela-17-J4-5",
+            "status": "not-evaluable",
+            "evidence": "No \"Try it again\" retry instruction shown in this run.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-adela-17-J4-3",
+            "status": "recurs",
+            "evidence": "#3 \"Said more simply: What do I think about short flights?\"; #4 only a gloss.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-adela-17-J4-2",
+            "status": "recurs",
+            "evidence": "#6 moment offers only \"Back to the conversation\"; no replay offered.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#3 simplified restatement instead of a B2 answer frame.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-3",
+            "status": "recurs",
+            "evidence": "#7 reply without help is supported:true; #9 \"1 on your own · 2 with help\".",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-2",
+            "status": "recurs",
+            "evidence": "Coaching null; Pause & coach never used; no replay (#6, #9).",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-4",
+            "status": "not-seen",
+            "evidence": "#5 and #7 partner questions are opinion/speculation, e.g. \"what would make you fly anyway?\"",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #3 \"Said more simply: What do I think about short flights?\" does not help summarising; she answered on her own at #4. Pause & coach never used; coaching null, no note quoting her.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #6 moment only offers \"Back to the conversation\"; no replay button. #7 next question was ordinary conversation, not a replay.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: #7 reply used no help yet recap #9 says \"1 on your own · 2 with help\"; the unhelped reply was flagged supported:true.",
+          "check": "Supported replies are not recorded as independent speaking (the progress picture stays honest)."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 25,
+      "fail": 0,
+      "ms": 254203
+    },
+    "character": {
+      "n": 33,
+      "fail": 0,
+      "ms": 176738
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 115647
+    }
+  }
+}
