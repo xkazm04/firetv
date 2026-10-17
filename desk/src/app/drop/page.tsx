@@ -88,7 +88,7 @@ export default function DropPage() {
       </section>
       <section><EssayShelf learnerId={who ?? undefined} refresh={tick} onOpen={(id, t) => { setPieceId(id); setText(t); setDocx(null); }} /></section>
       <section data-role="drop-twin"><h2>Your twin</h2>
-        <p>Your twin learns how you write from the messages and emails you keep, and travels as a <b>Twin Card</b>: a file any tool can load to draft in your voice. It never keeps what other people wrote to you.</p>
+        <p>Your twin learns how you write from the messages and emails you keep, and travels as a <b>Twin Card</b>: a file any tool can load to draft in your voice. The card carries up to five of your own texts as samples, you review which ones, and quoted replies from other people are left out.</p>
         {twin && twin.channels.length ? twin.channels.map((c) => (
           <div key={c.channel} className="twin-ch">
             <h3>{CH[c.channel] ?? c.channel} · {c.born ? "born" : `${twin.need - c.pieces} more to keep`}</h3>

@@ -80,6 +80,20 @@ test('the portrait: channels by format, born at three, newest first, cut at 500,
   const v = piece('t-0000000000aa', 'message', 'first take', 'second take'); assert.equal(C.portraitOf([v]).channels[0].exemplars[0].text, 'second take', 'the latest version');
   assert.deepEqual(C.levelWords({ formality: 1, warmth: 3, humor: 2, energy: 1, length: 1, directness: 2, expressiveness: 2, detail: 1 }).slice(0, 2), [{ dim: 'formality', level: 1, word: 'intimate' }, { dim: 'warmth', level: 3, word: 'cordial' }]);
 });
+test('quoted thread text is neither measured nor exported; her own lines are', () => {
+  const own = 'sure, thursday works for me. bring the contract';
+  const quoted = ['> Dear Petr, the invoice from Zorbaxis Ltd is overdue', own, 'On Mon, 5 Oct 2026, Jana Quillfeather <j@q.example> wrote:', '> secret quarantine figures', 'And a tail line from Jana'].join(String.fromCharCode(10));
+  const S = require(src('lib/rules/style.ts'));
+  assert.equal(S.ownText(quoted), own);
+  assert.deepEqual(S.styleSheet([quoted]), S.styleSheet([own]), 'the dims are measured on her own lines only');
+  assert.equal(S.styleSheet(['> only a quote']).messages, 0);
+  const ps = [piece('t-0000000000q1', 'message', quoted), ...msgs(2)];
+  const ex = C.portraitOf(ps).channels[0].exemplars.find((e) => e.pieceId === 't-0000000000q1');
+  assert.equal(ex.text, own);
+  const json = JSON.stringify(C.buildCard({ name: 'M', pieces: ps, cardId: 'x', createdAt: 'x', exportedAt: 'x' }));
+  for (const leak of ['Zorbaxis', 'quarantine', 'Quillfeather', 'tail line']) assert(!json.includes(leak), leak);
+  assert(json.includes('thursday works'));
+});
 test('canonical JSON is RFC 8785 for card values, and the spec\'s own examples reproduce their hashes', () => {
   assert.equal(C.canonical({ b: [1, 'é', null], a: { d: true, c: '\u0007"' }, u: undefined }), '{"a":{"c":"\\u0007\\"","d":true},"b":[1,"é",null]}');
   assert.throws(() => C.canonical({ x: 0.5 }), /integers only/);

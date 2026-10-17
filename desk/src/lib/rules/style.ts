@@ -46,6 +46,21 @@ const FORMAL = /\b(?:regarding|furthermore|moreover|therefore|kindly|sincerely|p
 const SLANG = /\b(?:gonna|wanna|gotta|kinda|sorta|yeah|yep|nope|ok|okay|cool|awesome|btw|tbh|imo|omg|u|ur)\b/gi;
 const LIST = /^\s*(?:[-*•]|\d+[.)])\s+/m;
 
+const WROTE_LINE = /^\s*(?:On\b.{0,200}\bwrote:|-{2,}\s*Original Message\s*-{2,}|Dne\b.{0,200}napsal\(a\)?:)\s*$/i;
+/**
+ * Only what the learner wrote: lines that start with ">" (a quoted reply) and everything from an "On ... wrote:" line
+ * onward (the quoted thread under a reply) are dropped, so what other people wrote to her is neither measured nor
+ * exported (L1-helena-46-EM5-3). A text that is only quotation comes back empty.
+ */
+export function ownText(text: string): string {
+  const keep: string[] = [];
+  for (const line of text.split(/\r?\n/)) {
+    if (WROTE_LINE.test(line)) break;
+    if (/^\s*>/.test(line)) continue;
+    keep.push(line);
+  }
+  return keep.join("\n").trim();
+}
 const words = (t: string) => t.match(/[\p{L}\p{N}']+/gu) ?? [];
 /** Sentences: split at . ! ? (and line breaks), keeping the end mark; a message with none is one sentence. */
 export function sentencesOf(text: string): string[] {
@@ -74,7 +89,7 @@ const count = (t: string, re: RegExp) => (t.match(re) ?? []).length;
 const stats = (xs: number[]) => ({ mean10: xs.length ? Math.round((10 * xs.reduce((a, b) => a + b, 0)) / xs.length) : 0, p50: pct(xs, 0.5), p90: pct(xs, 0.9) });
 
 export function styleSheet(texts: string[]): StyleSheet {
-  const msgs = texts.filter((t) => typeof t === "string" && words(t).length > 0);
+  const msgs = texts.filter((t) => typeof t === "string").map(ownText).filter((t) => words(t).length > 0);
   const sents = msgs.flatMap((m) => sentencesOf(bodyOf(m)));
   const all = msgs.join("\n");
   const openersCount = new Map<string, number>();

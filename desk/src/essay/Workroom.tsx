@@ -44,7 +44,7 @@ export function WorkroomScreen({ s, focus }: { s: Session; focus: number }) {
           <div className="h"><b>{CHANNEL_WORD[c.channel]}</b>{c.born ? <span className="born" style={{ color: CIT }}>Born</span> : <span className="wait">{w.need - c.pieces} more to keep</span>}</div>
           {c.born && <dl>{c.words.map((x) => <div key={x.dim}><dt>{x.dim}</dt><dd>{x.word}</dd></div>)}</dl>}
         </div>
-      )) : <p className="em-wr-empty">Your twin is born after {w?.need ?? 3} kept messages or emails of one kind. It learns how you write, never what you wrote for someone else.</p>}
+      )) : <p className="em-wr-empty">Your twin is born after {w?.need ?? 3} kept messages or emails of one kind. It learns how you write; the card carries up to five of your own texts, which you review on your phone, and never the quoted words of other people.</p>}
       {w?.born && <p className="em-wr-note">Download its card on the PC page: Twin Card 1.0, for any tool that writes in your voice.</p>}
     </aside>
     <div className="em-wr-acts"><div className="em-act" data-focused={at === "lenses"}>The lenses</div></div>

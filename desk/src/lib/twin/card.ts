@@ -15,7 +15,7 @@
  * canonical form of each part (SPEC 9); every number in a part is an integer.
  */
 import { createHash } from "node:crypto";
-import { styleSheet, twinDims, type Dims } from "../rules/style";
+import { ownText, styleSheet, twinDims, type Dims } from "../rules/style";
 import type { Piece } from "../session/texts";
 
 export const TWIN_BORN = 3;
@@ -45,7 +45,7 @@ export function portraitOf(pieces: Piece[], excluded: ReadonlySet<string> = new 
     return {
       channel: c, pieces: ps.length, born: ps.length >= TWIN_BORN,
       dims: ps.length ? twinDims(styleSheet(ps.map((p) => latest(p).text))) : null,
-      exemplars: ps.filter((p) => !excluded.has(p.id)).slice(0, EXEMPLARS_PER_CHANNEL).map((p) => ({ pieceId: p.id, text: cutAt(latest(p).text) })),
+      exemplars: ps.filter((p) => !excluded.has(p.id) && ownText(latest(p).text)).slice(0, EXEMPLARS_PER_CHANNEL).map((p) => ({ pieceId: p.id, text: cutAt(ownText(latest(p).text)) })),
     };
   });
   return { channels, born: channels.some((c) => c.born), pieces: pieces.length };
