@@ -50,6 +50,17 @@ test('directness reads more hedging as more indirect (Twin Card 5.1: blunt 1 ...
   const b = S.twinDims(S.styleSheet(BLUNT)).directness, h = S.twinDims(S.styleSheet(HEDGED)).directness;
   assert(b >= 1 && b <= 2, `blunt set reads ${b}`); assert(h >= 4 && h <= 5, `hedged set reads ${h}`);
 });
+test('email frames are measured apart: a greeting and sign-off alone are not ceremonial, line breaks do not shrink length or detail', () => {
+  const CASUAL = ["Hi Ana,\nI can't make it tomorrow, sorry. Can we do next week instead?\nThanks,\nMartin", "Hey Tom,\nyeah that's fine, I'll bring the charger and we can sort it out at the pub.\nCheers,\nMartin", "Hi Jana,\nthanks, I'm on it. I'll send the files tonight, it's no trouble at all.\nThanks,\nMartin"];
+  const LONG = ['Dear Ms Novak,\nThank you for your message regarding the schedule. I would like to confirm that the committee will meet on Thursday at ten, and furthermore that the revised budget, which was attached to the earlier notice, will be discussed in full before any vote is taken.\nKind regards,\nPetr Svoboda', 'Dear Mr Dvorak,\nPlease find attached the revised report. Kindly review the findings in the second section, because the figures there change the conclusion that was reached in the earlier draft, and let me know whether further changes are required before it is issued.\nSincerely,\nPetr Svoboda', 'Dear team,\nFurthermore, the budget review has been moved to Monday. I would appreciate your attendance, since several of the decisions cannot be taken without every department being represented at the table.\nBest regards,\nPetr Svoboda'];
+  assert.equal(S.bodyOf(CASUAL[0]), "I can't make it tomorrow, sorry. Can we do next week instead?");
+  const framed = S.twinDims(S.styleSheet(['Hi,\nok\nThanks,\nMartin', 'Hi,\nyes\nThanks,\nMartin', 'Hi,\nfine\nThanks,\nMartin']));
+  assert(framed.formality <= 4, `a frame alone reads ${framed.formality}`);
+  const c = S.twinDims(S.styleSheet(CASUAL)), l = S.twinDims(S.styleSheet(LONG));
+  assert(c.formality <= 2, `casual emails read ${c.formality}`); assert(c.length >= 2, 'a casual email is more than a one-liner'); const bare = (xs) => S.twinDims(S.styleSheet(xs.map(S.bodyOf))); assert.equal(c.detail, bare(CASUAL).detail, 'the frame does not move detail'); assert.equal(l.detail, bare(LONG).detail);
+  assert(l.formality >= 4, `formal emails read ${l.formality}`); assert(l.length >= 3 && l.detail >= 3, `long formal emails read length ${l.length}, detail ${l.detail}`);
+  assert(S.styleSheet(LONG).wps.p90 > 30 && S.styleSheet(CASUAL).sentences === 5, 'sentences are the body sentences, not the signature lines');
+});
 test('copyRun finds a lifted run of eight words; withinBands reads length against the writer\'s range', () => {
   const src = 'Please find attached the revised report and let me know if anything else is needed.';
   assert.equal(S.copyRun(src, 'Hi! please find attached the revised report and let me know soon.', 8), 'please find attached the revised report and let');

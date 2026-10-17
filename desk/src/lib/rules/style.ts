@@ -40,6 +40,7 @@ const EMOJI = /\p{Extended_Pictographic}|:\)|:\(|:D|;\)|<3/gu;
 const LAUGH = /\b(?:haha+|hehe+|lol|lmao|rofl)\b/gi;
 const GREETING = /^(?:hi|hey|hello|dear|good (?:morning|afternoon|evening)|hiya|yo)\b/i;
 const SIGNOFF = /\b(?:best(?: regards)?|kind regards|regards|cheers|thanks|thank you|sincerely|all the best|talk soon|speak soon|see you|bye)[,!.]?\s*(?:\n.*)?$/i;
+const SIGNOFF_LINE = /^(?:best(?: regards)?|kind regards|warm regards|regards|cheers|thanks|thank you|sincerely|yours(?: sincerely| faithfully)?|all the best|talk soon|speak soon|see you|bye)\b/i;
 const THANKS = /\b(?:thanks|thank you|thx|ty|grateful|appreciate)\b/gi;
 const FORMAL = /\b(?:regarding|furthermore|moreover|therefore|kindly|sincerely|please find|hereby|accordingly|pursuant|attached|herewith|i would like to|we would like to)\b/gi;
 const SLANG = /\b(?:gonna|wanna|gotta|kinda|sorta|yeah|yep|nope|ok|okay|cool|awesome|btw|tbh|imo|omg|u|ur)\b/gi;
@@ -50,6 +51,21 @@ const words = (t: string) => t.match(/[\p{L}\p{N}']+/gu) ?? [];
 export function sentencesOf(text: string): string[] {
   return text.split(/(?<=[.!?…])\s+|\n+/).map((s) => s.trim()).filter((s) => words(s).length > 0);
 }
+/**
+ * A message without its frame: a greeting line ("Dear Anna,") at the top and the sign-off with the signature lines
+ * under it ("Kind regards," then "Petr") at the bottom are measured by the greeting and signoff rates, not as sentences.
+ * Line breaks would make each a sentence of one to three words and drag the medians to "headline" (L1-helena-46-EM5-3).
+ * A message that is only a frame keeps it.
+ */
+export function bodyOf(text: string): string {
+  const lines = text.trim().split("\n").map((l) => l.trim());
+  if (lines.length > 1 && GREETING.test(lines[0]) && words(lines[0]).length <= 5 && !/[.!?]$/.test(lines[0])) lines.shift();
+  for (let i = Math.max(1, lines.length - 3); i < lines.length; i++) {
+    if (SIGNOFF_LINE.test(lines[i]) && words(lines[i]).length <= 5) { lines.length = i; break; }
+  }
+  const body = lines.join("\n");
+  return words(body).length ? body : text;
+}
 /** A text's sentence lengths in words, measured as the sheet's wps is: sentencesOf, then this file's word count. */
 export const sentenceWords = (text: string): number[] => sentencesOf(text).map((s) => words(s).length);
 const pct = (xs: number[], q: number) => { if (!xs.length) return 0; const s = [...xs].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.floor(q * (s.length - 1)))]; };
@@ -59,7 +75,7 @@ const stats = (xs: number[]) => ({ mean10: xs.length ? Math.round((10 * xs.reduc
 
 export function styleSheet(texts: string[]): StyleSheet {
   const msgs = texts.filter((t) => typeof t === "string" && words(t).length > 0);
-  const sents = msgs.flatMap(sentencesOf);
+  const sents = msgs.flatMap((m) => sentencesOf(bodyOf(m)));
   const all = msgs.join("\n");
   const openersCount = new Map<string, number>();
   for (const s of sents) { const w = words(s)[0]?.toLowerCase(); if (w) openersCount.set(w, (openersCount.get(w) ?? 0) + 1); }
@@ -85,8 +101,8 @@ const band = (v: number, cuts: [number, number, number, number]): 1 | 2 | 3 | 4 
 /** The eight dimensions (Twin Card 5.1), from a sheet. The cut points are the host's first guess, to tune on real writers. */
 export function twinDims(s: StyleSheet): Dims {
   const r = s.rates;
-  // formality: formal words, greetings and sign-offs up; contractions, slang, lowercase starts and emoji down
-  const formalScore = r.formalWord * 4 + r.greeting / 4 + r.signoff / 4 - r.contraction * 2 - r.slang * 3 - r.lowerStart / 4 - r.emoji / 5;
+  // formality: formal words up, greetings and sign-offs a little (alone they make a letter formal, never ceremonial); contractions, slang, lowercase starts and emoji down
+  const formalScore = r.formalWord * 4 + r.greeting / 40 + r.signoff / 40 - r.contraction * 2 - r.slang * 3 - r.lowerStart / 4 - r.emoji / 5;
   let formality = band(formalScore, [-150, -40, 40, 150]);
   const warmth = band(r.thanks / 3 + r.emoji / 3 + r.greeting / 10 + r.exclaim / 4, [40, 120, 250, 450]);
   let humor = band(r.laugh + r.emoji / 3, [20, 80, 200, 400]);
