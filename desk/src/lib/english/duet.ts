@@ -30,7 +30,7 @@ import { copiesShown } from "./credit";
 import { audienceAllowed, defaultPreferences } from "./curriculum";
 import { LOST_SCENE } from "./lostfound";
 import { validateObservations } from "./rules";
-import { shownLines } from "./review";
+import { ownLines, shownLines } from "./review";
 import type { Conversation, ConversationTurn, Duet, EnglishEvidence, EnglishPreferences, EnglishScene, EvidenceMode, SkillId } from "./types";
 
 export type Speaker = Duet["beat"];
@@ -109,7 +109,7 @@ export const coStarLines = (c: Conversation): string[] => c.turns.filter(t => t.
  */
 export function learnerBeat(c: Conversation, reply: string, mode: EvidenceMode, turnId: string, commandId: string): Conversation {
   const shown = [...c.turns.filter(t => t.role === "partner").slice(-1).map(t => t.text), ...coStarLines(c).slice(-1)];
-  const held: ConversationTurn = { id: turnId, role: "learner", text: reply, mode, supported: c.supported || copiesShown(reply, shown) };
+  const held: ConversationTurn = { id: turnId, role: "learner", text: reply, mode, supported: c.supported || copiesShown(reply, shown, ownLines(c)) };
   return { ...c, duet: { ...c.duet!, beat: "costar", held }, capture: false, quizOpen: false, error: "", commands: [...c.commands, commandId].slice(-100) };
 }
 
@@ -141,8 +141,8 @@ export function judgedAs(c: Conversation, pair: DuetPair): Conversation {
 export function coStarEvidence(c: Conversation, pair: DuetPair, raw: unknown, skills: SkillId[], at: number): EnglishEvidence[] {
   if (!c.duet?.coStarLearnerId) return [];
   const shown = [...shownLines(judgedAs(c, pair)), pair.learner.text];
-  const supported = c.supported || copiesShown(pair.coStar.text, shown);
-  return validateObservations(raw, { episodeId: c.id, turnId: pair.coStar.id, sceneId: c.sceneId, at, mode: pair.coStar.mode, supported, text: pair.coStar.text, shown, skills });
+  const supported = c.supported || copiesShown(pair.coStar.text, shown, ownLines(c, "costar"));
+  return validateObservations(raw, { episodeId: c.id, turnId: pair.coStar.id, sceneId: c.sceneId, at, mode: pair.coStar.mode, supported, text: pair.coStar.text, shown, own: ownLines(c, "costar"), skills });
 }
 
 /** What every tutor call's input carries in a duet: the co-star's name, as data. */

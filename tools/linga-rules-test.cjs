@@ -3282,3 +3282,43 @@ test('supported flag 5: cert credit is unchanged for genuinely unhelped evidence
  assert.equal(evidenceProgress(ev,'request'),'independent','two unhelped typed replies are "on your own", as before');
  assert.equal(evidenceProgress(ev.filter(e=>e.supported),'request'),'with-help','a helped reply alone is only "with help"');
 });
+
+// ---- lt-swap-2/recert-2/LT-jana-29-J3-2: a run of a shown line the learner already said herself is her own words, not a read-back
+const JANA=[
+ 'Thanks for joining the review, Owen. I\'d like to hear your take on the new checkout flow. Which part stood out to you, and why?',
+ 'Thanks for having me. To be fair, I really like that you cut the form down to a single page, because the old one was a bit of a maze. I\'d push back on one thing though, the hidden promo code field, but let me start with what works.',
+ 'Fair point, and I\'m glad the single page landed well. The promo code field is worth discussing. Where else do you feel the design is holding back?',
+ 'Well, my main concern is the promo code field. When it\'s sitting there in the middle of the page, people leave to go and look for a code, and then they often don\'t come back. So I\'d suggest collapsing it behind a small link, like "Have a code?", so it doesn\'t distract the people who don\'t have one. Other than that, I think the error messages on the picture are a bit vague too.',
+ 'Collapsing it sounds sensible, since shoppers leaving to hunt for a code is a real drop-off risk. You mentioned vague error messages too, so is there another spot where you\'d want the design to be bolder?',
+ 'Good question. To be fair, I\'d say the error messages are the other spot. Right now they just say "something went wrong", which doesn\'t help anyone. I\'d push for specific messages next to each field, in plain language.',
+ 'Let\'s do it. Who could we invite first?'];
+const JANA_MOMENT={kind:'word',said:'on the picture',better:'on the screen',why:'the screens shoppers see during checkout'};
+async function janaScene(){
+ fresh();const lines=[JANA[2],JANA[4],JANA[6]];let n=0;
+ answer=async req=>{const p=JSON.parse(req.prompt);return {json:p.submittedReply?{reply:lines[n++],observations:[],...(n===2?{moment:JANA_MOMENT}:{})}:{title:'Design review',goal:'Give your take on the checkout.',opening:JANA[0]},provider:'test',ms:1};};
+ await command('start',{sceneId:'booking',replace:true});
+ await reply(JANA[1]);await reply(JANA[3]);
+ assert(getSession().conversation.moment,'the moment stops the scene after reply 2');await command('moment-done');
+ await reply(JANA[5]);
+}
+const learnerFlags=()=>getSession().conversation.turns.filter(t=>t.role==='learner').map(t=>t.supported);
+test('J3 case 1: "the promo code field" was the learner\'s own word in reply 1; saying it again in reply 2 is not a read-back (conversation.ts copiesShown over her earlier replies)',async()=>{
+ await janaScene();
+ assert.deepEqual(learnerFlags(),[false,false,false]);
+ await command('finish');
+ const r=view().lingaView(getSession(),{}).recap;assert.equal(r.independent,3);assert.equal(r.supported,0);
+});
+test('J3 case 2: the teeth stay: a run of a partner line she never said is a read-back; so is the fix, the cue and the coached line; any help rung supports the next reply',async()=>{
+ const {copiesShown,creditOf}=require(path.join(root,'src/lib/english/credit.ts'));
+ const shown=['Fair point. The promo code field is worth discussing.'];
+ assert.equal(copiesShown('I think the promo code field matters',shown,[]),true,'never said by her: a read-back');
+ assert.equal(copiesShown('I think the promo code field matters',shown,['the hidden promo code field']),false,'said by her earlier: her own');
+ assert.equal(copiesShown('The promo code field is worth discussing',shown,['the hidden promo code field']),true,'the part she did not say is still a read-back');
+ assert.equal(copiesShown('on the screen',['on the screen'],['on the picture']),true,'under four words wholly inside a shown line');
+ assert.equal(copiesShown('on the screen',['on the screen'],['I said on the screen once']),false,'under four words she said herself');
+ assert.equal(creditOf('the promo code field is bad','describe',shown,['the hidden promo code field']),'own');
+ assert.equal(creditOf('the promo code field is bad','describe',shown,[]),'helped');
+ // the fix read back after the moment is still supported (K2 case 2 pins the same through the scene); a cue sets the flag, a rung sets it
+ await booked(said('Which date do you need?',{help:LADDER}));await reply();await command('cue');await reply('Friday, please.');
+ assert.equal(learnerFlags().at(-1),true,'a help rung supports the next reply');
+});

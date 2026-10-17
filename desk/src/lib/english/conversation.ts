@@ -17,7 +17,7 @@ import { EngineError } from "../engines/types";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
-import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, partnerLines, reuseOf, reviewOf, shownLines, askedAboutFor, slipsAgain, SLIP_AGAIN_TASK, usedLine, fossilOf, fossilMoment, FOSSIL_TASK } from "./review";
+import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, ownLines, partnerLines, reuseOf, reviewOf, shownLines, askedAboutFor, slipsAgain, SLIP_AGAIN_TASK, usedLine, fossilOf, fossilMoment, FOSSIL_TASK } from "./review";
 import { findKey, KNOWN_FALSE_FRIENDS, slipOf } from "./slip";
 import { checkLine, forgetLine, heldLine, holdLine, keepLine, LINE_MAX, lineBack, lineFound, lineTaught, OFFER_BANDS, offerLine, quizLine, showsLine, type HiddenLine } from "./line";
 import { afterTry, forget, heldFor, judgeTry, remember, revealed, triedLine, withhold } from "./repair";
@@ -471,9 +471,9 @@ export async function englishCommand(raw:unknown){
     if(action==="turn"){
       const partnerReply=partnerSays(c,result.json.reply,undefined,result.json.help),replyHeld=partnerReply===line(result.json.reply),turnId=pair?pair.learner.id:`${c.id}:${commandId}`;
       const skills=[...new Set([c.focusSkill,c.reviewSkill??"repair","repair"])] as SkillId[];
-      const observations=validateObservations(result.json.observations,{episodeId:c.id,turnId,sceneId:c.sceneId,at:Date.now(),mode,supported:judged.supported,text:reply,shown:shownLines(judged),skills});
+      const observations=validateObservations(result.json.observations,{episodeId:c.id,turnId,sceneId:c.sceneId,at:Date.now(),mode,supported:judged.supported,text:reply,shown:shownLines(judged),own:ownLines(c),skills});
       // a reply read back from a line the scene showed (the partner's, the cue, a moment's fix, the coached line) is supported
-      const copied=copiesShown(reply,shownLines(c));
+      const copied=copiesShown(reply,shownLines(c),ownLines(c));
       // a fossil's moment is code's (LG-57) and wins over the model's: a repeated error is the one that matters most
       const parsed=fossil?fossilMoment(fossil,turnId):mayStop?parseMoment(result.json.moment,reply,turnId):null;
       const moment=parsed&&[parsed.said,parsed.better,parsed.why].every(x=>audienceSafe(c,x)!==null)?parsed:null;

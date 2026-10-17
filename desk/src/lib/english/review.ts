@@ -104,6 +104,8 @@ export function findPhrase(text: string, phrase: string): string | null {
  * Everything this scene has already put in front of the learner: the partner's lines, the cue, its moments, the coach.
  * A fix the learner repaired before it was shown (K2, repair.ts) was never in front of them: the TV showed their own line.
  */
+/** What `role` said in earlier turns of this scene: their own words, which a later reply may repeat without reading anything back (credit.ts copiesShown). */
+export const ownLines = (c: Conversation, role: "learner" | "costar" = "learner"): string[] => c.turns.filter(t => t.role === role).map(t => t.text);
 export const shownLines = (c: Conversation): string[] => [...c.turns.filter(t => t.role === "partner").map(t => t.text), c.cue, ...(c.moments ?? []).map(m => m.repair?.selfRepaired ? "" : m.better), c.coaching?.after ?? ""];
 function alreadyShown(c: Conversation, phrase: string): boolean {
   return shownLines(c).some(x => !!x && findPhrase(x, phrase) !== null);
