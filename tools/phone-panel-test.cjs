@@ -996,7 +996,7 @@ test('the Essay box starts and resets empty; the sample is only a placeholder; a
  assert.equal(run('',pasted).prevented,true);
  assert.equal(run('','one line only').prevented,false,'a paste without a blank line is left to the browser');
  // reading an empty box stays refused
- assert.match(src,/disabled=\{busy \|\| notice !== null \|\| !essay\.trim\(\)\} onClick=\{analyseParagraph\}/,'an empty box cannot be sent');
+ assert.match(src,/disabled=\{busy \|\| notice !== null \|\| !essay\.trim\(\)\} onClick=\{paras\.length === 1 && pieceId \? \(\) => void readPiece\(true\) : analyseParagraph\}/,'an empty box cannot be sent');
 });
 
 test('a rewrite the desk accepted is written back into the phone paragraph; one it cannot place stays on the desk',()=>{
