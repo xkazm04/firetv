@@ -1664,3 +1664,14 @@ test('EM1-1: a PEEL Explain sentence that explains or links back is not a fault;
  assert.equal(f.find(x=>x.n===3).verdict,'faulty','a closing opinion that neither explains nor links back is still unbacked');
  assert.ok(f.every(x=>x.verdict!=='faulty'||x.note===RE.decideVerdicts('evidence',bare,new Set([1,2,3]),[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'opinion',note:'Write: Mornings hurt.'}]).find(y=>y.n===x.n).note),'a faulty note is code\'s line whatever the model said');
 });
+test('EM1-1: a clean four-sentence PEEL has no fault under Evidence or Structure; an Explain with no evidence before it is still faulted',()=>{
+ const peel='Children should walk to school. A 2020 survey found that walkers scored higher on focus tests. This shows that walking helps them focus. That is why more children should walk.';
+ const ss=RE.splitSentences(peel),all=new Set(ss.map(s=>s.n));
+ const st=RE.decideVerdicts('structure',ss,all,[{n:1,job:'claim'},{n:2,job:'evidence',supports:1},{n:3,job:'claim'},{n:4,job:'link'}]);
+ assert.ok(!st.some(x=>x.verdict==='faulty'),JSON.stringify(st));
+ const ev=RE.decideVerdicts('evidence',ss,all,[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'opinion'},{n:4,support:'opinion'}]);
+ assert.ok(!ev.some(x=>x.verdict==='faulty'),JSON.stringify(ev));
+ const none=RE.splitSentences('Children should walk to school. This shows that walking helps them focus.');
+ const f=RE.decideVerdicts('evidence',none,new Set([1,2]),[{n:1,support:'opinion'},{n:2,support:'opinion'}]);
+ assert.equal(f.find(x=>x.n===2).verdict,'faulty','an Explain with no evidence before it is still unbacked');
+});

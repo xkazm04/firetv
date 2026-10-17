@@ -12,7 +12,7 @@ export interface Sentence { n: number; text: string; words: number; connectors: 
 
 const CONNECTORS = /\b(because|therefore|however|although|which means|so that|as a result|for example|for instance|but|since|whereas|in contrast|this suggests|which suggests)\b/gi;
 const EVIDENCE = /\b(\d+%?|per cent|percent|research|study|studies|report(ed|s)?|found|data|measured|according to|for example|for instance)\b/i;
-const LINK = /^(therefore|so|this (means|shows|suggests)|as a result|in conclusion|which is why)\b/i;
+const LINK = /^(therefore|so|this (means|shows|suggests)|as a result|in conclusion|which is why|that is why)\b/i;
 
 /** Short forms whose full stop does not end a sentence, even when a capital follows. */
 const ABBREVIATION = /\b(?:Dr|Mr|Mrs|Ms|Prof|St|etc|eg|ie|e\.g|i\.e|vs)\.$/i;
@@ -383,11 +383,12 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
     const p = paraOf(s);
     return lastPara - firstPara >= 2 && (p === firstPara || p === lastPara) && sentences.some((t) => { const q = paraOf(t); return q !== p && markedIn(q); });
   };
-  // a paragraph's closing sentence after its own marked evidence that explains it or links back is its Explain (PEEL), not a bare claim
+  // a sentence after the paragraph's last marked evidence that explains it or links back is its Explain or Link (PEEL), not a bare claim
   const closesAfterEvidence = (s: Sentence) => {
     if (!LINK.test(s.text) && !s.connectors.some((c) => EXPLAINS.has(c))) return false;
     const mine = sentences.filter((t) => paraOf(t) === paraOf(s));
-    return mine[mine.length - 1] === s && mine.some((t) => t.n < s.n && marked(t) && (lens === "evidence" ? ok(t.n)?.support === "checkable" : ok(t.n)?.job === "evidence"));
+    const proofs = mine.filter((t) => marked(t) && (lens === "evidence" ? ok(t.n)?.support === "checkable" : ok(t.n)?.job === "evidence"));
+    return proofs.length > 0 && s.n > proofs[proofs.length - 1].n;
   };
   const named = new Set<number>(), direct = new Set<number>(), strongClaims = new Set<number>();
   if (lens === "structure") {
