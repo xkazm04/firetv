@@ -506,6 +506,20 @@ test('UD-7: a kind essay paragraph from a learner who has not noticed: 428 TEXT_
   assert.equal(seen.length, 0); assert.deepEqual(getSession().jobs, {}, 'no job'); assert.equal(status(), 'before');
 });
 
+// ---- recert-4 L1-helena-46-EM1-7: a one-paragraph piece opened from the shelf and changed reads as a new version of the same id ----
+test('EM1-7: a one-paragraph kept piece, changed and read as a piece, leaves the shelf one version richer under the same id', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); texts.markNoticed('ema');
+  const ONE = 'Cats sleep a lot. They do it in the sun.';
+  seen = []; answer = perParagraph(faultyAt([]));
+  const first = await (await post({ kind: 'piece', text: ONE, type: 'structure', keep: true })).json();
+  const id = first.piece.pieceId; assert.equal(texts.getPiece('ema', id).versions.length, 1);
+  const r = await post({ kind: 'piece', text: ONE + ' They also purr.', type: 'structure', keep: true, pieceId: id });
+  assert.equal(r.status, 200); assert.equal((await r.json()).piece.pieceId, id);
+  assert.equal(texts.getPiece('ema', id).versions.length, 2);
+  const phone = fs.readFileSync(path.join(root, 'src/app/phone/page.tsx'), 'utf8');
+  assert.match(phone, /paras\.length === 1 && pieceId \? \(\) => void readPiece\(true\) : analyseParagraph/, 'the phone sends an opened one-paragraph piece down the piece path');
+});
+
 // ---- recert-4 L1-daniel-15-EM3-1: a piece reading on the TV is walked, never replaced by a one-paragraph read ----
 test('EM3-1: after a piece read, Next paragraph posts essay.at for the next paragraph and "This paragraph only" is not offered for a read one', () => {
   const phone = fs.readFileSync(path.join(root, 'src/app/phone/page.tsx'), 'utf8');

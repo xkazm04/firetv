@@ -734,7 +734,7 @@ export default function Phone() {
             {stranded > 0 && <p className="pnote" data-role="essay-rewrites-stay" aria-live="polite">{rewriteStaysLine(stranded)}</p>}
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()))}>Dictate</button>
-            {!pieceCovers(pix) && <button className="pbtn" data-role="essay-analyse-one" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || notice !== null || !essay.trim()} onClick={analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button>}</div>
+            {!pieceCovers(pix) && <button className="pbtn" data-role="essay-analyse-one" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || notice !== null || !essay.trim()} onClick={paras.length === 1 && pieceId ? () => void readPiece(true) : analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button>}</div>
           <EssayShelf learnerId={s?.learner?.id} refresh={shelfTick} onOpen={openKept} /></div>}
 
         {screen === "tonight" && s && <div className="pscreen"><h3>Tonight</h3>
