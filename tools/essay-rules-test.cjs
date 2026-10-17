@@ -1626,7 +1626,7 @@ test('E9-7: desk/essay.ts no longer parses a summary or asks for one',()=>{
  assert.doesNotMatch(src,/Start with paragraph \(\d\+\)/,'the kept-summary regex is gone');
  assert.doesNotMatch(src,/summary sentence/);assert.doesNotMatch(src,/summaries/);
 });
-// ---- UAT 2026-10-17 recert: EM3-1 (thesis and conclusion) is not a false fault ----
+// ---- UAT 2026-10-17 recert: EM3-1 (thesis and conclusion) and EM1-1 (PEEL's Explain) are not false faults ----
 const ESSAY4='Schools should start later.\n\nSleep matters for learning. Research found that teenagers gain 34 minutes of sleep.\n\nHomework is too long. It ruins evenings.\n\nSo schools should change.';
 test('EM3-1: the thesis and the conclusion of a four-paragraph essay with body evidence are not faulty; Start with lands in a body paragraph',()=>{
  const ss=RE.splitSentences(ESSAY4);assert.deepEqual(ss.map(s=>s.para),[0,1,1,2,2,3]);
@@ -1638,4 +1638,16 @@ test('EM3-1: the thesis and the conclusion of a four-paragraph essay with body e
  assert.deepEqual(ev.map(x=>[x.n,x.verdict]),[[1,'neutral'],[2,'neutral'],[3,'strong'],[4,'faulty'],[5,'faulty'],[6,'neutral']],'a body paragraph with no evidence is still faulty');
  const bare=RE.decideVerdicts('evidence',ss,new Set(ss.map(s=>s.n)),ss.map(s=>({n:s.n,support:'opinion'})));
  assert.ok(bare.every(x=>x.verdict==='faulty'),'no marked evidence anywhere: every opinion stays faulty');
+});
+test('EM1-1: a PEEL Explain sentence that explains or links back is not a fault; a bare closing claim still is',()=>{
+ const peel='Schools should start later. Research found that teenagers gain 34 minutes of sleep. This means pupils concentrate better in the first lesson.';
+ const ss=RE.splitSentences(peel),all=new Set(ss.map(s=>s.n));
+ const st=RE.decideVerdicts('structure',ss,all,[{n:1,job:'claim'},{n:2,job:'evidence',supports:1},{n:3,job:'claim'}]);
+ assert.ok(!st.some(x=>x.verdict==='faulty'),JSON.stringify(st));
+ const ev=RE.decideVerdicts('evidence',ss,all,[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'opinion'}]);
+ assert.ok(!ev.some(x=>x.verdict==='faulty'),JSON.stringify(ev));
+ const bare=RE.splitSentences('Schools should start later. Research found that teenagers gain 34 minutes of sleep. Mornings are awful.');
+ const f=RE.decideVerdicts('evidence',bare,new Set([1,2,3]),[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'opinion'}]);
+ assert.equal(f.find(x=>x.n===3).verdict,'faulty','a closing opinion that neither explains nor links back is still unbacked');
+ assert.ok(f.every(x=>x.verdict!=='faulty'||x.note===RE.decideVerdicts('evidence',bare,new Set([1,2,3]),[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'opinion',note:'Write: Mornings hurt.'}]).find(y=>y.n===x.n).note),'a faulty note is code\'s line whatever the model said');
 });

@@ -257,6 +257,9 @@ export const LONG_SENTENCE_WORDS = 35;
 /** The connectors that turn a sentence back on what it conceded: the only words that make an Argument turn real. */
 const CONTRAST = new Set(["but", "however", "although", "whereas", "in contrast"]);
 
+/** The connectors that explain what the evidence before them shows: a sentence that closes a paragraph with one is its Explain. */
+const EXPLAINS = new Set(["because", "therefore", "since", "which means", "so that", "as a result", "this suggests", "which suggests"]);
+
 /** What the model reports about one sentence, per lens. Nothing here is a verdict. */
 export const JOBS = ["claim", "evidence", "link", "context", "none"] as const;
 export const SIDES = ["pushes", "against", "wanders", "neutral"] as const;
@@ -380,6 +383,12 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
     const p = paraOf(s);
     return lastPara - firstPara >= 2 && (p === firstPara || p === lastPara) && sentences.some((t) => { const q = paraOf(t); return q !== p && markedIn(q); });
   };
+  // a paragraph's closing sentence after its own marked evidence that explains it or links back is its Explain (PEEL), not a bare claim
+  const closesAfterEvidence = (s: Sentence) => {
+    if (!LINK.test(s.text) && !s.connectors.some((c) => EXPLAINS.has(c))) return false;
+    const mine = sentences.filter((t) => paraOf(t) === paraOf(s));
+    return mine[mine.length - 1] === s && mine.some((t) => t.n < s.n && marked(t) && (lens === "evidence" ? ok(t.n)?.support === "checkable" : ok(t.n)?.job === "evidence"));
+  };
   const named = new Set<number>(), direct = new Set<number>(), strongClaims = new Set<number>();
   if (lens === "structure") {
     for (const s of sentences) { const t = linkOf(s); if (t !== undefined) { named.add(t); if (ok(s.n)?.job === "evidence" && marked(s)) direct.add(t); } }
@@ -405,6 +414,7 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
         else if (read.support === "opinion") {
           const para = paraOf(s), marks = markedChecks(para);
           if (!marks.length) { if (bodyProves(s)) verdict = "neutral"; else { verdict = "faulty"; check = CHECKS.opinion; } }
+          else if (closesAfterEvidence(s) && !backed.has(s.n)) verdict = "neutral";
           else if (backed.has(s.n) || !marks.some((t) => backsOf(t) !== undefined)) verdict = "neutral";
           else {
             const rest = sentences.slice(at + 1).filter((t) => paraOf(t) === para), stop = rest.findIndex((t) => ok(t.n)?.support === "opinion");
@@ -420,7 +430,7 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
         const between = stop < 0 ? rest : rest.slice(0, stop);
         const blind = !named.has(s.n) && between.some((t) => ok(t.n)?.job === "evidence" && marked(t) && linkOf(t) === undefined);
         if (strongClaims.has(s.n)) verdict = "strong";
-        else if (blind || bodyProves(s)) verdict = "neutral";
+        else if (blind || bodyProves(s) || closesAfterEvidence(s)) verdict = "neutral";
         else if (!unsupportedSeen) { verdict = "faulty"; check = CHECKS.unsupported; unsupportedSeen = true; }
       } else if (read.job === "evidence") verdict = marked(s) ? "strong" : "neutral";
       else if (read.job === "link") {
