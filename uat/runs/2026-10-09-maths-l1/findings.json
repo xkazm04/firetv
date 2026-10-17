@@ -95,12 +95,12 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "A snapped page whose items read as Calculus specs (specFromQuestion) can be marked from a photo of his working, by the same code judge as a desk set, items that do not read being \"not sure\".",
     "l2_priority": "precondition: vision host (env.md, Math Buddy) — none until built; then page read rate and handwriting read on a real MA1 sheet.",
-    "recertify_run": "2026-10-09-maths-l1/recert-4",
+    "recertify_run": "2026-10-09-maths-l1/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recertify_evidence": "cited lines re-found at c4893c88; phone/page.tsx changed since 67581c54 (fc8a5151, ede841e4, 087c9d13) and the cite moved with it (same line content)",
     "recurred_as": "L1-matyas-19-MB1-1"
   },
   {
@@ -1037,12 +1037,12 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "A teacher signs off the tier-2 denominator range for cz 6. ročník",
     "l2_priority": "Set fit judged by a Czech maths teacher on 3 drawn sets",
-    "recertify_run": "2026-10-09-maths-l1/recert-4",
+    "recertify_run": "2026-10-09-maths-l1/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recertify_evidence": "cited lines re-found at c4893c88; no commit since 67581c54 touched the cited files",
     "recurred_as": "L1-nela-12-MB2-1"
   },
   {
@@ -1071,12 +1071,12 @@
     "code_check": "by-design",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "Owner ruling: either the add/sub questions say \"simplest form\" (unsure, not wrong, for 6/4), or the lesson drops \"then simplify\"",
     "l2_priority": "Owner/teacher ruling on unsimplified results for cz",
-    "recertify_run": "2026-10-09-maths-l1/recert-4",
+    "recertify_run": "2026-10-09-maths-l1/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recertify_evidence": "cited lines re-found at c4893c88; no commit since 67581c54 touched the cited files",
     "recurred_as": "L1-nela-12-MB2-2"
   },
   {
@@ -1298,11 +1298,11 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "A school-year pick on the profile, or the cut-off applied",
-    "recertify_run": "2026-10-09-maths-l1/recert-4",
+    "recertify_run": "2026-10-09-maths-l1/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 67581c54; no commit since 00f5db95 touched the cited files",
+    "recertify_evidence": "cited lines re-found at c4893c88; no commit since 67581c54 touched the cited files",
     "recurred_as": "L1-nela-12-MB5-1"
   },
   {
@@ -1857,12 +1857,12 @@
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "The draft paper persists on the phone until sent.",
     "l2_priority": "Lock the phone mid-entry on iOS/Android browsers; does the draft survive?",
-    "recertify_run": "2026-10-09-maths-l1/recert-4",
+    "recertify_run": "2026-10-09-maths-l1/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 67581c54; the cite at old :543 sits in a changed hunk and was re-read by hand: 258cc1bf added the system prop to the PaperPanel line, and the rows are still React state (paperRows, :71)",
+    "recertify_evidence": "cited lines re-found at c4893c88; phone/page.tsx changed since 67581c54 (fc8a5151, ede841e4, 087c9d13) and the cite moved with it (same line content)",
     "recurred_as": "L1-owen-17-MB4-1"
   },
   {
@@ -2540,11 +2540,11 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "The picks can be made on the phone (where the name is typed), or the TV rows start on the likely value (age row near the type's middle; course row skipped when the school path is the only sensible one).",
-    "recertify_run": "2026-10-09-maths-l1/recert-4",
+    "recertify_run": "2026-10-09-maths-l1/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "Narrowed, not fixed (the row cannot be split, so it is kept whole and restated smaller). 5da74e9a closes the system half: Save now reads 'Saves as United Kingdom (0.5 is a half); pick a school system above to change it.' for a skipped row (executed, scratch r5.cjs). The 24-press half is untouched: profileRows(null) is still Type 3, Age 5, School system 4, Interested in 3, Maths course 3, Save/Back 2 cells in six rows (profileRows.ts:79-87), and the phone profile still has only the Name field (phone/page.tsx:543).",
+    "recertify_evidence": "cited lines re-found at c4893c88; phone/page.tsx changed since 67581c54 (fc8a5151, ede841e4, 087c9d13) and the cite moved with it (same line content)",
     "recurred_as": "L1-radka-41-MB5-1"
   },
   {
@@ -2637,11 +2637,11 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "The phone Recap lists every learner with work tonight, one block each.",
-    "recertify_run": "2026-10-09-maths-l1/recert-4",
+    "recertify_run": "2026-10-09-maths-l1/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at 67581c54; page.tsx changed since 00f5db95 (fdafb05f, 258cc1bf, 67581c54) and the cite moved with it (same line content)",
+    "recertify_evidence": "cited lines re-found at c4893c88; the recapRows.ts cite (66-68) and the phone Recap block (741-750) sit in changed hunks of fc8a5151 and were re-read by hand: the signature moved to :77 and now wraps the log in tonightsLog, and the phone block moved to :750-760 with the tally taking the same wrapped log; the history is still the seated learner's and the block is still titled with their name; phone/page.tsx changed since 67581c54 (fc8a5151, ede841e4, 087c9d13) and the cite moved with it (same line content)",
     "recurred_as": "L1-radka-41-MB5-2"
   },
   {
@@ -3472,12 +3472,12 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "Each topic row names the statement's can text it came through.",
-    "recertify_run": "2026-10-09-maths-l1/recert-4",
+    "recertify_run": "2026-10-09-maths-l1/recert-5",
     "recertify_status": "recurs",
     "recurred_as": "L1-vojtech-18-MB4-1",
-    "recertify_evidence": "cited lines re-found at 67581c54; recovery.ts changed since 00f5db95 (7c8a497c) but not at the cited lines"
+    "recertify_evidence": "cited lines re-found at c4893c88; no commit since 67581c54 touched the cited files"
   },
   {
     "id": "L1-vojtech-18-MB4-7",
