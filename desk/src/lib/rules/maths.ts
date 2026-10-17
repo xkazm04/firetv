@@ -322,9 +322,9 @@ export function unreadLeaks(question: string, line: string, system?: SchoolSyste
 function numberAnswerOf(question: string): number | null {
   const t = fold(question.normalize("NFC")).toLowerCase().replace(/[−–]/g, "-");
   // 'Zaokrouhli 3,456 na desetiny' / 'Round 3.456 to 1 decimal place': no school shape rounds, so the fallback works the rounded value out
-  const round = /(?:zaokrouhl\w*|round)\s+(-?\d+(?:[.,]\d+)?)\s+(?:na|to(?:\s+the)?)\s+(?:(\d)\s+(?:decimal\s+places?|dp)|(jednotky|cele|desetiny|setiny|tisiciny)|(?:the\s+)?nearest\s+(whole|tenth|hundredth|thousandth))/.exec(t);
+  const round = /(?:zaokrouhl\w*|round)\s+(-?\d+(?:[.,]\d+)?)\s+(?:na|to(?:\s+the)?)\s+(?:(\d|jedno|jeden|jedna|dve|tri|ctyri)\s+(?:decimal\s+places?|dp|desetinn\w+\s+mist\w+)|(jednotky|cele|desetiny|setiny|tisiciny)|(?:the\s+)?nearest\s+(whole|tenth|hundredth|thousandth))/.exec(t);
   if (round) {
-    const places = round[2] ? Number(round[2]) : ({ jednotky: 0, cele: 0, whole: 0, desetiny: 1, tenth: 1, setiny: 2, hundredth: 2, tisiciny: 3, thousandth: 3 } as Record<string, number>)[round[3] ?? round[4]];
+    const places = round[2] ? (/^\d$/.test(round[2]) ? Number(round[2]) : ({ jedno: 1, jeden: 1, jedna: 1, dve: 2, tri: 3, ctyri: 4 } as Record<string, number>)[round[2]]) : ({ jednotky: 0, cele: 0, whole: 0, desetiny: 1, tenth: 1, setiny: 2, hundredth: 2, tisiciny: 3, thousandth: 3 } as Record<string, number>)[round[3] ?? round[4]];
     const x = Number(round[1].replace(",", "."));
     return x < 0 ? null : Math.round(x * 10 ** places + 1e-9) / 10 ** places;
   }

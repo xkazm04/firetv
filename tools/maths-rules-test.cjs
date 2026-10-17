@@ -805,3 +805,8 @@ test('MB-B1 marks: markOf reads right, wrong, unsure and skipped; a blank unsure
  assert.deepEqual(MK.markCounts(rows.map(r=>r[0])),{right:2,wrong:2,unsure:4,skipped:3});
  assert.deepEqual(MK.markCounts([]),{right:0,wrong:0,unsure:0,skipped:0});
 });
+test('L1-nela-12-MB1-1 (recert-2): "na dvě desetinná místa" reads as a rounding, so its answer leaks',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ for(const [q,l] of [['Zaokrouhli 3,456 na dvě desetinná místa','3,46'],['Zaokrouhli 3,456 na 2 desetinná místa','3,46'],['Zaokrouhli 3,4567 na tři desetinná místa','Je to 3,457.'],['Zaokrouhli 3,456 na jedno desetinné místo','3,5']])assert.equal(M.leaks(q,l,'cz'),true,`${q} | ${l}`);
+ for(const [q,l] of [['Zaokrouhli 3,456 na dvě desetinná místa','Podívej se na číslici na místě tisícin.']])assert.equal(M.leaks(q,l,'cz'),false,`${q} | ${l}`);
+});
