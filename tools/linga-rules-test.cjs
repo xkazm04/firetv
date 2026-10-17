@@ -2941,3 +2941,24 @@ test('LG-51 askedAbout: the previous learner line is matched against the taught 
  assert.equal(b.line,'The tomatoes are green.');
  assert.deepEqual(b.slips,[],'a clean line holds no slip');
 });
+const PHONE={id:'a1:t8:moment',kind:'fix',said:'I prefer my phone than my laptop',better:'I prefer my phone to my laptop',why:'Prefer takes to.',turnId:'a1:t8',at:8,slip:'phone than',fix:'phone to'};
+const phoneConvo=()=>convo({moments:[PHONE],turns:[{id:'p1',role:'partner',text:'Hello.'},{id:'a1:t8',role:'learner',text:'Is it correct to say "I prefer my phone than my laptop"?'},{id:'p2',role:'partner',text:'Tell me more.'}]});
+test('LG-51 askedAbout J4-1: a clean line with the question attached is judged, not the previous learner turn',()=>{
+ const {askedAboutFor}=require(path.join(root,'src/lib/english/review.ts'));
+ const a=askedAboutFor('I use my phone every day. Was my answer correct?',phoneConvo(),[]);
+ assert.equal(a.line,'I use my phone every day.');assert.deepEqual(a.slips,[],'the previous turn\'s slip does not leak');
+});
+test('LG-51 askedAbout: a quoted line inside the question is the line judged',()=>{
+ const {askedAboutFor}=require(path.join(root,'src/lib/english/review.ts'));
+ for(const q of ['Is it correct to say "I prefer my phone than my laptop"?','Is it correct to say “I prefer my phone than my laptop”?']){
+  const a=askedAboutFor(q,convo({moments:[PHONE]}),[]);
+  assert.equal(a.line,'I prefer my phone than my laptop');assert.deepEqual(a.slips,[{said:'phone than',better:'phone to'}]);
+ }
+});
+test('LG-51 askedAbout: a question alone still reads the previous learner turn',()=>{
+ const {askedAboutFor}=require(path.join(root,'src/lib/english/review.ts'));
+ const c=convo({moments:[PHONE],turns:[{id:'l1',role:'learner',text:'I prefer my phone than my laptop.'}]});
+ const a=askedAboutFor('Was that correct?',c,[]);
+ assert.equal(a.line,'I prefer my phone than my laptop.');assert.equal(a.slips.length,1);
+ assert.equal(askedAboutFor('Was that correct?',convo(),[]),undefined,'no earlier line, no askedAbout');
+});

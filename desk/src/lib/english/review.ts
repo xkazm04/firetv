@@ -246,12 +246,28 @@ export const asksCorrectness = (reply: string): boolean => CORRECTNESS_ASKED.som
 /** What a correctness question is about: the learner's previous own line and the taught slips it holds (empty when clean). */
 export interface AskedAbout { line: string; slips: { said: string; better: string }[] }
 /**
- * Set only when `reply` asks a direct correctness question and the learner has an earlier line. The slips are found by
- * slipsAgain over that line (this scene's moments, then the taught fixes the learner may be shown), by code, before the call.
+ * The line a correctness question is about, in the order learners mean it: a span quoted inside the question sentence,
+ * else the rest of `reply` once the question sentence is cut out (the question is attached to the line before it), else
+ * null (the question stands alone, so it is about the previous learner turn).
+ */
+function lineAsked(reply: string): string | null {
+  const parts = reply.match(/[^.?!]*[.?!]*/g)?.filter(p => p.trim()) ?? [];
+  const asks = parts.filter(p => asksCorrectness(p));
+  for (const q of asks) {
+    const quoted = q.match(/["“]([^"”]+)["”]/)?.[1].trim();
+    if (quoted) return quoted;
+  }
+  const rest = parts.filter(p => !asks.includes(p)).join(" ").trim();
+  return /[a-z]/i.test(rest) ? rest : null;
+}
+/**
+ * Set only when `reply` asks a direct correctness question and there is a line to judge: the line the reply quotes in the
+ * question, else the rest of the reply, else the learner's previous own line. The slips are found by slipsAgain over that
+ * line (this scene's moments, then the taught fixes the learner may be shown), by code, before the call.
  */
 export function askedAboutFor(reply: string, c: Conversation, taught: readonly Taught[]): AskedAbout | undefined {
   if (!asksCorrectness(reply)) return undefined;
-  const line = [...c.turns].reverse().find(t => t.role === "learner")?.text;
+  const line = lineAsked(reply) ?? [...c.turns].reverse().find(t => t.role === "learner")?.text;
   if (!line) return undefined;
   return { line, slips: slipsAgain(line, c, taught).map(h => ({ said: h.said, better: h.better })) };
 }
