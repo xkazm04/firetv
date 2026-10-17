@@ -2793,3 +2793,37 @@ test('LG-51: a direct correctness question gets the line quoted, a yes or no, an
  assert(/then carry on in the scene/i.test(r),'carries on: '+r);
  assert(/keep the quote short/i.test(r)&&/230 characters/.test(r),'says how to fit the reply limits: '+r);
 });
+test('LG-51 meaning: the prompt checks meaning and false friends from a teacher-widenable list, and a no names the corrected words',async()=>{
+ fresh();await command('start',{sceneId:'booking',replace:true});const c=getSession().conversation;
+ let system;answer=async(req)=>{system=req.system;return {json:{reply:'What date was it?',observations:[],moment:{kind:'none',said:'',better:'',why:''}},provider:'test',ms:1};};
+ await command('turn',{text:'I have booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});
+ const r=/When the learner asks whether[^\n]*/.exec(system)[0];
+ assert(/each word means what the learner meant in the scene, not only that the grammar is right/i.test(r),'meaning check: '+r);
+ assert(/false friend for a Czech or Slavic speaker/i.test(r)&&/makes the answer no/i.test(r),'false friend makes it a no: '+r);
+ const {KNOWN_FALSE_FRIENDS}=require(path.join(root,'src/lib/english/slip.ts'));
+ assert(KNOWN_FALSE_FRIENDS.length>=5,'a fixed list');
+ for(const w of ['eventually','actual','sympathetic','concurrence','become'])assert(KNOWN_FALSE_FRIENDS.some(x=>x.startsWith(w))&&r.includes(KNOWN_FALSE_FRIENDS.find(x=>x.startsWith(w))),'the prompt carries the list entry '+w);
+ assert(/a no names the corrected words themselves/i.test(r)&&/never only the category/i.test(r),'a no names the corrected words: '+r);
+ assert(/on a yes as well as a no/i.test(r),'quotes on a yes too: '+r);
+ assert(/askedAbout\.slips is not empty, the answer is no/i.test(r),'askedAbout slips decide the no: '+r);
+ assert(/at most 230 characters/.test(r),'the reply limit stays');
+});
+test('LG-51 detector: a direct correctness question is found, an ordinary reply is not',()=>{
+ const {asksCorrectness}=require(path.join(root,'src/lib/english/review.ts'));
+ for(const q of ['Is my sentence correct?','was that right?','Did I say it well?','Is it correct?','Am I saying it right?'])assert(asksCorrectness(q),'fires on: '+q);
+ for(const q of ['I need a room for Friday.','The right door is on the left.','Can you repeat that?','I will correct the booking tomorrow.'])assert(!asksCorrectness(q),'quiet on: '+q);
+});
+test('LG-51 askedAbout: the previous learner line is matched against the taught slips; a clean line gives empty slips; no question gives none',async()=>{
+ await slipStart([VIKTOR]);
+ await reply('Tomatoes is green. And red.');
+ assert.equal(prompts.at(-1).askedAbout,undefined,'an ordinary reply carries no askedAbout');
+ await reply('Is my sentence correct?');
+ const a=prompts.at(-1).askedAbout;
+ assert.equal(a.line,'Tomatoes is green. And red.');
+ assert.deepEqual(a.slips,[{said:'Tomatoes is',better:'tomatoes are'}]);
+ await reply('The tomatoes are green.');
+ await reply('Is my sentence correct?');
+ const b=prompts.at(-1).askedAbout;
+ assert.equal(b.line,'The tomatoes are green.');
+ assert.deepEqual(b.slips,[],'a clean line holds no slip');
+});
