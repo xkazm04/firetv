@@ -124,7 +124,7 @@ test('aim 4: a set asked for any other way carries no aim section - the prompt b
  const p=seen[0].prompt;
  assert.equal(p,UNAIMED(),'the base prompt with the learner section after the topic, and nothing else');
  assert.equal(S().practice.aim,undefined);
- seat();fromPaper('linear-two-step');stubText();
+ seat();fromPaper('frac-add-sub');stubText();
  const ix=prepareStops(S()).findIndex((u)=>u.id==='linear-one-step');store.dispatch({type:'focus',focus:ix});
  const r2=await post({topic:'linear-one-step'});assert.equal(r2.status,200);
  assert.equal(seen[0].prompt,UNAIMED(),'the aim belongs to its own unit only');
@@ -133,7 +133,7 @@ test('aim 4: a set asked for any other way carries no aim section - the prompt b
 
 test('aim 5: a code-written unit from the paper - no engine call; a statement that steers nothing leaves the set unaimed, one that steers is carried',async()=>{
  // N2 is all of adding and subtracting fractions: no form to pick, so the usual draw and no aim on the card (cycle 14)
- seat({age:10});fromPaper('frac-add-sub');stubText();
+ seat();fromPaper('frac-add-sub');stubText();
  const res=await post({topic:'frac-add-sub'});assert.equal(res.status,200);
  assert.equal(seen.length,0,'no model call');
  assert.equal(S().practice.aim,undefined,'the card claims no aim the set did not take');assert.equal(S().practice.items.length,6);

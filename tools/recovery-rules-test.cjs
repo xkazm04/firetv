@@ -260,3 +260,27 @@ test('MB4-2: a maturita learner past a unit does not have a partial link send th
   assert.deepEqual(ids(R.recovery([it('4', 0, 3, ['G17'])])), ['area']);
   assert.deepEqual(R.aimOf([it('4', 0, 3, ['G17'])], 'area', cz18), []);
 });
+
+test('L1-radka-41-MB4-2: a school-age learner at or near a unit\'s year keeps the fraction units; the maturita learner keeps the cut', () => {
+  const paper = [it('1', 0, 3, ['N2']), it('2', 1, 3, ['N1']), it('3', 0, 2, ['A1'])];
+  const sum = (r) => r.topics.reduce((n, t) => n + t.lost, 0) + r.notOnDesk.reduce((n, o) => n + o.lost, 0);
+  const frac = ['frac-add-sub', 'frac-mul-div'];
+  for (const at of [{ system: 'uk', age: 12 }, { system: 'cz', age: 12 }, { system: 'cz', age: 14 }]) {
+    const r = R.recovery(paper, at), who = at.system + at.age;
+    for (const id of [...frac, 'linear-one-step']) assert(ids(r).includes(id), who + ' ' + id);
+    assert(!r.notOnDesk.some((o) => o.code === 'N2' || o.code === 'A1'), who);
+    assert.equal(sum(r), r.totals.lost, who);
+  }
+  // within PAST_MARGIN of Equivalent fractions, N1 reaches it too
+  for (const at of [{ system: 'uk', age: 12 }, { system: 'cz', age: 12 }]) {
+    assert(ids(R.recovery(paper, at)).includes('frac-equivalent'), at.system + at.age);
+    assert.deepEqual(R.reachOf(['N1'], at), { topics: ['frac-equivalent'], off: [] });
+  }
+  // N8's core is Adding and subtracting fractions: it stays in reach however far past it the learner is
+  assert(R.reachOf(['N8'], { system: 'cz', age: 18 }).topics.includes('frac-add-sub'));
+  // the maturita learner still has a partial link below their year cut (MB4-2)
+  const cz18 = R.recovery(paper, { system: 'cz', age: 18 });
+  assert.deepEqual(ids(cz18).sort(), [...frac].sort());
+  assert.deepEqual(cz18.notOnDesk.map((o) => o.code).sort(), ['A1', 'N1']);
+  assert.equal(sum(cz18), cz18.totals.lost);
+});

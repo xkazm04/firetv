@@ -140,10 +140,12 @@ export const STATEMENTS: Statement[] = [
 /**
  * The touched units that cover a statement WHOLE, not a part of it. `touches` claims only that a unit practises part of a
  * statement; an id here is one a person reads as the unit being what the statement asks. Recovery uses it for a learner
- * past a unit's year: a partial link to such a unit is not a place their lost marks go (MB4-2), a whole one is.
+ * well past a unit's year (recovery.ts PAST_MARGIN): a partial link to such a unit is not a place their lost marks go (MB4-2), a whole one is.
  * Every id listed is also in that statement's `touches`.
  */
 export const WHOLE: Record<string, string[]> = {
+  N2: ["frac-add-sub", "frac-mul-div"],
+  N8: ["frac-add-sub"],
   N10: ["dec-convert"],
   N12: ["frac-of-amount", "pct-of-amount"],
   A17: ["linear-one-step", "linear-two-step", "linear-both-sides"],
