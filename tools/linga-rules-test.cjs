@@ -2720,6 +2720,19 @@ test('LG-8 slips: cleanPlacement accepts none, keeps 3 valid, trims 5 to 3, drop
  assert.deepEqual(P.cleanPlacement({...base,slips:[1,2,3,4,5].map(sl)}).slips,[1,2,3].map(sl));
  assert.deepEqual(P.cleanPlacement({...base,slips:[{said:'a'},sl(1),{said:5,better:'x'}]}).slips,[sl(1)]);
 });
+test('LG-8 focus: follows the first slip when it quotes none of it, keeps one that does, leaves no-slip focus, falls back when long or refused',()=>{
+ const C=require(path.join(root,'src/lib/english/check.ts')),F=require(path.join(root,'src/lib/english/line.ts'));
+ const t=r=>({id:'x'+r.length,band:'A2',kind:'say',prompt:'p',line:'',options:[],response:r,mode:'text',verdict:'partial',quote:'',note:'n',at:1});
+ const tasks=[t('I have meeting at nine.'),t('She go to work every day.')];
+ const slips=[{said:'I have meeting',better:'I have a meeting'},{said:'She go to work',better:'She goes to work'}];
+ assert.equal(C.focusFollowsSlip('Practise "She go to work" with "She goes to work"',slips,tasks),'"I have meeting" becomes "I have a meeting"','the focus quotes only the second slip');
+ assert.equal(C.focusFollowsSlip('what the real number is',slips,tasks),'"I have meeting" becomes "I have a meeting"','a focus quoting none');
+ const kept='Practise "I have meeting" as "I have a meeting"';
+ assert.equal(C.focusFollowsSlip(kept,slips,tasks),kept,'a focus already quoting the first slip is kept');
+ assert.equal(C.focusFollowsSlip('what the real number is',[],tasks),'what the real number is','no slips: untouched');
+ assert.equal(C.focusFollowsSlip('x',[{said:'I have meeting',better:'I have a meeting '+'z'.repeat(110)}],tasks),F.FOCUS_FALLBACK,'over 120 characters');
+ assert.equal(C.focusFollowsSlip('x',slips,tasks,l=>!/a meeting/.test(l)),F.FOCUS_FALLBACK,'refused by the audience gate');
+});
 test('LG-8 slips: the TV never shows them (view.ts and LingaTV.tsx do not reference slips)',()=>{
  for(const f of ['src/lib/english/view.ts','src/english/LingaTV.tsx'])assert(!/slips/.test(fs.readFileSync(path.join(root,f),"utf8")),f);
 });

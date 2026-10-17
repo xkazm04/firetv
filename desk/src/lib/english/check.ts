@@ -131,6 +131,19 @@ export function keepSlips(slips: unknown, tasks: readonly PlacementTask[], safe:
   return out;
 }
 
+/**
+ * The focus follows the first kept slip (LG-8): when slips exist and the focus does not quote the first one's said
+ * words, it is rebuilt as '"<said>" becomes "<better>"'. Over 120 characters, or refused by quotedFocus (the shape
+ * focusParts parses, the audience gate), it falls back to FOCUS_FALLBACK. No slips: the focus is untouched.
+ */
+export function focusFollowsSlip(focus: string, slips: readonly { said: string; better: string }[], tasks: PlacementTask[], safe: (line: string) => boolean = () => true): string {
+  if (!slips.length) return focus;
+  const norm = (x: string) => x.toLowerCase().replace(/[\s"“”]+/g, " ").trim(), { said, better } = slips[0];
+  if (norm(focus).includes(norm(said))) return focus;
+  const rebuilt = `"${said}" becomes "${better}"`;
+  return [...rebuilt].length > 120 ? FOCUS_FALLBACK : quotedFocus(rebuilt, tasks, safe);
+}
+
 /** Whatever the check is missing next, fetch it: the first question, the next task, the verdict, the topics. */
 async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelCheck> {
   const system = checkSystem(ctx.profile, ctx.adult), name = getSession().learner?.name ?? ctx.profile.name;
@@ -174,10 +187,10 @@ Your previous answer repeated an earlier task ("${twin?.prompt ?? ""}"). Answer 
       });
     }
     return call(k, token, "Linga could not put your level together. Try again.", async () => {
-      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.skipped ? "skipped" : t.verdict, note: t.note, answer: t.skipped ? "" : t.response.slice(0, 300) })), goal: (ctx.learning.preferences?.goal || k.goal).slice(0, 160), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, and naming at least one concrete thing the learner did, taken from their answers, not a generic line; where it fits tie it to their goal (goal). slips: up to three errors the learner made more than once, or the most important ones. Each said is the learner's exact words, copied from an answer; each better is the corrected form. Leave the list empty only when no answer holds an error. focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise; if it points at something the learner wrote, quote those exact words in double quotes from an answer. If you offer a better phrase for those words, put it in a second pair of double quotes after the learner's words.` }, summarySchema);
+      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.skipped ? "skipped" : t.verdict, note: t.note, answer: t.skipped ? "" : t.response.slice(0, 300) })), goal: (ctx.learning.preferences?.goal || k.goal).slice(0, 160), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, and naming at least one concrete thing the learner did, taken from their answers, not a generic line; where it fits tie it to their goal (goal). slips: up to three errors the learner made more than once, or the most important ones, the most frequent or most important first. Each said is the learner's exact words, copied from an answer; each better is the corrected form. Leave the list empty only when no answer holds an error. focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise, aimed at the first slip: quote its said words and give its better form; if it points at something the learner wrote, quote those exact words in double quotes from an answer. If you offer a better phrase for those words, put it in a second pair of double quotes after the learner's words.` }, summarySchema);
       const safe = (l: string) => ctx.adult || ![null, "adult"].includes(keywordAudience(l));
       const slips = keepSlips(r.json.slips, k.tasks, safe);
-      const placement: Placement = { at: Date.now(), band: ladder.band, selfBand: k.selfBand, confidence: ladder.confidence, source: "check", summary: line(r.json.summary, 160), focus: quotedFocus(line(r.json.focus, 120), k.tasks, safe), ...(slips.length ? { slips } : {}), tasks: k.tasks };
+      const placement: Placement = { at: Date.now(), band: ladder.band, selfBand: k.selfBand, confidence: ladder.confidence, source: "check", summary: line(r.json.summary, 160), focus: quotedFocus(focusFollowsSlip(line(r.json.focus, 120), slips, k.tasks, safe), k.tasks, safe), ...(slips.length ? { slips } : {}), tasks: k.tasks };
       return {
         apply: now => {
           const learning = getLearner(now.learnerId).english, prefs = learning.preferences ?? defaultPreferences(ctx.profile);
