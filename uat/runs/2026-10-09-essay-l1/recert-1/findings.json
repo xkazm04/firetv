@@ -27,11 +27,15 @@
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The note and the summary go through a code check before display: no 5+ word run of any learner sentence, and no complete declarative sentence of new content outside a quoted frame. A note that fails is replaced by the failed check's own line (CHECKS), as an empty note already is.",
     "l2_priority": "Run the essay harness on a young-voice profile (age 12) with Eliska's paragraph under each lens. A reader counts ghostwriting (b), new-content sentences, in notes and the summary; the harness echo check (tools/essay-ui-test.cjs:120-122) covers (a) only. Any one instance is a boundary blocker.",
     "scope_note": "matches docs/uat-insights/2026-10-09-essay-w-run.md accounting #2 (the ghostwriting check is a substring test; covered-elsewhere: DESIGN-ESSAY-MASTER.md Owed)",
-    "recurs": "L1-barbora-43-EM1-1"
+    "recurs": "L1-barbora-43-EM1-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/rules/essay.ts:443-444 still `said = cleanNote(o.note)` and a faulty note is the check line; cleanNote (320-323) strips a leading label only. The new commits (2bf64f3e, 6b003c59) change verdict decisions, not note text.",
+    "recurred_as": "L1-barbora-43-EM1-1"
   },
   {
     "id": "L1-barbora-43-EM1-2",
@@ -60,10 +64,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The x-ray's model paragraph is on a topic a school would not set this learner, or shows the role words over hatched content, and it never shares a topic with the phone's sample text.",
     "l2_priority": "Screenshot the x-ray from the forensic page's Why. Confirm the three sentences render whole and legible from the sofa.",
-    "recurs": "L1-barbora-43-EM1-2"
+    "recurs": "L1-barbora-43-EM1-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/essay/EssayTV.tsx:540-544 still holds the same three sleep sentences; the phone sample (page.tsx:59) and seeded task (store.ts:564) share the topic. No commit touched it.",
+    "recurred_as": "L1-barbora-43-EM1-2"
   },
   {
     "id": "L1-barbora-43-EM1-3",
@@ -91,10 +99,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The reading prompt carries the open Essay Master task's name (S6) and the lens's last two readings' fault counts (S7) when present. The grounding score is re-measured against ES-READ.",
     "l2_priority": "Grounded arm: read one paragraph with an essay task set and without it (control). Check whether the notes reference the question.",
-    "recurs": "L1-barbora-43-EM1-3"
+    "recurs": "L1-barbora-43-EM1-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/desk/essay.ts:86-90 system prompt still carries voice, lens, OBSERVE and sentences only; analyseEssay/analysePiece (137,157) take text, type, learner, age; route.ts:128,151 pass nothing more.",
+    "recurred_as": "L1-barbora-43-EM1-3"
   },
   {
     "id": "L1-barbora-43-EM1-4",
@@ -123,10 +135,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Each lens's fallback move teaches that lens's fault (Language: name the exact thing; split the long sentence).",
     "l2_priority": "Count how often a Language-lens faulty verdict arrives without its own fix (fix coverage) on a live run.",
-    "recurs": "L1-barbora-43-EM1-4"
+    "recurs": "L1-barbora-43-EM1-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/library/lessons.data.ts:41 still maps language -> lesson 'para'; ae2544b5 only reshaped the playbook patterns into one-sentence frames, the Paragraph move is still the fallback (EssayTV.tsx:310-314).",
+    "recurred_as": "L1-barbora-43-EM1-4"
   },
   {
     "id": "L1-barbora-43-EM1-5",
@@ -154,9 +170,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The box opens empty, with the sample as a placeholder; or a reading of the unchanged sample is not recorded.",
-    "recurs": "L1-barbora-43-EM1-6"
+    "recurs": "L1-barbora-43-EM1-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/phone/page.tsx:59,82,423 the box still opens and resets to the sample; desk/src/lib/desk/essay.ts:123,142 record() files any reading for the seated learner with no unchanged-sample check. (Recert-1 md calls this EM1-6.)",
+    "recurred_as": "L1-barbora-43-EM1-5"
   },
   {
     "id": "L1-barbora-43-EM4-1",
@@ -186,10 +206,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The engine sentence shows once per learner before the first reading of any kind. The Recap tab carries a 'Where the writing is' line and a delete that also clears the paragraph on the desk (s.essay and away slots). The shelf stays reachable whatever the TV shows.",
     "l2_priority": "Parent role on a paragraph-only evening: look for the notice and a delete without help; then inspect session.json for the paragraph after delete-all.",
-    "recurs": "L1-barbora-43-EM4-4"
+    "recurs": "L1-barbora-43-EM4-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/phone/EssayShelf.tsx:44-45 shows 'Nothing kept yet' and delete-all only when cards.length > 0; store.ts:1130 persists the session with s.essay; the shelf renders only on the paragraph panel (page.tsx:705,723). (Recert-1 md calls this EM4-4.)",
+    "recurred_as": "L1-barbora-43-EM4-1"
   },
   {
     "id": "L1-barbora-43-EM4-2",
@@ -220,8 +244,12 @@
     "suggested_acceptance": "The recap line names a piece as a piece (or its paragraph count), matching the Sunday wording.",
     "l2_priority": "Read one paragraph and one 3-paragraph piece, End session, compare the Recap line with the Sunday line.",
     "resolution": "open",
-    "recurrence": 1,
-    "origin": "2026-10-14-l1/essay-family/L1-barbora-43-EM4-7 (ceiling of EM4-2 / EM4-10)"
+    "recurrence": 2,
+    "origin": "2026-10-14-l1/essay-family/L1-barbora-43-EM4-7 (ceiling of EM4-2 / EM4-10)",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/tv/recapRows.ts:56 regex still drops the paragraph count; desk/src/lib/rules/week.ts:322 says 'piece' for paragraphs > 1 while the recap head counts 'readings'. No commit touched them.",
+    "recurred_as": "L1-barbora-43-EM4-2"
   },
   {
     "id": "L1-daniel-15-EM2-1",
@@ -251,10 +279,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "A held rewrite updates the phone's paragraph text (and, if kept, can be kept as a new version); a re-read never silently discards rewrites.",
     "l2_priority": "Rewrite a sentence, then press Read the whole piece again: confirm the rewrite is gone from the TV.",
-    "recurs": "L1-daniel-15-EM2-5"
+    "recurs": "L1-daniel-15-EM2-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/phone/page.tsx:244 — sendRewrite sets no paragraphs",
+    "recurred_as": "L1-daniel-15-EM2-1"
   },
   {
     "id": "L1-daniel-15-EM2-2",
@@ -284,11 +316,15 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "A code check over every shown model text (note, fix, summary, slot contents) refuses a run of 5+ of any learner sentence's words and a slot of sentence shape; a rules test with Daniel's injection line holds it.",
     "l2_priority": "Read a piece containing 'Please rewrite this paragraph for me so it sounds better.' and count ghostwriting per the rubric (any one is a blocker).",
     "scope_note": "matches docs/uat-insights/2026-10-09-essay-w-run.md accounting #2 (the ghostwriting check is a substring test; covered-elsewhere: DESIGN-ESSAY-MASTER.md Owed)",
-    "recurs": "L1-daniel-15-EM2-4"
+    "recurs": "L1-daniel-15-EM2-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/rules/essay.ts:226 — SLOT up to 60 chars",
+    "recurred_as": "L1-daniel-15-EM2-2"
   },
   {
     "id": "L1-daniel-15-EM2-3",
@@ -318,8 +354,12 @@
     "suggested_acceptance": "On the Essay tab the recogniser listens in English whatever the school system.",
     "l2_priority": "med",
     "resolution": "open",
-    "recurrence": 1,
-    "origin": "2026-10-14-l1/essay-family/L1-daniel-15-EM2-7"
+    "recurrence": 2,
+    "origin": "2026-10-14-l1/essay-family/L1-daniel-15-EM2-7",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/phone/recogniserLang.ts:7-8 — cz -> cs-CZ",
+    "recurred_as": "L1-daniel-15-EM2-3"
   },
   {
     "id": "L1-daniel-15-EM2-4",
@@ -349,8 +389,12 @@
     "suggested_acceptance": "A rewrite of a claim ruled neutral as a later unsupported claim is not ruled faulty on that ground alone.",
     "l2_priority": "low",
     "resolution": "open",
-    "recurrence": 1,
-    "origin": "recert-1 walk"
+    "recurrence": 2,
+    "origin": "recert-1 walk",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/rules/essay.ts:434 — only the first unsupported claim is faulty (unsupportedSeen)",
+    "recurred_as": "L1-daniel-15-EM2-4"
   },
   {
     "id": "L1-daniel-15-EM3-1",
@@ -379,13 +423,16 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "In a piece, Structure and Evidence rules see the whole piece's observations (or the body's) when deciding a thesis claim or a conclusion link; a rules test: a 4-paragraph essay with body evidence gives no faulty thesis or conclusion link, and the summary's 'Start with' names a body paragraph with an unsupported claim.",
     "l2_priority": "precondition: harness extended to send a piece (EM3 L2 note) — send Daniel's 4-paragraph essay on Structure; confirm the forensic opens on the intro thesis and the summary says 'Start with paragraph' of the intro; a senior reader rates the faulty verdicts.",
     "recurs": "L1-daniel-15-EM3-1",
     "severity_prior": "blocker",
-    "severity_why": "The default Structure lens no longer faults a backed thesis and conclusion when the model names the supports chain, so frequency drops from high to med."
+    "severity_why": "The default Structure lens no longer faults a backed thesis and conclusion when the model names the supports chain, so frequency drops from high to med.",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/essay.ts:380-386 bodyProves, used at :416 (Evidence) and :433 (Structure). Executed a 4-paragraph essay (thesis / 2 body paragraphs with a checkable sentence / conclusion): Evidence -> thesis and conclusion neutral, only the evidence-less body paragraph faulty, 'Start with paragraph 3, sentence 4'; Structure WITH supports chain and WITHOUT any supports -> thesis neutral, conclusion strong, 'Start with paragraph 3, sentence 4'. Bare opinions with no marked evidence anywhere stay faulty (guarded by the new tools/essay-rules-test.cjs test). Fixed by 2bf64f3e."
   },
   {
     "id": "L1-daniel-15-EM3-2",
@@ -412,10 +459,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The sample is a placeholder, not a value (or a multi-paragraph paste replaces the sample); a paste into the untouched box yields exactly the pasted paragraphs.",
     "l2_priority": "On a real phone, tap the Essay box and paste a 4-paragraph text: where does the cursor land, and does paragraph 1 include the sample?",
-    "recurs": "L1-daniel-15-EM3-3"
+    "recurs": "L1-daniel-15-EM3-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/phone/page.tsx:59,82 — FRESH_PARAS initial state",
+    "recurred_as": "L1-daniel-15-EM3-1"
   },
   {
     "id": "L1-daniel-15-EM3-3",
@@ -444,10 +495,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "When the TV holds a piece reading, the rewrite panel's next step walks the TV to the next paragraph's first sentence (essay.at), and 'This paragraph only' is not offered for a paragraph the piece already read.",
     "l2_priority": "After a piece read, press 'Next paragraph' on the phone: where do the TV and the phone go?",
-    "recurs": "L1-daniel-15-EM3-5"
+    "recurs": "L1-daniel-15-EM3-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/phone/page.tsx:697 — Next paragraph",
+    "recurred_as": "L1-daniel-15-EM3-2"
   },
   {
     "id": "L1-daniel-15-EM3-4",
@@ -476,10 +531,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "A paste whose text matches a kept piece's title or most of its paragraphs offers 'new version of <title>'; a question title is kept as the title; no piece is kept when the read is refused.",
     "l2_priority": "Paste, read with Keep, change one paragraph on the laptop, paste again, read: count shelf cards.",
-    "recurs": "L1-daniel-15-EM3-2"
+    "recurs": "L1-daniel-15-EM3-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/phone/page.tsx:271 — setPieceId(undefined) on paste",
+    "recurred_as": "L1-daniel-15-EM3-3"
   },
   {
     "id": "L1-daniel-15-EM3-5",
@@ -509,10 +568,14 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The forensic page carries 'paragraph k of n' while a piece is being read and the piece's 'Start with paragraph k' once it is done; the page does not move once shown; the waiting caption says 'piece' for a piece.",
     "l2_priority": "precondition: harness sends a piece — screenshot the forensic page at each essay.progress and after the last paragraph.",
-    "recurs": "L1-daniel-15-EM3-4"
+    "recurs": "L1-daniel-15-EM3-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/essay/EssayTV.tsx:423 — crumb Sentence n of N",
+    "recurred_as": "L1-daniel-15-EM3-4"
   },
   {
     "id": "L1-daniel-15-EM3-6",
@@ -540,10 +603,14 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The rewrite panel carries 'Send a new piece' / 'Your shelf' that brings the TV to the lens home, or the shelf and box stay reachable below the rewrite panel.",
     "l2_priority": "Reopen Essay Master the next evening with last night's reading on the desk: can the phone paste a new piece without the remote?",
-    "recurs": "L1-daniel-15-EM3-6"
+    "recurs": "L1-daniel-15-EM3-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/phone/page.tsx:705 — panel only when !onSentence && !onPlan",
+    "recurred_as": "L1-daniel-15-EM3-5"
   },
   {
     "id": "L1-daniel-15-EM3-7",
@@ -571,10 +638,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "A short first line with no full stop, or a question line followed by a paragraph, is taken as the title: shown as such, not read as a paragraph, and passed to the reading prompt as the task.",
     "l2_priority": "Send Daniel's piece with a title line both ways; record the paragraph count, call count and the title's verdict.",
-    "recurs": "L1-daniel-15-EM3-7"
+    "recurs": "L1-daniel-15-EM3-7",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/rules/essay.ts:91 — only # headings",
+    "recurred_as": "L1-daniel-15-EM3-6"
   },
   {
     "id": "L1-daniel-15-EM3-8",
@@ -601,10 +672,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "One line on the lens home or the forensic page says the desk reads structure, argument, evidence and word choice, not grammar or spelling.",
     "l2_priority": "optional: check whether any live note comments on grammar despite the lens.",
-    "recurs": "L1-daniel-15-EM3-9"
+    "recurs": "L1-daniel-15-EM3-9",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/essay/EssayTV.tsx:419 — 'Well done · This sentence does its job.'",
+    "recurred_as": "L1-daniel-15-EM3-7"
   },
   {
     "id": "L1-daniel-15-EM3-9",
@@ -632,10 +707,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Deleting a piece clears the phone's pieceId when it is the one open; the route falls back to addPiece on a missing id.",
     "l2_priority": "Open a kept piece, delete it on the shelf, press Read the whole piece with Keep on.",
-    "recurs": "L1-daniel-15-EM3-11"
+    "recurs": "L1-daniel-15-EM3-11",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/phone/EssayShelf.tsx:30-34 — remove reloads the list only",
+    "recurred_as": "L1-daniel-15-EM3-8"
   },
   {
     "id": "L1-daniel-15-EM3-10",
@@ -662,9 +741,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Either draw them (e.g. the shelf says whether the notice is accepted) or stop computing them.",
-    "recurs": "L1-daniel-15-EM3-10"
+    "recurs": "L1-daniel-15-EM3-10",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/api/texts/route.ts:6-7 — notice fields",
+    "recurred_as": "L1-daniel-15-EM3-9"
   },
   {
     "id": "L1-daniel-15-EM3-11",
@@ -694,8 +777,12 @@
     "suggested_acceptance": "Each paragraph shows a provisional verdict as it lands, or the wait screen says plainly that verdicts come when the whole piece is read and how far it has got.",
     "l2_priority": "high",
     "resolution": "open",
-    "recurrence": 1,
-    "origin": "2026-10-14-l1/essay-family/L1-daniel-15-EM3-14"
+    "recurrence": 2,
+    "origin": "2026-10-14-l1/essay-family/L1-daniel-15-EM3-14",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/desk/essay.ts:176 — decideVerdicts only when para === of - 1",
+    "recurred_as": "L1-daniel-15-EM3-10"
   },
   {
     "id": "L1-eliska-12-EM1-1",
@@ -725,10 +812,14 @@
     "code_check": "present-broken",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "A sentence after the paragraph's last checkable sentence that explains or links back is never faulty under Evidence. Either add a label such as 'explains' or exempt what follows the evidence, and hold it with a rules test on P6.",
     "l2_priority": "Send P6 (walk.cjs E17) with the Evidence lens and record the support label the model gives S3 and S4.",
-    "recurs": "L1-eliska-12-EM1-2"
+    "recurs": "L1-eliska-12-EM1-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "6b003c59 added closesAfterEvidence (desk/src/lib/rules/essay.ts:387-390, used at :417 and :433), but it needs the Explain/Link sentence to be the LAST sentence of its paragraph. Executed a four-sentence PEEL (point, 2020 survey, 'This shows that walking helps them focus.', 'That is why more children should walk.'): Evidence with S3 read as opinion -> [[1,neutral],[2,strong],[3,faulty],[4,neutral]]; the same with 'because' in S3, and Structure with S3 as claim -> S3 faulty. A three-sentence PEEL (Explain last) is now neutral.",
+    "recurred_as": "L1-eliska-12-EM1-1"
   },
   {
     "id": "L1-eliska-12-EM1-2",
@@ -757,11 +848,15 @@
     "code_check": "present-broken",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "cleanFix drops a pattern whose literal words form a clause with a subject and a verb (e.g. 'A survey found that'), or that holds a content word from her sentence. A test holds the two E7 'KEPT' examples to 'dropped'. If L2 shows one of these on screen, it is a ghostwriting blocker.",
     "l2_priority": "Count fix.pattern texts that supply a claim or a finding over several Evidence-lens readings of 12-year-old paragraphs (ghostwriting (b)).",
     "scope_note": "matches docs/uat-insights/2026-10-09-essay-w-run.md accounting #2 (the ghostwriting check is a substring test; covered-elsewhere: DESIGN-ESSAY-MASTER.md Owed)",
-    "recurs": "L1-eliska-12-EM1-3"
+    "recurs": "L1-eliska-12-EM1-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/rules/essay.ts:227 FIX_LIMITS unchanged (literalWords 10, copiedRun 4), cleanFix :231-251 the only checks, PATTERN_RULE desk/src/lib/desk/essay.ts:56-57 still says none of their words. Executed cleanFix: 'A survey found that [number] of children who walk feel happier.' and 'Research by [source] shows [number] percent of pupils sleep less.' both KEPT.",
+    "recurred_as": "L1-eliska-12-EM1-2"
   },
   {
     "id": "L1-eliska-12-EM1-3",
@@ -790,11 +885,15 @@
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "A note or summary that holds a 4-word run of any learner sentence, or a quoted sentence, falls back to the check's own line (CHECKS) or is dropped, enforced in decideVerdicts and judge(). A rules test holds E8.",
     "l2_priority": "Harness W4 textsThatContainAWholeLearnerSentence for a young-voice reading, plus a reader count of new-content notes.",
     "scope_note": "matches docs/uat-insights/2026-10-09-essay-w-run.md accounting #2 (the ghostwriting check is a substring test; covered-elsewhere: DESIGN-ESSAY-MASTER.md Owed)",
-    "recurs": "L1-eliska-12-EM1-4"
+    "recurs": "L1-eliska-12-EM1-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/rules/essay.ts:442-444: said = cleanNote(o.note); note = faulty ? check : said; cleanNote (:320) strips only a verdict label. Executed cleanNote('Write: Walking also makes children happier, because a 2020 survey found ...') -> returned unchanged; EssayTV.tsx:419-420 draws it under Well done / Neutral.",
+    "recurred_as": "L1-eliska-12-EM1-3"
   },
   {
     "id": "L1-eliska-12-EM1-4",
@@ -823,11 +922,15 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "CHECKS and planFit have a young wording ('This says what you think, but gives nothing a reader could check.'; 'That reads as a claim.').",
     "recurs": "L1-eliska-12-EM1-7",
     "severity_prior": "minor",
-    "severity_why": "Since E6 every faulty note is a fixed CHECKS line, so the unvoiced wording shows on every fault, not only when the model's note is empty."
+    "severity_why": "Since E6 every faulty note is a fixed CHECKS line, so the unvoiced wording shows on every fault, not only when the model's note is empty.",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "CHECKS (desk/src/lib/rules/essay.ts:305-316) still has no voice parameter: opinion 'This only asserts; nothing here is checkable.' (:310), unbacked :311, and it is every faulty note (:444). planFit still returns 'That reads as ...' (:687).",
+    "recurred_as": "L1-eliska-12-EM1-4"
   },
   {
     "id": "L1-eliska-12-EM1-5",
@@ -857,10 +960,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The page names the job the lens observed (or none), never the first-pass guess, or labels the guess as such.",
     "l2_priority": "Screenshot the forensic page on P3's sentence 3 under Evidence.",
-    "recurs": "L1-eliska-12-EM1-5"
+    "recurs": "L1-eliska-12-EM1-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Role is still the regex first pass (desk/src/lib/rules/essay.ts:14-15,43); crumb EssayTV.tsx:423, 'Its job' :432, table chip :491. Executed splitSentences on 'Walking is good. I found out that my friends who walk are never tired in class. In Year 8 we all have to wear a blazer. I found the lesson boring.' -> roles claim, evidence, evidence, evidence.",
+    "recurred_as": "L1-eliska-12-EM1-5"
   },
   {
     "id": "L1-eliska-12-EM1-6",
@@ -887,9 +994,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Either the table shows links, or the field is dropped from the computed stats.",
-    "recurs": "L1-eliska-12-EM1-8"
+    "recurs": "L1-eliska-12-EM1-8",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "paragraphStats computes links and words (desk/src/lib/rules/essay.ts:201-207) but the table figs array (desk/src/essay/EssayTV.tsx:476) lists sentences, claims, evidence, connectors, words avg only.",
+    "recurred_as": "L1-eliska-12-EM1-6"
   },
   {
     "id": "L1-eliska-12-EM1-7",
@@ -921,8 +1032,12 @@
     "suggested_acceptance": "Make supports / backs required for evidence-job and checkable sentences, or have code refuse a reading whose evidence sentence names nothing instead of ruling on it.",
     "l2_priority": "Run P2 live under Structure and Evidence 5 times each and count how often the model emits supports / backs.",
     "resolution": "open",
-    "recurrence": 1,
-    "origin": "2026-10-14-l1/essay-family/L1-eliska-12-EM1-12"
+    "recurrence": 2,
+    "origin": "2026-10-14-l1/essay-family/L1-eliska-12-EM1-12",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/desk/essay.ts:31,33 supports and backs are still optional properties; :46 requires only n, note and the deciding field. Rules desk/src/lib/rules/essay.ts:418 (no accepted link -> every opinion neutral) and :431-434 (blind / unsupported) are untouched by the new commits (6b003c59 only adds the closesAfterEvidence branch). Not re-executed beyond reading the code.",
+    "recurred_as": "L1-eliska-12-EM1-7"
   },
   {
     "id": "L1-eliska-12-EM2-1",
@@ -950,11 +1065,14 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "Each lens's fallback is a one-sentence frame matched to its check (Evidence: '[your point], because [something a reader can check].'; Language: a word-level frame). Or a rewrite may add a sentence. A test fills each fallback pattern and passes it through revise.",
     "l2_priority": "Fix coverage on young-voice readings: how often the fallback shows.",
-    "recurs": "L1-eliska-12-EM2-2"
+    "recurs": "L1-eliska-12-EM2-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "The Paragraph and Order playbook patterns are now one-sentence frames (desk/src/lib/library/lessons.data.ts:51 '[Your claim], for example [the evidence], so this shows [the link back].'; Order 'First, [..], then [..].'). Executed revise() with every PLAYBOOK pattern filled: all ok:true (no 'That is 3 sentences'); planSlots (desk/src/lib/rules/essay.ts:645) still gives claim, evidence, link for the para pattern. Fixed by ae2544b5."
   },
   {
     "id": "L1-eliska-12-EM2-2",
@@ -985,10 +1103,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The rewrite is judged against the first reading's own observations (kept on the reading) or the verdicts as context, never a regex guess that contradicts them. E11 comes back 'still'. Also, a rewrite whose own observation is unchanged (opinion -> opinion) never holds.",
     "l2_priority": "Live: rewrite S2 of P3 with an opinion sentence and record rewriteState. Note too the self-contradiction on screen: 'holds' over the note 'still only what you think'.",
-    "recurs": "L1-eliska-12-EM2-1"
+    "recurs": "L1-eliska-12-EM2-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/rules/essay.ts:572 a context sentence with regex role evidence is passed as checkable before the ruledOpinion check at :574; :418 no accepted link -> opinion neutral; rewriteState (:617-620) calls not-faulty 'holds'. Executed: S1,S2,S3 all opinion (faulty), S3 'I found out that my friends...'; rewrite S2 'Walking is really great for all kids.' with model note 'This is still only what you think.' -> neutral, rewriteState 'holds'.",
+    "recurred_as": "L1-eliska-12-EM2-1"
   },
   {
     "id": "L1-eliska-12-EM2-3",
@@ -1015,10 +1137,14 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "A kept faulty verdict that the rule would now clear carries a line ('Your new sentence 2 may cover this: read the paragraph again'), and the others are still not re-asked.",
     "scope_note": "matches EM-B3 (docs/BACKLOG.md, declined): a rewrite re-judges only its own sentence, so a kept verdict goes stale; raised here independently by a learner's walk",
-    "recurs": "L1-eliska-12-EM2-3"
+    "recurs": "L1-eliska-12-EM2-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/desk/essay.ts:264 still copies other sentences' verdicts (reading.verdicts.filter(v => v.n === s.n)). Executed: S1,S2 opinion faulty; S2 rewritten to a study backing S1 -> S2 strong, S1 remains faulty, while the rule over the new paragraph gives S1 neutral.",
+    "recurred_as": "L1-eliska-12-EM2-2"
   },
   {
     "id": "L1-eliska-12-EM2-4",
@@ -1048,9 +1174,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "'Next sentence' after a held rewrite goes to the next faulty sentence.",
-    "recurs": "L1-eliska-12-EM2-5"
+    "recurs": "L1-eliska-12-EM2-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/tv/keys.ts:185-188 focusAfterRewrite goes to FORENSIC_STOPS 'next'; :470 next = (i + 1) % n; :468 Rewrite only sets a status line (drawn in the bench bar by desk/src/app/tv/page.tsx).",
+    "recurred_as": "L1-eliska-12-EM2-3"
   },
   {
     "id": "L1-eliska-12-EM2-5",
@@ -1078,10 +1208,14 @@
     "code_check": "present-broken",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The refusal reads 'Start sentence 3 with a capital letter and end it with a full stop, so it stays one sentence.' A dictated rewrite gets its first letter capitalised and a full stop added before the check.",
     "l2_priority": "What the Web Speech transcript looks like on her phone (capital, punctuation).",
-    "recurs": "L1-eliska-12-EM2-4"
+    "recurs": "L1-eliska-12-EM2-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/rules/essay.ts:611 refusal 'In the paragraph that would not stay one sentence. Start it with a capital and end it with a full stop.' unchanged; desk/src/app/phone/page.tsx:694 Dictate sets the rewrite text raw. Executed revise on 'i found it boring' (lower case, no full stop) -> that line.",
+    "recurred_as": "L1-eliska-12-EM2-4"
   },
   {
     "id": "L1-helena-46-EM1-1",
@@ -1111,10 +1245,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The reading prompt carries the piece's format (message / email / essay); the Language lens's fallback is a language move with a slotted pattern, and a length-faulty sentence is taught to split, never claim-evidence-link.",
     "l2_priority": "Read one long client email through Language: which move and pattern does the long sentence show, and would a business-writing trainer accept it?",
-    "recurs": "L1-helena-46-EM1-2"
+    "recurs": "L1-helena-46-EM1-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "The Language lens still teaches the essay move: language -> lesson 'para' (lessons.data.ts:41), a faulty sentence without its own fix falls back to the playbook (rules/essay.ts:626-631), and the TV labels it 'The move · playbook · Paragraph' (EssayTV.tsx:427). The body carries no format (route.ts:15-17). ae2544b5 only made the fallback pattern one sentence (lessons.data.ts:51), the move is still 'Claim, then evidence, then the link back'.",
+    "recurred_as": "L1-helena-46-EM1-1"
   },
   {
     "id": "L1-helena-46-EM1-2",
@@ -1145,12 +1283,16 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "An Adult-mode reading's system prompt names an adult writer (no age, no 'student'), and a rules test pins voiceOf/withManner output for mode adult.",
     "l2_priority": "Read the notes and summary of one Adult-mode reading: does any line address her as a student or a teenager?",
     "recurs": "L1-helena-46-EM1-1",
     "severity_prior": "major",
-    "severity_why": "The faulty notes and the summary, which lead the caption and the spoken line, are code's own lines since 4158321b, so trust erosion drops to low."
+    "severity_why": "The faulty notes and the summary, which lead the caption and the spoken line, are code's own lines since 4158321b, so trust erosion drops to low.",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "voiceOf has no mode: TEEN essay 'a 15-year-old' (voice.ts:70, :75-78); the prompts say 'writing tutor for ${voice.who}', 'a student can act on' (desk/essay.ts:86, :90, :236-239); route.ts reads only learnerAge. Executed nothing new; no commit since recert-1 touched voice.ts.",
+    "recurred_as": "L1-helena-46-EM1-2"
   },
   {
     "id": "L1-helena-46-EM1-3",
@@ -1179,9 +1321,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "In Adult mode the lens home's captions and the playbook speak of messages and emails (or the playbook is hidden), checked by a render test.",
-    "recurs": "L1-helena-46-EM1-4"
+    "recurs": "L1-helena-46-EM1-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Unchanged: EssayTV.tsx:151 and :328 'Paste, type or dictate one paragraph on the phone', lessons.data.ts:49-54 playbook is Thesis/Paragraph/Order/Conclusion, x-ray sentence about students at EssayTV.tsx:541. No commit touched these.",
+    "recurred_as": "L1-helena-46-EM1-3"
   },
   {
     "id": "L1-helena-46-EM1-4",
@@ -1209,9 +1355,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Either the table or a caption shows which engine read the text (her notice names Claude), or the fields are dropped from the user-facing shape.",
-    "recurs": "L1-helena-46-EM1-5"
+    "recurs": "L1-helena-46-EM1-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Unchanged: stats.words/links (rules/essay.ts, stats builder) and provider (desk/essay.ts:143) are computed; EssayTV.tsx:476 draws sentences, claims, evidence, connectors, words avg only; no provider grep hit under essay/ or app/phone.",
+    "recurred_as": "L1-helena-46-EM1-4"
   },
   {
     "id": "L1-helena-46-EM1-5",
@@ -1239,9 +1389,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The phone's refusal names the PC page for .docx, or the phone reads .docx through the same docxText.",
-    "recurs": "L1-helena-46-EM1-6"
+    "recurs": "L1-helena-46-EM1-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Unchanged: rules/essay.ts:190 'The desk reads .txt and .md files', phone page.tsx:709 'Choose a file (.txt or .md)', while drop/page.tsx:48-50 reads .docx on the PC page.",
+    "recurred_as": "L1-helena-46-EM1-5"
   },
   {
     "id": "L1-helena-46-EM1-6",
@@ -1269,10 +1423,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "A non-English paragraph gets the desk's sentence before any model call.",
     "scope_note": "Helena writes to clients in English; low reachability for her.",
-    "recurs": "L1-helena-46-EM1-7"
+    "recurs": "L1-helena-46-EM1-7",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Executed paragraphIsEnglish at HEAD (scratch t.cjs): long Czech with diacritics -> false (refused); 'Dobrý den, posílám fakturu.' -> true; the same long text without diacritics -> true; a German paragraph -> true. Rule at rules/essay.ts:171-176 unchanged since recert-1.",
+    "recurred_as": "L1-helena-46-EM1-6"
   },
   {
     "id": "L1-helena-46-EM1-7",
@@ -1303,8 +1461,12 @@
     "suggested_acceptance": "A one-paragraph opened piece adds a version when read, or the phone line does not promise one.",
     "l2_priority": "Open a one-paragraph kept piece on a phone, change it, Analyse, and list versions on the shelf.",
     "resolution": "open",
-    "recurrence": 1,
-    "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM1-10"
+    "recurrence": 2,
+    "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM1-10",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "390d9408 made the route pass body.format to addPiece (route.ts:120), but this row is the one-paragraph path: page.tsx:307 still posts {kind:'essay'} with no pieceId and the route's essay path (route.ts:145-155) keeps nothing, while page.tsx:297 still promises 'read it again as a new version'. Only the 2+ paragraph button (page.tsx:718-720) sends keep/pieceId.",
+    "recurred_as": "L1-helena-46-EM1-7"
   },
   {
     "id": "L1-helena-46-EM5-1",
@@ -1331,10 +1493,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "directness = band(hedge rate) so more hedging is more indirect; tools/style-rules-test.cjs pins a blunt set at 1-2 and a hedged set at 4-5.",
-    "recurs": "L1-helena-46-EM5-2"
+    "recurs": "L1-helena-46-EM5-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/style.ts:112 now reads directness = band(r.hedge,[40,100,200,350]). Executed on scratch sets: a blunt five-message set gives directness 1 \"blunt\"; a hedged set (think/maybe/perhaps/guess) gives 5 \"indirect\". Pinned by tools/style-rules-test.cjs. Fixed by 3ad088b2."
   },
   {
     "id": "L1-helena-46-EM5-2",
@@ -1361,11 +1526,14 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "Greeting, sign-off and signature lines are measured apart from body sentences; a casual three-email set reads casual/consultative and a long formal set reads formal with full length; pinned in tools/style-rules-test.cjs.",
     "l2_priority": "Show a business-writing trainer three of the Character's emails and the twin's eight words: does she agree with each word?",
-    "recurs": "L1-helena-46-EM5-3"
+    "recurs": "L1-helena-46-EM5-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/style.ts:60-68 bodyOf strips the greeting line and the sign-off with signature lines before sentencesOf (:78); formalScore uses greeting/40 + signoff/40 (:105). Executed: three \"Hi Jan ... Best, Helena\" emails read formality casual (2), not ceremonial; a long formal \"Dear Mr Novak ... Kind regards\" set reads ceremonial, length full, detail exhaustive and structured (wps p50 24). Pinned in tools/style-rules-test.cjs. Fixed by 0b8a4857."
   },
   {
     "id": "L1-helena-46-EM5-3",
@@ -1393,10 +1561,14 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "In Adult mode a reading of a kept piece can be shown on the PC page (sentences and verdicts there, marks on the TV), or the TV asks before showing text.",
     "scope_note": "By design the curtain covers the Workroom, recap and Sunday page only (rubric curtain unit); this is the design tension, not a curtain count.",
-    "recurs": "L1-helena-46-EM5-7"
+    "recurs": "L1-helena-46-EM5-7",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/essay/EssayTV.tsx:424 — sentence text on the forensic page",
+    "recurred_as": "L1-helena-46-EM5-1"
   },
   {
     "id": "L1-helena-46-EM5-4",
@@ -1425,9 +1597,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The phone's keep asks message / email / essay, /drop has no silent default (or remembers the last), and both shelves show the format tag.",
-    "recurs": "L1-helena-46-EM5-8"
+    "recurs": "L1-helena-46-EM5-8",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/api/analyse/route.ts:18, :115 — body.format accepted and passed",
+    "recurred_as": "L1-helena-46-EM5-2"
   },
   {
     "id": "L1-helena-46-EM5-5",
@@ -1456,9 +1632,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Lines starting '>' and everything after an 'On … wrote:' line are dropped before measuring and exporting; the copy on /drop and the Workroom says the card carries up to five of her own texts, and she reviews them.",
-    "recurs": "L1-helena-46-EM5-9"
+    "recurs": "L1-helena-46-EM5-9",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/drop/page.tsx:91 — the claim",
+    "recurred_as": "L1-helena-46-EM5-3"
   },
   {
     "id": "L1-helena-46-EM5-6",
@@ -1487,9 +1667,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "In Adult mode Back from the lens home (or a Workroom stop on it) returns to the Workroom; a keys test walks landing -> forensic -> Workroom.",
-    "recurs": "L1-helena-46-EM5-5"
+    "recurs": "L1-helena-46-EM5-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/tv/keys.ts:290-292 — forensic first, Workroom only otherwise",
+    "recurred_as": "L1-helena-46-EM5-4"
   },
   {
     "id": "L1-helena-46-EM5-7",
@@ -1517,9 +1701,13 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "OK on a Workroom piece (or a Read button on /drop) reads that piece's latest version through the chosen lens.",
-    "recurs": "L1-helena-46-EM5-6"
+    "recurs": "L1-helena-46-EM5-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/drop/page.tsx:79-102 — keep, shelf, twin; no read",
+    "recurred_as": "L1-helena-46-EM5-5"
   },
   {
     "id": "L1-helena-46-EM5-8",
@@ -1547,12 +1735,15 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "An untitled piece is titled 'Untitled email/message/essay' plus a date or ordinal, or only from a '# heading' or a typed title; a rules test feeds unpunctuated first lines and asserts no run of 5+ of the text's words in workroomOf().pieces[].title.",
     "l2_priority": "Keep three pieces on /drop without titles (one chat line, one subject-like line, one greeting with comma) and read the Workroom's page text for any run of 5+ of their words.",
     "boundary": true,
-    "recurs": "L1-helena-46-EM5-1"
+    "recurs": "L1-helena-46-EM5-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/session/texts.ts:89-97 titleOf returns only a \"# heading\" or \"Untitled <format> <n>\", never a line of the text. Executed addPiece with unpunctuated chat line, greeting-with-comma, and subject-like first lines as format undefined/essay/email: workroomOf().pieces[].title were \"Untitled essay 1..6\" and \"Untitled email 1..3\"; no run of 5+ words of any text in any title (breach false), phone/analyse-style keep (no format) included. Pinned in tools/texts-rules-test.cjs. Fixed by 390d9408."
   },
   {
     "id": "L1-helena-46-EM5-9",
@@ -1580,9 +1771,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "On /drop the decline reads 'Not now' and the empty shelf names 'Keep it' on this page.",
-    "recurs": "L1-helena-46-EM5-10"
+    "recurs": "L1-helena-46-EM5-10",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/drop/page.tsx:86 — TextNotice with no mode",
+    "recurred_as": "L1-helena-46-EM5-6"
   },
   {
     "id": "L1-helena-46-EM5-10",
@@ -1609,9 +1804,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Either excluded pieces leave the measure too, or the copy says they still count toward the style numbers.",
-    "recurs": "L1-helena-46-EM5-11"
+    "recurs": "L1-helena-46-EM5-11",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/twin/card.ts:46-48 — born and dims over all pieces, exclusion on exemplars",
+    "recurred_as": "L1-helena-46-EM5-7"
   },
   {
     "id": "L1-helena-46-EM5-11",
@@ -1642,8 +1841,12 @@
     "suggested_acceptance": "The phone offers a title field or uses the file name, and two phone-kept pieces can be told apart on the shelf.",
     "l2_priority": "Keep two multi-paragraph pieces from the phone and read the shelf.",
     "resolution": "open",
-    "recurrence": 1,
-    "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM5-16"
+    "recurrence": 2,
+    "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM5-16",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/phone/page.tsx:280 — piece call sends text, type, keep, pieceId, source; no title",
+    "recurred_as": "L1-helena-46-EM5-8"
   },
   {
     "id": "L1-helena-46-EM5-12",
@@ -1674,8 +1877,12 @@
     "suggested_acceptance": "/api/twin answers 403 and /drop hides the twin panel when modeOf is not adult; a test opens it as a 13-year-old and as an 18+ Family profile and expects 403.",
     "l2_priority": "Join /drop with a Family-mode profile seated and press Show the Workroom on the TV.",
     "resolution": "open",
-    "recurrence": 1,
-    "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM5-13"
+    "recurrence": 2,
+    "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM5-13",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/api/twin/route.ts:20-24 — adult computed, not a gate",
+    "recurred_as": "L1-helena-46-EM5-9"
   },
   {
     "id": "L1-helena-46-EM5-13",
@@ -1703,8 +1910,12 @@
     "suggested_acceptance": "noBreakHyphen reads as '-'; a table row reads as one line; a fixture pins both.",
     "l2_priority": "Keep a .docx with a table and a non-breaking hyphen on /drop and open it.",
     "resolution": "open",
-    "recurrence": 1,
-    "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM5-15"
+    "recurrence": 2,
+    "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM5-15",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/rules/docx.ts:59 — only w:tab, w:br, w:t handled; no noBreakHyphen",
+    "recurred_as": "L1-helena-46-EM5-10"
   },
   {
     "id": "L1-kristyna-17-EM1-1",
@@ -1735,12 +1946,16 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Either the reading is refused for a non-English text (EM1-1), or the rules take the text's language: no code verdict on a Czech text is decided by an English-only word list.",
     "l2_priority": "With a Czech paragraph, record verdicts and notes under Argument and Structure; a Czech marker reads them (verdict agreement).",
     "recurs": "L1-kristyna-17-EM1-3",
     "severity_prior": "blocker",
-    "severity_why": "Blocker to major: the refusal now stops most Czech paragraphs before the word lists, so only a paragraph that leaks past the check is mis-ruled."
+    "severity_why": "Blocker to major: the refusal now stops most Czech paragraphs before the word lists, so only a paragraph that leaks past the check is mis-ruled.",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "essay.ts:13-15,258,271-273,410 still English-only lists; analyse/route.ts:146 refuses only when paragraphIsEnglish says no (essay.ts:171-177). No commit since 782afdfb touched these.",
+    "recurred_as": "L1-kristyna-17-EM1-1"
   },
   {
     "id": "L1-kristyna-17-EM1-2",
@@ -1768,9 +1983,13 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "ES-READ ≥ 5/8: the task (when given), the kind, and the learner's recurring faults reach the prompt.",
-    "recurs": "L1-kristyna-17-EM1-5"
+    "recurs": "L1-kristyna-17-EM1-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "lib/desk/essay.ts:86-104: system and prompt carry voice, lens, numbered sentences, counts; no task, kind, history or memory. Unchanged since recert-1.",
+    "recurred_as": "L1-kristyna-17-EM1-2"
   },
   {
     "id": "L1-kristyna-17-EM1-3",
@@ -1798,12 +2017,16 @@
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Whatever the language decision, the notes, moves and patterns on one page are in one language the learner chose.",
     "l2_priority": "Read a Czech paragraph live (claude-cli/sonnet): record the language of every note, fix and the summary.",
     "recurs": "L1-kristyna-17-EM1-6",
     "severity_prior": "major",
-    "severity_why": "Major to minor: only a Czech paragraph that leaks past the language check can reach the model now."
+    "severity_why": "Major to minor: only a Czech paragraph that leaks past the language check can reach the model now.",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "lib/desk/essay.ts:86-96 English system prompt has no language line; CHECKS lines (essay.ts:308) English. Only a leaked Czech paragraph reaches it.",
+    "recurred_as": "L1-kristyna-17-EM1-3"
   },
   {
     "id": "L1-kristyna-17-EM1-4",
@@ -1830,9 +2053,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The teen band names 'a teenager' or the real age.",
-    "recurs": "L1-kristyna-17-EM1-8"
+    "recurs": "L1-kristyna-17-EM1-8",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "voice.ts:70 essay: \"a 15-year-old\"; bandOf (voice.ts:34-38) teen for age 14+.",
+    "recurred_as": "L1-kristyna-17-EM1-4"
   },
   {
     "id": "L1-kristyna-17-EM1-5",
@@ -1859,9 +2086,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Links shown on the Table (the Structure lens's third job), or the field dropped.",
-    "recurs": "L1-kristyna-17-EM1-9"
+    "recurs": "L1-kristyna-17-EM1-9",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "essay.ts:207 still computes links; EssayTV.tsx:476 figs lists sentences, claims, evidence, connectors, words avg only; grep `.links` outside rules: 0 hits.",
+    "recurred_as": "L1-kristyna-17-EM1-5"
   },
   {
     "id": "L1-kristyna-17-EM1-6",
@@ -1891,8 +2122,12 @@
     "suggested_acceptance": "A rules test with at least 50 Czech paragraphs of mixed length, including function-word-heavy ones, holds the refusal at 0.95 or better.",
     "l2_priority": "Send five of her real Czech paragraphs and count refusals; code only, no model needed.",
     "resolution": "open",
-    "recurrence": 1,
-    "origin": "2026-10-14-l1/essay-family/L1-kristyna-17-EM1-11 (short-title half fixed by 0a53e75e UD-19)"
+    "recurrence": 2,
+    "origin": "2026-10-14-l1/essay-family/L1-kristyna-17-EM1-11 (short-title half fixed by 0a53e75e UD-19)",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "essay.ts:149-177 unchanged: ENGLISH_WORDS keeps my, a, to, do, by, so; CZECH_WORDS omits them; floor 0.15/0.25. The recert-1 repro paragraphs follow from the same arithmetic; no commit touched it.",
+    "recurred_as": "L1-kristyna-17-EM1-6"
   },
   {
     "id": "L1-kristyna-17-EM1-7",
@@ -1926,8 +2161,12 @@
     "suggested_acceptance": "The Essay tab and the plan caption say once 'Essay Master reads English writing' for a profile whose system is not uk/us.",
     "l2_priority": "From a cz profile open the plan and write slot 1 in Czech: is she told before Read it?",
     "resolution": "open",
-    "recurrence": 1,
-    "origin": "recert-1 walk (second half of the original EM1-1 acceptance)"
+    "recurrence": 2,
+    "origin": "recert-1 walk (second half of the original EM1-1 acceptance)",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "page.tsx:705-708 Essay tab copy and profileRows.ts:20 still name no language; keys.ts:445 posts the plan text as an essay read so the refusal comes only there (route.ts:146); planFit at essay.ts:683 judges from English frames.",
+    "recurred_as": "L1-kristyna-17-EM1-7"
   },
   {
     "id": "L1-kristyna-17-EM3-1",
@@ -1957,10 +2196,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The forensic crumb reads 'Paragraph p · Sentence n'; the forensic page shows the piece's 'start with paragraph P' line; the landing keeps it.",
     "l2_priority": "Send a 4-paragraph piece with faults in paragraphs 2 and 4: can a reader name paragraph and move from the forensic page alone?",
-    "recurs": "L1-kristyna-17-EM3-3"
+    "recurs": "L1-kristyna-17-EM3-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Crumb still \"Sentence n of N · role\" (EssayTV.tsx:423), rail label \"N paragraphs\" (:365); \"Start with paragraph p\" built at essay.ts:485 but drawn only in the last-verdict caption (EssayTV.tsx:150) and cut by firstSentence (landingRows.ts:86,149). 2bf64f3e moved which sentence is first (body evidence), not where it is shown.",
+    "recurred_as": "L1-kristyna-17-EM3-1"
   },
   {
     "id": "L1-kristyna-17-EM3-2",
@@ -1988,10 +2231,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Delete (one or all) clears the panel's pieceId when it matches; the next keep-and-read creates a new piece.",
     "l2_priority": "Open a kept piece, delete it, press Read the whole piece with Keep ticked.",
-    "recurs": "L1-kristyna-17-EM3-4"
+    "recurs": "L1-kristyna-17-EM3-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "EssayShelf.tsx:30-34 remove reloads only its list; page.tsx:97 pieceId cleared only at :263,271,423; route.ts:115 addVersion with a deleted id fails.",
+    "recurred_as": "L1-kristyna-17-EM3-2"
   },
   {
     "id": "L1-kristyna-17-EM3-3",
@@ -2019,10 +2266,14 @@
     "code_check": "present-broken",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "A short unpunctuated first line above more text (the shelf's own titleOf rule) is the title, not paragraph 1.",
     "l2_priority": "Send a titled piece under Structure: is the title observed as claim, and does the page open on it?",
-    "recurs": "L1-kristyna-17-EM3-5"
+    "recurs": "L1-kristyna-17-EM3-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "essay.ts:83-96 paragraphsOf makes only \"# \" lines their own item; a plain title is paragraph 1. 390d9408 changed the shelf title (untitled keep) in texts, not the splitter.",
+    "recurred_as": "L1-kristyna-17-EM3-3"
   },
   {
     "id": "L1-kristyna-17-EM3-4",
@@ -2048,9 +2299,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The caption reads the running job (its start line says 'reading your piece, N paragraphs').",
-    "recurs": "L1-kristyna-17-EM3-6"
+    "recurs": "L1-kristyna-17-EM3-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "EssayTV.tsx:144-146 `reading = pieceBeingRead(a?.piece)` tests the previous reading; a first piece shows \"reading your paragraph\".",
+    "recurred_as": "L1-kristyna-17-EM3-4"
   },
   {
     "id": "L1-kristyna-17-EM3-5",
@@ -2077,8 +2332,12 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Either the shelf shows the notice line (where the text goes) or the fields are dropped.",
-    "recurs": "L1-kristyna-17-EM3-7"
+    "recurs": "L1-kristyna-17-EM3-7",
+    "recertify_run": "2026-10-09-essay-l1/recert-2",
+    "recertify_status": "recurs",
+    "recertify_evidence": "texts/route.ts:39 returns pieces, noticed, notice; EssayShelf.tsx:19 reads only pieces; no other GET reader.",
+    "recurred_as": "L1-kristyna-17-EM3-5"
   }
 ]
