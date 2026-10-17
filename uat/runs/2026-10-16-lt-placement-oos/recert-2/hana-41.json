@@ -1,0 +1,478 @@
+{
+  "character": "hana-41",
+  "name": "Hana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nHana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "I don't know my exact level, so I'll let the app find it.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Hana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I will write about my work.",
+          "action": "answer",
+          "args": {
+            "text": "I use English in my work. I am accountant and I write emails to foreign colleagues and sometimes we have meeting."
+          },
+          "result": "ok",
+          "ms": 4644
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Hana! Writing emails and joining meetings in English is useful. How did you learn your English? School, a course, or time abroad?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Hana! Writing emails and joining meetings in English is useful. How did you learn your English? School, a course, or time abroad?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work. I am accountant and I write emails to foreign colleagues and sometimes we have meeting.\nLinga\nThanks, Hana! Writing emails and joining meetings in English is useful. How did you learn your English? School, a course, or time abroad?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Hana! Writing emails and joining meetings in English is useful. How did you learn your English? School, a course, or time abroad?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I learned mostly at school and a course, so I'll say that simply.",
+          "action": "answer",
+          "args": {
+            "text": "I learned English in school and then I had a course for two years. I never lived abroad."
+          },
+          "result": "ok",
+          "ms": 2118
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks! What do you want to do better in English at work? For example, write emails faster, or speak in meetings more easily?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks! What do you want to do better in English at work? For example, write emails faster, or speak in meetings more easily?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work. I am accountant and I write emails to foreign colleagues and sometimes we have meeting.\nLinga\nThanks, Hana! Writing emails and joining meetings in English is useful. How did you learn your English? School, a course, or time abroad?\nYou\nI learned English in school and then I had a course for two years. I never lived abroad.\nLinga\nThanks! What do you want to do better in English at work? For example, write emails faster, or speak in meetings more easily?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks! What do you want to do better in English at work? For example, write emails faster, or speak in meetings more easily?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to write emails faster and speak in meetings more easily.",
+          "action": "answer",
+          "args": {
+            "text": "I want to speak in meetings more easily. And also I want to write emails faster, because now I am checking every sentence too long."
+          },
+          "result": "ok",
+          "ms": 8022
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 1 · Choose the reply on the TV\nA colleague from Japan sends you a message at 9 a.m.: 'Are you free for a quick call today?' You are busy. What do you say?\n01\nYes, I like coffee. Thank you very much.\n02\nSorry, I am busy today. Can we talk tomorrow?\nYour task\nYes, I like coffee. Thank you very much.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA colleague from Japan sends you a message at 9 a.m.: 'Are you free for a quick call today?' You are busy. What do you say?\n[button: Yes, I like coffee. Thank you very much.] [button: Sorry, I am busy today. Can we talk tomorrow?] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, the second reply is clearly right.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 5588
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 2 · Listen and answer\nYour task\nWhy did the speaker change the day?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Why did the speaker change the day?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I moved our session to Thursday because Ana is on leave next week. Could you prepare the slides before then?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood this fine: Ana is on leave, so the day changed.",
+          "action": "answer",
+          "args": {
+            "text": "Because Ana is on leave next week."
+          },
+          "result": "ok",
+          "ms": 6537
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 3 · Say it\nYour task\nYou want to speak more easily in meetings with your team abroad. Do you think it is better to practise in short daily chats or in longer weekly sessions? Why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYou want to speak more easily in meetings with your team abroad. Do you think it is better to practise in short daily chats or in longer weekly sessions? Why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You want to speak more easily in meetings with your team abroad. Do you think it is better to practise in short daily chats or in longer weekly sessions? Why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I think short daily chats are easier, I can write a safe sentence.",
+          "action": "answer",
+          "args": {
+            "text": "I think short daily chats are better, because I can practise every day and I do not forget the words. Longer session once a week is difficult for me, I have not so much time."
+          },
+          "result": "ok",
+          "ms": 10139
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 4 · Say it\nYour task\nA new colleague from Brazil joins your team next week. What is one thing you would tell them about working with your team, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA new colleague from Brazil joins your team next week. What is one thing you would tell them about working with your team, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A new colleague from Brazil joins your team next week. What is one thing you would tell them about working with your team, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy enough, I will write one short safe sentence.",
+          "action": "answer",
+          "args": {
+            "text": "I would tell them that we are helping each other in our team, because everybody can ask a question and nobody is angry."
+          },
+          "result": "ok",
+          "ms": 12718
+        },
+        {
+          "n": 9,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nHana\nLinga's read · not a certificate\nB1 · Getting by\nYour words\nYour words: “I have not so much time”.\nLinga says\nYou gave clear reasons for your ideas, like why daily chats help you practise. Fixing small grammar will help you speak more easily in meetings.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou gave clear reasons for your ideas, like why daily chats help you practise. Fixing small grammar will help you speak more easily in meetings.\nLinga's read from your answers, not a certificate. Your B2 answers were close, but none was strong, so Linga starts you at B1.\nNext to practise:\nPractise \"I have not so much time\" by saying \"I do not have much time\" instead.\nYour usual slips\n“I have not so much time” → try “I do not have much time.” “Longer session once a week is difficult for me” → try “A longer session once a week is difficult for me.”\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nA colleague from Japan sends you a message at 9 a.m.: 'Are you free for a quick call today?' You are busy. What do you say?\n“Sorry, I am busy today. Can we talk tomorrow?”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhy did the speaker change the day?\n“Because Ana is on leave next week.”\nYou caught the reason for the change. Your answer is one short sentence, so we need more English to hear your range.\nB2 · Say it · nearly there\nYou want to speak more easily in meetings with your team abroad. Do you think it is better to practise in short daily chats or in longer weekly sessions? Why?\n“I think short daily chats are better, because I can practise every day and I do not forget the words. Longer session once a week is difficult for me, I have not so much time.”\nYour English read as B1 here, and this task was B2. Held back: \"Longer session once a week\".\nYou gave a reason for your choice. The missing 'a' in 'Longer session' held your English back.\nB2 · Say it · nearly there\nA new colleague from Brazil joins your team next week. What is one thing you would tell them about working with your team, and why?\n“I would tell them that we are helping each other in our team, because everybody can ask a question and nobody is angry.”\nYour English read as B1 here, and this task was B2. Held back: \"we are helping each other in our team\".\nYou gave a clear reason with 'because'. For usual team habits, try 'we help each other'. Wider word choice would also help.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 feels right, \"working, not good\" fits; I'm happy with this and will stop.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "B1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B1",
+          "summary": "You gave clear reasons for your ideas, like why daily chats help you practise. Fixing small grammar will help you speak more easily in meetings.",
+          "focus": "Practise \"I have not so much time\" by saying \"I do not have much time\" instead.",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A colleague from Japan sends you a message at 9 a.m.: 'Are you free for a quick call today?' You are busy. What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I like coffee. Thank you very much.",
+                "Sorry, I am busy today. Can we talk tomorrow?"
+              ],
+              "response": "Sorry, I am busy today. Can we talk tomorrow?",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Sorry, I am busy today. Can we talk tomorrow?",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Why did the speaker change the day?",
+              "line": "I moved our session to Thursday because Ana is on leave next week. Could you prepare the slides before then?",
+              "options": [],
+              "response": "Because Ana is on leave next week.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "Because Ana is on leave next week.",
+              "note": "You caught the reason for the change. Your answer is one short sentence, so we need more English to hear your range."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "You want to speak more easily in meetings with your team abroad. Do you think it is better to practise in short daily chats or in longer weekly sessions? Why?",
+              "line": "",
+              "options": [],
+              "response": "I think short daily chats are better, because I can practise every day and I do not forget the words. Longer session once a week is difficult for me, I have not so much time.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I think short daily chats are better, because I can practise every day and I do not forget the words. Longer session once a week is difficult for me, I have not so much time.",
+              "note": "You gave a reason for your choice. The missing 'a' in 'Longer session' held your English back."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A new colleague from Brazil joins your team next week. What is one thing you would tell them about working with your team, and why?",
+              "line": "",
+              "options": [],
+              "response": "I would tell them that we are helping each other in our team, because everybody can ask a question and nobody is angry.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I would tell them that we are helping each other in our team, because everybody can ask a question and nobody is angry.",
+              "note": "You gave a clear reason with 'because'. For usual team habits, try 'we help each other'. Wider word choice would also help."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 88226,
+      "prior": [
+        {
+          "id": "LT-hana-41-J1-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "B2 task graded 'fail' where partial fits",
+          "expected": "A B2 comparison with reasons and minor slips should be partial.",
+          "got": "Task 3 verdict 'fail' with the note 'You compared both options and gave clear reasons.'",
+          "evidence": [
+            "#10: B2 'not yet' beside a note praising the comparison; it conflicts with the 'partial' that task 5 got for similar slips.",
+            "placement judge prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-hana-41-J1-2",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Confidence caveat is vague",
+          "expected": "A clear reason for the uncertainty.",
+          "got": "'Only a few strong answers showed this level, so it may be a little off.'",
+          "evidence": [
+            "#10 phone verdict."
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#9 band B1 vs trueBand B1, exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Tasks are office-based (#5 colleague from Japan call, #7 meetings abroad, #8 new colleague); nothing childish."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "Answers were not pulled down; #9 'Your B2 answers were close, but none was strong, so Linga starts you at B1.'"
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#9 summary is semi-specific ('why daily chats help you practise') but the focus 'I have not so much time' is a minor slip and 'Fixing small grammar' is generic; no mention of her emails/presentation goals from Q3."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #9: reached the verdict from a first visit unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#9 B1 equals trueBand B1, exact."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Every task was clear (#5-#8); the 'Show the words' and 'I don't know' options were visible."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Not tested, but #2 says 'answer in English or in your own language' and I don't know buttons exist without penalty wording."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#9 'Fixing small grammar will help you speak more easily in meetings' is template-like, and the focus is a trivial phrase; the Q3 goal about emails was ignored."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 3,
+            "total": 4,
+            "disagreements": "Task 4 (#8): in-app partial; I would say pass or high partial, since 'we are helping each other' is a minor tense slip and the reason was clear. Tasks 1-3 agree."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Next focus is a trivial phrase, not the real pattern",
+            "expected": "A focus on a recurring B1 pattern (articles, progressive for habits) useful on Monday.",
+            "got": "Practise \"I have not so much time\" by saying \"I do not have much time\".",
+            "evidence": "#9 'Next to practise: Practise \"I have not so much time\"...' while the check also showed the missing article and 'we are helping each other'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Focus names a recurring pattern with a work example, not a single phrase.",
+            "code_hint": "placement summary prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Task 4 judged partial for a small slip",
+            "expected": "Pass or strong partial for a clear B1 answer with reason.",
+            "got": "partial; 'we are helping each other' flagged, 'Wider word choice would also help' is vague.",
+            "evidence": "#8/#9 note: 'Wider word choice would also help.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Notes name a concrete word or fix.",
+            "code_hint": "placement judge prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Confidence is low but explained vaguely",
+            "expected": "Clear reason for the uncertainty.",
+            "got": "'Your B2 answers were close, but none was strong' - confidence low without saying why on the screen.",
+            "evidence": "#9 caveat line.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Caveat names which evidence is missing.",
+            "code_hint": "verdict caveat copy"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Workplace-relevant, adult tasks and exact band",
+            "expected": "",
+            "got": "Tasks about colleagues, meetings and a Brazil newcomer; B1 exact in 4 tasks.",
+            "evidence": "#5-#9.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep office-themed tasks.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "low"
+        },
+        "voice": "Pěkné, it felt like a short business English test, not a game, and I liked that the tasks were about colleagues and meetings. B1 feels right for me, \"working, not good\". I also liked seeing my slips with a corrected version. But the next step is weak: practising \"I do not have much time\" is tiny, and I said I want to write emails faster and speak in meetings, and the summary only says \"fixing small grammar\". It sounds a bit like a template. Still, it took about seven minutes, not weeks to book a course at 800 CZK. I would use it again for evening practice and tell a colleague, if the topics and corrections get more specific to my job.",
+        "prior": [
+          {
+            "id": "LT-hana-41-J1-1",
+            "status": "not-seen",
+            "evidence": "#9 both B2 tasks got 'partial' with notes matching the verdict; no fail beside praise.",
+            "finding": -1
+          },
+          {
+            "id": "LT-hana-41-J1-2",
+            "status": "recurs",
+            "evidence": "#9 caveat 'Your B2 answers were close, but none was strong' remains vague; confidence low.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #9 'Fixing small grammar will help you speak more easily in meetings' is template-like, and the focus is a trivial phrase; the Q3 goal about emails was ignored.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #9 summary is semi-specific ('why daily chats help you practise') but the focus 'I have not so much time' is a minor slip and 'Fixing small grammar' is generic; no mention of her emails/presentation goals from Q3."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 11,
+      "fail": 0,
+      "ms": 49720
+    },
+    "character": {
+      "n": 9,
+      "fail": 0,
+      "ms": 38256
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 17104
+    }
+  }
+}

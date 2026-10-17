@@ -1,0 +1,512 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "I want to know my level before Friday's interview, so I'll let it test me.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Oksana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I use English mostly at work, so I'll say that.",
+          "action": "answer",
+          "args": {
+            "text": "I am from Ukraine and I live in Brno. I use English mostly at work, I am logistics coordinator. I write emails to carriers and sometimes I have calls with them. Now I prepare for interview on Friday."
+          },
+          "result": "ok",
+          "ms": 4973
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nGood luck with your interview on Friday! How did you learn your English? School, a course, time abroad, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nGood luck with your interview on Friday! How did you learn your English? School, a course, time abroad, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI am from Ukraine and I live in Brno. I use English mostly at work, I am logistics coordinator. I write emails to carriers and sometimes I have calls with them. Now I prepare for interview on Friday.\nLinga\nGood luck with your interview on Friday! How did you learn your English? School, a course, time abroad, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good luck with your interview on Friday! How did you learn your English? School, a course, time abroad, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Fine, I'll explain how I learned English briefly.",
+          "action": "answer",
+          "args": {
+            "text": "I learned English at school in Ukraine, but it was basic. Then I had a course two years ago and now mostly on my own, from work emails and videos."
+          },
+          "result": "ok",
+          "ms": 4638
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThank you, that helps a lot. What would you like to be able to do in English in the next few months? For example, write emails, speak on calls, or talk in meetings?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThank you, that helps a lot. What would you like to be able to do in English in the next few months? For example, write emails, speak on calls, or talk in meetings?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI am from Ukraine and I live in Brno. I use English mostly at work, I am logistics coordinator. I write emails to carriers and sometimes I have calls with them. Now I prepare for interview on Friday.\nLinga\nGood luck with your interview on Friday! How did you learn your English? School, a course, time abroad, or on your own?\nYou\nI learned English at school in Ukraine, but it was basic. Then I had a course two years ago and now mostly on my own, from work emails and videos.\nLinga\nThank you, that helps a lot. What would you like to be able to do in English in the next few months? For example, write emails, speak on calls, or talk in meetings?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that helps a lot. What would you like to be able to do in English in the next few months? For example, write emails, speak on calls, or talk in meetings?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to speak well in my Friday interview and on calls with carriers.",
+          "action": "answer",
+          "args": {
+            "text": "I want to speak better on calls with carriers, for example when delivery is late. Also I need to answer questions on job interview, to tell about my experience and about problem which I solved. And ask about team, salary and shifts."
+          },
+          "result": "ok",
+          "ms": 10034
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 1 · Choose the reply on the TV\nA colleague says, 'The truck is late. Can you call the carrier?' What do you say?\n01\nYes, I like the color of the truck.\n02\nYes, I will call them now.\nYour task\nYes, I like the color of the truck.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA colleague says, 'The truck is late. Can you call the carrier?' What do you say?\n[button: Yes, I like the color of the truck.] [button: Yes, I will call them now.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, the color answer is silly; I will call them now.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 3920
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 2 · Listen and answer\nYour task\nWhat is the reason for the delay?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What is the reason for the delay?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"The shipment left the warehouse two days ago, but the driver still has not reached the port because of bad weather.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood it: the driver is late because of bad weather.",
+          "action": "answer",
+          "args": {
+            "text": "The reason is bad weather. The driver did not reach the port yet."
+          },
+          "result": "ok",
+          "ms": 7289
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 3 · Say it\nYour task\nA client has a large order and asks whether to ship it by sea or by air. Which would you recommend, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA client has a large order and asks whether to ship it by sea or by air. Which would you recommend, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A client has a large order and asks whether to ship it by sea or by air. Which would you recommend, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Sea is cheaper, air is faster; I'll answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "I would recommend by sea if the client is not in hurry, because it is much cheaper for large order. But if the goods are urgent, by air is better, because it is faster, even if it cost more. I would ask the client about the deadline first."
+          },
+          "result": "ok",
+          "ms": 13573
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 4 · Say it\nYour task\nA new coworker asks what makes a carrier call go well. What is the most important habit you would teach them, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA new coworker asks what makes a carrier call go well. What is the most important habit you would teach them, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A new coworker asks what makes a carrier call go well. What is the most important habit you would teach them, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good question, I should answer about confirming details in writing.",
+          "action": "answer",
+          "args": {
+            "text": "The most important habit is to confirm everything at the end of the call. I repeat the date, time and place to the carrier and then I send a short email with the same information. It is important because when there is a problem later, we have a proof and nobody can say that he understood something different."
+          },
+          "result": "ok",
+          "ms": 9751
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 5 · Say it\nYour task\nA carrier tells you by phone that their rates will rise 15% from next week. You want to keep them as a partner but you cannot accept that increase. What would you say to them on the call?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA carrier tells you by phone that their rates will rise 15% from next week. You want to keep them as a partner but you cannot accept that increase. What would you say to them on the call?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A carrier tells you by phone that their rates will rise 15% from next week. You want to keep them as a partner but you cannot accept that increase. What would you say to them on the call?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I want to keep the partner, so I will be polite but clear about the rate.",
+          "action": "answer",
+          "args": {
+            "text": "I understand that your costs are higher, and we want to continue working with you. But fifteen percent from next week is too much for us, we cannot accept it. Can we discuss a smaller increase, maybe five percent, or start from next quarter? Also we can give you more regular volumes if the price stay stable."
+          },
+          "result": "ok",
+          "ms": 17818
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nOksana\nLinga's read · not a certificate\nB1 · Getting by\nYour words\nYour words: “for large order”.\nLinga says\nYou explain ideas clearly, like your carrier-call answer on confirming details. Article and verb slips remain; practice will help your interview answers.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou explain ideas clearly, like your carrier-call answer on confirming details. Article and verb slips remain; practice will help your interview answers.\nLinga's read from your answers, not a certificate. Your B2 answers were close, but only one was strong, so Linga starts you at B1.\nNext to practise:\nPractise plurals and articles: \"for large order\" should be \"for large orders\" in short sentences you say aloud.\nYour usual slips\n“for large order” → try “for large orders” “if the price stay” → try “if the price stays” “not in hurry” → try “not in a hurry”\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nA colleague says, 'The truck is late. Can you call the carrier?' What do you say?\n“Yes, I will call them now.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat is the reason for the delay?\n“The reason is bad weather. The driver did not reach the port yet.”\nYou caught the reason for the delay. Your two sentences were clear, and the past negative 'did not reach' was correct.\nB2 · Say it · nearly there\nA client has a large order and asks whether to ship it by sea or by air. Which would you recommend, and why?\n“I would recommend by sea if the client is not in hurry, because it is much cheaper for large order. But if the goods are urgent, by air is better, because it is faster, even if it cost more. I would ask the client about the deadline first.”\nYour English read as B1 here, and this task was B2. Held back: \"it is much cheaper for large order\".\nYour answer gave a recommendation and reasons. Missing articles, as in 'for large order', held the English back.\nB2 · Say it · at this level\nA new coworker asks what makes a carrier call go well. What is the most important habit you would teach them, and why?\n“The most important habit is to confirm everything at the end of the call. I repeat the date, time and place to the carrier and then I send a short email with the same information. It is important because when there is a problem later, we have a proof and nobody can say that he understood something different.”\nYou answered the question well. Your English is strong, with small slips like 'a proof' that never block the meaning.\nC1 · Say it · nearly there\nA carrier tells you by phone that their rates will rise 15% from next week. You want to keep them as a partner but you cannot accept that increase. What would you say to them on the call?\n“I understand that your costs are higher, and we want to continue working with you. But fifteen percent from next week is too much for us, we cannot accept it. Can we discuss a smaller increase, maybe five percent, or start from next quarter? Also we can give you more regular volumes if the price stay stable.”\nYour English read as B2 here, and this task was C1. Held back: \"if the price stay stable\".\nYou made a counter-offer and asked for a discussion. One verb form slipped: 'if the price stay' needs 'stays'. Idioms would add range.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 feels fair and the slips it found are real, so I'll stop here for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "B1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B1",
+          "summary": "You explain ideas clearly, like your carrier-call answer on confirming details. Article and verb slips remain; practice will help your interview answers.",
+          "focus": "Practise plurals and articles: \"for large order\" should be \"for large orders\" in short sentences you say aloud.",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A colleague says, 'The truck is late. Can you call the carrier?' What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I like the color of the truck.",
+                "Yes, I will call them now."
+              ],
+              "response": "Yes, I will call them now.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, I will call them now.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What is the reason for the delay?",
+              "line": "The shipment left the warehouse two days ago, but the driver still has not reached the port because of bad weather.",
+              "options": [],
+              "response": "The reason is bad weather. The driver did not reach the port yet.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "The reason is bad weather. The driver did not reach the port yet.",
+              "note": "You caught the reason for the delay. Your two sentences were clear, and the past negative 'did not reach' was correct."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A client has a large order and asks whether to ship it by sea or by air. Which would you recommend, and why?",
+              "line": "",
+              "options": [],
+              "response": "I would recommend by sea if the client is not in hurry, because it is much cheaper for large order. But if the goods are urgent, by air is better, because it is faster, even if it cost more. I would ask the client about the deadline first.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I would recommend by sea if the client is not in hurry, because it is much cheaper for large order. But if the goods are urgent, by air is better, because it is faster, even if it cost more.",
+              "note": "Your answer gave a recommendation and reasons. Missing articles, as in 'for large order', held the English back."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A new coworker asks what makes a carrier call go well. What is the most important habit you would teach them, and why?",
+              "line": "",
+              "options": [],
+              "response": "The most important habit is to confirm everything at the end of the call. I repeat the date, time and place to the carrier and then I send a short email with the same information. It is important because when there is a problem later, we have a proof and nobody can say that he understood something different.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "It is important because when there is a problem later, we have a proof and nobody can say that he understood something different.",
+              "note": "You answered the question well. Your English is strong, with small slips like 'a proof' that never block the meaning."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "A carrier tells you by phone that their rates will rise 15% from next week. You want to keep them as a partner but you cannot accept that increase. What would you say to them on the call?",
+              "line": "",
+              "options": [],
+              "response": "I understand that your costs are higher, and we want to continue working with you. But fifteen percent from next week is too much for us, we cannot accept it. Can we discuss a smaller increase, maybe five percent, or start from next quarter? Also we can give you more regular volumes if the price stay stable.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I understand that your costs are higher, and we want to continue working with you. But fifteen percent from next week is too much for us, we cannot accept it.",
+              "note": "You made a counter-offer and asked for a discussion. One verb form slipped: 'if the price stay' needs 'stays'. Idioms would add range."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 119280,
+      "prior": [
+        {
+          "id": "LT-oksana-34-J1-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Last two tasks near duplicates; judged inconsistently",
+          "expected": "Varied tasks; consistent grading",
+          "got": "Tasks 4 and 5 both ask for a firm polite request to a late carrier; both 'partial' for lacking idiomatic variety",
+          "evidence": [
+            "#8 and #9 prompts; #10 'To reach C1, try more varied and idiomatic phrases'",
+            "task generator prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "LT-oksana-34-J1-4",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Interview tasks aren't real interview questions",
+          "expected": "A real interview question such as 'Tell me about a problem you solved'",
+          "got": "Task 4 labels it an interview but asks for a carrier phone script",
+          "evidence": [
+            "#8 'Your interview asks about a problem you solved. A carrier says your parcel will be late again.'"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 B1 vs trueBand B1, exact; her inserted words weren't an issue (no Ukrainian words used)."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'in your own language'; #3 'school, a course, time abroad' with no Czech assumption; no child tone."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "Journey is the level check; no topics proposed yet (#10 'See my topics' not opened). 'Beyond the rehearsed answer [interview]' was in the situation list (#1)."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#5-#9 tasks are carrier calls and shipping, not interview questions; she asked for a problem-solved question (#4) and the check never asked one. Same gap as before."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation moments in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#2-#4 questions ask where she uses English, how she learned it and her goals; nothing about displacement or status."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10: she went from Find my level through 3 questions and 5 tasks to the verdict unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 'B1 · Getting by'; placement class exact against trueBand B1."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#9 each task was clear and she answered all; 'I don't know' was offered on every task."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 'Answer in English or your own language; both tell Linga something'; 'I don't know' was available and never felt like a failure."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 'like your carrier-call answer on confirming details' and the quoted slips 'for large order' show it listened. The summary is slightly generic ('practice will help your interview answers')."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None. Task 3 partial is fair for the missing articles. Task 5 partial is lenient but defensible; the 'price stay' slip is real."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Check tasks are carrier calls, not interview questions",
+            "expected": "At least one real interview question, such as 'Tell me about a problem you solved'",
+            "got": "All five tasks are carrier or shipping scenarios, though she said her goal was the interview (#4)",
+            "evidence": "#4 'answer questions on job interview... problem which I solved'; #5-#9 tasks are carrier/shipping only; the verdict next focus says 'practice will help your interview answers'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "When the learner names an interview goal, at least one check task is a real interview question.",
+            "code_hint": "task generator prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Accurate placement and real slips quoted",
+            "expected": "B1 with believable corrections",
+            "got": "B1 exact; slips quoted verbatim with fixes ('not in a hurry', 'price stays')",
+            "evidence": "#10 'Your usual slips “for large order” → try “for large orders”'; 'Linga's read... not a certificate'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep quoting the learner's own words with the fix.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Own-language welcome with no Czech assumption",
+            "expected": "No assumptions about her background",
+            "got": "'in English or in your own language' and a neutral question about how she learned English",
+            "evidence": "#2, #3.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the neutral wording.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Last tasks overlap, and the grading is lenient",
+            "expected": "Varied tasks with consistent grading",
+            "got": "Tasks 4 and 5 are both carrier-call scenarios. Task 5 is called 'nearly there' at C1 for a B2-level answer, and the verdict says 'Idioms would add range'.",
+            "evidence": "#8, #9, #10 'Your English read as B2 here, and this task was C1'.",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Vary the scenarios across the last tasks.",
+            "code_hint": "task generator prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 15,
+          "confidence": "low"
+        },
+        "voice": "B1 is fair, and I believe it. The corrections were real ones. It quoted \"for large order\" and \"if the price stay\" from my own answers, and it didn't treat me as Czech or as a refugee. That is what I wanted. The check took about seven minutes and every task was clear. But I told it three times that I have an interview on Friday. It then gave me only carrier-call tasks, with no \"tell me about a problem you solved\". That is what the interviewer will ask me. The summary is nice but a bit general. I would come back to try the interview situation, and I would tell a colleague about it. For Friday I need real interview rehearsal, not just a level.",
+        "prior": [
+          {
+            "id": "LT-oksana-34-J1-3",
+            "status": "recurs",
+            "evidence": "#8 and #9 are both carrier-call 'Say it' tasks, and #10 says 'Idioms would add range' while both were judged partial or nearly there.",
+            "finding": 3
+          },
+          {
+            "id": "LT-oksana-34-J1-4",
+            "status": "recurs",
+            "evidence": "#5-#9 contain no interview question, even though #4 asked for 'problem which I solved'.",
+            "finding": 0
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #5-#9 tasks are carrier calls and shipping, not interview questions; she asked for a problem-solved question (#4) and the check never asked one. Same gap as before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 13,
+      "fail": 0,
+      "ms": 71942
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 47080
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 18909
+    }
+  }
+}

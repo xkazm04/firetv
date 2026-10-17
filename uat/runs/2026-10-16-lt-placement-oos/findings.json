@@ -170,13 +170,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Probing tasks should differ in function (e.g. describe a solved problem vs ask a favour).",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-2",
     "recertify_status": "recurs",
-    "recertify_evidence": "#7 and #8 are near-duplicate app-versus-phone tasks, both graded partial for 'responsible about'.",
-    "recurred_as": "LT-oksana-34-J1-2"
+    "recertify_evidence": "#8 and #9 are both carrier-call 'Say it' tasks, and #10 says 'Idioms would add range' while both were judged partial or nearly there.",
+    "recurred_as": "LT-oksana-34-J1-4"
   },
   {
     "id": "LT-petra-38-J1-4",
@@ -295,12 +295,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "When the goal is an interview, include one genuine interview question in the check.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-2",
     "recertify_status": "recurs",
-    "recertify_evidence": "#5-#8 contain no real interview question despite her stating one in #4.",
+    "recertify_evidence": "#5-#9 contain no interview question, even though #4 asked for 'problem which I solved'.",
     "recurred_as": "LT-oksana-34-J1-1"
   },
   {
@@ -388,13 +388,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "The verdict matches the note's praise; similar errors get a similar grade.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#10: task 4 'not yet' with 'Your English read as A2 here' beside a note 'You answered the question and gave a reason', while task 3 with similar slips got 'nearly there'.",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-2",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#9 both B2 tasks got 'partial' with notes matching the verdict; no fail beside praise.",
     "recurred_as": "LT-hana-41-J1-1"
   },
   {
@@ -481,13 +481,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Name which task would settle the level.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-16-lt-placement-oos/recert-1",
+    "recertify_run": "2026-10-16-lt-placement-oos/recert-2",
     "recertify_status": "recurs",
-    "recertify_evidence": "#10: 'Only a few strong answers showed this level, so it may be a little off.'",
-    "recurred_as": "LT-hana-41-J1-2"
+    "recertify_evidence": "#9 caveat 'Your B2 answers were close, but none was strong' remains vague; confidence low.",
+    "recurred_as": "LT-hana-41-J1-3"
   },
   {
     "id": "LT-dominik-17-J1-2",
