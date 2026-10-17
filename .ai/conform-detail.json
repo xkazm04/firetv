@@ -1942,6 +1942,47 @@
           "evidence": "tools/lab-bench.cjs:210 The bench evaluates one active configuration against stored baseline thresholds; it does not conduct a cross-provider or cross-model selection experiment."
         }
       ]
+    },
+    "desk-surfaces/tv-surface/demo-data-plane": {
+      "context": "tv-surface",
+      "subject": "demo-data-plane",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-17",
+      "evaluatedTs": "2026-10-17T21:53:55.212Z",
+      "worker": "537b04b7-2ad6-4b17-9d96-7d421aa5eecc",
+      "techniques": [
+        {
+          "technique": "fake-surface-honesty-contract",
+          "verdict": "deviation",
+          "evidence": "desk/src/tv/screens.tsx:454 The complete learner screen renders profile names, school types and modules without identifying the default Ema and Jakub profiles as fabricated."
+        },
+        {
+          "technique": "fixture-self-consistency",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/session/store.ts:558 Although screens share the session roster, this demo identifier is handwritten without the required fabrication affix or identifier helper."
+        },
+        {
+          "technique": "network-faithful-mocks",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/useSession.ts:23 The inspected TV path uses actual SSE and HTTP POST requests; the demo profiles are initial server records rather than a mock network client needing simulated latency and response copying."
+        },
+        {
+          "technique": "one-interface-many-planes",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/session/store.ts:48 Profile lacks required value-level provenance: fresh() supplies demo profiles, while profile.save appends user-created profiles to the same returned collection at store.ts:720."
+        },
+        {
+          "technique": "runtime-dispatch-not-build-flag",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/session/store.ts:877 Missing saved session data automatically initializes the demo roster through fresh(); selection is not driven by an explicit viewer choice of a demo plane."
+        },
+        {
+          "technique": "seeded-determinism",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/session/store.ts:559 The initial demo roster and tasks are handwritten constants, with no generated fixture population or series to seed; live timestamps and the actual pairing PIN serve operational behavior."
+        }
+      ]
     }
   }
 }

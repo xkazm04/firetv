@@ -1423,7 +1423,11 @@
           "revision": 4,
           "changedAt": "2026-09-05",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/tv/screens.tsx:454 The learner switcher displays the server's demo profiles as ordinary learner names without a visible demo marker, allowing fabricated identities to appear real.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:952fe6652c22027d",
+          "evaluatedRevision": 4
         },
         {
           "subject": "motion",
