@@ -9,7 +9,7 @@
  * - The learner's line is held on the session (the learner's own words, not a withheld answer) until the co-star's
  *   arrives, with how much help it had at the moment it was said, so help the co-star asks for later never touches it.
  * - The co-star helper: during the learner's beat the phone shows the rescue ladder of the host line (help.ts) for the
- *   co-star to whisper or read. It is the cue action itself: no model call, and a starter revealed this way makes the
+ *   co-star to whisper or read. It is the cue action itself: no model call, and any rung revealed this way makes the
  *   learner's reply supported exactly as the learner's own tap would (help.ts supportedBy).
  * - Evidence is bound to the speaker. Observations, credit, moments, taught reuse and the room's hidden line are judged
  *   on the seated learner's own line only, as quotes of THAT line. A co-star earns observations only when they are a

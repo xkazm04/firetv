@@ -749,11 +749,11 @@ const reply=(text='I need a room.')=>command('turn',{text,mode:'text',lastTurnId
 const said=(text,patch={})=>()=>({reply:text,supportProvided:false,observations:[],...patch});
 const observed=q=>[{skill:'request',quote:q,success:true,confidence:'clear',note:'Asked clearly.'}];
 
-test('ladder case 1: three cues walk simpler, meaning, starter; only the starter makes the reply supported',async()=>{
+test('ladder case 1: three cues walk simpler, meaning, starter; any revealed rung makes the reply supported (ruling (a))',async()=>{
  await booked(said('Which date do you need?',{help:LADDER}));await reply();
  const V=view(),walk=[];
  for(let i=0;i<3;i++){await command('cue');const c=getSession().conversation;walk.push([c.cue,c.help&&c.help.rung,c.supported,V.lingaView(getSession(),{}).captionTag]);}
- assert.deepEqual(walk,[[LADDER.simpler,1,false,'Said more simply'],[LADDER.meaning,2,false,'What it means'],[LADDER.starter,3,true,'A way to start']]);
+ assert.deepEqual(walk,[[LADDER.simpler,1,true,'Said more simply'],[LADDER.meaning,2,true,'What it means'],[LADDER.starter,3,true,'A way to start']]);
 });
 test('ladder case 2: help follows the partner\'s current question, never the last one or the scene\'s static cue (the Tomas case)',async()=>{
  const A={simpler:'Your dog\'s name?',meaning:'name: what you call him',starter:'My dog is called …'};
@@ -765,12 +765,15 @@ test('ladder case 2: help follows the partner\'s current question, never the las
  assert.equal(cue,B.simpler);
  for(const x of [...Object.values(A),BOOKING_CUE])assert.notEqual(cue,x);
 });
-test('ladder case 3: a reply after the meaning rung is independent evidence; after the starter it is supported',async()=>{
+test('ladder case 3: a reply with no rung revealed is independent; after the meaning rung it is supported, as after the starter (ruling (a))',async()=>{
  await booked(p=>({reply:'Which date do you need?',supportProvided:false,observations:observed(p.submittedReply),help:LADDER}));
- await reply('Could you check my booking?');await command('cue');await command('cue');
- await reply('Could you check it for Friday?');
+ await reply('Could you check my booking?');
  let c=getSession().conversation,learner=c.turns.at(-2);
- assert.equal(learner.supported,false);assert(c.evidence.length&&c.evidence.filter(e=>e.turnId===learner.id).every(e=>e.supported===false));
+ assert.equal(learner.supported,false,'no rung revealed: unaided');assert(c.evidence.length&&c.evidence.filter(e=>e.turnId===learner.id).every(e=>e.supported===false));
+ await command('cue');await command('cue');
+ await reply('Could you check it for Friday?');
+ c=getSession().conversation;learner=c.turns.at(-2);
+ assert.equal(learner.supported,true,'the meaning rung is help');assert(c.evidence.filter(e=>e.turnId===learner.id).length&&c.evidence.filter(e=>e.turnId===learner.id).every(e=>e.supported===true));
  await command('cue');await command('cue');await command('cue');
  await reply('Could you check the Friday room?');
  c=getSession().conversation;learner=c.turns.at(-2);
@@ -787,7 +790,7 @@ test('ladder case 5: help.ts drops a malformed rung and the turn still lands; wi
  await booked(p=>({reply:partner,supportProvided:false,observations:observed(p.submittedReply),help:{simpler:partner,meaning:LADDER.meaning,starter:'I need a room for Friday.'}}));
  await reply('Could you check my booking?');
  let c=getSession().conversation;assert.equal(c.turns.at(-1).text,partner);assert.equal(c.evidence.length,1);
- await command('cue');c=getSession().conversation;assert.equal(c.cue,LADDER.meaning);assert.equal(c.supported,false);
+ await command('cue');c=getSession().conversation;assert.equal(c.cue,LADDER.meaning);assert.equal(c.supported,true,'any revealed rung is help (ruling (a))');
  await command('cue');c=getSession().conversation;assert.equal(c.cue,LADDER.meaning,'no rung past the last valid one');
  ladderEngine(said(partner,{help:{simpler:partner,meaning:'',starter:'I need a room for Friday.'}}));
  await reply('Friday, please.');await command('cue');

@@ -88,12 +88,12 @@ test('the turn table alternates the beats: the co-star is refused on the learner
   assert.deepEqual(conv().turns.map(t=>t.role),['partner','learner','costar','partner','learner','costar','partner']);
 });
 
-test('the co-star helper climbs the help.ts ladder with zero engine calls, and a starter makes the learner\'s reply supported',async()=>{
+test('the co-star helper climbs the help.ts ladder with zero engine calls, and any revealed rung makes the learner\'s reply supported',async()=>{
   fresh();
   await command('start',{sceneId:'booking',duet:{coStar:'Mum'}});
   calls.length=0;
   assert.equal(conv().supported,false);
-  await command('cue');assert.equal(conv().cue,LADDER.simpler);assert.equal(conv().supported,false,'the simpler line supplies no wording');
+  await command('cue');assert.equal(conv().cue,LADDER.simpler);assert.equal(conv().supported,true,'any revealed rung is help (the delegate\'s ruling (a))');
   await command('cue');assert.equal(conv().cue,LADDER.meaning);
   await command('cue');assert.equal(conv().cue,LADDER.starter);assert.equal(conv().supported,true,'a way to start is help, as the learner\'s own tap is');
   assert.equal(calls.length,0,'the helper is the ladder already held: no model call');
@@ -102,7 +102,7 @@ test('the co-star helper climbs the help.ts ladder with zero engine calls, and a
   assert.equal(conv().duet.held.supported,true,'the held line keeps the help it had when it was said');
   await said('Novak.',{speaker:'costar'});
   const ev=getLearner('ema').english.evidence;
-  assert.equal(ev.length,1);assert.equal(ev[0].supported,true,'credit stays honest: the reply after a starter is supported');
+  assert.equal(ev.length,1);assert.equal(ev[0].supported,true,'credit stays honest: the reply after a revealed rung is supported');
   assert.equal(conv().turns.find(t=>t.role==='learner').supported,true);
 });
 

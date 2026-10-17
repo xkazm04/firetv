@@ -502,8 +502,8 @@ export async function englishCommand(raw:unknown){
       // a co-star who is a learner profile: observations of their own line, on their own record (duet.ts); a named co-star earns nothing
       const coStar=pair?coStarEvidence(c,pair,result.json.coStarObservations,skills,Date.now()):[];
       if(coStar.length&&c.duet?.coStarLearnerId)saveEnglish(c.duet.coStarLearnerId,mergeEvidence(getLearner(c.duet.coStarLearnerId).english,coStar));
-      // SUPPORTED (lt-swap-2/recert-1): this reply's flag is the help the learner used for it (c.supported: a cue, the quiz, a
-      // starter rung) or a read-back of a shown line. Once it is recorded the next reply starts unhelped: neither the model's
+      // SUPPORTED (lt-swap-2/recert-1): this reply's flag is the help the learner used for it (c.supported: a cue, the quiz, any
+      // help rung) or a read-back of a shown line. Once it is recorded the next reply starts unhelped: neither the model's
       // supportProvided about its own line nor a moment makes a reply the learner then says on their own a helped one.
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
       next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,...(pair?[pair.learner,pair.coStar]:[{id:turnId,role:"learner" as const,text:reply,mode,supported:c.supported||copied}]),partner],...(pair&&c.duet?{duet:afterPair(c.duet)}:{}),supported:false,moment:onScreen,moments:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{}),...(found&&hidden&&c.line?{line:{...c.line,found:usedLine(reply,found),foundTurn:turnId,text:hidden.text}}:{})};

@@ -3,8 +3,8 @@
  *
  * Every partner line comes with its own ladder, written in the same model call as the line: said more simply,
  * what it means, a way to start. Code decides the rest. It drops a rung that does not do its job, reveals the
- * rungs one at a time and in order, and decides that only the starter makes the next reply supported. The simpler
- * line and the meaning supply no wording, so a reply after them can still earn independent evidence.
+ * rungs one at a time and in order, and decides that any rung revealed for the line on screen makes the next reply
+ * supported: certification credits only fully unaided replies (the delegate's ruling (a) on lt-swap-2/recert-1).
  *
  * Withholding: a rung may say the question again or explain a word, and the starter opens a reply without finishing
  * it. None of them is the learner's answer. The words of an unrevealed rung never reach the session, which every
@@ -13,8 +13,8 @@
  */
 import type { ConversationHelp, HelpRung } from "./types";
 
-/** Only a phrase starter supplies wording: a reply after it is supported practice. */
-export const SUPPORTING_RUNG: HelpRung = 3;
+/** Any revealed rung is help: a reply after the simpler line, the meaning or the starter is supported practice. */
+export const SUPPORTING_RUNG: HelpRung = 1;
 export const SIMPLER_MAX = 160, MEANING_MAX = 160, STARTER_MAX = 80, STARTER_WORDS = 8;
 const LADDER_CAP = 200;
 

@@ -104,7 +104,7 @@ export interface Answer { id: "answer"; action: "check-answer" | "check-task" | 
   speaker?: "learner" | "costar"; }
 /** The line the TV speaks. A new key plays it again; blocked keeps it silent. */
 export interface Spoken { line: string; key: string; blocked: boolean; slow: boolean; speaker: string; }
-export interface Recap { title: string; replies: number; spoken: number; /** replies said after help the learner used (a cue, the quiz, a starter rung) or reading back a shown line: the turns' flags */ supported: number; /** replies said with none */ independent: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
+export interface Recap { title: string; replies: number; spoken: number; /** replies said after help the learner used (a cue, the quiz, any help rung) or reading back a shown line: the turns' flags */ supported: number; /** replies said with none */ independent: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
 export type Hero =
   /** `yours` (L1): the learner's owned phrases on home, no count and no digit; Family draws them as Open Door objects, Adult as a progress line (X2) */
   | { kind: "intro"; kicker: string; title: string; subtitle: string; art: ArtKey; nameTag: string; yours?: { phrases: string[]; style: "objects" | "list" } }
