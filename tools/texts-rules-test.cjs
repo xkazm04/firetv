@@ -121,11 +121,11 @@ test('the essay on the desk is the seated learner\'s: a learner change never sho
   dispatch({ type: 'learner.set', id: 'jakub' });
   assert.notEqual(getSession().essay?.text, 'Ema wrote this.', 'jakub never sees ema\'s paragraph');
 });
-test('a title is never the text of a message: a heading or a heading-like first line, else "Untitled <format>"', () => {
-  assert.equal(T.addPiece('ema', { text: 'hey, running late, 10 min', format: 'message' }).value.title, 'Untitled message');
-  assert.equal(T.addPiece('ema', { text: 'Dear Ana,\n\nThe files are attached.', format: 'email' }).value.title, 'Untitled email', 'a greeting is not a heading');
-  assert.equal(T.addPiece('ema', { text: 'Teenagers sleep late.\n\nSo school should start later.' }).value.title, 'Untitled essay');
-  assert.equal(T.addPiece('ema', { text: 'Why we sleep\n\nTeenagers sleep late.' }).value.title, 'Why we sleep');
+test('a title is never a line of the text: only a "# heading" names a piece, else "Untitled <format> <n>"', () => {
+  assert.equal(T.addPiece('ema', { text: 'hey, running late, 10 min', format: 'message' }).value.title, 'Untitled message 1');
+  assert.equal(T.addPiece('ema', { text: 'Dear Ana,\n\nThe files are attached.', format: 'email' }).value.title, 'Untitled email 1', 'a greeting is not a heading');
+  assert.equal(T.addPiece('ema', { text: 'Teenagers sleep late.\n\nSo school should start later.' }).value.title, 'Untitled essay 1');
+  assert.equal(T.addPiece('ema', { text: 'Why we sleep\n\nTeenagers sleep late.' }).value.title, 'Untitled essay 2', 'a heading-like first line is not a heading any more (the curtain; was the line itself)');
   assert.equal(T.addPiece('ema', { text: '## Sleep\n\nOne line.' }).value.title, 'Sleep');
   T.deleteAll('ema');
 });
@@ -143,8 +143,23 @@ test('UD-6: deleting a piece or all pieces clears the essay reading on the desk 
   }
 });
 test('UD-14: an email or a message never takes a title from a body line', () => {
-  assert.equal(T.addPiece('ema', { text: 'Running late\n\nBack in ten', format: 'message' }).value.title, 'Untitled message');
-  assert.equal(T.addPiece('ema', { text: 'Meeting notes\n\nSee attached', format: 'email' }).value.title, 'Untitled email');
+  assert.equal(T.addPiece('ema', { text: 'Running late\n\nBack in ten', format: 'message' }).value.title, 'Untitled message 1');
+  assert.equal(T.addPiece('ema', { text: 'Meeting notes\n\nSee attached', format: 'email' }).value.title, 'Untitled email 1');
   assert.equal(T.addPiece('ema', { text: '# Hello\n\nx', format: 'email' }).value.title, 'Hello', 'an explicit heading still names it');
   T.deleteAll('ema');
+});
+test('the curtain: no run of five words of a kept text reaches the Workroom titles, whatever its first line looks like', () => {
+  const { workroomOf } = require(src('lib/twin/workroom.ts'));
+  const NL = String.fromCharCode(10, 10);
+  const texts = ['Teenagers sleep far too late at night' + NL + 'So school should start later in the day.', 'Why school should start later' + NL + 'Teenagers fall asleep late.', 'hey running late see you at the pub soon', 'Dear Ana the files are attached below' + NL + 'Thanks Martin'];
+  for (const t of texts) T.addPiece('curtain', { text: t });
+  T.addPiece('curtain', { text: texts[0], format: 'email' });
+  const titles = workroomOf('curtain').pieces.map((p) => p.title);
+  const w = (x) => x.toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
+  for (const title of titles) for (const t of texts) {
+    const a = w(t), b = ' ' + w(title).join(' ') + ' ';
+    for (let i = 0; i + 5 <= a.length; i++) assert(!b.includes(' ' + a.slice(i, i + 5).join(' ') + ' '), 'title "' + title + '" carries a run of the text');
+  }
+  assert.deepEqual([...titles].sort(), ['Untitled email 1', 'Untitled essay 1', 'Untitled essay 2', 'Untitled essay 3', 'Untitled essay 4']);
+  T.deleteAll('curtain');
 });

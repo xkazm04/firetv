@@ -82,15 +82,15 @@ function versionProblem(text: unknown): string | null {
   return null;
 }
 /**
- * A title when none was given: a "# heading", or a heading-like first line (short, no closing punctuation) above more
- * text. Never the first sentence of a message: titles show on the TV, and a chat line as its title is its text (the
- * curtain; found by the twin suite, v2 batch 4).
+ * A title when none was given: only a "# heading", else "Untitled <format> <n>". Never a line of the text: titles show
+ * on the TV, and a first line without closing punctuation is a sentence of the learner's own as often as a heading (the
+ * curtain; found by the twin suite, v2 batch 4; L1-helena-46-EM5-1). The ordinal is the next free one for the format.
  */
-function titleOf(text: string, format: string): string {
-  const ps = paragraphsOf(text), first = (ps[0] ?? "").trim();
+function titleOf(text: string, format: string, learnerId: string): string {
+  const first = (paragraphsOf(text)[0] ?? "").trim();
   if (/^#{1,6}\s+\S/.test(first)) return first.replace(/^#{1,6}\s+/, "").slice(0, 80);
-  if (format !== "email" && format !== "message" && ps.length > 1 && first.length <= 80 && !/[.?!,;:…]$/.test(first) && !first.includes("\n")) return first;
-  return `Untitled ${format}`;
+  const used = ids(learnerId).flatMap((id) => { const p = readPiece(learnerId, id); const m = p && p.format === format ? /^Untitled \S+ (\d+)$/.exec(p.title) : null; return m ? [Number(m[1])] : []; });
+  return `Untitled ${format} ${Math.max(0, ...used) + 1}`;
 }
 
 export function listPieces(learnerId: string): PieceCard[] {
@@ -113,7 +113,7 @@ export function addPiece(learnerId: string, input: { text: unknown; source?: unk
   const source = (TEXT_SOURCES as readonly unknown[]).includes(input.source) ? (input.source as TextSource) : "paste";
   const format = typeof input.format === "string" && FORMAT.test(input.format) ? input.format : "essay";
   const text = input.text as string;
-  const title = typeof input.title === "string" && input.title.trim() ? input.title.trim().slice(0, 80) : titleOf(text, format);
+  const title = typeof input.title === "string" && input.title.trim() ? input.title.trim().slice(0, 80) : titleOf(text, format, learnerId);
   const piece: Piece = { id: `t-${randomUUID().replace(/-/g, "").slice(0, 12)}`, format, title, versions: [{ at: now, source, text }] };
   writePiece(learnerId, piece);
   return { ok: true, value: piece };
