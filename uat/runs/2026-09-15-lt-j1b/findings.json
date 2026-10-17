@@ -23,12 +23,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Keep the complete task reading load near 15 words and demonstrate that this beginner understands the requested action, including after Czech or don't-know responses.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#6 25-word homework task with options: 'Moc dlouhé, nerozumím'; #8 'Hard one'.",
+    "recertify_evidence": "#5/#6 ~25-word prompts; #7 \"Too long and fast\".",
     "recurred_as": "LT-tomas-9-J1-1"
   },
   {
@@ -195,13 +195,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Offer one short, immediately repeatable phrase using familiar words before expanding to an activity sentence.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#9 focus 'try \"My favourite block is diamond.\"' is above like/is.",
-    "recurred_as": "LT-tomas-9-J1-2"
+    "recertify_evidence": "#10 slip \"Brother?\" → \"My brother and I will play Minecraft.\"; stray period \"“Minecraft house.”.\"",
+    "recurred_as": "LT-tomas-9-J1-3"
   },
   {
     "id": "LT-tomas-9-J1-3",

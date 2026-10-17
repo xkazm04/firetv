@@ -61,9 +61,9 @@
     "recurs": "LT-tomas-9-J2-1",
     "suggested_acceptance": "After Swap, the swapped topic is absent and a different one takes its place.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "No swap was attempted in this run."
+    "recertify_evidence": "No swap was pressed in this transcript."
   },
   {
     "id": "LT-tomas-9-J1-1",
@@ -155,14 +155,14 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 3,
     "recurs": "LT-tomas-9-J3-4",
     "suggested_acceptance": "When a learner reply is mostly Czech, offer one short English model sentence he can repeat.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "He replied in English, with no Czech or \"nevím\" turn (#2-#8)."
+    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#6 'Nevím' got a moment with the English 'I don't know'."
   },
   {
     "id": "LT-tomas-9-J4-2",
@@ -189,13 +189,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "recurs": "LT-tomas-9-J4-3",
     "suggested_acceptance": "Partner turns at most 8 words with one question for elementary profiles.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#12 two clauses plus a question; #13 'Which mob do you want to meet there?'"
+    "recertify_evidence": "#12 'My dog is happy, and I like dogs too. Do you know my dog's name?'"
   },
   {
     "id": "LT-tomas-9-J1-2",
@@ -254,12 +254,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "For an elementary A1 learner, partner turns are at most 8 words and one question, using known vocabulary.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#9 \"Wolves are good friends, and they follow you everywhere! Which shiny thing in the game do you like most?\""
+    "recertify_evidence": "#17 'What is your favourite thing to build?' and #7 'wood or stone' are above a pre-A1 child; he gets tired."
   },
   {
     "id": "LT-tomas-9-J4-4",
@@ -286,13 +286,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Supported flag follows help used on that turn exactly.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "Turns at #8 and #12 supported:true with no help; the #11 reply was supported:false.",
-    "recurred_as": "LT-tomas-9-J4-2"
+    "recertify_evidence": "facts: 'Ball is blue. Modrá. I like dog.' supported:true with no help at #11.",
+    "recurred_as": "LT-tomas-9-J4-4"
   },
   {
     "id": "LT-tomas-9-J1-4",
@@ -319,12 +319,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Questions <=10 words, one choice.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#4 'What do you want to do in English? Talk to friends, play games, or watch videos?'"
+    "recertify_evidence": "#4 \"Do you know how to say 'my dog' or 'I have a dog' in English? Tell me!\" too long.",
+    "recurred_as": "LT-tomas-9-J1-2"
   },
   {
     "id": "LT-tomas-9-J2-2",
@@ -351,13 +352,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "For elementary profiles, topic goals use present simple, 'like', 'is' only.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#2 narrate goal asks for \"first, then next, and what happened at the end\", a sequence he cannot yet build.",
-    "recurred_as": "LT-tomas-9-J2-5"
+    "recertify_evidence": "#2 \"Tell what happened in Minecraft in order, using first and then.\"",
+    "recurred_as": "LT-tomas-9-J2-3"
   },
   {
     "id": "LT-tomas-9-J3-4",
@@ -448,12 +449,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "After the replay, Sam asks a new simple question that needs the fixed form.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "No replay is offered in this transcript."
+    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#7 no replay offered at all; ends with 'Do you know my dog's name?' unrelated to moment."
   },
   {
     "id": "LT-tomas-9-J1-5",
@@ -479,13 +480,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "Focus is a clean model phrase, no quoted Czech.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#9 'Your words: “I like diamond.”.' has a stray period. It no longer parrots Czech, but the formatting defect remains."
+    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 focus uses English words \"I build a house in Minecraft\", not Czech parroting."
   },
   {
     "id": "LT-tomas-9-J2-3",
@@ -511,12 +512,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Child profile topic cards show one short line.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#2 \"Understand and repair\", \"Make contact\", and a why line on every card."
+    "recertify_evidence": "#2 \"Understand and repair\", \"Make contact\" labels."
   },
   {
     "id": "LT-tomas-9-J3-3",
@@ -542,13 +543,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Do not raise a moment on a phrase already taught in the same scene.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "Only one moment (#3-#5), so no repeat could occur."
+    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#18 the two moments differ: 'Nevím' and 'I like dog' → 'I like dogs'."
   },
   {
     "id": "LT-tomas-9-J3-6",
@@ -575,13 +576,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Filter the situation list by profile type.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#1 list still has \"A booking that is missing | Our group project | The lost jacket\".",
-    "recurred_as": "LT-tomas-9-J3-4"
+    "recertify_evidence": "#1 list still has 'A booking that is missing', 'Our group project', 'The lost jacket'.",
+    "recurred_as": "LT-tomas-9-J3-3"
   },
   {
     "id": "LT-tomas-9-J1-6",

@@ -1,0 +1,1670 @@
+[
+  {
+    "id": "LT-martin-45-J1-1",
+    "journey": "J1",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 27,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "dimension": "senior-quality",
+    "title": "Focus built on a misread slip, not his fossilised errors",
+    "expected": "Focus names a recurring error like 'we was', 'since 2015'",
+    "got": "Focus is 'he move the supplier call'; the listening line said 'I can move'",
+    "evidence": [
+      "#8 'Your words: \"he move the supplier call\"'; #2 'we was discussing' not mentioned",
+      "placement summary/focus prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 5,
+    "recurs": "2026-10-14-lt/recert-4/LT-martin-45-J1-2",
+    "suggested_acceptance": "Focus names a recurring error from his own answers, accurately",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J1-1",
+    "journey": "J1",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 27,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "dimension": "senior-quality",
+    "title": "Correct sentence 'corrected' as her next focus and usual slip",
+    "expected": "Only a real error is offered as a slip; otherwise say none was found.",
+    "got": "\"whereas during explanations they would stay\" → \"would have to stay off\" shown as both next focus and 'Your usual slips'.",
+    "evidence": [
+      "#10 Next to practise and Your usual slips; her sentence in #8 was grammatical.",
+      "slip/focus generation prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 4,
+    "recurs": "2026-10-14-lt/recert-4/LT-adela-17-J1-1",
+    "suggested_acceptance": "Every slip shown is an error an examiner would mark; with none, the screen says so.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J2-1",
+    "journey": "J2",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "broken-flow",
+    "severity": "blocker",
+    "rank": 27,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "dimension": "completion",
+    "title": "Swap button does nothing; unwanted topic stays and is agreed",
+    "expected": "Pressing Swap replaces 'Small talk about favourite places' with another topic.",
+    "got": "Four swap presses; the topic is still in the list and in planAgreed.",
+    "evidence": [
+      "#2,#3,#4,#6 swap on favourite places; #7 list unchanged; #8 planAgreed includes it.",
+      "linga-plan swap action"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 4,
+    "recurs": "2026-10-14-lt/recert-3/LT-martin-45-J2-3",
+    "suggested_acceptance": "After Swap, the chosen topic is replaced by a different one, or an error is shown.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-1",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 27,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "dimension": "clarity",
+    "title": "Check tasks too long for a nine-year-old beginner",
+    "expected": "Prompts of 15 words or fewer in words he knows",
+    "got": "~25-word choose prompts and a 22-word listening line; he skipped one and wanted to quit",
+    "evidence": [
+      "#5 \"Your dog runs to the door and wags his tail. Someone rings the bell...\"; #7 \"Too long and fast\"; #10 \"Dlouhé, těžké... chci už skončit.\"",
+      "check task generation prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-tomas-9-J1-1",
+    "suggested_acceptance": "Every check prompt and listening line is 15 words or fewer using pre-A1 vocabulary.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-4",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 27,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "dimension": "trust",
+    "title": "'Only single words' feedback feels like failing",
+    "expected": "Warm praise for any English word, no 'only'",
+    "got": "'Your English was only single words, so try a full sentence'",
+    "evidence": [
+      "#9/#10 \"Thanks for sharing! Your English was only single words\"",
+      "task note prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "For elementary profiles, notes celebrate words and never say 'only'.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J3-1",
+    "journey": "J3",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "\"we was promised\" and other fossilised errors get no moment",
+    "expected": "A moment or coaching on \"we was promised\", \"until next Friday\" and \"confirm me\".",
+    "got": "Turn 3 got nothing. The recap lists two fixes only.",
+    "evidence": [
+      "#7 \"we was promised the delivery in the middle of October ... I need the first one until next Friday\" got no moment. #11 \"please confirm me the date\" got none. #13 \"2 moments to keep\".",
+      "moment detection / as-needed rule"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 5,
+    "recurs": "2026-10-14-lt/recert-3/LT-martin-45-J3-1",
+    "suggested_acceptance": "Every learner turn with his named fossilised error gets a moment or a coaching note, or the recap lists it.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J1-3",
+    "journey": "J1",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "Notes generic or inaccurate",
+    "expected": "Each note names a concrete strength or error with a quote.",
+    "got": "\"Well done.\"; \"Try more precise, idiomatic phrases\"; \"tangled\" with no cause.",
+    "evidence": [
+      "#10 notes on tasks 1, 4 and 5.",
+      "verdict note prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 4,
+    "recurs": "2026-10-14-lt/recert-4/LT-adela-17-J1-3",
+    "suggested_acceptance": "Notes cite one phrase from the answer and say why it works or fails.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J4-3",
+    "journey": "J4",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "Help is a simplified restatement or an unrelated quiz",
+    "expected": "A B2 answer frame for what she is stuck on.",
+    "got": "'Said more simply' restatements and a second-conditional quiz unrelated to the question.",
+    "evidence": [
+      "#3 'Which device do you use most for reading news?'; #4 'Which sentence is a correct second conditional?'; #7 'Which news do you like?'",
+      "cue prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 4,
+    "recurs": "2026-10-14-lt/recert-1/LT-adela-17-J4-3",
+    "suggested_acceptance": "Cue returns an opinion or comparison sentence frame matched to the question asked.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J2-1",
+    "journey": "J2",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Plan is half everyday tasks, not exam discussion",
+    "expected": "At least 4 of 6 topics are exam-style opinion, comparison or speculation topics.",
+    "got": "Blackout story, e-waste drop-off and 'Could you explain that again?' are everyday tasks; fit 4/7 after her add.",
+    "evidence": [
+      "#2 \"Find an e-waste drop-off point\"; \"Could you explain that again?\"; planAgreed 7 topics.",
+      "topic plan prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-adela-17-J2-2",
+    "suggested_acceptance": "For a B2 First candidate, at least 4 of the 6 proposed topics are opinion, comparison or speculation.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J2-2",
+    "journey": "J2",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "missing-feature",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "missing",
+    "title": "Mock interview not proposed up front",
+    "expected": "A speaking-interview topic is in the initial set for a B2 First candidate.",
+    "got": "She had to add it herself.",
+    "evidence": [
+      "#2 add-topic text; not in the initial six. Appears as 7th in #3.",
+      "topic plan prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-adela-17-J2-3",
+    "suggested_acceptance": "Initial plan for an exam-aiming learner includes an interview-style topic.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J2-3",
+    "journey": "J2",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "trust",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "dimension": "senior-quality",
+    "title": "Questionable 'usual slip' correction",
+    "expected": "Only corrections an examiner would accept.",
+    "got": "Her grammatical 'would stay' is turned into 'would have to stay off', which changes the meaning.",
+    "evidence": [
+      "#1 \"“whereas during explanations they would stay” → try “whereas during explanations they would have to stay off”\"",
+      "placement coaching prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-adela-17-J2-5",
+    "suggested_acceptance": "Corrections flag only real errors and keep the learner's meaning.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J4-4",
+    "journey": "J4",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "trust",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "trust",
+    "title": "Supported flags and recap misstate independence",
+    "expected": "Unaided replies recorded as independent; recap separates supported from independent.",
+    "got": "Later replies with no help flagged supported:true; recap says '7 spoken · 0 written replies'.",
+    "evidence": [
+      "#11, #13 no help used but evidence supported:true; #17 recap line.",
+      "evidence recorder / recap builder"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-adela-17-J4-6",
+    "suggested_acceptance": "Only replies after a cue, phrase or Show me count as supported; the recap shows both counts.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-2",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "About-you questions too long and about learning history",
+    "expected": "One tiny question like 'Do you like Minecraft?'",
+    "got": "'Where do you use English in your life?' and a 24-word two-option question",
+    "evidence": [
+      "#2 \"Where do you use English in your life?\"; #4 \"Do you know how to say 'my dog' or 'I have a dog' in English? Tell me!\"",
+      "linga check intro prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-2/LT-tomas-9-J1-4",
+    "suggested_acceptance": "Intro questions for elementary profiles are under 10 words, about games or animals.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-3",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Slips and focus beyond his level, stray punctuation",
+    "expected": "Focus using like/is only; no 'slip' labels on single-word answers",
+    "got": "'Your usual slips … “Brother?” → try “My brother and I will play Minecraft.”' and 'build a house'; 'Your words: “Minecraft house.”.'",
+    "evidence": [
+      "#10 slips line and \"“Minecraft house.”.\"",
+      "placement summary / focus prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-tomas-9-J1-2",
+    "suggested_acceptance": "Focus is one tiny phrase with known verbs; no doubled period; no 'slips' for a beginner's single words.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-1",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "Abstract skill labels and long why lines for a 9-year-old",
+    "expected": "Tiny picture-led labels and one short reason in words he knows.",
+    "got": "Labels \"Understand and repair\", \"Get something done\", \"Make contact\" and 14-word why lines.",
+    "evidence": [
+      "#2 \"Understand and repair · Vera · shop helper\"; \"Tell a short story about your game and put the events in order.\"",
+      "plan topic generation prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-09-15-lt-recert/LT-tomas-9-J2-2",
+    "suggested_acceptance": "Each topic shows a label of at most 3 child words and a reason of at most 8 words; no skill category names.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J3-1",
+    "journey": "J3",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Several Sam turns use words above a beginner nine-year-old",
+    "expected": "Very short sentences made of words he knows",
+    "got": "'make', 'build', 'wood', 'yours' and 'favourite thing to build' are used with no support",
+    "evidence": [
+      "#5 learner: 'Hmm, make – I don't know it'. #9 'Yours? Hmm, I think it means...'. #17 'Hard question... I'm getting tired.'",
+      "conversation partner prompt (band A2 for an A1 child)"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-09-15-lt-recert2-beginners/LT-tomas-9-J3-2",
+    "suggested_acceptance": "At least 80% of partner turns use only words an A1 child knows; after a hesitation, the next turn gets easier.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J3-3",
+    "journey": "J3",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "trust",
+    "title": "Grown-up situations are listed for a nine-year-old",
+    "expected": "Child-suited situations only",
+    "got": "'A booking that is missing', 'Our group project' and 'The lost jacket' are offered",
+    "evidence": [
+      "#1 and #18 situation list.",
+      "situation catalogue filter"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-tomas-9-J3-4",
+    "suggested_acceptance": "The situation list for elementary profiles hides adult and workplace contexts.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J4-1",
+    "journey": "J4",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Partner turns too long for A1 nine-year-old",
+    "expected": "One very short sentence and one simple question.",
+    "got": "Two or three sentences plus a question with 'favorite toy'.",
+    "evidence": [
+      "#10 'Red roof, nice! My dog loves red too. What is the name of my dog's favorite toy?'; #12 'My dog is happy, and I like dogs too. Do you know my dog's name?'",
+      "partner prompt, A2 band for elementary"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-09-15-lt-recert2-beginners/LT-tomas-9-J4-3",
+    "suggested_acceptance": "Partner turns at most 8 words with one question, known vocabulary.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J4-2",
+    "journey": "J4",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "missing-feature",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "completion",
+    "title": "No replay of the moment",
+    "expected": "Fresh question to retry the coached point.",
+    "got": "Only 'Back to the conversation'; session ends without retry.",
+    "evidence": [
+      "#7 only 'Back to the conversation'; #13 '1 moment to keep'",
+      "moment replay flow"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-09-15-lt-recert/LT-tomas-9-J4-4",
+    "suggested_acceptance": "Moment screen offers Try again with a new question.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J4-3",
+    "journey": "J4",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Real errors uncoached; trivial moment chosen",
+    "expected": "Coach 'I build house' → 'a house' and 'dog' → 'dogs'.",
+    "got": "Only the Czech word got a moment; 'I like dog' repeated twice.",
+    "evidence": [
+      "#10 and #11 'I like dog.' no moment",
+      "moment selection prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-1/LT-tomas-9-J4-5",
+    "suggested_acceptance": "Moment targets grammatical errors in the learner's words.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J1-2",
+    "journey": "J1",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "broken-flow",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "dimension": "trust",
+    "title": "Her direct question 'Was that correct?' is never answered",
+    "expected": "A yes/no with the rule, in the verdict or the task note.",
+    "got": "The note says the sentence is 'tangled' and the question is skipped.",
+    "evidence": [
+      "#8 \"Was that correct?\"; #10 note \"The whereas sentence is tangled\".",
+      "verdict note prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 2,
+    "recurs": "2026-09-15-lt/LT-adela-17-J1-3",
+    "suggested_acceptance": "A question to the tutor in a response gets an accurate answer in the note.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J4-2",
+    "journey": "J4",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "missing",
+    "title": "Replay offers no fresh question",
+    "expected": "Replay the moment gives a new question and she answers it better.",
+    "got": "She re-says the same sentence; no replay is offered or taken.",
+    "evidence": [
+      "#9 'Say it again, your way'; #10 'Back to the conversation'.",
+      "moment/replay prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 2,
+    "recurs": "2026-09-15-lt/LT-adela-17-J4-5",
+    "suggested_acceptance": "After a moment, offer a fresh question that exercises the same point.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J4-1",
+    "journey": "J4",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "dimension": "senior-quality",
+    "title": "Tutor marks a correct answer wrong and repeats an old correction",
+    "expected": "Answer 'Was my answer correct?' accurately: yes, the answer was correct.",
+    "got": "Lena says 'No, 'phone than' should be 'phone to''.",
+    "evidence": [
+      "#11 answer had no error; #12 reply: 'No, 'phone than' should be 'phone to': 'I prefer my phone to my laptop.''",
+      "partner prompt / correction carry-over"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "When the learner asks if a sentence was correct, the reply judges only that sentence; never re-issues a prior correction.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-2",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Placement summary tasks and feedback exceed 15 words and A1 level",
+    "expected": "Tasks of about 15 words or fewer; advice using words he has.",
+    "got": "Two 25-word tasks, a B1 task offered, and advice \"My brother and I will play Minecraft\".",
+    "evidence": [
+      "#1 \"Your dog runs to the door and wags his tail. Someone rings the bell...\"; \"Try “My brother and I will play Minecraft.”\"",
+      "placement task prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 4,
+    "recurs": "2026-10-14-lt/recert-4/LT-tomas-9-J2-3",
+    "suggested_acceptance": "Check tasks and tips for elementary A1 use 15 words or fewer and only known verbs.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J1-2",
+    "journey": "J1",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "trust",
+    "title": "Why B1 not B2 still thin",
+    "expected": "Clear reason B2 answers fell short",
+    "got": "'close, but none was strong', confidence low",
+    "evidence": [
+      "#8 'Your B2 answers were close, but none was strong'",
+      "placement summary prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-martin-45-J1-4",
+    "suggested_acceptance": "Verdict states concrete B2 gaps",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J1-3",
+    "journey": "J1",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Task 1 passes despite slips; 'team has' note questionable",
+    "expected": "Partial or accurate note",
+    "got": "pass with 'he move', 'team have'",
+    "evidence": [
+      "#5, #8 note 'team has'",
+      "listen task judge"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-martin-45-J1-3",
+    "suggested_acceptance": "Flag slips consistently",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J4-4",
+    "journey": "J4",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "trust",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "trust",
+    "title": "Supported flag inaccurate",
+    "expected": "Only helped replies marked supported.",
+    "got": "'Ball is blue...' turn (no help used at #11) is supported:true; 'Roof is red' used 'Said more simply' so fine.",
+    "evidence": [
+      "facts turns: 'Ball is blue. Modrá. I like dog.' supported:true; #11 no help pressed",
+      "evidence recording of supported"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-tomas-9-J4-2",
+    "suggested_acceptance": "supported true only when help was opened for that turn.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J3-1",
+    "journey": "J3",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Missing article 'for environment' never flagged",
+    "expected": "A moment or note on 'the environment'",
+    "got": "Partner only answered 'pay off' and moved on",
+    "evidence": [
+      "#5 learner: 'the production is not good for environment'; #6 partner: 'Yes, pay off is correct'. No moment or coaching.",
+      "moment detection / partner correction prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 2,
+    "recurs": "2026-10-14-lt/recert-4/LT-adela-17-J3-2",
+    "suggested_acceptance": "Clear grammar slips in a turn get a moment or a one-line note, even when the learner asks about another phrase.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J2-5",
+    "journey": "J2",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "trust",
+    "title": "Her direct question 'Was that correct?' not answered plainly",
+    "expected": "A direct yes/no with the reason.",
+    "got": "The note says the sentence is 'tangled' with no clear correct/incorrect answer.",
+    "evidence": [
+      "#1 \"Was that correct?\" → \"The whereas sentence is tangled\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "When she asks if it was correct, the reply says yes or no and why.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J3-2",
+    "journey": "J3",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "Her question about 'possibly' not answered directly",
+    "expected": "Say whether 'might possibly not' was correct and why",
+    "got": "Same clue repeated, then 'Try may not'",
+    "evidence": [
+      "#8 'Is \"possibly\" correct here?'; #9 'Is that correct now?'; #9/#10 only the 'Eventually' note.",
+      "moment repair loop"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "When a learner asks if a repair is correct during a moment, answer it.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J3-5",
+    "journey": "J3",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "confusion",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "Sam asks 'What is your name?' again late in the chat",
+    "expected": "Conversation moves forward",
+    "got": "After the Rex football turn Sam asks his name a second time, and the mission label stays 'Tell Sam your name'",
+    "evidence": [
+      "#16 'Rex plays football with you! That sounds fun. What is your name?'; label 'Now: Tell Sam your name' in #4-#16.",
+      "conversation partner prompt / mission step tracker"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "The partner never repeats an answered mission question; the 'Now' label follows progress.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J3-2",
+    "journey": "J3",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Moment explanation uses grammar jargon",
+    "expected": "A child-sized reason such as 'More than one dog: dogs.'",
+    "got": "'Use the plural 'dogs' when you talk about dogs in general.'",
+    "evidence": [
+      "#11 and #18 recap: 'Use the plural 'dogs' when you talk about dogs in general.'",
+      "moment prompt / correction rules"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 4,
+    "recurs": "2026-10-14-lt/recert-4/LT-tomas-9-J3-2",
+    "suggested_acceptance": "Moment 'why' lines for elementary profiles have no grammar terms and are 8 words or fewer.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J2-2",
+    "journey": "J2",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "clarity",
+    "title": "Plan grows from six to seven after an add, unexplained",
+    "expected": "Six topics, or a note explaining the new size.",
+    "got": "'7 conversations for you' and seven agreed.",
+    "evidence": [
+      "#6 '7 conversations for you'; #8 seven items in planAgreed.",
+      "linga-plan add-topic"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-martin-45-J2-3",
+    "suggested_acceptance": "Adding a topic replaces one or says why the plan is now seven.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J4-5",
+    "journey": "J4",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "clarity",
+    "title": "Topic list long and mixed",
+    "expected": "A small list mostly about play and animals.",
+    "got": "21 situations including booking, project, lost jacket.",
+    "evidence": [
+      "#1 list"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-09-15-lt/LT-tomas-9-J4-4",
+    "suggested_acceptance": "Show six child-suited topics.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J3-2",
+    "journey": "J3",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "Scene closes after five replies",
+    "expected": "About eight replies of practice.",
+    "got": "\"Mission done\" after the fifth reply.",
+    "evidence": [
+      "#12 \"Mission done. See what you did tonight.\"",
+      "mission completion rule"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-martin-45-J3-2",
+    "suggested_acceptance": "The mission does not complete before about eight learner replies.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-3",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Narrate and describe goals demand more than like/is",
+    "expected": "Goals he can meet with words he has.",
+    "got": "\"using first and then\", \"full sentence\" goals.",
+    "evidence": [
+      "#2 \"put the events in order\"; #3 \"Say what you like about football, using full short sentences\"",
+      "plan topic generation prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 3,
+    "recurs": "2026-10-14-lt/recert-4/LT-tomas-9-J2-5",
+    "suggested_acceptance": "Goals for pre-A1 children ask for one word or a like/is sentence.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-4",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "missing-feature",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "Swap not exercised",
+    "expected": "A swap visibly replaces a topic.",
+    "got": "Only add was used; swap not shown.",
+    "evidence": [
+      "#2-#3 seven Swap buttons present; actions were add-topic and agree.",
+      "plan swap handler"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 2,
+    "recurs": "2026-10-14-lt/recert-4/LT-tomas-9-J2-4",
+    "suggested_acceptance": "A swap replaces the topic with a new child-suitable one.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J3-4",
+    "journey": "J3",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "missing",
+    "title": "Plural slip and 'Rex like' went unmarked until a later repeat",
+    "expected": "A quick model on the first 'I like dog'; a gentle model for 'Rex like'",
+    "got": "The first 'I like dog' (#4) passed; the moment came only at #10. 'Rex like... football' got nothing.",
+    "evidence": [
+      "#4 'Yes. I like dog. Dog is good.' got no moment; #15 'Rex like... football!' got none.",
+      "moment trigger / coaching rules"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 2,
+    "recurs": "2026-10-14-lt/recert-4/LT-tomas-9-J3-3",
+    "suggested_acceptance": "A repeated or first-seen clear slip gets a short model, with at most one stop per few turns.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J3-3",
+    "journey": "J3",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Partial answer to 'Is that sentence correct?'",
+    "expected": "Name both the false friend and the preposition error",
+    "got": "'No, actual technology should be current technology' only",
+    "evidence": [
+      "#5 partner reply omits 'interested about', which the moment later caught at #3.",
+      "partner prompt, correction wording"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Partner answer and moment agree on all errors in the sentence asked about.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J3-6",
+    "journey": "J3",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "confusion",
+    "severity": "minor",
+    "rank": 4,
+    "impact": {
+      "frequency": "med",
+      "reachability": "med",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Near-uniform 'Yes, correct' answers feel like confirmation",
+    "expected": "Occasional refinement at examiner standard",
+    "got": "Almost every checked phrase is 'correct' with a gloss",
+    "evidence": [
+      "#7, #12, #14, #16, #18, all begin 'Yes, ... is correct'.",
+      "partner prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Confirmations add register or collocation notes where useful.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J2-4",
+    "journey": "J2",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 4,
+    "impact": {
+      "frequency": "low",
+      "reachability": "med",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "'team have' corrected to 'team has' as an error",
+    "expected": "Only real errors flagged.",
+    "got": "Collective-noun plural treated as wrong.",
+    "evidence": [
+      "#1 'Watch the verb after 'he' and 'team': 'he moves', 'team has''.",
+      "placement feedback prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Do not flag acceptable British 'team have'.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J1-4",
+    "journey": "J1",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Placement exact, with exam-style tasks",
+    "expected": "B2 for a B2 learner.",
+    "got": "B2, via the library photo comparison and persuasion tasks at B2 and C1.",
+    "evidence": [
+      "#6 \"Which place would you prefer to study in\"; #10 B2 · Comfortable."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep the exam-style opinion and comparison tasks.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J3-5",
+    "journey": "J3",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "B2 questions that keep the discussion going",
+    "expected": "Opinion and speculation questions",
+    "got": "Escalating, on-topic exam-style questions",
+    "evidence": [
+      "#6 to #18, e.g. 'what happens to the lights when the speaker talks for an hour?'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Maintain B2 question types.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J1-4",
+    "journey": "J1",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Specific slips list with fixes",
+    "expected": "",
+    "got": "Quoted slips with corrected forms; exact B1",
+    "evidence": [
+      "#8 'many people in my company is cycling' → 'are'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J2-3",
+    "journey": "J2",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Added topic keeps his request and each topic has a clear why",
+    "expected": "The added topic reflects his words.",
+    "got": "'Present a quality problem' with 'plan with the supplier to management'; no 'easy' framing.",
+    "evidence": [
+      "#5 add text; #6 'You will present a quality problem and your plan with the supplier to management.'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep rationale lines tied to the job.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J3-3",
+    "journey": "J3",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Short, correct reason on challenge",
+    "expected": "A short, accurate reason when he asks why.",
+    "got": "One-line rule shown after \"Why is that wrong?\".",
+    "evidence": [
+      "#4 \"'Discuss' takes no 'about' before its object.\"; #10 \"'until' means something lasts up to that time.\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep one-line reasons on every moment.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J3-4",
+    "journey": "J3",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "clarity",
+    "title": "Meeting-shaped scene at his band",
+    "expected": "A workplace scene pitched at B1.",
+    "got": "Elena's B1 English and a real negotiation-and-next-steps scene.",
+    "evidence": [
+      "#7-#8 split-shipment negotiation and \"Who should send the revised schedule\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep plan-led workplace scenes.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-5",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Honest, gentle verdict framing",
+    "expected": "",
+    "got": "'Understood A2 · spoke A1 · not a certificate' and 'Some answers only partly showed this level'; skip note is kind",
+    "evidence": [
+      "#10 verdict header and \"Skipped. That tells Linga something too.\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep the honest split of understood versus spoke level.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-5",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Added topic keeps what he asked for and plan is child-safe",
+    "expected": "Own topic kept.",
+    "got": "\"football\" became \"Talk about football\" with Leo, football friend.",
+    "evidence": [
+      "#3 \"Talk about football ... Leo · football friend\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep topic personalisation and the child filter.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-6",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Interests drive the plan",
+    "expected": "Minecraft and dogs first.",
+    "got": "Minecraft house, dog Max, creeper present at once.",
+    "evidence": [
+      "#2 \"You love Minecraft, so we start there.\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep interest-led topics.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J3-6",
+    "journey": "J3",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "Topic and warmth match Tomáš; the 'Nevím' moment is kind",
+    "expected": "Friendly game character who is happy with one word",
+    "got": "Minecraft, creeper, dogs and football carried 12 turns. 'Nevím' got a translation and 'Take your time'.",
+    "evidence": [
+      "#5-#7 'Nice, a Minecraft house! Take your time.'; #6 'Nevím means 'I don't know' in English.'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep Czech-to-English moment and encouraging tone.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J4-6",
+    "journey": "J4",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "effort",
+    "title": "Help ladder is findable in-scene",
+    "expected": "Help without leaving the scene.",
+    "got": "Simpler line, phrase choice and word gloss available.",
+    "evidence": [
+      "#3 'Said more simply: What do you build today?'; #6 'build: make something new with blocks'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J2-4",
+    "journey": "J2",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "clarity",
+    "title": "Added topic keeps her request",
+    "expected": "The added topic keeps what she asked for.",
+    "got": "The mock interview keeps studying abroad and gives a reason tied to her words.",
+    "evidence": [
+      "#3 \"You want to talk about studying abroad, so this practice helps you give clear reasons\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep reasons grounded in what the learner typed.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J3-4",
+    "journey": "J3",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Accurate moments with a clear reason",
+    "expected": "Exact fixes",
+    "got": "'interested in'; 'Eventually means in the end, not possibly' → 'may not'",
+    "evidence": [
+      "#4 and #10 – correct and concise; the false friend was caught on first use."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep first-use detection of false friends.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J4-5",
+    "journey": "J4",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Moments are exact and quote the learner",
+    "expected": "Quote the learner and give the rule.",
+    "got": "Both moments quote her exactly with a correct rule.",
+    "evidence": [
+      "#9 'You said I prefer my phone than my laptop'; #14 ''Not used to' means not familiar with something, not lacking something.'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep exact quoting and one-line rules.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J4-6",
+    "journey": "J4",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "clarity",
+    "title": "Partner questions are B2 and on exam topics",
+    "expected": "Opinion, comparison and speculation questions.",
+    "got": "Comparison and hypothetical questions on the phone topic.",
+    "evidence": [
+      "#11 'If you had to give up your phone for a week, what would you miss most?'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep B2 speculation questions.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-martin-45-J1-5",
+    "journey": "J1",
+    "character": "martin-45",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "missing",
+    "title": "Workplace tasks fit Martin",
+    "expected": "",
+    "got": "Supplier deadline negotiation task",
+    "evidence": [
+      "#6 'Your supplier wants to move a delivery deadline'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  }
+]

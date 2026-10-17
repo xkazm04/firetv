@@ -1,0 +1,1274 @@
+{
+  "id": "2026-10-14-lt/recert-5",
+  "started": "2026-10-17T00:58:04.575Z",
+  "cast": [
+    "adela-17",
+    "martin-45",
+    "tomas-9"
+  ],
+  "journeys": null,
+  "recertify": null,
+  "pairs": {
+    "adela-17": [
+      "J1",
+      "J2",
+      "J3",
+      "J4"
+    ],
+    "martin-45": [
+      "J1",
+      "J2",
+      "J3"
+    ],
+    "tomas-9": [
+      "J1",
+      "J2",
+      "J3",
+      "J4"
+    ]
+  },
+  "ledger": {
+    "prior": {
+      "adela-17": {
+        "J1": [
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J1-3",
+            "run": "2026-09-15-lt",
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Her explicit correction question goes unanswered",
+            "expected": "Confirm \"interested in\" and explain that \"interested\" takes the preposition \"in\", either immediately or in explicit deferred feedback.",
+            "got": "The check moves on. A later task note supplies the correct phrase without answering her earlier question or giving its rule.",
+            "evidence": [
+              "#4: \"Was 'interested about' correct...?\" #5: \"Find your level · task 1 of up to 5.\" The facts note for #9 supplies \"'interested about' instead of 'interested in'\"."
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J1-2",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Real slip 'interested about' never corrected",
+            "expected": "Flag 'interested about' → 'interested in' with the rule.",
+            "got": "No moment or note on it anywhere; the wrong 'uses' slip was shown instead.",
+            "evidence": [
+              "#2 \"I'm interested about technology\"; #10 slips list contains only the 'use' item.",
+              "slip extraction prompt"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J1-1",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Invented slip: 'suggest that she uses' marked wrong",
+            "expected": "Only corrections an examiner accepts; 'suggests that she uses' is fine in British English (subjunctive optional).",
+            "got": "\"Your usual slips: 'I'd suggest that she uses the tool' → try '... she use the tool'\"",
+            "evidence": [
+              "#10 phone Your usual slips; her answer #9.",
+              "slips/moment generation prompt"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J1-3",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Notes for harder tasks are generic",
+            "expected": "Name concrete strength or error with an example.",
+            "got": "\"Plain word choice and no idioms held it back from C1\"; \"More precise words and idioms, instead of general ones\"; \"Well done!\"",
+            "evidence": [
+              "#10 notes tasks 3, 4, 5.",
+              "verdict note prompt"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J1-4",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Task verdicts and screen explanation don't match",
+            "expected": "Consistent reasoning for ceiling.",
+            "got": "Task 3 passed at C1, task 5 partial, yet \"Your C1 answers were close, but only one was strong\"; task 3 praise cites 'However' and 'instead of' as C1 structures.",
+            "evidence": [
+              "#10 task 3 pass note and explanation line.",
+              "placement judge prompt"
+            ],
+            "recurrence": 1
+          }
+        ],
+        "J2": [
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J2-1",
+            "run": "2026-09-15-lt",
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Repeated swaps do not deliver the variety she wants",
+            "expected": "Swapping unwanted topics produces a plan she would choose, with topic fit meeting the rubric's two-thirds threshold.",
+            "got": "Six distinct proposals are explicitly swapped away. The eight retained topics count as fitting, giving 8/14 across all proposals shown. Agreement succeeds, but six of the final eight topics still concern social media.",
+            "evidence": [
+              "#2 swaps \"When a post lost its context\": \"six topics about social media feels repetitive.\" #6–#10 reject five more proposals. #10: \"swapping them is getting frustrating.\" #11 agrees reluctantly: \"There is still too much social media\". #12 confirms the final eight titles."
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-adela-17-J2-1",
+            "run": "2026-09-15-lt-recert",
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Seven swaps before the plan becomes acceptable",
+            "expected": "Most proposals should suit her exam-discussion goals, with replacements reducing selection effort.",
+            "got": "She swaps seven times and adds two topics. A rejected film recommendation eventually becomes another film-planning topic. Six of 15 proposals fit her stated preferences, although the final plan reaches six of eight.",
+            "evidence": [
+              "#4: “These are still missing the exam-style discussions I actually want.” #9: “The film recommendation still feels too casual for exam preparation”. #11 shows “Pick a film everyone can enjoy”; she agrees with “After so many swaps, these are suitable enough”."
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J2-1",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Swapping gaming night does not remove it",
+            "expected": "Swap replaces the rejected topic with a new one.",
+            "got": "List unchanged after swap; plan agreed with gaming night in it.",
+            "evidence": [
+              "#3 swap \"Planning a group gaming night\"; #4 list still shows it; planAgreed includes it. Her thought: \"I'd rather swap it for something more serious.\"",
+              "plan swap handler / topicId matching"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J2-2",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Most proposed topics are not exam-style discussions",
+            "expected": "At least 4 of 6 opinion/comparison/speculation topics.",
+            "got": "Laptop battery, gaming night, app update, lecturer repeat are everyday tasks.",
+            "evidence": [
+              "#2 titles; fit about 2 of 7 after the add.",
+              "topic plan prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J2-5",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Questionable 'usual slip' correction",
+            "expected": "Only corrections an examiner would accept.",
+            "got": "'she uses' flagged as a slip, to 'use'.",
+            "evidence": [
+              "#1 \"“I'd suggest that she uses the tool” → try “I'd suggest that she use the tool”\"",
+              "placement coaching prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J2-4",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Reasons presume interests she never stated",
+            "expected": "Reasons grounded in what she said.",
+            "got": "\"Your series interest...\", \"Gaming with friends is a fun way\" with an empty interest preference.",
+            "evidence": [
+              "#2 reason lines for series and gaming.",
+              "topic plan prompt"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J2-3",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Initial plan omits an interview even though she aims at B2 First",
+            "expected": "A mock speaking-interview topic is proposed up front.",
+            "got": "She had to add it herself.",
+            "evidence": [
+              "#2 add-topic text; not in initial six topicsShown.",
+              "topic plan prompt"
+            ],
+            "recurrence": 2
+          }
+        ],
+        "J3": [
+          {
+            "id": "2026-10-14-lt/LT-adela-17-J3-1",
+            "run": "2026-10-14-lt",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner states a wrong rule about 'used to'",
+            "expected": "Distinguish 'be used to + -ing' from 'used to + infinitive' (past habit).",
+            "got": "\"After 'used to' we use the -ing form, so 'used to asking' is right.\"",
+            "evidence": [
+              "#6 partner reply. An examiner would flag this overgeneralisation.",
+              "partner prompt correction wording"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J3-3",
+            "run": "2026-10-14-lt/recert-1",
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "No moment for 'eventually' when first said",
+            "expected": "A moment at the first use of the false friend (#5)",
+            "got": "The moment fired only at #8, after she self-corrected",
+            "evidence": [
+              "#5 \"eventually I could use the phone\" had no moment; #9 moment on \"Eventually, I mean possibly\".",
+              "moment detection"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J3-2",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Clear slips in her turns get no moment or coaching",
+            "expected": "Flag \"damages local environment\" (missing article), \"What else I would add\" (word order) and \"makes a big carbon footprint\" (collocation)",
+            "got": "The partner moves on and says nothing about them. The recap shows one moment only.",
+            "evidence": [
+              "#7 learner turn, then #8 partner \"Yes, 'concentrate on' is right here\" with no mention of the other errors",
+              "moment detection / partner correction prompt"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J3-3",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "False friend 'eventually' confirmed as clear, no moment",
+            "expected": "Check what she means by \"eventually\" and note the false friend",
+            "got": "\"Yes, your sentence is correct, and 'greener eventually' is clear.\"",
+            "evidence": [
+              "#3 partner reply; no moment at #2/#3",
+              "partner prompt, correction wording"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J3-4",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Answer to her question names no preposition",
+            "expected": "Say \"compensate for\" when she asks whether \"compensate\" was correct",
+            "got": "\"No, 'compensate' needs a preposition after it\". She had to ask again at #6.",
+            "evidence": [
+              "#6 partner reply, then her \"which preposition do I need\" in the same turn",
+              "partner prompt, correction wording"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J3-5",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Partner speaks of Owen in the third person",
+            "expected": "Owen speaks as \"I\"",
+            "got": "\"Owen pushes back: batteries are made only once…\" in Owen's own turn",
+            "evidence": [
+              "#3, #8, #9 partner turns",
+              "partner prompt"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J3-6",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "confusion",
+            "dimension": "effort",
+            "title": "'Mission done' appears after only three replies",
+            "expected": "The scene keeps going until she chooses to finish",
+            "got": "From #7 the screen shows \"Mission done. See what you did tonight.\" while the partner keeps asking questions.",
+            "evidence": [
+              "#7, #8, #9 \"Mission done\" alongside a new partner question",
+              "mission progress"
+            ],
+            "recurrence": 1
+          }
+        ],
+        "J4": [
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J4-6",
+            "run": "2026-09-15-lt",
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Replay status persists throughout the remaining conversation",
+            "expected": "Make it clear when the retry has ended and ordinary discussion has resumed.",
+            "got": "The retry instruction stays visible across subsequent topics and all remaining conversation screens.",
+            "evidence": [
+              "#6 introduces \"Try it again: a new question practising the coaching point.\" The identical instruction remains at #22, after 13 replies and a question about listeners missing the explanation."
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J4-5",
+            "run": "2026-09-15-lt",
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Replay does not demonstrate improvement on the coached point",
+            "expected": "A fresh question should let her independently practise the coaching point and show improvement.",
+            "got": "The coach models a more tentative clarification request, but replay asks for a summary. She requests another cue and gives a supported summary. Later independent discussion succeeds, but improvement on the coached request is unproven.",
+            "evidence": [
+              "#5 models \"Could you clarify the difference between those two meanings first?\"; #6 asks \"what do you understand my main claim to be?\"; #7 answers \"If I understand you correctly\" after another cue, with \"supported\": true in facts."
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-adela-17-J4-5",
+            "run": "2026-09-15-lt-recert",
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Replay instruction persists after the retry is complete",
+            "expected": "The retry instruction disappears once its question has been answered.",
+            "got": "The screen continues presenting ordinary follow-ups and the closing agreement as a new retry question.",
+            "evidence": [
+              "#7 introduces \"Try it again: a new question practising the coaching point.\" The same instruction remains at #12 and #13, including after \"Let's agree on that rule for our proposal.\""
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-adela-17-J4-3",
+            "run": "2026-10-14-lt/recert-1",
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Help only simplifies partner line; no answer frame",
+            "expected": "B2 opinion phrases to unblock reply.",
+            "got": "'Said more simply' restatement and 'hidden cost' gloss.",
+            "evidence": [
+              "#3, #4",
+              "cue prompt"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J4-2",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Help does not match what she is stuck on",
+            "expected": "Cue gives an answer frame for the actual need (asking about an extension).",
+            "got": "Cue returned only a simplified restatement or a gloss of \"word count\".",
+            "evidence": [
+              "#6 \"not sure how to politely ask about an extension\"; #7 shows \"word count: the number of words the essay must have\". #9 shows \"Said more simply\".",
+              "cue prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J4-3",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner English and topic drift",
+            "expected": "Natural lecturer English that stays on the scene.",
+            "got": "\"how cities pay back the carbon from building new roads\" is unnatural and unrelated to the essay-deadline scene. It looks like leakage from an earlier topic.",
+            "evidence": [
+              "#8 partner line; #9 simplifies it to \"the carbon from new roads\".",
+              "partner prompt / carry-over memory"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J4-6",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Recap does not separate supported from independent speaking",
+            "expected": "The recap shows what she managed alone and what needed support.",
+            "got": "The recap shows only \"2 spoken · 0 written replies\", though both replies were supported.",
+            "evidence": [
+              "#11 recap line; facts turns both supported:true.",
+              "recap builder"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J4-1",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Replay never taken, so improvement is unproven",
+            "expected": "Replay gives a fresh question and she answers it better than before.",
+            "got": "She finished at the coach screen without replaying.",
+            "evidence": [
+              "#10 offered \"Replay the moment\" or \"Finish for today\"; she chose finish, and the recap #11 shows no replay.",
+              "coach screen / replay prompt"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J4-7",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner questions are not B2 exam-style",
+            "expected": "Opinion, comparison or speculation questions.",
+            "got": "Generic prompts such as \"Is there anything else you'd like to check?\".",
+            "evidence": [
+              "#6 partner line.",
+              "partner prompt"
+            ],
+            "recurrence": 1
+          }
+        ]
+      },
+      "martin-45": {
+        "J1": [
+          {
+            "id": "2026-09-15-lt/LT-martin-45-J1-2",
+            "run": "2026-09-15-lt",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "A successful B1 response receives only partial credit",
+            "expected": "Assess task success and grammatical accuracy against the requested band, allowing non-blocking errors at B1.",
+            "got": "The B1 speaking response supplies the requested polite solution and reason, but receives partial credit with basic grammar errors cited as the limitation.",
+            "evidence": [
+              "#8: \"Could you send first checked parts on Wednesday and rest of delivery next week?\" and \"because we can keep production running and you have enough time to finish checks.\" The associated saved verdict is \"partial\"; its note says \"basic grammar errors held your English back.\""
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-martin-45-J1-2",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Fossilised errors beyond -s not in focus",
+            "expected": "Focus or slips name 'we was', 'discussing about', 'since 2015', 'more easy'",
+            "got": "Focus is only third-person -s; 'more easy solution' and 'I am ... since 2015' go unmentioned",
+            "evidence": [
+              "#2 'we was discussing about... I am in this company since 2015'; #7 'more easy solution'; #8 focus only -s.",
+              "placement summary/focus prompt"
+            ],
+            "recurrence": 4
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-martin-45-J1-4",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Why B1 not B2 is thin for a C1 claimant",
+            "expected": "A clear reason the B2 answers fell short",
+            "got": "'Your B2 answers were close, but none was strong' with confidence low",
+            "evidence": [
+              "#8 'Your B2 answers were close, but none was strong, so Linga starts you at B1.'",
+              "placement summary prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-martin-45-J1-3",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Task 1 passes despite two -s slips",
+            "expected": "Partial or flagged slip",
+            "got": "pass; 'quality team want', 'supplier say' unflagged in the note",
+            "evidence": [
+              "#5 vs #8 note 'You understood why the delivery could be late'.",
+              "listen task judge"
+            ],
+            "recurrence": 2
+          }
+        ],
+        "J2": [
+          {
+            "id": "2026-09-15-lt-recert/LT-martin-45-J2-1",
+            "run": "2026-09-15-lt-recert",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Swaps repeatedly ignore the explicit business goal",
+            "expected": "After Martin states his meeting goals, replacement topics should move the plan toward at least four relevant workplace situations.",
+            "got": "Only two of the sixteen recorded proposals fit. Eight recorded swap replacements remain outside his requested workplace situations; the result of the final swap is not shown.",
+            "evidence": [
+              "#2: \"I need business topics: running meeting, negotiating deadline with supplier\". Subsequent replacements include #4 \"Return a jacket that does not fit\", #6 \"Plan a meal with a friend\", #9 \"Tell a friend about a surprising day trip\" and #12 \"Find a quieter hotel room\"."
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-martin-45-J2-3",
+            "run": "2026-10-14-lt/recert-3",
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "Swap still not exercised; off-brief topic stays in plan",
+            "expected": "Unwanted food topic swapped for a meeting topic",
+            "got": "Local food topic kept and agreed; 7 topics agreed, not 6",
+            "evidence": [
+              "#2 thought 'Local food is not what I need' yet #3 agree with it still listed",
+              "linga-plan add-topic"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-martin-45-J2-3",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Plan grows to seven after an add, unexplained; swap not exercised",
+            "expected": "Plan of six or a note about the size",
+            "got": "'7 conversations for you', agreed at seven",
+            "evidence": [
+              "#3 '7 conversations for you'; #4 planAgreed lists seven",
+              "linga-plan add-topic"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-martin-45-J2-4",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Rationale for the added topic calls it 'easy'",
+            "expected": "Seniority-appropriate framing",
+            "got": "'Easy small talk' for a man who hates easy tasks",
+            "evidence": [
+              "#3 'Easy small talk before a meeting builds trust'",
+              "plan rationale prompt"
+            ],
+            "recurrence": 1
+          }
+        ],
+        "J3": [
+          {
+            "id": "2026-10-14-lt/recert-3/LT-martin-45-J3-1",
+            "run": "2026-10-14-lt/recert-3",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Fossilised errors still uncorrected",
+            "expected": "A moment or coaching note on \"discuss about\", \"reason of\", \"until\" for \"by\" or \"since two weeks\".",
+            "got": "Only \"this parts\" got a moment. Turns 2 and 3 got none. The recap lists one fix.",
+            "evidence": [
+              "#5 \"we don't need to discuss about the extra cost\", \"the rest until next Wednesday\"; #6 \"waiting already since two weeks\"; #8 \"1 moment to keep\".",
+              "moment detection / as-needed correction rule"
+            ],
+            "recurrence": 4
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-martin-45-J3-1",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Fossilised errors beyond one go uncorrected",
+            "expected": "Moment or coaching on \"we was discussing about\", \"more early\", \"the earliest date what you can do\".",
+            "got": "Only \"stakeholder don't\" got a moment; the others in the same and later turns got nothing, and the recap lists one fix.",
+            "evidence": [
+              "#2 \"we was discussing about the delay\", \"more early\"; #8 \"the earliest date what you can do\"; #11 \"1 moment to keep\".",
+              "moment detection / as-needed rule"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-martin-45-J3-2",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Scene ended after four replies",
+            "expected": "About eight replies of practice.",
+            "got": "\"Mission done\" appeared after four replies.",
+            "evidence": [
+              "#10 \"Mission done. See what you did tonight.\""
+            ],
+            "recurrence": 2
+          }
+        ]
+      },
+      "tomas-9": {
+        "J1": [
+          {
+            "id": "2026-10-09-lt/LT-tomas-9-J1-1",
+            "run": "2026-10-09-lt",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Task 4 prompt too long for a nine-year-old",
+            "expected": "A prompt of 15 words or fewer, such as 'What do you build in Minecraft?'",
+            "got": "A 24-word, three-part open prompt asking for two or three sentences.",
+            "evidence": [
+              "#8 \"Think about your last game of Minecraft. What did you build or find, and why was it fun? Tell me in two or three sentences.\" Tomáš: \"Too long and hard, I don't understand\".",
+              "check task generation prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-2/LT-tomas-9-J1-4",
+            "run": "2026-10-14-lt/recert-2",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "About-you questions too long for a child",
+            "expected": "One tiny question",
+            "got": "Three-option 25-word question",
+            "evidence": [
+              "#4 'Talk to friends, play games, or watch videos without subtitles?'",
+              "linga check intro prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-2/LT-tomas-9-J1-5",
+            "run": "2026-10-14-lt/recert-2",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Next focus parrots Czech words",
+            "expected": "Teacher-like focus with an English word to try",
+            "got": "'Practise \"Hrát Minecraft.\" in English as \"play Minecraft\"'",
+            "evidence": [
+              "#10 focus; 'Your words: “Hrát Minecraft.”.' has a stray period",
+              "placement focus prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J1-1",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Check tasks too long for a nine-year-old",
+            "expected": "Prompts of 15 words or fewer in words he knows",
+            "got": "A 25-word homework task and a 24-word block prompt; he guessed or gave up",
+            "evidence": [
+              "#6 'Moc dlouhé, nerozumím, tak hádám.'; #8 'Hard one'; #7 'Too fast and hard'",
+              "check task generation prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J1-2",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Next focus and slip line beyond his level or wrong",
+            "expected": "A focus using only like/is, and no correction of a correct sentence",
+            "got": "A 'slip' that rewrites correct 'I like diamond.'; focus 'My favourite block is diamond'; stray period in 'Your words'",
+            "evidence": [
+              "#9 'Your usual slips “I like diamond.” → try “I like the diamond block.”'",
+              "verdict focus prompt / placement summary prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J1-3",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "About-you questions too long and cover learning history",
+            "expected": "One tiny question",
+            "got": "'Where do you use English in your life?' and a three-option question",
+            "evidence": [
+              "#2 and #4; answers were a word salad 'Minecraft. Nevím. Dog.'",
+              "linga check intro prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J1-4",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Placement low-confidence but exact",
+            "expected": "Honest wording about limited evidence",
+            "got": "A1 exact, and 'Some answers only partly showed this level' is honest",
+            "evidence": [
+              "#9"
+            ],
+            "recurrence": 1
+          }
+        ],
+        "J2": [
+          {
+            "id": "2026-09-15-lt-recert/LT-tomas-9-J2-2",
+            "run": "2026-09-15-lt-recert",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "The plan is too dense and additions are cut off",
+            "expected": "A beginner who barely reads English can understand each choice and its reason before agreeing.",
+            "got": "Long English lists include abstract skill labels. As the list grows, the shown text cuts off the personalized additions. Understanding every topic and its reason is not demonstrated.",
+            "evidence": [
+              "#2 includes \"Understand and repair\" and six separate English explanations. #4 ends with \"A Minecraft house for\". #6 says \"Your topics (8)\" but ends at \"[plan-3\", without displaying the football entry."
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-09-15-lt-recert2-goal/LT-tomas-9-J2-1",
+            "run": "2026-09-15-lt-recert2-goal",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Planning language is too demanding for this beginner",
+            "expected": "Tiny, concrete prompts and topic choices a near-pre-A1 nine-year-old can understand with little reading.",
+            "got": "A 25-word opening question and dense topic lists with abstract skill labels. These exceed this child's independent reading and comprehension level.",
+            "evidence": [
+              "#2: \"What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\" #3–#4: \"Get something done\", \"Understand and repair\", and \"Connect with people\"."
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-tomas-9-J2-5",
+            "run": "2026-10-14-lt/recert-1",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Why lines are too long and abstract for a beginner child",
+            "expected": "A one-short-line reason he can understand.",
+            "got": "\"helps you use past words and first, then and after that\"; the skill labels \"Understand and repair\" are adult-ish.",
+            "evidence": [
+              "#2 \"Telling what you did step by step helps you use past words...\"",
+              "topic proposal prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-2/LT-tomas-9-J2-1",
+            "run": "2026-10-14-lt/recert-2",
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Swap does nothing; unwanted school topic stays and is agreed",
+            "expected": "Swapping 'What I did after school' removes it and shows a new topic.",
+            "got": "Three swaps changed nothing; the topic stayed and was agreed in the plan of 7.",
+            "evidence": [
+              "#2-#4 same list after each swap; #6 \"What I did after school\" still listed; #6 agree.",
+              "plan swap handler"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-2/LT-tomas-9-J2-3",
+            "run": "2026-10-14-lt/recert-2",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Plan text too long and school-flavoured for a 9-year-old reader",
+            "expected": "Tiny labels, picture-led choices.",
+            "got": "Long why lines and 'Understand and repair', 'Connect with people' category labels.",
+            "evidence": [
+              "#2 \"Understand and repair\", \"Connect with people\"."
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J2-2",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Skill labels and why lines are too abstract for a 9-year-old",
+            "expected": "A tiny label and one short reason in words he knows.",
+            "got": "Labels such as \"Understand and repair\", \"Get something done\" and \"Make contact\". Why lines run to 15 or more words.",
+            "evidence": [
+              "#2 \"Understand and repair\"; \"Telling your friend what you built helps you use the words for order and results.\"",
+              "plan topic generation prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J2-3",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Check tasks run over 15 English words",
+            "expected": "About 15 words or fewer per check task.",
+            "got": "The Say-it task is about 19 words. The A2 task about homework is longer and is school-themed.",
+            "evidence": [
+              "#1 \"Your friend asks, 'What is your favourite Minecraft block?' Tell your friend one thing about your favourite block.\"",
+              "placement task prompt"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J2-4",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "Swapping was not exercised",
+            "expected": "A swap visibly replaces a topic.",
+            "got": "All topics fit, so he never swapped. Swap working is not shown by this run.",
+            "evidence": [
+              "#2-#3 swap buttons present; the action list has only add-topic and agree.",
+              "plan swap handler"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J2-5",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Narrate goal asks for sequence and past telling",
+            "expected": "Goals using words an A1 beginner has.",
+            "got": "The goal asks for \"first, then next, and what happened at the end\", which is above a child who knows only like and is.",
+            "evidence": [
+              "#2 \"Tell what you did first, then next, and what happened at the end, in short sentences.\"",
+              "plan topic generation prompt"
+            ],
+            "recurrence": 2
+          }
+        ],
+        "J3": [
+          {
+            "id": "2026-09-15-lt/LT-tomas-9-J3-1",
+            "run": "2026-09-15-lt",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Repeated confusion does not produce an easier question",
+            "expected": "Use familiar words and simplify immediately after uncertainty; at least 80% of partner turns should fit his level.",
+            "got": "Only 5 of 9 partner turns fit this learner. Turns at #4, #5, #8 and #9 retain unfamiliar drawing language or add complexity despite repeated confusion.",
+            "evidence": [
+              "#4: \"Drawing means making a picture with a pencil.\" #5 learner thought: \"I heard Minecraft, but I don't know what she means.\" #8 learner: \"Creeper! Nevím, co říkáš.\" #9 partner: \"Do you draw it with a pencil or a pen?\""
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-09-15-lt-recert2-beginners/LT-tomas-9-J3-2",
+            "run": "2026-09-15-lt-recert2-beginners",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "One question loses the beginner",
+            "expected": "Questions use familiar words or provide immediate support for new words.",
+            "got": "The hand question exceeds his demonstrated understanding. The other eight partner turns fit, yielding pitch 8/9 and meeting the journey threshold.",
+            "evidence": [
+              "#9: \"What is in its hand?\" He answers \"Nevím\" and thinks \"I don't know what he means by hand.\""
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-tomas-9-J3-1",
+            "run": "2026-10-14-lt/recert-1",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner speaks B1 to an A1 nine-year-old",
+            "expected": "Tiny sentences, one question, words like dog, house, bed.",
+            "got": "B1 partner with \"I'd love to see your world\", \"cosy\", \"Why do you like it the most?\" and two prompts in one turn.",
+            "evidence": [
+              "#5 \"Is your dog inside it too? I'd love to hear more about your house.\" #10 \"Why do you like it the most?\"",
+              "conversation partner prompt / placement band"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-2/LT-tomas-9-J3-2",
+            "run": "2026-10-14-lt/recert-2",
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Czech answers and \"nevím\" get no model sentence or coaching",
+            "expected": "A short English model such as \"I build a house.\" or a Czech-to-English prompt",
+            "got": "Mia accepts everything; no coaching or moment on most Czech turns",
+            "evidence": [
+              "#6-#8, #10-#20: \"Dog je se mnou. Dog is... nevím.\" and \"Wolfie je můj friend\" got no help. Coaching is null.",
+              "coaching trigger / moment rules"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-2/LT-tomas-9-J3-1",
+            "run": "2026-10-14-lt/recert-2",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner English is above a pre-A1 nine-year-old",
+            "expected": "Very short sentences, known words, one simple question per turn",
+            "got": "Multi-sentence turns with \"shiny\", \"brave\", \"helper\", \"Will your wolf help you dig diamonds, like your dog?\"",
+            "evidence": [
+              "#13, #15, #16: \"A wolf and a dog, what a great team! You have lots of shiny diamonds. Do you have a name for your wolf?\" He replies in Czech with \"I like X\".",
+              "conversation partner prompt (band A2 for an A1 child)"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-2/LT-tomas-9-J3-3",
+            "run": "2026-10-14-lt/recert-2",
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Second moment repeats the first",
+            "expected": "A new, different thing to learn",
+            "got": "\"Já stavím\" → \"I'm building\" repeats the lesson from \"Já stavím dům\"",
+            "evidence": [
+              "#9 and #27: \"2 moments to keep\" are the same phrase.",
+              "moment dedupe"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J3-2",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Correction note uses grammar jargon",
+            "expected": "A child-sized reason, e.g. \"More than one creeper: creepers.\"",
+            "got": "\"Use the right noun form after like.\"",
+            "evidence": [
+              "#3 and #10: \"Use the right noun form after like.\"",
+              "moment prompt / correction rules"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J3-1",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Alex's turns outgrow a nine-year-old after the first two",
+            "expected": "Tiny sentences, one question, known words (creeper, wolf, dog).",
+            "got": "Pitch 2 of 5. Turns 3-5 chain clauses and use \"loud\", \"follow you around\", \"fight\" and \"shiny\".",
+            "evidence": [
+              "#7 \"Ha, boom! Green is a good reason, and creepers are very loud. What else do you like in Minecraft?\" #9 \"Which shiny thing in the game do you like most?\" #9 thought: \"That was a lot of words and I'm tired\".",
+              "conversation partner prompt (band and length cap)"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J3-4",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Grown-up situations in a nine-year-old's list",
+            "expected": "Child-suited situations only.",
+            "got": "\"A booking that is missing\", \"Our group project\" and \"The lost jacket\" are listed.",
+            "evidence": [
+              "#1 and #10 situation list.",
+              "situation catalogue filter"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J3-3",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "\"I like dog\" gets no moment or coaching",
+            "expected": "A quick \"dogs\" model, as with creepers.",
+            "got": "The same plural slip passed unmarked; only the first was caught.",
+            "evidence": [
+              "#7 \"I like dog. Wolf! Dog in Minecraft.\" The turn got no moment. #10 shows 1 moment.",
+              "moment trigger / coaching rules"
+            ],
+            "recurrence": 1
+          }
+        ],
+        "J4": [
+          {
+            "id": "2026-09-15-lt/LT-tomas-9-J4-4",
+            "run": "2026-09-15-lt",
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "The topic menu dilutes his interests",
+            "expected": "A small selection with at least four of six topics about play, animals, games or sport.",
+            "got": "Thirteen choices appear; six clearly fit his interests. The first six contain only three clear matches.",
+            "evidence": [
+              "#1 mixes “My funny robot,” “Choose our game,” “Do you like cats?”, “My Minecraft creeper,” “I like dogs” and “The missing moon rover” with choices including “Pick a snack” and “A booking that is missing.”"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-tomas-9-J4-4",
+            "run": "2026-09-15-lt-recert",
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Replay changes the question but does not demonstrate the coached improvement",
+            "expected": "A fresh question followed by a better answer using the coaching point, then an independent attempt.",
+            "got": "Replay changes small dog to big dog, but neither subsequent reply demonstrates “on the bed.” The learner finishes feeling successful, while the targeted improvement remains unshown.",
+            "evidence": [
+              "#10 models “The dogs go on the bed.” #11 asks “Where does the big dog go?” and receives “Big dog… na bed. Bed!” #12 receives “Small dog… taky bed!” #14 saves “3 replies; 1 moments to keep.”"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-09-15-lt-recert2-beginners/LT-tomas-9-J4-3",
+            "run": "2026-09-15-lt-recert2-beginners",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner language exceeds his starting ability",
+            "expected": "Tiny familiar sentences and one simple question per turn.",
+            "got": "Only the second partner turn is comfortably pitched for him. The opening is long, the third adds unfamiliar action language without a question, and the final turn introduces several new words.",
+            "evidence": [
+              "#2: \"she said too much and I need help.\" #7: \"He brings you his yellow ball.\" #9: \"Pip wags his tail! Do you want to throw his yellow ball?\""
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-09-15-lt-recert2-beginners/LT-tomas-9-J4-2",
+            "run": "2026-09-15-lt-recert2-beginners",
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "No independent retry is demonstrated",
+            "expected": "Replay the moment with a fresh question and let Tomáš answer better without support.",
+            "got": "The transcript ends after three supported replies. No replay or independent attempt appears.",
+            "evidence": [
+              "#4 returns with \"back\"; #9 selects \"finish\"; #10 reports \"3 replies; 1 moments to keep.\" facts.conversation marks all three learner turns \"supported\": true."
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-09-15-lt-recert2-beginners/LT-tomas-9-J4-4",
+            "run": "2026-09-15-lt-recert2-beginners",
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Useful help interrupts the scene",
+            "expected": "Help stays within the conversation and preserves the fun.",
+            "got": "The phrase is useful, but a separate moment screen stops the exchange and requires a return action.",
+            "evidence": [
+              "#4 explicitly says \"Linga stopped the conversation: a word for this scene.\" Tomáš selects \"back\"."
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-tomas-9-J4-2",
+            "run": "2026-10-14-lt/recert-1",
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Placed B1 though true A1",
+            "expected": "A1 or A2.",
+            "got": "Level B1 · Getting by.",
+            "evidence": [
+              "#13 'Your level: B1 · Getting by'"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-tomas-9-J4-5",
+            "run": "2026-10-14-lt/recert-1",
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Few errors coached; moment cannot be replayed",
+            "expected": "Replay the moment and retry.",
+            "got": "Only 'postel' coached; 'My dog sleep' and 'dog' without article went unmarked. No replay.",
+            "evidence": [
+              "#8 only 'Back to the conversation'"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-2/LT-tomas-9-J4-2",
+            "run": "2026-10-14-lt/recert-2",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner turns too long and above A1 for a 9-year-old",
+            "expected": "One very short sentence and one question.",
+            "got": "Three-sentence turns, two questions, present continuous.",
+            "evidence": [
+              "#21 'Ha, dogs are cute! Dogs can help you in Minecraft too. Four o'clock, OK?'; #14 'What are you doing in Minecraft right now?'",
+              "partner prompt, A2 band for elementary"
+            ],
+            "recurrence": 4
+          },
+          {
+            "id": "2026-10-14-lt/recert-2/LT-tomas-9-J4-5",
+            "run": "2026-10-14-lt/recert-2",
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "Replay is repetition, not a fresh question",
+            "expected": "A new question after the moment.",
+            "got": "He repeats the fix, then Sam asks 'Four o'clock, OK?' again.",
+            "evidence": [
+              "#17-#19",
+              "moment replay"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J4-2",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Supported flag is wrong on several turns",
+            "expected": "Only replies after help are supported; unhelped ones are independent.",
+            "got": "Unhelped turns #8 and #12 are supported:true. The evidence quote is a quiz option, not his words.",
+            "evidence": [
+              "Facts turns: 'Creeper world. I like creeper.' supported:true; 'Yes! Four. Creeper world.' supported:true; evidence quote 'Do you want to play at four?'.",
+              "evidence recording of supported"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J4-1",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "No replay or independent retry after the moment",
+            "expected": "Replay the moment with a fresh question, then let him answer better unaided.",
+            "got": "The moment screen offers only 'Back to the conversation', and the rehearsal ends with no retry.",
+            "evidence": [
+              "#7 only 'Back to the conversation'; #13-#14 finish, '5 spoken · 0 written replies · 1 moment to keep'.",
+              "moment replay flow"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J4-3",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The only moment is unnecessary and slightly wrong",
+            "expected": "No interruption; or a correction of a real error such as creeper → creepers.",
+            "got": "'Čtyři → four o'clock' stops the scene, though he had already said 'four'. The real plural errors went uncoached.",
+            "evidence": [
+              "#6 'Čtyři... four', #7 'Linga stopped the conversation'. 'I like creeper' and 'I like dog' got no moment.",
+              "moment selection prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-4/LT-tomas-9-J4-4",
+            "run": "2026-10-14-lt/recert-4",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Partner turns grow long and use 'mob'",
+            "expected": "Tiny sentences, one question, known words.",
+            "got": "The later turns have two clauses plus a question and unexplained words such as 'mob'.",
+            "evidence": [
+              "#12 'Creepers are green and very funny! Do we play in the creeper world at four o'clock?'; #13 'Which mob do you want to meet there?'",
+              "partner prompt, elementary band"
+            ],
+            "recurrence": 2
+          }
+        ]
+      }
+    }
+  },
+  "instrument": {
+    "model": "claude-cli/sonnet",
+    "judgeScreenCap": 8000,
+    "roles": {
+      "tutor": {
+        "engine": "claude-cli",
+        "model": "per request (fast haiku, best sonnet)"
+      },
+      "character": {
+        "engine": "claude-cli",
+        "model": "best",
+        "thinking": false,
+        "resolved": "sonnet"
+      },
+      "judge": {
+        "engine": "claude-cli",
+        "model": "best",
+        "thinking": true,
+        "resolved": "sonnet"
+      }
+    },
+    "driver": {
+      "ledger.cjs": "b4b2984e047e390d",
+      "linga-text.cjs": "05229633e55bf1b7",
+      "metrics.cjs": "5233f96500b831de",
+      "product.cjs": "31591b456d8e545d",
+      "recertify.cjs": "bb825ccfba9028ac",
+      "surface.cjs": "05535a9f66962fd0",
+      "verdict.cjs": "f4a65c98ca6f4468"
+    }
+  },
+  "product": {
+    "commit": "45ec4aca2e3ce8d4a0844c68d478d561951b863a",
+    "dirty": false,
+    "files": {
+      "desk/src/english/LingaKeys.tsx": "9b2d9b746a9809917e92fbccf71255bcfb8054e0",
+      "desk/src/english/LingaPhone.tsx": "fee35d6e8cac0edb2b761afb3dab9ebcdbb26381",
+      "desk/src/english/LingaTV.tsx": "3fe697dd95a2fa7f5540c9c207d3436643cecbe6",
+      "desk/src/english/LostPicture.tsx": "0018857a24a6d2e6bd08e08719bfc6bab2087c3b",
+      "desk/src/english/OpenDoor.tsx": "1aded4f3f3190dbbecb691b36d2b9957347ea0a3",
+      "desk/src/english/ReplyBox.tsx": "ffa9f13543462e740f39f090dd60fdf173d7f475",
+      "desk/src/english/art/Booking.tsx": "a688608b52093e8e8a950c1f9346bfa0f87f2d1a",
+      "desk/src/english/art/Cafe.tsx": "0fac41c88940c0f2af3f39ce0f9a8a4acc1c113b",
+      "desk/src/english/art/Classroom.tsx": "09bf43a575b0532b383ecedef8b2b0d023e4227b",
+      "desk/src/english/art/Corridor.tsx": "fb7839e3ba87276c3df6bb8b7ac0f7f2dea76c62",
+      "desk/src/english/art/Handover.tsx": "ab03cd5d01ae207135fa249ca364c39ca3fb76b0",
+      "desk/src/english/art/Interview.tsx": "956b8b4b8c44e382cefd060ed328c6384c6a8691",
+      "desk/src/english/art/LostThing.tsx": "fffb458186604a8bbb989ed7d80b947f64a2b0c0",
+      "desk/src/english/art/Meet.tsx": "642c841a66a57b8692d67f90b7ec9e67d806201c",
+      "desk/src/english/art/Person.tsx": "31c5aaf00e492cee0d2723561070763a89e0f5cb",
+      "desk/src/english/art/Room.tsx": "6844e3c10c9f279150b214d9c4c0cdae8b6ea0f0",
+      "desk/src/english/art/Rover.tsx": "9753b0a6ebeaaf27340335f9db450b2f7e69660d",
+      "desk/src/english/art/States.tsx": "d5418d994c45cbd5ebc171b99aa3d6fe6e5b01c7",
+      "desk/src/english/art/Team.tsx": "cfbec13235666e8d73afd2e1fdb68f331c460f07",
+      "desk/src/english/art/Weekend.tsx": "b4abe95e66dcc3c3bcd1c5a713a2a2df057c7c5f",
+      "desk/src/english/art/index.tsx": "492f0bfb1f8bfdf4ef257abe18ea4f0ff222b239",
+      "desk/src/english/art/palette.ts": "c3ecc41432e12651e01e86b46ad58c2b703f13fa",
+      "desk/src/english/useEnglish.ts": "f9dd56e1e450383907e8fc6073e4cdb0ca69f1f6",
+      "desk/src/english/useEnglishAudio.ts": "f7814905db87fc40b27a6e450c302ee67e0575d1",
+      "desk/src/lib/dataDir.ts": "752006b3cab0bd36f659c666c802e1d56890a599",
+      "desk/src/lib/desk/failure.ts": "2358373db21e37784c7e5331517e8962a9738f47",
+      "desk/src/lib/desk/verify.ts": "03dcb2226c27f574c9ca23551fa0fbfca6a875aa",
+      "desk/src/lib/engines/call.ts": "7a442d864384e306c7a8e22bbba8a309aa29deb4",
+      "desk/src/lib/engines/codex.ts": "2c8f1b6e7b1c1ac8241d0e9c397ffd567f355e81",
+      "desk/src/lib/engines/meter.ts": "0df70d85d56a92b3cbf0ba826c933c24b180d397",
+      "desk/src/lib/engines/prices.ts": "63686fb6e8fc3d55e467777c8014a1fd75207fdd",
+      "desk/src/lib/engines/registry.ts": "cdecf946f973700954588e82aa9331f4b9738ec0",
+      "desk/src/lib/engines/shape.ts": "bf50bfc979c4283097cbc9278f7746fb77eb9e2e",
+      "desk/src/lib/engines/text.ts": "d01954f97d6f198302e29307b5a305ba9fb2a5bd",
+      "desk/src/lib/engines/types.ts": "27f58d2f42826e64c0171029a01e4671a7ad6701",
+      "desk/src/lib/english/activity.ts": "e735f42cd890c90dca9b1a88af0a7696c5ede258",
+      "desk/src/lib/english/cert.ts": "4d621ef7ff422fa8b9a4f10c2be9aa4375ca427b",
+      "desk/src/lib/english/check.ts": "b2d0c72b19a5c7edd737e976229c09baeece5f4e",
+      "desk/src/lib/english/conversation.ts": "8805c9e2d33146d2e9857b1d091123a6aa59a6c1",
+      "desk/src/lib/english/credit.ts": "b14666838090ec1ff08f2d36148b995d0192e303",
+      "desk/src/lib/english/curriculum.ts": "4550144b755580709cf4ed8c4aeb36930adcb1b9",
+      "desk/src/lib/english/duet.ts": "4b34b654aeff5db958b7787f1bbf544c362c3659",
+      "desk/src/lib/english/errors.ts": "f66cf4c0ced8f59715670d3e9cb8e2eb8ff1f3f0",
+      "desk/src/lib/english/gate.ts": "79cf4d1b5a7884a6bab6384565e956c5499dcff6",
+      "desk/src/lib/english/help.ts": "cb08ad1e7d18b41f42780a5b0c43b6c9156847d0",
+      "desk/src/lib/english/line.ts": "1346e9dcf213bfc171f9b925537c2bd0ff27f814",
+      "desk/src/lib/english/lostfound.ts": "71be11e999ec992888fde17cb91df97364692358",
+      "desk/src/lib/english/mission.ts": "0fd2b74e98a9043719f5266e422e7c765a59eb66",
+      "desk/src/lib/english/notes.ts": "dfd127239481a51357b528d7c870df5fc894acf3",
+      "desk/src/lib/english/own.ts": "0efb48403b64c2825e51bb98233abb3a972e49cb",
+      "desk/src/lib/english/pitch.ts": "436719b29c377ae318facfa3de8c54522b3f6bec",
+      "desk/src/lib/english/placement.ts": "073012cb86458250c5e691c90eac7f6aa2d0b693",
+      "desk/src/lib/english/repair.ts": "0560482b405fa2a8311595b0e5b209507389b6c1",
+      "desk/src/lib/english/review.ts": "b22863194b11423f1b17f9ea2e25d4920018c959",
+      "desk/src/lib/english/rules.ts": "c235aab8365be7ca89bbc6ba3faa1204ab1ec184",
+      "desk/src/lib/english/slip.ts": "a2adf7b417e0ad26befbcbb1a135afe31fccfa49",
+      "desk/src/lib/english/speaking.ts": "6d1c0438126bdfe9e6f96c876b0d53e4867560a5",
+      "desk/src/lib/english/take.ts": "7cfbcd8c352fe1d965a7e2755b96f4836f7e5080",
+      "desk/src/lib/english/turn.ts": "a6b200353127addbf400d11592411ca2a4f911f7",
+      "desk/src/lib/english/types.ts": "3142599a66899234d23c625f9d8cd00bc0afffb6",
+      "desk/src/lib/english/view.ts": "70b8914b02ae6389fbf1bb8e5e67ca7a6010a5c0",
+      "desk/src/lib/library/calculus1.spine.ts": "4ec6b77426e528298972bbc2f6a3cc76ac10a734",
+      "desk/src/lib/library/calculus2.spine.ts": "c3bfe9e5e4439c93c4c461b032b1c29cd630e4a4",
+      "desk/src/lib/library/gcse.ts": "ce524368d73bc8b757ef026b4214b4eaf9c8fa73",
+      "desk/src/lib/library/lessons.data.ts": "360d293bbb999ec295a813d44b8939c9084c228a",
+      "desk/src/lib/library/paths.ts": "b73617bf0f1644401e2ac327d4df120fbab8f22f",
+      "desk/src/lib/library/syllabus.ts": "7e9f1c8494ef1667c8ba5dd117555976212fbfc6",
+      "desk/src/lib/library/watched.ts": "986f5a13d31e05e3b54095eb2a21def95b230e99",
+      "desk/src/lib/library/worked.ts": "0ae878d44c4d618c2c2abd0727e52d8b7a776062",
+      "desk/src/lib/rules/calc-expr.ts": "23ad09d1f197f21bdd67f36347bd6fe604cac55e",
+      "desk/src/lib/rules/calc-read.ts": "dfc7d704eda1848918f0d91e674f3c93e57281ba",
+      "desk/src/lib/rules/calc-word.ts": "4fc646515ba01cf6556e288ab2a6f2903f67edb4",
+      "desk/src/lib/rules/calc.ts": "56ecb63bd8e14189fab1547611665083c8d8db7c",
+      "desk/src/lib/rules/calc2.ts": "0d14f2fb1c96b8229c8cabc8388809e5033285c7",
+      "desk/src/lib/rules/chain.ts": "3f19aefe15b87a2e4d7abba87696028db9bdb63e",
+      "desk/src/lib/rules/collect.ts": "eeb866587b64fc356d0bdcf7d962c8a28cc20a13",
+      "desk/src/lib/rules/digest.ts": "c70a39b2854059e313cacc37d8677913f1136eff",
+      "desk/src/lib/rules/english.ts": "751124253b89de3d4dfdf3e0eafe909908fbc64c",
+      "desk/src/lib/rules/essay.ts": "59e0a14f7cc2f39605e8d8cecc65c0708065f4f0",
+      "desk/src/lib/rules/fault.ts": "34baf915321f2bf1d4934276cdbea66d16d209d5",
+      "desk/src/lib/rules/kinds.ts": "6f2dd612826a4db93873ffe69f7a4452c1251399",
+      "desk/src/lib/rules/marks.ts": "f2b3be8e621739ae0c4af1ff11e9b4604ea31c47",
+      "desk/src/lib/rules/maths.ts": "5fdcb41df74b73f28db74160bde3884ce4a96574",
+      "desk/src/lib/rules/maturita.ts": "8955205d9d80c92b156f4885b308d7b4a938c1ab",
+      "desk/src/lib/rules/mode.ts": "d6209deff051e588c665b2b333df832b644c7262",
+      "desk/src/lib/rules/numberWords.ts": "523009da55d0a5c979c539d21632811ad5d9e0e2",
+      "desk/src/lib/rules/recovery.ts": "05a24bbff4930b8b03c283d1505c440a5da206be",
+      "desk/src/lib/rules/school.ts": "7dd08263e9ae6caf42490b8537d5e93e4e91e8bf",
+      "desk/src/lib/rules/slips.ts": "71b2bd3de32196b6d75c19b20aedfc8224a03ca6",
+      "desk/src/lib/rules/taskText.ts": "c26ab4ba5778f1b537247f24bb4f40c02e388e3d",
+      "desk/src/lib/rules/week.ts": "6e6b5595a11b08f0c045c439a27c2aa5b4012141",
+      "desk/src/lib/session/lan.ts": "80949328e965d9aff1ff72902956df18a883d76f",
+      "desk/src/lib/session/learners.ts": "162bf9e249fd30954feee2642d2299e62b1d45c4",
+      "desk/src/lib/session/store.ts": "fdf60b51c7a7458e9f9e2b04ecf76c26a6c77ae1",
+      "desk/src/maths/typeset.ts": "636106f78b5ba55c21c702041f0881da9f8babbe",
+      "desk/src/tv/collection.ts": "c5c8bde7103907de49379eb94ae3f1fb7a269d77",
+      "desk/src/tv/keys.ts": "6634c15288c1831fc01bd4bc4ff9a1bfd74f9857",
+      "desk/src/tv/landingRows.ts": "0d0caa089907a964bb706f6ed6542d27ea6659a0",
+      "desk/src/tv/mathsRows.ts": "8fb3ddb80a888f5a7336a4ce214076e75cdff46a",
+      "desk/src/tv/paperRows.ts": "82852d8a260b4713ebac9c378a3fde39f53711d0",
+      "desk/src/tv/prepareRows.ts": "0fe1f9cc9a488ce141bc010a0d8aa479a744e650",
+      "desk/src/tv/profileRows.ts": "778ff3b9bf9d7d91aea2175a3ec6b44f5f4389ab",
+      "desk/src/tv/recapRows.ts": "4fd580e409f74035347b16a8e1243caa04dfc8a2",
+      "desk/src/tv/sheetRows.ts": "928c549331d7f8b6aa6b74f9efddc9328c4017df",
+      "desk/src/tv/writingRows.ts": "d999863a0002ef2ce721590f4c9ecc0340d9aa50"
+    }
+  }
+}

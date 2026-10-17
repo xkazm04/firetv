@@ -22,13 +22,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "After uncertainty, switch to familiar colour, animal or game vocabulary with a short choice question; achieve pitch ≥0.8.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "He never signalled confusion in this run, so no easier follow-up could be judged (#2-#9)."
+    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#5-#7: after his 'Nevím... House?', Sam's next turn 'Do you build it with wood or stone?' is a plain either/or; no drawing-language pile-up."
   },
   {
     "id": "LT-adela-17-J2-1",
@@ -57,9 +57,9 @@
     "recurrence": 1,
     "suggested_acceptance": "After repeated swaps, offer different subject areas or a visible way to request them; achieve fit of at least two-thirds across proposals shown and agreement without unresolved topic dissatisfaction.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "Only one swap tried (#3); repeated-swap variety not reached."
+    "recertify_evidence": "#2–#3 no swaps made; no repeated swapping to observe."
   },
   {
     "id": "LT-adela-17-J3-1",
@@ -152,9 +152,9 @@
     "recurrence": 1,
     "suggested_acceptance": "Clear the replay instruction after the retry is evaluated and show a brief outcome tied to the practised skill.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "Replay was never taken (#10), so persistence of the retry banner was not reached."
+    "recertify_evidence": "No replay was started, so no persistent retry instruction could appear."
   },
   {
     "id": "LT-ondrej-16-J5-2",
@@ -213,12 +213,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "After supported practice, show a short coaching note with an exact learner quote, offer replay in the scene, and capture a better independent answer to a fresh question.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#7 and #14 give no replay or independent retry; all replies are help-flagged or mis-flagged.",
+    "recertify_evidence": "#7 only 'Back to the conversation'; #13 '1 moment to keep'.",
     "recurred_as": "LT-tomas-9-J4-1"
   },
   {
@@ -391,12 +391,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Use turns such as “Big and green! What is his name?” and “Bob! I like Bob.” Keep at least 80% of partner turns at this learner's level.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#12 'Creepers are green and very funny! Do we play...' and #13 'in the green world it is!' are too dense.",
+    "recertify_evidence": "#12 two clauses plus question; #10 'favorite toy'.",
     "recurred_as": "LT-tomas-9-J4-4"
   },
   {
@@ -423,12 +423,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Carry explicit language questions into verdict feedback and answer each accurately with a short rule.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "She asked no correctness question this run; though #2 'interested about' got no correction at all."
+    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#8 \"Was that correct?\" is not answered in #10, which says only \"The whereas sentence is tangled\".",
+    "recurred_as": "LT-adela-17-J1-2"
   },
   {
     "id": "LT-jana-29-J3-1",
@@ -1201,12 +1202,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Replay a fresh ambiguous claim that invites a tentative clarification request, then provide an opportunity to attempt that skill without support.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "No replay in #10; improvement on a fresh question could not be judged."
+    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#9 only 'Say it again, your way'; no fresh question, so improvement is unproven.",
+    "recurred_as": "LT-adela-17-J4-2"
   },
   {
     "id": "LT-adela-17-J4-7",
@@ -1232,13 +1234,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Summarize one evidenced independent success and distinguish supported practice without inventing a correction.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#11 recap: \"2 spoken · 0 written replies\", with no account of what was supported.",
-    "recurred_as": "LT-adela-17-J4-6"
+    "recertify_evidence": "#17 '7 spoken · 0 written replies · 2 moments to keep' with no supported split.",
+    "recurred_as": "LT-adela-17-J4-4"
   },
   {
     "id": "LT-jana-29-J1-1",
@@ -1614,13 +1616,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "Award this response a B1 pass while recording its genuine grammar weaknesses as coaching targets.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#8 Task 2 'partial' with 'Missing articles ... held your English back' on a clear B2-style argument."
+    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#8 B2 tasks partial with errors cited; no successful B1 response penalised."
   },
   {
     "id": "LT-martin-45-J2-1",
@@ -2194,12 +2196,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Present short, concrete topic choices and beginner-accessible reasons, with spoken or Czech support for independent use.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#2 \"Understand and repair\" and long why lines.",
+    "recertify_evidence": "#2 \"Understand and repair\"; \"Get something done\".",
     "recurred_as": "LT-tomas-9-J2-2"
   },
   {
@@ -2288,12 +2290,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Show six age-safe choices, at least four clearly about his preferred play, animals, games or sport.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-4",
+    "recertify_run": "2026-10-14-lt/recert-5",
     "recertify_status": "recurs",
-    "recertify_evidence": "#1 lists 21 situations, including 'A booking that is missing' and 'Our group project'."
+    "recertify_evidence": "#1 list of 21 situations including 'A booking that is missing', 'Our group project'.",
+    "recurred_as": "LT-tomas-9-J4-5"
   },
   {
     "id": "LT-viktor-67-J1-1",
