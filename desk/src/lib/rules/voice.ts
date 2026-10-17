@@ -26,7 +26,7 @@ export type Band = "young" | "teen";
 
 export interface Voice {
   band: Band;
-  /** The words that name the learner in the prompt's opening line: "a 15-year-old" (maths), "a teenager" (essay), "a Czech teenager" (english) today. */
+  /** The words that name the learner in the prompt's opening line: "a 15-year-old" (maths, essay), "a Czech teenager" (english) today. */
   who: string;
   /** One paragraph on how to sound, appended after the prompt. "" for the teen band: nothing is added. */
   manner: string;
@@ -69,30 +69,37 @@ const YOUNG: Record<VoiceSubject, { who: string; manner: string }> = {
 
 const TEEN: Record<VoiceSubject, string> = {
   maths: "a 15-year-old",
-  essay: "a teenager",
+  essay: "a 15-year-old",
   english: "a Czech teenager",
 };
 
-/** A maths or essay teen named by the age the profile holds ("an 18-year-old"); the article follows the spoken number. */
+/** A maths (or essay-reading) teen named by the age the profile holds ("an 18-year-old"); the article follows the spoken number. */
 const ageWho = (age: number): string => {
   const n = Math.round(age);
   return `${/^(8|11|18)/.test(String(n)) ? "an" : "a"} ${n}-year-old`;
 };
 
+/** The voice for `subject` at `age`. Same input, same output. */
+export function voiceOf(subject: VoiceSubject, age?: number | null): Voice {
+  if (bandOf(age) === "young") return { band: "young", ...YOUNG[subject] };
+  if (subject === "maths" && typeof age === "number" && Number.isFinite(age)) return { band: "teen", who: ageWho(age), manner: "" };
+  return { band: "teen", who: TEEN[subject], manner: "" };
+}
+
 /** What the essay reading calls an Adult-mode learner: no age, no "student". */
 export const ADULT_WRITER = "an adult writer";
 
 /**
- * The voice for `subject` at `age`. Same input, same output. `mode` matters to the essay entry only: an Adult-mode essay
- * learner is an adult writer, named without an age (maths and english ignore it, byte for byte). An essay teen is named
- * by the age the profile holds, or "a teenager" when it holds none.
+ * The voice of the essay READING prompt (desk/essay.ts) only; `voiceOf("essay")` stays what api/hint reads, byte for byte.
+ * An Adult-mode learner is an adult writer, named without an age. A teen is named by the age the profile holds, or
+ * "a teenager" when it holds none. The young band is `voiceOf("essay", age)`'s, untouched.
  */
-export function voiceOf(subject: VoiceSubject, age?: number | null, mode?: Mode): Voice {
-  if (subject === "essay" && mode === "adult") return { band: "teen", who: ADULT_WRITER, manner: "" };
-  if (bandOf(age) === "young") return { band: "young", ...YOUNG[subject] };
-  if (subject === "maths" && typeof age === "number" && Number.isFinite(age)) return { band: "teen", who: ageWho(age), manner: "" };
-  if (subject === "essay" && typeof age === "number" && Number.isFinite(age)) return { band: "teen", who: ageWho(age), manner: "" };
-  return { band: "teen", who: TEEN[subject], manner: "" };
+export function essayReadingVoice(age?: number | null, mode?: Mode): Voice {
+  if (mode === "adult") return { band: "teen", who: ADULT_WRITER, manner: "" };
+  const v = voiceOf("essay", age);
+  if (v.band === "young") return v;
+  if (typeof age === "number" && Number.isFinite(age)) return { band: "teen", who: ageWho(age), manner: "" };
+  return { band: "teen", who: "a teenager", manner: "" };
 }
 
 /** A prompt with the voice's manner after it; the prompt itself, untouched, when the manner is empty. */

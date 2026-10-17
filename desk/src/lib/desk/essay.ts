@@ -12,7 +12,7 @@ import { playFor } from "../library/lessons.data";
 import { getPiece, hasFormat } from "../session/texts";
 import { getLearner, LearnersUnread, readLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
 import { DeskSaid } from "./job";
-import { voiceOf, withManner } from "../rules/voice";
+import { essayReadingVoice, voiceOf, withManner } from "../rules/voice";
 import type { Mode } from "../rules/mode";
 import { LEARNER_UNREAD_RUN, type EssayAnalysis, type Verdict } from "../session/store";
 
@@ -160,7 +160,7 @@ export async function analyseEssay(raw: string, type: AnalysisType, learnerId: s
   const sentences = splitSentences(raw);
   const stats = paragraphStats(sentences);
   const lens = lensOf(type);
-  const { verdicts, provider } = await judge(sentences, new Set(sentences.map((s) => s.n)), lens, voiceOf("essay", age, reader.mode), undefined, undefined, reader);
+  const { verdicts, provider } = await judge(sentences, new Set(sentences.map((s) => s.n)), lens, essayReadingVoice(age, reader.mode), undefined, undefined, reader);
   record(learnerId, lens, sentences.length, verdicts.filter((v) => v.verdict === "faulty").length);
   const reading: EssayAnalysis = { text: raw, type, sentences, stats, verdicts, summary: "", provider };
   return { ...reading, summary: summaryLine(reading) };
@@ -178,7 +178,7 @@ export async function analyseEssay(raw: string, type: AnalysisType, learnerId: s
  */
 export async function analysePiece(raw: string, type: AnalysisType, learnerId: string, age: number | undefined,
   onProgress: (a: EssayAnalysis) => void = () => {}, pieceId?: string, format?: string, reader: ReadingFor = {}): Promise<EssayAnalysis> {
-  const sentences = splitSentences(raw), lens = lensOf(type), voice = voiceOf("essay", age, reader.mode);
+  const sentences = splitSentences(raw), lens = lensOf(type), voice = essayReadingVoice(age, reader.mode);
   // a kept piece reads as its own stored format; a piece not kept, as the format the send named (none: as an essay, as before)
   const kind = formatOf(learnerId, pieceId, format);
   const of = paragraphCount(sentences);
@@ -214,7 +214,7 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
  * The caller checks rules/essay pieceAgainProblem first.
  */
 export async function analysePieceAgain(reading: EssayAnalysis, learnerId: string, age?: number, notSaved?: (line: string) => void, reader: ReadingFor = {}): Promise<EssayAnalysis> {
-  const old = reading.piece!, lens = lensOf(reading.type), voice = voiceOf("essay", age, reader.mode), sentences = reading.sentences, of = old.paragraphs;
+  const old = reading.piece!, lens = lensOf(reading.type), voice = essayReadingVoice(age, reader.mode), sentences = reading.sentences, of = old.paragraphs;
   const piece: NonNullable<EssayAnalysis["piece"]> = { ...old, read: [...old.read], failed: [], ...(old.notEnglish ? { notEnglish: [...old.notEnglish] } : {}) };
   const observed = [...(old.observed ?? [])], kind = formatOf(learnerId, old.pieceId);
   let provider = reading.provider;
@@ -249,7 +249,7 @@ const reviseSchema = (lens: Lens) => { return { type: "object", properties: { ob
  * stands, and how many a rewrite fixed.
  */
 export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite: string, age?: number, learnerId?: string, notSaved?: (line: string) => void, reader: ReadingFor = {}): Promise<EssayAnalysis> {
-  const voice = voiceOf("essay", age, reader.mode), person = personOf(reader.mode);
+  const voice = essayReadingVoice(age, reader.mode), person = personOf(reader.mode);
   const r = revise(reading, n, rewrite);
   if (!r.ok) throw new Error(r.error);
   const next = r.reading;

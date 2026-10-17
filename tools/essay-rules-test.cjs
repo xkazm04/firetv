@@ -1769,12 +1769,14 @@ test('READER: a given task reaches the prompt as data labelled as the task; none
  const none=await run({});
  assert.doesNotMatch(none.prompt,/The task the writing answers/);assert.doesNotMatch(none.system,/task the writing answers/);
 });
-test('READER: maths and english voices are byte-identical whatever the mode, and the essay teen no longer reads 15 for everyone',()=>{
+test('READER: voiceOf (maths, english, and the essay hint) is byte-identical to before; only the essay reading voice names the teen by age',()=>{
  const V=require(path.join(root,'src/lib/rules/voice.ts'));
- for(const subject of ['maths','english'])for(const age of [undefined,null,10,12,13,14,15,17,18,25])
-  assert.deepEqual(V.voiceOf(subject,age,'adult'),V.voiceOf(subject,age),`${subject} at ${age}`);
  assert.deepEqual(V.voiceOf('maths'),{band:'teen',who:'a 15-year-old',manner:''});
  assert.deepEqual(V.voiceOf('english'),{band:'teen',who:'a Czech teenager',manner:''});
  assert.equal(V.voiceOf('maths',17).who,'a 17-year-old');
- assert.equal(V.voiceOf('essay',12).who,'a learner aged 11 to 13','the young essay voice is untouched');
+ assert.equal(V.voiceOf('essay').who,'a 15-year-old','the essay hint voice still reads 15');
+ assert.equal(V.voiceOf('essay',17).who,'a 15-year-old');
+ assert.equal(V.essayReadingVoice(17).who,'a 17-year-old');assert.equal(V.essayReadingVoice().who,'a teenager');assert.equal(V.essayReadingVoice(30,'adult').who,'an adult writer');
+ assert.equal(V.essayReadingVoice(12,'adult').who,'an adult writer');
+ assert.equal(V.essayReadingVoice(12).who,'a learner aged 11 to 13','the young essay voice is untouched');
 });

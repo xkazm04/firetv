@@ -81,6 +81,9 @@ async function prompts(age){
 const TEEN_AGES=[undefined,14,15,17,25],YOUNG_AGES=[12,13];
 /** The maths teen's name-words: the profile's age when it is known, today's fixed 15 when it is not. */
 const mathsWho=(a)=>a===undefined?'a 15-year-old':`${[8,11,18].includes(a)?'an':'a'} ${a}-year-old`;
+/** The essay reading names a teen by real age, or 'a teenager' with none (essayReadingVoice); the hint's essay voice does not move. */
+const readingWho=(a)=>a===undefined?'a teenager':mathsWho(a);
+const READING_KEYS=['essay.reading','essay.revise'];
 const CALC_KEYS=['hint.maths.calc','explain.calc'];
 
 // ------------------------------------------------------------------ 1: the module
@@ -127,7 +130,7 @@ test('2: learnerAge reads the seated profile, undefined for nobody, no profile o
 test('3: 15 and no age get today\'s prompts byte for byte; a known maths age is named, essay and english do not move',async()=>{
  for(const age of TEEN_AGES){
   const got=await prompts(age);
-  for(const k of Object.keys(TODAY))assert.equal(got[k],SUBJECT[k]==='maths'?TODAY[k].replace('a 15-year-old',mathsWho(age)):TODAY[k],`${k} at age ${age}`);
+  for(const k of Object.keys(TODAY))assert.equal(got[k],SUBJECT[k]==='maths'?TODAY[k].replace('a 15-year-old',mathsWho(age)):READING_KEYS.includes(k)?TODAY[k].replace('a 15-year-old',readingWho(age)):TODAY[k],`${k} at age ${age}`);
   assert.equal(got['hint.maths.2'],got['hint.maths.1'],'hint 2 shares hint 1\'s system prompt');
  }
  // the fragment itself, once each
@@ -216,7 +219,7 @@ test('6: routes - api/hint and api/analyse voice the seated profile\'s age; 14+ 
   systems=captureSystems();
   assert.equal((await post('analyse',{kind:'essay',text:PARA,type:'claim'})).status,200);await drain();
   assert.equal(systems.length,1);
-  assert.equal(systems[0]===TODAY['essay.reading'],!young,`essay reading at age ${age}`);
+  assert.equal(systems[0]===TODAY['essay.reading'].replace('a 15-year-old',readingWho(age)),!young,`essay reading at age ${age}`);
   assert.equal(systems[0].includes('a writing tutor for a learner aged 11 to 13'),young);
   // an English sentence
   systems=captureSystems();
