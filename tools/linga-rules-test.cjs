@@ -2796,6 +2796,24 @@ test('LG-8 slips: keepSlips drops a slip no answer holds, one only in a skipped 
  assert.deepEqual(keepSlips([{said:'She go to work',better:'She goes to the beer bar'}],tasks,l=>!/beer/.test(l)),[],'the audience gate refuses the better form');
  assert.deepEqual(keepSlips('nope',tasks),[]);assert.deepEqual(keepSlips([null,{said:1,better:'x'}],tasks),[]);
 });
+test('LG-8 third pass: a slip found only in a listen answer is dropped, a repeated slip comes first, the focus follows it',()=>{
+ const {keepSlips,focusFollowsSlip}=require(path.join(root,'src/lib/english/check.ts'));
+ const t=(kind,response)=>({id:'x'+response.length,band:'B1',kind,prompt:'p',line:'',options:[],response,mode:'text',verdict:'partial',quote:'',note:'n',at:1});
+ // martin-45 recert-5: answers as recorded; 'he move' is in the listen answer only
+ const martin=[t('listen','Because Thursday is busy for me and my team, so he move the supplier call to Friday. Then my team have more time to check the new prices. This is too easy.'),t('say','I think it is better to accept the change, but not for free. But two weeks delay make a problem for our production, so I will ask some compensation.'),t('say','I prefer cycling, because after the whole day in office I must clear my head. Also it is a good topic for small talk, many people in my company is cycling.')];
+ assert.deepEqual(keepSlips([{said:'he move the supplier call',better:'he moves the supplier call'}],martin),[],'a listen-borne slip is no slip');
+ // 'we was discussing' is not in martin-45's recorded answers: a stated reconstruction, said in two say answers
+ const again=[...martin,t('say','Yesterday we was discussing the price.'),t('say','Last week we was discussing it with the team.')];
+ const model=[{said:'he move the supplier call',better:'he moves the supplier call'},{said:'two weeks delay make',better:'two weeks delay makes'},{said:'we was discussing',better:'we were discussing'}];
+ const kept=keepSlips(model,again);
+ assert.deepEqual(kept.map(x=>x.said),['we was discussing','two weeks delay make'],'the repeated one first, the listen-borne one gone, the model order otherwise');
+ assert.equal(focusFollowsSlip('what the real number is',kept,again),'"we was discussing" becomes "we were discussing"','the focus follows the reordered first slip');
+ // hana-41 recert-2: 'I have not so much time' is said once; a slip she repeated outranks it (the repeat is a reconstruction)
+ const hana=[t('say','I think short daily chats are better. Longer session once a week is difficult for me, I have not so much time.'),t('say','I would tell them that we are helping each other in our team, because everybody can ask a question.'),t('say','I am helping each other when we are busy.')];
+ assert.deepEqual(keepSlips([{said:'I have not so much time',better:'I do not have much time'},{said:'we are helping each other',better:'we help each other'}],hana,undefined).map(x=>x.said),['I have not so much time','we are helping each other'],'nothing repeated: the model order stands');
+ assert.deepEqual(keepSlips([{said:'I have not so much time',better:'I do not have much time'},{said:'helping each other',better:'help each other'}],hana).map(x=>x.said),['helping each other','I have not so much time'],'said in two answers: first');
+ assert.deepEqual(keepSlips([{said:'a b',better:'a c'},{said:'x y',better:'x z'},{said:'a b',better:'a c'}],[t('say','a b and x y')]).map(x=>x.said),['a b','x y'],'listed twice counts as repeated, and is kept once');
+});
 test('LG-8 slips: cleanPlacement accepts none, keeps 3 valid, trims 5 to 3, drops a malformed item',()=>{
  const base={...placed('B1')},sl=n=>({said:'w'+n+' w',better:'b'+n+' b'});
  assert.equal(P.cleanPlacement(base).slips,undefined,'an older record stays valid');

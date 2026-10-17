@@ -117,25 +117,28 @@ export function quotedFocus(focus: string, tasks: PlacementTask[], safe: (line: 
 
 /**
  * The usual slips the summary lists (LG-8): a slip is kept only when the learner's words occur in an answer they gave
- * (a skipped answer is no answer), the better form differs from them, and it passes the audience gate the focus uses.
- * Normalised as focusParts does. At most three. Code checks the words were said, not that they were repeated.
+ * (a skipped answer is no answer, and a listen answer is the learner echoing the line they heard, so words found only
+ * there are no slip), the better form differs from them, and it passes the audience gate the focus uses. Normalised as
+ * focusParts does. One the learner repeated (the same said or better form listed twice, or the said words in two or
+ * more answers) comes before the rest; otherwise the model's order stands. At most three.
  */
 export function keepSlips(slips: unknown, tasks: readonly PlacementTask[], safe: (line: string) => boolean = () => true): { said: string; better: string }[] {
-  const norm = (x: string) => x.toLowerCase().replace(/[\s"“”]+/g, " ").trim(), held = tasks.filter(t => !t.skipped).map(t => norm(t.response)).join(" | ");
+  const norm = (x: string) => x.toLowerCase().replace(/[\s"“”]+/g, " ").trim(), answers = tasks.filter(t => !t.skipped && t.kind !== "listen").map(t => norm(t.response));
   if (!Array.isArray(slips)) return [];
-  const out: { said: string; better: string }[] = [];
+  const listed = slips.flatMap(s => s && typeof s === "object" ? [{ said: norm(String((s as { said?: unknown }).said ?? "")), better: norm(String((s as { better?: unknown }).better ?? "")) }] : []);
+  const out: { said: string; better: string; again: boolean }[] = [];
   for (const s of slips) {
     if (!s || typeof s !== "object" || typeof (s as { said?: unknown }).said !== "string" || typeof (s as { better?: unknown }).better !== "string") continue;
     const said = (s as { said: string }).said.trim().slice(0, 120), better = (s as { better: string }).better.trim().slice(0, 120);
-    if (norm(said).length < 2 || !norm(better) || norm(said) === norm(better) || !held.includes(norm(said)) || !safe(better)) continue;
-    if (!out.some(o => norm(o.said) === norm(said))) out.push({ said, better });
-    if (out.length === 3) break;
+    if (norm(said).length < 2 || !norm(better) || norm(said) === norm(better) || !answers.some(a => a.includes(norm(said))) || !safe(better)) continue;
+    if (out.some(o => norm(o.said) === norm(said))) continue;
+    out.push({ said, better, again: answers.filter(a => a.includes(norm(said))).length >= 2 || listed.filter(x => x.said === norm(said) || x.better === norm(better)).length >= 2 });
   }
-  return out;
+  return [...out.filter(o => o.again), ...out.filter(o => !o.again)].slice(0, 3).map(({ said, better }) => ({ said, better }));
 }
 
 /**
- * The focus follows the first kept slip (LG-8): when slips exist and the focus does not quote the first one's said
+ * The focus follows the first kept slip (LG-8; keepSlips puts a repeated one first): when slips exist and the focus does not quote the first one's said
  * words, it is rebuilt as '"<said>" becomes "<better>"'. Over 120 characters, or refused by quotedFocus (the shape
  * focusParts parses, the audience gate), it falls back to FOCUS_FALLBACK. No slips: the focus is untouched.
  */
