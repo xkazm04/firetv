@@ -1675,3 +1675,15 @@ test('EM1-1: a clean four-sentence PEEL has no fault under Evidence or Structure
  const f=RE.decideVerdicts('evidence',none,new Set([1,2]),[{n:1,support:'opinion'},{n:2,support:'opinion'}]);
  assert.equal(f.find(x=>x.n===2).verdict,'faulty','an Explain with no evidence before it is still unbacked');
 });
+test('EM2-2: a rewrite that is still opinion does not hold because a neighbour is labelled evidence; real backing or a checkable rewrite still holds',()=>{
+ const t='Schools start too early. Pupils are tired all day. I found out that my brother sleeps badly.';
+ const ss=RE.splitSentences(t);
+ const ctx=RE.contextObservations('evidence',ss,2);
+ const ruled=RE.decideVerdicts('evidence',ss,new Set([2]),[{n:2,support:'opinion'},{n:1,support:'opinion'},...ctx.filter(o=>o.n===3)]).find(v=>v.n===2);
+ assert.equal(ruled.verdict,'faulty');
+ assert.equal(RE.rewriteState({...ruled,was:{text:'x',verdict:'faulty'}}),'still');
+ const real=RE.decideVerdicts('evidence',ss,new Set([2]),[{n:2,support:'opinion'},{n:3,support:'checkable',backs:2}]).find(v=>v.n===2);
+ assert.equal(real.verdict,'neutral','a kept link that backs it still holds');
+ const chk=RE.decideVerdicts('evidence',ss,new Set([2]),[{n:2,support:'checkable'}]).find(v=>v.n===2);
+ assert.notEqual(chk.verdict,'faulty');
+});

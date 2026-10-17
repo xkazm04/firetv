@@ -416,7 +416,12 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
           const para = paraOf(s), marks = markedChecks(para);
           if (!marks.length) { if (bodyProves(s)) verdict = "neutral"; else { verdict = "faulty"; check = CHECKS.opinion; } }
           else if (closesAfterEvidence(s) && !backed.has(s.n)) verdict = "neutral";
-          else if (backed.has(s.n) || !marks.some((t) => backsOf(t) !== undefined)) verdict = "neutral";
+          else if (backed.has(s.n)) verdict = "neutral";
+          // no link in the paragraph: checkable sentences this call judged leave the opinion neutral (code cannot tell what they back);
+          // one that is only context (a rewrite's neighbour) backs nothing here, so a rewrite that is still opinion does not hold
+          else if (!marks.some((t) => backsOf(t) !== undefined)) {
+            if (marks.some((t) => judged.has(t.n))) verdict = "neutral"; else { verdict = "faulty"; check = CHECKS.unbacked; }
+          }
           else {
             const rest = sentences.slice(at + 1).filter((t) => paraOf(t) === para), stop = rest.findIndex((t) => ok(t.n)?.support === "opinion");
             const blind = (stop < 0 ? rest : rest.slice(0, stop)).some((t) => marks.includes(t) && backsOf(t) === undefined);
