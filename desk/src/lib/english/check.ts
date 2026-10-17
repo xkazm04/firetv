@@ -291,9 +291,10 @@ async function propose(k: LevelCheck, ctx: Ctx, token: string, count: number, sw
   // desk never writes a topic itself, so a second miss keeps the first answer. A topic in the learner's own words is exempt.
   const stems = asked ? [] : interestWords(prefs.interest || k.interest);
   const need = stems.length > 0 && !k.topics.some(t => t.id !== swap && touchesInterest(t, stems));
-  const { system, request } = planAsk(ctx, { count, asked, goal: prefs.goal || k.goal, interest: prefs.interest || k.interest, read: k.read, avoid: k.topics.map(t => t.title), need });
+  const { system, request } = planAsk(ctx, { count, asked, goal: prefs.goal || k.goal, interest: prefs.interest || k.interest, read: k.read, avoid: [...k.topics.map(t => t.title), ...(k.rejected ?? [])], need });
   const pick = (json: Record<string, unknown>) => {
-    const titles = new Set(k.topics.filter(t => t.id !== swap).map(t => t.title.toLowerCase()));
+    // the swapped topic's own title is as barred as an earlier rejected one: a model that hands it back must not pass as a replacement
+    const titles = new Set([...k.topics.map(t => t.title), ...(k.rejected ?? [])].map(t => t.toLowerCase()));
     return (Array.isArray(json.topics) ? json.topics : [])
       .map(t => cleanTopic({ ...object(t), id: `plan-${randomUUID().slice(0, 8)}` }))
       // cleanTopic already raised each topic's audience from its words (title, goal, why, partner, premise, cue) and
@@ -319,8 +320,13 @@ async function propose(k: LevelCheck, ctx: Ctx, token: string, count: number, sw
       } catch (e) { console.warn("Linga plan: the interest re-ask failed; the first answer is kept:", e instanceof Error ? e.message : e); }
     }
     if (!fresh.length) throw new Error("The tutor returned no topic this learner can practise.");
+    const gone = swap ? k.topics.find(t => t.id === swap)?.title : undefined;
     return {
-      apply: now => ({ ...now, topics: swap ? now.topics.map(t => t.id === swap ? fresh[0] : t) : [...now.topics, ...fresh].slice(0, PLAN_MAX) }),
+      apply: now => ({
+        ...now,
+        topics: swap ? now.topics.map(t => t.id === swap ? fresh[0] : t) : [...now.topics, ...fresh].slice(0, PLAN_MAX),
+        ...(gone ? { rejected: [...(now.rejected ?? []), gone].slice(-50) } : {}),
+      }),
       provider, ms,
     };
   });
@@ -460,11 +466,11 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
     return true;
   }
   if (action === "plan-swap" || action === "plan-add" || action === "plan-renew") {
-    if (action === "plan-renew") { await advance({ ...k, topics: [] }, ctx, commandId); return true; }
+    if (action === "plan-renew") { await advance({ ...k, topics: [], rejected: [...(k.rejected ?? []), ...k.topics.map(t => t.title)].slice(-50) }, ctx, commandId); return true; }
     if (action === "plan-swap") {
       const id = required(input.topicId, "topic", 100);
       if (!k.topics.some(t => t.id === id)) throw new ConversationError("That topic has already changed.", 409);
-      await propose(k, ctx, commandId, 1, id, "Linga could not find another topic. Try again.");
+      await propose(k, ctx, commandId, 1, id, "Linga found no different topic this time. Your topics are unchanged. Try again.");
       return true;
     }
     if (k.topics.length >= PLAN_MAX) throw new ConversationError(`A plan holds ${PLAN_MAX} topics. Swap one instead.`);

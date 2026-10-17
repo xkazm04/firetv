@@ -282,6 +282,8 @@ export interface LevelCheck {
   task: CheckTask | null; tasks: PlacementTask[]; placement: Placement | null; topics: PlanTopic[];
   /** no goal or interest is known yet: ask before cutting topics, which would otherwise be generic */
   askGoal?: boolean;
+  /** titles the learner swapped or renewed away in this plan session: never offered again (check.ts propose) */
+  rejected?: string[];
   /** a scene started or resumed over this check: kept where it was, and not the phone's until Carry on (activity.ts); absent on every check saved before */
   parked?: boolean;
   pending: string | null; error: string; commands: string[]; audioNonce: number; startedAt: number;

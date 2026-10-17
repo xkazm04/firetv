@@ -353,6 +353,38 @@ test("the interest re-ask spends what is left of the plan call's deadline: it ca
  await command('plan-propose');
  assert.equal(seen.length,2);assert.equal(seen[0],undefined,'the first plan call starts its own deadline');assert.equal(seen[1],ticket,"the re-ask is handed the first answer's ticket");
 });
+test('a plan swap drops the old topic, brings a different one, and never brings back a rejected title',async()=>{
+ fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true,goal:'speak more fluently in meetings',interest:''},notes:[]});
+ const base=[topic('Share your idea in a team meeting','all','relate'),topic('Summarise a project update','all','narrate')];
+ let queue=[],asks=[];answer=async req=>{const p=JSON.parse(req.prompt);if(p.step!=='plan')throw new Error('unexpected '+p.step);asks.push(p);const next=p.count>1?base:(queue.shift()||[]);return {json:{topics:next},provider:'test',ms:1};};
+ await command('plan-propose');let k=getSession().check;const keep=k.topics[1];const rejected=[];
+ // each round the model first hands back the swapped title or an earlier rejection, then a real replacement
+ const answers=[['Share your idea in a team meeting','Chair a short stand-up'],['Chair a short stand-up','Share your idea in a team meeting','Order food at a cafe'],['Order food at a cafe','Chair a short stand-up','Explain a delay to a client']];
+ for(const names of answers){
+  const old=getSession().check.topics.find(t=>t.id!==keep.id);
+  queue=[names.map(n=>topic(n,'all','request'))];
+  asks=[];await command('plan-swap',{checkId:getSession().check.id,topicId:old.id});
+  const now=getSession().check;rejected.push(old.title);
+  assert(!now.topics.some(t=>t.id===old.id),'old id gone');
+  for(const r of rejected)assert(!now.topics.some(t=>t.title===r),'rejected title '+r+' stays out');
+  assert.equal(now.topics.length,2);assert(now.topics.some(t=>t.id===keep.id),'the other topic is untouched');
+  assert(asks[0].avoid.includes(old.title),'the model is told to avoid the swapped title');
+ }
+ const titles=getSession().check.topics.map(t=>t.title);assert(titles.includes('Explain a delay to a client'));
+});
+test('a plan swap that gets no different topic back says so and leaves the list as it was',async()=>{
+ fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true,goal:'speak more fluently in meetings',interest:''},notes:[]});
+ const base=[topic('Share your idea in a team meeting','all','relate'),topic('Summarise a project update','all','narrate')];
+ let swapAnswer=[];answer=async req=>{const p=JSON.parse(req.prompt);if(p.step!=='plan')throw new Error('unexpected '+p.step);return {json:{topics:p.count>1?base:swapAnswer},provider:'test',ms:1};};
+ await command('plan-propose');const before=getSession().check.topics.map(t=>t.id+'|'+t.title);const target=getSession().check.topics[0];
+ for(const same of [[topic(target.title,'all','relate')],[]]){
+  swapAnswer=same;await assert.rejects(()=>command('plan-swap',{checkId:getSession().check.id,topicId:target.id}));
+  const now=getSession().check;assert.deepEqual(now.topics.map(t=>t.id+'|'+t.title),before,'the list is unchanged');
+  assert.match(now.error,/no different topic.*unchanged/i);assert.equal(now.pending,null);
+ }
+});
 test('a plan that misses a known interest is asked for once more with the gap named; no topic is written by the desk',async()=>{
  const setUp=async interest=>{fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
   await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true,goal:'speak more fluently in meetings',interest},notes:[]});};
