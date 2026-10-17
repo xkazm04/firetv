@@ -52,3 +52,37 @@ Ruling (b) is kept as is (1573a4ae message): Show me, a fix revealed after two m
 ## 5. Open proof
 
 The live recertify of the four Characters (tomas-9, adela-17, petra-38, jana-29) is the open proof. This record does not claim its result. The rows above are the pre-fix findings; the commits are pinned by rule tests with stubbed engines only, and no live model call was made for this record.
+
+## Addendum 2026-10-17: a run the learner already said herself is not a read-back (46db00cc)
+
+State described: main at 011019ff; the code lines below are read there, and `credit.ts` is unchanged since 46db00cc. The addendum is **not live-verified**. Where the commit shows no reason or no alternative, it says "not recorded". The sections above are unchanged.
+
+### A1. The constraint that forced it
+
+`LT-jana-29-J3-2` (`uat/runs/2026-10-17-lt-swap-2/recert-2/`; the recert-2 `SUMMARY.md` line 13 lists it under recaps that are "bare or wrong"). The 46db00cc message gives the cause: reply 2 of jana-29's J3 was stamped `supported:true` with no help action. Owen's line 2 echoed her "hidden promo code field" as "the promo code field", and her saying it again shared a 4-word run with a shown line, so `copiesShown` (section 2 above) took it for a read-back.
+
+### A2. The rule as built
+
+- `copiesShown` takes a new optional third argument `own`, the speaker's own earlier replies in the scene (`desk/src/lib/english/credit.ts:33`). A run found in `own` is her words, not a copy (`credit.ts:37-39`: `copy` is a run found in a shown line and not `hers`).
+- Edge tolerance of one joining word: a run of four or more words still counts as hers if dropping its first or its last word, when that word is in `EDGE_WORDS`, leaves a run found in `own` (`credit.ts:18` the list: the, a, an, this, that, my, your, to, of, in, on, and, is, are; `credit.ts:38` the test). Runs under four words need an exact match in `own`.
+- `creditOf` takes the same optional arg and passes it to `copiesShown` (`credit.ts:52,55`). `validateObservations` takes `own?: string[]` in its context and passes it to `creditOf` (`rules.ts:66,69`), so certification credit follows the same rule as the flag.
+- The helper is `ownLines(c, role = "learner")`: the texts of that role's earlier turns in the scene (`review.ts:108`).
+- Callers:
+  - `conversation.ts:484` (observations) and `conversation.ts:486` (the turn's flag), with `ownLines(c)`.
+  - `duet.ts:112`, `learnerBeat`, with the learner's earlier lines.
+  - `duet.ts:144-145`, `coStarEvidence`, with `ownLines(c, "costar")`, the co-star's earlier lines, for both the flag and the observations.
+
+### A3. Alternatives that lost
+
+Not recorded. The 46db00cc message names none. Neither the choice of the edge-word list nor of a tolerance of one word (rather than none or more) is explained there.
+
+### A4. Tests that pin it
+
+`tools/linga-rules-test.cjs`, from line 3306. The commit says no existing pin changed.
+
+- `J3 case 1` (line 3306): replays the J3 turns from jana-29 (`janaScene`, with a moment after reply 2). Expects the learner flags `[false,false,false]` and a recap of 3 "on your own" and 0 "with help". The message says it was red before (reply 2 was true).
+- `J3 case 2` (line 3312): pins the teeth. A run of a partner line she never said is still a read-back; a run she said earlier is hers; the part she did not say is still a read-back; a phrase under four words wholly inside a shown line is a read-back unless she said it herself; `creditOf` gives `own` with her earlier words and `helped` without. It also checks that a help rung still supports the next reply.
+
+### A5. Status
+
+Not live-verified. The tests use stubbed engines only. A live recertify (recert-3) is measuring it; this record does not claim its result.
