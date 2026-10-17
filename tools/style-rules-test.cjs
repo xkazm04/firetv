@@ -44,6 +44,12 @@ test('distinct writers measure apart; a writer measures nearer themselves than a
   const a = S.styleSheet(BUBBLY), z = S.styleSheet(FORMAL);
   assert.equal(S.styleDistance(a, a), 0); assert.equal(S.styleDistance(a, z), S.styleDistance(z, a)); assert(Number.isInteger(S.styleDistance(a, z)));
 });
+test('directness reads more hedging as more indirect (Twin Card 5.1: blunt 1 ... indirect 5)', () => {
+  const BLUNT = ['Send me the file today.', 'Move the meeting to Friday.', 'I need the budget by noon.', 'Do not change the plan.'];
+  const HEDGED = ['Maybe we could move the meeting, if possible.', 'I think it might work, perhaps on Friday.', 'I guess it is probably fine, not sure though.', 'Just wondering if you would mind sending it, maybe today?'];
+  const b = S.twinDims(S.styleSheet(BLUNT)).directness, h = S.twinDims(S.styleSheet(HEDGED)).directness;
+  assert(b >= 1 && b <= 2, `blunt set reads ${b}`); assert(h >= 4 && h <= 5, `hedged set reads ${h}`);
+});
 test('copyRun finds a lifted run of eight words; withinBands reads length against the writer\'s range', () => {
   const src = 'Please find attached the revised report and let me know if anything else is needed.';
   assert.equal(S.copyRun(src, 'Hi! please find attached the revised report and let me know soon.', 8), 'please find attached the revised report and let');

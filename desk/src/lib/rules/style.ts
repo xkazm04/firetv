@@ -92,13 +92,14 @@ export function twinDims(s: StyleSheet): Dims {
   let humor = band(r.laugh + r.emoji / 3, [20, 80, 200, 400]);
   const energy = band(r.exclaim + r.emoji / 2, [40, 120, 250, 450]);
   const length = band(s.wpm.p50, [8, 25, 60, 150]);
-  const directness = (6 - band(r.hedge, [40, 100, 200, 350])) as Dims["directness"];
+  // directness runs blunt (1) to indirect (5), as the level words do (SPEC 5.1): more hedging reads more indirect
+  const directness = band(r.hedge, [40, 100, 200, 350]);
   let expressiveness = band(r.emoji / 2 + r.exclaim / 2 + r.slang / 2 + r.laugh / 2, [30, 100, 220, 400]);
   const detail = band(s.wps.p50 * 10 + s.rates.connector / 2 + s.rates.list / 2, [80, 140, 220, 320]);
   // the coherence rules (SPEC 5.1): no formality >= 4 with expressiveness >= 4, no humor 5 with formality 5
   if (formality >= 4 && expressiveness >= 4) { if (formalScore > 150) expressiveness = 3; else formality = 3; }
   if (humor === 5 && formality === 5) humor = 4;
-  return { formality, warmth, humor, energy, length, directness: Math.max(1, Math.min(5, directness)) as Dims["directness"], expressiveness, detail };
+  return { formality, warmth, humor, energy, length, directness, expressiveness, detail };
 }
 
 /** How far apart two sheets are: a sum of normalised gaps over the measures that carry a voice (0 = the same). Integer. */
