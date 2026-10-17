@@ -112,3 +112,6 @@ deathride/art/reports/p4-draft-location.json
 /.claude/rules/ai-registry-llm-observability.md
 /.ai/skill-runs.local.jsonl
 # END ai-registry linked skills
+
+# Java Flight Recorder dumps carry the whole process environment (tokens included)
+*.jfr
