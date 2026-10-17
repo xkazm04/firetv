@@ -1,0 +1,989 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to B1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nB1Getting by · self-chosen\nTalk about my logistics experience\nYour mission\nDescribe my past logistics work clearly, with my role, years and main tasks.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\n· self-chosen\nNext topic:\nTalk about my logistics experience\nDescribe my past logistics work clearly, with my role, years and main tasks.\n[button: Start talking]\nOr choose a situation [list: Talk about my logistics experience [plan-fc8b4917] | Describe a problem I solved [plan-307e40c8] | Talk about salary and benefits [plan-3741064d] | Ask questions about the team [plan-5f45d8cc] | Ask an interviewer to repeat [plan-65864b83] | Follow up after my interview [plan-35bb2430] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "This is exactly my interview topic, so I'll start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8211
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nWarehouse interview: your last logistics job\nMaria Lopez says\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYour turn\nAnswer on your phone: speak or type.\nNowDescribe your last job in short steps\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nWarehouse interview: your last logistics job\nDescribe your past logistics work clearly, with a short summary of what you did and why you applied.\nNow: Describe your last job in short steps\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMaria Lopez · hiring manager\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Okay, I'll answer about my last job honestly.",
+          "action": "answer",
+          "args": {
+            "text": "Hello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays."
+          },
+          "result": "ok",
+          "ms": 14823
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said I have worked there since three years\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I have worked there since three years”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I should fix it: I have worked there for three years.",
+          "action": "answer",
+          "args": {
+            "text": "I have worked there for three years."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said I have worked there since three years\nYour try\nI have worked there for three years.\nA period of time needs a different time word than since here.\nYou fixed “there for”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “there for”\nYou said “I have worked there since three years”\nYour try: “I have worked there for three years.”\nA period of time needs a different time word than since here.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "OK, I see my mistake, now back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nWarehouse interview: your last logistics job\nMaria Lopez says\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\nYour turn\nAnswer on your phone: speak or type.\nNowMention one thing you did every day\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nWarehouse interview: your last logistics job\nDescribe your past logistics work clearly, with a short summary of what you did and why you applied.\nNow: Mention one thing you did every day\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMaria Lopez · hiring manager\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYou · written\nHello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays.\nMaria Lopez · hiring manager\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I should answer about the software I used every day.",
+          "action": "answer",
+          "args": {
+            "text": "We used SAP for orders and also Excel for the plan of trucks. Every day in the morning I checked new orders in SAP and I wrote the trucks to the Excel table. Also we had a GPS system to see where are the trucks."
+          },
+          "result": "ok",
+          "ms": 9346
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nWarehouse interview: your last logistics job\nMaria Lopez says\nThanks, that helps me see your system. How many trucks did you plan each day?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain why you want this job\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nWarehouse interview: your last logistics job\nDescribe your past logistics work clearly, with a short summary of what you did and why you applied.\nNow: Explain why you want this job\nThanks, that helps me see your system. How many trucks did you plan each day?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMaria Lopez · hiring manager\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYou · written\nHello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays.\nMaria Lopez · hiring manager\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\nYou · written\nWe used SAP for orders and also Excel for the plan of trucks. Every day in the morning I checked new orders in SAP and I wrote the trucks to the Excel table. Also we had a GPS system to see where are the trucks.\nMaria Lopez · hiring manager\nThanks, that helps me see your system. How many trucks did you plan each day?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, that helps me see your system. How many trucks did you plan each day?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy question, I can answer about the trucks I planned.",
+          "action": "answer",
+          "args": {
+            "text": "I planned around 25 trucks every day, in the busy season it was thirty or more. Some trucks were our own and some from carriers. When was a delay, I called the driver and I found other solution."
+          },
+          "result": "ok",
+          "ms": 10750
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nWarehouse interview: your last logistics job\nMaria Lopez says\nThirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nWarehouse interview: your last logistics job\nDescribe your past logistics work clearly, with a short summary of what you did and why you applied.\nNow: Explain why you want this job\nThirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMaria Lopez · hiring manager\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYou · written\nHello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays.\nMaria Lopez · hiring manager\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\nYou · written\nWe used SAP for orders and also Excel for the plan of trucks. Every day in the morning I checked new orders in SAP and I wrote the trucks to the Excel table. Also we had a GPS system to see where are the trucks.\nMaria Lopez · hiring manager\nThanks, that helps me see your system. How many trucks did you plan each day?\nYou · written\nI planned around 25 trucks every day, in the busy season it was thirty or more. Some trucks were our own and some from carriers. When was a delay, I called the driver and I found other solution.\nMaria Lopez · hiring manager\nThirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I should explain honestly why I want this job, with my usual mistakes.",
+          "action": "answer",
+          "args": {
+            "text": "I want this job because I want to grow in logistics and work in a bigger company. I like the warehouse and transport together, and I think my experience with planning trucks and carriers is useful for your team. Also I live in Brno, so the location is good for me."
+          },
+          "result": "ok",
+          "ms": 8363
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nWarehouse interview: your last logistics job\nMaria Lopez says\nThank you, that is a clear reason. Our warehouse gets very busy before Christmas. How would you keep the trucks on time in that week?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nWarehouse interview: your last logistics job\nDescribe your past logistics work clearly, with a short summary of what you did and why you applied.\nThank you, that is a clear reason. Our warehouse gets very busy before Christmas. How would you keep the trucks on time in that week?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMaria Lopez · hiring manager\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYou · written\nHello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays.\nMaria Lopez · hiring manager\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\nYou · written\nWe used SAP for orders and also Excel for the plan of trucks. Every day in the morning I checked new orders in SAP and I wrote the trucks to the Excel table. Also we had a GPS system to see where are the trucks.\nMaria Lopez · hiring manager\nThanks, that helps me see your system. How many trucks did you plan each day?\nYou · written\nI planned around 25 trucks every day, in the busy season it was thirty or more. Some trucks were our own and some from carriers. When was a delay, I called the driver and I found other solution.\nMaria Lopez · hiring manager\nThirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?\nYou · written\nI want this job because I want to grow in logistics and work in a bigger company. I like the warehouse and transport together, and I think my experience with planning trucks and carriers is useful for your team. Also I live in Brno, so the location is good for me.\nMaria Lopez · hiring manager\nThank you, that is a clear reason. Our warehouse gets very busy before Christmas. How would you keep the trucks on time in that week?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that is a clear reason. Our warehouse gets very busy before Christmas. How would you keep the trucks on time in that week?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Good question, I can answer about the busy week before Christmas.",
+          "action": "answer",
+          "args": {
+            "text": "Before Christmas week I would make the plan earlier, maybe two weeks before. I would talk with all carriers and confirm the trucks in advance, and I would have some reserve carrier if one truck is cancelled. Also I would check with the warehouse the time slots for loading, so the trucks don't wait in the queue."
+          },
+          "result": "ok",
+          "ms": 10032
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said some reserve carrier\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “some reserve carrier”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Oh, I forgot the article or plural; let me try again.",
+          "action": "answer",
+          "args": {
+            "text": "I would have a reserve carrier if one truck is cancelled."
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 10,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said some reserve carrier\nYour try\nI would have a reserve carrier if one truck is cancelled.\nA single countable noun like carrier needs a or a plural here.\nYou fixed “a reserve”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “a reserve”\nYou said “some reserve carrier”\nYour try: “I would have a reserve carrier if one truck is cancelled.”\nA single countable noun like carrier needs a or a plural here.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ok, I see, I need \"a\" there. Back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nWarehouse interview: your last logistics job\nMaria Lopez says\nConfirming trucks two weeks ahead and checking loading times is a sensible plan for a busy week. If a truck is late on the day, who would you call first?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nWarehouse interview: your last logistics job\nDescribe your past logistics work clearly, with a short summary of what you did and why you applied.\nConfirming trucks two weeks ahead and checking loading times is a sensible plan for a busy week. If a truck is late on the day, who would you call first?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMaria Lopez · hiring manager\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYou · written\nHello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays.\nMaria Lopez · hiring manager\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\nYou · written\nWe used SAP for orders and also Excel for the plan of trucks. Every day in the morning I checked new orders in SAP and I wrote the trucks to the Excel table. Also we had a GPS system to see where are the trucks.\nMaria Lopez · hiring manager\nThanks, that helps me see your system. How many trucks did you plan each day?\nYou · written\nI planned around 25 trucks every day, in the busy season it was thirty or more. Some trucks were our own and some from carriers. When was a delay, I called the driver and I found other solution.\nMaria Lopez · hiring manager\nThirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?\nYou · written\nI want this job because I want to grow in logistics and work in a bigger company. I like the warehouse and transport together, and I think my experience with planning trucks and carriers is useful for your team. Also I live in Brno, so the location is good for me.\nMaria Lopez · hiring manager\nThank you, that is a clear reason. Our warehouse gets very busy before Christmas. How would you keep the trucks on time in that week?\nYou · written\nBefore Christmas week I would make the plan earlier, maybe two weeks before. I would talk with all carriers and confirm the trucks in advance, and I would have some reserve carrier if one truck is cancelled. Also I would check with the warehouse the time slots for loading, so the trucks don't wait in the queue.\nMaria Lopez · hiring manager\nConfirming trucks two weeks ahead and checking loading times is a sensible plan for a busy week. If a truck is late on the day, who would you call first?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Confirming trucks two weeks ahead and checking loading times is a sensible plan for a busy week. If a truck is late on the day, who would you call first?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "I would call the driver first, then the carrier dispatcher; I'll answer once more.",
+          "action": "answer",
+          "args": {
+            "text": "First I would call the driver to know where he is and how long is the delay. Then I would call the carrier dispečink and also inform the warehouse, so they can change the loading slot."
+          },
+          "result": "ok",
+          "ms": 8473
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nWarehouse interview: your last logistics job\nMaria Lopez says\nThat plan is clear, and you explain why each step matters. Before we finish, could you sum up your past work in a few sentences?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nWarehouse interview: your last logistics job\nDescribe your past logistics work clearly, with a short summary of what you did and why you applied.\nThat plan is clear, and you explain why each step matters. Before we finish, could you sum up your past work in a few sentences?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMaria Lopez · hiring manager\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYou · written\nHello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays.\nMaria Lopez · hiring manager\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\nYou · written\nWe used SAP for orders and also Excel for the plan of trucks. Every day in the morning I checked new orders in SAP and I wrote the trucks to the Excel table. Also we had a GPS system to see where are the trucks.\nMaria Lopez · hiring manager\nThanks, that helps me see your system. How many trucks did you plan each day?\nYou · written\nI planned around 25 trucks every day, in the busy season it was thirty or more. Some trucks were our own and some from carriers. When was a delay, I called the driver and I found other solution.\nMaria Lopez · hiring manager\nThirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?\nYou · written\nI want this job because I want to grow in logistics and work in a bigger company. I like the warehouse and transport together, and I think my experience with planning trucks and carriers is useful for your team. Also I live in Brno, so the location is good for me.\nMaria Lopez · hiring manager\nThank you, that is a clear reason. Our warehouse gets very busy before Christmas. How would you keep the trucks on time in that week?\nYou · written\nBefore Christmas week I would make the plan earlier, maybe two weeks before. I would talk with all carriers and confirm the trucks in advance, and I would have some reserve carrier if one truck is cancelled. Also I would check with the warehouse the time slots for loading, so the trucks don't wait in the queue.\nMaria Lopez · hiring manager\nConfirming trucks two weeks ahead and checking loading times is a sensible plan for a busy week. If a truck is late on the day, who would you call first?\nYou · written\nFirst I would call the driver to know where he is and how long is the delay. Then I would call the carrier dispečink and also inform the warehouse, so they can change the loading slot.\nMaria Lopez · hiring manager\nThat plan is clear, and you explain why each step matters. Before we finish, could you sum up your past work in a few sentences?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That plan is clear, and you explain why each step matters. Before we finish, could you sum up your past work in a few sentences?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Last question, I will sum up my work briefly.",
+          "action": "answer",
+          "args": {
+            "text": "I worked three years as logistics coordinator in a transport company. I planned about 25 trucks every day, I worked with carriers and drivers and I solved delays. I used SAP and Excel. I think this experience is good for this job."
+          },
+          "result": "ok",
+          "ms": 5850
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nWarehouse interview: your last logistics job\nMaria Lopez says\nThank you, that is a clear summary, and planning about 25 trucks a day shows the scale of your work. Do you have any questions for us about the team?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nWarehouse interview: your last logistics job\nDescribe your past logistics work clearly, with a short summary of what you did and why you applied.\nThank you, that is a clear summary, and planning about 25 trucks a day shows the scale of your work. Do you have any questions for us about the team?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMaria Lopez · hiring manager\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYou · written\nHello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays.\nMaria Lopez · hiring manager\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\nYou · written\nWe used SAP for orders and also Excel for the plan of trucks. Every day in the morning I checked new orders in SAP and I wrote the trucks to the Excel table. Also we had a GPS system to see where are the trucks.\nMaria Lopez · hiring manager\nThanks, that helps me see your system. How many trucks did you plan each day?\nYou · written\nI planned around 25 trucks every day, in the busy season it was thirty or more. Some trucks were our own and some from carriers. When was a delay, I called the driver and I found other solution.\nMaria Lopez · hiring manager\nThirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?\nYou · written\nI want this job because I want to grow in logistics and work in a bigger company. I like the warehouse and transport together, and I think my experience with planning trucks and carriers is useful for your team. Also I live in Brno, so the location is good for me.\nMaria Lopez · hiring manager\nThank you, that is a clear reason. Our warehouse gets very busy before Christmas. How would you keep the trucks on time in that week?\nYou · written\nBefore Christmas week I would make the plan earlier, maybe two weeks before. I would talk with all carriers and confirm the trucks in advance, and I would have some reserve carrier if one truck is cancelled. Also I would check with the warehouse the time slots for loading, so the trucks don't wait in the queue.\nMaria Lopez · hiring manager\nConfirming trucks two weeks ahead and checking loading times is a sensible plan for a busy week. If a truck is late on the day, who would you call first?\nYou · written\nFirst I would call the driver to know where he is and how long is the delay. Then I would call the carrier dispečink and also inform the warehouse, so they can change the loading slot.\nMaria Lopez · hiring manager\nThat plan is clear, and you explain why each step matters. Before we finish, could you sum up your past work in a few sentences?\nYou · written\nI worked three years as logistics coordinator in a transport company. I planned about 25 trucks every day, I worked with carriers and drivers and I solved delays. I used SAP and Excel. I think this experience is good for this job.\nMaria Lopez · hiring manager\nThank you, that is a clear summary, and planning about 25 trucks a day shows the scale of your work. Do you have any questions for us about the team?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that is a clear summary, and planning about 25 trucks a day shows the scale of your work. Do you have any questions for us about the team?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Good, now I can ask about the team, salary and shifts.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I have. How many people are in the team and who would be my manager? Also, what are the shifts, and what is the salary range for this position?"
+          },
+          "result": "ok",
+          "ms": 8146
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nWarehouse interview: your last logistics job\nMaria Lopez says\nGood questions! Our team has eight people, and you would report to me. Shifts are early or late, and the salary range is on the job sheet. Would an early shift suit you?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nWarehouse interview: your last logistics job\nDescribe your past logistics work clearly, with a short summary of what you did and why you applied.\nGood questions! Our team has eight people, and you would report to me. Shifts are early or late, and the salary range is on the job sheet. Would an early shift suit you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMaria Lopez · hiring manager\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYou · written\nHello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays.\nMaria Lopez · hiring manager\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\nYou · written\nWe used SAP for orders and also Excel for the plan of trucks. Every day in the morning I checked new orders in SAP and I wrote the trucks to the Excel table. Also we had a GPS system to see where are the trucks.\nMaria Lopez · hiring manager\nThanks, that helps me see your system. How many trucks did you plan each day?\nYou · written\nI planned around 25 trucks every day, in the busy season it was thirty or more. Some trucks were our own and some from carriers. When was a delay, I called the driver and I found other solution.\nMaria Lopez · hiring manager\nThirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?\nYou · written\nI want this job because I want to grow in logistics and work in a bigger company. I like the warehouse and transport together, and I think my experience with planning trucks and carriers is useful for your team. Also I live in Brno, so the location is good for me.\nMaria Lopez · hiring manager\nThank you, that is a clear reason. Our warehouse gets very busy before Christmas. How would you keep the trucks on time in that week?\nYou · written\nBefore Christmas week I would make the plan earlier, maybe two weeks before. I would talk with all carriers and confirm the trucks in advance, and I would have some reserve carrier if one truck is cancelled. Also I would check with the warehouse the time slots for loading, so the trucks don't wait in the queue.\nMaria Lopez · hiring manager\nConfirming trucks two weeks ahead and checking loading times is a sensible plan for a busy week. If a truck is late on the day, who would you call first?\nYou · written\nFirst I would call the driver to know where he is and how long is the delay. Then I would call the carrier dispečink and also inform the warehouse, so they can change the loading slot.\nMaria Lopez · hiring manager\nThat plan is clear, and you explain why each step matters. Before we finish, could you sum up your past work in a few sentences?\nYou · written\nI worked three years as logistics coordinator in a transport company. I planned about 25 trucks every day, I worked with carriers and drivers and I solved delays. I used SAP and Excel. I think this experience is good for this job.\nMaria Lopez · hiring manager\nThank you, that is a clear summary, and planning about 25 trucks a day shows the scale of your work. Do you have any questions for us about the team?\nYou · written\nYes, I have. How many people are in the team and who would be my manager? Also, what are the shifts, and what is the salary range for this position?\nMaria Lopez · hiring manager\nGood questions! Our team has eight people, and you would report to me. Shifts are early or late, and the salary range is on the job sheet. Would an early shift suit you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good questions! Our team has eight people, and you would report to me. Shifts are early or late, and the salary range is on the job sheet. Would an early shift suit you?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Early shift is fine for me, I'll answer her last question honestly.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, an early shift is OK for me. I am used to start early, in my last job I began at six in the morning. Thank you for the information about the team."
+          },
+          "result": "ok",
+          "ms": 6669
+        },
+        {
+          "n": 15,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said I am used to start early\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I am used to start early”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Maybe I should fix it: used to starting, I think.",
+          "action": "answer",
+          "args": {
+            "text": "I am used to starting early, in my last job I began at six in the morning."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 16,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou said I am used to start early\nYour try\nI am used to starting early, in my last job I began at six in the morning.\nAfter 'used to', the next verb takes the -ing form.\nYou fixed “to starting”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “to starting”\nYou said “I am used to start early”\nYour try: “I am used to starting early, in my last job I began at six in the morning.”\nAfter 'used to', the next verb takes the -ing form.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "OK, I see my correction, now back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 17,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nWarehouse interview: your last logistics job\nMaria Lopez says\nGood to know, thank you. Our early shift begins at six, so how would you travel here from Brno?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nWarehouse interview: your last logistics job\nDescribe your past logistics work clearly, with a short summary of what you did and why you applied.\nGood to know, thank you. Our early shift begins at six, so how would you travel here from Brno?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMaria Lopez · hiring manager\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYou · written\nHello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays.\nMaria Lopez · hiring manager\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\nYou · written\nWe used SAP for orders and also Excel for the plan of trucks. Every day in the morning I checked new orders in SAP and I wrote the trucks to the Excel table. Also we had a GPS system to see where are the trucks.\nMaria Lopez · hiring manager\nThanks, that helps me see your system. How many trucks did you plan each day?\nYou · written\nI planned around 25 trucks every day, in the busy season it was thirty or more. Some trucks were our own and some from carriers. When was a delay, I called the driver and I found other solution.\nMaria Lopez · hiring manager\nThirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?\nYou · written\nI want this job because I want to grow in logistics and work in a bigger company. I like the warehouse and transport together, and I think my experience with planning trucks and carriers is useful for your team. Also I live in Brno, so the location is good for me.\nMaria Lopez · hiring manager\nThank you, that is a clear reason. Our warehouse gets very busy before Christmas. How would you keep the trucks on time in that week?\nYou · written\nBefore Christmas week I would make the plan earlier, maybe two weeks before. I would talk with all carriers and confirm the trucks in advance, and I would have some reserve carrier if one truck is cancelled. Also I would check with the warehouse the time slots for loading, so the trucks don't wait in the queue.\nMaria Lopez · hiring manager\nConfirming trucks two weeks ahead and checking loading times is a sensible plan for a busy week. If a truck is late on the day, who would you call first?\nYou · written\nFirst I would call the driver to know where he is and how long is the delay. Then I would call the carrier dispečink and also inform the warehouse, so they can change the loading slot.\nMaria Lopez · hiring manager\nThat plan is clear, and you explain why each step matters. Before we finish, could you sum up your past work in a few sentences?\nYou · written\nI worked three years as logistics coordinator in a transport company. I planned about 25 trucks every day, I worked with carriers and drivers and I solved delays. I used SAP and Excel. I think this experience is good for this job.\nMaria Lopez · hiring manager\nThank you, that is a clear summary, and planning about 25 trucks a day shows the scale of your work. Do you have any questions for us about the team?\nYou · written\nYes, I have. How many people are in the team and who would be my manager? Also, what are the shifts, and what is the salary range for this position?\nMaria Lopez · hiring manager\nGood questions! Our team has eight people, and you would report to me. Shifts are early or late, and the salary range is on the job sheet. Would an early shift suit you?\nYou · written\nYes, an early shift is OK for me. I am used to start early, in my last job I began at six in the morning. Thank you for the information about the team.\nMaria Lopez · hiring manager\nGood to know, thank you. Our early shift begins at six, so how would you travel here from Brno?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good to know, thank you. Our early shift begins at six, so how would you travel here from Brno?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "I live in Brno, so I'll answer simply and then finish.",
+          "action": "answer",
+          "args": {
+            "text": "I would go by train and then by tram. From my home it is about 40 minutes. For six o'clock I would take the first tram, or maybe I can come by bike when the weather is good."
+          },
+          "result": "ok",
+          "ms": 5467
+        },
+        {
+          "n": 18,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nMaria Lopez · hiring manager\nWarehouse interview: your last logistics job\nMaria Lopez says\nForty minutes by tram is a reasonable plan for six o'clock. What would you do if the first tram is late?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nWarehouse interview: your last logistics job\nDescribe your past logistics work clearly, with a short summary of what you did and why you applied.\nForty minutes by tram is a reasonable plan for six o'clock. What would you do if the first tram is late?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMaria Lopez · hiring manager\nHello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?\nYou · written\nHello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays.\nMaria Lopez · hiring manager\nThank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?\nYou · written\nWe used SAP for orders and also Excel for the plan of trucks. Every day in the morning I checked new orders in SAP and I wrote the trucks to the Excel table. Also we had a GPS system to see where are the trucks.\nMaria Lopez · hiring manager\nThanks, that helps me see your system. How many trucks did you plan each day?\nYou · written\nI planned around 25 trucks every day, in the busy season it was thirty or more. Some trucks were our own and some from carriers. When was a delay, I called the driver and I found other solution.\nMaria Lopez · hiring manager\nThirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?\nYou · written\nI want this job because I want to grow in logistics and work in a bigger company. I like the warehouse and transport together, and I think my experience with planning trucks and carriers is useful for your team. Also I live in Brno, so the location is good for me.\nMaria Lopez · hiring manager\nThank you, that is a clear reason. Our warehouse gets very busy before Christmas. How would you keep the trucks on time in that week?\nYou · written\nBefore Christmas week I would make the plan earlier, maybe two weeks before. I would talk with all carriers and confirm the trucks in advance, and I would have some reserve carrier if one truck is cancelled. Also I would check with the warehouse the time slots for loading, so the trucks don't wait in the queue.\nMaria Lopez · hiring manager\nConfirming trucks two weeks ahead and checking loading times is a sensible plan for a busy week. If a truck is late on the day, who would you call first?\nYou · written\nFirst I would call the driver to know where he is and how long is the delay. Then I would call the carrier dispečink and also inform the warehouse, so they can change the loading slot.\nMaria Lopez · hiring manager\nThat plan is clear, and you explain why each step matters. Before we finish, could you sum up your past work in a few sentences?\nYou · written\nI worked three years as logistics coordinator in a transport company. I planned about 25 trucks every day, I worked with carriers and drivers and I solved delays. I used SAP and Excel. I think this experience is good for this job.\nMaria Lopez · hiring manager\nThank you, that is a clear summary, and planning about 25 trucks a day shows the scale of your work. Do you have any questions for us about the team?\nYou · written\nYes, I have. How many people are in the team and who would be my manager? Also, what are the shifts, and what is the salary range for this position?\nMaria Lopez · hiring manager\nGood questions! Our team has eight people, and you would report to me. Shifts are early or late, and the salary range is on the job sheet. Would an early shift suit you?\nYou · written\nYes, an early shift is OK for me. I am used to start early, in my last job I began at six in the morning. Thank you for the information about the team.\nMaria Lopez · hiring manager\nGood to know, thank you. Our early shift begins at six, so how would you travel here from Brno?\nYou · written\nI would go by train and then by tram. From my home it is about 40 minutes. For six o'clock I would take the first tram, or maybe I can come by bike when the weather is good.\nMaria Lopez · hiring manager\nForty minutes by tram is a reasonable plan for six o'clock. What would you do if the first tram is late?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Forty minutes by tram is a reasonable plan for six o'clock. What would you do if the first tram is late?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission is done and I have answered enough; time to see the results.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 19,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour rehearsal\nYou said I am used to start early\nTry\nI am used to starting early\nAfter 'used to', the next verb takes the -ing form.\nYour mission\nChoose a fresh context for your next conversation.\n0 spoken · 10 written replies · 9 on your own · 1 with help · 3 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Give your role, years and main tasks.”\nFrom this rehearsal\n“I have worked there since three years” → “I have worked there for three years”\nA period of time needs a different time word than since here.\n“some reserve carrier” → “a reserve carrier”\nA single countable noun like carrier needs a or a plural here.\n“I am used to start early” → “I am used to starting early”\nAfter 'used to', the next verb takes the -ing form.\nYour level:\nB1 · Getting by\n· self-chosen\nNext topic:\nDescribe a problem I solved\nTell a short story: the problem, what I did, and the result.\n[button: Start talking]\nOr choose a situation [list: Talk about my logistics experience [plan-fc8b4917] | Describe a problem I solved [plan-307e40c8] | Talk about salary and benefits [plan-3741064d] | Ask questions about the team [plan-5f45d8cc] | Ask an interviewer to repeat [plan-65864b83] | Follow up after my interview [plan-35bb2430] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Good, my mistakes are saved and I can review them before Friday; that's enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Warehouse interview: your last logistics job",
+          "goal": "Describe your past logistics work clearly, with a short summary of what you did and why you applied.",
+          "partner": "Maria Lopez · hiring manager",
+          "band": "B1",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello, I'm Maria Lopez, the hiring manager. Thanks for coming in today. Could you tell me about your last logistics job?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello, thank you. I am from Ukraine and I live in Brno. My last job was logistics coordinator in a transport company. I have worked there since three years. I was responsible about planning of trucks and communication with carriers and drivers. Every day I checked orders in the dispečink and solved problems with delays.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that is clear. You planned trucks, worked with carriers and solved delays. What software did you use to check orders each day?"
+            },
+            {
+              "role": "learner",
+              "text": "We used SAP for orders and also Excel for the plan of trucks. Every day in the morning I checked new orders in SAP and I wrote the trucks to the Excel table. Also we had a GPS system to see where are the trucks.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thanks, that helps me see your system. How many trucks did you plan each day?"
+            },
+            {
+              "role": "learner",
+              "text": "I planned around 25 trucks every day, in the busy season it was thirty or more. Some trucks were our own and some from carriers. When was a delay, I called the driver and I found other solution.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thirty trucks in peak season is a lot to manage, and calling the driver yourself to find a fix is practical. Why do you want this job with our company?"
+            },
+            {
+              "role": "learner",
+              "text": "I want this job because I want to grow in logistics and work in a bigger company. I like the warehouse and transport together, and I think my experience with planning trucks and carriers is useful for your team. Also I live in Brno, so the location is good for me.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that is a clear reason. Our warehouse gets very busy before Christmas. How would you keep the trucks on time in that week?"
+            },
+            {
+              "role": "learner",
+              "text": "Before Christmas week I would make the plan earlier, maybe two weeks before. I would talk with all carriers and confirm the trucks in advance, and I would have some reserve carrier if one truck is cancelled. Also I would check with the warehouse the time slots for loading, so the trucks don't wait in the queue.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Confirming trucks two weeks ahead and checking loading times is a sensible plan for a busy week. If a truck is late on the day, who would you call first?"
+            },
+            {
+              "role": "learner",
+              "text": "First I would call the driver to know where he is and how long is the delay. Then I would call the carrier dispečink and also inform the warehouse, so they can change the loading slot.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "That plan is clear, and you explain why each step matters. Before we finish, could you sum up your past work in a few sentences?"
+            },
+            {
+              "role": "learner",
+              "text": "I worked three years as logistics coordinator in a transport company. I planned about 25 trucks every day, I worked with carriers and drivers and I solved delays. I used SAP and Excel. I think this experience is good for this job.",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that is a clear summary, and planning about 25 trucks a day shows the scale of your work. Do you have any questions for us about the team?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I have. How many people are in the team and who would be my manager? Also, what are the shifts, and what is the salary range for this position?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Good questions! Our team has eight people, and you would report to me. Shifts are early or late, and the salary range is on the job sheet. Would an early shift suit you?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, an early shift is OK for me. I am used to start early, in my last job I began at six in the morning. Thank you for the information about the team.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Good to know, thank you. Our early shift begins at six, so how would you travel here from Brno?"
+            },
+            {
+              "role": "learner",
+              "text": "I would go by train and then by tram. From my home it is about 40 minutes. For six o'clock I would take the first tram, or maybe I can come by bike when the weather is good.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Forty minutes by tram is a reasonable plan for six o'clock. What would you do if the first tram is late?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "f71091c8-4f8c-4a41-98c7-d5ee2057e17e:uat-7:moment",
+              "kind": "fix",
+              "said": "I have worked there since three years",
+              "better": "I have worked there for three years",
+              "why": "A period of time needs a different time word than since here.",
+              "turnId": "f71091c8-4f8c-4a41-98c7-d5ee2057e17e:uat-7",
+              "at": 1792256702490,
+              "slip": "there since",
+              "repair": {
+                "rung": 0,
+                "tried": "I have worked there for three years.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "there for"
+            },
+            {
+              "id": "f71091c8-4f8c-4a41-98c7-d5ee2057e17e:uat-13:moment",
+              "kind": "fix",
+              "said": "some reserve carrier",
+              "better": "a reserve carrier",
+              "why": "A single countable noun like carrier needs a or a plural here.",
+              "turnId": "f71091c8-4f8c-4a41-98c7-d5ee2057e17e:uat-13",
+              "at": 1792256768227,
+              "slip": "some reserve",
+              "repair": {
+                "rung": 0,
+                "tried": "I would have a reserve carrier if one truck is cancelled.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "a reserve"
+            },
+            {
+              "id": "f71091c8-4f8c-4a41-98c7-d5ee2057e17e:uat-19:moment",
+              "kind": "fix",
+              "said": "I am used to start early",
+              "better": "I am used to starting early",
+              "why": "After 'used to', the next verb takes the -ing form.",
+              "turnId": "f71091c8-4f8c-4a41-98c7-d5ee2057e17e:uat-19",
+              "at": 1792256824259,
+              "slip": "to start",
+              "repair": {
+                "rung": 0,
+                "tried": "I am used to starting early, in my last job I began at six in the morning.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "to starting"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "My last job was logistics coordinator in a transport company."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "We used SAP for orders and also Excel for the plan of trucks."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "I planned around 25 trucks every day, in the busy season it was thirty or more."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "I like the warehouse and transport together"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "I would talk with all carriers and confirm the trucks in advance"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "First I would call the driver to know where he is and how long is the delay."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "I planned about 25 trucks every day, I worked with carriers and drivers and I solved delays."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "in my last job I began at six in the morning"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "I would go by train and then by tram."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 202639,
+      "prior": [
+        {
+          "id": "2026-09-15-lt-recert/LT-oksana-34-J3-1",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "The completed rehearsal misses her interview job",
+          "expected": "Realistic B1 practice describing logistics experience and answering interview questions.",
+          "got": "Eight replies complete a hotel room change. Interview preparation is acknowledged only as a reason for needing quiet.",
+          "evidence": [
+            "#2: “I have a job interview on Friday”; #10: “I need to practise how to explain my work experience”; #11 responds “I’ll hold your calls for one hour while you practise.” #14: “That was enough about hotel rooms; I need to focus on my Friday interview.”"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/LT-oksana-34-J3-4",
+          "run": "2026-10-14-lt",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Unnatural collocations left uncorrected",
+          "expected": "'was six hours late', 'stuck at the border'",
+          "got": "'late for 6 hours' and 'stuck on the border' passed without comment",
+          "evidence": [
+            "#4 'the delivery was late for 6 hours'"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-oksana-34-J3-1",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated article and collocation errors never coached",
+          "expected": "'had an accident', 'late at the border', 'ask for the new arrival time' flagged or coached",
+          "got": "Only two moments; the missing article in 'driver had accident' (twice) and 'late on the border' passed without comment",
+          "evidence": [
+            "#2 'when the driver is late on the border'; #6 'the driver had accident'; #7 'the driver had accident'; #9 'I ask the new arrival time'",
+            "moment selection prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Interview topic is not recommended; the carrier call is",
+          "expected": "Job interview among the first two proposed topics",
+          "got": "Carrier pickup is recommended; 'Job interview: logistics coordinator' is 7th",
+          "evidence": [
+            "#1 list: '... Explain a late delivery to a client | Handle damaged pallets | Job interview: logistics coordinator ...'",
+            "plan/topic ordering"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated 'in warehouse' article error not coached",
+          "expected": "'in the warehouse' flagged",
+          "got": "Written twice (#3, #6) with no moment on the second",
+          "evidence": [
+            "#6 'my team in warehouse' passed silently",
+            "moment selection prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-5",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Recap has no logistics or interview vocabulary takeaway",
+          "expected": "Several logistics or interview phrases to keep",
+          "got": "Only the article fix; no phrase to take",
+          "evidence": [
+            "#9 recap: '1 moment to keep'",
+            "recap builder"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "'Mission done' shown while Sam is still asking",
+          "expected": "Mission done at a natural end",
+          "got": "Appears with Sam's 'Anything else you need?'",
+          "evidence": [
+            "#8 'Mission done. See what you did tonight.'",
+            "mission completion rule"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "J3 has no placement; level fixture set to B1 by hand."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 she says 'I am from Ukraine'; Maria never assumes Czech or a child; 'dispečink' accepted with no fuss."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#1 first recommended topic: 'Talk about my logistics experience'; interview is the conversation."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#5-#13 questions: 'What software did you use…', 'How many trucks did you plan each day?', 'who would you call first?' — realistic B1 logistics interview. #17 commute questions drift slightly."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#3 'since three years'→'for three years', #9 'a reserve carrier', #15 'used to starting': all correct and usable in an interview, though general grammar rather than interview phrases."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "No question on displacement or status; 'from Ukraine' was volunteered at #2."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 Start talking on plan topic; ten learner replies (#2–#17)."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Partner lines like 'Thirty trucks in peak season is a lot to manage… Why do you want this job with our company?' sit at B1; none babyish or advanced."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "3 moments, all correct (#3,#9,#15); about 3 per ten turns; scene flowed on after each."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#19 recap lists three fixes ('some reserve carrier' → 'a reserve carrier'); she says 'my mistakes are saved and I can review them before Friday'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 11,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 3,
+            "total": 3,
+            "learnerTurnsWithClearErrors": 7,
+            "missedClearErrors": 4
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, sensitive data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Realistic logistics interview at B1 with her plan topic first",
+            "expected": "Interview rehearsal at her level",
+            "got": "Maria Lopez asks software, trucks per day, peak-season plan, late-truck escalation, questions about team/shifts",
+            "evidence": "#5 'What software did you use to check orders each day?'; #11 'If a truck is late on the day, who would you call first?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the plan topic first and the partner's persona-specific questions.",
+            "code_hint": "plan/topic ordering"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Moments were correct, short, and self-repair worked",
+            "expected": "Accurate fixes",
+            "got": "Three correct fixes, each repaired by the learner then back to the scene",
+            "evidence": "#4 'A period of time needs a different time word than since here.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep moment correctness and the learner-repair loop.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Repeated collocation/grammar errors never coached",
+            "expected": "'responsible for', 'where the trucks are', 'When there was a delay', 'another solution', 'how long the delay is' flagged or coached",
+            "got": "Only three moments; 4 of 7 error-bearing turns got nothing",
+            "evidence": "#2 'responsible about planning of trucks' (moment fixed only 'since'); #5 'to see where are the trucks'; #6 'When was a delay… other solution'; #11 'how long is the delay'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recap or coaching names at least one further recurring error such as 'responsible for' and indirect-question word order.",
+            "code_hint": "moment selection prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Recap gives no interview/logistics phrases to keep",
+            "expected": "Interview phrases to take away for Friday",
+            "got": "Three grammar fixes only; mission line 'Choose a fresh context for your next conversation'",
+            "evidence": "#19 '3 moments to keep'; no phrase list",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recap adds 2-3 interview phrases (e.g. 'I was responsible for…').",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "'Mission done' shown while interviewer is still asking",
+            "expected": "Mission done at a natural end",
+            "got": "Banner appears from #8 and persists while Maria asks further questions",
+            "evidence": "#8 'Mission done. See what you did tonight.' alongside 'How would you keep the trucks on time…'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Mission-done only offered when partner closes, or reworded as optional.",
+            "code_hint": "mission completion rule"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Interview drifts to commute small talk",
+            "expected": "Stay on logistics (problem solved, carriers)",
+            "got": "Last turns ask how she would travel and what if tram is late",
+            "evidence": "#17 'how would you travel here from Brno?'; #18 'What would you do if the first tram is late?'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Partner keeps to role-relevant questions until the close.",
+            "code_hint": "partner prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 40,
+          "confidence": "low"
+        },
+        "voice": "Finally a rehearsal that is actually my interview. Maria asked about SAP, trucks per day, Christmas peak, who I call when a truck is late — real coordinator questions, and she didn't blink at \"dispečink\" or assume I'm Czech. Level felt right, not babyish. The three corrections were right and I fixed them myself, good. But I wrote \"responsible about\", \"where are the trucks\", \"other solution\" and nobody said a word, so I don't know if my English is clean. The recap gave me only grammar, no phrases to take to Friday, and \"Mission done\" kept appearing while Maria was still asking. The tram questions were a waste of my evening. I'd use it again for 20 minutes a night, and tell a friend, but I want more correction and interview phrases.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt-recert/LT-oksana-34-J3-1",
+            "status": "not-seen",
+            "evidence": "#1-#18 conversation is the interview itself: 'Could you tell me about your last logistics job?'",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/LT-oksana-34-J3-4",
+            "status": "recurs",
+            "evidence": "#2 'responsible about planning' and #6 'other solution' passed without comment, same unnatural-collocation gap.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-oksana-34-J3-1",
+            "status": "recurs",
+            "evidence": "Only 3 moments; #5 'see where are the trucks', #6 'When was a delay' never coached.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-1",
+            "status": "not-seen",
+            "evidence": "#1 'Next topic: Talk about my logistics experience' is first and recommended.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-2",
+            "status": "not-evaluable",
+            "evidence": "No repeated identical article error in this transcript; 'some reserve carrier' was caught once (#9).",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-5",
+            "status": "recurs",
+            "evidence": "#19 recap lists only three grammar fixes; no logistics or interview phrases.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-oksana-34-J3-3",
+            "status": "recurs",
+            "evidence": "#8 'Mission done. See what you did tonight.' beside Maria's 'How would you keep the trucks on time in that week?'",
+            "finding": 4
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 12,
+      "fail": 0,
+      "ms": 116931
+    },
+    "character": {
+      "n": 19,
+      "fail": 0,
+      "ms": 85125
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 35290
+    }
+  }
+}

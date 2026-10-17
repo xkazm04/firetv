@@ -1,0 +1,544 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to A2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA2Everyday basics · self-chosen\nProblem with my hotel room\nYour mission\nTell the front desk about a problem and ask for a fix.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nProblem with my hotel room\nTell the front desk about a problem and ask for a fix.\n[button: Start talking]\nOr choose a situation [list: Problem with my hotel room [plan-12eee7de] | My hotel booking is missing [plan-56ed7933] | Where is the breakfast room? [plan-8b202bf0] | Choose a restaurant for dinner [plan-0b3ef38d] | Call the travel agency [plan-b5215b13] | Talk with my child's teacher [plan-cd7a8128] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The recommended topic is a hotel problem, so I'll start talking.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 5134
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nProblem with my hotel room\nAna says\nHello, this is Ana at the front desk. How can I help you tonight?\nYour turn\nAnswer on your phone: speak or type.\nNowName one problem in your room\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nProblem with my hotel room\nTell the front desk about a problem and ask for a fix.\nNow: Name one problem in your room\nHello, this is Ana at the front desk. How can I help you tonight?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHello, this is Ana at the front desk. How can I help you tonight?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, this is Ana at the front desk. How can I help you tonight?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "A hotel room problem, I know this. I will say it slowly.",
+          "action": "answer",
+          "args": {
+            "text": "Hello, I have problem in my room. The air conditioning is not work and is very hot."
+          },
+          "result": "ok",
+          "ms": 10270
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said The air conditioning is not work\nTry\nThe air conditioning is not working\nAfter 'is not', use the -ing form: 'not working'.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “The air conditioning is not work”\nTry “The air conditioning is not working”\nAfter 'is not', use the -ing form: 'not working'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, \"not working\", okay. I read it and go on.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nProblem with my hotel room\nAna says\nOh, I am sorry about the heat. Can you tell me your room number?\nYour turn\nAnswer on your phone: speak or type.\nNowSay how it affects your night\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nProblem with my hotel room\nTell the front desk about a problem and ask for a fix.\nNow: Say how it affects your night\nOh, I am sorry about the heat. Can you tell me your room number?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHello, this is Ana at the front desk. How can I help you tonight?\nYou · spoken\nHello, I have problem in my room. The air conditioning is not work and is very hot.\nAna · hotel front desk clerk\nOh, I am sorry about the heat. Can you tell me your room number?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, I am sorry about the heat. Can you tell me your room number?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "She asks the room number, I answer and say about the night.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, sorry, my room is number two hundred twelve. I can not sleep because is too hot and I am very tired."
+          },
+          "result": "ok",
+          "ms": 9349
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nProblem with my hotel room\nAna says\nI am sorry you cannot sleep. What would help you?\nYour turn\nAnswer on your phone: speak or type.\nNowAgree on a fix and a time\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nProblem with my hotel room\nTell the front desk about a problem and ask for a fix.\nNow: Agree on a fix and a time\nI am sorry you cannot sleep. What would help you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHello, this is Ana at the front desk. How can I help you tonight?\nYou · spoken\nHello, I have problem in my room. The air conditioning is not work and is very hot.\nAna · hotel front desk clerk\nOh, I am sorry about the heat. Can you tell me your room number?\nYou · spoken\nYes, sorry, my room is number two hundred twelve. I can not sleep because is too hot and I am very tired.\nAna · hotel front desk clerk\nI am sorry you cannot sleep. What would help you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I am sorry you cannot sleep. What would help you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I need a fix, maybe another room or someone to look at it.",
+          "action": "answer",
+          "args": {
+            "text": "Maybe I can change to other room? Or somebody can come and repair the air conditioning now, please?"
+          },
+          "result": "ok",
+          "ms": 11439
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nProblem with my hotel room\nAna says\nYes, someone can come in ten minutes. Is anything else wrong in your room?\nYour turn\nAnswer on your phone: speak or type.\nNowAgree on a fix and a time\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nProblem with my hotel room\nTell the front desk about a problem and ask for a fix.\nNow: Agree on a fix and a time\nYes, someone can come in ten minutes. Is anything else wrong in your room?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHello, this is Ana at the front desk. How can I help you tonight?\nYou · spoken\nHello, I have problem in my room. The air conditioning is not work and is very hot.\nAna · hotel front desk clerk\nOh, I am sorry about the heat. Can you tell me your room number?\nYou · spoken\nYes, sorry, my room is number two hundred twelve. I can not sleep because is too hot and I am very tired.\nAna · hotel front desk clerk\nI am sorry you cannot sleep. What would help you?\nYou · spoken\nMaybe I can change to other room? Or somebody can come and repair the air conditioning now, please?\nAna · hotel front desk clerk\nYes, someone can come in ten minutes. Is anything else wrong in your room?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, someone can come in ten minutes. Is anything else wrong in your room?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Ten minutes is fine, I should say thank you and mention the small problem.",
+          "action": "answer",
+          "args": {
+            "text": "Ten minutes is okay, thank you. Also the bathroom, the water is not hot in shower. Sorry."
+          },
+          "result": "ok",
+          "ms": 8138
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nProblem with my hotel room\nAna says\nThank you. Do you want a new room tonight?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nProblem with my hotel room\nTell the front desk about a problem and ask for a fix.\nThank you. Do you want a new room tonight?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHello, this is Ana at the front desk. How can I help you tonight?\nYou · spoken\nHello, I have problem in my room. The air conditioning is not work and is very hot.\nAna · hotel front desk clerk\nOh, I am sorry about the heat. Can you tell me your room number?\nYou · spoken\nYes, sorry, my room is number two hundred twelve. I can not sleep because is too hot and I am very tired.\nAna · hotel front desk clerk\nI am sorry you cannot sleep. What would help you?\nYou · spoken\nMaybe I can change to other room? Or somebody can come and repair the air conditioning now, please?\nAna · hotel front desk clerk\nYes, someone can come in ten minutes. Is anything else wrong in your room?\nYou · spoken\nTen minutes is okay, thank you. Also the bathroom, the water is not hot in shower. Sorry.\nAna · hotel front desk clerk\nThank you. Do you want a new room tonight?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you. Do you want a new room tonight?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I have talked enough; the new room is not needed if they fix it, so I answer and then finish.",
+          "action": "answer",
+          "args": {
+            "text": "No, thank you. I stay in this room if the air conditioning is working. Sorry, and thank you for help."
+          },
+          "result": "ok",
+          "ms": 9801
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nProblem with my hotel room\nAna says\nOkay, you can stay in room two hundred twelve. How is the room now, while you wait?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nProblem with my hotel room\nTell the front desk about a problem and ask for a fix.\nOkay, you can stay in room two hundred twelve. How is the room now, while you wait?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHello, this is Ana at the front desk. How can I help you tonight?\nYou · spoken\nHello, I have problem in my room. The air conditioning is not work and is very hot.\nAna · hotel front desk clerk\nOh, I am sorry about the heat. Can you tell me your room number?\nYou · spoken\nYes, sorry, my room is number two hundred twelve. I can not sleep because is too hot and I am very tired.\nAna · hotel front desk clerk\nI am sorry you cannot sleep. What would help you?\nYou · spoken\nMaybe I can change to other room? Or somebody can come and repair the air conditioning now, please?\nAna · hotel front desk clerk\nYes, someone can come in ten minutes. Is anything else wrong in your room?\nYou · spoken\nTen minutes is okay, thank you. Also the bathroom, the water is not hot in shower. Sorry.\nAna · hotel front desk clerk\nThank you. Do you want a new room tonight?\nYou · spoken\nNo, thank you. I stay in this room if the air conditioning is working. Sorry, and thank you for help.\nAna · hotel front desk clerk\nOkay, you can stay in room two hundred twelve. How is the room now, while you wait?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Okay, you can stay in room two hundred twelve. How is the room now, while you wait?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I did about seven replies and the mission is done, so I'll look at the results.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 10
+        },
+        {
+          "n": 9,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said The air conditioning is not work\nTry\nThe air conditioning is not working\nAfter 'is not', use the -ing form: 'not working'.\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 5 on your own · 0 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“The room is very cold. Can you send someone to check the heating?”\nFrom this rehearsal\n“The air conditioning is not work” → “The air conditioning is not working”\nAfter 'is not', use the -ing form: 'not working'.\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nMy hotel booking is missing\nFind out where a lost booking is and get a room for tonight.\n[button: Start talking]\nOr choose a situation [list: Problem with my hotel room [plan-12eee7de] | My hotel booking is missing [plan-56ed7933] | Where is the breakfast room? [plan-8b202bf0] | Choose a restaurant for dinner [plan-0b3ef38d] | Call the travel agency [plan-b5215b13] | Talk with my child's teacher [plan-cd7a8128] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I saw my mistake and the correction; I am tired now, so I finish for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Problem with my hotel room",
+          "goal": "Tell the front desk about a problem and ask for a fix.",
+          "partner": "Ana · hotel front desk clerk",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello, this is Ana at the front desk. How can I help you tonight?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello, I have problem in my room. The air conditioning is not work and is very hot.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Oh, I am sorry about the heat. Can you tell me your room number?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, sorry, my room is number two hundred twelve. I can not sleep because is too hot and I am very tired.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I am sorry you cannot sleep. What would help you?"
+            },
+            {
+              "role": "learner",
+              "text": "Maybe I can change to other room? Or somebody can come and repair the air conditioning now, please?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, someone can come in ten minutes. Is anything else wrong in your room?"
+            },
+            {
+              "role": "learner",
+              "text": "Ten minutes is okay, thank you. Also the bathroom, the water is not hot in shower. Sorry.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you. Do you want a new room tonight?"
+            },
+            {
+              "role": "learner",
+              "text": "No, thank you. I stay in this room if the air conditioning is working. Sorry, and thank you for help.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Okay, you can stay in room two hundred twelve. How is the room now, while you wait?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "9ebabf0b-dac5-471f-b620-a90c7ac39b98:uat-7:moment",
+              "kind": "fix",
+              "said": "The air conditioning is not work",
+              "better": "The air conditioning is not working",
+              "why": "After 'is not', use the -ing form: 'not working'.",
+              "turnId": "9ebabf0b-dac5-471f-b620-a90c7ac39b98:uat-7",
+              "at": 1792256834308,
+              "slip": "not work",
+              "fix": "not working"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "is very hot"
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I can not sleep because is too hot and I am very tired."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Maybe I can change to other room?"
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Ten minutes is okay, thank you."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I stay in this room if the air conditioning is working"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 128536,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated past-tense errors passed without coaching",
+          "expected": "Recurring errors like 'repair it', 'tell me', 'say' noted",
+          "got": "Only 3 moments; 4 of 7 error turns got none, and 'he change the motor' in #12 got nothing until #13",
+          "evidence": [
+            "#6 'The technician repair it'; #7 'the night receptionist tell me'; #11 'The technician say'; #12 'he change the motor'",
+            "moment trigger rule"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-petra-38-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Clear errors beyond the first got no coaching",
+          "expected": "'Is correct?' and 'is on the left' (missing subject) noted in the recap",
+          "got": "Only 1 moment; 2 of 3 error turns were passed over and the recap lists only one fix.",
+          "evidence": [
+            "#6 'Is correct?', #8 'Yes, is on the left'; recap #10 '1 moment to keep'.",
+            "moment trigger / as-needed correction rule"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-petra-38-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Mission done after one exchange, then drifts off-topic",
+          "expected": "Scene stays on the mission, or ends cleanly",
+          "got": "'Mission done' appears at #7, and the guest then asks 'Do you like the phone or email more?'.",
+          "evidence": [
+            "#7 'Mission done'; #9 'Do you like the phone or email more?'",
+            "partner prompt / mission completion"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Level set to A2 by fixture; no placement in this journey."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'How can I help you tonight?' and the cues ('Name one problem in your room') are plain A2."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "Petra never asked for a repeat or said she didn't understand."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 six plan topics are all hotel/work/parent: 'My hotel booking is missing', 'Call the travel agency', 'Talk with my child's teacher'."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#3 'The air conditioning is not working' is correct and usable at a desk, though only one phrase was given."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#1 topic list and all scene lines are child-safe; nothing to worry a parent."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2–#7 five spoken replies from the plan topic 'Problem with my hotel room', kept going."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Ana's lines are short and A2, e.g. #6 'Yes, someone can come in ten minutes. Is anything else wrong in your room?'"
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 one moment, correct 'not working'; 1 in 5 turns, scene not broken up."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#9 recap: '5 spoken · 0 written replies · 5 on your own · 1 moment to keep' and the fix repeated."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 6,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 4,
+            "missedClearErrors": 3
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "Nothing adult, no personal data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Several clear errors got no coaching",
+            "expected": "'I have problem', 'because is too hot', 'water is not hot in shower' noted in the recap",
+            "got": "Only 'not work' became a moment; the recap lists one fix",
+            "evidence": "#2 'I have problem'; #4 'because is too hot'; #6 'the water is not hot in shower'; #9 '1 moment to keep'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "With as-needed correction, recap lists the main recurring slip (missing article/subject 'is') even if the scene is not stopped.",
+            "code_hint": "moment trigger rule"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Patient, realistic A2 front-desk partner",
+            "expected": "Short, work-shaped partner turns",
+            "got": "Ana speaks short supportive lines; all 6 at band",
+            "evidence": "#4 'Oh, I am sorry about the heat. Can you tell me your room number?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep partner register at A2.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment is correct and brief",
+            "expected": "One clear usable fix",
+            "got": "'not working' with a one-line reason, then back to the scene",
+            "evidence": "#3 'After 'is not', use the -ing form'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep one-line moments.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "I would use it again. Ana was patient and spoke slowly, like a real guest conversation, and the air-conditioning problem is exactly what happens at my desk. The one correction, \"not working\", was right and I can say it tomorrow. I did not feel tested. But I made more mistakes than that, like \"I have problem\" and \"because is too hot\", and nobody told me. The recap showed only one thing to keep, so I do not fully trust that I am learning everything. As a mother I looked at the topic list and saw nothing wrong for Tomáš or Klára, which is what I needed. Fifteen minutes after the kids sleep is better than an evening course and a babysitter. I would tell a colleague, but I would want a few more corrections.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-4",
+            "status": "recurs",
+            "evidence": "#4 'because is too hot' and #6 'the water is not hot in shower' passed with no moment.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-petra-38-J3-1",
+            "status": "recurs",
+            "evidence": "#9 '1 moment to keep' while #2 'I have problem' and #4 'because is too hot' got none.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-petra-38-J3-4",
+            "status": "not-seen",
+            "evidence": "#7 'Mission done' came after four replies and Ana stayed on the room: #8 'How is the room now, while you wait?'",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 7,
+      "fail": 0,
+      "ms": 86566
+    },
+    "character": {
+      "n": 9,
+      "fail": 0,
+      "ms": 41551
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 22701
+    }
+  }
+}

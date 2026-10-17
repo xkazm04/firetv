@@ -214,12 +214,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "suggested_acceptance": "After supported practice, show a short coaching note with an exact learner quote, offer replay in the scene, and capture a better independent answer to a fresh question.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#8 only 'Back to the conversation'; no retry before the session ends at #14.",
+    "recertify_evidence": "#5 then #6: the next question is unrelated to the moment.",
     "recurred_as": "LT-tomas-9-J4-1"
   },
   {
@@ -466,12 +466,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "For an accurate C1 learner, provide one or two correct, context-specific insights that explain a useful register choice without inventing mistakes.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#4 the moment is a B1 word swap and no C1 idiom or register was taught.",
+    "recertify_evidence": "The one moment is a basic slip (#4-#6); \"knackered\", \"good shout\" never surfaced.",
     "recurred_as": "LT-jana-29-J3-2"
   },
   {
@@ -707,13 +707,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "For this character, put interview practice among the first two recommendations and rehearse logistics experience and a problem she solved at B1.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#1 recommends carrier pickup, interview seventh.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#1 'Next topic: Talk about my logistics experience' is first and recommended.",
     "recurred_as": "LT-oksana-34-J3-1"
   },
   {
@@ -1398,13 +1398,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 3,
     "suggested_acceptance": "Recap the achieved goal using one learner quote, explain why its register worked, and retain a reusable phrase or next challenge.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#7 \"2 on your own · 1 with help\" though no help was used.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 \"4 on your own · 0 with help\" is accurate.",
     "recurred_as": "LT-jana-29-J3-3"
   },
   {
@@ -2394,12 +2394,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "suggested_acceptance": "Show six age-safe choices, at least four clearly about his preferred play, animals, games or sport.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#1 21 situations incl. 'A booking that is missing', 'The lost jacket'.",
+    "recertify_evidence": "#1 list includes 'A booking that is missing', 'The lost jacket', 'Our group project'.",
     "recurred_as": "LT-tomas-9-J4-5"
   },
   {
@@ -2523,9 +2523,9 @@
     "recurrence": 1,
     "suggested_acceptance": "Answer the first Czech meaning request with a Czech gloss and one short English example.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "He never asked for a Czech meaning in this run."
+    "recertify_evidence": "No Czech vocabulary question was asked in this run."
   },
   {
     "id": "LT-viktor-67-J3-3",

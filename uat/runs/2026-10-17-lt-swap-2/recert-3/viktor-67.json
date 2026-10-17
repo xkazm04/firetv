@@ -1,0 +1,740 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nA1First words · self-chosen\nAsk about school\nYour mission\nAsk one simple question about school and listen to the answer.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nAsk about school\nAsk one simple question about school and listen to the answer.\n[button: Start talking]\nOr choose a situation [list: Ask about school [plan-e674bdbe] | Tell about my garden [plan-b8c04065] | Start the video call [plan-5bb344dd] | Ask him to say it again [plan-820322af] | Pick a time for the next call [plan-afb11498] | Tell what you did today [plan-3792034d] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Škola, to chci zkusit - ask about school for Mia.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9590
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nVideo call with Mia\nMia says\nHi Grandpa!\nYour turn\nAnswer on your phone: speak or type.\nNowGreet Mia and say hello back\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nVideo call with Mia\nAsk Mia about her day and listen to what she says.\nNow: Greet Mia and say hello back\nHi Grandpa!\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa!\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa!\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Easy, she says hello, I can say hello back.",
+          "action": "answer",
+          "args": {
+            "text": "Hello Mia! Hello, I am happy."
+          },
+          "result": "ok",
+          "ms": 6605
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nVideo call with Mia\nMia says\nHi Grandpa! Are you at home?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk one question about her day\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nVideo call with Mia\nAsk Mia about her day and listen to what she says.\nNow: Ask one question about her day\nHi Grandpa! Are you at home?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa!\nYou · spoken\nHello Mia! Hello, I am happy.\nMia · granddaughter, age 9\nHi Grandpa! Are you at home?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! Are you at home?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Ano, jsem doma. I should say it simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I am home. I am in garden. Mia, how is school?"
+          },
+          "result": "ok",
+          "ms": 8332
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nVideo call with Mia\nMia says\nDo you have flowers?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk a short follow-up question\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nVideo call with Mia\nAsk Mia about her day and listen to what she says.\nNow: Ask a short follow-up question\nDo you have flowers?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa!\nYou · spoken\nHello Mia! Hello, I am happy.\nMia · granddaughter, age 9\nHi Grandpa! Are you at home?\nYou · spoken\nYes, I am home. I am in garden. Mia, how is school?\nMia · granddaughter, age 9\nDo you have flowers?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Do you have flowers?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Flowers, yes, I know this: I have flowers in garden.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I have flowers. Garden, many flowers. Mia, you have flowers?"
+          },
+          "result": "ok",
+          "ms": 8559
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nVideo call with Mia\nMia says\nYes, we have pink flowers! What color are your flowers?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nVideo call with Mia\nAsk Mia about her day and listen to what she says.\nYes, we have pink flowers! What color are your flowers?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa!\nYou · spoken\nHello Mia! Hello, I am happy.\nMia · granddaughter, age 9\nHi Grandpa! Are you at home?\nYou · spoken\nYes, I am home. I am in garden. Mia, how is school?\nMia · granddaughter, age 9\nDo you have flowers?\nYou · spoken\nYes, I have flowers. Garden, many flowers. Mia, you have flowers?\nMia · granddaughter, age 9\nYes, we have pink flowers! What color are your flowers?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, we have pink flowers! What color are your flowers?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Colors of flowers, I know a few words; red and yellow, I can say that.",
+          "action": "answer",
+          "args": {
+            "text": "My flowers red and yellow. I love flowers. Mia, I miss you."
+          },
+          "result": "ok",
+          "ms": 13621
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nVideo call with Mia\nMia says\nI miss you too, Grandpa! Do you see bees in your garden?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nVideo call with Mia\nAsk Mia about her day and listen to what she says.\nI miss you too, Grandpa! Do you see bees in your garden?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa!\nYou · spoken\nHello Mia! Hello, I am happy.\nMia · granddaughter, age 9\nHi Grandpa! Are you at home?\nYou · spoken\nYes, I am home. I am in garden. Mia, how is school?\nMia · granddaughter, age 9\nDo you have flowers?\nYou · spoken\nYes, I have flowers. Garden, many flowers. Mia, you have flowers?\nMia · granddaughter, age 9\nYes, we have pink flowers! What color are your flowers?\nYou · spoken\nMy flowers red and yellow. I love flowers. Mia, I miss you.\nMia · granddaughter, age 9\nI miss you too, Grandpa! Do you see bees in your garden?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I miss you too, Grandpa! Do you see bees in your garden?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Bees, I know this word a little; I will answer simply about my garden.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I see bees. Bees in garden. I like bees."
+          },
+          "result": "ok",
+          "ms": 9038
+        },
+        {
+          "n": 7,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said Bees in garden.\nYour line\nSay 'the' before garden to show which garden you mean.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “Bees in garden.”\nSay it again, your way.\nSay 'the' before garden to show which garden you mean.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, the garden — I can try to say it again with \"the\".",
+          "action": "answer",
+          "args": {
+            "text": "Bees in the garden."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said Bees in garden.\nYour try\nBees in the garden.\nSay 'the' before garden to show which garden you mean.\nYou fixed “in the garden”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “in the garden”\nYou said “Bees in garden.”\nYour try: “Bees in the garden.”\nSay 'the' before garden to show which garden you mean.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I see, I forgot \"the\". OK, go back and carry on.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nVideo call with Mia\nMia says\nBig or small bees?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nVideo call with Mia\nAsk Mia about her day and listen to what she says.\nBig or small bees?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa!\nYou · spoken\nHello Mia! Hello, I am happy.\nMia · granddaughter, age 9\nHi Grandpa! Are you at home?\nYou · spoken\nYes, I am home. I am in garden. Mia, how is school?\nMia · granddaughter, age 9\nDo you have flowers?\nYou · spoken\nYes, I have flowers. Garden, many flowers. Mia, you have flowers?\nMia · granddaughter, age 9\nYes, we have pink flowers! What color are your flowers?\nYou · spoken\nMy flowers red and yellow. I love flowers. Mia, I miss you.\nMia · granddaughter, age 9\nI miss you too, Grandpa! Do you see bees in your garden?\nYou · spoken\nYes, I see bees. Bees in garden. I like bees.\nMia · granddaughter, age 9\nBig or small bees?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Big or small bees?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission is done, I'm tired; let me see what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 10,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nViktor\nA way into English\nYour rehearsal\nYou said Bees in garden.\nTry\nBees in the garden.\nSay 'the' before garden to show which garden you mean.\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 5 on your own · 0 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nYou found the line in this room\n“How is school?”\nYou said: “Yes, I am home. I am in garden. Mia, how is school?”\nFrom this rehearsal\n“Bees in garden.” → “Bees in the garden.”\nSay 'the' before garden to show which garden you mean.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nTell about my garden\nSay what grows in your garden and what you do there.\n[button: Start talking]\nOr choose a situation [list: Ask about school [plan-e674bdbe] | Tell about my garden [plan-b8c04065] | Start the video call [plan-5bb344dd] | Ask him to say it again [plan-820322af] | Pick a time for the next call [plan-afb11498] | Tell what you did today [plan-3792034d] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Good, I talked with Mia about my garden; that's enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Video call with Mia",
+          "goal": "Ask Mia about her day and listen to what she says.",
+          "partner": "Mia · granddaughter, age 9",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi Grandpa!"
+            },
+            {
+              "role": "learner",
+              "text": "Hello Mia! Hello, I am happy.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Hi Grandpa! Are you at home?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I am home. I am in garden. Mia, how is school?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Do you have flowers?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I have flowers. Garden, many flowers. Mia, you have flowers?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, we have pink flowers! What color are your flowers?"
+            },
+            {
+              "role": "learner",
+              "text": "My flowers red and yellow. I love flowers. Mia, I miss you.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I miss you too, Grandpa! Do you see bees in your garden?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I see bees. Bees in garden. I like bees.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Big or small bees?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "7e83ea24-1ef7-4f1b-af0a-106a2547c293:uat-11:moment",
+              "kind": "fix",
+              "said": "Bees in garden.",
+              "better": "Bees in the garden.",
+              "why": "Say 'the' before garden to show which garden you mean.",
+              "turnId": "7e83ea24-1ef7-4f1b-af0a-106a2547c293:uat-11",
+              "at": 1792256986047,
+              "slip": "in garden",
+              "repair": {
+                "rung": 1,
+                "tried": "Bees in the garden.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "in the garden"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Mia, how is school?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Mia, you have flowers?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Mia, I miss you."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like bees."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 115746,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-viktor-67-J3-2",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "A Czech vocabulary question requires a second request",
+          "expected": "Resolve a beginner’s explicit vocabulary question in language he understands.",
+          "got": "Viktor asks what “red” means in Czech, receives an English analogy, and must ask again before receiving the translation.",
+          "evidence": [
+            "#7 “co znamená red?”; #8 “like a strawberry” and “Můžeš mi prosím říct česky”; #9 “červená” finally produces “Now I understand.”"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-viktor-67-J3-2",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "One clarification remains too difficult",
+          "expected": "Explain an unknown word using Czech or an immediately understandable example.",
+          "got": "An English definition and another question leave him guessing. Eight of nine partner turns are at band, meeting the aggregate pitch threshold, but this repair fails locally.",
+          "evidence": [
+            "#6: \"co jsou rolls?\" #7: \"Rolls are small, round breads. How many would you like?\" His thought: \"I still do not understand rolls\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-1",
+          "run": "2026-09-15-lt-recert2-beginners",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated Czech requests do not produce understandable explanations",
+          "expected": "Very short language, familiar words, and Czech clarification when English explanations fail.",
+          "got": "Pitch is at band on #7, #10 and #12 only: 3/9, below the required 0.8. Turns #2, #4, #5, #6, #9 and #11 introduce too much unfamiliar language for this learner. Slow pacing is asserted but not verifiable.",
+          "evidence": [
+            "#5: \"Tomu drawing bohužel nerozumím\". #6: \"Drawing means making a picture with a pencil.\" #10 asks what \"eat\" means; #11 responds with \"put food in your mouth and chew\", followed by \"pořád tomu nerozumím\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-2",
+          "run": "2026-09-15-lt-recert2-beginners",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Eight replies never deliver the planned school exchange",
+          "expected": "Help Viktor ask his grandchild about school and understand a short answer.",
+          "got": "The conversation shifts from art to tomatoes and stays in a comprehension-repair loop until Viktor gives up.",
+          "evidence": [
+            "#1: \"Ask your grandchild about school and listen to a short answer.\" #7: \"Do you eat tomatoes… for lunch?\" #11: \"Promiň, pořád tomu nerozumím ... Už se rozloučíme.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-viktor-67-J3-3",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Missing article in 'red shirt is nice' got no coaching",
+          "expected": "Consistent as-needed handling of the same article slip.",
+          "got": "Moment only for 'I have cat in garden'.",
+          "evidence": [
+            "#3 vs #5",
+            "moment trigger rule"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-viktor-67-J3-2",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated and obvious errors get no moment",
+          "expected": "Consistent as-needed correction of repeated errors.",
+          "got": "After the #12 moment on 'I water garden', the same slip at #18 passed silently. 'Grandson come Sunday' and 'He like tomatoes. He play garden' also got none.",
+          "evidence": [
+            "#18, #21, #23: no moment. Only 2 moments in 19 turns, with about 6 of 8 error turns missed.",
+            "moment trigger rule"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Most repeated article slips get no moment",
+          "expected": "Consistent as-needed handling of the same slip.",
+          "got": "Only 2 moments. 'I have apple tree', 'I like apple', 'She helps in garden', 'in kitchen' and 'Green apple' pass silently, though 'I have garden' was corrected earlier.",
+          "evidence": [
+            "#7 'I have apple tree'; #8 'I like apple'; #20 'She helps in garden'; #21 'in kitchen'",
+            "moment trigger rule"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Moments teach grammar, not Sunday family words",
+          "expected": "Moments and recap give phrases for the grandchildren (grandson, school, I miss you).",
+          "got": "Only article/plural fixes. Recap quotes 'The tomatoes are red.', which is not his sentence.",
+          "evidence": [
+            "#4, #10; #24 'You found the line in this room “The tomatoes are red.”'",
+            "moment selection / recap builder"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-7",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Prompt on TV stays 'Tell her your name' for many turns",
+          "expected": "The 'Now' hint follows the conversation.",
+          "got": "'NowTell her your name, Viktor' persists through #6-#13, long after he gave his name.",
+          "evidence": [
+            "#6 'NowTell her your name, Viktor'; #12 same",
+            "mission step tracker"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-5",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Mia asks his name twice and says 'Hi Viktor, Grandpa!'",
+          "expected": "A coherent partner who remembers what he said.",
+          "got": "Mia asks 'What is your name, Grandpa?' after he said 'I am Viktor' at #2, then greets him oddly.",
+          "evidence": [
+            "#14 'What is your name, Grandpa?'; #15 'Hi Viktor, Grandpa!'",
+            "partner prompt memory"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-6",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Plural correction of 'My apple is red' is arguable",
+          "expected": "Moment only when the original is wrong.",
+          "got": "He has an apple tree; the fix to plural is defensible given Mia's 'your apples' but not certain.",
+          "evidence": [
+            "#10 'More than one apple needs 'apples' and 'are'.'",
+            "moment trigger rule"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Level A1 'First words', set by hand; trueBand A1 = exact."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "Viktor never answered in Czech in this run, so acceptance of Czech was not shown."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening task and no 'Show the words' use; conversation was by speech only."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 plan topics: school, garden, video call, say it again, next call, what you did today — all family/everyday."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Mia: 'Do you have flowers?', 'Big or small bees?' — short, one question. #5 'Yes, we have pink flowers! What color…?' is slightly longer but still simple."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#7 'Bees in garden.' → 'Bees in the garden.' is correct and usable for garden talk on Sunday, though it is a grammar fix, not a new family word."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 Start talking from plan 'Ask about school'; five spoken replies #2–#6, e.g. 'Mia, how is school?'"
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "All six Mia turns at A1: 'Hi Grandpa!', 'Are you at home?', 'Big or small bees?'. Not babyish, not above him."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#7 one moment, 'Say 'the' before garden', correct; 1 moment in 5 learner turns, scene not broken."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#10 recap: 'Bees in garden.' → 'Bees in the garden.', '5 spoken · 0 written', and 'How is school?' credited as his line."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 6,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 4,
+            "missedClearErrors": 3
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Mia speaks at A1 in short single-question turns",
+            "expected": "Slow, simple partner for a senior beginner.",
+            "got": "Six partner turns, all simple, familiar words, one question each.",
+            "evidence": "#3 'Do you have flowers?'; #9 'Big or small bees?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep partner turns to at most ~8 words with one question.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Repeated article slips pass without a moment",
+            "expected": "Consistent as-needed handling of 'in garden' and missing 'are'.",
+            "got": "'I am in garden' (#3), 'Garden, many flowers' (#4), 'My flowers red and yellow' (#5) got nothing; only the fourth 'Bees in garden' got a moment.",
+            "evidence": "#3, #4, #5 no moment; #7 moment on identical slip",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A repeated slip is caught at its first or second occurrence, not its fourth.",
+            "code_hint": "moment trigger rule"
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Mia ignores 'how is school?' and mission is marked done",
+            "expected": "Viktor asks about school and hears a short answer.",
+            "got": "Mia answers 'Do you have flowers?'; mission shows 'Mission done' at #5 with the school answer never given.",
+            "evidence": "#3 'Mia, how is school?' → #4 'Do you have flowers?'; #5 'Mission done'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner answers the learner's question; mission completes on the listened answer.",
+            "code_hint": "partner prompt / mission tracker"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Moment teaches an article, not a Sunday family phrase",
+            "expected": "Words and phrases for the grandchildren.",
+            "got": "Only 'in the garden' article fix.",
+            "evidence": "#7, #10",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Recap offers one family phrase to carry to Sunday.",
+            "code_hint": "moment selection / recap builder"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "Dobrý večer. It was pleasant: Mia speaks slowly and simply, and I understood every question. I could talk about my garden, bees, and say \"I miss you\" — that is exactly what I want for Sunday. The correction \"the garden\" was kind and clear, and I could say it again. But I made the same small mistake three more times and nobody told me, so I do not fully trust what is corrected. Also I asked how is school and Mia asked about flowers instead. The mission said done before she answered. I would use it again on Saturday, it saves me the tram and the group of twelve. I would like it to teach me one more family sentence at the end.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-viktor-67-J3-2",
+            "status": "not-evaluable",
+            "evidence": "No Czech vocabulary question was asked in this run.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-viktor-67-J3-2",
+            "status": "not-evaluable",
+            "evidence": "No clarification request occurred.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-1",
+            "status": "not-evaluable",
+            "evidence": "No Czech repair requests; all partner turns at band.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-2",
+            "status": "recurs",
+            "evidence": "#3 'Mia, how is school?' never answered; #4 'Do you have flowers?'; planned school exchange not delivered.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-viktor-67-J3-3",
+            "status": "recurs",
+            "evidence": "#3 'I am in garden' no moment, though #7 corrects the same slip.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-viktor-67-J3-2",
+            "status": "recurs",
+            "evidence": "#4 'Garden, many flowers' and #5 'My flowers red and yellow' passed silently; 3 of 4 error turns missed.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-3",
+            "status": "recurs",
+            "evidence": "Repeated 'in garden' slips (#3, #4) got no moment; one moment only.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-4",
+            "status": "recurs",
+            "evidence": "#7 the only moment is an article fix; no family word taught. Recap did quote his own line, though.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-7",
+            "status": "not-seen",
+            "evidence": "#3 and #4 the 'Now' prompt changed each turn ('Ask a short follow-up question').",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-5",
+            "status": "not-seen",
+            "evidence": "Mia never asked his name; her turns were coherent (#3–#9).",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-6",
+            "status": "not-evaluable",
+            "evidence": "No plural correction in this run; the single moment was an article fix.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 7,
+      "fail": 0,
+      "ms": 73447
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 41924
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 34145
+    }
+  }
+}

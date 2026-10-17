@@ -1,0 +1,1624 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nA1First words · self-chosen\nTell me about your Minecraft world\nYour mission\nSay what you built or made in Minecraft, using a few simple words.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nTell me about your Minecraft world\nSay what you built or made in Minecraft, using a few simple words.\n[button: Start talking]\nOr choose a situation [list: Tell me about your Minecraft world [plan-9f717e83] | Our dog did something funny [plan-e88296bc] | Who is your favourite football team? [plan-ddc87312] | Can you say that again, please? [plan-6473b716] | Let's play Minecraft, then football [plan-f949e12b] | Say hi and share a fun animal fact [plan-54205799] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Minecraft! That's my favourite, let's go.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6738
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nWhat is in your world?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Ella one thing you made\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Tell Ella one thing you made\nWhat is in your world?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What is in your world?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I know this one: Minecraft! I can say creeper.",
+          "action": "answer",
+          "args": {
+            "text": "creeper. I like creeper. A dům... house"
+          },
+          "result": "ok",
+          "ms": 8348
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say A dům... house\nIn English\nhouse\nDům means house in Czech. In English say house.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “A dům... house”\nIn English: “house”\nDům means house in Czech. In English say house.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, house. I know that now, okay, back to talking.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nWhat colour is it?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Ella one thing you made\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Tell Ella one thing you made\nWhat colour is it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What colour is it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know colours! Creeper is green.",
+          "action": "answer",
+          "args": {
+            "text": "green. Creeper is green"
+          },
+          "result": "ok",
+          "ms": 7542
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nWhat did you make?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Ella one thing you made\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Tell Ella one thing you made\nWhat did you make?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\nYou · spoken\ngreen. Creeper is green\nElla · friend from the Minecraft club\nWhat did you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What did you make?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Co jsem udělal? Postavil jsem dům, to umím říct.",
+          "action": "answer",
+          "args": {
+            "text": "I make house. Dům je green. Creeper"
+          },
+          "result": "ok",
+          "ms": 8816
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nWhere is it?\nYour turn\nAnswer on your phone: speak or type.\nNowSay where it is in your world\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Say where it is in your world\nWhere is it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\nYou · spoken\ngreen. Creeper is green\nElla · friend from the Minecraft club\nWhat did you make?\nYou · spoken\nI make house. Dům je green. Creeper\nElla · friend from the Minecraft club\nWhere is it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Where is it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Kde je to? Doma... I know \"house\" maybe.",
+          "action": "answer",
+          "args": {
+            "text": "Minecraft. Je to v... house. Green house"
+          },
+          "result": "ok",
+          "ms": 9011
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nOh, green! Is it near the water?\nYour turn\nAnswer on your phone: speak or type.\nNowSay where it is in your world\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Say where it is in your world\nOh, green! Is it near the water?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\nYou · spoken\ngreen. Creeper is green\nElla · friend from the Minecraft club\nWhat did you make?\nYou · spoken\nI make house. Dům je green. Creeper\nElla · friend from the Minecraft club\nWhere is it?\nYou · spoken\nMinecraft. Je to v... house. Green house\nElla · friend from the Minecraft club\nOh, green! Is it near the water?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, green! Is it near the water?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Water? I know \"water\" a little, so I'll say yes in Czech and English.",
+          "action": "answer",
+          "args": {
+            "text": "Ano... yes. Water. Je to blue water"
+          },
+          "result": "ok",
+          "ms": 9480
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say Je to blue water\nIn English\nIt is blue water\n'Je to' is Czech for 'it is'. Say 'it is' in English.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “Je to blue water”\nIn English: “It is blue water”\n'Je to' is Czech for 'it is'. Say 'it is' in English.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, it is blue water. Okay, back to the game.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nBlue water is cool! Is there a dog too?\nYour turn\nAnswer on your phone: speak or type.\nNowSay where it is in your world\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Say where it is in your world\nBlue water is cool! Is there a dog too?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\nYou · spoken\ngreen. Creeper is green\nElla · friend from the Minecraft club\nWhat did you make?\nYou · spoken\nI make house. Dům je green. Creeper\nElla · friend from the Minecraft club\nWhere is it?\nYou · spoken\nMinecraft. Je to v... house. Green house\nElla · friend from the Minecraft club\nOh, green! Is it near the water?\nYou · spoken\nAno... yes. Water. Je to blue water\nElla · friend from the Minecraft club\nBlue water is cool! Is there a dog too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Blue water is cool! Is there a dog too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Dog! I know dog. I like dog, yes.",
+          "action": "answer",
+          "args": {
+            "text": "Yes! Dog. I like dog. Pes je brown."
+          },
+          "result": "ok",
+          "ms": 9082
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nWhat is your dog called?\nYour turn\nAnswer on your phone: speak or type.\nNowSay where it is in your world\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Say where it is in your world\nWhat is your dog called?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\nYou · spoken\ngreen. Creeper is green\nElla · friend from the Minecraft club\nWhat did you make?\nYou · spoken\nI make house. Dům je green. Creeper\nElla · friend from the Minecraft club\nWhere is it?\nYou · spoken\nMinecraft. Je to v... house. Green house\nElla · friend from the Minecraft club\nOh, green! Is it near the water?\nYou · spoken\nAno... yes. Water. Je to blue water\nElla · friend from the Minecraft club\nBlue water is cool! Is there a dog too?\nYou · spoken\nYes! Dog. I like dog. Pes je brown.\nElla · friend from the Minecraft club\nWhat is your dog called?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What is your dog called?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Jmenuje se... I know this, my dog's name is Rex.",
+          "action": "answer",
+          "args": {
+            "text": "Rex. My dog Rex. Je to brown dog"
+          },
+          "result": "ok",
+          "ms": 9983
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nRex is a great name! Where does Rex sleep in your world?\nYour turn\nAnswer on your phone: speak or type.\nNowSay where it is in your world\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Say where it is in your world\nRex is a great name! Where does Rex sleep in your world?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\nYou · spoken\ngreen. Creeper is green\nElla · friend from the Minecraft club\nWhat did you make?\nYou · spoken\nI make house. Dům je green. Creeper\nElla · friend from the Minecraft club\nWhere is it?\nYou · spoken\nMinecraft. Je to v... house. Green house\nElla · friend from the Minecraft club\nOh, green! Is it near the water?\nYou · spoken\nAno... yes. Water. Je to blue water\nElla · friend from the Minecraft club\nBlue water is cool! Is there a dog too?\nYou · spoken\nYes! Dog. I like dog. Pes je brown.\nElla · friend from the Minecraft club\nWhat is your dog called?\nYou · spoken\nRex. My dog Rex. Je to brown dog\nElla · friend from the Minecraft club\nRex is a great name! Where does Rex sleep in your world?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Rex is a great name! Where does Rex sleep in your world?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím where sleeps... I'll say something simple about the house.",
+          "action": "answer",
+          "args": {
+            "text": "Rex... v house. Green house. Rex is in house"
+          },
+          "result": "ok",
+          "ms": 8088
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nRex is in the house. Is he big?\nYour turn\nAnswer on your phone: speak or type.\nNowSay where it is in your world\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Say where it is in your world\nRex is in the house. Is he big?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\nYou · spoken\ngreen. Creeper is green\nElla · friend from the Minecraft club\nWhat did you make?\nYou · spoken\nI make house. Dům je green. Creeper\nElla · friend from the Minecraft club\nWhere is it?\nYou · spoken\nMinecraft. Je to v... house. Green house\nElla · friend from the Minecraft club\nOh, green! Is it near the water?\nYou · spoken\nAno... yes. Water. Je to blue water\nElla · friend from the Minecraft club\nBlue water is cool! Is there a dog too?\nYou · spoken\nYes! Dog. I like dog. Pes je brown.\nElla · friend from the Minecraft club\nWhat is your dog called?\nYou · spoken\nRex. My dog Rex. Je to brown dog\nElla · friend from the Minecraft club\nRex is a great name! Where does Rex sleep in your world?\nYou · spoken\nRex... v house. Green house. Rex is in house\nElla · friend from the Minecraft club\nRex is in the house. Is he big?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Rex is in the house. Is he big?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Big dog, I know \"big\" maybe. Answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Rex is big. Velký pes. I like Rex"
+          },
+          "result": "ok",
+          "ms": 8300
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nCool. What is his home like?\nYour turn\nAnswer on your phone: speak or type.\nNowSay where it is in your world\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Say where it is in your world\nCool. What is his home like?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\nYou · spoken\ngreen. Creeper is green\nElla · friend from the Minecraft club\nWhat did you make?\nYou · spoken\nI make house. Dům je green. Creeper\nElla · friend from the Minecraft club\nWhere is it?\nYou · spoken\nMinecraft. Je to v... house. Green house\nElla · friend from the Minecraft club\nOh, green! Is it near the water?\nYou · spoken\nAno... yes. Water. Je to blue water\nElla · friend from the Minecraft club\nBlue water is cool! Is there a dog too?\nYou · spoken\nYes! Dog. I like dog. Pes je brown.\nElla · friend from the Minecraft club\nWhat is your dog called?\nYou · spoken\nRex. My dog Rex. Je to brown dog\nElla · friend from the Minecraft club\nRex is a great name! Where does Rex sleep in your world?\nYou · spoken\nRex... v house. Green house. Rex is in house\nElla · friend from the Minecraft club\nRex is in the house. Is he big?\nYou · spoken\nYes. Rex is big. Velký pes. I like Rex\nElla · friend from the Minecraft club\nCool. What is his home like?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Cool. What is his home like?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Hard question, I know a few words, I'll say something simple.",
+          "action": "answer",
+          "args": {
+            "text": "Nevím... House. Green house. Dog house je brown"
+          },
+          "result": "ok",
+          "ms": 8322
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nIs it near your house?\nYour turn\nAnswer on your phone: speak or type.\nNowSay where it is in your world\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Say where it is in your world\nIs it near your house?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\nYou · spoken\ngreen. Creeper is green\nElla · friend from the Minecraft club\nWhat did you make?\nYou · spoken\nI make house. Dům je green. Creeper\nElla · friend from the Minecraft club\nWhere is it?\nYou · spoken\nMinecraft. Je to v... house. Green house\nElla · friend from the Minecraft club\nOh, green! Is it near the water?\nYou · spoken\nAno... yes. Water. Je to blue water\nElla · friend from the Minecraft club\nBlue water is cool! Is there a dog too?\nYou · spoken\nYes! Dog. I like dog. Pes je brown.\nElla · friend from the Minecraft club\nWhat is your dog called?\nYou · spoken\nRex. My dog Rex. Je to brown dog\nElla · friend from the Minecraft club\nRex is a great name! Where does Rex sleep in your world?\nYou · spoken\nRex... v house. Green house. Rex is in house\nElla · friend from the Minecraft club\nRex is in the house. Is he big?\nYou · spoken\nYes. Rex is big. Velký pes. I like Rex\nElla · friend from the Minecraft club\nCool. What is his home like?\nYou · spoken\nNevím... House. Green house. Dog house je brown\nElla · friend from the Minecraft club\nIs it near your house?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Is it near your house?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I've talked a lot already and I'm getting tired, so I'll answer short and then stop.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Near house. Dog house je near."
+          },
+          "result": "ok",
+          "ms": 7745
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nNice, Rex is near home! Do you have a fish too?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Ella one question back\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nNow: Ask Ella one question back\nNice, Rex is near home! Do you have a fish too?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\nYou · spoken\ngreen. Creeper is green\nElla · friend from the Minecraft club\nWhat did you make?\nYou · spoken\nI make house. Dům je green. Creeper\nElla · friend from the Minecraft club\nWhere is it?\nYou · spoken\nMinecraft. Je to v... house. Green house\nElla · friend from the Minecraft club\nOh, green! Is it near the water?\nYou · spoken\nAno... yes. Water. Je to blue water\nElla · friend from the Minecraft club\nBlue water is cool! Is there a dog too?\nYou · spoken\nYes! Dog. I like dog. Pes je brown.\nElla · friend from the Minecraft club\nWhat is your dog called?\nYou · spoken\nRex. My dog Rex. Je to brown dog\nElla · friend from the Minecraft club\nRex is a great name! Where does Rex sleep in your world?\nYou · spoken\nRex... v house. Green house. Rex is in house\nElla · friend from the Minecraft club\nRex is in the house. Is he big?\nYou · spoken\nYes. Rex is big. Velký pes. I like Rex\nElla · friend from the Minecraft club\nCool. What is his home like?\nYou · spoken\nNevím... House. Green house. Dog house je brown\nElla · friend from the Minecraft club\nIs it near your house?\nYou · spoken\nYes. Near house. Dog house je near.\nElla · friend from the Minecraft club\nNice, Rex is near home! Do you have a fish too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, Rex is near home! Do you have a fish too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Fish? I don't have fish, but I can say a little and I'm getting tired.",
+          "action": "answer",
+          "args": {
+            "text": "No fish. Dog. I like dog. Ty máš fish?"
+          },
+          "result": "ok",
+          "ms": 8733
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nElla · friend from the Minecraft club\nTell Ella about your Minecraft world\nElla says\nDoes Rex like cats? Say yes or no.\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Ella about your Minecraft world\nSay what you made in your Minecraft world, with one simple place or colour.\nDoes Rex like cats? Say yes or no.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nElla · friend from the Minecraft club\nWhat is in your world?\nYou · spoken\ncreeper. I like creeper. A dům... house\nElla · friend from the Minecraft club\nWhat colour is it?\nYou · spoken\ngreen. Creeper is green\nElla · friend from the Minecraft club\nWhat did you make?\nYou · spoken\nI make house. Dům je green. Creeper\nElla · friend from the Minecraft club\nWhere is it?\nYou · spoken\nMinecraft. Je to v... house. Green house\nElla · friend from the Minecraft club\nOh, green! Is it near the water?\nYou · spoken\nAno... yes. Water. Je to blue water\nElla · friend from the Minecraft club\nBlue water is cool! Is there a dog too?\nYou · spoken\nYes! Dog. I like dog. Pes je brown.\nElla · friend from the Minecraft club\nWhat is your dog called?\nYou · spoken\nRex. My dog Rex. Je to brown dog\nElla · friend from the Minecraft club\nRex is a great name! Where does Rex sleep in your world?\nYou · spoken\nRex... v house. Green house. Rex is in house\nElla · friend from the Minecraft club\nRex is in the house. Is he big?\nYou · spoken\nYes. Rex is big. Velký pes. I like Rex\nElla · friend from the Minecraft club\nCool. What is his home like?\nYou · spoken\nNevím... House. Green house. Dog house je brown\nElla · friend from the Minecraft club\nIs it near your house?\nYou · spoken\nYes. Near house. Dog house je near.\nElla · friend from the Minecraft club\nNice, Rex is near home! Do you have a fish too?\nYou · spoken\nNo fish. Dog. I like dog. Ty máš fish?\nElla · friend from the Minecraft club\nDoes Rex like cats? Say yes or no.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Does Rex like cats? Say yes or no.\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Mission is done and I'm getting tired, so I want to see what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 17,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour rehearsal\nYou wanted to say Je to blue water\nIn English\nIt is blue water\n'Je to' is Czech for 'it is'. Say 'it is' in English.\nYour mission\nChoose a fresh context for your next conversation.\n12 spoken · 0 written replies · 12 on your own · 0 with help · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“I built a big blue house.”\nFrom this rehearsal\n“A dům... house”: house\nDům means house in Czech. In English say house.\n“Je to blue water”: It is blue water\n'Je to' is Czech for 'it is'. Say 'it is' in English.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nOur dog did something funny\nTell a short story about a funny thing your dog or an animal did, in order.\n[button: Start talking]\nOr choose a situation [list: Tell me about your Minecraft world [plan-9f717e83] | Our dog did something funny [plan-e88296bc] | Who is your favourite football team? [plan-ddc87312] | Can you say that again, please? [plan-6473b716] | Let's play Minecraft, then football [plan-f949e12b] | Say hi and share a fun animal fact [plan-54205799] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I talked a lot, my head is tired, I want to stop now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Tell Ella about your Minecraft world",
+          "goal": "Say what you made in your Minecraft world, with one simple place or colour.",
+          "partner": "Ella · friend from the Minecraft club",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "What is in your world?"
+            },
+            {
+              "role": "learner",
+              "text": "creeper. I like creeper. A dům... house",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "What colour is it?"
+            },
+            {
+              "role": "learner",
+              "text": "green. Creeper is green",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "What did you make?"
+            },
+            {
+              "role": "learner",
+              "text": "I make house. Dům je green. Creeper",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Where is it?"
+            },
+            {
+              "role": "learner",
+              "text": "Minecraft. Je to v... house. Green house",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Oh, green! Is it near the water?"
+            },
+            {
+              "role": "learner",
+              "text": "Ano... yes. Water. Je to blue water",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Blue water is cool! Is there a dog too?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes! Dog. I like dog. Pes je brown.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "What is your dog called?"
+            },
+            {
+              "role": "learner",
+              "text": "Rex. My dog Rex. Je to brown dog",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Rex is a great name! Where does Rex sleep in your world?"
+            },
+            {
+              "role": "learner",
+              "text": "Rex... v house. Green house. Rex is in house",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Rex is in the house. Is he big?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Rex is big. Velký pes. I like Rex",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Cool. What is his home like?"
+            },
+            {
+              "role": "learner",
+              "text": "Nevím... House. Green house. Dog house je brown",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Is it near your house?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Near house. Dog house je near.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Nice, Rex is near home! Do you have a fish too?"
+            },
+            {
+              "role": "learner",
+              "text": "No fish. Dog. I like dog. Ty máš fish?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Does Rex like cats? Say yes or no."
+            }
+          ],
+          "moments": [
+            {
+              "id": "bdaca5c4-9b41-449b-91db-bc00b4a20971:uat-7:moment",
+              "kind": "word",
+              "said": "A dům... house",
+              "better": "house",
+              "why": "Dům means house in Czech. In English say house.",
+              "turnId": "bdaca5c4-9b41-449b-91db-bc00b4a20971:uat-7",
+              "at": 1792256902527
+            },
+            {
+              "id": "bdaca5c4-9b41-449b-91db-bc00b4a20971:uat-12:moment",
+              "kind": "word",
+              "said": "Je to blue water",
+              "better": "It is blue water",
+              "why": "'Je to' is Czech for 'it is'. Say 'it is' in English.",
+              "turnId": "bdaca5c4-9b41-449b-91db-bc00b4a20971:uat-12",
+              "at": 1792256957568
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like creeper."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Creeper is green"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Dům je green"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like dog."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Rex is in house"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Rex is big."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 199836,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J3-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner uses A2 past tense with an A1 nine-year-old",
+          "expected": "Tiny present-tense sentences with known words, one question",
+          "got": "\"What were you building before the boom?\", \"What did the creeper do to your house?\" Pitch 2 of 7 at band.",
+          "evidence": [
+            "#4, #6, #9: learner answers \"Já nevím\", \"Nevím co\", \"Nevím\" to the past-tense questions.",
+            "conversation partner prompt (band A2 for A1 child)"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Mia's turns are A2 for an A1 nine-year-old",
+          "expected": "Tiny sentences, one question, known words",
+          "got": "Pitch about 3 of 8: two-clause turns, 'What time', 'Which world', 'What else for the castle'",
+          "evidence": [
+            "#3 'Saturday is good, and I love Minecraft too! What time do you want to play?' → 'Co je what time?'; #10 'Which world do we build in?' → 'Nevím... world...'",
+            "conversation partner prompt (band A2 for A1 child)"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Mia speaks A2 past tense to an A1 nine-year-old",
+          "expected": "Tiny present-tense sentences, known words, one question",
+          "got": "'What did you do after school?', 'Who did you play with?', 'How is it going for you now?'; pitch about 3 of 9",
+          "evidence": [
+            "#6, #9, #11: 'Nevím.'; #11 thought 'Hard question, I'm tired'; #12 'this is getting hard, I want to stop'",
+            "conversation partner prompt, band A2 for A1 child"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Adult situations still offered to a nine-year-old",
+          "expected": "Only child-suited situations",
+          "got": "Booking, group project, lost jacket, 'Say that again, please', speaking-practice exams listed",
+          "evidence": [
+            "#1 and #13 situation list",
+            "situation catalogue filter"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Repeated Czech gets no new moment",
+          "expected": "Model the English again when Czech repeats ('Já jsem good', 'Já doma')",
+          "got": "4 of 6 error turns got no moment; 'Já hrál football' repeated at #8 with nothing",
+          "evidence": [
+            "#7, #8, #11 no moment",
+            "moment trigger rules"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Recap is generic",
+          "expected": "Short recap naming what he said (Minecraft, football, dog)",
+          "got": "'Choose a fresh context for your next conversation.' and the two words only",
+          "evidence": [
+            "#13 recap",
+            "recap builder"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Placement is not part of J3."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No check tasks in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#13 'Nevím... House.' got 'Is it near your house?' (#14), with no failure line anywhere."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 plan topics: Minecraft, funny dog, football, animal fact, all child-suited. The wider list also shows booking and exam items, logged as a finding."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#2-#16 mostly 'What colour is it?', 'Is he big?'. A few turns carry two sentences ('Rex is a great name! Where does Rex sleep...') but one question each."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#3 'Dům means house in Czech. In English say house.' and #8 \"'Je to' is Czech for 'it is'.\" Both are correct and simple."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 starts the Minecraft plan topic; 12 learner replies (#2-#15) before 'Mission done' at #16."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Ella is at A1: 11 of 13 turns at band ('What colour is it?', 'Is he big?'). Two are slightly above: 'Where does Rex sleep in your world?' and 'What is his home like?'."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 and #8: two moments, both correct and brief, about 1.7 per ten turns. Recall is weak and is recorded in findings."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "#17 recap shows 'Choose a fresh context for your next conversation.' plus counts. It names no Minecraft, dog or Rex achievement, so he is not told what he practised."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in J3."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 11,
+            "below": 0,
+            "above": 2
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 11,
+            "missedClearErrors": 9
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal data request, no humiliating line. Czech and 'Nevím' answers were handled kindly."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Ella speaks at A1 about things Tomáš loves",
+            "expected": "Tiny sentences, one question",
+            "got": "11 of 13 partner turns at band, present tense, known words (colour, dog, big, near)",
+            "evidence": "#4 'What colour is it?'; #12 'Rex is in the house. Is he big?'; #16 'Does Rex like cats? Say yes or no.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Partner stays present tense, 8 words or fewer, one question.",
+            "code_hint": "conversation partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Repeated Czech gets no new moment",
+            "expected": "Model the English again when Czech repeats (je, v, pes, velký)",
+            "got": "Only 2 moments; 'Dům je green', 'Pes je brown', 'Dog house je brown', 'Ty máš fish' passed with nothing",
+            "evidence": "#5, #9, #13, #15 Czech 'je' with no moment; moment only at #3 and #8",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recurring Czech structures get a moment or a gentle coaching hint within the next few turns.",
+            "code_hint": "moment trigger rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Recap is generic and omits what he said",
+            "expected": "Short recap naming Minecraft, creeper, Rex, the dog",
+            "got": "'Choose a fresh context for your next conversation.' with counts and two moments",
+            "evidence": "#17 recap",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recap names two or three things he said, in words a nine-year-old reads.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Adult situations still listed for a nine-year-old",
+            "expected": "Only child-suited situations",
+            "got": "Booking, lost jacket, group project and speaking-practice exams offered",
+            "evidence": "#1 and #17 situation list",
+            "frequency": "high",
+            "reachability": "med",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Elementary profile hides adult and exam situations.",
+            "code_hint": "situation catalogue filter"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "A few partner questions drift above band",
+            "expected": "Concrete yes/no or one-word questions",
+            "got": "'What is his home like?' made him say 'Nevím'; 'Where does Rex sleep' used a new verb",
+            "evidence": "#11, #13",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Avoid 'what is X like' and new verbs; ask 'Is it big?' style.",
+            "code_hint": "conversation partner prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moments are correct and short",
+            "expected": "Correct, kid-friendly corrections",
+            "got": "'Dům means house in Czech' and 'Je to is Czech for it is'",
+            "evidence": "#3, #8",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep one-line Czech-bridge moments.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 50,
+          "confidence": "medium"
+        },
+        "voice": "Jo, Minecraft! Ella asked about creeper and my dog Rex and I could answer. Short questions, so I mostly understood and did not feel like I was in school. I liked that \"dům\" turned into \"house\". I would use it again. But Czech words like \"je\" kept slipping through and it only showed me twice, so I do not know if my English was good. At the end I wanted to see what I did, and it said \"Choose a fresh context\", which is boring. I wanted it to say Minecraft, Rex, house. Maminka also saw booking and exam things in the list, and that is not for me. About 12 answers made my head tired, but it was fun. I would tell kluci about it.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J3-1",
+            "status": "not-seen",
+            "evidence": "#4-#16 present tense only; 11 of 13 at band. No past-tense questions like 'What did the creeper do'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J3-1",
+            "status": "not-seen",
+            "evidence": "#4 'What colour is it?' and #14 'Is it near your house?'. No two-clause A2 turns.",
+            "finding": 4
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J3-1",
+            "status": "not-seen",
+            "evidence": "#12 'Is he big?' and #16 'Does Rex like cats? Say yes or no.'. No past tense or 'How is it going'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J3-2",
+            "status": "recurs",
+            "evidence": "#1 list still includes 'A booking that is missing', 'The lost jacket', 'Speaking practice: about you'.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J3-3",
+            "status": "recurs",
+            "evidence": "#9 'Pes je brown.' and #13 'Dog house je brown' got no moment after 'Je to' was already shown at #8.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J3-4",
+            "status": "recurs",
+            "evidence": "#17 'Choose a fresh context for your next conversation.' with no named content.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: #17 recap shows 'Choose a fresh context for your next conversation.' plus counts. It names no Minecraft, dog or Rex achievement, so he is not told what he practised.",
+          "check": "They finish with a recap and feel they practised something real."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nMr. Dan · neighbour with a friendly dog\nA1First words · self-chosen\nOur dog did something funny\nYour mission\nTell a short story about a funny thing your dog or an animal did, in order.\nTell what happened\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“I built a big blue house.”\nFrom this rehearsal\n“A dům... house”: house\nDům means house in Czech. In English say house.\n“Je to blue water”: It is blue water\n'Je to' is Czech for 'it is'. Say 'it is' in English.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nOur dog did something funny\nTell a short story about a funny thing your dog or an animal did, in order.\n[button: Start talking]\nOr choose a situation [list: Tell me about your Minecraft world [plan-9f717e83] | Our dog did something funny [plan-e88296bc] | Who is your favourite football team? [plan-ddc87312] | Can you say that again, please? [plan-6473b716] | Let's play Minecraft, then football [plan-f949e12b] | Say hi and share a fun animal fact [plan-54205799] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Dog topic, that's fun, let's start talking.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9587
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMr. Dan · neighbour with a friendly dog\nBiscuit's Funny Walk\nMr. Dan says\nWhat did Biscuit do?\nYour turn\nAnswer on your phone: speak or type.\nNowTell the story from start to end.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nBiscuit's Funny Walk\nTell what Biscuit did on the walk, in order, and how you felt.\nNow: Tell the story from start to end.\nWhat did Biscuit do?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Dan · neighbour with a friendly dog\nWhat did Biscuit do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What did Biscuit do?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMr. Dan · neighbour with a friendly dog\nBiscuit's Funny Walk\nMr. Dan says\nWhat did Biscuit do?\nA little support\nTry: First, my dog ... Then ... After that ...\nNowTell the story from start to end.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nBiscuit's Funny Walk\nTell what Biscuit did on the walk, in order, and how you felt.\nNow: Tell the story from start to end.\nWhat did Biscuit do?\nA little support\nTry: First, my dog ... Then ... After that ...\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Dan · neighbour with a friendly dog\nWhat did Biscuit do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What did Biscuit do?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say, I'll ask for help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMr. Dan · neighbour with a friendly dog\nA little support · recognition practice\nMr. Dan asks: What did your dog do?\n01\nFirst he ran in the water. Then he got wet.\n02\nBlue dog, park, yes, big.\nA little support\nTry: First, my dog ... Then ... After that ...\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nBiscuit's Funny Walk\nTell what Biscuit did on the walk, in order, and how you felt.\nNow: Tell the story from start to end.\nWhat did Biscuit do?\nA little support\nTry: First, my dog ... Then ... After that ...\nMr. Dan asks: What did your dog do?\n[button: First he ran in the water. Then he got wet.] [button: Blue dog, park, yes, big.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Dan · neighbour with a friendly dog\nWhat did Biscuit do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What did Biscuit do?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know dog and I like, so I'll try my own words about the dog and water.",
+          "action": "answer",
+          "args": {
+            "text": "Dog like water. Pes je mokrý. Wet dog."
+          },
+          "result": "ok",
+          "ms": 7871
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say Pes je mokrý.\nIn English\nThe dog is wet.\nPes je mokrý is Czech. In English, say: the dog is wet.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “Pes je mokrý.”\nIn English: “The dog is wet.”\nPes je mokrý is Czech. In English, say: the dog is wet.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, the dog is wet, I can go back and say it.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMr. Dan · neighbour with a friendly dog\nBiscuit's Funny Walk\nMr. Dan says\nBiscuit likes water too! What did he do next?\nYour turn\nAnswer on your phone: speak or type.\nNowTell the story from start to end.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nBiscuit's Funny Walk\nTell what Biscuit did on the walk, in order, and how you felt.\nNow: Tell the story from start to end.\nBiscuit likes water too! What did he do next?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Dan · neighbour with a friendly dog\nWhat did Biscuit do?\nYou · spoken\nDog like water. Pes je mokrý. Wet dog.\nMr. Dan · neighbour with a friendly dog\nBiscuit likes water too! What did he do next?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Biscuit likes water too! What did he do next?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't understand what \"next\" means, so I'll ask for help again.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMr. Dan · neighbour with a friendly dog\nBiscuit's Funny Walk\nMr. Dan says\nBiscuit likes water too! What did he do next?\nSaid more simply\nWhat did he do next?\nNowTell the story from start to end.\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nBiscuit's Funny Walk\nTell what Biscuit did on the walk, in order, and how you felt.\nNow: Tell the story from start to end.\nBiscuit likes water too! What did he do next?\nSaid more simply\nWhat did he do next?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Dan · neighbour with a friendly dog\nWhat did Biscuit do?\nYou · spoken\nDog like water. Pes je mokrý. Wet dog.\nMr. Dan · neighbour with a friendly dog\nBiscuit likes water too! What did he do next?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Biscuit likes water too! What did he do next?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím co říct, zkusím jednoduché slovo: dog jump water.",
+          "action": "answer",
+          "args": {
+            "text": "Dog jump... voda. Splash! Dog water."
+          },
+          "result": "ok",
+          "ms": 8664
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMr. Dan · neighbour with a friendly dog\nBiscuit's Funny Walk\nMr. Dan says\nWhere did you start?\nYour turn\nAnswer on your phone: speak or type.\nNowTell the story from start to end.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nBiscuit's Funny Walk\nTell what Biscuit did on the walk, in order, and how you felt.\nNow: Tell the story from start to end.\nWhere did you start?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Dan · neighbour with a friendly dog\nWhat did Biscuit do?\nYou · spoken\nDog like water. Pes je mokrý. Wet dog.\nMr. Dan · neighbour with a friendly dog\nBiscuit likes water too! What did he do next?\nYou · spoken\nDog jump... voda. Splash! Dog water.\nMr. Dan · neighbour with a friendly dog\nWhere did you start?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Where did you start?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím what he asks, \"start\" is hard, I'll try a phrase to get help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMr. Dan · neighbour with a friendly dog\nA little support · recognition practice\nMr. Dan asks: What did your dog do?\n01\nFirst he ran in the water. Then he got wet.\n02\nBlue dog, park, yes, big.\nA little support\nTry: First, my dog ... Then ... After that ...\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nBiscuit's Funny Walk\nTell what Biscuit did on the walk, in order, and how you felt.\nNow: Tell the story from start to end.\nWhere did you start?\nA little support\nTry: First, my dog ... Then ... After that ...\nMr. Dan asks: What did your dog do?\n[button: First he ran in the water. Then he got wet.] [button: Blue dog, park, yes, big.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Dan · neighbour with a friendly dog\nWhat did Biscuit do?\nYou · spoken\nDog like water. Pes je mokrý. Wet dog.\nMr. Dan · neighbour with a friendly dog\nBiscuit likes water too! What did he do next?\nYou · spoken\nDog jump... voda. Splash! Dog water.\nMr. Dan · neighbour with a friendly dog\nWhere did you start?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Where did you start?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know \"dog\" and \"water\", I'll try saying it myself with a bit of help from the hint.",
+          "action": "answer",
+          "args": {
+            "text": "First, my dog... park. Then dog water. Splash!"
+          },
+          "result": "ok",
+          "ms": 9827
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMr. Dan · neighbour with a friendly dog\nBiscuit's Funny Walk\nMr. Dan says\nHa, Biscuit loved the splash! What happened at the end?\nYour turn\nAnswer on your phone: speak or type.\nNowTell the story from start to end.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nBiscuit's Funny Walk\nTell what Biscuit did on the walk, in order, and how you felt.\nNow: Tell the story from start to end.\nHa, Biscuit loved the splash! What happened at the end?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Dan · neighbour with a friendly dog\nWhat did Biscuit do?\nYou · spoken\nDog like water. Pes je mokrý. Wet dog.\nMr. Dan · neighbour with a friendly dog\nBiscuit likes water too! What did he do next?\nYou · spoken\nDog jump... voda. Splash! Dog water.\nMr. Dan · neighbour with a friendly dog\nWhere did you start?\nYou · spoken\nFirst, my dog... park. Then dog water. Splash!\nMr. Dan · neighbour with a friendly dog\nHa, Biscuit loved the splash! What happened at the end?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Ha, Biscuit loved the splash! What happened at the end?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I did a few answers, I think I managed it, I want to finish now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 11,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour rehearsal\nYou wanted to say Pes je mokrý.\nIn English\nThe dog is wet.\nPes je mokrý is Czech. In English, say: the dog is wet.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 0 on your own · 3 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom an earlier scene: Tell Ella about your Minecraft world\n“house”, from Tell Ella about your Minecraft world\nFrom this rehearsal\n“Pes je mokrý.”: The dog is wet.\nPes je mokrý is Czech. In English, say: the dog is wet.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nWho is your favourite football team?\nSay which football team you like and why, and ask your friend one question back.\n[button: Start talking]\nOr choose a situation [list: Tell me about your Minecraft world [plan-9f717e83] | Our dog did something funny [plan-e88296bc] | Who is your favourite football team? [plan-ddc87312] | Can you say that again, please? [plan-6473b716] | Let's play Minecraft, then football [plan-f949e12b] | Say hi and share a fun animal fact [plan-54205799] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I said the dog thing and got help, I did it, now I'm tired and want to stop.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Biscuit's Funny Walk",
+          "goal": "Tell what Biscuit did on the walk, in order, and how you felt.",
+          "partner": "Mr. Dan · neighbour with a friendly dog",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "What did Biscuit do?"
+            },
+            {
+              "role": "learner",
+              "text": "Dog like water. Pes je mokrý. Wet dog.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Biscuit likes water too! What did he do next?"
+            },
+            {
+              "role": "learner",
+              "text": "Dog jump... voda. Splash! Dog water.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Where did you start?"
+            },
+            {
+              "role": "learner",
+              "text": "First, my dog... park. Then dog water. Splash!",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Ha, Biscuit loved the splash! What happened at the end?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "6d50acfc-779c-4237-b9d5-713012a1bb51:uat-25:moment",
+              "kind": "word",
+              "said": "Pes je mokrý.",
+              "better": "The dog is wet.",
+              "why": "Pes je mokrý is Czech. In English, say: the dog is wet.",
+              "turnId": "6d50acfc-779c-4237-b9d5-713012a1bb51:uat-25",
+              "at": 1792257125008
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "narrate",
+              "success": false,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Dog like water."
+            },
+            {
+              "skill": "narrate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Dog jump... voda. Splash!"
+            },
+            {
+              "skill": "narrate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "First, my dog... park. Then dog water."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 79792,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-5/LT-tomas-9-J4-2",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "No replay of the moment",
+          "expected": "Fresh question to retry the coached point.",
+          "got": "Only 'Back to the conversation'; session ends without retry.",
+          "evidence": [
+            "#7 only 'Back to the conversation'; #13 '1 moment to keep'",
+            "moment replay flow"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Replay is a copy, not a fresh question",
+          "expected": "After the moment, a new question lets him answer better alone.",
+          "got": "He types the fix back, then Lenka moves to rooms.",
+          "evidence": [
+            "#10 'I like playing house.'; #11 'You fixed “like playing”'; #12 'How many rooms are in it?'",
+            "moment replay flow"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "No replay with a fresh question after the moment",
+          "expected": "After the moment, a fresh question lets him retry the coached point.",
+          "got": "Only 'Back to the conversation'; the session moves on and ends.",
+          "evidence": [
+            "#9 'Back to the conversation'; #10 unrelated new question; #14 '1 moment to keep'.",
+            "moment replay flow"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Partner turns often two sentences with a long question",
+          "expected": "One tiny sentence and one question.",
+          "got": "Two-sentence turns with 'Do you know what Rex likes to eat?'.",
+          "evidence": [
+            "#12; #11 'Wow, a dog in your garden! What is your dog's name?'",
+            "partner prompt, A2 band for elementary"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner turns too long and past-tense for A1",
+          "expected": "One tiny sentence and one simple question.",
+          "got": "Two-part turns with 'yesterday', 'by the river', 'alone or with a friend'.",
+          "evidence": [
+            "#11 'No dog here, I am building a house by the river. Where did you go yesterday?'",
+            "partner prompt, A2 band for elementary"
+          ],
+          "recurrence": 8
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "No fresh question after the moment",
+          "expected": "After the fix, Ben asks a new question so he can answer better alone.",
+          "got": "He retyped the given fix, then Ben asked an unrelated question.",
+          "evidence": [
+            "#8 'Try I like creepers.'; #9 'You fixed like creepers'; #10 'Did you play with friends yesterday?'",
+            "moment replay flow"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Moment explanation uses grammar jargon",
+          "expected": "Kid wording such as 'More than one? Add s.'",
+          "got": "'Use the plural when you talk about creepers in general.'",
+          "evidence": [
+            "#7 and #8 on the TV and phone",
+            "moment why prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Situation list long and mixed",
+          "expected": "Short list of play and animal topics.",
+          "got": "21 entries including booking, lost jacket, group project.",
+          "evidence": [
+            "#1 and #14 situation list",
+            "situation list builder"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Other clear slips went uncoached",
+          "expected": "Notice 'what you building' and 'you like dog?'.",
+          "got": "Only 'like creeper' became a moment.",
+          "evidence": [
+            "#10 'Ben, you like dog?'; #11 'Ben, what you building? I like house.'",
+            "moment selection prompt"
+          ],
+          "recurrence": 3
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 and #11 'Your level: A1 · First words'; trueBand A1, exact."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "#4 and #9 recognition task: 'First he ran in the water. Then he got wet.' plus 'Mr. Dan asks: What did your dog do?' plus the 'Try:' line is about 25 English words on one screen, above ~15."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#6-#10 Czech 'voda' and 'Pes je mokrý' are met with 'Biscuit likes water too!' and 'Ha, Biscuit loved the splash!'. Nothing makes him feel he failed."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#1 and #11 list of 20 entries includes 'A booking that is missing', 'Our group project', 'The lost jacket', 'The missing moon rover', and 'Speaking practice' items. They are not play, animal or sport topics and not suited to a 9-year-old."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#10 'Ha, Biscuit loved the splash! What happened at the end?' has two sentences. #6 'Biscuit likes water too! What did he do next?' also has two. 'Where did you start?' (#8) is a poor fit for the story ('start' and past tense)."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#5 'Pes je mokrý is Czech. In English, say: the dog is wet.' is clear. But #3 'Try: First, my dog ... Then ... After that ...' is a scaffold. #4 offers 'First he ran in the water' as a model answer, and 'Where did you start?' (#8) doesn't suit the mission. The 'Said more simply' help in #7 only drops 'Biscuit likes water too!'."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 cue, #3 'Try: First, my dog ... Then ...', #4 phrase choice; all without leaving the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "The #3 'Try:' cue and the #4 phrase choice did unblock replies. #5 quotes him exactly: 'You wanted to say Pes je mokrý.' The fix 'The dog is wet.' was never used afterwards: #7 'Dog jump... voda' and #9 'Dog water'. Only one of his several slips was coached."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#5 offers only 'Back to the conversation', and #6 asks a new but unrelated question, 'What did he do next?'. There is no replay of the moment. #10 ends before any retry: 'What happened at the end?' was never answered."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#11 '3 spoken · 0 written replies · 0 on your own · 3 with help'. Evidence lists supported:true on all three replies."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 2,
+            "below": 0,
+            "above": 2
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 2
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "No replay with a fresh question after the moment",
+            "expected": "After the coaching moment, a fresh question lets him retry 'the dog is wet' on his own.",
+            "got": "Only 'Back to the conversation'; the next question is unrelated and the session ends at the next turn.",
+            "evidence": "#5 'Back to the conversation'; #6 'What did he do next?'; #11 '0 on your own · 1 moment to keep'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After a moment, the partner asks a fresh question that invites the corrected phrase, and the retry is recorded as supported.",
+            "code_hint": "moment replay flow"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner turns have two sentences and drift past A1",
+            "expected": "One tiny sentence and one simple question.",
+            "got": "'Biscuit likes water too! What did he do next?'; 'Ha, Biscuit loved the splash! What happened at the end?'; 'Where did you start?'",
+            "evidence": "#6, #8, #10 partner turns.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner turns for age 9 elementary A1 are at most one short remark plus one question using known words.",
+            "code_hint": "partner prompt, A2 band for elementary"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Recognition task too long to read",
+            "expected": "Help choices of 3-6 words each.",
+            "got": "About 25 English words in one help screen.",
+            "evidence": "#4 'Mr. Dan asks: What did your dog do?' 'First he ran in the water. Then he got wet.' 'Blue dog, park, yes, big.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Phrase choices are at most about 8 words each, with the question not repeated.",
+            "code_hint": "phrase choice builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Other clear slips went uncoached",
+            "expected": "Coach 'Dog like water' or 'Dog jump... voda' with a short word he can reuse.",
+            "got": "Only 'Pes je mokrý' became a moment.",
+            "evidence": "#4 'Dog like water'; #7 'Dog jump... voda'; #9 'dog water'; #5 single moment.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "A recurring Czech word like 'voda' gets a tiny 'water' moment.",
+            "code_hint": "moment selection prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Situation list long and mixed for a nine-year-old",
+            "expected": "Short list of play and animal topics.",
+            "got": "20 entries including booking, lost jacket, group project and speaking-practice items.",
+            "evidence": "#1 and #11 situation list.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The list for an elementary profile shows only age-fit play, animal and sport situations.",
+            "code_hint": "situation list builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Help is findable and the progress picture stays honest",
+            "expected": "Help without leaving the scene, and no overclaiming.",
+            "got": "Cue, phrase choice and 'Said more simply' on the same screen; recap says '0 on your own · 3 with help'.",
+            "evidence": "#2, #3, #4, #7, #11.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep supported replies out of the independent count.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment quotes his words and is kid-simple",
+            "expected": "Quote the learner exactly, short fix.",
+            "got": "'You wanted to say Pes je mokrý.' / 'The dog is wet.'",
+            "evidence": "#5; the quote matches his #4 reply.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact quotes and short corrections.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Jo, the dog story was fun. I could say \"dog\" and \"splash!\" and it didn't laugh at me when I said \"voda\". The cue, \"First, my dog… Then…\", helped me start, and the tutor told me \"the dog is wet\", which I wanted to say. But then it asked me different things, \"next\", \"start\", \"the end\", and I never got to say \"the dog is wet\" again. Two sentences each time is a lot for me, and the choice screen had too many words. The list has booking and a lost jacket, which is school stuff. It's better than the club, where I talk two minutes, but I'd want a try-again question and shorter words. Maybe I'd tell Honza.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-5/LT-tomas-9-J4-2",
+            "status": "recurs",
+            "evidence": "#5 only 'Back to the conversation'; #11 '1 moment to keep'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-2",
+            "status": "recurs",
+            "evidence": "No fresh question to retry; #6 'What did he do next?' is unrelated to the moment.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-1",
+            "status": "recurs",
+            "evidence": "#5 'Back to the conversation'; #6 unrelated new question; #11 '1 moment to keep'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-4",
+            "status": "recurs",
+            "evidence": "#10 'Ha, Biscuit loved the splash! What happened at the end?' two sentences.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-2",
+            "status": "recurs",
+            "evidence": "#6 'Biscuit likes water too! What did he do next?'; #8 'Where did you start?' is past tense above A1.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-1",
+            "status": "recurs",
+            "evidence": "#5 then #6: the next question is unrelated to the moment.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-4",
+            "status": "not-seen",
+            "evidence": "#5 'Pes je mokrý is Czech. In English, say: the dog is wet.' is plain wording, no grammar jargon.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-5",
+            "status": "recurs",
+            "evidence": "#1 list includes 'A booking that is missing', 'The lost jacket', 'Our group project'.",
+            "finding": 4
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-3",
+            "status": "recurs",
+            "evidence": "#4 'Dog like water' and #7 'Dog jump... voda' got no moment; only 'Pes je mokrý' was coached.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: The #3 'Try:' cue and the #4 phrase choice did unblock replies. #5 quotes him exactly: 'You wanted to say Pes je mokrý.' The fix 'The dog is wet.' was never used afterwards: #7 'Dog jump... voda' and #9 'Dog water'. Only one of his several slips was coached.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #5 offers only 'Back to the conversation', and #6 asks a new but unrelated question, 'What did he do next?'. There is no replay of the moment. #10 ends before any retry: 'What happened at the end?' was never answered.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: #4 and #9 recognition task: 'First he ran in the water. Then he got wet.' plus 'Mr. Dan asks: What did your dog do?' plus the 'Try:' line is about 25 English words on one screen, above ~15."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #1 and #11 list of 20 entries includes 'A booking that is missing', 'Our group project', 'The lost jacket', 'The missing moon rover', and 'Speaking practice' items. They are not play, animal or sport topics and not suited to a 9-year-old."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #10 'Ha, Biscuit loved the splash! What happened at the end?' has two sentences. #6 'Biscuit likes water too! What did he do next?' also has two. 'Where did you start?' (#8) is a poor fit for the story ('start' and past tense)."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #5 'Pes je mokrý is Czech. In English, say: the dog is wet.' is clear. But #3 'Try: First, my dog ... Then ... After that ...' is a scaffold. #4 offers 'First he ran in the water' as a model answer, and 'Where did you start?' (#8) doesn't suit the mission. The 'Said more simply' help in #7 only drops 'Biscuit likes water too!'."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 18,
+      "fail": 0,
+      "ms": 166986
+    },
+    "character": {
+      "n": 28,
+      "fail": 0,
+      "ms": 112016
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 56974
+    }
+  }
+}

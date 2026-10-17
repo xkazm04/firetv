@@ -23,14 +23,14 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 6,
     "recurs": "2026-10-14-lt/recert-2/LT-tomas-9-J3-1",
     "suggested_acceptance": "For an elementary A1 profile, partner turns are at most 8 words, present tense, known vocabulary.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#4 'What did you do today?', #6 'Did you play outside?' answered 'Nevím' / Czech; past tense again."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#4-#16 present tense only; 11 of 13 at band. No past-tense questions like 'What did the creeper do'."
   },
   {
     "id": "LT-tomas-9-J4-3",
@@ -194,9 +194,9 @@
     "recurrence": 2,
     "suggested_acceptance": "A B2 slip repeated or exam-relevant (embedded question order, missing article) gets a moment or coaching note.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "No article error in her replies this run.",
+    "recertify_evidence": "She never said 'in Czech Republic' or 'used to' for a custom.",
     "recurred_as": "LT-adela-17-J3-4"
   },
   {
@@ -224,14 +224,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "recurs": "2026-10-14-lt/recert-5/LT-martin-45-J1-1",
     "suggested_acceptance": "The verdict's slips list includes at least one error from his earlier free answers, including the intake replies.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#2 'We was discussing about deadlines' never coached; #9 focus is only 'the plan for how we fix it'.",
-    "recurred_as": "LT-martin-45-J1-1"
+    "recertify_evidence": "#2 'We was discussing about deadlines' and #4 'when he don't agree' are not named in #10; the focus is only 'this delay make'.",
+    "recurred_as": "LT-martin-45-J1-2"
   },
   {
     "id": "LT-tomas-9-J4-1",
@@ -258,13 +258,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 8,
+    "recurrence": 9,
     "recurs": "2026-10-14-lt/recert-2/LT-tomas-9-J4-2",
     "suggested_acceptance": "Partner turns for elementary A1 stay under ~8 words with one question; at least 0.8 judged 'at'.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#11 'No dog here, I am building a house by the river. Where did you go yesterday?'",
+    "recertify_evidence": "#6 'Biscuit likes water too! What did he do next?'; #8 'Where did you start?' is past tense above A1.",
     "recurred_as": "LT-tomas-9-J4-2"
   },
   {
@@ -394,13 +394,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "recurs": "2026-10-14-lt/recert-4/LT-martin-45-J3-1",
     "suggested_acceptance": "A turn with a listed fossilised error (more better, confirm me, since-with-present) gets a moment or a recap coaching note within the scene.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#2 \"this parts since Monday\" and #7 \"confirm me\" went without a moment; only 1 of 3 error-bearing turns got one."
+    "recertify_evidence": "#3 'I am in this company since 2015' and #7 'He don't' got no moment; #16 '2 moments to keep'.",
+    "recurred_as": "LT-martin-45-J3-1"
   },
   {
     "id": "LT-tomas-9-J1-1",
@@ -596,14 +597,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "recurs": "2026-10-14-lt/recert-5/LT-tomas-9-J3-3",
     "suggested_acceptance": "Situation list filtered by elementary profile.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#1 list: 'A booking that is missing', 'Our group project', 'The lost jacket'.",
-    "recurred_as": "LT-tomas-9-J3-2"
+    "recertify_evidence": "#1 list still includes 'A booking that is missing', 'The lost jacket', 'Speaking practice: about you'.",
+    "recurred_as": "LT-tomas-9-J3-4"
   },
   {
     "id": "LT-tomas-9-J4-2",
@@ -630,13 +631,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "recurs": "2026-09-15-lt-recert2-beginners/LT-tomas-9-J4-2",
     "suggested_acceptance": "After a fix, the partner asks a new question using the coached pattern and the next reply is checked unsupported.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#8-#9 he typed 'I like creepers.', then #10 'Did you play with friends yesterday?'"
+    "recertify_evidence": "No fresh question to retry; #6 'What did he do next?' is unrelated to the moment."
   },
   {
     "id": "LT-tomas-9-J4-4",
@@ -794,13 +795,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "recurs": "2026-10-14-lt/recert-5/LT-martin-45-J1-2",
     "suggested_acceptance": "A B2 pass is not given when the answer has several basic grammar slips.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#9 B2 at low confidence; Task 2 passed with 'accurate grammar' despite 'without owner'."
+    "recertify_evidence": "#10 B2 again, with confidence medium; task 4 passed despite 'deliver' and 'this cost'; task 1 passed with 'He want'.",
+    "recurred_as": "LT-martin-45-J1-1"
   },
   {
     "id": "LT-adela-17-J3-3",
@@ -831,9 +833,9 @@
     "recurs": "2026-10-14-lt/recert-5/LT-adela-17-J3-1",
     "suggested_acceptance": "Article omissions get a moment or a recap note.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "No missing-article error in her turns (#2, #4, #5)."
+    "recertify_evidence": "No missing-article slip in her turns this run (#2–#7)."
   },
   {
     "id": "LT-adela-17-J1-2",
@@ -891,13 +893,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 3,
     "suggested_acceptance": "Partner stays in role and asks B2 questions tied to the mission.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#5 'Shall I take the deposit now?'; #4 'Will you bring it back by six o'clock?'",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#5 \"How would your rule stop that?\" — opinion/speculation, not logistics.",
     "recurred_as": "LT-adela-17-J3-1"
   },
   {
@@ -925,12 +927,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "The recap ties repeated slips to the level or a focus line.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#9 \"Your level: B2 · Comfortable\" next to a quote \"the plan for how we fix it\", no reasons.",
+    "recertify_evidence": "#16 'Your level: B2 · Comfortable' with only 'this delay makes' as evidence.",
     "recurred_as": "LT-martin-45-J3-2"
   },
   {
@@ -1124,13 +1126,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "recurs": "2026-10-14-lt/recert-5/LT-tomas-9-J4-5",
     "suggested_acceptance": "Elementary profile sees at most 6 child-fit situations.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#1 21 situations incl. 'A booking that is missing', 'The lost jacket'.",
+    "recertify_evidence": "#1 list includes 'A booking that is missing', 'The lost jacket', 'Our group project'.",
     "recurred_as": "LT-tomas-9-J4-5"
   },
   {
@@ -1158,14 +1160,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "recurs": "2026-10-14-lt/recert-5/LT-tomas-9-J3-4",
     "suggested_acceptance": "Model the sentence for repeated slips.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "#8 'Já hrál football' repeated with no moment; 'Já jsem good' at #7 and #11 got none.",
-    "recurred_as": "LT-tomas-9-J3-3"
+    "recertify_evidence": "#9 'Pes je brown.' and #13 'Dog house je brown' got no moment after 'Je to' was already shown at #8.",
+    "recurred_as": "LT-tomas-9-J3-2"
   },
   {
     "id": "LT-adela-17-J4-4",
@@ -1224,13 +1226,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "Czech fallbacks get a gentle English phrase offer.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "One moment only; #10 'Ben, you like dog?' and #11 'Ben, what you building?' uncoached.",
-    "recurred_as": "LT-tomas-9-J4-3"
+    "recertify_evidence": "#4 'Dog like water' and #7 'Dog jump... voda' got no moment; only 'Pes je mokrý' was coached.",
+    "recurred_as": "LT-tomas-9-J4-4"
   },
   {
     "id": "LT-martin-45-J1-3",

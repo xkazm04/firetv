@@ -1,0 +1,586 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to B2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nSam · classmate\nB2Comfortable · self-chosen\nShould Phones Be Banned in Class?\nYour mission\nGive a clear opinion, then disagree politely with a point and suggest a middle option.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nShould Phones Be Banned in Class?\nGive a clear opinion, then disagree politely with a point and suggest a middle option.\n[button: Start talking]\nOr choose a situation [list: Should Phones Be Banned in Class? [plan-2e1cc7a6] | Mock Interview About My Plans [plan-ce6d353b] | Plan a School Recycling Scheme [plan-fd7a9f73] | Asking About a Lecture Point [plan-47fc6833] | Telling About a Trip Abroad [plan-06bc772a] | Choosing a Train Ticket [plan-8eb41669] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "This topic about phones in class is exam-style, so I'll start with it.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6520
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · classmate\nShould Phones Be Banned in Class?\nSam says\nHonestly, I think the new phone ban is fair. Students get distracted fast. What's your view on it?\nYour turn\nAnswer on your phone: speak or type.\nNowGive an opinion with one reason\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nShould Phones Be Banned in Class?\nGive a clear opinion, then disagree politely and suggest a middle option.\nNow: Give an opinion with one reason\nHonestly, I think the new phone ban is fair. Students get distracted fast. What's your view on it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · classmate\nHonestly, I think the new phone ban is fair. Students get distracted fast. What's your view on it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Honestly, I think the new phone ban is fair. Students get distracted fast. What's your view on it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Good, a proper exam-style topic; I'll give my opinion with a reason.",
+          "action": "answer",
+          "args": {
+            "text": "Well, I partly agree with you, because phones are really distracting during lessons. Although I think a total ban is too strict, because students are interested about using them for actual information, for example dictionaries or school apps. I'd rather have a rule that phones can be used only when the teacher allows it."
+          },
+          "result": "ok",
+          "ms": 14443
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said students are interested about using them\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “students are interested about using them”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I think I know it's \"interested in\", so I'll try it myself.",
+          "action": "answer",
+          "args": {
+            "text": "Students are interested in using them for current information."
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said students are interested about using them\nYour try\nStudents are interested in using them for current information.\n'interested' is followed by 'in' before a noun or -ing form.\nYou fixed “interested in”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “interested in”\nYou said “students are interested about using them”\nYour try: “Students are interested in using them for current information.”\n'interested' is followed by 'in' before a noun or -ing form.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I fixed it; let's carry on with the discussion.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · classmate\nShould Phones Be Banned in Class?\nSam says\nYour reason is clear, and you disagree politely. But many teachers worry that phones make cheating easy during tests. How would your rule stop that?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nShould Phones Be Banned in Class?\nGive a clear opinion, then disagree politely and suggest a middle option.\nNow: Politely disagree with one of Sam's points\nYour reason is clear, and you disagree politely. But many teachers worry that phones make cheating easy during tests. How would your rule stop that?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · classmate\nHonestly, I think the new phone ban is fair. Students get distracted fast. What's your view on it?\nYou · spoken\nWell, I partly agree with you, because phones are really distracting during lessons. Although I think a total ban is too strict, because students are interested about using them for actual information, for example dictionaries or school apps. I'd rather have a rule that phones can be used only when the teacher allows it.\nSam · classmate\nYour reason is clear, and you disagree politely. But many teachers worry that phones make cheating easy during tests. How would your rule stop that?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your reason is clear, and you disagree politely. But many teachers worry that phones make cheating easy during tests. How would your rule stop that?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good question; I need to answer with a practical rule about tests.",
+          "action": "answer",
+          "args": {
+            "text": "I think during tests phones should be collected at the beginning of the lesson and put in a box on the teacher's desk. Whereas in normal lessons students could use them with permission, tests would be completely phone-free. It depends on the school, but I'd rather have this clear rule than a total ban. Was my sentence correct?"
+          },
+          "result": "ok",
+          "ms": 10394
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · classmate\nShould Phones Be Banned in Class?\nSam says\nYes, your sentence is correct, and 'Whereas in normal lessons' contrasts the two situations clearly. Do you think students would really hand in their phones for every test?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nShould Phones Be Banned in Class?\nGive a clear opinion, then disagree politely and suggest a middle option.\nNow: Agree on a middle option together\nYes, your sentence is correct, and 'Whereas in normal lessons' contrasts the two situations clearly. Do you think students would really hand in their phones for every test?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · classmate\nHonestly, I think the new phone ban is fair. Students get distracted fast. What's your view on it?\nYou · spoken\nWell, I partly agree with you, because phones are really distracting during lessons. Although I think a total ban is too strict, because students are interested about using them for actual information, for example dictionaries or school apps. I'd rather have a rule that phones can be used only when the teacher allows it.\nSam · classmate\nYour reason is clear, and you disagree politely. But many teachers worry that phones make cheating easy during tests. How would your rule stop that?\nYou · spoken\nI think during tests phones should be collected at the beginning of the lesson and put in a box on the teacher's desk. Whereas in normal lessons students could use them with permission, tests would be completely phone-free. It depends on the school, but I'd rather have this clear rule than a total ban. Was my sentence correct?\nSam · classmate\nYes, your sentence is correct, and 'Whereas in normal lessons' contrasts the two situations clearly. Do you think students would really hand in their phones for every test?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, your sentence is correct, and 'Whereas in normal lessons' contrasts the two situations clearly. Do you think students would really hand in their phones for every test?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good question; I'll answer with my real opinion and a small slip.",
+          "action": "answer",
+          "args": {
+            "text": "I think most students would do it if the rule is the same for everyone, because nobody wants to be the only one with a phone. However, some of them might hide a second phone, so teachers would eventually need to check the bags. Is it a good idea, or is it too much control?"
+          },
+          "result": "ok",
+          "ms": 10357
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · classmate\nShould Phones Be Banned in Class?\nSam says\nChecking bags feels strict, and some students would feel treated like suspects. Still, a clear rule might help everyone trust the system. Would you accept bag checks only during tests?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nShould Phones Be Banned in Class?\nGive a clear opinion, then disagree politely and suggest a middle option.\nNow: Agree on a middle option together\nChecking bags feels strict, and some students would feel treated like suspects. Still, a clear rule might help everyone trust the system. Would you accept bag checks only during tests?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · classmate\nHonestly, I think the new phone ban is fair. Students get distracted fast. What's your view on it?\nYou · spoken\nWell, I partly agree with you, because phones are really distracting during lessons. Although I think a total ban is too strict, because students are interested about using them for actual information, for example dictionaries or school apps. I'd rather have a rule that phones can be used only when the teacher allows it.\nSam · classmate\nYour reason is clear, and you disagree politely. But many teachers worry that phones make cheating easy during tests. How would your rule stop that?\nYou · spoken\nI think during tests phones should be collected at the beginning of the lesson and put in a box on the teacher's desk. Whereas in normal lessons students could use them with permission, tests would be completely phone-free. It depends on the school, but I'd rather have this clear rule than a total ban. Was my sentence correct?\nSam · classmate\nYes, your sentence is correct, and 'Whereas in normal lessons' contrasts the two situations clearly. Do you think students would really hand in their phones for every test?\nYou · spoken\nI think most students would do it if the rule is the same for everyone, because nobody wants to be the only one with a phone. However, some of them might hide a second phone, so teachers would eventually need to check the bags. Is it a good idea, or is it too much control?\nSam · classmate\nChecking bags feels strict, and some students would feel treated like suspects. Still, a clear rule might help everyone trust the system. Would you accept bag checks only during tests?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Checking bags feels strict, and some students would feel treated like suspects. Still, a clear rule might help everyone trust the system. Would you accept bag checks only during tests?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Fair question; I'd accept it if it's only for tests.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I would accept it, but only if the teacher explains the reason before the test. Although bag checks feel strict, I think they are better than students cheating, because it is unfair to everyone else. I'd rather have a short check at the door than a total ban. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 10831
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · classmate\nShould Phones Be Banned in Class?\nSam says\nYes, 'I'd rather have a short check at the door than a total ban' is correct, and it clearly states your middle option. What would happen to a student who forgets to hand in their phone?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nShould Phones Be Banned in Class?\nGive a clear opinion, then disagree politely and suggest a middle option.\nYes, 'I'd rather have a short check at the door than a total ban' is correct, and it clearly states your middle option. What would happen to a student who forgets to hand in their phone?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · classmate\nHonestly, I think the new phone ban is fair. Students get distracted fast. What's your view on it?\nYou · spoken\nWell, I partly agree with you, because phones are really distracting during lessons. Although I think a total ban is too strict, because students are interested about using them for actual information, for example dictionaries or school apps. I'd rather have a rule that phones can be used only when the teacher allows it.\nSam · classmate\nYour reason is clear, and you disagree politely. But many teachers worry that phones make cheating easy during tests. How would your rule stop that?\nYou · spoken\nI think during tests phones should be collected at the beginning of the lesson and put in a box on the teacher's desk. Whereas in normal lessons students could use them with permission, tests would be completely phone-free. It depends on the school, but I'd rather have this clear rule than a total ban. Was my sentence correct?\nSam · classmate\nYes, your sentence is correct, and 'Whereas in normal lessons' contrasts the two situations clearly. Do you think students would really hand in their phones for every test?\nYou · spoken\nI think most students would do it if the rule is the same for everyone, because nobody wants to be the only one with a phone. However, some of them might hide a second phone, so teachers would eventually need to check the bags. Is it a good idea, or is it too much control?\nSam · classmate\nChecking bags feels strict, and some students would feel treated like suspects. Still, a clear rule might help everyone trust the system. Would you accept bag checks only during tests?\nYou · spoken\nYes, I would accept it, but only if the teacher explains the reason before the test. Although bag checks feel strict, I think they are better than students cheating, because it is unfair to everyone else. I'd rather have a short check at the door than a total ban. Was my answer correct?\nSam · classmate\nYes, 'I'd rather have a short check at the door than a total ban' is correct, and it clearly states your middle option. What would happen to a student who forgets to hand in their phone?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'I'd rather have a short check at the door than a total ban' is correct, and it clearly states your middle option. What would happen to a student who forgets to hand in their phone?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Mission is done and I've answered about eight times, so I'll look at the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 9,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said students are interested about using them\nTry\nstudents are interested in using them\n'interested' is followed by 'in' before a noun or -ing form.\nYour mission\nChoose a fresh context for your next conversation.\n4 spoken · 0 written replies · 4 on your own · 0 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“That's a fair point, though it cuts both ways.”\nFrom this rehearsal\n“students are interested about using them” → “students are interested in using them”\n'interested' is followed by 'in' before a noun or -ing form.\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nMock Interview About My Plans\nDescribe your plans, skills and reasons clearly in an interview, using examples.\n[button: Start talking]\nOr choose a situation [list: Should Phones Be Banned in Class? [plan-2e1cc7a6] | Mock Interview About My Plans [plan-ce6d353b] | Plan a School Recycling Scheme [plan-fd7a9f73] | Asking About a Lecture Point [plan-47fc6833] | Telling About a Trip Abroad [plan-06bc772a] | Choosing a Train Ticket [plan-8eb41669] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Good, my mistake is saved on the map; that's enough practice for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Should Phones Be Banned in Class?",
+          "goal": "Give a clear opinion, then disagree politely and suggest a middle option.",
+          "partner": "Sam · classmate",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Honestly, I think the new phone ban is fair. Students get distracted fast. What's your view on it?"
+            },
+            {
+              "role": "learner",
+              "text": "Well, I partly agree with you, because phones are really distracting during lessons. Although I think a total ban is too strict, because students are interested about using them for actual information, for example dictionaries or school apps. I'd rather have a rule that phones can be used only when the teacher allows it.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Your reason is clear, and you disagree politely. But many teachers worry that phones make cheating easy during tests. How would your rule stop that?"
+            },
+            {
+              "role": "learner",
+              "text": "I think during tests phones should be collected at the beginning of the lesson and put in a box on the teacher's desk. Whereas in normal lessons students could use them with permission, tests would be completely phone-free. It depends on the school, but I'd rather have this clear rule than a total ban. Was my sentence correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, your sentence is correct, and 'Whereas in normal lessons' contrasts the two situations clearly. Do you think students would really hand in their phones for every test?"
+            },
+            {
+              "role": "learner",
+              "text": "I think most students would do it if the rule is the same for everyone, because nobody wants to be the only one with a phone. However, some of them might hide a second phone, so teachers would eventually need to check the bags. Is it a good idea, or is it too much control?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Checking bags feels strict, and some students would feel treated like suspects. Still, a clear rule might help everyone trust the system. Would you accept bag checks only during tests?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I would accept it, but only if the teacher explains the reason before the test. Although bag checks feel strict, I think they are better than students cheating, because it is unfair to everyone else. I'd rather have a short check at the door than a total ban. Was my answer correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'I'd rather have a short check at the door than a total ban' is correct, and it clearly states your middle option. What would happen to a student who forgets to hand in their phone?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "d4e1e09e-5b1c-4167-b911-9c9396df9609:uat-7:moment",
+              "kind": "fix",
+              "said": "students are interested about using them",
+              "better": "students are interested in using them",
+              "why": "'interested' is followed by 'in' before a noun or -ing form.",
+              "turnId": "d4e1e09e-5b1c-4167-b911-9c9396df9609:uat-7",
+              "at": 1792256552761,
+              "slip": "interested about",
+              "repair": {
+                "rung": 0,
+                "tried": "Students are interested in using them for current information.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "interested in"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Although I think a total ban is too strict"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I'd rather have this clear rule than a total ban"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Is it a good idea, or is it too much control?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Although bag checks feel strict, I think they are better than students cheating, because it is unfair to everyone else."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 128157,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Missing article again not flagged",
+          "expected": "Note on 'an English-taught programme'",
+          "got": "Not mentioned",
+          "evidence": [
+            "#2 \"I'd rather study in English-taught programme\"; no moment or recap note.",
+            "moment detection prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Missing article 'in Czech Republic' not flagged",
+          "expected": "Note on 'in the Czech Republic'.",
+          "got": "No moment; also unremarked 'used to whip' for a custom that continues.",
+          "evidence": [
+            "#8 \"in Czech Republic we have\"; recap #11 lists two moments only.",
+            "moment detection prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner stays at A2/B1 transactional questions",
+          "expected": "Opinion, comparison or speculation questions at B2 stretch.",
+          "got": "'Will you bring it back by six o'clock?' 'Shall I take the deposit now?'",
+          "evidence": [
+            "#4, #5: yes/no logistics; Adéla's B2 'Although... I'd rather...' replies get no stretch.",
+            "partner prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J3-5",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Recommended topics are service role-plays, not exam discussion",
+          "expected": "Technology, environment, education topics.",
+          "got": "Bike rental first, then café, train platform, headset.",
+          "evidence": [
+            "#1 topic list; thought: 'not very exam-like'.",
+            "plan topic generation"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Missed 'not used to cycle' (should be 'cycling')",
+          "expected": "A note on be used to + -ing.",
+          "got": "No moment or coaching on it.",
+          "evidence": [
+            "#4 'I'm not used to cycle for many hours'; no mention in #5 or recap #7.",
+            "moment detection prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 level shows \"B2 · Comfortable\", matching trueBand B2 (fixture-set)."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks or verdict notes in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#4 \"'interested' is followed by 'in' before a noun or -ing form.\" is correct; confirmations at #6 and #8 are accurate."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#5 \"How would your rule stop that?\", #6 \"Do you think students would really hand in their phones for every test?\" are B2 opinion/speculation questions."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 list: phones in class, mock interview, recycling scheme, lecture point, trip abroad are exam-relevant; only the train ticket is not (5 of 6)."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#6 \"Yes, your sentence is correct, and 'Whereas in normal lessons' contrasts...\"; #8 same for 'I'd rather...' — accurate and specific."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 starts the plan topic; #2–#8 she gives four substantive replies and the scene continues."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "All five partner turns are B2 level, e.g. #7 \"Still, a clear rule might help everyone trust the system.\""
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "One moment (#3), correct: \"interested about\" → \"interested in\"; 1 moment in 4 learner turns, scene kept flowing."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#9 recap: \"1 moment to keep\" and the saved fix with its rule; she felt it was real practice."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "False friend 'actual information' left uncorrected",
+            "expected": "A note that 'actual' means real; 'current' is intended, per her known false-friend slip.",
+            "got": "Moment fixed only 'interested about'; 'actual' was never named. Her own retry silently used 'current'.",
+            "evidence": "#2 \"for actual information\"; #3 only \"interested about\" flagged; #9 recap lists one fix.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "When a turn contains a known false friend, the moment or coaching names it with a rule.",
+            "code_hint": "moment detection prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment is exact, correct and gives the rule",
+            "expected": "One exact correction with the rule.",
+            "got": "\"interested\" is followed by \"in\" before a noun or -ing form, with her own retry.",
+            "evidence": "#3-#4 \"You fixed 'interested in'\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the say-it-again moment with the rule.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Partner asks B2 opinion and speculation questions",
+            "expected": "Challenging questions at B2.",
+            "got": "\"How would your rule stop that?\" and \"Do you think students would really hand in their phones...?\"",
+            "evidence": "#5, #6",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep topic-linked stretch questions.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Partner answers 'Was it correct?' with only yes plus praise",
+            "expected": "A precise verdict, and a note about any slip in the answer.",
+            "got": "\"Yes, your sentence is correct\" with a short admiration of one connector.",
+            "evidence": "#6, #8",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Answer names what was checked and what could be sharper.",
+            "code_hint": "partner prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "low"
+        },
+        "voice": "Finally a topic that feels like the speaking exam: phones in class, with Sam asking me how my rule would stop cheating. The questions were properly B2, not pet small talk, and the \"interested about\" fix was exactly right, with the rule. I liked saying it again myself. But I used \"actual information\" and nobody told me, and that is exactly my freezing point, so I can't fully trust that I've been checked. When I asked \"Was my sentence correct?\" I got a yes, which was fine but a little polite-classmate. I'd use it again for opinion practice, but I'd still keep my notebook for false friends. Worth telling classmates about if the corrections get sharper.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-3",
+            "status": "not-evaluable",
+            "evidence": "No missing-article slip in her turns this run (#2–#7).",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-4",
+            "status": "not-evaluable",
+            "evidence": "She never said 'in Czech Republic' or 'used to' for a custom.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J3-1",
+            "status": "not-seen",
+            "evidence": "#5 \"How would your rule stop that?\" — opinion/speculation, not logistics.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J3-5",
+            "status": "not-seen",
+            "evidence": "#1 first recommended topic is \"Should Phones Be Banned in Class?\".",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J3-2",
+            "status": "not-evaluable",
+            "evidence": "No 'be used to + -ing' error in her turns this run.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 6,
+      "fail": 0,
+      "ms": 87556
+    },
+    "character": {
+      "n": 9,
+      "fail": 0,
+      "ms": 40224
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 31231
+    }
+  }
+}

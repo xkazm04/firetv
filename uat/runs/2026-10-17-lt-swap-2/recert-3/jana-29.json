@@ -1,0 +1,678 @@
+{
+  "character": "jana-29",
+  "name": "Jana",
+  "trueBand": "C1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to C1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nPriya · team colleague\nC1Fluent · self-chosen\nDeclining after-work drinks\nYour mission\nTurn down a pub invitation warmly, give a reason without over-explaining, and suggest another time.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\n· self-chosen\nNext topic:\nDeclining after-work drinks\nTurn down a pub invitation warmly, give a reason without over-explaining, and suggest another time.\n[button: Start talking]\nOr choose a situation [list: Declining after-work drinks [plan-9555924d] | Disagreeing with a senior designer [plan-2af66578] | Flat viewing with a pushy landlord [plan-f4f79cc6] | Small talk with a new colleague [plan-57ed1948] | Clarifying a vague brief [plan-60f84b1b] | Describing a hobby and what you like [plan-5806243d] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Declining drinks is actually relevant to me, so let's get going.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8583
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nPriya · team colleague\nDeclining a pub invitation in Dublin\nPriya says\nRight, we're heading to the pub round the corner after that sprint review. Coming along, or are you properly wiped out like the rest of us?\nYour turn\nAnswer on your phone: speak or type.\nNowDecline without sounding cold\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nDeclining a pub invitation in Dublin\nTurn down after-work drinks warmly, give a short reason, and suggest another time.\nNow: Decline without sounding cold\nRight, we're heading to the pub round the corner after that sprint review. Coming along, or are you properly wiped out like the rest of us?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · team colleague\nRight, we're heading to the pub round the corner after that sprint review. Coming along, or are you properly wiped out like the rest of us?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Right, we're heading to the pub round the corner after that sprint review. Coming along, or are you properly wiped out like the rest of us?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Easy enough; I'll decline politely with a reason and suggest another time.",
+          "action": "answer",
+          "args": {
+            "text": "Ah, I'd love to, but to be fair I'm properly wiped out, so I think I'll head home tonight. Have one for me though! Let's do it next week, maybe on Thursday, and the first round is on me."
+          },
+          "result": "ok",
+          "ms": 9124
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nPriya · team colleague\nDeclining a pub invitation in Dublin\nPriya says\nFair enough, you do look knackered! Next Thursday sounds good, and I'll hold you to that first round. Which pub should we try?\nYour turn\nAnswer on your phone: speak or type.\nNowGive one short, honest reason\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nDeclining a pub invitation in Dublin\nTurn down after-work drinks warmly, give a short reason, and suggest another time.\nNow: Give one short, honest reason\nFair enough, you do look knackered! Next Thursday sounds good, and I'll hold you to that first round. Which pub should we try?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · team colleague\nRight, we're heading to the pub round the corner after that sprint review. Coming along, or are you properly wiped out like the rest of us?\nYou · spoken\nAh, I'd love to, but to be fair I'm properly wiped out, so I think I'll head home tonight. Have one for me though! Let's do it next week, maybe on Thursday, and the first round is on me.\nPriya · team colleague\nFair enough, you do look knackered! Next Thursday sounds good, and I'll hold you to that first round. Which pub should we try?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Fair enough, you do look knackered! Next Thursday sounds good, and I'll hold you to that first round. Which pub should we try?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy question, but I'll answer naturally and suggest somewhere.",
+          "action": "answer",
+          "args": {
+            "text": "Oh, I'm not fussy, to be honest. Whatever's close to the office works for me. Maybe that place on the corner with the snug, if it's not too packed on the Thursday? I'd rather somewhere we can actually hear each other talk."
+          },
+          "result": "ok",
+          "ms": 16331
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nJana\nA way into English\nA moment\nYou said I'd rather somewhere we can actually hear each other talk.\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I'd rather somewhere we can actually hear each other talk.”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I dropped \"to\" before \"hear\"? Fine, I'll just say it again properly.",
+          "action": "answer",
+          "args": {
+            "text": "I'd rather go somewhere where we can actually hear each other talk."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nJana\nA way into English\nA moment\nYou said I'd rather somewhere we can actually hear each other talk.\nYour line\n'Rather' needs a verb after it, so 'prefer' fits before a place.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I'd rather somewhere we can actually hear each other talk.”\nSay it again, your way.\n'Rather' needs a verb after it, so 'prefer' fits before a place.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fair, 'rather' without a verb is a bit off; I'll just fix it with 'prefer'.",
+          "action": "answer",
+          "args": {
+            "text": "Fair enough. I'd prefer somewhere we can actually hear each other talk."
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nJana\nA way into English\nA moment\nYou said I'd rather somewhere we can actually hear each other talk.\nYour try\nFair enough. I'd prefer somewhere we can actually hear each other talk.\n'Rather' needs a verb after it, so 'prefer' fits before a place.\nYou fixed “i'd prefer”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “i'd prefer”\nYou said “I'd rather somewhere we can actually hear each other talk.”\nYour try: “Fair enough. I'd prefer somewhere we can actually hear each other talk.”\n'Rather' needs a verb after it, so 'prefer' fits before a place.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fair, 'prefer' it is. Let's get back to the chat.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nPriya · team colleague\nDeclining a pub invitation in Dublin\nPriya says\nGood shout, that snug is the best spot in the place. Go on, just the one tonight before you head off? The lads will be gutted.\nYour turn\nAnswer on your phone: speak or type.\nNowGive one short, honest reason\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nDeclining a pub invitation in Dublin\nTurn down after-work drinks warmly, give a short reason, and suggest another time.\nNow: Give one short, honest reason\nGood shout, that snug is the best spot in the place. Go on, just the one tonight before you head off? The lads will be gutted.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · team colleague\nRight, we're heading to the pub round the corner after that sprint review. Coming along, or are you properly wiped out like the rest of us?\nYou · spoken\nAh, I'd love to, but to be fair I'm properly wiped out, so I think I'll head home tonight. Have one for me though! Let's do it next week, maybe on Thursday, and the first round is on me.\nPriya · team colleague\nFair enough, you do look knackered! Next Thursday sounds good, and I'll hold you to that first round. Which pub should we try?\nYou · spoken\nOh, I'm not fussy, to be honest. Whatever's close to the office works for me. Maybe that place on the corner with the snug, if it's not too packed on the Thursday? I'd rather somewhere we can actually hear each other talk.\nPriya · team colleague\nGood shout, that snug is the best spot in the place. Go on, just the one tonight before you head off? The lads will be gutted.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good shout, that snug is the best spot in the place. Go on, just the one tonight before you head off? The lads will be gutted.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Pushy but friendly; I'll hold firm with a short honest reason and keep it light.",
+          "action": "answer",
+          "args": {
+            "text": "Ah, stop, you're killing me! Honestly, I've had a really long day and my head's completely fried, so if I stayed for just the one, I'd be rubbish company. Thursday I'll be much better, I promise. Tell the lads I'll make it up to them."
+          },
+          "result": "ok",
+          "ms": 12794
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nPriya · team colleague\nDeclining a pub invitation in Dublin\nPriya says\nGo on then, Thursday it is! Ciara's leaving do is the Friday after, so you're coming to that one, yeah?\nYour turn\nAnswer on your phone: speak or type.\nNowSuggest a specific time to meet\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nDeclining a pub invitation in Dublin\nTurn down after-work drinks warmly, give a short reason, and suggest another time.\nNow: Suggest a specific time to meet\nGo on then, Thursday it is! Ciara's leaving do is the Friday after, so you're coming to that one, yeah?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · team colleague\nRight, we're heading to the pub round the corner after that sprint review. Coming along, or are you properly wiped out like the rest of us?\nYou · spoken\nAh, I'd love to, but to be fair I'm properly wiped out, so I think I'll head home tonight. Have one for me though! Let's do it next week, maybe on Thursday, and the first round is on me.\nPriya · team colleague\nFair enough, you do look knackered! Next Thursday sounds good, and I'll hold you to that first round. Which pub should we try?\nYou · spoken\nOh, I'm not fussy, to be honest. Whatever's close to the office works for me. Maybe that place on the corner with the snug, if it's not too packed on the Thursday? I'd rather somewhere we can actually hear each other talk.\nPriya · team colleague\nGood shout, that snug is the best spot in the place. Go on, just the one tonight before you head off? The lads will be gutted.\nYou · spoken\nAh, stop, you're killing me! Honestly, I've had a really long day and my head's completely fried, so if I stayed for just the one, I'd be rubbish company. Thursday I'll be much better, I promise. Tell the lads I'll make it up to them.\nPriya · team colleague\nGo on then, Thursday it is! Ciara's leaving do is the Friday after, so you're coming to that one, yeah?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Go on then, Thursday it is! Ciara's leaving do is the Friday after, so you're coming to that one, yeah?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Ciara's do is a bit much; I'll be warm but noncommittal and suggest a time for Thursday.",
+          "action": "answer",
+          "args": {
+            "text": "Ah, brilliant, Thursday it is then. Shall we say six o'clock, straight after work, so we get the snug before it fills up? As for Ciara's do, I'd love to pop in, at least for a bit, but let me check my diary and I'll let you know tomorrow."
+          },
+          "result": "ok",
+          "ms": 10254
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nPriya · team colleague\nDeclining a pub invitation in Dublin\nPriya says\nSix o'clock in the snug it is, then! Ciara's do is a long one, so no pressure to stay late. Also, we're going for a curry after on Friday, if you fancy it?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nDeclining a pub invitation in Dublin\nTurn down after-work drinks warmly, give a short reason, and suggest another time.\nSix o'clock in the snug it is, then! Ciara's do is a long one, so no pressure to stay late. Also, we're going for a curry after on Friday, if you fancy it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · team colleague\nRight, we're heading to the pub round the corner after that sprint review. Coming along, or are you properly wiped out like the rest of us?\nYou · spoken\nAh, I'd love to, but to be fair I'm properly wiped out, so I think I'll head home tonight. Have one for me though! Let's do it next week, maybe on Thursday, and the first round is on me.\nPriya · team colleague\nFair enough, you do look knackered! Next Thursday sounds good, and I'll hold you to that first round. Which pub should we try?\nYou · spoken\nOh, I'm not fussy, to be honest. Whatever's close to the office works for me. Maybe that place on the corner with the snug, if it's not too packed on the Thursday? I'd rather somewhere we can actually hear each other talk.\nPriya · team colleague\nGood shout, that snug is the best spot in the place. Go on, just the one tonight before you head off? The lads will be gutted.\nYou · spoken\nAh, stop, you're killing me! Honestly, I've had a really long day and my head's completely fried, so if I stayed for just the one, I'd be rubbish company. Thursday I'll be much better, I promise. Tell the lads I'll make it up to them.\nPriya · team colleague\nGo on then, Thursday it is! Ciara's leaving do is the Friday after, so you're coming to that one, yeah?\nYou · spoken\nAh, brilliant, Thursday it is then. Shall we say six o'clock, straight after work, so we get the snug before it fills up? As for Ciara's do, I'd love to pop in, at least for a bit, but let me check my diary and I'll let you know tomorrow.\nPriya · team colleague\nSix o'clock in the snug it is, then! Ciara's do is a long one, so no pressure to stay late. Also, we're going for a curry after on Friday, if you fancy it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Six o'clock in the snug it is, then! Ciara's do is a long one, so no pressure to stay late. Also, we're going for a curry after on Friday, if you fancy it?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission's done and I've had enough replies, so time to see how I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 10,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nJana\nA way into English\nYour rehearsal\nYou said I'd rather somewhere we can actually hear each other talk.\nTry\nI'd prefer somewhere we can actually hear each other talk.\n'Rather' needs a verb after it, so 'prefer' fits before a place.\nYour mission\nChoose a fresh context for your next conversation.\n4 spoken · 0 written replies · 4 on your own · 0 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Could I take a rain check on that?”\nFrom this rehearsal\n“I'd rather somewhere we can actually hear each other talk.” → “I'd prefer somewhere we can actually hear each other talk.”\n'Rather' needs a verb after it, so 'prefer' fits before a place.\nYour level:\nC1 · Fluent\n· self-chosen\nNext topic:\nDisagreeing with a senior designer\nDisagree with a senior colleague's feedback respectfully, give clear reasons, and propose a way to check.\n[button: Start talking]\nOr choose a situation [list: Declining after-work drinks [plan-9555924d] | Disagreeing with a senior designer [plan-2af66578] | Flat viewing with a pushy landlord [plan-f4f79cc6] | Small talk with a new colleague [plan-57ed1948] | Clarifying a vague brief [plan-60f84b1b] | Describing a hobby and what you like [plan-5806243d] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Rehearsal saved, the 'prefer' correction is fair; I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Declining a pub invitation in Dublin",
+          "goal": "Turn down after-work drinks warmly, give a short reason, and suggest another time.",
+          "partner": "Priya · team colleague",
+          "band": "C1",
+          "trueBand": "C1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Right, we're heading to the pub round the corner after that sprint review. Coming along, or are you properly wiped out like the rest of us?"
+            },
+            {
+              "role": "learner",
+              "text": "Ah, I'd love to, but to be fair I'm properly wiped out, so I think I'll head home tonight. Have one for me though! Let's do it next week, maybe on Thursday, and the first round is on me.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Fair enough, you do look knackered! Next Thursday sounds good, and I'll hold you to that first round. Which pub should we try?"
+            },
+            {
+              "role": "learner",
+              "text": "Oh, I'm not fussy, to be honest. Whatever's close to the office works for me. Maybe that place on the corner with the snug, if it's not too packed on the Thursday? I'd rather somewhere we can actually hear each other talk.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Good shout, that snug is the best spot in the place. Go on, just the one tonight before you head off? The lads will be gutted."
+            },
+            {
+              "role": "learner",
+              "text": "Ah, stop, you're killing me! Honestly, I've had a really long day and my head's completely fried, so if I stayed for just the one, I'd be rubbish company. Thursday I'll be much better, I promise. Tell the lads I'll make it up to them.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Go on then, Thursday it is! Ciara's leaving do is the Friday after, so you're coming to that one, yeah?"
+            },
+            {
+              "role": "learner",
+              "text": "Ah, brilliant, Thursday it is then. Shall we say six o'clock, straight after work, so we get the snug before it fills up? As for Ciara's do, I'd love to pop in, at least for a bit, but let me check my diary and I'll let you know tomorrow.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Six o'clock in the snug it is, then! Ciara's do is a long one, so no pressure to stay late. Also, we're going for a curry after on Friday, if you fancy it?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "0448c765-325e-496b-969d-b4a171bdfdac:uat-8:moment",
+              "kind": "fix",
+              "said": "I'd rather somewhere we can actually hear each other talk.",
+              "better": "I'd prefer somewhere we can actually hear each other talk.",
+              "why": "'Rather' needs a verb after it, so 'prefer' fits before a place.",
+              "turnId": "0448c765-325e-496b-969d-b4a171bdfdac:uat-8",
+              "at": 1792256567148,
+              "slip": "i'd rather",
+              "repair": {
+                "rung": 1,
+                "tried": "Fair enough. I'd prefer somewhere we can actually hear each other talk.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "i'd prefer"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I'd love to, but to be fair I'm properly wiped out"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Maybe that place on the corner with the snug, if it's not too packed on the Thursday?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Thursday I'll be much better, I promise. Tell the lads I'll make it up to them."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Shall we say six o'clock, straight after work, so we get the snug before it fills up?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 132452,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-1/LT-jana-29-J3-2",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Recap is inaccurate and generic",
+          "expected": "Specific recap naming what was practised, correct counts",
+          "got": "'4 spoken · 0 written replies' after 5 replies; sentence 'I'm not really the right audience for it' was not hers",
+          "evidence": [
+            "#7 recap vs #2-#5 five answers.",
+            "recap builder / evidence counting"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-2",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Recap is bare",
+          "expected": "Specific recap of what was practised, with phrases gained",
+          "got": "\"3 spoken · 0 written replies\", level-check phrase only",
+          "evidence": [
+            "#6 recap",
+            "recap builder"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "missing-feature",
+          "dimension": "senior-quality",
+          "title": "Fluent practice again yields no new language to keep",
+          "expected": "One or two idiom or register takeaways at C1",
+          "got": "Zero moments, no coaching",
+          "evidence": [
+            "facts.conversation moments [] and coaching null; Declan's 'grand' and 'a scramble' never surfaced.",
+            "moment trigger rules"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Recap is bare and mislabels help",
+          "expected": "Specific recap naming what was practised and phrases to reuse",
+          "got": "Counts only, '2 with help' though no help was used",
+          "evidence": [
+            "#6 \"3 spoken · 0 written replies · 1 on your own · 2 with help\"",
+            "recap builder"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-jana-29-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Mission closes after three replies",
+          "expected": "Scene runs about eight learner replies",
+          "got": "\"Mission done\" shown at #6 with Owen's question \"Who could we invite first?\" still open",
+          "evidence": [
+            "#6 \"Mission done. See what you did tonight.\" after only 3 learner replies",
+            "mission completion rule"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-jana-29-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Recap is bare and mislabels help",
+          "expected": "A specific recap naming what was practised, with phrases to reuse, and correct counts",
+          "got": "Counts only, \"2 on your own · 1 with help\" though Jana used no help",
+          "evidence": [
+            "#7 \"3 spoken · 0 written replies · 2 on your own · 1 with help · 1 moment to keep\"",
+            "recap builder / evidence counting"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-jana-29-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Only moment is a B1-level word swap",
+          "expected": "A C1 insight on register, idiom or collocation",
+          "got": "\"on the picture\" → \"on the screen\", with a thin explanation",
+          "evidence": [
+            "#4 \"A word for this scene… the screens shoppers see during checkout\"",
+            "moment trigger rules"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-jana-29-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner calls the learner by its own name",
+          "expected": "A natural colleague who addresses Jana correctly",
+          "got": "Owen says \"Thanks for joining the review, Owen\"",
+          "evidence": [
+            "#2 partner opening line",
+            "conversation partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Level set to C1 by fixture; no placement in this journey."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No check tasks in J3."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3-#9 Priya: \"you do look knackered\", \"Good shout\", \"The lads will be gutted\", \"Go on then\" are natural Irish colleague English."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#4-#6 only moment swaps \"I'd rather somewhere\" for \"I'd prefer\"; correct but a basic slip, no idiom/register insight. The partner's \"knackered\", \"good shout\", \"gutted\" were never surfaced."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 plan list: drinks, disagreeing with senior designer, pushy landlord, small talk, clarifying a brief are all workplace/relocation nuance (5 of 6)."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No verdict summary in this journey; #10 recap is counts and one moment."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 Start talking on plan topic; four replies #2,#3,#7,#8 kept going."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "All five partner turns at C1, e.g. #7 \"Go on, just the one tonight before you head off?\""
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "One moment in four learner turns (#4), correct: \"'Rather' needs a verb after it\". It did not break the scene."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#10 recap: \"4 spoken · 0 written replies · 4 on your own · 0 with help · 1 moment to keep\" plus a line to reuse, \"Could I take a rain check on that?\""
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "Nothing adult, no sensitive data request, nothing humiliating."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Partner talks like a Dublin colleague",
+            "expected": "Natural C1 colleague English",
+            "got": "Idiomatic, warm, pushy-friendly banter",
+            "evidence": "#3 \"you do look knackered\"; #5 \"Good shout\"; #7 \"The lads will be gutted\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep partner register at C1 Irish English.",
+            "code_hint": "conversation partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Only moment is a basic slip, not a C1 insight",
+            "expected": "Idiom or register point new at C1",
+            "got": "\"I'd rather\" to \"I'd prefer\", thin explanation",
+            "evidence": "#4-#6 \"'Rather' needs a verb after it, so 'prefer' fits before a place.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "For C1 learners prefer moments on register, idiom or collocation, e.g. 'knackered', 'good shout', 'take a rain check'.",
+            "code_hint": "moment trigger rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Mission closes after four replies with question open",
+            "expected": "Scene runs about eight replies",
+            "got": "\"Mission done\" while Priya's curry question is open",
+            "evidence": "#9 \"Mission done. See what you did tonight.\" after \"if you fancy it?\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Do not close the mission while the partner asks an open question.",
+            "code_hint": "mission completion rule"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Recap counts are now accurate",
+            "expected": "Correct counts",
+            "got": "4 spoken, 4 on your own, 0 with help, moment to keep",
+            "evidence": "#10 recap line matches four replies",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the counts accurate.",
+            "code_hint": "recap builder"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 15,
+          "confidence": "low"
+        },
+        "voice": "The partner is the best part. Priya sounds like an actual Dublin colleague: \"knackered\", \"good shout\", \"the lads will be gutted\". That's what I came for, and it never talked down to me. The scene was believable, and declining drinks is exactly my worry.\n\nThe one stop was a miss for me. I said \"I'd rather somewhere\", it's a fair slip, and the fix is correct. But it's something I know. I wanted to hear why \"good shout\" works, or whether \"take a rain check\" is too casual with a manager. The recap offered that line but never tied it to my scene. It also ended after four replies while Priya was still asking about the curry.\n\nWould I use it again? Yes, for the banter practice. Is it a Preply replacement yet? Not quite, because the teaching is thin at C1. Still, 15 minutes whenever beats scheduling across time zones.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-1/LT-jana-29-J3-2",
+            "status": "not-seen",
+            "evidence": "#10 recap counts \"4 spoken · 4 on your own\" match four replies; no foreign sentence.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-2",
+            "status": "not-seen",
+            "evidence": "#10 recap has counts, a moment to keep and \"Could I take a rain check on that?\"",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-2",
+            "status": "recurs",
+            "evidence": "The one moment is a basic slip (#4-#6); \"knackered\", \"good shout\" never surfaced.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-3",
+            "status": "not-seen",
+            "evidence": "#10 \"4 on your own · 0 with help\" is accurate.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-jana-29-J3-1",
+            "status": "recurs",
+            "evidence": "#9 \"Mission done\" after four replies with \"if you fancy it?\" still open.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-jana-29-J3-2",
+            "status": "not-seen",
+            "evidence": "#10 help count is 0 and matches Jana using no help.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-jana-29-J3-3",
+            "status": "recurs",
+            "evidence": "#6 \"I'd rather\" to \"I'd prefer\" is a thin word swap with a short explanation.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-jana-29-J3-4",
+            "status": "not-seen",
+            "evidence": "Priya never uses a wrong name for the learner in #2-#9.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #4-#6 only moment swaps \"I'd rather somewhere\" for \"I'd prefer\"; correct but a basic slip, no idiom/register insight. The partner's \"knackered\", \"good shout\", \"gutted\" were never surfaced."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 6,
+      "fail": 0,
+      "ms": 89033
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 42976
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 29259
+    }
+  }
+}
