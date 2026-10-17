@@ -810,3 +810,11 @@ test('L1-nela-12-MB1-1 (recert-2): "na dvě desetinná místa" reads as a roundi
  for(const [q,l] of [['Zaokrouhli 3,456 na dvě desetinná místa','3,46'],['Zaokrouhli 3,456 na 2 desetinná místa','3,46'],['Zaokrouhli 3,4567 na tři desetinná místa','Je to 3,457.'],['Zaokrouhli 3,456 na jedno desetinné místo','3,5']])assert.equal(M.leaks(q,l,'cz'),true,`${q} | ${l}`);
  for(const [q,l] of [['Zaokrouhli 3,456 na dvě desetinná místa','Podívej se na číslici na místě tisícin.']])assert.equal(M.leaks(q,l,'cz'),false,`${q} | ${l}`);
 });
+test('L1-vojtech-18-MB1-2 (recert-2): an unspaced pair "(1,3)" is a point, so the line through two such points leaks; a decimal-comma point still reads',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts')),T=require(path.join(root,'src/lib/rules/maturita.ts'));
+ for(const q of ['Find the line through (1,3) and (3,7)','Find the line through (1, 3) and (3, 7)']){
+  assert.equal(M.leaks(q,'The line is y = 2x + 1.','en'),true,q);
+  assert.equal(M.leaks(q,'Find the slope first: rise over run.','en'),false,q);
+ }
+ assert.deepEqual(T.lineOf('Najděte přímku A[1,5; 2], B[3,5; 6]'),{m:2,c:-1});
+});

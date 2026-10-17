@@ -97,8 +97,11 @@ export interface TwoPointLine { m: number; c: number }
 /** The line through two points written A[1, 2], B(3; 8) or (1, 2) ... (3, 8), as y = mx + c; null for a vertical line or no reading. */
 export function lineOf(text: unknown): TwoPointLine | null {
   if (typeof text !== "string" || !/(?:primk|line|straight)/i.test(fold(text))) return null;
-  const t = text.replace(/[−–]/g, "-").replace(/(\d),(\d)(?!\d)/g, "$1.$2");
-  const pts = [...t.matchAll(new RegExp(String.raw`[\[(]\s*(${NUM})\s*[,;]\s*(${NUM})\s*[\])]`, "g"))].map((p) => [toNum(p[1]), toNum(p[2])]);
+  const raw = text.replace(/[−–]/g, "-");
+  const points = (t: string) => [...t.matchAll(new RegExp(String.raw`[\[(]\s*(${NUM})\s*[,;]\s*(${NUM})\s*[\])]`, "g"))].map((p) => [toNum(p[1]), toNum(p[2])]);
+  // '(1,3)' is a point, not the decimal 1.3: read the brackets as written first, and only then with a decimal comma ('A[1,5; 2]')
+  let pts = points(raw);
+  if (pts.length !== 2) pts = points(raw.replace(/(\d),(\d)(?!\d)/g, "$1.$2"));
   if (pts.length !== 2 || near(pts[0][0], pts[1][0])) return null;
   const m = (pts[1][1] - pts[0][1]) / (pts[1][0] - pts[0][0]);
   return { m, c: pts[0][1] - m * pts[0][0] };
