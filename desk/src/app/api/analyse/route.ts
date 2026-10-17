@@ -8,7 +8,7 @@ import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence } from "@/lib/desk/essay";
 import { BUSY, blocksRun, refused, runJob, type JobRun } from "@/lib/desk/job";
 import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, type AnalysisType } from "@/lib/rules/essay";
-import { addPiece, addVersion, FORMAT_NEEDED_LINE, hasFormat, noticed, TEXT_NOTICE } from "@/lib/session/texts";
+import { addPiece, addVersion, FORMAT_NEEDED_LINE, getPiece, hasFormat, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { learnerAge } from "@/lib/rules/voice";
 import { modeOf } from "@/lib/rules/mode";
 import { sentenceProblem } from "@/lib/rules/english";
@@ -118,15 +118,18 @@ export async function POST(req: Request) {
     if (!paragraphsOf(body.text).some(paragraphIsEnglish)) return refusedWithLine(NOT_ENGLISH_LINE);
     let pieceId: string | undefined;
     if (body.keep) {
+      // a pieceId that is no longer on the shelf (deleted since the phone opened it) is no pieceId: a new piece (L1-daniel-15-EM3-6)
+      const named = typeof body.pieceId === "string" && getPiece(who.id, body.pieceId) ? body.pieceId : undefined;
+      const target = named;
       // a new piece needs a chosen format (a new version of a kept piece keeps the piece's own): refused before anything is kept
-      if (typeof body.pieceId !== "string" && !hasFormat(body.format)) return NextResponse.json({ error: FORMAT_NEEDED_LINE }, { status: 400 });
+      if (!target && !hasFormat(body.format)) return NextResponse.json({ error: FORMAT_NEEDED_LINE }, { status: 400 });
       // a reading already running refuses this one: refused before the piece is kept, so a refused send leaves no piece on the shelf
       if (blocksRun(getSession().jobs?.analyse, who.id)) return refused({ status: 409, error: BUSY });
       if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });
-      const kept = typeof body.pieceId === "string" ? addVersion(who.id, body.pieceId, { text: body.text, source: body.source }) : addPiece(who.id, { text: body.text, source: body.source, format: body.format });
+      let kept = target ? addVersion(who.id, target, { text: body.text, source: body.source }) : addPiece(who.id, { text: body.text, source: body.source, format: body.format });
       // the same text kept again is not a failure: the reading goes ahead on the version already kept
+      if (!kept.ok && target && kept.status === 400 && /kept last/.test(kept.error)) { pieceId = target; kept = { ok: true, value: getPiece(who.id, target)! }; }
       if (kept.ok) pieceId = kept.value.id;
-      else if (typeof body.pieceId === "string" && kept.status === 400 && /kept last/.test(kept.error)) pieceId = body.pieceId;
       else return NextResponse.json({ error: kept.error }, { status: kept.status });
     }
     const paragraphs = paragraphsOf(body.text).length;

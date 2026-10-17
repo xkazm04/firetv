@@ -13,7 +13,7 @@ export interface ShelfCard { id: string; format: string; title: string; versions
 const FORMAT_LABEL: Record<string, string> = { message: "Message", email: "Email", essay: "Essay" };
 const when = (at: number) => new Date(at).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 
-export function EssayShelf({ learnerId, refresh, onOpen }: { learnerId: string | undefined; refresh: number; onOpen: (id: string, text: string) => void }) {
+export function EssayShelf({ learnerId, refresh, onOpen, onGone }: { learnerId: string | undefined; refresh: number; onOpen: (id: string, text: string) => void; onGone?: (id: string | "all") => void }) {
   const [cards, setCards] = useState<ShelfCard[] | null>(null);
   const [sure, setSure] = useState(false);
   const [say, setSay] = useState("");
@@ -29,8 +29,8 @@ export function EssayShelf({ learnerId, refresh, onOpen }: { learnerId: string |
       if (r.ok && j.versions?.length) onOpen(id, j.versions[j.versions.length - 1].text); else setSay(j.error ?? "That piece could not be opened.");
     } catch { setSay("That did not reach the desk."); }
   };
-  const remove = async (q: string, done: string) => {
-    try { const r = await fetch(`/api/texts?${q}`, { method: "DELETE" }); setSay(r.ok ? done : "The desk could not delete that."); }
+  const remove = async (q: string, done: string, gone?: string) => {
+    try { const r = await fetch(`/api/texts?${q}`, { method: "DELETE" }); setSay(r.ok ? done : "The desk could not delete that."); if (r.ok && gone) onGone?.(gone); }
     catch { setSay("That did not reach the desk."); }
     setSure(false); void load();
   };
@@ -42,10 +42,10 @@ export function EssayShelf({ learnerId, refresh, onOpen }: { learnerId: string |
         <li key={c.id} data-role="essay-shelf-piece">
           <span><b>{c.title}</b><small data-role="essay-shelf-format">{FORMAT_LABEL[c.format] ?? c.format} · {c.paragraphs} paragraph{c.paragraphs === 1 ? "" : "s"} · version {c.versions} · {when(c.updated)}</small></span>
           <button className="pbtn" data-secondary="true" onClick={() => void open(c.id)}>Open</button>
-          <button className="pbtn" data-secondary="true" aria-label={`Delete ${c.title}`} onClick={() => void remove(`id=${encodeURIComponent(c.id)}`, "Deleted.")}>Delete</button>
+          <button className="pbtn" data-secondary="true" aria-label={`Delete ${c.title}`} onClick={() => void remove(`id=${encodeURIComponent(c.id)}`, "Deleted.", c.id)}>Delete</button>
         </li>))}</ul> : <p>Nothing kept yet. Pieces you read on the TV with "Keep it on my shelf" land here.</p>}
       {cards.length > 0 && (sure
-        ? <button className="pbtn" data-role="essay-delete-all" onClick={() => void remove("all=1", "Everything you kept is deleted.")}>Yes, delete everything I kept</button>
+        ? <button className="pbtn" data-role="essay-delete-all" onClick={() => void remove("all=1", "Everything you kept is deleted.", "all")}>Yes, delete everything I kept</button>
         : <button className="pbtn" data-secondary="true" data-role="essay-delete-all" onClick={() => setSure(true)}>Delete everything I kept</button>)}
       <button className="pbtn" data-secondary="true" data-role="essay-forget-paragraph" onClick={() => void remove("paragraph=1", "Tonight's paragraph is gone from the desk and the TV.")}>Forget tonight's paragraph</button>
       {say && <p data-role="essay-shelf-note" aria-live="polite">{say}</p>}

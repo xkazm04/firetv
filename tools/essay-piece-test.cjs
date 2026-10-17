@@ -570,3 +570,18 @@ test('L1-helena-46-EM1-1: the piece prompt carries the format as data; a kept pi
   await analysePiece(PIECE, 'language', 'ema', 15);
   assert(seen.every((r) => kind(r) === undefined && !/kind of writing/i.test(r.system + r.prompt)), 'no format: the prompt is the essay prompt, unchanged');
 });
+
+// ---- recert-5 L1-daniel-15-EM3-6: deleting the open piece clears the phone's pieceId; a keep naming a missing piece is a new piece ----
+test('EM3-6 (recert-5): a keep that names a deleted pieceId makes a new piece, not a 404; the shelf tells the phone a piece is gone', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = []; texts.deleteAll('ema'); texts.markNoticed('ema');
+  answer = perParagraph(faultyAt([]));
+  const first = await quietly(() => post({ kind: 'piece', text: PIECE, type: 'structure', keep: true, source: 'paste', format: 'essay' }));
+  assert.equal(first.status, 200);
+  const gone = texts.listPieces('ema')[0].id; assert.ok(texts.deletePiece('ema', gone));
+  const other = 'Cats sleep a lot.\n\nThey hunt at night.\n\nOwners feed them twice a day.';
+  const r = await quietly(() => post({ kind: 'piece', text: other, type: 'structure', keep: true, source: 'message', pieceId: gone, format: 'essay' }));
+  assert.equal(r.status, 200, 'no 404'); const cards = texts.listPieces('ema'); assert.equal(cards.length, 1); assert.notEqual(cards[0].id, gone);
+  const shelf = fs.readFileSync(path.join(root, 'src/app/phone/EssayShelf.tsx'), 'utf8'), phone = fs.readFileSync(path.join(root, 'src/app/phone/page.tsx'), 'utf8');
+  assert.match(shelf, /onGone\?\.\(gone\)/); assert.match(phone, /onGone=\{\(id\) => setPieceId\(\(cur\) => \(id === "all" \|\| cur === id \? undefined : cur\)\)\}/);
+  texts.deleteAll('ema');
+});
