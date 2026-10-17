@@ -128,7 +128,7 @@ export function quotedFocus(focus: string, tasks: PlacementTask[], safe: (line: 
 const STYLE_WORDS = new Set(["then", "which", "that", "so", "also", "just", "really", "very", "actually", "quite", "maybe", "well"]);
 /** A style slip: the words that differ between said and better are all connectives or fillers, not grammar (LG-8 4th pass). */
 export function slipIsStyle(s: { said: string; better: string }): boolean {
-  const w = (x: string) => x.toLowerCase().match(/[a-z']+/g) ?? [], b = w(s.better), a = w(s.said);
+  const w = (x: string): string[] => x.toLowerCase().match(/[a-z']+/g) ?? [], b = w(s.better), a = w(s.said);
   const diff = [...a.filter(x => !b.includes(x)), ...b.filter(x => !a.includes(x))];
   return diff.length > 0 && diff.every(x => STYLE_WORDS.has(x));
 }
