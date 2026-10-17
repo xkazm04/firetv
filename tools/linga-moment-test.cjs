@@ -42,3 +42,13 @@ test('the cap holds even for a repeat, and the beginner cap is lower than the ad
   const off=scene('B1',lines,[]);off.preferences.correction='never';
   assert.equal(momentAllowed(off,true),false);
 });
+
+test('the moment task: a beginner may stop on a repeated grammar slip; B1 and above must stop on a basic error; no new categories',()=>{
+  const {momentTaskFor}=require(path.join(root,'src/lib/english/conversation.ts'));
+  const a=momentTaskFor(true),b=momentTaskFor(false);
+  assert.ok(!/stop only for a word or phrase/.test(a));
+  assert.match(a,/grammar slip is a stop for a beginner only when they have made it more than once/);
+  assert.match(b,/at B1 and above, a basic error their level should already control/);
+  assert.ok(!/beginner/.test(b));
+  for(const t of [a,b])assert.match(t,/Never stop for a valid alternative, a style or register choice/);
+});
