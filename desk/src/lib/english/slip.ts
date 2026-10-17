@@ -153,7 +153,9 @@ export function findKey(text: string, key: string): string | null {
  * the slip, or null. The key-match helper later items build on (self-repair, spaced return, a line per room).
  */
 export function slipIn(text: string, keys: SlipKeys): string | null {
-  return findKey(text, keys.fix) !== null ? null : slipStands(text, keys.slip);
+  // a fix the slip itself holds ("more better" -> "better") is in the text whenever the slip is: it clears nothing
+  const inside = holds(keyWords(keys.slip), keyWords(keys.fix));
+  return !inside && findKey(text, keys.fix) !== null ? null : slipStands(text, keys.slip);
 }
 /** Where the slip key stands in `text` as a slip: word for word, and not straight after one of the BARE_LICENSORS. Null when it does not. */
 export function slipStands(text: string, slip: string): string | null {
