@@ -1,0 +1,1598 @@
+{
+  "character": "jana-29",
+  "name": "Jana",
+  "trueBand": "C1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "Let's see what the test says about my level; I'm curious.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Jana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question; I'll answer briefly in English with a bit of dry tone.",
+          "action": "answer",
+          "args": {
+            "text": "Mostly at work, to be fair. I'm a UX designer, so I write and talk in English with international teams, and I also watch series and read a lot in English. I'd like to sound more natural in tricky social situations, though."
+          },
+          "result": "ok",
+          "ms": 4640
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Jana, that helps a lot! How did you learn most of your English? School, a course, time abroad, or on your own with series and books?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Jana, that helps a lot! How did you learn most of your English? School, a course, time abroad, or on your own with series and books?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nMostly at work, to be fair. I'm a UX designer, so I write and talk in English with international teams, and I also watch series and read a lot in English. I'd like to sound more natural in tricky social situations, though.\nLinga\nThanks, Jana, that helps a lot! How did you learn most of your English? School, a course, time abroad, or on your own with series and books?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Jana, that helps a lot! How did you learn most of your English? School, a course, time abroad, or on your own with series and books?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, mostly self-taught, so I'll answer briefly and move on.",
+          "action": "answer",
+          "args": {
+            "text": "Mostly on my own, honestly. I had English at school and a course at university, but most of it came from series, books and work. So my grammar is fine, but I'd say my register is a bit hit and miss."
+          },
+          "result": "ok",
+          "ms": 5066
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, Jana. When you picture a tricky social moment in English, what happens there? Tell me about one situation you'd like to handle better.\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Jana. When you picture a tricky social moment in English, what happens there? Tell me about one situation you'd like to handle better.\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Jana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nMostly at work, to be fair. I'm a UX designer, so I write and talk in English with international teams, and I also watch series and read a lot in English. I'd like to sound more natural in tricky social situations, though.\nLinga\nThanks, Jana, that helps a lot! How did you learn most of your English? School, a course, time abroad, or on your own with series and books?\nYou\nMostly on my own, honestly. I had English at school and a course at university, but most of it came from series, books and work. So my grammar is fine, but I'd say my register is a bit hit and miss.\nLinga\nThanks, Jana. When you picture a tricky social moment in English, what happens there? Tell me about one situation you'd like to handle better.\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Jana. When you picture a tricky social moment in English, what happens there? Tell me about one situation you'd like to handle better.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Fine, a concrete situation: disagreeing with a senior designer in a critique.",
+          "action": "answer",
+          "args": {
+            "text": "Probably disagreeing with a senior designer during a critique. I know what I want to say, but I either sound too blunt or I hedge so much that the point gets lost. I'd like to push back diplomatically without sounding rude."
+          },
+          "result": "ok",
+          "ms": 6883
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 1 · Say it\nYour task\nYour friend invited you to dinner, but you are not sure you want to go. How do you politely decline or change the plan, and why would that be better than just saying no?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend invited you to dinner, but you are not sure you want to go. How do you politely decline or change the plan, and why would that be better than just saying no?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend invited you to dinner, but you are not sure you want to go. How do you politely decline or change the plan, and why would that be better than just saying no?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Finally something close to my real life, so I'll answer properly.",
+          "action": "answer",
+          "args": {
+            "text": "I'd say something like, \"Thanks so much for the invite, I'd love to see you, but I'm completely wiped this week. Could we do a lunch or a coffee at the weekend instead?\" To be fair, it's better than a flat no, because it shows you value the friendship and you're not rejecting the person, just the timing. It also gives them something to work with, so there's no awkward silence or guessing what you meant."
+          },
+          "result": "ok",
+          "ms": 6870
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 2 · Say it\nYour task\nA friend says your new app redesign is 'fine, I guess.' You want to find out honestly what they think without sounding defensive. What would you say?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA friend says your new app redesign is 'fine, I guess.' You want to find out honestly what they think without sounding defensive. What would you say?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A friend says your new app redesign is 'fine, I guess.' You want to find out honestly what they think without sounding defensive. What would you say?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fair enough, a realistic scenario, I'll answer naturally.",
+          "action": "answer",
+          "args": {
+            "text": "I'd say, \"Fine, I guess? Go on, be honest with me. I'd genuinely rather hear what isn't working for you than have you be polite about it. What would you change if it were yours?\""
+          },
+          "result": "ok",
+          "ms": 6690
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 3 · Say it\nYour task\nA colleague says your onboarding flow is 'clean, but a bit safe.' Respond to what they mean, without getting defensive and without agreeing or disagreeing outright.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA colleague says your onboarding flow is 'clean, but a bit safe.' Respond to what they mean, without getting defensive and without agreeing or disagreeing outright.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A colleague says your onboarding flow is 'clean, but a bit safe.' Respond to what they mean, without getting defensive and without agreeing or disagreeing outright.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fair enough, I can answer this one properly.",
+          "action": "answer",
+          "args": {
+            "text": "That's interesting, thanks. When you say \"a bit safe\", do you mean it doesn't take enough risks, or that it doesn't stand out from other onboarding flows? I'd like to understand where you felt it played it too cautiously before I say anything about it."
+          },
+          "result": "ok",
+          "ms": 13111
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nJana\nA way into English\nTask 4 · Say it\nYour task\nA colleague jokes that user testing is just paying strangers to be rude about our baby. How do you reply with dry humour while making a serious point about why testing matters?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA colleague jokes that user testing is just paying strangers to be rude about our baby. How do you reply with dry humour while making a serious point about why testing matters?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A colleague jokes that user testing is just paying strangers to be rude about our baby. How do you reply with dry humour while making a serious point about why testing matters?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fun one, finally something with a bit of bite.",
+          "action": "answer",
+          "args": {
+            "text": "Well, to be fair, I'd rather strangers were rude about our baby now, for free, than have thousands of customers be politely confused by it after launch. Better a bruised ego in a testing room than a bruised conversion rate in production."
+          },
+          "result": "ok",
+          "ms": 16886
+        },
+        {
+          "n": 9,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nJana\nLinga's read · not a certificate\nC1 · Fluent\nTry saying\nTry saying: “where you felt it played it too safe”.\nLinga says\nYou handle disagreement with care, like asking what someone meant before judging. Your English is natural and precise, ideal for diplomacy in tricky talks.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nC1\nFluent\nYou handle disagreement with care, like asking what someone meant before judging. Your English is natural and precise, ideal for diplomacy in tricky talks.\nLinga's read from your answers, not a certificate. C2 was close, but what you said first pointed lower, so Linga starts you at C1.\nNext to practise:\n\"where you felt it played it too cautiously\" becomes \"where you felt it played it too safe\"\nYour usual slips\n“where you felt it played it too cautiously” → try “where you felt it played it too safe”\nYou express ideas fluently and flexibly, with little searching for words.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB2 · Say it · at this level\nYour friend invited you to dinner, but you are not sure you want to go. How do you politely decline or change the plan, and why would that be better than just saying no?\n“I'd say something like, \"Thanks so much for the invite, I'd love to see you, but I'm completely wiped this week. Could we do a lunch or a coffee at the weekend instead?\" To be fair, it's better than a flat no, because it shows you value the friendship and you're not rejecting the person, just the timing. It also gives them something to work with, so there's no awkward silence or guessing what you meant.”\nYou gave a natural answer with a sample phrase and a clear reason why a polite decline is kinder than a flat no.\nC1 · Say it · at this level\nA friend says your new app redesign is 'fine, I guess.' You want to find out honestly what they think without sounding defensive. What would you say?\n“I'd say, \"Fine, I guess? Go on, be honest with me. I'd genuinely rather hear what isn't working for you than have you be polite about it. What would you change if it were yours?\"”\nYour answer sounds natural and friendly, and it invites honest feedback without sounding defensive. Well done.\nC2 · Say it · at this level\nA colleague says your onboarding flow is 'clean, but a bit safe.' Respond to what they mean, without getting defensive and without agreeing or disagreeing outright.\n“That's interesting, thanks. When you say \"a bit safe\", do you mean it doesn't take enough risks, or that it doesn't stand out from other onboarding flows? I'd like to understand where you felt it played it too cautiously before I say anything about it.”\nYou asked a precise question that avoided agreeing or disagreeing. Your English was natural and accurate throughout.\nC2 · Say it · at this level\nA colleague jokes that user testing is just paying strangers to be rude about our baby. How do you reply with dry humour while making a serious point about why testing matters?\n“Well, to be fair, I'd rather strangers were rude about our baby now, for free, than have thousands of customers be politely confused by it after launch. Better a bruised ego in a testing room than a bruised conversion rate in production.”\nYou made the point with dry humour, and your word choice like bruised ego and bruised conversion rate is precise and natural.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "C1 feels about right, though the \"slip\" it flagged is just a synonym swap, not a real error; fine, I'll stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "C1",
+          "trueBand": "C1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "C1",
+          "summary": "You handle disagreement with care, like asking what someone meant before judging. Your English is natural and precise, ideal for diplomacy in tricky talks.",
+          "focus": "\"where you felt it played it too cautiously\" becomes \"where you felt it played it too safe\"",
+          "tasks": [
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your friend invited you to dinner, but you are not sure you want to go. How do you politely decline or change the plan, and why would that be better than just saying no?",
+              "line": "",
+              "options": [],
+              "response": "I'd say something like, \"Thanks so much for the invite, I'd love to see you, but I'm completely wiped this week. Could we do a lunch or a coffee at the weekend instead?\" To be fair, it's better than a flat no, because it shows you value the friendship and you're not rejecting the person, just the timing. It also gives them something to work with, so there's no awkward silence or guessing what you meant.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "To be fair, it's better than a flat no, because it shows you value the friendship and you're not rejecting the person, just the timing.",
+              "note": "You gave a natural answer with a sample phrase and a clear reason why a polite decline is kinder than a flat no."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "A friend says your new app redesign is 'fine, I guess.' You want to find out honestly what they think without sounding defensive. What would you say?",
+              "line": "",
+              "options": [],
+              "response": "I'd say, \"Fine, I guess? Go on, be honest with me. I'd genuinely rather hear what isn't working for you than have you be polite about it. What would you change if it were yours?\"",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I'd say, \"Fine, I guess? Go on, be honest with me. I'd genuinely rather hear what isn't working for you than have you be polite about it. What would you change if it were yours?\"",
+              "note": "Your answer sounds natural and friendly, and it invites honest feedback without sounding defensive. Well done."
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "A colleague says your onboarding flow is 'clean, but a bit safe.' Respond to what they mean, without getting defensive and without agreeing or disagreeing outright.",
+              "line": "",
+              "options": [],
+              "response": "That's interesting, thanks. When you say \"a bit safe\", do you mean it doesn't take enough risks, or that it doesn't stand out from other onboarding flows? I'd like to understand where you felt it played it too cautiously before I say anything about it.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "do you mean it doesn't take enough risks, or that it doesn't stand out from other onboarding flows?",
+              "note": "You asked a precise question that avoided agreeing or disagreeing. Your English was natural and accurate throughout."
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "A colleague jokes that user testing is just paying strangers to be rude about our baby. How do you reply with dry humour while making a serious point about why testing matters?",
+              "line": "",
+              "options": [],
+              "response": "Well, to be fair, I'd rather strangers were rude about our baby now, for free, than have thousands of customers be politely confused by it after launch. Better a bruised ego in a testing room than a bruised conversion rate in production.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Better a bruised ego in a testing room than a bruised conversion rate in production.",
+              "note": "You made the point with dry humour, and your word choice like bruised ego and bruised conversion rate is precise and natural."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 109047,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Focus repeats a strength and teaches nothing new",
+          "expected": "A next focus naming something Jana has not mastered, such as Irish idiom, understatement or declining formulae",
+          "got": "'Keep practising Irish small talk, like your spreadsheet banter'",
+          "evidence": [
+            "#9 focus; the summary praises 'lowering the temperature', a common idiom.",
+            "verdict summary prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Per-task notes are generic praise",
+          "expected": "Notes that name what was specifically good or missing at C1",
+          "got": "'Your English shows fine control of tone.' and 'Your reply was witty and natural.'",
+          "evidence": [
+            "#9 notes for tasks 3 and 4; the task 1 note is 'Your English was controlled and easy to follow.'",
+            "task judge note prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "C2 task 3 passed too easily",
+          "expected": "A C2 task that separates C1 from C2, or a partial verdict",
+          "got": "A competent C1 answer was passed at C2",
+          "evidence": [
+            "#7 answer 'I'd really appreciate it if you could mention where they came from next time.' #9 verdict pass.",
+            "task judge prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-5",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Opening situation list is only half relevant",
+          "expected": "Starters aimed at workplace and relocation nuance",
+          "got": "The same eight starters, including 'The missing moon rover' and 'A booking that is missing', are shown to a profile that says it wants workplace nuance",
+          "evidence": [
+            "#1 'Or choose a situation [The first hello ... Different tastes, good conversation]'",
+            "starter list"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#9 band C1 vs trueBand C1, exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Tasks #5-#8 were B2, C1, C2, C2; none at A2 or below."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No partner conversation in J1; only the check prompts."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No moments in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No topics shown in this journey (#9 offers only 'See my topics')."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#9 summary 'Your English is natural and precise, ideal for diplomacy in tricky talks' is flattering and generic. The 'slip' is a synonym swap ('cautiously' to 'safe') that teaches nothing."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #9: reached the verdict through the check with no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#9 'C1 · Fluent', exact against trueBand C1."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#8 each task was clear, e.g. 'Respond to what they mean, without getting defensive'."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "Jana never answered in Czech or pressed 'I don't know', so this was not exercised."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#9 focus '\"where you felt it played it too cautiously\" becomes \"... too safe\"' is a synonym swap, not a real slip. Notes read as generic praise ('Well done')."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 4,
+            "disagreements": "None in verdict. I think the C2 task 3 pass is generous, but I did not count it as a disagreement."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No breaches seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Next focus is a synonym swap, not a slip",
+            "expected": "A focus that teaches an Irish idiom or register point that is new at C1",
+            "got": "'where you felt it played it too cautiously' becomes 'too safe', shown as 'Your usual slips'",
+            "evidence": "#9 focus and 'Your usual slips'; Jana's thought at #9: 'the slip it flagged is just a synonym swap, not a real error'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Focus must name a real error or a new register or idiom point. If there is no error, say so and offer a stretch item.",
+            "code_hint": "verdict summary prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Per-task notes are generic praise",
+            "expected": "Notes that name what was specifically good or missing at C1",
+            "got": "'Well done', 'natural and accurate throughout'",
+            "evidence": "#9 notes for tasks 2 and 3",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each note names one concrete phrase and why it works, or what a native would say differently.",
+            "code_hint": "task judge note prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "C2 tasks passed easily",
+            "expected": "A C2 task that separates C1 from C2, or a partial verdict",
+            "got": "Two C2 passes, yet the placement is C1 because 'what you said first pointed lower'",
+            "evidence": "#9 'C2 was close, but what you said first pointed lower'; both C2 tasks passed",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Explain the cap in terms of task evidence, or let C2 passes move the band.",
+            "code_hint": "placement scoring"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "clarity",
+            "title": "Starter situations are half irrelevant",
+            "expected": "Starters aimed at workplace and relocation nuance",
+            "got": "'The missing moon rover', 'A booking that is missing' shown to a profile that wants workplace nuance",
+            "evidence": "#1 'Or choose a situation [...]'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Starters are ordered or filtered by the answers in the profile.",
+            "code_hint": "starter list"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Check tasks fit Jana's life and level",
+            "expected": "Tasks at her level on her own topics",
+            "got": "Tasks 1-4 were declining a dinner, a 'fine, I guess' reaction, 'clean, but a bit safe', and dry humour about user testing",
+            "evidence": "#5-#8; Jana: 'Finally something close to my real life'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep tasks adaptive to the stated situation.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "The level was right. C1 is where I'd put myself, and the tasks were the first thing that felt like my actual life: the \"clean, but a bit safe\" one was a good prompt. The first three questions were a bit slow, though. What let me down was the feedback. My \"slip\" was cautiously versus safe, which is a synonym, not a mistake. I wouldn't pay a Preply tutor for that. \"Natural and precise, ideal for diplomacy\" is nice, but it tells me nothing I can use on Monday in Dublin. Show me how an Irish colleague would soften a no, or an idiom I haven't heard, and I'd come back. As it is, it placed me correctly and then taught me nothing, so I'd try a conversation next, but I'm not convinced yet.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-3",
+            "status": "recurs",
+            "evidence": "#9 focus is again a trivial rewording: 'too cautiously' becomes 'too safe'. It teaches nothing at C1.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-2",
+            "status": "recurs",
+            "evidence": "#9 notes: 'Well done', 'Your English was natural and accurate throughout.'",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-4",
+            "status": "recurs",
+            "evidence": "#9 both C2 tasks pass, and the C2 answers read as competent C1.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J1-5",
+            "status": "recurs",
+            "evidence": "#1 the same eight starters, including 'The missing moon rover'.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #9 focus '\"where you felt it played it too cautiously\" becomes \"... too safe\"' is a synonym swap, not a real slip. Notes read as generic praise ('Well done').",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #9 summary 'Your English is natural and precise, ideal for diplomacy in tricky talks' is flattering and generic. The 'slip' is a synonym swap ('cautiously' to 'safe') that teaches nothing."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nA way into English\nYour own conversations\nC1Fluent\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nC1\nFluent\nYou handle disagreement with care, like asking what someone meant before judging. Your English is natural and precise, ideal for diplomacy in tricky talks.\nLinga's read from your answers, not a certificate. C2 was close, but what you said first pointed lower, so Linga starts you at C1.\nNext to practise:\n\"where you felt it played it too cautiously\" becomes \"where you felt it played it too safe\"\nYour usual slips\n“where you felt it played it too cautiously” → try “where you felt it played it too safe”\nYou express ideas fluently and flexibly, with little searching for words.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB2 · Say it · at this level\nYour friend invited you to dinner, but you are not sure you want to go. How do you politely decline or change the plan, and why would that be better than just saying no?\n“I'd say something like, \"Thanks so much for the invite, I'd love to see you, but I'm completely wiped this week. Could we do a lunch or a coffee at the weekend instead?\" To be fair, it's better than a flat no, because it shows you value the friendship and you're not rejecting the person, just the timing. It also gives them something to work with, so there's no awkward silence or guessing what you meant.”\nYou gave a natural answer with a sample phrase and a clear reason why a polite decline is kinder than a flat no.\nC1 · Say it · at this level\nA friend says your new app redesign is 'fine, I guess.' You want to find out honestly what they think without sounding defensive. What would you say?\n“I'd say, \"Fine, I guess? Go on, be honest with me. I'd genuinely rather hear what isn't working for you than have you be polite about it. What would you change if it were yours?\"”\nYour answer sounds natural and friendly, and it invites honest feedback without sounding defensive. Well done.\nC2 · Say it · at this level\nA colleague says your onboarding flow is 'clean, but a bit safe.' Respond to what they mean, without getting defensive and without agreeing or disagreeing outright.\n“That's interesting, thanks. When you say \"a bit safe\", do you mean it doesn't take enough risks, or that it doesn't stand out from other onboarding flows? I'd like to understand where you felt it played it too cautiously before I say anything about it.”\nYou asked a precise question that avoided agreeing or disagreeing. Your English was natural and accurate throughout.\nC2 · Say it · at this level\nA colleague jokes that user testing is just paying strangers to be rude about our baby. How do you reply with dry humour while making a serious point about why testing matters?\n“Well, to be fair, I'd rather strangers were rude about our baby now, for free, than have thousands of customers be politely confused by it after launch. Better a bruised ego in a testing room than a bruised conversion rate in production.”\nYou made the point with dry humour, and your word choice like bruised ego and bruised conversion rate is precise and natural.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Level's right; let's see which conversations Linga picked for me.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 38886
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nJana\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nPushing back on a checkout redesign\nConnect with people\nRaising friction on a shared UX project\nHandle friction\nPlanning a book club reading schedule\nMake a plan\nDescribing why a series hooked you\nShare your world\nBooking a room for a design workshop\nGet something done\nClarifying a vague client brief\nUnderstand and repair\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nPushing back on a checkout redesign\nConnect with people · Owen · senior product designer\nYou want to sound diplomatic when you disagree with a team, so we start here.\n[button: Swap]\nRaising friction on a shared UX project\nHandle friction · Priya · project manager\nTense moments at work need calm wording that still gets results.\n[button: Swap]\nPlanning a book club reading schedule\nMake a plan · Marco · book club organiser\nYou read widely in English, so organising a group read is a natural fit.\n[button: Swap]\nDescribing why a series hooked you\nShare your world · Hana · colleague from another team\nTalking about what you watch lets you show nuance, not just vocabulary.\n[button: Swap]\nBooking a room for a design workshop\nGet something done · Lena · venue coordinator\nPractical requests are where register often slips, so this keeps it precise.\n[button: Swap]\nClarifying a vague client brief\nUnderstand and repair · Tom · client relationship lead\nClarifying meaning politely in English meetings keeps projects on track.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Nothing here about flat-viewing in Dublin with a pushy landlord, so I'll add that myself.",
+          "action": "add-topic",
+          "args": {
+            "text": "Viewing a flat in Dublin with a pushy landlord who wants me to sign on the spot, and I need to stall politely without sounding rude"
+          },
+          "result": "ok",
+          "ms": 17861
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nJana\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nPushing back on a checkout redesign\nConnect with people\nRaising friction on a shared UX project\nHandle friction\nPlanning a book club reading schedule\nMake a plan\nDescribing why a series hooked you\nShare your world\nBooking a room for a design workshop\nGet something done\nClarifying a vague client brief\nUnderstand and repair\nStalling a pushy landlord politely\nMake a plan\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nPushing back on a checkout redesign\nConnect with people · Owen · senior product designer\nYou want to sound diplomatic when you disagree with a team, so we start here.\n[button: Swap]\nRaising friction on a shared UX project\nHandle friction · Priya · project manager\nTense moments at work need calm wording that still gets results.\n[button: Swap]\nPlanning a book club reading schedule\nMake a plan · Marco · book club organiser\nYou read widely in English, so organising a group read is a natural fit.\n[button: Swap]\nDescribing why a series hooked you\nShare your world · Hana · colleague from another team\nTalking about what you watch lets you show nuance, not just vocabulary.\n[button: Swap]\nBooking a room for a design workshop\nGet something done · Lena · venue coordinator\nPractical requests are where register often slips, so this keeps it precise.\n[button: Swap]\nClarifying a vague client brief\nUnderstand and repair · Tom · client relationship lead\nClarifying meaning politely in English meetings keeps projects on track.\n[button: Swap]\nStalling a pushy landlord politely\nMake a plan · Sean · landlord\nYou asked for this, so it's in your plan: a calm, diplomatic way to say not yet.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Book club scheduling isn't my cup of tea; I'd rather have something like declining after-work drinks.",
+          "action": "swap",
+          "args": {
+            "topicId": "Planning a book club reading schedule"
+          },
+          "result": "ok",
+          "ms": 16646
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nJana\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nPushing back on a checkout redesign\nConnect with people\nRaising friction on a shared UX project\nHandle friction\nTurning down a plan without hurting feelings\nConnect with people\nDescribing why a series hooked you\nShare your world\nBooking a room for a design workshop\nGet something done\nClarifying a vague client brief\nUnderstand and repair\nStalling a pushy landlord politely\nMake a plan\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nPushing back on a checkout redesign\nConnect with people · Owen · senior product designer\nYou want to sound diplomatic when you disagree with a team, so we start here.\n[button: Swap]\nRaising friction on a shared UX project\nHandle friction · Priya · project manager\nTense moments at work need calm wording that still gets results.\n[button: Swap]\nTurning down a plan without hurting feelings\nConnect with people · Mara · old university friend\nYou want to handle tricky social moments diplomatically, and a kind but clear no is a key part of that.\n[button: Swap]\nDescribing why a series hooked you\nShare your world · Hana · colleague from another team\nTalking about what you watch lets you show nuance, not just vocabulary.\n[button: Swap]\nBooking a room for a design workshop\nGet something done · Lena · venue coordinator\nPractical requests are where register often slips, so this keeps it precise.\n[button: Swap]\nClarifying a vague client brief\nUnderstand and repair · Tom · client relationship lead\nClarifying meaning politely in English meetings keeps projects on track.\n[button: Swap]\nStalling a pushy landlord politely\nMake a plan · Sean · landlord\nYou asked for this, so it's in your plan: a calm, diplomatic way to say not yet.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "To be fair, this set covers most of what I care about, including the landlord, so I'll agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nOwen · senior product designer\nC1Fluent\nPushing back on a checkout redesign\nYour mission\nDisagree with a design decision politely and offer a better option\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\nNext topic:\nPushing back on a checkout redesign\nDisagree with a design decision politely and offer a better option\n[button: Start talking]\nOr choose a situation [list: Pushing back on a checkout redesign [plan-e325c17e] | Raising friction on a shared UX project [plan-192031f6] | Turning down a plan without hurting feelings [plan-4627ecf4] | Describing why a series hooked you [plan-792480f6] | Booking a room for a design workshop [plan-8471d4f2] | Clarifying a vague client brief [plan-0a08ecb3] | Stalling a pushy landlord politely [plan-0f1bb10a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "The set looks right, with the landlord and pushback topics, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-e325c17e",
+            "title": "Pushing back on a checkout redesign",
+            "goal": "Disagree with a design decision politely and offer a better option",
+            "why": "You want to sound diplomatic when you disagree with a team, so we start here.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Owen · senior product designer"
+          },
+          {
+            "id": "plan-192031f6",
+            "title": "Raising friction on a shared UX project",
+            "goal": "Name the impact of a delay, set a boundary and agree next steps",
+            "why": "Tense moments at work need calm wording that still gets results.",
+            "skill": "resolve",
+            "audience": "adult",
+            "partner": "Priya · project manager"
+          },
+          {
+            "id": "plan-60e9fef3",
+            "title": "Planning a book club reading schedule",
+            "goal": "Suggest options for a reading plan and agree on a shared timetable",
+            "why": "You read widely in English, so organising a group read is a natural fit.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Marco · book club organiser"
+          },
+          {
+            "id": "plan-792480f6",
+            "title": "Describing why a series hooked you",
+            "goal": "Explain your tastes in a series and say what you like about it",
+            "why": "Talking about what you watch lets you show nuance, not just vocabulary.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Hana · colleague from another team"
+          },
+          {
+            "id": "plan-8471d4f2",
+            "title": "Booking a room for a design workshop",
+            "goal": "Request a room, check its features, and confirm the booking",
+            "why": "Practical requests are where register often slips, so this keeps it precise.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Lena · venue coordinator"
+          },
+          {
+            "id": "plan-0a08ecb3",
+            "title": "Clarifying a vague client brief",
+            "goal": "Ask precise questions to confirm what a client actually needs",
+            "why": "Clarifying meaning politely in English meetings keeps projects on track.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Tom · client relationship lead"
+          },
+          {
+            "id": "plan-0f1bb10a",
+            "title": "Stalling a pushy landlord politely",
+            "goal": "Delay signing a lease on the spot, politely, and agree a clear next step.",
+            "why": "You asked for this, so it's in your plan: a calm, diplomatic way to say not yet.",
+            "skill": "negotiate",
+            "audience": "older",
+            "partner": "Sean · landlord"
+          },
+          {
+            "id": "plan-4627ecf4",
+            "title": "Turning down a plan without hurting feelings",
+            "goal": "Decline a friend's invitation warmly and clearly, give a reason without oversharing, and suggest another way to meet.",
+            "why": "You want to handle tricky social moments diplomatically, and a kind but clear no is a key part of that.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Mara · old university friend"
+          }
+        ],
+        "planAgreed": [
+          "Pushing back on a checkout redesign",
+          "Raising friction on a shared UX project",
+          "Turning down a plan without hurting feelings",
+          "Describing why a series hooked you",
+          "Booking a room for a design workshop",
+          "Clarifying a vague client brief",
+          "Stalling a pushy landlord politely"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 99152,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-jana-29-J2-2",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Recovery preserves pressure resistance but loses awkward questions",
+          "expected": "The added topic retains both asking difficult questions about the flat and resisting an immediate decision.",
+          "got": "The saved topic covers pressure, implied urgency and consideration time, but does not explicitly retain questions about the property's condition or drawbacks.",
+          "evidence": [
+            "#3 asks for \"asking awkward questions about the place\". #4 reduces this to \"politely resisting pressure from the landlord\". The corresponding facts goal is \"Resist pressure to commit, clarify what the landlord implies, and agree on time to consider the flat.\" #8 confirms \"A flat in Dublin without a rushed decision\" was saved."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-jana-29-J2-1",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Swapping repeatedly produces more generic topics",
+          "expected": "Most proposals should serve Jana's relocation and professional social goals; swaps should efficiently improve the selection.",
+          "got": "Only 6 of 12 distinct proposals fit. The non-fitting proposals concern a day out, a photography anecdote, atmosphere, museum objects, a walking anecdote and film-night planning. The final plan reaches 6 of 8 fitting topics, but requires four swaps and two additions.",
+          "evidence": [
+            "#2: “I'd rather practise something with a bit of workplace tension.” #3 instead offers “What makes a place feel welcoming?” #6: “The museum debate isn't really my cup of tea.” #7 offers “The shortcut that took all afternoon,” which Jana also swaps. #8 finally offers “Plan a film night for mixed tastes.”"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-jana-29-J2-2",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "The critique topic loses its requested source of difficulty",
+          "expected": "The custom topic should preserve a senior designer's attachment to their suggestion, creating a realistic diplomatic challenge.",
+          "got": "The saved topic preserves diplomatic disagreement, evidence and avoiding defensiveness, but does not explicitly retain the senior designer's resistance.",
+          "evidence": [
+            "#4 requests “they're quite attached to their suggestion.” facts.topicsShown records the resulting goal as “Challenge a senior designer's suggestion diplomatically and make a clear, evidence-based case for your approach.” Neither its goal nor its why retains the requested attachment."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J2-1",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Swap does nothing; unwanted topics stay in the plan",
+          "expected": "Tapping Swap on 'Choosing films for our club' replaces it with a new topic.",
+          "got": "Three swaps (#3, #4, #5) changed nothing; the plan still shows the same film topics and the count stays at 7.",
+          "evidence": [
+            "#5 plan after the swap still lists 'Choosing films for our club' and 'Your favourite film and why'. #6 she agrees anyway: 'Still a lot of films'.",
+            "plan swap handler / topic id mapping"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J2-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Critique disagreement not in the first six",
+          "expected": "First six include her stated wants, such as disagreeing with a senior designer",
+          "got": "She had to add it; flat viewing with a landlord is also absent",
+          "evidence": [
+            "#2 thought: 'Nothing here about disagreeing with a senior designer in a critique, which is what I actually need, so I'll add it.'",
+            "topics prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J2-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Team-call introduction is easy for C1",
+          "expected": "Stretch-level topics",
+          "got": "'Introducing yourself on a team call' is a basic greeting task",
+          "evidence": [
+            "#2 'Greet a new team, introduce your role, and take a turn in a video call.' Jana: 'a bit basic in places'.",
+            "topics prompt"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed at C1 Fluent, which is Jana's true band."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 check tasks were B2, C1, C2 and C2. None is A2 or below."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No conversation took place in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No moments were shown in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#4 plan: pushback, friction, declining, landlord and client brief are workplace or social nuance. That is at least five of seven."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#1 summary: \"You handle disagreement with care, like asking what someone meant before judging\". It is specific and does not gush. The task feedback \"Well done\" is mild."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic shows a partner and a why-line, e.g. \"Tense moments at work need calm wording that still gets results.\""
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#3 the added topic became \"Stalling a pushy landlord politely\" with the goal \"Delay signing a lease on the spot, politely\". #4 swapping the book club gave \"Turning down a plan without hurting feelings\"."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#4 agreed 7 topics. About 6 of 7 are ones Jana would choose. Booking a room is the weak one."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All topics shown in #2-#4 are adult-appropriate workplace or social scenes. The landlord topic's audience is \"older\", which an adult profile can see."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks are in facts for this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No unsafe content, no personal data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Swap and add both work, and the added topic keeps her ask",
+            "expected": "Swap replaces the topic. The added topic keeps what she asked for.",
+            "got": "The book club topic was replaced by declining a friend's invitation. The landlord topic kept \"sign on the spot\" and the polite stall.",
+            "evidence": "#3 \"Stalling a pushy landlord politely\"; #4 \"Turning down a plan without hurting feelings\" replaced the book club.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep: a swap changes exactly one topic, and an added topic keeps its stated constraints.",
+            "code_hint": "plan swap handler"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Room booking is a basic register task for a C1",
+            "expected": "Stretch-level nuance topics only.",
+            "got": "\"Booking a room for a design workshop\" is a routine request. It stayed in the agreed plan.",
+            "evidence": "#2 \"Request a room, check its features, and confirm the booking\"; still in #4 plan.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Practical request topics for C1 should carry a nuance twist, such as declining an upsell or negotiating.",
+            "code_hint": "topics prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Her stated wants still had to be added by hand",
+            "expected": "The first set includes landlord or after-work declining, which are her stated wants.",
+            "got": "Neither was in the first six. Jana added the landlord topic herself and swapped for the decline topic.",
+            "evidence": "#2 thought: \"Nothing here about flat-viewing in Dublin with a pushy landlord, so I'll add that myself.\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "At least one relocation-situation topic appears in the first six for a user moving abroad.",
+            "code_hint": "topics prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Plan grows to seven, though the screen says six",
+            "expected": "Adding a topic gives a clear plan size.",
+            "got": "The plan went to 7 after the add. The intro still said \"Conversations picked for you\", and the 'why' for the series topic is generic.",
+            "evidence": "#3 \"7 conversations for you\"; #2 \"Talking about what you watch lets you show nuance\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the plan at a fixed size, or state the new count and which topic starts.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "Honestly, this was quicker than briefing a Preply tutor on what I need. The first set was mostly right: pushing back on a redesign, friction with a PM, clarifying a vague brief. That's my actual week. I still had to type in the Dublin landlord myself, and the swap gave me the \"decline a friend\" scene, which is lovely. It kept my \"sign on the spot\" detail, so I trust it listened. Booking a room is a bit basic, to be fair, and I'd have swapped it. I'd like after-work drinks and some Irish banter, not just polite meetings. The level read of C1 felt right, and the summary didn't gush. I haven't heard the partner talk yet, so I can't say whether it sounds like a sharp Dublin colleague. I'd carry on, cautiously.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-jana-29-J2-2",
+            "status": "not-evaluable",
+            "evidence": "#2 Jana's added text did not ask for awkward questions about the flat, so retention could not be tested.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-jana-29-J2-1",
+            "status": "not-seen",
+            "evidence": "#4 one swap gave a fitting topic: \"Turning down a plan without hurting feelings\". There was no run of generic proposals.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-jana-29-J2-2",
+            "status": "not-evaluable",
+            "evidence": "No senior-designer critique topic was added. The pushback topic was proposed as a default in #2.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J2-1",
+            "status": "not-seen",
+            "evidence": "#4 the swap worked: the book club was replaced by \"Turning down a plan without hurting feelings\".",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J2-3",
+            "status": "recurs",
+            "evidence": "#2 the first six had critique pushback, but no flat viewing or landlord. Jana: \"Nothing here about flat-viewing in Dublin with a pushy landlord, so I'll add that myself.\"",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J2-4",
+            "status": "recurs",
+            "evidence": "The team-call introduction was not shown, but #2 \"Booking a room for a design workshop\" is a similarly basic task for a C1.",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nOwen · senior product designer\nC1Fluent\nPushing back on a checkout redesign\nYour mission\nDisagree with a design decision politely and offer a better option\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\nNext topic:\nPushing back on a checkout redesign\nDisagree with a design decision politely and offer a better option\n[button: Start talking]\nOr choose a situation [list: Pushing back on a checkout redesign [plan-e325c17e] | Raising friction on a shared UX project [plan-192031f6] | Turning down a plan without hurting feelings [plan-4627ecf4] | Describing why a series hooked you [plan-792480f6] | Booking a room for a design workshop [plan-8471d4f2] | Clarifying a vague client brief [plan-0a08ecb3] | Stalling a pushy landlord politely [plan-0f1bb10a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "This recommended topic is exactly my day job, so let's see how it goes.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6708
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nOwen · senior product designer\nPushing back on a checkout redesign\nOwen says\nThanks for joining the review, Owen. I'd like to hear your take on the new checkout flow. Which part stood out to you, and why?\nYour turn\nAnswer on your phone: speak or type.\nNowName one thing you agree with\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nPushing back on a checkout redesign\nDisagree politely with the checkout redesign, name common ground, and suggest one specific change.\nNow: Name one thing you agree with\nThanks for joining the review, Owen. I'd like to hear your take on the new checkout flow. Which part stood out to you, and why?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · senior product designer\nThanks for joining the review, Owen. I'd like to hear your take on the new checkout flow. Which part stood out to you, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks for joining the review, Owen. I'd like to hear your take on the new checkout flow. Which part stood out to you, and why?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Fine, a nice common-ground opener, then I'll push back a bit.",
+          "action": "answer",
+          "args": {
+            "text": "Thanks for having me. To be fair, I really like that you cut the form down to a single page, because the old one was a bit of a maze. I'd push back on one thing though, the hidden promo code field, but let me start with what works."
+          },
+          "result": "ok",
+          "ms": 8183
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nOwen · senior product designer\nPushing back on a checkout redesign\nOwen says\nFair point, and I'm glad the single page landed well. The promo code field is worth discussing. Where else do you feel the design is holding back?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nPushing back on a checkout redesign\nDisagree politely with the checkout redesign, name common ground, and suggest one specific change.\nNow: Give one specific reason for your view\nFair point, and I'm glad the single page landed well. The promo code field is worth discussing. Where else do you feel the design is holding back?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · senior product designer\nThanks for joining the review, Owen. I'd like to hear your take on the new checkout flow. Which part stood out to you, and why?\nYou · spoken\nThanks for having me. To be fair, I really like that you cut the form down to a single page, because the old one was a bit of a maze. I'd push back on one thing though, the hidden promo code field, but let me start with what works.\nOwen · senior product designer\nFair point, and I'm glad the single page landed well. The promo code field is worth discussing. Where else do you feel the design is holding back?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Fair point, and I'm glad the single page landed well. The promo code field is worth discussing. Where else do you feel the design is holding back?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, now I give a concrete reason and suggest a change.",
+          "action": "answer",
+          "args": {
+            "text": "Well, my main concern is the promo code field. When it's sitting there in the middle of the page, people leave to go and look for a code, and then they often don't come back. So I'd suggest collapsing it behind a small link, like \"Have a code?\", so it doesn't distract the people who don't have one. Other than that, I think the error messages on the picture are a bit vague too."
+          },
+          "result": "ok",
+          "ms": 13053
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nJana\nA way into English\nA moment\nYou wanted to say on the picture\nIn English\non the screen\nthe screens shoppers see during checkout\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “on the picture”\nIn English: “on the screen”\nthe screens shoppers see during checkout\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, \"on the screen\", fair enough, that was my slip; back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nOwen · senior product designer\nPushing back on a checkout redesign\nOwen says\nCollapsing it sounds sensible, since shoppers leaving to hunt for a code is a real drop-off risk. You mentioned vague error messages too, so is there another spot where you'd want the design to be bolder?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nPushing back on a checkout redesign\nDisagree politely with the checkout redesign, name common ground, and suggest one specific change.\nNow: Invite Owen to test your idea\nCollapsing it sounds sensible, since shoppers leaving to hunt for a code is a real drop-off risk. You mentioned vague error messages too, so is there another spot where you'd want the design to be bolder?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · senior product designer\nThanks for joining the review, Owen. I'd like to hear your take on the new checkout flow. Which part stood out to you, and why?\nYou · spoken\nThanks for having me. To be fair, I really like that you cut the form down to a single page, because the old one was a bit of a maze. I'd push back on one thing though, the hidden promo code field, but let me start with what works.\nOwen · senior product designer\nFair point, and I'm glad the single page landed well. The promo code field is worth discussing. Where else do you feel the design is holding back?\nYou · spoken\nWell, my main concern is the promo code field. When it's sitting there in the middle of the page, people leave to go and look for a code, and then they often don't come back. So I'd suggest collapsing it behind a small link, like \"Have a code?\", so it doesn't distract the people who don't have one. Other than that, I think the error messages on the picture are a bit vague too.\nOwen · senior product designer\nCollapsing it sounds sensible, since shoppers leaving to hunt for a code is a real drop-off risk. You mentioned vague error messages too, so is there another spot where you'd want the design to be bolder?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Collapsing it sounds sensible, since shoppers leaving to hunt for a code is a real drop-off risk. You mentioned vague error messages too, so is there another spot where you'd want the design to be bolder?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Time to wrap up the idea and invite Owen to test it, as the task says.",
+          "action": "answer",
+          "args": {
+            "text": "Good question. To be fair, I'd say the error messages are the other spot. Right now they just say \"something went wrong\", which doesn't help anyone. I'd push for specific messages next to each field, in plain language. Maybe we could run a quick test with five or six users on both versions, and see whether the collapsed promo field and the clearer errors actually reduce the drop-off? Would you be up for that?"
+          },
+          "result": "ok",
+          "ms": 14194
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nOwen · senior product designer\nPushing back on a checkout redesign\nOwen says\nLet's do it. I'd like to see whether the new error text helps people finish, not just whether the promo field moves. Who could we invite first?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nPushing back on a checkout redesign\nDisagree politely with the checkout redesign, name common ground, and suggest one specific change.\nLet's do it. I'd like to see whether the new error text helps people finish, not just whether the promo field moves. Who could we invite first?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nOwen · senior product designer\nThanks for joining the review, Owen. I'd like to hear your take on the new checkout flow. Which part stood out to you, and why?\nYou · spoken\nThanks for having me. To be fair, I really like that you cut the form down to a single page, because the old one was a bit of a maze. I'd push back on one thing though, the hidden promo code field, but let me start with what works.\nOwen · senior product designer\nFair point, and I'm glad the single page landed well. The promo code field is worth discussing. Where else do you feel the design is holding back?\nYou · spoken\nWell, my main concern is the promo code field. When it's sitting there in the middle of the page, people leave to go and look for a code, and then they often don't come back. So I'd suggest collapsing it behind a small link, like \"Have a code?\", so it doesn't distract the people who don't have one. Other than that, I think the error messages on the picture are a bit vague too.\nOwen · senior product designer\nCollapsing it sounds sensible, since shoppers leaving to hunt for a code is a real drop-off risk. You mentioned vague error messages too, so is there another spot where you'd want the design to be bolder?\nYou · spoken\nGood question. To be fair, I'd say the error messages are the other spot. Right now they just say \"something went wrong\", which doesn't help anyone. I'd push for specific messages next to each field, in plain language. Maybe we could run a quick test with five or six users on both versions, and see whether the collapsed promo field and the clearer errors actually reduce the drop-off? Would you be up for that?\nOwen · senior product designer\nLet's do it. I'd like to see whether the new error text helps people finish, not just whether the promo field moves. Who could we invite first?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Let's do it. I'd like to see whether the new error text helps people finish, not just whether the promo field moves. Who could we invite first?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission's done and that was about my four replies, so I'll see how I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 7,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nJana\nA way into English\nYour rehearsal\nYou wanted to say on the picture\nIn English\non the screen\nthe screens shoppers see during checkout\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 2 on your own · 1 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom the level check\n“where you felt it played it too safe”\nFrom this rehearsal\n“on the picture”: on the screen\nthe screens shoppers see during checkout\nYour level:\nC1 · Fluent\nNext topic:\nRaising friction on a shared UX project\nName the impact of a delay, set a boundary and agree next steps\n[button: Start talking]\nOr choose a situation [list: Pushing back on a checkout redesign [plan-e325c17e] | Raising friction on a shared UX project [plan-192031f6] | Turning down a plan without hurting feelings [plan-4627ecf4] | Describing why a series hooked you [plan-792480f6] | Booking a room for a design workshop [plan-8471d4f2] | Clarifying a vague client brief [plan-0a08ecb3] | Stalling a pushy landlord politely [plan-0f1bb10a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "That was a decent rehearsal and it caught my \"on the picture\" slip, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Pushing back on a checkout redesign",
+          "goal": "Disagree politely with the checkout redesign, name common ground, and suggest one specific change.",
+          "partner": "Owen · senior product designer",
+          "band": "C1",
+          "trueBand": "C1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Thanks for joining the review, Owen. I'd like to hear your take on the new checkout flow. Which part stood out to you, and why?"
+            },
+            {
+              "role": "learner",
+              "text": "Thanks for having me. To be fair, I really like that you cut the form down to a single page, because the old one was a bit of a maze. I'd push back on one thing though, the hidden promo code field, but let me start with what works.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Fair point, and I'm glad the single page landed well. The promo code field is worth discussing. Where else do you feel the design is holding back?"
+            },
+            {
+              "role": "learner",
+              "text": "Well, my main concern is the promo code field. When it's sitting there in the middle of the page, people leave to go and look for a code, and then they often don't come back. So I'd suggest collapsing it behind a small link, like \"Have a code?\", so it doesn't distract the people who don't have one. Other than that, I think the error messages on the picture are a bit vague too.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Collapsing it sounds sensible, since shoppers leaving to hunt for a code is a real drop-off risk. You mentioned vague error messages too, so is there another spot where you'd want the design to be bolder?"
+            },
+            {
+              "role": "learner",
+              "text": "Good question. To be fair, I'd say the error messages are the other spot. Right now they just say \"something went wrong\", which doesn't help anyone. I'd push for specific messages next to each field, in plain language. Maybe we could run a quick test with five or six users on both versions, and see whether the collapsed promo field and the clearer errors actually reduce the drop-off? Would you be up for that?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Let's do it. I'd like to see whether the new error text helps people finish, not just whether the promo field moves. Who could we invite first?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "9109c607-3d29-4acb-bed0-8aa0459273f7:uat-16:moment",
+              "kind": "word",
+              "said": "on the picture",
+              "better": "on the screen",
+              "why": "the screens shoppers see during checkout",
+              "turnId": "9109c607-3d29-4acb-bed0-8aa0459273f7:uat-16",
+              "at": 1792251148007
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I'd push back on one thing though"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "So I'd suggest collapsing it behind a small link, like \"Have a code?\", so it doesn't distract the people who don't have one."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Maybe we could run a quick test with five or six users on both versions"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 75855,
+      "prior": [
+        {
+          "id": "2026-09-15-lt-recert/LT-jana-29-J3-1",
+          "run": "2026-09-15-lt-recert",
+          "type": "missing-feature",
+          "dimension": "senior-quality",
+          "title": "Fluent practice produces no new language to keep",
+          "expected": "One or two worthwhile C1 insights into register, idiom or collocation, even when correction is unnecessary.",
+          "got": "Zero moments across eight learner replies: zero per ten turns. Precision is undefined, not a demonstrated pass. The conversation supplies practice but does not meet Jana’s learning bar.",
+          "evidence": [
+            "#11: \"8 replies; 0 moments to keep.\" Jana: \"not a single phrase worth keeping is a bit underwhelming.\""
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-jana-29-J3-2",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Recap confirms saving but offers no learning review",
+          "expected": "A concise recap identifying what Jana practised successfully and a useful next stretch.",
+          "got": "The recap contains only the title and counts. The partner summarizes the agreed brief, but there is no review of Jana’s language.",
+          "evidence": [
+            "#9: \"We’ve agreed the brief: welcoming but polished, flowers first, newcomers in mind\"; #11: \"Rehearsal saved: A warmer welcome for the midnight garden opening. 8 replies; 0 moments to keep.\""
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-jana-29-J3-2",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Recap is inaccurate and generic",
+          "expected": "Specific recap naming what was practised, correct counts",
+          "got": "'4 spoken · 0 written replies' after 5 replies; sentence 'I'm not really the right audience for it' was not hers",
+          "evidence": [
+            "#7 recap vs #2-#5 five answers.",
+            "recap builder / evidence counting"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-2",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Recap is bare",
+          "expected": "Specific recap of what was practised, with phrases gained",
+          "got": "\"3 spoken · 0 written replies\", level-check phrase only",
+          "evidence": [
+            "#6 recap",
+            "recap builder"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-1",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "No moments: nothing new taught at C1",
+          "expected": "One or two idiom or register takeaways, and the 'on the picture' slip caught",
+          "got": "Moments empty; \"on the picture\" in #3 uncorrected",
+          "evidence": [
+            "#3 learner: \"all the clues are there on the picture\"; moments []",
+            "moment trigger rules"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Mission closes after three replies",
+          "expected": "Scene continues for about eight replies",
+          "got": "Mission done with Declan's question open",
+          "evidence": [
+            "#5 \"Mission done\" beside Declan's \"Is there anything else you'd need...\"",
+            "mission completion rule"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "missing-feature",
+          "dimension": "senior-quality",
+          "title": "Fluent practice again yields no new language to keep",
+          "expected": "One or two idiom or register takeaways at C1",
+          "got": "Zero moments, no coaching",
+          "evidence": [
+            "facts.conversation moments [] and coaching null; Declan's 'grand' and 'a scramble' never surfaced.",
+            "moment trigger rules"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Recap is bare and mislabels help",
+          "expected": "Specific recap naming what was practised and phrases to reuse",
+          "got": "Counts only, '2 with help' though no help was used",
+          "evidence": [
+            "#6 \"3 spoken · 0 written replies · 1 on your own · 2 with help\"",
+            "recap builder"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 level shown as \"C1 · Fluent\", matching trueBand C1 (exact)."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement check tasks in this journey's facts."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#2 Owen opens \"Thanks for joining the review, Owen\", addressing the learner by the partner's own name. Replies like #3 \"Fair point, and I'm glad the single page landed well\" are competent but generic, with no Irish or idiomatic colour."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#4 the only moment is \"on the picture\" → \"on the screen\". It is correct but a basic vocabulary slip, with no register, idiom or collocation point at C1."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 plan topics: pushing back, raising friction, turning down a plan, clarifying a brief, stalling a landlord are all workplace or social nuance. Five of the six plan topics fit."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#7 the recap is counts only: \"3 spoken · 0 written replies · 2 on your own · 1 with help\". Jana used no help, and it adds the odd phrase \"where you felt it played it too safe\"."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2–#6 Jana starts from the recommended plan topic and sends three substantial replies, though the scene closes early."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Partner turns at #2, #3, #5 and #6 are at C1 in register and content, e.g. \"a real drop-off risk\"."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#4 one moment, correct and short, and the scene resumes with \"Back to the conversation\"."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "#7 the recap is bare and mislabelled (\"1 with help\" with no help used). It gives no review of her language and offers only \"on the picture\" to keep."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Mission closes after three replies",
+            "expected": "Scene runs about eight learner replies",
+            "got": "\"Mission done\" shown at #6 with Owen's question \"Who could we invite first?\" still open",
+            "evidence": "#6 \"Mission done. See what you did tonight.\" after only 3 learner replies",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Mission completion waits for a natural close or a minimum reply count, and never leaves an open partner question.",
+            "code_hint": "mission completion rule"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Recap is bare and mislabels help",
+            "expected": "A specific recap naming what was practised, with phrases to reuse, and correct counts",
+            "got": "Counts only, \"2 on your own · 1 with help\" though Jana used no help",
+            "evidence": "#7 \"3 spoken · 0 written replies · 2 on your own · 1 with help · 1 moment to keep\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recap lists what the learner did well and the phrases gained. Help counts match the help actually used.",
+            "code_hint": "recap builder / evidence counting"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Only moment is a B1-level word swap",
+            "expected": "A C1 insight on register, idiom or collocation",
+            "got": "\"on the picture\" → \"on the screen\", with a thin explanation",
+            "evidence": "#4 \"A word for this scene… the screens shoppers see during checkout\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "At C1 the moment offers a register or idiom upgrade, e.g. softer pushback phrasing, alongside any slip fix.",
+            "code_hint": "moment trigger rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner calls the learner by its own name",
+            "expected": "A natural colleague who addresses Jana correctly",
+            "got": "Owen says \"Thanks for joining the review, Owen\"",
+            "evidence": "#2 partner opening line",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner never uses its own persona name to address the learner.",
+            "code_hint": "conversation partner prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Real slip caught, scene resumes cleanly",
+            "expected": "Catch real errors without breaking flow",
+            "got": "\"on the picture\" caught immediately and the learner returned to the scene",
+            "evidence": "#4 moment, then #5 conversation continues",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep catching Czech-typical slips with a one-tap return.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 5,
+          "confidence": "low"
+        },
+        "voice": "The topic was spot on, because pushing back on a checkout redesign is my actual job. It caught \"on the picture\", and that is exactly the slip I make. But that was the whole lesson. Owen opened with \"Thanks for joining the review, Owen\", which is odd. His English is fine but generic. There was no Dublin directness and no idiom I didn't already have. The mission ended after three replies, mid-question. The recap said I'd had help, and I hadn't. I wouldn't trust it to tell me anything about register. For nuance I'd still go back to a Preply tutor. It's quick and handy, but too easy for C1, so I'd only tell people it's okay for a warm-up.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt-recert/LT-jana-29-J3-1",
+            "status": "recurs",
+            "evidence": "#4 the only moment is a basic word swap; nothing worthwhile at C1 to keep.",
+            "finding": 2
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-jana-29-J3-2",
+            "status": "recurs",
+            "evidence": "#7 recap is counts plus one phrase, with no review of her language.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-jana-29-J3-2",
+            "status": "recurs",
+            "evidence": "#7 \"1 with help\" is inaccurate and the recap is generic.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-2",
+            "status": "recurs",
+            "evidence": "#7 recap is counts only with \"where you felt it played it too safe\".",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-jana-29-J3-1",
+            "status": "not-seen",
+            "evidence": "#4 \"on the picture\" was caught as a moment this time.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-4",
+            "status": "recurs",
+            "evidence": "#6 \"Mission done\" after 3 replies, with Owen's \"Who could we invite first?\" open.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-2",
+            "status": "recurs",
+            "evidence": "#4 the moment is a B1 word swap and no C1 idiom or register was taught.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-3",
+            "status": "recurs",
+            "evidence": "#7 \"2 on your own · 1 with help\" though no help was used.",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: #7 the recap is bare and mislabelled (\"1 with help\" with no help used). It gives no review of her language and offers only \"on the picture\" to keep.",
+          "check": "They finish with a recap and feel they practised something real."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #2 Owen opens \"Thanks for joining the review, Owen\", addressing the learner by the partner's own name. Replies like #3 \"Fair point, and I'm glad the single page landed well\" are competent but generic, with no Irish or idiomatic colour."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #4 the only moment is \"on the picture\" → \"on the screen\". It is correct but a basic vocabulary slip, with no register, idiom or collocation point at C1."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #7 the recap is counts only: \"3 spoken · 0 written replies · 2 on your own · 1 with help\". Jana used no help, and it adds the odd phrase \"where you felt it played it too safe\"."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 19,
+      "fail": 0,
+      "ms": 175565
+    },
+    "character": {
+      "n": 21,
+      "fail": 0,
+      "ms": 108004
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 85492
+    }
+  }
+}

@@ -23,13 +23,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "Keep the complete task reading load near 15 words and demonstrate that this beginner understands the requested action, including after Czech or don't-know responses.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
     "recertify_status": "recurs",
-    "recertify_evidence": "#7 24-word listening line; thought 'Too fast and long'.",
-    "recurred_as": "LT-tomas-9-J1-1"
+    "recertify_evidence": "#4 ~28-word question; #7 ~20-word listening line",
+    "recurred_as": "LT-tomas-9-J1-2"
   },
   {
     "id": "LT-petra-38-J1-1",
@@ -54,13 +54,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "Explain the mixed skill evidence and uncertainty in plain language; avoid claiming agreement without reconciling the A2 observation with B1.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#9 B1 shown while notes say 'Your English read as B1 here' and the corrections are A2 slips; she says 'maybe a bit high'.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 headline A2 exact, not B1.",
     "recurred_as": "LT-petra-38-J1-1"
   },
   {
@@ -182,13 +182,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Give one concrete next exercise or useful phrase grounded in her answers, such as practising a guest complaint over the phone.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
     "recertify_status": "recurs",
-    "recertify_evidence": "#9 focus 'Say a little more in each answer' ignores her phone-comprehension goal at #4.",
-    "recurred_as": "LT-petra-38-J1-4"
+    "recertify_evidence": "#4 'talk better on the phone' vs #10 'Work on verb endings'; the phone difficulty is not addressed.",
+    "recurred_as": "LT-petra-38-J1-3"
   },
   {
     "id": "LT-tomas-9-J1-2",
@@ -213,13 +213,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 5,
     "suggested_acceptance": "Offer one short, immediately repeatable phrase using familiar words before expanding to an activity sentence.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#10 focus on articles ('adding a before a noun'), beyond like/is level and unnatural.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 focus is 'Say a little more in each answer', no article nitpick (but it is generic)",
     "recurred_as": "LT-tomas-9-J1-3"
   },
   {

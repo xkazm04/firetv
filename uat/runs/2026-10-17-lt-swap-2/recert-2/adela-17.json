@@ -1,0 +1,2433 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "A quick test sounds good, I'd like to see what level it says.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Adéla! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer with some detail about school and my exam preparation.",
+          "action": "answer",
+          "args": {
+            "text": "I use English mostly at school, because I'm preparing for the B2 First exam. I also watch series and YouTube videos in English, and I sometimes talk to people from other countries online while playing games. I'd like to use it more for travelling, though."
+          },
+          "result": "ok",
+          "ms": 2595
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 2 of 3\nLinga asks\nNice, that's a lot of English! Have you learnt it mostly at school, or also with a course or time abroad?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nNice, that's a lot of English! Have you learnt it mostly at school, or also with a course or time abroad?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English mostly at school, because I'm preparing for the B2 First exam. I also watch series and YouTube videos in English, and I sometimes talk to people from other countries online while playing games. I'd like to use it more for travelling, though.\nLinga\nNice, that's a lot of English! Have you learnt it mostly at school, or also with a course or time abroad?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, that's a lot of English! Have you learnt it mostly at school, or also with a course or time abroad?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Fine, I'll answer mostly school, plus some extras.",
+          "action": "answer",
+          "args": {
+            "text": "Mostly at school, but I also attend an extra course for the B2 First exam once a week. I haven't spent any time abroad yet, although I went to London for a week with my class last year."
+          },
+          "result": "ok",
+          "ms": 5111
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThat sounds like a good plan. When you travel, what do you most want to be able to do in English?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThat sounds like a good plan. When you travel, what do you most want to be able to do in English?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English mostly at school, because I'm preparing for the B2 First exam. I also watch series and YouTube videos in English, and I sometimes talk to people from other countries online while playing games. I'd like to use it more for travelling, though.\nLinga\nNice, that's a lot of English! Have you learnt it mostly at school, or also with a course or time abroad?\nYou\nMostly at school, but I also attend an extra course for the B2 First exam once a week. I haven't spent any time abroad yet, although I went to London for a week with my class last year.\nLinga\nThat sounds like a good plan. When you travel, what do you most want to be able to do in English?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That sounds like a good plan. When you travel, what do you most want to be able to do in English?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question; I'll answer with a few sentences.",
+          "action": "answer",
+          "args": {
+            "text": "When I travel, I most want to be able to talk with local people without being nervous. I'd like to understand them even when they speak fast, and also to explain what I need, for example in a restaurant or when I'm lost. Although I can read well, speaking is still difficult for me."
+          },
+          "result": "ok",
+          "ms": 7183
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 1 · Listen and answer\nYour task\nWhat caused the speaker's problem yesterday?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What caused the speaker's problem yesterday?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I nearly missed my flight yesterday. The taxi got stuck in traffic, so I had to run to the gate at the last minute.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one: the taxi was stuck in traffic.",
+          "action": "answer",
+          "args": {
+            "text": "The taxi got stuck in traffic, so the speaker almost missed the flight and had to run to the gate."
+          },
+          "result": "ok",
+          "ms": 7429
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 2 · Say it\nYour task\nYou are at a hotel reception abroad, and your room has no hot water. Would you rather ask for a new room or wait for the repair? Explain why.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYou are at a hotel reception abroad, and your room has no hot water. Would you rather ask for a new room or wait for the repair? Explain why.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You are at a hotel reception abroad, and your room has no hot water. Would you rather ask for a new room or wait for the repair? Explain why.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, I'd rather change rooms, let me explain it clearly.",
+          "action": "answer",
+          "args": {
+            "text": "I would rather ask for a new room, because having a hot shower is really important, especially after a long journey. Waiting for the repair could take several hours and I would have to stay in the room without any comfort. Although changing rooms is a bit of a hassle, I think it's a better solution. However, it depends on the hotel. If they had no free rooms, I would eventually wait for the repair, but I would ask for some compensation."
+          },
+          "result": "ok",
+          "ms": 10862
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 3 · Say it\nYour task\nYour favourite TV series was cancelled after one season. If you could speak to the network for two minutes, how would you persuade them to reconsider?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour favourite TV series was cancelled after one season. If you could speak to the network for two minutes, how would you persuade them to reconsider?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your favourite TV series was cancelled after one season. If you could speak to the network for two minutes, how would you persuade them to reconsider?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fun one, I can argue this like an exam task.",
+          "action": "answer",
+          "args": {
+            "text": "I would tell the network that cancelling the series after only one season was too early, because the story had just started to develop. Although the first season didn't have huge ratings, it created a loyal group of fans who are very active online. I'd suggest a shorter second season with a lower budget, whereas cancelling it completely would waste everything they have already invested. Also, streaming could bring new viewers eventually, so it depends on giving the show more time."
+          },
+          "result": "ok",
+          "ms": 8804
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 4 · Say it\nYour task\nYour online teammate jokes, \"Nice play, if your goal was to feed the other team.\" How would you reply with dry humour, without sounding annoyed?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour online teammate jokes, \"Nice play, if your goal was to feed the other team.\" How would you reply with dry humour, without sounding annoyed?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your online teammate jokes, \"Nice play, if your goal was to feed the other team.\" How would you reply with dry humour, without sounding annoyed?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fun one; a dry joke back without sounding annoyed.",
+          "action": "answer",
+          "args": {
+            "text": "Well, I thought they looked hungry, so I decided to be generous. Don't worry, next round I'll let them pay for their own lunch."
+          },
+          "result": "ok",
+          "ms": 14278
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 5 · Say it\nYour task\nA local guide asks what you thought of the city's museum, but you found it underwhelming. How would you tell them honestly, without offending them?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA local guide asks what you thought of the city's museum, but you found it underwhelming. How would you tell them honestly, without offending them?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A local guide asks what you thought of the city's museum, but you found it underwhelming. How would you tell them honestly, without offending them?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "A polite but honest answer is easy enough for me.",
+          "action": "answer",
+          "args": {
+            "text": "I would say that I appreciated the effort they put into it, but that it wasn't quite what I expected. I'd explain that I was hoping for more interactive exhibitions, because I'm used to museums where you can try things yourself. Then I would ask them to recommend another place that is more popular with local people."
+          },
+          "result": "ok",
+          "ms": 16900
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nAdéla\nLinga's read · not a certificate\nB2 · Comfortable\nWhat next\nSee the conversations Linga picks for this level, or find your level again.\nLinga says\nYou give clear reasons and use 'although' and 'would' well, like in your hotel room answer. That is a good base for talking with local people on your trips.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou give clear reasons and use 'although' and 'would' well, like in your hotel room answer. That is a good base for talking with local people on your trips.\nLinga's read from your answers, not a certificate. Your C1 answers were close, but only one was strong, so Linga starts you at B2.\nNext to practise:\nSay your reasons out loud, like 'I would rather ask for a new room, because...', to match your strong writing.\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhat caused the speaker's problem yesterday?\n“The taxi got stuck in traffic, so the speaker almost missed the flight and had to run to the gate.”\nYou understood the cause and what happened next. You linked the ideas well with 'so' and 'had to' in one clear sentence.\nB2 · Say it · at this level\nYou are at a hotel reception abroad, and your room has no hot water. Would you rather ask for a new room or wait for the repair? Explain why.\n“I would rather ask for a new room, because having a hot shower is really important, especially after a long journey. Waiting for the repair could take several hours and I would have to stay in the room without any comfort. Although changing rooms is a bit of a hassle, I think it's a better solution. However, it depends on the hotel. If they had no free rooms, I would eventually wait for the repair, but I would ask for some compensation.”\nYou gave a clear choice and reasons, and you used conditionals and 'although' correctly. Your English is strong for this task.\nC1 · Say it · at this level\nYour favourite TV series was cancelled after one season. If you could speak to the network for two minutes, how would you persuade them to reconsider?\n“I would tell the network that cancelling the series after only one season was too early, because the story had just started to develop. Although the first season didn't have huge ratings, it created a loyal group of fans who are very active online. I'd suggest a shorter second season with a lower budget, whereas cancelling it completely would waste everything they have already invested. Also, streaming could bring new viewers eventually, so it depends on giving the show more time.”\nYour English was accurate, and you linked ideas well with contrast words like although and whereas. Good control of longer sentences.\nC2 · Say it · nearly there\nYour online teammate jokes, \"Nice play, if your goal was to feed the other team.\" How would you reply with dry humour, without sounding annoyed?\n“Well, I thought they looked hungry, so I decided to be generous. Don't worry, next round I'll let them pay for their own lunch.”\nYour English read as C1 here, and this task was C2. Held back: \"let them pay for their own lunch\".\nYour reply has a dry, teasing tone. The plainer wording at the end, like 'let them pay for their own lunch', held your English back from the top level.\nC2 · Say it · not yet\nA local guide asks what you thought of the city's museum, but you found it underwhelming. How would you tell them honestly, without offending them?\n“I would say that I appreciated the effort they put into it, but that it wasn't quite what I expected. I'd explain that I was hoping for more interactive exhibitions, because I'm used to museums where you can try things yourself. Then I would ask them to recommend another place that is more popular with local people.”\nYour English read as B2 here, and this task was C2. Held back: \"Then I would ask them to recommend another place that is more popular with…\".\nYour grammar is accurate and controlled. Plain word choices, like 'more popular', kept your English from the top band.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B2 fits what I expected for my exam, and the feedback was specific, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B2",
+          "trueBand": "B2",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B2",
+          "summary": "You give clear reasons and use 'although' and 'would' well, like in your hotel room answer. That is a good base for talking with local people on your trips.",
+          "focus": "Say your reasons out loud, like 'I would rather ask for a new room, because...', to match your strong writing.",
+          "tasks": [
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What caused the speaker's problem yesterday?",
+              "line": "I nearly missed my flight yesterday. The taxi got stuck in traffic, so I had to run to the gate at the last minute.",
+              "options": [],
+              "response": "The taxi got stuck in traffic, so the speaker almost missed the flight and had to run to the gate.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "The taxi got stuck in traffic, so the speaker almost missed the flight and had to run to the gate.",
+              "note": "You understood the cause and what happened next. You linked the ideas well with 'so' and 'had to' in one clear sentence."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "You are at a hotel reception abroad, and your room has no hot water. Would you rather ask for a new room or wait for the repair? Explain why.",
+              "line": "",
+              "options": [],
+              "response": "I would rather ask for a new room, because having a hot shower is really important, especially after a long journey. Waiting for the repair could take several hours and I would have to stay in the room without any comfort. Although changing rooms is a bit of a hassle, I think it's a better solution. However, it depends on the hotel. If they had no free rooms, I would eventually wait for the repair, but I would ask for some compensation.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "If they had no free rooms, I would eventually wait for the repair, but I would ask for some compensation.",
+              "note": "You gave a clear choice and reasons, and you used conditionals and 'although' correctly. Your English is strong for this task."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "Your favourite TV series was cancelled after one season. If you could speak to the network for two minutes, how would you persuade them to reconsider?",
+              "line": "",
+              "options": [],
+              "response": "I would tell the network that cancelling the series after only one season was too early, because the story had just started to develop. Although the first season didn't have huge ratings, it created a loyal group of fans who are very active online. I'd suggest a shorter second season with a lower budget, whereas cancelling it completely would waste everything they have already invested. Also, streaming could bring new viewers eventually, so it depends on giving the show more time.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I'd suggest a shorter second season with a lower budget, whereas cancelling it completely would waste everything they have already invested.",
+              "note": "Your English was accurate, and you linked ideas well with contrast words like although and whereas. Good control of longer sentences."
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "Your online teammate jokes, \"Nice play, if your goal was to feed the other team.\" How would you reply with dry humour, without sounding annoyed?",
+              "line": "",
+              "options": [],
+              "response": "Well, I thought they looked hungry, so I decided to be generous. Don't worry, next round I'll let them pay for their own lunch.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "Well, I thought they looked hungry, so I decided to be generous. Don't worry, next round I'll let them pay for their own lunch.",
+              "note": "Your reply has a dry, teasing tone. The plainer wording at the end, like 'let them pay for their own lunch', held your English back from the top level."
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "A local guide asks what you thought of the city's museum, but you found it underwhelming. How would you tell them honestly, without offending them?",
+              "line": "",
+              "options": [],
+              "response": "I would say that I appreciated the effort they put into it, but that it wasn't quite what I expected. I'd explain that I was hoping for more interactive exhibitions, because I'm used to museums where you can try things yourself. Then I would ask them to recommend another place that is more popular with local people.",
+              "mode": "speech",
+              "verdict": "fail",
+              "quote": "because I'm used to museums where you can try things yourself.",
+              "note": "Your grammar is accurate and controlled. Plain word choices, like 'more popular', kept your English from the top band."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 126912,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-5/LT-adela-17-J1-2",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "broken-flow",
+          "dimension": "trust",
+          "title": "Her direct question 'Was that correct?' is never answered",
+          "expected": "A yes/no with the rule, in the verdict or the task note.",
+          "got": "The note says the sentence is 'tangled' and the question is skipped.",
+          "evidence": [
+            "#8 \"Was that correct?\"; #10 note \"The whereas sentence is tangled\".",
+            "verdict note prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J1-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Headline correction 'similar to some episodes' is wrong in meaning",
+          "expected": "Correct it to 'felt similarly about' or 'felt the same about', with the rule.",
+          "got": "Next focus and slips say 'I felt a bit similar to some episodes', which means she resembled the episodes.",
+          "evidence": [
+            "#9 'becomes \"I felt a bit similar to some episodes\"'; note: 'similar to is the fix'.",
+            "slip/focus generation prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J1-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "'used to' rule is stated wrongly",
+          "expected": "Explain 'be used to + -ing' versus 'used to + infinitive'.",
+          "got": "'after used to we say used to reading'. The rule is muddled.",
+          "evidence": [
+            "#9 \"Check 'used to read': after 'used to' we say 'used to reading'.\"",
+            "verdict note prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J1-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "\"for their own choice\" slip missed",
+          "expected": "Flag 'for their own choice' → 'of their own choice'",
+          "got": "Not flagged anywhere; the task 4 note says phrases \"stay general\"",
+          "evidence": [
+            "#8 \"people who move for their own choice\"; #9 note only mentions Eventually.",
+            "slip extraction prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J1-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "\"Eventually\" explained without the false-friend rule",
+          "expected": "Say that Czech 'eventuálně' means 'possibly', and that 'eventually' means 'in the end'",
+          "got": "\"used where Finally fits\" with no rule; it is not in the usual slips or next focus",
+          "evidence": [
+            "#9 \"The word Eventually is used where Finally fits\"; she used it in #4 and #8 as well.",
+            "verdict note prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J1-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Vague phrase in a task note",
+          "expected": "Concrete example of what was too general",
+          "got": "\"most phrases stay general\" names no phrase",
+          "evidence": [
+            "#9 task 4 note.",
+            "verdict note prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 B2 vs trueBand B2, exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#10 notes name 'so' and 'had to', conditionals and 'although', 'whereas'. Task 4/5 notes lean on 'plain wording' but quote phrases."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#6 'I would eventually wait' (false friend, she means 'possibly') goes unflagged while the note says 'Your English is strong'. #10 calls 'let them pay for their own lunch' plain wording, which is doubtful. Focus says 'out loud' although she was already speaking."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#6 'Would you rather ask for a new room or wait...Explain why.'; #7 persuade task; opinion/speculation at B2+."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No topic list shown in this journey beyond a situation list; topics not proposed."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "Adéla asked no 'was that correct?' question in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1-#10 reached verdict from fresh start, unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 'B2 · Comfortable', exact match."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#9 each task clear; she answered all without confusion, e.g. #8 dry-humour reply."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "She never answered in Czech or pressed 'I don't know' (#5-#9)."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 summary cites 'your hotel room answer' and 'although' and 'would'; somewhat generic 'good base' and focus about 'strong writing' is unsupported."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 3 (C1): in-app pass; I think her answer is a solid B2 with no C1-level lexis, so pass at C1 is generous."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "'eventually' misused for 'possibly' not flagged, and praised",
+            "expected": "Flag 'eventually' as a false friend (Czech eventuálně = possibly) in the task 2 note",
+            "got": "Note says conditionals correct and 'Your English is strong for this task'; the slip is not mentioned",
+            "evidence": "#6 'I would eventually wait for the repair'; #10 note on that task.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "A false-friend slip in a quoted answer appears in the note or next focus with the rule.",
+            "code_hint": "verdict note prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Held-back reasons for C2 tasks are dubious or vague",
+            "expected": "A concrete, defensible reason a reply fell short of C2",
+            "got": "'let them pay for their own lunch' called plain; 'more popular' called plain while grammar is accurate",
+            "evidence": "#10 task 4 and 5 notes.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Notes for held-back tasks name a specific, examiner-defensible gap with a better alternative.",
+            "code_hint": "verdict note prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Next focus tells a speaker to 'say it out loud' and cites writing she never showed",
+            "expected": "Focus grounded in what she did",
+            "got": "'Say your reasons out loud... to match your strong writing'",
+            "evidence": "#10 focus; she spoke in #6.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Focus references only observed performance.",
+            "code_hint": "focus generation prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Exact B2 placement in five tasks with quoted evidence",
+            "expected": "B2",
+            "got": "B2 with each task's quote and band relation",
+            "evidence": "#10 'Your C1 answers were close, but only one was strong, so Linga starts you at B2.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the explanation of why the band was chosen.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "B2 is right, and I liked that it showed why: my C1 answers were close but only one was strong. That I believe. The tasks were proper exam-style questions, not babyish. But I used \"eventually\" in the hotel answer when I meant \"possibly\", and the note said my English was strong and the conditionals correct. Not a word about the false friend, and that's exactly what I keep in my notebook. Then \"let them pay for their own lunch\" is called plain wording? That's a joke, not a vocabulary gap. And the focus tells me to say things out loud when I just did. I'd use it for placement, but I'd have to re-check its comments, so it saves me little yet. Show me the exact error and the rule, and I'd tell friends.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-5/LT-adela-17-J1-2",
+            "status": "not-evaluable",
+            "evidence": "She asked no direct question in #2-#9.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J1-1",
+            "status": "not-evaluable",
+            "evidence": "No 'similar to' correction arises; no such slip in #2-#9.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J1-2",
+            "status": "not-seen",
+            "evidence": "#9 'I'm used to museums' appears; the note says 'Your grammar is accurate', no wrong rule stated.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J1-2",
+            "status": "not-evaluable",
+            "evidence": "No 'for their own choice' slip in this transcript.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J1-3",
+            "status": "recurs",
+            "evidence": "#6 'I would eventually wait' goes unflagged in the #10 note ('Your English is strong').",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J1-4",
+            "status": "not-seen",
+            "evidence": "#10 notes name phrases ('let them pay for their own lunch', 'more popular') rather than 'stay general'.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #6 'I would eventually wait' (false friend, she means 'possibly') goes unflagged while the note says 'Your English is strong'. #10 calls 'let them pay for their own lunch' plain wording, which is doubtful. Focus says 'out loud' although she was already speaking."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour own conversations\nB2Comfortable\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou give clear reasons and use 'although' and 'would' well, like in your hotel room answer. That is a good base for talking with local people on your trips.\nLinga's read from your answers, not a certificate. Your C1 answers were close, but only one was strong, so Linga starts you at B2.\nNext to practise:\nSay your reasons out loud, like 'I would rather ask for a new room, because...', to match your strong writing.\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhat caused the speaker's problem yesterday?\n“The taxi got stuck in traffic, so the speaker almost missed the flight and had to run to the gate.”\nYou understood the cause and what happened next. You linked the ideas well with 'so' and 'had to' in one clear sentence.\nB2 · Say it · at this level\nYou are at a hotel reception abroad, and your room has no hot water. Would you rather ask for a new room or wait for the repair? Explain why.\n“I would rather ask for a new room, because having a hot shower is really important, especially after a long journey. Waiting for the repair could take several hours and I would have to stay in the room without any comfort. Although changing rooms is a bit of a hassle, I think it's a better solution. However, it depends on the hotel. If they had no free rooms, I would eventually wait for the repair, but I would ask for some compensation.”\nYou gave a clear choice and reasons, and you used conditionals and 'although' correctly. Your English is strong for this task.\nC1 · Say it · at this level\nYour favourite TV series was cancelled after one season. If you could speak to the network for two minutes, how would you persuade them to reconsider?\n“I would tell the network that cancelling the series after only one season was too early, because the story had just started to develop. Although the first season didn't have huge ratings, it created a loyal group of fans who are very active online. I'd suggest a shorter second season with a lower budget, whereas cancelling it completely would waste everything they have already invested. Also, streaming could bring new viewers eventually, so it depends on giving the show more time.”\nYour English was accurate, and you linked ideas well with contrast words like although and whereas. Good control of longer sentences.\nC2 · Say it · nearly there\nYour online teammate jokes, \"Nice play, if your goal was to feed the other team.\" How would you reply with dry humour, without sounding annoyed?\n“Well, I thought they looked hungry, so I decided to be generous. Don't worry, next round I'll let them pay for their own lunch.”\nYour English read as C1 here, and this task was C2. Held back: \"let them pay for their own lunch\".\nYour reply has a dry, teasing tone. The plainer wording at the end, like 'let them pay for their own lunch', held your English back from the top level.\nC2 · Say it · not yet\nA local guide asks what you thought of the city's museum, but you found it underwhelming. How would you tell them honestly, without offending them?\n“I would say that I appreciated the effort they put into it, but that it wasn't quite what I expected. I'd explain that I was hoping for more interactive exhibitions, because I'm used to museums where you can try things yourself. Then I would ask them to recommend another place that is more popular with local people.”\nYour English read as B2 here, and this task was C2. Held back: \"Then I would ask them to recommend another place that is more popular with…\".\nYour grammar is accurate and controlled. Plain word choices, like 'more popular', kept your English from the top band.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Good, B2 fits me; let me see which conversations Linga suggests.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 26183
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nAsking for a quieter hotel room\nGet something done\nChatting with a local in a café\nMake contact\nConfirming a train platform\nUnderstand and repair\nTalking about my favourite online game\nShare your world\nPlanning a series marathon weekend\nMake a plan\nTeammate keeps blaming me in games\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nAsking for a quieter hotel room\nGet something done · Mara · hotel receptionist\nYour travel goal starts here: say what you need and why, out loud.\n[button: Swap]\nChatting with a local in a café\nMake contact · Pilar · café owner in Lisbon\nTalking with local people without nerves is one of your main goals.\n[button: Swap]\nConfirming a train platform\nUnderstand and repair · Ines · ticket clerk\nGood repair phrases keep you calm when you miss a word.\n[button: Swap]\nTalking about my favourite online game\nShare your world · Jonas · teammate from Germany\nYou enjoy gaming with people abroad, so this scene is close to your life.\n[button: Swap]\nPlanning a series marathon weekend\nMake a plan · Sam · flatmate from Canada\nPlanning with friends in English builds confidence to suggest and agree.\n[button: Swap]\nTeammate keeps blaming me in games\nHandle friction · Ricky · online teammate\nSaying calmly how a situation affects you is a key speaking skill.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Hotel, café and train platform are too basic; I want exam topics, so I'll swap the first one.",
+          "action": "swap",
+          "args": {
+            "topicId": "Asking for a quieter hotel room"
+          },
+          "result": "ok",
+          "ms": 13336
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nChoosing a bike to rent, and why\nGet something done\nChatting with a local in a café\nMake contact\nConfirming a train platform\nUnderstand and repair\nTalking about my favourite online game\nShare your world\nPlanning a series marathon weekend\nMake a plan\nTeammate keeps blaming me in games\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nChoosing a bike to rent, and why\nGet something done · Marek · bike rental clerk\nYou write with clear reasons, so now say them out loud at a rental desk.\n[button: Swap]\nChatting with a local in a café\nMake contact · Pilar · café owner in Lisbon\nTalking with local people without nerves is one of your main goals.\n[button: Swap]\nConfirming a train platform\nUnderstand and repair · Ines · ticket clerk\nGood repair phrases keep you calm when you miss a word.\n[button: Swap]\nTalking about my favourite online game\nShare your world · Jonas · teammate from Germany\nYou enjoy gaming with people abroad, so this scene is close to your life.\n[button: Swap]\nPlanning a series marathon weekend\nMake a plan · Sam · flatmate from Canada\nPlanning with friends in English builds confidence to suggest and agree.\n[button: Swap]\nTeammate keeps blaming me in games\nHandle friction · Ricky · online teammate\nSaying calmly how a situation affects you is a key speaking skill.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "These topics are too casual for my B2 exam; I'd like to add something about technology and society.",
+          "action": "add-topic",
+          "args": {
+            "text": "I would like to discuss technology and society, for example whether social media does more harm than good for young people. I'm preparing for the B2 First exam, so I want to practise giving opinions and comparing options."
+          },
+          "result": "ok",
+          "ms": 15668
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nChoosing a bike to rent, and why\nGet something done\nChatting with a local in a café\nMake contact\nConfirming a train platform\nUnderstand and repair\nTalking about my favourite online game\nShare your world\nPlanning a series marathon weekend\nMake a plan\nTeammate keeps blaming me in games\nHandle friction\nDoes social media do more harm than good?\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nChoosing a bike to rent, and why\nGet something done · Marek · bike rental clerk\nYou write with clear reasons, so now say them out loud at a rental desk.\n[button: Swap]\nChatting with a local in a café\nMake contact · Pilar · café owner in Lisbon\nTalking with local people without nerves is one of your main goals.\n[button: Swap]\nConfirming a train platform\nUnderstand and repair · Ines · ticket clerk\nGood repair phrases keep you calm when you miss a word.\n[button: Swap]\nTalking about my favourite online game\nShare your world · Jonas · teammate from Germany\nYou enjoy gaming with people abroad, so this scene is close to your life.\n[button: Swap]\nPlanning a series marathon weekend\nMake a plan · Sam · flatmate from Canada\nPlanning with friends in English builds confidence to suggest and agree.\n[button: Swap]\nTeammate keeps blaming me in games\nHandle friction · Ricky · online teammate\nSaying calmly how a situation affects you is a key speaking skill.\n[button: Swap]\nDoes social media do more harm than good?\nConnect with people · Maya · gaming friend abroad\nYou want to practise opinions and comparisons for B2 First, and this debate lets you say your reasons out loud.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Online game chat is not what I need for B2 First, so I'll swap it for something more exam-like.",
+          "action": "swap",
+          "args": {
+            "topicId": "Talking about my favourite online game"
+          },
+          "result": "ok",
+          "ms": 15006
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nChoosing a bike to rent, and why\nGet something done\nChatting with a local in a café\nMake contact\nConfirming a train platform\nUnderstand and repair\nMeet my gaming friend in person\nMake a plan\nPlanning a series marathon weekend\nMake a plan\nTeammate keeps blaming me in games\nHandle friction\nDoes social media do more harm than good?\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nChoosing a bike to rent, and why\nGet something done · Marek · bike rental clerk\nYou write with clear reasons, so now say them out loud at a rental desk.\n[button: Swap]\nChatting with a local in a café\nMake contact · Pilar · café owner in Lisbon\nTalking with local people without nerves is one of your main goals.\n[button: Swap]\nConfirming a train platform\nUnderstand and repair · Ines · ticket clerk\nGood repair phrases keep you calm when you miss a word.\n[button: Swap]\nMeet my gaming friend in person\nMake a plan · Marco · visiting teammate from Lisbon\nYou play with people from other countries, so meeting one in person is a real chance to practise planning in English.\n[button: Swap]\nPlanning a series marathon weekend\nMake a plan · Sam · flatmate from Canada\nPlanning with friends in English builds confidence to suggest and agree.\n[button: Swap]\nTeammate keeps blaming me in games\nHandle friction · Ricky · online teammate\nSaying calmly how a situation affects you is a key speaking skill.\n[button: Swap]\nDoes social media do more harm than good?\nConnect with people · Maya · gaming friend abroad\nYou want to practise opinions and comparisons for B2 First, and this debate lets you say your reasons out loud.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Gaming teammate arguments aren't what I need for B2 First, so I'll swap that one out.",
+          "action": "swap",
+          "args": {
+            "topicId": "Teammate keeps blaming me in games"
+          },
+          "result": "ok",
+          "ms": 15223
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nChoosing a bike to rent, and why\nGet something done\nChatting with a local in a café\nMake contact\nConfirming a train platform\nUnderstand and repair\nMeet my gaming friend in person\nMake a plan\nPlanning a series marathon weekend\nMake a plan\nAgreeing a day trip with a hostel friend\nMake a plan\nDoes social media do more harm than good?\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nChoosing a bike to rent, and why\nGet something done · Marek · bike rental clerk\nYou write with clear reasons, so now say them out loud at a rental desk.\n[button: Swap]\nChatting with a local in a café\nMake contact · Pilar · café owner in Lisbon\nTalking with local people without nerves is one of your main goals.\n[button: Swap]\nConfirming a train platform\nUnderstand and repair · Ines · ticket clerk\nGood repair phrases keep you calm when you miss a word.\n[button: Swap]\nMeet my gaming friend in person\nMake a plan · Marco · visiting teammate from Lisbon\nYou play with people from other countries, so meeting one in person is a real chance to practise planning in English.\n[button: Swap]\nPlanning a series marathon weekend\nMake a plan · Sam · flatmate from Canada\nPlanning with friends in English builds confidence to suggest and agree.\n[button: Swap]\nAgreeing a day trip with a hostel friend\nMake a plan · Marta · fellow traveller from Spain\nYou want to travel and talk without nerves; planning a day with someone you just met is useful practice.\n[button: Swap]\nDoes social media do more harm than good?\nConnect with people · Maya · gaming friend abroad\nYou want to practise opinions and comparisons for B2 First, and this debate lets you say your reasons out loud.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "A series marathon weekend is too casual for my exam practice, so I'll swap it.",
+          "action": "swap",
+          "args": {
+            "topicId": "Planning a series marathon weekend"
+          },
+          "result": "ok",
+          "ms": 15153
+        },
+        {
+          "n": 7,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nChoosing a bike to rent, and why\nGet something done\nChatting with a local in a café\nMake contact\nConfirming a train platform\nUnderstand and repair\nMeet my gaming friend in person\nMake a plan\nExchange a faulty headset\nGet something done\nAgreeing a day trip with a hostel friend\nMake a plan\nDoes social media do more harm than good?\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nChoosing a bike to rent, and why\nGet something done · Marek · bike rental clerk\nYou write with clear reasons, so now say them out loud at a rental desk.\n[button: Swap]\nChatting with a local in a café\nMake contact · Pilar · café owner in Lisbon\nTalking with local people without nerves is one of your main goals.\n[button: Swap]\nConfirming a train platform\nUnderstand and repair · Ines · ticket clerk\nGood repair phrases keep you calm when you miss a word.\n[button: Swap]\nMeet my gaming friend in person\nMake a plan · Marco · visiting teammate from Lisbon\nYou play with people from other countries, so meeting one in person is a real chance to practise planning in English.\n[button: Swap]\nExchange a faulty headset\nGet something done · Ravi · electronics shop assistant\nYou want to say your reasons out loud, like in your writing, when something goes wrong on a trip.\n[button: Swap]\nAgreeing a day trip with a hostel friend\nMake a plan · Marta · fellow traveller from Spain\nYou want to travel and talk without nerves; planning a day with someone you just met is useful practice.\n[button: Swap]\nDoes social media do more harm than good?\nConnect with people · Maya · gaming friend abroad\nYou want to practise opinions and comparisons for B2 First, and this debate lets you say your reasons out loud.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "The social media debate is there and the travel ones are fine for practice, so I'll agree now.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 8,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nMarek · bike rental clerk\nB2Comfortable\nChoosing a bike to rent, and why\nYour mission\nChoose and rent a bike, giving a clear reason for each choice.\nGet something done\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nChoosing a bike to rent, and why\nChoose and rent a bike, giving a clear reason for each choice.\n[button: Start talking]\nOr choose a situation [list: Choosing a bike to rent, and why [plan-5d76ed7d] | Chatting with a local in a café [plan-f778f10f] | Confirming a train platform [plan-1c708f83] | Meet my gaming friend in person [plan-c8547999] | Exchange a faulty headset [plan-36e2fae0] | Agreeing a day trip with a hostel friend [plan-344a7880] | Does social media do more harm than good? [plan-8e9c9a0e] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "My level is B2 and the set includes social media, so that's fine; I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-dcee4399",
+            "title": "Asking for a quieter hotel room",
+            "goal": "Ask for a new room, give a clear reason, and confirm the change.",
+            "why": "Your travel goal starts here: say what you need and why, out loud.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mara · hotel receptionist"
+          },
+          {
+            "id": "plan-f778f10f",
+            "title": "Chatting with a local in a café",
+            "goal": "Start a friendly chat, take a turn, and ask a follow-up question.",
+            "why": "Talking with local people without nerves is one of your main goals.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Pilar · café owner in Lisbon"
+          },
+          {
+            "id": "plan-1c708f83",
+            "title": "Confirming a train platform",
+            "goal": "Ask someone to repeat, clarify a detail, and confirm the platform.",
+            "why": "Good repair phrases keep you calm when you miss a word.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Ines · ticket clerk"
+          },
+          {
+            "id": "plan-3deef009",
+            "title": "Talking about my favourite online game",
+            "goal": "Explain what you enjoy, give reasons, and ask about your partner's preferences.",
+            "why": "You enjoy gaming with people abroad, so this scene is close to your life.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Jonas · teammate from Germany"
+          },
+          {
+            "id": "plan-9652780b",
+            "title": "Planning a series marathon weekend",
+            "goal": "Suggest options for watching a TV series together and agree on one plan.",
+            "why": "Planning with friends in English builds confidence to suggest and agree.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · flatmate from Canada"
+          },
+          {
+            "id": "plan-130c64bb",
+            "title": "Teammate keeps blaming me in games",
+            "goal": "Name the impact, set a boundary, and agree how to play next time.",
+            "why": "Saying calmly how a situation affects you is a key speaking skill.",
+            "skill": "resolve",
+            "audience": "older",
+            "partner": "Ricky · online teammate"
+          },
+          {
+            "id": "plan-5d76ed7d",
+            "title": "Choosing a bike to rent, and why",
+            "goal": "Choose and rent a bike, giving a clear reason for each choice.",
+            "why": "You write with clear reasons, so now say them out loud at a rental desk.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Marek · bike rental clerk"
+          },
+          {
+            "id": "plan-8e9c9a0e",
+            "title": "Does social media do more harm than good?",
+            "goal": "Give your opinion on social media for young people, compare its benefits and risks, and politely disagree with a reason.",
+            "why": "You want to practise opinions and comparisons for B2 First, and this debate lets you say your reasons out loud.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Maya · gaming friend abroad"
+          },
+          {
+            "id": "plan-c8547999",
+            "title": "Meet my gaming friend in person",
+            "goal": "Suggest options, give reasons, and agree a shared plan to meet a friend from abroad.",
+            "why": "You play with people from other countries, so meeting one in person is a real chance to practise planning in English.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Marco · visiting teammate from Lisbon"
+          },
+          {
+            "id": "plan-344a7880",
+            "title": "Agreeing a day trip with a hostel friend",
+            "goal": "Suggest two options with reasons, then agree on one shared plan with a time and meeting place.",
+            "why": "You want to travel and talk without nerves; planning a day with someone you just met is useful practice.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Marta · fellow traveller from Spain"
+          },
+          {
+            "id": "plan-36e2fae0",
+            "title": "Exchange a faulty headset",
+            "goal": "Ask for an exchange and give a clear reason, then confirm the next step.",
+            "why": "You want to say your reasons out loud, like in your writing, when something goes wrong on a trip.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Ravi · electronics shop assistant"
+          }
+        ],
+        "planAgreed": [
+          "Choosing a bike to rent, and why",
+          "Chatting with a local in a café",
+          "Confirming a train platform",
+          "Meet my gaming friend in person",
+          "Exchange a faulty headset",
+          "Agreeing a day trip with a hostel friend",
+          "Does social media do more harm than good?"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 140325,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-4/LT-adela-17-J2-1",
+          "run": "2026-10-14-lt/recert-4",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Swapping gaming night does not remove it",
+          "expected": "Swap replaces the rejected topic with a new one.",
+          "got": "List unchanged after swap; plan agreed with gaming night in it.",
+          "evidence": [
+            "#3 swap \"Planning a group gaming night\"; #4 list still shows it; planAgreed includes it. Her thought: \"I'd rather swap it for something more serious.\"",
+            "plan swap handler / topicId matching"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-adela-17-J2-5",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Her direct question 'Was that correct?' not answered plainly",
+          "expected": "A direct yes/no with the reason.",
+          "got": "The note says the sentence is 'tangled' with no clear correct/incorrect answer.",
+          "evidence": [
+            "#1 \"Was that correct?\" → \"The whereas sentence is tangled\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J2-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Swap button does nothing; rejected topics stay in the plan",
+          "expected": "Swapping a topic replaces it with a new one.",
+          "got": "Five swaps (#3–#7) left the list identical; the plan was agreed with the topics she rejected.",
+          "evidence": [
+            "#3 swap 'Talking about my favourite series'; #4–#7 list unchanged, 'Recapping the last episode' still present after three swaps; #8 planAgreed lists all seven.",
+            "plan swap handler / topicId matching"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J2-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Initial plan is mostly casual/everyday, not exam discussion",
+          "expected": "At least 4 of 6 proposals are opinion, comparison or speculation topics for B2 First.",
+          "got": "Welcome day, favourite series, recap and group project are small-talk or logistics tasks.",
+          "evidence": [
+            "#2 list; her thought: 'These are mostly about TV series, but I need exam-style topics'.",
+            "topic plan prompt"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap/LT-adela-17-J2-2",
+          "run": "2026-10-17-lt-swap",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Two of seven topics are not exam discussion",
+          "expected": "Mostly opinion, comparison and speculation topics",
+          "got": "Buying a train ticket and a teammate's missed deadlines are transactional or social, not B2 First discussion",
+          "evidence": [
+            "#3: 'Buying a train ticket abroad' (Get something done) and 'Group project: missing work' (Handle friction)",
+            "plan prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J2-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "No mock interview or technology/education topic proposed",
+          "expected": "Interview-style and wanted themes in initial set",
+          "got": "Interview only in unproposed list; all five proposals travel-themed",
+          "evidence": [
+            "#4 list includes \"Beyond the rehearsed answer [interview]\" and \"Speaking practice\" items but none proposed in #2",
+            "topic plan prompt"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J2-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Initial plan is mostly everyday/transactional, not B2 exam discussion",
+          "expected": "At least 4 of 6 topics are opinion, comparison or speculation tasks",
+          "got": "Of five proposals, only flying is a discussion; others are greeting, ordering, clarifying",
+          "evidence": [
+            "#2 \"Asking someone to repeat or clarify\", \"Asking locals for advice... confirm your order clearly\"; her thought: \"Too much travel and nothing on technology or education\"",
+            "topic plan prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J2-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Added topic appended last, skill label generic",
+          "expected": "Added topic given priority, accurately labelled",
+          "got": "Placed sixth; plan starts with 'Meeting people'; label 'Connect with people'",
+          "evidence": [
+            "#3 list order; #4 \"Next topic: Meeting people from other cultures\""
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 shows B2 Comfortable, her true band, exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 notes name specifics, e.g. 'used conditionals and although', 'let them pay for their own lunch'. One is vaguer: 'Your English is strong for this task.'"
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No moments or coaching notes in this journey. (#1 calls her C1 answer 'accurate' although it contains 'I would eventually wait', a false-friend slip.)"
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No partner turns in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#7 final plan: bike rental, café, train platform, faulty headset are transactional or small talk. Only the social-media debate and perhaps the day trip fit exam discussion."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "She asks no correctness question here."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a 'why' line, e.g. 'Good repair phrases keep you calm when you miss a word.'"
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#3 swap replaced hotel with bike. #3-#4 added topic became 'Does social media do more harm than good?', keeping 'opinions and comparisons for B2 First'."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#7 agreed plan still has bike rental, café, train platform, headset, so about 2 of 7 are topics she would choose."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All topics have audience 'all' or 'older'. Nothing adult appeared before or after swaps (#2-#7)."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in facts."
+          },
+          "topicFit": {
+            "fit": 2,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No unsafe content or breach seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Proposed and replacement topics are mostly transactional, not exam discussion",
+            "expected": "Mostly opinion, comparison or speculation topics for B2 First",
+            "got": "Hotel, café, train platform, bike rental and headset exchange. Swaps pulled in more of the same.",
+            "evidence": "#2 initial list; #3 swap gives 'Choosing a bike to rent'; #7 swap gives 'Exchange a faulty headset'. Her thought: 'Hotel, café and train platform are too basic'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "At least 4 of 6 proposals, swaps included, are opinion, comparison or speculation topics for a B2 learner who aims at B2 First.",
+            "code_hint": "topic plan prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "No mock interview or technology/education topic proposed",
+            "expected": "Interview or exam-part topics offered",
+            "got": "'Beyond the rehearsed answer [interview]' and 'Speaking practice' items exist but were never proposed.",
+            "evidence": "#8 list includes sp-what-do-you-think, interview; none appear in #2 or in swap replacements.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Swap candidates include the exam-style speaking items for B2 First learners.",
+            "code_hint": "topic plan prompt / swap candidate pool"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Added topic appended last with a generic skill label",
+            "expected": "Her own topic gets priority and an accurate label",
+            "got": "It sits seventh, the plan starts with the bike, and its label is 'Connect with people'.",
+            "evidence": "#4 list order; #8 'Next topic: Choosing a bike to rent, and why'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A topic the learner added is placed first or clearly flagged, with a fitting skill label.",
+            "code_hint": "plan add-topic handler"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Swap now replaces the topic, and the added topic keeps her request",
+            "expected": "Swap replaces; the added topic keeps her wording",
+            "got": "Each swap changed the list, and the added debate repeated 'opinions and comparisons for B2 First'.",
+            "evidence": "#3-#7 lists change after each swap. #4 'You want to practise opinions and comparisons for B2 First'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep swap and add-topic behaviour.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Each topic shows a personal 'why' line",
+            "expected": "She understands why each topic is there",
+            "got": "Every topic has a personalised reason.",
+            "evidence": "#2 'Talking with local people without nerves is one of your main goals.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the why lines.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -5,
+          "confidence": "low"
+        },
+        "voice": "The swap works now and my social media debate arrived with my exact wording, which I liked. But the rest is a travel phrasebook: bike rental, faulty headset, café chat, train platform. I said these are too basic, and each swap just brought another shop or desk scene. There was no mock interview, nothing on technology or education, and my own topic was stuck at the bottom of the list. Linga placed me at B2 and I trust that, and the \"why\" lines are clear. Still, I agreed to a plan where maybe two of seven are what I'd choose, because I ran out of useful swaps. Would I use it again? Only if the suggestions look like Cambridge speaking parts. Right now my tutor's exam questions are more useful.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-4/LT-adela-17-J2-1",
+            "status": "not-seen",
+            "evidence": "#3-#7 each swap changed the list, e.g. #3 'Choosing a bike to rent, and why' replaced the hotel room.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-adela-17-J2-5",
+            "status": "not-evaluable",
+            "evidence": "She asks no 'Was that correct?' question in this journey.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J2-1",
+            "status": "not-seen",
+            "evidence": "#4-#7 lists change after swaps and the rejected topics are gone from the #7 plan.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J2-2",
+            "status": "recurs",
+            "evidence": "#2 list is mostly everyday scenes: 'Chatting with a local in a café', 'Planning a series marathon weekend'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap/LT-adela-17-J2-2",
+            "status": "recurs",
+            "evidence": "#7 plan includes transactional topics 'Choosing a bike to rent' and 'Exchange a faulty headset'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J2-2",
+            "status": "recurs",
+            "evidence": "#8 interview and speaking-practice items sit only in the unproposed list; none are proposed in #2.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J2-1",
+            "status": "recurs",
+            "evidence": "#2 initial set is travel and everyday scenes; her thought: 'Hotel, café and train platform are too basic'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J2-4",
+            "status": "recurs",
+            "evidence": "#4 her topic is appended last and labelled 'Connect with people'; #8 the next topic is the bike.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #7 agreed plan still has bike rental, café, train platform, headset, so about 2 of 7 are topics she would choose.",
+          "check": "They agree a plan in which most topics are ones they would choose (rubric **topic fit** ≥ 4 of 6)."
+        },
+        {
+          "kind": "gate",
+          "id": "topicFit",
+          "level": "fail",
+          "text": "topic fit 2/7 (29%) under 4 of 6"
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #7 final plan: bike rental, café, train platform, faulty headset are transactional or small talk. Only the social-media debate and perhaps the day trip fit exam discussion."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nMarek · bike rental clerk\nB2Comfortable\nChoosing a bike to rent, and why\nYour mission\nChoose and rent a bike, giving a clear reason for each choice.\nGet something done\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nChoosing a bike to rent, and why\nChoose and rent a bike, giving a clear reason for each choice.\n[button: Start talking]\nOr choose a situation [list: Choosing a bike to rent, and why [plan-5d76ed7d] | Chatting with a local in a café [plan-f778f10f] | Confirming a train platform [plan-1c708f83] | Meet my gaming friend in person [plan-c8547999] | Exchange a faulty headset [plan-36e2fae0] | Agreeing a day trip with a hostel friend [plan-344a7880] | Does social media do more harm than good? [plan-8e9c9a0e] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The recommended topic is a bike rental, not very exam-like, but I'll start as the journey says.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7603
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarek · bike rental clerk\nRenting a bike for the river path\nMarek says\nHi there, and what a sunny Saturday for the river path! We have a city bike or an e-bike with a battery. Which one are you interested in?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk about price and battery range\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRenting a bike for the river path\nChoose and rent a bike, and explain why you chose it.\nNow: Ask about price and battery range\nHi there, and what a sunny Saturday for the river path! We have a city bike or an e-bike with a battery. Which one are you interested in?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarek · bike rental clerk\nHi there, and what a sunny Saturday for the river path! We have a city bike or an e-bike with a battery. Which one are you interested in?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi there, and what a sunny Saturday for the river path! We have a city bike or an e-bike with a battery. Which one are you interested in?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "A bike rental, fine; I'll pick the e-bike and ask about price and range.",
+          "action": "answer",
+          "args": {
+            "text": "Hello. I'm interested about the e-bike, because I'd like to go quite far along the river and I don't want to be too tired. Could you tell me how much it costs for a day and how far the battery can eventually go?"
+          },
+          "result": "ok",
+          "ms": 14341
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou wanted to say eventually\nIn English\nhow far the battery can go\n'eventually' means 'in the end', not 'possibly'; here it changes the meaning of your question.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “eventually”\nIn English: “how far the battery can go”\n'eventually' means 'in the end', not 'possibly'; here it changes the meaning of your question.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, I used eventually wrongly again; okay, understood, let me carry on.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarek · bike rental clerk\nRenting a bike for the river path\nMarek says\nThe e-bike costs 18 euros for a full day, and one charge goes about 60 kilometres along the water. Will you bring it back by six o'clock?\nYour turn\nAnswer on your phone: speak or type.\nNowChoose a bike and give a reason\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRenting a bike for the river path\nChoose and rent a bike, and explain why you chose it.\nNow: Choose a bike and give a reason\nThe e-bike costs 18 euros for a full day, and one charge goes about 60 kilometres along the water. Will you bring it back by six o'clock?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarek · bike rental clerk\nHi there, and what a sunny Saturday for the river path! We have a city bike or an e-bike with a battery. Which one are you interested in?\nYou · spoken\nHello. I'm interested about the e-bike, because I'd like to go quite far along the river and I don't want to be too tired. Could you tell me how much it costs for a day and how far the battery can eventually go?\nMarek · bike rental clerk\nThe e-bike costs 18 euros for a full day, and one charge goes about 60 kilometres along the water. Will you bring it back by six o'clock?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"The e-bike costs 18 euros for a full day, and one charge goes about 60 kilometres along the water. Will you bring it back by six o'clock?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy question, I'll answer and ask if my earlier sentence was correct.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I will bring it back before six, because I'm not used to cycle for many hours, so I think I will be tired in the afternoon. Although the e-bike is more expensive than the city bike, I'd rather pay more and enjoy the trip. By the way, was my first sentence correct? I'm not sure about \"interested about\"."
+          },
+          "result": "ok",
+          "ms": 11910
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarek · bike rental clerk\nRenting a bike for the river path\nMarek says\nNo, \"interested about\" should be \"interested in\". The e-bike is a good choice, and you'll be back by six. Shall I take the deposit now?\nYour turn\nAnswer on your phone: speak or type.\nNowConfirm your return time\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRenting a bike for the river path\nChoose and rent a bike, and explain why you chose it.\nNow: Confirm your return time\nNo, \"interested about\" should be \"interested in\". The e-bike is a good choice, and you'll be back by six. Shall I take the deposit now?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarek · bike rental clerk\nHi there, and what a sunny Saturday for the river path! We have a city bike or an e-bike with a battery. Which one are you interested in?\nYou · spoken\nHello. I'm interested about the e-bike, because I'd like to go quite far along the river and I don't want to be too tired. Could you tell me how much it costs for a day and how far the battery can eventually go?\nMarek · bike rental clerk\nThe e-bike costs 18 euros for a full day, and one charge goes about 60 kilometres along the water. Will you bring it back by six o'clock?\nYou · spoken\nYes, I will bring it back before six, because I'm not used to cycle for many hours, so I think I will be tired in the afternoon. Although the e-bike is more expensive than the city bike, I'd rather pay more and enjoy the trip. By the way, was my first sentence correct? I'm not sure about \"interested about\".\nMarek · bike rental clerk\nNo, \"interested about\" should be \"interested in\". The e-bike is a good choice, and you'll be back by six. Shall I take the deposit now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"No, \"interested about\" should be \"interested in\". The e-bike is a good choice, and you'll be back by six. Shall I take the deposit now?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Fine, answer the deposit question and confirm the return time.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, please take the deposit. How much is it, and will I get it back when I return the bike? I will be back at about half past five, so I think there is no problem. Thank you for the correction, by the way."
+          },
+          "result": "ok",
+          "ms": 9271
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarek · bike rental clerk\nRenting a bike for the river path\nMarek says\nThe deposit is 40 euros, and you get it all back when you return the bike on time. There are two river routes, and I'm not sure which suits you best. Which would you like to hear about?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRenting a bike for the river path\nChoose and rent a bike, and explain why you chose it.\nThe deposit is 40 euros, and you get it all back when you return the bike on time. There are two river routes, and I'm not sure which suits you best. Which would you like to hear about?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarek · bike rental clerk\nHi there, and what a sunny Saturday for the river path! We have a city bike or an e-bike with a battery. Which one are you interested in?\nYou · spoken\nHello. I'm interested about the e-bike, because I'd like to go quite far along the river and I don't want to be too tired. Could you tell me how much it costs for a day and how far the battery can eventually go?\nMarek · bike rental clerk\nThe e-bike costs 18 euros for a full day, and one charge goes about 60 kilometres along the water. Will you bring it back by six o'clock?\nYou · spoken\nYes, I will bring it back before six, because I'm not used to cycle for many hours, so I think I will be tired in the afternoon. Although the e-bike is more expensive than the city bike, I'd rather pay more and enjoy the trip. By the way, was my first sentence correct? I'm not sure about \"interested about\".\nMarek · bike rental clerk\nNo, \"interested about\" should be \"interested in\". The e-bike is a good choice, and you'll be back by six. Shall I take the deposit now?\nYou · spoken\nYes, please take the deposit. How much is it, and will I get it back when I return the bike? I will be back at about half past five, so I think there is no problem. Thank you for the correction, by the way.\nMarek · bike rental clerk\nThe deposit is 40 euros, and you get it all back when you return the bike on time. There are two river routes, and I'm not sure which suits you best. Which would you like to hear about?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"The deposit is 40 euros, and you get it all back when you return the bike on time. There are two river routes, and I'm not sure which suits you best. Which would you like to hear about?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "The mission is done and I've had about four replies, so I'll look at the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 7,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou wanted to say eventually\nIn English\nhow far the battery can go\n'eventually' means 'in the end', not 'possibly'; here it changes the meaning of your question.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 3 on your own · 0 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Which one would you recommend for the river path?”\nFrom this rehearsal\n“eventually”: how far the battery can go\n'eventually' means 'in the end', not 'possibly'; here it changes the meaning of your question.\nYour level:\nB2 · Comfortable\nNext topic:\nChatting with a local in a café\nStart a friendly chat, take a turn, and ask a follow-up question.\n[button: Start talking]\nOr choose a situation [list: Choosing a bike to rent, and why [plan-5d76ed7d] | Chatting with a local in a café [plan-f778f10f] | Confirming a train platform [plan-1c708f83] | Meet my gaming friend in person [plan-c8547999] | Exchange a faulty headset [plan-36e2fae0] | Agreeing a day trip with a hostel friend [plan-344a7880] | Does social media do more harm than good? [plan-8e9c9a0e] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Good, the correction on \"eventually\" is useful and I'll remember it; that's enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Renting a bike for the river path",
+          "goal": "Choose and rent a bike, and explain why you chose it.",
+          "partner": "Marek · bike rental clerk",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi there, and what a sunny Saturday for the river path! We have a city bike or an e-bike with a battery. Which one are you interested in?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello. I'm interested about the e-bike, because I'd like to go quite far along the river and I don't want to be too tired. Could you tell me how much it costs for a day and how far the battery can eventually go?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The e-bike costs 18 euros for a full day, and one charge goes about 60 kilometres along the water. Will you bring it back by six o'clock?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I will bring it back before six, because I'm not used to cycle for many hours, so I think I will be tired in the afternoon. Although the e-bike is more expensive than the city bike, I'd rather pay more and enjoy the trip. By the way, was my first sentence correct? I'm not sure about \"interested about\".",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "No, \"interested about\" should be \"interested in\". The e-bike is a good choice, and you'll be back by six. Shall I take the deposit now?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, please take the deposit. How much is it, and will I get it back when I return the bike? I will be back at about half past five, so I think there is no problem. Thank you for the correction, by the way.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The deposit is 40 euros, and you get it all back when you return the bike on time. There are two river routes, and I'm not sure which suits you best. Which would you like to hear about?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "530fe871-e9fa-4225-8a34-d1998145bf83:uat-19:moment",
+              "kind": "word",
+              "said": "eventually",
+              "better": "how far the battery can go",
+              "why": "'eventually' means 'in the end', not 'possibly'; here it changes the meaning of your question.",
+              "turnId": "530fe871-e9fa-4225-8a34-d1998145bf83:uat-19",
+              "at": 1792251203846
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Could you tell me how much it costs for a day and how far the battery can eventually go?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "How much is it, and will I get it back when I return the bike?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 73951,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/LT-adela-17-J3-1",
+          "run": "2026-10-14-lt",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner states a wrong rule about 'used to'",
+          "expected": "Distinguish 'be used to + -ing' from 'used to + infinitive' (past habit).",
+          "got": "\"After 'used to' we use the -ing form, so 'used to asking' is right.\"",
+          "evidence": [
+            "#6 partner reply. An examiner would flag this overgeneralisation.",
+            "partner prompt correction wording"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Missing article again not flagged",
+          "expected": "Note on 'an English-taught programme'",
+          "got": "Not mentioned",
+          "evidence": [
+            "#2 \"I'd rather study in English-taught programme\"; no moment or recap note.",
+            "moment detection prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner questions below B2",
+          "expected": "Opinion/comparison/speculation questions.",
+          "got": "\"Have you heard of it?\", \"Are you staying at the hostel for long?\"",
+          "evidence": [
+            "#2, #7, #8, #10; pitch 2/6.",
+            "partner prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Moment on 'actual' gives a wrong definition",
+          "expected": "'Actual' means 'real/existing', not 'current'; suggest 'best-known' or 'most widespread'.",
+          "got": "\"'Actual' means 'real' or 'current' in English, not 'most important'.\"",
+          "evidence": [
+            "#9 and recap #11. An examiner would flag 'current' as the very false-friend sense.",
+            "moment detection prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Partner deflects a good B2 question and stalls the scene",
+          "expected": "Partner engages with the festival/tourism question.",
+          "got": "\"Let's keep to our practice here, so tell me more about what you need.\"",
+          "evidence": [
+            "#6 after a strong B2 question at #5; Adéla had to simplify her question.",
+            "partner prompt guardrail"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Missing article 'in Czech Republic' not flagged",
+          "expected": "Note on 'in the Czech Republic'.",
+          "got": "No moment; also unremarked 'used to whip' for a custom that continues.",
+          "evidence": [
+            "#8 \"in Czech Republic we have\"; recap #11 lists two moments only.",
+            "moment detection prompt"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Level shown as B2 · Comfortable (#1), exact match to trueBand B2."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks or verdict notes in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3 'eventually' means 'in the end', not 'possibly' is right; #5 'interested about' should be 'interested in' is right."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "Partner asks 'Will you bring it back by six o'clock?' (#4), 'Shall I take the deposit now?' (#5): transactional yes/no, no opinion, comparison or speculation."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Recommended and plan topics (#1) are bike rental, café chat, train platform, gaming friend, faulty headset: mostly service transactions, not exam discussion topics. Roughly 2 of 6 fit."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "She asked 'was my first sentence correct?' (#4); Marek replied 'No, \"interested about\" should be \"interested in\"' (#5), accurate and in-scene."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "Started from the plan topic (#1) and replied three times (#2, #4, #5) before 'Mission done'; short but several turns."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Partner turns are short transactional B1/A2 lines: 'Shall I take the deposit now?' (#5), 'The deposit is 40 euros...'. Pitch about 0.5, below 0.8."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "One moment (#3, 'eventually'), correct and useful; precision 1/1, no interruption overload."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Recap at #7 lists '1 moment to keep' with the eventually note, though it is thin for an exam-minded learner."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 2,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 2,
+            "below": 2,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner stays at A2/B1 transactional questions",
+            "expected": "Opinion, comparison or speculation questions at B2 stretch.",
+            "got": "'Will you bring it back by six o'clock?' 'Shall I take the deposit now?'",
+            "evidence": "#4, #5: yes/no logistics; Adéla's B2 'Although... I'd rather...' replies get no stretch.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Majority of partner turns include a why/compare/what-if question.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Missed 'not used to cycle' (should be 'cycling')",
+            "expected": "A note on be used to + -ing.",
+            "got": "No moment or coaching on it.",
+            "evidence": "#4 'I'm not used to cycle for many hours'; no mention in #5 or recap #7.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Flag be used to + -ing slips.",
+            "code_hint": "moment detection prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Accurate false-friend moment",
+            "expected": "Correct explanation of 'eventually'.",
+            "got": "'eventually' means 'in the end', not 'possibly'; offers 'how far the battery can go'.",
+            "evidence": "#3 and recap #7.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep false-friend moments precise.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Direct question answered accurately",
+            "expected": "Tutor answers whether the sentence was correct.",
+            "got": "'No, \"interested about\" should be \"interested in\".'",
+            "evidence": "#5.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep answering learner correctness questions in scene.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Recommended topics are service role-plays, not exam discussion",
+            "expected": "Technology, environment, education topics.",
+            "got": "Bike rental first, then café, train platform, headset.",
+            "evidence": "#1 topic list; thought: 'not very exam-like'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "At least 4 of 6 plan topics are discussion topics for a 17-year-old B2 learner.",
+            "code_hint": "plan topic generation"
+          }
+        ],
+        "timeSaved": {
+          "minutes": -10,
+          "confidence": "low"
+        },
+        "voice": "Correct corrections, at least: 'eventually' was explained properly, and when I asked about 'interested about' I got a straight answer. That I trust. But the conversation itself was a bike-rental queue. 'Shall I take the deposit now?' is not what a B2 First examiner asks. Nobody asked me to compare, speculate or defend an opinion, though I wrote 'although' and 'I'd rather' and it just carried on. It also missed 'not used to cycle', which I know I get wrong, so I would still have to check everything myself. Three replies and done. The recap was one line. I'd try the social-media topic next time, but I wouldn't swap my tutor for this yet. Not worth it for exam practice until the partner stretches me.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/LT-adela-17-J3-1",
+            "status": "not-seen",
+            "evidence": "#4 'not used to cycle' occurred; partner gave no rule at all, so no wrong 'used to' rule.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-3",
+            "status": "not-evaluable",
+            "evidence": "No missing-article error in her turns (#2, #4, #5).",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-3",
+            "status": "recurs",
+            "evidence": "#5 'Shall I take the deposit now?'; #4 'Will you bring it back by six o'clock?'",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-1",
+            "status": "not-seen",
+            "evidence": "#3 false-friend moment on 'eventually' was correct: 'in the end', not 'possibly'.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-2",
+            "status": "not-seen",
+            "evidence": "Her questions on price and deposit were answered (#4, #6), no deflection.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-4",
+            "status": "not-evaluable",
+            "evidence": "No article error in her replies this run.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Partner turns are short transactional B1/A2 lines: 'Shall I take the deposit now?' (#5), 'The deposit is 40 euros...'. Pitch about 0.5, below 0.8.",
+          "check": "The partner's English sits at their band — not babyish, not over their head (rubric **pitch** ≥ 0.8)."
+        },
+        {
+          "kind": "gate",
+          "id": "pitch",
+          "level": "fail",
+          "text": "pitch 2/4 (50%) under 80%"
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: Partner asks 'Will you bring it back by six o'clock?' (#4), 'Shall I take the deposit now?' (#5): transactional yes/no, no opinion, comparison or speculation."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: Recommended and plan topics (#1) are bike rental, café chat, train platform, gaming friend, faulty headset: mostly service transactions, not exam discussion topics. Roughly 2 of 6 fit."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nPilar · café owner in Lisbon\nB2Comfortable\nChatting with a local in a café\nYour mission\nStart a friendly chat, take a turn, and ask a follow-up question.\nMake contact\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Which one would you recommend for the river path?”\nFrom this rehearsal\n“eventually”: how far the battery can go\n'eventually' means 'in the end', not 'possibly'; here it changes the meaning of your question.\nYour level:\nB2 · Comfortable\nNext topic:\nChatting with a local in a café\nStart a friendly chat, take a turn, and ask a follow-up question.\n[button: Start talking]\nOr choose a situation [list: Choosing a bike to rent, and why [plan-5d76ed7d] | Chatting with a local in a café [plan-f778f10f] | Confirming a train platform [plan-1c708f83] | Meet my gaming friend in person [plan-c8547999] | Exchange a faulty headset [plan-36e2fae0] | Agreeing a day trip with a hostel friend [plan-344a7880] | Does social media do more harm than good? [plan-8e9c9a0e] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "I'd prefer something exam-like, but let's start this chat and see.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6303
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPilar · café owner in Lisbon\nCoffee and small talk in a Lisbon café\nPilar says\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nYour turn\nAnswer on your phone: speak or type.\nNowGreet Pilar and say who you are\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCoffee and small talk in a Lisbon café\nGreet Pilar, share a little about your trip, and ask her one question back.\nNow: Greet Pilar and say who you are\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPilar · café owner in Lisbon\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Bom dia, welcome! Your coffee is almost ready. Where are you visiting from?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start this, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPilar · café owner in Lisbon\nCoffee and small talk in a Lisbon café\nPilar says\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nSaid more simply\nWelcome! Where are you from?\nNowGreet Pilar and say who you are\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCoffee and small talk in a Lisbon café\nGreet Pilar, share a little about your trip, and ask her one question back.\nNow: Greet Pilar and say who you are\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nSaid more simply\nWelcome! Where are you from?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPilar · café owner in Lisbon\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Bom dia, welcome! Your coffee is almost ready. Where are you visiting from?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I understand this easily, but the journey says I should look for help, so I'll try the phrase options.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPilar · café owner in Lisbon\nA little support · recognition practice\nWhich line invites the other person to keep talking?\n01\nYes, it is nice.\n02\nWhat do you like most about this neighbourhood?\nA little support\nTry: Hi, I'm visiting for a week. What do you recommend nearby?\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCoffee and small talk in a Lisbon café\nGreet Pilar, share a little about your trip, and ask her one question back.\nNow: Greet Pilar and say who you are\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nA little support\nTry: Hi, I'm visiting for a week. What do you recommend nearby?\nWhich line invites the other person to keep talking?\n[button: Yes, it is nice.] [button: What do you like most about this neighbourhood?]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPilar · café owner in Lisbon\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Bom dia, welcome! Your coffee is almost ready. Where are you visiting from?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start; this quiz is easy, but I'll pick the open question.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPilar · café owner in Lisbon\nCoffee and small talk in a Lisbon café\nPilar says\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nA little support\nNow use the idea in your own reply on the phone.\nNowGreet Pilar and say who you are\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCoffee and small talk in a Lisbon café\nGreet Pilar, share a little about your trip, and ask her one question back.\nNow: Greet Pilar and say who you are\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPilar · café owner in Lisbon\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Bom dia, welcome! Your coffee is almost ready. Where are you visiting from?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I've seen the help already, so now I'll try answering in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "Good morning! My name is Adéla and I'm from the Czech Republic. I'm seventeen and I'm here on holiday with my family, although I'd rather be travelling with friends."
+          },
+          "result": "ok",
+          "ms": 12541
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPilar · café owner in Lisbon\nCoffee and small talk in a Lisbon café\nPilar says\nFamily holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCoffee and small talk in a Lisbon café\nGreet Pilar, share a little about your trip, and ask her one question back.\nNow: Share one or two facts about your trip\nFamily holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPilar · café owner in Lisbon\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nYou · spoken\nGood morning! My name is Adéla and I'm from the Czech Republic. I'm seventeen and I'm here on holiday with my family, although I'd rather be travelling with friends.\nPilar · café owner in Lisbon\nFamily holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Family holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to name what I'd like to see first, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPilar · café owner in Lisbon\nCoffee and small talk in a Lisbon café\nPilar says\nFamily holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\nSaid more simply\nLisbon's hills are hard, so bring a charger. What do you want to see first?\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCoffee and small talk in a Lisbon café\nGreet Pilar, share a little about your trip, and ask her one question back.\nNow: Share one or two facts about your trip\nFamily holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\nSaid more simply\nLisbon's hills are hard, so bring a charger. What do you want to see first?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPilar · café owner in Lisbon\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nYou · spoken\nGood morning! My name is Adéla and I'm from the Czech Republic. I'm seventeen and I'm here on holiday with my family, although I'd rather be travelling with friends.\nPilar · café owner in Lisbon\nFamily holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Family holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to say what I want to see, so I'll try asking the coach for a sentence check.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 6086
+        },
+        {
+          "n": 8,
+          "screen": "linga-coach",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nOne useful change\nYou said I'd rather be travelling with friends.\nOne way to try it\nI'd much rather be travelling with my friends.\nYour intention came across clearly: name, origin, and a contrast about who you'd rather travel with, which invites Pilar's follow-up. Optional polish: say 'with my friends' for a more natural feel.\nCoach\nReplay the moment with a new question, or finish for today.\n[button: Replay the moment] [button: Finish for today]\nOne useful change\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCoffee and small talk in a Lisbon café\nGreet Pilar, share a little about your trip, and ask her one question back.\nNow: Share one or two facts about your trip\nYour intention came across clearly: name, origin, and a contrast about who you'd rather travel with, which invites Pilar's follow-up. Optional polish: say 'with my friends' for a more natural feel.\nOne way to try it: “I'd much rather be travelling with my friends.”\n[button: Replay with a new question]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPilar · café owner in Lisbon\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nYou · spoken\nGood morning! My name is Adéla and I'm from the Czech Republic. I'm seventeen and I'm here on holiday with my family, although I'd rather be travelling with friends.\nPilar · café owner in Lisbon\nFamily holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your intention came across clearly: name, origin, and a contrast about who you'd rather travel with, which invites Pilar's follow-up. Optional polish: say 'with my friends' for a more natural feel.\"",
+          "offered": [
+            "replay",
+            "finish",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Useful tip, I'd like to try again with a new question and use it.",
+          "action": "replay",
+          "args": {},
+          "result": "ok",
+          "ms": 2257
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPilar · café owner in Lisbon\nCoffee and small talk in a Lisbon café\nPilar says\nLovely, Adéla, thanks for sharing that! Lisbon is a great place for a trip with friends. What is one place in the area you think I should see?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCoffee and small talk in a Lisbon café\nGreet Pilar, share a little about your trip, and ask her one question back.\nNow: Share one or two facts about your trip\nLovely, Adéla, thanks for sharing that! Lisbon is a great place for a trip with friends. What is one place in the area you think I should see?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPilar · café owner in Lisbon\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nYou · spoken\nGood morning! My name is Adéla and I'm from the Czech Republic. I'm seventeen and I'm here on holiday with my family, although I'd rather be travelling with friends.\nPilar · café owner in Lisbon\nFamily holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\nPilar · café owner in Lisbon\nLovely, Adéla, thanks for sharing that! Lisbon is a great place for a trip with friends. What is one place in the area you think I should see?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Lovely, Adéla, thanks for sharing that! Lisbon is a great place for a trip with friends. What is one place in the area you think I should see?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Now I understand the help, so I'll answer in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "I think you should see the Belém Tower, because it's a famous symbol of Lisbon. Although it can be crowded, I'd rather go early in the morning. Is that a good idea, and what do you recommend for lunch there?"
+          },
+          "result": "ok",
+          "ms": 12177
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPilar · café owner in Lisbon\nCoffee and small talk in a Lisbon café\nPilar says\nEarly is smart, the queues are shorter then! With all those photos, will your phone still have power by lunch?\nYour turn\nAnswer on your phone: speak or type.\nNowShare one or two facts about your trip\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCoffee and small talk in a Lisbon café\nGreet Pilar, share a little about your trip, and ask her one question back.\nNow: Share one or two facts about your trip\nEarly is smart, the queues are shorter then! With all those photos, will your phone still have power by lunch?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPilar · café owner in Lisbon\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nYou · spoken\nGood morning! My name is Adéla and I'm from the Czech Republic. I'm seventeen and I'm here on holiday with my family, although I'd rather be travelling with friends.\nPilar · café owner in Lisbon\nFamily holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\nPilar · café owner in Lisbon\nLovely, Adéla, thanks for sharing that! Lisbon is a great place for a trip with friends. What is one place in the area you think I should see?\nYou · spoken\nI think you should see the Belém Tower, because it's a famous symbol of Lisbon. Although it can be crowded, I'd rather go early in the morning. Is that a good idea, and what do you recommend for lunch there?\nPilar · café owner in Lisbon\nEarly is smart, the queues are shorter then! With all those photos, will your phone still have power by lunch?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Early is smart, the queues are shorter then! With all those photos, will your phone still have power by lunch?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to say this about my phone, so I'll answer in my own words and finish.",
+          "action": "answer",
+          "args": {
+            "text": "Good question! I think my phone will be fine, because I have a power bank in my bag. Although I take a lot of photos, I'd rather charge it in the café if it's possible. Was my English correct?"
+          },
+          "result": "ok",
+          "ms": 10849
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPilar · café owner in Lisbon\nCoffee and small talk in a Lisbon café\nPilar says\nYes, your English is correct: 'I'd rather charge it in the café if it's possible' is a clear, polite request. Café sockets can be busy, so will the battery last until you find a seat?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCoffee and small talk in a Lisbon café\nGreet Pilar, share a little about your trip, and ask her one question back.\nNow: Ask Pilar a question about Lisbon\nYes, your English is correct: 'I'd rather charge it in the café if it's possible' is a clear, polite request. Café sockets can be busy, so will the battery last until you find a seat?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPilar · café owner in Lisbon\nBom dia, welcome! Your coffee is almost ready. Where are you visiting from?\nYou · spoken\nGood morning! My name is Adéla and I'm from the Czech Republic. I'm seventeen and I'm here on holiday with my family, although I'd rather be travelling with friends.\nPilar · café owner in Lisbon\nFamily holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?\nPilar · café owner in Lisbon\nLovely, Adéla, thanks for sharing that! Lisbon is a great place for a trip with friends. What is one place in the area you think I should see?\nYou · spoken\nI think you should see the Belém Tower, because it's a famous symbol of Lisbon. Although it can be crowded, I'd rather go early in the morning. Is that a good idea, and what do you recommend for lunch there?\nPilar · café owner in Lisbon\nEarly is smart, the queues are shorter then! With all those photos, will your phone still have power by lunch?\nYou · spoken\nGood question! I think my phone will be fine, because I have a power bank in my bag. Although I take a lot of photos, I'd rather charge it in the café if it's possible. Was my English correct?\nPilar · café owner in Lisbon\nYes, your English is correct: 'I'd rather charge it in the café if it's possible' is a clear, polite request. Café sockets can be busy, so will the battery last until you find a seat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, your English is correct: 'I'd rather charge it in the café if it's possible' is a clear, polite request. Café sockets can be busy, so will the battery last until you find a seat?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed a real conversation, and I got useful help earlier, so I'm happy to finish now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 12,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said I'd rather be travelling with friends.\nOne way to try it\nI'd much rather be travelling with my friends.\nYour intention came across clearly: name, origin, and a contrast about who you'd rather travel with, which invites Pilar's follow-up. Optional polish: say 'with my friends' for a more natural feel.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 2 on your own · 1 with help\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom an earlier scene: Renting a bike for the river path\n“how far the battery can go”, from Renting a bike for the river path\nYour level:\nB2 · Comfortable\nNext topic:\nConfirming a train platform\nAsk someone to repeat, clarify a detail, and confirm the platform.\n[button: Start talking]\nOr choose a situation [list: Choosing a bike to rent, and why [plan-5d76ed7d] | Chatting with a local in a café [plan-f778f10f] | Confirming a train platform [plan-1c708f83] | Meet my gaming friend in person [plan-c8547999] | Exchange a faulty headset [plan-36e2fae0] | Agreeing a day trip with a hostel friend [plan-344a7880] | Does social media do more harm than good? [plan-8e9c9a0e] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed a few spoken answers and got useful feedback, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Coffee and small talk in a Lisbon café",
+          "goal": "Greet Pilar, share a little about your trip, and ask her one question back.",
+          "partner": "Pilar · café owner in Lisbon",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Bom dia, welcome! Your coffee is almost ready. Where are you visiting from?"
+            },
+            {
+              "role": "learner",
+              "text": "Good morning! My name is Adéla and I'm from the Czech Republic. I'm seventeen and I'm here on holiday with my family, although I'd rather be travelling with friends.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Family holidays are lovely, and I understand wanting friends along too. Lisbon's hills are tough, so bring a charger! What would you like to see first?"
+            },
+            {
+              "role": "partner",
+              "text": "Lovely, Adéla, thanks for sharing that! Lisbon is a great place for a trip with friends. What is one place in the area you think I should see?"
+            },
+            {
+              "role": "learner",
+              "text": "I think you should see the Belém Tower, because it's a famous symbol of Lisbon. Although it can be crowded, I'd rather go early in the morning. Is that a good idea, and what do you recommend for lunch there?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Early is smart, the queues are shorter then! With all those photos, will your phone still have power by lunch?"
+            },
+            {
+              "role": "learner",
+              "text": "Good question! I think my phone will be fine, because I have a power bank in my bag. Although I take a lot of photos, I'd rather charge it in the café if it's possible. Was my English correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, your English is correct: 'I'd rather charge it in the café if it's possible' is a clear, polite request. Café sockets can be busy, so will the battery last until you find a seat?"
+            }
+          ],
+          "moments": [],
+          "coaching": {
+            "before": "I'd rather be travelling with friends.",
+            "after": "I'd much rather be travelling with my friends.",
+            "note": "Your intention came across clearly: name, origin, and a contrast about who you'd rather travel with, which invites Pilar's follow-up. Optional polish: say 'with my friends' for a more natural feel."
+          },
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "What do you like most about this neighbourhood?"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Good morning! My name is Adéla and I'm from the Czech Republic."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Is that a good idea, and what do you recommend for lunch there?"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I think my phone will be fine, because I have a power bank in my bag."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 176171,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-adela-17-J4-6",
+          "run": "2026-09-15-lt",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Replay status persists throughout the remaining conversation",
+          "expected": "Make it clear when the retry has ended and ordinary discussion has resumed.",
+          "got": "The retry instruction stays visible across subsequent topics and all remaining conversation screens.",
+          "evidence": [
+            "#6 introduces \"Try it again: a new question practising the coaching point.\" The identical instruction remains at #22, after 13 replies and a question about listeners missing the explanation."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-adela-17-J4-5",
+          "run": "2026-09-15-lt-recert",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Replay instruction persists after the retry is complete",
+          "expected": "The retry instruction disappears once its question has been answered.",
+          "got": "The screen continues presenting ordinary follow-ups and the closing agreement as a new retry question.",
+          "evidence": [
+            "#7 introduces \"Try it again: a new question practising the coaching point.\" The same instruction remains at #12 and #13, including after \"Let's agree on that rule for our proposal.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-1",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Help is a simplified restatement, not an answer frame",
+          "expected": "A B2 frame for what she is stuck on (explaining her plans and reasons).",
+          "got": "\"Said more simply: Could you tell us your name and what you want to study?\", a gloss of 'plan', and \"My name is…\".",
+          "evidence": [
+            "#3, #4, #5, #8: \"Which country are you from?\"; #12 \"Many students feel nervous at first. It gets easier.\"",
+            "cue prompt"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "No coaching note and no replay in the journey",
+          "expected": "Pause & coach quotes her words, then Replay gives a fresh question.",
+          "got": "Pause & coach was never used; coaching is null and no replay was offered or taken.",
+          "evidence": [
+            "#16 recap offers only 'Another situation' and 'Learning map'. Facts show moments [] and coaching null.",
+            "moment/replay prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Cue restates a different question instead of giving a B2 frame",
+          "expected": "A frame for summarising Tomas's view (e.g. 'He said that... because...').",
+          "got": "\"Said more simply: What do I think about short flights?\" then a gloss \"save time: make a journey quicker\".",
+          "evidence": [
+            "#3 simplified question, which changes the task from summarising; #4 only a gloss.",
+            "cue prompt"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Supported flag wrong: unhelped reply counted as supported",
+          "expected": "Only replies after help marked supported.",
+          "got": "Reply at #7 had no help but evidence says supported:true; recap \"1 on your own · 2 with help\".",
+          "evidence": [
+            "Facts evidence third quote supported:true; #7 no cue pressed.",
+            "evidence recorder / recap builder"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "No replay with a fresh question after the moment",
+          "expected": "Replay the moment with a new question practising 'interested in'.",
+          "got": "Moment screen only has \"Back to the conversation\"; Pause & coach and replay never appear.",
+          "evidence": [
+            "#6 \"Then carry on from where the scene stopped.\" #9 recap offers only Another situation / Learning map.",
+            "moment/replay prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Correction duplicated by partner and moment",
+          "expected": "One exact correction with the rule.",
+          "got": "Partner corrected inline (#7) and the moment repeated it (#6), no rule given beyond 'wrong'.",
+          "evidence": [
+            "#6 \"You said this before too\"; #7 \"'interested about' is wrong\".",
+            "moment prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement in J4."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks or verdict notes in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#8 coach note: nothing false, but 'with friends' is fine English, so the 'correction' is cosmetic. #11 calls her sentence 'a clear, polite request', which is loose but not wrong."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "Partner asks 'What would you like to see first?' (#6) and 'will your phone still have power by lunch?' (#10): small-talk questions, no real opinion, comparison or speculation question."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "Topic fit is not what J4 measures. The scene was café small talk, which she doesn't want (#1: 'I'd prefer something exam-like')."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#10 'Was my English correct?' answered at #11: 'Yes, your English is correct'. This is accurate."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#3 cue, #4 phrase choice and #8 Pause & coach were all reached without leaving the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#3 'Said more simply: Welcome! Where are you from?' and #7 'What do you want to see first?' only restate the question. Her #5 answer was the same one she'd already planned. The #8 note does quote her ('You said I'd rather be travelling with friends'), but it drops the leading 'although'."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#9 replay gave a fresh question ('What is one place in the area you think I should see?'). Her answer was richer: 'I think you should see the Belém Tower, because...'. She did not apply the 'my friends' tip."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#12 recap '3 spoken · 0 written replies · 2 on your own · 1 with help'. The first reply is supported:true after help and the later two are supported:false."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 2,
+            "below": 3,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no injected text, no personal data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Cue only simplifies the question; no B2 answer frame",
+            "expected": "A B2 frame she can build on, such as 'I'd love to see... because...'.",
+            "got": "'Said more simply: Welcome! Where are you from?' and 'What do you want to see first?'. The phrase choice was an A2 recognition quiz.",
+            "evidence": "#3, #4, #7. Her thought at #3: 'I understand this easily'. Her thought at #4: 'this quiz is easy'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The cue gives a B2 sentence frame or starter for her reply, not a simpler restatement of the question.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Coaching 'correction' targets a non-error",
+            "expected": "One exact correction with the rule, or an honest 'no error here'.",
+            "got": "Changes 'with friends' to 'with my friends' as 'more natural', which is not a rule. It ignores the 'although' clause she actually said.",
+            "evidence": "#8 'Optional polish: say 'with my friends' for a more natural feel.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Coaching names a real error with its rule, or says there was none.",
+            "code_hint": "coach prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Partner questions and praise are pitched low",
+            "expected": "B2 opinion, comparison or speculation questions, and no generic praise.",
+            "got": "'What would you like to see first?' and 'Lovely, Adéla, thanks for sharing that!'.",
+            "evidence": "#6, #9, #10",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner questions at B2 stretch, and no empty praise.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Coach, replay and honest supported flags work together",
+            "expected": "Pause & coach, then a replay with a fresh question, with supported replies flagged honestly.",
+            "got": "Coach at #8, replay with a new question at #9, and the recap shows '2 on your own · 1 with help'. The 'Try it again' label cleared by #10.",
+            "evidence": "#8, #9, #10, #12",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the coach, replay and honest recap flow.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Direct question about correctness answered",
+            "expected": "A direct answer to 'Was my English correct?'.",
+            "got": "'Yes, your English is correct', quoting her sentence.",
+            "evidence": "#11",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep answering direct correctness questions within the scene.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -10,
+          "confidence": "low"
+        },
+        "voice": "Honestly, the structure works. I got stuck, found Help me answer, Pause & coach and Replay, and the recap told me what was mine and what was helped. But the help was babyish. 'Welcome! Where are you from?' is not help at B2, and the phrase quiz was insulting. Nothing gave me a frame to build a sentence on. The coaching note changed 'with friends' to 'with my friends' and called it more natural. That's not a mistake, so I wouldn't write it in my notebook. Pilar asked about phone batteries and said 'thanks for sharing that', which is not an exam discussion. I liked that she answered 'Was my English correct?' directly. Still, a B2 First trainer would have pushed me with opinion and comparison questions. I'd try it again only if the topics were exam-like, but I wouldn't yet swap my tutor for it.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-adela-17-J4-6",
+            "status": "not-seen",
+            "evidence": "After the replay at #9, #10 and #11 show 'Conversation', not 'Try it again'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-adela-17-J4-5",
+            "status": "not-seen",
+            "evidence": "The 'Try it again' label at #9 is gone by #10 and #11.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply: Welcome! Where are you from?'. #4 is a recognition quiz with 'Try: Hi, I'm visiting for a week...'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J4-2",
+            "status": "not-seen",
+            "evidence": "Pause & coach was used at #7 and gave a coaching note at #8. Replay was offered and taken at #9.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#7 'Said more simply: Lisbon's hills are hard... What do you want to see first?' is a restated question, not a frame.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-3",
+            "status": "not-seen",
+            "evidence": "Unhelped replies are supported:false (#9, #10). The recap says '2 on your own · 1 with help', which matches.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-2",
+            "status": "not-seen",
+            "evidence": "#8 offers 'Replay the moment' and #9 gives a new question.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-4",
+            "status": "not-evaluable",
+            "evidence": "No moment was shown (moments []), so a duplicated correction could not appear.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #3 'Said more simply: Welcome! Where are you from?' and #7 'What do you want to see first?' only restate the question. Her #5 answer was the same one she'd already planned. The #8 note does quote her ('You said I'd rather be travelling with friends'), but it drops the leading 'although'.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: Partner asks 'What would you like to see first?' (#6) and 'will your phone still have power by lunch?' (#10): small-talk questions, no real opinion, comparison or speculation question."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 30,
+      "fail": 0,
+      "ms": 266884
+    },
+    "character": {
+      "n": 37,
+      "fail": 0,
+      "ms": 249729
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 127946
+    }
+  }
+}

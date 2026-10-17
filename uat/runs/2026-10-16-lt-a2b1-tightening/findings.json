@@ -177,12 +177,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Step up in smaller increments; avoid stacking two B2 tasks.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
     "recertify_status": "recurs",
-    "recertify_evidence": "#7 and #8 are both B2 'Say it' tasks; #7 is an opinion task and she answers with an apology."
+    "recertify_evidence": "#8 'Would you rather call or text ... and why?' is a B2 opinion task.",
+    "recurred_as": "LT-petra-38-J1-2"
   },
   {
     "id": "LT-sofie-11-J1-3",

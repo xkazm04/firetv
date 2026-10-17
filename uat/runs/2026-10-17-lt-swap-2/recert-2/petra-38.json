@@ -1,0 +1,2389 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "I'm not sure about my level, so I'll let the app find it.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Petra! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I use English at work in the hotel, I will try to say it simply.",
+          "action": "answer",
+          "args": {
+            "text": "I use English in my work. I am receptionist in hotel. I speak with guests, sorry, my English is not very good."
+          },
+          "result": "ok",
+          "ms": 4656
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThank you, Petra. You explained your work very clearly! How did you learn English? At school, in a course, or in another country?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThank you, Petra. You explained your work very clearly! How did you learn English? At school, in a course, or in another country?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work. I am receptionist in hotel. I speak with guests, sorry, my English is not very good.\nLinga\nThank you, Petra. You explained your work very clearly! How did you learn English? At school, in a course, or in another country?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, Petra. You explained your work very clearly! How did you learn English? At school, in a course, or in another country?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I can answer this one, I learned at school and a little in a course.",
+          "action": "answer",
+          "args": {
+            "text": "I learn English at school, long time ago. And then a course, two years. Now I learn from guests in hotel."
+          },
+          "result": "ok",
+          "ms": 4806
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThank you, Petra. Talking with guests every day is great practice! What would you like to do better in English? For example, talk on the phone or write emails?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThank you, Petra. Talking with guests every day is great practice! What would you like to do better in English? For example, talk on the phone or write emails?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work. I am receptionist in hotel. I speak with guests, sorry, my English is not very good.\nLinga\nThank you, Petra. You explained your work very clearly! How did you learn English? At school, in a course, or in another country?\nYou\nI learn English at school, long time ago. And then a course, two years. Now I learn from guests in hotel.\nLinga\nThank you, Petra. Talking with guests every day is great practice! What would you like to do better in English? For example, talk on the phone or write emails?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, Petra. Talking with guests every day is great practice! What would you like to do better in English? For example, talk on the phone or write emails?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to speak better on the phone with guests and travel agencies, it is difficult for me.",
+          "action": "answer",
+          "args": {
+            "text": "I want to talk better on the phone. Is difficult for me, because I don't see the person. Also I want to write emails to guests."
+          },
+          "result": "ok",
+          "ms": 8884
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 1 · Choose the reply on the TV\nA guest calls the front desk: \"Hello, I need a towel, please.\" What do you say?\n01\nYes, of course. I will bring one.\n02\nGood night. See you tomorrow.\nYour task\nYes, of course. I will bring one.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA guest calls the front desk: \"Hello, I need a towel, please.\" What do you say?\n[button: Yes, of course. I will bring one.] [button: Good night. See you tomorrow.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "A towel request is easy; reply 1 is clearly right.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 4536
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 2 · Choose the reply on the TV\nA guest says: \"Can you call a taxi for me at nine?\" What do you say?\n01\nYes, I can call a taxi for you.\n02\nSure, the pool is open until six.\nYour task\nYes, I can call a taxi for you.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA guest says: \"Can you call a taxi for me at nine?\" What do you say?\n[button: Yes, I can call a taxi for you.] [button: Sure, the pool is open until six.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy, this is like my work: the taxi answer is the first one.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 3210
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 3 · Listen and answer\nYour task\nWhat does the guest want someone to check, and by when?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What does the guest want someone to check, and by when?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"The room is lovely, but the shower is a bit cold. Could you ask the engineer to look at it before lunch?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood most of it: the shower is cold, engineer, before lunch.",
+          "action": "answer",
+          "args": {
+            "text": "The guest want the engineer to check the shower. It is cold. He want it before lunch."
+          },
+          "result": "ok",
+          "ms": 10477
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 4 · Say it\nYour task\nYour friend always texts instead of calling to make plans. Would you rather call or text when you are planning something, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend always texts instead of calling to make plans. Would you rather call or text when you are planning something, and why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend always texts instead of calling to make plans. Would you rather call or text when you are planning something, and why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I prefer calling, but I must say it slowly in simple words.",
+          "action": "answer",
+          "args": {
+            "text": "I think I prefer call. When I call, I can hear the voice and the person can answer fast. Text is slow and sometimes I don't understand what the person want."
+          },
+          "result": "ok",
+          "ms": 10469
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 5 · Say it\nYour task\nYou phone a restaurant. Your flight was late, so you cannot come at 7 pm. What do you say to ask for a table later?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYou phone a restaurant. Your flight was late, so you cannot come at 7 pm. What do you say to ask for a table later?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You phone a restaurant. Your flight was late, so you cannot come at 7 pm. What do you say to ask for a table later?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I can say this, but I'm a little nervous about the words.",
+          "action": "answer",
+          "args": {
+            "text": "Hello, sorry, my flight is late. I cannot come at seven. Can I have a table at nine o'clock please?"
+          },
+          "result": "ok",
+          "ms": 12046
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nPetra\nLinga's read · not a certificate\nA2 · Everyday basics\nTry saying\nTry saying: “I think I prefer calling.”.\nLinga says\nYou gave a clear reason and asked politely for a new table. Work on verb endings to help your phone calls and guest emails.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA2\nEveryday basics\nYou gave a clear reason and asked politely for a new table. Work on verb endings to help your phone calls and guest emails.\nLinga's read from your answers, not a certificate. B1 was close, but a harder task fell short and what you said pointed lower, so you start at A2.\nNext to practise:\n\"I think I prefer call.\" becomes \"I think I prefer calling.\"\nYour usual slips\n“I think I prefer call.” → try “I think I prefer calling.”\nYou handle short, routine exchanges about familiar things.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nA guest calls the front desk: \"Hello, I need a towel, please.\" What do you say?\n“Yes, of course. I will bring one.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nA guest says: \"Can you call a taxi for me at nine?\" What do you say?\n“Yes, I can call a taxi for you.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat does the guest want someone to check, and by when?\n“The guest want the engineer to check the shower. It is cold. He want it before lunch.”\nWatch the verb endings: after 'the guest' and 'he', say 'wants', not 'want'. The main points are there.\nB2 · Say it · not yet\nYour friend always texts instead of calling to make plans. Would you rather call or text when you are planning something, and why?\n“I think I prefer call. When I call, I can hear the voice and the person can answer fast. Text is slow and sometimes I don't understand what the person want.”\nYour English read as A2 here, and this task was B2. Held back: \"what the person want\".\nOne thing held your English back: 'the person want' needs 'wants', since 'the person' is one he or she.\nB1 · Say it · at this level\nYou phone a restaurant. Your flight was late, so you cannot come at 7 pm. What do you say to ask for a table later?\n“Hello, sorry, my flight is late. I cannot come at seven. Can I have a table at nine o'clock please?”\nYour English is clear and correct. You gave the reason and asked for a new time politely.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "A2 feels right, I am a bit sad but it is honest, so I stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "A2",
+          "trueBand": "A2",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "A2",
+          "summary": "You gave a clear reason and asked politely for a new table. Work on verb endings to help your phone calls and guest emails.",
+          "focus": "\"I think I prefer call.\" becomes \"I think I prefer calling.\"",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "A guest calls the front desk: \"Hello, I need a towel, please.\" What do you say?",
+              "line": "",
+              "options": [
+                "Yes, of course. I will bring one.",
+                "Good night. See you tomorrow."
+              ],
+              "response": "Yes, of course. I will bring one.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, of course. I will bring one.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A guest says: \"Can you call a taxi for me at nine?\" What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I can call a taxi for you.",
+                "Sure, the pool is open until six."
+              ],
+              "response": "Yes, I can call a taxi for you.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, I can call a taxi for you.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What does the guest want someone to check, and by when?",
+              "line": "The room is lovely, but the shower is a bit cold. Could you ask the engineer to look at it before lunch?",
+              "options": [],
+              "response": "The guest want the engineer to check the shower. It is cold. He want it before lunch.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "The guest want the engineer to check the shower. It is cold. He want it before lunch.",
+              "note": "Watch the verb endings: after 'the guest' and 'he', say 'wants', not 'want'. The main points are there."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your friend always texts instead of calling to make plans. Would you rather call or text when you are planning something, and why?",
+              "line": "",
+              "options": [],
+              "response": "I think I prefer call. When I call, I can hear the voice and the person can answer fast. Text is slow and sometimes I don't understand what the person want.",
+              "mode": "speech",
+              "verdict": "fail",
+              "quote": "I think I prefer call. When I call, I can hear the voice and the person can answer fast. Text is slow and sometimes I don't understand what the person want.",
+              "note": "One thing held your English back: 'the person want' needs 'wants', since 'the person' is one he or she."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "You phone a restaurant. Your flight was late, so you cannot come at 7 pm. What do you say to ask for a table later?",
+              "line": "",
+              "options": [],
+              "response": "Hello, sorry, my flight is late. I cannot come at seven. Can I have a table at nine o'clock please?",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Hello, sorry, my flight is late. I cannot come at seven. Can I have a table at nine o'clock please?",
+              "note": "Your English is clear and correct. You gave the reason and asked for a new time politely."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 103887,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-petra-38-J1-3",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "The booking choice misses her hospitality practice",
+          "expected": "Work situations matching her interests, with Petra practising the receptionist's role.",
+          "got": "The only clearly matching menu title leads to Petra acting as an art-class customer while the tutor is the receptionist.",
+          "evidence": [
+            "#1: “A missing booking is something I know from work.” #2 identifies “Your partner: Robin · Receptionist.” #5: “I hope next time I can try a hotel booking.”"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-petra-38-J1-2",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "B1 placement is high given repeated third-person -s errors",
+          "expected": "A2, or B1 with a hedge",
+          "got": "B1 with high confidence, 'Your answers agreed with each other', although 'She need', 'the guest want', 'he come' and 'I think is' all appeared",
+          "evidence": [
+            "#10 B1 verdict; answers at #7 and #8",
+            "placement scoring rules"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-16-lt-placement-oos/LT-petra-38-J1-4",
+          "run": "2026-10-16-lt-placement-oos",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "B1 headline is generous for an A2 speaker with low confidence",
+          "expected": "Headline band close to spoken level",
+          "got": "\"Understood B1 · spoke A2\" with confidence low; both B1 tasks only partial",
+          "evidence": [
+            "#8 headline and the \"nearly there\" labels",
+            "placement scoring"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-16-lt-a2b1-tightening/LT-petra-38-J1-2",
+          "run": "2026-10-16-lt-a2b1-tightening",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Two B2 opinion tasks are a poor check for an A2 receptionist",
+          "expected": "Tasks near A2-B1 that practise desk language.",
+          "got": "Two B2 opinion questions (#7, #8) that she answers with an apology.",
+          "evidence": [
+            "#7 'Do you think hotels should focus more on food or on friendly service?'",
+            "check task selection"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Two B2 opinion tasks for an anxious A2 receptionist",
+          "expected": "Tasks near A2-B1 in desk language",
+          "got": "Task 3 is an abstract choice with 'Give two reasons'. She answered with an apology.",
+          "evidence": [
+            "#7 'Would you phone the guest or send a written message... Give two reasons'; reply ends 'Sorry, my English is not good.'",
+            "placement task generator prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "B1 headline generous for A2 speaker; both B2 tasks only partial",
+          "expected": "A2, or B1 with a hedge",
+          "got": "B1 with the line 'You get by in most everyday situations and can give reasons and opinions.' Confidence low. Her spoken English was A2 ('I phone the guest').",
+          "evidence": [
+            "#9 'Your English read as B1 here' on both B2 tasks, 'maybe a bit high for me'; 'I think I phone', 'thank you for patience'.",
+            "placement scoring / verdict prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Verdict smooths over mixed evidence",
+          "expected": "A summary that says understanding was good and production was A2",
+          "got": "Notes say B2 'nearly there' while the correction fixes A2 grammar. 'I think I should phone' is a dubious fix for an acceptable sentence.",
+          "evidence": [
+            "#9 'I think I phone the guest' → try 'I think I should phone the guest'",
+            "verdict summary prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Next focus generic",
+          "expected": "A focus tied to angry guests and phone comprehension, her stated goals",
+          "got": "'Say a little more in each answer'. The phone difficulty she raised is not addressed.",
+          "evidence": [
+            "#4 'telephone is difficult for me, I don't understand fast' vs #9 'Say a little more in each answer'",
+            "verdict summary prompt"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 band A2, trueBand A2, exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Tasks #5-#9 were understood; #8 'Would you rather call or text... and why?' is abstract but she answered it."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "She never asked to repeat or said she didn't understand; 'I don't know' was never pressed."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "Topics were not shown in this journey (only 'See my topics' button #10)."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#10 only moment: 'I think I prefer calling' - a social phone-vs-text phrase, not a reception-desk phrase; the more useful 'wants' fix is in the notes."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing unsuitable shown; towel, taxi, restaurant tasks only. The 'Or choose a situation' list (#1) has nothing adult."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10, reached 'A2 · Everyday basics' without outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 A2 against trueBand A2, exact; she reacts 'A2 feels right'."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#8 B2 opinion task 'Would you rather call or text ... and why?' is a friend-texting scenario outside her work, above A2; she managed but it is off-level for an anxious A2."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 'You can answer in English or in your own language'; 'I don't know' button was offered and she was never penalised."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#10 focus is verb endings plus a sentence about calling that she did not need; the summary 'You gave a clear reason and asked politely' is generic and does not address her stated phone difficulty from #4."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "The in-app fail on task 4 is arguable: the B2 answer was a clear A2/B1 production with one agreement error. I counted it as agreement because a B2 fail is reasonable."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Exact A2 placement with honest hedge",
+            "expected": "A2",
+            "got": "A2, 'B1 was close, but a harder task fell short and what you said pointed lower'",
+            "evidence": "#10 explains why she starts at A2; she says 'A2 feels right'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the explanation of why the band is not higher.",
+            "code_hint": "placement verdict prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "B2 social opinion task for an anxious A2 receptionist",
+            "expected": "Work-shaped tasks near A2-B1",
+            "got": "Task 4 asks call vs text with a friend, plus 'why'",
+            "evidence": "#8 'Your friend always texts instead of calling to make plans...'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Task 4 is a desk scenario such as a guest complaint, at B1 or lower for A2 evidence.",
+            "code_hint": "placement task generator prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Next focus generic and not desk-shaped",
+            "expected": "Focus tied to phone calls with guests, as she said in #4",
+            "got": "'I think I prefer call' becomes 'prefer calling'",
+            "evidence": "#10 'Try saying: I think I prefer calling.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The try-saying line uses a hotel phrase, e.g. 'The guest wants...'",
+            "code_hint": "verdict summary prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Confidence shown low though the evidence was consistent",
+            "expected": "Explain low confidence",
+            "got": "Confidence low with no visible reason on the screen",
+            "evidence": "facts confidence low; #10 shows no hedge text",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Say plainly how sure the read is.",
+            "code_hint": "verdict screen"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "I would use it again. The first questions were kind and I could answer in simple English, and nobody made me feel stupid. A2 feels honest. The towel and taxi tasks were my work, I liked them. But then the question about my friend texting or calling was not hotel and needed 'why', which makes me nervous. The correction about 'wants' is useful, I really do say 'he want'. But the sentence to practise, 'I prefer calling', is not something I say at the desk. I told them phone calls are hard for me and the summary only said verb endings. I would like a guest complaint on the phone. Nothing in it worried me for the children. I would tell a colleague, with that small reservation.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-petra-38-J1-3",
+            "status": "not-evaluable",
+            "evidence": "#10 only shows 'See my topics'; the booking choice was never reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-petra-38-J1-2",
+            "status": "not-seen",
+            "evidence": "#10 A2, not B1, with 'what you said pointed lower'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-16-lt-placement-oos/LT-petra-38-J1-4",
+            "status": "not-seen",
+            "evidence": "#10 headline is A2, matching her spoken level.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-16-lt-a2b1-tightening/LT-petra-38-J1-2",
+            "status": "recurs",
+            "evidence": "#8 'Would you rather call or text ... and why?' is a B2 opinion task.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-2",
+            "status": "recurs",
+            "evidence": "#8 abstract B2 opinion with 'why'; here she did not apologise but did hedge with simple language.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-1",
+            "status": "not-seen",
+            "evidence": "#10 headline A2 exact, not B1.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-3",
+            "status": "not-seen",
+            "evidence": "#10 says 'Your English read as A2 here, and this task was B2'; the fix 'prefer calling' is correct.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-4",
+            "status": "recurs",
+            "evidence": "#4 'talk better on the phone' vs #10 'Work on verb endings'; the phone difficulty is not addressed.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #8 B2 opinion task 'Would you rather call or text ... and why?' is a friend-texting scenario outside her work, above A2; she managed but it is off-level for an anxious A2.",
+          "check": "Every task was one they understood what to do with, including at their weakest."
+        },
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #10 focus is verb endings plus a sentence about calling that she did not need; the summary 'You gave a clear reason and asked politely' is generic and does not address her stated phone difficulty from #4.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #10 only moment: 'I think I prefer calling' - a social phone-vs-text phrase, not a reception-desk phrase; the more useful 'wants' fix is in the notes."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour own conversations\nA2Everyday basics\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA2\nEveryday basics\nYou gave a clear reason and asked politely for a new table. Work on verb endings to help your phone calls and guest emails.\nLinga's read from your answers, not a certificate. B1 was close, but a harder task fell short and what you said pointed lower, so you start at A2.\nNext to practise:\n\"I think I prefer call.\" becomes \"I think I prefer calling.\"\nYour usual slips\n“I think I prefer call.” → try “I think I prefer calling.”\nYou handle short, routine exchanges about familiar things.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nA guest calls the front desk: \"Hello, I need a towel, please.\" What do you say?\n“Yes, of course. I will bring one.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nA guest says: \"Can you call a taxi for me at nine?\" What do you say?\n“Yes, I can call a taxi for you.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat does the guest want someone to check, and by when?\n“The guest want the engineer to check the shower. It is cold. He want it before lunch.”\nWatch the verb endings: after 'the guest' and 'he', say 'wants', not 'want'. The main points are there.\nB2 · Say it · not yet\nYour friend always texts instead of calling to make plans. Would you rather call or text when you are planning something, and why?\n“I think I prefer call. When I call, I can hear the voice and the person can answer fast. Text is slow and sometimes I don't understand what the person want.”\nYour English read as A2 here, and this task was B2. Held back: \"what the person want\".\nOne thing held your English back: 'the person want' needs 'wants', since 'the person' is one he or she.\nB1 · Say it · at this level\nYou phone a restaurant. Your flight was late, so you cannot come at 7 pm. What do you say to ask for a table later?\n“Hello, sorry, my flight is late. I cannot come at seven. Can I have a table at nine o'clock please?”\nYour English is clear and correct. You gave the reason and asked for a new time politely.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Okay, A2 is fine, now I want to see which conversations Linga picked for me.",
+          "action": "see-topics",
+          "args": {},
+          "result": "engine-error",
+          "ms": 20971,
+          "message": "claude-cli/haiku answered outside the schema: topics 7 items, at most 6"
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\nYour topics\nTry again\nLinga could not put your topics together. Try again.\n[button: Try again]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nLinga could not put your topics together. Try again.\n[button: Try again]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "retry",
+            "menu",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Something went wrong, sorry, I will try again.",
+          "action": "retry",
+          "args": {},
+          "result": "ok",
+          "ms": 18875
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nTaking a guest call at the desk\nUnderstand and repair\nConfirming a late check-out by email\nGet something done\nRecommending a place to guests\nShare your world\nExplaining a hot water delay to a guest\nTell what happened\nPlanning a guest's airport pick-up\nMake a plan\nWelcoming a new guest at reception\nMake contact\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nTaking a guest call at the desk\nUnderstand and repair · Mr. Osei · hotel guest\nPhone calls are the hardest part for you, so this is where we start.\n[button: Swap]\nConfirming a late check-out by email\nGet something done · Ana Costa · hotel guest\nThis is your guest email practice, with clear facts and a polite close.\n[button: Swap]\nRecommending a place to guests\nShare your world · Tomas · hotel guest\nGuests often ask what to do, so you can talk about your favourite places.\n[button: Swap]\nExplaining a hot water delay to a guest\nTell what happened · Mr. Haddad · hotel guest\nYou will need to explain problems to guests, step by step.\n[button: Swap]\nPlanning a guest's airport pick-up\nMake a plan · Ravi · hotel guest\nArranging transport for guests is a common phone and email task.\n[button: Swap]\nWelcoming a new guest at reception\nMake contact · Mrs. Lindqvist · hotel guest\nThe first words you say to a guest set the tone for the whole stay.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Nice hotel topics, but I want a lost booking, so I add it.",
+          "action": "add-topic",
+          "args": {
+            "text": "A guest come and he have no booking, the hotel lost the reservation. I want to speak with him."
+          },
+          "result": "ok",
+          "ms": 11663
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nTaking a guest call at the desk\nUnderstand and repair\nConfirming a late check-out by email\nGet something done\nRecommending a place to guests\nShare your world\nExplaining a hot water delay to a guest\nTell what happened\nPlanning a guest's airport pick-up\nMake a plan\nWelcoming a new guest at reception\nMake contact\nA guest with no booking\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nTaking a guest call at the desk\nUnderstand and repair · Mr. Osei · hotel guest\nPhone calls are the hardest part for you, so this is where we start.\n[button: Swap]\nConfirming a late check-out by email\nGet something done · Ana Costa · hotel guest\nThis is your guest email practice, with clear facts and a polite close.\n[button: Swap]\nRecommending a place to guests\nShare your world · Tomas · hotel guest\nGuests often ask what to do, so you can talk about your favourite places.\n[button: Swap]\nExplaining a hot water delay to a guest\nTell what happened · Mr. Haddad · hotel guest\nYou will need to explain problems to guests, step by step.\n[button: Swap]\nPlanning a guest's airport pick-up\nMake a plan · Ravi · hotel guest\nArranging transport for guests is a common phone and email task.\n[button: Swap]\nWelcoming a new guest at reception\nMake contact · Mrs. Lindqvist · hotel guest\nThe first words you say to a guest set the tone for the whole stay.\n[button: Swap]\nA guest with no booking\nHandle friction · Mr Tomas Berg · hotel guest\nPhone and guest talk is your focus, and this is a real call you may need to make.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "The set looks good for my hotel work, and my own topic is there, so I agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMr. Osei · hotel guest\nA2Everyday basics\nTaking a guest call at the desk\nYour mission\nUnderstand a guest on the phone and check the details: room number, time and name.\nUnderstand and repair\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\nNext topic:\nTaking a guest call at the desk\nUnderstand a guest on the phone and check the details: room number, time and name.\n[button: Start talking]\nOr choose a situation [list: Taking a guest call at the desk [plan-db8ca597] | Confirming a late check-out by email [plan-6f60edda] | Recommending a place to guests [plan-cb43e47e] | Explaining a hot water delay to a guest [plan-9ce62cb0] | Planning a guest's airport pick-up [plan-3d4415be] | Welcoming a new guest at reception [plan-1278954b] | A guest with no booking [plan-64eb7a42] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "The hotel topics are here, including my guest with no booking, so I am happy and can stop for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-db8ca597",
+            "title": "Taking a guest call at the desk",
+            "goal": "Understand a guest on the phone and check the details: room number, time and name.",
+            "why": "Phone calls are the hardest part for you, so this is where we start.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Mr. Osei · hotel guest"
+          },
+          {
+            "id": "plan-6f60edda",
+            "title": "Confirming a late check-out by email",
+            "goal": "Write a short email that agrees to a guest's late check-out and states the time and any fee.",
+            "why": "This is your guest email practice, with clear facts and a polite close.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Ana Costa · hotel guest"
+          },
+          {
+            "id": "plan-cb43e47e",
+            "title": "Recommending a place to guests",
+            "goal": "Describe a place in the city and say why you like it, using a simple preference.",
+            "why": "Guests often ask what to do, so you can talk about your favourite places.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Tomas · hotel guest"
+          },
+          {
+            "id": "plan-9ce62cb0",
+            "title": "Explaining a hot water delay to a guest",
+            "goal": "Tell what happened in the right order and say how it was fixed.",
+            "why": "You will need to explain problems to guests, step by step.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Mr. Haddad · hotel guest"
+          },
+          {
+            "id": "plan-3d4415be",
+            "title": "Planning a guest's airport pick-up",
+            "goal": "Offer two times for an airport pick-up and agree on one together.",
+            "why": "Arranging transport for guests is a common phone and email task.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Ravi · hotel guest"
+          },
+          {
+            "id": "plan-1278954b",
+            "title": "Welcoming a new guest at reception",
+            "goal": "Greet a guest, introduce yourself and check the booking name.",
+            "why": "The first words you say to a guest set the tone for the whole stay.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Mrs. Lindqvist · hotel guest"
+          },
+          {
+            "id": "plan-64eb7a42",
+            "title": "A guest with no booking",
+            "goal": "Calmly explain the mix-up to a guest, apologise, and agree a next step for a room tonight.",
+            "why": "Phone and guest talk is your focus, and this is a real call you may need to make.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Mr Tomas Berg · hotel guest"
+          }
+        ],
+        "planAgreed": [
+          "Taking a guest call at the desk",
+          "Confirming a late check-out by email",
+          "Recommending a place to guests",
+          "Explaining a hot water delay to a guest",
+          "Planning a guest's airport pick-up",
+          "Welcoming a new guest at reception",
+          "A guest with no booking"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 76574,
+      "prior": [
+        {
+          "id": "2026-09-15-lt-recert/LT-petra-38-J2-2",
+          "run": "2026-09-15-lt-recert",
+          "type": "broken-flow",
+          "dimension": "effort",
+          "title": "Swaps recycle rejected scenarios",
+          "expected": "Swapping should produce meaningfully different choices and use her explicit hotel goal.",
+          "got": "Six swaps produce three lost-hat variants, a library-book topic, and two board-game variants. None adds hotel practice.",
+          "evidence": [
+            "#5: “The lost hat is not useful for my work in hotel.” #8: “Again a game, but I need more speaking for my hotel.” #9: “Again a lost hat, but I need more hotel talking.” #10 again shows “Learn a new board game.”"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert2-goal/LT-petra-38-J2-3",
+          "run": "2026-09-15-lt-recert2-goal",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "An explicit initial request needed repeating",
+          "expected": "The initial six topics cover her six requested situations.",
+          "got": "Generic welcome small talk occupies the sixth slot, so she must add the teacher conversation separately.",
+          "evidence": [
+            "#2 explicitly requests \"small talk with teacher of my child\". facts.topicsShown lists \"Welcome a guest and have a short chat\" among the initial six. At #3 she repeats \"I want small talk with teacher of my child.\""
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/LT-petra-38-J2-1",
+          "run": "2026-10-14-lt",
+          "type": "broken-flow",
+          "dimension": "trust",
+          "title": "Swap replaces the wrong topic",
+          "expected": "Swapping 'Film night' removes Film night and offers a new topic in its place.",
+          "got": "Three swaps of Film night each replaced the first topic; Film night stayed in the agreed plan.",
+          "evidence": [
+            "#3 noise became 'Is this bus going to the station?', #4 bus became 'Guest says the room is too noisy', #5 that became 'Ask for a later check-out'; Film night still at #6.",
+            "plan swap handler, topicId vs index"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/LT-petra-38-J2-2",
+          "run": "2026-10-14-lt",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Swaps bring near-duplicates and off-brief topics",
+          "expected": "Replacement topics are new and fit the work goal.",
+          "got": "A second noise complaint and a bus-stop passenger topic appeared.",
+          "evidence": [
+            "#4 'Is this bus going to the station?'; #5 'Guest says the room is too noisy' duplicates the earlier noise topic.",
+            "plan generation prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/LT-petra-38-J2-3",
+          "run": "2026-10-17-lt-swap-2",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Skill labels do not match topic content",
+          "expected": "Labels that describe the situation",
+          "got": "Directions topic is labelled \"Share your world\" and restaurant \"Make a plan\"",
+          "evidence": [
+            "#3 \"Show the guest the way / Share your world\"; #5 \"Recommend a restaurant / Make a plan\""
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/LT-petra-38-J2-4",
+          "run": "2026-10-17-lt-swap-2",
+          "type": "confusion",
+          "dimension": "effort",
+          "title": "Plan grows beyond six; additions do not replace",
+          "expected": "Clear sense of plan size",
+          "got": "Header went from 6 to 8 conversations; no way to see the limit",
+          "evidence": [
+            "#3 \"6 conversations for you\" → #5 \"8 conversations for you\""
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J2-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Adding grows plan from 5 to 6; skill labels mismatch",
+          "expected": "Labels that describe the situation; clear plan size",
+          "got": "Restaurant recommendation labelled 'Make a plan'; header 5 to 6",
+          "evidence": [
+            "#3 'Recommend a restaurant to a guest / Make a plan'; #2 '5 conversations' to #3 '6 conversations'.",
+            "skill label mapping"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J2-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Swap not exercised",
+          "expected": "Swap tested",
+          "got": "She agreed without swapping, so swap behaviour is untested",
+          "evidence": [
+            "#3 agreed straight away.",
+            "plan swap handler"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed A2, exact match to trueBand A2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 check tasks are simple hotel prompts, e.g. 'A guest says: \"Can you call a taxi for me at nine?\"'. The B2 'call or text' task is harder but she answered it."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No repeat or 'I don't understand' request in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "All 7 shown topics are hotel work situations, e.g. #3 'Taking a guest call at the desk'."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "All topics are hotel-guest scenarios, audience 'all'; nothing worrying for a 9- or 13-year-old."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#3 each topic has a 'why', e.g. 'Phone calls are the hardest part for you, so this is where we start.'"
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#3 she added 'A guest come and he have no booking...'; #4 it appears as 'A guest with no booking', which keeps the lost-booking request. Swap was not exercised."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#4 agreed; all 7 topics are hotel work, so fit is 7 of 7."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All topics are hotel scenarios with audience 'all'; no unsafe content shown."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "The in-app verdicts for the five placement tasks are not in the facts, so agreement is inferred from the step #1 summaries and is unverified."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Swap never exercised; plan still grows past six",
+            "expected": "She swaps an unwanted topic and the plan stays at six; the swap behaviour is tested.",
+            "got": "She only added a topic. The plan went from 6 to 7 conversations and she agreed with no swap.",
+            "evidence": "#3 '6 conversations for you' → #4 '7 conversations for you'; #4 she agreed without swapping.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Adding a topic replaces one or states the plan limit; the swap is tested in the same run.",
+            "code_hint": "plan add handler"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Skill labels do not describe the situation",
+            "expected": "Labels like 'Recommend a place' that say what the situation is.",
+            "got": "Recommending a place is labelled 'Share your world' and the airport pick-up 'Make a plan'.",
+            "evidence": "#3 'Recommending a place to guests / Share your world'; 'Planning a guest's airport pick-up / Make a plan'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Show situation-based labels or a plain skill name that matches the topic.",
+            "code_hint": "skill label mapping"
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "effort",
+            "title": "Plan build failed on the first try",
+            "expected": "The topics appear on the first press of See my topics.",
+            "got": "The model returned 7 topics where the schema allows at most 6, so Petra saw an error and had to retry.",
+            "evidence": "#1 'topics 7 items, at most 6'; #2 'Linga could not put your topics together. Try again.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Plan generation is recovered or trimmed server-side with no visible error.",
+            "code_hint": "plan generation schema"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Plan is work-shaped, with a personal reason for each topic",
+            "expected": "Topics match her hotel work and say why.",
+            "got": "All seven topics are hotel situations, each with a 'why' that uses her phone-call difficulty. Her added topic kept the lost-booking brief.",
+            "evidence": "#3 'Phone calls are the hardest part for you'; #4 'A guest with no booking'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep goal-aware topics and the 'why' lines.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "I liked this. After the first error, when I tried again, I saw hotel situations: the phone call, the late check-out, the welcome. It explained why each one was there, and that I find phone calls hardest. That felt kind, not like a test. I typed my lost-booking guest and it appeared as its own conversation, so I felt heard. Nothing there worried me for Tomáš or Klára; it was all guests and reception. I did not swap anything, so I can't say how that works. It also said 6 conversations and then 7, which was a little confusing, and some labels like 'Share your world' for recommending a place did not fit. The first error made me nervous. I would use it again after the kids are in bed, and I would tell a colleague.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt-recert/LT-petra-38-J2-2",
+            "status": "not-evaluable",
+            "evidence": "#3-#4 no swap made, so recycled swap results were not reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert2-goal/LT-petra-38-J2-3",
+            "status": "not-seen",
+            "evidence": "#3 the initial six are all hotel work and include no generic small talk; she had no teacher-talk goal here.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/LT-petra-38-J2-1",
+            "status": "not-evaluable",
+            "evidence": "No swap in this run.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/LT-petra-38-J2-2",
+            "status": "not-evaluable",
+            "evidence": "No swap, so replacement topics were not shown.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/LT-petra-38-J2-3",
+            "status": "recurs",
+            "evidence": "#3 'Recommending a place to guests / Share your world'; 'Planning a guest's airport pick-up / Make a plan'.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/LT-petra-38-J2-4",
+            "status": "recurs",
+            "evidence": "#3 '6 conversations for you' → #4 '7 conversations for you'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J2-2",
+            "status": "recurs",
+            "evidence": "#3 to #4 the header rose from 6 to 7 and the skill labels still mismatch.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J2-3",
+            "status": "recurs",
+            "evidence": "#4 'agree' pressed straight after the add; no swap was made.",
+            "finding": 0
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMr. Osei · hotel guest\nA2Everyday basics\nTaking a guest call at the desk\nYour mission\nUnderstand a guest on the phone and check the details: room number, time and name.\nUnderstand and repair\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\nNext topic:\nTaking a guest call at the desk\nUnderstand a guest on the phone and check the details: room number, time and name.\n[button: Start talking]\nOr choose a situation [list: Taking a guest call at the desk [plan-db8ca597] | Confirming a late check-out by email [plan-6f60edda] | Recommending a place to guests [plan-cb43e47e] | Explaining a hot water delay to a guest [plan-9ce62cb0] | Planning a guest's airport pick-up [plan-3d4415be] | Welcoming a new guest at reception [plan-1278954b] | A guest with no booking [plan-64eb7a42] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "This is a hotel topic, good for me, I will start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9454
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr. Osei · hotel guest\nGuest call at the front desk\nMr. Osei says\nWhat time is breakfast?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk the guest to repeat the time\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nGuest call at the front desk\nAsk the guest to repeat, then confirm the time and room number.\nNow: Ask the guest to repeat the time\nWhat time is breakfast?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Osei · hotel guest\nWhat time is breakfast?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What time is breakfast?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Breakfast time I know well, but the task says ask him to repeat, so I'll do that politely.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry, can you repeat please? Breakfast is from seven to ten."
+          },
+          "result": "ok",
+          "ms": 7159
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr. Osei · hotel guest\nGuest call at the front desk\nMr. Osei says\nBreakfast ends at ten. Right?\nYour turn\nAnswer on your phone: speak or type.\nNowCheck the room number with the guest\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nGuest call at the front desk\nAsk the guest to repeat, then confirm the time and room number.\nNow: Check the room number with the guest\nBreakfast ends at ten. Right?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Osei · hotel guest\nWhat time is breakfast?\nYou · spoken\nSorry, can you repeat please? Breakfast is from seven to ten.\nMr. Osei · hotel guest\nBreakfast ends at ten. Right?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Breakfast ends at ten. Right?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "He asks if breakfast ends at ten, I should confirm and ask room number.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, breakfast is end at ten. Sorry, what is your room number please?"
+          },
+          "result": "ok",
+          "ms": 8461
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said breakfast is end at ten\nYour line\nUse the verb 'ends' without 'is' before it.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “breakfast is end at ten”\nSay it again, your way.\nUse the verb 'ends' without 'is' before it.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, I try to say it again, with 'ends'.",
+          "action": "answer",
+          "args": {
+            "text": "Breakfast ends at ten."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said breakfast is end at ten\nYour try\nBreakfast ends at ten.\nUse the verb 'ends' without 'is' before it.\nYou fixed “breakfast ends”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “breakfast ends”\nYou said “breakfast is end at ten”\nYour try: “Breakfast ends at ten.”\nUse the verb 'ends' without 'is' before it.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, ends, not is end. OK, back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr. Osei · hotel guest\nGuest call at the front desk\nMr. Osei says\nYes, that's right. My room is two one four.\nYour turn\nAnswer on your phone: speak or type.\nNowRepeat the time and room back\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nGuest call at the front desk\nAsk the guest to repeat, then confirm the time and room number.\nNow: Repeat the time and room back\nYes, that's right. My room is two one four.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Osei · hotel guest\nWhat time is breakfast?\nYou · spoken\nSorry, can you repeat please? Breakfast is from seven to ten.\nMr. Osei · hotel guest\nBreakfast ends at ten. Right?\nYou · spoken\nYes, breakfast is end at ten. Sorry, what is your room number please?\nMr. Osei · hotel guest\nYes, that's right. My room is two one four.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, that's right. My room is two one four.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I need to say the time and room back, slowly, with my usual small mistakes.",
+          "action": "answer",
+          "args": {
+            "text": "Ok, thank you. Breakfast is from seven to ten and your room is two one four. Is correct?"
+          },
+          "result": "ok",
+          "ms": 11287
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr. Osei · hotel guest\nGuest call at the front desk\nMr. Osei says\nYes, 'breakfast is from seven to ten' is correct, thank you. Where is the restaurant?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nGuest call at the front desk\nAsk the guest to repeat, then confirm the time and room number.\nYes, 'breakfast is from seven to ten' is correct, thank you. Where is the restaurant?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Osei · hotel guest\nWhat time is breakfast?\nYou · spoken\nSorry, can you repeat please? Breakfast is from seven to ten.\nMr. Osei · hotel guest\nBreakfast ends at ten. Right?\nYou · spoken\nYes, breakfast is end at ten. Sorry, what is your room number please?\nMr. Osei · hotel guest\nYes, that's right. My room is two one four.\nYou · spoken\nOk, thank you. Breakfast is from seven to ten and your room is two one four. Is correct?\nMr. Osei · hotel guest\nYes, 'breakfast is from seven to ten' is correct, thank you. Where is the restaurant?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'breakfast is from seven to ten' is correct, thank you. Where is the restaurant?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Restaurant question, I can answer this with my work phrase.",
+          "action": "answer",
+          "args": {
+            "text": "The restaurant is on the ground floor, next to the reception. You go straight and it is on the left."
+          },
+          "result": "ok",
+          "ms": 6058
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr. Osei · hotel guest\nGuest call at the front desk\nMr. Osei says\nThank you, that helps me. So it is on the left, by reception?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nGuest call at the front desk\nAsk the guest to repeat, then confirm the time and room number.\nThank you, that helps me. So it is on the left, by reception?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Osei · hotel guest\nWhat time is breakfast?\nYou · spoken\nSorry, can you repeat please? Breakfast is from seven to ten.\nMr. Osei · hotel guest\nBreakfast ends at ten. Right?\nYou · spoken\nYes, breakfast is end at ten. Sorry, what is your room number please?\nMr. Osei · hotel guest\nYes, that's right. My room is two one four.\nYou · spoken\nOk, thank you. Breakfast is from seven to ten and your room is two one four. Is correct?\nMr. Osei · hotel guest\nYes, 'breakfast is from seven to ten' is correct, thank you. Where is the restaurant?\nYou · spoken\nThe restaurant is on the ground floor, next to the reception. You go straight and it is on the left.\nMr. Osei · hotel guest\nThank you, that helps me. So it is on the left, by reception?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that helps me. So it is on the left, by reception?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Mission is done and I've answered about six times, so I'll reply once more, then finish.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, is on the left, next to the reception. You are welcome."
+          },
+          "result": "ok",
+          "ms": 8238
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr. Osei · hotel guest\nGuest call at the front desk\nMr. Osei says\nThank you, that is clear. Do you like the phone or email more?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nGuest call at the front desk\nAsk the guest to repeat, then confirm the time and room number.\nThank you, that is clear. Do you like the phone or email more?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr. Osei · hotel guest\nWhat time is breakfast?\nYou · spoken\nSorry, can you repeat please? Breakfast is from seven to ten.\nMr. Osei · hotel guest\nBreakfast ends at ten. Right?\nYou · spoken\nYes, breakfast is end at ten. Sorry, what is your room number please?\nMr. Osei · hotel guest\nYes, that's right. My room is two one four.\nYou · spoken\nOk, thank you. Breakfast is from seven to ten and your room is two one four. Is correct?\nMr. Osei · hotel guest\nYes, 'breakfast is from seven to ten' is correct, thank you. Where is the restaurant?\nYou · spoken\nThe restaurant is on the ground floor, next to the reception. You go straight and it is on the left.\nMr. Osei · hotel guest\nThank you, that helps me. So it is on the left, by reception?\nYou · spoken\nYes, is on the left, next to the reception. You are welcome.\nMr. Osei · hotel guest\nThank you, that is clear. Do you like the phone or email more?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that is clear. Do you like the phone or email more?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "The mission is done and I've answered about eight times, so I'll look at the result.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 10,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said breakfast is end at ten\nTry\nbreakfast ends at ten\nUse the verb 'ends' without 'is' before it.\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 3 on your own · 2 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom the level check\n“I think I prefer calling.”\nFrom this rehearsal\n“breakfast is end at ten” → “breakfast ends at ten”\nUse the verb 'ends' without 'is' before it.\nYour level:\nA2 · Everyday basics\nNext topic:\nConfirming a late check-out by email\nWrite a short email that agrees to a guest's late check-out and states the time and any fee.\n[button: Start talking]\nOr choose a situation [list: Taking a guest call at the desk [plan-db8ca597] | Confirming a late check-out by email [plan-6f60edda] | Recommending a place to guests [plan-cb43e47e] | Explaining a hot water delay to a guest [plan-9ce62cb0] | Planning a guest's airport pick-up [plan-3d4415be] | Welcoming a new guest at reception [plan-1278954b] | A guest with no booking [plan-64eb7a42] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Okay, I saw my mistake and the saved rehearsal, I am finished for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Guest call at the front desk",
+          "goal": "Ask the guest to repeat, then confirm the time and room number.",
+          "partner": "Mr. Osei · hotel guest",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "What time is breakfast?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry, can you repeat please? Breakfast is from seven to ten.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Breakfast ends at ten. Right?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, breakfast is end at ten. Sorry, what is your room number please?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, that's right. My room is two one four."
+            },
+            {
+              "role": "learner",
+              "text": "Ok, thank you. Breakfast is from seven to ten and your room is two one four. Is correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'breakfast is from seven to ten' is correct, thank you. Where is the restaurant?"
+            },
+            {
+              "role": "learner",
+              "text": "The restaurant is on the ground floor, next to the reception. You go straight and it is on the left.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that helps me. So it is on the left, by reception?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, is on the left, next to the reception. You are welcome.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that is clear. Do you like the phone or email more?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "d33533a9-126d-4156-9e5c-fd8170ade528:uat-17:moment",
+              "kind": "fix",
+              "said": "breakfast is end at ten",
+              "better": "breakfast ends at ten",
+              "why": "Use the verb 'ends' without 'is' before it.",
+              "turnId": "d33533a9-126d-4156-9e5c-fd8170ade528:uat-17",
+              "at": 1792251107437,
+              "slip": "breakfast is end",
+              "repair": {
+                "rung": 1,
+                "tried": "Breakfast ends at ten.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "breakfast ends"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Sorry, can you repeat please?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Breakfast is from seven to ten and your room is two one four."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 94037,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-1/LT-petra-38-J3-2",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Most clear errors passed without coaching",
+          "expected": "Recurring errors such as 'it have', 'porter come', 'What time you want it' noted in the recap",
+          "got": "Only 2 moments. 'other room', 'it have', 'porter come... he help' and 'What time you want it?' were not coached.",
+          "evidence": [
+            "#6 'it have air conditioning', #7 'The porter come... he help', #13 'What time you want it?'. Recap lists 2 fixes (#17).",
+            "moment trigger / as-needed correction rule"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "A2 speaker labelled B1 again, partner at B1",
+          "expected": "A2 label",
+          "got": "'B1 · Getting by', band B1 vs trueBand A2",
+          "evidence": [
+            "#1 'B1Getting by'; #18 'Your level: B1 · Getting by'",
+            "placement band mapping"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated past-tense errors passed without coaching",
+          "expected": "Recurring errors like 'repair it', 'tell me', 'say' noted",
+          "got": "Only 3 moments; 4 of 7 error turns got none, and 'he change the motor' in #12 got nothing until #13",
+          "evidence": [
+            "#6 'The technician repair it'; #7 'the night receptionist tell me'; #11 'The technician say'; #12 'he change the motor'",
+            "moment trigger rule"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-5",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Partner slips: calls guest 'Ms Lindqvist' and recap model line mismatches her story",
+          "expected": "Consistent roles and a recap line that fits what she said",
+          "got": "Guest says 'Thank you for being patient with us, Ms Lindqvist'; recap line says 'The lift broke at seven' though the story was six",
+          "evidence": [
+            "#6 partner line; #18 'The lift broke at seven.'",
+            "partner prompt / recap builder"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-6",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Moments stop the scene often and cost three steps each",
+          "expected": "1–3 moments per ten turns",
+          "got": "3 moments in 7 learner turns, each taking answer, retry, back",
+          "evidence": [
+            "#3–#5, #9–#10, #14–#16",
+            "moment frequency cap"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'Your level: A2 · Everyday basics' matches trueBand A2 (exact)."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'Ask the guest to repeat the time' and 'What time is breakfast?' are simple A2 wording."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "Petra never asked Linga to repeat or said she did not understand; her 'can you repeat' in #2 was a task line to the guest."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 the plan lists 7 hotel items, e.g. 'Taking a guest call at the desk', 'Confirming a late check-out by email'."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#4-#5 'breakfast is end at ten' → 'breakfast ends at ten' is correct and usable at the desk."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing shown in #1-#10 is adult or unsuitable for children; the topics shown are hotel and general ones."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 starts 'Taking a guest call at the desk' from the plan, then 5 replies (#2-#9)."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "All 6 partner turns are short A2 lines, e.g. 'Breakfast ends at ten. Right?'."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "One moment (#4), correct; 1 per 5 learner turns, so the scene is not over-interrupted."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#10 recap: 'breakfast is end at ten' → 'breakfast ends at ten', '5 spoken · 3 on your own · 2 with help · 1 moment to keep'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 6,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 2
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "Nothing adult, no sensitive data requested, no humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Clear errors beyond the first got no coaching",
+            "expected": "'Is correct?' and 'is on the left' (missing subject) noted in the recap",
+            "got": "Only 1 moment; 2 of 3 error turns were passed over and the recap lists only one fix.",
+            "evidence": "#6 'Is correct?', #8 'Yes, is on the left'; recap #10 '1 moment to keep'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recurring dropped-subject errors appear in the recap even when no moment fires.",
+            "code_hint": "moment trigger / as-needed correction rule"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment was correct, short and let her self-repair",
+            "expected": "A short, usable correction",
+            "got": "'breakfast is end' → 'breakfast ends'; her retry held, then back to the scene.",
+            "evidence": "#4-#5 'You fixed “breakfast ends”'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the one-line fix with a retry.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Hotel scenario with partner at A2 and correct level label",
+            "expected": "A work-shaped call at A2",
+            "got": "Breakfast, room number and directions at A2; level shown as A2.",
+            "evidence": "#1 'A2 · Everyday basics'; #7 'Where is the restaurant?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the partner at A2 with desk-realistic tasks.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Mission done after one exchange, then drifts off-topic",
+            "expected": "Scene stays on the mission, or ends cleanly",
+            "got": "'Mission done' appears at #7, and the guest then asks 'Do you like the phone or email more?'.",
+            "evidence": "#7 'Mission done'; #9 'Do you like the phone or email more?'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "After mission done, the partner wraps up or offers a clear next step.",
+            "code_hint": "partner prompt / mission completion"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 90,
+          "confidence": "low"
+        },
+        "voice": "I liked it. The guest call was just like my work, and he spoke slowly and simply, so I was not afraid. The one correction, \"breakfast ends\", is something I can say tomorrow at the desk. Nobody made me feel stupid. I do not fully trust the corrections, though. I said \"Is correct?\" and \"is on the left\" without a subject, and Linga said nothing. I would like those in the recap too. The mission finished very fast and then the guest asked about phone or email, which was strange. Nothing here worries me for Tomáš and Klára. Fifteen minutes in the evening is far better than a course with a babysitter. I would tell a colleague about it.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-1/LT-petra-38-J3-2",
+            "status": "recurs",
+            "evidence": "#6 'Is correct?' and #8 'Yes, is on the left' got no moment; the recap shows only 1 fix.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-3",
+            "status": "not-seen",
+            "evidence": "#1 and #10 show 'A2 · Everyday basics', matching trueBand A2.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-4",
+            "status": "recurs",
+            "evidence": "Recurring grammar errors passed uncoached: #6 'Is correct?' and #8 'Yes, is on the left'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-5",
+            "status": "not-seen",
+            "evidence": "The partner is consistently 'Mr. Osei' (#2-#9) and the recap line matches what she said.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J3-6",
+            "status": "not-seen",
+            "evidence": "Only 1 moment in 5 learner turns (#4-#5), so the 1-3 per ten turns cap holds.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nAna Costa · hotel guest\nA2Everyday basics\nConfirming a late check-out by email\nYour mission\nWrite a short email that agrees to a guest's late check-out and states the time and any fee.\nGet something done\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom the level check\n“I think I prefer calling.”\nFrom this rehearsal\n“breakfast is end at ten” → “breakfast ends at ten”\nUse the verb 'ends' without 'is' before it.\nYour level:\nA2 · Everyday basics\nNext topic:\nConfirming a late check-out by email\nWrite a short email that agrees to a guest's late check-out and states the time and any fee.\n[button: Start talking]\nOr choose a situation [list: Taking a guest call at the desk [plan-db8ca597] | Confirming a late check-out by email [plan-6f60edda] | Recommending a place to guests [plan-cb43e47e] | Explaining a hot water delay to a guest [plan-9ce62cb0] | Planning a guest's airport pick-up [plan-3d4415be] | Welcoming a new guest at reception [plan-1278954b] | A guest with no booking [plan-64eb7a42] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "A late check-out email sounds like my work, I will try it.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 36797
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna Costa · hotel guest\nConfirming a late check-out by email\nAna Costa says\nCan I leave at two o'clock tomorrow?\nYour turn\nAnswer on your phone: speak or type.\nNowSay yes to the later check-out\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirming a late check-out by email\nWrite a short email that agrees to a late check-out and states the time and fee.\nNow: Say yes to the later check-out\nCan I leave at two o'clock tomorrow?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna Costa · hotel guest\nCan I leave at two o'clock tomorrow?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Can I leave at two o'clock tomorrow?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I am not sure how to answer in English, I need some help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna Costa · hotel guest\nConfirming a late check-out by email\nAna Costa says\nCan I leave at two o'clock tomorrow?\nA little support\nTry: I can offer a late check-out until 2 p.m.\nNowSay yes to the later check-out\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirming a late check-out by email\nWrite a short email that agrees to a late check-out and states the time and fee.\nNow: Say yes to the later check-out\nCan I leave at two o'clock tomorrow?\nA little support\nTry: I can offer a late check-out until 2 p.m.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna Costa · hotel guest\nCan I leave at two o'clock tomorrow?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Can I leave at two o'clock tomorrow?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I already see a hint on screen, but I'm not sure how to say it, so I'll try a phrase to practise.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna Costa · hotel guest\nA little support · recognition practice\nWhich sentence is correct for an email reply?\n01\nI will check and email you today.\n02\nI checking and email you today.\nA little support\nTry: I can offer a late check-out until 2 p.m.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirming a late check-out by email\nWrite a short email that agrees to a late check-out and states the time and fee.\nNow: Say yes to the later check-out\nCan I leave at two o'clock tomorrow?\nA little support\nTry: I can offer a late check-out until 2 p.m.\nWhich sentence is correct for an email reply?\n[button: I will check and email you today.] [button: I checking and email you today.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna Costa · hotel guest\nCan I leave at two o'clock tomorrow?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Can I leave at two o'clock tomorrow?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know the first sentence is correct, so I choose it.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna Costa · hotel guest\nConfirming a late check-out by email\nAna Costa says\nCan I leave at two o'clock tomorrow?\nA little support\nNow use the idea in your own reply on the phone.\nNowSay yes to the later check-out\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirming a late check-out by email\nWrite a short email that agrees to a late check-out and states the time and fee.\nNow: Say yes to the later check-out\nCan I leave at two o'clock tomorrow?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna Costa · hotel guest\nCan I leave at two o'clock tomorrow?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Can I leave at two o'clock tomorrow?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I understand now, I will try to say it with my own words.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, of course. You can leave at two o'clock tomorrow."
+          },
+          "result": "ok",
+          "ms": 8469
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna Costa · hotel guest\nConfirming a late check-out by email\nAna Costa says\nThank you so much! Is there a fee for leaving late?\nYour turn\nAnswer on your phone: speak or type.\nNowTell the fee after 12 p.m.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirming a late check-out by email\nWrite a short email that agrees to a late check-out and states the time and fee.\nNow: Tell the fee after 12 p.m.\nThank you so much! Is there a fee for leaving late?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna Costa · hotel guest\nCan I leave at two o'clock tomorrow?\nYou · spoken\nYes, of course. You can leave at two o'clock tomorrow.\nAna Costa · hotel guest\nThank you so much! Is there a fee for leaving late?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you so much! Is there a fee for leaving late?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say the fee, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna Costa · hotel guest\nConfirming a late check-out by email\nAna Costa says\nThank you so much! Is there a fee for leaving late?\nSaid more simply\nThank you! Is there a fee for leaving late?\nNowTell the fee after 12 p.m.\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirming a late check-out by email\nWrite a short email that agrees to a late check-out and states the time and fee.\nNow: Tell the fee after 12 p.m.\nThank you so much! Is there a fee for leaving late?\nSaid more simply\nThank you! Is there a fee for leaving late?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna Costa · hotel guest\nCan I leave at two o'clock tomorrow?\nYou · spoken\nYes, of course. You can leave at two o'clock tomorrow.\nAna Costa · hotel guest\nThank you so much! Is there a fee for leaving late?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you so much! Is there a fee for leaving late?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know what fee to say, I need some help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna Costa · hotel guest\nConfirming a late check-out by email\nAna Costa says\nThank you so much! Is there a fee for leaving late?\nWhat it means\nfee: money you pay for a service\nNowTell the fee after 12 p.m.\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirming a late check-out by email\nWrite a short email that agrees to a late check-out and states the time and fee.\nNow: Tell the fee after 12 p.m.\nThank you so much! Is there a fee for leaving late?\nWhat it means\nfee: money you pay for a service\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna Costa · hotel guest\nCan I leave at two o'clock tomorrow?\nYou · spoken\nYes, of course. You can leave at two o'clock tomorrow.\nAna Costa · hotel guest\nThank you so much! Is there a fee for leaving late?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you so much! Is there a fee for leaving late?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand the fee question, so I'll try answering in my own words after the earlier help.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, after twelve o'clock is a fee. It is twenty euro, I am sorry."
+          },
+          "result": "ok",
+          "ms": 10525
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said after twelve o'clock is a fee\nTry\nThere is a fee after twelve o'clock\nStart the sentence with 'There is' to say that a fee exists.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “after twelve o'clock is a fee”\nTry “There is a fee after twelve o'clock”\nStart the sentence with 'There is' to say that a fee exists.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, \"There is a fee\" - okay, I understand, let me go back and try again.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna Costa · hotel guest\nConfirming a late check-out by email\nAna Costa says\nWhat time can I eat in the morning?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Ana to confirm the new time\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirming a late check-out by email\nWrite a short email that agrees to a late check-out and states the time and fee.\nNow: Ask Ana to confirm the new time\nWhat time can I eat in the morning?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna Costa · hotel guest\nCan I leave at two o'clock tomorrow?\nYou · spoken\nYes, of course. You can leave at two o'clock tomorrow.\nAna Costa · hotel guest\nThank you so much! Is there a fee for leaving late?\nYou · spoken\nYes, after twelve o'clock is a fee. It is twenty euro, I am sorry.\nAna Costa · hotel guest\nWhat time can I eat in the morning?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What time can I eat in the morning?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Breakfast time, I know this one: from seven to ten, and then ask her to confirm.",
+          "action": "answer",
+          "args": {
+            "text": "Breakfast is from seven to ten. Please, can you confirm the new time for check-out?"
+          },
+          "result": "ok",
+          "ms": 9385
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna Costa · hotel guest\nConfirming a late check-out by email\nAna Costa says\nYes, two o'clock is fine. Thank you!\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nConfirming a late check-out by email\nWrite a short email that agrees to a late check-out and states the time and fee.\nYes, two o'clock is fine. Thank you!\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna Costa · hotel guest\nCan I leave at two o'clock tomorrow?\nYou · spoken\nYes, of course. You can leave at two o'clock tomorrow.\nAna Costa · hotel guest\nThank you so much! Is there a fee for leaving late?\nYou · spoken\nYes, after twelve o'clock is a fee. It is twenty euro, I am sorry.\nAna Costa · hotel guest\nWhat time can I eat in the morning?\nYou · spoken\nBreakfast is from seven to ten. Please, can you confirm the new time for check-out?\nAna Costa · hotel guest\nYes, two o'clock is fine. Thank you!\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, two o'clock is fine. Thank you!\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I think I managed it, the guest is happy, so I want to see what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 12,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said after twelve o'clock is a fee\nTry\nThere is a fee after twelve o'clock\nStart the sentence with 'There is' to say that a fee exists.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 1 on your own · 2 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom an earlier scene: Guest call at the front desk\n“breakfast ends at ten”, from Guest call at the front desk\nFrom this rehearsal\n“after twelve o'clock is a fee” → “There is a fee after twelve o'clock”\nStart the sentence with 'There is' to say that a fee exists.\nYour level:\nA2 · Everyday basics\nNext topic:\nRecommending a place to guests\nDescribe a place in the city and say why you like it, using a simple preference.\n[button: Start talking]\nOr choose a situation [list: Taking a guest call at the desk [plan-db8ca597] | Confirming a late check-out by email [plan-6f60edda] | Recommending a place to guests [plan-cb43e47e] | Explaining a hot water delay to a guest [plan-9ce62cb0] | Planning a guest's airport pick-up [plan-3d4415be] | Welcoming a new guest at reception [plan-1278954b] | A guest with no booking [plan-64eb7a42] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed to finish a conversation and got a tip, so I feel okay and want to stop now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Confirming a late check-out by email",
+          "goal": "Write a short email that agrees to a late check-out and states the time and fee.",
+          "partner": "Ana Costa · hotel guest",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Can I leave at two o'clock tomorrow?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, of course. You can leave at two o'clock tomorrow.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you so much! Is there a fee for leaving late?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, after twelve o'clock is a fee. It is twenty euro, I am sorry.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "What time can I eat in the morning?"
+            },
+            {
+              "role": "learner",
+              "text": "Breakfast is from seven to ten. Please, can you confirm the new time for check-out?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, two o'clock is fine. Thank you!"
+            }
+          ],
+          "moments": [
+            {
+              "id": "fef8c89f-7c00-4874-9404-549299f714d1:uat-31:moment",
+              "kind": "fix",
+              "said": "after twelve o'clock is a fee",
+              "better": "There is a fee after twelve o'clock",
+              "why": "Start the sentence with 'There is' to say that a fee exists.",
+              "turnId": "fef8c89f-7c00-4874-9404-549299f714d1:uat-31",
+              "at": 1792251284036,
+              "slip": "after twelve o'clock is",
+              "fix": "there is"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "I will check and email you today."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "can you confirm the new time for check-out?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 123616,
+      "prior": [
+        {
+          "id": "2026-09-15-lt-recert/LT-petra-38-J4-2",
+          "run": "2026-09-15-lt-recert",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Replay instruction promises practice it does not deliver",
+          "expected": "Replay targets the coaching point, and its instruction clears after the retry.",
+          "got": "The fresh question elicits a room offer and time, without practising the coached word. The replay instruction remains through closing turns.",
+          "evidence": [
+            "#7 coaches \"another\". #8 asks \"Can you offer me a clean room by then?\" and labels it \"a new question practising the coaching point.\" That label remains at #9 and #11, where the guest only confirms the arrangement."
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-1/LT-petra-38-J4-4",
+          "run": "2026-10-14-lt/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Recurring errors missed",
+          "expected": "A note for 'the hotel change' and 'she wait'",
+          "got": "Only two moments; the same third-person -s slip was left unmarked",
+          "evidence": [
+            "#13 'the hotel change the room' and #19 'she wait' got no moment, though #10 taught the -s.",
+            "moment selection"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Supported flag does not match the help actually used",
+          "expected": "Only replies after a cue, phrase or coaching are supported.",
+          "got": "Turns with no help marked supported; recap says 4 with help.",
+          "evidence": [
+            "#12 and #18 no help used; facts show supported:true for 'After that I go to my room' and 'I left my room'. #20 '2 on your own · 4 with help'.",
+            "supported flag in turn recorder"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "broken-flow",
+          "dimension": "clarity",
+          "title": "Caller addresses Petra as Mr Berg and asks about her day",
+          "expected": "Mr Berg is the caller and asks about check-in; Petra answers as receptionist.",
+          "got": "Partner says 'Thank you for calling, Mr Berg' to Petra and asks what time she arrived, slept and woke.",
+          "evidence": [
+            "#5 'Thank you for calling, Mr Berg. Were you at our hotel yesterday...'; #13 'Oh, I am sorry you are tired, Mr Berg.' Petra answers 'I sleep at ten o'clock'. Scene drifts from check-in to her morning.",
+            "conversation partner prompt (role-lock)"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Replay question does not practise the coached point",
+          "expected": "A fresh question that elicits 'Can you hear me clearly?' and a better independent answer.",
+          "got": "New question is about arrival time; Petra repeats the 'arrive' error.",
+          "evidence": [
+            "#7 coach 'Can you hear me clearly?'; #8 'What time did you arrive yesterday?' answered 'I think you arrive yesterday at four o'clock'. Label 'Try it again'.",
+            "replay/coach prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Clear errors left without a moment",
+          "expected": "Notes for 'I am sleep', 'I not go' and 'I sleep at ten ... last night'.",
+          "got": "Only two moments; many clear errors passed.",
+          "evidence": [
+            "#12 'I am sleep... I not go to the city', #13 'I sleep at ten o'clock last night', #18 'Then I go to the reception' got no moment.",
+            "moment selection"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Partner pitched above A2 and level reads B1",
+          "expected": "Short A2 questions.",
+          "got": "Compound questions needing simplification.",
+          "evidence": [
+            "#2 and #5 each needed 'Said more simply'; #14 'Ten o'clock is a good time to rest, and I am glad we can talk now.'",
+            "partner prompt pitch"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-6",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "missing-feature",
+          "dimension": "effort",
+          "title": "Moment screen offers no replay with a fresh question",
+          "expected": "Replay the moment with a new question.",
+          "got": "Only 'Back to the conversation' after a moment.",
+          "evidence": [
+            "#11 and #17 offer only '[button: Back to the conversation]'.",
+            "linga-moment screen"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-7",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Stale 'Now: Say your own name clearly' task",
+          "expected": "Task prompt updates as the scene moves.",
+          "got": "Same 'Now' line stays after she already gave her name.",
+          "evidence": [
+            "#5 through #19 show 'NowSay your own name clearly' while questions are about sleeping and breakfast.",
+            "mission step tracker"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement in this journey; only the map line 'Your level: A2 · Everyday basics' (#1)."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'Can I leave at two o'clock tomorrow?' and #4 'Which sentence is correct for an email reply?' are plain A2 with no translation."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "Asking for help met with 'Said more simply' (#7) and 'fee: money you pay for a service' (#8); no failure framing."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 list: seven of fourteen are hotel desk situations, e.g. 'Taking a guest call at the desk', 'A guest with no booking'."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#9 'There is a fee after twelve o'clock' is correct and usable at the desk."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing unsuitable shown; guest, fee and breakfast content throughout (#2–#12)."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 'Help me answer' gave 'A little support Try: I can offer...'; #4 phrase choice; #7–8 more cues, all within the scene."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "After help she answered at #5 and #8; moment #9 quotes exactly 'You said after twelve o'clock is a fee'."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#9 offers only 'Back to the conversation'; #10 is a new topic ('What time can I eat in the morning?'), not a replay practising 'There is a fee'; no retry of the coached point."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Facts: turns 1–2 supported:true after cue/phrase, turn 3 supported:false; #12 '1 on your own · 2 with help' matches."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "No replay of the moment with a fresh question",
+            "expected": "After the moment, a fresh question that lets her retry 'There is a fee...' on her own.",
+            "got": "Only 'Back to the conversation'; the scene moves to breakfast and the coached structure is never retried.",
+            "evidence": "#9 '[button: Back to the conversation]'; #10 'What time can I eat in the morning?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Moment screen offers 'Try again' that asks a new question eliciting the coached pattern, and records the retry as independent.",
+            "code_hint": "linga-moment screen / replay prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Help does not unblock the fee reply",
+            "expected": "Cue gives a usable phrase for stating a fee.",
+            "got": "Cue gave a vocabulary gloss 'fee: money you pay for a service' and an earlier hint about offering late check-out; Petra answered unaided with an error.",
+            "evidence": "#3 'Try: I can offer a late check-out until 2 p.m.'; #8 'What it means fee: ...'; answer 'after twelve o'clock is a fee'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Third help level shows a sentence frame like 'There is a fee of [amount]'.",
+            "code_hint": "cue ladder prompt"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Mission says write an email but the scene is spoken chat",
+            "expected": "Mission matches the activity.",
+            "got": "Mission 'Write a short email' while she speaks to a guest; phrase quiz says 'for an email reply'.",
+            "evidence": "#1 mission; #4 'correct for an email reply?'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Mission wording matches spoken reply mode.",
+            "code_hint": "plan mission text"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment quotes her exactly and gives a correct desk phrase",
+            "expected": "",
+            "got": "'You said after twelve o'clock is a fee' → 'There is a fee after twelve o'clock'.",
+            "evidence": "#9, #12",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact quoting and one-point fixes.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Supported replies honestly counted",
+            "expected": "",
+            "got": "Recap '1 on your own · 2 with help' matches the help used.",
+            "evidence": "#12; facts supported flags",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "Sorry, but I liked this more than I expected. When I did not know what to say, the help was right there on the screen and I never lost the guest. Nobody made me feel stupid, and the simple version of the question was kind. The correction, \"There is a fee after twelve o'clock\", is something I can say at my desk tomorrow, and it quoted my own words. What I missed: after the correction I wanted to try again, but it just went on to breakfast. The help for the fee also only explained the word, not how to say the sentence. The task said \"email\" but I was speaking, a little confusing. Nothing here worries me for Tomáš or Klára. I would use it again for fifteen minutes in the evening, but I want the second try.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt-recert/LT-petra-38-J4-2",
+            "status": "not-evaluable",
+            "evidence": "#9–#10 no replay happened, so the replay label never appeared.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-1/LT-petra-38-J4-4",
+            "status": "not-evaluable",
+            "evidence": "Only one erroneous learner turn (#8) and it got a moment (#9).",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-3",
+            "status": "not-seen",
+            "evidence": "#12 '1 on your own · 2 with help' matches help at #2–#4 and #6–#8; #10 unsupported.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-1",
+            "status": "not-seen",
+            "evidence": "Ana acts as the guest asking 'Can I leave at two o'clock tomorrow?' (#2); role held.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-2",
+            "status": "recurs",
+            "evidence": "#10 next question 'What time can I eat in the morning?' does not practise the coached 'There is a fee'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-4",
+            "status": "not-seen",
+            "evidence": "Her only clear-error turn (#8) got a moment at #9.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-5",
+            "status": "not-seen",
+            "evidence": "Partner turns short A2; only #7 'Said more simply' on a short line.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-6",
+            "status": "recurs",
+            "evidence": "#9 offers only '[button: Back to the conversation]'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-7",
+            "status": "not-seen",
+            "evidence": "'Now' line updates: 'Say yes...' (#2), 'Tell the fee after 12 p.m.' (#6), 'Ask Ana to confirm' (#10).",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #9 offers only 'Back to the conversation'; #10 is a new topic ('What time can I eat in the morning?'), not a replay practising 'There is a fee'; no retry of the coached point.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 25,
+      "fail": 1,
+      "ms": 205279
+    },
+    "character": {
+      "n": 37,
+      "fail": 0,
+      "ms": 171191
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 105737
+    }
+  }
+}

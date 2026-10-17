@@ -54,12 +54,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Cover all five explicitly requested situations within the initial six suggestions before adding adjacent design scenarios.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
     "recertify_status": "recurs",
-    "recertify_evidence": "#2 'Nothing here about disagreeing with a senior designer in a critique'; she had to add it.",
+    "recertify_evidence": "#2 the first six had critique pushback, but no flat viewing or landlord. Jana: \"Nothing here about flat-viewing in Dublin with a pushy landlord, so I'll add that myself.\"",
     "recurred_as": "LT-jana-29-J2-3"
   },
   {
@@ -207,12 +207,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "Use one tiny question, familiar words and short topic cards; verify that this beginner can understand each topic and its reason.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
     "recertify_status": "recurs",
-    "recertify_evidence": "#3 added topic labelled 'Share your world'; 'Understand and repair' still shown.",
+    "recertify_evidence": "#4 'Tell a friend about your favourite animal / Share your world'; 'Get something done'",
     "recurred_as": "LT-tomas-9-J2-2"
   },
   {
@@ -270,12 +270,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "Include explicitly requested activity formats in the initial proposals when compatible with the profile.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
     "recertify_status": "recurs",
-    "recertify_evidence": "#4 \"Beyond the rehearsed answer [interview]\" only in the situation list, not proposed in #2.",
+    "recertify_evidence": "#8 interview and speaking-practice items sit only in the unproposed list; none are proposed in #2.",
     "recurred_as": "LT-adela-17-J2-2"
   },
   {
@@ -363,13 +363,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Include all six explicitly requested, suitable situations before introducing a generic alternative.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "Her goal field is empty and she requested only the restaurant topic, which was added."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-2",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#3 the initial six are all hotel work and include no generic small talk; she had no teacher-talk goal here."
   },
   {
     "id": "LT-martin-45-J2-1",
