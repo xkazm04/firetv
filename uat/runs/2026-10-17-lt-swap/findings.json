@@ -1,0 +1,199 @@
+[
+  {
+    "id": "LT-tomas-9-J2-1",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "broken-flow",
+    "severity": "blocker",
+    "rank": 27,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "high"
+    },
+    "dimension": "completion",
+    "title": "Swap button does nothing",
+    "expected": "Pressing Swap replaces 'Ask where a book is' with a new topic.",
+    "got": "Topic list unchanged after two swaps; library topic remained and was agreed.",
+    "evidence": [
+      "#4 and #5 swap 'Ask where a book is', #5/#6 list still shows it; planAgreed includes it."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "After Swap, the swapped topic is gone and a different one appears, on TV and phone.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-2",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Default topics are school-like, not a nine-year-old's",
+    "expected": "At least four of six about play, animals, games or sport.",
+    "got": "Library, weekend recount, hello, say-again; only animal and game fit.",
+    "evidence": [
+      "#3 six topics; Tomáš: 'Kniha v knihovně je nuda'."
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "For elementary profiles, bias suggestions to games, animals, sport; avoid library/shop scenes.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-4",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "Why-lines and screen text too long for a 9-year-old",
+    "expected": "Tiny sentences, minimal reading.",
+    "got": "Sentences like 'Making plans with friends at break time is a common thing to do.'",
+    "evidence": [
+      "#3 phone why lines; 'Conversations picked for your level and interests. Swap any you don't want, or add your own.'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Child-profile why lines of ≤8 words.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J2-2",
+    "journey": "J2",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Two of seven topics are not exam discussion",
+    "expected": "Mostly opinion, comparison and speculation topics",
+    "got": "Buying a train ticket and a teammate's missed deadlines are transactional or social, not B2 First discussion",
+    "evidence": [
+      "#3: 'Buying a train ticket abroad' (Get something done) and 'Group project: missing work' (Handle friction)",
+      "plan prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "With an exam goal stated, at least five of six topics are opinion, comparison or speculation tasks.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J2-3",
+    "journey": "J2",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "clarity",
+    "title": "Added topic is appended last and labelled 'Share your world'",
+    "expected": "Her requested mock interview first, labelled as an interview",
+    "got": "Placed seventh, with a skill label that does not match an exam interview",
+    "evidence": [
+      "#4: 'Talking about my plans for university / Share your world'; #5 'Next topic' is technology"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "The user's added topic is visible as such and can be set to go first.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-adela-17-J2-1",
+    "journey": "J2",
+    "character": "adela-17",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Added topic keeps her exact request",
+    "expected": "The added topic keeps what she asked for",
+    "got": "Became 'Talking about my plans for university' with Ms Harper, friendly examiner, a mock interview on university and travel",
+    "evidence": [
+      "#4: 'You asked for a mock interview about university and travel, so this practises that exact kind of talk.'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Added topic title, partner and why reflect the user's words.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-3",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Own topic kept what he asked for",
+    "expected": "Added topic reflects his words.",
+    "got": "'Talk about the creeper' with Sam, a Minecraft friend, simple words.",
+    "evidence": [
+      "#4 'You asked about creepers, so we will talk about them with simple words.'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep topic add honouring the child's words.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  }
+]

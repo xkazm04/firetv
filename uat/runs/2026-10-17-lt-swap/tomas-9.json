@@ -1,0 +1,431 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to A1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour own conversations\nA1First words · self-chosen\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA1\nFirst words\nYou understand and use familiar everyday words and very simple phrases.\nYou chose this level yourself.\n[button: See my topics] [button: Find my level with Linga]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "I want to see what Minecraft and dog things there are.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nBefore Linga picks your topics\nLinga asks\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\nYour turn\nLinga picks conversations for your level without a goal. You can swap any of them.\n[button: Let Linga pick] [button: Not now]\nYour topics · A1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about. Any language is fine.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Let Linga pick] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "skip-goal",
+            "not-now",
+            "menu"
+          ],
+          "thought": "Nevím co říct, ať vybere Linga.",
+          "action": "skip-goal",
+          "args": {},
+          "result": "ok",
+          "ms": 16559
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nSay hello and tell your name\nMake contact\nAsk where a book is\nGet something done\nTalk about your favourite animal\nShare your world\nTell what you did at the weekend\nTell what happened\nSuggest a game to play\nMake a plan\nAsk someone to say it again\nUnderstand and repair\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nSay hello and tell your name\nMake contact · Mia · new classmate\nYou will meet new friends, so this helps you start talking with them.\n[button: Swap]\nAsk where a book is\nGet something done · Mr Lee · librarian\nYou can ask for help in a new place, like a library or shop.\n[button: Swap]\nTalk about your favourite animal\nShare your world · Ben · friend at the park\nTelling people what you like helps them get to know you.\n[button: Swap]\nTell what you did at the weekend\nTell what happened · Nina · classmate\nTelling what you did helps friends know your day and share their own.\n[button: Swap]\nSuggest a game to play\nMake a plan · Leo · friend at school\nMaking plans with friends at break time is a common thing to do.\n[button: Swap]\nAsk someone to say it again\nUnderstand and repair · Ava · classmate\nAsking again is how you can understand new words and people.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "There is no Minecraft here, so I'll add my own.",
+          "action": "add-topic",
+          "args": {
+            "text": "Minecraft creeper"
+          },
+          "result": "ok",
+          "ms": 6368
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nSay hello and tell your name\nMake contact\nAsk where a book is\nGet something done\nTalk about your favourite animal\nShare your world\nTell what you did at the weekend\nTell what happened\nSuggest a game to play\nMake a plan\nAsk someone to say it again\nUnderstand and repair\nTalk about the creeper\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nSay hello and tell your name\nMake contact · Mia · new classmate\nYou will meet new friends, so this helps you start talking with them.\n[button: Swap]\nAsk where a book is\nGet something done · Mr Lee · librarian\nYou can ask for help in a new place, like a library or shop.\n[button: Swap]\nTalk about your favourite animal\nShare your world · Ben · friend at the park\nTelling people what you like helps them get to know you.\n[button: Swap]\nTell what you did at the weekend\nTell what happened · Nina · classmate\nTelling what you did helps friends know your day and share their own.\n[button: Swap]\nSuggest a game to play\nMake a plan · Leo · friend at school\nMaking plans with friends at break time is a common thing to do.\n[button: Swap]\nAsk someone to say it again\nUnderstand and repair · Ava · classmate\nAsking again is how you can understand new words and people.\n[button: Swap]\nTalk about the creeper\nShare your world · Sam · friend who plays Minecraft\nYou asked about creepers, so we will talk about them with simple words.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Kniha v knihovně, to je nuda, tohle bych nechtěl.",
+          "action": "swap",
+          "args": {
+            "topicId": "Ask where a book is"
+          },
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nSay hello and tell your name\nMake contact\nAsk where a book is\nGet something done\nTalk about your favourite animal\nShare your world\nTell what you did at the weekend\nTell what happened\nSuggest a game to play\nMake a plan\nAsk someone to say it again\nUnderstand and repair\nTalk about the creeper\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nSay hello and tell your name\nMake contact · Mia · new classmate\nYou will meet new friends, so this helps you start talking with them.\n[button: Swap]\nAsk where a book is\nGet something done · Mr Lee · librarian\nYou can ask for help in a new place, like a library or shop.\n[button: Swap]\nTalk about your favourite animal\nShare your world · Ben · friend at the park\nTelling people what you like helps them get to know you.\n[button: Swap]\nTell what you did at the weekend\nTell what happened · Nina · classmate\nTelling what you did helps friends know your day and share their own.\n[button: Swap]\nSuggest a game to play\nMake a plan · Leo · friend at school\nMaking plans with friends at break time is a common thing to do.\n[button: Swap]\nAsk someone to say it again\nUnderstand and repair · Ava · classmate\nAsking again is how you can understand new words and people.\n[button: Swap]\nTalk about the creeper\nShare your world · Sam · friend who plays Minecraft\nYou asked about creepers, so we will talk about them with simple words.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Kniha v knihovně je nuda, to nechci.",
+          "action": "swap",
+          "args": {
+            "topicId": "Ask where a book is"
+          },
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nSay hello and tell your name\nMake contact\nAsk where a book is\nGet something done\nTalk about your favourite animal\nShare your world\nTell what you did at the weekend\nTell what happened\nSuggest a game to play\nMake a plan\nAsk someone to say it again\nUnderstand and repair\nTalk about the creeper\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nSay hello and tell your name\nMake contact · Mia · new classmate\nYou will meet new friends, so this helps you start talking with them.\n[button: Swap]\nAsk where a book is\nGet something done · Mr Lee · librarian\nYou can ask for help in a new place, like a library or shop.\n[button: Swap]\nTalk about your favourite animal\nShare your world · Ben · friend at the park\nTelling people what you like helps them get to know you.\n[button: Swap]\nTell what you did at the weekend\nTell what happened · Nina · classmate\nTelling what you did helps friends know your day and share their own.\n[button: Swap]\nSuggest a game to play\nMake a plan · Leo · friend at school\nMaking plans with friends at break time is a common thing to do.\n[button: Swap]\nAsk someone to say it again\nUnderstand and repair · Ava · classmate\nAsking again is how you can understand new words and people.\n[button: Swap]\nTalk about the creeper\nShare your world · Sam · friend who plays Minecraft\nYou asked about creepers, so we will talk about them with simple words.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Jsou tam Minecraft a zvířata, to je fajn, tak souhlasím.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 7,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nMia · new classmate\nA1First words · self-chosen\nSay hello and tell your name\nYour mission\nGreet a new friend, say your name, and take a turn to talk.\nMake contact\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nSay hello and tell your name\nGreet a new friend, say your name, and take a turn to talk.\n[button: Start talking]\nOr choose a situation [list: Say hello and tell your name [plan-85f2aa38] | Ask where a book is [plan-ea9cd756] | Talk about your favourite animal [plan-0fc0e672] | Tell what you did at the weekend [plan-b75f6099] | Suggest a game to play [plan-b26c1076] | Ask someone to say it again [plan-f2573bf0] | Talk about the creeper [plan-bd2ca4e8] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I added my creeper topic, so that's enough for now, I'm tired.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-85f2aa38",
+            "title": "Say hello and tell your name",
+            "goal": "Greet a new friend, say your name, and take a turn to talk.",
+            "why": "You will meet new friends, so this helps you start talking with them.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Mia · new classmate"
+          },
+          {
+            "id": "plan-ea9cd756",
+            "title": "Ask where a book is",
+            "goal": "Ask where something is in the library and find it.",
+            "why": "You can ask for help in a new place, like a library or shop.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mr Lee · librarian"
+          },
+          {
+            "id": "plan-0fc0e672",
+            "title": "Talk about your favourite animal",
+            "goal": "Say what your favourite animal is and give one or two simple reasons.",
+            "why": "Telling people what you like helps them get to know you.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Ben · friend at the park"
+          },
+          {
+            "id": "plan-b75f6099",
+            "title": "Tell what you did at the weekend",
+            "goal": "Tell three short things you did, in order, using first, then and last.",
+            "why": "Telling what you did helps friends know your day and share their own.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Nina · classmate"
+          },
+          {
+            "id": "plan-b26c1076",
+            "title": "Suggest a game to play",
+            "goal": "Suggest a game, hear a reply, and agree on one game to play together.",
+            "why": "Making plans with friends at break time is a common thing to do.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Leo · friend at school"
+          },
+          {
+            "id": "plan-f2573bf0",
+            "title": "Ask someone to say it again",
+            "goal": "Tell someone you did not understand and ask them to repeat it.",
+            "why": "Asking again is how you can understand new words and people.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Ava · classmate"
+          },
+          {
+            "id": "plan-bd2ca4e8",
+            "title": "Talk about the creeper",
+            "goal": "Describe a creeper and say if you like it or not, using short sentences.",
+            "why": "You asked about creepers, so we will talk about them with simple words.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · friend who plays Minecraft"
+          }
+        ],
+        "planAgreed": [
+          "Say hello and tell your name",
+          "Ask where a book is",
+          "Talk about your favourite animal",
+          "Tell what you did at the weekend",
+          "Suggest a game to play",
+          "Ask someone to say it again",
+          "Talk about the creeper"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 57209,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 level shown as 'A1 First words · self-chosen'; matches true band A1."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No check tasks in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#2 'Nevím co říct, ať vybere Linga' met only with a neutral 'Let Linga pick' option; no failure line."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#3 six proposed: only 'favourite animal' and 'Suggest a game' are play/animals/games; library, weekend, hello, say-again are school-like. Only 2 of 6 (3 of 7 with creeper)."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moments in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#3 each topic has a 'why' line, e.g. 'You will meet new friends, so this helps you start talking with them.'"
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Add worked (#4 'Talk about the creeper… Sam · friend who plays Minecraft'), but swapping 'Ask where a book is' at #4 and #5 changed nothing; it stayed and was in planAgreed."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "Agreed at #6 with the library topic still in; fit about 3 of 7 (animal, game, creeper); gate 4 of 6 missed."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All 7 topics audience 'all' and child-safe; nothing adult shown."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 3,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Swap button does nothing",
+            "expected": "Pressing Swap replaces 'Ask where a book is' with a new topic.",
+            "got": "Topic list unchanged after two swaps; library topic remained and was agreed.",
+            "evidence": "#4 and #5 swap 'Ask where a book is', #5/#6 list still shows it; planAgreed includes it.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After Swap, the swapped topic is gone and a different one appears, on TV and phone.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Default topics are school-like, not a nine-year-old's",
+            "expected": "At least four of six about play, animals, games or sport.",
+            "got": "Library, weekend recount, hello, say-again; only animal and game fit.",
+            "evidence": "#3 six topics; Tomáš: 'Kniha v knihovně je nuda'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "For elementary profiles, bias suggestions to games, animals, sport; avoid library/shop scenes.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Own topic kept what he asked for",
+            "expected": "Added topic reflects his words.",
+            "got": "'Talk about the creeper' with Sam, a Minecraft friend, simple words.",
+            "evidence": "#4 'You asked about creepers, so we will talk about them with simple words.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep topic add honouring the child's words.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Why-lines and screen text too long for a 9-year-old",
+            "expected": "Tiny sentences, minimal reading.",
+            "got": "Sentences like 'Making plans with friends at break time is a common thing to do.'",
+            "evidence": "#3 phone why lines; 'Conversations picked for your level and interests. Swap any you don't want, or add your own.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Child-profile why lines of ≤8 words.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Creeper jo, to bylo super! I typed it and Linga made a Minecraft talk with Sam. But the library thing... nuda. I pressed Swap two times and it was still there. Nic se nestalo. Then I had to say OK with it anyway. Lots of the topics sound like school: weekend, hello, ask again. I want dogs, football, Minecraft. The words under the topics are long, my mum would have to read them. Would I use it again? Maybe for the creeper, if the Swap works. Right now I'd tell a friend \"it's okay, but it's a bit like homework\"."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Add worked (#4 'Talk about the creeper… Sam · friend who plays Minecraft'), but swapping 'Ask where a book is' at #4 and #5 changed nothing; it stayed and was in planAgreed.",
+          "check": "They can swap what they don't want and add one in their own words, and the added topic keeps what they asked for."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: Agreed at #6 with the library topic still in; fit about 3 of 7 (animal, game, creeper); gate 4 of 6 missed.",
+          "check": "They agree a plan in which most topics are ones they would choose (rubric **topic fit** ≥ 4 of 6)."
+        },
+        {
+          "kind": "gate",
+          "id": "topicFit",
+          "level": "fail",
+          "text": "topic fit 3/7 (43%) under 4 of 6"
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #3 six proposed: only 'favourite animal' and 'Suggest a game' are play/animals/games; library, weekend, hello, say-again are school-like. Only 2 of 6 (3 of 7 with creeper)."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 2,
+      "fail": 0,
+      "ms": 22910
+    },
+    "character": {
+      "n": 7,
+      "fail": 0,
+      "ms": 33978
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 20170
+    }
+  }
+}

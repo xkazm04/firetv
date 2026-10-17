@@ -1,0 +1,352 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to B2 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour own conversations\nB2Comfortable · self-chosen\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou talk with some ease on a wide range of topics, including less familiar ones.\nYou chose this level yourself.\n[button: See my topics] [button: Find my level with Linga]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "I'd like to see which topics Linga has picked for me before changing anything.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nBefore Linga picks your topics\nLinga asks\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\nYour turn\nLinga picks conversations for your level without a goal. You can swap any of them.\n[button: Let Linga pick] [button: Not now]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about. Any language is fine.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Let Linga pick] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "skip-goal",
+            "not-now",
+            "menu"
+          ],
+          "thought": "I'll say what I want, since I'm preparing for B2 First and want exam-style topics.",
+          "action": "answer",
+          "args": {
+            "text": "I'm preparing for the B2 First exam, so I'd like to practise exam-style discussions about technology and society, the environment, education and travel. I'd also like a mock interview about my plans for the future."
+          },
+          "result": "ok",
+          "ms": 21032
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDoes technology help or harm society?\nConnect with people\nSchool plan to cut plastic waste\nMake a plan\nHow I like to study\nShare your world\nBuying a train ticket abroad\nGet something done\nA trip that went wrong\nTell what happened\nGroup project: missing work\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDoes technology help or harm society?\nConnect with people · Maya · classmate\nExam discussions often ask whether technology is good for people, so this is close to your B2 First goal.\n[button: Swap]\nSchool plan to cut plastic waste\nMake a plan · Tomas · project teammate\nEnvironment is a common B2 First topic, and planning a shared solution helps you practise suggesting and agreeing.\n[button: Swap]\nHow I like to study\nShare your world · Lena · teacher\nEducation questions are frequent in B2 First, and you need to explain your preferences clearly.\n[button: Swap]\nBuying a train ticket abroad\nGet something done · Ravi · ticket clerk\nTravel is a B2 First topic, and buying tickets is a common real situation where you need to confirm details.\n[button: Swap]\nA trip that went wrong\nTell what happened · Ines · friend\nTelling a story about past events is a B2 First skill, and travel experiences give you useful material.\n[button: Swap]\nGroup project: missing work\nHandle friction · Sam · group member\nHandling friction politely is a useful skill for group discussions and speaking tasks in the exam.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "A mock interview about my plans is missing, so I'll add it.",
+          "action": "add-topic",
+          "args": {
+            "text": "A mock interview about my plans for the future, like studying at university and travelling abroad, in the style of the B2 First speaking exam."
+          },
+          "result": "ok",
+          "ms": 13790
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDoes technology help or harm society?\nConnect with people\nSchool plan to cut plastic waste\nMake a plan\nHow I like to study\nShare your world\nBuying a train ticket abroad\nGet something done\nA trip that went wrong\nTell what happened\nGroup project: missing work\nHandle friction\nTalking about my plans for university\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDoes technology help or harm society?\nConnect with people · Maya · classmate\nExam discussions often ask whether technology is good for people, so this is close to your B2 First goal.\n[button: Swap]\nSchool plan to cut plastic waste\nMake a plan · Tomas · project teammate\nEnvironment is a common B2 First topic, and planning a shared solution helps you practise suggesting and agreeing.\n[button: Swap]\nHow I like to study\nShare your world · Lena · teacher\nEducation questions are frequent in B2 First, and you need to explain your preferences clearly.\n[button: Swap]\nBuying a train ticket abroad\nGet something done · Ravi · ticket clerk\nTravel is a B2 First topic, and buying tickets is a common real situation where you need to confirm details.\n[button: Swap]\nA trip that went wrong\nTell what happened · Ines · friend\nTelling a story about past events is a B2 First skill, and travel experiences give you useful material.\n[button: Swap]\nGroup project: missing work\nHandle friction · Sam · group member\nHandling friction politely is a useful skill for group discussions and speaking tasks in the exam.\n[button: Swap]\nTalking about my plans for university\nShare your world · Ms Harper · friendly examiner\nYou asked for a mock interview about university and travel, so this practises that exact kind of talk.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "This set covers technology, environment, education, travel and my mock interview, so it feels right.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nMaya · classmate\nB2Comfortable · self-chosen\nDoes technology help or harm society?\nYour mission\nGive and defend an opinion on technology, respond to a partner's view, and add a balancing point.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nDoes technology help or harm society?\nGive and defend an opinion on technology, respond to a partner's view, and add a balancing point.\n[button: Start talking]\nOr choose a situation [list: Does technology help or harm society? [plan-f782683f] | School plan to cut plastic waste [plan-18f743f3] | How I like to study [plan-52b205cf] | Buying a train ticket abroad [plan-331bd4d8] | A trip that went wrong [plan-a7b07412] | Group project: missing work [plan-e6ab7ab8] | Talking about my plans for university [plan-0851e0ed] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "The set looks right for my exam practice, with technology, school plastic and a university plans talk, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-f782683f",
+            "title": "Does technology help or harm society?",
+            "goal": "Give and defend an opinion on technology, respond to a partner's view, and add a balancing point.",
+            "why": "Exam discussions often ask whether technology is good for people, so this is close to your B2 First goal.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Maya · classmate"
+          },
+          {
+            "id": "plan-18f743f3",
+            "title": "School plan to cut plastic waste",
+            "goal": "Suggest practical options for a school environment project and agree on one plan with the group.",
+            "why": "Environment is a common B2 First topic, and planning a shared solution helps you practise suggesting and agreeing.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Tomas · project teammate"
+          },
+          {
+            "id": "plan-52b205cf",
+            "title": "How I like to study",
+            "goal": "Describe your study habits and explain why you prefer them, using comparisons.",
+            "why": "Education questions are frequent in B2 First, and you need to explain your preferences clearly.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Lena · teacher"
+          },
+          {
+            "id": "plan-331bd4d8",
+            "title": "Buying a train ticket abroad",
+            "goal": "Ask for the right ticket, compare two options, and confirm the details before you pay.",
+            "why": "Travel is a B2 First topic, and buying tickets is a common real situation where you need to confirm details.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Ravi · ticket clerk"
+          },
+          {
+            "id": "plan-a7b07412",
+            "title": "A trip that went wrong",
+            "goal": "Tell a short story about a travel problem, in order, and explain what you did and what happened.",
+            "why": "Telling a story about past events is a B2 First skill, and travel experiences give you useful material.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Ines · friend"
+          },
+          {
+            "id": "plan-e6ab7ab8",
+            "title": "Group project: missing work",
+            "goal": "Name the impact of a teammate's missed deadlines, set a clear boundary, and agree next steps.",
+            "why": "Handling friction politely is a useful skill for group discussions and speaking tasks in the exam.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Sam · group member"
+          },
+          {
+            "id": "plan-0851e0ed",
+            "title": "Talking about my plans for university",
+            "goal": "Answer questions about your future study and travel plans, give reasons, and compare options at a natural pace.",
+            "why": "You asked for a mock interview about university and travel, so this practises that exact kind of talk.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Ms Harper · friendly examiner"
+          }
+        ],
+        "planAgreed": [
+          "Does technology help or harm society?",
+          "School plan to cut plastic waste",
+          "How I like to study",
+          "Buying a train ticket abroad",
+          "A trip that went wrong",
+          "Group project: missing work",
+          "Talking about my plans for university"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 57573,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Level was set by hand (#1 'You chose this level yourself'); no placement in J2."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks or verdict notes in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No moments or coaching notes shown; only topic 'why' lines (#3), which contain no corrections."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No partner turns; the conversation was not started (#5 only shows 'Start talking')."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#4: technology, plastic waste, study, trip, and university-plans interview are exam-relevant. That is 5 of 7, and the train ticket and teammate friction topics are not."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "She asked no correctness question in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#3 shows six topics, each with a 'why' line such as 'Exam discussions often ask whether technology is good for people...'."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#4 shows the added topic 'Talking about my plans for university' with Ms Harper, a 'friendly examiner', and the why 'You asked for a mock interview about university and travel'. Swap buttons were visible but not used, so swapping was not exercised."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#4 agreed 7 topics, 5 of which she would choose, which meets the 4 of 6 gate in ratio."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All seven topics have audience 'all' and are age-appropriate for a 17-year-old; nothing adult appeared (#3, #4)."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "Nothing unsafe; no personal data requested."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Added topic keeps her exact request",
+            "expected": "The added topic keeps what she asked for",
+            "got": "Became 'Talking about my plans for university' with Ms Harper, friendly examiner, a mock interview on university and travel",
+            "evidence": "#4: 'You asked for a mock interview about university and travel, so this practises that exact kind of talk.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Added topic title, partner and why reflect the user's words.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Two of seven topics are not exam discussion",
+            "expected": "Mostly opinion, comparison and speculation topics",
+            "got": "Buying a train ticket and a teammate's missed deadlines are transactional or social, not B2 First discussion",
+            "evidence": "#3: 'Buying a train ticket abroad' (Get something done) and 'Group project: missing work' (Handle friction)",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "With an exam goal stated, at least five of six topics are opinion, comparison or speculation tasks.",
+            "code_hint": "plan prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Added topic is appended last and labelled 'Share your world'",
+            "expected": "Her requested mock interview first, labelled as an interview",
+            "got": "Placed seventh, with a skill label that does not match an exam interview",
+            "evidence": "#4: 'Talking about my plans for university / Share your world'; #5 'Next topic' is technology",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The user's added topic is visible as such and can be set to go first.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 5,
+          "confidence": "low"
+        },
+        "voice": "Fair enough, I'd use it again. I said I wanted exam-style talks on technology, the environment, education and travel, and most of what came back matched. Each topic had a reason (\"Environment is a common B2 First topic\"), so I knew why it was there. Adding my mock interview worked. It came back as Ms Harper, a friendly examiner, which is exactly what I asked for. I was a bit annoyed that it sat last, and that the train ticket and the missing-work argument are not really exam discussions. I didn't swap anything, so I can't say how well swapping works. I can't judge the corrections yet, because I haven't spoken to it. It saves me some planning time, but my tutor still knows my exam better. I'd tell a classmate to try it."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 2,
+      "fail": 0,
+      "ms": 34807
+    },
+    "character": {
+      "n": 5,
+      "fail": 0,
+      "ms": 22506
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 20216
+    }
+  }
+}
