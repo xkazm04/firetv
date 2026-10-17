@@ -1,4 +1,4 @@
-import type { Audience } from "./types";
+import type { Audience, Band } from "./types";
 
 /**
  * The audience backstop (adult plan A1, its safety half; v2 decisions 2026-10-07 X4). A topic's audience is the model's
@@ -99,10 +99,47 @@ export const REDIRECT_LINE = "Let's keep to our practice here, so tell me more a
  * Whether a partner line may reach this learner (LG-20). The premise rule applied to the reply: for a learner who is not
  * an adult, or a desk in Family mode (`adult` false, from `adultContent`), a line on the never-list or the adult list is
  * never shown and never stored; the redirect takes its place. The gate only narrows: an adult learner's line passes as
- * it came, and innuendo and non-English stay on the prompt.
+ * it came, and innuendo and non-English stay on the prompt. `hold` (LG-56) holds the line to a beginner's band first
+ * (bandLine); for a learner who is not an adult the line as written and the held line must both pass.
  */
-export function partnerLine(reply: string, adult: boolean): string {
-  if (adult) return reply;
-  const audience = keywordAudience(reply);
-  return audience === null || audience === "adult" ? REDIRECT_LINE : reply;
+export function partnerLine(reply: string, adult: boolean, hold?: BandHoldFor): string {
+  const held = hold ? bandLine(reply, hold.band, hold.simpler) : reply;
+  if (adult) return held;
+  // the line as the model wrote it is judged first: a held line, or its simpler rung, never launders a stopped one
+  return [reply, held].some(x => { const audience = keywordAudience(x); return audience === null || audience === "adult"; }) ? REDIRECT_LINE : held;
+}
+
+/**
+ * LG-56: the band a beginner's partner line is held to (council-lite r2 value-1; LT-tomas-9-J4-1, LT-viktor-67-J3-1,
+ * LT-petra-38-J4-1). The prompt asks an A1-A2 partner for short lines, and on the claude engine it still talked above
+ * the band in every run. Code now counts what it can count: at most `sentences` sentences, at most `words` words in
+ * each, at most one question. Word frequency is not counted: "the most common words" stays on the prompt.
+ */
+export const BAND_HOLD: Partial<Record<Band, { words: number; sentences: number }>> = { A1: { words: 8, sentences: 2 }, A2: { words: 12, sentences: 2 } };
+/** What partnerLine needs to hold a line to a band: the band, and the line's own simpler rung when the model gave one. */
+export interface BandHoldFor { band: Band; simpler?: string }
+
+const WORDS = /[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu;
+const sentencesOf = (text: string) => text.trim().split(/(?<=[.!?])\s+/).map(x => x.trim()).filter(Boolean);
+const wordsIn = (text: string) => text.match(WORDS)?.length ?? 0;
+/** How far a line is over its band: 0 when it fits. Each sentence, word and question past the limit counts one. */
+function overBand(text: string, hold: { words: number; sentences: number }): number {
+  const s = sentencesOf(text), questions = (text.match(/\?/g) ?? []).length;
+  return Math.max(0, s.length - hold.sentences) + Math.max(0, questions - 1) + s.reduce((n, x) => n + Math.max(0, wordsIn(x) - hold.words), 0);
+}
+/**
+ * A partner line as a learner at `band` may hear it. B1 and up, or a line that fits: unchanged. Over the band: the line's
+ * simpler rung (help.ts) when that fits; else the line cut to its first statement and its last question, in their
+ * order, which keeps the reaction and the one question the scene needs; else whichever of the cut and the rung is
+ * least over. Code never writes a word of its own here: every kept sentence is the model's.
+ */
+export function bandLine(reply: string, band: Band, simpler?: string): string {
+  const hold = BAND_HOLD[band];
+  if (!hold || overBand(reply, hold) === 0) return reply;
+  const rung = simpler?.trim() ?? "";
+  if (rung && overBand(rung, hold) === 0) return rung;
+  const s = sentencesOf(reply), question = [...s].reverse().find(x => x.endsWith("?")), statement = s.find(x => !x.endsWith("?"));
+  const keep = s.filter(x => x === statement || x === question).filter(x => wordsIn(x) <= hold.words);
+  const cut = keep.length ? keep.join(" ") : question ?? s[0] ?? reply;
+  return rung && overBand(rung, hold) < overBand(cut, hold) ? rung : cut;
 }

@@ -927,7 +927,8 @@ test('review case 3: no reuse after the starter rung, or after the partner alrea
  await command('cue');await command('cue');await command('cue');assert.equal(getSession().conversation.supported,true);
  await reply(REUSED);
  assert.equal(taughtOf(TAUGHT_A.id).reusedAt,undefined,'a supported reply is not reuse');assert.equal(getSession().conversation.review.used,undefined);
- c=await taughtStart([TAUGHT_A],{title:'Booking',goal:'Fix a booking.',opening:'Good evening. I have a booking list here. Your name?',supportProvided:false});
+ // LG-56: the fixture line fits the A1 band, so the hold keeps the words this row is about
+ c=await taughtStart([TAUGHT_A],{title:'Booking',goal:'Fix a booking.',opening:'I have a booking list here. Your name?',supportProvided:false});
  assert.equal(c.review.id,TAUGHT_A.id);
  await reply(REUSED);
  assert.equal(taughtOf(TAUGHT_A.id).reusedAt,undefined,'a copy of the partner\'s own words is not reuse');assert.equal(getSession().conversation.review.used,undefined);
@@ -1230,7 +1231,8 @@ test('K4 case 1: the rover scene hides its quiz answer; an unsupported reply tha
  assert.equal(R.reuseOf('Which bridge?',convo({review:rv})),null);
 });
 test('K4 case 2: no find after a partner line said it, after the quiz showed it, or on a supported reply; the partner stops inviting a shown line',async()=>{
- let c=await roomStart({},{...ROVER_OPENING,opening:'Hello! There are two bridges here. Which bridge do you mean? Where to?'});
+ // LG-56: the fixture line fits the A1 band, so the hold keeps the words this row is about
+ let c=await roomStart({},{...ROVER_OPENING,opening:'Two bridges here. Which bridge do you mean?'});
  await reply('Which bridge do you mean?');
  assert.equal(getSession().conversation.line.found,undefined,'the partner said it first');assert.equal(getLearner('ema').english.taught.length,0);
  c=await roomStart({},ROVER_OPENING,()=>({reply:'Which bridge do you mean? There are two.',supportProvided:false,observations:[]}));
@@ -2319,9 +2321,10 @@ for(const [name,line] of [['dating',DATING],['never-list',NEVERLINE]]){
   assert(!JSON.stringify(getSession().conversation).includes(line),'the model text is stored nowhere on the conversation');
  });
 }
+// LG-56: at B1, so the band hold (A1-A2 only) leaves the lines as they came and this row pins the audience gate alone
 test('LG-20: the same lines pass unchanged to an adult outside Family mode, and are held again in Family mode',async()=>{
  fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
- await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true},notes:[]});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),level:'B1',adultConfirmed:true},notes:[]});
  for(const line of [DATING,NEVERLINE]){
   says(line);await command('start',{sceneId:'booking',replace:true});
   await command('turn',{text:'I booked two nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
@@ -3016,4 +3019,41 @@ test('LG-8 4th pass: core slips (agreement, article, preposition) lead, a repeat
  const style=[{said:'so then I would',better:'I would'},{said:'I am accountant',better:'I am an accountant'}];
  assert.deepEqual(keepSlips(style,tasks).map(x=>x.said),['I am accountant','so then I would'],'a repeated style slip yields to a core one');
  assert.equal(focusFollowsSlip('send faster',kept,tasks),'"I am accountant" becomes "I am an accountant"','the focus leads with the core slip');
+});
+
+// ---- council-lite r2 (8f1a2cda) value-1 and value-2: the partner holds a beginner's band, and a repeated error gets a moment
+const LENKA="Hi, I'm Lenka from school! I'm new to Minecraft. How many diamonds are in your chest?";
+/** a learner at `level` with an empty record, an engine that keeps every request and answers turns with `turn(p)` */
+async function bandStart(id,level,opening,turn){
+ fresh();dispatch({type:'learner.set',id});dispatch({type:'subject',subject:'english'});
+ saveEnglish(id,{...emptyEnglish()});
+ const profile=getSession().profiles.find(p=>p.id===id);
+ await command('preferences',{preferences:{...defaultPreferences(profile),level,...(id==='jakub'?{adultConfirmed:true}:{})},notes:[]});
+ const seen=[];
+ answer=async req=>{const p=JSON.parse(req.prompt);seen.push({system:req.system,prompt:p});return {json:p.submittedReply?turn(p):{title:'Minecraft house',goal:'Show your house.',opening,supportProvided:false,help:{simpler:'',meaning:'',starter:''}},provider:'test',ms:1};};
+ await command('start',{sceneId:'booking',replace:true});
+ return seen;
+}
+test('LG-56: bandLine holds an A1-A2 line to two short sentences and one question, prefers a fitting simpler rung, and leaves B1 up alone',()=>{
+ const {bandLine}=require(path.join(root,'src/lib/english/gate.ts'));
+ assert.equal(bandLine(LENKA,'A1'),"Hi, I'm Lenka from school! How many diamonds are in your chest?",'LT-tomas-9-J4-1: the reaction and the one question, in their order');
+ assert.equal(bandLine(LENKA,'A1','Hi! How many diamonds do you have?'),'Hi! How many diamonds do you have?','a simpler rung that fits wins');
+ assert.equal(bandLine('Do you like it? Is it big?','A1'),'Is it big?','one question: the last');
+ assert.equal(bandLine('Hello! What do you like?','A1'),'Hello! What do you like?','a line in band is unchanged');
+ assert.equal(bandLine(LENKA,'B1'),LENKA,'B1 is not held');
+ assert.equal(bandLine('Hi there, I am the new girl in your class, and I really love building houses! What is yours like?','A1'),'What is yours like?','an over-long statement is dropped, the question kept');
+});
+test('LG-56: a tomas-9-like A1 partner is held at the opening and on a turn through partnerSays; the prompt names the limit; B1 hears the line as it came',async()=>{
+ const long='Wow, that is a really big and beautiful house you built for all your friends and pets! What do you keep in it?';
+ let seen=await bandStart('ema','A1',LENKA,()=>({reply:long,supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'Wow, a big house! What is in it?',meaning:'',starter:''}}));
+ assert.match(seen[0].system,/This learner plays at A1: every sentence you say has at most 8 words/);
+ assert.equal(partnerSaid()[0],"Hi, I'm Lenka from school! How many diamonds are in your chest?");
+ await reply('Many diamonds. I have a house.');
+ assert.equal(partnerSaid().at(-1),'Wow, a big house! What is in it?','the simpler rung that fits');
+ const {BAND_HOLD}=require(path.join(root,'src/lib/english/gate.ts'));
+ for(const l of partnerSaid()){const s=l.split(/(?<=[.!?])\s+/);assert(s.length<=2&&s.every(x=>x.split(/\s+/).length<=BAND_HOLD.A1.words)&&(l.match(/\?/g)||[]).length<=1,l);}
+ seen=await bandStart('jakub','B1',LENKA,()=>({reply:long,supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
+ assert.doesNotMatch(seen[0].system,/This learner plays at/);
+ await reply('I keep my bike in it.');
+ assert.deepEqual(partnerSaid(),[LENKA,long],'B1 is not held');
 });
