@@ -121,8 +121,15 @@ export function quotedFocus(focus: string, tasks: PlacementTask[], safe: (line: 
  * (a skipped answer is no answer, and a listen answer is the learner echoing the line they heard, so words found only
  * there are no slip), the better form differs from them, and it passes the audience gate the focus uses. Normalised as
  * focusParts does. One the learner repeated (the same said or better form listed twice, or the said words in two or
- * more answers) comes before the rest; otherwise the model's order stands. At most three.
+ * more answers) comes before the rest; a style slip (slipIsStyle) goes last, repeated or not; otherwise the model's order stands. At most three.
  */
+const STYLE_WORDS = new Set(["then", "which", "that", "so", "also", "just", "really", "very", "actually", "quite", "maybe", "well"]);
+/** A style slip: the words that differ between said and better are all connectives or fillers, not grammar (LG-8 4th pass). */
+export function slipIsStyle(s: { said: string; better: string }): boolean {
+  const w = (x: string) => x.toLowerCase().match(/[a-z']+/g) ?? [], b = w(s.better), a = w(s.said);
+  const diff = [...a.filter(x => !b.includes(x)), ...b.filter(x => !a.includes(x))];
+  return diff.length > 0 && diff.every(x => STYLE_WORDS.has(x));
+}
 export function keepSlips(slips: unknown, tasks: readonly PlacementTask[], safe: (line: string) => boolean = () => true): { said: string; better: string }[] {
   const norm = (x: string) => x.toLowerCase().replace(/[\s"“”]+/g, " ").trim(), answers = tasks.filter(t => !t.skipped && t.kind !== "listen").map(t => norm(t.response));
   if (!Array.isArray(slips)) return [];
@@ -135,7 +142,9 @@ export function keepSlips(slips: unknown, tasks: readonly PlacementTask[], safe:
     if (out.some(o => norm(o.said) === norm(said))) continue;
     out.push({ said, better, again: answers.filter(a => a.includes(norm(said))).length >= 2 || listed.filter(x => x.said === norm(said) || x.better === norm(better)).length >= 2 });
   }
-  return [...out.filter(o => o.again), ...out.filter(o => !o.again)].slice(0, 3).map(({ said, better }) => ({ said, better }));
+  // core slips first (a repeated one before the rest), a style slip last; the model's order otherwise
+  const rank = (o: { said: string; better: string; again: boolean }) => slipIsStyle(o) ? 2 : o.again ? 0 : 1;
+  return [0, 1, 2].flatMap(r => out.filter(o => rank(o) === r)).slice(0, 3).map(({ said, better }) => ({ said, better }));
 }
 
 /**
@@ -206,7 +215,7 @@ Your previous answer ("${line(r.json.prompt, 120)}") was not set in the learner'
       });
     }
     return call(k, token, "Linga could not put your level together. Try again.", async () => {
-      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.skipped ? "skipped" : t.verdict, note: t.note, answer: t.skipped ? "" : t.response.slice(0, 300) })), goal: (ctx.learning.preferences?.goal || k.goal).slice(0, 160), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, and naming at least one concrete thing the learner did, taken from their answers, not a generic line; where it fits tie it to their goal (goal). slips: up to three errors the learner made more than once, or the most important ones, the most frequent or most important first. Each said is the learner's exact words, copied from an answer; each better is the corrected form. Leave the list empty only when no answer holds an error. focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise, aimed at the first slip: quote its said words and give its better form; if it points at something the learner wrote, quote those exact words in double quotes from an answer. If you offer a better phrase for those words, put it in a second pair of double quotes after the learner's words.` }, summarySchema);
+      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.skipped ? "skipped" : t.verdict, note: t.note, answer: t.skipped ? "" : t.response.slice(0, 300) })), goal: (ctx.learning.preferences?.goal || k.goal).slice(0, 160), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, and naming at least one concrete thing the learner did, taken from their answers, not a generic line; where it fits tie it to their goal (goal). slips: up to three errors the learner made more than once, or the most important ones. Rank by how much a slip breaks meaning or core grammar: verb agreement ('we was'), a missing article ('I am accountant'), a missing verb, a wrong verb form or a wrong preposition ('interested about') come first; style and word choice ('then' or 'which' against 'that', an extra 'so') come last, even when repeated. Each said is the learner's exact words, copied from an answer; each better is the corrected form. Leave the list empty only when no answer holds an error. focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise, aimed at the first slip: quote its said words and give its better form; if it points at something the learner wrote, quote those exact words in double quotes from an answer. If you offer a better phrase for those words, put it in a second pair of double quotes after the learner's words.` }, summarySchema);
       const safe = (l: string) => ctx.adult || ![null, "adult"].includes(keywordAudience(l));
       const slips = keepSlips(r.json.slips, k.tasks, safe);
       const placement: Placement = { at: Date.now(), band: ladder.band, selfBand: k.selfBand, confidence: ladder.confidence, source: "check", summary: line(r.json.summary, 160), focus: quotedFocus(focusFollowsSlip(line(r.json.focus, 120), slips, k.tasks, safe), k.tasks, safe), ...(slips.length ? { slips } : {}), tasks: k.tasks };

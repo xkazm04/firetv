@@ -2984,3 +2984,15 @@ test('LG-55 4th pass: an interview or call aim gets the real-question instructio
  assert.equal(C.goalTask(plain),`The learner stated a goal (learner.goal) and no earlier task touches this aim of it: "${plain}". Set this task in that aim, in a situation it names, not in the interest.`);
  assert(P.questionSituation('Friday interview')&&P.questionSituation('an exam')&&!P.questionSituation('read novels'));
 });
+test('LG-8 4th pass: core slips (agreement, article, preposition) lead, a repeated style slip does not',()=>{
+ const {keepSlips,focusFollowsSlip,slipIsStyle}=require(path.join(root,'src/lib/english/check.ts'));
+ const t=r=>({id:'x'+r.length,band:'B1',kind:'say',prompt:'p',line:'',options:[],response:r,mode:'text',verdict:'partial',quote:'',note:'n',at:1});
+ const tasks=[t('So then I would send it. I am accountant. We was discussing it. I am interested about this.'),t('So then I would call. Then I would send the file.')];
+ const model=[{said:'So then I would send',better:'I would send'},{said:'I am accountant',better:'I am an accountant'},{said:'we was discussing',better:'we were discussing'},{said:'interested about',better:'interested in'}];
+ assert(slipIsStyle(model[0])&&!slipIsStyle(model[1])&&!slipIsStyle(model[3]));
+ const kept=keepSlips(model,tasks);
+ assert.deepEqual(kept.map(x=>x.said),['I am accountant','we was discussing','interested about'],'a style slip goes last and is cut by the three-slip limit');
+ const style=[{said:'so then I would',better:'I would'},{said:'I am accountant',better:'I am an accountant'}];
+ assert.deepEqual(keepSlips(style,tasks).map(x=>x.said),['I am accountant','so then I would'],'a repeated style slip yields to a core one');
+ assert.equal(focusFollowsSlip('send faster',kept,tasks),'"I am accountant" becomes "I am an accountant"','the focus leads with the core slip');
+});
