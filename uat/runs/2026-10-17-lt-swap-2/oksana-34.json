@@ -1,0 +1,354 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to B1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour own conversations\nB1Getting by · self-chosen\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou get by in most everyday situations and can give reasons and opinions.\nYou chose this level yourself.\n[button: See my topics] [button: Find my level with Linga]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "I want to see which conversations Linga picked for my interview.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nOksana\nA way into English\nBefore Linga picks your topics\nLinga asks\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\nYour turn\nLinga picks conversations for your level without a goal. You can swap any of them.\n[button: Let Linga pick] [button: Not now]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about. Any language is fine.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Let Linga pick] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "skip-goal",
+            "not-now",
+            "menu"
+          ],
+          "thought": "I have a clear goal, so I'll tell it about my Friday interview.",
+          "action": "answer",
+          "args": {
+            "text": "I have a job interview on Friday for logistics coordinator. I need to describe my experience, explain a problem which I solved, and ask about team, salary and shifts. Also a phone call with carrier about late delivery."
+          },
+          "result": "ok",
+          "ms": 27980
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nOksana\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nTalk about my work experience\nShare your world\nExplain a problem I solved\nTell what happened\nAsk about the team\nGet something done\nTalk about salary and hours\nMake a plan\nMeet a colleague on arrival\nMake contact\nAsk someone to repeat\nUnderstand and repair\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nTalk about my work experience\nShare your world · Ms Okafor · hiring manager\nThe interviewer will ask about your experience first, so practise this before Friday.\n[button: Swap]\nExplain a problem I solved\nTell what happened · Mr Lindqvist · operations manager\nInterviewers often ask for a real example, so you can practise telling the story.\n[button: Swap]\nAsk about the team\nGet something done · Daniel Reyes · team lead\nAsking good questions at the end shows interest, so prepare a few before Friday.\n[button: Swap]\nTalk about salary and hours\nMake a plan · Ivan Petrov · HR partner\nSalary questions are hard, so practise a polite way to ask and to reply.\n[button: Swap]\nMeet a colleague on arrival\nMake contact · Ben · warehouse colleague\nOn the day you may meet staff in the hall, so a friendly start helps you relax.\n[button: Swap]\nAsk someone to repeat\nUnderstand and repair · Priya · dispatch clerk\nIn an interview you may miss a word, so practise asking politely for help.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "The phone call with a carrier about a late delivery is missing, so I'll add it.",
+          "action": "add-topic",
+          "args": {
+            "text": "Phone call with a carrier about a late delivery. I need to ask where is the truck and agree new time."
+          },
+          "result": "ok",
+          "ms": 19726
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nOksana\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nTalk about my work experience\nShare your world\nExplain a problem I solved\nTell what happened\nAsk about the team\nGet something done\nTalk about salary and hours\nMake a plan\nMeet a colleague on arrival\nMake contact\nAsk someone to repeat\nUnderstand and repair\nCall the carrier about a late delivery\nGet something done\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nTalk about my work experience\nShare your world · Ms Okafor · hiring manager\nThe interviewer will ask about your experience first, so practise this before Friday.\n[button: Swap]\nExplain a problem I solved\nTell what happened · Mr Lindqvist · operations manager\nInterviewers often ask for a real example, so you can practise telling the story.\n[button: Swap]\nAsk about the team\nGet something done · Daniel Reyes · team lead\nAsking good questions at the end shows interest, so prepare a few before Friday.\n[button: Swap]\nTalk about salary and hours\nMake a plan · Ivan Petrov · HR partner\nSalary questions are hard, so practise a polite way to ask and to reply.\n[button: Swap]\nMeet a colleague on arrival\nMake contact · Ben · warehouse colleague\nOn the day you may meet staff in the hall, so a friendly start helps you relax.\n[button: Swap]\nAsk someone to repeat\nUnderstand and repair · Priya · dispatch clerk\nIn an interview you may miss a word, so practise asking politely for help.\n[button: Swap]\nCall the carrier about a late delivery\nGet something done · Maya · carrier support agent\nAsking where a delivery is and agreeing a new time is useful practice for clear, polite questions.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "This covers my interview and the carrier call, so it's good enough for me.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nMs Okafor · hiring manager\nB1Getting by · self-chosen\nTalk about my work experience\nYour mission\nDescribe my past jobs and the tasks I did, in clear short sentences.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\n· self-chosen\nNext topic:\nTalk about my work experience\nDescribe my past jobs and the tasks I did, in clear short sentences.\n[button: Start talking]\nOr choose a situation [list: Talk about my work experience [plan-603cadee] | Explain a problem I solved [plan-5076baba] | Ask about the team [plan-ba841f5a] | Talk about salary and hours [plan-1fb79864] | Meet a colleague on arrival [plan-9536da18] | Ask someone to repeat [plan-9ff204d8] | Call the carrier about a late delivery [plan-e9a4064a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "The plan fits my interview and carrier call, so I'm happy and done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-603cadee",
+            "title": "Talk about my work experience",
+            "goal": "Describe my past jobs and the tasks I did, in clear short sentences.",
+            "why": "The interviewer will ask about your experience first, so practise this before Friday.",
+            "skill": "describe",
+            "audience": "older",
+            "partner": "Ms Okafor · hiring manager"
+          },
+          {
+            "id": "plan-5076baba",
+            "title": "Explain a problem I solved",
+            "goal": "Tell a short story: the problem, what I did, and the result.",
+            "why": "Interviewers often ask for a real example, so you can practise telling the story.",
+            "skill": "narrate",
+            "audience": "older",
+            "partner": "Mr Lindqvist · operations manager"
+          },
+          {
+            "id": "plan-ba841f5a",
+            "title": "Ask about the team",
+            "goal": "Ask two or three clear questions about the team and daily work.",
+            "why": "Asking good questions at the end shows interest, so prepare a few before Friday.",
+            "skill": "request",
+            "audience": "older",
+            "partner": "Daniel Reyes · team lead"
+          },
+          {
+            "id": "plan-1fb79864",
+            "title": "Talk about salary and hours",
+            "goal": "Ask about the salary range and working hours, and suggest a fair option.",
+            "why": "Salary questions are hard, so practise a polite way to ask and to reply.",
+            "skill": "negotiate",
+            "audience": "older",
+            "partner": "Ivan Petrov · HR partner"
+          },
+          {
+            "id": "plan-9536da18",
+            "title": "Meet a colleague on arrival",
+            "goal": "Greet a new colleague, introduce myself, and say I'm glad to meet them.",
+            "why": "On the day you may meet staff in the hall, so a friendly start helps you relax.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Ben · warehouse colleague"
+          },
+          {
+            "id": "plan-9ff204d8",
+            "title": "Ask someone to repeat",
+            "goal": "Ask someone to repeat or explain a word, and confirm the meaning.",
+            "why": "In an interview you may miss a word, so practise asking politely for help.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Priya · dispatch clerk"
+          },
+          {
+            "id": "plan-e9a4064a",
+            "title": "Call the carrier about a late delivery",
+            "goal": "Ask where the delivery truck is, hear an update, and agree a new delivery time that you confirm back.",
+            "why": "Asking where a delivery is and agreeing a new time is useful practice for clear, polite questions.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Maya · carrier support agent"
+          }
+        ],
+        "planAgreed": [
+          "Talk about my work experience",
+          "Explain a problem I solved",
+          "Ask about the team",
+          "Talk about salary and hours",
+          "Meet a colleague on arrival",
+          "Ask someone to repeat",
+          "Call the carrier about a late delivery"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 69241,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 level shown 'B1 Getting by · self-chosen'; her mixed-language answer did not lower it."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#3-#4 no line assumes Czech or a child; the prompt says 'Any language is fine.'"
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3 first two topics are 'Talk about my work experience' and 'Explain a problem I solved'."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No conversation in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#2 asks only what she wants to practise; nothing about displacement or status."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#3 each topic has a why, e.g. 'Interviewers often ask for a real example, so you can practise telling the story.'"
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#3-#4 added 'Phone call with a carrier…'; it appears as 'Call the carrier about a late delivery' with the goal 'Ask where the delivery truck is… agree a new delivery time'. She did not use Swap."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#4 agreed 7 topics; about 5 of 7 are ones she would choose (the first four plus the carrier call). The colleague greeting and 'ask to repeat' are filler."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All 7 topics are workplace-appropriate for an adult; nothing unsafe was shown."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Her free-text goal produced an interview-first plan",
+            "expected": "Topics follow her stated goal",
+            "got": "Four of the first six topics map to her interview, each with a clear 'why' line",
+            "evidence": "#3 'Talk about my work experience… The interviewer will ask about your experience first, so practise this before Friday.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "A stated goal yields at least 4 of 6 topics on that goal.",
+            "code_hint": "plan prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Added topic kept her wording",
+            "expected": "Added topic keeps what she asked for",
+            "got": "The carrier call keeps 'where is the truck' and 'agree new time'",
+            "evidence": "#4 'Ask where the delivery truck is, hear an update, and agree a new delivery time that you confirm back.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "An added topic's goal contains the user's stated aims.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Two filler topics in a Friday-interview plan",
+            "expected": "All slots tuned to interview and logistics",
+            "got": "'Meet a colleague on arrival' and 'Ask someone to repeat' stayed, and she did not swap them",
+            "evidence": "#3 'On the day you may meet staff in the hall' (#4: still in the 7 agreed)",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "With a stated goal, generic slots are replaced by goal-specific ones, such as a tell-me-about-yourself or a gap question.",
+            "code_hint": "plan prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "I told it about Friday and it listened. The first four topics were exactly my interview: experience, a problem I solved, questions for the team, and salary and hours. I added the carrier call in my own words, and it kept \"where is the truck\" and \"agree new time\". That was quick, and nobody asked me about Ukraine or assumed I was Czech. I would use it again. Two topics, greeting a colleague and asking someone to repeat, feel like filler. I would rather rehearse \"tell me about yourself\" or a hard question about a gap. I left them in because I was in a hurry, but a real coach would not have suggested them. I do not know yet whether the practice itself is good. This only set the plan, and that part worked. A premium tutor costs 900 CZK and has no free slot before Friday, so this is useful."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 2,
+      "fail": 0,
+      "ms": 47690
+    },
+    "character": {
+      "n": 5,
+      "fail": 0,
+      "ms": 21299
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 18545
+    }
+  }
+}

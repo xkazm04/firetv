@@ -1,0 +1,395 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to A2 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour own conversations\nA2Everyday basics · self-chosen\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA2\nEveryday basics\nYou handle short, routine exchanges about familiar things.\nYou chose this level yourself.\n[button: See my topics] [button: Find my level with Linga]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "I want to see which conversations Linga picked for me.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nA way into English\nBefore Linga picks your topics\nLinga asks\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\nYour turn\nLinga picks conversations for your level without a goal. You can swap any of them.\n[button: Let Linga pick] [button: Not now]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about. Any language is fine.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Let Linga pick] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "skip-goal",
+            "not-now",
+            "menu"
+          ],
+          "thought": "I want hotel situations, so I will tell Linga that.",
+          "action": "answer",
+          "args": {
+            "text": "I work in hotel. I want practise guest complaint, lost booking, and give directions to guest."
+          },
+          "result": "ok",
+          "ms": 17616
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nA guest is upset about the room\nHandle friction\nThe booking is not in the system\nGet something done\nShow the guest the way\nShare your world\nCould you say that again?\nUnderstand and repair\nHello and welcome\nMake contact\nLate check-out plan\nMake a plan\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nA guest is upset about the room\nHandle friction · Mr Okafor · hotel guest\nComplaints are a big part of your work at the desk, so this is a good place to start.\n[button: Swap]\nThe booking is not in the system\nGet something done · Ms Lindqvist · hotel guest\nLost bookings happen often, so you need clear questions to find them.\n[button: Swap]\nShow the guest the way\nShare your world · Mr Park · hotel guest\nGuests ask for directions many times every day.\n[button: Swap]\nCould you say that again?\nUnderstand and repair · Ana · hotel guest\nGuests speak in many different ways, so checking meaning helps you avoid mistakes.\n[button: Swap]\nHello and welcome\nMake contact · Tom · new guest\nThe first words at the desk set the tone for the whole stay.\n[button: Swap]\nLate check-out plan\nMake a plan · Mrs Rossi · hotel guest\nGuests often ask to leave later, and you need to find a plan that works for both of you.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Good, my three are there, but I also want a phone call from a travel agency.",
+          "action": "add-topic",
+          "args": {
+            "text": "I want practise phone call from travel agency about group booking for hotel."
+          },
+          "result": "ok",
+          "ms": 5989
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nA guest is upset about the room\nHandle friction\nThe booking is not in the system\nGet something done\nShow the guest the way\nShare your world\nCould you say that again?\nUnderstand and repair\nHello and welcome\nMake contact\nLate check-out plan\nMake a plan\nTravel agency calls about group booking\nGet something done\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nA guest is upset about the room\nHandle friction · Mr Okafor · hotel guest\nComplaints are a big part of your work at the desk, so this is a good place to start.\n[button: Swap]\nThe booking is not in the system\nGet something done · Ms Lindqvist · hotel guest\nLost bookings happen often, so you need clear questions to find them.\n[button: Swap]\nShow the guest the way\nShare your world · Mr Park · hotel guest\nGuests ask for directions many times every day.\n[button: Swap]\nCould you say that again?\nUnderstand and repair · Ana · hotel guest\nGuests speak in many different ways, so checking meaning helps you avoid mistakes.\n[button: Swap]\nHello and welcome\nMake contact · Tom · new guest\nThe first words at the desk set the tone for the whole stay.\n[button: Swap]\nLate check-out plan\nMake a plan · Mrs Rossi · hotel guest\nGuests often ask to leave later, and you need to find a plan that works for both of you.\n[button: Swap]\nTravel agency calls about group booking\nGet something done · Lena · travel agent\nYour hotel work includes calls about group bookings, so this practice fits your job.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "I also want recommend restaurant to guest, this is missing.",
+          "action": "add-topic",
+          "args": {
+            "text": "I want practise recommend restaurant to guest at hotel."
+          },
+          "result": "ok",
+          "ms": 9447
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n8 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nA guest is upset about the room\nHandle friction\nThe booking is not in the system\nGet something done\nShow the guest the way\nShare your world\nCould you say that again?\nUnderstand and repair\nHello and welcome\nMake contact\nLate check-out plan\nMake a plan\nTravel agency calls about group booking\nGet something done\nRecommend a restaurant\nMake a plan\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nA guest is upset about the room\nHandle friction · Mr Okafor · hotel guest\nComplaints are a big part of your work at the desk, so this is a good place to start.\n[button: Swap]\nThe booking is not in the system\nGet something done · Ms Lindqvist · hotel guest\nLost bookings happen often, so you need clear questions to find them.\n[button: Swap]\nShow the guest the way\nShare your world · Mr Park · hotel guest\nGuests ask for directions many times every day.\n[button: Swap]\nCould you say that again?\nUnderstand and repair · Ana · hotel guest\nGuests speak in many different ways, so checking meaning helps you avoid mistakes.\n[button: Swap]\nHello and welcome\nMake contact · Tom · new guest\nThe first words at the desk set the tone for the whole stay.\n[button: Swap]\nLate check-out plan\nMake a plan · Mrs Rossi · hotel guest\nGuests often ask to leave later, and you need to find a plan that works for both of you.\n[button: Swap]\nTravel agency calls about group booking\nGet something done · Lena · travel agent\nYour hotel work includes calls about group bookings, so this practice fits your job.\n[button: Swap]\nRecommend a restaurant\nMake a plan · Mr Tanaka · hotel guest\nYou want to recommend restaurants to guests, so this topic practises that at your level.\n[button: Swap]\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "not-now"
+          ],
+          "thought": "Most topics fit my work, so I am happy with this set.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel guest\nA2Everyday basics · self-chosen\nA guest is upset about the room\nYour mission\nCalm the guest and agree a fix for the room.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nA guest is upset about the room\nCalm the guest and agree a fix for the room.\n[button: Start talking]\nOr choose a situation [list: A guest is upset about the room [plan-1a94587f] | The booking is not in the system [plan-7b8a7932] | Show the guest the way [plan-cd7564ee] | Could you say that again? [plan-91475c95] | Hello and welcome [plan-92516902] | Late check-out plan [plan-3a71f597] | Travel agency calls about group booking [plan-f6708e67] | Recommend a restaurant [plan-5ba0d498] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "The set looks right for my hotel work, so I am happy and can stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-1a94587f",
+            "title": "A guest is upset about the room",
+            "goal": "Calm the guest and agree a fix for the room.",
+            "why": "Complaints are a big part of your work at the desk, so this is a good place to start.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Mr Okafor · hotel guest"
+          },
+          {
+            "id": "plan-7b8a7932",
+            "title": "The booking is not in the system",
+            "goal": "Find the booking and confirm the room for the guest.",
+            "why": "Lost bookings happen often, so you need clear questions to find them.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Ms Lindqvist · hotel guest"
+          },
+          {
+            "id": "plan-cd7564ee",
+            "title": "Show the guest the way",
+            "goal": "Give clear directions to the restaurant and the lift.",
+            "why": "Guests ask for directions many times every day.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mr Park · hotel guest"
+          },
+          {
+            "id": "plan-91475c95",
+            "title": "Could you say that again?",
+            "goal": "Ask the guest to repeat and confirm what they meant.",
+            "why": "Guests speak in many different ways, so checking meaning helps you avoid mistakes.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Ana · hotel guest"
+          },
+          {
+            "id": "plan-92516902",
+            "title": "Hello and welcome",
+            "goal": "Greet a new guest and say your name and your job.",
+            "why": "The first words at the desk set the tone for the whole stay.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Tom · new guest"
+          },
+          {
+            "id": "plan-3a71f597",
+            "title": "Late check-out plan",
+            "goal": "Offer two options and agree one plan with the guest.",
+            "why": "Guests often ask to leave later, and you need to find a plan that works for both of you.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Mrs Rossi · hotel guest"
+          },
+          {
+            "id": "plan-f6708e67",
+            "title": "Travel agency calls about group booking",
+            "goal": "Take the details of a group booking, check the rooms, and confirm the price and next step by phone.",
+            "why": "Your hotel work includes calls about group bookings, so this practice fits your job.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Lena · travel agent"
+          },
+          {
+            "id": "plan-5ba0d498",
+            "title": "Recommend a restaurant",
+            "goal": "Suggest a restaurant to a guest and explain why you like it, in simple sentences.",
+            "why": "You want to recommend restaurants to guests, so this topic practises that at your level.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Mr Tanaka · hotel guest"
+          }
+        ],
+        "planAgreed": [
+          "A guest is upset about the room",
+          "The booking is not in the system",
+          "Show the guest the way",
+          "Could you say that again?",
+          "Hello and welcome",
+          "Late check-out plan",
+          "Travel agency calls about group booking",
+          "Recommend a restaurant"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 65784,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Level set to A2 by hand (setup); no placement in J2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 \"What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\" plain A2 wording, no translation needed."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "Petra never asked for a repeat or said she did not understand in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#3 and #5: all 6 proposed and both additions are hotel desk situations (complaint, lost booking, directions, late check-out, travel agency call, restaurant)."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation held, so no moments shown."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#3-#6: every topic is hotel work with audience \"all\"; nothing unsuitable for children shown."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#3 each topic has a \"why\" line, e.g. \"Lost bookings happen often, so you need clear questions to find them.\""
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#3-#5 two topics added in her words; #4 \"Travel agency calls about group booking\" with Lena · travel agent, #5 \"Recommend a restaurant\" keeps her ask. Swap buttons visible but not used."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5 agreed 8 topics, all work situations she named or would name; fit 8 of 8."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All 8 topics are hotel work and audience \"all\" (#3-#6); nothing unsafe after additions."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 8,
+            "safe": 8,
+            "total": 8
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, rule change, sensitive data request or humiliating line seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Goal question yields on-job topics with clear reasons",
+            "expected": "Topics reflecting her work, each with a reason",
+            "got": "Complaint, lost booking and directions all appeared with work-based why lines",
+            "evidence": "#3 \"Complaints are a big part of your work at the desk, so this is a good place to start.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Each proposed topic carries a one-line why tied to the stated goal.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Added topics keep her wording and intent",
+            "expected": "Own-words topic reflected faithfully",
+            "got": "Travel agency group booking and restaurant recommendation added as topics with fitting partners",
+            "evidence": "#4 \"Travel agency calls about group booking\" · Lena · travel agent; #5 \"Recommend a restaurant\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Added topic title, partner and goal match the request.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Skill labels do not match topic content",
+            "expected": "Labels that describe the situation",
+            "got": "Directions topic is labelled \"Share your world\" and restaurant \"Make a plan\"",
+            "evidence": "#3 \"Show the guest the way / Share your world\"; #5 \"Recommend a restaurant / Make a plan\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Skill label matches what the learner will actually do in the topic.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "effort",
+            "title": "Plan grows beyond six; additions do not replace",
+            "expected": "Clear sense of plan size",
+            "got": "Header went from 6 to 8 conversations; no way to see the limit",
+            "evidence": "#3 \"6 conversations for you\" → #5 \"8 conversations for you\"",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Explain or cap plan size when topics are added.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "I liked it. I said in my bad English what I need: complaints, lost booking, directions. Linga gave me those, and each had a short reason, so I did not feel tested. I added the travel agency call and the restaurant, and both came back just as I asked, with a guest name and a role. That is what I do at the desk. As a mother I looked for anything unsuitable for Tomáš and Klára and saw only hotel situations, so I relaxed. Small things: \"Show the guest the way\" says \"Share your world\", which confused me, and my list grew to eight, not six. I did not try Swap, so I cannot say if it works well. Would I use it after the kids sleep? Yes. Would I tell the other receptionists? Probably, once I hear the first conversation is gentle."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 3,
+      "fail": 0,
+      "ms": 33032
+    },
+    "character": {
+      "n": 6,
+      "fail": 0,
+      "ms": 32464
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 22214
+    }
+  }
+}

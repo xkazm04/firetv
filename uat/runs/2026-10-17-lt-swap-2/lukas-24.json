@@ -1,0 +1,383 @@
+{
+  "character": "lukas-24",
+  "name": "Lukáš",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to B2 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nLukáš\nA way into English\nYour own conversations\nB2Comfortable · self-chosen\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Lukáš\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou talk with some ease on a wide range of topics, including less familiar ones.\nYou chose this level yourself.\n[button: See my topics] [button: Find my level with Linga]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "I'd like to see what topics Linga picked for me first.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nLukáš\nA way into English\nBefore Linga picks your topics\nLinga asks\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\nYour turn\nLinga picks conversations for your level without a goal. You can swap any of them.\n[button: Let Linga pick] [button: Not now]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Lukáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about. Any language is fine.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Let Linga pick] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "skip-goal",
+            "not-now",
+            "menu"
+          ],
+          "thought": "I'd like to tell it what I actually want, like first dates and meetup stuff.",
+          "action": "answer",
+          "args": {
+            "text": "Um, I guess I'd like to practise first dates, like when you meet someone and your tastes are kind of different. And also small talk at meetups, how to keep the conversation going."
+          },
+          "result": "ok",
+          "ms": 21464
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nLukáš\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDifferent tastes on a first date\nShare your world\nSmall talk at a meetup\nMake contact\nDisagreeing about a film\nConnect with people\nAsking someone to repeat\nUnderstand and repair\nTelling a story about your weekend\nTell what happened\nPlanning a second date\nMake a plan\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Lukáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDifferent tastes on a first date\nShare your world · Maya · first-date match\nYou want to talk about first dates when your tastes are different, so this comes first.\n[button: Swap]\nSmall talk at a meetup\nMake contact · Priya · meetup organiser\nYou asked how to keep small talk going at meetups, so this is your second priority.\n[button: Swap]\nDisagreeing about a film\nConnect with people · Tom · film club member\nDifferent tastes come up in groups too, so this helps on dates and at meetups.\n[button: Swap]\nAsking someone to repeat\nUnderstand and repair · Chen · café acquaintance\nIn a noisy place it is easy to miss words, so this makes conversations easier.\n[button: Swap]\nTelling a story about your weekend\nTell what happened · Sofia · new friend\nStories help a new date or a new group get to know you.\n[button: Swap]\nPlanning a second date\nMake a plan · Daniel · first-date match\nAfter a good first date, choosing the next plan is a natural next step.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "I'd like something about asking someone out for coffee, that's missing, so I'll type it.",
+          "action": "add-topic",
+          "args": {
+            "text": "Um, I guess I'd like to practise asking someone out for coffee, like, kind of without making it awkward."
+          },
+          "result": "ok",
+          "ms": 6818
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nLukáš\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDifferent tastes on a first date\nShare your world\nSmall talk at a meetup\nMake contact\nDisagreeing about a film\nConnect with people\nAsking someone to repeat\nUnderstand and repair\nTelling a story about your weekend\nTell what happened\nPlanning a second date\nMake a plan\nAsking someone for coffee\nMake a plan\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Lukáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDifferent tastes on a first date\nShare your world · Maya · first-date match\nYou want to talk about first dates when your tastes are different, so this comes first.\n[button: Swap]\nSmall talk at a meetup\nMake contact · Priya · meetup organiser\nYou asked how to keep small talk going at meetups, so this is your second priority.\n[button: Swap]\nDisagreeing about a film\nConnect with people · Tom · film club member\nDifferent tastes come up in groups too, so this helps on dates and at meetups.\n[button: Swap]\nAsking someone to repeat\nUnderstand and repair · Chen · café acquaintance\nIn a noisy place it is easy to miss words, so this makes conversations easier.\n[button: Swap]\nTelling a story about your weekend\nTell what happened · Sofia · new friend\nStories help a new date or a new group get to know you.\n[button: Swap]\nPlanning a second date\nMake a plan · Daniel · first-date match\nAfter a good first date, choosing the next plan is a natural next step.\n[button: Swap]\nAsking someone for coffee\nMake a plan · Maya · someone you met at a class\nYou asked how to invite someone for coffee without it feeling awkward, so we will practise a light, easy invitation.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "I'm B2, so asking someone to repeat feels a bit basic; I'd rather swap it.",
+          "action": "swap",
+          "args": {
+            "topicId": "Asking someone to repeat"
+          },
+          "result": "ok",
+          "ms": 16978
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nLukáš\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDifferent tastes on a first date\nShare your world\nSmall talk at a meetup\nMake contact\nDisagreeing about a film\nConnect with people\nTelling someone what you enjoy\nShare your world\nTelling a story about your weekend\nTell what happened\nPlanning a second date\nMake a plan\nAsking someone for coffee\nMake a plan\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Lukáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDifferent tastes on a first date\nShare your world · Maya · first-date match\nYou want to talk about first dates when your tastes are different, so this comes first.\n[button: Swap]\nSmall talk at a meetup\nMake contact · Priya · meetup organiser\nYou asked how to keep small talk going at meetups, so this is your second priority.\n[button: Swap]\nDisagreeing about a film\nConnect with people · Tom · film club member\nDifferent tastes come up in groups too, so this helps on dates and at meetups.\n[button: Swap]\nTelling someone what you enjoy\nShare your world · Sam · new group member\nThis helps you talk about your tastes in a relaxed way, at meetups and on first dates.\n[button: Swap]\nTelling a story about your weekend\nTell what happened · Sofia · new friend\nStories help a new date or a new group get to know you.\n[button: Swap]\nPlanning a second date\nMake a plan · Daniel · first-date match\nAfter a good first date, choosing the next plan is a natural next step.\n[button: Swap]\nAsking someone for coffee\nMake a plan · Maya · someone you met at a class\nYou asked how to invite someone for coffee without it feeling awkward, so we will practise a light, easy invitation.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "I guess this set covers first dates, meetups and coffee, so it feels right.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga",
+          "shown": "TV\nLinga\nLukáš\nMaya · first-date match\nB2Comfortable · self-chosen\nDifferent tastes on a first date\nYour mission\nExplain your likes and dislikes and ask about theirs, without it feeling like an argument.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Lukáš\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nDifferent tastes on a first date\nExplain your likes and dislikes and ask about theirs, without it feeling like an argument.\n[button: Start talking]\nOr choose a situation [list: Different tastes on a first date [plan-3708d456] | Small talk at a meetup [plan-7d4af9a9] | Disagreeing about a film [plan-298de187] | Telling someone what you enjoy [plan-9baa3d30] | Telling a story about your weekend [plan-905f9bfe] | Planning a second date [plan-6f67d9d9] | Asking someone for coffee [plan-6d880420] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "The plan looks good with my topics included, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-3708d456",
+            "title": "Different tastes on a first date",
+            "goal": "Explain your likes and dislikes and ask about theirs, without it feeling like an argument.",
+            "why": "You want to talk about first dates when your tastes are different, so this comes first.",
+            "skill": "describe",
+            "audience": "adult",
+            "partner": "Maya · first-date match"
+          },
+          {
+            "id": "plan-7d4af9a9",
+            "title": "Small talk at a meetup",
+            "goal": "Start a conversation with a stranger, keep it going with questions, and end it politely.",
+            "why": "You asked how to keep small talk going at meetups, so this is your second priority.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Priya · meetup organiser"
+          },
+          {
+            "id": "plan-298de187",
+            "title": "Disagreeing about a film",
+            "goal": "Give a different opinion politely and find common ground.",
+            "why": "Different tastes come up in groups too, so this helps on dates and at meetups.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Tom · film club member"
+          },
+          {
+            "id": "plan-e93d6aca",
+            "title": "Asking someone to repeat",
+            "goal": "Ask someone to repeat or explain, and check that you understood.",
+            "why": "In a noisy place it is easy to miss words, so this makes conversations easier.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Chen · café acquaintance"
+          },
+          {
+            "id": "plan-905f9bfe",
+            "title": "Telling a story about your weekend",
+            "goal": "Describe what happened in order and explain why it was fun or surprising.",
+            "why": "Stories help a new date or a new group get to know you.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Sofia · new friend"
+          },
+          {
+            "id": "plan-6f67d9d9",
+            "title": "Planning a second date",
+            "goal": "Suggest two options, hear the other person's choice, and agree on one plan.",
+            "why": "After a good first date, choosing the next plan is a natural next step.",
+            "skill": "negotiate",
+            "audience": "adult",
+            "partner": "Daniel · first-date match"
+          },
+          {
+            "id": "plan-6d880420",
+            "title": "Asking someone for coffee",
+            "goal": "Ask someone for coffee in a relaxed way, suggest a time and place, and agree on a simple plan.",
+            "why": "You asked how to invite someone for coffee without it feeling awkward, so we will practise a light, easy invitation.",
+            "skill": "negotiate",
+            "audience": "adult",
+            "partner": "Maya · someone you met at a class"
+          },
+          {
+            "id": "plan-9baa3d30",
+            "title": "Telling someone what you enjoy",
+            "goal": "Describe your interests and explain why you like them, then ask the other person about theirs.",
+            "why": "This helps you talk about your tastes in a relaxed way, at meetups and on first dates.",
+            "skill": "describe",
+            "audience": "adult",
+            "partner": "Sam · new group member"
+          }
+        ],
+        "planAgreed": [
+          "Different tastes on a first date",
+          "Small talk at a meetup",
+          "Disagreeing about a film",
+          "Telling someone what you enjoy",
+          "Telling a story about your weekend",
+          "Planning a second date",
+          "Asking someone for coffee"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 72577,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Level was set by hand to B2 (setup fixture); no placement in J2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#3-4: 'Asking someone out for coffee' became 'Asking someone for coffee' with why 'invite someone for coffee without it feeling awkward', adult, not refused."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No partner conversation or explicit requests in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No redirect occurred in J2."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments shown."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No partner turns in J2."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#3 each topic has a why line, e.g. 'You asked how to keep small talk going at meetups, so this is your second priority.'"
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#4 swap of 'Asking someone to repeat' gave 'Telling someone what you enjoy' (#5); added coffee topic kept as adult 'Maya · someone you met at a class'."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5 agreed 7 topics; 6 of 7 wanted, only 'Telling a story about your weekend' is marginal."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Topics are adult, non-explicit; adult-audience ones are fine for an adult-confirmed profile (#3-5)."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 8,
+            "total": 8
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No unsafe content shown; dating topics non-explicit."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Each topic carries a personal reason",
+            "expected": "Understand why each topic is there",
+            "got": "Each topic has a why line echoing his words",
+            "evidence": "#3 'You asked how to keep small talk going at meetups, so this is your second priority.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Every topic has a why tied to the stated goal.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Own-words topic kept as adult topic",
+            "expected": "Coffee invitation accepted",
+            "got": "Added as 'Asking someone for coffee' with adult partner",
+            "evidence": "#4 'Asking someone for coffee ... Maya · someone you met at a class'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Added topic keeps the user's intent.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "First proposal had a too-basic topic and a generic one",
+            "expected": "B2-level topics fitted to his goals",
+            "got": "'Asking someone to repeat' was too basic for B2 and the weekend story is generic; the swap fixed the first.",
+            "evidence": "#3 'Asking someone to repeat'; #5 plan includes 'Telling a story about your weekend'",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Avoid A2-level repair topics for B2 on first proposal.",
+            "code_hint": "curriculum.ts"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "I was nervous it would refuse dating, but it didn't even blink. I said first dates and meetups, and the topics matched, each with a short reason in my own words. Asking someone for coffee was missing, so I typed it, and it came back as a proper adult scene, not watered down. I swapped out \"asking someone to repeat\" because it felt too basic for B2, and the replacement was better. Not everything fit; the weekend story is generic. Still, seven of eight shown is what I'd have picked. I'd use it for fifteen minutes before a date. I haven't seen the partner talk yet, so I can't say whether it stays respectful and non-cringey, but the planning step I trust. I'd tell a friend from the meetup."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 3,
+      "fail": 0,
+      "ms": 45241
+    },
+    "character": {
+      "n": 6,
+      "fail": 0,
+      "ms": 27068
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 24281
+    }
+  }
+}

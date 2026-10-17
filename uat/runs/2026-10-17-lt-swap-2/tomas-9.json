@@ -1,0 +1,373 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to A1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour own conversations\nA1First words · self-chosen\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA1\nFirst words\nYou understand and use familiar everyday words and very simple phrases.\nYou chose this level yourself.\n[button: See my topics] [button: Find my level with Linga]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "I want to see what Linga picked for me, maybe Minecraft.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nBefore Linga picks your topics\nLinga asks\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\nYour turn\nLinga picks conversations for your level without a goal. You can swap any of them.\n[button: Let Linga pick] [button: Not now]\nYour topics · A1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nWhat would you like to practise in English? A situation you want to handle, or something you enjoy talking about. Any language is fine.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Let Linga pick] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "skip-goal",
+            "not-now",
+            "menu"
+          ],
+          "thought": "Chci Minecraft a psy, to napíšu.",
+          "action": "answer",
+          "args": {
+            "text": "Minecraft. Dog. Football"
+          },
+          "result": "ok",
+          "ms": 21889
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nShow me your Minecraft world\nShare your world\nPlay football after school\nMake a plan\nMy dog goes to the park\nTell what happened\nHello, I am new here\nMake contact\nCan you say that again?\nUnderstand and repair\nBuy dog food at the shop\nGet something done\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nShow me your Minecraft world\nShare your world · Sam · friend from class\nYou like Minecraft, so we start here. You can talk about your world.\n[button: Swap]\nPlay football after school\nMake a plan · Leo · classmate\nFootball is in your plan, so let's make a plan together.\n[button: Swap]\nMy dog goes to the park\nTell what happened · Mrs. Lee · neighbour\nYour dog is in your plan, so you can tell its story.\n[button: Swap]\nHello, I am new here\nMake contact · Ava · new classmate\nMeeting new people helps you play games and make friends.\n[button: Swap]\nCan you say that again?\nUnderstand and repair · Coach Ben · football coach\nCoaches talk fast, so this helps you at football practice.\n[button: Swap]\nBuy dog food at the shop\nGet something done · Sara · shop helper\nYour dog needs food, so this is real life practice.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Nakupování je nuda, tohle nechci.",
+          "action": "swap",
+          "args": {
+            "topicId": "Buy dog food at the shop"
+          },
+          "result": "ok",
+          "ms": 5674
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nTomáš\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nShow me your Minecraft world\nShare your world\nPlay football after school\nMake a plan\nMy dog goes to the park\nTell what happened\nHello, I am new here\nMake contact\nCan you say that again?\nUnderstand and repair\nPick a game to play together\nMake a plan\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · A1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nShow me your Minecraft world\nShare your world · Sam · friend from class\nYou like Minecraft, so we start here. You can talk about your world.\n[button: Swap]\nPlay football after school\nMake a plan · Leo · classmate\nFootball is in your plan, so let's make a plan together.\n[button: Swap]\nMy dog goes to the park\nTell what happened · Mrs. Lee · neighbour\nYour dog is in your plan, so you can tell its story.\n[button: Swap]\nHello, I am new here\nMake contact · Ava · new classmate\nMeeting new people helps you play games and make friends.\n[button: Swap]\nCan you say that again?\nUnderstand and repair · Coach Ben · football coach\nCoaches talk fast, so this helps you at football practice.\n[button: Swap]\nPick a game to play together\nMake a plan · Max · friend next door\nYou like Minecraft, dogs and football, so let's practise choosing what to do together.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Minecraft, fotbal, pes... to je dobrý, může být.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nSam · friend from class\nA1First words · self-chosen\nShow me your Minecraft world\nYour mission\nTell a friend what you built in Minecraft and say one thing you like about it.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nShow me your Minecraft world\nTell a friend what you built in Minecraft and say one thing you like about it.\n[button: Start talking]\nOr choose a situation [list: Show me your Minecraft world [plan-e56d3a90] | Play football after school [plan-51130e37] | My dog goes to the park [plan-1166f277] | Hello, I am new here [plan-65f30da8] | Can you say that again? [plan-4b12e9db] | Pick a game to play together [plan-f064241b] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Minecraft je tam, to je dobré, hotovo.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-e56d3a90",
+            "title": "Show me your Minecraft world",
+            "goal": "Tell a friend what you built in Minecraft and say one thing you like about it.",
+            "why": "You like Minecraft, so we start here. You can talk about your world.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · friend from class"
+          },
+          {
+            "id": "plan-51130e37",
+            "title": "Play football after school",
+            "goal": "Agree with a friend on a time and a place to play football.",
+            "why": "Football is in your plan, so let's make a plan together.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Leo · classmate"
+          },
+          {
+            "id": "plan-1166f277",
+            "title": "My dog goes to the park",
+            "goal": "Tell what your dog did, in order, from start to end.",
+            "why": "Your dog is in your plan, so you can tell its story.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Mrs. Lee · neighbour"
+          },
+          {
+            "id": "plan-65f30da8",
+            "title": "Hello, I am new here",
+            "goal": "Say hello, say your name, and ask one question to start a talk.",
+            "why": "Meeting new people helps you play games and make friends.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Ava · new classmate"
+          },
+          {
+            "id": "plan-4b12e9db",
+            "title": "Can you say that again?",
+            "goal": "Ask the coach to repeat a word and check what it means.",
+            "why": "Coaches talk fast, so this helps you at football practice.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Coach Ben · football coach"
+          },
+          {
+            "id": "plan-cf90e1cd",
+            "title": "Buy dog food at the shop",
+            "goal": "Ask where the dog food is and choose the right bag.",
+            "why": "Your dog needs food, so this is real life practice.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sara · shop helper"
+          },
+          {
+            "id": "plan-f064241b",
+            "title": "Pick a game to play together",
+            "goal": "Suggest a game and agree on one with a friend.",
+            "why": "You like Minecraft, dogs and football, so let's practise choosing what to do together.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Max · friend next door"
+          }
+        ],
+        "planAgreed": [
+          "Show me your Minecraft world",
+          "Play football after school",
+          "My dog goes to the park",
+          "Hello, I am new here",
+          "Can you say that again?",
+          "Pick a game to play together"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 50225,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Level set to A1 by hand (setup); no placement run in J2."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No check tasks in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No Czech or 'don't know' answers were given."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#3 all six topics suit a 9-year-old; Minecraft, football, dog, game, football coach are play, animals or sport (≥4)."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moments in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#3 each topic has a 'why', e.g. 'You like Minecraft, so we start here.'"
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Swap worked (#3→#4: shopping replaced by 'Pick a game to play together'), but no own-words topic was ever added; the text box stayed '0 of 400 characters' (#4)."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#4 agreed plan: Minecraft, football, dog, new-friend hello, coach repeat, pick a game; at least 4 of 6 wanted."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All topics, including the swapped-in one, are child-safe (#3, #4)."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Plan built from my three words",
+            "expected": "Topics reflect what a child says",
+            "got": "'Minecraft. Dog. Football' produced Minecraft, football and dog topics with a simple 'why'",
+            "evidence": "#2 reply; #3 'Football is in your plan, so let's make a plan together.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Topics named in the first reply appear in the first set.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "Swap fills with an on-interest topic",
+            "expected": "Swapped topic replaced by a fitting one",
+            "got": "Shopping swapped for 'Pick a game to play together'",
+            "evidence": "#4 'You like Minecraft, dogs and football'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "A swap returns a topic tied to stated interests.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Shopping topic proposed to a child who wanted games",
+            "expected": "No shopping for a child who gave play interests",
+            "got": "'Buy dog food at the shop' was in the first six",
+            "evidence": "#3 and thought 'Nakupování je nuda'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "For elementary profiles, prefer play topics over errands.",
+            "code_hint": "topic planner prompt"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Add-your-own topic never used",
+            "expected": "Child adds a topic and sees it kept",
+            "got": "Text box with '0 of 400 characters' unused; wording is too long and abstract for a nine-year-old",
+            "evidence": "#4 'Add a topic in your own words'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Short prompt for children, e.g. 'Your idea?', with Czech allowed.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft tam byl hned, to bylo dobrý! I said \"Minecraft, dog, football\" and it gave me that. The shopping one was nuda, so I swapped it and got a game with a friend. That's good. But there was a lot of reading on the phone, mostly Mum would have to read it. I didn't add my own topic; I didn't know I should, and the text was long. I trust the topics a bit, because they match what I like. But \"Can you say that again?\" and \"Hello, I am new here\" feel a little like school. Would I use it again? Yes, if it's more Minecraft and less talking-to-the-neighbour. I'd tell a kamarád."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Swap worked (#3→#4: shopping replaced by 'Pick a game to play together'), but no own-words topic was ever added; the text box stayed '0 of 400 characters' (#4).",
+          "check": "They can swap what they don't want and add one in their own words, and the added topic keeps what they asked for."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 2,
+      "fail": 0,
+      "ms": 27547
+    },
+    "character": {
+      "n": 5,
+      "fail": 0,
+      "ms": 22445
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 20186
+    }
+  }
+}

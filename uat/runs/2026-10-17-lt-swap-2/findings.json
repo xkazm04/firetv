@@ -1,0 +1,398 @@
+[
+  {
+    "id": "LT-tomas-9-J2-4",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "confusion",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "Add-your-own topic never used",
+    "expected": "Child adds a topic and sees it kept",
+    "got": "Text box with '0 of 400 characters' unused; wording is too long and abstract for a nine-year-old",
+    "evidence": [
+      "#4 'Add a topic in your own words'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Short prompt for children, e.g. 'Your idea?', with Czech allowed.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-3",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "missing",
+    "title": "Shopping topic proposed to a child who wanted games",
+    "expected": "No shopping for a child who gave play interests",
+    "got": "'Buy dog food at the shop' was in the first six",
+    "evidence": [
+      "#3 and thought 'Nakupování je nuda'",
+      "topic planner prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "For elementary profiles, prefer play topics over errands.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-petra-38-J2-3",
+    "journey": "J2",
+    "character": "petra-38",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "clarity",
+    "title": "Skill labels do not match topic content",
+    "expected": "Labels that describe the situation",
+    "got": "Directions topic is labelled \"Share your world\" and restaurant \"Make a plan\"",
+    "evidence": [
+      "#3 \"Show the guest the way / Share your world\"; #5 \"Recommend a restaurant / Make a plan\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Skill label matches what the learner will actually do in the topic.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-oksana-34-J2-3",
+    "journey": "J2",
+    "character": "oksana-34",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 4,
+    "impact": {
+      "frequency": "med",
+      "reachability": "med",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Two filler topics in a Friday-interview plan",
+    "expected": "All slots tuned to interview and logistics",
+    "got": "'Meet a colleague on arrival' and 'Ask someone to repeat' stayed, and she did not swap them",
+    "evidence": [
+      "#3 'On the day you may meet staff in the hall' (#4: still in the 7 agreed)",
+      "plan prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "With a stated goal, generic slots are replaced by goal-specific ones, such as a tell-me-about-yourself or a gap question.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-lukas-24-J2-3",
+    "journey": "J2",
+    "character": "lukas-24",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "polish",
+    "rank": 2,
+    "impact": {
+      "frequency": "low",
+      "reachability": "med",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "First proposal had a too-basic topic and a generic one",
+    "expected": "B2-level topics fitted to his goals",
+    "got": "'Asking someone to repeat' was too basic for B2 and the weekend story is generic; the swap fixed the first.",
+    "evidence": [
+      "#3 'Asking someone to repeat'; #5 plan includes 'Telling a story about your weekend'",
+      "curriculum.ts"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Avoid A2-level repair topics for B2 on first proposal.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-petra-38-J2-4",
+    "journey": "J2",
+    "character": "petra-38",
+    "cert_level": "LT",
+    "type": "confusion",
+    "severity": "polish",
+    "rank": 2,
+    "impact": {
+      "frequency": "low",
+      "reachability": "med",
+      "trust_erosion": "low"
+    },
+    "dimension": "effort",
+    "title": "Plan grows beyond six; additions do not replace",
+    "expected": "Clear sense of plan size",
+    "got": "Header went from 6 to 8 conversations; no way to see the limit",
+    "evidence": [
+      "#3 \"6 conversations for you\" → #5 \"8 conversations for you\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Explain or cap plan size when topics are added.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-lukas-24-J2-1",
+    "journey": "J2",
+    "character": "lukas-24",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Each topic carries a personal reason",
+    "expected": "Understand why each topic is there",
+    "got": "Each topic has a why line echoing his words",
+    "evidence": [
+      "#3 'You asked how to keep small talk going at meetups, so this is your second priority.'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Every topic has a why tied to the stated goal.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-lukas-24-J2-2",
+    "journey": "J2",
+    "character": "lukas-24",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "Own-words topic kept as adult topic",
+    "expected": "Coffee invitation accepted",
+    "got": "Added as 'Asking someone for coffee' with adult partner",
+    "evidence": [
+      "#4 'Asking someone for coffee ... Maya · someone you met at a class'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Added topic keeps the user's intent.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-oksana-34-J2-1",
+    "journey": "J2",
+    "character": "oksana-34",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Her free-text goal produced an interview-first plan",
+    "expected": "Topics follow her stated goal",
+    "got": "Four of the first six topics map to her interview, each with a clear 'why' line",
+    "evidence": [
+      "#3 'Talk about my work experience… The interviewer will ask about your experience first, so practise this before Friday.'",
+      "plan prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "A stated goal yields at least 4 of 6 topics on that goal.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-petra-38-J2-1",
+    "journey": "J2",
+    "character": "petra-38",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Goal question yields on-job topics with clear reasons",
+    "expected": "Topics reflecting her work, each with a reason",
+    "got": "Complaint, lost booking and directions all appeared with work-based why lines",
+    "evidence": [
+      "#3 \"Complaints are a big part of your work at the desk, so this is a good place to start.\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Each proposed topic carries a one-line why tied to the stated goal.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-petra-38-J2-2",
+    "journey": "J2",
+    "character": "petra-38",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "Added topics keep her wording and intent",
+    "expected": "Own-words topic reflected faithfully",
+    "got": "Travel agency group booking and restaurant recommendation added as topics with fitting partners",
+    "evidence": [
+      "#4 \"Travel agency calls about group booking\" · Lena · travel agent; #5 \"Recommend a restaurant\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Added topic title, partner and goal match the request.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-1",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Plan built from my three words",
+    "expected": "Topics reflect what a child says",
+    "got": "'Minecraft. Dog. Football' produced Minecraft, football and dog topics with a simple 'why'",
+    "evidence": [
+      "#2 reply; #3 'Football is in your plan, so let's make a plan together.'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Topics named in the first reply appear in the first set.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-oksana-34-J2-2",
+    "journey": "J2",
+    "character": "oksana-34",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "Added topic kept her wording",
+    "expected": "Added topic keeps what she asked for",
+    "got": "The carrier call keeps 'where is the truck' and 'agree new time'",
+    "evidence": [
+      "#4 'Ask where the delivery truck is, hear an update, and agree a new delivery time that you confirm back.'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "An added topic's goal contains the user's stated aims.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J2-2",
+    "journey": "J2",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "effort",
+    "title": "Swap fills with an on-interest topic",
+    "expected": "Swapped topic replaced by a fitting one",
+    "got": "Shopping swapped for 'Pick a game to play together'",
+    "evidence": [
+      "#4 'You like Minecraft, dogs and football'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "A swap returns a topic tied to stated interests.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  }
+]
