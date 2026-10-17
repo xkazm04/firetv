@@ -571,6 +571,31 @@ test('L1-helena-46-EM1-1: the piece prompt carries the format as data; a kept pi
   assert(seen.every((r) => kind(r) === undefined && !/kind of writing/i.test(r.system + r.prompt)), 'no format: the prompt is the essay prompt, unchanged');
 });
 
+// ---- recert-5 L1-daniel-15-EM3-1: a revised essay sent again is a new version of the kept piece, not a second card ----
+const REVISED = '# Early starts\n\nSchools start too early. Teenagers are tired.\n\nResearch found that teens sleep later. This is bad.\n\nTherefore school should start at nine, and later is better.';
+test('EM3-1 (recert-5): a second paste of the same piece adds a version, a different text still makes a new piece, a refused read keeps nothing', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = []; texts.deleteAll('ema'); texts.markNoticed('ema');
+  answer = perParagraph(faultyAt([]));
+  const keep = (text, extra = {}) => quietly(() => post({ kind: 'piece', text, type: 'structure', keep: true, source: 'paste', format: 'essay', ...extra }));
+  assert.equal((await keep(PIECE)).status, 200); assert.equal(texts.listPieces('ema').length, 1);
+  // the same piece with the last paragraph reworked: most paragraphs equal -> version 2 of the same card
+  const again = PIECE.replace('Therefore school should start at nine.', 'Therefore school should start at nine, so teens sleep.');
+  assert.equal((await keep(again)).status, 200);
+  let cards = texts.listPieces('ema'); assert.equal(cards.length, 1, 'no second card'); assert.equal(cards[0].versions, 2);
+  // a different text is a new piece
+  assert.equal((await keep('Dogs are loyal animals.\n\nThey guard homes and help people.\n\nMany families keep one.')).status, 200);
+  assert.equal(texts.listPieces('ema').length, 2);
+  // a "# heading" title matches on the title alone: the second paste of the headed piece is a version, not a card
+  assert.equal((await keep(REVISED)).status, 200);
+  assert.equal((await keep(REVISED.replace('Early starts', 'Early starts').replace('Teenagers are tired.', 'Everyone is tired.').replace('This is bad.', 'That is worse.'))).status, 200);
+  const h = texts.listPieces('ema').filter((c) => c.title === 'Early starts'); assert.equal(h.length, 1, 'same heading, one card'); assert.equal(h[0].versions, 2);
+  // a refused read keeps nothing
+  const before = JSON.stringify(texts.listPieces('ema'));
+  const czech = await keep(CZ_R4 + '\n\n' + CZ_R7);
+  assert.equal(czech.status, 400); assert.equal(JSON.stringify(texts.listPieces('ema')), before);
+  texts.deleteAll('ema');
+});
+
 // ---- recert-5 L1-daniel-15-EM3-6: deleting the open piece clears the phone's pieceId; a keep naming a missing piece is a new piece ----
 test('EM3-6 (recert-5): a keep that names a deleted pieceId makes a new piece, not a 404; the shelf tells the phone a piece is gone', async () => {
   dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = []; texts.deleteAll('ema'); texts.markNoticed('ema');

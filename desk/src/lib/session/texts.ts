@@ -122,6 +122,28 @@ export function addPiece(learnerId: string, input: { text: unknown; source?: unk
   return { ok: true, value: piece };
 }
 
+/**
+ * The kept piece a text is another version of, or null (recert-5/L1-daniel-15-EM3-1): the same "# heading" title, or more
+ * than half of the paragraphs equal to the piece's last version. A question first line is never a title, so it never matches
+ * by title. A format that differs is another piece. The most recently kept match wins.
+ */
+export function matchPiece(learnerId: string, text: string, format?: unknown): string | null {
+  if (!LEARNER_ID.test(learnerId) || typeof text !== "string") return null;
+  const first = (paragraphsOf(text)[0] ?? "").trim();
+  const heading = /^#{1,6}\s+\S/.test(first) ? first.replace(/^#{1,6}\s+/, "").slice(0, 80) : null;
+  const mine = paragraphsOf(text).map((x) => x.trim());
+  for (const c of listPieces(learnerId)) {
+    if (typeof format === "string" && format && c.format !== format) continue;
+    if (heading !== null && c.title === heading) return c.id;
+    const last = getPiece(learnerId, c.id)?.versions.at(-1);
+    if (!last) continue;
+    const theirs = paragraphsOf(last.text).map((x) => x.trim());
+    const shared = theirs.filter((x) => mine.includes(x)).length;
+    if (shared * 2 > Math.max(mine.length, theirs.length)) return c.id;
+  }
+  return null;
+}
+
 export function addVersion(learnerId: string, id: string, input: { text: unknown; source?: unknown }, now = Date.now()): TextResult<Piece> {
   const p = getPiece(learnerId, id); if (!p) return fail("That piece is not on your shelf.", 404);
   const problem = versionProblem(input.text); if (problem) return fail(problem);

@@ -8,7 +8,7 @@ import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence } from "@/lib/desk/essay";
 import { BUSY, blocksRun, refused, runJob, type JobRun } from "@/lib/desk/job";
 import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, type AnalysisType } from "@/lib/rules/essay";
-import { addPiece, addVersion, FORMAT_NEEDED_LINE, getPiece, hasFormat, noticed, TEXT_NOTICE } from "@/lib/session/texts";
+import { addPiece, addVersion, FORMAT_NEEDED_LINE, getPiece, hasFormat, matchPiece, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { learnerAge } from "@/lib/rules/voice";
 import { modeOf } from "@/lib/rules/mode";
 import { sentenceProblem } from "@/lib/rules/english";
@@ -120,7 +120,8 @@ export async function POST(req: Request) {
     if (body.keep) {
       // a pieceId that is no longer on the shelf (deleted since the phone opened it) is no pieceId: a new piece (L1-daniel-15-EM3-6)
       const named = typeof body.pieceId === "string" && getPiece(who.id, body.pieceId) ? body.pieceId : undefined;
-      const target = named;
+      // a text that is another version of a kept piece goes to that piece, not to a second card (L1-daniel-15-EM3-1)
+      const target = named ?? (typeof body.text === "string" ? matchPiece(who.id, body.text, body.format) ?? undefined : undefined);
       // a new piece needs a chosen format (a new version of a kept piece keeps the piece's own): refused before anything is kept
       if (!target && !hasFormat(body.format)) return NextResponse.json({ error: FORMAT_NEEDED_LINE }, { status: 400 });
       // a reading already running refuses this one: refused before the piece is kept, so a refused send leaves no piece on the shelf
@@ -129,6 +130,8 @@ export async function POST(req: Request) {
       let kept = target ? addVersion(who.id, target, { text: body.text, source: body.source }) : addPiece(who.id, { text: body.text, source: body.source, format: body.format });
       // the same text kept again is not a failure: the reading goes ahead on the version already kept
       if (!kept.ok && target && kept.status === 400 && /kept last/.test(kept.error)) { pieceId = target; kept = { ok: true, value: getPiece(who.id, target)! }; }
+      // a guessed match that cannot take a version (full) is a new piece, if the phone named a format; one the learner named is told
+      else if (!kept.ok && target && !named && hasFormat(body.format)) kept = addPiece(who.id, { text: body.text, source: body.source, format: body.format });
       if (kept.ok) pieceId = kept.value.id;
       else return NextResponse.json({ error: kept.error }, { status: kept.status });
     }
