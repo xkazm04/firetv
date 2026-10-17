@@ -313,7 +313,61 @@ function readsAsNothing(question: string, system?: SchoolSystem): boolean {
  */
 export function unreadLeaks(question: string, line: string, system?: SchoolSystem): boolean {
   if (typeof question !== "string" || typeof line !== "string" || !line || !readsAsNothing(question, system)) return false;
-  return SOLUTION.test(fold(decimalComma(said(line))));
+  const spoken = fold(decimalComma(said(line)));
+  return SOLUTION.test(spoken) || statesNumberAnswer(question, spoken) || statesSimplified(question, spoken);
+}
+
+// ---- three more shapes the fallback works out itself (L1-vojtech-18-MB1-1): a bare log, a count of choices, a simplified expression
+/** The whole-number answer of a bare logarithm ('log_2 8', 'log 1000' to base 10) or of a count of choices ('Kolika způsoby lze vybrat 3 žáky z 10?'), or null. */
+function numberAnswerOf(question: string): number | null {
+  const t = fold(question.normalize("NFC")).toLowerCase().replace(/[−–]/g, "-");
+  const log = /\blog(?:_(\d+))?\s*\(?\s*(\d+)\s*\)?/.exec(t);
+  if (log) {
+    const base = log[1] ? Number(log[1]) : 10, x = Number(log[2]);
+    const v = Math.log(x) / Math.log(base);
+    if (base > 1 && x > 0 && Number.isFinite(v) && Math.abs(v - Math.round(v)) < 1e-9) return Math.round(v);
+    return null;
+  }
+  if (/(?:kolika\s+zpusoby|kolik\s+zpusobu|kolik\s+(?:ruznych\s+)?(?:vyberu|moznosti|kombinaci)|how\s+many\s+(?:different\s+)?(?:ways|combinations|choices))/.test(t)) {
+    const m = /(?:vybrat|vyberu|zvolit|choose|select|pick)\D*?(\d+)\D+?(?:z|ze|from|of|out of)\s+(\d+)/.exec(t) ?? /\b(\d+)\b\D+?\b(?:z|ze|from|of|out of)\s+(\d+)/.exec(t);
+    if (!m) return null;
+    const k = Number(m[1]), n = Number(m[2]);
+    if (!(k >= 0 && k <= n && n <= 60)) return null;
+    let c = 1;
+    for (let i = 1; i <= k; i++) c = (c * (n - k + i)) / i;
+    return Math.round(c);
+  }
+  return null;
+}
+
+/** Does the spoken line say the number the question works out, a number the question itself does not give? */
+function statesNumberAnswer(question: string, spoken: string): boolean {
+  const ans = numberAnswerOf(question);
+  if (ans === null) return false;
+  const own = new Set((question.replace(/(\d),(\d)/g, "$1.$2").match(NUMBERS) ?? []).map(Number));
+  return (spoken.match(NUMBERS) ?? []).some((v) => Number(v.replace(/\s+/g, "")) === ans && !own.has(ans));
+}
+
+/**
+ * A line that gives the simplified form of an item that asks to simplify an expression: after 'je to', 'it is', 'you get', 'výsledek je'
+ * or an equals sign, an expression equal to the item's own at several values of x and written otherwise. A line that only
+ * names a step ('factor the top as (x-3)(x+3)' - not equal to the item's expression, or not after those phrases) passes.
+ */
+function statesSimplified(question: string, spoken: string): boolean {
+  const q = fold(question.normalize("NFC")).toLowerCase().replace(/[−–]/g, "-");
+  const m = /(?:zjednodus\w*|simplify|uprav\w*)\s+(?:vyraz\s+|the\s+expression\s+)?(.+?)\s*[.?!]?\s*$/.exec(q);
+  if (!m || !/x/.test(m[1])) return false;
+  const task = m[1].replace(/\s+/g, "");
+  const at = [1.7, 2.3, 4.1, -1.6].map((x) => evaluate(task, x));
+  if (at.some((v) => v === null || !Number.isFinite(v))) return false;
+  const phrase = /(?:je to|it is|it's|that is|you get|you obtain|dostanes|vyjde|vysledek je|result is|answer is|equals|=)\s*:?\s*([a-z0-9^+\-*/() .]+?)\s*(?=\.\s|\.$|[;,!?]|$)/g;
+  for (const c of spoken.matchAll(phrase)) {
+    const cand = c[1].replace(/\s+/g, "");
+    if (!cand || cand === task || !/x/.test(cand)) continue;
+    const got = [1.7, 2.3, 4.1, -1.6].map((x) => evaluate(cand, x));
+    if (got.every((v, i) => v !== null && Math.abs(v - at[i]!) < 1e-9)) return true;
+  }
+  return false;
 }
 
 

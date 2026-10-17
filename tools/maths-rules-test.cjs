@@ -691,6 +691,36 @@ test('UD-26 maturita: an inequality, a sequence term and a line through two poin
  ];
  for(const [q,l] of benign)assert.equal(M.leaks(q,l,'cz'),false,`${q} | ${l}`);
 });
+// ------------------------------------------------------------------ L1-vojtech-18-MB1-1: the leak guard's passing shapes
+test('L1-vojtech-18-MB1-1 leak guard: a listed sequence, a bare log, a count of choices, a simplify item and Czech number words in every case leak; a method line passes',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts')),T=require(path.join(root,'src/lib/rules/maturita.ts'));
+ // the listed sequence is read into a1 and d (or q)
+ assert.deepEqual(T.sequenceTermOf('Find the 10th term of 3, 7, 11, ...'),{n:10,value:39});
+ assert.deepEqual(T.sequenceTermOf('Určete a10 aritmetické posloupnosti 3, 7, 11, ...'),{n:10,value:39});
+ assert.deepEqual(T.sequenceTermOf('Určete desátý člen posloupnosti 3; 7; 11; ...'),{n:10,value:39});
+ assert.deepEqual(T.sequenceTermOf('Find the 5th term of 2, 6, 18, ...'),{n:5,value:162});
+ assert.equal(T.sequenceTermOf('Find the 5th term of 2, 6, 19, ...'),null,'neither arithmetic nor geometric');
+ assert.deepEqual(T.sequenceTermOf('Aritmetická posloupnost má a1 = 3 a d = 4. Určete a10.'),{n:10,value:39},'the stated a1 and d are read as they were');
+ const leaking=[
+  ['Find the 10th term of 3, 7, 11, ...','The 10th term is 39.'],['Určete a10 aritmetické posloupnosti 3, 7, 11, ...','Desátý člen je 39.'],['Určete a10 aritmetické posloupnosti 3, 7, 11, ...','a10 = 39'],
+  ['Určete a10 aritmetické posloupnosti 3, 7, 11, ...','Je to třicet devět.'],
+  ['Vypočtěte log_2 8.','Je to 3.'],['Vypočtěte log_2 8.','Výsledek je tři.'],['Vypočtěte log 1000.','Je to 3.'],
+  ['Kolika způsoby lze vybrat 3 žáky z 10?','10 choose 3 is 120.'],['Kolika způsoby lze vybrat 3 žáky z 10?','Je to 120 způsobů.'],['Kolika způsoby lze vybrat 3 žáky z 10?','Je to sto dvacet.'],
+  ['Zjednodušte výraz (x^2 - 9)/(x - 3).','Je to x + 3.'],['Zjednodušte výraz (x^2 - 9)/(x - 3).','You get x+3.'],
+  // a Czech number word in another case than the one a dictionary gives
+  ['Řešte nerovnici x^2 - 5x + 6 < 0','x leží mezi dvěma a třemi.'],['Řešte nerovnici x^2 - 5x + 6 < 0','Kořeny jsou dvě a tři.'],['Řešte nerovnici x^2 - 5x + 6 < 0','Je to mezi dvojkou a trojkou, tedy od dvou do tří.'],
+ ];
+ for(const [q,l] of leaking)assert.equal(M.leaks(q,l,'cz'),true,`${q} | ${l}`);
+ // a non-leaking hint still passes
+ const benign=[
+  ['Find the 10th term of 3, 7, 11, ...','Look at how much each term grows by, then use that step nine times.'],['Určete a10 aritmetické posloupnosti 3, 7, 11, ...','Zjisti rozdíl dvou sousedních členů a použij vzorec a_n = a_1 + (n - 1)d.'],
+  ['Vypočtěte log_2 8.','Ask yourself: 2 to which power gives 8?'],['Vypočtěte log_2 8.','Kolikrát musíš vynásobit dvojku sebou samou, abys dostal osmičku?'],
+  ['Kolika způsoby lze vybrat 3 žáky z 10?','Použij kombinační číslo: nezáleží na pořadí vybraných.'],['Kolika způsoby lze vybrat 3 žáky z 10?','Order does not matter here, so think of choosing a group of 3.'],
+  ['Zjednodušte výraz (x^2 - 9)/(x - 3).','Rozlož čitatel podle vzorce a^2 - b^2 a pak zkrať.'],['Zjednodušte výraz (x^2 - 9)/(x - 3).','Factor the top first; the bottom is x - 3.'],
+  ['Řešte nerovnici x^2 - 5x + 6 < 0','Najdi nejdřív nulové body levé strany.'],
+ ];
+ for(const [q,l] of benign)assert.equal(M.leaks(q,l,'cz'),false,`${q} | ${l}`);
+});
 // ------------------------------------------------------------------ MB-B2: the stricter fallback for an item no reader reads
 test('MB-B2 fallback: on an item no reader reads, a line stating a solution is refused; a plain method line passes; a read item is untouched',()=>{
  const M=require(path.join(root,'src/lib/rules/maths.ts'));

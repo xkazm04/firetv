@@ -33,8 +33,14 @@ const CS_CARD: Record<string, number> = {
   nula: 0, jeden: 1, jedna: 1, jedno: 1, dva: 2, dve: 2, tri: 3, ctyri: 4, pet: 5, sest: 6, sedm: 7, osm: 8, devet: 9, deset: 10,
   jedenact: 11, dvanact: 12, trinact: 13, ctrnact: 14, patnact: 15, sestnact: 16, sedmnact: 17, osmnact: 18, devatenact: 19, dvacet: 20,
   tricet: 30, ctyricet: 40, padesat: 50, sedesat: 60, sedmdesat: 70, osmdesat: 80, devadesat: 90, sto: 100,
+  // the other cases (genitive, dative, locative, instrumental), folded: 'dvou', 'dvema', 'tremi', 'peti', 'dvaceti', 'stu'
+  jedne: 1, jednoho: 1, jednomu: 1, jednou: 1, jednim: 1, jednu: 1, dvou: 2, dvema: 2, trem: 3, tremi: 3, trech: 3,
+  ctyr: 4, ctyrem: 4, ctyrmi: 4, ctyrech: 4, peti: 5, sesti: 6, sedmi: 7, osmi: 8, deviti: 9, desiti: 10, deseti: 10,
+  jedenacti: 11, dvanacti: 12, trinacti: 13, ctrnacti: 14, patnacti: 15, sestnacti: 16, sedmnacti: 17, osmnacti: 18, devatenacti: 19,
+  dvaceti: 20, triceti: 30, ctyriceti: 40, padesati: 50, sedesati: 60, sedmdesati: 70, osmdesati: 80, devadesati: 90, stu: 100,
 };
-const CS_TENS = new Set(["dvacet", "tricet", "ctyricet", "padesat", "sedesat", "sedmdesat", "osmdesat", "devadesat"]);
+const CS_TENS = new Set(["dvacet", "tricet", "ctyricet", "padesat", "sedesat", "sedmdesat", "osmdesat", "devadesat",
+  "dvaceti", "triceti", "ctyriceti", "padesati", "sedesati", "sedmdesati", "osmdesati", "devadesati"]);
 
 /** Czech fraction words, folded, singular and plural: polovina, poloviny, polovin ... dvacetina, dvacetiny, dvacetin. */
 const CS_ORD: Record<string, number> = (() => {
@@ -65,7 +71,12 @@ export function figuresOfCzech(line0: string): string {
     let n: number | null = null, j = i + 1;
     if (own(CS_CARD, w)) {
       n = CS_CARD[w];
-      if (CS_TENS.has(w) && near(i) && own(CS_CARD, toks[i + 1].w) && CS_CARD[toks[i + 1].w] >= 1 && CS_CARD[toks[i + 1].w] <= 9) { n += CS_CARD[toks[i + 1].w]; j = i + 2; }
+      // 'sto dvacet jedna' is 121: a hundred, then what follows it up to ninety-nine
+      if (n === 100 && near(i) && own(CS_CARD, toks[i + 1].w) && CS_CARD[toks[i + 1].w] >= 1 && CS_CARD[toks[i + 1].w] <= 99) {
+        const t = toks[i + 1].w;
+        n += CS_CARD[t]; j = i + 2;
+        if (CS_TENS.has(t) && near(i + 1) && own(CS_CARD, toks[i + 2].w) && CS_CARD[toks[i + 2].w] >= 1 && CS_CARD[toks[i + 2].w] <= 9) { n += CS_CARD[toks[i + 2].w]; j = i + 3; }
+      } else if (CS_TENS.has(w) && near(i) && own(CS_CARD, toks[i + 1].w) && CS_CARD[toks[i + 1].w] >= 1 && CS_CARD[toks[i + 1].w] <= 9) { n += CS_CARD[toks[i + 1].w]; j = i + 2; }
     }
     let rep: string | null = null;
     if (n !== null) {

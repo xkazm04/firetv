@@ -43,18 +43,52 @@ export function inequalityOf(text: unknown): Inequality | null {
 
 // ---- sequence term
 export interface SequenceTerm { n: number; value: number }
-/** The asked term of an arithmetic (a1, d) or geometric (a1, q) sequence, or null. */
+const EN_TERM = ["third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth"];
+const CS_TERM = ["treti", "ctvrty", "paty", "sesty", "sedmy", "osmy", "devaty", "desaty", "jedenacty", "dvanacty", "trinacty", "ctrnacty", "patnacty", "sestnacty", "sedmnacty", "osmnacty", "devatenacty", "dvacaty"];
+/** The place a task asks for, folded text in: 'a10', 'the 10th term', '10. člen', 'the tenth term', 'desátý člen'; null when it names none. */
+function termAsked(t: string): number | null {
+  const verb = /(?:urcete|urci|vypocitejte|vypocti(?:te)?|spoctete|najdete|najdi|find|calculate|what is)\s+(?:clen\s+)?a_?\{?(\d{1,3})\}?\b/.exec(t);
+  if (verb) return Number(verb[1]);
+  const num = /\b(\d{1,3})(?:th|st|nd|rd|\.)\s+(?:term|clen)/.exec(t);
+  if (num) return Number(num[1]);
+  const word = new RegExp(String.raw`(?:\b(${EN_TERM.join("|")})\s+term|\b(${CS_TERM.join("|")})\s+clen)`).exec(t);
+  if (word) return word[1] ? EN_TERM.indexOf(word[1]) + 3 : CS_TERM.indexOf(word[2]) + 3;
+  return null;
+}
+/**
+ * The first terms of a sequence written out ('3, 7, 11, ...', also with semicolons), as an arithmetic (a1, d) or a geometric (a1, q)
+ * one; null when they are fewer than three, or neither. Folded text in.
+ */
+function listedSequence(t: string): { a1: number; d: number } | { a1: number; q: number } | null {
+  const m = new RegExp(String.raw`(?<![\d.])(${NUM}(?:\s*[;,]\s*${NUM}){2,})(?!\d)`).exec(t);
+  if (!m) return null;
+  const v = m[1].split(/\s*[;,]\s*/).map(toNum);
+  const d = v[1] - v[0];
+  if (v.every((x, i) => i === 0 || near(x - v[i - 1], d))) return { a1: v[0], d };
+  if (v[0] !== 0 && v.every((x, i) => i === 0 || near(x, v[i - 1] * (v[1] / v[0])))) return { a1: v[0], q: v[1] / v[0] };
+  return null;
+}
+/** The asked term of an arithmetic (a1, d) or geometric (a1, q) sequence, given as a1 and d or q or as its first terms listed, or null. */
 export function sequenceTermOf(text: unknown): SequenceTerm | null {
   if (typeof text !== "string") return null;
   const t = fold(text.normalize("NFC")).toLowerCase().replace(/[−–]/g, "-").replace(/₁/g, "1").replace(/(\d),(\d)/g, "$1.$2");
-  const first = new RegExp(String.raw`(?:\ba_?1|prvni clen|first term)\s*(?:je|is|=|:)?\s*(${NUM})`).exec(t);
+  const first = new RegExp(String.raw`(?:\ba_?1(?!\d)|prvni clen|first term)\s*(?:je|is|=|:)?\s*(${NUM})`).exec(t);
   const diff = new RegExp(String.raw`(?:\bd|diferenc\w*|common difference)\s*(?:je|is|=|:)?\s*(${NUM})`).exec(t);
   const ratio = new RegExp(String.raw`(?:\bq|kvocient\w*|common ratio)\s*(?:je|is|=|:)?\s*(${NUM})`).exec(t);
-  const ask = /(?:urcete|urci|vypocitejte|vypocti(?:te)?|spoctete|najdete|najdi|find|calculate|what is)\s+(?:clen\s+)?a_?\{?(\d{1,3})\}?\b/.exec(t);
-  if (!first || !ask || (!diff && !ratio) || (diff && ratio)) return null;
-  const n = Number(ask[1]), a1 = toNum(first[1]);
-  if (n < 2) return null;
-  const value = diff ? a1 + (n - 1) * toNum(diff[1]) : a1 * Math.pow(toNum(ratio![1]), n - 1);
+  const n = termAsked(t);
+  if (n === null || n < 2) return null;
+  let a1: number, d: number | null = null, q: number | null = null;
+  if (first && (diff || ratio)) {
+    if (diff && ratio) return null;
+    a1 = toNum(first[1]);
+    if (diff) d = toNum(diff[1]); else q = toNum(ratio![1]);
+  } else if (!first && !diff && !ratio) {
+    const l = listedSequence(t);
+    if (!l) return null;
+    a1 = l.a1;
+    if ("d" in l) d = l.d; else q = l.q;
+  } else return null;
+  const value = d !== null ? a1 + (n - 1) * d : a1 * Math.pow(q!, n - 1);
   return Number.isFinite(value) && Math.abs(value) < 1e12 ? { n, value } : null;
 }
 
