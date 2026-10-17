@@ -654,8 +654,8 @@ test('P17 (i) a learner switch resets the last learner\'s essay, photo, typed an
 test('P17 (ii) a reply that returns after the learner changed sets no state but busy, in every handler',async(t)=>{
  const src=fs.readFileSync(PAGE,'utf8');
  const cut=(from,to)=>{const a=src.indexOf(from),e=src.indexOf(to,a);assert.ok(a>0&&e>a,`${from} is where the test expects it`);return src.slice(a,src.lastIndexOf('\n',e));};
- const SETTERS=['Busy','Msg','Phase','Note','Info','Notice','ReadIx','PieceId','ShelfTick','Q','Paras'];
- const PARAMS=['s','seat','call','post','shot','busy','typed','document','HTMLElement','onPlan','onSentence','slotText','rewrite','planFill','paras','pieceProblem','etype','keep','pieceId','source','essay','paragraphsOf','essayTooLong','pix','page','q','sentence',...SETTERS.map((n)=>'set'+n)];
+ const SETTERS=['Busy','Msg','Phase','Note','Info','Notice','ReadIx','PieceId','ShelfTick','Q','Paras','Stranded'];
+ const PARAMS=['s','seat','call','post','shot','busy','typed','document','HTMLElement','onPlan','onSentence','slotText','rewrite','planFill','paras','pieceProblem','etype','keep','pieceId','source','essay','paragraphsOf','essayTooLong','pix','page','q','sentence','writeRewriteBack','rewriteStaysLine','stranded',...SETTERS.map((n)=>'set'+n)];
  const reply=(body,ok=true,status=200)=>Promise.resolve({ok,status,json:async()=>body});
  const gate=()=>{let open;const p=new Promise((r)=>{open=r;});return {p,open};};
  // build one handler; `respond(url, body)` is the network
@@ -666,7 +666,7 @@ test('P17 (ii) a reply that returns after the learner changed sets no state but 
   const rec=(k)=>(v)=>calls.push([k,typeof v==='function'?'fn':v]);
   const stubs={s:{practice:{items:[{n:10}]},walkIx:0,itemIx:0},seat,call:(u,b)=>{urls.push([u,b]);return respond(u,b);},post:(e)=>{urls.push(['post',e]);return respond('post',e);},shot:{url:'u',w:1,h:2},busy:false,typed:['a','b'],
    document:{activeElement:null},HTMLElement:class{},onPlan:{i:0,plan:{}},onSentence:{n:2},slotText:'slot',rewrite:'rw',planFill:()=>({ok:true}),paras:['one','two'],pieceProblem:()=>'',
-   etype:'structure',keep:true,pieceId:'p1',source:'message',essay:'one',paragraphsOf:(x)=>[x],essayTooLong:()=>'',pix:0,page:{items:[]},q:'why',sentence:'I go.'};
+   etype:'structure',keep:true,pieceId:'p1',source:'message',essay:'one',paragraphsOf:(x)=>[x],essayTooLong:()=>'',pix:0,page:{items:[]},q:'why',sentence:'I go.',writeRewriteBack:()=>({paras:['one','two'],written:true,line:''}),rewriteStaysLine:()=>'',stranded:0};
   const out=f(...PARAMS.map((p)=>p.startsWith('set')&&SETTERS.includes(p.slice(3))?rec(p.slice(3)):stubs[p]));
   return {fn:out[name],calls,urls,seat,mark:()=>calls.length};
  };
@@ -997,4 +997,31 @@ test('the Essay box starts and resets empty; the sample is only a placeholder; a
  assert.equal(run('','one line only').prevented,false,'a paste without a blank line is left to the browser');
  // reading an empty box stays refused
  assert.match(src,/disabled=\{busy \|\| notice !== null \|\| !essay\.trim\(\)\} onClick=\{analyseParagraph\}/,'an empty box cannot be sent');
+});
+
+test('a rewrite the desk accepted is written back into the phone paragraph; one it cannot place stays on the desk',()=>{
+ const R=require(path.join(SRC,'app/phone/rewriteBack.ts'));
+ const src=fs.readFileSync(PAGE,'utf8');
+ const paras=['I like dogs. Dogs are good.','Cats sleep a lot. It is true.'];
+ // once: written, and present in the text readPiece would send
+ const a=R.writeRewriteBack(paras,'Cats sleep a lot.','Cats nap for most of the day.');
+ assert.equal(a.written,true);assert.equal(a.line,'');
+ assert.equal(a.paras[1],'Cats nap for most of the day. It is true.');
+ assert.ok(a.paras.join('\n\n').includes('Cats nap for most of the day.'),'readPiece sends paras.join');
+ assert.deepEqual(paras,['I like dogs. Dogs are good.','Cats sleep a lot. It is true.'],'the input is not mutated');
+ // twice (in one paragraph or across two) or not at all: unchanged, plain line
+ for(const [ps,orig] of [[['Dogs run. Dogs run.','x'],'Dogs run.'],[['Dogs run.','Dogs run. More.'],'Dogs run.'],[paras,'No such sentence.'],[paras,'']]){
+  const b=R.writeRewriteBack(ps,orig,'Something else.');
+  assert.equal(b.written,false);assert.deepEqual(b.paras,ps);assert.equal(b.line,R.REWRITE_STAYS_ON_DESK);
+ }
+ assert.match(R.REWRITE_STAYS_ON_DESK,/stays on the desk/);
+ assert.match(R.rewriteStaysLine(3),/^3 rewrites stay on the desk/);
+ // unchanged rewrite: a no-op
+ const c=R.writeRewriteBack(paras,'Cats sleep a lot.','Cats sleep a lot.');
+ assert.equal(c.paras,paras);assert.equal(c.line,'');
+ // the page wires it: written on r.ok, counted when not, said before the read sends
+ assert.match(src,/writeRewriteBack\(paras, onSentence\.text, rewrite\)/);
+ assert.match(src,/setStranded\(\(k\) => k \+ 1\)/);
+ assert.match(src,/stranded \? `\$\{rewriteStaysLine\(stranded\)\}/,'readPiece says it before sending');
+ assert.match(src,/data-role="essay-rewrites-stay"/);
 });

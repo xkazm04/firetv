@@ -8,6 +8,7 @@ import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES, PLAYBOOK } from "@/lib/library/lessons.data";
 import { essayFileProblem, essayTooLong, REWRITE_WHILE_READING, paragraphsOf, pieceAgainOffered, pieceBeingRead, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
 import { EssayShelf, TextNotice } from "./EssayShelf";
+import { rewriteStaysLine, writeRewriteBack } from "./rewriteBack";
 import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
@@ -85,6 +86,7 @@ export default function Phone() {
   const [pix, setPix] = useState(0);
   /** The paragraphs the desk has already read, by index: after one, Next is the button to press. */
   const [readIx, setReadIx] = useState<number[]>([]);
+  const [stranded, setStranded] = useState(0); // rewrites the desk took that this phone could not write into its text
   /** The panel's own lines: a problem (a file the desk will not take, a paragraph that is too long), and a plain word on how a text was split. */
   const [note, setNote] = useState("");
   const [info, setInfo] = useState("");
@@ -246,9 +248,10 @@ export default function Phone() {
   const sendRewrite = async () => { if (!onSentence) return; const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("the desk is reading it…");
     try { const r = await call("/api/analyse", { kind: "rewrite", n: onSentence.n, text: rewrite }); const j = await r.json().catch(() => ({} as { error?: string }));
       if (moved()) return;
-      setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "failed"); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
+      if (r.ok) { const back = writeRewriteBack(paras, onSentence.text, rewrite); if (back.written) setParas(back.paras); else setStranded((k) => k + 1); setMsg(back.line ? `on the TV. ${back.line}` : "on the TV"); }
+      else setMsg((j as { error?: string }).error ?? "failed"); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   /** Load a text as a list of paragraphs, the first one showing. */
-  const loadParagraphs = (ps: string[], said: string) => { setParas(ps); setPix(0); setReadIx([]); setNote(""); setInfo(said); setMsg(""); };
+  const loadParagraphs = (ps: string[], said: string) => { setParas(ps); setStranded(0); setPix(0); setReadIx([]); setNote(""); setInfo(said); setMsg(""); };
   const goPara = (i: number) => { if (i >= 0 && i < paras.length) { setPix(i); setNote(""); setInfo(""); setMsg(""); } };
   /** A file the learner picked: checked, read here in the browser (no upload), split on blank lines. */
   const pickFile = async (f: File | undefined) => {
@@ -277,7 +280,7 @@ export default function Phone() {
     const whole = paras.join("\n\n"), problem = pieceProblem(whole);
     if (problem) return setNote(problem);
     const who = seat.current.id, moved = () => seat.current.id !== who;
-    setNote(""); setInfo(""); setBusy(true); setMsg("the desk is reading your piece…");
+    setNote(""); setInfo(""); setBusy(true); setMsg(stranded ? `${rewriteStaysLine(stranded)} The desk is reading your piece…` : "the desk is reading your piece…");
     try {
       const r = await call("/api/analyse", { kind: "piece", text: whole, type: etype, keep: keepIt, pieceId, source });
       const j = await r.json().catch(() => ({} as { error?: string; notice?: boolean; piece?: { pieceId?: string } }));
@@ -285,7 +288,7 @@ export default function Phone() {
       if (r.status === 428 && (j as { notice?: boolean }).notice) { setMsg(""); setNotice((j as { error?: string }).error ?? ""); return; }
       // E3, E4: only the paragraphs the desk ruled are marked read; each one it did not rule is named with its line
       const back = (j as { piece?: { read?: number[]; failed: number[]; notEnglish?: number[]; paragraphs: number } }).piece;
-      if (r.ok) { setMsg("on the TV"); setReadIx(back?.read ?? paras.map((_, i) => i)); setInfo([...(back?.failed ?? []).map((k) => [k, `Paragraph ${k + 1} did not come back. Send it again from the phone.`] as const), ...(back?.notEnglish ?? []).map((k) => [k, `Paragraph ${k + 1} is not in English, so the desk did not read it.`] as const)].sort((x, y) => x[0] - y[0]).map((x) => x[1]).join(" ")); const id = (j as { piece?: { pieceId?: string } }).piece?.pieceId; if (id) setPieceId(id); setShelfTick((t) => t + 1); }
+      if (r.ok) { setMsg("on the TV"); setStranded(0); setReadIx(back?.read ?? paras.map((_, i) => i)); setInfo([...(back?.failed ?? []).map((k) => [k, `Paragraph ${k + 1} did not come back. Send it again from the phone.`] as const), ...(back?.notEnglish ?? []).map((k) => [k, `Paragraph ${k + 1} is not in English, so the desk did not read it.`] as const)].sort((x, y) => x[0] - y[0]).map((x) => x[1]).join(" ")); const id = (j as { piece?: { pieceId?: string } }).piece?.pieceId; if (id) setPieceId(id); setShelfTick((t) => t + 1); }
       else { setMsg(""); setNote((j as { error?: string }).error ?? "The desk could not read that piece. Try again."); }
     } catch { if (!moved()) { setMsg(""); setNote("That did not reach the desk."); } } finally { setBusy(false); }
   };
@@ -719,6 +722,7 @@ export default function Phone() {
           {notice !== null && <TextNotice text={notice} mode={noticeFor} onAccept={() => void (noticeFor === "paragraph" ? acceptParagraphNotice() : acceptNotice())} onDecline={() => { setNotice(null); if (noticeFor === "piece") { setKeep(false); void readPiece(false); } }} />}
           {paras.length > 1 && <div className="field" data-role="essay-piece">
             <label className="pkeep"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} data-role="essay-keep" /><span>Keep it on my shelf</span></label>
+            {stranded > 0 && <p className="pnote" data-role="essay-rewrites-stay" aria-live="polite">{rewriteStaysLine(stranded)}</p>}
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()))}>Dictate</button>
             <button className="pbtn" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || notice !== null || !essay.trim()} onClick={analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button></div>
