@@ -77,8 +77,8 @@ function stubText(req) {
       { turnId: b.turnId, quote: 'a quote the learner never said', kind: 'word', note: 'This one must be dropped.', better: '' },
     ] }, provider: 'stub', ms: 0 };
   }
-  if (p.submittedReply) return { json: { reply: 'I see. And what do you want to do next?', supportProvided: false, observations: [], moment: { kind: 'none', said: '', better: '', why: '' }, help: { simpler: '', meaning: '', starter: '' } }, provider: 'stub', ms: 0 };
-  return { json: { title: 'A pitched scene', goal: 'Play the scene you pitched.', opening: 'Hello. So, what brings you here today?', supportProvided: false, help: { simpler: '', meaning: '', starter: '' } }, provider: 'stub', ms: 0 };
+  if (p.submittedReply) return { json: { reply: 'I see. And what do you want to do next?', observations: [], moment: { kind: 'none', said: '', better: '', why: '' }, help: { simpler: '', meaning: '', starter: '' } }, provider: 'stub', ms: 0 };
+  return { json: { title: 'A pitched scene', goal: 'Play the scene you pitched.', opening: 'Hello. So, what brings you here today?', help: { simpler: '', meaning: '', starter: '' } }, provider: 'stub', ms: 0 };
 }
 let lastCutRaw = null;
 engine.text = async (req) => {

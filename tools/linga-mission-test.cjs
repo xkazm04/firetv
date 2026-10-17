@@ -20,12 +20,12 @@ function command(action,extra={}){const s=getSession();return englishCommand({ac
 function fresh(){dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});dispatch({type:'subject',subject:'english'});}
 const rover=ENGLISH_SCENES.find(x=>x.id==='rover');
 async function begin(sceneId,extra={}){
- answer=async()=>({json:{title:'T',goal:'G',opening:'Pip beeps. The rover is near a bridge. Do you see it?',supportProvided:false,...extra},provider:'test',ms:1});
+ answer=async()=>({json:{title:'T',goal:'G',opening:'Pip beeps. The rover is near a bridge. Do you see it?',...extra},provider:'test',ms:1});
  await command('start',{sceneId,replace:true});
 }
 /** One reply `text`; the stub returns a partner line and `step` (omitted when undefined). */
 async function say(text,step){
- answer=async()=>({json:{reply:'Pip beeps again.',supportProvided:false,observations:[],...(step?{step}:{})},provider:'test',ms:1});
+ answer=async()=>({json:{reply:'Pip beeps again.',observations:[],...(step?{step}:{})},provider:'test',ms:1});
  await command('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
 }
 const claim=(quote)=>({reached:true,quote});

@@ -28,9 +28,9 @@ after(()=>{clearInterval(globalThis.__desk?.ticker);try{fs.rmSync(dataDir,{recur
 
 const HOST='Hello, both of you. Ema, what is the name on the booking?';
 const LADDER={simpler:'What name is on the booking?',meaning:'booking: a place you saved for later',starter:'The booking is under …'};
-const opening=()=>({json:{title:'A missing booking',goal:'Find the booking together.',opening:HOST,supportProvided:false,help:LADDER},provider:'test',ms:1});
+const opening=()=>({json:{title:'A missing booking',goal:'Find the booking together.',opening:HOST,help:LADDER},provider:'test',ms:1});
 /** One pair's answer: the host line, its ladder, and whatever observations, moment and co-star observations the case wants. */
-const pairAnswer=(patch={})=>async()=>({json:{reply:'Thank you both. When did you book it?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'When did you book?',meaning:'',starter:'I booked it on …'},...patch},provider:'test',ms:1});
+const pairAnswer=(patch={})=>async()=>({json:{reply:'Thank you both. When did you book it?',observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'When did you book?',meaning:'',starter:'I booked it on …'},...patch},provider:'test',ms:1});
 let counter=0;
 const id=()=>`duet-${++counter}`;
 function command(action,extra={}){const s=getSession();return englishCommand({action,learnerId:s.learner.id,episodeId:s.conversation?.id,commandId:id(),...extra});}
@@ -184,12 +184,12 @@ test('Family mode: a co-star profile makes the room the stricter of the two; a n
   seatJakub();
   await rejects(command('start',{sceneId:'date',duet:{coStarLearnerId:'ema'}}),403,/not available for Ema/);
   assert.equal(calls.length,0);
-  answer=async()=>({json:{title:'A booking',goal:'Sort it out.',opening:'Shall we discuss it over a beer?',supportProvided:false,help:{}},provider:'test',ms:1});
+  answer=async()=>({json:{title:'A booking',goal:'Sort it out.',opening:'Shall we discuss it over a beer?',help:{}},provider:'test',ms:1});
   await command('start',{sceneId:'booking',duet:{coStarLearnerId:'ema'}});
   assert.equal(conv().turns[0].text,REDIRECT_LINE,'with Ema in the room the gate holds an adult line');
   assert.match(calls[0].system,/This desk is in Family mode|not an adult/);
   seatJakub();
-  answer=async()=>({json:{title:'A booking',goal:'Sort it out.',opening:'Shall we discuss it over a beer?',supportProvided:false,help:{}},provider:'test',ms:1});
+  answer=async()=>({json:{title:'A booking',goal:'Sort it out.',opening:'Shall we discuss it over a beer?',help:{}},provider:'test',ms:1});
   await command('start',{sceneId:'booking',duet:{coStar:'Sam'}});
   assert.equal(conv().turns[0].text,'Shall we discuss it over a beer?','a named co-star has no profile: the learner\'s Adult mode stands');
   // and a duet takes no Cut, even in Adult mode

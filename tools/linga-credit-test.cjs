@@ -17,9 +17,9 @@ function command(action,extra={}){const s=getSession();return englishCommand({ac
 function fresh(){dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});dispatch({type:'subject',subject:'english'});}
 /** Start `sceneId` with a stubbed opening that offers no support, then reply `text`; the stub observes `observations` of it. */
 async function played(sceneId,opening,text,observations,replace=true){
- answer=async()=>({json:{title:'T',goal:'G',opening,supportProvided:false},provider:'test',ms:1});
+ answer=async()=>({json:{title:'T',goal:'G',opening},provider:'test',ms:1});
  await command('start',{sceneId,replace});
- answer=async()=>({json:{reply:'Tell me more.',supportProvided:false,observations},provider:'test',ms:1});
+ answer=async()=>({json:{reply:'Tell me more.',observations},provider:'test',ms:1});
  await command('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
 }
 const obs=(skill,quote)=>[{skill,quote,success:true,confidence:'clear',note:'Did it.'}];

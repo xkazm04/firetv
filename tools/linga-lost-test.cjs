@@ -149,12 +149,12 @@ function fresh(){dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'}
 const PARTNER='Let me look on the table. Can you tell me more?';
 /** Start the lost scene with a chosen seed (the module draws its seed from Math.random at start). */
 async function begin(seed,sceneId='lost'){
- answer=async()=>({json:{title:'The lost jacket',goal:'Find what you lost.',opening:'Hello! Did you lose something?',supportProvided:false},provider:'test',ms:1});
+ answer=async()=>({json:{title:'The lost jacket',goal:'Find what you lost.',opening:'Hello! Did you lose something?'},provider:'test',ms:1});
  const real=Math.random;if(seed!==undefined)Math.random=()=>(seed+.5)/0x7fffffff;
  try{await command('start',{sceneId,replace:true});}finally{Math.random=real;}
 }
 async function say(text,json={}){
- answer=async()=>({json:{reply:PARTNER,supportProvided:false,observations:[],...json},provider:'test',ms:1});
+ answer=async()=>({json:{reply:PARTNER,observations:[],...json},provider:'test',ms:1});
  await command('turn',{text,mode:'speech',lastTurnId:getSession().conversation.turns.at(-1).id});
 }
 const lost=()=>getSession().conversation.lost;

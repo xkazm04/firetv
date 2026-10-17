@@ -85,9 +85,9 @@ test('D4 3: a level check answered by typing moves no evidence and no progress, 
  assert.equal(after_.evidence.length,before.evidence.length,'a placement task is never evidence');
  assert.deepEqual(after_.achievements,before.achievements);
  // the same learner, a conversation: an unsupported typed reply with a clear, quoted observation is evidence with mode text
- answer=async()=>({json:{title:'Booking',goal:'Fix it.',opening:'Hello, can I help?',supportProvided:false},provider:'test',ms:1});
+ answer=async()=>({json:{title:'Booking',goal:'Fix it.',opening:'Hello, can I help?'},provider:'test',ms:1});
  await command('start',{sceneId:'booking',replace:true});
- answer=async()=>({json:{reply:'Of course. What name?',supportProvided:false,observations:[{skill:'request',quote:'Could you check my booking',success:true,confidence:'clear',note:'Asked for help.'}]},provider:'test',ms:1});
+ answer=async()=>({json:{reply:'Of course. What name?',observations:[{skill:'request',quote:'Could you check my booking',success:true,confidence:'clear',note:'Asked for help.'}]},provider:'test',ms:1});
  await command('turn',{text:'Could you check my booking, please?',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
  const e=getLearner('ema').english.evidence.at(-1);
  assert.deepEqual([e.mode,e.supported,e.quote],['text',false,'Could you check my booking']);
@@ -304,10 +304,10 @@ test('cert 10: finishing a conversation issues it, checked against tonight\'s re
   prime(mergeEvidence({...emptyEnglish(),placements:[check('A1','high')],plan:{at:1,band:'A1',topics:[topicOf('p0','request','Lost and found')]}},evidenceFor(['contact','repair'])));
   assert.equal(getLearner(PROFILE_ID).english.certificates.length,0,'loading the record issues nothing');
   assert.notEqual(V.lingaView({...getSession(),screen:'linga'}).actions[0].id,'your-certificate','nor does drawing home');
-  answer=async()=>({json:{title:'Booking',goal:'Fix it.',opening:'Hello, can I help?',supportProvided:false},provider:'test',ms:1});
+  answer=async()=>({json:{title:'Booking',goal:'Fix it.',opening:'Hello, can I help?'},provider:'test',ms:1});
   await command('start',{sceneId:'booking',replace:true});
   for(const text of ['Could you check my booking, please?','Could you check the date for me?']){
-   answer=async()=>({json:{reply:'Of course. What else?',supportProvided:false,observations:[{skill:'request',quote:'Could you check',success:true,confidence:'clear',note:'Asked.'}]},provider:'test',ms:1});
+   answer=async()=>({json:{reply:'Of course. What else?',observations:[{skill:'request',quote:'Could you check',success:true,confidence:'clear',note:'Asked.'}]},provider:'test',ms:1});
    await command('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
   }
   if(tamper){const l=getLearner(PROFILE_ID).english;saveEnglish(PROFILE_ID,{...l,evidence:l.evidence.map(e=>e.skill==='request'?{...e,quote:'Please give me a free room'}:e)});}

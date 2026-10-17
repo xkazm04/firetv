@@ -277,7 +277,7 @@ test('an optional moment or observation that overruns its limit is dropped, and 
  fresh();answer=async()=>({json:{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'},provider:'test',ms:1});
  await command('start',{sceneId:'booking',replace:true});const c=getSession().conversation;
  const reg=require(path.join(root,'src/lib/engines/registry.ts'));
- reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'What name is it under?',supportProvided:false,
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'What name is it under?',
   observations:[{skill:'request',quote:'I has booking',success:false,confidence:'clear',note:'n'.repeat(400)}],
   moment:{kind:'fix',said:'I has booking',better:'I have a booking',why:'w'.repeat(300)}})})});
  engine.text=realText;
@@ -741,12 +741,12 @@ const BOOKING_CUE='Try asking: Could you check the date, please?';
 const LADDER={simpler:'What day do you come?',meaning:'date: the day, like Friday',starter:'I need the room on …'};
 let calls=0;
 /** A stubbed engine that counts its calls: the opening, then every turn answers with `reply` and `help`. */
-function ladderEngine(turn,opening={title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?',supportProvided:false}){
+function ladderEngine(turn,opening={title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'}){
  calls=0;answer=async req=>{calls++;const p=JSON.parse(req.prompt);return {json:p.submittedReply?turn(p):opening,provider:'test',ms:1};};
 }
 async function booked(turn,opening){fresh();ladderEngine(turn,opening);await command('start',{sceneId:'booking',replace:true});}
 const reply=(text='I need a room.')=>command('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
-const said=(text,patch={})=>()=>({reply:text,supportProvided:false,observations:[],...patch});
+const said=(text,patch={})=>()=>({reply:text,observations:[],...patch});
 const observed=q=>[{skill:'request',quote:q,success:true,confidence:'clear',note:'Asked clearly.'}];
 
 test('ladder case 1: three cues walk simpler, meaning, starter; any revealed rung makes the reply supported (ruling (a))',async()=>{
@@ -758,7 +758,7 @@ test('ladder case 1: three cues walk simpler, meaning, starter; any revealed run
 test('ladder case 2: help follows the partner\'s current question, never the last one or the scene\'s static cue (the Tomas case)',async()=>{
  const A={simpler:'Your dog\'s name?',meaning:'name: what you call him',starter:'My dog is called …'};
  const B={simpler:'Does he like his ball?',meaning:'ball: the round toy he plays with',starter:'He likes …'};
- await booked(said('Does Pip play with his ball every day?',{help:B}),{title:'A new dog',goal:'Talk about a dog.',opening:'What is your dog\'s name, then?',supportProvided:false,help:A});
+ await booked(said('Does Pip play with his ball every day?',{help:B}),{title:'A new dog',goal:'Talk about a dog.',opening:'What is your dog\'s name, then?',help:A});
  await command('cue');assert.equal(getSession().conversation.cue,A.simpler);
  await reply('His name is Pip.');await command('cue');
  const cue=getSession().conversation.cue;
@@ -766,7 +766,7 @@ test('ladder case 2: help follows the partner\'s current question, never the las
  for(const x of [...Object.values(A),BOOKING_CUE])assert.notEqual(cue,x);
 });
 test('ladder case 3: a reply with no rung revealed is independent; after the meaning rung it is supported, as after the starter (ruling (a))',async()=>{
- await booked(p=>({reply:'Which date do you need?',supportProvided:false,observations:observed(p.submittedReply),help:LADDER}));
+ await booked(p=>({reply:'Which date do you need?',observations:observed(p.submittedReply),help:LADDER}));
  await reply('Could you check my booking?');
  let c=getSession().conversation,learner=c.turns.at(-2);
  assert.equal(learner.supported,false,'no rung revealed: unaided');assert(c.evidence.length&&c.evidence.filter(e=>e.turnId===learner.id).every(e=>e.supported===false));
@@ -787,7 +787,7 @@ test('ladder case 4: unrevealed rungs stay in server memory, off the session',as
 });
 test('ladder case 5: help.ts drops a malformed rung and the turn still lands; with no valid rung the cue falls back to the scene cue',async()=>{
  const partner='Which date do you need?';
- await booked(p=>({reply:partner,supportProvided:false,observations:observed(p.submittedReply),help:{simpler:partner,meaning:LADDER.meaning,starter:'I need a room for Friday.'}}));
+ await booked(p=>({reply:partner,observations:observed(p.submittedReply),help:{simpler:partner,meaning:LADDER.meaning,starter:'I need a room for Friday.'}}));
  await reply('Could you check my booking?');
  let c=getSession().conversation;assert.equal(c.turns.at(-1).text,partner);assert.equal(c.evidence.length,1);
  await command('cue');c=getSession().conversation;assert.equal(c.cue,LADDER.meaning);assert.equal(c.supported,true,'any revealed rung is help (ruling (a))');
@@ -797,7 +797,7 @@ test('ladder case 5: help.ts drops a malformed rung and the turn still lands; wi
  c=getSession().conversation;assert.equal(c.cue,BOOKING_CUE);assert.equal(c.supported,true);
  // through the real engine: help is optional and unchecked there, so a help the schema would refuse costs a rung, not the turn
  const reg=require(path.join(root,'src/lib/engines/registry.ts'));
- reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'And for how many nights?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'x'.repeat(400),meaning:'nights: how many times you sleep there',starter:7}})})});
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'And for how many nights?',observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'x'.repeat(400),meaning:'nights: how many times you sleep there',starter:7}})})});
  engine.text=realText;
  try{await reply('For Friday.');}finally{engine.text=(req,after)=>answer(req,after);reg.resetProviders();}
  c=getSession().conversation;assert.equal(c.error,'');assert.equal(c.turns.at(-1).text,'And for how many nights?');
@@ -926,9 +926,9 @@ const REUSED='Hi, I have a booking for Friday.';
 const REVIEW={id:TAUGHT_A.id,kind:'fix',better:'I have a booking',fromTitle:'A hotel booking'};
 /** a learner whose record holds these taught items, and an engine that keeps every prompt it was sent */
 let prompts=[];
-async function taughtStart(taught,opening={title:'Rover',goal:'Find the rover.',opening:'Hello there. Where are you going?',supportProvided:false},turnReply='Lovely. And what name is it under?'){
+async function taughtStart(taught,opening={title:'Rover',goal:'Find the rover.',opening:'Hello there. Where are you going?'},turnReply='Lovely. And what name is it under?'){
  fresh();saveEnglish('ema',{...emptyEnglish(),taught});prompts=[];
- answer=async req=>{const p=JSON.parse(req.prompt);prompts.push(p);return {json:p.submittedReply?{reply:turnReply,supportProvided:false,observations:[]}:opening,provider:'test',ms:1};};
+ answer=async req=>{const p=JSON.parse(req.prompt);prompts.push(p);return {json:p.submittedReply?{reply:turnReply,observations:[]}:opening,provider:'test',ms:1};};
  await command('start',{sceneId:'rover',replace:true});
  return getSession().conversation;
 }
@@ -957,13 +957,13 @@ test('review case 2: an unsupported reply that uses the phrase is recorded by co
  assert.equal(R.reuseOf('I don’t know',convo({review:{...REVIEW,better:"I don't know"}})),'I don’t know');
 });
 test('review case 3: no reuse after the starter rung, or after the partner already said the phrase in this scene',async()=>{
- let c=await taughtStart([TAUGHT_A],{title:'Booking',goal:'Fix a booking.',opening:'Which date do you need?',supportProvided:false,help:LADDER});
+ let c=await taughtStart([TAUGHT_A],{title:'Booking',goal:'Fix a booking.',opening:'Which date do you need?',help:LADDER});
  assert.equal(c.review.id,TAUGHT_A.id);
  await command('cue');await command('cue');await command('cue');assert.equal(getSession().conversation.supported,true);
  await reply(REUSED);
  assert.equal(taughtOf(TAUGHT_A.id).reusedAt,undefined,'a supported reply is not reuse');assert.equal(getSession().conversation.review.used,undefined);
  // LG-56: the fixture line fits the A1 band, so the hold keeps the words this row is about
- c=await taughtStart([TAUGHT_A],{title:'Booking',goal:'Fix a booking.',opening:'I have a booking list here. Your name?',supportProvided:false});
+ c=await taughtStart([TAUGHT_A],{title:'Booking',goal:'Fix a booking.',opening:'I have a booking list here. Your name?'});
  assert.equal(c.review.id,TAUGHT_A.id);
  await reply(REUSED);
  assert.equal(taughtOf(TAUGHT_A.id).reusedAt,undefined,'a copy of the partner\'s own words is not reuse');assert.equal(getSession().conversation.review.used,undefined);
@@ -1038,9 +1038,9 @@ const slipMod=()=>require(path.join(root,'src/lib/english/slip.ts'));
 /** Viktor's fix from the 2026-10-14 LT run, as the record keeps it */
 const VIKTOR={id:'v1:t1:moment',kind:'fix',said:'My tomatoes is one metr.',better:'My tomatoes are one metre tall.',why:'A plural subject like tomatoes takes are, not is.',turnId:'v1:t1',at:30,sceneId:'garden',title:'Show my tomato plants'};
 /** a learner whose record holds `taught`, and an engine that keeps every prompt and answers each turn with `turn()` */
-async function slipStart(taught,turn=()=>({reply:'Lovely! What colour are they?',supportProvided:false,observations:[]})){
+async function slipStart(taught,turn=()=>({reply:'Lovely! What colour are they?',observations:[]})){
  fresh();saveEnglish('ema',{...emptyEnglish(),taught:cleanEnglish({taught}).taught});prompts=[];
- answer=async req=>{const p=JSON.parse(req.prompt);prompts.push(p);return {json:p.submittedReply?turn(p):{title:'Garden',goal:'Show the garden.',opening:'Hi Grandpa! What is growing there?',supportProvided:false},provider:'test',ms:1};};
+ answer=async req=>{const p=JSON.parse(req.prompt);prompts.push(p);return {json:p.submittedReply?turn(p):{title:'Garden',goal:'Show the garden.',opening:'Hi Grandpa! What is growing there?'},provider:'test',ms:1};};
  await command('start',{sceneId:'rover',replace:true});
  return getSession().conversation;
 }
@@ -1130,7 +1130,7 @@ test('K1 case 6: a slip taught twice merges into one Taught item; "My tomatoes a
  const R=review();
  assert.equal(R.findPhrase('My tomatoes are big.',VIKTOR.better),null,'today\'s whole-sentence test: null');
  // the moment Linga made in the next scene on the same slip, said in a new sentence
- let c=await slipStart([VIKTOR],()=>({reply:'Lovely! How big is it now?',supportProvided:false,observations:[],moment:{kind:'fix',said:'My tomatoes is big.',better:'My tomatoes are big.',why:'Tomatoes is plural, so it takes are.'}}));
+ let c=await slipStart([VIKTOR],()=>({reply:'Lovely! How big is it now?',observations:[],moment:{kind:'fix',said:'My tomatoes is big.',better:'My tomatoes are big.',why:'Tomatoes is plural, so it takes are.'}}));
  assert.equal(c.review.id,VIKTOR.id);assert.equal(c.review.fix,'tomatoes are');
  await reply('I have tomatoes. My tomatoes is big.');
  // K2: the moment joins the scene's moments, and merges into the record, when it closes
@@ -1227,10 +1227,10 @@ test('K3 case 4: a seeded run on a fake clock - used, not invited the same day, 
 // ---- K4: one line in every room (line.ts). A stubbed engine, no live model.
 const lineMod=()=>require(path.join(root,'src/lib/english/line.ts'));
 const BRIDGE='Which bridge do you mean?';
-const ROVER_OPENING={title:'Rover',goal:'Find the rover.',opening:'Hello there. Where are you going?',supportProvided:false};
+const ROVER_OPENING={title:'Rover',goal:'Find the rover.',opening:'Hello there. Where are you going?'};
 /** a learner whose record is `learning`, a rover scene started on an engine that keeps every prompt and request */
 let requests=[];
-async function roomStart(learning={},opening=ROVER_OPENING,turn=()=>({reply:'Good. Then turn left at the tree. What do you see?',supportProvided:false,observations:[]})){
+async function roomStart(learning={},opening=ROVER_OPENING,turn=()=>({reply:'Good. Then turn left at the tree. What do you see?',observations:[]})){
  fresh();saveEnglish('ema',{...emptyEnglish(),...learning});prompts=[];requests=[];
  answer=async req=>{requests.push(req);const p=JSON.parse(req.prompt);prompts.push(p);return {json:p.submittedReply?turn(p):opening,provider:'test',ms:1};};
  await command('start',{sceneId:'rover',replace:true});
@@ -1272,14 +1272,14 @@ test('K4 case 2: no find after a partner line said it, after the quiz showed it,
  let c=await roomStart({},{...ROVER_OPENING,opening:'Two bridges here. Which bridge do you mean?'});
  await reply('Which bridge do you mean?');
  assert.equal(getSession().conversation.line.found,undefined,'the partner said it first');assert.equal(getLearner('ema').english.taught.length,0);
- c=await roomStart({},ROVER_OPENING,()=>({reply:'Which bridge do you mean? There are two.',supportProvided:false,observations:[]}));
+ c=await roomStart({},ROVER_OPENING,()=>({reply:'Which bridge do you mean? There are two.',observations:[]}));
  await reply('I want the bridge.');await reply('Which bridge do you mean?');
  assert.equal(getSession().conversation.line.found,undefined,'a partner line already said it');
  c=await roomStart();
  await command('quiz');assert.equal(getSession().conversation.line.shown,true,'the quiz put it on screen');
  await reply('I go to the river.');await reply('Which bridge do you mean?');
  assert.equal(getSession().conversation.line.found,undefined,'shown by the quiz two turns ago');assert.equal(prompts.at(-1).roomLine,undefined);
- c=await roomStart();await command('cue');// help the learner used (lt-swap-2/recert-1: the opening's supportProvided:true is no longer help)
+ c=await roomStart();await command('cue');// help the learner used (lt-swap-2/recert-1: an opening line is no help)
  await reply('Which bridge do you mean?');assert.equal(getSession().conversation.line.found,undefined,'a supported reply');
  assert.deepEqual(getSession().conversation.line,{source:'quiz'},'not found, not handed over: the session holds no words of it');
 });
@@ -1375,7 +1375,7 @@ test('K4 case 8: a fix moment keeps the recap\'s moment slot over a found line; 
 // ---- T10: the tutor's calls run with thinking off, and only they do ----
 test('thinking case 1: opening, turn, coach and replay ask for thinking off; the level check and its plan do not',async()=>{
  const seen=[];
- const partner=()=>({reply:'Which dates did you book?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'',meaning:'',starter:''}});
+ const partner=()=>({reply:'Which dates did you book?',observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'',meaning:'',starter:''}});
  fresh();answer=async(req)=>{const p=JSON.parse(req.prompt);seen.push({who:'linga',task:p.task.slice(0,12),thinking:req.thinking});
   return {json:/^Prepare/.test(p.task)?{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'}:/^Coach/.test(p.task)?{before:'two nights',after:'two nights, please',note:'Clear. Add please.'}:partner(),provider:'test',ms:1};};
  await command('start',{sceneId:'booking'});
@@ -2414,7 +2414,7 @@ let k2Calls=0;
 /** A learner at `level` in a scene where the next reply yields the tomato moment; every model call is counted. */
 async function k2Moment({level='B1',partner='Lovely! Is that big for a tomato plant?',moment={kind:'fix',...TOMATO},observations=[]}={}){
  fresh();saveEnglish('ema',{...emptyEnglish(),preferences:{...defaultPreferences(),level}});k2Calls=0;
- answer=async req=>{k2Calls++;const p=JSON.parse(req.prompt);return {json:p.submittedReply?{reply:partner,supportProvided:false,observations,moment}:{title:'Garden',goal:'Show the garden.',opening:'Hi Grandpa! How tall are your plants?',supportProvided:false},provider:'test',ms:1};};
+ answer=async req=>{k2Calls++;const p=JSON.parse(req.prompt);return {json:p.submittedReply?{reply:partner,observations,moment}:{title:'Garden',goal:'Show the garden.',opening:'Hi Grandpa! How tall are your plants?'},provider:'test',ms:1};};
  await command('start',{sceneId:'weekend',replace:true});
  await command('turn',{text:'My tomatoes is one metre.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
  k2Calls=0;return getSession().conversation;
@@ -2454,7 +2454,7 @@ test('K2 case 1 GATE: the session has no better until a try holds; "My tomatoes 
  assert.equal(c.moments.length,1);assert.equal(c.moments[0].better,TOMATO.better,'the fix joins the scene\'s moments when it closes');
  assert.equal(c.supported,false,'still free after Back');
  // the next reply is the learner's own: its observation is unsupported
- answer=async()=>({json:{reply:'And the beans?',supportProvided:false,observations:[{skill:'describe',quote:'My tomatoes are very tall',success:true,confidence:'clear',note:'Described the plants.'}]},provider:'test',ms:1});
+ answer=async()=>({json:{reply:'And the beans?',observations:[{skill:'describe',quote:'My tomatoes are very tall',success:true,confidence:'clear',note:'Described the plants.'}]},provider:'test',ms:1});
  await reply('My tomatoes are very tall now.');
  const e=getSession().conversation.evidence.at(-1);assert.equal(e?.quote,'My tomatoes are very tall');assert.equal(e.supported,false,'own-words credit after a self-repair');
  console.log(`# K2 case 1: held "${t[0].tried}" selfRepaired=${t[0].selfRepaired} supported=${c.supported} modelCalls=0`);
@@ -2476,7 +2476,7 @@ test('K2 case 2: "My tomatoes is one metre." is not held; misses climb to the cl
  const t=getLearner('ema').english.taught[0];assert.equal(t.selfRepaired,false);assert.equal(t.tried,'My tomatoes is one metre!');
  assert.equal(getSession().conversation.supported,false,'a revealed fix alone leaves the next reply unhelped (lt-swap-2/recert-1)');
  // the next reply that reads the revealed fix back is supported, by code (credit.ts copiesShown over the scene's shown lines)
- answer=async()=>({json:{reply:'And the beans?',supportProvided:false,observations:[]},provider:'test',ms:1});
+ answer=async()=>({json:{reply:'And the beans?',observations:[]},provider:'test',ms:1});
  await reply('Yes, my tomatoes are one metre.');assert.equal(getSession().conversation.turns.filter(t=>t.role==='learner').at(-1).supported,true,'a read-back of the fix');
  console.log(`# K2 case 2: "My tomatoes is one metre." not held -> rung 1; undecided -> rung 2 (shown); one more try, then spent; modelCalls=${k2Calls}`);
 });
@@ -3071,7 +3071,7 @@ async function bandStart(id,level,opening,turn){
  const profile=getSession().profiles.find(p=>p.id===id);
  await command('preferences',{preferences:{...defaultPreferences(profile),level,...(id==='jakub'?{adultConfirmed:true}:{})},notes:[]});
  const seen=[];
- answer=async req=>{const p=JSON.parse(req.prompt);seen.push({system:req.system,prompt:p});return {json:p.submittedReply?turn(p):{title:'Minecraft house',goal:'Show your house.',opening,supportProvided:false,help:{simpler:'',meaning:'',starter:''}},provider:'test',ms:1};};
+ answer=async req=>{const p=JSON.parse(req.prompt);seen.push({system:req.system,prompt:p});return {json:p.submittedReply?turn(p):{title:'Minecraft house',goal:'Show your house.',opening,help:{simpler:'',meaning:'',starter:''}},provider:'test',ms:1};};
  await command('start',{sceneId:'booking',replace:true});
  return seen;
 }
@@ -3086,24 +3086,24 @@ test('LG-56: bandLine holds an A1-A2 line to two short sentences and one questio
 });
 test('LG-56: a tomas-9-like A1 partner is held at the opening and on a turn through partnerSays; the prompt names the limit; B1 hears the line as it came',async()=>{
  const long='Wow, that is a really big and beautiful house you built for all your friends and pets! What do you keep in it?';
- let seen=await bandStart('ema','A1',LENKA,()=>({reply:long,supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'Wow, a big house! What is in it?',meaning:'',starter:''}}));
+ let seen=await bandStart('ema','A1',LENKA,()=>({reply:long,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'Wow, a big house! What is in it?',meaning:'',starter:''}}));
  assert.match(seen[0].system,/This learner plays at A1: every sentence you say has at most 8 words/);
  assert.equal(partnerSaid()[0],"Hi, I'm Lenka from school! How many diamonds are in your chest?");
  await reply('Many diamonds. I have a house.');
  assert.equal(partnerSaid().at(-1),'Wow, a big house! What is in it?','the simpler rung that fits');
  const {BAND_HOLD}=require(path.join(root,'src/lib/english/gate.ts'));
  for(const l of partnerSaid()){const s=l.split(/(?<=[.!?])\s+/);assert(s.length<=2&&s.every(x=>x.split(/\s+/).length<=BAND_HOLD.A1.words)&&(l.match(/\?/g)||[]).length<=1,l);}
- seen=await bandStart('jakub','B1',LENKA,()=>({reply:long,supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
+ seen=await bandStart('jakub','B1',LENKA,()=>({reply:long,observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
  assert.doesNotMatch(seen[0].system,/This learner plays at/);
  await reply('I keep my bike in it.');
  assert.deepEqual(partnerSaid(),[LENKA,long],'B1 is not held');
 });
 test('LG-56: no band hold for an unplaced learner with no level set',async()=>{
  const long='Wow, that is a really big and beautiful house you built for all your friends and pets! What do you keep in it?';
- const turn=()=>({reply:long,supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''}});
+ const turn=()=>({reply:long,observations:[],moment:{kind:'none',said:'',better:'',why:''}});
  const noHold=async(label)=>{
   const seen=[];
-  answer=async req=>{const p=JSON.parse(req.prompt);seen.push({system:req.system,prompt:p});return {json:p.submittedReply?turn():{title:'Minecraft house',goal:'Show your house.',opening:long,supportProvided:false,help:{simpler:'',meaning:'',starter:''}},provider:'test',ms:1};};
+  answer=async req=>{const p=JSON.parse(req.prompt);seen.push({system:req.system,prompt:p});return {json:p.submittedReply?turn():{title:'Minecraft house',goal:'Show your house.',opening:long,help:{simpler:'',meaning:'',starter:''}},provider:'test',ms:1};};
   await command('start',{sceneId:'booking',replace:true});
   assert.doesNotMatch(seen[0].system,/plays at/,label+': no band sentence');
   assert.match(seen[0].system,/Level: A1 on the CEFR scale/,label+': the Level line is unchanged');
@@ -3126,7 +3126,7 @@ test('LG-56: no band hold for an unplaced learner with no level set',async()=>{
 });
 test('LG-57: a martin-45-like error said twice in one scene stops the scene with a code-made moment; the partner is told to leave the fix to it',async()=>{
  const {FOSSIL_TASK,FOSSIL_WHY}=review();
- const seen=await bandStart('jakub','B1','Hello, how can I help?',()=>({reply:'I see. When do you need them?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
+ const seen=await bandStart('jakub','B1','Hello, how can I help?',()=>({reply:'I see. When do you need them?',observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
  await reply('We was promised the parts on Monday.');
  assert.equal(getSession().conversation.moment,null,'once is not yet a fossil');assert.equal(seen.at(-1).prompt.slipAgain,undefined);
  await reply('Sorry, but we was told Friday by your colleague.');
@@ -3141,7 +3141,7 @@ test('LG-57: a martin-45-like error said twice in one scene stops the scene with
 });
 test('LG-57: a fix taught in an earlier session said again ("more better") stops the scene, counts once, and adds no second item',async()=>{
  const MARTIN={id:'m1:t1:moment',kind:'fix',said:'this is more better for me',better:'this is better for me',why:'Better already compares.',turnId:'m1:t1',at:30,sceneId:'booking',title:'Supplier call'};
- const seen=await bandStart('jakub','B1','Hello, how can I help?',()=>({reply:'Good. Which day is best for the truck?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
+ const seen=await bandStart('jakub','B1','Hello, how can I help?',()=>({reply:'Good. Which day is best for the truck?',observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
  saveEnglish('jakub',{...getLearner('jakub').english,taught:cleanEnglish({taught:[MARTIN]}).taught});
  await reply('Friday is more better for me.');
  const c=getSession().conversation;
@@ -3152,15 +3152,15 @@ test('LG-57: a fix taught in an earlier session said again ("more better") stops
  assert.equal(taught.length,1,'no second item');assert.equal(taught[0].slips,1,'one reply counts once');
 });
 // recert-6/LT-tomas-9-J4-3, recert-6/LT-adela-17-J4-3: supported is true exactly when help was used for that reply
-test('supported flag: an opening with supportProvided absent is not supported, and a model that says nothing never supports a reply',async()=>{
- await booked(said('Which date?',{supportProvided:undefined,observations:undefined}),{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'});
- assert.equal(getSession().conversation.supported,false,'an absent supportProvided is not help');
+test('supported flag: an opening is not supported, and a model that says nothing never supports a reply',async()=>{
+ await booked(said('Which date?',{observations:undefined}),{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'});
+ assert.equal(getSession().conversation.supported,false,'an opening line is not help');
  await reply('Could you check my booking?');
  let c=getSession().conversation,l=c.turns.at(-2);
  assert.equal(l.supported,false);assert.equal(c.supported,false,'the next reply starts independent');
 });
 test('supported flag: a cue then a reply is supported; the next unhelped reply is independent again',async()=>{
- await booked(p=>({reply:'Which date do you need?',supportProvided:false,observations:observed(p.submittedReply)}));
+ await booked(p=>({reply:'Which date do you need?',observations:observed(p.submittedReply)}));
  await command('cue');assert.equal(getSession().conversation.supported,true,'a cue is help');
  await reply('Could you check my booking?');
  let c=getSession().conversation,l=c.turns.at(-2);
@@ -3179,25 +3179,35 @@ test('supported flag: the recap splits supported from independent replies',()=>{
 });
 // lt-swap-2/recert-1 (LT-tomas-9-J4-2, recorded against LT-tomas-9-J4-3; LT-adela-17-J4-3, LT-petra-38-J4-3, LT-jana-29-J3-3):
 // a learner turn is supported only when that reply came after help the learner used (a cue, a quiz opened or answered, a
-// starter rung) or reads back a line the scene showed. Never the model's supportProvided, never a moment, coaching or replay alone.
-/** A stubbed engine for a recert-1 scene: turns answer with `turn(p)`, coach with `coach`, replay with `again`; every line claims supportProvided:true. */
+// help rung) or reads back a line the scene showed. Never the model's word (the delegate's ruling (c) removed supportProvided
+// from the answer's shape), never a moment, coaching or replay alone.
+/** A stubbed engine for a recert-1 scene: turns answer with `turn(p)`, coach with `coach`, replay with `again`; every request is kept in `asked`. */
+let asked=[];
 function recertEngine(turn,{coach,again}={}){
- answer=async req=>{const p=JSON.parse(req.prompt);
-  if(String(p.task??'').startsWith('Coach'))return {json:coach,provider:'test',ms:1};
-  if(p.coaching)return {json:{reply:again,supportProvided:true},provider:'test',ms:1};
-  return {json:p.submittedReply?{supportProvided:true,observations:[],...turn(p)}:{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?',supportProvided:true},provider:'test',ms:1};};
+ asked=[];answer=async req=>{const p=JSON.parse(req.prompt);
+  const out=String(p.task??'').startsWith('Coach')?coach:p.coaching?{reply:again}:p.submittedReply?{observations:[],moment:{kind:'none',said:'',better:'',why:''},...turn(p)}:{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'};
+  asked.push({req,out});return {json:out,provider:'test',ms:1};};
 }
 async function recertScene(turn,more){fresh();saveEnglish('ema',emptyEnglish());recertEngine(turn,more);await command('start',{sceneId:'booking',replace:true});}
 const lastLearner=()=>[...getSession().conversation.turns].reverse().find(t=>t.role==='learner');
 const flags=()=>getSession().conversation.turns.filter(t=>t.role==='learner').map(t=>t.supported);
-test('supported flag 1 (jana-29 J3, tomas-9 J4 #12): an opening and partner lines that claim supportProvided:true never support an unhelped reply',async()=>{
+test('supported flag 1 (jana-29 J3, tomas-9 J4 #12): an opening and partner lines never support an unhelped reply, and the answer has no supportProvided',async()=>{
  await recertScene(p=>({reply:p.submittedReply.startsWith('Thanks')?'Could we agree on a fixed day that works for both of us?':'What day would be workable for you?',observations:observed(p.submittedReply)}));
- assert.equal(getSession().conversation.supported,false,'the opening\'s supportProvided:true is the model\'s claim about its own line, not help the learner used (jana-29 #2)');
+ assert.equal(getSession().conversation.supported,false,'the opening is the model\'s own line, not help the learner used (jana-29 #2)');
  await reply('Could we agree on a firmer handover date?');
- assert.equal(lastLearner().supported,false);assert.equal(getSession().conversation.supported,false,'the partner line\'s supportProvided:true is not carried to the next reply');
+ assert.equal(lastLearner().supported,false);assert.equal(getSession().conversation.supported,false,'a partner line is not carried to the next reply as help');
  await reply('Thanks, Wednesday end of day would suit me.');
  await reply('How about Thursday morning then?');
  assert.deepEqual(flags(),[false,false,false],'jana-29 J3: three own replies, none helped');
+ // ruling (c): no prompt asks for supportProvided, every stub answer fits the narrowed shape, and the shape refuses the old field
+ const {validate}=require(path.join(root,'src/lib/engines/shape.ts'));
+ assert.equal(asked.length,4);
+ for(const {req,out} of asked){
+  const s=req.accept??req.schema;
+  assert(!JSON.stringify([req.system,req.prompt,req.schema,req.accept]).includes('supportProvided'),'the model is never asked for supportProvided');
+  assert.deepEqual(validate(out,s),[]);
+  assert(validate({...out,supportProvided:true},s).some(([p,why])=>p.includes('supportProvided')&&why==='not in the schema'),'an answer still carrying supportProvided is refused');
+ }
  const ev=getSession().conversation.evidence;assert.equal(ev.length,3);assert(ev.every(e=>e.supported===false),'own-words evidence stays unsupported');
 });
 test('supported flag 2 (adela-17 J4 #7, petra-38 J4 #8 #12 #18, tomas-9 J4 #10): a moment, coaching or a replay alone does not support the next reply',async()=>{
@@ -3255,7 +3265,7 @@ test('supported flag 4 (tomas-9 J4 #14): the recap\'s on-your-own and with-help 
  if(getSession().screen==='linga-moment')await command('moment-done');
  await reply('Dog. Dog v garden. I like dog.');// #10: own, after a moment
  await reply('Dog... Rex. My dog Rex.');// #11: own
- await reply('Rex like... maso. Dog like meat.');// #12: own, after a partner line that claimed supportProvided:true
+ await reply('Rex like... maso. Dog like meat.');// #12: own, after a partner line alone
  assert.deepEqual(flags(),[true,false,true,false,false,false]);
  await command('finish');
  const v=view().lingaView(getSession(),{});
