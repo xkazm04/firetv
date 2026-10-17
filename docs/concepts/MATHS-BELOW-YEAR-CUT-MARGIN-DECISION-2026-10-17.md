@@ -22,7 +22,7 @@ The first cut applied at any year above the unit. It stranded school-age learner
 |---|---|---|
 | A1 | Revert the cut (37425037/4b82f0a3). | It re-opens MB4-2 for the CZ 18 learner: G17 and N1 would again route to Area of rectangles and Equivalent fractions. The CZ 18 case is still pinned (`recovery-rules-test.cjs:241-262`, `recovery-rules-test.cjs:282-286`). |
 | A2 | A margin of 0 to 2. | Still strands the 12 to 14 learners the finding names. The recert note proposed "more than three school years" (`2026-10-17-maths-l1-recert-2.md:70` fix direction), and the commit chose 3. The commit does not record a measured test of margins 0 to 2; the reason against them is the stranded-learner list in section 1, and I am not adding a figure the sources do not show. |
-| A3 | Add N1 -> frac-equivalent to `WHOLE`. | The commit states it "would undo the CZ-18 N1 cut that MB4-2 pins in recovery-rules-test and paper-aim-test". Both pins exist: `recovery-rules-test.cjs:246-248` (the inequality, N1, is not on the desk for CZ 18) and `paper-aim-test.cjs:391-402` (N1 off the desk for the seated maturita learner). |
+| A3 | Add N1 -> frac-equivalent to `WHOLE`. | The commit states it "would undo the CZ-18 N1 cut that MB4-2 pins in recovery-rules-test and paper-aim-test". Both pins exist: `recovery-rules-test.cjs:246-248` (the inequality, N1, is not on the desk for CZ 18) and `paper-aim-test.cjs:391-410` (N1 off the desk for the seated maturita learner). |
 
 ## 4. Consequences
 
@@ -42,5 +42,5 @@ Watch item for the recert-3 re-walk of L1-radka-41-MB4-2: re-walk the paper [N2 
 - `tools/recovery-rules-test.cjs`, test `MB4-2: a maturita learner past a unit does not have a partial link send their marks to it` (line 241): CZ 18 cut, a CZ age 10 learner keeps the old routing.
 - Same file, test `L1-radka-41-MB4-2: a school-age learner at or near a unit's year keeps the fraction units; the maturita learner keeps the cut` (line 264): UK 12, CZ 12 and CZ 14 keep N2 and A1 units and have no N2 or A1 off the desk; UK 12 and CZ 12 reach `frac-equivalent` through N1; N8 stays reachable at CZ 18; CZ 18 keeps the cut.
 - The restored fixtures of 7107748f: Ema at age 12 in `tools/maths-tv-test.cjs:1029` (test `RP3 a`, line 1027), and `seat()` at the default age 14 with `frac-add-sub` in the `aim 5` test (`tools/paper-aim-test.cjs:136`; the default age 14 is at line 46) and in `aim 4` (`paper-aim-test.cjs:127`).
-- `tools/paper-aim-test.cjs:391-402` pins the maturita side (N1 off the desk for CZ 18 through the Reader).
+- `tools/paper-aim-test.cjs:391-410` pins the maturita side (N1 off the desk for CZ 18 through the Reader).
 - No test pins the CZ 14 N1 gap as intended: `recovery-rules-test.cjs:264-287` asserts N2 and A1 for CZ 14 but does not assert N1 either way.
