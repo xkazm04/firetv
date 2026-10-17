@@ -44,3 +44,7 @@ Watch item for the recert-3 re-walk of L1-radka-41-MB4-2: re-walk the paper [N2 
 - The restored fixtures of 7107748f: Ema at age 12 in `tools/maths-tv-test.cjs:1029` (test `RP3 a`, line 1027), and `seat()` at the default age 14 with `frac-add-sub` in the `aim 5` test (`tools/paper-aim-test.cjs:136`; the default age 14 is at line 46) and in `aim 4` (`paper-aim-test.cjs:127`).
 - `tools/paper-aim-test.cjs:391-410` pins the maturita side (N1 off the desk for CZ 18 through the Reader).
 - No test pins the CZ 14 N1 gap as intended: `recovery-rules-test.cjs:264-287` asserts N2 and A1 for CZ 14 but does not assert N1 either way.
+
+## 7. Residual resolved (recert-3/L1-radka-41-MB4-2)
+
+The cut now applies only from `CUT_FROM_YEAR` = 12 (`recovery.ts`), the first option in section 5's list of the recert's fix direction (stage as well as distance). `PAST_MARGIN` stays. A UK 13 to 15 learner (Years 9 to 11) and a CZ 14 to 16 learner (9. to 11. ročník) keep N1 on Equivalent fractions and A1 on its unit; UK 16 and above, CZ 17 and above keep the cut, as do the CZ 18 pins. `recovery-rules-test.cjs` pins UK 13, UK 15, CZ 14 and CZ 15. Consequence: a CZ 16 learner, who was cut before, is no longer cut.

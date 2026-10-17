@@ -276,6 +276,15 @@ test('L1-radka-41-MB4-2: a school-age learner at or near a unit\'s year keeps th
     assert(ids(R.recovery(paper, at)).includes('frac-equivalent'), at.system + at.age);
     assert.deepEqual(R.reachOf(['N1'], at), { topics: ['frac-equivalent'], off: [] });
   }
+  // below the sixth form the cut does not apply: N1 and A1 stay on the desk for UK 13 and 15 and CZ 14 and 15
+  for (const at of [{ system: 'uk', age: 13 }, { system: 'uk', age: 15 }, { system: 'cz', age: 14 }, { system: 'cz', age: 15 }]) {
+    const r = R.recovery(paper, at), who = at.system + at.age;
+    assert(ids(r).includes('frac-equivalent'), who + ' N1');
+    assert.deepEqual(R.reachOf(['N1'], at), { topics: ['frac-equivalent'], off: [] }, who);
+    assert.deepEqual(r.notOnDesk, [], who);
+    assert.equal(sum(r), r.totals.lost, who);
+  }
+  assert(R.reachOf(['A1'], { system: 'uk', age: 15 }).topics.length > 0 && R.reachOf(['A1'], { system: 'cz', age: 15 }).off.length === 0);
   // N8's core is Adding and subtracting fractions: it stays in reach however far past it the learner is
   assert(R.reachOf(['N8'], { system: 'cz', age: 18 }).topics.includes('frac-add-sub'));
   // the maturita learner still has a partial link below their year cut (MB4-2)

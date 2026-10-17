@@ -184,10 +184,17 @@ interface Dest { kind: "topic" | "off"; id: string; codes: string[]; }
  */
 export const PAST_MARGIN = 3;
 
+/**
+ * The school year (the system's own numbering) from which the cut applies at all: the sixth-form and maturita learner it
+ * was written for. Below it a GCSE or Year 9 learner's fraction and notation marks reach their unit however far past it
+ * (L1-radka-41-MB4-2 residual: N1 from UK 13 / CZ 14 and A1 from 15 were stranded).
+ */
+export const CUT_FROM_YEAR = 12;
+
 /** The destinations of one cleaned item's codes, in the item's order; a place reached twice is kept once, at its first place. */
 function destinations(codes: string[], at?: Reader): Dest[] {
   const year = at ? schoolYear(at.system, at.age) : -Infinity;
-  const past = (id: string) => year - (SCHOOL[AT.get(id)!].year?.[at?.system ?? "uk"] ?? Infinity) > PAST_MARGIN;
+  const past = (id: string) => year >= CUT_FROM_YEAR && year - (SCHOOL[AT.get(id)!].year?.[at?.system ?? "uk"] ?? Infinity) > PAST_MARGIN;
   const out: Dest[] = [];
   const put = (kind: Dest["kind"], id: string, code: string) => {
     const d = out.find((x) => x.kind === kind && x.id === id);
