@@ -454,6 +454,8 @@ export function goalAim(goal: string, earlier: string[]): string {
 }
 /** Is some aim of the stated goal still unreached? Empty goal: nothing is required, false. */
 export function goalUntouched(goal: string, earlier: string[]): boolean { return !!goalAim(goal, earlier); }
+/** An aim that names a real situation with its own questions (LG-55 4th pass): the say task then asks what that situation asks. A short word list, no synonyms. */
+export function questionSituation(aim: string): boolean { return /\b(interviews?|exams?|tests?|calls?|meetings?|appointments?|presentations?|check-?ins?)\b/i.test(aim); }
 /** The next task must be set in the learner's goal: a say task at B1 or above, while an aim of it is untouched by every task so far. */
 export function goalTaskDue(goal: string, band: Band, kind: TaskKind, earlier: string[]): boolean {
   return kind === "say" && BANDS.indexOf(band) >= BANDS.indexOf("B1") && goalUntouched(goal, earlier);

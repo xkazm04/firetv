@@ -18,7 +18,7 @@ import { FOCUS_FALLBACK, focusParts } from "./line";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
 import { ConversationError, lingaLine } from "./errors";
-import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, conversationBand, firstQuestion, interestWords, isBand, keepHeldBack, kindFor, PLAN_MAX, PLAN_SIZE, playBand, sameTask, startBand, goalAim, goalTaskDue, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
+import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, conversationBand, firstQuestion, interestWords, isBand, keepHeldBack, kindFor, PLAN_MAX, PLAN_SIZE, playBand, sameTask, startBand, goalAim, goalTaskDue, questionSituation, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
 // The right option of a "choose" task. Server memory only: the session reaches every screen.
@@ -65,7 +65,8 @@ const KIND_TASK: Record<Exclude<TaskKind, "choose">, string> = {
 };
 
 /** The instruction a say task carries while an aim of the learner's stated goal is untouched by every task so far (LG-55); placement.ts goalTaskDue decides when, goalAim names the aim. */
-const goalTask = (aim: string) => `The learner stated a goal (learner.goal) and no earlier task touches this aim of it: "${aim}". Set this task in that aim, in a situation it names, not in the interest.`;
+const realQuestion = " Where that aim is a real situation with its own questions (an interview, an exam, a call, a meeting), the prompt is the question that situation actually asks, worded the way the other person in it would say it (for an interview: 'Tell me about a time you solved a problem at work.'), never an opinion or a comparison about that situation.";
+export const goalTask = (aim: string) => `The learner stated a goal (learner.goal) and no earlier task touches this aim of it: "${aim}". Set this task in that aim, in a situation it names, not in the interest.${questionSituation(aim) ? realQuestion : ""}`;
 
 function stageScreen(k: LevelCheck): Screen { return k.stage === "verdict" ? "linga-verdict" : k.stage === "plan" ? "linga-plan" : "linga-check"; }
 /** An unparked check holds the desk, so a live scene yields it (activity.ts); a parked check never moves the TV. */
@@ -186,7 +187,7 @@ Your previous answer repeated an earlier task ("${twin?.prompt ?? ""}"). Answer 
           console.info("Linga check: the task is not set in the learner's goal; asked once more.");
           try {
             const again = await ask(system, { ...request, task: `${request.task}
-Your previous answer ("${line(r.json.prompt, 120)}") was not set in the learner's goal (learner.goal). Answer again with a situation set in this aim of it: "${aim}".` }, taskSchema, 90000, r.again);
+Your previous answer ("${line(r.json.prompt, 120)}") was not set in the learner's goal (learner.goal). Answer again with a situation set in this aim of it: "${aim}".${questionSituation(aim) ? realQuestion : ""}` }, taskSchema, 90000, r.again);
             ms += again.ms;
             r = { ...again, ms };
           } catch (e) { console.warn("Linga check: the goal re-ask failed; the first answer is kept:", e instanceof Error ? e.message : e); }

@@ -2974,3 +2974,13 @@ test('LG-51 askedAbout: a question alone still reads the previous learner turn',
  assert.equal(a.line,'I prefer my phone than my laptop.');assert.equal(a.slips.length,1);
  assert.equal(askedAboutFor('Was that correct?',convo(),[]),undefined,'no earlier line, no askedAbout');
 });
+
+test('LG-55 4th pass: an interview or call aim gets the real-question instruction, an aim with no such situation keeps today\'s text',()=>{
+ const C=require(path.join(root,'src/lib/english/check.ts'));
+ const iv=C.goalTask('a job interview on Friday for logistics coordinator, where she must explain a problem she solved');
+ assert.match(iv,/the question that situation actually asks/);assert.match(iv,/Tell me about a time you solved a problem at work/);assert.match(iv,/never an opinion/);
+ assert.match(C.goalTask('speak better on calls with carriers'),/the question that situation actually asks/);
+ const plain='travel to Spain and order food';
+ assert.equal(C.goalTask(plain),`The learner stated a goal (learner.goal) and no earlier task touches this aim of it: "${plain}". Set this task in that aim, in a situation it names, not in the interest.`);
+ assert(P.questionSituation('Friday interview')&&P.questionSituation('an exam')&&!P.questionSituation('read novels'));
+});
