@@ -194,12 +194,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "Use one tiny question, familiar words and short topic cards; verify that this beginner can understand each topic and its reason.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#2 \"Get something done\", \"Understand and repair\" labels still shown."
+    "recertify_evidence": "#2 labels \"Understand and repair\", \"Get something done\", \"Connect with people\" are still abstract.",
+    "recurred_as": "LT-tomas-9-J2-2"
   },
   {
     "id": "LT-tomas-9-J2-2",
@@ -256,13 +257,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "Include explicitly requested activity formats in the initial proposals when compatible with the profile.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#2 initial six have no interview; she typed \"I would like a mock interview about my plans after school\".",
-    "recurred_as": "LT-adela-17-J2-2"
+    "recertify_evidence": "#2 no interview topic in initial six; she had to add her own at #2.",
+    "recurred_as": "LT-adela-17-J2-3"
   },
   {
     "id": "LT-lukas-24-J2-3",

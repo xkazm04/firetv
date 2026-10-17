@@ -1,0 +1,262 @@
+[
+  {
+    "id": "LT-hana-41-J1-2",
+    "journey": "J1",
+    "character": "hana-41",
+    "cert_level": "LT",
+    "type": "confusion",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "Question 3 repeats question 2",
+    "expected": "A new question about her life.",
+    "got": "Q2 'How did you learn your English?' then Q3 'Where did you study English?'",
+    "evidence": [
+      "#3 and #4. Hana: 'It asked almost the same question again'.",
+      "check intro prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "The three about-you questions are distinct.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-hana-41-J1-3",
+    "journey": "J1",
+    "character": "hana-41",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "trust",
+    "title": "Confidence caveat and task notes are vague or contradictory",
+    "expected": "A clear reason for low confidence. Task notes that fit the verdict.",
+    "got": "Confidence is 'low' with no reason. The B1 listen answer passed but is described as 'not enough English to show more than A2'. The C1 task is 'partial' but 'correct throughout'.",
+    "evidence": [
+      "#10 task notes, and the prior gap with the vague caveat.",
+      "placement judge prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 4,
+    "recurs": "LT-hana-41-J1-2",
+    "suggested_acceptance": "The caveat names its cause, and the note matches the verdict.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-hana-41-J1-1",
+    "journey": "J1",
+    "character": "hana-41",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Focus targets a trivial slip and mislabels it",
+    "expected": "A focus a trainer would give: articles ('I am accountant'), tenses, and prepositions.",
+    "got": "'Practise linking words: so then I would send becomes so I would send'.",
+    "evidence": [
+      "#10 focus. Missed 'I am accountant' (#2) and 'I learn mostly in my work' (#3).",
+      "placement summary prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "The focus names the most frequent error class across her answers and is labelled correctly.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-oksana-34-J1-3",
+    "journey": "J1",
+    "character": "oksana-34",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "B2 interview answer judged 'fail' and read as A2",
+    "expected": "Partial; clear answer with example is not A2",
+    "got": "Task 3 verdict fail, 'Your English read as A2 here'",
+    "evidence": [
+      "#10 'Your English read as A2 here... Held back: \"employer see that\"' while the note says 'You gave a reason and an example.'",
+      "placement judge prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Single agreement slips should not read as A2; grade communication and task completion first.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-oksana-34-J1-4",
+    "journey": "J1",
+    "character": "oksana-34",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Interview task is a hypothetical opinion, not a real interview question",
+    "expected": "'Tell me about a problem you solved'",
+    "got": "'Which impresses an employer more: big problem fixed quickly or small one solved creatively?'; task 5 is a parcel complaint",
+    "evidence": [
+      "#7 and #9 prompts",
+      "task generator prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 4,
+    "recurs": "LT-oksana-34-J1-4",
+    "suggested_acceptance": "At least one task phrased as a real interview question for the stated goal.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-oksana-34-J1-5",
+    "journey": "J1",
+    "character": "oksana-34",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "clarity",
+    "title": "Next focus is one trivial slip, not interview language",
+    "expected": "Focus tied to interview or logistics vocabulary",
+    "got": "Focus is employer see to sees",
+    "evidence": [
+      "#10 Next to practise: '\"employer see that I can work under pressure\" becomes ...'",
+      "verdict focus builder"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Next focus should connect to her stated Friday interview goal.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-hana-41-J1-4",
+    "journey": "J1",
+    "character": "hana-41",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Office-relevant adult tasks and a trusted band",
+    "expected": "Professional topics.",
+    "got": "The tasks are about Berlin emails, time zones, and a deadline extension. The band is B1 despite her A2 self-view.",
+    "evidence": [
+      "#6, #8, #9, #10"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep workplace-flavoured tasks.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-oksana-34-J1-1",
+    "journey": "J1",
+    "character": "oksana-34",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Exact B1 placement with personalised summary",
+    "expected": "Level she accepts, with a teacher-like read",
+    "got": "B1, summary cites her truck example and goal",
+    "evidence": [
+      "#10 'You told how you found another truck in one hour, which fits your goal of job interview experience.'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep summary citing a learner-specific detail.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-oksana-34-J1-2",
+    "journey": "J1",
+    "character": "oksana-34",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "clarity",
+    "title": "Own-language invitation, no background assumptions",
+    "expected": "No Czech or refugee assumptions",
+    "got": "Neutral welcome, 'your own language' wording",
+    "evidence": [
+      "#2 'You can answer in English or in your own language.'"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep neutral phrasing for out-of-segment users.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  }
+]

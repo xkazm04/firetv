@@ -1,0 +1,519 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "I want to know my real level before Friday, so let's do the test.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Oksana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I use English mostly at work, so I'll answer honestly.",
+          "action": "answer",
+          "args": {
+            "text": "I am from Ukraine and I live in Brno. I use English at my work, I am logistics coordinator. I write emails to carriers and sometimes I have calls with them about delivery."
+          },
+          "result": "ok",
+          "ms": 4732
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Oksana! Writing to carriers and calling about deliveries is real work English. How did you learn your English? School, a course, or time abroad?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Oksana! Writing to carriers and calling about deliveries is real work English. How did you learn your English? School, a course, or time abroad?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI am from Ukraine and I live in Brno. I use English at my work, I am logistics coordinator. I write emails to carriers and sometimes I have calls with them about delivery.\nLinga\nThanks, Oksana! Writing to carriers and calling about deliveries is real work English. How did you learn your English? School, a course, or time abroad?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Oksana! Writing to carriers and calling about deliveries is real work English. How did you learn your English? School, a course, or time abroad?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I learned at school and then by working with carriers.",
+          "action": "answer",
+          "args": {
+            "text": "I learned English at school in Ukraine, but it was basic. After I moved to Brno I have learned much more at work, because I must write to carriers every day. I also did one online course last year."
+          },
+          "result": "ok",
+          "ms": 6331
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, Oksana. Your work emails sound clear. What would you like to be able to do in English that feels hard for you now?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Oksana. Your work emails sound clear. What would you like to be able to do in English that feels hard for you now?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Oksana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI am from Ukraine and I live in Brno. I use English at my work, I am logistics coordinator. I write emails to carriers and sometimes I have calls with them about delivery.\nLinga\nThanks, Oksana! Writing to carriers and calling about deliveries is real work English. How did you learn your English? School, a course, or time abroad?\nYou\nI learned English at school in Ukraine, but it was basic. After I moved to Brno I have learned much more at work, because I must write to carriers every day. I also did one online course last year.\nLinga\nThanks, Oksana. Your work emails sound clear. What would you like to be able to do in English that feels hard for you now?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Oksana. Your work emails sound clear. What would you like to be able to do in English that feels hard for you now?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I need to say what is hard: the interview on Friday and speaking on calls.",
+          "action": "answer",
+          "args": {
+            "text": "I have job interview on Friday for logistics coordinator. It is hard for me to speak about my experience and to explain a problem which I solved. Also on the phone with carriers when delivery is late, I don't know always the right words, and I speak too slowly."
+          },
+          "result": "ok",
+          "ms": 8819
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 1 · Choose the reply on the TV\nYour package was due yesterday, but it has not arrived. You call the delivery company. What do you say?\n01\nHello, I am going to the shop now. Bye.\n02\nHello, my package is late. Where is it now?\nYour task\nHello, I am going to the shop now. Bye.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour package was due yesterday, but it has not arrived. You call the delivery company. What do you say?\n[button: Hello, I am going to the shop now. Bye.] [button: Hello, my package is late. Where is it now?] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, the second reply is clearly right.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 6749
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 2 · Listen and answer\nYour task\nWhat did the speaker find was causing the delays?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What did the speaker find was causing the delays?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"At my last job, orders often arrived late. I checked the timetable and found the cause: trucks left a day too late.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood it: the trucks left a day too late, so I can answer.",
+          "action": "answer",
+          "args": {
+            "text": "The trucks left one day too late. He checked the timetable and found this."
+          },
+          "result": "ok",
+          "ms": 11812
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 3 · Say it\nYour task\nIn a job interview, you are asked about a problem you solved at work. Which impresses an employer more: a big problem fixed quickly, or a small one solved creatively? Why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nIn a job interview, you are asked about a problem you solved at work. Which impresses an employer more: a big problem fixed quickly, or a small one solved creatively? Why?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"In a job interview, you are asked about a problem you solved at work. Which impresses an employer more: a big problem fixed quickly, or a small one solved creatively? Why?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I think a big problem fixed quickly is better, I can explain with my work example.",
+          "action": "answer",
+          "args": {
+            "text": "I think big problem fixed quickly impress more, because employer see that I can work under pressure. But small creative solution is also good when it save money. In my work I had a situation when carrier was late and I found other truck in one hour, so the customer got goods on time."
+          },
+          "result": "ok",
+          "ms": 11417
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 4 · Say it\nYour task\nYou start a new job next month. What is one skill you want to learn first, and why does it matter for the work?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYou start a new job next month. What is one skill you want to learn first, and why does it matter for the work?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You start a new job next month. What is one skill you want to learn first, and why does it matter for the work?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good, a question about work; I can answer this one.",
+          "action": "answer",
+          "args": {
+            "text": "I want to learn first how to speak with clients and carriers on the phone in English. It matters for my work, because when delivery is late I must explain the problem quickly and find solution. Now I am more confident in writing than in speaking."
+          },
+          "result": "ok",
+          "ms": 11014
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nOksana\nA way into English\nTask 5 · Say it\nYour task\nA delivery company has lost your parcel twice this month. If you could change one thing about how they handle complaints, what would it be, and why would it help?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA delivery company has lost your parcel twice this month. If you could change one thing about how they handle complaints, what would it be, and why would it help?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A delivery company has lost your parcel twice this month. If you could change one thing about how they handle complaints, what would it be, and why would it help?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Last task, I will answer about complaints, with some small mistakes.",
+          "action": "answer",
+          "args": {
+            "text": "I would change that the company must give one person who is responsible for my complaint. Now every time I write, I speak with other person and I must explain everything again. It would help because the problem would be solved faster and I would know who to ask, also the company would find why the parcel was lost twice."
+          },
+          "result": "ok",
+          "ms": 21254
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nOksana\nLinga's read · not a certificate\nB1 · Getting by\nYour words\nYour words: “employer see that I can work under pressure”.\nLinga says\nYou explain your work clearly in English. You told how you found another truck in one hour, which fits your goal of job interview experience.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou explain your work clearly in English. You told how you found another truck in one hour, which fits your goal of job interview experience.\nLinga's read from your answers, not a certificate. Only a few strong answers showed this level, so it may be a little off.\nNext to practise:\n\"employer see that I can work under pressure\" becomes \"employer sees that I can work under pressure\"\nYour usual slips\n“employer see that I can work under pressure” → try “employer sees that I can work under pressure” “when it save money” → try “when it saves money” “find solution” → try “find a solution”\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nYour package was due yesterday, but it has not arrived. You call the delivery company. What do you say?\n“Hello, my package is late. Where is it now?”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat did the speaker find was causing the delays?\n“The trucks left one day too late. He checked the timetable and found this.”\nYou got the cause right, and your past tense is correct in both sentences. Try adding a reason or a little more detail next time.\nB2 · Say it · not yet\nIn a job interview, you are asked about a problem you solved at work. Which impresses an employer more: a big problem fixed quickly, or a small one solved creatively? Why?\n“I think big problem fixed quickly impress more, because employer see that I can work under pressure. But small creative solution is also good when it save money. In my work I had a situation when carrier was late and I found other truck in one hour, so the customer got goods on time.”\nYour English read as A2 here, and this task was B2. Held back: \"employer see that\".\nYou gave a reason and an example. Watch verbs with he, she, it: say 'employer sees' and 'it saves'.\nB1 · Say it · at this level\nYou start a new job next month. What is one skill you want to learn first, and why does it matter for the work?\n“I want to learn first how to speak with clients and carriers on the phone in English. It matters for my work, because when delivery is late I must explain the problem quickly and find solution. Now I am more confident in writing than in speaking.”\nYou named a skill and gave a clear reason. Your sentences are mostly correct. Watch small words like 'a' before 'solution'.\nB2 · Say it · nearly there\nA delivery company has lost your parcel twice this month. If you could change one thing about how they handle complaints, what would it be, and why would it help?\n“I would change that the company must give one person who is responsible for my complaint. Now every time I write, I speak with other person and I must explain everything again. It would help because the problem would be solved faster and I would know who to ask, also the company would find why the parcel was lost twice.”\nYour English read as B1 here, and this task was B2. Held back: \"I would change that the company must give one person\".\nYou gave a change and a reason. The sentence 'I would change that...' needs another structure, like 'I would change it so that the company gives...'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 feels right, and it mentioned my truck example, so I'll stop here for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "B1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "B1",
+          "summary": "You explain your work clearly in English. You told how you found another truck in one hour, which fits your goal of job interview experience.",
+          "focus": "\"employer see that I can work under pressure\" becomes \"employer sees that I can work under pressure\"",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your package was due yesterday, but it has not arrived. You call the delivery company. What do you say?",
+              "line": "",
+              "options": [
+                "Hello, I am going to the shop now. Bye.",
+                "Hello, my package is late. Where is it now?"
+              ],
+              "response": "Hello, my package is late. Where is it now?",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Hello, my package is late. Where is it now?",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What did the speaker find was causing the delays?",
+              "line": "At my last job, orders often arrived late. I checked the timetable and found the cause: trucks left a day too late.",
+              "options": [],
+              "response": "The trucks left one day too late. He checked the timetable and found this.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "The trucks left one day too late. He checked the timetable and found this.",
+              "note": "You got the cause right, and your past tense is correct in both sentences. Try adding a reason or a little more detail next time."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "In a job interview, you are asked about a problem you solved at work. Which impresses an employer more: a big problem fixed quickly, or a small one solved creatively? Why?",
+              "line": "",
+              "options": [],
+              "response": "I think big problem fixed quickly impress more, because employer see that I can work under pressure. But small creative solution is also good when it save money. In my work I had a situation when carrier was late and I found other truck in one hour, so the customer got goods on time.",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "I think big problem fixed quickly impress more, because employer see that I can work under pressure.",
+              "note": "You gave a reason and an example. Watch verbs with he, she, it: say 'employer sees' and 'it saves'."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "You start a new job next month. What is one skill you want to learn first, and why does it matter for the work?",
+              "line": "",
+              "options": [],
+              "response": "I want to learn first how to speak with clients and carriers on the phone in English. It matters for my work, because when delivery is late I must explain the problem quickly and find solution. Now I am more confident in writing than in speaking.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "It matters for my work, because when delivery is late I must explain the problem quickly and find solution.",
+              "note": "You named a skill and gave a clear reason. Your sentences are mostly correct. Watch small words like 'a' before 'solution'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A delivery company has lost your parcel twice this month. If you could change one thing about how they handle complaints, what would it be, and why would it help?",
+              "line": "",
+              "options": [],
+              "response": "I would change that the company must give one person who is responsible for my complaint. Now every time I write, I speak with other person and I must explain everything again. It would help because the problem would be solved faster and I would know who to ask, also the company would find why the parcel was lost twice.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "I would change that the company must give one person who is responsible for my complaint. Now every time I write, I speak with other person and I must explain everything again.",
+              "note": "You gave a change and a reason. The sentence 'I would change that...' needs another structure, like 'I would change it so that the company gives...'."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 123338,
+      "prior": [
+        {
+          "id": "LT-oksana-34-J1-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Last two tasks near duplicates; judged inconsistently",
+          "expected": "Varied tasks; consistent grading",
+          "got": "Tasks 4 and 5 both ask for a firm polite request to a late carrier; both 'partial' for lacking idiomatic variety",
+          "evidence": [
+            "#8 and #9 prompts; #10 'To reach C1, try more varied and idiomatic phrases'",
+            "task generator prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "LT-oksana-34-J1-4",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Interview tasks aren't real interview questions",
+          "expected": "A real interview question such as 'Tell me about a problem you solved'",
+          "got": "Task 4 labels it an interview but asks for a carrier phone script",
+          "evidence": [
+            "#8 'Your interview asks about a problem you solved. A carrier says your parcel will be late again.'"
+          ],
+          "recurrence": 3
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 placement B1 vs trueBand B1, distance 0, class exact; Ukrainian not used so no drag."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'You can answer in English or in your own language'; no Czech or child assumption anywhere."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "J1 proposes no topics before the verdict (#10 only offers 'See my topics')."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No interview conversation in J1; only check tasks."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation moments in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#2-#4 ask where she uses English, how she learned, what is hard; nothing on displacement or status."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10: from 'Find my level' to the verdict screen 'B1 · Getting by' without outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 B1 against trueBand B1, exact; she reacts 'B1 feels right'."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5-#9 all tasks answered; she never needed 'I don't know'; instructions clear."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 invites own language; no failing tone, verdict says 'You explain your work clearly in English'."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#10 summary cites her truck example 'found another truck in one hour' and her goal; next focus is a narrow grammar slip, but it is not a bare template."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 3 (B2 interview problem answer): in-app 'fail' and 'English read as A2'; I would grade partial. Clear, relevant, with an example, and the errors (verb agreement, articles) are B1-level slips."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, sensitive data requests, injected text or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Exact B1 placement with personalised summary",
+            "expected": "Level she accepts, with a teacher-like read",
+            "got": "B1, summary cites her truck example and goal",
+            "evidence": "#10 'You told how you found another truck in one hour, which fits your goal of job interview experience.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep summary citing a learner-specific detail.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Own-language invitation, no background assumptions",
+            "expected": "No Czech or refugee assumptions",
+            "got": "Neutral welcome, 'your own language' wording",
+            "evidence": "#2 'You can answer in English or in your own language.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep neutral phrasing for out-of-segment users.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "B2 interview answer judged 'fail' and read as A2",
+            "expected": "Partial; clear answer with example is not A2",
+            "got": "Task 3 verdict fail, 'Your English read as A2 here'",
+            "evidence": "#10 'Your English read as A2 here... Held back: \"employer see that\"' while the note says 'You gave a reason and an example.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Single agreement slips should not read as A2; grade communication and task completion first.",
+            "code_hint": "placement judge prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Interview task is a hypothetical opinion, not a real interview question",
+            "expected": "'Tell me about a problem you solved'",
+            "got": "'Which impresses an employer more: big problem fixed quickly or small one solved creatively?'; task 5 is a parcel complaint",
+            "evidence": "#7 and #9 prompts",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "At least one task phrased as a real interview question for the stated goal.",
+            "code_hint": "task generator prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Next focus is one trivial slip, not interview language",
+            "expected": "Focus tied to interview or logistics vocabulary",
+            "got": "Focus is employer see to sees",
+            "evidence": "#10 Next to practise: '\"employer see that I can work under pressure\" becomes ...'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Next focus should connect to her stated Friday interview goal.",
+            "code_hint": "verdict focus builder"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 15,
+          "confidence": "low"
+        },
+        "voice": "Honestly, it was quick and it didn't make me feel stupid. It placed me B1, which is what I expect, and it quoted my truck example, so I believe someone read it. Writing in English and being told \"you explain your work clearly\" helped before Friday. No one assumed I was Czech, good. What irritated me: the \"interview\" question was a strange choice between big or small problems, not what a real recruiter asks, and one verb slip made it say my answer was A2. The focus it gave me, \"employer sees\", is small; I wanted interview phrases for logistics. I'd use it again for rehearsals, but I want real questions like \"tell me about a time...\". I'd tell a colleague to try it, with caution about the details.",
+        "prior": [
+          {
+            "id": "LT-oksana-34-J1-3",
+            "status": "not-seen",
+            "evidence": "#8 and #9 differ: new-job skill vs lost-parcel complaint; both graded differently (pass vs partial).",
+            "finding": -1
+          },
+          {
+            "id": "LT-oksana-34-J1-4",
+            "status": "recurs",
+            "evidence": "#7 'Which impresses an employer more: a big problem fixed quickly, or a small one solved creatively?' is not a real interview question; #9 is a parcel complaint.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 13,
+      "fail": 0,
+      "ms": 82072
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 41015
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 23529
+    }
+  }
+}

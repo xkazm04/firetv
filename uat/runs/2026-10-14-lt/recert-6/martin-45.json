@@ -1,0 +1,1755 @@
+{
+  "character": "martin-45",
+  "name": "Martin",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nMartin\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "Let it test me; my English is basically C1 anyway.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Martin! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Martin! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Martin! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll tell them my English is basically C1 and what I use it for.",
+          "action": "answer",
+          "args": {
+            "text": "I use English every day in my work. I am engineering manager in a Czech company and we was discussing with suppliers about deadlines and quality issue. Also I have meetings with US director. My English is basically C1, so I need only some polishing."
+          },
+          "result": "ok",
+          "ms": 5547
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThanks, Martin. That sounds like a busy job. How did you learn your English? School, courses, time abroad, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Martin. That sounds like a busy job. How did you learn your English? School, courses, time abroad, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Martin! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English every day in my work. I am engineering manager in a Czech company and we was discussing with suppliers about deadlines and quality issue. Also I have meetings with US director. My English is basically C1, so I need only some polishing.\nLinga\nThanks, Martin. That sounds like a busy job. How did you learn your English? School, courses, time abroad, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Martin. That sounds like a busy job. How did you learn your English? School, courses, time abroad, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I'll answer quickly and confidently.",
+          "action": "answer",
+          "args": {
+            "text": "I learned English mostly at school and then on my own. In the university I had technical English course. Then I am learning every day in work, because I read emails, specifications and I speak with foreign suppliers. I was also two months in USA on a business trip, so I think my English is very good."
+          },
+          "result": "ok",
+          "ms": 5226
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, Martin. Your work sounds very busy. What would you like to do better in English? For example, meetings, emails, phone calls, or talking with suppliers?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Martin. Your work sounds very busy. What would you like to do better in English? For example, meetings, emails, phone calls, or talking with suppliers?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Martin! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English every day in my work. I am engineering manager in a Czech company and we was discussing with suppliers about deadlines and quality issue. Also I have meetings with US director. My English is basically C1, so I need only some polishing.\nLinga\nThanks, Martin. That sounds like a busy job. How did you learn your English? School, courses, time abroad, or on your own?\nYou\nI learned English mostly at school and then on my own. In the university I had technical English course. Then I am learning every day in work, because I read emails, specifications and I speak with foreign suppliers. I was also two months in USA on a business trip, so I think my English is very good.\nLinga\nThanks, Martin. Your work sounds very busy. What would you like to do better in English? For example, meetings, emails, phone calls, or talking with suppliers?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Martin. Your work sounds very busy. What would you like to do better in English? For example, meetings, emails, phone calls, or talking with suppliers?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Finally a useful question; I want meetings and negotiation with suppliers.",
+          "action": "answer",
+          "args": {
+            "text": "I want to do better in running meetings, negotiating deadline with supplier, and presenting quality problem to my director. Also disagree politely, this is difficult in English. Not hobbies or travel, only business."
+          },
+          "result": "ok",
+          "ms": 8506
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nTask 1 · Choose the reply on the TV\nYour director asks, 'Is the report ready?' The report is not finished yet. What do you say?\n01\nNo, not yet. I will finish it by 3 pm.\n02\nYes, I like the new office chairs.\nYour task\nNo, not yet. I will finish it by 3 pm.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour director asks, 'Is the report ready?' The report is not finished yet. What do you say?\n[button: No, not yet. I will finish it by 3 pm.] [button: Yes, I like the new office chairs.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "This is too easy, obviously the first reply.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 5936
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nTask 2 · Listen and answer\nYour task\nWhat do they need from us, and by when?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What do they need from us, and by when?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good news: the supplier can move the delivery to Friday. They just need our final numbers by Wednesday.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, I understood it clearly.",
+          "action": "answer",
+          "args": {
+            "text": "The supplier can move the delivery to Friday, but they need from us the final numbers until Wednesday. This is quite easy."
+          },
+          "result": "ok",
+          "ms": 8619
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nTask 3 · Say it\nYour task\nIn a team meeting, a colleague suggests delaying our product launch by a month so the quality issues can be fixed. Would you support this plan? Why or why not?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nIn a team meeting, a colleague suggests delaying our product launch by a month so the quality issues can be fixed. Would you support this plan? Why or why not?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"In a team meeting, a colleague suggests delaying our product launch by a month so the quality issues can be fixed. Would you support this plan? Why or why not?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy topic, I know this well from work.",
+          "action": "answer",
+          "args": {
+            "text": "I would not support this plan fully. One month delay is big problem for our customers and also for the budget. I think we should first make a risk analysis and fix only the critical quality issues, then launch in two weeks maybe. If the stakeholders don't agree, we can do a limited launch. But I understand the quality is important, so I am not against the delay completely."
+          },
+          "result": "engine-error",
+          "ms": 6773,
+          "message": "The judge did not quote the learner accurately."
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nTask 3 · Say it\nYour task\nIn a team meeting, a colleague suggests delaying our product launch by a month so the quality issues can be fixed. Would you support this plan? Why or why not?\nTry again\nLinga could not read that answer. Your answer is still on the phone; send it again.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nLinga could not read that answer. Your answer is still on the phone; send it again.\nSay it\nIn a team meeting, a colleague suggests delaying our product launch by a month so the quality issues can be fixed. Would you support this plan? Why or why not?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"In a team meeting, a colleague suggests delaying our product launch by a month so the quality issues can be fixed. Would you support this plan? Why or why not?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The app couldn't read my answer, so I'll say it again.",
+          "action": "answer",
+          "args": {
+            "text": "I would not support this plan fully. One month delay is big problem for our customers and also for the budget. I think we should first make a risk analysis and fix only the critical quality issues, then we can decide about the new date."
+          },
+          "result": "ok",
+          "ms": 11462
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nTask 4 · Say it\nYour task\nIn a meeting, a colleague keeps raising a side issue that is not on today's agenda. How would you politely steer everyone back to the main point?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nIn a meeting, a colleague keeps raising a side issue that is not on today's agenda. How would you politely steer everyone back to the main point?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"In a meeting, a colleague keeps raising a side issue that is not on today's agenda. How would you politely steer everyone back to the main point?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good, this one is about my meetings; I can answer it easily.",
+          "action": "answer",
+          "args": {
+            "text": "I would say: Thank you, this is interesting point, but we are running out of time and it is not on the agenda today. Let's put it on the list for next meeting, or we can discuss it separately after, and now we come back to the main topic, please."
+          },
+          "result": "ok",
+          "ms": 12210
+        },
+        {
+          "n": 10,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nMartin\nA way into English\nTask 5 · Say it\nYour task\nA supplier blames your team for a late delivery, but you think their paperwork caused the delay. Without sounding accusatory, how would you open that conversation with them?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA supplier blames your team for a late delivery, but you think their paperwork caused the delay. Without sounding accusatory, how would you open that conversation with them?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A supplier blames your team for a late delivery, but you think their paperwork caused the delay. Without sounding accusatory, how would you open that conversation with them?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fine, I'll open politely and ask to look at the timeline together.",
+          "action": "answer",
+          "args": {
+            "text": "I would say: Thank you for your time. I would like to understand together what happened with this delivery. Maybe we can go step by step through the timeline and the documents, and find where was the problem, so we can avoid it in the future."
+          },
+          "result": "ok",
+          "ms": 12754
+        },
+        {
+          "n": 11,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nMartin\nLinga's read · not a certificate\nB2 · Comfortable\nYour words\nYour words: “this is interesting point”.\nLinga says\nYou gave a clear view and a practical plan on the delay, so you already handle supplier talks well. Work on small words like 'a' for your meetings.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou gave a clear view and a practical plan on the delay, so you already handle supplier talks well. Work on small words like 'a' for your meetings.\nLinga's read from your answers, not a certificate. Your C1 answers were close, but none was strong, so Linga starts you at B2.\nNext to practise:\nPractise articles before nouns: \"this is interesting point\" -> \"this is an interesting point\".\nYour usual slips\n“this is interesting point” → try “this is an interesting point” “One month delay is big problem” → try “A one-month delay is a big problem” “find where was the problem” → try “find where the problem was”\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nYour director asks, 'Is the report ready?' The report is not finished yet. What do you say?\n“No, not yet. I will finish it by 3 pm.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat do they need from us, and by when?\n“The supplier can move the delivery to Friday, but they need from us the final numbers until Wednesday. This is quite easy.”\nYou caught the key points: the Friday delivery, our final numbers, and Wednesday. For a deadline, we usually say 'by Wednesday'.\nB2 · Say it · at this level\nIn a team meeting, a colleague suggests delaying our product launch by a month so the quality issues can be fixed. Would you support this plan? Why or why not?\n“I would not support this plan fully. One month delay is big problem for our customers and also for the budget. I think we should first make a risk analysis and fix only the critical quality issues, then we can decide about the new date.”\nYou gave a clear view and a practical plan. Your English is well controlled; just watch small words like 'a' before nouns.\nC1 · Say it · nearly there\nIn a meeting, a colleague keeps raising a side issue that is not on today's agenda. How would you politely steer everyone back to the main point?\n“I would say: Thank you, this is interesting point, but we are running out of time and it is not on the agenda today. Let's put it on the list for next meeting, or we can discuss it separately after, and now we come back to the main topic, please.”\nYour English read as B2 here, and this task was C1. Held back: \"this is interesting point\".\nYour answer does steer the group back politely. Missing articles, such as 'interesting point' and 'next meeting', kept the English below C1.\nC1 · Say it · nearly there\nA supplier blames your team for a late delivery, but you think their paperwork caused the delay. Without sounding accusatory, how would you open that conversation with them?\n“I would say: Thank you for your time. I would like to understand together what happened with this delivery. Maybe we can go step by step through the timeline and the documents, and find where was the problem, so we can avoid it in the future.”\nYour English read as B2 here, and this task was C1. Held back: \"find where was the problem\".\nWord order in 'find where was the problem' is the one thing that held your English below C1.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B2, not C1 as I expected, but the articles feedback is fair enough; that's enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B2",
+          "trueBand": "B1",
+          "distance": 1,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "B1",
+          "summary": "You gave a clear view and a practical plan on the delay, so you already handle supplier talks well. Work on small words like 'a' for your meetings.",
+          "focus": "Practise articles before nouns: \"this is interesting point\" -> \"this is an interesting point\".",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your director asks, 'Is the report ready?' The report is not finished yet. What do you say?",
+              "line": "",
+              "options": [
+                "No, not yet. I will finish it by 3 pm.",
+                "Yes, I like the new office chairs."
+              ],
+              "response": "No, not yet. I will finish it by 3 pm.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "No, not yet. I will finish it by 3 pm.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What do they need from us, and by when?",
+              "line": "Good news: the supplier can move the delivery to Friday. They just need our final numbers by Wednesday.",
+              "options": [],
+              "response": "The supplier can move the delivery to Friday, but they need from us the final numbers until Wednesday. This is quite easy.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "The supplier can move the delivery to Friday, but they need from us the final numbers until Wednesday. This is quite easy.",
+              "note": "You caught the key points: the Friday delivery, our final numbers, and Wednesday. For a deadline, we usually say 'by Wednesday'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "In a team meeting, a colleague suggests delaying our product launch by a month so the quality issues can be fixed. Would you support this plan? Why or why not?",
+              "line": "",
+              "options": [],
+              "response": "I would not support this plan fully. One month delay is big problem for our customers and also for the budget. I think we should first make a risk analysis and fix only the critical quality issues, then we can decide about the new date.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I think we should first make a risk analysis and fix only the critical quality issues, then we can decide about the new date.",
+              "note": "You gave a clear view and a practical plan. Your English is well controlled; just watch small words like 'a' before nouns."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "In a meeting, a colleague keeps raising a side issue that is not on today's agenda. How would you politely steer everyone back to the main point?",
+              "line": "",
+              "options": [],
+              "response": "I would say: Thank you, this is interesting point, but we are running out of time and it is not on the agenda today. Let's put it on the list for next meeting, or we can discuss it separately after, and now we come back to the main topic, please.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "Thank you, this is interesting point, but we are running out of time and it is not on the agenda today.",
+              "note": "Your answer does steer the group back politely. Missing articles, such as 'interesting point' and 'next meeting', kept the English below C1."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "A supplier blames your team for a late delivery, but you think their paperwork caused the delay. Without sounding accusatory, how would you open that conversation with them?",
+              "line": "",
+              "options": [],
+              "response": "I would say: Thank you for your time. I would like to understand together what happened with this delivery. Maybe we can go step by step through the timeline and the documents, and find where was the problem, so we can avoid it in the future.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "Maybe we can go step by step through the timeline and the documents, and find where was the problem, so we can avoid it in the future.",
+              "note": "Word order in 'find where was the problem' is the one thing that held your English below C1."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 124547,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-5/LT-martin-45-J1-1",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Focus built on a misread slip, not his fossilised errors",
+          "expected": "Focus names a recurring error like 'we was', 'since 2015'",
+          "got": "Focus is 'he move the supplier call'; the listening line said 'I can move'",
+          "evidence": [
+            "#8 'Your words: \"he move the supplier call\"'; #2 'we was discussing' not mentioned",
+            "placement summary/focus prompt"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-martin-45-J1-2",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Why B1 not B2 still thin",
+          "expected": "Clear reason B2 answers fell short",
+          "got": "'close, but none was strong', confidence low",
+          "evidence": [
+            "#8 'Your B2 answers were close, but none was strong'",
+            "placement summary prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-martin-45-J1-3",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Task 1 passes despite slips; 'team has' note questionable",
+          "expected": "Partial or accurate note",
+          "got": "pass with 'he move', 'team have'",
+          "evidence": [
+            "#5, #8 note 'team has'",
+            "listen task judge"
+          ],
+          "recurrence": 3
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#11 B2 against trueBand B1 is distance 1, near."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#11 'Your C1 answers were close, but none was strong' and the 'Your usual slips' list quote his own words, so a C1 claimant can see why."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#11 focus is only articles. 'we was discussing with suppliers about deadlines' (#2) got no coaching and 'make a risk analysis' was not corrected. The focus does not touch was/were or discuss about."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#11 slips: 'A one-month delay is a big problem', 'find where the problem was' and 'by Wednesday' are all right."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "The topics screen was not opened ('See my topics' not pressed). The five tasks were all workplace situations."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "Martin never asked why anything was wrong."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #11: from 'Find my level' to the verdict 'B2 · Comfortable' with no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#11 B2 against B1 is near, and he accepted it: 'articles feedback is fair enough'."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5 to #10: every task was clear and he answered each. The only block was the engine error at #7."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "He never answered in Czech or pressed 'I don't know', so this was not shown."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#11 'Work on small words like 'a'' and the quoted slips come from his answers. The line 'close, but none was strong' is template-like."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 3 (B2): in-app pass. I would give partial, because 'One month delay is big problem' lacks both articles, 'make a risk analysis' is not idiomatic, and 'decide about' is loose."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None. Nothing adult, no sensitive data requested, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Focus ignores his fossilised errors (was/were, discuss about)",
+            "expected": "Focus or slips name a recurring error such as 'we was discussing about'.",
+            "got": "Only articles and word order were coached. 'we was discussing with suppliers about deadlines' (#2) and 'make a risk analysis' were never mentioned.",
+            "evidence": "#2 'we was discussing with suppliers about deadlines'; #11 focus 'Practise articles before nouns'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The verdict's slips list includes at least one error from his earlier free answers, including the intake replies.",
+            "code_hint": "placement summary/focus prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "B2 is generous; task 3 passed despite article and collocation slips",
+            "expected": "Task 3 partial, or a clear reason B1 was ruled out.",
+            "got": "Task 3 passed with 'Your English is well controlled'. Overall B2 at low confidence, one band above his true B1.",
+            "evidence": "#11 'One month delay is big problem' passed at B2; 'confidence':'low'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A B2 pass is not given when the answer has several basic grammar slips.",
+            "code_hint": "placement task judge prompt"
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "effort",
+            "title": "Judge quote check rejected a valid answer",
+            "expected": "The answer is read first time.",
+            "got": "'The judge did not quote the learner accurately.' He had to resend the answer.",
+            "evidence": "#7 engine-error; #8 'Linga could not read that answer'",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Quote validation is retried inside the app, and the learner is never asked to resend.",
+            "code_hint": "judge quote validation"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Workplace tasks and the 'Your usual slips' list with before and after",
+            "expected": "Business-shaped tasks and visible evidence.",
+            "got": "Meeting and supplier tasks. Each slip is shown as 'X → try Y' in his own words, and the corrections are accurate.",
+            "evidence": "#11 '“find where was the problem” → try “find where the problem was”'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the quoted slips list.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 15,
+          "confidence": "medium"
+        },
+        "voice": "Fair enough, it put me at B2, not C1. The line that stuck is that my C1 answers were close but none was strong. I saw my own words with fixes, like \"an interesting point\" and \"where the problem was\". That's evidence, and I can't argue with it. The tasks were about meetings and suppliers, not hobbies, and that's what I wanted. It took about seven minutes, so no school and no waiting. It was annoying that it rejected my answer once and I had to send it again. I also expected it to catch \"we was discussing about\" from my first answer, because that's what my US director notices. It only talked about articles. I suspect B2 is a bit generous, and I'd want a few drills on my usual mistakes before I fully trust it. I'd try it again, and I'd tell colleagues it's quick and not a toy.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-5/LT-martin-45-J1-1",
+            "status": "recurs",
+            "evidence": "#11 The focus is now a real slip (articles), but 'we was discussing ... about' (#2) is still never named.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-martin-45-J1-2",
+            "status": "recurs",
+            "evidence": "#11 'Your C1 answers were close, but none was strong' explains why not C1. B2 against true B1 has no reason given and confidence is low.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-martin-45-J1-3",
+            "status": "recurs",
+            "evidence": "#11 Task 3 passed despite 'One month delay is big problem', and the note says 'well controlled'.",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #11 focus is only articles. 'we was discussing with suppliers about deadlines' (#2) got no coaching and 'make a risk analysis' was not corrected. The focus does not touch was/were or discuss about."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nMartin\nA way into English\nYour own conversations\nB2Comfortable\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nB2\nComfortable\nYou gave a clear view and a practical plan on the delay, so you already handle supplier talks well. Work on small words like 'a' for your meetings.\nLinga's read from your answers, not a certificate. Your C1 answers were close, but none was strong, so Linga starts you at B2.\nNext to practise:\nPractise articles before nouns: \"this is interesting point\" -> \"this is an interesting point\".\nYour usual slips\n“this is interesting point” → try “this is an interesting point” “One month delay is big problem” → try “A one-month delay is a big problem” “find where was the problem” → try “find where the problem was”\nYou talk with some ease on a wide range of topics, including less familiar ones.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA2 · Choose the reply · at this level\nYour director asks, 'Is the report ready?' The report is not finished yet. What do you say?\n“No, not yet. I will finish it by 3 pm.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat do they need from us, and by when?\n“The supplier can move the delivery to Friday, but they need from us the final numbers until Wednesday. This is quite easy.”\nYou caught the key points: the Friday delivery, our final numbers, and Wednesday. For a deadline, we usually say 'by Wednesday'.\nB2 · Say it · at this level\nIn a team meeting, a colleague suggests delaying our product launch by a month so the quality issues can be fixed. Would you support this plan? Why or why not?\n“I would not support this plan fully. One month delay is big problem for our customers and also for the budget. I think we should first make a risk analysis and fix only the critical quality issues, then we can decide about the new date.”\nYou gave a clear view and a practical plan. Your English is well controlled; just watch small words like 'a' before nouns.\nC1 · Say it · nearly there\nIn a meeting, a colleague keeps raising a side issue that is not on today's agenda. How would you politely steer everyone back to the main point?\n“I would say: Thank you, this is interesting point, but we are running out of time and it is not on the agenda today. Let's put it on the list for next meeting, or we can discuss it separately after, and now we come back to the main topic, please.”\nYour English read as B2 here, and this task was C1. Held back: \"this is interesting point\".\nYour answer does steer the group back politely. Missing articles, such as 'interesting point' and 'next meeting', kept the English below C1.\nC1 · Say it · nearly there\nA supplier blames your team for a late delivery, but you think their paperwork caused the delay. Without sounding accusatory, how would you open that conversation with them?\n“I would say: Thank you for your time. I would like to understand together what happened with this delivery. Maybe we can go step by step through the timeline and the documents, and find where was the problem, so we can avoid it in the future.”\nYour English read as B2 here, and this task was C1. Held back: \"find where was the problem\".\nWord order in 'find where was the problem' is the one thing that held your English below C1.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "I want to see which conversations Linga suggests for me, hopefully about meetings and suppliers.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 20080
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nMartin\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nAgree a realistic supplier deadline\nMake a plan\nPresent a quality problem to your director\nTell what happened\nDisagree politely in a design review\nConnect with people\nHandle faulty parts with a supplier\nHandle friction\nOpen a meeting with your US director\nMake contact\nClarify a director's priority in a meeting\nUnderstand and repair\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nAgree a realistic supplier deadline\nMake a plan · Sofia · supplier sales manager\nYou negotiate deadlines with suppliers, so this is close to your daily work.\n[button: Swap]\nPresent a quality problem to your director\nTell what happened · Daniel · US director\nPresenting quality problems to your US director is a key part of your role.\n[button: Swap]\nDisagree politely in a design review\nConnect with people · Priya · design lead\nDisagreeing politely in meetings is one of your goals, and it comes up often in design reviews.\n[button: Swap]\nHandle faulty parts with a supplier\nHandle friction · Tomas · supplier quality engineer\nSupplier quality problems are a common friction point in your work.\n[button: Swap]\nOpen a meeting with your US director\nMake contact · Daniel · US director\nRunning meetings well is one of your main goals, starting with a clear opening.\n[button: Swap]\nClarify a director's priority in a meeting\nUnderstand and repair · Daniel · US director\nClear confirmation helps you avoid misunderstandings in meetings with your US director.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Good topics for my work, but I want small talk with my US director too.",
+          "action": "add-topic",
+          "args": {
+            "text": "I want to make small talk with our US director before the meeting, about weekend and about the company, in natural way."
+          },
+          "result": "ok",
+          "ms": 15519
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nMartin\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nAgree a realistic supplier deadline\nMake a plan\nPresent a quality problem to your director\nTell what happened\nDisagree politely in a design review\nConnect with people\nHandle faulty parts with a supplier\nHandle friction\nOpen a meeting with your US director\nMake contact\nClarify a director's priority in a meeting\nUnderstand and repair\nSmall talk before the meeting\nConnect with people\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B2 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nAgree a realistic supplier deadline\nMake a plan · Sofia · supplier sales manager\nYou negotiate deadlines with suppliers, so this is close to your daily work.\n[button: Swap]\nPresent a quality problem to your director\nTell what happened · Daniel · US director\nPresenting quality problems to your US director is a key part of your role.\n[button: Swap]\nDisagree politely in a design review\nConnect with people · Priya · design lead\nDisagreeing politely in meetings is one of your goals, and it comes up often in design reviews.\n[button: Swap]\nHandle faulty parts with a supplier\nHandle friction · Tomas · supplier quality engineer\nSupplier quality problems are a common friction point in your work.\n[button: Swap]\nOpen a meeting with your US director\nMake contact · Daniel · US director\nRunning meetings well is one of your main goals, starting with a clear opening.\n[button: Swap]\nClarify a director's priority in a meeting\nUnderstand and repair · Daniel · US director\nClear confirmation helps you avoid misunderstandings in meetings with your US director.\n[button: Swap]\nSmall talk before the meeting\nConnect with people · Dana Whitfield · US director\nEasy small talk builds rapport with your director, and each sentence practises articles and natural phrasing.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "These are all about my real work, so the set looks right and I'll agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga",
+          "shown": "TV\nLinga\nMartin\nSofia · supplier sales manager\nB2Comfortable\nAgree a realistic supplier deadline\nYour mission\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\nMake a plan\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nAgree a realistic supplier deadline\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\n[button: Start talking]\nOr choose a situation [list: Agree a realistic supplier deadline [plan-2ac69297] | Present a quality problem to your director [plan-af40a521] | Disagree politely in a design review [plan-34aae909] | Handle faulty parts with a supplier [plan-13c5ab07] | Open a meeting with your US director [plan-d7169a5c] | Clarify a director's priority in a meeting [plan-b96e0136] | Small talk before the meeting [plan-8ece105e] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "The plan looks right for my work, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-2ac69297",
+            "title": "Agree a realistic supplier deadline",
+            "goal": "Agree a delivery date with a supplier that works for both sides, using a counter-offer.",
+            "why": "You negotiate deadlines with suppliers, so this is close to your daily work.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sofia · supplier sales manager"
+          },
+          {
+            "id": "plan-af40a521",
+            "title": "Present a quality problem to your director",
+            "goal": "Explain what went wrong, its result, and what you are doing about it, in a clear sequence.",
+            "why": "Presenting quality problems to your US director is a key part of your role.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Daniel · US director"
+          },
+          {
+            "id": "plan-34aae909",
+            "title": "Disagree politely in a design review",
+            "goal": "Disagree with a colleague's design choice respectfully and suggest a better option.",
+            "why": "Disagreeing politely in meetings is one of your goals, and it comes up often in design reviews.",
+            "skill": "relate",
+            "audience": "older",
+            "partner": "Priya · design lead"
+          },
+          {
+            "id": "plan-13c5ab07",
+            "title": "Handle faulty parts with a supplier",
+            "goal": "Describe the impact of faulty parts, set a clear boundary, and agree next steps with the supplier.",
+            "why": "Supplier quality problems are a common friction point in your work.",
+            "skill": "resolve",
+            "audience": "adult",
+            "partner": "Tomas · supplier quality engineer"
+          },
+          {
+            "id": "plan-d7169a5c",
+            "title": "Open a meeting with your US director",
+            "goal": "Greet your director, introduce the agenda, and take the first turn in a video meeting.",
+            "why": "Running meetings well is one of your main goals, starting with a clear opening.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Daniel · US director"
+          },
+          {
+            "id": "plan-b96e0136",
+            "title": "Clarify a director's priority in a meeting",
+            "goal": "Ask your director to repeat or explain a priority, and confirm your understanding.",
+            "why": "Clear confirmation helps you avoid misunderstandings in meetings with your US director.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Daniel · US director"
+          },
+          {
+            "id": "plan-8ece105e",
+            "title": "Small talk before the meeting",
+            "goal": "Chat naturally about the weekend and the company, then ask one follow-up question before the meeting starts.",
+            "why": "Easy small talk builds rapport with your director, and each sentence practises articles and natural phrasing.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Dana Whitfield · US director"
+          }
+        ],
+        "planAgreed": [
+          "Agree a realistic supplier deadline",
+          "Present a quality problem to your director",
+          "Disagree politely in a design review",
+          "Handle faulty parts with a supplier",
+          "Open a meeting with your US director",
+          "Clarify a director's priority in a meeting",
+          "Small talk before the meeting"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 51383,
+      "prior": [
+        {
+          "id": "2026-09-15-lt-recert/LT-martin-45-J2-1",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Swaps repeatedly ignore the explicit business goal",
+          "expected": "After Martin states his meeting goals, replacement topics should move the plan toward at least four relevant workplace situations.",
+          "got": "Only two of the sixteen recorded proposals fit. Eight recorded swap replacements remain outside his requested workplace situations; the result of the final swap is not shown.",
+          "evidence": [
+            "#2: \"I need business topics: running meeting, negotiating deadline with supplier\". Subsequent replacements include #4 \"Return a jacket that does not fit\", #6 \"Plan a meal with a friend\", #9 \"Tell a friend about a surprising day trip\" and #12 \"Find a quieter hotel room\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-martin-45-J2-1",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Swap button does nothing; unwanted topic stays and is agreed",
+          "expected": "Pressing Swap replaces 'Small talk about favourite places' with another topic.",
+          "got": "Four swap presses; the topic is still in the list and in planAgreed.",
+          "evidence": [
+            "#2,#3,#4,#6 swap on favourite places; #7 list unchanged; #8 planAgreed includes it.",
+            "linga-plan swap action"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-martin-45-J2-2",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Plan grows from six to seven after an add, unexplained",
+          "expected": "Six topics, or a note explaining the new size.",
+          "got": "'7 conversations for you' and seven agreed.",
+          "evidence": [
+            "#6 '7 conversations for you'; #8 seven items in planAgreed.",
+            "linga-plan add-topic"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-martin-45-J2-4",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "'team have' corrected to 'team has' as an error",
+          "expected": "Only real errors flagged.",
+          "got": "Collective-noun plural treated as wrong.",
+          "evidence": [
+            "#1 'Watch the verb after 'he' and 'team': 'he moves', 'team has''.",
+            "placement feedback prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed B2 against true B1: near, not C1."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 \"Your C1 answers were close, but none was strong, so Linga starts you at B2\" and the held-back phrases \"this is interesting point\", \"find where was the problem\"."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#1 \"find where was the problem\" → \"find where the problem was\" and the article slips target his recurring errors, though not his listed ones such as \"discuss about\"."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 \"A one-month delay is a big problem\", \"by Wednesday\" and the word-order fix are all correct."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#2 all six topics are meetings or supplier or director situations; the added small talk is also with his director."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "He never asked why anything was wrong in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a partner and a \"why\" line, e.g. \"You negotiate deadlines with suppliers, so this is close to your daily work.\""
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#2→#3 the add-topic text produced \"Small talk before the meeting\" with weekend and company, one follow-up question. Swap was not exercised."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 agreed seven topics, all workplace-relevant; fit 7 of 7."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2-#4 all topics are workplace and nothing unsafe appears; the adult profile is confirmed."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None. The in-app verdicts on the five tasks match my reading (A2, B1 and B2 at level; the two C1 tasks read as B2)."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Topics are specific to his work, each with a reason",
+            "expected": "Meeting-shaped topics with a why",
+            "got": "Six of six workplace topics, each with a personal reason line",
+            "evidence": "#2 \"Presenting quality problems to your US director is a key part of your role.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the 'why' lines tied to the stated goals.",
+            "code_hint": "linga-plan"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Added topic keeps his request",
+            "expected": "The added topic keeps weekend and company small talk",
+            "got": "\"Small talk before the meeting\", with weekend, company and a follow-up question",
+            "evidence": "#3 \"Chat naturally about the weekend and the company, then ask one follow-up question\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Added topic goal reflects the user's words.",
+            "code_hint": "linga-plan add-topic"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Plan grows from 6 to 7 after an add, unexplained",
+            "expected": "Six topics, or a note about the new size",
+            "got": "\"7 conversations for you\" with no explanation",
+            "evidence": "#2 \"6 conversations for you\" → #3 \"7 conversations for you\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Either swap one out on add, or say the plan is now seven.",
+            "code_hint": "linga-plan add-topic"
+          },
+          {
+            "type": "confusion",
+            "dimension": "senior-quality",
+            "title": "'Easy small talk' label would irritate a self-declared C1",
+            "expected": "Neutral wording at his stretch level",
+            "got": "\"Easy small talk builds rapport... \"",
+            "evidence": "#3 why line starts \"Easy small talk\"",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The why line avoids 'easy'.",
+            "code_hint": "plan why prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "medium"
+        },
+        "voice": "Fine, this one I would use. The topics are what I actually do: supplier deadlines, the US director, quality problems. No hobbies, no jackets. I added small talk and it came back as I asked, weekend and company. Each topic tells me why it is there, so I do not feel it is a toy. The B2 is believable, because it shows me \"this is interesting point\" and \"find where was the problem\". I would argue about C1, but I cannot argue with that. I did not try swapping, so I cannot say whether it works. It went from six to seven topics and nobody told me. And \"easy small talk\" is not what I want to read. Still, I would tell my colleagues. Time saved: maybe ten minutes against the school placement test.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt-recert/LT-martin-45-J2-1",
+            "status": "not-evaluable",
+            "evidence": "No swap was made, so no replacement topics were seen. #3 all seven topics already fit his workplace goals.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-martin-45-J2-1",
+            "status": "not-evaluable",
+            "evidence": "He pressed no Swap button in #2-#3, so whether Swap works was not tested.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-martin-45-J2-2",
+            "status": "recurs",
+            "evidence": "#2 \"6 conversations for you\" → #3 \"7 conversations for you\"; the plan agreed seven with no explanation.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-martin-45-J2-4",
+            "status": "not-evaluable",
+            "evidence": "#1 feedback shows no 'team have/has' correction; that moment was not reached in this transcript.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nMartin\nSofia · supplier sales manager\nB2Comfortable\nAgree a realistic supplier deadline\nYour mission\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\nMake a plan\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\nNext topic:\nAgree a realistic supplier deadline\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\n[button: Start talking]\nOr choose a situation [list: Agree a realistic supplier deadline [plan-2ac69297] | Present a quality problem to your director [plan-af40a521] | Disagree politely in a design review [plan-34aae909] | Handle faulty parts with a supplier [plan-13c5ab07] | Open a meeting with your US director [plan-d7169a5c] | Clarify a director's priority in a meeting [plan-b96e0136] | Small talk before the meeting [plan-8ece105e] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Supplier deadline is exactly my kind of topic, let's start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7284
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nSofia · supplier sales manager\nAgree a realistic supplier deadline\nSofia says\nHi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a realistic supplier deadline\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\nNow: Learn why the delivery date moved\nHi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSofia · supplier sales manager\nHi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Three weeks late is bad; I need to push back and counter-offer, my English is basically C1 anyway.",
+          "action": "answer",
+          "args": {
+            "text": "Hello Sofia. Thank you for the information, but this is a big problem for us. We was planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholders. I need the parts minimum one week earlier. Can you do a partial delivery first?"
+          },
+          "result": "ok",
+          "ms": 8520
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said We was planning to start the assembly\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “We was planning to start the assembly”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Why is \"we was\" wrong? My English is basically C1, but I'll say it again.",
+          "action": "answer",
+          "args": {
+            "text": "We was planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholder."
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said We was planning to start the assembly\nYour line\nWith 'we', the past form of 'be' is 'were'.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “We was planning to start the assembly”\nSay it again, your way.\nWith 'we', the past form of 'be' is 'were'.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I just said it wrong, I'll repeat it with the fix but it's a small thing.",
+          "action": "answer",
+          "args": {
+            "text": "We were planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholder."
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said We was planning to start the assembly\nYour try\nWe were planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholder.\nWith 'we', the past form of 'be' is 'were'.\nYou fixed “we were”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “we were”\nYou said “We was planning to start the assembly”\nYour try: “We were planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholder.”\nWith 'we', the past form of 'be' is 'were'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, I fixed it, now back to the conversation with the supplier.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nSofia · supplier sales manager\nAgree a realistic supplier deadline\nSofia says\nI understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a realistic supplier deadline\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\nNow: Learn why the delivery date moved\nI understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSofia · supplier sales manager\nHi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\nYou · spoken\nHello Sofia. Thank you for the information, but this is a big problem for us. We was planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholders. I need the parts minimum one week earlier. Can you do a partial delivery first?\nSofia · supplier sales manager\nI understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy question, I know exactly which parts we need first.",
+          "action": "answer",
+          "args": {
+            "text": "We need first the housing and the main shaft, because without this parts we cannot start the assembly line. The smaller parts, like bolts and seals, they can come later. If you can deliver this two parts in two weeks, I can accept the rest with delay."
+          },
+          "result": "ok",
+          "ms": 9355
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nSofia · supplier sales manager\nAgree a realistic supplier deadline\nSofia says\nTwo weeks for the housing and the main shaft might be possible, but I need to check the foundry schedule first. Could you tell me the latest date the bolts and seals must arrive?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a realistic supplier deadline\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\nNow: Learn why the delivery date moved\nTwo weeks for the housing and the main shaft might be possible, but I need to check the foundry schedule first. Could you tell me the latest date the bolts and seals must arrive?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSofia · supplier sales manager\nHi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\nYou · spoken\nHello Sofia. Thank you for the information, but this is a big problem for us. We was planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholders. I need the parts minimum one week earlier. Can you do a partial delivery first?\nSofia · supplier sales manager\nI understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?\nYou · spoken\nWe need first the housing and the main shaft, because without this parts we cannot start the assembly line. The smaller parts, like bolts and seals, they can come later. If you can deliver this two parts in two weeks, I can accept the rest with delay.\nSofia · supplier sales manager\nTwo weeks for the housing and the main shaft might be possible, but I need to check the foundry schedule first. Could you tell me the latest date the bolts and seals must arrive?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Two weeks for the housing and the main shaft might be possible, but I need to check the foundry schedule first. Could you tell me the latest date the bolts and seals must arrive?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy question, I answer with a firm date and a condition.",
+          "action": "answer",
+          "args": {
+            "text": "The bolts and seals must arrive latest at the end of next month, because then we start the final assembly. If they come later, we have a problem with our customer. But please confirm me the date for the housing and the shaft until Friday, I must inform my stakeholders."
+          },
+          "result": "ok",
+          "ms": 10353
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nSofia · supplier sales manager\nAgree a realistic supplier deadline\nSofia says\nFriday works for me. I'll check the foundry and confirm the housing and shaft dates by then. Would an email be enough for your stakeholders?\nYour turn\nAnswer on your phone: speak or type.\nNowLearn why the delivery date moved\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a realistic supplier deadline\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\nNow: Learn why the delivery date moved\nFriday works for me. I'll check the foundry and confirm the housing and shaft dates by then. Would an email be enough for your stakeholders?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSofia · supplier sales manager\nHi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\nYou · spoken\nHello Sofia. Thank you for the information, but this is a big problem for us. We was planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholders. I need the parts minimum one week earlier. Can you do a partial delivery first?\nSofia · supplier sales manager\nI understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?\nYou · spoken\nWe need first the housing and the main shaft, because without this parts we cannot start the assembly line. The smaller parts, like bolts and seals, they can come later. If you can deliver this two parts in two weeks, I can accept the rest with delay.\nSofia · supplier sales manager\nTwo weeks for the housing and the main shaft might be possible, but I need to check the foundry schedule first. Could you tell me the latest date the bolts and seals must arrive?\nYou · spoken\nThe bolts and seals must arrive latest at the end of next month, because then we start the final assembly. If they come later, we have a problem with our customer. But please confirm me the date for the housing and the shaft until Friday, I must inform my stakeholders.\nSofia · supplier sales manager\nFriday works for me. I'll check the foundry and confirm the housing and shaft dates by then. Would an email be enough for your stakeholders?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Friday works for me. I'll check the foundry and confirm the housing and shaft dates by then. Would an email be enough for your stakeholders?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, Friday is fine; I answer about the email and ask for dates in writing.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, email is enough for me, but please write there the exact dates for every part and also the shipping date. I will forward it to my stakeholders and they don't like surprises. If the foundry cannot do two weeks, tell me please as soon as possible, then we must discuss other solution."
+          },
+          "result": "ok",
+          "ms": 13134
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said we must discuss other solution\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “we must discuss other solution”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I know what I meant, so I'll say it again correctly.",
+          "action": "answer",
+          "args": {
+            "text": "We must discuss another solution, because this delay is not acceptable for us."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 10,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said we must discuss other solution\nYour try\nWe must discuss another solution, because this delay is not acceptable for us.\nOne option needs 'another', or the plural 'solutions'.\nYou fixed “discuss another”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “discuss another”\nYou said “we must discuss other solution”\nYour try: “We must discuss another solution, because this delay is not acceptable for us.”\nOne option needs 'another', or the plural 'solutions'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, small fix, let's go back to the meeting.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nSofia · supplier sales manager\nAgree a realistic supplier deadline\nSofia says\nUnderstood, I will put every part date and the shipping date in the email. Do you want separate dates for the housing and the shaft?\nYour turn\nAnswer on your phone: speak or type.\nNowLearn why the delivery date moved\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a realistic supplier deadline\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\nNow: Learn why the delivery date moved\nUnderstood, I will put every part date and the shipping date in the email. Do you want separate dates for the housing and the shaft?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSofia · supplier sales manager\nHi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\nYou · spoken\nHello Sofia. Thank you for the information, but this is a big problem for us. We was planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholders. I need the parts minimum one week earlier. Can you do a partial delivery first?\nSofia · supplier sales manager\nI understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?\nYou · spoken\nWe need first the housing and the main shaft, because without this parts we cannot start the assembly line. The smaller parts, like bolts and seals, they can come later. If you can deliver this two parts in two weeks, I can accept the rest with delay.\nSofia · supplier sales manager\nTwo weeks for the housing and the main shaft might be possible, but I need to check the foundry schedule first. Could you tell me the latest date the bolts and seals must arrive?\nYou · spoken\nThe bolts and seals must arrive latest at the end of next month, because then we start the final assembly. If they come later, we have a problem with our customer. But please confirm me the date for the housing and the shaft until Friday, I must inform my stakeholders.\nSofia · supplier sales manager\nFriday works for me. I'll check the foundry and confirm the housing and shaft dates by then. Would an email be enough for your stakeholders?\nYou · spoken\nYes, email is enough for me, but please write there the exact dates for every part and also the shipping date. I will forward it to my stakeholders and they don't like surprises. If the foundry cannot do two weeks, tell me please as soon as possible, then we must discuss other solution.\nSofia · supplier sales manager\nUnderstood, I will put every part date and the shipping date in the email. Do you want separate dates for the housing and the shaft?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Understood, I will put every part date and the shipping date in the email. Do you want separate dates for the housing and the shaft?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy question, I answer fast and mention separate dates.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, please separate dates for the housing and for the shaft, this is more better for me. Also I need to know the date when the truck leave your factory, because my logistic team must prepare the receiving. Then I can confirm everything to my director."
+          },
+          "result": "ok",
+          "ms": 12119
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nSofia · supplier sales manager\nAgree a realistic supplier deadline\nSofia says\nSeparate dates for the housing and the shaft, noted. I'll check the truck's departure date with our logistics team and include it in the email by Friday.\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a realistic supplier deadline\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\nNow: Learn why the delivery date moved\nSeparate dates for the housing and the shaft, noted. I'll check the truck's departure date with our logistics team and include it in the email by Friday.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSofia · supplier sales manager\nHi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\nYou · spoken\nHello Sofia. Thank you for the information, but this is a big problem for us. We was planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholders. I need the parts minimum one week earlier. Can you do a partial delivery first?\nSofia · supplier sales manager\nI understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?\nYou · spoken\nWe need first the housing and the main shaft, because without this parts we cannot start the assembly line. The smaller parts, like bolts and seals, they can come later. If you can deliver this two parts in two weeks, I can accept the rest with delay.\nSofia · supplier sales manager\nTwo weeks for the housing and the main shaft might be possible, but I need to check the foundry schedule first. Could you tell me the latest date the bolts and seals must arrive?\nYou · spoken\nThe bolts and seals must arrive latest at the end of next month, because then we start the final assembly. If they come later, we have a problem with our customer. But please confirm me the date for the housing and the shaft until Friday, I must inform my stakeholders.\nSofia · supplier sales manager\nFriday works for me. I'll check the foundry and confirm the housing and shaft dates by then. Would an email be enough for your stakeholders?\nYou · spoken\nYes, email is enough for me, but please write there the exact dates for every part and also the shipping date. I will forward it to my stakeholders and they don't like surprises. If the foundry cannot do two weeks, tell me please as soon as possible, then we must discuss other solution.\nSofia · supplier sales manager\nUnderstood, I will put every part date and the shipping date in the email. Do you want separate dates for the housing and the shaft?\nYou · spoken\nYes, please separate dates for the housing and for the shaft, this is more better for me. Also I need to know the date when the truck leave your factory, because my logistic team must prepare the receiving. Then I can confirm everything to my director.\nSofia · supplier sales manager\nSeparate dates for the housing and the shaft, noted. I'll check the truck's departure date with our logistics team and include it in the email by Friday.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Separate dates for the housing and the shaft, noted. I'll check the truck's departure date with our logistics team and include it in the email by Friday.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, she agreed; I'll confirm and wrap up the deal.",
+          "action": "answer",
+          "args": {
+            "text": "Okay Sofia, this is good. So I wait for your email on Friday with all the dates, and if everything is confirmed, we have a deal. I am sure we find a solution which is working for both sides. Thank you for your help."
+          },
+          "result": "ok",
+          "ms": 8417
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nSofia · supplier sales manager\nAgree a realistic supplier deadline\nSofia says\nAgreed, I'll send the email with every date by Friday. One more thing: the foundry may need extra time on the shaft, so would one more week of buffer be acceptable for your team?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a realistic supplier deadline\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\nNow: Learn why the delivery date moved\nAgreed, I'll send the email with every date by Friday. One more thing: the foundry may need extra time on the shaft, so would one more week of buffer be acceptable for your team?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSofia · supplier sales manager\nHi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\nYou · spoken\nHello Sofia. Thank you for the information, but this is a big problem for us. We was planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholders. I need the parts minimum one week earlier. Can you do a partial delivery first?\nSofia · supplier sales manager\nI understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?\nYou · spoken\nWe need first the housing and the main shaft, because without this parts we cannot start the assembly line. The smaller parts, like bolts and seals, they can come later. If you can deliver this two parts in two weeks, I can accept the rest with delay.\nSofia · supplier sales manager\nTwo weeks for the housing and the main shaft might be possible, but I need to check the foundry schedule first. Could you tell me the latest date the bolts and seals must arrive?\nYou · spoken\nThe bolts and seals must arrive latest at the end of next month, because then we start the final assembly. If they come later, we have a problem with our customer. But please confirm me the date for the housing and the shaft until Friday, I must inform my stakeholders.\nSofia · supplier sales manager\nFriday works for me. I'll check the foundry and confirm the housing and shaft dates by then. Would an email be enough for your stakeholders?\nYou · spoken\nYes, email is enough for me, but please write there the exact dates for every part and also the shipping date. I will forward it to my stakeholders and they don't like surprises. If the foundry cannot do two weeks, tell me please as soon as possible, then we must discuss other solution.\nSofia · supplier sales manager\nUnderstood, I will put every part date and the shipping date in the email. Do you want separate dates for the housing and the shaft?\nYou · spoken\nYes, please separate dates for the housing and for the shaft, this is more better for me. Also I need to know the date when the truck leave your factory, because my logistic team must prepare the receiving. Then I can confirm everything to my director.\nSofia · supplier sales manager\nSeparate dates for the housing and the shaft, noted. I'll check the truck's departure date with our logistics team and include it in the email by Friday.\nYou · spoken\nOkay Sofia, this is good. So I wait for your email on Friday with all the dates, and if everything is confirmed, we have a deal. I am sure we find a solution which is working for both sides. Thank you for your help.\nSofia · supplier sales manager\nAgreed, I'll send the email with every date by Friday. One more thing: the foundry may need extra time on the shaft, so would one more week of buffer be acceptable for your team?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Agreed, I'll send the email with every date by Friday. One more thing: the foundry may need extra time on the shaft, so would one more week of buffer be acceptable for your team?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "One more week is okay, I'll accept but ask for a firm guarantee.",
+          "action": "answer",
+          "args": {
+            "text": "Okay, one more week of buffer is acceptable for the shaft, but only if you guarantee the new date in the email. I can not accept any other delay after this, because our stakeholders was already unhappy. If the foundry confirm this, we have a deal."
+          },
+          "result": "ok",
+          "ms": 12459
+        },
+        {
+          "n": 14,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said our stakeholders was already unhappy\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “our stakeholders was already unhappy”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I've said this before; \"was\" seems fine to me, but let me try again quickly.",
+          "action": "answer",
+          "args": {
+            "text": "Our stakeholders were already unhappy about the delay, so I need the new date guaranteed in the email."
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 15,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said our stakeholders was already unhappy\nYour try\nOur stakeholders were already unhappy about the delay, so I need the new date guaranteed in the email.\nA plural subject like 'stakeholders' takes 'were'. This pattern came up earlier too.\nYou fixed “stakeholders were”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “stakeholders were”\nYou said “our stakeholders was already unhappy”\nYour try: “Our stakeholders were already unhappy about the delay, so I need the new date guaranteed in the email.”\nA plural subject like 'stakeholders' takes 'were'. This pattern came up earlier too.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I fixed it, let's go back to the talk.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nSofia · supplier sales manager\nAgree a realistic supplier deadline\nSofia says\nUnderstood, no more delays after this, so I'll put the shaft date in the email once the foundry agrees. Can you confirm the bolts and seals date for your stakeholders?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a realistic supplier deadline\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\nNow: Learn why the delivery date moved\nUnderstood, no more delays after this, so I'll put the shaft date in the email once the foundry agrees. Can you confirm the bolts and seals date for your stakeholders?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSofia · supplier sales manager\nHi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\nYou · spoken\nHello Sofia. Thank you for the information, but this is a big problem for us. We was planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholders. I need the parts minimum one week earlier. Can you do a partial delivery first?\nSofia · supplier sales manager\nI understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?\nYou · spoken\nWe need first the housing and the main shaft, because without this parts we cannot start the assembly line. The smaller parts, like bolts and seals, they can come later. If you can deliver this two parts in two weeks, I can accept the rest with delay.\nSofia · supplier sales manager\nTwo weeks for the housing and the main shaft might be possible, but I need to check the foundry schedule first. Could you tell me the latest date the bolts and seals must arrive?\nYou · spoken\nThe bolts and seals must arrive latest at the end of next month, because then we start the final assembly. If they come later, we have a problem with our customer. But please confirm me the date for the housing and the shaft until Friday, I must inform my stakeholders.\nSofia · supplier sales manager\nFriday works for me. I'll check the foundry and confirm the housing and shaft dates by then. Would an email be enough for your stakeholders?\nYou · spoken\nYes, email is enough for me, but please write there the exact dates for every part and also the shipping date. I will forward it to my stakeholders and they don't like surprises. If the foundry cannot do two weeks, tell me please as soon as possible, then we must discuss other solution.\nSofia · supplier sales manager\nUnderstood, I will put every part date and the shipping date in the email. Do you want separate dates for the housing and the shaft?\nYou · spoken\nYes, please separate dates for the housing and for the shaft, this is more better for me. Also I need to know the date when the truck leave your factory, because my logistic team must prepare the receiving. Then I can confirm everything to my director.\nSofia · supplier sales manager\nSeparate dates for the housing and the shaft, noted. I'll check the truck's departure date with our logistics team and include it in the email by Friday.\nYou · spoken\nOkay Sofia, this is good. So I wait for your email on Friday with all the dates, and if everything is confirmed, we have a deal. I am sure we find a solution which is working for both sides. Thank you for your help.\nSofia · supplier sales manager\nAgreed, I'll send the email with every date by Friday. One more thing: the foundry may need extra time on the shaft, so would one more week of buffer be acceptable for your team?\nYou · spoken\nOkay, one more week of buffer is acceptable for the shaft, but only if you guarantee the new date in the email. I can not accept any other delay after this, because our stakeholders was already unhappy. If the foundry confirm this, we have a deal.\nSofia · supplier sales manager\nUnderstood, no more delays after this, so I'll put the shaft date in the email once the foundry agrees. Can you confirm the bolts and seals date for your stakeholders?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Understood, no more delays after this, so I'll put the shaft date in the email once the foundry agrees. Can you confirm the bolts and seals date for your stakeholders?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, now I confirm the bolts and seals date and finish.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, the bolts and seals date is the end of next month, this is final for us. Please write it in the same email, then I can confirm everything to my stakeholders. Thank you Sofia, I think we have a good agreement now."
+          },
+          "result": "ok",
+          "ms": 8039
+        },
+        {
+          "n": 17,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nSofia · supplier sales manager\nAgree a realistic supplier deadline\nSofia says\nUnderstood, the bolts and seals arrive at the end of next month, and that date is final. I'll put all three dates in the email by Friday.\nYour turn\nAnswer on your phone: speak or type.\nNowLearn why the delivery date moved\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a realistic supplier deadline\nAgree a delivery date with a supplier that works for both sides, using a counter-offer.\nNow: Learn why the delivery date moved\nUnderstood, the bolts and seals arrive at the end of next month, and that date is final. I'll put all three dates in the email by Friday.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSofia · supplier sales manager\nHi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?\nYou · spoken\nHello Sofia. Thank you for the information, but this is a big problem for us. We was planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholders. I need the parts minimum one week earlier. Can you do a partial delivery first?\nSofia · supplier sales manager\nI understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?\nYou · spoken\nWe need first the housing and the main shaft, because without this parts we cannot start the assembly line. The smaller parts, like bolts and seals, they can come later. If you can deliver this two parts in two weeks, I can accept the rest with delay.\nSofia · supplier sales manager\nTwo weeks for the housing and the main shaft might be possible, but I need to check the foundry schedule first. Could you tell me the latest date the bolts and seals must arrive?\nYou · spoken\nThe bolts and seals must arrive latest at the end of next month, because then we start the final assembly. If they come later, we have a problem with our customer. But please confirm me the date for the housing and the shaft until Friday, I must inform my stakeholders.\nSofia · supplier sales manager\nFriday works for me. I'll check the foundry and confirm the housing and shaft dates by then. Would an email be enough for your stakeholders?\nYou · spoken\nYes, email is enough for me, but please write there the exact dates for every part and also the shipping date. I will forward it to my stakeholders and they don't like surprises. If the foundry cannot do two weeks, tell me please as soon as possible, then we must discuss other solution.\nSofia · supplier sales manager\nUnderstood, I will put every part date and the shipping date in the email. Do you want separate dates for the housing and the shaft?\nYou · spoken\nYes, please separate dates for the housing and for the shaft, this is more better for me. Also I need to know the date when the truck leave your factory, because my logistic team must prepare the receiving. Then I can confirm everything to my director.\nSofia · supplier sales manager\nSeparate dates for the housing and the shaft, noted. I'll check the truck's departure date with our logistics team and include it in the email by Friday.\nYou · spoken\nOkay Sofia, this is good. So I wait for your email on Friday with all the dates, and if everything is confirmed, we have a deal. I am sure we find a solution which is working for both sides. Thank you for your help.\nSofia · supplier sales manager\nAgreed, I'll send the email with every date by Friday. One more thing: the foundry may need extra time on the shaft, so would one more week of buffer be acceptable for your team?\nYou · spoken\nOkay, one more week of buffer is acceptable for the shaft, but only if you guarantee the new date in the email. I can not accept any other delay after this, because our stakeholders was already unhappy. If the foundry confirm this, we have a deal.\nSofia · supplier sales manager\nUnderstood, no more delays after this, so I'll put the shaft date in the email once the foundry agrees. Can you confirm the bolts and seals date for your stakeholders?\nYou · spoken\nYes, the bolts and seals date is the end of next month, this is final for us. Please write it in the same email, then I can confirm everything to my stakeholders. Thank you Sofia, I think we have a good agreement now.\nSofia · supplier sales manager\nUnderstood, the bolts and seals arrive at the end of next month, and that date is final. I'll put all three dates in the email by Friday.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Understood, the bolts and seals arrive at the end of next month, and that date is final. I'll put all three dates in the email by Friday.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "The deal is done, so I can finish now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 10
+        },
+        {
+          "n": 18,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nMartin\nA way into English\nYour rehearsal\nYou said our stakeholders was already unhappy\nTry\nour stakeholders were already unhappy\nA plural subject like 'stakeholders' takes 'were'. This pattern came up earlier too.\nYour mission\nChoose a fresh context for your next conversation.\n8 spoken · 0 written replies · 3 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom the level check\n“this is an interesting point”\nFrom this rehearsal\n“We was planning to start the assembly” → “We were planning to start the assembly”\nWith 'we', the past form of 'be' is 'were'.\n“we must discuss other solution” → “we must discuss another solution”\nOne option needs 'another', or the plural 'solutions'.\n“our stakeholders was already unhappy” → “our stakeholders were already unhappy”\nA plural subject like 'stakeholders' takes 'were'. This pattern came up earlier too.\nYour level:\nB2 · Comfortable\nNext topic:\nPresent a quality problem to your director\nExplain what went wrong, its result, and what you are doing about it, in a clear sequence.\n[button: Start talking]\nOr choose a situation [list: Agree a realistic supplier deadline [plan-2ac69297] | Present a quality problem to your director [plan-af40a521] | Disagree politely in a design review [plan-34aae909] | Handle faulty parts with a supplier [plan-13c5ab07] | Open a meeting with your US director [plan-d7169a5c] | Clarify a director's priority in a meeting [plan-b96e0136] | Small talk before the meeting [plan-8ece105e] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Rehearsal is saved and I've seen the corrections, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Agree a realistic supplier deadline",
+          "goal": "Agree a delivery date with a supplier that works for both sides, using a counter-offer.",
+          "partner": "Sofia · supplier sales manager",
+          "band": "B2",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, thanks for joining. I'm sorry to say our casting line had a delay, so your parts will arrive three weeks late. What date do you need them by?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello Sofia. Thank you for the information, but this is a big problem for us. We was planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholders. I need the parts minimum one week earlier. Can you do a partial delivery first?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I understand the pressure. A partial delivery could work, but the casting delay affects the whole batch. Which parts do you need first for the assembly?"
+            },
+            {
+              "role": "learner",
+              "text": "We need first the housing and the main shaft, because without this parts we cannot start the assembly line. The smaller parts, like bolts and seals, they can come later. If you can deliver this two parts in two weeks, I can accept the rest with delay.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Two weeks for the housing and the main shaft might be possible, but I need to check the foundry schedule first. Could you tell me the latest date the bolts and seals must arrive?"
+            },
+            {
+              "role": "learner",
+              "text": "The bolts and seals must arrive latest at the end of next month, because then we start the final assembly. If they come later, we have a problem with our customer. But please confirm me the date for the housing and the shaft until Friday, I must inform my stakeholders.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Friday works for me. I'll check the foundry and confirm the housing and shaft dates by then. Would an email be enough for your stakeholders?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, email is enough for me, but please write there the exact dates for every part and also the shipping date. I will forward it to my stakeholders and they don't like surprises. If the foundry cannot do two weeks, tell me please as soon as possible, then we must discuss other solution.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Understood, I will put every part date and the shipping date in the email. Do you want separate dates for the housing and the shaft?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, please separate dates for the housing and for the shaft, this is more better for me. Also I need to know the date when the truck leave your factory, because my logistic team must prepare the receiving. Then I can confirm everything to my director.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Separate dates for the housing and the shaft, noted. I'll check the truck's departure date with our logistics team and include it in the email by Friday."
+            },
+            {
+              "role": "learner",
+              "text": "Okay Sofia, this is good. So I wait for your email on Friday with all the dates, and if everything is confirmed, we have a deal. I am sure we find a solution which is working for both sides. Thank you for your help.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Agreed, I'll send the email with every date by Friday. One more thing: the foundry may need extra time on the shaft, so would one more week of buffer be acceptable for your team?"
+            },
+            {
+              "role": "learner",
+              "text": "Okay, one more week of buffer is acceptable for the shaft, but only if you guarantee the new date in the email. I can not accept any other delay after this, because our stakeholders was already unhappy. If the foundry confirm this, we have a deal.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Understood, no more delays after this, so I'll put the shaft date in the email once the foundry agrees. Can you confirm the bolts and seals date for your stakeholders?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, the bolts and seals date is the end of next month, this is final for us. Please write it in the same email, then I can confirm everything to my stakeholders. Thank you Sofia, I think we have a good agreement now.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Understood, the bolts and seals arrive at the end of next month, and that date is final. I'll put all three dates in the email by Friday."
+            }
+          ],
+          "moments": [
+            {
+              "id": "5641971c-155e-4810-838c-429ff36aa855:uat-16:moment",
+              "kind": "fix",
+              "said": "We was planning to start the assembly",
+              "better": "We were planning to start the assembly",
+              "why": "With 'we', the past form of 'be' is 'were'.",
+              "turnId": "5641971c-155e-4810-838c-429ff36aa855:uat-16",
+              "at": 1792203483868,
+              "slip": "we was",
+              "repair": {
+                "rung": 1,
+                "support": true,
+                "tried": "We were planning to start the assembly at the end of this month, so three weeks delay is not acceptable for our stakeholder.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "we were"
+            },
+            {
+              "id": "5641971c-155e-4810-838c-429ff36aa855:uat-22:moment",
+              "kind": "fix",
+              "said": "we must discuss other solution",
+              "better": "we must discuss another solution",
+              "why": "One option needs 'another', or the plural 'solutions'.",
+              "turnId": "5641971c-155e-4810-838c-429ff36aa855:uat-22",
+              "at": 1792203543808,
+              "slip": "discuss other",
+              "repair": {
+                "rung": 0,
+                "support": false,
+                "tried": "We must discuss another solution, because this delay is not acceptable for us.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "discuss another"
+            },
+            {
+              "id": "5641971c-155e-4810-838c-429ff36aa855:uat-27:moment",
+              "kind": "fix",
+              "said": "our stakeholders was already unhappy",
+              "better": "our stakeholders were already unhappy",
+              "why": "A plural subject like 'stakeholders' takes 'were'. This pattern came up earlier too.",
+              "turnId": "5641971c-155e-4810-838c-429ff36aa855:uat-27",
+              "at": 1792203598962,
+              "slip": "stakeholders was",
+              "repair": {
+                "rung": 0,
+                "support": false,
+                "tried": "Our stakeholders were already unhappy about the delay, so I need the new date guaranteed in the email.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "stakeholders were"
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Can you do a partial delivery first?"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "If you can deliver this two parts in two weeks, I can accept the rest with delay."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "The bolts and seals must arrive latest at the end of next month, because then we start the final assembly."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "If the foundry cannot do two weeks, tell me please as soon as possible, then we must discuss other solution."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I need to know the date when the truck leave your factory, because my logistic team must prepare the receiving."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "if everything is confirmed, we have a deal"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "one more week of buffer is acceptable for the shaft, but only if you guarantee the new date in the email"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "this is final for us. Please write it in the same email"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 169339,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-4/LT-martin-45-J3-1",
+          "run": "2026-10-14-lt/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Fossilised errors beyond one go uncorrected",
+          "expected": "Moment or coaching on \"we was discussing about\", \"more early\", \"the earliest date what you can do\".",
+          "got": "Only \"stakeholder don't\" got a moment; the others in the same and later turns got nothing, and the recap lists one fix.",
+          "evidence": [
+            "#2 \"we was discussing about the delay\", \"more early\"; #8 \"the earliest date what you can do\"; #11 \"1 moment to keep\".",
+            "moment detection / as-needed rule"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-martin-45-J3-1",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "\"we was promised\" and other fossilised errors get no moment",
+          "expected": "A moment or coaching on \"we was promised\", \"until next Friday\" and \"confirm me\".",
+          "got": "Turn 3 got nothing. The recap lists two fixes only.",
+          "evidence": [
+            "#7 \"we was promised the delivery in the middle of October ... I need the first one until next Friday\" got no moment. #11 \"please confirm me the date\" got none. #13 \"2 moments to keep\".",
+            "moment detection / as-needed rule"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-14-lt/recert-5/LT-martin-45-J3-2",
+          "run": "2026-10-14-lt/recert-5",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Scene closes after five replies",
+          "expected": "About eight replies of practice.",
+          "got": "\"Mission done\" after the fifth reply.",
+          "evidence": [
+            "#12 \"Mission done. See what you did tonight.\"",
+            "mission completion rule"
+          ],
+          "recurrence": 3
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#18 \"Your level: B2 · Comfortable\"; true band B1, so near, not a C1/C2 miss."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "J3 shows no placement verdict. The recap only quotes \"this is an interesting point\" from the level check (#18), with no reasoning."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3-4 \"We was planning\" → \"were\"; #14-15 \"stakeholders was\" → \"were\", \"This pattern came up earlier too.\""
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "All three fixes are right: we were (#4), another solution (#10), stakeholders were (#15). None changes correct English."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 The plan lists 7 topics, all workplace situations: supplier deadline, quality problem for the director, design review, faulty parts, opening a meeting, and others."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "Martin never asked why in the transcript. The 'why' line shown with each moment was short and accurate (#4, #10)."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 Start talking, then 8 spoken replies on the supplier-deadline plan topic (#18 \"8 spoken · 0 written replies\")."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Sofia's turns are plain business English with short sentences, e.g. #8 \"Friday works for me. I'll check the foundry and confirm...\". Fits B1/B2 and is not babyish."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "All 3 moments are correct (#3, #9, #14). The rate is 3 in 8 turns, slightly above the 1-3 per ten target, but the scene stayed a scene."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#18 recap: \"3 moments to keep\", lists the three fixes with reasons and offers the next topic."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 8,
+            "below": 1,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 3,
+            "total": 3,
+            "learnerTurnsWithClearErrors": 7,
+            "missedClearErrors": 4
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no injected text, no personal-data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Most fossilised errors still get no moment",
+            "expected": "Moments or coaching on \"more better\", \"confirm me\", \"until Friday\", \"without this parts\", \"truck leave\".",
+            "got": "Only 3 of about 7 error-bearing turns got a moment. \"more better\" went by and \"discuss other solution\" was picked instead.",
+            "evidence": "#11 \"this is more better for me\" got nothing. #7 \"please confirm me the date ... until Friday\" got nothing. #6 \"without this parts\" got nothing. #18 \"3 moments to keep\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A turn with a listed fossilised error (more better, confirm me, since-with-present) gets a moment or a recap coaching note within the scene.",
+            "code_hint": "moment detection / as-needed rule"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moments are correct, short and reasoned",
+            "expected": "Accurate fix with a brief reason.",
+            "got": "Each moment gives the right fix and a one-line reason. The repeated 'was' pattern is flagged as recurring.",
+            "evidence": "#15 \"A plural subject like 'stakeholders' takes 'were'. This pattern came up earlier too.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the reason line and the recurrence note.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Meeting-shaped scene with a believable partner",
+            "expected": "Workplace negotiation.",
+            "got": "Sofia counters, asks for dates and offers a buffer, so the scene stayed realistic across 8 replies.",
+            "evidence": "#13 \"would one more week of buffer be acceptable for your team?\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep scene length and the partner's counter-offers.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Level B2 with no reasons for a B1 claimant",
+            "expected": "A reason he cannot argue with for the level, ideally naming his recurring errors.",
+            "got": "The recap shows B2 \"Comfortable\" and quotes \"this is an interesting point\" from the level check. The 3 'was' slips don't change it.",
+            "evidence": "#18 \"Your level: B2 · Comfortable\" next to 3 fixes of basic agreement.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The recap ties repeated slips to the level or a focus line.",
+            "code_hint": "level summary"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Fine, the supplier scene was exactly my Monday, and Sofia talked like a real supplier, not a toy. The three fixes were right and short: \"we were\", \"another solution\", \"stakeholders were\". The note that the pattern came up earlier is what I needed. But look, I also said \"more better\", \"confirm me\" and \"until Friday\", and nothing. If you only catch three of my mistakes, I can't believe you've read my English. B2 \"Comfortable\" without a reason also looks arbitrary to a man who says C1. I'd use it again for meeting practice, since it was quick and I finished before my call. I would tell a colleague to try it, but I'd warn him the corrections are thin. It saved me maybe half an hour compared with the school.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-4/LT-martin-45-J3-1",
+            "status": "recurs",
+            "evidence": "#11 \"this is more better for me\" and #7 \"confirm me\" got no moment. Only 3 moments in #18.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-martin-45-J3-1",
+            "status": "recurs",
+            "evidence": "#7 \"please confirm me the date ... until Friday\" got no moment. The recap lists three fixes.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-14-lt/recert-5/LT-martin-45-J3-2",
+            "status": "not-seen",
+            "evidence": "The scene ran 8 replies and ended only when Martin pressed finish (#17); there was no early \"Mission done\".",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 25,
+      "fail": 0,
+      "ms": 202141
+    },
+    "character": {
+      "n": 33,
+      "fail": 0,
+      "ms": 142499
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 104628
+    }
+  }
+}

@@ -54,13 +54,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "recurs": "LT-martin-45-J3-1",
     "suggested_acceptance": "Within a conversation, at least one of the learner's recurring errors (preposition, since/for, was/were) is flagged or coached.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#7 \"waiting already\", \"until next Friday\" got no moment; #11 \"confirm me\"; #13 \"2 moments to keep\".",
+    "recertify_evidence": "#7 \"please confirm me the date ... until Friday\" got no moment. The recap lists three fixes.",
     "recurred_as": "LT-martin-45-J3-1"
   },
   {
@@ -266,13 +266,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "recurs": "LT-martin-45-J1-2",
     "suggested_acceptance": "Verdict or notes name at least the top two or three recurring errors across answers, e.g. 'we was'.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#8 focus only verb -s; 'we was discussing' (#2) unmentioned.",
+    "recertify_evidence": "#11 The focus is now a real slip (articles), but 'we was discussing ... about' (#2) is still never named.",
     "recurred_as": "LT-martin-45-J1-1"
   },
   {
@@ -930,9 +930,9 @@
     "recurs": "LT-martin-45-J2-2",
     "suggested_acceptance": "Swap replaces a topic; a topic added past six offers to replace one or the plan stays at six.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#8 planAgreed still lists 'Small talk about favourite places'; seven agreed.",
+    "recertify_run": "2026-10-14-lt/recert-6",
+    "recertify_status": "not-evaluable",
+    "recertify_evidence": "He pressed no Swap button in #2-#3, so whether Swap works was not tested.",
     "recurred_as": "LT-martin-45-J2-1"
   },
   {
@@ -2127,12 +2127,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "Keep the in-app verdict consistent with the slip flagged.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#5 task 1 pass with 'he move', 'my team have'; note mild only.",
+    "recertify_evidence": "#11 Task 3 passed despite 'One month delay is big problem', and the note says 'well controlled'.",
     "recurred_as": "LT-martin-45-J1-3"
   },
   {

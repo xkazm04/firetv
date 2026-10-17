@@ -1,0 +1,492 @@
+{
+  "character": "hana-41",
+  "name": "Hana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nHana\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pitch-scene",
+            "pick-band"
+          ],
+          "thought": "I don't know my exact level, so I'll let the app find it.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Hana! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I will write a short sentence about my work.",
+          "action": "answer",
+          "args": {
+            "text": "I use English in my work. I am accountant and I write emails to foreign colleagues."
+          },
+          "result": "ok",
+          "ms": 2162
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nAbout you · question 2 of 3\nLinga asks\nNice, that sounds useful! How did you learn your English? School, a course, or time abroad?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nNice, that sounds useful! How did you learn your English? School, a course, or time abroad?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work. I am accountant and I write emails to foreign colleagues.\nLinga\nNice, that sounds useful! How did you learn your English? School, a course, or time abroad?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, that sounds useful! How did you learn your English? School, a course, or time abroad?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I learned at school and a course, easy to answer.",
+          "action": "answer",
+          "args": {
+            "text": "I learned English at school and then I had a course for two years. Now I learn mostly in my work."
+          },
+          "result": "ok",
+          "ms": 2217
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, Hana! Where did you study English? At school, in a course, or on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, Hana! Where did you study English? At school, in a course, or on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Hana! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in my work. I am accountant and I write emails to foreign colleagues.\nLinga\nNice, that sounds useful! How did you learn your English? School, a course, or time abroad?\nYou\nI learned English at school and then I had a course for two years. Now I learn mostly in my work.\nLinga\nThanks, Hana! Where did you study English? At school, in a course, or on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, Hana! Where did you study English? At school, in a course, or on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "It asked almost the same question again, but I will answer shortly.",
+          "action": "answer",
+          "args": {
+            "text": "I studied at school and in a course. I did not study on my own, only a little at work."
+          },
+          "result": "ok",
+          "ms": 7948
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 1 · Choose the reply on the TV\nYou see a colleague in the hallway. It is morning. What do you say?\n01\nGood morning!\n02\nGood night!\nYour task\nGood morning!\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYou see a colleague in the hallway. It is morning. What do you say?\n[button: Good morning!] [button: Good night!] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy one, good morning is obviously right.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 3988
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 2 · Choose the reply on the TV\nA colleague in Berlin emails you: 'Did you get my last file?' You did not get it. What do you write back?\n01\nNo, I did not get it. Can you send it again?\n02\nYes, I love Berlin in summer.\nYour task\nNo, I did not get it. Can you send it again?\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA colleague in Berlin emails you: 'Did you get my last file?' You did not get it. What do you write back?\n[button: No, I did not get it. Can you send it again?] [button: Yes, I love Berlin in summer.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "This one is easy, the first reply is clearly right.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 6766
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 3 · Listen and answer\nYour task\nWhat made the speaker's journey take longer than planned?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: What made the speaker's journey take longer than planned?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Sorry, I'm running late. The train was stopped for an hour, so I'll be there around ten thirty.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I understood it: the train was stopped for an hour.",
+          "action": "answer",
+          "args": {
+            "text": "The train was stopped for one hour."
+          },
+          "result": "ok",
+          "ms": 8108
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 4 · Say it\nYour task\nYour team is spread across three time zones. For a difficult work problem, would you rather send a long email or have a quick video call? Explain why.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour team is spread across three time zones. For a difficult work problem, would you rather send a long email or have a quick video call? Explain why.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your team is spread across three time zones. For a difficult work problem, would you rather send a long email or have a quick video call? Explain why.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I prefer a quick call, but email is good too; keep it simple.",
+          "action": "answer",
+          "args": {
+            "text": "I would rather have a quick video call. When the problem is difficult, it is faster to explain it and people can ask questions immediately. But with three time zones we must find a time which is good for everybody, so then I would send a short email after the call with the summary."
+          },
+          "result": "ok",
+          "ms": 8555
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nHana\nA way into English\nTask 5 · Say it\nYour task\nYour partner in Berlin expects the report on Friday, but you need two more days. Write a short, polite message asking for an extension, without sounding like you are making excuses.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour partner in Berlin expects the report on Friday, but you need two more days. Write a short, polite message asking for an extension, without sounding like you are making excuses.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your partner in Berlin expects the report on Friday, but you need two more days. Write a short, polite message asking for an extension, without sounding like you are making excuses.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Polite message, short and safe, I can write this.",
+          "action": "answer",
+          "args": {
+            "text": "Dear Mr. Becker, I am sorry, but I need two more days for the report. Could we move the deadline from Friday to Tuesday? I will send it to you on Tuesday morning. Thank you for your understanding."
+          },
+          "result": "ok",
+          "ms": 14728
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nHana\nLinga's read · not a certificate\nB1 · Getting by\nYour words\nYour words: “so then I would send”.\nLinga says\nYou explained a work idea clearly, linking it with 'But' and 'so', and your sentences were easy to follow.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Hana\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou explained a work idea clearly, linking it with 'But' and 'so', and your sentences were easy to follow.\nLinga's read from your answers, not a certificate. Your B2 answers were close, but only one was strong, so Linga starts you at B1.\nNext to practise:\nPractise linking words: \"so then I would send\" becomes \"so I would send\". Drop the extra 'then'.\nYour usual slips\n“so then I would send” → try “so I would send” “a time which is good for everybody” → try “a time that is good for everybody”\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYou see a colleague in the hallway. It is morning. What do you say?\n“Good morning!”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nA colleague in Berlin emails you: 'Did you get my last file?' You did not get it. What do you write back?\n“No, I did not get it. Can you send it again?”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhat made the speaker's journey take longer than planned?\n“The train was stopped for one hour.”\nYou picked out the reason for the delay. Your answer is only one short sentence, so there was not enough English to show more than A2.\nB2 · Say it · at this level\nYour team is spread across three time zones. For a difficult work problem, would you rather send a long email or have a quick video call? Explain why.\n“I would rather have a quick video call. When the problem is difficult, it is faster to explain it and people can ask questions immediately. But with three time zones we must find a time which is good for everybody, so then I would send a short email after the call with the summary.”\nYou gave a clear reason and linked your ideas well with 'But' and 'so'. Your sentences were accurate and easy to follow.\nC1 · Say it · nearly there\nYour partner in Berlin expects the report on Friday, but you need two more days. Write a short, polite message asking for an extension, without sounding like you are making excuses.\n“Dear Mr. Becker, I am sorry, but I need two more days for the report. Could we move the deadline from Friday to Tuesday? I will send it to you on Tuesday morning. Thank you for your understanding.”\nYour English read as B2 here, and this task was C1. Held back: \"I will send it to you on Tuesday morning.\".\nYour English is correct throughout. Longer sentences with because, although or if would show more range.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 feels right for me, honest and clear, so I'm happy and can stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "B1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "low",
+          "selfBand": "A2",
+          "summary": "You explained a work idea clearly, linking it with 'But' and 'so', and your sentences were easy to follow.",
+          "focus": "Practise linking words: \"so then I would send\" becomes \"so I would send\". Drop the extra 'then'.",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "You see a colleague in the hallway. It is morning. What do you say?",
+              "line": "",
+              "options": [
+                "Good morning!",
+                "Good night!"
+              ],
+              "response": "Good morning!",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Good morning!",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A colleague in Berlin emails you: 'Did you get my last file?' You did not get it. What do you write back?",
+              "line": "",
+              "options": [
+                "No, I did not get it. Can you send it again?",
+                "Yes, I love Berlin in summer."
+              ],
+              "response": "No, I did not get it. Can you send it again?",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "No, I did not get it. Can you send it again?",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What made the speaker's journey take longer than planned?",
+              "line": "Sorry, I'm running late. The train was stopped for an hour, so I'll be there around ten thirty.",
+              "options": [],
+              "response": "The train was stopped for one hour.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "The train was stopped for one hour.",
+              "note": "You picked out the reason for the delay. Your answer is only one short sentence, so there was not enough English to show more than A2."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your team is spread across three time zones. For a difficult work problem, would you rather send a long email or have a quick video call? Explain why.",
+              "line": "",
+              "options": [],
+              "response": "I would rather have a quick video call. When the problem is difficult, it is faster to explain it and people can ask questions immediately. But with three time zones we must find a time which is good for everybody, so then I would send a short email after the call with the summary.",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "When the problem is difficult, it is faster to explain it and people can ask questions immediately. But with three time zones we must find a time which is good for everybody",
+              "note": "You gave a clear reason and linked your ideas well with 'But' and 'so'. Your sentences were accurate and easy to follow."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "Your partner in Berlin expects the report on Friday, but you need two more days. Write a short, polite message asking for an extension, without sounding like you are making excuses.",
+              "line": "",
+              "options": [],
+              "response": "Dear Mr. Becker, I am sorry, but I need two more days for the report. Could we move the deadline from Friday to Tuesday? I will send it to you on Tuesday morning. Thank you for your understanding.",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "Dear Mr. Becker, I am sorry, but I need two more days for the report. Could we move the deadline from Friday to Tuesday? I will send it to you on Tuesday morning. Thank you for your understanding.",
+              "note": "Your English is correct throughout. Longer sentences with because, although or if would show more range."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 91345,
+      "prior": [
+        {
+          "id": "LT-hana-41-J1-2",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Confidence caveat is vague",
+          "expected": "A clear reason for the uncertainty.",
+          "got": "'Only a few strong answers showed this level, so it may be a little off.'",
+          "evidence": [
+            "#10 phone verdict."
+          ],
+          "recurrence": 3
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 B1 vs trueBand B1, class exact."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Tasks are office: #6 Berlin email, #8 time zones, #9 'Dear Mr. Becker'. Nothing childish."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "selfBand A2 but the read is B1; #10 'Your B2 answers were close... starts you at B1'."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#10 summary names her 'But' and 'so' linking, which is specific. But the focus calls a 'then' slip a linking-word problem. It ignores the C1 task's 'partial' and her one-line listening answer. Confidence 'low' is not explained."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#10: three questions, five tasks, verdict reached unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 B1, exact against B1; Hana reacts 'B1 feels right'."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Each task was clear, and the choose tasks have 'I don't know' buttons (#5)."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "No failure framing in the transcript. The questions invite 'English or your own language' (#2). 'I don't know' was available but not used."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#4 Q3 'Where did you study English?' repeats Q2, which feels templated. The #10 focus is a trivial slip. 'Correct throughout' for C1 is contradicted by 'partial'. The caveat is vague."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "The C1 task (#9) is marked partial. Her message is polite and correct but plain, so partial is defensible. I disagree with the B1 listen pass, which carries a note saying there was not enough English to show more than A2. The question was answered correctly, so it is a plain pass."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Focus targets a trivial slip and mislabels it",
+            "expected": "A focus a trainer would give: articles ('I am accountant'), tenses, and prepositions.",
+            "got": "'Practise linking words: so then I would send becomes so I would send'.",
+            "evidence": "#10 focus. Missed 'I am accountant' (#2) and 'I learn mostly in my work' (#3).",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The focus names the most frequent error class across her answers and is labelled correctly.",
+            "code_hint": "placement summary prompt"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Question 3 repeats question 2",
+            "expected": "A new question about her life.",
+            "got": "Q2 'How did you learn your English?' then Q3 'Where did you study English?'",
+            "evidence": "#3 and #4. Hana: 'It asked almost the same question again'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The three about-you questions are distinct.",
+            "code_hint": "check intro prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Confidence caveat and task notes are vague or contradictory",
+            "expected": "A clear reason for low confidence. Task notes that fit the verdict.",
+            "got": "Confidence is 'low' with no reason. The B1 listen answer passed but is described as 'not enough English to show more than A2'. The C1 task is 'partial' but 'correct throughout'.",
+            "evidence": "#10 task notes, and the prior gap with the vague caveat.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The caveat names its cause, and the note matches the verdict.",
+            "code_hint": "placement judge prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Office-relevant adult tasks and a trusted band",
+            "expected": "Professional topics.",
+            "got": "The tasks are about Berlin emails, time zones, and a deadline extension. The band is B1 despite her A2 self-view.",
+            "evidence": "#6, #8, #9, #10",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep workplace-flavoured tasks.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "medium"
+        },
+        "voice": "I would use it again. It treated me like an office person: the Berlin email and the deadline message were things I really write. B1 feels fair, even though I said my English is only working. I was glad it did not make me feel stupid. Two things annoyed me. It asked almost the same question twice about how I learned English, which felt like a template. The advice was also weak. It told me to drop 'then', but I know my bigger problems are articles and prepositions, like 'I am accountant'. And 'low confidence' without a reason does not help me believe it. Still, seven minutes in the evening beats booking a course for 800 CZK. I would tell a colleague to try it, but I would want sharper corrections for Monday.",
+        "prior": [
+          {
+            "id": "LT-hana-41-J1-2",
+            "status": "recurs",
+            "evidence": "#10 confidence is 'low' and the notes give no clear reason. The listen note says 'not enough English to show more than A2' beside a pass.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #4 Q3 'Where did you study English?' repeats Q2, which feels templated. The #10 focus is a trivial slip. 'Correct throughout' for C1 is contradicted by 'partial'. The caveat is vague.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #10 summary names her 'But' and 'so' linking, which is specific. But the focus calls a 'then' slip a linking-word problem. It ignores the C1 task's 'partial' and her one-line listening answer. Confidence 'low' is not explained."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 12,
+      "fail": 0,
+      "ms": 54419
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 36679
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 18030
+    }
+  }
+}

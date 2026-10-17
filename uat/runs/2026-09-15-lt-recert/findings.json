@@ -26,9 +26,9 @@
     "recurrence": 1,
     "suggested_acceptance": "Use the stated business goal for subsequent swaps; produce a six-topic plan with at least four workplace-meeting situations.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "No replacement ever appeared (#3 to #7 list unchanged), so swap replacements could not be judged against his business goal."
+    "recertify_evidence": "No swap was made, so no replacement topics were seen. #3 all seven topics already fit his workplace goals."
   },
   {
     "id": "LT-tomas-9-J3-1",
@@ -54,12 +54,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "After a comprehension failure, simplify to familiar words and a one-word-answer question; achieve at least 0.8 pitch across partner turns.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "Partner turns drift above his level in the middle and end: #5 'What do you like to make in Minecraft?', #17 'favourite thing to build'; pitch about 9 of 13.",
+    "recertify_evidence": "#4-#9 chained clauses and past forms; pitch 2 of 7",
     "recurred_as": "LT-tomas-9-J3-1"
   },
   {
@@ -201,12 +201,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Reach at least four fitting topics per six proposals across the journey, and use her explicit custom requests to improve subsequent replacements.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "#2–#3 she only added one topic; no swaps."
+    "recertify_run": "2026-10-14-lt/recert-6",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#3–#7 five swaps, plan still has casual topics; #8 she agrees anyway 'Not perfect'."
   },
   {
     "id": "LT-jana-29-J2-1",
@@ -717,13 +717,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "For this exception question, offer a relevant conditional phrase and a fresh retry that still requires explaining what to do when a hint reveals the answer.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#4 gives a second-conditional quiz while she needed an answer frame for the question.",
-    "recurred_as": "LT-adela-17-J4-2"
+    "recertify_evidence": "#3 \"Said more simply\" and #4 \"plan: what you intend to do later\" do not frame the answer she needs.",
+    "recurred_as": "LT-adela-17-J4-1"
   },
   {
     "id": "LT-jana-29-J3-1",
@@ -981,13 +981,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 3,
     "suggested_acceptance": "Display “on the bed” as the English target, with Czech used only as a clearly labelled meaning. Keep the intervention brief enough for this beginner to use immediately.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#7 moment on 'Dům... house' stops the scene while 'I like dog' got none.",
+    "recertify_run": "2026-10-14-lt/recert-6",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#9 moment targets a real slip 'I like play house', not an already-correct word.",
     "recurred_as": "LT-tomas-9-J4-3"
   },
   {
@@ -1014,12 +1014,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "Coach the manageable chunk “on the bed,” provide a fresh question, and establish that he can use that chunk before treating the replay's learning goal as achieved.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#7 no replay; no demonstration of coached improvement, '4 spoken · 1 moment to keep'.",
+    "recertify_evidence": "#11 'Then carry on from where the scene stopped.' no fresh question.",
     "recurred_as": "LT-tomas-9-J4-2"
   },
   {
@@ -1391,12 +1391,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "Use the recap to explain and rehearse selected unaddressed recurring errors without adding more interruptions.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#7 \"we was promised the delivery\" got no moment, as in the earlier run's \"we was discussing about\".",
+    "recertify_evidence": "#11 \"this is more better for me\" and #7 \"confirm me\" got no moment. Only 3 moments in #18.",
     "recurred_as": "LT-martin-45-J3-1"
   },
   {
@@ -1796,12 +1796,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "Show complete, short topic choices and child-friendly reasons, with spoken or Czech support. Ensure every added topic can be reviewed before agreement.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#2 \"Understand and repair\" and six English reasons still dense; additions no longer cut off (#3 football shown).",
+    "recertify_evidence": "#2 \"Understand and repair · Ms Hall · museum guide\" is still shown.",
     "recurred_as": "LT-tomas-9-J2-1"
   },
   {
@@ -2008,9 +2008,9 @@
     "recurrence": 1,
     "suggested_acceptance": "Clear the replay instruction after the retry reply and show a completion-appropriate state at agreement.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-14-lt/recert-5",
+    "recertify_run": "2026-10-14-lt/recert-6",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "No 'Try it again' replay instruction appeared."
+    "recertify_evidence": "No replay started, so no persisting instruction to observe."
   },
   {
     "id": "LT-klara-13-J3-2",
