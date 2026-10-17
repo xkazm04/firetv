@@ -372,6 +372,14 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
   const markedChecks = (para: number) => sentences.filter((t) => paraOf(t) === para && ok(t.n)?.support === "checkable" && marked(t));
   const backed = new Set<number>(), unbackedSeen = new Set<number>();
   if (lens === "evidence") for (const t of sentences) { const b = backsOf(t); if (b !== undefined && marked(t)) backed.add(b); }
+  // piece: the opening and closing paragraphs of a multi-paragraph piece state and sum up what the body paragraphs prove,
+  // so a bare thesis or conclusion is read against the body's marked evidence
+  const paras = sentences.map(paraOf), firstPara = Math.min(...paras), lastPara = Math.max(...paras);
+  const markedIn = (para: number) => sentences.some((t) => paraOf(t) === para && marked(t) && (lens === "evidence" ? ok(t.n)?.support === "checkable" : ok(t.n)?.job === "evidence"));
+  const bodyProves = (s: Sentence) => {
+    const p = paraOf(s);
+    return lastPara - firstPara >= 2 && (p === firstPara || p === lastPara) && sentences.some((t) => { const q = paraOf(t); return q !== p && markedIn(q); });
+  };
   const named = new Set<number>(), direct = new Set<number>(), strongClaims = new Set<number>();
   if (lens === "structure") {
     for (const s of sentences) { const t = linkOf(s); if (t !== undefined) { named.add(t); if (ok(s.n)?.job === "evidence" && marked(s)) direct.add(t); } }
@@ -396,7 +404,7 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
         if (read.support === "checkable") verdict = marked(s) ? "strong" : "neutral";
         else if (read.support === "opinion") {
           const para = paraOf(s), marks = markedChecks(para);
-          if (!marks.length) { verdict = "faulty"; check = CHECKS.opinion; }
+          if (!marks.length) { if (bodyProves(s)) verdict = "neutral"; else { verdict = "faulty"; check = CHECKS.opinion; } }
           else if (backed.has(s.n) || !marks.some((t) => backsOf(t) !== undefined)) verdict = "neutral";
           else {
             const rest = sentences.slice(at + 1).filter((t) => paraOf(t) === para), stop = rest.findIndex((t) => ok(t.n)?.support === "opinion");
@@ -412,7 +420,7 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
         const between = stop < 0 ? rest : rest.slice(0, stop);
         const blind = !named.has(s.n) && between.some((t) => ok(t.n)?.job === "evidence" && marked(t) && linkOf(t) === undefined);
         if (strongClaims.has(s.n)) verdict = "strong";
-        else if (blind) verdict = "neutral";
+        else if (blind || bodyProves(s)) verdict = "neutral";
         else if (!unsupportedSeen) { verdict = "faulty"; check = CHECKS.unsupported; unsupportedSeen = true; }
       } else if (read.job === "evidence") verdict = marked(s) ? "strong" : "neutral";
       else if (read.job === "link") {
