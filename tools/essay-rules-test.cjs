@@ -256,14 +256,14 @@ test('cleanFix refuses a frame that hands over a neighbour sentence, a sentence 
   assert.deepEqual(fix(pattern),{move:mv,pattern},pattern);
 });
 test('with no fix of its own, a faulty sentence falls back to its lens\'s playbook lesson: a named move and a slotted pattern',()=>{
- const {PLAYBOOK,ESSAY_TYPES,playFor}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+ const {PLAYBOOK,ESSAY_TYPES,playFor,SPLIT}=require(path.join(root,'src/lib/library/lessons.data.ts'));
  const {cleanFix}=require(path.join(root,'src/lib/rules/essay.ts'));
- for(const p of PLAYBOOK){
+ for(const p of [...PLAYBOOK,SPLIT]){
   assert.equal(cleanFix({move:'Stand in move',pattern:p.pattern})?.pattern,p.pattern,`${p.id}: the pattern passes the rule a model's pattern must pass`);
   const n=p.move.split(/\s+/).length;assert.ok(n>=2&&n<=7,`${p.id}: the move is named in a few words (${n}); Paragraph's is the brief's own seven`);
  }
  assert.equal(PLAYBOOK.find(p=>p.id==='para').move,'Claim, then evidence, then the link back','Paragraph\'s move is its own line');
- for(const t of ESSAY_TYPES)assert.ok(PLAYBOOK.includes(playFor(t.id)),`${t.id} names a playbook lesson`);
+ for(const t of ESSAY_TYPES)assert.ok(t.id==='language'?playFor(t.id)===SPLIT:PLAYBOOK.includes(playFor(t.id)),`${t.id} names a playbook lesson (Language: the split move)`);
  assert.equal(playFor('argument').id,'thesis');assert.equal(playFor('structure').id,'para');
  assert.equal(playFor('no-such-lens').id,'para','an unknown lens still gets a move, never an empty slot');assert.equal(playFor(null).id,'para');
 });
@@ -272,7 +272,7 @@ test('L1-eliska-12-EM2-1: every playbook pattern, filled in plain words, is one 
  const {revise,splitSentences,joinSentences,paragraphStats}=require(path.join(root,'src/lib/rules/essay.ts'));
  const base=splitSentences('Many students are tired. Sleep is important. Schools start early.');
  const reading={text:joinSentences(base),type:'structure',sentences:base,stats:paragraphStats(base),verdicts:[],summary:''};
- const fallbacks=new Set([...PLAYBOOK,...ESSAY_TYPES.map(t=>playFor(t.id)),playFor('no-such-lens'),playFor(null)]);
+ const fallbacks=new Set([...PLAYBOOK,playFor('language'),...ESSAY_TYPES.map(t=>playFor(t.id)),playFor('no-such-lens'),playFor(null)]);
  for(const p of fallbacks){
   const filled=p.pattern.replace(/\[[^\]]+\]/g,'the school day').replace(/^[a-z]/,c=>c.toUpperCase());
   assert.equal(splitSentences(filled).length,1,`${p.id}: "${filled}" counts as one sentence by the splitter revise uses`);
@@ -1731,4 +1731,18 @@ test('EM2-2: a rewrite that is still opinion does not hold because a neighbour i
  assert.equal(real.verdict,'neutral','a kept link that backs it still holds');
  const chk=RE.decideVerdicts('evidence',ss,new Set([2]),[{n:2,support:'checkable'}]).find(v=>v.n===2);
  assert.notEqual(chk.verdict,'faulty');
+});
+
+test('L1-helena-46-EM1-1: the Language fallback for a faulty sentence with no fix is a language move, never Claim, then evidence, then the link back',()=>{
+ const {playFor,PLAYBOOK}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+ const {taught,cleanFix}=require(path.join(root,'src/lib/rules/essay.ts'));
+ const lang=playFor('language');
+ const t=taught({verdict:'faulty',fix:undefined},{move:lang.move,pattern:lang.pattern});
+ assert.equal(t.own,false,'it is the fallback, not the reading own fix');
+ assert.equal(t.fix.move,'One idea per sentence');
+ assert.notEqual(t.fix.move,PLAYBOOK.find(p=>p.id==='para').move);assert.doesNotMatch(t.fix.pattern,/evidence|claim/i);
+ assert.deepEqual(cleanFix(t.fix),t.fix,'a slotted pattern with none of the learner words');
+ for(const lens of ['structure','evidence'])assert.equal(playFor(lens).id,'para',lens+' keeps its fallback');assert.equal(playFor('argument').id,'thesis');
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ assert.ok(tv.includes('t.from.id === "split" ? "language" : "playbook"'),'the TV labels the Language fallback as a language move');
 });

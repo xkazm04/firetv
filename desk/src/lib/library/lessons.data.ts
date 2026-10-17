@@ -38,7 +38,7 @@ export const ESSAY_TYPES = [
   { id: "structure", name: "Structure", promise: "Which sentence does which job — claim, evidence, link — and what is missing.", lesson: "para" },
   { id: "argument", name: "Argument", promise: "Does the paragraph take a side, and does every sentence push the same way?", lesson: "thesis" },
   { id: "evidence", name: "Evidence", promise: "What here is a fact a reader can check, and what is only an opinion.", lesson: "para" },
-  { id: "language", name: "Language", promise: "Sentence length, rhythm, connectors, repeated words.", lesson: "para" },
+  { id: "language", name: "Language", promise: "Sentence length, rhythm, connectors, repeated words.", lesson: "split" },
 ] as const;
 
 /**
@@ -52,11 +52,17 @@ export const PLAYBOOK = [
   { id: "order", lessonId: "es-3", title: "Order", line: "Which argument goes first, and why that one.", move: "Strongest first, then the rest", pattern: "First, [your strongest argument], then [the next one]." },
   { id: "concl", lessonId: "es-4", title: "Conclusion", line: "What the introduction promised, now delivered.", move: "Promise, then deliver", pattern: "So [what the introduction promised], because [what you showed]." },
 ] as const;
-export type Play = (typeof PLAYBOOK)[number];
+/**
+ * The Language lens's move when a faulty sentence has no fix of its own (recert-5/L1-helena-46-EM1-1): a language move,
+ * never the essay's claim-evidence-link, which would tell an email to add evidence. It is not one of the four structures
+ * (no lesson, not on the playbook page); its pattern is one sentence frame with a slot and none of the learner's words.
+ */
+export const SPLIT = { id: "split", lessonId: "", title: "One idea per sentence", line: "A long sentence carries one idea; name it, stop, and start the next.", move: "One idea per sentence", pattern: "Say [the one idea] and stop." } as const;
+export type Play = (typeof PLAYBOOK)[number] | typeof SPLIT;
 /** The unit and minutes of a playbook structure, from the lesson it stands for. */
 export function playLesson(p: Play): Lesson | undefined { return LESSONS.find((l) => l.id === p.lessonId); }
-/** The playbook structure a lens teaches through; Paragraph for a lens this version does not know. */
+/** The playbook structure a lens teaches through (Language: the split move, which is not a structure); Paragraph for a lens this version does not know. */
 export function playFor(lens: string | null | undefined): Play {
   const id = ESSAY_TYPES.find((t) => t.id === lens)?.lesson;
-  return PLAYBOOK.find((p) => p.id === id) ?? PLAYBOOK[1];
+  return id === SPLIT.id ? SPLIT : PLAYBOOK.find((p) => p.id === id) ?? PLAYBOOK[1];
 }

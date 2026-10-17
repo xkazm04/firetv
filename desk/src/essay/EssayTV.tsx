@@ -424,7 +424,7 @@ function Page({ sn, n, v, lens, type, inked, job, unruled, pending }: { sn: Sent
       <div className="em-sent" data-role="essay-sentence"><span className="em-q" aria-hidden="true">“</span><SentenceText text={sn.text} faulty={vd === "faulty"} /></div>
       <div className="em-note" data-role="essay-problem" data-verdict={vd}><Caption label={noteCap.label} text={noteCap.text} /></div>
       {t ? <>
-        <Move move={t.fix.move} label={t.from ? `The move · playbook · ${t.from.title}` : "The move"} inked={inked} />
+        <Move move={t.fix.move} label={t.from ? `The move · ${t.from.id === "split" ? "language" : "playbook"} · ${t.from.title}` : "The move"} inked={inked} />
         <Pattern pattern={t.fix.pattern} label={<span className="em-lbl">{t.from ? `The pattern · ${t.from.title}` : "The pattern"}</span>} />
       </> : (
         <div className={`em-move em-role${vd === "strong" ? "" : " neutral"}`}>
@@ -505,7 +505,7 @@ function Table({ s, a, cur, verdicts }: { s: Session; a: Reading; cur: number; v
 export function Playbook({ s, focus }: { s: Session; focus: number }) {
   const at = stopAt(PLAYBOOK_STOPS, focus) ?? PLAYBOOK_STOPS[0];
   const forReading = s.essay ? playFor(s.essay.type) : null;
-  const unit = (p: Play) => playLesson(p)?.unit ?? PLAYBOOK_STOPS.indexOf(p) + 1;
+  const unit = (p: Play) => playLesson(p)?.unit ?? (PLAYBOOK_STOPS as readonly Play[]).indexOf(p) + 1;
   return (<>
     <Brand /><Top s={s} menu="Back" />
     <section className="em-stack">

@@ -466,7 +466,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k !== "select") return;
     const at = stopAt(FORENSIC_STOPS, s.focus);
     if (at === "rewrite") o.ev({ type: "status", text: rewriteUnruledLine(a, a.sentences[i].n) ?? rewriteStatus(a.sentences[i].n) });
-    if (at === "why") o.nav("playbook", PLAYBOOK_STOPS.indexOf(playFor(a.type)), "forensic");
+    if (at === "why") o.nav("playbook", Math.max(0, PLAYBOOK_STOPS.findIndex((p) => p === playFor(a.type))), "forensic");
     if (at === "next") go((i + 1) % n);
     if (at === "back") o.nav("essaytype", readingLens(s));
   },

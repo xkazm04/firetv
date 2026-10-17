@@ -9,6 +9,7 @@ import { text } from "../engines/text";
 import { assemble, data, dataRows, say } from "../prompt/assemble";
 import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, sentenceRows, revise, ruledSentences, SIDES, splitSentences, summaryLine, SUPPORTS, taught, unanswered, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
+import { getPiece, hasFormat } from "../session/texts";
 import { getLearner, LearnersUnread, readLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
 import { DeskSaid } from "./job";
 import { voiceOf, withManner } from "../rules/voice";
@@ -78,7 +79,7 @@ const lensOf = (type: string): Lens => ANALYSIS_TYPES.find((t) => t.id === type)
  * paragraph's numbers, so the Structure lens can see the thesis while it judges a body paragraph. Anchored by code:
  * an observation for a number outside `judged` is dropped, and the model is never asked for a verdict.
  */
-async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voice: Voice, focus?: { para: number; of: number }) {
+async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voice: Voice, focus?: { para: number; of: number }, format?: string) {
   // with `focus` (one paragraph of a piece) the observations come back unruled: analysePiece rules the whole piece once
   const stats = paragraphStats(sentences.filter((s) => judged.has(s.n)));
   const piece = paragraphCount(sentences) > 1;
@@ -91,12 +92,14 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
       `For a 'faulty' verdict only, add a fix to a sentence you see a problem in: 'move' names the technique in 2 to 6 words (for example "Concede, then turn it back"), ` +
       `and 'pattern' is a sentence frame with the content left as bracketed slots for the student to fill (for example "Although [the other side], [why your claim still holds]."). ` +
       `${PATTERN_RULE} ` +
+      `${format ? "The kind of writing is given beside the sentences: judge the text as that kind of writing, by what a good one of that kind does, never by what an essay does (an email is not asked for a thesis or for evidence). " : ""}` +
       `Plain text, to be read aloud.`, voice);
   // the learner's sentences are data; the desk's counts and first-pass roles ride beside each as its own note
   const asked = assemble("essay-read", {
     system: [say("stance", system)],
     prompt: [
       dataRows("sentences", `The student's ${piece ? `piece, ${paragraphCount(sentences)} paragraphs,` : "paragraph,"} sentence by sentence`, sentenceRows(sentences)),
+      data("format", "The kind of writing this is", format),
       say("focus", focus && `Judge only paragraph ${focus.para + 1} of ${focus.of}: sentences ${ns[0]} to ${ns.at(-1)}, one observation each, in the context of the whole piece.`),
       say("counts", `Counts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`),
     ],
@@ -133,6 +136,12 @@ function record(learnerId: string, lens: Lens, sentences: number, faulty: number
   saveLearner(l);
 }
 
+/** The kind of writing a piece is read as: a kept piece's stored format, else the one the send named, else none. */
+function formatOf(learnerId: string, pieceId?: string, sent?: string): string | undefined {
+  const kept = pieceId ? getPiece(learnerId, pieceId)?.format : undefined;
+  return kept ?? (typeof sent === "string" && hasFormat(sent) ? sent : undefined);
+}
+
 /** `age` is the seated profile's; without one the reading speaks as it always has (rules/voice, the teen band). */
 export async function analyseEssay(raw: string, type: AnalysisType, learnerId: string, age?: number): Promise<EssayAnalysis> {
   const sentences = splitSentences(raw);
@@ -155,8 +164,10 @@ export async function analyseEssay(raw: string, type: AnalysisType, learnerId: s
  * it is listed in `piece.notEnglish`, and the summary counts only the sentences of the paragraphs that were ruled.
  */
 export async function analysePiece(raw: string, type: AnalysisType, learnerId: string, age: number | undefined,
-  onProgress: (a: EssayAnalysis) => void = () => {}, pieceId?: string): Promise<EssayAnalysis> {
+  onProgress: (a: EssayAnalysis) => void = () => {}, pieceId?: string, format?: string): Promise<EssayAnalysis> {
   const sentences = splitSentences(raw), lens = lensOf(type), voice = voiceOf("essay", age);
+  // a kept piece reads as its own stored format; a piece not kept, as the format the send named (none: as an essay, as before)
+  const kind = formatOf(learnerId, pieceId, format);
   const of = paragraphCount(sentences);
   const piece: NonNullable<EssayAnalysis["piece"]> = { paragraphs: of, read: [], failed: [], ...(pieceId ? { pieceId } : {}) };
   const notEnglish: number[] = [];
@@ -170,7 +181,7 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
   for (let para = 0; para < of; para++) {
     const judged = new Set(sentences.filter((s) => (s.para ?? 0) === para).map((s) => s.n));
     if (!notEnglish.includes(para)) try {
-      const r = await judge(sentences, judged, lens, voice, { para, of });
+      const r = await judge(sentences, judged, lens, voice, { para, of }, kind);
       observed.push(...r.seen); judged.forEach((n) => judgedAll.add(n)); provider = r.provider; piece.read.push(para);
     } catch (e) { lastError = e; piece.failed.push(para); }
     if (para === of - 1 && piece.read.length) { verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed); }
@@ -192,13 +203,13 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
 export async function analysePieceAgain(reading: EssayAnalysis, learnerId: string, age?: number, notSaved?: (line: string) => void): Promise<EssayAnalysis> {
   const old = reading.piece!, lens = lensOf(reading.type), voice = voiceOf("essay", age), sentences = reading.sentences, of = old.paragraphs;
   const piece: NonNullable<EssayAnalysis["piece"]> = { ...old, read: [...old.read], failed: [], ...(old.notEnglish ? { notEnglish: [...old.notEnglish] } : {}) };
-  const observed = [...(old.observed ?? [])];
+  const observed = [...(old.observed ?? [])], kind = formatOf(learnerId, old.pieceId);
   let provider = reading.provider;
   const still: number[] = [];
   for (const para of old.failed) {
     const judged = new Set(sentences.filter((s) => (s.para ?? 0) === para).map((s) => s.n));
     try {
-      const r = await judge(sentences, judged, lens, voice, { para, of });
+      const r = await judge(sentences, judged, lens, voice, { para, of }, kind);
       observed.push(...r.seen); provider = r.provider; piece.read.push(para);
     } catch { still.push(para); }
   }

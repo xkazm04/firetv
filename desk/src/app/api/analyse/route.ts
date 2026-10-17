@@ -132,7 +132,7 @@ export async function POST(req: Request) {
         // the first paragraph back opens the reading; the rest grow it where the learner is
         dispatch(first ? { type: "essay.set", analysis: a, owner: who.id } : { type: "essay.progress", analysis: a, owner: who.id });
         first = false;
-      }, pieceId);
+      }, pieceId, body.format);
       // the piece is recorded once it is all read, after the last paragraph's progress: say so, so the session's history
       // and the Sunday page are read again (store.ts REHYDRATE)
       if (goes()) dispatch({ type: "essay.progress", analysis: done, owner: who.id });

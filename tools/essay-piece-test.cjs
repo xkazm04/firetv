@@ -554,3 +554,19 @@ test('EM5-2: /drop starts with no format chosen, the shelf shows each format, th
   const phone = fs.readFileSync(path.join(root, 'src/app/phone/page.tsx'), 'utf8');
   assert.match(phone, /keepIt && !pieceId && !pieceFormat/); assert.match(phone, /format: pieceFormat/);
 });
+test('L1-helena-46-EM1-1: the piece prompt carries the format as data; a kept piece uses its stored one; no format leaves the prompt as it was', async () => {
+  const kind = (req) => /The kind of writing this is[^\n]*\n?[^\n]*/.exec(req.prompt)?.[0];
+  seen = []; answer = perParagraph(faultyAt([]));
+  await analysePiece(PIECE, 'language', 'ema', 15, undefined, undefined, 'email');
+  assert.equal(seen.length, 3);
+  assert(seen.every((r) => /email/.test(kind(r) ?? '')), 'a new piece reads as the body\'s format');
+  assert(seen.every((r) => /judge the text as that kind of writing/.test(r.system) && /never by what an essay does/.test(r.system)), 'the reader is told to judge by the kind, so an email is never asked for evidence');
+  const kept = texts.addPiece('ema', { text: PIECE, source: 'paste', format: 'message' });
+  seen = [];
+  await analysePiece(PIECE, 'language', 'ema', 15, undefined, kept.value.id, 'email');
+  assert(seen.every((r) => /message/.test(kind(r) ?? '') && !/email/.test(kind(r) ?? '')), 'a kept piece uses its stored format over the body\'s');
+  texts.deleteAll('ema');
+  seen = [];
+  await analysePiece(PIECE, 'language', 'ema', 15);
+  assert(seen.every((r) => kind(r) === undefined && !/kind of writing/i.test(r.system + r.prompt)), 'no format: the prompt is the essay prompt, unchanged');
+});
