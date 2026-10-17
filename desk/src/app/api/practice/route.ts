@@ -21,7 +21,7 @@ import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { makeItems } from "@/lib/desk/items";
 import { topicIn } from "@/lib/library/paths";
 import { MOVED_ON, refused, runJob } from "@/lib/desk/job";
-import { aimOf } from "@/lib/rules/recovery";
+import { aimOf, readerOf } from "@/lib/rules/recovery";
 import { topSlipsOf } from "@/lib/rules/school";
 
 export const dynamic = "force-dynamic";
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
   // a set opened from the paper's recovery row (MB-B40): Get ready for school is open on the unit that row carried, and
   // the paper's lost statements on it are the set's aim; read from the session here, never from the body
   const s = getSession();
-  const aim = s.paperAim === topic && s.screen === "prepare" && s.paper ? aimOf([...s.paper.items, ...s.paper.unmapped], topic) : [];
+  const aim = s.paperAim === topic && s.screen === "prepare" && s.paper ? aimOf([...s.paper.items, ...s.paper.unmapped], topic, readerOf(s)) : [];
   // a step up after a set on this unit by this learner: the slips named on its top rung aim the new set's tier 3 (cycle 18)
   const topSlips = stretch && s.practice?.topic === topic && s.practice.owner === learner ? topSlipsOf(topic, s.practice.items) : [];
   const r = await runJob("practice", async (run) => {

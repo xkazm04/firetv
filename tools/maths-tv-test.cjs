@@ -1026,7 +1026,7 @@ const flat3=(h)=>h.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ');
 
 test('RP3 a: one walk - the topics, then the off-desk statements; Select does nothing on a statement; Back and Menu go to the first unit',()=>{
  const K=require(path.join(root,'src/tv/keys.ts')),{paperView,paperStopCount}=PAPER();
- const prof=[{id:'ema',name:'Ema',type:'elementary',age:12,system:'uk',modules:['maths']}];
+ const prof=[{id:'ema',name:'Ema',type:'elementary',age:8,system:'uk',modules:['maths']}];
  const mk=(f)=>({...paperSession(rp3Paper(),{},f),profiles:prof});
  const v=paperView(mk(0)),t=v.topics.length,n=t+v.off.length;
  assert.ok(t>=2&&v.off.length>=6);assert.equal(paperStopCount(mk(0)),n);

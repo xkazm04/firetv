@@ -4,7 +4,7 @@
  * desk calls secure marked beside them and never dropped (ruling 2). Pure; no string names the board.
  */
 import type { Session } from "@/lib/session/store";
-import { recovery, prereqsOf, reachOf, type Recovery } from "@/lib/rules/recovery";
+import { recovery, prereqsOf, reachOf, readerOf, type Recovery } from "@/lib/rules/recovery";
 
 export interface PaperTopic { id: string; name: string; lost: number; from: string; secure: boolean;
   /** Some of its lost marks are a share of a question that reaches other places too (the whole-mark sharing of rules/recovery). */
@@ -26,12 +26,13 @@ export interface PaperView {
 const marks = (n: number) => `${n} ${n === 1 ? "mark" : "marks"}`;
 const labels = (qs: readonly string[]) => qs.join(", ");
 
-export function paperView(s: Pick<Session, "paper" | "skills">): PaperView {
+export function paperView(s: Pick<Session, "paper" | "skills" | "profiles" | "learner">): PaperView {
   if (!s.paper) return { empty: true, marks: 0, outOf: 0, lost: 0, topics: [], off: [], unmapped: 0, leftOut: 0 };
-  const r: Recovery = recovery([...s.paper.items, ...s.paper.unmapped]);
+  const at = readerOf(s);
+  const r: Recovery = recovery([...s.paper.items, ...s.paper.unmapped], at);
   // a question that reaches more than one place splits its lost marks between them
   const split = new Set<string>();
-  for (const it of r.items) { const d = reachOf(it.codes); if (d.topics.length + d.off.length > 1 && it.marks < it.outOf) split.add(it.q); }
+  for (const it of r.items) { const d = reachOf(it.codes, at); if (d.topics.length + d.off.length > 1 && it.marks < it.outOf) split.add(it.q); }
   const isShared = (qs: readonly string[]) => qs.some((q) => split.has(q));
   return {
     empty: false, marks: r.totals.marks, outOf: r.totals.outOf, lost: r.totals.lost, unmapped: r.unmapped.length, leftOut: s.paper.leftOut ?? 0,
@@ -42,7 +43,7 @@ export function paperView(s: Pick<Session, "paper" | "skills">): PaperView {
 }
 
 /** The stops the D-pad walks (tv/keys): the topic rows, then the off-desk statements. */
-export const paperStopCount = (s: Pick<Session, "paper" | "skills">): number => { const v = paperView(s); return v.topics.length + v.off.length; };
+export const paperStopCount = (s: Pick<Session, "paper" | "skills" | "profiles" | "learner">): number => { const v = paperView(s); return v.topics.length + v.off.length; };
 
 /**
  * The off-desk row's name (design/maths-lamplight.css .mb-poffrow): 26 px, in 732 px of room - the 1100 px column, less

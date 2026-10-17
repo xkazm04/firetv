@@ -124,7 +124,7 @@ test('aim 4: a set asked for any other way carries no aim section - the prompt b
  const p=seen[0].prompt;
  assert.equal(p,UNAIMED(),'the base prompt with the learner section after the topic, and nothing else');
  assert.equal(S().practice.aim,undefined);
- seat();fromPaper('frac-add-sub');stubText();
+ seat();fromPaper('linear-two-step');stubText();
  const ix=prepareStops(S()).findIndex((u)=>u.id==='linear-one-step');store.dispatch({type:'focus',focus:ix});
  const r2=await post({topic:'linear-one-step'});assert.equal(r2.status,200);
  assert.equal(seen[0].prompt,UNAIMED(),'the aim belongs to its own unit only');
@@ -133,7 +133,7 @@ test('aim 4: a set asked for any other way carries no aim section - the prompt b
 
 test('aim 5: a code-written unit from the paper - no engine call; a statement that steers nothing leaves the set unaimed, one that steers is carried',async()=>{
  // N2 is all of adding and subtracting fractions: no form to pick, so the usual draw and no aim on the card (cycle 14)
- seat();fromPaper('frac-add-sub');stubText();
+ seat({age:10});fromPaper('frac-add-sub');stubText();
  const res=await post({topic:'frac-add-sub'});assert.equal(res.status,200);
  assert.equal(seen.length,0,'no model call');
  assert.equal(S().practice.aim,undefined,'the card claims no aim the set did not take');assert.equal(S().practice.items.length,6);
@@ -386,4 +386,25 @@ test('aim 15: the Practice card says what a step up aims at, in the slip\'s own 
  const plain=renderToStaticMarkup(createElement(M.PracticeScreen,{s:{...base,practice:{topic:'pct-change',items,marked:false,stretch:true}}}));
  assert.ok(aimed.includes('data-role="maths-practice-aim">Aimed at: took the percent of the new amount.</div>'),'in the taped card');
  assert.equal(aimed.replace(/<div class="aim"[^>]*>.*?<\/div>/,''),plain,'otherwise the screen is unchanged');
+});
+
+test('MB4-2: the seated maturita learner\'s paper sends a partial link below their year to not-on-the-desk; with nobody seated the old routing stays',()=>{
+ const {readerOf,aimOf}=require(src('lib/rules/recovery.ts'));
+ const rows=[{q:'1',marks:0,outOf:3,codes:['G17']},{q:'2',marks:1,outOf:3,codes:['N1']}];
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'mb42-cz',name:'Jana',type:'high-school',age:18,system:'cz',modules:['maths']}});store.dispatch({type:'profile.save'});
+ store.dispatch({type:'paper.enter',rows});
+ assert.deepEqual(readerOf(S()),{system:'cz',age:18});
+ const v=paperView(S());
+ assert.deepEqual(v.topics.map((t)=>t.id),[],'nothing lands on Area of rectangles or Equivalent fractions');
+ assert.deepEqual(v.off.map((o)=>[o.can,o.lost]).sort(),[[can('G17'),3],[can('N1'),2]].sort());
+ assert.deepEqual(aimOf(S().paper.items,'area',readerOf(S())),[],'aimOf with the reader');
+ assert.ok(aimOf(S().paper.items,'area').includes('G17'),'aimOf without one keeps the old aim');
+ // nobody seated: the old routing
+ const bare={paper:S().paper,skills:S().skills,profiles:S().profiles,learner:null};
+ assert.equal(readerOf(bare),undefined);
+ assert.deepEqual(paperView(bare).topics.map((t)=>t.id).sort(),['area','frac-equivalent']);
+ // a profile of type other, or one with no age or system, has no reader
+ assert.equal(readerOf({profiles:[{id:'x',name:'X',type:'other',modules:[]}],learner:{id:'x'}}),undefined);
+ assert.equal(readerOf({profiles:[{id:'x',name:'X',type:'high-school',age:18,modules:[]}],learner:{id:'x'}}),undefined);
 });

@@ -19,7 +19,7 @@
  */
 import { STATEMENTS, WHOLE, gcseClaimAllowed, type Statement } from "../library/gcse";
 import { schoolYear } from "../library/syllabus";
-import type { SchoolSystem } from "../session/store";
+import type { SchoolSystem, Session } from "../session/store";
 import { topicsOf, type PathTopic } from "../library/paths";
 
 /**
@@ -167,6 +167,12 @@ export function prereqsOf(id: string): Set<string> {
  * is not on the desk. Absent, every touched unit is a destination, as before.
  */
 export interface Reader { system: SchoolSystem; age: number; }
+
+/** The Reader of the seated learner; undefined when nobody is seated, the profile is not at school (type other), or it keeps no age or system. */
+export function readerOf(s: Pick<Session, "profiles" | "learner">): Reader | undefined {
+  const me = s.profiles.find((p) => p.id === s.learner?.id);
+  return me && me.type !== "other" && me.age !== undefined && me.system !== undefined ? { system: me.system, age: me.age } : undefined;
+}
 
 /** A place an item's lost marks can go: a school-path topic, or a statement the path has no topic for. */
 interface Dest { kind: "topic" | "off"; id: string; codes: string[]; }
