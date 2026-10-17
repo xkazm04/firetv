@@ -3086,7 +3086,11 @@
           "revision": 12,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "tools/lab-bench.cjs:225 Benchmark results contain scores and provider identities without determinism stamps, leaving readers unable to assess their reproducibility.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:609da9e2f3c21869",
+          "evaluatedRevision": 12
         }
       ],
       "governance": "governed"

@@ -1,0 +1,101 @@
+{
+ "schema": "conform-run/1",
+ "worker": "7eb93658-c024-4f36-b3ea-98bacf1eb7da",
+ "subject": "cross-provider-benchmark-operations",
+ "evaluatedAt": "2026-10-17T21:08:08.968265+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "vision-lab",
+   "subject": "cross-provider-benchmark-operations",
+   "bundle": "llm-observability",
+   "state": "deviation",
+   "evidence": "tools/lab-bench.cjs:225 Benchmark results contain scores and provider identities without determinism stamps, leaving readers unable to assess their reproducibility.",
+   "techniques": [
+    {
+     "technique": "axes-and-caveats-live-at-the-surface",
+     "verdict": "deviation",
+     "evidence": "tools/lab-bench.cjs:284 JSON serialization drops the run's mode and the human renderer's caveat that replay reads use perfect ground-truth answers."
+    },
+    {
+     "technique": "cheapest-sufficient-configuration",
+     "verdict": "not-applicable",
+     "evidence": "tools/lab-bench.cjs:200 The bench applies absolute PoC acceptance thresholds rather than selecting among configurations by relative quality and cost."
+    },
+    {
+     "technique": "dataset-sampling-anonymize-freeze",
+     "verdict": "not-applicable",
+     "evidence": "vision/poc_ocr.py:8 The inspected corpus consists of authored PoC exercises and synthetic pages, fitting the technique's curated pre-ship evaluation exception rather than production-traffic sampling."
+    },
+    {
+     "technique": "determinism-stamping",
+     "verdict": "deviation",
+     "evidence": "tools/lab-bench.cjs:225 The result envelope records no per-call or run-level determinism stamp; pinning temperature in the local adapter does not satisfy artifact disclosure."
+    },
+    {
+     "technique": "entitlement-exhaustion-is-not-ill-health",
+     "verdict": "not-applicable",
+     "evidence": "tools/lab-bench.cjs:214 The live bench uses one active text configuration rather than comparative target columns; the technique explicitly excludes single-target runs."
+    },
+    {
+     "technique": "failure-clustering-recommendations",
+     "verdict": "not-applicable",
+     "evidence": "tools/lab-corpus.cjs:49 The hint corpus has twelve problems and retrieval has nine; the technique explicitly permits individual failure details instead of clustering for datasets this small."
+    },
+    {
+     "technique": "graded-case-difficulty",
+     "verdict": "not-applicable",
+     "evidence": "tools/lab-bench-test.cjs:73 Nine retrieval cases would yield approximately three cases per rung, which the technique explicitly excludes; the other inspected corpora are similarly small."
+    },
+    {
+     "technique": "handicap-disclosure-in-the-result-row",
+     "verdict": "not-applicable",
+     "evidence": "tools/lab-bench.cjs:232 The report compares the current pipeline with its PoC baseline, without competitor columns or an identified target-specific weakening of the workload."
+    },
+    {
+     "technique": "sampling-knobs-are-axes-not-strings",
+     "verdict": "not-applicable",
+     "evidence": "vision/vlm.py:32 The Python experiments select one model and pin its settings rather than comparing effort or thinking-budget configurations; single-target pinning belongs to determinism stamping."
+    },
+    {
+     "technique": "self-hosted-residency-is-part-of-the-target",
+     "verdict": "deviation",
+     "evidence": "vision/vlm.py:61 Local-model measurements return answer text and total elapsed time without placement metadata, and the inspected experiment loops neither warm targets explicitly nor exclude cold loads."
+    },
+    {
+     "technique": "target-matrix-runs",
+     "verdict": "not-applicable",
+     "evidence": "tools/lab-bench.cjs:210 The bench evaluates one active configuration against stored baseline thresholds; it does not conduct a cross-provider or cross-model selection experiment."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-17T21:08:08.968265+00:00",
+   "bundle": "llm-observability",
+   "subjects": [
+    "cross-provider-benchmark-operations"
+   ],
+   "techniques": [
+    "axes-and-caveats-live-at-the-surface",
+    "cheapest-sufficient-configuration",
+    "dataset-sampling-anonymize-freeze",
+    "determinism-stamping",
+    "entitlement-exhaustion-is-not-ill-health",
+    "failure-clustering-recommendations",
+    "graded-case-difficulty",
+    "handicap-disclosure-in-the-result-row",
+    "sampling-knobs-are-axes-not-strings",
+    "self-hosted-residency-is-part-of-the-target",
+    "target-matrix-runs"
+   ],
+   "deviations": 1,
+   "context": "vision-lab",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
