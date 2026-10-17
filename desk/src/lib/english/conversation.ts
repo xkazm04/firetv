@@ -147,10 +147,11 @@ const beginner=(c:Conversation)=>easyBand(isBand(c.preferences.level)?c.preferen
  * turns, two a rehearsal: at A1–A2 nearly every reply has something to fix, and in the second UAT run Tomáš met
  * a moment on almost every reply, which stops a scene being a scene.
  */
-function momentAllowed(c:Conversation):boolean{
+export function momentAllowed(c:Conversation,repeated=false):boolean{
   const moments=c.moments??[],gap=beginner(c)?4:3,cap=beginner(c)?2:4;
   if(c.preferences.correction!=="as-needed"||moments.length>=cap)return false;
-  const last=moments.at(-1);if(!last)return true;
+  // a slip the learner already made (a fossil, found by code) may stop the scene inside the gap; the cap still bounds it
+  const last=moments.at(-1);if(!last||repeated)return true;
   const since=c.turns.slice(c.turns.findIndex(t=>t.id===last.turnId)+1).filter(t=>t.role==="learner").length;
   return since>=gap-1;
 }
@@ -447,13 +448,14 @@ export async function englishCommand(raw:unknown){
   const judged=pair?judgedAs(c,pair):c;
   const lastLearner=[...c.turns].reverse().find(t=>t.role==="learner");
   if(action==="replay"&&!c.coaching)throw new ConversationError("Ask for a coaching moment first.");
-  const mayStop=action==="turn"&&momentAllowed(c);
+  const stopsRepeat=action==="turn"&&momentAllowed(c,true);
   // K1: a taught slip said again is found by code before the call (review.ts slipsAgain): this scene's moments and the
   // taught fixes this learner may be shown. The first asks the partner for a soft recast; record-tier ones count below.
   const again=action==="turn"?slipsAgain(reply,judged,learning.taught.filter(allowed)):[];
   // LG-57: a slip the learner made before (a taught one, or a known slip said twice in this scene) is a fossil: when a
   // moment may stop the scene, code stops it for the fossil after the reply, and the partner is told to leave the fix to it
-  const fossil=mayStop?fossilOf(reply,judged,again):null;
+  const fossil=stopsRepeat?fossilOf(reply,judged,again):null;
+  const mayStop=stopsRepeat&&(!!fossil||momentAllowed(c));
   const askedAbout=action==="turn"?askedAboutFor(reply,judged,learning.taught.filter(allowed)):undefined;
   // L3: the lost-property table after this reply, decided in code before the call; the partner phrases it, and it lands with the turn
   const lost=action==="turn"?lostTurn(c,reply):undefined;
