@@ -39,6 +39,15 @@ export const KNOWN_SLIPS: readonly string[] = [
   "i is", "you is", "we is", "they is", "more better", "most best", "more worse",
 ];
 /**
+ * The right form of each KNOWN_SLIPS pair (LG-57), so code can name the fix of a known slip the learner says twice in
+ * one scene before any moment taught it. One entry per KNOWN_SLIPS entry; a teacher widens both together.
+ */
+export const KNOWN_SLIP_FIXES: Readonly<Record<string, string>> = {
+  "we was": "we were", "they was": "they were", "you was": "you were", "he don't": "he doesn't", "she don't": "she doesn't", "it don't": "it doesn't",
+  "he have": "he has", "she have": "she has", "it have": "it has", "he do": "he does", "she do": "she does",
+  "i is": "i am", "you is": "you are", "we is": "we are", "they is": "they are", "more better": "better", "most best": "best", "more worse": "worse",
+};
+/**
  * Words a Czech or Slavic speaker commonly uses in their home-language sense (a false friend), each with the sense meant
  * and the English that says it. A teacher may widen it, the way KNOWN_SLIPS is widened. Read by the partner prompt only:
  * the input holds no L1, so this list is assumed, never detected.

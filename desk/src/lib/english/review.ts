@@ -8,7 +8,7 @@
  *
  * Pure data, no filesystem: the server, the view and the tests all import it.
  */
-import { findKey, guarded, keysOf, recordTier, sameSlip, slipIn, slipStands, type SlipKeys } from "./slip";
+import { findKey, guarded, keysOf, KNOWN_SLIP_FIXES, recordTier, sameSlip, slipIn, slipStands, type SlipKeys } from "./slip";
 import type { Conversation, Moment, Reuse, Review, Taught, Yours } from "./types";
 
 /**
@@ -236,6 +236,33 @@ export function slipsAgain(reply: string, c: Conversation, taught: readonly Taug
   }
   return out;
 }
+/**
+ * LG-57: a fossilised error, the one slip in `reply` the turn stops for (council-lite r2 value-2; LT-martin-45-J3-1,
+ * LT-adela-17-J3-1). A slip the learner already made and Linga already taught (`again`, slipsAgain: this scene's moments
+ * and the taught fixes of earlier sessions) when it may write to the record; else a KNOWN_SLIPS pair (slip.ts) said in
+ * `reply` and in an earlier learner line of this scene, never words the partner said. Code, before the call; null when
+ * neither holds. A one-off slip is never a fossil: the model still judges it, as before.
+ */
+export function fossilOf(reply: string, c: Conversation, again: readonly SlipAgain[]): SlipAgain | null {
+  const taught = again.find(h => h.record);
+  if (taught) return taught;
+  const partner = partnerLines(c), before = c.turns.filter(t => t.role === "learner").map(t => t.text);
+  for (const [slip, fix] of Object.entries(KNOWN_SLIP_FIXES)) {
+    const keys = { slip, fix }, said = slipIn(reply, keys);
+    if (said !== null && recordTier(keys, partner) && before.some(t => slipIn(t, keys) !== null)) return { said, better: fix, keys, record: true };
+  }
+  return null;
+}
+/** The moment code makes for a fossil (LG-57): the learner's exact words, the right form in their case, and a reason in code's own words. */
+export function fossilMoment(h: SlipAgain, turnId: string, at = Date.now()): Moment {
+  const better = /^\p{Lu}/u.test(h.said) ? h.better.charAt(0).toUpperCase() + h.better.slice(1) : h.better;
+  return { id: `${turnId}:moment`, kind: "fix", said: h.said, better, why: FOSSIL_WHY, turnId, at, slip: h.keys.slip, fix: h.keys.fix };
+}
+/** Why a fossil moment stops the scene: never its corrected words, so the fix can wait for the learner's try (repair.ts). */
+export const FOSSIL_WHY = "You said this before too, so let's get it right now.";
+/** What the partner is told when code stops the scene for a fossil after its reply: leave the fix to the moment. */
+export const FOSSIL_TASK = "The learner just said again an error they made before: said is their words, better is the right form. Linga stops the scene for it after your reply. Do not use the right form or its corrected words in your reply, do not correct them yourself, and return moment kind none.";
+
 /** A direct question whether the learner's own line was right ("Is my sentence correct?", "Did I say it well?"). Pure; English only. */
 export const CORRECTNESS_ASKED: readonly RegExp[] = [
   /\b(?:is|was)\s+(?:my|that|this|it|the)\b[^.?!]{0,40}\b(?:correct|right|ok|okay|wrong)\b/i,

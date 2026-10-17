@@ -1067,8 +1067,10 @@ test('K1 case 3 GATE: replaying the 2026-10-14 LT moments over the stored learne
  assert(other.every(h=>/\bmore better\b/i.test(h.text)),'no flag on another learner\'s line is a false match');
  console.log(`# K1 replay: ${own.length} recurrences flagged (${own.filter(h=>h.record).length} record tier) over ${people.reduce((n,p)=>n+p.lines.length,0)} learner lines; other learners: ${other.filter(h=>h.record).length} record-tier flags, ${other.filter(h=>!h.record).length} soft, all true "is more better" slips`);
 });
+// LG-57 revised this row on purpose: where a moment may stop the scene, a record-tier slip said again is now a fossil and
+// stops it (code's moment, FOSSIL_TASK); the soft recast this row pins is what is left when no moment may, as here
 test('K1 case 4: a taught slip said again reaches the turn prompt as slipAgain, counts once a reply on the record, and the fix said raises nothing',async()=>{
- await slipStart([VIKTOR]);
+ await slipStart([VIKTOR]);getSession().conversation.preferences.correction='pauses';
  await reply('Tomatoes is green. And red.');
  const again=prompts.at(-1).slipAgain;
  assert.deepEqual({said:again.said,better:again.better},{said:'Tomatoes is',better:'tomatoes are'},'the learner\'s exact words and the fix key');
@@ -2963,8 +2965,9 @@ test('LG-51 detector: a direct correctness question is found, an ordinary reply 
  for(const q of ['Is my sentence correct?','was that right?','Did I say it well?','Is it correct?','Am I saying it right?'])assert(asksCorrectness(q),'fires on: '+q);
  for(const q of ['I need a room for Friday.','The right door is on the left.','Can you repeat that?','I will correct the booking tomorrow.'])assert(!asksCorrectness(q),'quiet on: '+q);
 });
+// LG-57: no moment may stop this scene (correction "pauses"), so the taught slip said again stays a reply and the question can follow it
 test('LG-51 askedAbout: the previous learner line is matched against the taught slips; a clean line gives empty slips; no question gives none',async()=>{
- await slipStart([VIKTOR]);
+ await slipStart([VIKTOR]);getSession().conversation.preferences.correction='pauses';
  await reply('Tomatoes is green. And red.');
  assert.equal(prompts.at(-1).askedAbout,undefined,'an ordinary reply carries no askedAbout');
  await reply('Is my sentence correct?');
@@ -3056,4 +3059,31 @@ test('LG-56: a tomas-9-like A1 partner is held at the opening and on a turn thro
  assert.doesNotMatch(seen[0].system,/This learner plays at/);
  await reply('I keep my bike in it.');
  assert.deepEqual(partnerSaid(),[LENKA,long],'B1 is not held');
+});
+test('LG-57: a martin-45-like error said twice in one scene stops the scene with a code-made moment; the partner is told to leave the fix to it',async()=>{
+ const {FOSSIL_TASK,FOSSIL_WHY}=review();
+ const seen=await bandStart('jakub','B1','Hello, how can I help?',()=>({reply:'I see. When do you need them?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
+ await reply('We was promised the parts on Monday.');
+ assert.equal(getSession().conversation.moment,null,'once is not yet a fossil');assert.equal(seen.at(-1).prompt.slipAgain,undefined);
+ await reply('Sorry, but we was told Friday by your colleague.');
+ const c=getSession().conversation;
+ assert(c.moment,'LT-martin-45-J3-1 (recert-5 "we was promised"): the repeat gets a moment');
+ assert.equal(c.moment.kind,'fix');assert.equal(c.moment.said,'we was');assert.equal(c.moment.why,FOSSIL_WHY);assert.equal(c.moment.better,'','the fix waits for a try');
+ assert.equal(getSession().screen,'linga-moment');
+ assert.deepEqual(seen.at(-1).prompt.slipAgain,{said:'we was',better:'we were',task:FOSSIL_TASK});
+ await command('moment-done');
+ assert.equal(getSession().conversation.moments.at(-1).better,'we were');
+ assert(getLearner('jakub').english.taught.some(t=>t.slip==='we was'),'kept on the record when it closes');
+});
+test('LG-57: a fix taught in an earlier session said again ("more better") stops the scene, counts once, and adds no second item',async()=>{
+ const MARTIN={id:'m1:t1:moment',kind:'fix',said:'this is more better for me',better:'this is better for me',why:'Better already compares.',turnId:'m1:t1',at:30,sceneId:'booking',title:'Supplier call'};
+ const seen=await bandStart('jakub','B1','Hello, how can I help?',()=>({reply:'Good. Which day is best for the truck?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
+ saveEnglish('jakub',{...getLearner('jakub').english,taught:cleanEnglish({taught:[MARTIN]}).taught});
+ await reply('Friday is more better for me.');
+ const c=getSession().conversation;
+ assert(c.moment,'the taught slip said again gets a moment, not only a recast');assert.equal(c.moment.said,'is more better');
+ assert.equal(seen.at(-1).prompt.slipAgain.task,review().FOSSIL_TASK);
+ await command('moment-done');
+ const taught=getLearner('jakub').english.taught;
+ assert.equal(taught.length,1,'no second item');assert.equal(taught[0].slips,1,'one reply counts once');
 });
