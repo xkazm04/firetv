@@ -1,0 +1,114 @@
+{
+  "id": "2026-10-09-essay-l1/recert-3",
+  "started": "2026-10-17T09:01:29.831Z",
+  "finished": "2026-10-17T09:01:29.831Z",
+  "cert_level": "L1",
+  "module": "Essay Master",
+  "base_commit": "00f5db956f6c77cdfda09e5a5f477261bd543eda",
+  "cast": [
+    "barbora-43",
+    "daniel-15",
+    "eliska-12",
+    "helena-46",
+    "kristyna-17"
+  ],
+  "journeys": [
+    "EM1",
+    "EM2",
+    "EM3",
+    "EM4",
+    "EM5"
+  ],
+  "pairs": [
+    {
+      "character": "barbora-43",
+      "journey": "EM1"
+    },
+    {
+      "character": "barbora-43",
+      "journey": "EM4"
+    },
+    {
+      "character": "daniel-15",
+      "journey": "EM2"
+    },
+    {
+      "character": "daniel-15",
+      "journey": "EM3"
+    },
+    {
+      "character": "eliska-12",
+      "journey": "EM1"
+    },
+    {
+      "character": "eliska-12",
+      "journey": "EM2"
+    },
+    {
+      "character": "helena-46",
+      "journey": "EM1"
+    },
+    {
+      "character": "helena-46",
+      "journey": "EM5"
+    },
+    {
+      "character": "kristyna-17",
+      "journey": "EM1"
+    },
+    {
+      "character": "kristyna-17",
+      "journey": "EM3"
+    }
+  ],
+  "recertify": {
+    "of": "2026-10-09-essay-l1",
+    "k": 3,
+    "prior_base_commit": "90e032f273eb27cbfbc0ce63394305ee4991a8df",
+    "prior_run": "2026-10-09-essay-l1/recert-2",
+    "mode": "L1 code re-walk of every row open in recert-2/findings.json; answers fixed | recurs, stamped by recertify.cjs writeBack (fixed as not-seen)"
+  },
+  "instrument": {
+    "level": "L1 theoretical re-walk (uat skill, recertify at L1; README *Levels*)",
+    "walkers": "the builder session itself, one pass over all pairs: each open recert-2 row re-found at current file:line on main 00f5db95 (cites re-mapped through git diff -U0, hunks re-read), the rows the new commits claim to close executed in scratch repros outside the repo",
+    "model_calls": "none: no desk engine, no Ollama, no codex, no paid API; the hint engine was stubbed in one repro; desk/data untouched",
+    "overlay": [
+      "uat/README.md",
+      "uat/env.md",
+      "uat/rubric.md",
+      "uat/accepted-gaps.md"
+    ]
+  },
+  "product": {
+    "commit": "00f5db956f6c77cdfda09e5a5f477261bd543eda",
+    "dirty": false,
+    "files": {
+      "desk/src/app/api/analyse/route.ts": "e7239372a935566f1e2c2c12a0255d70389c5db9",
+      "desk/src/app/api/texts/route.ts": "45efd79f4c4c3c6a1fbf8b00952e455108606fdb",
+      "desk/src/app/api/twin/route.ts": "ff3fe945239c3f0d36ea706dd5caf0fa0363464d",
+      "desk/src/app/drop/page.tsx": "e8d35706f7ae6c705b41a428d16fd361670854dd",
+      "desk/src/app/phone/EssayShelf.tsx": "411a35c89d7fee3f2d847b904c61acbdfbc7b33c",
+      "desk/src/app/phone/page.tsx": "09f573b654fd3a231744f51e8e70b80dc353fab5",
+      "desk/src/app/phone/recogniserLang.ts": "bf611f7ff8ad2810b09a8c38fd002a85a3620e48",
+      "desk/src/app/tv/page.tsx": "356dd6b2b9eca608af05d591d18a3e55d632d58d",
+      "desk/src/essay/EssayTV.tsx": "79ea68a7acf9f19fc3324484d34f5c27accae512",
+      "desk/src/essay/Workroom.tsx": "e6c275df0ac15b74fe84a83980eb30a32fccdf9d",
+      "desk/src/lib/desk/essay.ts": "630078f9e02f543573d2e67c2592b2f5c7419fbc",
+      "desk/src/lib/library/lessons.data.ts": "93d90b5d08aa33937ab7a5da3fcba70117747dda",
+      "desk/src/lib/prompt/assemble.ts": "a62590ce7c67d0bbd649a46b750490c28330376b",
+      "desk/src/lib/rules/docx.ts": "8af522dbbb5da8d473e4c6fea79e020c4f2163bd",
+      "desk/src/lib/rules/essay.ts": "dab53e4580dba13db55361a54a193cb619a35bdf",
+      "desk/src/lib/rules/style.ts": "565e1f1c7ee65cbd35cad238bdc289e45c76fb13",
+      "desk/src/lib/rules/voice.ts": "b3ad8d4704c778e335b2aa3cc3bd9f7a8c8e489d",
+      "desk/src/lib/rules/week.ts": "6e6b5595a11b08f0c045c439a27c2aa5b4012141",
+      "desk/src/lib/session/store.ts": "5329afd710248216fb4418e04c30f3d534fa9984",
+      "desk/src/lib/session/texts.ts": "48b9ed540d1000f0af134ce77985345ef50117e0",
+      "desk/src/lib/twin/card.ts": "e7b20c0b19acbf79f310cf208edd5f0261d98b13",
+      "desk/src/tv/keys.ts": "6634c15288c1831fc01bd4bc4ff9a1bfd74f9857",
+      "desk/src/tv/landingRows.ts": "0d0caa089907a964bb706f6ed6542d27ea6659a0",
+      "desk/src/tv/profileRows.ts": "778ff3b9bf9d7d91aea2175a3ec6b44f5f4389ab",
+      "desk/src/tv/recapRows.ts": "4fd580e409f74035347b16a8e1243caa04dfc8a2",
+      "desk/src/tv/screens.tsx": "c5eac476563ca77719ea03726b783896d6f3f3b3"
+    }
+  }
+}

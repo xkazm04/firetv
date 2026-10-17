@@ -28,13 +28,13 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "L1-matyas-19-MB1-3",
     "suggested_acceptance": "A snapped page whose items read as Calculus specs (specFromQuestion) can be marked from a photo of his working, by the same code judge as a desk set, items that do not read being \"not sure\".",
     "l2_priority": "precondition: vision host (env.md, Math Buddy) — none until built; then page read rate and handwriting read on a real MA1 sheet.",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "His own MA1 sheet is still never marked: no client sends a page id. No commit between recert-1 base d4f5042a and HEAD touched these files.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
     "recurred_as": "L1-matyas-19-MB1-1"
   },
   {
@@ -62,13 +62,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 3,
     "recurs": "L1-matyas-19-MB3-3",
     "suggested_acceptance": "An implicit-derivative shape (F(x, y) = c, asked dy/dx in x and y or at a point on the curve), checked numerically by -F_x/F_y, on calc1-chain; or the topic and its blurb stop promising it.",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
-    "recertify_status": "recurs",
-    "recertify_evidence": "calc1-chain still promises implicit differentiation but sets only y=f(x) derivatives; readQuestion(\"Find dy/dx if x^2 + y^2 = 25\") -> linear, and \"dy/dx = -x/y.\" passes leaksLine (executed false). No commit between recert-1 base d4f5042a and HEAD touched these files. Fix in flight: a parallel run is building implicit differentiation (L1-matyas-19-MB3-3 in the 2026-10-09 numbering) in another worktree; not on main at 90e032f2.",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "fd9f5ca5 adds a tenth shape, implicit-derivative (rules/calc.ts:46-50 ImplicitSpec, CALC_SHAPES), set by calc1-chain (calculus1.spine.ts:121, items.ts SHAPE_LINES). Executed at 00f5db95 (scratch r3.cjs): readQuestion(\"Find dy/dx if x^2 + y^2 = 25\") -> kind calc, spec {shape implicit-derivative}; the same for \"Find dy/dx at (3, 4) if ...\", \"Differentiate x*y + y^2 = 7 implicitly\" and the Czech \"Určete derivaci implicitně zadané funkce ... v bodě [3; 4]\" (the point read). checkAnswer marks -x/y and x/(-y) right and x/y wrong with slip sign; at (3, 4) -3/4 is right, 3/4 is a sign slip, and a general -x/y is unsure (\"should be a number\"). leaksLine refuses \"dy/dx = -x/y.\" and \"The slope is -x/y\" (true) and, at the point, \"At that point the slope is -0.75\" (true); \"Try differentiating each term with respect to x, treating y as a function of x.\" passes (false); withheldCalc names the method only. Policy note: at a point the general formula \"dy/dx = -x/y.\" is not refused, the same as derivative-at (\"The derivative is 3x^2.\" passes for \"at x = 2\", executed). Whether the model sets a sound implicit item is L2.",
     "recurred_as": "L1-matyas-19-MB3-1"
   },
   {
@@ -96,13 +96,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "L1-nela-12-MB2-6",
     "suggested_acceptance": "A teacher signs off the tier-2 denominator range for cz 6. ročník",
     "l2_priority": "Set fit judged by a Czech maths teacher on 3 drawn sets",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "school.ts:2798 gen unchanged; no commit since recert-1 touched the generator.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
     "recurred_as": "L1-nela-12-MB2-1"
   },
   {
@@ -131,13 +131,13 @@
     "code_check": "by-design",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "L1-nela-12-MB2-7",
     "suggested_acceptance": "Owner ruling: either the add/sub questions say \"simplest form\" (unsure, not wrong, for 6/4), or the lesson drops \"then simplify\"",
     "l2_priority": "Owner/teacher ruling on unsimplified results for cz",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "worked.ts:15 still says 'then simplify'; school.ts:1588 adds the simplest-form tail only when form is simplest.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
     "recurred_as": "L1-nela-12-MB2-2"
   },
   {
@@ -167,12 +167,12 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "L1-nela-12-MB5-4",
     "suggested_acceptance": "The blurb names the number format (\"0,5 is a half\"), or Save asks for a system",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "profileRows.ts:24,29,33 unchanged: default uk, cz blurb names ročníky only, silent fallback.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
     "recurred_as": "L1-nela-12-MB5-1"
   },
   {
@@ -201,12 +201,12 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "L1-nela-12-MB5-5",
     "suggested_acceptance": "A school-year pick on the profile, or the cut-off applied",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "syllabus.ts:302-304 schoolYear = age - start + 1, no cut-off; stretch.ts:74-78 learnerYear uses it.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
     "recurred_as": "L1-nela-12-MB5-2"
   },
   {
@@ -305,13 +305,13 @@
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "L1-owen-17-MB4-6",
     "suggested_acceptance": "The draft paper persists on the phone until sent.",
     "l2_priority": "Lock the phone mid-entry on iOS/Android browsers; does the draft survive?",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "No commit touched the phone draft; cites re-found at HEAD.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
     "recurred_as": "L1-owen-17-MB4-1"
   },
   {
@@ -340,13 +340,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "L1-radka-41-MB4-4",
     "suggested_acceptance": "For a cz learner the panel offers task-shaped statements a parent recognises (e.g. 'simplify an expression with brackets', 'a construction with ruler and compasses'), mapped to the same codes; no 'Foundation paper' wording.",
     "l2_priority": "Time a non-specialist typing the 16-question mock (C3, <= 15 min) and count questions left with no pick.",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "PaperPanel.tsx:12 builds WHOLE from statementChoices() with no system; :36 prints c.can and '(a harder statement)'. No commit since recert-1 touches this.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
     "recurred_as": "L1-radka-41-MB4-1"
   },
   {
@@ -376,12 +376,12 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "L1-radka-41-MB5-4",
     "suggested_acceptance": "The picks can be made on the phone (where the name is typed), or the TV rows start on the likely value (age row near the type's middle; course row skipped when the school path is the only sensible one).",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "profileRows.ts:24 DEFAULT_SYSTEM uk, :69 type defaults to high-school, :77 Maths course row sits before Save/Back; page.tsx:538 phone profile has only Name.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
     "recurred_as": "L1-radka-41-MB5-1"
   },
   {
@@ -410,12 +410,12 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "L1-radka-41-MB5-7",
     "suggested_acceptance": "The phone Recap lists every learner with work tonight, one block each.",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "recapRows.ts:66-68 filters the seated session's history; page.tsx:735-744 renders one block for s.learner; store.ts:666 other learners' logs stay in away.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; store.ts changed since 90e032f2 (fd9f5ca5) but not at the cited lines",
     "recurred_as": "L1-radka-41-MB5-2"
   },
   {
@@ -480,14 +480,15 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 3,
     "recurs": "L1-vojtech-18-MB1-2",
     "suggested_acceptance": "A task that reads as no unit gets a neutral stance that names no unit (no 'factoring and linear-equations'). The teen voice names the learner's age or stage (16-19 'a secondary-school student preparing for a school-leaving exam') instead of '15'.",
     "l2_priority": "Ask a hint on a snapped arithmetic-sequence and line task; judge whether the hint pushes a linear-equation method (hint helpfulness unit: next-step / generic / leak).",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
-    "recertify_status": "recurs",
-    "recurred_as": "L1-vojtech-18-MB1-1"
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
+    "recertify_status": "not-seen",
+    "recurred_as": "L1-vojtech-18-MB1-1",
+    "recertify_evidence": "00f5db95 makes voiceOf(\"maths\", age) name the profile age (rules/voice.ts:75-83 ageWho: \"an 18-year-old\", \"a 15-year-old\") and gives a sequence, line or inequality task its method in the stance (desk/hint.ts:90-98 maturitaMethod, used at :110). Executed hint() with the text engine stubbed to capture the system prompt (scratch r3.cjs, system cz, age 18): \"Určete 10. člen aritmetické posloupnosti ...\" -> \"You are a maths tutor for an 18-year-old. This is an arithmetic or geometric sequence task; use the nth-term formula.\"; \"Find the line through (1,3) and (3,7)\" -> \"... for an 18-year-old. This is a line through two points; use the gradient and y = mx + c.\"; \"Řešte nerovnici x^2 - 5x + 6 < 0\" -> \"... This is an inequality; find where the expression changes sign, then read off the solution set.\" With no age the stance keeps \"a 15-year-old\" but still names the method; \"Simplify 3x + 2x\" keeps the neutral school stance. A Calculus learner is still spoken to as the course's student (hint.ts:156), by design."
   },
   {
     "id": "L1-vojtech-18-MB2-1",
@@ -587,13 +588,14 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "L1-vojtech-18-MB4-5",
     "suggested_acceptance": "The picker offers a short area-level choice first (numbers, equations, functions, sequences, geometry, probability and statistics), with the statements as an optional refinement. The tier flag reads 'harder than this list covers'.",
     "l2_priority": "Time a B1 reader picking statements for 10 maturita questions.",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recurred_as": "L1-vojtech-18-MB4-1"
+    "recurred_as": "L1-vojtech-18-MB4-1",
+    "recertify_evidence": "cited lines re-found at 00f5db95; gcse.ts changed since 90e032f2 (7107748f) but not at the cited lines"
   },
   {
     "id": "L1-vojtech-18-MB4-3",
@@ -621,12 +623,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "L1-vojtech-18-MB4-6",
     "suggested_acceptance": "Each topic row names the statement's can text it came through.",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recurred_as": "L1-vojtech-18-MB4-2"
+    "recurred_as": "L1-vojtech-18-MB4-2",
+    "recertify_evidence": "cited lines re-found at 00f5db95; recovery.ts changed since 90e032f2 (7107748f) but not at the cited lines"
   },
   {
     "id": "L1-matyas-19-MB1-2",
@@ -656,11 +659,11 @@
     "suggested_acceptance": "calc2SpecFromQuestion reads inf as it reads infinity for n; a rules row pins 'Find lim_(n->inf) (3n+1)/(2n-5)'.",
     "l2_priority": "low; a rules row is enough to confirm, no vision needed",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "origin": "2026-10-14-l1/math-adult/L1-matyas-19-MB1-5",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "lim_(n->inf) still reads as linear; \"The limit is 3/2.\" is not refused (executed: leaksLine false; with n->infinity it reads calc and is refused true). No commit between recert-1 base d4f5042a and HEAD touched these files.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
     "recurred_as": "L1-matyas-19-MB1-2"
   },
   {
@@ -691,12 +694,12 @@
     "suggested_acceptance": "A by-parts line '∫ u dv = uv - ∫ v du' is checked by differentiating both sides and u/dv lines are bound; failing that, the TV says plainly that working on Calculus 2 techniques is not line-checked.",
     "l2_priority": "precondition: vision host and the Calculus 2 path — snap by-parts working with a wrong last line; confirm the card shows the answer line only.",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "origin": "2026-10-14-l1/math-adult/L1-matyas-19-MB3-16",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "By-parts working on Calculus 2 techniques is still not line-checked; no commit touched chain.ts or calculus2.spine.ts since recert-1. No commit between recert-1 base d4f5042a and HEAD touched these files.",
-    "recurred_as": "L1-matyas-19-MB3-2"
+    "recertify_evidence": "cited lines re-found at 00f5db95; chain.ts changed since 90e032f2 (fd9f5ca5) but not at the cited lines",
+    "recurred_as": "L1-matyas-19-MB3-1"
   },
   {
     "id": "L1-matyas-19-MB3-3",
@@ -727,12 +730,12 @@
     "suggested_acceptance": "A word-problem part whose key is irrational says 'Give the exact value', or derivative-at / extremum accept a correct rounding at its own precision as limit does.",
     "l2_priority": "No vision needed: typed route on calc1-related-rates; answer 1.1495 for a key of 65/(18π) and read the card.",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "origin": "2026-10-14-l1/math-adult/L1-matyas-19-MB3-17",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "Derivative-at and extremum still use the 1e-6 rounded tolerance; only limit and definite-integral go to decimalCall; word-problem lines still say no \"exact\". No commit between recert-1 base d4f5042a and HEAD touched these files.",
-    "recurred_as": "L1-matyas-19-MB3-3"
+    "recertify_evidence": "cited lines re-found at 00f5db95; calc.ts changed since 90e032f2 (fd9f5ca5) but not at the cited lines",
+    "recurred_as": "L1-matyas-19-MB3-2"
   },
   {
     "id": "L1-matyas-19-MB3-4",
@@ -761,12 +764,12 @@
     "suggested_acceptance": "parsePlain reads inf, infinity or ∞ after ^ and _ as one atom; a typeset row pins the four lines.",
     "l2_priority": "low; reachable only through a handwritten line transcribed with inf or ∞",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "origin": "2026-10-14-l1/math-adult/L1-matyas-19-MB3-18",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "Infinity bound still split in typesetting (executed: int_1^inf -> ^(i)nf; ∫_1^∞ -> ^()∞; x^inf -> ^(i)nf). No commit between recert-1 base d4f5042a and HEAD touched these files.",
-    "recurred_as": "L1-matyas-19-MB3-4"
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
+    "recurred_as": "L1-matyas-19-MB3-3"
   },
   {
     "id": "L1-matyas-19-MB3-5",
@@ -795,12 +798,12 @@
     "suggested_acceptance": "The blurb length pin that SL3 holds for school topics also counts the Calculus spines.",
     "l2_priority": "none; static",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "origin": "2026-10-14-l1/math-adult/L1-matyas-19-MB3-20",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "Both Calculus 2 blurbs unchanged at 30 and 33 words; file untouched since recert-1. No commit between recert-1 base d4f5042a and HEAD touched these files.",
-    "recurred_as": "L1-matyas-19-MB3-5"
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
+    "recurred_as": "L1-matyas-19-MB3-4"
   },
   {
     "id": "L1-matyas-19-MB3-6",
@@ -829,12 +832,12 @@
     "suggested_acceptance": "Either the item stores tex for the typesetter, or the field and its code are dropped.",
     "l2_priority": "none",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "origin": "2026-10-14-l1/math-adult/L1-matyas-19-MB3-21",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "question() still returns tex and items.ts stores plain only. No commit between recert-1 base d4f5042a and HEAD touched these files.",
-    "recurred_as": "L1-matyas-19-MB3-6"
+    "recertify_evidence": "cited lines re-found at 00f5db95; calc.ts changed since 90e032f2 (fd9f5ca5) but not at the cited lines; items.ts changed since 90e032f2 (fd9f5ca5) but not at the cited lines",
+    "recurred_as": "L1-matyas-19-MB3-5"
   },
   {
     "id": "L1-nela-12-MB1-1",
@@ -902,11 +905,11 @@
     "suggested_acceptance": "recapRows counts hints and hinted problems only from a log whose day is today; the repro then gives 'Arrives when the session ends.' on day 2 before any event.",
     "l2_priority": "No model needed: a Math harness with a cz profile and an isolated DESK_DATA_DIR, the clock moved past midnight, then the phone's Recap tab opened.",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "origin": "2026-10-14-l1/math-family/L1-nela-12-MB5-7",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "recapRows.ts:79 reads s.log.hints without a day check; store.ts dayed runs only inside reduce (:679); phone/page.tsx:741 guard passes on a non-empty tile.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; store.ts changed since 90e032f2 (fd9f5ca5) but not at the cited lines",
     "recurred_as": "L1-nela-12-MB5-3"
   },
   {
@@ -938,11 +941,11 @@
     "suggested_acceptance": "A worked lesson for the three equation units, written in library/worked.ts with code-drawn examples (the M1 shape), or the Prepare card says 'no lesson yet' in its own words.",
     "l2_priority": "No L2 precondition: code-decided and deterministic.",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "origin": "2026-10-14-l1/math-family/L1-owen-17-MB2-11",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "No commit touched worked.ts; the gap still holds at the cited lines.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
     "recurred_as": "L1-owen-17-MB2-1"
   },
   {
@@ -974,11 +977,11 @@
     "suggested_acceptance": "For a learner past the path's end (pastPathEnd), the Topics ruler leaves out the Year label as the Prepare cards do; a test pins it.",
     "l2_priority": "Low: a screenshot of Topics for a UK 17-year-old confirms it.",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "origin": "recert-1 walk",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "MathsTV.tsx:337 unchanged; no pastPathEnd check on the Topics ruler.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files",
     "recurred_as": "L1-owen-17-MB2-2"
   },
   {
@@ -1045,11 +1048,11 @@
     "suggested_acceptance": "recapRows and the phone tally count the log only when log.day is today; a test with a yesterday-stamped log and no event reads 'A quiet evening.'",
     "l2_priority": "No L2 precondition: code-decided; a Math harness with a cz profile and a moved clock in an isolated DESK_DATA_DIR.",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "origin": "2026-10-14-l1/math-family/L1-radka-41-MB5-10",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recertify_evidence": "recapRows.ts:79 takes hints and second hints from s.log with no log.day check; page.tsx:741-744 tallies from s.log; store.ts:664-669 clears only inside reduce (:679) and getSession (:989) returns the stored session.",
+    "recertify_evidence": "cited lines re-found at 00f5db95; store.ts changed since 90e032f2 (fd9f5ca5) but not at the cited lines",
     "recurred_as": "L1-radka-41-MB5-3"
   },
   {
@@ -1112,10 +1115,11 @@
     "suggested_acceptance": "Back or Menu on an off-desk row returns to tonight (or to prepare on the last unit for a learner past the path), never to focus 0; a key test pins it.",
     "l2_priority": "Low: one D-pad press on the recovery screen.",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "origin": "recert-1 walk",
-    "recertify_run": "2026-10-09-maths-l1/recert-2",
+    "recertify_run": "2026-10-09-maths-l1/recert-3",
     "recertify_status": "recurs",
-    "recurred_as": "L1-vojtech-18-MB4-3"
+    "recurred_as": "L1-vojtech-18-MB4-3",
+    "recertify_evidence": "cited lines re-found at 00f5db95; no commit since 90e032f2 touched the cited files"
   }
 ]
