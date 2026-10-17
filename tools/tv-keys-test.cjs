@@ -538,7 +538,20 @@ test('course lessons 2: the Math Buddy blurb speaks for either path - no "school
  assert.ok(MODULE_BLURB.maths.split(/(?<=\.)\s/).length<=2,'short: at most two sentences');
 });
 
-test('course lessons 3: the landing card for Math Buddy says the same as the profile blurb - no "school maths" on either',()=>{
+test('profile system: every blurb names its decimal convention, Save names the system it saves, the layout is unchanged',()=>{
+ const {SYSTEM_BLURB,SYSTEMS,profileRows}=require(path.join(root,'src/tv/profileRows.ts'));
+ for(const s of SYSTEMS)assert.match(SYSTEM_BLURB[s],s==='cz'||s==='de'?/0,5 is a half \(decimal comma\)\./:/0\.5 is a half \(decimal point\)\./,s);
+ const save=(d)=>profileRows(d).at(-1).cells[0].blurb;
+ assert.match(save({id:'p',name:'P',type:'high-school',age:16,modules:['maths']}),/United Kingdom/,'no system: says UK');
+ assert.match(save({id:'p',name:'P',type:'high-school',age:16,modules:['maths']}),/pick a school system above/);
+ assert.match(save({id:'p',name:'P',type:'high-school',age:16,system:'cz',modules:['maths']}),/Czech Republic \(0,5 is a half\)/);
+ assert.doesNotMatch(save({id:'p',name:'P',type:'high-school',age:16,system:'cz',modules:['maths']}),/pick a school system/);
+ const rows=profileRows({id:'p',name:'P',type:'high-school',age:16,modules:['maths']});
+ assert.deepEqual(rows.map((r)=>r.cells.length),[3,5,4,3,rows[4].cells.length,2],'row and cell counts (no Mode row under 18)');
+ assert.equal(rows.length,6);
+});
+
+test('course lessons 3:the landing card for Math Buddy says the same as the profile blurb - no "school maths" on either',()=>{
  // only the code lines that assign a blurb are read: a line comment may quote the old wording, a string may not
  const landing=fs.readFileSync(path.join(root,'src/tv/landingRows.ts'),'utf8').split('\n').filter((l)=>/^\s*(maths|english|essay):\s*"/.test(l)).join('\n');
  assert.doesNotMatch(landing,/school maths/i,'the landing blurb does not assume the school path');

@@ -24,11 +24,13 @@ export const SYSTEMS: SchoolSystem[] = ["us", "uk", "cz", "de"];
 export const DEFAULT_SYSTEM: SchoolSystem = "uk";
 export const SYSTEM_WORDS: Record<SchoolSystem, string> = { us: "United States", uk: "United Kingdom", cz: "Czech Republic", de: "Germany" };
 export const SYSTEM_BLURB: Record<SchoolSystem, string> = {
-  us: "Progress is shown against US grades.",
-  uk: "Progress is shown against UK years.",
-  cz: "Progress is shown against Czech ročníky.",
-  de: "Progress is shown against German Klassen.",
+  us: "Progress is shown against US grades. 0.5 is a half (decimal point).",
+  uk: "Progress is shown against UK years. 0.5 is a half (decimal point).",
+  cz: "Progress is shown against Czech ročníky. 0,5 is a half (decimal comma).",
+  de: "Progress is shown against German Klassen. 0,5 is a half (decimal comma).",
 };
+/** The decimal convention each system reads a learner's numbers by, in the words the Save blurb quotes. */
+const SYSTEM_DECIMAL: Record<SchoolSystem, string> = { us: "0.5 is a half", uk: "0.5 is a half", cz: "0,5 is a half", de: "0,5 is a half" };
 /** The system on a profile, or the default. */
 export function systemOf(p: Profile | null | undefined): SchoolSystem { return p?.system ?? DEFAULT_SYSTEM; }
 
@@ -65,6 +67,13 @@ export const COURSES: MathPath[] = Object.keys(PATHS) as MathPath[];
  * The pick rows for a draft: type, age (school types only), mode, school system, interests, the Maths course (only while
  * Maths is on), actions. The TV and the D-pad share this.
  */
+/** What Save will keep: the system it saves, named, so a skipped School system row is not a silent default. */
+function saveBlurb(d: Profile | null): string {
+  const sys = systemOf(d);
+  return d?.system
+    ? `Saves as ${SYSTEM_WORDS[sys]} (${SYSTEM_DECIMAL[sys]}).`
+    : `Saves as ${SYSTEM_WORDS[sys]} (${SYSTEM_DECIMAL[sys]}); pick a school system above to change it.`;
+}
 export function profileRows(d: Profile | null): Row[] {
   const t = d?.type ?? "high-school", r = AGE_RANGE[t];
   const rows: Row[] = [{ title: "Type of student", cells: TYPES.map((x) => ({ kind: "type", label: TYPE_WORDS[x], blurb: TYPE_BLURB[x], type: x })) }];
@@ -75,7 +84,7 @@ export function profileRows(d: Profile | null): Row[] {
   rows.push({ title: "School system", cells: SYSTEMS.map((x) => ({ kind: "system", label: SYSTEM_WORDS[x], blurb: SYSTEM_BLURB[x], system: x })) });
   rows.push({ title: "Interested in", cells: (["maths", "english", "essay"] as Subject[]).map((m) => ({ kind: "interest", label: BRAND[m], blurb: MODULE_BLURB[m], sub: m })) });
   if ((d?.modules ?? ALL).includes("maths")) rows.push({ title: "Maths course", cells: COURSES.map((p) => ({ kind: "path", label: PATHS[p].name, blurb: PATHS[p].blurb, path: p })) });
-  rows.push({ title: "", cells: [{ kind: "save", label: "Save", blurb: "Sit at this desk with these picks." }, { kind: "back", label: "Back", blurb: "Throw the draft away and go back." }] });
+  rows.push({ title: "", cells: [{ kind: "save", label: "Save", blurb: saveBlurb(d) }, { kind: "back", label: "Back", blurb: "Throw the draft away and go back." }] });
   return rows;
 }
 export function locate(rows: Row[], f: number): { r: number; c: number } {
