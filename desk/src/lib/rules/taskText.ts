@@ -15,8 +15,8 @@ export type { SchoolSystem };
 /** A leading instruction in Czech or English, matched on the text with its diacritics folded: 'Řešte rovnici', 'Work out', 'Derivujte:'. */
 const INSTRUCTION = new RegExp(
   String.raw`^\s*(?:(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+)?` +
-  String.raw`(res(?:te)?|vypocit(?:ej|ejte)|vypoctete|spoctete|spocti(?:te)?|spocitej(?:te)?|derivuj(?:te)?|urcete|urci|najdete|najdi|secti(?:te)?|odecti(?:te)?|vynasob(?:te)?|rozdel(?:te)?|zkrat(?:te)?|preved(?:te)?|solve|calculate|work out|find)\b` +
-  String.raw`(?:\s+(?:(?:rovnici|priklad|ulohu|limitu|hodnotu|vyraz|zlomek|equation)|(derivaci)(?:\s+funkce)?|(?:neurcity\s+)?integral(?:\s+funkce)?))?\s*:?\s*`,
+  String.raw`(res(?:te)?|vypocit(?:ej|ejte)|vypoctete|spoctete|spocti(?:te)?|spocitej(?:te)?|derivuj(?:te)?|urcete|urci|najdete|najdi|secti(?:te)?|odecti(?:te)?|odectete|vynasob(?:te)?|rozdel(?:te)?|vydel(?:te)?|uprav(?:te)?|dopln(?:te)?|zapis(?:te)?|zkrat(?:te)?|preved(?:te)?|solve|calculate|work out|find)\b` +
+  String.raw`(?:\s+(?:(?:rovnici|priklad|ulohu|limitu|hodnotu|vyraz|zlomek|chybejici\s+(?:cislo|citatel|jmenovatel)|equation)|(derivaci)(?:\s+funkce)?|(?:neurcity\s+)?integral(?:\s+funkce)?))?\s*:?\s*`,
   "i",
 );
 const DERIVE = /^deriv/i;
@@ -30,11 +30,23 @@ export function withoutInstruction(text: string): string {
   if (!m || m[0].length === 0) return text;
   const rest = t.slice(m[0].length), verb = m[1].toLowerCase();
   if (DERIVE.test(verb) || m[2]) return `Differentiate ${rest}`;
-  const pair = VERB_OP[verb.replace(/te$/, "")];
+  const bare = fold(rest.trim()), v = verb === "odectete" ? "odecti" : verb.replace(/te$/, "");
+  // 'Odečti 1/6 od 3/4' takes the first from the second: 3/4 - 1/6
+  if (v === "odecti") { const j = /^(.+?)\s+od\s+(.+?)\s*\.?$/.exec(bare); if (j && NUMERIC.test(j[1]) && NUMERIC.test(j[2])) return `${j[2]} - ${j[1]}`; }
+  // 'Vyděl 3/4 číslem 1/2' is 3/4 ÷ 1/2
+  if (v === "vydel") { const j = /^(.+?)\s+(?:cislem|cislo)\s+(.+?)\s*\.?$/.exec(bare); if (j && NUMERIC.test(j[1]) && NUMERIC.test(j[2])) return `${j[1]} ÷ ${j[2]}`; }
+  // 'Rozděl 60 v poměru 2:3' is 'Divide 60 in the ratio 2:3'
+  if (v === "rozdel") { const j = /^(\d+(?:[.,]\d+)?)\s+v\s+pomeru\s+(\d+\s*:\s*\d+)\s*\.?$/.exec(bare); if (j) return `Divide ${j[1]} in the ratio ${j[2].replace(/\s+/g, "")}`; }
+  // 'Uprav 18/24 na základní tvar' and 'Uprav na základní tvar 18/24' are 'Simplify 18/24'
+  if (v === "uprav") {
+    const j = /^(?:na\s+zakladni\s+tvar\s+(.+?)|(.+?)\s+na\s+zakladni\s+tvar)\s*\.?$/.exec(bare);
+    if (j) return `Simplify ${(j[1] ?? j[2]).trim()}`;
+  }
+  const pair = VERB_OP[v];
   if (pair) { const j = /^(.+?)\s+a\s+(.+?)\s*\.?$/.exec(rest); return j && NUMERIC.test(j[1]) && NUMERIC.test(j[2]) ? `${j[1]} ${pair} ${j[2]}` : rest; }
   if (/^zkrat/.test(verb)) return `Simplify ${rest}`;
-  if (/^preved/.test(verb)) {
-    const c = /^(.+?)\s+na\s+(desetinn\w*|zlomek|procent\w*|%)/.exec(fold(rest));
+  if (/^(?:preved|zapis)/.test(verb)) {
+    const c = /^(.+?)\s+(?:na|jako)\s+(desetinn\w*|zlomek|procent\w*|%)/.exec(fold(rest));
     if (c) return `Convert ${rest.slice(0, c[1].length)} to ${/^desetinn/.test(c[2]) ? "a decimal" : /^zlomek/.test(c[2]) ? "a fraction" : "a percentage"}`;
   }
   return rest;

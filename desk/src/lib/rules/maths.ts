@@ -318,9 +318,16 @@ export function unreadLeaks(question: string, line: string, system?: SchoolSyste
 }
 
 // ---- three more shapes the fallback works out itself (L1-vojtech-18-MB1-1): a bare log, a count of choices, a simplified expression
-/** The whole-number answer of a bare logarithm ('log_2 8', 'log 1000' to base 10) or of a count of choices ('Kolika způsoby lze vybrat 3 žáky z 10?'), or null. */
+/** The number a rounding ('Zaokrouhli 3,456 na desetiny'), a bare logarithm ('log_2 8'; 'log 1000' is to base 10) or a count of choices ('Kolika způsoby lze vybrat 3 žáky z 10?') works out, or null. */
 function numberAnswerOf(question: string): number | null {
   const t = fold(question.normalize("NFC")).toLowerCase().replace(/[−–]/g, "-");
+  // 'Zaokrouhli 3,456 na desetiny' / 'Round 3.456 to 1 decimal place': no school shape rounds, so the fallback works the rounded value out
+  const round = /(?:zaokrouhl\w*|round)\s+(-?\d+(?:[.,]\d+)?)\s+(?:na|to(?:\s+the)?)\s+(?:(\d)\s+(?:decimal\s+places?|dp)|(jednotky|cele|desetiny|setiny|tisiciny)|(?:the\s+)?nearest\s+(whole|tenth|hundredth|thousandth))/.exec(t);
+  if (round) {
+    const places = round[2] ? Number(round[2]) : ({ jednotky: 0, cele: 0, whole: 0, desetiny: 1, tenth: 1, setiny: 2, hundredth: 2, tisiciny: 3, thousandth: 3 } as Record<string, number>)[round[3] ?? round[4]];
+    const x = Number(round[1].replace(",", "."));
+    return x < 0 ? null : Math.round(x * 10 ** places + 1e-9) / 10 ** places;
+  }
   const log = /\blog(?:_(\d+))?\s*\(?\s*(\d+)\s*\)?/.exec(t);
   if (log) {
     const base = log[1] ? Number(log[1]) : 10, x = Number(log[2]);

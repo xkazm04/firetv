@@ -261,6 +261,14 @@ test('CONFLICTS: the strict leak rule refuses these legit hints, and that cost i
  for (const [s,h] of CONFLICTS) assert.equal(S.leaksSchool(s,h),true,`${s.expr} | ${h}`);
 });
 
+test('L1-vojtech-18-MB2-2: a Czech cardinal before procent is a percentage, in every case; a method line and another number pass', () => {
+ const P={shape:'probability',expr:'bag red 12, blue 3 ask blue'}; // 3 of 15 = 1/5 = 20 %
+ for (const h of ['It is twenty percent.','Je to 20 %.','Je to jedna pětina.','Je to dvacet procent.','Je to dvacet procent z celku.','Pravděpodobnost je dvaceti procent.','Je to 20 procent.'])
+  assert.equal(S.leaksSchool(P,h),true,h);
+ for (const h of ['Spočítej všechny kuličky a modré kuličky.','Pravděpodobnost je podíl příznivých a všech možností.','Je to deset procent z celku.','V sáčku je patnáct kuliček.'])
+  assert.equal(S.leaksSchool(P,h),false,h);
+});
+
 test('leaksSchool: odd inputs are false, the same input gives the same answer', () => {
  for (const h of [null,undefined,42,{},'','   ']) assert.equal(S.leaksSchool(A,h),false);
  for (const s of [null,{},cs('3/0 + 1'),'3/4 + 1/6']) assert.equal(S.leaksSchool(s,'The answer is 11/12.'),false);

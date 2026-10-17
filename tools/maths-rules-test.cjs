@@ -721,6 +721,43 @@ test('L1-vojtech-18-MB1-1 leak guard: a listed sequence, a bare log, a count of 
  ];
  for(const [q,l] of benign)assert.equal(M.leaks(q,l,'cz'),false,`${q} | ${l}`);
 });
+// ------------------------------------------------------------------ L1-nela-12-MB1-1 / L1-radka-41-MB1-1: the Czech instructions that read as nothing
+test('L1-nela-12-MB1-1 / L1-radka-41-MB1-1 backstop: Odečti X od Y, Vyděl, Rozděl v poměru, Uprav, Doplň and Zapiš jako read as a spec and their answers leak; Zaokrouhli is refused by the fallback',()=>{
+ const K=require(path.join(root,'src/lib/rules/kinds.ts')),M=require(path.join(root,'src/lib/rules/maths.ts'));
+ const H=require(path.join(root,'src/lib/desk/hint.ts'));
+ const spec=(q)=>{const r=K.readQuestion(q,'cz');return {calc:r.calc,school:r.school,parts:r.parts};};
+ // [task, expected spec, a line that must leak]
+ const rows=[
+  ['Odečti 1/6 od 3/4',{shape:'compute',expr:'3/4 - 1/6'},'You get 7/12.'],
+  ['Odečti 1/4 od 3/4',{shape:'compute',expr:'3/4 - 1/4'},'Then you get 1/2.'],
+  ['Odečtěte 1/2 od 3/4',{shape:'compute',expr:'3/4 - 1/2'},'Je to 1/4.'],
+  ['Vyděl 3/4 číslem 1/2',{shape:'compute',expr:'3/4 ÷ 1/2'},'Then you get 3/2.'],
+  ['Vydělte 3/4 : 1/2',{shape:'compute',expr:'3/4 ÷ 1/2'},'Then you get 3/2.'],
+  ['Rozděl 60 v poměru 2:3',{shape:'ratio',expr:'60 in 2:3'},'The parts are 24 and 36.'],
+  ['Uprav na základní tvar 18/24',{shape:'simplify',expr:'18/24'},'Je to 3/4.'],
+  ['Uprav 18/24 na základní tvar',{shape:'simplify',expr:'18/24'},'Je to 3/4.'],
+  ['Uprav 3/4 + 1/6',{shape:'compute',expr:'3/4 + 1/6'},'11/12'],
+  ['Doplň: 3/4 = ?/12',{shape:'missing',expr:'3/4 = ?/12'},'So 9.'],
+  ['Zapiš 3/4 jako desetinné číslo',{shape:'convert',expr:'3/4',to:'decimal'},'0,75'],
+  ['Zapiš 0,75 jako zlomek',{shape:'convert',expr:'0.75',to:'fraction'},'To je 3/4.'],
+  ['Zapiš 3/8 jako procento',{shape:'convert',expr:'3/8',to:'percent'},'37,5 %'],
+ ];
+ for(const [q,want,line] of rows){
+  const r=K.readQuestion(q,'cz');
+  assert.equal(r.kind,'school',q);assert.deepEqual(r.school,want,q);
+  assert.equal(H.leaksLine(q,spec(q),line,'cz'),true,`${q} | ${line}`);
+ }
+ // a hint that names the method passes
+ const benign=[['Odečti 1/6 od 3/4','Find a common denominator first.'],['Odečti 1/6 od 3/4','Začni zlomkem, od kterého odčítáš.'],['Vyděl 3/4 číslem 1/2','Dividing by a fraction is multiplying by its flip.'],
+  ['Rozděl 60 v poměru 2:3','Add 2 and 3 to get the number of parts.'],['Uprav na základní tvar 18/24','Find a number that divides both 18 and 24.'],['Zapiš 3/4 jako desetinné číslo','Divide the top by the bottom.']];
+ for(const [q,l] of benign)assert.equal(H.leaksLine(q,spec(q),l,'cz'),false,`${q} | ${l}`);
+ // the reader's old forms are untouched
+ assert.deepEqual(K.readQuestion('Odečti 5/6 a 1/3','cz').school,{shape:'compute',expr:'5/6 - 1/3'});
+ // Zaokrouhli: no school shape rounds, so the fallback works the value out
+ assert.equal(K.readQuestion('Zaokrouhli 3,456 na desetiny','cz').kind,'linear');
+ for(const [q,l] of [['Zaokrouhli 3,456 na desetiny','3,5'],['Zaokrouhli 3,456 na setiny','Je to 3,46.'],['Round 3.456 to 1 decimal place','It is 3.5.'],['Zaokrouhli 3,6 na jednotky','Výsledek je čtyři.']])assert.equal(M.leaks(q,l,'cz'),true,`${q} | ${l}`);
+ for(const [q,l] of [['Zaokrouhli 3,456 na desetiny','Podívej se na číslici na místě setin.'],['Zaokrouhli 3,456 na desetiny','Look at the hundredths digit: 5 or more rounds up.']])assert.equal(M.leaks(q,l,'cz'),false,`${q} | ${l}`);
+});
 // ------------------------------------------------------------------ MB-B2: the stricter fallback for an item no reader reads
 test('MB-B2 fallback: on an item no reader reads, a line stating a solution is refused; a plain method line passes; a read item is untouched',()=>{
  const M=require(path.join(root,'src/lib/rules/maths.ts'));
