@@ -435,16 +435,26 @@ const asksComparison = (text: string) => COMPARISON.test(text);
 
 /** Words of a goal that name a day or month, not a situation: "an interview on Friday" is about the interview. */
 const GOAL_STOP = new Set("monday tuesday wednesday thursday friday saturday sunday today tomorrow tonight week weekend month next soon january february march april may june july august september october november december".split(" "));
+/** Framing words of a goal that name no situation ("speak better", "answer questions", "for example when"): never a touch. */
+const GOAL_GENERIC = new Set("want need wants needs better answer answers question questions problem problems solved solve tell ask experience example examples when what how which where why would able can help get make".split(" "));
 /**
- * Is a stated goal still unreached: it has content words, and no earlier task prompt (or line) touches any of them?
- * Same word check as touchesInterest, so the same limits hold (no synonyms: a "meeting" prompt does not touch an
- * "interview" goal). Empty goal: nothing is required, false.
+ * A goal splits into its aims at sentence ends, semicolons and "also": "speak better on calls with carriers. Also
+ * answer interview questions" is two. Each aim keeps its situation stems (no day words, no framing words); an aim with
+ * none is dropped.
  */
-export function goalUntouched(goal: string, earlier: string[]): boolean {
-  const stems = [...new Set(words(goal).filter(w => !GOAL_STOP.has(w)).map(stemWord))];
-  return stems.length > 0 && !earlier.some(e => touchesInterest({ title: e, premise: "" }, stems));
+export function goalAims(goal: string): { aim: string; stems: string[] }[] {
+  return goal.split(/[.;!?\n]+|\balso\b/i).map(a => a.replace(/^\s*(and|,)\s+/i, "").trim()).flatMap(aim => {
+    const stems = [...new Set(words(aim).filter(w => !GOAL_STOP.has(w) && !GOAL_GENERIC.has(w)).map(stemWord))];
+    return stems.length ? [{ aim, stems }] : [];
+  });
 }
-/** The next task must be set in the learner's goal: a say task at B1 or above, while no task so far touches it. */
+/** The first aim of a stated goal that no earlier task prompt (or line) touches, or "" (no goal, or every aim reached). Same word check as touchesInterest: no synonyms. */
+export function goalAim(goal: string, earlier: string[]): string {
+  return goalAims(goal).find(a => !earlier.some(e => touchesInterest({ title: e, premise: "" }, a.stems)))?.aim ?? "";
+}
+/** Is some aim of the stated goal still unreached? Empty goal: nothing is required, false. */
+export function goalUntouched(goal: string, earlier: string[]): boolean { return !!goalAim(goal, earlier); }
+/** The next task must be set in the learner's goal: a say task at B1 or above, while an aim of it is untouched by every task so far. */
 export function goalTaskDue(goal: string, band: Band, kind: TaskKind, earlier: string[]): boolean {
   return kind === "say" && BANDS.indexOf(band) >= BANDS.indexOf("B1") && goalUntouched(goal, earlier);
 }

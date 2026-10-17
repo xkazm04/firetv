@@ -2737,6 +2737,19 @@ test('LG-55 second pass: an interview goal is untouched by the carrier prompts, 
  assert(P.goalUntouched(goal,['What are you doing on Friday?']),'a day word is not the goal');
  assert(P.goalTaskDue(goal,'B1','say',OKSANA));assert(!P.goalTaskDue(goal,'A2','say',OKSANA),'below B1');assert(!P.goalTaskDue(goal,'B2','listen',OKSANA));
 });
+const OKSANA_GOAL='I want to speak better on calls with carriers, for example when delivery is late. Also I need to answer questions on job interview, to tell about my experience and about problem which I solved. And ask about team, salary and shifts.';
+const OKSANA_TASKS=["A colleague says, 'The truck is late. Can you call the carrier?' What do you say?",'What is the reason for the delay? The shipment left the warehouse two days ago, but the driver still has not reached the port because of bad weather.','A client has a large order and asks whether to ship it by sea or by air. Which would you recommend, and why?','A new coworker asks what makes a carrier call go well. What is the most important habit you would teach them, and why?'];
+test('LG-55 third pass: oksana-34 goal (reconstructed: the about step\'s goal is not in the run JSON) is split into aims; the interview aim is untouched by her carrier tasks',()=>{
+ // the compound goal names carriers and calls, so the first task used to touch the whole goal
+ assert.equal(P.goalAims(OKSANA_GOAL).length,3,'carrier calls, the interview, the questions to ask');
+ assert(P.goalUntouched(OKSANA_GOAL,OKSANA_TASKS.slice(0,1)),'task 1 touches the carrier aim only');
+ assert.match(P.goalAim(OKSANA_GOAL,OKSANA_TASKS),/job interview/,'the aim named to the tutor is the interview');
+ assert(P.goalTaskDue(OKSANA_GOAL,'B2','say',OKSANA_TASKS),'the next B2 say task is due');
+ assert.match(P.goalAim(OKSANA_GOAL,[...OKSANA_TASKS,'Tell me about a job interview you had.']),/team, salary/,'after an interview prompt the next aim is named');
+ assert.equal(P.goalAim('speak better and answer questions',['Tell me about your day']),'','generic verbs and framing words are no aim');
+ assert.equal(P.goalAim('I need English for a job interview on Friday',[]),'I need English for a job interview on Friday');
+ assert.equal(P.goalAim('',[]),'');
+});
 test('LG-55 second pass: the task request carries the goal instruction exactly when the goal is untouched, and a miss is asked once more',async()=>{
  const run=async(goalText,prompts)=>{fresh();const asks=[];let n=0;
   answer=wrap(req=>{const p=JSON.parse(req.prompt);
@@ -2744,7 +2757,7 @@ test('LG-55 second pass: the task request carries the goal instruction exactly w
    if(p.step==='task'){asks.push(p);return {prompt:prompts[Math.min(n++,prompts.length-1)],line:'',options:[],correct:0};}
    return checkAnswer(req);});
   await command('check-start');await answerAbout(3);return {asks,k:()=>getSession().check};};
- const GOAL=/set this task in that goal/;
+ const GOAL=/Set this task in that aim/;
  let r=await run('a job interview on Friday',['A carrier keeps dropping your calls. Do you want to fix it?','Your parcel is late. What do you tell the carrier?']);
  assert.equal(r.asks.length,2);assert.match(r.asks[0].task,GOAL);assert.match(r.asks[1].task,/not set in the learner's goal/);assert.equal(r.k().task.prompt,'Your parcel is late. What do you tell the carrier?');
  r=await run('a job interview on Friday',['Tell me about a problem you solved at work, as you would in an interview.']);
