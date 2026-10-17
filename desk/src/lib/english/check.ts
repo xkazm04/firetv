@@ -18,7 +18,7 @@ import { FOCUS_FALLBACK, focusParts } from "./line";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
 import { ConversationError, lingaLine } from "./errors";
-import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, conversationBand, firstQuestion, interestWords, isBand, keepHeldBack, kindFor, PLAN_MAX, PLAN_SIZE, playBand, sameTask, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
+import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, conversationBand, firstQuestion, interestWords, isBand, keepHeldBack, kindFor, PLAN_MAX, PLAN_SIZE, playBand, sameTask, startBand, goalTaskDue, goalUntouched, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
 // The right option of a "choose" task. Server memory only: the session reaches every screen.
@@ -61,8 +61,11 @@ export function chooseTaskFor(band: Band): string {
 
 const KIND_TASK: Record<Exclude<TaskKind, "choose">, string> = {
   listen: "line: one or two sentences someone says to the learner, with the vocabulary and pace of this band, at most 200 characters. prompt: one question about what was said, at most 120 characters, that can only be answered by understanding the line, answerable in a few words. Do not repeat the line's key words in the question. options: empty. correct: 0.",
-  say: "prompt: a small situation, from the learner's interests where they fit, that invites them to say something at this band, at most 200 characters. One situation and one question, never a scenario followed by a separate general question. A1 and A2: one simple sentence about themselves or their day. B1: two or three sentences with a reason or a short story. B2: an opinion or a comparison with reasons. C1 and C2: something that needs nuance, a hypothetical or persuading. line: empty. options: empty. correct: 0.",
+  say: "prompt: a small situation, from the learner's interests where they fit, that invites them to say something at this band, at most 200 characters. One situation and one question, never a scenario followed by a separate general question. It must differ from every task in avoid in topic or function (what the learner is asked to do), not only in wording: a new wording of the same choice or comparison is a repeat. A1 and A2: one simple sentence about themselves or their day. B1: two or three sentences with a reason or a short story. B2: an opinion or a comparison with reasons. C1 and C2: something that needs nuance, a hypothetical or persuading. line: empty. options: empty. correct: 0.",
 };
+
+/** The instruction a say task carries while the learner's stated goal is untouched by every task so far (LG-55); placement.ts goalTaskDue decides when. */
+const GOAL_TASK = "The learner stated a goal (learner.goal) and no earlier task touches it: set this task in that goal, in a situation the goal names, not in the interest.";
 
 function stageScreen(k: LevelCheck): Screen { return k.stage === "verdict" ? "linga-verdict" : k.stage === "plan" ? "linga-plan" : "linga-check"; }
 /** An unparked check holds the desk, so a live scene yields it (activity.ts); a parked check never moves the TV. */
@@ -157,10 +160,12 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
     if (!ladder.done) {
       const band = ladder.next, kind = kindFor(band, k.tasks);
       return call(k, token, "Linga could not prepare the next task. Try again.", async () => {
-        const request = { step: "task", band, kind, bandGuide: BAND_TUTOR[band], learner: { interest: k.interest, goal: k.goal }, avoid: k.tasks.map(t => t.prompt), task: `Write one ${kind} task at band ${band}. ${kind === "choose" ? chooseTaskFor(band) : KIND_TASK[kind]}` };
+        // a stated goal no task has touched (LG-55): this say task is set in it, asked for here and checked below
+        const earlier = k.tasks.map(t => `${t.prompt} ${t.line}`.trim()), goalDue = goalTaskDue(k.goal, band, kind, earlier);
+        const request = { step: "task", band, kind, bandGuide: BAND_TUTOR[band], learner: { interest: k.interest, goal: k.goal }, avoid: k.tasks.map(t => t.prompt), task: `Write one ${kind} task at band ${band}. ${kind === "choose" ? chooseTaskFor(band) : KIND_TASK[kind]}${goalDue ? ` ${GOAL_TASK}` : ""}` };
         let r = await ask(system, request, taskSchema);
         // a repeat of an earlier task (LG-55): asked once more inside this call, booked as its next try (types.ts Again)
-        const earlier = k.tasks.map(t => `${t.prompt} ${t.line}`.trim()), said = (j: Record<string, unknown>) => kind === "listen" ? `${line(j.prompt, 200)} ${line(j.line, 230)}` : line(j.prompt, 200);
+        const said = (j: Record<string, unknown>) => kind === "listen" ? `${line(j.prompt, 200)} ${line(j.line, 230)}` : line(j.prompt, 200);
         let ms = r.ms;
         if (sameTask(said(r.json), earlier)) {
           const twin = k.tasks.find(t => sameTask(said(r.json), [`${t.prompt} ${t.line}`.trim()]));
@@ -172,6 +177,16 @@ Your previous answer repeated an earlier task ("${twin?.prompt ?? ""}"). Answer 
             // if the second answer repeats too it is kept: a repeated task is a smaller harm than a check that cannot go on
             r = { ...again, ms };
           } catch (e) { console.warn("Linga check: the repeat re-ask failed; the first answer is kept:", e instanceof Error ? e.message : e); }
+        }
+        // the goal was asked for and the answer still does not touch it: asked once more, the second answer kept whatever it is
+        if (goalDue && goalUntouched(k.goal, [said(r.json)])) {
+          console.info("Linga check: the task is not set in the learner's goal; asked once more.");
+          try {
+            const again = await ask(system, { ...request, task: `${request.task}
+Your previous answer ("${line(r.json.prompt, 120)}") was not set in the learner's goal (learner.goal). Answer again with a situation set in that goal.` }, taskSchema, 90000, r.again);
+            ms += again.ms;
+            r = { ...again, ms };
+          } catch (e) { console.warn("Linga check: the goal re-ask failed; the first answer is kept:", e instanceof Error ? e.message : e); }
         }
         const task: CheckTask = { id: randomUUID(), band, kind, prompt: line(r.json.prompt, 200), line: "", options: [], revealed: false };
         if (kind === "listen") task.line = line(r.json.line, 230);
