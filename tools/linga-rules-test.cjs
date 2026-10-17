@@ -3145,3 +3145,35 @@ test('LG-57: a fix taught in an earlier session said again ("more better") stops
  const taught=getLearner('jakub').english.taught;
  assert.equal(taught.length,1,'no second item');assert.equal(taught[0].slips,1,'one reply counts once');
 });
+// recert-6/LT-tomas-9-J4-3, recert-6/LT-adela-17-J4-3: supported is true exactly when help was used for that reply
+test('supported flag: an opening with supportProvided absent is not supported, and a model that says nothing never supports a reply',async()=>{
+ await booked(said('Which date?',{supportProvided:undefined,observations:undefined}),{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'});
+ assert.equal(getSession().conversation.supported,false,'an absent supportProvided is not help');
+ await reply('Could you check my booking?');
+ let c=getSession().conversation,l=c.turns.at(-2);
+ assert.equal(l.supported,false);assert.equal(c.supported,false,'the next reply starts independent');
+});
+test('supported flag: a cue then a reply is supported; the next unhelped reply is independent again',async()=>{
+ await booked(p=>({reply:'Which date do you need?',supportProvided:false,observations:observed(p.submittedReply)}));
+ await command('cue');assert.equal(getSession().conversation.supported,true,'a cue is help');
+ await reply('Could you check my booking?');
+ let c=getSession().conversation,l=c.turns.at(-2);
+ assert.equal(l.supported,true);assert(c.evidence.filter(e=>e.turnId===l.id).every(e=>e.supported===true));
+ assert.equal(c.supported,false,'the flag resets after the helped reply');
+ await reply('Could you check it for Friday?');
+ c=getSession().conversation;l=c.turns.at(-2);
+ assert.equal(l.supported,false);assert(c.evidence.filter(e=>e.turnId===l.id).length&&c.evidence.filter(e=>e.turnId===l.id).every(e=>e.supported===false));
+ assert.equal(c.supported,false);
+});
+test('supported flag: an explicit supportProvided:true from the model still supports the next reply',async()=>{
+ await booked(said('Which date do you need?',{supportProvided:true}));
+ assert.equal(getSession().conversation.supported,false,'the opening said nothing');
+ await reply('Could you check my booking?');
+ assert.equal(getSession().conversation.supported,true,'the model supplied wording');
+});
+test('supported flag: the recap splits supported from independent replies',()=>{
+ const V=view(),turns=[{id:'p1',role:'partner',text:'Hello.'},{id:'l1',role:'learner',text:'Hello',mode:'speech',supported:true},{id:'p2',role:'partner',text:'Name?'},{id:'l2',role:'learner',text:'Eva',mode:'speech',supported:false},{id:'p3',role:'partner',text:'Date?'},{id:'l3',role:'learner',text:'Friday',mode:'text',supported:false}];
+ const v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',turns})})),{});
+ assert.equal(v.recap.supported,1);assert.equal(v.recap.independent,2);assert.equal(v.recap.replies,3);
+ assert.match(v.hero.data??JSON.stringify(v),/2 on your own · 1 with help/);
+});

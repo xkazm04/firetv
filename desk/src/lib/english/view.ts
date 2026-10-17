@@ -104,7 +104,7 @@ export interface Answer { id: "answer"; action: "check-answer" | "check-task" | 
   speaker?: "learner" | "costar"; }
 /** The line the TV speaks. A new key plays it again; blocked keeps it silent. */
 export interface Spoken { line: string; key: string; blocked: boolean; slow: boolean; speaker: string; }
-export interface Recap { title: string; replies: number; spoken: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
+export interface Recap { title: string; replies: number; spoken: number; /** replies said after help (a cue, a quiz, a moment, a copied line) */ supported: number; /** replies said with none */ independent: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
 export type Hero =
   /** `yours` (L1): the learner's owned phrases on home, no count and no digit; Family draws them as Open Door objects, Adult as a progress line (X2) */
   | { kind: "intro"; kicker: string; title: string; subtitle: string; art: ArtKey; nameTag: string; yours?: { phrases: string[]; style: "objects" | "list" } }
@@ -515,8 +515,9 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   } else if (c && s.screen === "linga-recap") {
     tag = "Your rehearsal"; title = "Take it somewhere new";
     const attempts = c.turns.filter(t => t.role === "learner"), spokenCount = attempts.filter(t => t.mode === "speech").length, moments = c.moments ?? [];
-    recap = { title: c.title, replies: attempts.length, spoken: spokenCount, moments: moments.map(({ kind, said, better, why }) => ({ kind, said, better, why })) };
-    const counts = `${spokenCount} spoken · ${attempts.length - spokenCount} written replies${moments.length ? ` · ${moments.length} ${moments.length === 1 ? "moment" : "moments"} to keep` : ""}`;
+    const helped = attempts.filter(t => t.supported).length;
+    recap = { title: c.title, replies: attempts.length, spoken: spokenCount, supported: helped, independent: attempts.length - helped, moments: moments.map(({ kind, said, better, why }) => ({ kind, said, better, why })) };
+    const counts = `${spokenCount} spoken · ${attempts.length - spokenCount} written replies${attempts.length ? ` · ${attempts.length - helped} on your own · ${helped} with help` : ""}${moments.length ? ` · ${moments.length} ${moments.length === 1 ? "moment" : "moments"} to keep` : ""}`;
     const rv = c.review, notes = c.cut?.notes ?? [], ln = c.line?.text ? c.line : null;
     caption = attempts.length ? `Next, try ${recommended.name.toLowerCase()}. Your notes and learning map are on the phone.` : "You explored the scene. Try a reply next time; no progress was recorded.";
     if (notes.length) {

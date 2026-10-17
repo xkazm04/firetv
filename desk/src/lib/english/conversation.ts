@@ -330,7 +330,7 @@ export async function englishCommand(raw:unknown){
       const steps=Array.isArray(result.json.steps)?result.json.steps.filter(x=>typeof x!=="string"||audienceSafe(c,x)!==null):result.json.steps;
       // the offer, kept only when line.ts and the audience gate pass it; else the quiz answer is the room's line
       const offered=askOffer?safe(offerLine(result.json.offer,scene,profile.name))??safe(quizLine(scene)):null;
-      commit({...c,...(offered?{line:holdLine(c.id,offered)}:{}),title:safeTitle??scene.name,goal:safeGoal??scene.goal,turns:[opening],...(()=>{const m=missionOf(scene,steps);return m?{mission:m}:{};})(),supported:result.json.supportProvided!==false,help:keepLadder(opening.id,validLadder(openingHeld?result.json.help:undefined,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
+      commit({...c,...(offered?{line:holdLine(c.id,offered)}:{}),title:safeTitle??scene.name,goal:safeGoal??scene.goal,turns:[opening],...(()=>{const m=missionOf(scene,steps);return m?{mission:m}:{};})(),supported:result.json.supportProvided===true,help:keepLadder(opening.id,validLadder(openingHeld?result.json.help:undefined,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
       return getSession();
     }catch(e){try{const now=checkCurrent(c,commandId);commit({...now,pending:null,error:lingaLine(e,"The scene could not be prepared. Try again or choose another situation.")});}catch{/* superseded */}throw e;}
   }
@@ -491,7 +491,7 @@ export async function englishCommand(raw:unknown){
       if(found)forgetLine(c.id);
       // K2 (repair.ts): a fix is withheld, its better and fix key in server memory, unless its own why, the partner's line or
       // an observation note already said them; a word, as before, shows at once. A1-A2 learners start on the clue.
-      const support=result.json.supportProvided!==false;let onScreen:Moment|null=null;
+      const support=result.json.supportProvided===true;let onScreen:Moment|null=null;
       if(moment){
         remember(moment,counted);
         const says=(x:string)=>findPhrase(x,moment.better)!==null||(!!moment.fix&&findKey(x,moment.fix)!==null);
