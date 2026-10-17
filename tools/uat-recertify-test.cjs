@@ -451,3 +451,53 @@ test('the instrument hashes every driver file there is, derived from the directo
   assert.ok(!('notes.md' in seeded), 'only .cjs files are the driver');
   assert.equal(seeded['verdict.cjs'], real['verdict.cjs'], 'the same file hashes the same');
 });
+
+// ---- --journeys: a scoped recertify
+const ALL_IDS = ['petra-38', 'tomas-9', 'viktor-67', 'klara-13'];
+test('--journeys parses (J3,J4), no option leaves it null, and a malformed or unknown id throws', () => {
+  const opts = { characters: ALL_IDS, runs: tmp };
+  assert.deepEqual(D().parseArgs(['--recertify', BEGINNERS, '--journeys', 'J3,J4'], opts).journeys, ['J3', 'J4']);
+  const plain = D().parseArgs(['--recertify', BEGINNERS], opts);
+  assert.equal(plain.journeys, null);
+  assert.equal(plain.mode, 'recertify');
+  for (const bad of ['3', 'j3', 'J3;J4', 'J3,', '']) assert.throws(() => D().parseArgs(['--recertify', '--journeys', bad], opts), /--journeys/, `"${bad}" is refused`);
+  assert.throws(() => D().parseArgs(['--recertify', '--journeys'], opts), /--journeys/, 'a missing value is refused');
+  assert.throws(() => D().parseArgs(['--recertify', '--journeys', 'J99'], opts), /no journey file defines/, 'a well-formed but unknown id is refused');
+  assert.throws(() => R().checkJourneys(['J3', 'x']), /J3/);
+  assert.equal(R().checkJourneys(null), null);
+});
+
+test('--journeys keeps only the named journeys in plan(): no filter is unchanged, rows of other journeys are never planned', () => {
+  const dir = path.join(FIXTURES, BEGINNERS), full = R().plan(dir);
+  assert.deepEqual(R().plan(dir, { journeys: null }), full);
+  assert.deepEqual(R().plan(dir, { journeys: ['J4'] }), { 'petra-38': ['J4'], 'tomas-9': ['J4'], 'viktor-67': ['J4'] });
+  assert.deepEqual(R().plan(dir, { journeys: ['J3', 'J4'] }), full);
+  assert.deepEqual(R().plan(dir, { journeys: ['J7'] }), {});
+});
+
+test('--journeys leaves the other journeys\' rows exactly as they are in the ledger outcome: none stamped fixed or regressed', () => {
+  const LG = require(path.resolve(__dirname, '../uat/driver/ledger.cjs'));
+  const runs = path.join(tmp, `scoped-${crypto.randomUUID().slice(0, 8)}`), prior = path.join(runs, BEGINNERS);
+  fs.mkdirSync(prior, { recursive: true });
+  for (const f of fs.readdirSync(path.join(FIXTURES, BEGINNERS))) { const p = path.join(FIXTURES, BEGINNERS, f); if (fs.statSync(p).isFile()) fs.copyFileSync(p, path.join(prior, f)); }
+  const ledger = LG.ledger(runs), all = R().planLedger(ledger), scoped = R().planLedger(ledger, { journeys: ['J4'] });
+  assert.deepEqual(R().planLedger(ledger, { journeys: null }), all, 'no filter, same plan');
+  assert.ok(Object.values(all.pairs).some(js => js.includes('J3')), 'the unscoped plan holds J3');
+  assert.deepEqual(scoped.pairs, { 'petra-38': ['J4'], 'tomas-9': ['J4'], 'viktor-67': ['J4'] });
+  assert.ok(scoped.open < all.open);
+  const before = fs.readFileSync(path.join(prior, 'findings.json'), 'utf8');
+  // a rerun that answers only the J4 rows: not-seen for each of them
+  const rerun = path.join(prior, 'recert-1');
+  fs.mkdirSync(rerun, { recursive: true });
+  fs.writeFileSync(path.join(rerun, 'run.json'), JSON.stringify({ id: R().runId(rerun), journeys: ['J4'], ledger: { prior: scoped.prior } }));
+  fs.writeFileSync(path.join(rerun, 'findings.json'), '[]');
+  const out = R().finishLedger(rerun, { runs });
+  assert.ok(out.notEvaluable + out.fixed + out.recurs > 0);
+  const rows = readJson(path.join(prior, 'findings.json')), was = JSON.parse(before);
+  for (const f of rows) {
+    const old = was.find(x => x.id === f.id);
+    if (f.journey === 'J4') continue;
+    assert.deepEqual(f, old, `${f.id} (${f.journey}) is untouched`);
+  }
+  assert.ok(rows.some(f => f.journey === 'J4' && f.recertify_run), 'the J4 rows were stamped');
+});

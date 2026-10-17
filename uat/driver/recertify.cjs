@@ -3,7 +3,7 @@
  * write-back into the ORIGINATING run (uat skill: re-run only the affected character x journey; artifacts and
  * resolutions live in the originating run's directory).
  *
- *   plan(run)                  -> { character: [journey, …] } with open non-strength findings
+ *   plan(run, {journeys})      -> { character: [journey, …] } with open non-strength findings, optionally only these journeys
  *   openFindings(run, c, j)    -> the prior rows the judge is shown for one pair
  *   metricDelta(before, after) -> the rubric metrics of both runs, recomputed from the per-Character JSON
  *   confounds(before, after)   -> { confounds, notes, product }: a changed journey start, a new journey, a changed
@@ -13,7 +13,9 @@
  *   renderRecertify(prior, r)  -> recertify.md beside the originating run; Regressed compares the code verdicts
  *                                 (verdict.cjs verdictOf), never the judge's own, so a changed judge mood is not a regression
  *   finish(prior, rerun)       -> writeBack + renderRecertify, from the rerun's own files
- *   planLedger(ledger)         -> every pair with an open gap in ANY run (ledger.cjs), each with its gaps' global ids
+ *   planLedger(ledger, {…})    -> every pair with an open gap in ANY run (ledger.cjs), each with its gaps' global ids
+ *   checkJourneys(ids)         -> the --journeys filter, or a throw for an id that is not J<n>; rows of other journeys are never
+ *                                 planned, so never re-judged, stamped fixed or counted regressed
  *   finishLedger(rerun)        -> each answer stamped into the findings.json of the run that owns the row; OPEN.md rewritten
  *
  * A run is an id under uat/runs/ or a directory. A rerun lives inside its originating run as recert-<k>/.
@@ -38,10 +40,22 @@ const isOpen = LG.isOpen;
 const jn = j => Number(String(j).replace(/\D/g, '')) || 0;
 
 // ---------------------------------------------------------------- plan
-/** The Character x journey pairs that still have an open non-strength finding. */
-function plan(run) {
-  const out = {};
-  for (const f of findings(run)) if (isOpen(f)) (out[f.character] ??= new Set()).add(f.journey);
+/**
+ * The --journeys filter of a scoped recertify: null (every journey) or a list of J<n> ids. An id that is not of that form
+ * throws, so a typo never narrows the rerun to nothing.
+ */
+function checkJourneys(ids) {
+  if (ids === null || ids === undefined) return null;
+  if (!Array.isArray(ids) || !ids.length) throw new Error('--journeys takes a comma-separated list of journey ids such as J3,J4');
+  const bad = ids.filter(j => !/^J\d+$/.test(j));
+  if (bad.length) throw new Error(`--journeys ${bad.map(j => JSON.stringify(j)).join(', ')}: a journey id looks like J3 (comma-separated: J3,J4)`);
+  return ids;
+}
+const wanted = journeys => j => !journeys || journeys.includes(j);
+/** The Character x journey pairs that still have an open non-strength finding; with `journeys`, only those journeys. */
+function plan(run, { journeys = null } = {}) {
+  const out = {}, keep = wanted(journeys);
+  for (const f of findings(run)) if (isOpen(f) && keep(f.journey)) (out[f.character] ??= new Set()).add(f.journey);
   return Object.fromEntries(Object.entries(out).sort(([a], [b]) => a.localeCompare(b)).map(([c, s]) => [c, [...s].sort((a, b) => jn(a) - jn(b))]));
 }
 /** What the judge of a recertify pair is shown: that pair's open findings, nothing else. */
@@ -250,9 +264,11 @@ function renderRecertify(prior, rerun) {
     const ids = A.flatMap(r => freshOf(r.character, d.journeys)), weak = d.from[1] !== null && d.from[1] < SMALL_BASE ? ` (a base of ${d.from[1]}: weak evidence)` : '';
     regressed.push(`| ${cite(ids) || '(no finding filed)'} | ${d.label} ${key === 'breaches' ? 'rose' : 'fell'} ${d.before} -> ${d.after}${weak}${moved} | ${pair} |`);
   }
+  // a scoped rerun (--journeys) says so, so it cannot be read as a full recertify
+  const scope = runJson(rerun)?.journeys?.length ? `, limited to journey${runJson(rerun).journeys.length > 1 ? 's' : ''} ${runJson(rerun).journeys.join(', ')} (rows of other journeys were left as they were)` : '';
   const md = [
     `# Recertify — LT run ${P}`, '',
-    `Rerun: \`${id}\`: ${A.map(r => `${r.character} ${r.journeys.map(j => j.id).join(', ')}`).join(' · ') || 'no Character finished'}. Only the pairs with open findings were rerun; each judge was shown that pair's open finding ids and answered each one.`, '',
+    `Rerun: \`${id}\`: ${A.map(r => `${r.character} ${r.journeys.map(j => j.id).join(', ')}`).join(' · ') || 'no Character finished'}. Only the pairs with open findings were rerun${scope}; each judge was shown that pair's open finding ids and answered each one.`, '',
     `**Level reached: LT only.** The skill keeps \`resolved-verified\` for live L2 evidence, so a finding the rerun no longer shows is \`fixed\` in \`${P}/findings.json\`, with \`recertify_run\` and \`recertify_evidence\`. Rerun finding ids are positional, so they are written \`${id}/<id>\`.`, '',
     '## Fixed (LT evidence)', '',
     ...(cf.confounds.some(c => c.kind === 'instrument') ? ['**The instrument changed between these runs (see Confounded below).** A gap not seen here may be the new engine, not a fix: read nothing below as a fix until L2 or a rerun on the same instrument shows it.', ''] : []),
@@ -298,8 +314,8 @@ function finish(prior, rerun) {
  * plan() gives them, `prior` per pair (the rows its judge is shown, each named by its gap's global id and carrying the
  * run that holds it), and `home`, the newest run holding a planned gap: the rerun lives inside it as recert-<k>/.
  */
-function planLedger(L, { characters } = {}) {
-  const gaps = L.open.filter(g => !characters || characters.includes(g.character)), prior = {};
+function planLedger(L, { characters, journeys = null } = {}) {
+  const keep = wanted(journeys), gaps = L.open.filter(g => (!characters || characters.includes(g.character)) && keep(g.journey)), prior = {};
   for (const g of gaps) ((prior[g.character] ??= {})[g.journey] ??= []).push({ id: g.id, run: g.head.run, type: g.type, dimension: g.head.dimension, title: g.title, expected: g.head.expected, got: g.head.got, evidence: g.head.evidence, recurrence: g.recurrence });
   const sorted = Object.fromEntries(Object.entries(prior).sort(([a], [b]) => a.localeCompare(b)).map(([c, js]) => [c, Object.fromEntries(Object.entries(js).sort(([a], [b]) => jn(a) - jn(b)))]));
   const newest = gaps.reduce((m, g) => (m && m.head.order >= g.head.order ? m : g), null);
@@ -345,4 +361,4 @@ function instrumentOf({ model, judgeScreenCap, roles, dir = __dirname }) {
   };
 }
 
-module.exports = { RUNS, runId, results, plan, openFindings, ratio, rollUp, metricDelta, confounds, priorStatuses, writeBack, writeAtomic, nextRerun, renderRecertify, finish, planLedger, finishLedger, instrumentOf, START_SHIFT };
+module.exports = { RUNS, runId, results, checkJourneys, plan, openFindings, ratio, rollUp, metricDelta, confounds, priorStatuses, writeBack, writeAtomic, nextRerun, renderRecertify, finish, planLedger, finishLedger, instrumentOf, START_SHIFT };

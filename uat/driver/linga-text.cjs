@@ -10,6 +10,7 @@
  * --recertify <run> reruns only the Character x journey pairs of <run> that still have open findings (recertify.cjs
  * plan), inside that run as recert-<k>/. Each judge is shown the pair's open finding ids and answers each (prior[]);
  * the answers are written back into <run>/findings.json and <run>/recertify.md is written beside it.
+ * --journeys J3,J4 after either form limits the recertify to those journeys' rows; rows of other journeys are left as they are.
  * --recertify with no run reruns every pair with an open gap in ANY run (ledger.cjs, recertify.cjs planLedger), inside
  * the newest of those runs as recert-<k>/; each judge answers all of its pair's open rows by global id (<run>/<id>),
  * and each answer is stamped into the run that owns the row (finishLedger), then uat/runs/OPEN.md is rewritten.
@@ -166,7 +167,7 @@ function parseArgs(args, { runs = RUNS_DIR, characters: ids = null, journeyTexts
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
     if (a === '--runs') out.runs = path.resolve(args[++i]);
-    else if (a === '--journeys') out.journeys = args[++i].split(',');
+    else if (a === '--journeys') out.journeys = require('./recertify.cjs').checkJourneys(args[++i]?.split(',') ?? []);
     else if (a === '--run') out.run = args[++i];
     else if (a === '--parallel') {
       const n = Number(args[++i]);
@@ -221,22 +222,22 @@ async function parent() {
   for (const n of only) if (!all.some(c => c.sim.id === n)) { console.error(`Unknown character ${n}. Known: ${all.map(c => c.sim.id).join(', ')}`); process.exit(2); }
   const RC = require('./recertify.cjs');
   let cast = all.filter(c => !only.length || only.includes(c.sim.id)), id, dir, dataDir, logDir, pairs = null, prior = null, ledgerPrior = null;
-  if ((recertify || a.mode === 'ledger') && (runId || pickJourneys)) { console.error('--recertify picks its own run dir and journeys; drop --run and --journeys.'); process.exit(2); }
+  if ((recertify || a.mode === 'ledger') && runId) { console.error('--recertify picks its own run dir; drop --run.'); process.exit(2); }
   if (recertify) {
     // only the pairs that still have open findings, inside the originating run
     prior = path.isAbsolute(recertify) ? recertify : path.join(runsDir, recertify);
     if (!fs.existsSync(path.join(prior, 'findings.json'))) { console.error(`No findings.json in ${prior}.`); process.exit(2); }
-    pairs = Object.fromEntries(Object.entries(RC.plan(prior)).filter(([c]) => cast.some(x => x.sim.id === c)));
+    pairs = Object.fromEntries(Object.entries(RC.plan(prior, { journeys: pickJourneys })).filter(([c]) => cast.some(x => x.sim.id === c)));
     cast = cast.filter(c => pairs[c.sim.id]);
-    if (!cast.length) { console.log(`Nothing open to recertify in ${RC.runId(prior)}.`); process.exit(0); }
+    if (!cast.length) { console.log(`Nothing open to recertify in ${RC.runId(prior)}${pickJourneys ? ` for journeys ${pickJourneys.join(',')}` : ''}.`); process.exit(0); }
     const slot = RC.nextRerun(prior);
     dir = slot.dir; id = RC.runId(dir); dataDir = slot.data; logDir = slot.logs;
   } else if (a.mode === 'ledger') {
     // every pair with an open gap in any run, inside the newest run that holds one
-    const plan = RC.planLedger(require('./ledger.cjs').ledger(runsDir), { characters: cast.map(c => c.sim.id) });
+    const plan = RC.planLedger(require('./ledger.cjs').ledger(runsDir), { characters: cast.map(c => c.sim.id), journeys: pickJourneys });
     pairs = plan.pairs; ledgerPrior = plan.prior;
     cast = cast.filter(c => pairs[c.sim.id]);
-    if (!cast.length) { console.log(`Nothing open to recertify under ${runsDir}.`); process.exit(0); }
+    if (!cast.length) { console.log(`Nothing open to recertify under ${runsDir}${pickJourneys ? ` for journeys ${pickJourneys.join(',')}` : ''}.`); process.exit(0); }
     const slot = RC.nextRerun(path.join(runsDir, plan.home));
     dir = slot.dir; id = RC.runId(dir); dataDir = slot.data; logDir = slot.logs;
   } else {
