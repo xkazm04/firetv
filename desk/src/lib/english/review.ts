@@ -236,6 +236,25 @@ export function slipsAgain(reply: string, c: Conversation, taught: readonly Taug
   }
   return out;
 }
+/** A direct question whether the learner's own line was right ("Is my sentence correct?", "Did I say it well?"). Pure; English only. */
+export const CORRECTNESS_ASKED: readonly RegExp[] = [
+  /\b(?:is|was)\s+(?:my|that|this|it|the)\b[^.?!]{0,40}\b(?:correct|right|ok|okay|wrong)\b/i,
+  /\bdid\s+i\s+(?:say|put|write)\b[^.?!]{0,40}\b(?:well|right|correctly|correct)\b/i,
+  /\bam\s+i\s+(?:saying|using)\b[^.?!]{0,40}\b(?:right|correctly|correct)\b/i,
+];
+export const asksCorrectness = (reply: string): boolean => CORRECTNESS_ASKED.some(re => re.test(reply));
+/** What a correctness question is about: the learner's previous own line and the taught slips it holds (empty when clean). */
+export interface AskedAbout { line: string; slips: { said: string; better: string }[] }
+/**
+ * Set only when `reply` asks a direct correctness question and the learner has an earlier line. The slips are found by
+ * slipsAgain over that line (this scene's moments, then the taught fixes the learner may be shown), by code, before the call.
+ */
+export function askedAboutFor(reply: string, c: Conversation, taught: readonly Taught[]): AskedAbout | undefined {
+  if (!asksCorrectness(reply)) return undefined;
+  const line = [...c.turns].reverse().find(t => t.role === "learner")?.text;
+  if (!line) return undefined;
+  return { line, slips: slipsAgain(line, c, taught).map(h => ({ said: h.said, better: h.better })) };
+}
 /** What the partner is told when a taught slip comes back: model the right form once, and never stop the scene for it. */
 export const SLIP_AGAIN_TASK = "The learner just said again a form Linga already taught: said is their words, better is the right form. In your reply, use the right form naturally once, as you would in conversation, without pointing it out, correcting them or asking them to repeat it. Do not stop the scene for it.";
 

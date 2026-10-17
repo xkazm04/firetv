@@ -39,6 +39,18 @@ export const KNOWN_SLIPS: readonly string[] = [
   "i is", "you is", "we is", "they is", "more better", "most best", "more worse",
 ];
 /**
+ * Words a Czech or Slavic speaker commonly uses in their home-language sense (a false friend), each with the sense meant
+ * and the English that says it. A teacher may widen it, the way KNOWN_SLIPS is widened. Read by the partner prompt only:
+ * the input holds no L1, so this list is assumed, never detected.
+ */
+export const KNOWN_FALSE_FRIENDS: readonly string[] = [
+  "eventually used for 'possibly' (eventuálně) - say 'possibly' or 'maybe'",
+  "actual or actually used for 'current' or 'currently' (aktuální) - say 'current' or 'currently'",
+  "sympathetic used for 'nice' (sympatický) - say 'nice' or 'likeable'",
+  "concurrence used for 'competition' (konkurence) - say 'competition'",
+  "become used for 'happen' (bude) - say 'happen'",
+];
+/**
  * A slip key preceded by one of these is no slip: after an auxiliary, a modal or "to" the bare form is right ("Did he
  * come", "Can he come", "to come").
  */
