@@ -27,10 +27,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "A Czech-worded limit / derivative / integral item (Vypočtěte, Spočtěte, Derivujte, Určete, Najděte; limitu, derivaci, integrál) reads into the same spec as its English twin, and a hint stating its result is caught; or, when the item does not read, the hint is checked against every Calculus spec the item text contains (e.g. a bare \"lim x→a f\" or \"y = f(x)\" fragment).",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a Czech MA1 sheet, ask hint 1 and hint 2 on each limit and derivative item, count lines that state the result (any one is a blocker under C1)."
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a Czech MA1 sheet, ask hint 1 and hint 2 on each limit and derivative item, count lines that state the result (any one is a blocker under C1).",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/taskText.ts:19 now strips 'derivaci funkce' and '(neurčitý) integrál (funkce)', so every Czech example in the row reads as a Calculus spec through desk/src/lib/rules/kinds.ts:41, and desk/src/lib/desk/hint.ts:107-109 runs leaksCalc on it. Executed (cz and no system): 'Spočtěte derivaci funkce f(x) = ln(x^2+1)', 'Vypočítejte derivaci y = x^2 sin x', 'Najděte neurčitý integrál ∫ x e^(x^2) dx', 'Vypočtěte lim x→0 sin(3x)/x', 'Derivujte: y = sin(x^2)' all read, and 'The derivative is 2x/(x^2+1).', 'The integral is e^(x^2)/2 + C.', 'The limit is 3.', 'You should get three.' are refused. Residual: 'Derivujte f(x) = tg(x^2)' reads only with system cz; implicit items stay unread (MB3-3). (commit 0a53e75e fix(desk,uat): UAT 2026-10-14 build items UD-4..7, 9-11, 13-24, 26 (partial))"
   },
   {
     "id": "L1-matyas-19-MB1-2",
@@ -57,10 +60,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "For a derivative / antiderivative item the guard also refuses a line that names both factors of the answer (the outer derivative and the inner derivative) or carries the answer as a product split across words; a test pins the three lines above as leaks.",
-    "l2_priority": "Text engine (no vision needed with a typed page fixture): run hint 1 and 2 on six chain-rule and three standard-limit items; judge each line next-step / generic / leak (completing step counts as leak)."
+    "l2_priority": "Text engine (no vision needed with a typed page fixture): run hint 1 and 2 on six chain-rule and three standard-limit items; judge each line next-step / generic / leak (completing step counts as leak).",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/calc.ts:641 leaksCalc refuses the three pinned lines (executed: 'Multiply cos(x^2) by 2x.', the outside-then-multiply-by-2x line and the u = x^2 substitution line all leak), while 'Use the chain rule: the outside is sin, the inside is x^2.' passes. (commit 66602171 MB-B16 (Calculus): leaksCalc refuses a line naming both factors of the answer, and a substitution that completes it)"
   },
   {
     "id": "L1-matyas-19-MB1-3",
@@ -89,9 +95,13 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "A snapped page whose items read as Calculus specs (specFromQuestion) can be marked from a photo of his working, by the same code judge as a desk set, items that do not read being \"not sure\".",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — none until built; then page read rate and handwriting read on a real MA1 sheet."
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — none until built; then page read rate and handwriting read on a real MA1 sheet.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "The server half landed: desk/src/app/api/mark/route.ts:60 sends a body with `page` to markPageRoute (:99), which marks a snapped page's spec-reading items with the code judge. No client sends `page`, though. desk/src/app/phone/page.tsx:387 and :406 post only image or answers, so without a desk set the route still answers 'Start a practice set first.' (:62), and the TV page screen's Select still only asks for a hint (desk/src/tv/keys.ts:391). (commit 200dab86 mark: MB-B35 mark a learner's own snapped maths page from a photo of the working)",
+    "recurred_as": "L1-matyas-19-MB1-1"
   },
   {
     "id": "L1-matyas-19-MB1-4",
@@ -117,10 +127,13 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "The maths read prompt asks for plain one-line notation (lim_(x->a), a/b with brackets, no LaTeX) and keeps the printed language; page read rate >= 0.9 on a Czech MA1 sheet.",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a printed Czech MA1 sheet (limits, derivatives, one implicit item); page read rate (problems read as printed / on the page) and how many read items readQuestion turns into a Calculus spec."
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a printed Czech MA1 sheet (limits, derivatives, one implicit item); page read rate (problems read as printed / on the page) and how many read items readQuestion turns into a Calculus spec.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/desk/read.ts:37-46 mathsContext names the course ('Their course in progress is Calculus 1.') and the school notation, and asks for plain one-line notation with no LaTeX, in the printed language. desk/src/app/api/read/route.ts:37 passes system, path, age and stage. A LaTeX line that still slips through reads as linear (executed). That is the fallback the prompt now heads off. (commit 50fd60a4 MB-B3: the maths read prompt carries the learner's school system, notation, course and age or stage, asks for plain one-line notation and the printed language; lettered parts get an optional label the TV names the item by (English and Essay prompts unchanged))"
   },
   {
     "id": "L1-matyas-19-MB1-5",
@@ -209,12 +222,15 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "A decimal answer to a limit or a definite integral is right only when it equals the exact value rounded to the decimal places written (2.718 for e, 0.859 for (e-1)/2, 3.00 for 3); any other decimal within ROUNDED_CLOSE is \"not sure\" with the \"asks for the exact value\" line; a rules test pins 2.999, 3.014, 0.4996 and 9.04 as not right.",
     "l2_priority": "No vision needed: typed route on a calc1-limit-laws set, answer one item with the value at x = 0.01; the sheet must not tick it.",
     "scope_note": "orchestrator: the 5e-3 rounded tolerance is documented as deliberate (desk/src/lib/rules/calc.ts:50, 'a learner who rounds to three figures lands within 5e-3'); the rubric's false-tick unit and Matyáš's senior bar (a university tutor) mark a decimal estimate of an exact limit wrong. The tolerance against the rubric is the owner's call (result.json questions); no backlog match (docs/BACKLOG.md ## Math Buddy is empty)",
-    "boundary": true
+    "boundary": true,
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/calc.ts:401-404 sends a limit or definite-integral decimal to calc-read decimalCall. Executed: 2.999, 3.014, 2.9996 (lim = 3), 0.4996, 0.498 (1/2), 9.04, 8.99 (∫ = 9) are unsure with the 'asks for the exact value' line; 3, 3.00, 0.5 and 9 are right; 3.1 is wrong. (commit 9c777d5d MB-B28: a decimal for a limit or definite integral is right only as the exact value correctly rounded at its own precision)"
   },
   {
     "id": "L1-matyas-19-MB3-2",
@@ -241,12 +257,15 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "An antiderivative (or derivative) answer undefined at a sample where the truth is defined is not right: wrong, or \"not sure\" with a domain line; ln(x) + C for 1/x is pinned in a rules test.",
     "l2_priority": "No vision needed: typed route on a calc1-antiderivatives set containing 1/x (or a/x); answer ln x + C.",
     "scope_note": "orchestrator: whether ln x + C without |x| is a false tick depends on the item's stated domain; a strict tutor rings it, and the code accepts it by skipping negative samples (desk/src/lib/rules/calc-expr.ts:716). No backlog match",
-    "boundary": true
+    "boundary": true,
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/calc-expr.ts:764 undefinedWhereTrue feeds WHY.domain (desk/src/lib/rules/calc.ts:98). Executed: 'ln(x) + C' and 'ln x + C' for ∫1/x are unsure with the domain line; 'ln|x| + C' is right. (commit ebdddf7c MB-B27: an antiderivative or derivative undefined where the truth is defined is not sure, with a domain line)"
   },
   {
     "id": "L1-matyas-19-MB3-3",
@@ -275,8 +294,12 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
-    "suggested_acceptance": "An implicit-derivative shape (F(x, y) = c, asked dy/dx in x and y or at a point on the curve), checked numerically by -F_x/F_y, on calc1-chain; or the topic and its blurb stop promising it."
+    "recurrence": 2,
+    "suggested_acceptance": "An implicit-derivative shape (F(x, y) = c, asked dy/dx in x and y or at a point on the curve), checked numerically by -F_x/F_y, on calc1-chain; or the topic and its blurb stop promising it.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/library/calculus1.spine.ts:116-120 still names and describes calc1-chain as covering implicit differentiation, with shapes ['derivative']. desk/src/lib/rules/calc.ts:42 CALC_SHAPES has no implicit shape, and 'Find dy/dx if x^2 + y^2 = 25' reads as linear (executed).",
+    "recurred_as": "L1-matyas-19-MB3-1"
   },
   {
     "id": "L1-matyas-19-MB3-4",
@@ -304,10 +327,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "On a set whose items carry a Calculus spec the per-answer cap is long enough for the spec's own derivative printed plainly (e.g. 120), and the phone shows a count instead of cutting silently.",
-    "l2_priority": "No vision needed: type a 45-character quotient-rule answer on a calc1-rules set on the real phone page; confirm the cut and the verdict."
+    "l2_priority": "No vision needed: type a 45-character quotient-rule answer on a calc1-rules set on the real phone page; confirm the cut and the verdict.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/maths.ts:120 sets TYPED_ANSWER_MAX = 120, and both phone boxes read it (desk/src/app/phone/page.tsx:618, :661). Executed: the 45-character quotient-rule answer is right. (commit 6cbe3bd4 maths: a long right answer is taken whole, one cap of 120 for every typed answer (MK14, MB-B32))"
   },
   {
     "id": "L1-matyas-19-MB3-5",
@@ -337,9 +363,12 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "An unsure Calculus item shows a not-sure line built from its why (no value in it), and a wrong item with no slip may show its why (extra constant); \"I got something different\" is kept for a disagreement only."
+    "suggested_acceptance": "An unsure Calculus item shows a not-sure line built from its why (no value in it), and a wrong item with no slip may show its why (extra constant); \"I got something different\" is kept for a disagreement only.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/kinds.ts:153-158 unsureLine builds NOT_SURE(n, why) (desk/src/lib/rules/maths.ts:110). Executed via judgeSet: an unreadable answer gets 'The desk is not sure about number 1. The desk cannot read this answer as mathematics, and it does not guess.'; '2x+C' on a derivative is wrong with 'A derivative has no arbitrary constant in it.' (commit 83bbe368 marking: an unsure item says why, a blank says no answer yet (MK10, MB-B1 line half))"
   },
   {
     "id": "L1-matyas-19-MB3-6",
@@ -366,9 +395,12 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "With system cz (or de), a Calculus answer reads a decimal comma and the Czech function names tg, cotg, arctg, arccotg; a constant letter other than C is read as the arbitrary constant."
+    "suggested_acceptance": "With system cz (or de), a Calculus answer reads a decimal comma and the Czech function names tg, cotg, arctg, arccotg; a constant letter other than C is read as the arbitrary constant.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/calc-read.ts:32 czechNames and :84 czechAnswer read tg, cotg, arctg, arccotg, the decimal comma and + K for cz. Executed (system cz): '1+tg(x)^2', 'tg(x)^2+1', 'arctg(x)+C', '-arccotg(x)+C', 'e^(x^2)/2 + K', '+ C1', '+ C_1', '0,5' and '0,859' are all right. wellFormed still refuses arctg inside a spec, but the desk writes specs, not him. (commit 4879c4de feat(maths): read Czech notation in Calculus answers)"
   },
   {
     "id": "L1-matyas-19-MB3-7",
@@ -396,10 +428,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "A line \"A · (B)'\" is read as A times the derivative of B; a \"u = g(x)\" line binds u for the lines after it; a \"lim … = lim …\" line is an = line between the two bodies; the three workings above put the pen on the slipped line.",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap his handwritten chain-rule working in prime notation; does the transcription keep the primes, and where is the pen?"
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap his handwritten chain-rule working in prime notation; does the transcription keep the primes, and where is the pen?",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/chain.ts:272-369 reads \"(B)'\" as the derivative of B and binds 'u = g(x)'; 'lim A = lim B' is read as two equal limits. Executed: the cos(x^2)·(x^2)' working -> [true,false] pen 1; the u = x^2 working -> pen 2; the (3x^2+1)' working with '· 6' -> pen 1; a correct lim = lim chain gets no pen, and a wrong last line gets pen 1. (commit 15e94aa8 feat(maths): read prime notation, u = lines and lim = lim lines in Calculus working)"
   },
   {
     "id": "L1-matyas-19-MB3-8",
@@ -426,9 +461,12 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "For a derivative spec whose f is a composition g(h(x)), an answer equal to g'(h(x)) at the samples is wrong with slip forgot-chain, decided in code."
+    "suggested_acceptance": "For a derivative spec whose f is a composition g(h(x)), an answer equal to g'(h(x)) at the samples is wrong with slip forgot-chain, decided in code.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/calc.ts:454 returns slip forgot-chain when the answer is the outer derivative with the inside not differentiated. Executed: 'cos(x^2)' for d/dx sin(x^2) -> wrong, slip forgot-chain, said 'A function sits inside another here. Multiply by the derivative of the inside as well.' (commit 4a8d4dac feat(maths): name the forgotten chain factor in code)"
   },
   {
     "id": "L1-matyas-19-MB3-9",
@@ -455,10 +493,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "A topic may name a structural requirement (calc1-chain: the function is a composition) that code checks on each spec, and the set fit for six chain-rule sets is >= 5 of 6 each.",
-    "l2_priority": "No vision needed: ask five sets on calc1-chain through the text engine; set fit per question (on topic and at level), count non-composite items."
+    "l2_priority": "No vision needed: ask five sets on calc1-chain through the text engine; set fit per question (on topic and at level), count non-composite items.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "calc1-chain declares requires: 'composition' (desk/src/lib/library/calculus1.spine.ts:120). desk/src/lib/desk/items.ts:415 drops any spec that fails meetsRequirement (desk/src/lib/rules/calc.ts:530-536), and the prompt carries the composition rule line (items.ts:310, :339). Executed: sin(x^2) and e^(2x) are kept; x^3+x, x^2 sin x and ln(x) are refused. Set yield is an L2 measurement. (commit 3a8e36d9 feat(maths): keep only compositions in a chain-rule set)"
   },
   {
     "id": "L1-matyas-19-MB3-10",
@@ -484,9 +525,12 @@
     ],
     "code_check": "n-a",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "The topic is named in course-neutral words (integral with a variable upper limit); a spine test keeps the id."
+    "suggested_acceptance": "The topic is named in course-neutral words (integral with a variable upper limit); a spine test keeps the id.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/library/calculus1.spine.ts:179-180: calc1-area-so-far is named 'The integral with a variable upper limit'; the id is unchanged. (commit 5899d6a9 maths: the area-so-far topic is named The integral with a variable upper limit (TN1, MB-B41).)"
   },
   {
     "id": "L1-matyas-19-MB3-11",
@@ -512,10 +556,13 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "The explain prompt includes his written answer, his transcribed working (numbered lines) and the slip and line the desk found; MB-EXPLAIN >= 6/8.",
-    "l2_priority": "No vision needed (typed set): explain on a wrong chain-rule item; does the reply name his line?"
+    "l2_priority": "No vision needed (typed set): explain on a wrong chain-rule item; does the reply name his line?",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/desk/explain.ts:50-70 seenBlock puts his written answer, his working as numbered lines and 'The desk found this slip: …, on line N.' into the explainCalc prompt. (commit 1dfcfdae explain: the prompt carries the written answer, the working and the slip with its line (X4))"
   },
   {
     "id": "L1-matyas-19-MB3-12",
@@ -604,10 +651,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "For a cz (and de) learner, read · as ×, : between two fractions as ÷, a decimal comma in a task, a Czech instruction lead (Vypočítej/Sečti/Zkrať...) and Czech number words in leaksSchool; a repro of e1/e2 then shows a spec and leak=true",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a Czech 6. ročník fractions-and-decimals sheet. Record what vision transcribes for ·, :, decimal commas and lettered items. For each unread item record hint 1 and hint 2: do they state the result (answer leak, blocker), and do they talk about x or equations (stance)?"
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a Czech 6. ročník fractions-and-decimals sheet. Record what vision transcribes for ·, :, decimal commas and lettered items. For each unread item record hint 1 and hint 2: do they state the result (answer leak, blocker), and do they talk about x or equations (stance)?",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/taskText.ts:51-58 reads · as ×, ':' between fractions as ÷ and the cz decimal comma; taskText.ts:16-21 strips Vypočítej; kinds.ts:41-46 then gives a school spec, and hint.ts:107-109 runs leaksSchool. Repro (scratch read.cjs): '2/3 · 3/4', '3/4 : 1/2', '2,5 · 0,4', 'Vypočítej: 3/4 + 1/6', '2 1/2 + 1/4' all read as their unit; the answer lines (including 'To je jedenáct dvanáctin.') all leak=true; the stance is the unit's (hint.ts:84,96). (commit 119988a1 MB-B2: the reader strips a leading instruction and reads the middle dot, the fraction colon and the system's decimal comma)"
   },
   {
     "id": "L1-nela-12-MB1-2",
@@ -636,9 +686,12 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "On a new evening (or once a page is older than today), the homework door issues page.ask; older sheets remain reachable from the page's Left/Right or the continue card"
+    "suggested_acceptance": "On a new evening (or once a page is older than today), the homework door issues page.ask; older sheets remain reachable from the page's Left/Right or the continue card",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/tv/mathsRows.ts:22-30 tonightsSheet keeps only a maths page with day == today; desk/src/tv/keys.ts:339-341 otherwise sends page.ask; the continue card uses the same rule (mathsRows.ts:134-139). (commit 3a98790e HW2: the homework door opens tonight's sheet only (a page snapped today, read with a problem or being read); pages carry the day they were snapped, page titles count tonight's pages)"
   },
   {
     "id": "L1-nela-12-MB1-3",
@@ -664,9 +717,12 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "Each withheld line is ≤25 words (one method step and \"The answer is yours\")"
+    "suggested_acceptance": "Each withheld line is ≤25 words (one method step and \"The answer is yours\")",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/school.ts:4463 SCHOOL_WITHHELD: all 15 lines are 25 words or fewer (max 25, scratch rules.cjs); tools/school-rules-test.cjs:491-492 pins it. (commit 993948e5 school: every withheld hint line is 25 words or fewer (MB-B6 part 2))"
   },
   {
     "id": "L1-nela-12-MB1-4",
@@ -692,10 +748,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "MB-READ ≥4/5: system and notation, topic, age in the prompt; a string label for lettered items",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — page read rate on a Czech sheet with 1. a) b) c) items and comma decimals"
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — page read rate on a Czech sheet with 1. a) b) c) items and comma decimals",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/desk/read.ts:27-46 mathsContext puts the cz notation, the course, age or stage, the printed language and a lettered-part label into the maths read; read.ts:18-21 adds a string label to the schema; desk/src/app/api/read/route.ts:37 passes the owner's profile. (commit 50fd60a4 MB-B3: the maths read prompt carries the learner's school system, notation, course and age or stage, asks for plain one-line notation and the printed language; lettered parts get an optional label the TV names the item by (English and Essay prompts unchanged))"
   },
   {
     "id": "L1-nela-12-MB1-5",
@@ -722,10 +781,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "MB-HINT ≥6/8 for a read school task",
-    "l2_priority": "Hint helpfulness ratio on her real sheet: next-step versus generic"
+    "l2_priority": "Hint helpfulness ratio on her real sheet: next-step versus generic",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/desk/hint.ts:124-139 groundFor adds the notation line, her recorded slips on the task's unit and WORKED_METHODS for the unit; desk/src/app/api/hint/route.ts:39 builds it for every maths hint and passes it at :42 and :51. (commit c7460599 MB-B8 (grounding): a maths hint is told the learner's notation, recorded slips and the unit's method, in the user prompt)"
   },
   {
     "id": "L1-nela-12-MB1-6",
@@ -813,10 +875,13 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "An unsure school item carries check().why (or a short form of it) as its line; ASK is used only where the desk did compute a different value",
-    "l2_priority": "Read the walk card on an unsure item with Mum: is it read as \"wrong\"?"
+    "l2_priority": "Read the walk card on an unsure item with Mum: is it read as \"wrong\"?",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/kinds.ts:153-159 unsureLine gives BLANK for an empty box and NOT_SURE(n, why) with the checker's own reason for a school item; kinds.ts:179 uses it. Repro: '4/22' for 6/33 simplest -> 'The desk is not sure about number 5. The value is right; the question asks for it in its simplest form.'; blank -> 'Number 6 has no answer yet.' (commit 83bbe368 marking: an unsure item says why, a blank says no answer yet (MK10, MB-B1 line half))"
   },
   {
     "id": "L1-nela-12-MB2-2",
@@ -843,10 +908,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "The recogniser language follows the profile (cs-CZ for cz), and a \"type it instead\" link is always shown",
-    "l2_priority": "Hold-to-explain in Czech on an Android phone: what transcript arrives, and does the reply make sense?"
+    "l2_priority": "Hold-to-explain in Czech on an Android phone: what transcript arrives, and does the reply make sense?",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/app/phone/recogniserLang.ts:7-8 gives cs-CZ for a cz learner, used at desk/src/app/phone/page.tsx:373; desk/src/app/phone/ExplainTalk.tsx:36-37 shows a 'Type it' button beside hold-to-speak while a recogniser exists. (commit 632287e6 explain: a Type it button beside the hold button while a recogniser exists (X2, MB-B18))"
   },
   {
     "id": "L1-nela-12-MB2-3",
@@ -871,10 +939,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "MB-EXPLAIN ≥6/8: studentAnswer, studentWorking and the slip name are added (the reply is still checked by leaksSchool)",
-    "l2_priority": "Explain-reply quality on a wrong item: does it name her step?"
+    "l2_priority": "Explain-reply quality on a wrong item: does it name her step?",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/desk/explain.ts:241-252 seenOf carries her written answer, her working lines and the code slip's sentence with its line; explain.ts:64-71 seenParts puts them in the prompt as data. (commit 1dfcfdae explain: the prompt carries the written answer, the working and the slip with its line (X4))"
   },
   {
     "id": "L1-nela-12-MB2-4",
@@ -901,9 +972,12 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "Questions are printed in the learner's system (decimal comma for cz/de), and the reader still reads them back"
+    "suggested_acceptance": "Questions are printed in the learner's system (decimal comma for cz/de), and the reader still reads them back",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/school.ts:1417-1436 question(spec, system) prints a decimal comma for cz/de; desk/src/lib/desk/items.ts:522,567 and desk/src/lib/desk/worked.ts:28-32 pass the system. Repro (scratch rules.cjs, 900 cz dec-arith items): 0 decimal points, 0 £, 0 €, 300 Kč ('Work out 9,19 Kč + 9,34 Kč.'); worked pairs read 'Work out 78,2 - 3,19.' -> '75,01'. (commit eb00c8ee feat(maths): print code-written questions in the learner's decimals and money)"
   },
   {
     "id": "L1-nela-12-MB2-5",
@@ -930,9 +1004,12 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "Every SCHOOL_SLIPS.says ≤25 words (a test pins it)"
+    "suggested_acceptance": "Every SCHOOL_SLIPS.says ≤25 words (a test pins it)",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/school.ts:1610 SCHOOL_SLIPS: 57 lines, max 25 words, none over (scratch rules.cjs); tools/school-rules-test.cjs:487 pins it. (commit bf466188 school: every slip line the desk says is 25 words or fewer (MB-B6 part 1))"
   },
   {
     "id": "L1-nela-12-MB2-6",
@@ -960,9 +1037,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "A teacher signs off the tier-2 denominator range for cz 6. ročník",
-    "l2_priority": "Set fit judged by a Czech maths teacher on 3 drawn sets"
+    "l2_priority": "Set fit judged by a Czech maths teacher on 3 drawn sets",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/rules/school.ts:2798 gen(seed, 2) still draws pairs like '3/4 - 1/9' and '4/11 - 1/12'; no teacher sign-off is recorded.",
+    "recurred_as": "L1-nela-12-MB2-1"
   },
   {
     "id": "L1-nela-12-MB2-7",
@@ -990,9 +1071,13 @@
     "code_check": "by-design",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Owner ruling: either the add/sub questions say \"simplest form\" (unsure, not wrong, for 6/4), or the lesson drops \"then simplify\"",
-    "l2_priority": "Owner/teacher ruling on unsimplified results for cz"
+    "l2_priority": "Owner/teacher ruling on unsimplified results for cz",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/library/worked.ts:15 still teaches 'Add or take away the tops, then simplify'; check() marks an unsimplified sum right because simplest form is asked only when the spec says so (desk/src/lib/rules/school.ts:1588,1953).",
+    "recurred_as": "L1-nela-12-MB2-2"
   },
   {
     "id": "L1-nela-12-MB2-8",
@@ -1078,10 +1163,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "recapCaption says \"all of it right\" only when at least one item was marked and none is wrong or unsure; a hints-only evening gets its own sentence",
-    "scope_note": "orchestrator: the same recap builder serves Essay (desk/src/tv/recapRows.ts); see 2026-10-09-essay-l1 L1-barbora-43-EM4-6 for the writing-evening variant. No backlog match"
+    "scope_note": "orchestrator: the same recap builder serves Essay (desk/src/tv/recapRows.ts); see 2026-10-09-essay-l1 L1-barbora-43-EM4-6 for the writing-evening variant. No backlog match",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/tv/recapRows.ts:228-238 recapCaption says 'all of it right' only when a set was marked and toLook is 0; a hints-only evening -> 'Worked through with 3 hints; nothing was marked.', Linga only -> 'One conversation in English; nothing to mark.' (scratch recap.cjs). (commit 715ce1ef M6 (MB-B11): the recap caption says 'all of it right' only when an item was marked; hints-only, homework-only and Linga-only evenings each get their own sentence)"
   },
   {
     "id": "L1-nela-12-MB5-2",
@@ -1111,9 +1199,12 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "The log is per evening (reset at the first event of a new day, or at session.end once the recap is read), with a repro of e5 showing 0 hints on evening 2"
+    "suggested_acceptance": "The log is per evening (reset at the first event of a new day, or at session.end once the recap is read), with a repro of e5 showing 0 hints on evening 2",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/session/store.ts:664-669 dayed() clears the log (and away logs) on the first event of a later day, run by every reduce (store.ts:679), session.end included. Repro (scratch recap.cjs): evening 1 with 3 hints, next day End session first -> log.hints 0, 'A quiet evening.' (commit 9ee12486 M5 (MB-B12): the evening log is stamped with the local day it is first written and cleared by the first event of a later day, seated and away; session.end keeps it and records endedAt)"
   },
   {
     "id": "L1-nela-12-MB5-3",
@@ -1141,9 +1232,12 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "Homework evenings (sheets, problems, second hints) reach the digest and the week page as counts"
+    "suggested_acceptance": "Homework evenings (sheets, problems, second hints) reach the digest and the week page as counts",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/app/api/read/route.ts:46-59 writes a homework digest entry with the history line; desk/src/lib/rules/week.ts:230-232 counts sheets, hints and second hints and week.ts:289-300 says them on the Sunday page. (commit 18789175 MB-B14: a homework sheet and a typed paper write the week; the Sunday page says them)"
   },
   {
     "id": "L1-nela-12-MB5-4",
@@ -1171,8 +1265,12 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
-    "suggested_acceptance": "The blurb names the number format (\"0,5 is a half\"), or Save asks for a system"
+    "recurrence": 2,
+    "suggested_acceptance": "The blurb names the number format (\"0,5 is a half\"), or Save asks for a system",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/tv/profileRows.ts:24 DEFAULT_SYSTEM is still 'uk' and :29 the cz blurb is still 'Progress is shown against Czech ročníky.'; nothing says the row decides how 0,5 is read.",
+    "recurred_as": "L1-nela-12-MB5-1"
   },
   {
     "id": "L1-nela-12-MB5-5",
@@ -1200,8 +1298,12 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
-    "suggested_acceptance": "A school-year pick on the profile, or the cut-off applied"
+    "recurrence": 2,
+    "suggested_acceptance": "A school-year pick on the profile, or the cut-off applied",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/lib/library/syllabus.ts:296-304 schoolYear = age - SYSTEM_START + 1, documented as ignoring the birthday cut-off; desk/src/lib/rules/stretch.ts:74-78 learnerYear uses it.",
+    "recurred_as": "L1-nela-12-MB5-2"
   },
   {
     "id": "L1-nela-12-MB5-6",
@@ -1263,11 +1365,14 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Every linear-item answer that reads as a mixed number (a b/c, -a b/c) is judged as a + b/c, or is unsure; two bare numbers separated by a space are unsure. A test pins 4x + 2 = 5 with \"1 3/4\" -> wrong and 7 - 2x = 3x + 1 with \"1 1/5\" -> right, on the typed, second-go and photo paths.",
     "l2_priority": "precondition: text engine for a linear set (claude CLI). Confirm live that a model-written two-step set carries fractional roots, type a mixed-number wrong answer and see the TV tick; for the photo path (precondition: vision host (env.md, Math Buddy)) check whether the reader passes \"1 3/4\" through.",
-    "boundary": true
+    "boundary": true,
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/desk/verify.ts:159-164 mixedNumber reads '1 3/4' as 1 + 3/4 and '2 3' as no value; substitute() uses it at verify.ts:175-177, reached by the typed path (desk/src/lib/rules/kinds.ts:117,125) and the second go (desk/src/lib/desk/mark.ts:259-261). Executed: 4x + 2 = 5 with '1 3/4' -> wrong (typed and second go), '3/4' -> right; x + 4 = 10 with '2 3' -> unsure. (commit e4dc93f5 MB-B26: a mixed number on a linear item is a + b/c on every route; two bare numbers read not sure)"
   },
   {
     "id": "L1-owen-17-MB2-2",
@@ -1294,10 +1399,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Same fix as owen-17-MB2-1; false rings on the linear battery = 0.",
-    "l2_priority": "precondition: text engine (claude CLI). Confirm on a live linear set."
+    "l2_priority": "precondition: text engine (claude CLI). Confirm on a live linear set.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Same mixedNumber path (desk/src/lib/desk/verify.ts:159-177). Executed: 7 - 2x = 3x + 1 with '1 1/5' -> right; 2x + 7 = 4 with '-1 1/2' -> right, typed and second go; pinned at tools/maths-judge-test.cjs:230. (commit e4dc93f5 MB-B26: a mixed number on a linear item is a + b/c on every route; two bare numbers read not sure)"
   },
   {
     "id": "L1-owen-17-MB2-3",
@@ -1325,10 +1433,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "For a learner whose school year is past the unit (or on a step up), the fraction generators include mixed-number operands and at least one in-context item; set fit judged >= 5/6 for a Foundation resitter.",
-    "l2_priority": "Set fit is a judge metric: a maths teacher rates six live sets on frac-add-sub / frac-mul-div for a Foundation resitter."
+    "l2_priority": "Set fit is a judge metric: a maths teacher rates six live sets on frac-add-sub / frac-mul-div for a Foundation resitter.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "A step up on frac-add-sub and frac-mul-div now draws two tier-3 items from TOP_TIER_GENERATORS (desk/src/lib/rules/school.ts:3039-3041; genMixedAddSub :2967, genMixedMulDiv :3001; desk/src/lib/rules/stretch.ts:59 tierCounts with top; desk/src/lib/desk/items.ts:443-450). Executed: 1000/1000 top-rung items carry a mixed number and 500/1000 are word problems. Residual: The usual still draws 0 mixed numbers in 4000 tier-1/2 specs, and a paper's N2 does not steer the fraction units (paperSteer -> null, school.ts:3743). (commit 129ce63e feat(maths): write a top rung of mixed numbers and word problems for the fractions units)"
   },
   {
     "id": "L1-owen-17-MB2-4",
@@ -1355,10 +1466,13 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Every slip line the walk shows is <= 25 words (split the \"what happened\" from the \"what to do\" if needed); line-length share >= 0.9.",
-    "l2_priority": "Driver: measure the rendered walk lines; check wrapping on the 1920 stage."
+    "l2_priority": "Driver: measure the rendered walk lines; check wrapping on the 1920 stage.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Every SCHOOL_SLIPS.says is 25 words or fewer (desk/src/lib/rules/school.ts:1610; pinned at tools/school-rules-test.cjs:487). Executed: 57 slip lines, top-rung slips included, 0 over 25 words. (commit bf466188 school: every slip line the desk says is 25 words or fewer (MB-B6 part 1))"
   },
   {
     "id": "L1-owen-17-MB2-5",
@@ -1386,9 +1500,12 @@
     ],
     "code_check": "by-design",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "For system uk, money items use £; \"cm squared\"/\"sq cm\"/\"square cm\" read as cm2."
+    "suggested_acceptance": "For system uk, money items use £; \"cm squared\"/\"sq cm\"/\"square cm\" read as cm2.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Money is the learner's own: LOCAL_MONEY uk -> £ through localMoney on every unit generator and the pct-change top rung (desk/src/lib/rules/school.ts:3613-3621, 3631-3644, 3042); 'cm squared', 'sq cm', 'square cm' read as cm2 (school.ts:156-157). Executed over every UK generator: only £, no € or $; '54 cm squared' / 'sq cm' / 'square cm' -> right. By design, '12.54 pounds' is still unsure (school.ts:172: 'pounds' is money or weight), never wrong. (commit eb00c8ee feat(maths): print code-written questions in the learner's decimals and money)"
   },
   {
     "id": "L1-owen-17-MB2-6",
@@ -1415,9 +1532,12 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "The unsure line names why in desk words, with no value (\"the desk could not tell from a rounded answer\", \"no answer here yet\")."
+    "suggested_acceptance": "The unsure line names why in desk words, with no value (\"the desk could not tell from a rounded answer\", \"no answer here yet\").",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "unsureLine (desk/src/lib/rules/kinds.ts:153-158) gives a blank 'Number N has no answer yet.' and a school item the engine's own reason; ASK is now only the wrong-linear line (desk/src/lib/rules/maths.ts:181). Executed: '0.28' for 4/11 - 1/12 -> 'The desk is not sure about number 3. This is a rounded value; the desk asks for the exact one.' (commit 83bbe368 marking: an unsure item says why, a blank says no answer yet (MK10, MB-B1 line half))"
   },
   {
     "id": "L1-owen-17-MB2-7",
@@ -1445,9 +1565,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "L2: handwriting read >= 0.9 and 0 false ticks over snapped school and linear sheets, including mixed-number answers.",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a worked school sheet and a worked linear sheet with mixed-number answers (right and wrong); measure handwriting read, false ticks and unsure rate; check whether the reader rewrites \"1 3/4\"."
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a worked school sheet and a worked linear sheet with mixed-number answers (right and wrong); measure handwriting read, false ticks and unsure rate; check whether the reader rewrites \"1 3/4\".",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "The linear photo prompt still asks for the learner's value and the model's own solution 'as a plain number or simple fraction' (desk/src/lib/desk/mark.ts:167,170); the school prompt copies answers verbatim (mark.ts:151-152). Reading handwriting is L2-only.",
+    "recurred_as": "L1-owen-17-MB2-1"
   },
   {
     "id": "L1-owen-17-MB2-8",
@@ -1474,9 +1598,12 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "From the recovery route, a topic with a worked lesson offers it (one press, skippable) before the set."
+    "suggested_acceptance": "From the recovery route, a topic with a worked lesson offers it (one press, skippable) before the set.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Get ready for school opens a unit with a worked lesson on 'See how first', lit (desk/src/tv/keys.ts:528; Select teaches at keys.ts:523; desk/src/tv/prepareRows.ts:56-59), and the paper route opens the same question (keys.ts:541). (commit 5a45e935 tv: Get ready for school offers a unit's worked lesson first, lit (GR1, MB-B39))"
   },
   {
     "id": "L1-owen-17-MB2-9",
@@ -1503,10 +1630,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "X2 and X3 reach the explain prompt; MB-EXPLAIN >= 5/8.",
-    "l2_priority": "precondition: text engine (claude CLI). Compare replies with and without the answer and slip supplied (control arm)."
+    "l2_priority": "precondition: text engine (claude CLI). Compare replies with and without the answer and slip supplied (control arm).",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "seenOf/seenParts put the written answer, the working and the slip with its line into both explain prompts (desk/src/lib/desk/explain.ts:56, 65-71, 242-250; called at explain.ts:285). (commit 1dfcfdae explain: the prompt carries the written answer, the working and the slip with its line (X4))"
   },
   {
     "id": "L1-owen-17-MB2-10",
@@ -1563,9 +1693,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "A topic row shows only what its questions tested: a statement that touches several units is split by what the question practised (or the learner confirms the unit), and the rows' losses never add up to more than the paper lost; Owen's mock yields <= 8 rows, none for decimals.",
-    "l2_priority": "A resit lecturer orders the same mock by hand; compare the top 5."
+    "l2_priority": "A resit lecturer orders the same mock by hand; compare the top 5.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "A statement still reaches every unit in its touches (desk/src/lib/rules/recovery.ts:175-177; desk/src/lib/library/gcse.ts:42 N2 -> frac-add-sub, frac-mul-div, dec-arith; gcse.ts:73 A17 -> three equation units). The loss is now split into whole-mark shares (recovery.ts:218-222) labelled 'shared' (desk/src/tv/paperRows.ts:93). Nothing splits it by what the question practised.",
+    "recurred_as": "L1-owen-17-MB4-1"
   },
   {
     "id": "L1-owen-17-MB4-2",
@@ -1593,10 +1727,13 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Every off-desk statement is reachable by name on the TV (a walkable second column or a page), most lost first.",
-    "l2_priority": "Driver: render the paper screen with this mock; confirm the overflow and its legibility."
+    "l2_priority": "Driver: render the paper screen with this mock; confirm the overflow and its legibility.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "The D-pad walks the off-desk statements by name after the topics (desk/src/tv/keys.ts:534-537; paperStopCount desk/src/tv/paperRows.ts:45); the screen draws them as rows (desk/src/maths/MathsTV.tsx:726-741) and the score card counts them (paperRows.ts:60-66). No 'and N more' remains. (commit 1faea42d paper: every off-desk statement walked by name after the topics; the score card counts them; Foundation first on a tie (RP3, MB-B13))"
   },
   {
     "id": "L1-owen-17-MB4-3",
@@ -1623,9 +1760,12 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "Select on a recovery row opens The usual / A step up for that topic (or prepare focused on it); presses from list to set <= 3."
+    "suggested_acceptance": "Select on a recovery row opens The usual / A step up for that topic (or prepare focused on it); presses from list to set <= 3.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Select on a recovery row opens Get ready for school on that unit with its question open and carries the unit as the paper's aim; Back or Menu land on that unit (desk/src/tv/keys.ts:534-546). (commit b3581eb2 tv: Select on a recovery row opens its unit in Get ready for school with the question open; Back lands on that unit (RP1, MB-B9))"
   },
   {
     "id": "L1-owen-17-MB4-4",
@@ -1652,9 +1792,12 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "Among equal losses a Foundation statement comes before a flagged one; a flagged statement never takes a visible slot ahead of a Foundation statement with the same loss."
+    "suggested_acceptance": "Among equal losses a Foundation statement comes before a flagged one; a flagged statement never takes a visible slot ahead of a Foundation statement with the same loss.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "notOnDesk sorts by lost, then Foundation before flagged, then spec order (desk/src/lib/rules/recovery.ts:246); a flagged row reads 'a harder statement' (desk/src/maths/MathsTV.tsx:735), and every row can be walked. (commit 1faea42d paper: every off-desk statement walked by name after the topics; the score card counts them; Foundation first on a tie (RP3, MB-B13))"
   },
   {
     "id": "L1-owen-17-MB4-5",
@@ -1681,10 +1824,13 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "A search/filter by word, or a short \"what this paper usually tests\" list; a pick that leads to more than one unit says which.",
-    "l2_priority": "Time an Owen-like entry of a 25-question paper on a phone; C3 seconds per question."
+    "l2_priority": "Time an Owen-like entry of a 25-question paper on a phone; C3 seconds per question.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Each row's picker has a 'Find by words' search box that narrows the statements (desk/src/app/phone/PaperPanel.tsx:28), and the areas fold with a count of picks (PaperPanel.tsx:31). (commit d2276d38 paper: areas fold and a box finds a statement by its words (MB-B7 way in))"
   },
   {
     "id": "L1-owen-17-MB4-6",
@@ -1711,9 +1857,13 @@
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "The draft paper persists on the phone until sent.",
-    "l2_priority": "Lock the phone mid-entry on iOS/Android browsers; does the draft survive?"
+    "l2_priority": "Lock the phone mid-entry on iOS/Android browsers; does the draft survive?",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "paperRows is still React state only (desk/src/app/phone/page.tsx:68 useState<DraftRow[]>); the only storage call left removes the PIN (page.tsx:192).",
+    "recurred_as": "L1-owen-17-MB4-2"
   },
   {
     "id": "L1-owen-17-MB4-7",
@@ -1739,9 +1889,12 @@
     ],
     "code_check": "by-design",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "For a learner whose school year is past the unit's, the card omits the year (or says \"foundations\")."
+    "suggested_acceptance": "For a learner whose school year is past the unit's, the card omits the year (or says \"foundations\").",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Prepare cards print no year when the learner is past the path's end (desk/src/maths/MathsTV.tsx:650, 689; pastPathEnd desk/src/tv/prepareRows.ts:97). The Topics ruler still prints years (MathsTV.tsx:337); that is recorded as a new row. (commit 29cdfd86 maths: a learner past the end of the school path opens Topics and Prepare on the last topic, and the desk says the path ends (MB-B19))"
   },
   {
     "id": "L1-owen-17-MB4-8",
@@ -1827,10 +1980,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "readQuestion/equationOf read an item after stripping a leading instruction in cz/en ('Řeš (rovnici)', 'Vypočítej', 'Solve' with or without a colon), and the school reader accepts '·' and the learner's decimal comma (school system passed in). A suite row per form proves leaks() catches 'x = 11' / '11/12' / '0,12' on each.",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a Czech worksheet with 'Řeš rovnici'/'Vypočítej' items and '·' / comma decimals; record the item text vision returns and count hint/next lines that state the final answer (answer leak metric)."
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a Czech worksheet with 'Řeš rovnici'/'Vypočítej' items and '·' / comma decimals; record the item text vision returns and count hint/next lines that state the final answer (answer leak metric).",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/taskText.ts:16-19,51-71 strip cz/en leads (with or without a colon), read the middle dot, the fraction colon and the cz decimal comma; kinds.ts:41 readQuestion(text, system) and hint.ts:107-109 leaksLine use them. Scratch leak.cjs: 'Řeš rovnici 3(x - 2) = 2x + 5' + 'So x = 11.', 'Solve 3(x - 2)...', 'Vypočítej: 3/4 + 1/6 =', '2/3 · 9/4 =', '0,3 × 0,4' all leak=true; an unread task gets a neutral stance (hint.ts:87,98). (commit 119988a1 MB-B2: the reader strips a leading instruction and reads the middle dot, the fraction colon and the system's decimal comma)"
   },
   {
     "id": "L1-radka-41-MB1-2",
@@ -1858,10 +2014,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "With no marked set tonight, the caption says what was done without a verdict (e.g. 'A sheet worked through with 3 hints; nothing was marked.'); 'all of it right' only when at least one set was marked and every item is right. A recapRows test pins the homework-only branch.",
-    "scope_note": "orchestrator: same defect as L1-nela-12-MB5-1, found independently. No backlog match"
+    "scope_note": "orchestrator: same defect as L1-nela-12-MB5-1, found independently. No backlog match",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/tv/recapRows.ts:228-238 recapCaption says 'all of it right' only when a set was marked (233); hints only -> 'Worked through with N hints; nothing was marked.' (234). The phone prints the same caption (app/phone/page.tsx:747). (commit 715ce1ef M6 (MB-B11): the recap caption says 'all of it right' only when an item was marked; hints-only, homework-only and Linga-only evenings each get their own sentence)"
   },
   {
     "id": "L1-radka-41-MB1-3",
@@ -1888,10 +2047,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "The hint call receives the learner's school system (notation) and recorded slips for the item's unit; an unread item gets a neutral stance, not 'factoring and linear-equations'.",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — on a Czech decimals sheet, judge each hint next-step vs generic (hint helpfulness) and whether it uses the comma notation."
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — on a Czech decimals sheet, judge each hint next-step vs generic (hint helpfulness) and whether it uses the comma notation.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/app/api/hint/route.ts:36-39,42,51 pass system and groundFor(item, {id, system}); desk/src/lib/desk/hint.ts:124-139 groundFor adds the cz notation line, the learner's recorded slips on the item's unit and the unit's worked method; hint.ts:87,93-98 an unread task gets a neutral stance, a unit task names its unit. (commit c7460599 MB-B8 (grounding): a maths hint is told the learner's notation, recorded slips and the unit's method, in the user prompt)"
   },
   {
     "id": "L1-radka-41-MB1-4",
@@ -1917,10 +2079,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "The read prompt names the learner's notation (decimal comma, '·') and accepts a lettered part label; page read rate >= 0.9 on three Czech worksheets.",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — page read rate on 3 Czech 6. ročník sheets with comma decimals and a) b) c) parts; time to read page."
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — page read rate on 3 Czech 6. ročník sheets with comma decimals and a) b) c) parts; time to read page.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/desk/read.ts:27-31,37-46 mathsContext names the cz notation (decimal comma, colon), course and age, keeps the printed language and asks for a lettered part's label; read.ts:17-20 the schema has an optional label, read.ts:109-113 keys items by it. (commit 50fd60a4 MB-B3: the maths read prompt carries the learner's school system, notation, course and age or stage, asks for plain one-line notation and the printed language; lettered parts get an optional label the TV names the item by (English and Essay prompts unchanged))"
   },
   {
     "id": "L1-radka-41-MB1-5",
@@ -1978,9 +2143,12 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "When unmapped questions lost marks, the list and caption say e.g. '28 marks lost on 16 questions with no statement picked: pick what they test on the phone to see topics.' A paperRows test covers all-unmapped and mapped-full + unmapped-lost."
+    "suggested_acceptance": "When unmapped questions lost marks, the list and caption say e.g. '28 marks lost on 16 questions with no statement picked: pick what they test on the phone to see topics.' A paperRows test covers all-unmapped and mapped-full + unmapped-lost.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/tv/paperRows.ts:110-113 the caption states 'N marks were lost on questions that name no statement'; paperNone (122-126) likewise; 'No marks were lost' only when lost is 0. desk/src/maths/MathsTV.tsx:769-773 also says how many questions named no statement. (commit 9875e783 paper: say 'No marks were lost' only when none were (MB-B15))"
   },
   {
     "id": "L1-radka-41-MB4-2",
@@ -2008,10 +2176,13 @@
     ],
     "code_check": "by-design",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "An item's loss is shared, not copied, across the topics it touches (the rows add up to the paper's loss); the caption names the biggest loss and says separately which base unit comes first; A4 no longer maps expression questions onto an equations unit. A senior teacher signs off the order on two real CERMAT-style mocks.",
-    "l2_priority": "A 2. stupeň maths teacher reads the list for the 22/50 mock and says whether it names the real weak topics."
+    "l2_priority": "A 2. stupeň maths teacher reads the list for the 22/50 mock and says whether it names the real weak topics.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/recovery.ts:196,218-228 share a question's lost marks in whole marks across its destinations, so the rows add up to the paper's loss; library/gcse.ts:60 A4 no longer maps to an equations unit; tv/paperRows.ts:99-118 the caption names the base and the biggest loss ('Start with X, the base for Y, where most marks went.'). Teacher sign-off on the order stays a human step. (commit ee949056 rules: a question's lost marks are shared in whole marks across what it reaches, so the paper list adds up; caption names the biggest loss (RP2, MB-B5 part 1))"
   },
   {
     "id": "L1-radka-41-MB4-3",
@@ -2038,10 +2209,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Select on a lit recovery row asks The usual / A step up and writes that unit's set (as Prepare does): 2 presses from the list.",
-    "l2_priority": "Press count from the paper screen to a set on the first topic, live."
+    "l2_priority": "Press count from the paper screen to a set on the first topic, live.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/tv/keys.ts:534-545 Select on a lit recovery row goes to Get ready for school on that unit with its question open and carries the unit as the paper's aim: 2 presses from the list to the set. (commit b3581eb2 tv: Select on a recovery row opens its unit in Get ready for school with the question open; Back lands on that unit (RP1, MB-B9))"
   },
   {
     "id": "L1-radka-41-MB4-4",
@@ -2070,9 +2244,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "For a cz learner the panel offers task-shaped statements a parent recognises (e.g. 'simplify an expression with brackets', 'a construction with ruler and compasses'), mapped to the same codes; no 'Foundation paper' wording.",
-    "l2_priority": "Time a non-specialist typing the 16-question mock (C3, <= 15 min) and count questions left with no pick."
+    "l2_priority": "Time a non-specialist typing the 16-question mock (C3, <= 15 min) and count questions left with no pick.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/app/phone/PaperPanel.tsx:19-41 still offers only the GCSE statement list (statementChoices, library/gcse.ts) in UK wording for every school system; the find-by-words box (29) makes a statement findable, not understandable; no task-shaped or CERMAT list for a cz learner.",
+    "recurred_as": "L1-radka-41-MB4-1"
   },
   {
     "id": "L1-radka-41-MB4-5",
@@ -2100,9 +2278,12 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "An empty Scored reads as 'Type 0 if nothing was scored'; the TV score card says 'k questions left out on the phone' when the stored paper is smaller than the rows typed."
+    "suggested_acceptance": "An empty Scored reads as 'Type 0 if nothing was scored'; the TV score card says 'k questions left out on the phone' when the stored paper is smaller than the rows typed.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/paperEntry.ts:34 an empty Scored says 'Type 0 if nothing was scored.'; desk/src/tv/paperRows.ts:68-73 leftOutLine, drawn on the TV score card (MathsTV.tsx:766), says how many typed questions the phone left out. (commit ec8d3cc8 paper: an empty Scored or Out of box says what to type, not that it is not a whole number (MB-B22 part 1))"
   },
   {
     "id": "L1-radka-41-MB4-6",
@@ -2129,9 +2310,12 @@
     ],
     "code_check": "by-design",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "The caps are worded as the desk's limits ('The desk takes questions of up to 6 marks') and 'Foundation' is not shown to a cz learner."
+    "suggested_acceptance": "The caps are worded as the desk's limits ('The desk takes questions of up to 6 marks') and 'Foundation' is not shown to a cz learner.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/recovery.ts:91,96 caps worded as the desk's own ('The desk takes at most 6 marks for one question', '... at most 80 marks for one paper'); PaperPanel.tsx:36 and MathsTV.tsx:735 say 'a harder statement', not 'beyond a Foundation paper'. (commit 4e779dd2 paper: state the desk's own limits, never an exam tier (MB-B7 wording))"
   },
   {
     "id": "L1-radka-41-MB4-7",
@@ -2157,9 +2341,12 @@
     ],
     "code_check": "by-design",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "The tag says what to do with the disagreement ('The desk had this as secure; the paper says otherwise') or is replaced by a plain 'worth a recheck'."
+    "suggested_acceptance": "The tag says what to do with the disagreement ('The desk had this as secure; the paper says otherwise') or is replaced by a plain 'worth a recheck'.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/maths/MathsTV.tsx:752 a topic the record calls secure reads 'Worth a recheck' beside its lost marks; no 'Secure on the desk' string remains. (commit ccd5660f maths: a topic the desk had as secure reads Worth a recheck on a paper's recovery list (MB-B24 part 1))"
   },
   {
     "id": "L1-radka-41-MB4-8",
@@ -2185,9 +2372,12 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "The panel's heading and Send button name the seated learner."
+    "suggested_acceptance": "The panel's heading and Send button name the seated learner.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/app/phone/PaperPanel.tsx:15-16 paperHeading 'A paper <name> sat' and paperSend 'Send N questions to <name>'s record', used at 51 and 70. (commit eab8cfa9 MB-B43: the Paper panel's heading and Send button name the seated learner)"
   },
   {
     "id": "L1-radka-41-MB4-9",
@@ -2214,10 +2404,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "A set opened from the recovery carries the paper's lost statements as its aim; the equations prompt receives age and school system.",
-    "l2_priority": "set fit on a One-step equations set opened after the mock: on topic and at a 9. ročník level?"
+    "l2_priority": "set fit on a One-step equations set opened after the mock: on topic and at a 9. ročník level?",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/app/api/practice/route.ts:45,49 a set opened from a recovery row (Session.paperAim, set by keys.ts:543) is asked with aimOf(paper items, topic); desk/src/lib/desk/items.ts:86-104,205-212 learnerBlock gives age and system to every set prompt and aimBlock the lost statements to an equations set; a code-written unit's draw is steered by paperSteer (items.ts:209). (commit c4ba0b8f feat(maths): aim a set opened from a paper at the statements it lost)"
   },
   {
     "id": "L1-radka-41-MB4-10",
@@ -2278,11 +2471,14 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "The log (problems, hints, hard, minutes, started) is cleared at the start of a new day or after the recap is left, for every learner slot; a reducer test runs two evenings and asserts the second recap is 'A quiet evening.'",
     "l2_priority": "Two evenings live with a restart between: the second night's TV and phone recap.",
-    "scope_note": "orchestrator: same defect as L1-nela-12-MB5-2, found independently. No backlog match"
+    "scope_note": "orchestrator: same defect as L1-nela-12-MB5-2, found independently. No backlog match",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/session/store.ts:664-669 dayed() clears the log (and every away slot's) on the first event of a later day, session.end included; store.ts:679 reduce runs it. Scratch recap.cjs: day-1 log of 3 hints, day 2 End session first -> log.hints 0, 'A quiet evening.' The residual (phone opened before any event) is a new minor. (commit 9ee12486 M5 (MB-B12): the evening log is stamped with the local day it is first written and cleared by the first event of a later day, seated and away; session.end keeps it and records endedAt)"
   },
   {
     "id": "L1-radka-41-MB5-2",
@@ -2310,9 +2506,12 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "A homework session (pages read, hints, second hints) and a paper entered each write a digest entry; the Sunday page has a line for them ('Two homework sheets, 5 hints, 2 needed a second.')."
+    "suggested_acceptance": "A homework session (pages read, hints, second hints) and a paper entered each write a digest entry; the Sunday page has a line for them ('Two homework sheets, 5 hints, 2 needed a second.').",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/app/api/read/route.ts:56-58 a homework read writes a homework digest entry and desk/src/lib/session/learners.ts:486 a typed paper writes a paper entry; desk/src/lib/rules/week.ts:128-131,216 the Sunday page carries homework sheets, hints, second hints and papers. (commit 18789175 MB-B14: a homework sheet and a typed paper write the week; the Sunday page says them)"
   },
   {
     "id": "L1-radka-41-MB5-4",
@@ -2341,8 +2540,12 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
-    "suggested_acceptance": "The picks can be made on the phone (where the name is typed), or the TV rows start on the likely value (age row near the type's middle; course row skipped when the school path is the only sensible one)."
+    "recurrence": 2,
+    "suggested_acceptance": "The picks can be made on the phone (where the name is typed), or the TV rows start on the likely value (age row near the type's middle; course row skipped when the school path is the only sensible one).",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/tv/profileRows.ts:24,71-85 unchanged since 12592a71: the draft opens as high-school, the system defaults to United Kingdom with a blurb about progress only, the Maths course row (Calculus) sits between Interests and Save/Back; the phone's profile view edits only the name (app/phone/page.tsx:538).",
+    "recurred_as": "L1-radka-41-MB5-1"
   },
   {
     "id": "L1-radka-41-MB5-5",
@@ -2368,9 +2571,12 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "question(spec, system) prints the learner's decimal mark and a local currency for cz/de."
+    "suggested_acceptance": "question(spec, system) prints the learner's decimal mark and a local currency for cz/de.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/school.ts:1433-1436 question(spec, system) prints the cz decimal comma; school.ts:3613-3620 localMoney turns €/£/$ into Kč for cz in every SCHOOL_GENERATORS unit (3631-) and the pct-change top rung (3042); items.ts:450,522 pass the system. Scratch q.cjs/q2.cjs: 300 cz dec-arith items, 0 with £/€ or a decimal point ('Work out 17,70 Kč - 5,16 Kč.'). (commit eb00c8ee feat(maths): print code-written questions in the learner's decimals and money)"
   },
   {
     "id": "L1-radka-41-MB5-6",
@@ -2398,9 +2604,12 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "A blank typed answer is its own state ('skipped'), drawn and counted apart from the desk's doubt."
+    "suggested_acceptance": "A blank typed answer is its own state ('skipped'), drawn and counted apart from the desk's doubt.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/marks.ts:28 an unsure item with no answer is 'skipped'; rules/maths.ts:241 the history line counts ', s skipped' apart from 'not sure'; maths/MathsTV.tsx:860 titles it 'Number N was skipped'; tv/recapRows.ts:258-263 the recap line says 'N skipped'. (commit da50fc86 feat(maths): count skipped items apart from the desk's doubt)"
   },
   {
     "id": "L1-radka-41-MB5-7",
@@ -2428,8 +2637,12 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
-    "suggested_acceptance": "The phone Recap lists every learner with work tonight, one block each."
+    "recurrence": 2,
+    "suggested_acceptance": "The phone Recap lists every learner with work tonight, one block each.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "desk/src/tv/recapRows.ts:66-80 and app/phone/page.tsx:740-747 build the recap from the seated session only (s.history, s.log); neither reads s.away; the week (WeekPage s.week) is the seated learner's.",
+    "recurred_as": "L1-radka-41-MB5-2"
   },
   {
     "id": "L1-radka-41-MB5-8",
@@ -2456,9 +2669,12 @@
     ],
     "code_check": "present-but-missed",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "The unit line names the not-sure count when it is above 0."
+    "suggested_acceptance": "The unit line names the not-sure count when it is above 0.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "desk/src/lib/rules/week.ts:162-163 unitLine prints ', N not sure' (and ', N skipped') when above 0. (commit f47b8b41 MB5-8: the unit line names the last set's not-sure count when above 0)"
   },
   {
     "id": "L1-radka-41-MB5-9",
@@ -2521,9 +2737,13 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "On a snapped page, every item whose text contains an equation or an inequality in x has an oracle whatever the words around it (strip any leading instruction words, not only 'Label:'). A task the desk cannot check gets a stricter fallback: either refuse any line with a number not in the problem, or show the withheld line after a second leak-shaped line. A test pins Czech and English instruction forms ('Řešte rovnici …', 'Solve …', 'a) …').",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a Czech maturita worksheet (inequality, arithmetic sequence, line through two points, 'Řešte rovnici …' without a colon) and record whether the transcribed item keeps the instruction words. Then ask hint 1 and hint 2 on each and count lines that state the final answer (answer leak unit)."
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a Czech maturita worksheet (inequality, arithmetic sequence, line through two points, 'Řešte rovnici …' without a colon) and record whether the transcribed item keeps the instruction words. Then ask hint 1 and hint 2 on each and count lines that state the final answer (answer leak unit).",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "leaks() now adds the maturita readers and the unread-item fallback (desk/src/lib/rules/maths.ts:281-291, 314-317; desk/src/lib/rules/maturita.ts:80-106), so 19 of 25 probed lines are refused, but a listed sequence, a bare logarithm, a simplify item, a combination count and Czech inflected number words still pass. (commit 0a53e75e fix(desk,uat): UAT 2026-10-14 build items UD-4..7, 9-11, 13-24, 26 (partial: UD-26 maturita readers); earlier 119988a1 / c4d9ef75 MB-B2)",
+    "recurred_as": "L1-vojtech-18-MB1-1"
   },
   {
     "id": "L1-vojtech-18-MB1-2",
@@ -2552,9 +2772,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "A task that reads as no unit gets a neutral stance that names no unit (no 'factoring and linear-equations'). The teen voice names the learner's age or stage (16-19 'a secondary-school student preparing for a school-leaving exam') instead of '15'.",
-    "l2_priority": "Ask a hint on a snapped arithmetic-sequence and line task; judge whether the hint pushes a linear-equation method (hint helpfulness unit: next-step / generic / leak)."
+    "l2_priority": "Ask a hint on a snapped arithmetic-sequence and line task; judge whether the hint pushes a linear-equation method (hint helpfulness unit: next-step / generic / leak).",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "A maturita task no longer gets the linear-equations unit: stanceOf gives neutralStance (desk/src/lib/desk/hint.ts:87, 93-98), but that stance names no method and still calls him 'a 15-year-old' (desk/src/lib/rules/voice.ts:68-78). (commit 0599317f HL2: a maths task no reader reads gets a neutral stance that names no unit (partial))",
+    "recurred_as": "L1-vojtech-18-MB1-2"
   },
   {
     "id": "L1-vojtech-18-MB1-3",
@@ -2581,10 +2805,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "The read prompt names the learner's school system's number and point notation and says how lettered sub-items are numbered. A cz page with '2,5', 'A[1; 2]' and 'a)–f)' items reads at page read rate >= 0.9.",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a Czech worksheet with decimal commas, A[x; y] points, (a; b) intervals and a)–f) sub-items under one numbered instruction. Measure page read rate (problems read as printed / problems on the page) and whether the instruction ('Řešte v R') survives on each item."
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a Czech worksheet with decimal commas, A[x; y] points, (a; b) intervals and a)–f) sub-items under one numbered instruction. Measure page read rate (problems read as printed / problems on the page) and whether the instruction ('Řešte v R') survives on each item.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "mathsContext (desk/src/lib/desk/read.ts:27-48) carries his school system and cz notation, course, age, the printed language and a label for lettered parts; the route passes his profile (desk/src/app/api/read/route.ts:37, 41). (commit 50fd60a4 MB-B3: the maths read prompt carries the learner's school system, notation, course and age or stage)"
   },
   {
     "id": "L1-vojtech-18-MB1-4",
@@ -2611,10 +2838,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "The hint schema caps hint and what_to_try_next at 25 words each. A cz learner's Mic listens in cs-CZ, or the profile offers the hint language.",
-    "l2_priority": "Count words per hint and next line over 10 hints on his tasks (line length unit, share <= 25 words)."
+    "l2_priority": "Count words per hint and next line over 10 hints on his tasks (line length unit, share <= 25 words).",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Hint lines are capped at 25 words in code with one re-ask (desk/src/lib/desk/hint.ts:50, 170, 182-187), and the phone recogniser listens in cs-CZ for a cz learner (desk/src/app/phone/recogniserLang.ts:7-8, desk/src/app/phone/page.tsx:373). The three Point & ask presets stay English (page.tsx:680), which his expected line (plain English or Czech) allows. (commit d642c422 MB-B33 (length): maths hint lines are 25 words or fewer, checked in code with the one re-ask; 5a2135b9 MB-B33 (Mic): the phone's speech recogniser follows the seated learner's school system)"
   },
   {
     "id": "L1-vojtech-18-MB1-5",
@@ -2641,10 +2871,13 @@
     ],
     "code_check": "by-design",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "The phone's recap line adds 'k needed a second hint'.",
-    "l2_priority": "Render the recap after one second hint and confirm the lit lamp reads as 'needed a second hint' without a legend."
+    "l2_priority": "Render the recap after one second hint and confirm the lit lamp reads as 'needed a second hint' without a legend.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "The recap names hinted problems and which needed a second hint: hintedOf/hintedLine (desk/src/tv/recapRows.ts:112-125, 171-180), a named lamp per problem on the TV (desk/src/tv/screens.tsx:380-382) and the phone's line (desk/src/app/phone/page.tsx:747). (commit bf99e8ac feat(maths): name tonight's hinted problems in the recap rows (with 26e477c4, 92647c57))"
   },
   {
     "id": "L1-vojtech-18-MB1-6",
@@ -2733,10 +2966,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "readNumber strips one leading single-letter name or P(…) with '=' (c =, b =, P(A) =) as it strips 'x ='. The unsure said line never says 'something different' (e.g. 'The desk could not read number N as one value. How did you get there?').",
-    "l2_priority": "Type 'c = 34 mm' on a Pythagoras item and read the sheet's walk line aloud."
+    "l2_priority": "Type 'c = 34 mm' on a Pythagoras item and read the sheet's walk line aloud.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Executed rules/school check at cz: 'c = 34 mm', 'c=34mm', 'c = 34' are right on the 16/30 mm item, and 'P(A) = 3/13', 'P = 3/13' are right on the probability item (desk/src/lib/rules/school.ts:323 readNumber). 'odpověď: 34' is still unsure, with a neutral why line. (commit 69f9bc52 school: a right answer written with its name is read, one pattern at both reading sites (MK13, MB-B25))"
   },
   {
     "id": "L1-vojtech-18-MB2-3",
@@ -2764,11 +3000,14 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "For a learner past the path's end, the desk says so on Topics and Prepare (see MB2-5). Any 'step up' beyond tier 2 is named as still school-level.",
     "l2_priority": "A maths teacher rates the six step-up items on the three units against the maturita katalog (set fit unit).",
-    "scope_note": "Out of segment: no maturita path exists by design; the finding is that nothing raises the level for an 18-year-old."
+    "scope_note": "Out of segment: no maturita path exists by design; the finding is that nothing raises the level for an 18-year-old.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "A step up on Pythagoras, probability and percent change now has a top rung (decimals and rounding, without replacement and combined events, repeated and reverse changes; executed makeSchoolItems, desk/src/lib/desk/items.ts:495), the step-up line says it is 'still school level', and the path-end line says his year is past it (desk/src/tv/prepareRows.ts:108-112). The expected 'or a plain statement' half holds; the content is still 8.-9. ročník. (commit 1674fc48 feat(maths): say what the percent and Pythagoras step ups add and that they are still school level (with 9a669411, eea3fa97))"
   },
   {
     "id": "L1-vojtech-18-MB2-4",
@@ -2796,10 +3035,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "With nothing secure, Topics and Prepare open on min(expectedIndex, last) for the learner's age and system (the SCHOOL tick), not on the first topic.",
-    "l2_priority": "Open Teach me something as an 18-year-old cz profile and screenshot the first focused topic."
+    "l2_priority": "Open Teach me something as an 18-year-old cz profile and screenshot the first focused topic.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Executed on a cz age-18 profile: topicsFocus = 16 (desk/src/tv/keys.ts:206-213) and the Prepare door opens on the last topic via prepareDoorFocus (keys.ts:215-218, wired at :338). (commit 29cdfd86 maths: a learner past the end of the school path opens Topics and Prepare on the last topic, and the desk says the path ends (MB-B19))"
   },
   {
     "id": "L1-vojtech-18-MB2-5",
@@ -2827,10 +3069,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "When expectedOn equals the path length, Tonight's and Prepare's caption say in <= 25 words that the path ends before the learner's year (e.g. 'This path ends at 9. ročník; your year is past it.').",
-    "l2_priority": "Render Tonight and Prepare for an 18-year-old cz profile and read the captions."
+    "l2_priority": "Render Tonight and Prepare for an 18-year-old cz profile and read the captions.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "The Prepare door line is pathEndsLine(s) ?? PREPARE_DOOR (desk/src/maths/MathsTV.tsx:435); executed: 'This path ends at 9. ročník; your year is past it.' (desk/src/tv/prepareRows.ts:108-112). (commit 29cdfd86 maths: a learner past the end of the school path opens Topics and Prepare on the last topic, and the desk says the path ends (MB-B19))"
   },
   {
     "id": "L1-vojtech-18-MB2-6",
@@ -2856,10 +3101,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "A 'Type it' link is always beside the hold button; the recognition language follows the profile's system (cs-CZ for cz).",
-    "l2_priority": "On Chrome for Android, open an unsure item's walk and confirm no text box is offered."
+    "l2_priority": "On Chrome for Android, open an unsure item's walk and confirm no text box is offered.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "A 'Type it' button sits beside hold-to-speak (desk/src/app/phone/ExplainTalk.tsx:38) and the recogniser uses cs-CZ for a cz learner (desk/src/app/phone/recogniserLang.ts:7-8, page.tsx:373). (commit 632287e6 explain: a Type it button beside the hold button while a recogniser exists (X2, MB-B18))"
   },
   {
     "id": "L1-vojtech-18-MB2-7",
@@ -2886,10 +3134,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "For a pythagoras spec, the leak profile also refuses the squared answer (1156) and 'square root of <that>' / '√<that>'.",
-    "l2_priority": "Explain a wrong Pythagoras answer ten times and count replies that state the squared total or its root."
+    "l2_priority": "Explain a wrong Pythagoras answer ten times and count replies that state the squared total or its root.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Executed leaksSchool on the 16/30 mm item: 'the square root of 1156', 'c² = 16² + 30² = 1156, teď odmocni.', 'c je odmocnina z 1156.', 'c = √1156' all leak (desk/src/lib/rules/school.ts:2656); 'c squared is 1156.' passes by the X1a ruling (the total alone is not a leak). (commit 9def48b2 X1a: a Pythagoras line leaks when the squared total sits under a root or beside a root instruction)"
   },
   {
     "id": "L1-vojtech-18-MB2-8",
@@ -2916,9 +3167,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Handwriting read >= 0.9 on a cz sheet; no false tick.",
-    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a worked six on Pythagoras and probability written Czech-style ('c = 34 mm', '0,25', 'P(A) = 3/13', one wrong per set). Measure handwriting read, false ticks, false rings and unsure rate."
+    "l2_priority": "precondition: vision host (env.md, Math Buddy) — snap a worked six on Pythagoras and probability written Czech-style ('c = 34 mm', '0,25', 'P(A) = 3/13', one wrong per set). Measure handwriting read, false ticks, false rings and unsure rate.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "schoolPrompt (desk/src/lib/desk/mark.ts:146-158) still names neither his school system nor his notation; only the judge gets the system (mark.ts:186-192, 199-203). Handwriting reading is still unverified.",
+    "recurred_as": "L1-vojtech-18-MB2-1"
   },
   {
     "id": "L1-vojtech-18-MB2-9",
@@ -2945,10 +3200,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Every topic blurb <= 25 words; a test pins it.",
-    "l2_priority": "Read the Topics caption on the TV at 3 m."
+    "l2_priority": "Read the Topics caption on the TV at 3 m.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Executed over prepareStops for his profile: 0 of 17 school blurbs exceed 25 words; the three step-up lines are 25 words each and the path-end line 11 (desk/src/tv/prepareRows.ts). (commit 92889b66 school: every school topic blurb is 25 words or fewer, ratio-share withheld names the parts' total (SL3, SL2-c))"
   },
   {
     "id": "L1-vojtech-18-MB2-10",
@@ -2974,9 +3232,12 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
-    "suggested_acceptance": "A cz set uses Kč (or no currency); 'Kč' is a unit readNumber reads."
+    "suggested_acceptance": "A cz set uses Kč (or no currency); 'Kč' is a unit readNumber reads.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Executed at cz: the step-up percent-change set prints 'Increase 400 Kč by 34 %.' and 'A car is worth 4400 Kč ...'; '536 Kč' and '536 korun' are right (Kč in UNITS, desk/src/lib/rules/school.ts:148). '536 liber' is still unsure, which no longer matters once Kč is printed. (commit eb00c8ee feat(maths): print code-written questions in the learner's decimals and money)"
   },
   {
     "id": "L1-vojtech-18-MB2-11",
@@ -3002,10 +3263,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Either the reply is held to English, or Czech fraction and number words are read.",
-    "l2_priority": "Explain in Czech to an unsure item and see which language the reply comes back in."
+    "l2_priority": "Explain in Czech to an unsure item and see which language the reply comes back in.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Executed leaksSchool (desk/src/lib/rules/school.ts:2656): 'Pravděpodobnost je tři třináctiny.' leaks on the 3-of-13 item and 'Je to jedna pětina.' on a 1/5 item. (commit 42e666f7 X1b: one closed number-words table; the three leak checks read Czech cardinals and fraction words as figures)"
   },
   {
     "id": "L1-vojtech-18-MB4-1",
@@ -3033,10 +3297,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "paperCaption and the list fallback branch on v.lost: 'No marks were lost' only when lost is 0. With lost > 0 and no topic or statement: 'N marks were lost on questions that name no statement; pick what each tests on the phone.'",
-    "l2_priority": "Send a paper with three rows and no statements, and screenshot the TV."
+    "l2_priority": "Send a paper with three rows and no statements, and screenshot the TV.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "paperCaption and paperNone say 'No marks were lost' only when v.lost is 0 (desk/src/tv/paperRows.ts:108-127); executed on two unmapped questions with 6 lost: '6 marks were lost on questions that name no statement. Pick what each one tests on the phone.' (commit 9875e783 paper: say 'No marks were lost' only when none were (MB-B15))"
   },
   {
     "id": "L1-vojtech-18-MB4-2",
@@ -3069,9 +3336,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "A statement's partial touch does not lead the list: the caption names the first topic only when it carries the largest single loss on the paper, and says 'part of' for a partial touch. A statement whose wording goes beyond the topic (volume, trigonometry) is listed under 'Not on the desk yet' as well.",
-    "l2_priority": "Enter the 25-row maturita paper on the phone and read the TV caption and the first two rows."
+    "l2_priority": "Enter the 25-row maturita paper on the phone and read the TV caption and the first two rows.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "G17 still touches ['area'], G20 ['pythagoras'], N1 ['frac-equivalent'] (desk/src/lib/library/gcse.ts:114, 117, 41); executed: a cylinder-volume question under G17 makes the caption 'Start with Area of rectangles, triangles and composite shapes', and an inequality under N1 'Start with Equivalent fractions'. A4 now touches nothing (gcse.ts:60).",
+    "recurred_as": "L1-vojtech-18-MB4-1"
   },
   {
     "id": "L1-vojtech-18-MB4-3",
@@ -3098,10 +3369,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "The score card adds 'N of M lost marks are not on the desk yet', and the off card can be walked like the topic list.",
-    "l2_priority": "Read the TV after the 25-row paper and ask whether a teacher can tell where most marks went."
+    "l2_priority": "Read the TV after the 25-row paper and ask whether a teacher can tell where most marks went.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "offCountLine says 'N of M lost marks are not on the desk yet.' (desk/src/tv/paperRows.ts:60-65), rendered on the score card (desk/src/maths/MathsTV.tsx:719), and every off-desk statement is walked by name after the topics. (commit 1faea42d paper: every off-desk statement walked by name after the topics; the score card counts them; Foundation first on a tie (RP3, MB-B13))"
   },
   {
     "id": "L1-vojtech-18-MB4-4",
@@ -3128,10 +3402,13 @@
     ],
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Select on a topic row opens Prepare focused on that unit with the question asked (2 presses to a set). Back lands on the lit topic's unit.",
-    "l2_priority": "Count presses from the paper screen to practice.set live."
+    "l2_priority": "Count presses from the paper screen to practice.set live.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Select on a topic row navigates to prepare on that unit with its question open, and Back/Menu land on that unit (desk/src/tv/keys.ts:534-545). Back from an off-desk row still lands on focus 0 (filed as a new row). (commit b3581eb2 tv: Select on a recovery row opens its unit in Get ready for school with the question open; Back lands on that unit (RP1, MB-B9))"
   },
   {
     "id": "L1-vojtech-18-MB4-5",
@@ -3160,10 +3437,14 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "The picker offers a short area-level choice first (numbers, equations, functions, sequences, geometry, probability and statistics), with the statements as an optional refinement. The tier flag reads 'harder than this list covers'.",
     "l2_priority": "Time a B1 reader picking statements for 10 maturita questions.",
-    "scope_note": "Out of segment: the map is GCSE Foundation by owner decision; the cost falls on a non-UK learner."
+    "scope_note": "Out of segment: the map is GCSE Foundation by owner decision; the cost falls on a non-UK learner.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "The picker still lists the GCSE statements in GCSE wording (desk/src/lib/library/gcse.ts:39-136, e.g. P6 at :128), with no logarithm, domain or quadratic-inequality statement; the flag now reads '(a harder statement)' (desk/src/app/phone/PaperPanel.tsx:36) and areas fold with a Find-by-words box (:27-28).",
+    "recurred_as": "L1-vojtech-18-MB4-2"
   },
   {
     "id": "L1-vojtech-18-MB4-6",
@@ -3191,8 +3472,12 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 1,
-    "suggested_acceptance": "Each topic row names the statement's can text it came through."
+    "recurrence": 2,
+    "suggested_acceptance": "Each topic row names the statement's can text it came through.",
+    "recertify_run": "2026-10-09-maths-l1/recert-1",
+    "recertify_status": "recurs",
+    "recertify_evidence": "RecoveryTopic.codes is still built (desk/src/lib/rules/recovery.ts:63) and dropped by paperView (desk/src/tv/paperRows.ts:39-40: id, name, lost, from, secure, shared); no screen reads it.",
+    "recurred_as": "L1-vojtech-18-MB4-3"
   },
   {
     "id": "L1-vojtech-18-MB4-7",
