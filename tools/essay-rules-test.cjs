@@ -1746,3 +1746,35 @@ test('L1-helena-46-EM1-1: the Language fallback for a faulty sentence with no fi
  const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
  assert.ok(tv.includes('t.from.id === "split" ? "language" : "playbook"'),'the TV labels the Language fallback as a language move');
 });
+
+// ---- who is writing and what the paragraph answers (recert-5/L1-kristyna-17-EM1-2, L1-helena-46-EM1-2, L1-kristyna-17-EM1-4)
+test('READER: an Adult-mode reading names an adult writer, no age and no "student"; a teen is named by real age or as a teenager',async()=>{
+ const V=require(path.join(root,'src/lib/rules/voice.ts'));
+ const sys=async(age,reader)=>{seen=[];answer=()=>({json:{observations:[]}});await analyseEssay('Homework is pointless.','evidence','essay-reader',age,reader).catch(()=>{});return seen[0].system;};
+ const adult=await sys(undefined,{mode:'adult'});
+ assert.match(adult,/writing tutor for an adult writer\./);
+ assert.doesNotMatch(adult,/student|\d+-year-old|teenager/i,'adult prompt: no age, no student');
+ const adult30=await sys(30,{mode:'adult'});
+ assert.doesNotMatch(adult30,/student|\d+-year-old|teenager/i);
+ const k=await sys(17,{});
+ assert.match(k,/writing tutor for a 17-year-old\./);assert.doesNotMatch(k,/15-year-old/);
+ assert.match(await sys(undefined,{}),/writing tutor for a teenager\./);
+ assert.match(await sys(18,{}),/for an 18-year-old\./);
+});
+test('READER: a given task reaches the prompt as data labelled as the task; none given adds no row',async()=>{
+ const run=async(reader)=>{seen=[];answer=()=>({json:{observations:[]}});await analyseEssay('Homework is pointless.','evidence','essay-reader',17,reader).catch(()=>{});return seen[0];};
+ const withTask=await run({task:'Discuss whether homework should be abolished.'});
+ assert.match(withTask.prompt,/The task the writing answers[^\n]*\n?[^\n]*Discuss whether homework should be abolished\./);
+ assert.match(withTask.system,/task the writing answers is given beside the sentences as data/);
+ const none=await run({});
+ assert.doesNotMatch(none.prompt,/The task the writing answers/);assert.doesNotMatch(none.system,/task the writing answers/);
+});
+test('READER: maths and english voices are byte-identical whatever the mode, and the essay teen no longer reads 15 for everyone',()=>{
+ const V=require(path.join(root,'src/lib/rules/voice.ts'));
+ for(const subject of ['maths','english'])for(const age of [undefined,null,10,12,13,14,15,17,18,25])
+  assert.deepEqual(V.voiceOf(subject,age,'adult'),V.voiceOf(subject,age),`${subject} at ${age}`);
+ assert.deepEqual(V.voiceOf('maths'),{band:'teen',who:'a 15-year-old',manner:''});
+ assert.deepEqual(V.voiceOf('english'),{band:'teen',who:'a Czech teenager',manner:''});
+ assert.equal(V.voiceOf('maths',17).who,'a 17-year-old');
+ assert.equal(V.voiceOf('essay',12).who,'a learner aged 11 to 13','the young essay voice is untouched');
+});

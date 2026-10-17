@@ -10,12 +10,13 @@ import { BUSY, blocksRun, refused, runJob, type JobRun } from "@/lib/desk/job";
 import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, type AnalysisType } from "@/lib/rules/essay";
 import { addPiece, addVersion, FORMAT_NEEDED_LINE, hasFormat, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { learnerAge } from "@/lib/rules/voice";
+import { modeOf } from "@/lib/rules/mode";
 import { sentenceProblem } from "@/lib/rules/english";
 
 export const dynamic = "force-dynamic";
-type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: string; type: AnalysisType } | { kind: "rewrite"; n: number; text: string }
+type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: string; type: AnalysisType; task?: string } | { kind: "rewrite"; n: number; text: string }
   | { kind: "piece-again" }
-  | { kind: "piece"; text: string; type: AnalysisType; keep?: boolean; pieceId?: string; source?: string; format?: string };
+  | { kind: "piece"; text: string; type: AnalysisType; keep?: boolean; pieceId?: string; source?: string; format?: string; task?: string };
 
 /** E3-b: a reading refused before any run with a line for the learner says the line on the TV's status line too, whichever door sent it. */
 /** A refusal said before any run: on the session as the status, and as an essay refusal when it is one (the essay screens caption it). */
@@ -41,6 +42,11 @@ function readingStands(run: JobRun, owner: string): boolean {
   return job === undefined || job.by !== owner;
 }
 
+/** The longest task the reading carries; the rest is cut, never refused. */
+const TASK_MAX = 400;
+/** The task the paragraph answers, when the send names one: a plain trimmed string, or nothing. */
+const taskOf = (t: unknown): string | undefined => (typeof t === "string" && t.trim() ? t.trim().slice(0, TASK_MAX) : undefined);
+
 export async function POST(req: Request) {
   // a body that is not one of the readings is refused in desk words before any run: never a 500, never a failed job
   const body = (await req.json().catch(() => null)) as Body | null;
@@ -52,6 +58,9 @@ export async function POST(req: Request) {
   const who = getSession().learner;
   // the tutor's voice fits the seated profile's age (rules/voice); no age known speaks as it always has
   const age = learnerAge(getSession());
+  // and the profile's mode: an Adult-mode reading names an adult writer, never a student (rules/voice)
+  const seated = getSession();
+  const mode = modeOf(seated.profiles?.find((p) => p.id === seated.learner?.id), seated.englishLearning?.preferences ?? undefined);
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   if (body.kind === "english") {
     const r = await runJob("analyse", async () => {
@@ -76,7 +85,7 @@ export async function POST(req: Request) {
     // a rewrite that was read but whose history line did not save still succeeds, and says so (as SETTLE_NOT_SAVED does)
     let notSaved: string | undefined;
     const r = await runJob("analyse", async () => {
-      const next = await reviseSentence(a, n, body.text, age, who.id, (line) => { notSaved = line; });
+      const next = await reviseSentence(a, n, body.text, age, who.id, (line) => { notSaved = line; }, { mode });
       // a paragraph read or a reset since the rewrite was asked leaves the desk as it is now
       if (getSession().essay === a) dispatch({ type: "essay.revised", analysis: next, n });
       return next;
@@ -93,7 +102,7 @@ export async function POST(req: Request) {
     if (problem || !a) return NextResponse.json({ error: problem }, { status: 400 });
     let notSaved: string | undefined;
     const r = await runJob("analyse", async (run) => {
-      const done = await analysePieceAgain(a, who.id, age, (line) => { notSaved = line; });
+      const done = await analysePieceAgain(a, who.id, age, (line) => { notSaved = line; }, { mode });
       // one report, when the piece is ruled; a reading replaced since leaves the desk as it is now
       if (readingStands(run, who.id) && getSession().essay === a) dispatch({ type: "essay.progress", analysis: done, owner: who.id });
       return done;
@@ -132,7 +141,7 @@ export async function POST(req: Request) {
         // the first paragraph back opens the reading; the rest grow it where the learner is
         dispatch(first ? { type: "essay.set", analysis: a, owner: who.id } : { type: "essay.progress", analysis: a, owner: who.id });
         first = false;
-      }, pieceId, body.format);
+      }, pieceId, body.format, { mode, task: taskOf(body.task) });
       // the piece is recorded once it is all read, after the last paragraph's progress: say so, so the session's history
       // and the Sunday page are read again (store.ts REHYDRATE)
       if (goes()) dispatch({ type: "essay.progress", analysis: done, owner: who.id });
@@ -150,7 +159,7 @@ export async function POST(req: Request) {
   if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });
   const r = await runJob("analyse", async () => {
     dispatch({ type: "essay.type", essayType: body.type, owner: who.id });
-    const a = await analyseEssay(body.text, body.type, who.id, age);
+    const a = await analyseEssay(body.text, body.type, who.id, age, { mode, task: taskOf(body.task) });
     dispatch({ type: "essay.set", analysis: a, owner: who.id });
     return a;
   }, { key: "essay", start: `reading your paragraph — ${body.type} lens…`, done: (a) => a.summary.slice(0, 120) });
