@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 import { EssayShelf, TextNotice } from "../phone/EssayShelf";
 
 type Words = { dim: string; level: number; word: string }[];
-interface TwinView { adult: boolean; born: boolean; need: number; channels: { channel: string; pieces: number; born: boolean; words: Words; exemplars: { pieceId: string; text: string; included: boolean }[] }[] }
+interface TwinView { born: boolean; need: number; channels: { channel: string; pieces: number; born: boolean; words: Words; exemplars: { pieceId: string; text: string; included: boolean }[] }[] }
 const FORMATS = [["message", "Message (chat)"], ["email", "Email"], ["essay", "Essay"]] as const;
 const CH = { chat: "Messages", email: "Emails", generic: "Essays" } as Record<string, string>;
 const MAX_FILE = 150 * 1024;
@@ -87,7 +87,7 @@ export default function DropPage() {
         <div className="row"><button onClick={() => void keep()} disabled={!docx && !text.trim()} data-role="drop-keep">Keep it</button>{say && <span aria-live="polite">{say}</span>}</div>
       </section>
       <section><EssayShelf learnerId={who ?? undefined} refresh={tick} onOpen={(id, t) => { setPieceId(id); setText(t); setDocx(null); }} /></section>
-      <section data-role="drop-twin"><h2>Your twin</h2>
+      {twin && <section data-role="drop-twin"><h2>Your twin</h2>
         <p>Your twin learns how you write from the messages and emails you keep, and travels as a <b>Twin Card</b>: a file any tool can load to draft in your voice. The card carries up to five of your own texts as samples, you review which ones, and quoted replies from other people are left out.</p>
         {twin && twin.channels.length ? twin.channels.map((c) => (
           <div key={c.channel} className="twin-ch">
@@ -97,9 +97,9 @@ export default function DropPage() {
               <ul>{c.exemplars.map((e) => <li key={e.pieceId}><label><input type="checkbox" checked={e.included} onChange={(ev) => void toggle(e.pieceId, !ev.target.checked)} /> {e.text}</label></li>)}</ul></>}
           </div>
         )) : <p>Keep three messages (or three emails) to bring your twin to life.</p>}
-        {twin?.born && (twin.adult ? <a className="btn" href="/api/twin/card" data-role="drop-card">Download your Twin Card</a> : <p>The Twin Card download is for Adult mode (18 and over).</p>)}
+        {twin.born && <a className="btn" href="/api/twin/card" data-role="drop-card">Download your Twin Card</a>}
         <div className="row"><button className="secondary" onClick={() => void showOnTv()}>Show the Workroom on the TV</button></div>
-      </section>
+      </section>}
     </main>
   );
 }

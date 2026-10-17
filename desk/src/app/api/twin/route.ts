@@ -17,11 +17,13 @@ import { workroomOf } from "@/lib/twin/workroom";
 import { modeOf } from "@/lib/rules/mode";
 
 export const dynamic = "force-dynamic";
+/** The desk's learner, and only when Adult mode is on for them: the twin is not offered in Family mode or under 18 (L1-helena-46-EM5-9). */
 function seated(): { id: string; adult: boolean } | NextResponse {
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const p = s.profiles.find((x) => x.id === who.id);
-  return { id: who.id, adult: modeOf(p, s.englishLearning?.preferences ?? undefined) === "adult" };
+  if (modeOf(p, s.englishLearning?.preferences ?? undefined) !== "adult") return NextResponse.json({ error: "The twin is for Adult mode (18 and over)." }, { status: 403 });
+  return { id: who.id, adult: true };
 }
 
 export async function GET(req: Request) {

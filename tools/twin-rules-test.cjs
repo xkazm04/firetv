@@ -124,7 +124,16 @@ test('routes: born at three, the card only for Adult mode on a phone or PC, the 
   const kid = makeProfile({ id: 'kid', name: 'Ema', type: 'high-school', age: 13 });
   await keepAll(MSG.slice(0, 3));
   assert.equal((await cardRoute.GET(R('/api/twin/card', 'GET'))).status, 403, 'family mode: no card');
-  const kidView = await (await twin.GET(R('/api/twin', 'GET'))).json(); assert.equal(kidView.adult, false); assert.equal(kidView.born, true);
+  for (const [m, url, body] of [['GET', '/api/twin'], ['POST', '/api/twin', { open: true }], ['POST', '/api/twin', { exclude: 'x', on: true }]]) {
+    for (const role of ['phone', 'tv', null]) assert.equal((await twin[m](R(url, m, body, role))).status, 403, `13-year-old: ${m} ${role} refused`);
+  }
+  assert.notEqual(getSession().screen, 'workroom', 'a refused call opens no Workroom');
+  await texts.DELETE(R('/api/texts?all=1', 'DELETE'));
+  makeProfile({ id: 'eva', name: 'Eva', type: 'other', age: 30, mode: 'family' });
+  await keepAll(MSG.slice(0, 3));
+  assert.equal((await twin.GET(R('/api/twin', 'GET'))).status, 403, '18+ in Family mode: no twin');
+  assert.equal((await twin.POST(R('/api/twin', 'POST', { open: true }, 'tv'))).status, 403, '18+ in Family mode: the TV neither');
+  assert.equal((await cardRoute.GET(R('/api/twin/card', 'GET'))).status, 403);
   await texts.DELETE(R('/api/texts?all=1', 'DELETE'));
 
   const me = makeProfile({ id: 'martin', name: 'Martin Novák', type: 'other', mode: 'adult' });
