@@ -53,3 +53,28 @@ A live recert may call this verified only if:
 - the focus of the verdict for hana-41 and martin-45 is no longer a trivial or listen-borne slip.
 
 Until then the status is built, not live-verified.
+
+## 6. LG-55 fourth pass: an aim that is a real situation asks that situation's own question (1ee71f8c)
+
+Added after the fact from commit 1ee71f8c, `docs/BACKLOG.md` (LG-55 4th pass) and the recert notes. Source files: `desk/src/lib/english/check.ts`, `desk/src/lib/english/placement.ts`. Where they show no reason or no alternative, this section says "not recorded".
+
+**Constraint.** The third pass worked: in the third recert (`docs/uat-insights/2026-10-17-lt-recert-third-pass.md`, section 1) a task for the first time carried oksana-34's interview aim. But the task was a hypothetical opinion: "Which impresses an employer more: a big problem fixed quickly, or a small one solved creatively? Why?" The judge, `recert-3/LT-oksana-34-J1-4` (minor, recurrence 4): "not a real interview question". Her own voice: she wanted real questions like "tell me about a time...". The note counts it as "still recurs; the goal now reaches a task, in a wrong shape". The aim-level rule (section 2) decides which aim a task is set in, not what the task asks, so the model was free to write an opinion about the situation.
+
+**Decision.** `goalTask(aim)` (now exported) and the single goal re-ask in `advance()` (`check.ts`) append an instruction when `questionSituation(aim)` is true. The instruction: where the aim is a real situation with its own questions (an interview, an exam, a call, a meeting), the prompt is the question that situation actually asks, worded as the other person would say it (for an interview: "Tell me about a time you solved a problem at work."), never an opinion or comparison about it. `questionSituation` (`placement.ts`) is a word list: interview, exam, test, call, meeting, appointment, presentation, check-in (plural and hyphen forms). An aim with none of these gets today's text unchanged.
+
+**Alternatives that lost.**
+- A synonym or model-based test of whether an aim is a real situation: not recorded as considered. The commit says only "a short word list"; the backlog adds "no synonyms".
+- Applying the instruction to every aim: not recorded. The commit gates it on the word list and pins that a plain aim keeps today's text.
+- A code check that rejects an opinion-shaped prompt after the fact: not recorded. The change is a prompt instruction only.
+- Hard-coding the interview question in code: not recorded.
+
+**Evidence.**
+- Origin: `recert-3/LT-oksana-34-J1-4` (third pass, section 1), and the earlier `LT-oksana-34-J1-1` (second pass: "no task is an interview question").
+- Rule test `LG-55 4th pass: an interview or call aim gets the real-question instruction, an aim with no such situation keeps today's text` (`tools/linga-rules-test.cjs`, added in 1ee71f8c). It asserts that `goalTask` on the interview aim contains "the question that situation actually asks", "Tell me about a time you solved a problem at work" and "never an opinion"; that a calls aim gets the same; that `travel to Spain and order food` yields exactly today's text; and that `questionSituation` is true for "Friday interview" and "an exam", false for "read novels". The commit does not say whether the test was red first.
+- Recert-4 (`docs/uat-insights/2026-10-17-lt-recert-sofie-11.md`, section (c)) ran on product commit 31493cc5, which contains 1ee71f8c (checked with `git merge-base --is-ancestor`). For sofie-11, task 5 asks a real situation's question ("They ask, 'What did you do in the game today?'"). The note itself says: "I cannot tell from the transcript that the goal-aim rule produced task 5; it fits the aim either way." It is not evidence that the rule fired.
+
+**Not verified.**
+- No recert of oksana-34 since 1ee71f8c, so the interview case that forced the change has not been re-observed. The backlog says "Not live-verified".
+- The test pins the instruction text sent to the model, not what the model then writes.
+- The word list is closed: an aim phrased without one of those words (for example "a talk with my boss") gets no instruction.
+- Whether a real-question prompt costs or helps placement accuracy: not recorded.
