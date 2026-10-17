@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 
 export interface ShelfCard { id: string; format: string; title: string; versions: number; paragraphs: number; updated: number; }
 
+const FORMAT_LABEL: Record<string, string> = { message: "Message", email: "Email", essay: "Essay" };
 const when = (at: number) => new Date(at).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 
 export function EssayShelf({ learnerId, refresh, onOpen }: { learnerId: string | undefined; refresh: number; onOpen: (id: string, text: string) => void }) {
@@ -39,7 +40,7 @@ export function EssayShelf({ learnerId, refresh, onOpen }: { learnerId: string |
       <b>Your shelf</b>
       {cards.length ? <ul>{cards.map((c) => (
         <li key={c.id} data-role="essay-shelf-piece">
-          <span><b>{c.title}</b><small>{c.paragraphs} paragraph{c.paragraphs === 1 ? "" : "s"} · version {c.versions} · {when(c.updated)}</small></span>
+          <span><b>{c.title}</b><small data-role="essay-shelf-format">{FORMAT_LABEL[c.format] ?? c.format} · {c.paragraphs} paragraph{c.paragraphs === 1 ? "" : "s"} · version {c.versions} · {when(c.updated)}</small></span>
           <button className="pbtn" data-secondary="true" onClick={() => void open(c.id)}>Open</button>
           <button className="pbtn" data-secondary="true" aria-label={`Delete ${c.title}`} onClick={() => void remove(`id=${encodeURIComponent(c.id)}`, "Deleted.")}>Delete</button>
         </li>))}</ul> : <p>Nothing kept yet. Pieces you read on the TV with "Keep it on my shelf" land here.</p>}

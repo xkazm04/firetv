@@ -655,7 +655,7 @@ test('P17 (ii) a reply that returns after the learner changed sets no state but 
  const src=fs.readFileSync(PAGE,'utf8');
  const cut=(from,to)=>{const a=src.indexOf(from),e=src.indexOf(to,a);assert.ok(a>0&&e>a,`${from} is where the test expects it`);return src.slice(a,src.lastIndexOf('\n',e));};
  const SETTERS=['Busy','Msg','Phase','Note','Info','Notice','ReadIx','PieceId','ShelfTick','Q','Paras','Stranded'];
- const PARAMS=['s','seat','call','post','shot','busy','typed','document','HTMLElement','onPlan','onSentence','slotText','rewrite','planFill','paras','pieceProblem','etype','keep','pieceId','source','essay','paragraphsOf','essayTooLong','pix','page','q','sentence','writeRewriteBack','rewriteStaysLine','stranded',...SETTERS.map((n)=>'set'+n)];
+ const PARAMS=['s','seat','call','post','shot','busy','typed','document','HTMLElement','onPlan','onSentence','slotText','rewrite','planFill','paras','pieceProblem','etype','keep','pieceId','source','pieceFormat','essay','paragraphsOf','essayTooLong','pix','page','q','sentence','writeRewriteBack','rewriteStaysLine','stranded',...SETTERS.map((n)=>'set'+n)];
  const reply=(body,ok=true,status=200)=>Promise.resolve({ok,status,json:async()=>body});
  const gate=()=>{let open;const p=new Promise((r)=>{open=r;});return {p,open};};
  // build one handler; `respond(url, body)` is the network
@@ -666,7 +666,7 @@ test('P17 (ii) a reply that returns after the learner changed sets no state but 
   const rec=(k)=>(v)=>calls.push([k,typeof v==='function'?'fn':v]);
   const stubs={s:{practice:{items:[{n:10}]},walkIx:0,itemIx:0},seat,call:(u,b)=>{urls.push([u,b]);return respond(u,b);},post:(e)=>{urls.push(['post',e]);return respond('post',e);},shot:{url:'u',w:1,h:2},busy:false,typed:['a','b'],
    document:{activeElement:null},HTMLElement:class{},onPlan:{i:0,plan:{}},onSentence:{n:2},slotText:'slot',rewrite:'rw',planFill:()=>({ok:true}),paras:['one','two'],pieceProblem:()=>'',
-   etype:'structure',keep:true,pieceId:'p1',source:'message',essay:'one',paragraphsOf:(x)=>[x],essayTooLong:()=>'',pix:0,page:{items:[]},q:'why',sentence:'I go.',writeRewriteBack:()=>({paras:['one','two'],written:true,line:''}),rewriteStaysLine:()=>'',stranded:0};
+   etype:'structure',keep:true,pieceId:'p1',source:'message',pieceFormat:'message',essay:'one',paragraphsOf:(x)=>[x],essayTooLong:()=>'',pix:0,page:{items:[]},q:'why',sentence:'I go.',writeRewriteBack:()=>({paras:['one','two'],written:true,line:''}),rewriteStaysLine:()=>'',stranded:0};
   const out=f(...PARAMS.map((p)=>p.startsWith('set')&&SETTERS.includes(p.slice(3))?rec(p.slice(3)):stubs[p]));
   return {fn:out[name],calls,urls,seat,mark:()=>calls.length};
  };

@@ -20,7 +20,7 @@ export default function DropPage() {
   const [who, setWho] = useState<string | null>(null);
   const [code, setCode] = useState("");
   const [say, setSay] = useState("");
-  const [format, setFormat] = useState<string>("message");
+  const [format, setFormat] = useState<string>("");
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [docx, setDocx] = useState<{ name: string; b64: string } | null>(null);
@@ -77,14 +77,14 @@ export default function DropPage() {
       <h1>Study Desk · {who ? `${who}'s writing` : "your writing"}</h1>
       {!who && <p className="bad">No one is at the desk yet. Choose a learner on the TV first.</p>}
       <section><h2>Keep a piece</h2>
-        <div className="row">{FORMATS.map(([id, label]) => <label key={id}><input type="radio" name="format" checked={format === id} onChange={() => setFormat(id)} /> {label}</label>)}</div>
+        <div className="row" role="radiogroup" aria-label="What is it?" data-role="drop-format">{FORMATS.map(([id, label]) => <label key={id}><input type="radio" name="format" checked={format === id} onChange={() => setFormat(id)} /> {label}</label>)}</div>
         <div className="row"><input placeholder="Title (optional)" value={title} onChange={(e) => setTitle(e.target.value)} />
           <label className="file">Choose a file (.txt, .md, .docx)<input type="file" accept=".txt,.md,.docx,text/plain,text/markdown,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void pick(f); }} data-role="drop-file" /></label></div>
         {docx ? <p>Ready: <b>{docx.name}</b> (its text is read on the desk; the file is not kept).</p>
           : <textarea rows={10} placeholder="Or paste a message, an email or an essay you wrote" value={text} onChange={(e) => setText(e.target.value)} data-role="drop-text" />}
         {pieceId && <p>Editing a kept piece: keeping it again adds a new version. <button className="link" onClick={() => setPieceId(undefined)}>Keep as a new piece instead</button></p>}
         {notice !== null && <TextNotice text={notice} onAccept={() => void accept()} onDecline={() => setNotice(null)} />}
-        <div className="row"><button onClick={() => void keep()} disabled={!docx && !text.trim()} data-role="drop-keep">Keep it</button>{say && <span aria-live="polite">{say}</span>}</div>
+        <div className="row"><button onClick={() => void keep()} disabled={(!docx && !text.trim()) || (!format && !pieceId)} data-role="drop-keep">Keep it</button>{say && <span aria-live="polite">{say}</span>}</div>
       </section>
       <section><EssayShelf learnerId={who ?? undefined} refresh={tick} onOpen={(id, t) => { setPieceId(id); setText(t); setDocx(null); }} /></section>
       {twin && <section data-role="drop-twin"><h2>Your twin</h2>

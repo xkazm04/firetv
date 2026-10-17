@@ -100,6 +100,8 @@ export default function Phone() {
   const [source, setSource] = useState<"file" | "paste" | "message">("message");
   const [pieceId, setPieceId] = useState<string | undefined>(undefined);
   const [keep, setKeep] = useState(true);
+  /** What the kept piece is; nothing is preselected, so a keep waits for a choice (recert-5/L1-helena-46-EM5-2). */
+  const [pieceFormat, setPieceFormat] = useState("");
   const [notice, setNotice] = useState<string | null>(null);
   /** Which read the one-time notice interrupted: the whole piece (kept on the shelf) or the single paragraph showing. */
   const [noticeFor, setNoticeFor] = useState<"piece" | "paragraph">("piece");
@@ -282,10 +284,11 @@ export default function Phone() {
   const readPiece = async (keepIt = keep) => {
     const whole = paras.join("\n\n"), problem = pieceProblem(whole);
     if (problem) return setNote(problem);
+    if (keepIt && !pieceId && !pieceFormat) return setNote("Choose message, email or essay before you keep it.");
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNote(""); setInfo(""); setBusy(true); setMsg(stranded ? `${rewriteStaysLine(stranded)} The desk is reading your piece…` : "the desk is reading your piece…");
     try {
-      const r = await call("/api/analyse", { kind: "piece", text: whole, type: etype, keep: keepIt, pieceId, source });
+      const r = await call("/api/analyse", { kind: "piece", text: whole, type: etype, keep: keepIt, pieceId, source, ...(pieceFormat ? { format: pieceFormat } : {}) });
       const j = await r.json().catch(() => ({} as { error?: string; notice?: boolean; piece?: { pieceId?: string } }));
       if (moved()) return;
       if (r.status === 428 && (j as { notice?: boolean }).notice) { setMsg(""); setNotice((j as { error?: string }).error ?? ""); return; }
@@ -731,6 +734,7 @@ export default function Phone() {
           {notice !== null && <TextNotice text={notice} mode={noticeFor} onAccept={() => void (noticeFor === "paragraph" ? acceptParagraphNotice() : acceptNotice())} onDecline={() => { setNotice(null); if (noticeFor === "piece") { setKeep(false); void readPiece(false); } }} />}
           {paras.length > 1 && <div className="field" data-role="essay-piece">
             <label className="pkeep"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} data-role="essay-keep" /><span>Keep it on my shelf</span></label>
+            {keep && !pieceId && <div className="pkeep" role="radiogroup" aria-label="What is it?" data-role="essay-format">{([["message", "Message"], ["email", "Email"], ["essay", "Essay"]] as const).map(([id, label]) => <label key={id}><input type="radio" name="piece-format" checked={pieceFormat === id} onChange={() => setPieceFormat(id)} data-role={`essay-format-${id}`} /><span>{label}</span></label>)}</div>}
             {stranded > 0 && <p className="pnote" data-role="essay-rewrites-stay" aria-live="polite">{rewriteStaysLine(stranded)}</p>}
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()))}>Dictate</button>

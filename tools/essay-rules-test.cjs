@@ -832,7 +832,7 @@ test('a piece sent to be kept while a reading is running is refused BUSY before 
  assert.equal(getSession().jobs?.analyse?.phase,'running');
  const had=texts.listPieces('ema').length;
  for(let k=0;k<2;k++){
-  const r=await analyse({kind:'piece',text:'First paragraph is here and it is in English.\n\nSecond paragraph is also English text.',type:'evidence',keep:true});
+  const r=await analyse({kind:'piece',text:'First paragraph is here and it is in English.\n\nSecond paragraph is also English text.',type:'evidence',keep:true,format:'essay'});
   assert.equal(r.status,409);deskWorded((await r.json()).error);
  }
  assert.equal(texts.listPieces('ema').length,had,'two refused sends kept no piece');

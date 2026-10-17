@@ -36,6 +36,9 @@ const fail = (error: string, status = 400): { ok: false; error: string; status: 
 /** Ids become path parts, so only plain ids pass: a learner id as the store mints them, a piece id as this file does. */
 const LEARNER_ID = /^[A-Za-z0-9_-]{1,64}$/, PIECE_ID = /^t-[a-f0-9]{12}$/;
 const FORMAT = /^[a-z][a-z0-9-]{0,23}$/;
+/** A keep from the phone or /drop must name its format: no format is never read as an essay (recert-5/L1-helena-46-EM5-2). addPiece itself still defaults to essay for callers that predate this. */
+export const FORMAT_NEEDED_LINE = "Choose message, email or essay before you keep it.";
+export const hasFormat = (f: unknown): boolean => typeof f === "string" && FORMAT.test(f);
 const folder = (learnerId: string) => path.join(dataDir(), "texts", learnerId);
 const fileOf = (learnerId: string, id: string) => path.join(folder(learnerId), `${id}.json`);
 

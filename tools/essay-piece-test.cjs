@@ -175,10 +175,10 @@ const post = (body) => analyse.POST(new Request('http://desk/api/analyse', { met
 test('route: keep needs the one-time notice; then the piece is kept, and the next read is a new version', async () => {
   dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' });
   seen = []; answer = perParagraph(faultyAt([3]));
-  const refused = await post({ kind: 'piece', text: PIECE, type: 'structure', keep: true, source: 'file' });
+  const refused = await post({ kind: 'piece', text: PIECE, type: 'structure', keep: true, source: 'file', format: 'essay' });
   assert.equal(refused.status, 428); assert.equal(seen.length, 0, 'no model call before the notice');
   texts.markNoticed('ema');
-  const r = await post({ kind: 'piece', text: PIECE, type: 'structure', keep: true, source: 'file' });
+  const r = await post({ kind: 'piece', text: PIECE, type: 'structure', keep: true, source: 'file', format: 'essay' });
   assert.equal(r.status, 200); const a = await r.json();
   assert.match(a.piece.pieceId, /^t-/);
   assert.equal(texts.getPiece('ema', a.piece.pieceId).versions[0].source, 'file');
@@ -366,7 +366,7 @@ test('E3-b guards: 409 with nobody at the desk and 428 TEXT_NOTICE leave the sta
   let r = await post({ kind: 'essay', text: CZ_R7, type: 'structure' });
   assert.equal(r.status, 409); assert.equal(status(), 'before');
   texts.deleteAll('ema'); seatAndMark();
-  r = await post({ kind: 'piece', text: PIECE, type: 'structure', keep: true });
+  r = await post({ kind: 'piece', text: PIECE, type: 'structure', keep: true, format: 'essay' });
   assert.equal(r.status, 428); assert.equal(status(), 'before'); assert.equal(seen.length, 0);
 });
 
@@ -511,7 +511,7 @@ test('EM1-7: a one-paragraph kept piece, changed and read as a piece, leaves the
   dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); texts.markNoticed('ema');
   const ONE = 'Cats sleep a lot. They do it in the sun.';
   seen = []; answer = perParagraph(faultyAt([]));
-  const first = await (await post({ kind: 'piece', text: ONE, type: 'structure', keep: true })).json();
+  const first = await (await post({ kind: 'piece', text: ONE, type: 'structure', keep: true, format: 'essay' })).json();
   const id = first.piece.pieceId; assert.equal(texts.getPiece('ema', id).versions.length, 1);
   const r = await post({ kind: 'piece', text: ONE + ' They also purr.', type: 'structure', keep: true, pieceId: id });
   assert.equal(r.status, 200); assert.equal((await r.json()).piece.pieceId, id);
@@ -527,4 +527,30 @@ test('EM3-1: after a piece read, Next paragraph posts essay.at for the next para
   assert.match(next, /type: "essay\.at", n: first\.n/); assert.match(next, /\(x\.para \?\? 0\) === pix \+ 1/);
   assert.match(phone, /\{!pieceCovers\(pix\) && <button[^>]*data-role="essay-analyse-one"/, 'the one-paragraph button is withheld for a paragraph the piece reading covers');
   assert.match(phone, /pieceCovers = \(ix: number\) => pieceHeld && \(s\?\.essay\?\.piece\?\.read/);
+});
+
+// ---- recert-5 L1-helena-46-EM5-2: an email kept from the phone is an email; /drop and the shelf name the format ----
+test('EM5-2: a phone keep names its format: email lands as email in the Emails channel; none is refused, nothing kept', async () => {
+  const { FORMAT_NEEDED_LINE } = texts; const { channelOf } = require(src('lib/twin/card.ts'));
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = []; texts.deleteAll('ema'); texts.markNoticed('ema');
+  const MAIL = 'Hi Anna,\n\nThanks for your note about Friday. I can bring the slides.\n\nBest wishes,\nEma';
+  answer = observing([{ n: 1, job: 'context' }, { n: 2, job: 'claim' }, { n: 3, job: 'link' }]);
+  const none = await post({ kind: 'piece', text: MAIL, type: 'structure', keep: true, source: 'paste' });
+  assert.equal(none.status, 400); assert.equal((await none.json()).error, FORMAT_NEEDED_LINE); assert.equal(texts.listPieces('ema').length, 0, 'a refused keep leaves nothing on the shelf');
+  const bad = await post({ kind: 'piece', text: MAIL, type: 'structure', keep: true, format: 'Bad Format!' });
+  assert.equal(bad.status, 400); assert.equal(texts.listPieces('ema').length, 0);
+  const r = await quietly(() => post({ kind: 'piece', text: MAIL, type: 'structure', keep: true, source: 'paste', format: 'email' }));
+  assert.equal(r.status, 200);
+  const cards = texts.listPieces('ema'); assert.equal(cards.length, 1); assert.equal(cards[0].format, 'email'); assert.match(cards[0].title, /^Untitled email 1$/);
+  assert.equal(channelOf(cards[0].format), 'email', 'it counts toward the Emails channel');
+  texts.deleteAll('ema');
+});
+test('EM5-2: /drop starts with no format chosen, the shelf shows each format, the phone asks before it keeps', () => {
+  const drop = fs.readFileSync(path.join(root, 'src/app/drop/page.tsx'), 'utf8');
+  assert.match(drop, /useState<string>\(""\)/, '/drop preselects nothing'); assert.doesNotMatch(drop, /useState<string>\("message"\)/);
+  assert.match(drop, /disabled=\{\(!docx && !text\.trim\(\)\) \|\| \(!format && !pieceId\)\}/, 'keeping waits for a choice');
+  const shelf = fs.readFileSync(path.join(root, 'src/app/phone/EssayShelf.tsx'), 'utf8');
+  assert.match(shelf, /data-role="essay-shelf-format">\{FORMAT_LABEL\[c\.format\] \?\? c\.format\}/, 'the shelf shows each piece\'s format');
+  const phone = fs.readFileSync(path.join(root, 'src/app/phone/page.tsx'), 'utf8');
+  assert.match(phone, /keepIt && !pieceId && !pieceFormat/); assert.match(phone, /format: pieceFormat/);
 });

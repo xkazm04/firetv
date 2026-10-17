@@ -8,7 +8,7 @@ import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence } from "@/lib/desk/essay";
 import { BUSY, blocksRun, refused, runJob, type JobRun } from "@/lib/desk/job";
 import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, type AnalysisType } from "@/lib/rules/essay";
-import { addPiece, addVersion, noticed, TEXT_NOTICE } from "@/lib/session/texts";
+import { addPiece, addVersion, FORMAT_NEEDED_LINE, hasFormat, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { learnerAge } from "@/lib/rules/voice";
 import { sentenceProblem } from "@/lib/rules/english";
 
@@ -109,6 +109,8 @@ export async function POST(req: Request) {
     if (!paragraphsOf(body.text).some(paragraphIsEnglish)) return refusedWithLine(NOT_ENGLISH_LINE);
     let pieceId: string | undefined;
     if (body.keep) {
+      // a new piece needs a chosen format (a new version of a kept piece keeps the piece's own): refused before anything is kept
+      if (typeof body.pieceId !== "string" && !hasFormat(body.format)) return NextResponse.json({ error: FORMAT_NEEDED_LINE }, { status: 400 });
       // a reading already running refuses this one: refused before the piece is kept, so a refused send leaves no piece on the shelf
       if (blocksRun(getSession().jobs?.analyse, who.id)) return refused({ status: 409, error: BUSY });
       if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });

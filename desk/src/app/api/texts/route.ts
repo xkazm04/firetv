@@ -15,7 +15,7 @@
 import { NextResponse } from "next/server";
 import { getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { roleFrom } from "@/lib/session/pairing";
-import { addPiece, addVersion, deleteAll, deletePiece, getPiece, listPieces, markNoticed, noticed, TEXT_NOTICE } from "@/lib/session/texts";
+import { addPiece, FORMAT_NEEDED_LINE, hasFormat, addVersion, deleteAll, deletePiece, getPiece, listPieces, markNoticed, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { docxText } from "@/lib/rules/docx";
 import { dispatch } from "@/lib/session/store";
 import { workroomOf } from "@/lib/twin/workroom";
@@ -60,6 +60,7 @@ export async function POST(req: Request) {
     if (!read.ok) return NextResponse.json({ error: read.error }, { status: 400 });
     text = read.text;
   }
+  if (typeof body.id !== "string" && !hasFormat(body.format)) return NextResponse.json({ error: FORMAT_NEEDED_LINE }, { status: 400 });
   const input = { text, source: body.docx !== undefined ? "file" : body.source, format: body.format, title: body.title };
   const r = typeof body.id === "string" ? addVersion(who.id, body.id, input) : addPiece(who.id, input);
   if (r.ok) refresh(who.id);

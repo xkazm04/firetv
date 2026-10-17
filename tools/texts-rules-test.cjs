@@ -73,18 +73,18 @@ test('route: a piece is kept only after the one-time notice; delete-all forgets 
   seat('ema');
   const first = await route.GET(req('GET')); const j = await first.json();
   assert.equal(j.noticed, false); assert.match(j.notice, /Claude/);
-  const refused = await route.POST(req('POST', '', { text: 'Before the notice.' }));
+  const refused = await route.POST(req('POST', '', { text: 'Before the notice.', format: 'essay' }));
   assert.equal(refused.status, 428); assert.equal((await refused.json()).notice, true);
   assert.equal(fs.existsSync(folder('ema')) && fs.readdirSync(folder('ema')).some(f => f.startsWith('t-')), false, 'nothing kept');
   assert.equal((await (await route.POST(req('POST', '', { notice: true }))).json()).noticed, true);
   assert.equal((await (await route.GET(req('GET'))).json()).noticed, true);
-  assert.equal((await route.POST(req('POST', '', { text: 'After the notice.' }))).status, 200);
+  assert.equal((await route.POST(req('POST', '', { text: 'After the notice.', format: 'essay' }))).status, 200);
   await route.DELETE(req('DELETE', '?all=1'));
   assert.equal((await (await route.GET(req('GET'))).json()).noticed, false, 'deleting everything forgets the notice: it shows again');
 });
 test('route: the seated learner only; one learner never reaches another\'s', async () => {
   seat('ema'); await route.POST(req('POST', '', { notice: true }));
-  const made = await (await route.POST(req('POST', '', { text: PIECE, source: 'paste' }))).json();
+  const made = await (await route.POST(req('POST', '', { text: PIECE, source: 'paste', format: 'essay' }))).json();
   assert.match(made.id, /^t-/);
   let r = await route.POST(req('POST', '', { id: made.id, text: PIECE + '\n\nMore.' })); assert.equal(r.status, 200);
   assert.equal((await (await route.GET(req('GET'))).json()).pieces.length, 1);
@@ -133,7 +133,7 @@ test('UD-6: deleting a piece or all pieces clears the essay reading on the desk 
   const reading = { text: 'Ema wrote this.', type: 'structure', sentences: [{ n: 1, text: 'Ema wrote this.', words: 3, connectors: [], role: 'claim' }], stats: {}, verdicts: [], summary: '' };
   for (const how of ['?all=1', 'piece']) {
     seat('ema'); await route.POST(req('POST', '', { notice: true }));
-    const made = (await (await route.POST(req('POST', '', { text: PIECE }))).json());
+    const made = (await (await route.POST(req('POST', '', { text: PIECE, format: 'essay' }))).json());
     assert.equal((await route.GET(req('GET', `?id=${made.id}`))).status, 200);
     dispatch({ type: 'essay.set', analysis: reading, owner: 'ema' });
     assert.equal(getSession().essay.text, 'Ema wrote this.');
@@ -146,7 +146,7 @@ test('EM4-1: DELETE ?paragraph=1 clears the seated paragraph, keeps every piece,
   const reading = (t) => ({ text: t, type: 'structure', sentences: [{ n: 1, text: t, words: 3, connectors: [], role: 'claim' }], stats: {}, verdicts: [], summary: '' });
   seat('jakub'); dispatch({ type: 'essay.set', analysis: reading('Jakub wrote this.'), owner: 'jakub' });
   seat('ema'); await route.POST(req('POST', '', { notice: true }));
-  const made = await (await route.POST(req('POST', '', { text: PIECE }))).json();
+  const made = await (await route.POST(req('POST', '', { text: PIECE, format: 'essay' }))).json();
   dispatch({ type: 'essay.set', analysis: reading('Ema wrote this.'), owner: 'ema' });
   for (const role of ['tv', 'guest']) {
     assert.equal((await route.DELETE(req('DELETE', '?paragraph=1', undefined, { 'x-desk-role': role }))).status, 403);
@@ -182,4 +182,14 @@ test('the curtain: no run of five words of a kept text reaches the Workroom titl
   }
   assert.deepEqual([...titles].sort(), ['Untitled email 1', 'Untitled essay 1', 'Untitled essay 2', 'Untitled essay 3', 'Untitled essay 4']);
   T.deleteAll('curtain');
+});
+
+test('EM5-2 (recert-5/L1-helena-46-EM5-2): a new piece must name its format: none is refused with the line and keeps nothing, a named one is kept as named', async () => {
+  T.deleteAll('ema'); seat('ema'); await route.POST(req('POST', '', { notice: true }));
+  const no = await route.POST(req('POST', '', { text: 'Hi Anna, see you Friday.' }));
+  assert.equal(no.status, 400); assert.equal((await no.json()).error, T.FORMAT_NEEDED_LINE); assert.deepEqual(T.listPieces('ema'), []);
+  assert.equal((await route.POST(req('POST', '', { text: 'Hi Anna, see you Friday.', format: 'Bad Format!' }))).status, 400);
+  const ok = await route.POST(req('POST', '', { text: 'Hi Anna, see you Friday.', format: 'email' })); assert.equal(ok.status, 200);
+  assert.equal(T.listPieces('ema')[0].format, 'email');
+  T.deleteAll('ema');
 });
