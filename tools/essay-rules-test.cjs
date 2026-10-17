@@ -254,6 +254,19 @@ test('with no fix of its own, a faulty sentence falls back to its lens\'s playbo
  assert.equal(playFor('argument').id,'thesis');assert.equal(playFor('structure').id,'para');
  assert.equal(playFor('no-such-lens').id,'para','an unknown lens still gets a move, never an empty slot');assert.equal(playFor(null).id,'para');
 });
+test('L1-eliska-12-EM2-1: every playbook pattern, filled in plain words, is one sentence and goes through revise unrefused',()=>{
+ const {PLAYBOOK,ESSAY_TYPES,playFor}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+ const {revise,splitSentences,joinSentences,paragraphStats}=require(path.join(root,'src/lib/rules/essay.ts'));
+ const base=splitSentences('Many students are tired. Sleep is important. Schools start early.');
+ const reading={text:joinSentences(base),type:'structure',sentences:base,stats:paragraphStats(base),verdicts:[],summary:''};
+ const fallbacks=new Set([...PLAYBOOK,...ESSAY_TYPES.map(t=>playFor(t.id)),playFor('no-such-lens'),playFor(null)]);
+ for(const p of fallbacks){
+  const filled=p.pattern.replace(/\[[^\]]+\]/g,'the school day').replace(/^[a-z]/,c=>c.toUpperCase());
+  assert.equal(splitSentences(filled).length,1,`${p.id}: "${filled}" counts as one sentence by the splitter revise uses`);
+  const r=revise(reading,2,filled);
+  assert.equal(r.ok,true,`${p.id}: revise takes the filled pattern${r.ok?'':' ('+r.error+')'}`);
+ }
+});
 test('the model is asked for a fix only on a faulty verdict, as a move and a slotted pattern, never a rewrite',async()=>{
  seen=[];answer=reply({verdicts:[],summary:'s'});
  await analyseEssay(THREE,'argument','essay-anon');

@@ -639,16 +639,16 @@ export interface Plan { lens: string; slots: string[]; }
 
 /**
  * The slots of a playbook pattern, in the pattern's order, with the role each one plays. The role is read from the
- * frame words in front of the slot by the same first-pass rule as a sentence's (LINK, then EVIDENCE, else a claim),
+ * frame words between the slot and the one before it by the same first-pass rule as a sentence's (LINK, then EVIDENCE, else a claim),
  * so a pattern with its slots reordered gives the new order and nothing here is listed by hand.
  */
 export function planSlots(play: { pattern: string }): PlanSlot[] {
   const out: PlanSlot[] = [];
-  for (const piece of play.pattern.split(/(?<=[.!?])\s+/)) {
-    const label = piece.match(/\[([^[\]]+)\]/)?.[1];
-    if (!label) continue;
-    const frame = piece.replace(/\[[^[\]]+\]/g, " ").trim();
-    out.push({ label, role: LINK.test(frame) ? "link" : EVIDENCE.test(frame) ? "evidence" : "claim" });
+  let from = 0;
+  for (const m of play.pattern.matchAll(/\[([^[\]]+)\]/g)) {
+    const frame = play.pattern.slice(from, m.index).replace(/\[[^[\]]+\]/g, " ").replace(/^[\s,.;:!?]+/, "").trim();
+    out.push({ label: m[1], role: LINK.test(frame) ? "link" : EVIDENCE.test(frame) ? "evidence" : "claim" });
+    from = m.index + m[0].length;
   }
   return out;
 }

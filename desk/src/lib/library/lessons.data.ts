@@ -43,13 +43,13 @@ export const ESSAY_TYPES = [
 
 /**
  * The playbook: Essay Master's four structure lessons (es-1..es-4 above), each as a line, a move (the lesson
- * named as a technique, the way a reading's fix names one) and a pattern — a sentence frame with [slots] for
+ * named as a technique, the way a reading's fix names one) and a pattern — a one-sentence frame with [slots] (the one-sentence rewrite takes it as it stands) for
  * the learner's own content. A frame teaches the shape; it never writes the sentence.
  */
 export const PLAYBOOK = [
   { id: "thesis", lessonId: "es-1", title: "Thesis", line: "One sentence that takes a side and says why.", move: "Take a side, then say why", pattern: "[Your side], because [your reason]." },
-  { id: "para", lessonId: "es-2", title: "Paragraph", line: "Claim, then evidence, then the link back.", move: "Claim, then evidence, then the link back", pattern: "[Your claim]. For example, [the evidence]. This shows [the link back]." },
-  { id: "order", lessonId: "es-3", title: "Order", line: "Which argument goes first, and why that one.", move: "Strongest first, then the rest", pattern: "First, [your strongest argument]. Then [the next one]." },
+  { id: "para", lessonId: "es-2", title: "Paragraph", line: "Claim, then evidence, then the link back.", move: "Claim, then evidence, then the link back", pattern: "[Your claim], for example [the evidence], so this shows [the link back]." },
+  { id: "order", lessonId: "es-3", title: "Order", line: "Which argument goes first, and why that one.", move: "Strongest first, then the rest", pattern: "First, [your strongest argument], then [the next one]." },
   { id: "concl", lessonId: "es-4", title: "Conclusion", line: "What the introduction promised, now delivered.", move: "Promise, then deliver", pattern: "So [what the introduction promised], because [what you showed]." },
 ] as const;
 export type Play = (typeof PLAYBOOK)[number];
