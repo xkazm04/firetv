@@ -542,7 +542,7 @@ export default function Phone() {
               <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 
-        {screen === "paper" && <PaperPanel rows={paperRows} setRows={setPaperRows} post={post} seated={!!s?.learner} status={s?.status ?? ""} kept={!!s?.paper} name={s?.learner?.name} />}
+        {screen === "paper" && <PaperPanel rows={paperRows} setRows={setPaperRows} post={post} seated={!!s?.learner} status={s?.status ?? ""} kept={!!s?.paper} name={s?.learner?.name} system={s?.learner ? s.profiles?.find((p) => p.id === s.learner?.id)?.system : undefined} />}
 
         {screen === "capture" && (() => {
           const reading = phase === "sending" || (phase === "sent" && !!s?.reading);

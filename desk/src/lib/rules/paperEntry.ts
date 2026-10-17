@@ -6,6 +6,8 @@
  * names the board or the specification (recovery.ts HONEST LIMITS - the drop reasons are already worded that way).
  */
 import { AREAS, STATEMENTS, type Area } from "../library/gcse";
+import { AREAS_CZ, CAN_CZ } from "../library/gcse-cz";
+import type { SchoolSystem } from "../session/store";
 import { cleanPaper, MAX_CODES, type CleanPaper } from "./recovery";
 
 /** One row of the panel as typed: text in the fields, the statements picked by code. */
@@ -43,25 +45,36 @@ export function entryOf(rows: readonly DraftRow[]): Entry {
   return { clean, drops, notes, kept: clean.items.length + clean.unmapped.length };
 }
 
-/** The statements to pick from, by area: each with its `can` text. A statement beyond a Foundation paper is flagged, not hidden. */
+/** The statements to pick from, by area: each with its `can` text. A statement beyond a Foundation paper is flagged, not hidden.
+ * A cz learner gets the Czech labels (library/gcse-cz) on the same codes; every other system the English list. */
 export interface Choice { code: string; can: string; foundation: boolean; }
-export function statementChoices(): { area: Area; name: string; items: Choice[] }[] {
+export function statementChoices(system?: SchoolSystem): { area: Area; name: string; items: Choice[] }[] {
+  const cz = system === "cz";
   return (Object.keys(AREAS) as Area[]).map((area) => ({
-    area, name: AREAS[area].name,
-    items: STATEMENTS.filter((s) => s.area === area).map((s) => ({ code: s.code, can: s.can, foundation: s.foundation })),
+    area, name: cz ? AREAS_CZ[area] : AREAS[area].name,
+    items: STATEMENTS.filter((s) => s.area === area).map((s) => ({ code: s.code, can: cz ? CAN_CZ[s.code] ?? s.can : s.can, foundation: s.foundation })),
   })).filter((g) => g.items.length);
 }
 /** A picked statement as the panel names it: the `can` text, or "" for a code the list does not hold. */
-export const canOf = (code: string): string => STATEMENTS.find((s) => s.code === code)?.can ?? "";
+export const canOf = (code: string, system?: SchoolSystem): string => {
+  const s = STATEMENTS.find((x) => x.code === code);
+  return s ? (system === "cz" ? CAN_CZ[code] ?? s.can : s.can) : "";
+};
 /** The most statements one question may name. */
 export const MOST_PICKS = MAX_CODES;
 
-/** The statements whose `can` text holds every typed word, ignoring case, by area; an area with no match is left out. An empty query keeps all. */
-export function choicesMatching(query: string): ReturnType<typeof statementChoices> {
-  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
-  const all = statementChoices();
+/** Lower case with the accents taken off, so "nejmensi" finds "nejmenší". */
+const fold = (t: string): string => t.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+
+/** The statements whose `can` text holds every typed word, ignoring case, by area; an area with no match is left out. An empty query keeps all.
+ * For a cz learner a statement matches on its Czech or its English text, accents ignored. */
+export function choicesMatching(query: string, system?: SchoolSystem): ReturnType<typeof statementChoices> {
+  const cz = system === "cz";
+  const words = (cz ? fold(query) : query.toLowerCase()).split(/\s+/).filter(Boolean);
+  const all = statementChoices(system);
   if (!words.length) return all;
+  const text = (c: Choice) => (cz ? [fold(c.can), fold(canOf(c.code))] : [c.can.toLowerCase()]);
   return all
-    .map((g) => ({ ...g, items: g.items.filter((c) => words.every((w) => c.can.toLowerCase().includes(w))) }))
+    .map((g) => ({ ...g, items: g.items.filter((c) => text(c).some((t) => words.every((w) => t.includes(w)))) }))
     .filter((g) => g.items.length);
 }

@@ -442,6 +442,31 @@ test('paper 4c: the picker finds a statement by its words and folds its areas',(
  assert.match(src,/\(\$\{picked\} picked\)/,'the area summary counts its picks');
 });
 
+test('recert-3/L1-radka-41-MB4-1, L1-vojtech-18-MB4-1: a cz learner picks statements in Czech, on the same codes',()=>{
+ const {statementChoices,canOf,choicesMatching}=ENTRY();
+ const {STATEMENTS,AREAS}=require(path.join(SRC,'lib/library/gcse.ts'));
+ const {CAN_CZ,AREAS_CZ}=require(path.join(SRC,'lib/library/gcse-cz.ts'));
+ assert.deepEqual(Object.keys(CAN_CZ).sort(),STATEMENTS.map(s=>s.code).sort(),'every statement code has a Czech label, none missing or extra');
+ for(const s of STATEMENTS){assert.ok(CAN_CZ[s.code].trim().length>3,`${s.code} has a Czech label`);assert.notEqual(CAN_CZ[s.code],s.can,`${s.code} is translated`);}
+ assert.deepEqual(Object.keys(AREAS_CZ).sort(),Object.keys(AREAS).sort());
+ const cz=statementChoices('cz'),uk=statementChoices('uk');
+ assert.deepEqual(cz.map(g=>g.name),Object.keys(AREAS).filter(a=>STATEMENTS.some(s=>s.area===a)).map(a=>AREAS_CZ[a]),'cz gets the Czech area names');
+ assert.deepEqual(cz.flatMap(g=>g.items.map(c=>c.code)),uk.flatMap(g=>g.items.map(c=>c.code)),'the codes are the same, in the same order');
+ for(const c of cz.flatMap(g=>g.items)){assert.equal(c.can,CAN_CZ[c.code]);assert.equal(canOf(c.code,'cz'),CAN_CZ[c.code]);}
+ assert.deepEqual(uk,statementChoices(),'uk is the English list unchanged');
+ for(const sys of ['us','de',undefined])assert.deepEqual(statementChoices(sys),uk,`${sys} unchanged`);
+ assert.equal(canOf('N4','uk'),STATEMENTS.find(s=>s.code==='N4').can);assert.equal(canOf('NOPE','cz'),'');
+ const codes=(gs)=>gs.flatMap(g=>g.items.map(c=>c.code));
+ for(const q of ['nejmenší','nejmensi','NSN','HCF, LCM'.split(',')[0],'množiny bodů','mnoziny bodu','loci'])
+  assert.ok(codes(choicesMatching(q,'cz')).includes(q.match(/mno|loci/i)?'G2':'N4'),`${q} finds its statement for a cz learner`);
+ assert.deepEqual(codes(choicesMatching('nejmensi','cz')),codes(choicesMatching('nejmenší','cz')),'accents do not matter');
+ assert.deepEqual(codes(choicesMatching('loci','cz')),codes(choicesMatching('loci','uk')),'an English query finds the same statement for a cz learner');
+ assert.deepEqual(choicesMatching('nejmenší','uk'),[],'a uk learner searches the English text only');
+ const src=code(PAPER_PANEL),page=fs.readFileSync(PAGE,'utf8');
+ assert.match(src,/choicesMatching\(query, system\)/);assert.match(src,/canOf\(c, system\)/);assert.match(src,/wholeOf\(system\)/);
+ assert.match(page,/<PaperPanel [^>]*system=\{s\?\.learner \? s\.profiles\?\.find\(\(p\) => p\.id === s\.learner\?\.id\)\?\.system : undefined\}/,'the panel is given the seated learner\'s system');
+});
+
 test('paper 5: a paper kept can be shown on the TV from the panel - the TV has no key into the list, so the phone is its door',()=>{
  const src=code(PAPER_PANEL);
  assert.match(src,/seated && kept && <button[^>]*onClick=\{\(\) => void post\(\{ type: "nav", screen: "paper" \}\)\}/);
