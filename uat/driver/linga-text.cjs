@@ -309,18 +309,19 @@ function severity(f) {
  * with no rendered control (0), actions only the phone offers, and picks of an action that was not offered.
  */
 function driverCoverage(results) {
-  let screens = 0, notOffered = 0;
+  let screens = 0, notOffered = 0, unresolved = 0;
   const strays = new Map(), unrendered = new Map(), phoneOnly = new Map(), add = (m, k) => m.set(k, (m.get(k) ?? 0) + 1);
   for (const r of results) for (const j of r.journeys ?? []) for (const s of j.steps ?? []) {
     if (s.result === 'observed (not acted on)') continue;
     screens++;
     if (s.result === 'not-offered') notOffered++;
+    if (s.result === 'unresolved') unresolved++;
     for (const x of s.coverage?.strays ?? []) add(strays, `${s.screen} · ${x}`);
     for (const x of s.coverage?.unrendered ?? []) add(unrendered, `${s.screen} · ${x}`);
     for (const x of s.coverage?.phoneOnly ?? []) add(phoneOnly, `${s.screen} · ${x}`);
   }
   const list = m => m.size ? ` (${[...m].map(([k, n]) => `${k} ×${n}`).join(', ')})` : '';
-  return `${screens} screens read from the rendered TV and phone · unmapped controls ${strays.size}${list(strays)} · view actions with no control ${unrendered.size}${list(unrendered)} · phone-only actions ${phoneOnly.size}${list(phoneOnly)} · not-offered picks ${notOffered}`;
+  return `${screens} screens read from the rendered TV and phone · unmapped controls ${strays.size}${list(strays)} · view actions with no control ${unrendered.size}${list(unrendered)} · phone-only actions ${phoneOnly.size}${list(phoneOnly)} · not-offered picks ${notOffered} · unresolved picks ${unresolved}`;
 }
 
 /**
@@ -537,6 +538,8 @@ If the screen looks broken or confusing, react as this person would: retry, go b
       const step = { n: i, screen: view.screen, shown: view.shown, offered: view.actions.map(a => a.id), ...(Object.values(view.coverage).some(x => x.length) ? { coverage: view.coverage } : {}), thought: d.thought, action: d.action, args, result: 'ok', ms: 0 };
       if (SF.gate(view.surface, d) === 'done') { step.result = 'done'; steps.push(step); say(`${jid} #${i} ${view.screen} → done`); record.endedBy = 'character-stopped'; break; }
       if (SF.gate(view.surface, d) !== 'ok') { step.result = 'not-offered'; steps.push(step); say(`${jid} #${i} ${view.screen} → ${d.action} (not offered)`); continue; }
+      // an action that is offered, but the decision names no entry of it (or the entry has nothing to run), sent no command: a failure, never ok
+      if (!SF.resolves(view.surface, d)) { step.result = 'unresolved'; step.message = `no entry of ${d.action} matches ${JSON.stringify(args)}`; steps.push(step); say(`${jid} #${i} ${view.screen} → ${d.action} (unresolved: no command sent)`); continue; }
       const t0 = Date.now();
       try { await run(d, view); } catch (e) { step.result = e.status ? `refused ${e.status}` : 'engine-error'; step.message = String(e.message).slice(0, 300); }
       step.ms = Date.now() - t0;

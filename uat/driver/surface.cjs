@@ -247,8 +247,11 @@ function surfaceOf(s, ui = {}) {
     const box = controls.find(r => r.side === 'phone' && r.tag === 'textarea' && !r.action && !r.disabled);
     if (box) { box.action = a; tied.get(a).push(box); }
   }
+  // a per-topic entry carries the topic's title as the screen shows it, so a decision that names the topic resolves
+  const titles = new Map((v.hero?.kind === 'topics' ? v.hero.topics : []).map(t => [t.id, t.title]));
+  const titleOf = a => titles.get(a.run?.command?.extra?.topicId);
   const offered = [];
-  for (const a of offers) if (tied.get(a).length) offered.push({ id: a.id, label: a.label, run: a.run, ...(a.needs ? { needs: a.needs } : {}), on: [...new Set(tied.get(a).map(r => r.side))].join('+') });
+  for (const a of offers) if (tied.get(a).length) offered.push({ id: a.id, label: a.label, run: a.run, ...(titleOf(a) ? { title: titleOf(a) } : {}), ...(a.needs ? { needs: a.needs } : {}), on: [...new Set(tied.get(a).map(r => r.side))].join('+') });
   for (const r of controls) if (r.phoneOnly && !offered.some(o => o.id === r.action.id && same(o.run, r.action.run))) offered.push({ id: r.action.id, label: r.label || r.action.label, run: r.action.run, ...(r.action.needs ? { needs: r.action.needs } : {}), on: 'phone', phoneOnly: true });
   const answered = v.answer && controls.some(r => r.action === 'answer');
   if (answered) offered.unshift({ id: 'answer', label: v.answer.label, needs: 'text', answer: v.answer, on: 'phone' });
@@ -279,7 +282,7 @@ function choices(sf) {
 
 /**
  * The offered action a decision names: by id, then by the value it carries (an option, a topic or a scene, matched by
- * its id or its label). When the entries differ by that value and the decision's value matches none, nothing is picked.
+ * its id, label or title). When the entries differ by that value and the decision's value matches none, nothing is picked.
  */
 function pick(sf, d) {
   const list = sf.offered.filter(a => a.id === d.action);
@@ -288,9 +291,18 @@ function pick(sf, d) {
     const val = x => x.run?.command?.extra?.[k];
     if (new Set(list.map(val)).size < 2) continue;
     const want = d[k];
-    return list.find(x => val(x) !== undefined && (val(x) === want || (typeof want === 'string' && want !== '' && norm(x.label) === norm(want)))) ?? null;
+    return list.find(x => val(x) !== undefined && (val(x) === want || (typeof want === 'string' && want !== '' && (norm(x.label) === norm(want) || (x.title && norm(x.title) === norm(want)))))) ?? null;
   }
   return list[0] ?? null;
+}
+
+/**
+ * Whether a gated decision turns into something the run does: an entry was picked, and it has a command, a screen
+ * change or a typed answer. A decision that names no entry among several is 'unresolved', never a step that went ok.
+ */
+function resolves(sf, d) {
+  const a = pick(sf, d);
+  return !!(a && (a.answer || a.run?.command || a.run?.nav || a.run?.ui));
 }
 
 /** The step gate: "done" is always honoured (the Character may stop on any screen); any other action must be offered. */
@@ -299,4 +311,4 @@ function gate(sf, d) {
   return sf.offered.some(a => a.id === d.action) ? 'ok' : 'not-offered';
 }
 
-module.exports = { surfaceOf, surfaceText, choices, pick, gate, install, BY_DESIGN_UNMAPPED, LINGA_SCREENS };
+module.exports = { surfaceOf, surfaceText, choices, pick, resolves, gate, install, BY_DESIGN_UNMAPPED, LINGA_SCREENS };

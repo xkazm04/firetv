@@ -299,7 +299,34 @@ test('UD-23: a swap decision names its topic by id or by label; a param that mat
   assert.equal(S.pick(sf, { action: 'find-level' }).id, 'find-level', 'a single entry needs no param');
 });
 
-test('UD-24: "done" is honoured whether or not it is offered; anything else must be offered', () => {
+test('UD-23b: six swap buttons share one label; a decision names the topic by its title, as the screen shows it', () => {
+  const S = surface();
+  const sf = S.surfaceOf(sessionOf(STATES['plan topics']), {});
+  const swaps = sf.offered.filter(a => a.id === 'swap');
+  assert.equal(swaps.length, 2); assert.equal(new Set(swaps.map(a => a.label)).size, 1, 'one shared label');
+  assert.deepEqual(swaps.map(a => a.title), ['Topic p-a', 'Topic p-b'], 'each entry carries its topic title');
+  assert.equal(S.pick(sf, { action: 'swap', topicId: 'Topic p-b' }).run.command.extra.topicId, 'p-b', 'by title');
+  assert.equal(S.pick(sf, { action: 'swap', topicId: ' topic P-A ' }).run.command.extra.topicId, 'p-a', 'title is case and space tolerant');
+  assert.equal(S.pick(sf, { action: 'swap', topicId: 'p-a' }).run.command.extra.topicId, 'p-a', 'by id still');
+  assert.equal(S.pick(sf, { action: 'swap', topicId: 'Topic zzz' }), null, 'an unknown title is null');
+  assert.equal(S.pick(sf, { action: 'swap', topicId: '' }), null, 'empty is null');
+});
+
+test('UD-23c: a gated decision that picks no entry is unresolved, an entry that runs something resolves', () => {
+  const S = surface();
+  const swap = (id, title) => ({ id: 'swap', label: 'Swap this topic', title, run: { command: { action: 'plan-swap', extra: { topicId: id } } } });
+  const sf = { offered: [swap('t1', 'Ordering food'), swap('t2', 'Booking a room'), { id: 'menu', label: 'Menu', run: { ui: { menu: true } } }, { id: 'inert', label: 'Inert', run: {} }, { id: 'answer', label: 'Reply', answer: { action: 'reply' } }] };
+  assert.equal(S.gate(sf, { action: 'swap', topicId: 'Nothing' }), 'ok', 'the gate alone cannot tell');
+  assert.equal(S.resolves(sf, { action: 'swap', topicId: 'Nothing' }), false);
+  assert.equal(S.resolves(sf, { action: 'swap', topicId: 'Booking a room' }), true);
+  assert.equal(S.resolves(sf, { action: 'menu' }), true, 'a screen-state step is a real step');
+  assert.equal(S.resolves(sf, { action: 'inert' }), false, 'an entry with nothing to run');
+  assert.equal(S.resolves(sf, { action: 'answer' }), true);
+  const src = fs.readFileSync(DRIVER, 'utf8');
+  assert(/!SF\.resolves\([^)]*\)\) \{ step\.result = 'unresolved'/.test(src), 'the step loop records an unresolved step before running it');
+});
+
+test('UD-24:"done" is honoured whether or not it is offered; anything else must be offered', () => {
   const S = surface();
   const sf = { offered: [{ id: 'find-level', label: 'Find my level', run: {} }] };
   assert.equal(S.gate(sf, { action: 'done' }), 'done');
