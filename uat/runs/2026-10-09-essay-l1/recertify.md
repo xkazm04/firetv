@@ -133,7 +133,7 @@ Severity now is derived from the walker's impact by the rubric (rank = frequency
 
 ## Regressed
 
-None. No row fixed at 2026-10-09 or in the 2026-10-14 lead walk was found broken again. Two new rows are seams of the fixes, not regressions. L1-eliska-12-EM1-7 (new): the planted-claim fix only works when the model names the supports links, which are optional in the schema. L1-kristyna-17-EM1-6 (new): the language check lets a Czech paragraph through when its shared function words reach 15%.
+None. No row fixed at 2026-10-09 or in the 2026-10-14 lead walk was found broken again. Two new rows are seams of the fixes, not regressions. 2026-10-09-essay-l1/recert-1/L1-eliska-12-EM1-7 (new): the planted-claim fix only works when the model names the supports links, which are optional in the schema. 2026-10-09-essay-l1/recert-1/L1-kristyna-17-EM1-6 (new): the language check lets a Czech paragraph through when its shared function words reach 15%.
 
 ## New findings for the next drain
 
