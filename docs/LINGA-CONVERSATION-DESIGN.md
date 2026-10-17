@@ -231,6 +231,8 @@ Raised by the five 2026-09-15 LT runs (codex played and judged them, so they are
 - Should *Not now* on a moment lower that learner's rate, and does that rate persist across scenes?
 - How does this trade against LG-24, following up a repeated error without adding a stop?
 
+*Delegate ruling 2026-10-17, reversible by the owner.* The third preference question is answered by Option 1 of the recert-3 limiter (`uat/runs/2026-10-17-lt-swap-2/recert-3/limiter.md`), save fixes for the end, and not as a new preference: under *as needed*, on a turn where the gap or the cap shuts the stop, the turn still asks for its one fix. Code holds it to the same checks as a moment (an exact excerpt of the reply, the audience gate) and keeps it as a held fix with its turn id (`Conversation.heldFixes`). A held fix is never a stop: it never opens a moment, no screen shows it during the scene, and it is not a taught item. The recap lists the held fixes apart from the moments, and the take's sessions entry keeps them. Stops keep today's gap, cap and preference rules, so the stop count does not change for the same model output. With correction off nothing is held. A fossil still stops when it may. The other three questions stay open.
+
 ## Open questions (10-09 drain)
 
 Raised by the three 2026-10-09 browser runs of `tools/linga-ui-test.cjs`. They are L2 on the claude CLI (`claude-cli/haiku`), with one scripted learner (Mia, A2, *The missing moon rover*) and the builder's reading; the owner's reading is owed. Each question has a backlog id in `docs/BACKLOG.md` and its evidence in `docs/uat-insights/2026-10-09-linga-*.md`. No question is answered here.
