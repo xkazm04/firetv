@@ -339,6 +339,24 @@ test('LG-4 (e): "Mission done" does not end the scene while the replay question 
   }finally{r.done();}
 });
 
+test('LG-4 recert-7 (adela-17 J4 #12): the Now row reads the replay, not "Mission done", until the replay question is answered',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts'));
+  const r=await lg4(asked(REPLAY_Q));
+  try{
+    await r.cmd('moment-done');
+    const s=r.getSession(),done={steps:['say where you work','say what you do'],reached:[{turnId:'a',quote:'I work'},{turnId:'b',quote:'I do'}]};
+    assert.equal(s.conversation.phase,'replay');
+    const open=V.lingaView({...s,conversation:{...s.conversation,mission:done}},{});
+    assert.equal(open.hero.subtitle,'Try it again','the replay is the current thing');
+    assert.ok(V.viewText(open).includes('\nNow: Try it again\n'),'the driver reads the same Now row');
+    assert.doesNotMatch(V.viewText(open),/Mission done/);
+    const step=V.lingaView({...s,conversation:{...s.conversation,mission:{...done,reached:done.reached.slice(0,1)}}},{});
+    assert.equal(step.hero.subtitle,'say what you do','a step still open stays the Now row');
+    const answered=V.lingaView({...s,conversation:{...s.conversation,phase:'conversation',mission:done}},{});
+    assert.equal(answered.hero.subtitle,'Mission done','once it is answered, Mission done as before');
+  }finally{r.done();}
+});
+
 test('LG-4: the moment\'s Back says the scene continues with a question to try the fix; a lost fix goes back as before',async()=>{
   const V=require(path.join(root,'src/lib/english/view.ts'));
   const r=await lg4(asked(REPLAY_Q));

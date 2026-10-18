@@ -591,7 +591,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       hero = { kind: "choices", kicker: "A little support · recognition practice", prompt: scene.quiz.question, options: [...scene.quiz.options], small: true };
       actions = scene.quiz.options.map((x, i) => act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") }));
     } else {
-      hero = { kind: "scene", kicker: `${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: said ? (c.mission ? currentStep(c.mission) ?? "Mission done" : c.goal) : "", art: c.sceneId, small: true,
+      // the Now row over the replay's question reads the replay, never "Mission done" (LG-4 recert-7, adela-17 J4 #12), as the banner below
+      hero = { kind: "scene", kicker: `${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: said ? (c.mission ? currentStep(c.mission) ?? (c.phase === "replay" ? "Try it again" : "Mission done") : c.goal) : "", art: c.sceneId, small: true,
         ...(c.mission ? { steps: c.mission.steps.map((text, i) => ({ text, state: (i < c.mission!.reached.length ? "done" : i === c.mission!.reached.length ? "current" : "open") as Dot })) } : {}),
         partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes, ...(c.lost ? { lost: c.lost } : {}) };
       const quiz = act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") });
