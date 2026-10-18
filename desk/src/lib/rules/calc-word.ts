@@ -98,7 +98,7 @@ const relatedRates: WordTemplate = {
       topic: "calc1-related-rates",
       stem: `Air is pumped into a spherical balloon at a steady ${q} cubic centimetres per second. Let r be the radius of the balloon in centimetres.`,
       parts: [
-        { part: "a", line: `How fast is r increasing at the moment when r = ${r0}? Give the rate in centimetres per second.`, spec: { shape: "derivative-at", f: `(${inside})^(1/3)`, at: 0 } },
+        { part: "a", line: `How fast is r increasing at the moment when r = ${r0}? Give the exact rate in centimetres per second.`, spec: { shape: "derivative-at", f: `(${inside})^(1/3)`, at: 0 } },
         { part: "b", line: "How fast is the surface area of the balloon increasing at that same moment? Give the rate in square centimetres per second.", spec: { shape: "derivative-at", f: `4pi*(${inside})^(2/3)`, at: 0 } },
       ],
       drawn: [q, r0],
@@ -124,7 +124,7 @@ const rectangle: WordTemplate = {
       stem: `A rectangle has a perimeter of ${P} metres. Let x be the length of a side of the rectangle in metres.`,
       parts: [
         { part: "a", line: "What is the largest area the rectangle can have? Give it in square metres.", spec: { shape: "extremum", f: `x(${h} - x)`, on: [0, h], kind: "max" } },
-        { part: "b", line: "What is the shortest length its diagonal can have? Give it in metres.", spec: { shape: "extremum", f: `sqrt(x^2 + (${h} - x)^2)`, on: [0, h], kind: "min" } },
+        { part: "b", line: "What is the shortest length its diagonal can have? Give the exact value in metres.", spec: { shape: "extremum", f: `sqrt(x^2 + (${h} - x)^2)`, on: [0, h], kind: "min" } },
       ],
       drawn: [P],
     };

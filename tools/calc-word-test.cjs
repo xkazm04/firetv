@@ -181,3 +181,14 @@ test('M3a corpus: what the printed questions read into - 14 of 31 single specs (
  assert.equal(q.kind,'calc');assert.equal(q.calc,null);assert.equal(q.school,null);assert.equal(q.parts.length,2);
  assert.deepEqual(K.readQuestion('Find the maximum value of f(x) = x^3 - 12x on [-3, 3].').parts,null,'a single read carries no parts');
 });
+
+// MB3-2: a part whose key is irrational asks for the exact value, since a rounding such as 1.1495 for 65/(18π) is not ticked
+test('MB3-2: the word-problem parts with an irrational key say "exact"; a four-figure rounding of one is not ticked',()=>{
+ const irrational={'sphere-rates':0,'rectangle-perimeter':1};
+ for(const [id,at] of Object.entries(irrational))for(let seed=1;seed<=20;seed++){
+  const w=W.drawWord(id,seed);if(!w)continue;
+  assert.match(w.parts[at].line,/exact/i,`${id} seed ${seed}: the irrational part asks for the exact value`);
+ }
+ let hit=null;for(let seed=1;seed<=2000&&!hit;seed++){const w=W.drawWord('sphere-rates',seed);if(w&&w.drawn[0]===130&&w.drawn[1]===3)hit=w;}
+ assert.ok(hit,"the 130 and 3 draw exists");assert.equal(C.checkAnswer(hit.parts[0].spec,"65/(18pi)").verdict,"right");assert.equal(C.checkAnswer(hit.parts[0].spec,"1.1495").verdict,"unsure");
+});
