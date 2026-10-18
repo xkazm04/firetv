@@ -315,11 +315,12 @@ export function parsePlain(src: string): MNode[] {
     if (t.k === "ch" && (t.v === "-" || t.v === "−" || t.v === "+")) { out.push({ t: "bin", v: t.v === "+" ? "+" : "−" }); i++; }
     const u = peek();
     if (u?.k === "num") { out.push({ t: "num", v: u.v }); i++; }
+    else if (u?.k === "let" && /^(inf|infinity)$/i.test(u.v)) { out.push({ t: "sym", v: "∞" }); i++; } // an infinity bound is one atom: ^inf, _infinity
     else if (u?.k === "let") {
       // one letter, the rest of the run stays on the line: e^2x is e² x, x^n is xⁿ
       out.push({ t: "var", v: u.v[0] });
       if (u.v.length > 1) T[i] = { k: "let", v: u.v.slice(1) }; else i++;
-    } else if (u?.k === "ch" && (u.v === "π" || GREEK.includes(u.v))) { out.push(u.v === "π" ? { t: "sym", v: "π" } : { t: "var", v: u.v }); i++; }
+    } else if (u?.k === "ch" && (u.v === "π" || u.v === "∞" || GREEK.includes(u.v))) { out.push(u.v === "π" || u.v === "∞" ? { t: "sym", v: u.v } : { t: "var", v: u.v }); i++; }
     return out;
   }
   const attach = (out: Raw[], key: "sup" | "sub", body: MNode[]) => {

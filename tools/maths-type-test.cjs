@@ -479,3 +479,9 @@ test('MB-B4: a cz question sets Kč as one upright word and keeps the decimal co
  assert.equal(flat('Work out 38,2 - 18,38.'),'Work out 38,2−18,38.');
  assert.ok(T.parseMath('Kčx').some((x)=>x.t!=='text'||x.v!=='Kč'),'a longer run is not the crown');
 });
+
+// MB3-3: an infinity bound after ^ or _ is one atom, in every spelling
+test('MB3-3: inf, infinity and ∞ after ^ or _ are one ∞ atom',()=>{
+ for(const [s,want] of [['int_1^inf x dx','∫_(1)^(∞) x dx'],['∫_1^∞ x dx','∫_(1)^(∞) x dx'],['sum_(n=1)^infinity 1/n','∑_(n=1)^(∞) (1)/(n)'],['x^inf','x^(∞)']])
+  assert.equal(flat(s),want,s);
+});
