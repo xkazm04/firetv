@@ -429,7 +429,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen — paste or dictate the paragraph on the phone` }); }
     }
     if (k === "menu") o.nav("playbook", 0, "essaytype");
-    if (k === "back") o.nav("landing", landingFocus(s, "essay"));
+    // Adult mode: Back from the lens home returns to the Workroom, so it stays reachable once a reading is on the desk (recert-6/L1-helena-46-EM5-2)
+    if (k === "back") { if (isAdultHere(s)) o.calls.push({ url: "/api/twin", body: { open: true } }); else o.nav("landing", landingFocus(s, "essay")); }
   },
   // the Paragraph's slots, written on the phone: Up/Down walk the slots, then Read it and Back; Read it reads only when all three are written
   essayplan: (s, k, _, o) => {

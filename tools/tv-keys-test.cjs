@@ -903,3 +903,22 @@ test('SW13: 100 session updates leave the TV page with one keydown binding, and 
  handler({key:' ',preventDefault(){}});
  assert.deepEqual(seen,[99],'the key is read against the newest session');
 });
+
+test('workroom 1 (recert-6/L1-helena-46-EM5-2): in Adult mode a reading on the desk still leaves a remote path back to the Workroom; Family mode keeps Back to the desk',()=>{
+ const {tvKey}=keys();
+ const ADULT={id:'hel',name:'Helena',type:'adult',age:34,system:'uk',modules:['essay'],mode:'adult'};
+ const adult=(patch={})=>essay({profiles:[ADULT],learner:{id:'hel',name:'Helena'},...patch});
+ // landing -> forensic: with the paragraph on the desk, Select on the essay card opens the forensic page first
+ const landing=adult({screen:'landing',focus:0});
+ assert.deepEqual(tvKey(landing,'select',LOCAL).events.at(-1),{type:'nav',screen:'forensic',focus:0});
+ // forensic Back -> the lens home, and from there Back reaches the Workroom (the desk opens it, titles and counts only)
+ const back=tvKey(adult({screen:'forensic'}),'back',LOCAL);
+ assert.equal(back.events.at(-1).screen,'essaytype');
+ const toRoom=tvKey(adult({screen:'essaytype'}),'back',LOCAL);
+ assert.deepEqual(toRoom.events,[]);
+ assert.deepEqual(toRoom.calls,[{url:'/api/twin',body:{open:true}}]);
+ // Family mode is unchanged: Back from the lens home is the desk
+ const fam=tvKey(essay({screen:'essaytype'}),'back',LOCAL);
+ assert.deepEqual(fam.calls,[]);
+ assert.equal(fam.events.at(-1).screen,'landing');
+});
