@@ -2697,7 +2697,11 @@
           "revision": 6,
           "changedAt": "2026-10-13",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "uat/rubric.md:30 The overlay defines judge agreement as an uncorrected raw pass ratio against the in-app tutor model without a human-labeled golden set or Cohen's kappa calibration, allowing uncalibrated judge outputs to drive release-gating verdicts.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:80bd8653a6d797f2",
+          "evaluatedRevision": 6
         },
         {
           "subject": "judge-contract-design",

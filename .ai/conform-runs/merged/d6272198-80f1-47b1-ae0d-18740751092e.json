@@ -1,0 +1,95 @@
+{
+ "schema": "conform-run/1",
+ "worker": "d6272198-80f1-47b1-ae0d-18740751092e",
+ "subject": "judge-calibration-and-drift",
+ "evaluatedAt": "2026-10-18T22:15:41.714492+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "uat",
+   "subject": "judge-calibration-and-drift",
+   "bundle": "llm-observability",
+   "state": "deviation",
+   "evidence": "uat/rubric.md:30 The overlay defines judge agreement as an uncorrected raw pass ratio against the in-app tutor model without a human-labeled golden set or Cohen's kappa calibration, allowing uncalibrated judge outputs to drive release-gating verdicts.",
+   "techniques": [
+    {
+     "technique": "golden-set-agreement-measurement",
+     "verdict": "deviation",
+     "evidence": "uat/rubric.md:30 Calculates judge agreement as a raw ratio of agreement against the in-app tutor model rather than chance-corrected Cohen's kappa on a frozen human-labeled golden set."
+    },
+    {
+     "technique": "trust-bar-verdict",
+     "verdict": "deviation",
+     "evidence": "uat/driver/verdict.cjs:142 Gating pass/fail verdicts are decided directly from uncalibrated judge checks without a pre-committed kappa trust bar or machine-readable trusted/untrusted boundary."
+    },
+    {
+     "technique": "scheduled-recalibration",
+     "verdict": "deviation",
+     "evidence": "uat/README.md:58 Recertification reruns application journeys to check open product findings rather than running a scheduled recalibration sentinel over a pinned golden set."
+    },
+    {
+     "technique": "reserved-rubric-persistence",
+     "verdict": "deviation",
+     "evidence": "uat/driver/linga-text.cjs:370 Writes run findings to local run files rather than persisting calibration history under a reserved rubric namespace in a shared quality-score store."
+    },
+    {
+     "technique": "windowed-score-drop-alerting",
+     "verdict": "deviation",
+     "evidence": "uat/driver/recertify.cjs:85 Computes a memoryless point-to-point delta between two runs rather than maintaining a rolling window over historical cycles to catch slow slides."
+    },
+    {
+     "technique": "judge-selection-by-spread",
+     "verdict": "deviation",
+     "evidence": "uat/driver/linga-text.cjs:41 Judge model was chosen by subscription constraint rather than evaluating discrimination spread between known-good and known-bad outputs on a golden set."
+    },
+    {
+     "technique": "repeatability-floor",
+     "verdict": "deviation",
+     "evidence": "uat/driver/recertify.cjs:262 Metric regression alerting triggers on a hardcoded 10-point drop without measuring the judge's repeatability floor across repeated draws."
+    },
+    {
+     "technique": "judge-replacement-bridge",
+     "verdict": "deviation",
+     "evidence": "uat/driver/recertify.cjs:160 Treats switching judge models as an unbridgeable instrument confound rather than replaying the replacement over reference anchors with floor-based tolerance."
+    },
+    {
+     "technique": "fit-and-report-on-disjoint-labels",
+     "verdict": "not-applicable",
+     "evidence": "uat/driver/linga-text.cjs:110 The judge system prompt is authored statically and is not fitted or tuned against human annotations."
+    },
+    {
+     "technique": "reference-ladder",
+     "verdict": "not-applicable",
+     "evidence": "uat/rubric.md:9 Scoring evaluates candidate outputs absolutely against rubric criteria and definitions of done rather than against an exemplar reference."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-18T22:15:41.714492+00:00",
+   "bundle": "llm-observability",
+   "subjects": [
+    "judge-calibration-and-drift"
+   ],
+   "techniques": [
+    "fit-and-report-on-disjoint-labels",
+    "golden-set-agreement-measurement",
+    "judge-replacement-bridge",
+    "judge-selection-by-spread",
+    "reference-ladder",
+    "repeatability-floor",
+    "reserved-rubric-persistence",
+    "scheduled-recalibration",
+    "trust-bar-verdict",
+    "windowed-score-drop-alerting"
+   ],
+   "deviations": 1,
+   "context": "uat",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}
