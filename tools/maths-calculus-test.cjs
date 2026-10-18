@@ -414,3 +414,15 @@ after(()=>{
  }
  console.log(lines.join('\n'));
 });
+
+// MB3-1: working on a Calculus 2 topic is not line-checked, and the TV card says so in one plain line
+test('MB3-1: a wrong Calculus 2 item with working carries the not-checked-by-line note; other paths and working-less items do not',()=>{
+ const W=require(path.join(root,'src/maths/working.ts'));
+ const wrong={n:1,question:'Find int x e^x dx.',verdict:'wrong',studentWorking:'u = x, dv = e^x dx\nxe^x - e^x + 1'};
+ assert.equal(W.lineCheckNote('calc2-parts',wrong),W.NOT_LINE_CHECKED);
+ assert.match(W.NOT_LINE_CHECKED,/not checked line by line, only the answer/);
+ assert.equal(W.lineCheckNote('calc1-chain',wrong),null,'Calculus 1 lines are checked');
+ assert.equal(W.lineCheckNote('calc2-parts',{...wrong,verdict:'right'}),null);
+ assert.equal(W.lineCheckNote('calc2-parts',{...wrong,studentWorking:undefined}),null,'no working, nothing to say');
+ assert.equal(W.lineCheckNote(undefined,wrong),null);
+});

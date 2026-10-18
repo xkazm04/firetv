@@ -38,7 +38,7 @@ import { MATHS_FONTS } from "./fonts";
 import { MathText, Tick } from "./MathText";
 import { prose } from "./prose";
 import { isTall, parseMath } from "./typeset";
-import { KIND_WORD, lookAt, working } from "./working";
+import { KIND_WORD, lineCheckNote, lookAt, working } from "./working";
 
 /**
  * The root every Math Buddy screen is drawn in. `busy` is the TV's own wait for a practice set; `ask` the lit cell of Get
@@ -846,7 +846,7 @@ function Tally({ items, cur }: { items: PracticeItem[]; cur: number | null }) {
 }
 
 /** The side of the paper: the kind of mark, the slip's name, and the taped card - the screen's one caption slot. */
-function SlipSide({ items, ix, points, job }: { items: PracticeItem[]; ix: number; points?: string; job?: JobLine | null }) {
+function SlipSide({ items, ix, points, job, topic }: { items: PracticeItem[]; ix: number; points?: string; job?: JobLine | null; topic?: string }) {
   const it = items[ix], name = itemName(items, ix);
   const v = markOf(it), w = working(it);
   const kind = v === "wrong" ? w.mark?.kind ?? "line" : v;
@@ -860,6 +860,7 @@ function SlipSide({ items, ix, points, job }: { items: PracticeItem[]; ix: numbe
     skipped: () => ({ word: "Skipped", title: `Number ${nm} was skipped`, next: "Work it on paper, then tell the desk on the phone what you got." }),
   };
   const { word, title, next } = SIDE[v]();
+  const unchecked = lineCheckNote(topic, it);
   const said = deskLine(items, ix, it.reply ?? it.said ?? (v === "right" ? `Number ${it.n} is right.` : "The desk has no comment on this one."));
   return (
     <aside className="mb-side" key={`${it.n}-${v}`}>
@@ -871,6 +872,7 @@ function SlipSide({ items, ix, points, job }: { items: PracticeItem[]; ix: numbe
         <div className="hl"><span className="mb-lab">{it.reply ? "The desk replied" : "The desk says"}</span></div>
         <div className="ht" data-role="maths-said">{prose(said)}</div>
         {job ? <JobNote job={job} /> : next && <div className="nx">{ARROW}<span>{prose(next)}</span></div>}
+        {unchecked && <div className="nx" data-role="maths-unchecked">{ARROW}<span>{unchecked}</span></div>}
       </div>
       {/* v2 M4a: a Calculus item shows its graph under the card - the tangent at the point, the area between the bounds */}
       {/* a part whose function the stem does not print (a story's, v2 M3a) draws no graph: a curve the learner never saw */}
@@ -935,7 +937,7 @@ export function Sheet({ s, focus }: { s: Session; focus: number }) {
         </div>
       </div>
     </div>
-    {tile && ix !== null ? <SlipSide items={p.items} ix={ix} points={p.items[ix].slip ? slipById(p.items[ix].slip!)?.points : undefined} /> : (
+    {tile && ix !== null ? <SlipSide topic={p.topic} items={p.items} ix={ix} points={p.items[ix].slip ? slipById(p.items[ix].slip!)?.points : undefined} /> : (
       <aside className="mb-side" key={String(at)}>
         <div className="mb-khead"><div className="mb-kick">{at === "more" ? <>{KIND_ICON.six}Six more</> : <>Put away</>}</div></div>
         <div className="mb-stitle" data-role="maths-slip"><Amber text={at === "more" ? `Six more on ${name}` : "The set leaves the desk"} /></div>
@@ -976,7 +978,7 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
         </div>
       </div>
     </div>
-    <SlipSide items={p.items} ix={s.walkIx} points={sl?.points} job={explainLine(s, it.n)} />
+    <SlipSide topic={p.topic} items={p.items} ix={s.walkIx} points={sl?.points} job={explainLine(s, it.n)} />
     <div className="mb-acts">
       {last && <Act icon={ICON.back} label="Back to the sheet" focused={stopAt(walkStops(s), focus) === "sheet"} primary />}
       <div className="mb-updn"><Chev dir="l" on={s.walkIx > 0} /><span>{it.n} of {p.items.length}</span><Chev dir="r" on={!last} /></div>
