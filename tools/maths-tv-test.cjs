@@ -1220,3 +1220,17 @@ test('MB-B1 TV: the Sheet, the Walk and the Continue card draw a skipped item as
  const none=drawMaths('Sheet',{...secondSession(null,'sheet',{practice:{topic:'linear-one-step',marked:true,items:items.slice(3)}}),focus:0});
  assert.deepEqual(tags(none,'mb-tm').map((t)=>/data-v="(\w+)"/.exec(t)[1]),['skipped','skipped']);assert.doesNotMatch(none,/class="nr"/);
 });
+
+test('paper 9 (L1-vojtech-18-MB4-1): each recovery topic row names the statement codes that led the questions to it',()=>{
+ const {paperView}=PAPER(),{recovery}=REC();
+ const raw=[it('7',0,2,['N12']),it('9',0,2,['A1'])],s=paperSession(raw);
+ const v=paperView(s),r=recovery(raw);
+ assert.ok(v.topics.length>=2);
+ for(const t of v.topics){
+  assert.ok(t.codes.length>0,t.id+' carries its codes');
+  assert.deepEqual(t.codes,r.topics.find(x=>x.id===t.id).codes,'the view takes recovery()\'s codes whole');
+ }
+ const row=drawMaths('PaperScreen',s).match(/<div class="mb-prow"[^>]*data-id="pct-of-amount"[^>]*>.*?<\/div>/s);
+ assert.ok(row,'the pct-of-amount row is drawn');
+ assert.match(row[0].replace(/<[^>]*>/g,' '),/led by N12/,'the row says which statement led there');
+});

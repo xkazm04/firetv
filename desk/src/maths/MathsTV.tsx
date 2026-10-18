@@ -748,7 +748,7 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
                 <span className="n">{ix + 1}</span>
                 <span className="nm">{t.name}</span>
                 <span className="lost">{lostLabel(t.lost, t.shared)}</span>
-                <span className="from">From {t.from}</span>
+                <span className="from">From {t.from}{t.codes.length > 0 && ` · led by ${t.codes.join(", ")}`}</span>
                 {t.secure && <span className="sec" data-role="maths-paper-secure">Worth a recheck</span>}
               </div>
             );
