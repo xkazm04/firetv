@@ -16,7 +16,7 @@
  */
 import type { PracticeItem, SchoolSystem } from "@/lib/session/store";
 import { chainChecks } from "@/lib/rules/chain";
-import { pathOfTopic } from "@/lib/library/paths";
+import { CALC2_SPINE } from "@/lib/library/calculus2.spine";
 import { isCalcSpec, readsAsArithmetic, workingLines } from "@/lib/rules/maths";
 import type { ErrorKind, LineMarkSpec } from "./typeset";
 
@@ -75,7 +75,7 @@ export function lookAt(it: PracticeItem, points?: string): string | null {
 export const NOT_LINE_CHECKED = "Working on these topics is not checked line by line, only the answer.";
 export function lineCheckNote(topic: string | undefined, it: PracticeItem): string | null {
   if (!topic || it.verdict !== "wrong" || !workingLines(it).length) return null;
-  return pathOfTopic(topic) === "calc2" ? NOT_LINE_CHECKED : null;
+  return CALC2_SPINE.some((t) => t.id === topic) ? NOT_LINE_CHECKED : null;
 }
 
 /** The kicker word for a mark: the same grammar the sheet draws, named once beside it. */
