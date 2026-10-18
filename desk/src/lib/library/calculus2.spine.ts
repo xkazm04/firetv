@@ -75,14 +75,14 @@ export const CALC2_SPINE: Calc2SpineTopic[] = [
   {
     id: "calc2-approx", sections: ["7.7"], openstax: ["3.6"],
     name: "Approximate integration", strand: "Techniques of integration",
-    blurb: "When an integral has no closed form, its value is estimated by cutting the interval into equal pieces and combining the function's values with the trapezoid, midpoint or Simpson's rule.",
+    blurb: "An integral with no closed form is estimated by cutting the interval into pieces and using the trapezoid, midpoint or Simpson's rule.",
     prereq: [],
     shapes: ["approx-integral"],
   },
   {
     id: "calc2-sequences", sections: ["11.1"], openstax: ["5.1"],
     name: "Sequences", strand: "Sequences and series",
-    blurb: "A sequence is a list of numbers indexed by n, and its limit is the value the terms settle towards, or the sign of the infinity they grow to, as n gets large.",
+    blurb: "A sequence is a list of numbers indexed by n, and its limit is the value, or the infinity, its terms approach.",
     prereq: [],
     shapes: ["sequence-limit"],
   },

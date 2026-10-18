@@ -200,3 +200,10 @@ test('7: the quoted \'calc2\' appears in desk/src only in paths.ts and calculus2
  assert.ok(walk(SRC).length>100,'the sweep read the tree');
  assert.ok(/"calc2"/.test(fs.readFileSync(path.join(SRC,'lib/library/paths.ts'),'utf8')),'paths.ts holds the literal');
 });
+
+// MB3-4 (SL3 for the Calculus spines): every Calculus 1 and Calculus 2 blurb is 25 words or fewer
+test('MB3-4: every Calculus 1 and Calculus 2 spine blurb is 25 words or fewer',()=>{
+ const {CALC1_SPINE}=require(src('lib/library/calculus1.spine.ts'));
+ assert.ok(CALC1_SPINE.length>0&&CALC2_SPINE.length>0);
+ for(const t of [...CALC1_SPINE,...CALC2_SPINE])assert.ok(t.blurb.trim().split(/\s+/).length<=25,`${t.id}: blurb is 25 words or fewer`);
+});
