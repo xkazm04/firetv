@@ -14,6 +14,7 @@ import { audienceAllowed, defaultPreferences, eligibleScenes, AUTHORED_SCENES, E
 import { adultContent, isAdult } from "../rules/mode";
 import { ConversationError, lingaLine } from "./errors";
 import { EngineError } from "../engines/types";
+import { EASE_INSTRUCTION, learnerLost } from "./ease";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
@@ -131,11 +132,13 @@ const sceneInput=(c:Conversation)=>{const s=sceneOf(c);return {title:c.title,goa
  * The tutor's input for every call. `invite` adds the taught item this scene brings back (review.ts), until it is used,
  * or the line this scene hides (K4, line.ts roomLine), until it is found or shown: the same contract, invite it, never say it.
  */
-function context(c:Conversation,invite=true){
+function context(c:Conversation,invite=true,now?:{text:string;supported:boolean}){
   const learning=readLearner(c.learnerId).english,bring=invite?bringBack(c,learning.taught):null,roomLine=invite?lineBack(c):null;
   const recent=learning.evidence.filter(e=>e.skill===c.focusSkill&&e.mode!=="choice").slice(-4);
   const struggles=recent.filter(e=>!e.success).length,independent=recent.filter(e=>e.success&&!e.supported).length;
-  const adaptation=struggles>=2?"Use a shorter question and a concrete example. Offer a phrase starter if needed. Stay in the scene.":independent>=3?"Ask a less predictable follow-up within the learner's chosen level and social challenge. Avoid another copy of a question they already answered.":"Keep one manageable question per turn. Respond to the learner's need before adding difficulty.";
+  // LG-5: this turn's reply is read too (ease.ts), not only the stored record
+  const easing=!!now&&learnerLost([...c.turns.filter(t=>t.role==="learner"),{text:now.text,supported:now.supported}]);
+  const adaptation=easing?EASE_INSTRUCTION:struggles>=2?"Use a shorter question and a concrete example. Offer a phrase starter if needed. Stay in the scene.":independent>=3?"Ask a less predictable follow-up within the learner's chosen level and social challenge. Avoid another copy of a question they already answered.":"Keep one manageable question per turn. Respond to the learner's need before adding difficulty.";
   // a check that found the spoken English lower says so beside its band (S2), so the level the tutor pitches at agrees with it
   const placement=learning.placement;
   const step=c.mission&&currentStep(c.mission);
@@ -503,7 +506,7 @@ export async function englishCommand(raw:unknown){
     const stepTask=c.mission&&!missionDone(c.mission)?" step: currentStep is the one goal this learner is working on. Set reached true only when submittedReply itself, in the learner's own words, does it, and quote the exact words of submittedReply that did it (at least two words); otherwise reached false with an empty quote.":"";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
     const task=action==="turn"?{task:`${pair?DUET_PAIR:"Respond in character to submittedReply, then assess it against the allowed skills."} Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}${pair&&c.duet?.coStarLearnerId?COSTAR_TASK:""}`,submittedReply:reply,...(pair?{coStarReply:pair.coStar.text}:{}),...(askedAbout?{askedAbout}:{}),...(fossil?{slipAgain:{said:fossil.said,better:fossil.better,task:FOSSIL_TASK}}:again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
-    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(lost!==undefined?{...c,lost}:c,action!=="coach"),...task}),schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:replaySchema,accept:action==="turn"?(pair?pairAccept:turnAccept):action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"});
+    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(lost!==undefined?{...c,lost}:c,action!=="coach",action==="turn"?{text:reply,supported:c.supported}:undefined),...task}),schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:replaySchema,accept:action==="turn"?(pair?pairAccept:turnAccept):action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"});
     const current=checkCurrent(c,commandId);
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
     if(action==="turn"){

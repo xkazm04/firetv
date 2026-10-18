@@ -3323,3 +3323,24 @@ test('J3 case 2: the teeth stay: a run of a partner line she never said is a rea
  await booked(said('Which date do you need?',{help:LADDER}));await reply();await command('cue');await reply('Friday, please.');
  assert.equal(learnerFlags().at(-1),true,'a help rung supports the next reply');
 });
+// LG-5, turn-level easing: this turn's reply is read by code (ease.ts); only the phrasing of the easier question is the model's.
+test('LG-5: a not-understanding reply puts the easing instruction in the turn input; a plain English reply, or one that merely says "know", does not',async()=>{
+ const {EASE_INSTRUCTION}=require(path.join(root,'src/lib/english/ease.ts'));
+ const seen=[];
+ const run=async(replies,opts={})=>{
+  await booked(p=>{if(p.submittedReply)seen.push(p.adaptation);return {reply:'Which date do you need?',observations:[],help:LADDER};});
+  seen.length=0;
+  for(const r of replies){if(opts.cue)await command('cue');await reply(r);}
+  return seen.at(-1);
+ };
+ assert.equal(await run(['Nevím']),EASE_INSTRUCTION,'nevím');
+ assert.equal(await run(['nevim']),EASE_INSTRUCTION,'no diacritics');
+ assert.equal(await run(['Nerozumím']),EASE_INSTRUCTION,'nerozumím');
+ assert.equal(await run(["I don't know"]),EASE_INSTRUCTION,"I don't know");
+ assert.equal(await run(['What?']),EASE_INSTRUCTION,'what?');
+ assert.equal(await run(['Já mám psa a on je velký']),EASE_INSTRUCTION,'a Czech sentence');
+ assert.equal(await run(['I need a room.','Friday, please.'],{cue:true}),EASE_INSTRUCTION,'help asked twice in a row');
+ assert.notEqual(await run(['I need a room for Friday.']),EASE_INSTRUCTION,'a plain English reply');
+ assert.notEqual(await run(['I know the hotel, it is near the station.']),EASE_INSTRUCTION,'English that merely contains "know"');
+ assert.notEqual(await run(['I need a room.','Friday, please.']),EASE_INSTRUCTION,'no help asked');
+});
