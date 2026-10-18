@@ -1,0 +1,17 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c3085ec5-ee16-41fd-ada0-d9ab0b8874f6",
+ "subject": "job-coordination",
+ "evaluatedAt": "2026-10-18T22:01:18.330204+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "job-coordination",
+   "context": "desk-pipelines",
+   "reason": "evidence leans on engines/call.ts, which is not a tracked file"
+  }
+ ],
+ "consults": []
+}
