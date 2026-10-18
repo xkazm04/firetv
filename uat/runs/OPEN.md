@@ -2,16 +2,16 @@
 
 Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run. One section per module that has open rows.
 
-296 open across 13 runs
+292 open across 13 runs
 drained 9 of 13 runs
 undrained: 2026-10-14-lt, 2026-10-16-lt-a2b1-tightening, 2026-10-17-lt-swap, 2026-10-17-lt-swap-2 (home: docs/uat-insights/<run-id>.md, uat/README.md)
 
 # Linga
 
-234 open in 40 pairs across 26 runs
-234 open: 57 seen on the current product, 177 seen before a product change
+230 open in 40 pairs across 27 runs
+230 open: 21 seen on the current product, 209 seen before a product change
 
-recurring 127 · unasked by a later run of their pair 22
+recurring 125 · unasked by a later run of their pair 22
 
 Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each judge answers all of its pair's open rows, and each answer is stamped into the run that owns the row.
 
@@ -20,11 +20,11 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 - `2026-10-14-lt/LT-petra-38-J2-1` blocker · rank 27 · Swap replaces the wrong topic · product: 54 of 93 files changed since
 - `2026-09-15-lt-recert/LT-petra-38-J2-2` blocker · rank 18 · Swaps recycle rejected scenarios · product: 24 of 25 files changed since · 81 paths held by one side only
 - `2026-10-14-lt/LT-petra-38-J2-2` major · rank 12 · Swaps bring near-duplicates and off-brief topics · product: 54 of 93 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J2-3` major · rank 12 · Plan build failed on the first try · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J2-1` major · rank 9 · Swap never exercised; plan still grows past six · recurrence 3, first seen 2026-10-17-lt-swap-2 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J2-2` major · rank 9 · Skill labels do not describe the situation · recurrence 3, first seen 2026-10-17-lt-swap-2 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J2-2` minor · rank 6 · Adding grows plan from 5 to 6; skill labels mismatch · recurrence 3, first seen 2026-10-14-lt/recert-1 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J2-3` minor · rank 6 · Swap not exercised · recurrence 3, first seen 2026-10-14-lt/recert-1 · product: 9 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J2-3` major · rank 12 · Plan build failed on the first try · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J2-1` major · rank 9 · Swap never exercised; plan still grows past six · recurrence 3, first seen 2026-10-17-lt-swap-2 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J2-2` major · rank 9 · Skill labels do not describe the situation · recurrence 3, first seen 2026-10-17-lt-swap-2 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J2-2` minor · rank 6 · Adding grows plan from 5 to 6; skill labels mismatch · recurrence 3, first seen 2026-10-14-lt/recert-1 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J2-3` minor · rank 6 · Swap not exercised · recurrence 3, first seen 2026-10-14-lt/recert-1 · product: 10 of 105 files changed since
 
 ## viktor-67 J2 · 7 open · top rank 27
 
@@ -39,39 +39,40 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 ## viktor-67 J3 · 7 open · top rank 27
 
 - `2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-1` blocker · rank 27 · Repeated Czech requests do not produce understandable explanations · product: 24 of 25 files changed since · 81 paths held by one side only
-- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J3-3` minor · rank 6 · "I have garden" on the first reply got no stop and no recap line · recurrence 4, first seen 2026-09-15-lt-recert2-beginners
-- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J3-4` minor · rank 6 · Mission closes after six replies, not about eight · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-5
+- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J3-3` minor · rank 6 · "I have garden" on the first reply got no stop and no recap line · recurrence 4, first seen 2026-09-15-lt-recert2-beginners · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J3-4` minor · rank 6 · Mission closes after six replies, not about eight · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-5 · product: 6 of 106 files changed since
 - `2026-09-15-lt-recert/LT-viktor-67-J3-2` minor · rank 6 · One clarification remains too difficult · product: 24 of 25 files changed since · 81 paths held by one side only
 - `2026-09-15-lt/LT-viktor-67-J3-2` minor · rank 6 · A Czech vocabulary question requires a second request · product: 24 of 25 files changed since · 81 paths held by one side only
 - `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-6` polish · rank 2 · Plural correction of 'My apple is red' is arguable · product: 14 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J3-5` polish · rank 2 · Recap model sentence differs from what he said again
+- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J3-5` polish · rank 2 · Recap model sentence differs from what he said again · product: 6 of 106 files changed since
+
+## viktor-67 J4 · 7 open · top rank 27
+
+- `2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-1` blocker · rank 27 · Help cue repeats the same irrelevant line · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-4
+- `2026-10-17-lt-swap-2/recert-4/LT-viktor-67-J4-1` blocker · rank 18 · Phrase quiz shows a line Leo never said · recurrence 7, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J4-2` blocker · rank 18 · Phrase quiz asks a question Leo never asked · recurrence 4, first seen 2026-09-15-lt-recert2-beginners
+- `2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-2` blocker · rank 18 · Past-tense and 'play' questions above A1 · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-6
+- `2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-3` blocker · rank 18 · Replay adds no improvement; same slip returns
+- `2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-4` major · rank 12 · Clear errors missed; same fix twice · recurrence 7, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-5` major · rank 12 · Phrase quiz is not about the scene · recurrence 4, first seen 2026-10-17-lt-swap-2/recert-1
 
 ## adela-17 J1 · 6 open · top rank 27
 
-- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J1-1` blocker · rank 27 · 'eventually' misused for 'possibly' not flagged, and praised · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-1 · product: 9 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J1-1` blocker · rank 27 · 'eventually' misused for 'possibly' not flagged, and praised · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-1 · product: 10 of 105 files changed since
 - `2026-10-14-lt/recert-5/LT-adela-17-J1-2` blocker · rank 18 · Her direct question 'Was that correct?' is never answered · recurrence 2, first seen 2026-09-15-lt · product: 32 of 105 files changed since
 - `2026-10-14-lt/recert-6/LT-adela-17-J1-1` blocker · rank 18 · Headline correction 'similar to some episodes' is wrong in meaning · product: 32 of 105 files changed since
 - `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J1-2` major · rank 12 · "for their own choice" slip missed · product: 14 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J1-2` major · rank 12 · Held-back reasons for C2 tasks are dubious or vague · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J1-3` minor · rank 6 · Next focus tells a speaker to 'say it out loud' and cites writing she never showed · product: 9 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J1-2` major · rank 12 · Held-back reasons for C2 tasks are dubious or vague · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J1-3` minor · rank 6 · Next focus tells a speaker to 'say it out loud' and cites writing she never showed · product: 10 of 105 files changed since
 
 ## adela-17 J2 · 6 open · top rank 27
 
-- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J2-1` blocker · rank 27 · Proposed and replacement topics are mostly transactional, not exam discussion · recurrence 6, first seen 2026-10-14-lt/recert-1 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J2-2` blocker · rank 18 · No mock interview or technology/education topic proposed · recurrence 6, first seen 2026-09-15-lt-recert2-goal · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J2-1` blocker · rank 18 · Initial plan is mostly everyday/transactional, not B2 exam discussion · recurrence 4, first seen 2026-09-15-lt-recert · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J2-3` major · rank 12 · Added topic appended last with a generic skill label · recurrence 3, first seen 2026-10-17-lt-swap · product: 9 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J2-1` blocker · rank 27 · Proposed and replacement topics are mostly transactional, not exam discussion · recurrence 6, first seen 2026-10-14-lt/recert-1 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J2-2` blocker · rank 18 · No mock interview or technology/education topic proposed · recurrence 6, first seen 2026-09-15-lt-recert2-goal · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-adela-17-J2-1` blocker · rank 18 · Initial plan is mostly everyday/transactional, not B2 exam discussion · recurrence 4, first seen 2026-09-15-lt-recert · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-adela-17-J2-3` major · rank 12 · Added topic appended last with a generic skill label · recurrence 3, first seen 2026-10-17-lt-swap · product: 10 of 105 files changed since
 - `2026-10-14-lt/recert-5/LT-adela-17-J2-5` major · rank 12 · Her direct question 'Was that correct?' not answered plainly · product: 32 of 105 files changed since
-- `2026-10-17-lt-swap/LT-adela-17-J2-2` minor · rank 6 · Two of seven topics are not exam discussion · recurrence 3, first seen 2026-10-17-lt-swap · product: 9 of 105 files changed since
-
-## adela-17 J4 · 6 open · top rank 27
-
-- `2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-3` blocker · rank 27 · Supported/independent counts are wrong; reply 3 flagged as helped · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
-- `2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-1` blocker · rank 18 · Cue only simplifies the question; quiz is about a different prompt · recurrence 9, first seen 2026-10-14-lt
-- `2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-1` blocker · rank 18 · Cue gives a simplified question and a gloss; the B2 frame came on the third press · recurrence 8, first seen 2026-09-15-lt-recert
-- `2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-2` blocker · rank 18 · Partner drifts off the careers brief into personal social-media questions and gives generic praise · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-2
-- `2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-4` major · rank 8 · No coach note or replay of the stuck moment
-- `2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-5` minor · rank 6 · Rule given is thin for an exam learner · product: 1 of 105 files changed since
+- `2026-10-17-lt-swap/LT-adela-17-J2-2` minor · rank 6 · Two of seven topics are not exam discussion · recurrence 3, first seen 2026-10-17-lt-swap · product: 10 of 105 files changed since
 
 ## ondrej-16 J1 · 6 open · top rank 27
 
@@ -82,23 +83,14 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 - `2026-09-15-lt/LT-ondrej-16-J1-3` major · rank 9 · Repeated clear errors yield no useful feedback · product: 24 of 25 files changed since · 81 paths held by one side only
 - `2026-09-15-lt/LT-ondrej-16-J1-2` minor · rank 6 · The mission stays elementary after he engages · product: 24 of 25 files changed since · 81 paths held by one side only
 
-## petra-38 J4 · 6 open · top rank 27
-
-- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-1` blocker · rank 27 · Cue shows the same irrelevant line for every question · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-2
-- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-3` blocker · rank 18 · Moment screen gives only Back, no retry of the fix · recurrence 5, first seen 2026-09-15-lt
-- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-2` blocker · rank 18 · Replay question is a rephrase, not a fresh question practising the coaching
-- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-4` major · rank 12 · Coach quotes an earlier turn, not where she was stuck · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
-- `2026-10-17-lt-swap-2/recert-4/LT-petra-38-J4-6` minor · rank 6 · Moment screen offers no fresh-question replay · recurrence 6, first seen 2026-10-14-lt
-- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-5` minor · rank 6 · Clear learner errors got no moment
-
 ## tomas-9 J1 · 6 open · top rank 27
 
-- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-3` blocker · rank 27 · Feedback frames skip and one-word answers as shortfall · recurrence 4, first seen 2026-10-14-lt/recert-5 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J1-4` blocker · rank 18 · About-you questions long and about learning history · recurrence 6, first seen 2026-10-14-lt/recert-2 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-1` blocker · rank 18 · About-you questions long and abstract for a 9-year-old · recurrence 6, first seen 2026-10-14-lt/recert-1 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-2` blocker · rank 18 · Listening line too long and fast · recurrence 6, first seen 2026-09-15-lt-j1b · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-4` major · rank 12 · A2 rests on guessable two-option choices · recurrence 3, first seen 2026-10-14-lt/recert-6 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-5` major · rank 12 · Summary and focus generic, miss what he said · product: 9 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-3` blocker · rank 27 · Feedback frames skip and one-word answers as shortfall · recurrence 4, first seen 2026-10-14-lt/recert-5 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J1-4` blocker · rank 18 · About-you questions long and about learning history · recurrence 6, first seen 2026-10-14-lt/recert-2 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-1` blocker · rank 18 · About-you questions long and abstract for a 9-year-old · recurrence 6, first seen 2026-10-14-lt/recert-1 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-2` blocker · rank 18 · Listening line too long and fast · recurrence 6, first seen 2026-09-15-lt-j1b · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-4` major · rank 12 · A2 rests on guessable two-option choices · recurrence 3, first seen 2026-10-14-lt/recert-6 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-5` major · rank 12 · Summary and focus generic, miss what he said · product: 10 of 105 files changed since
 
 ## martin-45 J2 · 5 open · top rank 27
 
@@ -110,31 +102,39 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 ## oksana-34 J3 · 5 open · top rank 27
 
-- `2026-10-17-lt-swap-2/recert-6/LT-oksana-34-J3-1` blocker · rank 27 · Interviewer calls the candidate 'Priya', the interviewer's own name
-- `2026-10-17-lt-swap-2/recert-6/LT-oksana-34-J3-2` blocker · rank 18 · Key B1 errors 'responsible about' and 'I work' never coached · recurrence 5, first seen 2026-10-14-lt
-- `2026-10-17-lt-swap-2/recert-6/LT-oksana-34-J3-4` blocker · rank 18 · Recap has no interview phrases to keep; the mission line is generic · recurrence 5, first seen 2026-10-14-lt/recert-1
-- `2026-10-17-lt-swap-2/recert-6/LT-oksana-34-J3-3` major · rank 12 · 'Mission done' appears while the interviewer is still asking, and a question repeats · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
-- `2026-10-17-lt-swap-2/recert-4/LT-oksana-34-J3-4` major · rank 9 · 'Mission done' banner appears from #10 while interviewer keeps asking · recurrence 5, first seen 2026-10-14-lt/recert-3
+- `2026-10-17-lt-swap-2/recert-6/LT-oksana-34-J3-1` blocker · rank 27 · Interviewer calls the candidate 'Priya', the interviewer's own name · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-oksana-34-J3-2` blocker · rank 18 · Key B1 errors 'responsible about' and 'I work' never coached · recurrence 5, first seen 2026-10-14-lt · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-oksana-34-J3-4` blocker · rank 18 · Recap has no interview phrases to keep; the mission line is generic · recurrence 5, first seen 2026-10-14-lt/recert-1 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-oksana-34-J3-3` major · rank 12 · 'Mission done' appears while the interviewer is still asking, and a question repeats · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-4/LT-oksana-34-J3-4` major · rank 9 · 'Mission done' banner appears from #10 while interviewer keeps asking · recurrence 5, first seen 2026-10-14-lt/recert-3 · product: 6 of 106 files changed since
+
+## petra-38 J4 · 5 open · top rank 27
+
+- `2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-1` blocker · rank 27 · Ana ignores what the learner said and repeats 'Is the room cold?'
+- `2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-3` blocker · rank 18 · Replay does not make her practise the coached phrase · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-6
+- `2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-4` blocker · rank 18 · Clear learner errors got no moment or held fix · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-6
+- `2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-5` major · rank 12 · Coach note claims Ana understood, and quotes the first turn not the stuck point · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-4
+- `2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-2` major · rank 12 · Cues do not match the learner's real problem and are not used
 
 ## jana-29 J1 · 4 open · top rank 27
 
-- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J1-1` blocker · rank 27 · Next focus is a synonym swap, not a slip · recurrence 4, first seen 2026-10-14-lt · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J1-2` blocker · rank 18 · Per-task notes are generic praise · recurrence 3, first seen 2026-10-14-lt/recert-3 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J1-3` major · rank 12 · C2 tasks passed easily · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-1 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J1-4` major · rank 9 · Starter situations are half irrelevant · recurrence 3, first seen 2026-09-15-lt · product: 9 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J1-1` blocker · rank 27 · Next focus is a synonym swap, not a slip · recurrence 4, first seen 2026-10-14-lt · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J1-2` blocker · rank 18 · Per-task notes are generic praise · recurrence 3, first seen 2026-10-14-lt/recert-3 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J1-3` major · rank 12 · C2 tasks passed easily · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-1 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J1-4` major · rank 9 · Starter situations are half irrelevant · recurrence 3, first seen 2026-09-15-lt · product: 10 of 105 files changed since
 
 ## martin-45 J3 · 4 open · top rank 27
 
-- `2026-10-17-lt-swap-2/recert-6/LT-martin-45-J3-2` blocker · rank 27 · B1 level shown without any evidence · recurrence 5, first seen 2026-10-14-lt/recert-6
-- `2026-10-17-lt-swap-2/recert-6/LT-martin-45-J3-3` major · rank 12 · Stops dense, each with a retry loop · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
-- `2026-10-17-lt-swap-2/recert-6/LT-martin-45-J3-4` major · rank 12 · 'Customer don't accept' went uncorrected
-- `2026-10-17-lt-swap-2/recert-6/LT-martin-45-J3-5` polish · rank 2 · Retry marked 'You fixed' while the slip stayed partly wrong
+- `2026-10-17-lt-swap-2/recert-6/LT-martin-45-J3-2` blocker · rank 27 · B1 level shown without any evidence · recurrence 5, first seen 2026-10-14-lt/recert-6 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-martin-45-J3-3` major · rank 12 · Stops dense, each with a retry loop · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-martin-45-J3-4` major · rank 12 · 'Customer don't accept' went uncorrected · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-martin-45-J3-5` polish · rank 2 · Retry marked 'You fixed' while the slip stayed partly wrong · product: 6 of 106 files changed since
 
 ## adela-17 J3 · 3 open · top rank 27
 
-- `2026-10-17-lt-swap-2/recert-6/LT-adela-17-J3-1` blocker · rank 27 · Fix for 'interested about' changes the sentence and gives no rule
-- `2026-10-17-lt-swap-2/recert-6/LT-adela-17-J3-2` major · rank 12 · False friend 'eventually' not noted · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-3
-- `2026-10-17-lt-swap-2/recert-6/LT-adela-17-J3-3` major · rank 12 · Partner corrects in the scene and uses generic praise · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
+- `2026-10-17-lt-swap-2/recert-6/LT-adela-17-J3-1` blocker · rank 27 · Fix for 'interested about' changes the sentence and gives no rule · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-adela-17-J3-2` major · rank 12 · False friend 'eventually' not noted · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-3 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-adela-17-J3-3` major · rank 12 · Partner corrects in the scene and uses generic praise · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4 · product: 6 of 106 files changed since
 
 ## klara-13 J3 · 14 open · top rank 18
 
@@ -181,27 +181,15 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 ## tomas-9 J2 · 9 open · top rank 18
 
-- `2026-10-14-lt/recert-5/LT-tomas-9-J2-1` blocker · rank 18 · Abstract skill labels and long why lines for a 9-year-old · recurrence 6, first seen 2026-09-15-lt-recert · product: 9 of 105 files changed since
-- `2026-10-14-lt/recert-6/LT-tomas-9-J2-2` blocker · rank 18 · Abstract skill labels for a 9-year-old · recurrence 6, first seen 2026-09-15-lt-recert2-goal · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J2-1` blocker · rank 18 · Abstract skill labels and long why lines for a 9-year-old · recurrence 6, first seen 2026-10-14-lt/recert-2 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J2-1` blocker · rank 18 · Abstract skill labels and long why lines for a 9-year-old · recurrence 6, first seen 2026-09-15-lt · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J2-2` blocker · rank 18 · Default six include shopping and a decline topic for a child who wants games · recurrence 3, first seen 2026-10-14-lt/recert-6 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J2-2` blocker · rank 18 · Shopping topic proposed again to a child who wants games · recurrence 3, first seen 2026-10-17-lt-swap-2 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J2-3` major · rank 12 · Goals demand past tense beyond like/is · recurrence 6, first seen 2026-10-14-lt/recert-1 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap/LT-tomas-9-J2-4` major · rank 12 · Why-lines and screen text too long for a 9-year-old · recurrence 3, first seen 2026-10-17-lt-swap · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J2-4` minor · rank 6 · Goals use grammar jargon beyond like/is · recurrence 6, first seen 2026-10-14-lt/recert-2 · product: 9 of 105 files changed since
-
-## tomas-9 J4 · 9 open · top rank 18
-
-- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-1` blocker · rank 18 · No fresh question after the moment · recurrence 9, first seen 2026-09-15-lt
-- `2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-1` blocker · rank 18 · No replay with a fresh question after the moment · recurrence 9, first seen 2026-09-15-lt-recert
-- `2026-10-17-lt-swap-2/recert-4/LT-tomas-9-J4-2` blocker · rank 18 · No replay with a fresh question after the moment · recurrence 9, first seen 2026-09-15-lt-recert2-beginners
-- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J4-5` blocker · rank 18 · Situation list long and mixed · recurrence 9, first seen 2026-09-15-lt
-- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J4-1` blocker · rank 18 · No fresh question after the moment · recurrence 8, first seen 2026-10-14-lt/recert-2
-- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J4-2` blocker · rank 18 · Cue is generic and repeated · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
-- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J4-3` blocker · rank 18 · Supported flag inconsistent
-- `2026-10-17-lt-swap-2/recert-4/LT-tomas-9-J4-3` major · rank 12 · Partner turns drift above A1 · recurrence 9, first seen 2026-09-15-lt-recert2-beginners
-- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J4-4` minor · rank 6 · Grammar note too abstract and fix changes sentence
+- `2026-10-14-lt/recert-5/LT-tomas-9-J2-1` blocker · rank 18 · Abstract skill labels and long why lines for a 9-year-old · recurrence 6, first seen 2026-09-15-lt-recert · product: 10 of 105 files changed since
+- `2026-10-14-lt/recert-6/LT-tomas-9-J2-2` blocker · rank 18 · Abstract skill labels for a 9-year-old · recurrence 6, first seen 2026-09-15-lt-recert2-goal · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J2-1` blocker · rank 18 · Abstract skill labels and long why lines for a 9-year-old · recurrence 6, first seen 2026-10-14-lt/recert-2 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J2-1` blocker · rank 18 · Abstract skill labels and long why lines for a 9-year-old · recurrence 6, first seen 2026-09-15-lt · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J2-2` blocker · rank 18 · Default six include shopping and a decline topic for a child who wants games · recurrence 3, first seen 2026-10-14-lt/recert-6 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J2-2` blocker · rank 18 · Shopping topic proposed again to a child who wants games · recurrence 3, first seen 2026-10-17-lt-swap-2 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J2-3` major · rank 12 · Goals demand past tense beyond like/is · recurrence 6, first seen 2026-10-14-lt/recert-1 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap/LT-tomas-9-J2-4` major · rank 12 · Why-lines and screen text too long for a 9-year-old · recurrence 3, first seen 2026-10-17-lt-swap · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J2-4` minor · rank 6 · Goals use grammar jargon beyond like/is · recurrence 6, first seen 2026-10-14-lt/recert-2 · product: 10 of 105 files changed since
 
 ## ondrej-16 J5 · 8 open · top rank 18
 
@@ -214,16 +202,16 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 - `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J5-5` minor · rank 6 · Partner pitched at A2 and stays simple for a B1 speaker · product: 14 of 105 files changed since
 - `2026-10-14-lt/recert-3/LT-ondrej-16-J5-5` polish · rank 2 · Fix accepted though the retry carried injected text · product: 34 of 105 files changed since
 
-## viktor-67 J4 · 8 open · top rank 18
+## tomas-9 J4 · 8 open · top rank 18
 
-- `2026-10-17-lt-swap-2/recert-4/LT-viktor-67-J4-1` blocker · rank 18 · Phrase quiz shows a line Leo never said · recurrence 6, first seen 2026-10-14-lt
-- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J4-1` blocker · rank 18 · Replay hands back the model, no fresh question · recurrence 3, first seen 2026-09-15-lt-recert
-- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J4-2` blocker · rank 18 · Phrase quiz asks a question Leo never asked · recurrence 3, first seen 2026-09-15-lt-recert2-beginners
-- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J4-3` blocker · rank 18 · Help button repeats the same cue · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
-- `2026-10-17-lt-swap-2/recert-4/LT-viktor-67-J4-2` blocker · rank 18 · No coaching or moment after a supported scene · product: 1 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-3` major · rank 12 · Phrase quiz mismatches the scene · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-1
-- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J4-4` minor · rank 6 · Clear A1 errors got no moment, only an article fix · recurrence 6, first seen 2026-10-14-lt
-- `2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J4-5` minor · rank 6 · Past-tense question above his band
+- `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-1` blocker · rank 18 · No fresh question after the moment · recurrence 9, first seen 2026-09-15-lt · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-1` blocker · rank 18 · No replay with a fresh question after the moment · recurrence 9, first seen 2026-09-15-lt-recert · product: 7 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-4/LT-tomas-9-J4-2` blocker · rank 18 · No replay with a fresh question after the moment · recurrence 9, first seen 2026-09-15-lt-recert2-beginners · product: 6 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J4-1` blocker · rank 18 · No fresh question after the moment · recurrence 8, first seen 2026-10-14-lt/recert-2 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-2` blocker · rank 18 · Coaching note abstract and drops what he said · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-6
+- `2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-1` blocker · rank 18 · Replay with fresh question never exercised
+- `2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-3` major · rank 12 · Cue generic and help loop repeated · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-4
+- `2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-4` major · rank 9 · Situation list long and mixed · recurrence 10, first seen 2026-09-15-lt
 
 ## hana-41 J1 · 7 open · top rank 18
 
@@ -263,21 +251,29 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 - `2026-10-17-lt-swap-2/recert-1/LT-ondrej-16-J2-4` minor · rank 6 · Seven topics, but no cars or football in the first six · product: 14 of 105 files changed since
 - `2026-09-15-lt-recert2-goal/LT-ondrej-16-J2-4` minor · rank 3 · The first swap repeats the unwanted role theme · product: 24 of 25 files changed since · 81 paths held by one side only
 
+## adela-17 J4 · 5 open · top rank 18
+
+- `2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-1` blocker · rank 18 · Cue gives simplified question first; B2 frame arrives on press three · recurrence 10, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-1` blocker · rank 18 · Cue gives a simplified question and a gloss; the B2 frame came on the third press · recurrence 9, first seen 2026-09-15-lt-recert
+- `2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-3` major · rank 12 · Partner addresses itself as 'Ana' in its own turns
+- `2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-2` minor · rank 6 · Rule for the fix is a bare collocation statement, no rule or why · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
+- `2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-4` minor · rank 6 · Replay quote truncated and fix not tested
+
 ## jana-29 J3 · 5 open · top rank 18
 
-- `2026-10-17-lt-swap-2/recert-6/LT-jana-29-J3-1` blocker · rank 18 · Scene ends at logistics; no nuance pressure for a C1 · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
-- `2026-10-17-lt-swap-2/recert-6/LT-jana-29-J3-3` blocker · rank 18 · Recap counts '1 with help' with no help used · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
-- `2026-10-17-lt-swap-2/recert-4/LT-jana-29-J3-1` blocker · rank 18 · Clear slip "on the picture" got no moment and no recap fix · product: 1 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-6/LT-jana-29-J3-4` major · rank 12 · Recap hidden line is below the learner's level
-- `2026-10-17-lt-swap-2/recert-6/LT-jana-29-J3-2` minor · rank 6 · Goal chip lags: asks for a reason after it was given
+- `2026-10-17-lt-swap-2/recert-6/LT-jana-29-J3-1` blocker · rank 18 · Scene ends at logistics; no nuance pressure for a C1 · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-jana-29-J3-3` blocker · rank 18 · Recap counts '1 with help' with no help used · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-4/LT-jana-29-J3-1` blocker · rank 18 · Clear slip "on the picture" got no moment and no recap fix · product: 6 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-jana-29-J3-4` major · rank 12 · Recap hidden line is below the learner's level · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-jana-29-J3-2` minor · rank 6 · Goal chip lags: asks for a reason after it was given · product: 6 of 106 files changed since
 
 ## petra-38 J1 · 5 open · top rank 18
 
-- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-2` blocker · rank 18 · Two B2 opinion tasks for an anxious A2 receptionist · recurrence 4, first seen 2026-10-14-lt · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J1-2` blocker · rank 18 · B2 social opinion task for an anxious A2 receptionist · recurrence 3, first seen 2026-10-16-lt-a2b1-tightening · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J1-3` blocker · rank 18 · Next focus generic and not desk-shaped · recurrence 3, first seen 2026-09-15-lt-j1b · product: 9 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-petra-38-J1-2` blocker · rank 18 · Two B2 opinion tasks for an anxious A2 receptionist · recurrence 4, first seen 2026-10-14-lt · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J1-2` blocker · rank 18 · B2 social opinion task for an anxious A2 receptionist · recurrence 3, first seen 2026-10-16-lt-a2b1-tightening · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J1-3` blocker · rank 18 · Next focus generic and not desk-shaped · recurrence 3, first seen 2026-09-15-lt-j1b · product: 10 of 105 files changed since
 - `2026-09-15-lt/LT-petra-38-J1-3` minor · rank 6 · The booking choice misses her hospitality practice · product: 24 of 25 files changed since · 81 paths held by one side only
-- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J1-4` polish · rank 2 · Confidence shown low though the evidence was consistent · product: 9 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-petra-38-J1-4` polish · rank 2 · Confidence shown low though the evidence was consistent · product: 10 of 105 files changed since
 
 ## sofie-11 J1 · 5 open · top rank 18
 
@@ -289,11 +285,11 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 ## tomas-9 J3 · 5 open · top rank 18
 
-- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J3-1` blocker · rank 18 · Recap mission line is generic · recurrence 5, first seen 2026-10-17-lt-swap-2/recert-1
-- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J3-2` major · rank 12 · Adult situations still offered to a nine-year-old · recurrence 9, first seen 2026-10-14-lt/recert-2
-- `2026-10-17-lt-swap-2/recert-4/LT-tomas-9-J3-2` major · rank 12 · 'Jmenuje se' glossed as 'name' · product: 1 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J3-3` major · rank 9 · Telegraphic errors get no stop and no held fix
-- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J3-5` polish · rank 2 · 'What is your house from?' is unnatural English
+- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J3-1` blocker · rank 18 · Recap mission line is generic · recurrence 5, first seen 2026-10-17-lt-swap-2/recert-1 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J3-2` major · rank 12 · Adult situations still offered to a nine-year-old · recurrence 9, first seen 2026-10-14-lt/recert-2 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-4/LT-tomas-9-J3-2` major · rank 12 · 'Jmenuje se' glossed as 'name' · product: 6 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J3-3` major · rank 9 · Telegraphic errors get no stop and no held fix · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J3-5` polish · rank 2 · 'What is your house from?' is unnatural English · product: 6 of 106 files changed since
 
 ## viktor-67 J1 · 5 open · top rank 18
 
@@ -305,17 +301,17 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 ## martin-45 J1 · 4 open · top rank 18
 
-- `2026-10-17-lt-swap-2/recert-3/LT-martin-45-J1-2` blocker · rank 18 · Fossilised errors went unremarked · recurrence 8, first seen 2026-10-14-lt · product: 5 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-1/LT-martin-45-J1-2` blocker · rank 18 · B2 generous; Task 2 praised as accurate despite slips · recurrence 6, first seen 2026-10-14-lt/recert-3 · product: 5 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-3/LT-martin-45-J1-1` blocker · rank 18 · B2 is generous: tasks with repeated agreement slips passed · recurrence 6, first seen 2026-10-14-lt/recert-1 · product: 5 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-3/LT-martin-45-J1-3` blocker · rank 18 · A correction offers a non-idiomatic alternative and flags an acceptable phrase · product: 5 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-3/LT-martin-45-J1-2` blocker · rank 18 · Fossilised errors went unremarked · recurrence 8, first seen 2026-10-14-lt · product: 7 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-1/LT-martin-45-J1-2` blocker · rank 18 · B2 generous; Task 2 praised as accurate despite slips · recurrence 6, first seen 2026-10-14-lt/recert-3 · product: 7 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-3/LT-martin-45-J1-1` blocker · rank 18 · B2 is generous: tasks with repeated agreement slips passed · recurrence 6, first seen 2026-10-14-lt/recert-1 · product: 7 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-3/LT-martin-45-J1-3` blocker · rank 18 · A correction offers a non-idiomatic alternative and flags an acceptable phrase · product: 7 of 105 files changed since
 
 ## petra-38 J3 · 4 open · top rank 18
 
-- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J3-1` blocker · rank 18 · Conversation ended after three replies · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
-- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J3-2` major · rank 12 · Petra plays the guest, not the receptionist
-- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J3-3` minor · rank 6 · Same error missed on its first appearance
-- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J3-5` polish · rank 2 · Partner asked about heat in a noise complaint
+- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J3-1` blocker · rank 18 · Conversation ended after three replies · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J3-2` major · rank 12 · Petra plays the guest, not the receptionist · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J3-3` minor · rank 6 · Same error missed on its first appearance · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-petra-38-J3-5` polish · rank 2 · Partner asked about heat in a noise complaint · product: 6 of 106 files changed since
 
 ## lukas-24 J3 · 3 open · top rank 18
 
@@ -331,9 +327,9 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 ## ondrej-16 J3 · 3 open · top rank 18
 
-- `2026-10-17-lt-swap-2/recert-6/LT-ondrej-16-J3-2` blocker · rank 18 · Recap mission line still generic · recurrence 5, first seen 2026-10-14-lt/recert-3
-- `2026-10-17-lt-swap-2/recert-6/LT-ondrej-16-J3-3` minor · rank 6 · Partner repeats the 'Turbo Rift ... right?' tag · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
-- `2026-10-17-lt-swap-2/recert-6/LT-ondrej-16-J3-4` minor · rank 6 · Mission closes after only three replies
+- `2026-10-17-lt-swap-2/recert-6/LT-ondrej-16-J3-2` blocker · rank 18 · Recap mission line still generic · recurrence 5, first seen 2026-10-14-lt/recert-3 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-ondrej-16-J3-3` minor · rank 6 · Partner repeats the 'Turbo Rift ... right?' tag · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4 · product: 6 of 106 files changed since
+- `2026-10-17-lt-swap-2/recert-6/LT-ondrej-16-J3-4` minor · rank 6 · Mission closes after only three replies · product: 6 of 106 files changed since
 
 ## dominik-17 J1 · 2 open · top rank 18
 
@@ -358,11 +354,11 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 ## jana-29 J2 · 5 open · top rank 6
 
-- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J2-2` minor · rank 6 · Room booking is a basic register task for a C1 · recurrence 3, first seen 2026-10-14-lt/recert-1 · product: 9 of 105 files changed since
-- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J2-3` minor · rank 6 · Her stated wants still had to be added by hand · recurrence 3, first seen 2026-09-15-lt-recert2-goal · product: 9 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J2-2` minor · rank 6 · Room booking is a basic register task for a C1 · recurrence 3, first seen 2026-10-14-lt/recert-1 · product: 10 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J2-3` minor · rank 6 · Her stated wants still had to be added by hand · recurrence 3, first seen 2026-09-15-lt-recert2-goal · product: 10 of 105 files changed since
 - `2026-09-15-lt-recert/LT-jana-29-J2-2` minor · rank 6 · The critique topic loses its requested source of difficulty · product: 24 of 25 files changed since · 81 paths held by one side only
 - `2026-09-15-lt/LT-jana-29-J2-2` minor · rank 6 · Recovery preserves pressure resistance but loses awkward questions · product: 24 of 25 files changed since · 81 paths held by one side only
-- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J2-4` minor · rank 3 · Plan grows to seven, though the screen says six · product: 9 of 105 files changed since
+- `2026-10-17-lt-swap-2/recert-2/LT-jana-29-J2-4` minor · rank 3 · Plan grows to seven, though the screen says six · product: 10 of 105 files changed since
 
 ## lukas-24 J1 · 2 open · top rank 6
 
@@ -380,76 +376,76 @@ Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Lin
 
 ## helena-46 EM5 · 7 open · top rank 12
 
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-1` major · rank 12 · Reading a kept email puts every sentence on the TV and its first words on the lens home · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-2` major · rank 9 · After the first reading, no remote path leads back to the Workroom · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-3` major · rank 9 · A kept piece can be read only from the phone; the PC page cannot ask for a reading and the Workroom's piece rows do nothing on OK · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-6` major · rank 9 · A piece kept from the phone cannot be named, so the Workroom and shelf show its first line or a column of 'Untitled essay' rows · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-4` minor · rank 3 · On /drop the notice's 'Read without keeping' reads nothing, and the empty shelf says pieces arrive from the TV · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-5` polish · rank 2 · Leaving a piece out of the exemplars still lets its text shape the dims and count toward birth · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-7` polish · rank 2 · .docx text: table cells become separate paragraphs and a non-breaking hyphen is dropped and glues the words · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 2 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-1` major · rank 12 · Reading a kept email puts every sentence on the TV and its first words on the lens home · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-2` major · rank 9 · After the first reading, no remote path leads back to the Workroom · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-3` major · rank 9 · A kept piece can be read only from the phone; the PC page cannot ask for a reading and the Workroom's piece rows do nothing on OK · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-6` major · rank 9 · A piece kept from the phone cannot be named, so the Workroom and shelf show its first line or a column of 'Untitled essay' rows · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-4` minor · rank 3 · On /drop the notice's 'Read without keeping' reads nothing, and the empty shelf says pieces arrive from the TV · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-5` polish · rank 2 · Leaving a piece out of the exemplars still lets its text shape the dims and count toward birth · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-7` polish · rank 2 · .docx text: table cells become separate paragraphs and a non-breaking hyphen is dropped and glues the words · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 3 of 31 files changed since
 
 ## daniel-15 EM3 · 6 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-1` major · rank 9 · The forensic page he is moved to shows neither 'paragraph k of n' nor the summary; the first wait says 'your paragraph' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-2` major · rank 9 · The paste box and the shelf are hidden whenever the TV is on the forensic page, and Essay Master reopens there · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-3` major · rank 9 · A title line is read as its own paragraph or fuses into sentence 1; the task never reaches the prompt as a task · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-6` major · rank 9 · No verdict lands until the last paragraph is read (C3 second clause fails by design) · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-4` minor · rank 6 · Nothing says grammar and spelling are not checked; 'Well done' lands on sentences with errors · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-5` minor · rank 3 · Present-and-correct-but-unwired: provider, stats.words, stats.links; /api/texts noticed and notice · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-1` major · rank 9 · The forensic page he is moved to shows neither 'paragraph k of n' nor the summary; the first wait says 'your paragraph' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-2` major · rank 9 · The paste box and the shelf are hidden whenever the TV is on the forensic page, and Essay Master reopens there · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-3` major · rank 9 · A title line is read as its own paragraph or fuses into sentence 1; the task never reaches the prompt as a task · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-6` major · rank 9 · No verdict lands until the last paragraph is read (C3 second clause fails by design) · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-4` minor · rank 6 · Nothing says grammar and spelling are not checked; 'Well done' lands on sentences with errors · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM3-5` minor · rank 3 · Present-and-correct-but-unwired: provider, stats.words, stats.links; /api/texts noticed and notice · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
 
 ## eliska-12 EM1 · 6 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-1` major · rank 9 · Every faulty note is a code line not in the young voice: 'asserts', 'checkable'; planFit prints 'That reads as claim.' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-4` major · rank 9 · The planted-claim fix depends on the model naming links (supports / backs): when it omits them, Structure marks the true topic sentence and Evidence marks nothing · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-2` minor · rank 6 · The forensic crumb, 'Its job' and the table show the regex first-pass role, which can contradict the verdict · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-5` minor · rank 6 · PEEL's Explain is still marked faulty when it has no connector or linker opener: closesAfterEvidence needs "because", "this means", "so" ... in the sentence · recurrence 4, first seen 2026-10-09-essay-l1/recert-3 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-6` minor · rank 6 · cleanFix's content check is a closed list of verbs: a frame with any other verb ('Teenagers sleep [how many] hours.') still states content and is kept · recurrence 3, first seen 2026-10-09-essay-l1/recert-4 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-3` polish · rank 2 · stats.links (PEEL's L) and stats.words are computed for every reading and shown nowhere · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-1` major · rank 9 · Every faulty note is a code line not in the young voice: 'asserts', 'checkable'; planFit prints 'That reads as claim.' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-4` major · rank 9 · The planted-claim fix depends on the model naming links (supports / backs): when it omits them, Structure marks the true topic sentence and Evidence marks nothing · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-2` minor · rank 6 · The forensic crumb, 'Its job' and the table show the regex first-pass role, which can contradict the verdict · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-5` minor · rank 6 · PEEL's Explain is still marked faulty when it has no connector or linker opener: closesAfterEvidence needs "because", "this means", "so" ... in the sentence · recurrence 4, first seen 2026-10-09-essay-l1/recert-3 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-6` minor · rank 6 · cleanFix's content check is a closed list of verbs: a frame with any other verb ('Teenagers sleep [how many] hours.') still states content and is kept · recurrence 3, first seen 2026-10-09-essay-l1/recert-4 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM1-3` polish · rank 2 · stats.links (PEEL's L) and stats.words are computed for every reading and shown nowhere · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
 
 ## kristyna-17 EM1 · 6 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-2` major · rank 9 · ES-READ: kind and mode now reach the reading, a task has no sender and no history or memory reaches it · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-5` major · rank 9 · The language check lets some Czech through: a paragraph whose shared function words (my, a, to, do) reach 15% is read as English, under English rules, with no word about language · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-6` minor · rank 6 · Nothing says before the first send that Essay Master reads English; on the plan she writes and inks three Czech slots before the refusal · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-4` minor · rank 3 · stats.links and stats.words are computed for every reading and shown nowhere · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-2` major · rank 9 · ES-READ: kind and mode now reach the reading, a task has no sender and no history or memory reaches it · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-5` major · rank 9 · The language check lets some Czech through: a paragraph whose shared function words (my, a, to, do) reach 15% is read as English, under English rules, with no word about language · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-6` minor · rank 6 · Nothing says before the first send that Essay Master reads English; on the plan she writes and inks three Czech slots before the refusal · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM1-4` minor · rank 3 · stats.links and stats.words are computed for every reading and shown nowhere · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
 
 ## kristyna-17 EM3 · 4 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM3-1` major · rank 9 · The forensic page never names the paragraph; 'Start with paragraph p, sentence n' is on the lens home only, cut from the landing, and means 'earliest' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM3-2` minor · rank 6 · A plain title line becomes paragraph 1 of the piece, costs a model call, and can become 'Start with paragraph 1' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM3-3` minor · rank 3 · While the first paragraph of a first piece is read, the TV says 'The desk is reading your paragraph' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM3-4` minor · rank 3 · GET /api/texts returns noticed and notice that no screen reads · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM3-1` major · rank 9 · The forensic page never names the paragraph; 'Start with paragraph p, sentence n' is on the lens home only, cut from the landing, and means 'earliest' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM3-2` minor · rank 6 · A plain title line becomes paragraph 1 of the piece, costs a model call, and can become 'Start with paragraph 1' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM3-3` minor · rank 3 · While the first paragraph of a first piece is read, the TV says 'The desk is reading your paragraph' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-kristyna-17-EM3-4` minor · rank 3 · GET /api/texts returns noticed and notice that no screen reads · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
 
 ## barbora-43 EM1 · 2 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-6/L1-barbora-43-EM1-1` major · rank 9 · The x-ray shows a hand-in-ready model paragraph on the topic of the phone's own sample paragraph · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-barbora-43-EM1-2` major · rank 9 · ES-READ grounding: the reading still never sees her earlier readings or notes, and no client sends the assignment · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-barbora-43-EM1-1` major · rank 9 · The x-ray shows a hand-in-ready model paragraph on the topic of the phone's own sample paragraph · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-barbora-43-EM1-2` major · rank 9 · ES-READ grounding: the reading still never sees her earlier readings or notes, and no client sends the assignment · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
 
 ## barbora-43 EM4 · 2 open · top rank 8
 
-- `2026-10-09-essay-l1/recert-6/L1-barbora-43-EM4-1` major · rank 8 · A paragraph-only evening's delete is out of reach when the TV is on a sentence or the plan: the shelf, and 'Forget tonight's paragraph' with it, shows only on the paragraph panel · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-barbora-43-EM4-2` polish · rank 2 · A piece is 'one reading' on the recap but 'one piece' on the Sunday page · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 2 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-barbora-43-EM4-1` major · rank 8 · A paragraph-only evening's delete is out of reach when the TV is on a sentence or the plan: the shelf, and 'Forget tonight's paragraph' with it, shows only on the paragraph panel · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-barbora-43-EM4-2` polish · rank 2 · A piece is 'one reading' on the recap but 'one piece' on the Sunday page · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 3 of 31 files changed since
 
 ## helena-46 EM1 · 5 open · top rank 6
 
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM1-1` minor · rank 6 · Adult mode's lens home, plan, playbook and x-ray speak only to school paragraphs · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM1-5` minor · rank 6 · An email read on its own, or a piece read with Keep off, is still judged as an essay: the kind of writing is asked and sent only for a kept piece · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM1-2` minor · rank 3 · Four reading fields are computed and never shown (provider, stats.links, stats.words, sentences[].connectors) · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM1-3` polish · rank 2 · The phone refuses a .docx that the PC page accepts · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; short Czech, Czech without diacritics and German go to the model · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM1-1` minor · rank 6 · Adult mode's lens home, plan, playbook and x-ray speak only to school paragraphs · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM1-5` minor · rank 6 · An email read on its own, or a piece read with Keep off, is still judged as an essay: the kind of writing is asked and sent only for a kept piece · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM1-2` minor · rank 3 · Four reading fields are computed and never shown (provider, stats.links, stats.words, sentences[].connectors) · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM1-3` polish · rank 2 · The phone refuses a .docx that the PC page accepts · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; short Czech, Czech without diacritics and German go to the model · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
 
 ## eliska-12 EM2 · 3 open · top rank 6
 
-- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM2-2` minor · rank 6 · After a rewrite holds, focus goes to 'Next sentence', which steps to n+1, not to the next faulty sentence; the 'Rewrite on my phone' instruction lands only on the bench status bar · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM2-3` minor · rank 3 · Refusal 'In the paragraph that would not stay one sentence.' is opaque; a dictated mid-paragraph rewrite is always refused · recurrence 7, first seen 2026-10-09-essay-l1 · product: 2 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM2-2` minor · rank 6 · After a rewrite holds, focus goes to 'Next sentence', which steps to n+1, not to the next faulty sentence; the 'Rewrite on my phone' instruction lands only on the bench status bar · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-eliska-12-EM2-3` minor · rank 3 · Refusal 'In the paragraph that would not stay one sentence.' is opaque; a dictated mid-paragraph rewrite is always refused · recurrence 7, first seen 2026-10-09-essay-l1 · product: 3 of 31 files changed since
 
 ## daniel-15 EM2 · 2 open · top rank 6
 
-- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM2-1` minor · rank 6 · Dictate on the Essay tab and the rewrite panel listens in Czech for a cz learner, but the desk reads English · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 2 of 31 files changed since
-- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM2-2` minor · rank 4 · A rewrite of a sentence first ruled neutral as a later unsupported claim is ruled faulty: 'Rewrite · not yet' · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 2 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM2-1` minor · rank 6 · Dictate on the Essay tab and the rewrite panel listens in Czech for a cz learner, but the desk reads English · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 3 of 31 files changed since
+- `2026-10-09-essay-l1/recert-6/L1-daniel-15-EM2-2` minor · rank 4 · A rewrite of a sentence first ruled neutral as a later unsupported claim is ruled faulty: 'Rewrite · not yet' · recurrence 6, first seen 2026-10-09-essay-l1/recert-1 · product: 3 of 31 files changed since
 
 # Math Buddy
 

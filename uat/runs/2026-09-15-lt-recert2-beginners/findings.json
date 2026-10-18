@@ -210,13 +210,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 9,
     "suggested_acceptance": "Use familiar language such as \"A yellow ball! Do you like it?\" and give one simple question every turn.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#17 'Sleeping is nice! Where does he sleep at night?' and #11 two-sentence turns; mild drift.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#9 'Creepers are cool! Do you build a house in Minecraft?' stays simple.",
     "recurred_as": "LT-tomas-9-J4-3"
   },
   {
@@ -243,12 +243,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "After supported practice, provide an explicit unaided attempt and verify improvement before treating the replay goal as achieved.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
     "recertify_status": "recurs",
-    "recertify_evidence": "#15-#16 the replay is a retype of \"The tree is green.\" with no fresh question and no independent improvement shown.",
+    "recertify_evidence": "#6 quiz does not match Mia's line at #2.",
     "recurred_as": "LT-viktor-67-J4-2"
   },
   {
@@ -586,9 +586,9 @@
     "recurrence": 9,
     "suggested_acceptance": "Offer an accessible replay and capture a fresh, improved answer without a cue before claiming this journey complete.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#16 'Back to the conversation' leads to #17 new question.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_status": "not-evaluable",
+    "recertify_evidence": "#11-#12 never reached the replayed question.",
     "recurred_as": "LT-tomas-9-J4-2"
   },
   {

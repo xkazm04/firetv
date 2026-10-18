@@ -1,0 +1,950 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA2Everyday basics · self-chosen\nTell the hotel my room is cold\nYour mission\nSay what the problem is and ask for a fix.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nTell the hotel my room is cold\nSay what the problem is and ask for a fix.\n[button: Start talking]\nOr choose a situation [list: Tell the hotel my room is cold [plan-42efc56e] | Find my hotel booking [plan-56f052ab] | Ask the way to the bus stop [plan-997fc57b] | Ask for a good place to eat [plan-9dd32920] | Answer a call from my travel agency [plan-89904977] | Talk about my child's homework [plan-09fd7ef9] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The room is cold topic is good for a hotel person, I'll start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9335
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nHow can I help you?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Ana what the problem is\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nHow can I help you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"How can I help you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 11
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nHow can I help you?\nA little support\nTry: The room is very cold. Can you help, please?\nNowTell Ana what the problem is\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nHow can I help you?\nA little support\nTry: The room is very cold. Can you help, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"How can I help you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say, I will press help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nHow can I help you?\nA little support\nTry: The room is very cold. Can you help, please?\nNowTell Ana what the problem is\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nHow can I help you?\nA little support\nTry: The room is very cold. Can you help, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"How can I help you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say, I need help again.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 14
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA little support · recognition practice\nAna says, 'Sorry. What is the problem?' What do you say?\n01\nThe heater is broken. The room is cold.\n02\nI am happy with the room.\nA little support\nTry: The room is very cold. Can you help, please?\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nHow can I help you?\nA little support\nTry: The room is very cold. Can you help, please?\nAna says, 'Sorry. What is the problem?' What do you say?\n[button: The heater is broken. The room is cold.] [button: I am happy with the room.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"How can I help you?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know the first one is right, the room is cold; I will choose it.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 11
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nHow can I help you?\nA little support\nNow use the idea in your own reply on the phone.\nNowTell Ana what the problem is\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nHow can I help you?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"How can I help you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I know the problem, but I'm nervous; I'll try saying it in my own simple words.",
+          "action": "answer",
+          "args": {
+            "text": "Hello, I have a problem. The room is not clean and I want other room, please."
+          },
+          "result": "ok",
+          "ms": 10649
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nI am sorry to hear that. Is the room cold?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Ana what the problem is\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nI am sorry to hear that. Is the room cold?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\nYou · spoken\nHello, I have a problem. The room is not clean and I want other room, please.\nAna · hotel front desk clerk\nI am sorry to hear that. Is the room cold?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I am sorry to hear that. Is the room cold?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Is the room cold? No, it's not that; I'm not sure how to explain, so I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nI am sorry to hear that. Is the room cold?\nSaid more simply\nSorry. Is the room cold?\nNowTell Ana what the problem is\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nI am sorry to hear that. Is the room cold?\nSaid more simply\nSorry. Is the room cold?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\nYou · spoken\nHello, I have a problem. The room is not clean and I want other room, please.\nAna · hotel front desk clerk\nI am sorry to hear that. Is the room cold?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I am sorry to hear that. Is the room cold?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to answer, I need help; the room is not cold, so I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 19
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nI am sorry to hear that. Is the room cold?\nA way to start\nThe heater does not work…\nNowTell Ana what the problem is\n[button: Choose a phrase] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nI am sorry to hear that. Is the room cold?\nA way to start\nThe heater does not work…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\nYou · spoken\nHello, I have a problem. The room is not clean and I want other room, please.\nAna · hotel front desk clerk\nI am sorry to hear that. Is the room cold?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I am sorry to hear that. Is the room cold?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "coach",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, I need help with a sentence.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 8674
+        },
+        {
+          "n": 10,
+          "screen": "linga-coach",
+          "shown": "TV\nLinga\nPetra\nA way into English\nOne useful change\nYou said I want other room\nOne way to try it\nI want another room\nYour complaint and request are clear, and Ana understood the problem. One change: use 'another room', with 'an', because you are asking for one room.\nCoach\nReplay the moment with a new question, or finish for today.\n[button: Replay the moment] [button: Finish for today]\nOne useful change\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nYour complaint and request are clear, and Ana understood the problem. One change: use 'another room', with 'an', because you are asking for one room.\nOne way to try it: “I want another room”\n[button: Replay with a new question]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\nYou · spoken\nHello, I have a problem. The room is not clean and I want other room, please.\nAna · hotel front desk clerk\nI am sorry to hear that. Is the room cold?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your complaint and request are clear, and Ana understood the problem. One change: use 'another room', with 'an', because you are asking for one room.\"",
+          "offered": [
+            "replay",
+            "finish",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I understand a bit; I want to try again with the new word, so I'll replay.",
+          "action": "replay",
+          "args": {},
+          "result": "ok",
+          "ms": 8021
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nThank you. Do you want to leave this room today, or wait?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Ana what the problem is\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nThank you. Do you want to leave this room today, or wait?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\nYou · spoken\nHello, I have a problem. The room is not clean and I want other room, please.\nAna · hotel front desk clerk\nI am sorry to hear that. Is the room cold?\nAna · hotel front desk clerk\nThank you. Do you want to leave this room today, or wait?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you. Do you want to leave this room today, or wait?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I heard it, so I try answering in my own words, slowly.",
+          "action": "answer",
+          "args": {
+            "text": "I want leave the room today, please. I want other room."
+          },
+          "result": "ok",
+          "ms": 12030
+        },
+        {
+          "n": 12,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said I want other room.\nYour line\n'Another' means one more room, a different one.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I want other room.”\nSay it again, your way.\n'Another' means one more room, a different one.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Another room, I see. Let me say it again.",
+          "action": "answer",
+          "args": {
+            "text": "I want another room, please."
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 13,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said I want other room.\nYour try\nI want another room, please.\n'Another' means one more room, a different one.\nYou fixed “want another”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “want another”\nYou said “I want other room.”\nYour try: “I want another room, please.”\n'Another' means one more room, a different one.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I learned \"another\". Let me go back and carry on.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 8496
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nGood. What kind of room do you want, small or big?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Ana what the problem is\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nGood. What kind of room do you want, small or big?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\nYou · spoken\nHello, I have a problem. The room is not clean and I want other room, please.\nAna · hotel front desk clerk\nI am sorry to hear that. Is the room cold?\nAna · hotel front desk clerk\nThank you. Do you want to leave this room today, or wait?\nYou · spoken\nI want leave the room today, please. I want other room.\nAna · hotel front desk clerk\nOkay, I can find you a new room. Is the room cold?\nAna · hotel front desk clerk\nGood. What kind of room do you want, small or big?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good. What kind of room do you want, small or big?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed to ask for a room; I think that is good enough, I will finish.",
+          "action": "answer",
+          "args": {
+            "text": "A big room, please. Sorry, my English is not good."
+          },
+          "result": "ok",
+          "ms": 7828
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nDon't worry, your English is fine. Is the heater broken?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Ana what the problem is\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Tell Ana what the problem is\nDon't worry, your English is fine. Is the heater broken?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\nYou · spoken\nHello, I have a problem. The room is not clean and I want other room, please.\nAna · hotel front desk clerk\nI am sorry to hear that. Is the room cold?\nAna · hotel front desk clerk\nThank you. Do you want to leave this room today, or wait?\nYou · spoken\nI want leave the room today, please. I want other room.\nAna · hotel front desk clerk\nOkay, I can find you a new room. Is the room cold?\nAna · hotel front desk clerk\nGood. What kind of room do you want, small or big?\nYou · spoken\nA big room, please. Sorry, my English is not good.\nAna · hotel front desk clerk\nDon't worry, your English is fine. Is the heater broken?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Don't worry, your English is fine. Is the heater broken?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "The heater is fine, only room is not clean; I'll explain simply.",
+          "action": "answer",
+          "args": {
+            "text": "No, the heater is not broken. The room is just not clean. Sorry."
+          },
+          "result": "ok",
+          "ms": 12631
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nI am sorry about that. Do you want a new room, or a clean room now?\nYour turn\nAnswer on your phone: speak or type.\nNowSay how it affects your sleep\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Say how it affects your sleep\nI am sorry about that. Do you want a new room, or a clean room now?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\nYou · spoken\nHello, I have a problem. The room is not clean and I want other room, please.\nAna · hotel front desk clerk\nI am sorry to hear that. Is the room cold?\nAna · hotel front desk clerk\nThank you. Do you want to leave this room today, or wait?\nYou · spoken\nI want leave the room today, please. I want other room.\nAna · hotel front desk clerk\nOkay, I can find you a new room. Is the room cold?\nAna · hotel front desk clerk\nGood. What kind of room do you want, small or big?\nYou · spoken\nA big room, please. Sorry, my English is not good.\nAna · hotel front desk clerk\nDon't worry, your English is fine. Is the heater broken?\nYou · spoken\nNo, the heater is not broken. The room is just not clean. Sorry.\nAna · hotel front desk clerk\nI am sorry about that. Do you want a new room, or a clean room now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I am sorry about that. Do you want a new room, or a clean room now?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed to explain the problem; a clean room now is what I want, then I can finish.",
+          "action": "answer",
+          "args": {
+            "text": "I want a new room, please. I can not sleep because the room is dirty and smell bad."
+          },
+          "result": "ok",
+          "ms": 8845
+        },
+        {
+          "n": 17,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nI can move you today. Is one hour okay?\nYour turn\nAnswer on your phone: speak or type.\nNowAgree on one next step\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nNow: Agree on one next step\nI can move you today. Is one hour okay?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\nYou · spoken\nHello, I have a problem. The room is not clean and I want other room, please.\nAna · hotel front desk clerk\nI am sorry to hear that. Is the room cold?\nAna · hotel front desk clerk\nThank you. Do you want to leave this room today, or wait?\nYou · spoken\nI want leave the room today, please. I want other room.\nAna · hotel front desk clerk\nOkay, I can find you a new room. Is the room cold?\nAna · hotel front desk clerk\nGood. What kind of room do you want, small or big?\nYou · spoken\nA big room, please. Sorry, my English is not good.\nAna · hotel front desk clerk\nDon't worry, your English is fine. Is the heater broken?\nYou · spoken\nNo, the heater is not broken. The room is just not clean. Sorry.\nAna · hotel front desk clerk\nI am sorry about that. Do you want a new room, or a clean room now?\nYou · spoken\nI want a new room, please. I can not sleep because the room is dirty and smell bad.\nAna · hotel front desk clerk\nI can move you today. Is one hour okay?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I can move you today. Is one hour okay?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "One hour is okay, I can agree to this and finish.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, one hour is okay. Thank you very much."
+          },
+          "result": "ok",
+          "ms": 5612
+        },
+        {
+          "n": 18,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel front desk clerk\nA problem at the hotel front desk\nAna says\nGood. I move you in one hour.\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA problem at the hotel front desk\nTell Ana the problem, say how it affects you, and agree on one next step.\nGood. I move you in one hour.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel front desk clerk\nHow can I help you?\nYou · spoken\nHello, I have a problem. The room is not clean and I want other room, please.\nAna · hotel front desk clerk\nI am sorry to hear that. Is the room cold?\nAna · hotel front desk clerk\nThank you. Do you want to leave this room today, or wait?\nYou · spoken\nI want leave the room today, please. I want other room.\nAna · hotel front desk clerk\nOkay, I can find you a new room. Is the room cold?\nAna · hotel front desk clerk\nGood. What kind of room do you want, small or big?\nYou · spoken\nA big room, please. Sorry, my English is not good.\nAna · hotel front desk clerk\nDon't worry, your English is fine. Is the heater broken?\nYou · spoken\nNo, the heater is not broken. The room is just not clean. Sorry.\nAna · hotel front desk clerk\nI am sorry about that. Do you want a new room, or a clean room now?\nYou · spoken\nI want a new room, please. I can not sleep because the room is dirty and smell bad.\nAna · hotel front desk clerk\nI can move you today. Is one hour okay?\nYou · spoken\nYes, one hour is okay. Thank you very much.\nAna · hotel front desk clerk\nGood. I move you in one hour.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good. I move you in one hour.\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I managed to get a new room, I feel good, let me see the result.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 54
+        },
+        {
+          "n": 19,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said I want other room\nOne way to try it\nI want another room\nYour complaint and request are clear, and Ana understood the problem. One change: use 'another room', with 'an', because you are asking for one room.\nYour mission\nChoose a fresh context for your next conversation.\n6 spoken · 0 written replies · 4 on your own · 2 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“The heater is broken. The room is cold.”\nFrom this rehearsal\n“I want other room.” → “I want another room.”\n'Another' means one more room, a different one.\nTried again: “A big room, please. Sorry, my English is not good.”\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nFind my hotel booking\nGive your name and dates and get your booking found.\n[button: Start talking]\nOr choose a situation [list: Tell the hotel my room is cold [plan-42efc56e] | Find my hotel booking [plan-56f052ab] | Ask the way to the bus stop [plan-997fc57b] | Ask for a good place to eat [plan-9dd32920] | Answer a call from my travel agency [plan-89904977] | Talk about my child's homework [plan-09fd7ef9] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed to ask for another room, so I am happy to stop now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "A problem at the hotel front desk",
+          "goal": "Tell Ana the problem, say how it affects you, and agree on one next step.",
+          "partner": "Ana · hotel front desk clerk",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "How can I help you?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello, I have a problem. The room is not clean and I want other room, please.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I am sorry to hear that. Is the room cold?"
+            },
+            {
+              "role": "partner",
+              "text": "Thank you. Do you want to leave this room today, or wait?"
+            },
+            {
+              "role": "learner",
+              "text": "I want leave the room today, please. I want other room.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Okay, I can find you a new room. Is the room cold?"
+            },
+            {
+              "role": "partner",
+              "text": "Good. What kind of room do you want, small or big?"
+            },
+            {
+              "role": "learner",
+              "text": "A big room, please. Sorry, my English is not good.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Don't worry, your English is fine. Is the heater broken?"
+            },
+            {
+              "role": "learner",
+              "text": "No, the heater is not broken. The room is just not clean. Sorry.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I am sorry about that. Do you want a new room, or a clean room now?"
+            },
+            {
+              "role": "learner",
+              "text": "I want a new room, please. I can not sleep because the room is dirty and smell bad.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I can move you today. Is one hour okay?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, one hour is okay. Thank you very much.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Good. I move you in one hour."
+            }
+          ],
+          "moments": [
+            {
+              "id": "b3a0d971-6d18-4a12-bda8-9baa18cb3edb:uat-16:moment",
+              "kind": "fix",
+              "said": "I want other room.",
+              "better": "I want another room.",
+              "why": "'Another' means one more room, a different one.",
+              "turnId": "b3a0d971-6d18-4a12-bda8-9baa18cb3edb:uat-16",
+              "at": 1792324530190,
+              "slip": "want other",
+              "repair": {
+                "rung": 1,
+                "tried": "I want another room, please.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "want another",
+              "replay": {
+                "question": "Good. What kind of room do you want, small or big?",
+                "turnId": "d17188ac-8fd9-40d5-b721-f8bc10a4f379",
+                "reply": "A big room, please. Sorry, my English is not good.",
+                "used": false
+              }
+            }
+          ],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Hello, I have a problem. The room is not clean and I want other room, please.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 4,
+              "n": 2,
+              "reply": "I want leave the room today, please. I want other room.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I want other room.",
+                "better": "I want another room.",
+                "why": "'Another' means one more room, a different one."
+              },
+              "shown": true
+            },
+            {
+              "turn": 7,
+              "n": 3,
+              "reply": "A big room, please. Sorry, my English is not good.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 4,
+              "reply": "No, the heater is not broken. The room is just not clean. Sorry.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 11,
+              "n": 5,
+              "reply": "I want a new room, please. I can not sleep because the room is dirty and smell bad.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 13,
+              "n": 6,
+              "reply": "Yes, one hour is okay. Thank you very much.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": {
+            "before": "I want other room",
+            "after": "I want another room",
+            "note": "Your complaint and request are clear, and Ana understood the problem. One change: use 'another room', with 'an', because you are asking for one room."
+          },
+          "evidence": [
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "The heater is broken. The room is cold."
+            },
+            {
+              "skill": "resolve",
+              "success": false,
+              "supported": false,
+              "mode": "speech",
+              "quote": "The room is just not clean."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I can not sleep because the room is dirty"
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, one hour is okay."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 334028,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J4-6",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Moment screen offers no fresh-question replay",
+          "expected": "After the moment, a fresh question to retry",
+          "got": "Only the same sentence retried at #7; then 'Back to the conversation'.",
+          "evidence": [
+            "#8 '[button: Back to the conversation]'",
+            "linga-moment screen"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Cue shows the same irrelevant line for every question",
+          "expected": "A cue that answers the current question (name, then booking number).",
+          "got": "'Try: I have a booking for two nights. Can you check again, please?' appears for the name question and the number question.",
+          "evidence": [
+            "#3, #6, #7, #8 show the identical cue. #2 asks for her name and booking number, and the cue never gives 'My name is…' or a number phrase.",
+            "cue ladder prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Moment screen gives only Back, no retry of the fix",
+          "expected": "After 'I'm looking' she can try the sentence again or get a fresh question.",
+          "got": "Only 'Back to the conversation'. The scene moves on to 'Please read me the number.'",
+          "evidence": [
+            "#12 '[button: Back to the conversation]'; #13 'Please read me the number.' She never uses 'I'm looking'.",
+            "linga-moment screen"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Replay question is a rephrase, not a fresh question practising the coaching",
+          "expected": "A new question that lets her retry the coached phrase and answer better.",
+          "got": "'What is your booking number?' repeats the earlier ask. The coached phrase is not used and the answer is 'I don't know'.",
+          "evidence": [
+            "#5 'Your booking number, please?' vs #10 'What is your booking number?'. Her #10 answer is 'Sorry, my booking number is... I don't know.'",
+            "replay prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Coach quotes an earlier turn, not where she was stuck",
+          "expected": "A coaching note on the reply she struggled with, helping her say or read the number.",
+          "got": "Coach quotes her first reply, which was fine, and advises 'Here is my booking number' without saying how to read a number.",
+          "evidence": [
+            "#9 'You said Sorry, I have a booking for two nights.' while she was stuck at #8 on 'Your booking number, please?'.",
+            "coach prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Clear learner errors got no moment",
+          "expected": "Fixes for 'under other name', 'I have it in email' and the 'I look' pattern, at least held for the recap.",
+          "got": "Only one moment shown and no held fixes.",
+          "evidence": [
+            "rawMoments for turns 4, 8, 10, 14 are kind none. Her errors include 'under other name', 'I have it in email' and 'check out'.",
+            "moment detection prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Level set to A2 by hand in fixtures; this journey includes no placement."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#5 'Ana says, Sorry. What is the problem? What do you say?' with two short options is A2-clear."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#8 'Said more simply: Sorry. Is the room cold?' and #15 'Don't worry, your English is fine' meet her apology kindly."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 topic list: cold room, hotel booking, bus stop directions, restaurant, travel agency call are work situations she named; 5 of 6 plus homework."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#12 'I want other room.' → 'I want another room.' is correct and usable, though the scene casts her as the guest and 'want leave' / 'smell bad' got nothing."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing adult or unsuitable shown; topics and Ana's lines are all hotel/everyday."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#7-#9 she used Help me answer, 'Said more simply', 'A way to start' and Pause & coach (#9) without leaving the scene."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 coach quotes exactly 'You said I want other room' and she then fixed it at #12-13; but the cue 'The heater does not work…' (#9) did not fit her real problem."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#11 after replay Ana asks a new question but she repeats 'I want other room.'; the recap shows 'Tried again: A big room, please' with no 'another' (replay used:false). Not better than before."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#19 '4 on your own · 2 with help'; the phrase-pick turn is marked supported; one extra turn was flagged supported without help, which errs conservative."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 9,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 2
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Ana ignores what the learner said and repeats 'Is the room cold?'",
+            "expected": "The partner responds to 'the room is not clean', not the scripted cold room.",
+            "got": "Ana asks 'Is the room cold?' at #7, again in the turn after #11, and 'Is the heater broken?' after #14.",
+            "evidence": "#7 'I am sorry to hear that. Is the room cold?' after 'The room is not clean'; conversation turn 'Okay, I can find you a new room. Is the room cold?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Partner reply must address the learner's stated problem; no repeat of an already answered question.",
+            "code_hint": "partner prompt / scenario script"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Cues do not match the learner's real problem and are not used",
+            "expected": "Help that moves her sentence forward.",
+            "got": "'The room is very cold' and 'The heater does not work…' offered when she needs 'not clean'.",
+            "evidence": "#3 'Try: The room is very cold. Can you help, please?'; #9 'The heater does not work…'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Cue draws on the learner's own stated problem and the current question.",
+            "code_hint": "cue ladder prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Replay does not make her practise the coached phrase",
+            "expected": "Fresh question where she uses 'another room' and does better.",
+            "got": "#11 she repeats 'I want other room'; later 'A big room' without 'another'; replay used:false.",
+            "evidence": "#11 'I want leave the room today, please. I want other room.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Replay question invites the coached phrase and the recap shows whether it was used.",
+            "code_hint": "replay prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Clear learner errors got no moment or held fix",
+            "expected": "Fixes for 'want leave', 'smell bad', and the first 'other room'.",
+            "got": "One moment; heldFixes empty.",
+            "evidence": "rawMoments turns 1, 7, 9, 11, 13 kind none; #16 'the room is dirty and smell bad'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each clear error yields a stop or a held fix shown on the recap.",
+            "code_hint": "moment detection prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Coach note claims Ana understood, and quotes the first turn not the stuck point",
+            "expected": "Coaching tied to where she was stuck, truthful about Ana.",
+            "got": "'Ana understood the problem' while Ana asked about cold; quote from turn 1.",
+            "evidence": "#10 'Your complaint and request are clear, and Ana understood the problem.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Note helps with the question she was stuck on and does not praise a mismatch.",
+            "code_hint": "coach prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Ladder of help works in-scene and the moment retry is satisfying",
+            "expected": "Help without leaving the scene.",
+            "got": "Simplified line, phrase choice, coach, then retry 'You fixed want another'.",
+            "evidence": "#8 'Said more simply'; #13 'You fixed “want another”'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the cue ladder and the retry confirmation.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "Sorry, my English is not perfect, but I tell honestly. The help buttons are good: I press, it says the question more simply, and I can choose a phrase. Nobody makes me feel stupid, and nothing is bad for Tomáš or Klára. I liked \"another room\" — I can use it. But Ana asked me three times \"Is the room cold?\" when I said the room is dirty. Like a guest who is not listened to! The help said \"the heater does not work\", not my problem. Then I did the same mistake again after coaching, and nobody noticed \"I want leave\" or \"smell bad\". I would use it fifteen minutes in the evening, but I would not fully trust the corrections yet. Better than expensive course for a short practice, yes.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J4-6",
+            "status": "not-seen",
+            "evidence": "#10-#11 the coach offers 'Replay the moment' and gives a fresh question 'Do you want to leave this room today, or wait?'; #12 allows retry.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-1",
+            "status": "not-seen",
+            "evidence": "Cues differ per question (#3 'The room is very cold…', #8 'Sorry. Is the room cold?', #9 'The heater does not work…'), not one identical line, though they mismatch her problem.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-3",
+            "status": "not-seen",
+            "evidence": "#12 moment screen offers a text box and Show me; she retried 'I want another room, please.' and #13 confirmed 'You fixed “want another”'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-2",
+            "status": "recurs",
+            "evidence": "#11 she answers 'I want leave the room today, please. I want other room.' and the recap shows 'Tried again: A big room…' with no coached phrase.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-4",
+            "status": "recurs",
+            "evidence": "#10 coach quotes her turn-1 reply 'You said I want other room' while she was stuck on 'Is the room cold?' (#7-#9).",
+            "finding": 4
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-5",
+            "status": "recurs",
+            "evidence": "One moment only, heldFixes empty; 'I want leave', 'smell bad' (#16) and turn-1 'other room' got no coaching.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #11 after replay Ana asks a new question but she repeats 'I want other room.'; the recap shows 'Tried again: A big room, please' with no 'another' (replay used:false). Not better than before.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 11,
+      "fail": 0,
+      "ms": 116607
+    },
+    "character": {
+      "n": 19,
+      "fail": 0,
+      "ms": 215652
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 138076
+    }
+  }
+}

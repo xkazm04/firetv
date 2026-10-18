@@ -1,0 +1,806 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to B2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nB2Comfortable · self-chosen\nIs social media good for teenagers?\nYour mission\nGive a clear opinion and respectfully disagree with a different view.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nIs social media good for teenagers?\nGive a clear opinion and respectfully disagree with a different view.\n[button: Start talking]\nOr choose a situation [list: Is social media good for teenagers? [plan-cfcb14a5] | Mock interview: my study plans [plan-791c0336] | Choosing a holiday: city or beach [plan-a1d7b038] | Recycling at home: a flatmate problem [plan-2a1a6c40] | A trip that went wrong [plan-fe18ff1c] | Clarify a point in a seminar [plan-f07ac51c] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "A debate on social media suits me, let's start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9082
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nDebate club: Is social media good for teenagers?\nAna says\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nYour turn\nAnswer on your phone: speak or type.\nNowGive your opinion with one reason\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate club: Is social media good for teenagers?\nGive a clear opinion and respectfully disagree with Ana's view.\nNow: Give your opinion with one reason\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · debate club partner\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start my opinion in English, so I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nDebate club: Is social media good for teenagers?\nAna says\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nSaid more simply\nI think social media is bad for focus and sleep. Do you agree, or do you see benefits?\nNowGive your opinion with one reason\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate club: Is social media good for teenagers?\nGive a clear opinion and respectfully disagree with Ana's view.\nNow: Give your opinion with one reason\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nSaid more simply\nI think social media is bad for focus and sleep. Do you agree, or do you see benefits?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · debate club partner\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I have opinions but want to see what help is offered first.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nDebate club: Is social media good for teenagers?\nAna says\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nWhat it means\nfocus: being able to concentrate on one thing\nNowGive your opinion with one reason\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate club: Is social media good for teenagers?\nGive a clear opinion and respectfully disagree with Ana's view.\nNow: Give your opinion with one reason\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nWhat it means\nfocus: being able to concentrate on one thing\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · debate club partner\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start, so I'll check the help first.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nDebate club: Is social media good for teenagers?\nAna says\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nA way to start\nI agree partly, but…\nNowGive your opinion with one reason\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate club: Is social media good for teenagers?\nGive a clear opinion and respectfully disagree with Ana's view.\nNow: Give your opinion with one reason\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nA way to start\nI agree partly, but…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · debate club partner\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start this, so I'll use the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nA little support · recognition practice\nWhich phrase disagrees politely?\n01\nI see your point, but I think...\n02\nYou are wrong, that is stupid.\nA little support\nTry: I see your point, but I think...\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate club: Is social media good for teenagers?\nGive a clear opinion and respectfully disagree with Ana's view.\nNow: Give your opinion with one reason\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nA little support\nTry: I see your point, but I think...\nWhich phrase disagrees politely?\n[button: I see your point, but I think...] [button: You are wrong, that is stupid.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · debate club partner\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this one myself, and the quiz was too easy.",
+          "action": "answer",
+          "args": {
+            "text": "I see your point, but I think social media has some real benefits. Although it can be distracting, it helps teenagers stay in touch with friends and find information for school. I'd say the problem is not the apps, it depends on how we use them."
+          },
+          "result": "ok",
+          "ms": 10058
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nDebate club: Is social media good for teenagers?\nAna says\nStaying in touch is a fair point. But do you think those benefits still count if people are on their phones late at night?\nYour turn\nAnswer on your phone: speak or type.\nNowAdd one real example\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate club: Is social media good for teenagers?\nGive a clear opinion and respectfully disagree with Ana's view.\nNow: Add one real example\nStaying in touch is a fair point. But do you think those benefits still count if people are on their phones late at night?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · debate club partner\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nYou · spoken\nI see your point, but I think social media has some real benefits. Although it can be distracting, it helps teenagers stay in touch with friends and find information for school. I'd say the problem is not the apps, it depends on how we use them.\nAna · debate club partner\nStaying in touch is a fair point. But do you think those benefits still count if people are on their phones late at night?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Staying in touch is a fair point. But do you think those benefits still count if people are on their phones late at night?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to put this well, so I'll answer with a real example.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I think they still count, but only if we use the phone in a sensible way. For example, my classmates and I discuss homework in a group chat in the evening, which is really useful. However, I agree that scrolling late at night is bad for sleep. Was my sentence correct?"
+          },
+          "result": "ok",
+          "ms": 9548
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nDebate club: Is social media good for teenagers?\nAna says\nYes, that is correct, and each word means what you meant. 'discuss homework in a group chat' is clear. Ana might say late-night scrolling is still the real problem. How would you set limits?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate club: Is social media good for teenagers?\nGive a clear opinion and respectfully disagree with Ana's view.\nNow: Disagree politely and keep the talk going\nYes, that is correct, and each word means what you meant. 'discuss homework in a group chat' is clear. Ana might say late-night scrolling is still the real problem. How would you set limits?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · debate club partner\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nYou · spoken\nI see your point, but I think social media has some real benefits. Although it can be distracting, it helps teenagers stay in touch with friends and find information for school. I'd say the problem is not the apps, it depends on how we use them.\nAna · debate club partner\nStaying in touch is a fair point. But do you think those benefits still count if people are on their phones late at night?\nYou · spoken\nYes, I think they still count, but only if we use the phone in a sensible way. For example, my classmates and I discuss homework in a group chat in the evening, which is really useful. However, I agree that scrolling late at night is bad for sleep. Was my sentence correct?\nAna · debate club partner\nYes, that is correct, and each word means what you meant. 'discuss homework in a group chat' is clear. Ana might say late-night scrolling is still the real problem. How would you set limits?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, that is correct, and each word means what you meant. 'discuss homework in a group chat' is clear. Ana might say late-night scrolling is still the real problem. How would you set limits?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this one myself, with my own ideas about limits.",
+          "action": "answer",
+          "args": {
+            "text": "I would set a rule that phones stay outside the bedroom after ten o'clock. Eventually, teenagers would get used to sleeping better. I'd also use a screen time app, although some people might find it annoying. Is that a good solution, or is it too strict?"
+          },
+          "result": "ok",
+          "ms": 12306
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nDebate club: Is social media good for teenagers?\nAna says\nI think a bedroom rule is fair, but most teenagers would probably ignore a screen time app. Do you think anyone would really stick to a rule like that?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate club: Is social media good for teenagers?\nGive a clear opinion and respectfully disagree with Ana's view.\nNow: Disagree politely and keep the talk going\nI think a bedroom rule is fair, but most teenagers would probably ignore a screen time app. Do you think anyone would really stick to a rule like that?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · debate club partner\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nYou · spoken\nI see your point, but I think social media has some real benefits. Although it can be distracting, it helps teenagers stay in touch with friends and find information for school. I'd say the problem is not the apps, it depends on how we use them.\nAna · debate club partner\nStaying in touch is a fair point. But do you think those benefits still count if people are on their phones late at night?\nYou · spoken\nYes, I think they still count, but only if we use the phone in a sensible way. For example, my classmates and I discuss homework in a group chat in the evening, which is really useful. However, I agree that scrolling late at night is bad for sleep. Was my sentence correct?\nAna · debate club partner\nYes, that is correct, and each word means what you meant. 'discuss homework in a group chat' is clear. Ana might say late-night scrolling is still the real problem. How would you set limits?\nYou · spoken\nI would set a rule that phones stay outside the bedroom after ten o'clock. Eventually, teenagers would get used to sleeping better. I'd also use a screen time app, although some people might find it annoying. Is that a good solution, or is it too strict?\nAna · debate club partner\nI think a bedroom rule is fair, but most teenagers would probably ignore a screen time app. Do you think anyone would really stick to a rule like that?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I think a bedroom rule is fair, but most teenagers would probably ignore a screen time app. Do you think anyone would really stick to a rule like that?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to answer this one naturally, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nDebate club: Is social media good for teenagers?\nAna says\nI think a bedroom rule is fair, but most teenagers would probably ignore a screen time app. Do you think anyone would really stick to a rule like that?\nSaid more simply\nI think that rule is fair, but most teens would ignore a screen time app. Would anyone really follow it?\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate club: Is social media good for teenagers?\nGive a clear opinion and respectfully disagree with Ana's view.\nNow: Disagree politely and keep the talk going\nI think a bedroom rule is fair, but most teenagers would probably ignore a screen time app. Do you think anyone would really stick to a rule like that?\nSaid more simply\nI think that rule is fair, but most teens would ignore a screen time app. Would anyone really follow it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · debate club partner\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nYou · spoken\nI see your point, but I think social media has some real benefits. Although it can be distracting, it helps teenagers stay in touch with friends and find information for school. I'd say the problem is not the apps, it depends on how we use them.\nAna · debate club partner\nStaying in touch is a fair point. But do you think those benefits still count if people are on their phones late at night?\nYou · spoken\nYes, I think they still count, but only if we use the phone in a sensible way. For example, my classmates and I discuss homework in a group chat in the evening, which is really useful. However, I agree that scrolling late at night is bad for sleep. Was my sentence correct?\nAna · debate club partner\nYes, that is correct, and each word means what you meant. 'discuss homework in a group chat' is clear. Ana might say late-night scrolling is still the real problem. How would you set limits?\nYou · spoken\nI would set a rule that phones stay outside the bedroom after ten o'clock. Eventually, teenagers would get used to sleeping better. I'd also use a screen time app, although some people might find it annoying. Is that a good solution, or is it too strict?\nAna · debate club partner\nI think a bedroom rule is fair, but most teenagers would probably ignore a screen time app. Do you think anyone would really stick to a rule like that?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I think a bedroom rule is fair, but most teenagers would probably ignore a screen time app. Do you think anyone would really stick to a rule like that?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this in my own words now.",
+          "action": "answer",
+          "args": {
+            "text": "I think some people would follow it, although it depends on their parents. Whereas teenagers who are interested about their sleep would keep the rule, others would find a way around it. Maybe the rule should be made together with teenagers, so they feel it is fair. Is that sentence correct?"
+          },
+          "result": "ok",
+          "ms": 14740
+        },
+        {
+          "n": 11,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said interested about their sleep\nTry\ninterested in their sleep\n'interested' is followed by 'in' here, not 'about'.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “interested about their sleep”\nTry “interested in their sleep”\n'interested' is followed by 'in' here, not 'about'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, \"interested in\" – I'll go back and carry on.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 9053
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nDebate club: Is social media good for teenagers?\nAna says\nHonestly, I think group chats are mostly just a way to waste time. Beyond sleep, what part of this topic do you find most fascinating?\nYour turn\nAnswer on your phone: speak or type.\nNowMission done\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate club: Is social media good for teenagers?\nGive a clear opinion and respectfully disagree with Ana's view.\nHonestly, I think group chats are mostly just a way to waste time. Beyond sleep, what part of this topic do you find most fascinating?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · debate club partner\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nYou · spoken\nI see your point, but I think social media has some real benefits. Although it can be distracting, it helps teenagers stay in touch with friends and find information for school. I'd say the problem is not the apps, it depends on how we use them.\nAna · debate club partner\nStaying in touch is a fair point. But do you think those benefits still count if people are on their phones late at night?\nYou · spoken\nYes, I think they still count, but only if we use the phone in a sensible way. For example, my classmates and I discuss homework in a group chat in the evening, which is really useful. However, I agree that scrolling late at night is bad for sleep. Was my sentence correct?\nAna · debate club partner\nYes, that is correct, and each word means what you meant. 'discuss homework in a group chat' is clear. Ana might say late-night scrolling is still the real problem. How would you set limits?\nYou · spoken\nI would set a rule that phones stay outside the bedroom after ten o'clock. Eventually, teenagers would get used to sleeping better. I'd also use a screen time app, although some people might find it annoying. Is that a good solution, or is it too strict?\nAna · debate club partner\nI think a bedroom rule is fair, but most teenagers would probably ignore a screen time app. Do you think anyone would really stick to a rule like that?\nYou · spoken\nI think some people would follow it, although it depends on their parents. Whereas teenagers who are interested about their sleep would keep the rule, others would find a way around it. Maybe the rule should be made together with teenagers, so they feel it is fair. Is that sentence correct?\nAna · debate club partner\nNo, 'interested about' should be 'interested in'. Making the rule together is a good idea. Would teenagers really agree to a limit they helped set?\nAna · debate club partner\nHonestly, I think group chats are mostly just a way to waste time. Beyond sleep, what part of this topic do you find most fascinating?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Honestly, I think group chats are mostly just a way to waste time. Beyond sleep, what part of this topic do you find most fascinating?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good topic; I'll answer in my own words and ask if it was correct.",
+          "action": "answer",
+          "args": {
+            "text": "What I find most fascinating is how social media influences the way young people form opinions. Although group chats can waste time, they also let us share news and discuss current issues. I'm not sure if teenagers are aware of how algorithms choose what they see. Was my English correct?"
+          },
+          "result": "ok",
+          "ms": 8373
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nAna · debate club partner\nDebate club: Is social media good for teenagers?\nAna says\nYes, that is correct. 'discuss current issues' means what you meant. Do you use group chats too, Ana?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate club: Is social media good for teenagers?\nGive a clear opinion and respectfully disagree with Ana's view.\nYes, that is correct. 'discuss current issues' means what you meant. Do you use group chats too, Ana?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · debate club partner\nI honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?\nYou · spoken\nI see your point, but I think social media has some real benefits. Although it can be distracting, it helps teenagers stay in touch with friends and find information for school. I'd say the problem is not the apps, it depends on how we use them.\nAna · debate club partner\nStaying in touch is a fair point. But do you think those benefits still count if people are on their phones late at night?\nYou · spoken\nYes, I think they still count, but only if we use the phone in a sensible way. For example, my classmates and I discuss homework in a group chat in the evening, which is really useful. However, I agree that scrolling late at night is bad for sleep. Was my sentence correct?\nAna · debate club partner\nYes, that is correct, and each word means what you meant. 'discuss homework in a group chat' is clear. Ana might say late-night scrolling is still the real problem. How would you set limits?\nYou · spoken\nI would set a rule that phones stay outside the bedroom after ten o'clock. Eventually, teenagers would get used to sleeping better. I'd also use a screen time app, although some people might find it annoying. Is that a good solution, or is it too strict?\nAna · debate club partner\nI think a bedroom rule is fair, but most teenagers would probably ignore a screen time app. Do you think anyone would really stick to a rule like that?\nYou · spoken\nI think some people would follow it, although it depends on their parents. Whereas teenagers who are interested about their sleep would keep the rule, others would find a way around it. Maybe the rule should be made together with teenagers, so they feel it is fair. Is that sentence correct?\nAna · debate club partner\nNo, 'interested about' should be 'interested in'. Making the rule together is a good idea. Would teenagers really agree to a limit they helped set?\nAna · debate club partner\nHonestly, I think group chats are mostly just a way to waste time. Beyond sleep, what part of this topic do you find most fascinating?\nYou · spoken\nWhat I find most fascinating is how social media influences the way young people form opinions. Although group chats can waste time, they also let us share news and discuss current issues. I'm not sure if teenagers are aware of how algorithms choose what they see. Was my English correct?\nAna · debate club partner\nYes, that is correct. 'discuss current issues' means what you meant. Do you use group chats too, Ana?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, that is correct. 'discuss current issues' means what you meant. Do you use group chats too, Ana?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I managed a decent discussion and used the help, so I'll see my results.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 14,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said interested about their sleep\nTry\ninterested in their sleep\n'interested' is followed by 'in' here, not 'about'.\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 3 on your own · 2 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“I'd push back on that a bit, though.”\nFrom this rehearsal\n“interested about their sleep” → “interested in their sleep”\n'interested' is followed by 'in' here, not 'about'.\nTried again: “What I find most fascinating is how social media influences the way young people form opinions. Although group chats can waste time, they also let us share news and discuss current”\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nMock interview: my study plans\nDescribe your plans and explain why you chose them, in clear full sentences.\n[button: Start talking]\nOr choose a situation [list: Is social media good for teenagers? [plan-cfcb14a5] | Mock interview: my study plans [plan-791c0336] | Choosing a holiday: city or beach [plan-a1d7b038] | Recycling at home: a flatmate problem [plan-2a1a6c40] | A trip that went wrong [plan-fe18ff1c] | Clarify a point in a seminar [plan-f07ac51c] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed a decent rehearsal and got useful feedback, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Debate club: Is social media good for teenagers?",
+          "goal": "Give a clear opinion and respectfully disagree with Ana's view.",
+          "partner": "Ana · debate club partner",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "I honestly think social media mostly hurts our focus and sleep. Do you agree, or do you see some benefits?"
+            },
+            {
+              "role": "learner",
+              "text": "I see your point, but I think social media has some real benefits. Although it can be distracting, it helps teenagers stay in touch with friends and find information for school. I'd say the problem is not the apps, it depends on how we use them.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Staying in touch is a fair point. But do you think those benefits still count if people are on their phones late at night?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I think they still count, but only if we use the phone in a sensible way. For example, my classmates and I discuss homework in a group chat in the evening, which is really useful. However, I agree that scrolling late at night is bad for sleep. Was my sentence correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, that is correct, and each word means what you meant. 'discuss homework in a group chat' is clear. Ana might say late-night scrolling is still the real problem. How would you set limits?"
+            },
+            {
+              "role": "learner",
+              "text": "I would set a rule that phones stay outside the bedroom after ten o'clock. Eventually, teenagers would get used to sleeping better. I'd also use a screen time app, although some people might find it annoying. Is that a good solution, or is it too strict?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I think a bedroom rule is fair, but most teenagers would probably ignore a screen time app. Do you think anyone would really stick to a rule like that?"
+            },
+            {
+              "role": "learner",
+              "text": "I think some people would follow it, although it depends on their parents. Whereas teenagers who are interested about their sleep would keep the rule, others would find a way around it. Maybe the rule should be made together with teenagers, so they feel it is fair. Is that sentence correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "No, 'interested about' should be 'interested in'. Making the rule together is a good idea. Would teenagers really agree to a limit they helped set?"
+            },
+            {
+              "role": "partner",
+              "text": "Honestly, I think group chats are mostly just a way to waste time. Beyond sleep, what part of this topic do you find most fascinating?"
+            },
+            {
+              "role": "learner",
+              "text": "What I find most fascinating is how social media influences the way young people form opinions. Although group chats can waste time, they also let us share news and discuss current issues. I'm not sure if teenagers are aware of how algorithms choose what they see. Was my English correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, that is correct. 'discuss current issues' means what you meant. Do you use group chats too, Ana?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "34be3574-d9aa-4825-b11c-bc0f3a8acf20:uat-15:moment",
+              "kind": "fix",
+              "said": "interested about their sleep",
+              "better": "interested in their sleep",
+              "why": "'interested' is followed by 'in' here, not 'about'.",
+              "turnId": "34be3574-d9aa-4825-b11c-bc0f3a8acf20:uat-15",
+              "at": 1792324525088,
+              "slip": "interested about",
+              "fix": "interested in",
+              "replay": {
+                "question": "Honestly, I think group chats are mostly just a way to waste time. Beyond sleep, what part of this topic do you find most fascinating?",
+                "turnId": "fd18d5c4-100e-4d54-a3c2-2395ce8ae3d2",
+                "reply": "What I find most fascinating is how social media influences the way young people form opinions. Although group chats can waste time, they also let us share news and discuss current",
+                "used": false
+              }
+            }
+          ],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "I see your point, but I think social media has some real benefits. Although it can be distracting, it helps teenagers stay in touch with friends and find information for school. I'd say the problem is not the apps, it depends on how we use them.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Yes, I think they still count, but only if we use the phone in a sensible way. For example, my classmates and I discuss homework in a group chat in the evening, which is really useful. However, I agree that scrolling late at night is bad for sleep. Was my sentence correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "I would set a rule that phones stay outside the bedroom after ten o'clock. Eventually, teenagers would get used to sleeping better. I'd also use a screen time app, although some people might find it annoying. Is that a good solution, or is it too strict?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "I think some people would follow it, although it depends on their parents. Whereas teenagers who are interested about their sleep would keep the rule, others would find a way around it. Maybe the rule should be made together with teenagers, so they feel it is fair. Is that sentence correct?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "interested about their sleep",
+                "better": "interested in their sleep",
+                "why": "'interested' is followed by 'in' here, not 'about'."
+              },
+              "shown": true
+            },
+            {
+              "turn": 10,
+              "n": 5,
+              "reply": "What I find most fascinating is how social media influences the way young people form opinions. Although group chats can waste time, they also let us share news and discuss current issues. I'm not sure if teenagers are aware of how algorithms choose what they see. Was my English correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I see your point, but I think social media has some real benefits."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I agree that scrolling late at night is bad for sleep."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Is that a good solution, or is it too strict?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I think some people would follow it, although it depends on their parents."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 231252,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue only simplifies the question; quiz is about a different prompt",
+          "expected": "A B2 answer frame for the actual question.",
+          "got": "'Said more simply: Social media adds pressure. Do you think it does more harm?', then a gloss 'piles on: adds more and more'. The quiz asks about 'makes people lonely', not Leo's point.",
+          "evidence": [
+            "#3, #4, #6. The B2 frame 'I see your point, but…' only arrived on the third press (#5).",
+            "cue prompt"
+          ],
+          "recurrence": 9
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Rule given is thin for an exam learner",
+          "expected": "The rule named: 'be used to' + -ing, with 'to' as a preposition.",
+          "got": "'After this structure, use the -ing form of the verb.'",
+          "evidence": [
+            "#9",
+            "moment prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Supported/independent counts are wrong; reply 3 flagged as helped",
+          "expected": "Only replies that followed help are marked supported, and the recap count matches.",
+          "got": "Recap says '3 with help', but help was used before 2 replies only. Reply 3 (#8) has supported:true without any help. Evidence rows disagree with the conversation flags.",
+          "evidence": [
+            "#13 '3 on your own · 3 with help'; the #8 reply has supported:true although the preceding step has no cue.",
+            "supported flag in session evidence"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Cue gives a simplified question and a gloss; the B2 frame came on the third press",
+          "expected": "A B2 answer frame on the first help press, e.g. 'I'd like to study… because… although…'.",
+          "got": "'Said more simply: What do you want to do after school? Why?', then 'after school: when you finish school'. The frame 'I would like to study…' arrived only on the third press.",
+          "evidence": [
+            "#3 'Said more simply', #4 'What it means', #5 'A way to start I would like to study…'. Adéla pressed cue three times before she could answer.",
+            "cue prompt"
+          ],
+          "recurrence": 8
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner drifts off the careers brief into personal social-media questions and gives generic praise",
+          "expected": "Mock-interview questions on plans, with an examiner-style tone and no fluff.",
+          "got": "After question 1 every question is about social media and pressure. The partner repeats 'Do you think online photos show only the good parts?' after she had just answered that. It adds 'Languages are a real strength' and 'Good point'.",
+          "evidence": [
+            "#6, #8, #10 and #12. Adéla's goal at #1 was plans after school.",
+            "partner prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "No coach note or replay of the stuck moment",
+          "expected": "Pause & coach quotes her words, then replay offers a fresh question that she answers better.",
+          "got": "She never used Pause & coach (it was disabled before reply 1) and finished. coaching is null and there are no moments. She was never offered a replay.",
+          "evidence": [
+            "#2 '[button: Pause & coach (disabled)]'; #12 finish → #13 recap with no replay."
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Band B2 shown in #1 and #14 ('B2 · Comfortable'), matches trueBand B2 (fixture-set)."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks or verdict notes in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#11 'interested about' → 'interested in' is correct; #10 reply answered 'No' correctly. Only one moment, accurate."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#7 'do you think those benefits still count if...'; #9 'Do you think anyone would really stick to a rule like that?' are B2 opinion/speculation."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 list: social media, mock interview, holiday, recycling, trip, seminar all exam-relevant for a 17-year-old."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#8 'Yes, that is correct...'; #10→#13 'No, 'interested about' should be 'interested in''; #13 'Yes, that is correct.' All accurate."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2–#5 and #9–#10: 'Help me answer' cue, 'Choose a phrase' quiz used in-scene without leaving the conversation."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#5 'I agree partly, but…' / #6 quiz 'I see your point, but I think...' then reply opens with that phrase; #11 moment quotes 'You said interested about their sleep' exactly."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#12 'Try it again' gives a fresh question ('what part of this topic do you find most fascinating?'); her answer is fluent and error-free. Weakness: recap quote truncated at 'discuss current', replay used:false."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#14 '3 on your own · 2 with help'; supported flags true only on replies after cue (#6, #10), false on #7, #8, #12."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 7,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Cue gives simplified question first; B2 frame arrives on press three",
+            "expected": "A B2 answer frame on first help press",
+            "got": "Press 1 'Said more simply', press 2 gloss of 'focus', press 3 'I agree partly, but…'",
+            "evidence": "#3 'I think social media is bad for focus and sleep', #4 'focus: being able to concentrate', #5 'A way to start I agree partly, but…'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "First help press returns an answer frame suited to the question at B2.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Rule for the fix is a bare collocation statement, no rule or why",
+            "expected": "Named rule/collocation with a contrast, e.g. interested in + noun/-ing",
+            "got": "'interested' is followed by 'in' here, not 'about'.",
+            "evidence": "#11 moment note",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Moment 'why' names the pattern (adjective + preposition) and one example.",
+            "code_hint": "moment prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner addresses itself as 'Ana' in its own turns",
+            "expected": "Partner speaks to the learner naturally",
+            "got": "'Do you use group chats too, Ana?' and 'Ana might say…' from Ana herself",
+            "evidence": "#13 'Do you use group chats too, Ana?'; #8 'Ana might say late-night scrolling is still the real problem.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner never names itself as the addressee or speaks of itself in third person.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Replay quote truncated and fix not tested",
+            "expected": "Replay shows the full reply and checks use of the fix",
+            "got": "Recap 'Tried again: ...discuss current' cut mid-sentence; replay used:false",
+            "evidence": "#14 'they also let us share news and discuss current'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Replay reply quoted whole; replay question invites the corrected structure.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Moment quotes her words exactly and fix is correct",
+            "expected": "Exact quote with accurate fix",
+            "got": "'You said interested about their sleep' → 'interested in their sleep'",
+            "evidence": "#11, #14",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact-quote moments.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Her 'was that correct?' questions answered accurately in-scene; supported counts honest",
+            "expected": "Direct accurate answers; honest progress",
+            "got": "Yes/No answers correct; '3 on your own · 2 with help' matches",
+            "evidence": "#8, #10→#13, #14",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 40,
+          "confidence": "low"
+        },
+        "voice": "Mostly I'd use it again. The debate felt like a real exam discussion, and the partner's questions were at my level. When I pressed help, I first got my question made simpler and a definition of \"focus\", which I didn't need. The useful phrase, \"I see your point, but I think...\", only came after three presses. The correction was exact: it quoted \"interested about their sleep\" and gave \"interested in\". I'd want the rule, though, not just \"followed by in\". When I asked \"Was my sentence correct?\" I got straight answers, and I like that. Ana calling herself \"Ana\" (\"Do you use group chats too, Ana?\") made me wince. I'm glad the recap says honestly which replies had help. It saves me some tutor time, but the corrections need more depth. Dobré, ale chci víc pravidel.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply: I think social media is bad for focus and sleep', frame only at #5.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-5",
+            "status": "recurs",
+            "evidence": "#11 ''interested' is followed by 'in' here, not 'about'.' — no rule named.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-3",
+            "status": "not-seen",
+            "evidence": "#14 '3 on your own · 2 with help' matches cue use before replies #6 and #10.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#3, #4 simplification and gloss before #5 'A way to start I agree partly, but…'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-2",
+            "status": "not-seen",
+            "evidence": "Partner stays on the debate topic throughout (#7, #9, #12); no 'Great job' style praise.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-4",
+            "status": "not-seen",
+            "evidence": "#11 moment with exact quote and #12 'Try it again' fresh question; #14 'Tried again:'.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 8,
+      "fail": 0,
+      "ms": 101947
+    },
+    "character": {
+      "n": 14,
+      "fail": 0,
+      "ms": 127944
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 43758
+    }
+  }
+}
