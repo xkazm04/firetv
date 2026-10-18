@@ -356,6 +356,9 @@ function printable(spec: unknown): { s: CalcSpec; f: Expr } | null {
  * has none, and the only numbers printed are the spec's own parameters. For a comma-system learner (cz, de) the spec's
  * bare log - the engine's natural log - prints as ln (calc-read naturalAsLn), so a cz learner never reads base 10 into
  * it; any other system, or none, prints exactly as before.
+ *
+ * tex has no screen reader: items.ts keeps plain only. It is the TeX form the rule suites hold to the typesetter
+ * (typesetFault in calc-rules-test) and the frozen calc fixtures record, so dropping it would rewrite those fixtures.
  */
 export function question(spec: unknown, system?: SchoolSystem): { plain: string; tex: string } | null {
   if (commaSystem(system) && spec && typeof spec === "object") {
