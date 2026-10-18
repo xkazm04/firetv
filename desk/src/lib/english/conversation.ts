@@ -23,6 +23,7 @@ import { findKey, KNOWN_FALSE_FRIENDS, slipOf } from "./slip";
 import { checkLine, forgetLine, heldLine, holdLine, keepLine, LINE_MAX, lineBack, lineFound, lineTaught, OFFER_BANDS, offerLine, quizLine, showsLine, type HiddenLine } from "./line";
 import { afterTry, forget, heldFor, judgeTry, remember, revealed, triedLine, withhold } from "./repair";
 import { copiesShown, wordsOf } from "./credit";
+import { replayRefused } from "./replay";
 import { applyStep, currentStep, missionDone, missionOf, STEP_MAX } from "./mission";
 import { accepts, isTurnAction, refusal } from "./turn";
 import { forkOf, heldOf, runningTake } from "./take";
@@ -61,6 +62,9 @@ const withCoStar=(s:Shape):Shape=>({...s,properties:{...s.properties,coStarObser
 const pairAccept={...turnAccept,properties:{...turnAccept.properties,coStarObservations:{}}};
 const coachSchema=schema({before:str(180),after:str(180),note:str(220)});
 const replaySchema=schema({reply:str(230),help:helpSchema}),replayAccept=loose({reply:str(230)});
+// the replay step alone (LG-4 recert-7): form is the after words the answer should use, held to the coaching in code
+// (replay.ts replayRefused) and never shown; Take Two keeps replaySchema. Accepted loosely: a Back replay without it is refused.
+const formSchema=schema({reply:str(230),form:str(180),help:helpSchema}),formAccept={...replayAccept,properties:{...replayAccept.properties,form:{}}};
 // Every tutor call below (opening, turn, coach, replay) runs with thinking off: hidden reasoning cost 52-90 s a turn and
 // timed out a third of the time; off, a turn took 4-6 s and still caught the error it was set (T10 A/B, 2026-09-25).
 // The level check, plan, hints and marking keep the model's own thinking.
@@ -151,7 +155,7 @@ const beginner=(c:Conversation)=>easyBand(isBand(c.preferences.level)?c.preferen
  * wants the coached form; askedBefore is the partner's question the coached reply answered and the line on screen, never
  * asked again or rephrased (LT-petra-38-J4-2). The learner's answer is never supplied.
  */
-export const REPLAY_TASK="Return to the scene with one new short question that the learner can answer well only by using the after form of coaching (the corrected words, or the word or phrase they needed). The question must not be any line in askedBefore, nor a rephrase of one: ask about something new in the scene. Do not supply the learner's answer, and never say the after words yourself.";
+export const REPLAY_TASK="Return to the scene with one new short question that the learner can answer well only by using the after form of coaching, given as afterForm (the corrected words, or the word or phrase they needed): its natural answer must need those words. The question must not be any line in askedBefore, nor a rephrase of one: ask about something new in the scene. Do not supply the learner's answer, and never say the after words yourself. form: the words of afterForm the learner's answer should use. GOOD, for afterForm \"I work\": reply \"What do you do there every morning?\", form \"I work\" (the answer is \"I work at the front desk\"). BAD: reply \"Which hotel is it?\" (\"The Grand\" answers it without the form).";
 function askedBefore(c:Conversation):string[]{
   let at=c.turns.length-1;while(at>=0&&c.turns[at].role!=="learner")at--;
   const before=c.turns.slice(0,Math.max(at,0)).reverse().find(t=>t.role==="partner"),last=[...c.turns].reverse().find(t=>t.role==="partner");
@@ -554,8 +558,8 @@ export async function englishCommand(raw:unknown){
     const momentTask=mayStop?momentTaskFor(beginner(c)):action==="turn"&&holdsFixes(c)?heldTaskFor(beginner(c)):" moment: kind none with empty fields.";
     const stepTask=c.mission&&!missionDone(c.mission)?" step: currentStep is the one goal this learner is working on. Set reached true only when submittedReply itself, in the learner's own words, does it, and quote the exact words of submittedReply that did it (at least two words); otherwise reached false with an empty quote.":"";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
-    const task=action==="turn"?{task:`${pair?DUET_PAIR:"Respond in character to submittedReply, then assess it against the allowed skills."} Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}${pair&&c.duet?.coStarLearnerId?COSTAR_TASK:""}`,submittedReply:reply,...(pair?{coStarReply:pair.coStar.text}:{}),...(askedAbout?{askedAbout}:{}),...(fossil?{slipAgain:{said:fossil.said,better:fossil.better,task:FOSSIL_TASK}}:again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:REPLAY_TASK,coaching,askedBefore:askedBefore(c)};
-    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(lost!==undefined?{...c,lost}:c,action!=="coach",action==="turn"?{text:reply,supported:c.supported}:undefined),...task}),schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:replaySchema,accept:action==="turn"?(pair?pairAccept:turnAccept):action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"});
+    const task=action==="turn"?{task:`${pair?DUET_PAIR:"Respond in character to submittedReply, then assess it against the allowed skills."} Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}${pair&&c.duet?.coStarLearnerId?COSTAR_TASK:""}`,submittedReply:reply,...(pair?{coStarReply:pair.coStar.text}:{}),...(askedAbout?{askedAbout}:{}),...(fossil?{slipAgain:{said:fossil.said,better:fossil.better,task:FOSSIL_TASK}}:again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:REPLAY_TASK,coaching,afterForm:coaching!.after,askedBefore:askedBefore(c)};
+    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(lost!==undefined?{...c,lost}:c,action!=="coach",action==="turn"?{text:reply,supported:c.supported}:undefined),...task}),schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:formSchema,accept:action==="turn"?(pair?pairAccept:turnAccept):action==="replay"?formAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"});
     const current=checkCurrent(c,commandId);
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
     if(action==="turn"){
@@ -603,6 +607,8 @@ export async function englishCommand(raw:unknown){
       const {partner,patch}=replayed(c,result.json);
       // after Back (LG-4): a gate's redirect line or a question asked before is no replay; the catch returns to the conversation
       if(back&&(partner.text===REDIRECT_LINE||askedBefore(c).some(x=>wordsOf(x).join(" ")===wordsOf(partner.text).join(" "))))throw new Error("The replay asked nothing new.");
+      // recert-7 (LT-petra-38-J4-2): a fresh question that does not call for the coached form, or says it, is no replay either
+      const refused=back?replayRefused(partner.text,result.json.form,back.coaching.after):null;if(refused)throw new Error(refused);
       next={...next,...patch,...(back?{replayFor:undefined,moments:current.moments.map(x=>x.id===back!.moment.id?{...x,replay:{question:partner.text,turnId:partner.id}}:x)}:{})};
     }
     commit(next,screenFor(next));return getSession();

@@ -256,7 +256,8 @@ async function lg4(replay){
   return {calls,cmd,say,getSession,getLearner,done:()=>{engine.text=real;}};
 }
 const replays=calls=>calls.filter(x=>x.p.task===C.REPLAY_TASK);
-const asked=reply=>()=>({json:{reply},provider:'test',ms:1});
+/** a replay answer; `form` (LG-4 recert-7) names the after words the answer should use, 'I work' unless a test says otherwise */
+const asked=(reply,form='I work')=>()=>({json:{reply,form},provider:'test',ms:1});
 
 test('LG-4 (a, c): Back on a moment runs the replay step with the moment as coaching and sets phase replay; Finish over a moment has no replay',async()=>{
   const V=require(path.join(root,'src/lib/english/view.ts'));
@@ -321,6 +322,55 @@ test('LG-4 (d): the reply to the replay question is kept on the moment with whet
       assert.ok(V.viewText(v).includes(`  "I am work" → "I work" (Work is the verb here.)\n      Tried again: “${reply}”${used?' · you used it':''}\n`),'one short line on the recap moment');
     }finally{r.done();}
   }
+});
+
+// ---- LG-4 recert-7 (LT-petra-38-J4-2): the replay after a moment must call for the coached form. In recert-7 the question
+// was fresh but asked nothing the form answers, and 0 of 4 replies used it. Code holds the replay's `form` to the coaching.
+test('LG-4 recert-7 rules: replayRefused passes a replay whose form names the after form, and refuses no overlap, no form, or a question that says it',()=>{
+  const {replayRefused,contentWords}=require(path.join(root,'src/lib/english/replay.ts'));
+  assert.equal(replayRefused(REPLAY_Q,'I work','I work'),null,'good: the form is the after form');
+  assert.equal(replayRefused(REPLAY_Q,'WORK','I work'),null,'case apart, one content word is enough');
+  assert.equal(replayRefused('What do you check every day?','doesn\'t check','he doesn\'t check'),null);
+  assert.match(replayRefused(REPLAY_Q,'the hotel','I work'),/did not call for the coached form/,'a form with no overlap with the after form');
+  assert.match(replayRefused(REPLAY_Q,'I','I work'),/did not call for the coached form/,'a light word alone names no form');
+  for(const form of [undefined,'',42])assert.match(replayRefused(REPLAY_Q,form,'I work'),/did not call/,`no form: ${form}`);
+  assert.match(replayRefused('So you say I work there, yes?','I work','I work'),/said the coached form itself/,'the partner never supplies the answer');
+  assert.match(replayRefused('Do you i WORK at night?','I work','I work'),/said the coached form/,'case apart');
+  assert.deepEqual(contentWords('on the'),['on','the'],'an after form of light words is held to all its words');
+});
+
+test('LG-4 recert-7 wired: Back asks with the after form named and a required form; a replay that does not call for it, or says it, leaves the conversation as a failed one does',async()=>{
+  const r=await lg4(asked(REPLAY_Q));
+  try{
+    await r.cmd('moment-done');
+    const [call]=replays(r.calls);
+    assert.equal(call.p.afterForm,'I work','the after form, given in the task data');
+    assert.match(call.p.task,/afterForm/);assert.match(call.p.task,/GOOD/);assert.match(call.p.task,/BAD/);
+    assert.ok(call.req.schema.required.includes('form'),'the replay schema requires form');
+    assert.ok('form' in call.req.accept.properties,'and the answer may carry it');
+    const c=r.getSession().conversation;
+    assert.equal(c.phase,'replay');assert.equal(c.moments[0].replay.question,REPLAY_Q);
+    assert.ok(!JSON.stringify(c).includes('"form"'),'form is internal: it is not kept on the scene');
+  }finally{r.done();}
+  for(const [name,replay] of Object.entries({'no overlap':asked(REPLAY_Q,'the hotel'),'no form':()=>({json:{reply:REPLAY_Q},provider:'test',ms:1}),'says the form':asked('So you say I work at the desk?')})){
+    const r=await lg4(replay);
+    try{
+      const before=r.getSession().conversation.turns.length;
+      await r.cmd('moment-done');
+      const c=r.getSession().conversation;
+      assert.equal(c.phase,'conversation',name);assert.equal(c.error,'',`${name}: no error screen`);assert.equal(c.pending,null,name);
+      assert.equal(c.turns.length,before,`${name}: no new partner line`);assert.equal(c.moments[0].replay,undefined,name);
+    }finally{r.done();}
+  }
+});
+
+test('LG-4 recert-7: Take Two keeps replaySchema and replayAccept, with no form, so a take answer without form is still accepted',()=>{
+  const fs=require('node:fs'),cv=fs.readFileSync(path.join(root,'src/lib/english/conversation.ts'),'utf8');
+  assert.ok(cv.includes('const replaySchema=schema({reply:str(230),help:helpSchema}),replayAccept=loose({reply:str(230)});'),'replaySchema unchanged');
+  assert.match(cv,/task:TAKE_TASK,submittedReply:reply\}\),schema:replaySchema,accept:replayAccept,[^\n]*use:"linga-take"/,'the Take Two call keeps them');
+  const {validate,schema,str}=require(path.join(root,'src/lib/engines/shape.ts'));
+  const accept={...schema({reply:str(230)}),properties:{reply:str(230),help:{}}};
+  assert.deepEqual(validate({reply:'Fine, and you?'},accept),[],'a take answer without form fits replayAccept');
 });
 
 test('LG-4 recert-7: Back answers at once with the partner thinking of a new question, on the TV and the phone, gone when the replay lands or fails',async()=>{
