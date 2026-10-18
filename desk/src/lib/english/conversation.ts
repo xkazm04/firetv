@@ -157,9 +157,6 @@ function askedBefore(c:Conversation):string[]{
   const before=c.turns.slice(0,Math.max(at,0)).reverse().find(t=>t.role==="partner"),last=[...c.turns].reverse().find(t=>t.role==="partner");
   return [...new Set([before?.text,last?.text].filter((x):x is string=>!!x))];
 }
-function replayRequest(c:Conversation,coaching:Coaching){
-  return {system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:REPLAY_TASK,coaching,askedBefore:askedBefore(c)}),schema:replaySchema,accept:replayAccept,model:"fast" as const,timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-replay"};
-}
 /** The replay's answer on the scene: the partner's new question, phase replay, its own help ladder; no help carried over. */
 function replayed(c:Conversation,json:Record<string,unknown>){
   const partner={id:randomUUID(),role:"partner" as const,text:partnerSays(c,json.reply,undefined,json.help)},held=partner.text===line(json.reply);
@@ -178,22 +175,14 @@ function repliedTo(c:Conversation,reply:string):Moment[]{
   });
 }
 /**
- * Back on a moment (LG-4): the moment closes as before, and one with a form to practise (not lost, not empty, and the duet
- * not holding half a pair) hands off to the replay step. A failed or refused replay, a gate's redirect line or a question
- * asked before leaves the scene in the conversation with no error, as Back did before. The replay is kept on the moment.
+ * Back on a moment (LG-4): the moment closes as before (closeMoment), and one with a form to practise (not lost, not empty,
+ * and the duet not holding half a pair) hands off to the replay step, its said, better and why as the coaching. Null: Back
+ * only returns to the conversation, as it did before the ruling.
  */
-async function momentBack(c:Conversation,commandId:string,allowed:(t:{sceneId:string})=>boolean){
-  const closed={...closeMoment(c,allowed),commands:[...c.commands,commandId].slice(-100)};
-  const m=(closed.moments?.length??0)>(c.moments?.length??0)?closed.moments.at(-1)!:null;
-  if(!m||!m.said.trim()||!m.better.trim()||duetRefuses(closed,"replay")){commit(closed,"linga-talk");return;}
-  commit({...closed,pending:commandId,capture:false,error:""},"linga-talk");
-  try{
-    const result=await text<Record<string,unknown>>(replayRequest(closed,{before:m.said,after:m.better,note:m.why}));
-    const current=checkCurrent(closed,commandId),{partner,patch}=replayed(current,result.json);
-    const again=wordsOf(partner.text).join(" ");
-    if(partner.text===REDIRECT_LINE||askedBefore(current).some(x=>wordsOf(x).join(" ")===again))throw new Error("The replay asked nothing new.");
-    commit({...current,...patch,pending:null,error:"",moments:current.moments.map(x=>x.id===m.id?{...x,replay:{question:partner.text,turnId:partner.id}}:x),provider:result.provider,responseMs:result.ms},"linga-talk");
-  }catch{try{const current=checkCurrent(closed,commandId);commit({...current,pending:null,error:""},"linga-talk");}catch{/* newer episode owns the UI */}}
+function backReplay(closed:Conversation,before:Conversation):{moment:Moment;coaching:Coaching}|null{
+  const m=(closed.moments?.length??0)>(before.moments?.length??0)?closed.moments.at(-1)!:null;
+  if(!m||!m.said.trim()||!m.better.trim()||duetRefuses(closed,"replay"))return null;
+  return {moment:m,coaching:{before:m.said,after:m.better,note:m.why}};
 }
 /**
  * A moment at most once per three learner turns and four in a rehearsal. Beginners get fewer — once per four
@@ -331,7 +320,8 @@ async function takeTurn(c:Conversation,input:Record<string,unknown>,commandId:st
 /** One validated command surface for both devices. No client can commit model evidence. */
 export async function englishCommand(raw:unknown){
   const input=object(raw),s=getSession();
-  const learnerId=required(input.learnerId,"learner"),action=required(input.action,"action",30);
+  const learnerId=required(input.learnerId,"learner");
+  let action=required(input.action,"action",30);
   if(s.learner?.id!==learnerId)throw new ConversationError("The learner at the desk changed. Try again.",409);
   const profile=s.profiles.find(p=>p.id===learnerId);
   if(!profile)throw new ConversationError("Choose a learner first.");
@@ -423,7 +413,7 @@ export async function englishCommand(raw:unknown){
       return getSession();
     }catch(e){try{const now=checkCurrent(c,commandId);commit({...now,pending:null,error:lingaLine(e,"The scene could not be prepared. Try again or choose another situation.")});}catch{/* superseded */}throw e;}
   }
-  const c=s.conversation;
+  let c=s.conversation;
   if(!c||c.id!==input.episodeId||c.learnerId!==learnerId)throw new ConversationError("This conversation has changed. Open the current scene.",409);
   if(c.commands.includes(commandId))return getSession();
   const prefs=learning.preferences??defaultPreferences(profile),scene=sceneOf(c),deskMode=modeOf(profile,prefs);
@@ -444,7 +434,14 @@ export async function englishCommand(raw:unknown){
   if(action==="leave"&&runningTake(c)){commit({...c,pending:null,capture:false},"linga-talk");return getSession();}
   if(action==="leave") {commit({...c,pending:null,paused:true,capture:false,quizOpen:false},"linga");return getSession();}
   if(action==="resume") {commit({...c,paused:false,capture:false,error:""},screenFor(c),parkCheck());return getSession();}
-  if(action==="moment-done"){await momentBack(c,commandId,allowed);return getSession();}
+  // LG-4 (owner ruling 2026-10-18): Back closes the moment, then a moment with a form to practise runs the replay step below
+  // as a replay, with the moment as its coaching; Back with nothing to practise, or a replay that fails, is the conversation
+  let back:ReturnType<typeof backReplay>=null;
+  if(action==="moment-done"){
+    const closed=closeMoment(c,allowed);back=backReplay(closed,c);
+    if(!back){commit({...closed,commands:[...c.commands,commandId].slice(-100)},"linga-talk");return getSession();}
+    c=closed;action="replay";commit(c,"linga-talk");
+  }
   if(action==="moment-try"){
     // K2 (repair.ts): the learner's line again on a fix moment, judged by code with no model call. Never a turn, never evidence.
     const m=c.moment!,r=m.repair!,commands=[...c.commands,commandId].slice(-100);
@@ -535,7 +532,8 @@ export async function englishCommand(raw:unknown){
   // the scene as the learner's line is judged on: in a duet, with the help that line had and the co-star's lines as shown
   const judged=pair?judgedAs(c,pair):c;
   const lastLearner=[...c.turns].reverse().find(t=>t.role==="learner");
-  if(action==="replay"&&!c.coaching)throw new ConversationError("Ask for a coaching moment first.");
+  const coaching=back?back.coaching:c.coaching;
+  if(action==="replay"&&!coaching)throw new ConversationError("Ask for a coaching moment first.");
   const stopsRepeat=action==="turn"&&momentAllowed(c,true);
   // K1: a taught slip said again is found by code before the call (review.ts slipsAgain): this scene's moments and the
   // taught fixes this learner may be shown. The first asks the partner for a soft recast; record-tier ones count below.
@@ -555,8 +553,8 @@ export async function englishCommand(raw:unknown){
     const momentTask=mayStop?momentTaskFor(beginner(c)):action==="turn"&&holdsFixes(c)?heldTaskFor(beginner(c)):" moment: kind none with empty fields.";
     const stepTask=c.mission&&!missionDone(c.mission)?" step: currentStep is the one goal this learner is working on. Set reached true only when submittedReply itself, in the learner's own words, does it, and quote the exact words of submittedReply that did it (at least two words); otherwise reached false with an empty quote.":"";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
-    const task=action==="turn"?{task:`${pair?DUET_PAIR:"Respond in character to submittedReply, then assess it against the allowed skills."} Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}${pair&&c.duet?.coStarLearnerId?COSTAR_TASK:""}`,submittedReply:reply,...(pair?{coStarReply:pair.coStar.text}:{}),...(askedAbout?{askedAbout}:{}),...(fossil?{slipAgain:{said:fossil.said,better:fossil.better,task:FOSSIL_TASK}}:again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:null;
-    const result=await text<Record<string,unknown>>(action==="replay"?replayRequest(c,c.coaching!):{system:tutorSystem(c),prompt:JSON.stringify({...context(lost!==undefined?{...c,lost}:c,action!=="coach",action==="turn"?{text:reply,supported:c.supported}:undefined),...task}),schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):coachSchema,accept:action==="turn"?(pair?pairAccept:turnAccept):undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":"linga-turn"});
+    const task=action==="turn"?{task:`${pair?DUET_PAIR:"Respond in character to submittedReply, then assess it against the allowed skills."} Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}${pair&&c.duet?.coStarLearnerId?COSTAR_TASK:""}`,submittedReply:reply,...(pair?{coStarReply:pair.coStar.text}:{}),...(askedAbout?{askedAbout}:{}),...(fossil?{slipAgain:{said:fossil.said,better:fossil.better,task:FOSSIL_TASK}}:again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:REPLAY_TASK,coaching,askedBefore:askedBefore(c)};
+    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(lost!==undefined?{...c,lost}:c,action!=="coach",action==="turn"?{text:reply,supported:c.supported}:undefined),...task}),schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:replaySchema,accept:action==="turn"?(pair?pairAccept:turnAccept):action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"});
     const current=checkCurrent(c,commandId);
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
     if(action==="turn"){
@@ -600,7 +598,15 @@ export async function englishCommand(raw:unknown){
       const before=line(result.json.before,180);
       if(audienceSafe(c,line(result.json.after,180))===null||audienceSafe(c,line(result.json.note,220))===null)throw new Error("The coach note did not fit this learner.");if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
       next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
-    }else next={...next,...replayed(c,result.json).patch};
+    }else{
+      const {partner,patch}=replayed(c,result.json);
+      // after Back (LG-4): a gate's redirect line or a question asked before is no replay; the catch returns to the conversation
+      if(back&&(partner.text===REDIRECT_LINE||askedBefore(c).some(x=>wordsOf(x).join(" ")===wordsOf(partner.text).join(" "))))throw new Error("The replay asked nothing new.");
+      next={...next,...patch,...(back?{moments:current.moments.map(x=>x.id===back!.moment.id?{...x,replay:{question:partner.text,turnId:partner.id}}:x)}:{})};
+    }
     commit(next,screenFor(next));return getSession();
-  }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:lingaLine(e,"The tutor could not complete that turn. Your reply is still on the phone; please retry.")});}catch{/* newer episode owns the UI */}throw e;}
+  }catch(e){
+    // Back never strands the scene (LG-4): a failed replay after a moment is the conversation, with no error
+    if(back){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100)},"linga-talk");}catch{/* newer episode owns the UI */}return getSession();}
+    try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:lingaLine(e,"The tutor could not complete that turn. Your reply is still on the phone; please retry.")});}catch{/* newer episode owns the UI */}throw e;}
 }
