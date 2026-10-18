@@ -189,6 +189,10 @@ version's change as pips (citron changed, a plus added, a minus removed, bone ke
 Right: the twin panel, per channel "Born" in citron or "N more to keep", and the level words once born. One action, The
 lenses, leads to the family lens home. The TV never shows a sentence of the text: the session carries only what
 `lib/twin/workroom.ts` builds (titles, counts, marks, level words), and `workroom.set` is the desk's own event.
+OK on a piece row reads that piece's latest version on the TV (recert-6/L1-helena-46-EM5-3): the TV sends only the id
+(`/api/analyse` kind `shelf-piece`, TV role only), the desk looks the text up on the seated learner's shelf and reads it
+as the phone's piece, under the lens last chosen. It writes nothing (no version, no notice, no history line); while it
+runs the Workroom captions "Reading", and a piece not read leaves the TV on the Workroom with the "Not read" line.
 
 **The twin is earned** (E3): a channel is born at three pieces of its kind (messages → chat, emails → email, anything
 else → generic). **The Twin Card** (`lib/twin/card.ts`, `/api/twin/card`) is pulled forward from T5 as a slice: Adult
