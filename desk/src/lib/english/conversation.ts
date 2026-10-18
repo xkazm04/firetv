@@ -6,7 +6,7 @@ import { getLearner, readLearner, saveEnglish, saveLearner, withDigest } from ".
 import { markSeen, recommendFor, withCertificate } from "./cert";
 import { checkAt, parked } from "./activity";
 import { checkCommand, isCheckAction, pitchAsk } from "./check";
-import { BAND_HOLD, keywordAudience, partnerLine } from "./gate";
+import { BAND_HOLD, keywordAudience, partnerLine, REDIRECT_LINE } from "./gate";
 import { keepPitch, PITCH_MAX, PITCH_PREFIX, shapePitch } from "./pitch";
 import { BETTER_MAX, cleanNotes, NOTE_KINDS, NOTE_MAX, NOTES_MAX, QUOTE_MAX } from "./notes";
 import { modeOf } from "../rules/mode";
@@ -18,18 +18,18 @@ import { EASE_INSTRUCTION, learnerLost } from "./ease";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
-import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, ownLines, partnerLines, reuseOf, reviewOf, shownLines, askedAboutFor, slipsAgain, SLIP_AGAIN_TASK, usedLine, fossilOf, fossilMoment, FOSSIL_TASK, type SlipAgain } from "./review";
+import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, ownLines, partnerLines, reuseOf, reviewOf, shownLines, askedAboutFor, slipsAgain, SLIP_AGAIN_TASK, usedLine, usesForm, fossilOf, fossilMoment, FOSSIL_TASK, type SlipAgain } from "./review";
 import { findKey, KNOWN_FALSE_FRIENDS, slipOf } from "./slip";
 import { checkLine, forgetLine, heldLine, holdLine, keepLine, LINE_MAX, lineBack, lineFound, lineTaught, OFFER_BANDS, offerLine, quizLine, showsLine, type HiddenLine } from "./line";
 import { afterTry, forget, heldFor, judgeTry, remember, revealed, triedLine, withhold } from "./repair";
-import { copiesShown } from "./credit";
+import { copiesShown, wordsOf } from "./credit";
 import { applyStep, currentStep, missionDone, missionOf, STEP_MAX } from "./mission";
 import { accepts, isTurnAction, refusal } from "./turn";
 import { forkOf, heldOf, runningTake } from "./take";
 import { lostFacts, lostPicture, lostStart, lostTurn } from "./lostfound";
-import { afterPair, coStarAdult, coStarEvidence, COSTAR_TASK, DUET_OPENING, DUET_PAIR, DUET_SYSTEM, duetInput, judgedAs, learnerBeat, pairOf, startDuet, type DuetPair } from "./duet";
+import { afterPair, coStarAdult, coStarEvidence, COSTAR_TASK, DUET_OPENING, DUET_PAIR, DUET_SYSTEM, duetInput, duetRefuses, judgedAs, learnerBeat, pairOf, startDuet, type DuetPair } from "./duet";
 import { BANDS, type Band } from "./types";
-import type { Conversation, Duet, EnglishEvidence, EnglishPreferences, EnglishScene, EvidenceMode, HeldFix, LevelCheck, Moment, SceneLine, SkillId, Take } from "./types";
+import type { Coaching, Conversation, Duet, EnglishEvidence, EnglishPreferences, EnglishScene, EvidenceMode, HeldFix, LevelCheck, Moment, SceneLine, SkillId, Take } from "./types";
 
 export { ConversationError };
 // The engine already holds each answer to its schema; these second checks fit a line to the screen.
@@ -145,6 +145,56 @@ function context(c:Conversation,invite=true,now?:{text:string;supported:boolean}
   return {scene:sceneInput(c),...(step?{currentStep:step}:{}),preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",...(conversationBand(placement)!==placement.band?{spokenAnswersAt:spokenBand(placement.tasks)}:{}),practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18),...(bring?{bringBack:bring}:{}),...(roomLine?{roomLine}:{}),...(c.moments?.length?{taughtThisScene:c.moments.map(m=>({said:m.said,better:m.better}))}:{}),...(c.lost?{lostProperty:lostFacts(c.lost)}:{}),...duetInput(c)};
 }
 const beginner=(c:Conversation)=>easyBand(isBand(c.preferences.level)?c.preferences.level:"A1");
+/**
+ * The replay step, one implementation for both ways in: the learner's coach then replay, and Back on a moment (LG-4, owner
+ * ruling 2026-10-18), where the coaching is the moment's said, better and why. The partner asks one fresh question that
+ * wants the coached form; askedBefore is the partner's question the coached reply answered and the line on screen, never
+ * asked again or rephrased (LT-petra-38-J4-2). The learner's answer is never supplied.
+ */
+export const REPLAY_TASK="Return to the scene with one new short question that the learner can answer well only by using the after form of coaching (the corrected words, or the word or phrase they needed). The question must not be any line in askedBefore, nor a rephrase of one: ask about something new in the scene. Do not supply the learner's answer, and never say the after words yourself.";
+function askedBefore(c:Conversation):string[]{
+  let at=c.turns.length-1;while(at>=0&&c.turns[at].role!=="learner")at--;
+  const before=c.turns.slice(0,Math.max(at,0)).reverse().find(t=>t.role==="partner"),last=[...c.turns].reverse().find(t=>t.role==="partner");
+  return [...new Set([before?.text,last?.text].filter((x):x is string=>!!x))];
+}
+function replayRequest(c:Conversation,coaching:Coaching){
+  return {system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:REPLAY_TASK,coaching,askedBefore:askedBefore(c)}),schema:replaySchema,accept:replayAccept,model:"fast" as const,timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-replay"};
+}
+/** The replay's answer on the scene: the partner's new question, phase replay, its own help ladder; no help carried over. */
+function replayed(c:Conversation,json:Record<string,unknown>){
+  const partner={id:randomUUID(),role:"partner" as const,text:partnerSays(c,json.reply,undefined,json.help)},held=partner.text===line(json.reply);
+  return {partner,patch:{phase:"replay" as const,supported:false,turns:[...c.turns,partner],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(held?json.help:undefined,partner.text),c.help?.forTurn)}};
+}
+/**
+ * The scene's moments after a reply (LG-4): the moment whose replay question is the line this reply answers keeps the reply
+ * (usedLine: the sentence that says the form) and whether it used the form, decided here in code, never by the model.
+ */
+function repliedTo(c:Conversation,reply:string):Moment[]{
+  const last=c.turns.at(-1);
+  return (c.moments??[]).map(m=>{
+    if(c.phase!=="replay"||!m.replay||m.replay.reply!==undefined||last?.id!==m.replay.turnId)return m;
+    const form=usesForm(reply,m);
+    return {...m,replay:{...m.replay,reply:usedLine(reply,form??reply.trim()),used:form!==null}};
+  });
+}
+/**
+ * Back on a moment (LG-4): the moment closes as before, and one with a form to practise (not lost, not empty, and the duet
+ * not holding half a pair) hands off to the replay step. A failed or refused replay, a gate's redirect line or a question
+ * asked before leaves the scene in the conversation with no error, as Back did before. The replay is kept on the moment.
+ */
+async function momentBack(c:Conversation,commandId:string,allowed:(t:{sceneId:string})=>boolean){
+  const closed={...closeMoment(c,allowed),commands:[...c.commands,commandId].slice(-100)};
+  const m=(closed.moments?.length??0)>(c.moments?.length??0)?closed.moments.at(-1)!:null;
+  if(!m||!m.said.trim()||!m.better.trim()||duetRefuses(closed,"replay")){commit(closed,"linga-talk");return;}
+  commit({...closed,pending:commandId,capture:false,error:""},"linga-talk");
+  try{
+    const result=await text<Record<string,unknown>>(replayRequest(closed,{before:m.said,after:m.better,note:m.why}));
+    const current=checkCurrent(closed,commandId),{partner,patch}=replayed(current,result.json);
+    const again=wordsOf(partner.text).join(" ");
+    if(partner.text===REDIRECT_LINE||askedBefore(current).some(x=>wordsOf(x).join(" ")===again))throw new Error("The replay asked nothing new.");
+    commit({...current,...patch,pending:null,error:"",moments:current.moments.map(x=>x.id===m.id?{...x,replay:{question:partner.text,turnId:partner.id}}:x),provider:result.provider,responseMs:result.ms},"linga-talk");
+  }catch{try{const current=checkCurrent(closed,commandId);commit({...current,pending:null,error:""},"linga-talk");}catch{/* newer episode owns the UI */}}
+}
 /**
  * A moment at most once per three learner turns and four in a rehearsal. Beginners get fewer — once per four
  * turns, two a rehearsal: at A1–A2 nearly every reply has something to fix, and in the second UAT run Tomáš met
@@ -394,7 +444,7 @@ export async function englishCommand(raw:unknown){
   if(action==="leave"&&runningTake(c)){commit({...c,pending:null,capture:false},"linga-talk");return getSession();}
   if(action==="leave") {commit({...c,pending:null,paused:true,capture:false,quizOpen:false},"linga");return getSession();}
   if(action==="resume") {commit({...c,paused:false,capture:false,error:""},screenFor(c),parkCheck());return getSession();}
-  if(action==="moment-done") {commit({...closeMoment(c,allowed),commands:[...c.commands,commandId].slice(-100)},"linga-talk");return getSession();}
+  if(action==="moment-done"){await momentBack(c,commandId,allowed);return getSession();}
   if(action==="moment-try"){
     // K2 (repair.ts): the learner's line again on a fix moment, judged by code with no model call. Never a turn, never evidence.
     const m=c.moment!,r=m.repair!,commands=[...c.commands,commandId].slice(-100);
@@ -505,8 +555,8 @@ export async function englishCommand(raw:unknown){
     const momentTask=mayStop?momentTaskFor(beginner(c)):action==="turn"&&holdsFixes(c)?heldTaskFor(beginner(c)):" moment: kind none with empty fields.";
     const stepTask=c.mission&&!missionDone(c.mission)?" step: currentStep is the one goal this learner is working on. Set reached true only when submittedReply itself, in the learner's own words, does it, and quote the exact words of submittedReply that did it (at least two words); otherwise reached false with an empty quote.":"";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
-    const task=action==="turn"?{task:`${pair?DUET_PAIR:"Respond in character to submittedReply, then assess it against the allowed skills."} Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}${pair&&c.duet?.coStarLearnerId?COSTAR_TASK:""}`,submittedReply:reply,...(pair?{coStarReply:pair.coStar.text}:{}),...(askedAbout?{askedAbout}:{}),...(fossil?{slipAgain:{said:fossil.said,better:fossil.better,task:FOSSIL_TASK}}:again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
-    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(lost!==undefined?{...c,lost}:c,action!=="coach",action==="turn"?{text:reply,supported:c.supported}:undefined),...task}),schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:replaySchema,accept:action==="turn"?(pair?pairAccept:turnAccept):action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"});
+    const task=action==="turn"?{task:`${pair?DUET_PAIR:"Respond in character to submittedReply, then assess it against the allowed skills."} Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}${pair&&c.duet?.coStarLearnerId?COSTAR_TASK:""}`,submittedReply:reply,...(pair?{coStarReply:pair.coStar.text}:{}),...(askedAbout?{askedAbout}:{}),...(fossil?{slipAgain:{said:fossil.said,better:fossil.better,task:FOSSIL_TASK}}:again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:null;
+    const result=await text<Record<string,unknown>>(action==="replay"?replayRequest(c,c.coaching!):{system:tutorSystem(c),prompt:JSON.stringify({...context(lost!==undefined?{...c,lost}:c,action!=="coach",action==="turn"?{text:reply,supported:c.supported}:undefined),...task}),schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):coachSchema,accept:action==="turn"?(pair?pairAccept:turnAccept):undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":"linga-turn"});
     const current=checkCurrent(c,commandId);
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
     if(action==="turn"){
@@ -545,15 +595,12 @@ export async function englishCommand(raw:unknown){
       // help rung) or a read-back of a shown line. Once it is recorded the next reply starts unhelped: a moment does not make a
       // reply the learner then says on their own a helped one.
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
-      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,...(pair?[pair.learner,pair.coStar]:[{id:turnId,role:"learner" as const,text:reply,mode,supported:c.supported||copied}]),partner],...(pair&&c.duet?{duet:afterPair(c.duet)}:{}),supported:false,moment:onScreen,moments:c.moments??[],...(()=>{const h=keepHeld(current.heldFixes,held);return h.length?{heldFixes:h}:{};})(),cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{}),...(found&&hidden&&c.line?{line:{...c.line,found:usedLine(reply,found),foundTurn:turnId,text:hidden.text}}:{})};
+      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,...(pair?[pair.learner,pair.coStar]:[{id:turnId,role:"learner" as const,text:reply,mode,supported:c.supported||copied}]),partner],...(pair&&c.duet?{duet:afterPair(c.duet)}:{}),supported:false,moment:onScreen,moments:repliedTo(c,reply),...(()=>{const h=keepHeld(current.heldFixes,held);return h.length?{heldFixes:h}:{};})(),cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{}),...(found&&hidden&&c.line?{line:{...c.line,found:usedLine(reply,found),foundTurn:turnId,text:hidden.text}}:{})};
     }else if(action==="coach"){
       const before=line(result.json.before,180);
       if(audienceSafe(c,line(result.json.after,180))===null||audienceSafe(c,line(result.json.note,220))===null)throw new Error("The coach note did not fit this learner.");if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
       next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
-    }else{
-      const partner={id:randomUUID(),role:"partner" as const,text:partnerSays(c,result.json.reply,undefined,result.json.help)},replayHeld=partner.text===line(result.json.reply);
-      next={...next,phase:"replay",supported:false,turns:[...c.turns,partner],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replayHeld?result.json.help:undefined,partner.text),c.help?.forTurn)};
-    }
+    }else next={...next,...replayed(c,result.json).patch};
     commit(next,screenFor(next));return getSession();
   }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:lingaLine(e,"The tutor could not complete that turn. Your reply is still on the phone; please retry.")});}catch{/* newer episode owns the UI */}throw e;}
 }

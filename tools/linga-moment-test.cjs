@@ -169,7 +169,10 @@ async function replayOndrej(correction){
   const profile=getSession().profiles.find(p=>p.id==='ema');
   saveEnglish('ema',{...emptyEnglish(),preferences:{...defaultPreferences(profile),level:'B1',correction}});
   engine.text=async req=>{
-    const p=JSON.parse(req.prompt);prompts.push(p);
+    const p=JSON.parse(req.prompt);
+    // LG-4: Back on the moment asks for a replay; this run answers it with nothing usable, so the scene carries on as it did
+    if(p.task===C.REPLAY_TASK)return {json:{},provider:'test',ms:1};
+    prompts.push(p);
     if(!p.submittedReply)return {json:{title:'Ranked tonight',goal:'Agree when to stop playing.',opening:'Hey! Ranked matches tonight? What do you think?'},provider:'test',ms:1};
     const [,reply,moment]=ONDREJ_LINES.find(l=>l[0]===p.submittedReply);
     return {json:{reply,observations:[],moment},provider:'test',ms:1};
@@ -223,4 +226,126 @@ test('LG-23 wired: during the scene no view lists a held fix; with correction of
   assert.ok(off.prompts.slice(1).every(p=>/moment: kind none with empty fields/.test(p.task)),'no fix is asked for');
   assert.equal(off.learning.sessions.at(-1).held,undefined);
   assert.deepEqual(V.lingaView(off.done,{}).recap.held,[]);
+});
+
+// ---- LG-4, path from the moment to Replay (owner ruling 2026-10-18): Back on a moment hands off to the existing Replay with
+// a fresh question built on the moment's form; the recap records the reply to it. A stubbed engine, no live model.
+const SLIP='I am work in a hotel.',REPLAY_Q='And what do you do there every morning?',ON_SCREEN='Which hotel is it?';
+/** A B1 scene whose first reply stops on a fix; `replay` answers the replay call (or throws), every other turn gets a plain reply. */
+async function lg4(replay){
+  const engine=require(path.join(root,'src/lib/engines/text.ts')),real=engine.text,calls=[];
+  const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
+  const {getLearner,saveEnglish}=require(path.join(root,'src/lib/session/learners.ts'));
+  const {emptyEnglish}=require(path.join(root,'src/lib/english/types.ts')),{defaultPreferences}=require(path.join(root,'src/lib/english/curriculum.ts'));
+  dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});dispatch({type:'subject',subject:'english'});
+  const profile=getSession().profiles.find(p=>p.id==='ema');
+  saveEnglish('ema',{...emptyEnglish(),preferences:{...defaultPreferences(profile),level:'B1',correction:'as-needed'}});
+  engine.text=async req=>{
+    const p=JSON.parse(req.prompt);calls.push({req,p});
+    if(p.task===C.REPLAY_TASK)return replay(p);
+    if(!p.submittedReply)return {json:{title:'Front desk',goal:'Talk about your job.',opening:'Hello! Where do you work?'},provider:'test',ms:1};
+    if(p.submittedReply===SLIP)return {json:{reply:ON_SCREEN,observations:[],moment:{kind:'fix',said:'I am work',better:'I work',why:'Work is the verb here.'}},provider:'test',ms:1};
+    return {json:{reply:'Nice. Tell me more.',observations:[],moment:{kind:'none',said:'',better:'',why:''}},provider:'test',ms:1};
+  };
+  let n=0;
+  const cmd=(action,extra={})=>{const s=getSession();return C.englishCommand({action,learnerId:'ema',episodeId:s.conversation?.id,commandId:`lg4-${Date.now()}-${++n}`,...extra});};
+  const say=text=>cmd('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+  await cmd('start',{sceneId:'booking',replace:true});
+  await say(SLIP);
+  assert.ok(getSession().conversation.moment,'the reply stops the scene');
+  return {calls,cmd,say,getSession,getLearner,done:()=>{engine.text=real;}};
+}
+const replays=calls=>calls.filter(x=>x.p.task===C.REPLAY_TASK);
+const asked=reply=>()=>({json:{reply},provider:'test',ms:1});
+
+test('LG-4 (a, c): Back on a moment runs the replay step with the moment as coaching and sets phase replay; Finish over a moment has no replay',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts'));
+  const r=await lg4(asked(REPLAY_Q));
+  try{
+    await r.cmd('moment-done');
+    const c=r.getSession().conversation,[call]=replays(r.calls);
+    assert.ok(call,'Back asks for the replay (LT-tomas-9-J4-1)');
+    assert.deepEqual(call.p.coaching,{before:'I am work',after:'I work',note:'Work is the verb here.'},'the coaching is the closed moment: said, better, why');
+    assert.equal(call.req.use,'linga-replay');assert.equal(call.req.thinking,false);
+    assert.ok(call.p.askedBefore.includes(ON_SCREEN),'the question on screen is passed as one to avoid (LT-petra-38-J4-2)');
+    assert.match(call.p.task,/must not be any line in askedBefore, nor a rephrase of one/);assert.match(call.p.task,/only by using the after form/);assert.match(call.p.task,/Do not supply the learner's answer/);
+    assert.equal(c.phase,'replay');assert.equal(c.moment,null);assert.equal(c.pending,null);assert.equal(c.error,'');
+    assert.equal(c.turns.at(-1).text,REPLAY_Q);assert.equal(c.turns.at(-1).role,'partner');
+    assert.equal(r.getSession().screen,'linga-talk');assert.equal(c.coaching,null,'no coach screen: the moment is the coaching');
+    assert.deepEqual(c.moments.map(m=>[m.said,m.better,m.replay?.question]),[['I am work','I work',REPLAY_Q]]);
+    assert.equal(r.getLearner('ema').english.taught.filter(t=>!t.line).length,1,'the moment is kept on the record as before');
+    assert.equal(V.lingaView(r.getSession(),{}).tag,'Try it again','the existing Replay screen');
+  }finally{r.done();}
+  const f=await lg4(()=>{throw new Error('no replay on Finish');});
+  try{
+    await f.cmd('finish');
+    assert.equal(replays(f.calls).length,0,'Finish over a moment has no replay');
+    assert.deepEqual(V.lingaView(f.getSession(),{}).recap.moments,[{kind:'fix',said:'I am work',better:'I work',why:'Work is the verb here.'}],'its recap shows what it showed before');
+  }finally{f.done();}
+});
+
+test('LG-4 (b): a failed, empty or repeated replay leaves Back where it was: the conversation, no error, no replay kept',async()=>{
+  const outcomes={failed:()=>{throw new Error('timed out');},empty:()=>({json:{},provider:'test',ms:1}),repeated:asked(ON_SCREEN)};
+  for(const [name,replay] of Object.entries(outcomes)){
+    const r=await lg4(replay);
+    try{
+      const before=r.getSession().conversation.turns.length;
+      await r.cmd('moment-done');
+      const c=r.getSession().conversation;
+      assert.equal(replays(r.calls).length,1,`${name}: the replay was asked for`);
+      assert.equal(c.phase,'conversation',name);assert.equal(c.pending,null,name);assert.equal(c.error,'',`${name}: no error screen`);
+      assert.equal(c.moment,null,name);assert.equal(c.turns.length,before,`${name}: no new partner line`);assert.equal(c.turns.at(-1).text,ON_SCREEN);
+      assert.equal(r.getSession().screen,'linga-talk',name);
+      assert.equal(c.moments.length,1,`${name}: the moment closed as before`);assert.equal(c.moments[0].replay,undefined,name);
+      await r.say('I work at the Grand.');
+      assert.equal(r.getSession().conversation.turns.length,before+2,`${name}: the scene carries on`);
+    }finally{r.done();}
+  }
+});
+
+test('LG-4 (d): the reply to the replay question is kept on the moment with whether it used the form, decided in code, and the recap shows it',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts'));
+  for(const [reply,used] of [['Every morning I work at the front desk.',true],['Every morning I check in the guests.',false]]){
+    const r=await lg4(asked(REPLAY_Q));
+    try{
+      await r.cmd('moment-done');await r.say(reply);
+      const c=r.getSession().conversation;
+      assert.equal(c.phase,'conversation','the replay is answered');
+      assert.deepEqual(c.moments[0].replay,{question:REPLAY_Q,turnId:c.turns.at(-3).id,reply,used},reply);
+      assert.equal(c.turns.at(-2).supported,false,'(6) the replay answer is supported only by the turn rules: no help used here');
+      await r.say('I like it, I work there.');
+      assert.equal(r.getSession().conversation.moments[0].replay.reply,reply,'a later reply does not overwrite it');
+      await r.cmd('finish');
+      const v=V.lingaView(r.getSession(),{});
+      assert.deepEqual(v.recap.moments,[{kind:'fix',said:'I am work',better:'I work',why:'Work is the verb here.',tried:reply,used}]);
+      assert.ok(V.viewText(v).includes(`  "I am work" → "I work" (Work is the verb here.)\n      Tried again: “${reply}”${used?' · you used it':''}\n`),'one short line on the recap moment');
+    }finally{r.done();}
+  }
+});
+
+test('LG-4 (e): "Mission done" does not end the scene while the replay question is open (LT-tomas-9-J4-1)',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts'));
+  const r=await lg4(asked(REPLAY_Q));
+  try{
+    await r.cmd('moment-done');
+    const s=r.getSession(),done={steps:['say where you work','say what you do'],reached:[{turnId:'a',quote:'I work'},{turnId:'b',quote:'I do'}]};
+    assert.equal(s.conversation.phase,'replay');
+    const open=V.lingaView({...s,conversation:{...s.conversation,mission:done}},{});
+    assert.ok(!open.actions.some(a=>a.id==='finish'),'no "See what you did" over the replay question');
+    assert.notEqual(open.baseCaption,'Mission done. See what you did tonight.');
+    assert.equal(open.answer?.action,'turn','the replay question takes the reply');
+    const answered=V.lingaView({...s,conversation:{...s.conversation,phase:'conversation',mission:done}},{});
+    assert.equal(answered.actions[0].id,'finish','once it is answered, the mission is done as before');
+  }finally{r.done();}
+});
+
+test('LG-4: the moment\'s Back says the scene continues with a question to try the fix; a lost fix goes back as before',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts'));
+  const r=await lg4(asked(REPLAY_Q));
+  try{
+    const s=r.getSession(),back=m=>V.lingaView({...s,conversation:{...s.conversation,moment:m}},{}).actions.find(a=>a.id==='back');
+    assert.equal(back(s.conversation.moment).label,'Back to the conversation','the button keeps its place and name');
+    assert.match(back(s.conversation.moment).help,/new question to try this/);
+    assert.equal(back({...s.conversation.moment,better:'',repair:{rung:0,lost:true}}).help,'Carry on from where the scene stopped.');
+  }finally{r.done();}
 });

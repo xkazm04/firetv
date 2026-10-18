@@ -23,7 +23,7 @@ import { runningTake, takeSpent } from "./take";
 import { lostLine, type LostTask } from "./lostfound";
 import { showOpen } from "./repair";
 import { slipStands } from "./slip";
-import { beatCaption, beatOf, duetAgain } from "./duet";
+import { beatCaption, beatOf, duetAgain, duetRefuses } from "./duet";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
 
 /**
@@ -104,7 +104,9 @@ export interface Answer { id: "answer"; action: "check-answer" | "check-task" | 
   speaker?: "learner" | "costar"; }
 /** The line the TV speaks. A new key plays it again; blocked keeps it silent. */
 export interface Spoken { line: string; key: string; blocked: boolean; slow: boolean; speaker: string; }
-export interface Recap { title: string; replies: number; spoken: number; /** replies said after help the learner used (a cue, the quiz, any help rung) or reading back a shown line: the turns' flags */ supported: number; /** replies said with none */ independent: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>;
+export interface Recap { title: string; replies: number; spoken: number; /** replies said after help the learner used (a cue, the quiz, any help rung) or reading back a shown line: the turns' flags */ supported: number; /** replies said with none */ independent: number; moments: Array<{ kind: "fix" | "word"; said: string; better: string; why: string;
+    /** LG-4: the learner's reply to the replay after this moment, and whether it said the form (code, review.ts usesForm); absent with no reply */
+    tried?: string; used?: boolean }>;
   /** LG-23: the fixes held for the end on turns that did not stop, apart from the moments that did */
   held: Array<{ kind: "fix" | "word"; said: string; better: string; why: string }>; }
 export type Hero =
@@ -198,6 +200,13 @@ const skillName = (id: string) => ENGLISH_SKILLS.find(x => x.id === id)?.name ??
 const cmd = (action: string, extra?: Record<string, unknown>): ViewRun => ({ command: extra ? { action, extra } : { action } });
 const go = (screen: Screen): ViewRun => ({ nav: { screen } });
 const act = (id: ActionId, label: string, help: string, run: ViewRun, more: Partial<ViewAction> = {}): ViewAction => ({ id, label, help, run, ...more });
+/**
+ * Back on a moment (LG-4, owner ruling 2026-10-18): a moment with a form to try hands off to the replay, so its caption says the
+ * scene continues with a question to try it. A fix a restart lost, or a duet holding half a pair, goes back as before.
+ */
+const backHelp = (c: Conversation) => c.moment?.repair?.lost || duetRefuses(c, "replay") ? "Carry on from where the scene stopped." : "Back to the scene: your partner asks a new question to try this.";
+/** LG-4: a moment's replay on the recap, one short line: the learner's reply, and whether it said the form (never a count). */
+export const replayLine = (reply: string, used: boolean) => `Tried again: “${reply}”${used ? " · you used it" : ""}`;
 
 /** The caption tag over each rung of the rescue ladder (lib/english/help.ts): the rung names itself. */
 export const RUNG_TAG = { 1: "Said more simply", 2: "What it means", 3: "A way to start" } as const;
@@ -476,7 +485,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     actions = [act("next-chapter", "Next chapter", `${ENGLISH_SKILLS[(chapter + 1) % 8].name}.`, { ui: { chapter: (chapter + 1) % 8 } }), act("previous-chapter", "Previous chapter", `${ENGLISH_SKILLS[(chapter + 7) % 8].name}.`, { ui: { chapter: (chapter + 7) % 8 } })];
   } else if (c && s.screen === "linga-moment" && c.moment) {
     const m = c.moment, r = m.kind === "fix" ? m.repair : undefined; tag = "A moment";
-    const back = act("back", "Back to the conversation", "Carry on from where the scene stopped.", cmd("moment-done"), { disabled: refused("moment-done") });
+    const back = act("back", "Back to the conversation", backHelp(c), cmd("moment-done"), { disabled: refused("moment-done") });
     if (!r) {
       hero = { kind: "comparison", before: { kicker: m.kind === "fix" ? "You said" : "You wanted to say", quote: m.said }, after: { kicker: m.kind === "fix" ? "Try" : "In English", quote: m.better }, note: m.why };
       caption = "Then carry on from where the scene stopped."; captionTag = m.kind === "fix" ? "One thing to fix" : "A word for this scene";
@@ -518,7 +527,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     tag = "Your rehearsal"; title = "Take it somewhere new";
     const attempts = c.turns.filter(t => t.role === "learner"), spokenCount = attempts.filter(t => t.mode === "speech").length, moments = c.moments ?? [], held = c.heldFixes ?? [];
     const helped = attempts.filter(t => t.supported).length;
-    recap = { title: c.title, replies: attempts.length, spoken: spokenCount, supported: helped, independent: attempts.length - helped, moments: moments.map(({ kind, said, better, why }) => ({ kind, said, better, why })), held: held.map(({ kind, said, better, why }) => ({ kind, said, better, why })) };
+    recap = { title: c.title, replies: attempts.length, spoken: spokenCount, supported: helped, independent: attempts.length - helped, moments: moments.map(({ kind, said, better, why, replay }) => ({ kind, said, better, why, ...(replay?.reply !== undefined ? { tried: replay.reply, used: !!replay.used } : {}) })), held: held.map(({ kind, said, better, why }) => ({ kind, said, better, why })) };
     const counts = `${spokenCount} spoken · ${attempts.length - spokenCount} written replies${attempts.length ? ` · ${attempts.length - helped} on your own · ${helped} with help` : ""}${moments.length ? ` · ${moments.length} ${moments.length === 1 ? "moment" : "moments"} to keep` : ""}`;
     const rv = c.review, notes = c.cut?.notes ?? [], ln = c.line?.text ? c.line : null;
     caption = attempts.length ? `Next, try ${recommended.name.toLowerCase()}. Your notes and learning map are on the phone.` : "You explored the scene. Try a reply next time; no progress was recorded.";
@@ -593,7 +602,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
         : st === "paused" ? [act("resume", "Resume", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }), act("finish", "Finish rehearsal", "End here and keep your learning evidence.", cmd("finish"), { disabled: refused("finish") }), ...(cutting ? [cutAction()] : [])]
         : [...(first ? [first] : []), second, ...(cutting && !c.quizOpen ? [cutAction()] : [])];
       // The mission is done: the way on is the primary action, and the child may still keep talking (turn.ts takes a turn).
-      if (c.mission && missionDone(c.mission) && st === "your-turn") {
+      // Never over the replay's question (LG-4, LT-tomas-9-J4-1): the scene waits for its answer first.
+      if (c.mission && missionDone(c.mission) && st === "your-turn" && c.phase !== "replay") {
         const done = "Mission done. See what you did tonight.";
         actions = [act("finish", "See what you did", done, cmd("finish"), { disabled: refused("finish") }), ...actions.slice(0, 1)];
         if (!c.cue && !c.capture && captionTag !== "Used again") caption = done;
@@ -690,7 +700,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (lc.stage !== "verdict") onPhone(lc.stage === "plan" ? act("not-now", "Not now", "Leave for now. Linga asks again when you come back to your topics.", cmd("check-leave")) : stopCheck);
   }
   if (panel === "moment" && c && showOpen(c.moment)) onPhone(act("show-me", "Show me", "See Linga's fix. You can say it once more after.", cmd("moment-show"), { disabled: refused("moment-show") }));
-  if (panel === "moment" && c) onPhone(act("back", "Back to the conversation", "Carry on from where the scene stopped.", cmd("moment-done"), { disabled: refused("moment-done") }));
+  if (panel === "moment" && c) onPhone(act("back", "Back to the conversation", backHelp(c), cmd("moment-done"), { disabled: refused("moment-done") }));
   // the phone's live conversation: Resume while the learner paused, the coach's replay, else the reply helpers
   if (panel === "talk" && c && take) {
     // inside Take Two: Back to the notes, and Repeat audio or Cancel; the reply box takes the line (answerOf)
@@ -785,7 +795,8 @@ export function viewText(v: LingaView): string {
   if (v.recap) {
     out.push(`Rehearsal saved: ${v.recap.title}. ${v.recap.replies} ${v.recap.replies === 1 ? "reply" : "replies"}, ${v.recap.spoken} spoken.`);
     const listed = (m: Recap["held"][number]) => m.kind === "fix" ? `  "${m.said}" → "${m.better}" (${m.why})` : `  "${m.said}": ${m.better} (${m.why})`;
-    if (v.recap.moments.length) out.push("On the phone, from this rehearsal:", ...v.recap.moments.map(listed));
+    if (v.recap.moments.length) out.push("On the phone, from this rehearsal:", ...v.recap.moments.map(m => listed(m) + (m.tried !== undefined ? `
+      ${replayLine(m.tried, !!m.used)}` : "")));
     // LG-23: the fixes held for the end, listed apart from the moments that stopped the scene
     if (v.recap.held.length) out.push("On the phone, saved for the end:", ...v.recap.held.map(listed));
   }

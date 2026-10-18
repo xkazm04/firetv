@@ -3344,3 +3344,14 @@ test('LG-5: a not-understanding reply puts the easing instruction in the turn in
  assert.notEqual(await run(['I know the hotel, it is near the station.']),EASE_INSTRUCTION,'English that merely contains "know"');
  assert.notEqual(await run(['I need a room.','Friday, please.']),EASE_INSTRUCTION,'no help asked');
 });
+// LG-4 (owner ruling 2026-10-18), recert-6/LT-petra-38-J4-2: the replay question was a rephrase of the earlier ask. The coach's
+// replay and the moment's Back share one replay step: the earlier questions go in as askedBefore, the answer is never supplied.
+test('LG-4: the coach replay asks a question that needs the coached form, with the earlier questions passed as ones to avoid',async()=>{
+ await recertScene(()=>({reply:'Which room was it?'}),{coach:{before:'I booked',after:'I have booked',note:'Say it is done now.'},again:'What have you done about the noise so far?'});
+ await reply('I booked two nights.');await command('coach');await command('replay');
+ const call=asked.find(x=>x.req.use==='linga-replay'),p=JSON.parse(call.req.prompt);
+ assert.deepEqual(p.coaching,{before:'I booked',after:'I have booked',note:'Say it is done now.'});
+ assert.deepEqual(p.askedBefore,['Hello, can I help?','Which room was it?'],'the question the coached reply answered and the line on screen');
+ assert.match(p.task,/only by using the after form/);assert.match(p.task,/must not be any line in askedBefore, nor a rephrase of one/);assert.match(p.task,/Do not supply the learner's answer/);
+ assert.equal(getSession().conversation.phase,'replay');assert.equal(getSession().conversation.turns.at(-1).text,'What have you done about the noise so far?');
+});

@@ -175,6 +175,14 @@ export function saysItem(t: Taught, quote: string): boolean {
   if (r.key) return findKey(quote, r.key) !== null;
   return findPhrase(quote, r.better) !== null;
 }
+/**
+ * Whether `reply` says a moment's form (LG-4, the replay after a moment), judged as reuseOf judges a reply: a fix with guarded
+ * keys by its fix key said and its slip key not, anything else by its whole better phrase. The words that said it, or null.
+ */
+export function usesForm(reply: string, m: Pick<Moment, "kind" | "better" | "slip" | "fix">): string | null {
+  if (m.kind === "fix" && m.slip && m.fix && guarded(m.slip)) return slipStands(reply, m.slip) === null ? findKey(reply, m.fix) : null;
+  return findPhrase(reply, m.better);
+}
 /** A use that may count toward "yours": it names its scene (a use kept before K3 does not), and its quote holds and says the item. */
 const countsToward = (t: Taught, r: Reuse) => !!r.sceneId && quoteHolds(r.quote) && saysItem(t, r.quote);
 const apart = (a: Reuse, b: Reuse) => a.sceneId !== b.sceneId && localDay(a.at) !== localDay(b.at);

@@ -97,7 +97,14 @@ export interface Moment {
    * While it is withheld, better is "" and fix is absent: both wait in server memory until a try holds or Show me.
    */
   repair?: MomentRepair;
+  /** LG-4: the replay a moment closed by Back handed off to (conversation.ts); on the scene's moments only, never on the record */
+  replay?: MomentReplay;
 }
+/**
+ * The replay after a moment (LG-4, owner ruling 2026-10-18): the partner's fresh question built on the moment's form, and
+ * the learner's reply to it. Written by code: `used` is whether that reply said the form (review.ts usesForm), never the model's.
+ */
+export interface MomentReplay { question: string; turnId: string; reply?: string; used?: boolean; }
 /**
  * A fix held for the recap (LG-23 Option 1, delegate ruling 2026-10-17): the turn's one fix on a reply where the moment gap
  * or cap shut the stop, held to the same checks as a moment (parseMoment's exact excerpt, the audience gate). Never a stop:
