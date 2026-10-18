@@ -124,6 +124,9 @@ Both faces come through `next/font/google` (`desk/src/essay/fonts.ts`), self-hos
   goes; "Read without keeping" skips it. The shelf lists titles and counts; Open loads the latest version, and the next
   read of it is a new version. Delete one, or "Delete everything I kept" (a second press confirms), which also forgets
   the notice.
+  Naming (row `2026-10-09-essay-l1/recert-6/L1-helena-46-EM5-6`): the phone's Essay tab has an optional Name field when Keep is on
+  (typed title: 9a4b8d43). A picked file pre-fills it with the file name without its extension; with no name and no file the
+  numbered "Untitled <format> <n>" stays. A version keeps its piece's title; no title is ever taken from the text's first line.
 - A strong sentence shows its job in the giant type and "Nothing to fix"; a neutral one is quiet.
 - A faulty sentence without its own fix takes its lens's playbook lesson as the move - never an empty slot.
 

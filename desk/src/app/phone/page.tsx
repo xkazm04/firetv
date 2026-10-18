@@ -272,7 +272,7 @@ export default function Phone() {
     if (after) return setNote(after);
     const ps = paragraphsOf(text);
     if (!ps.length) return setNote("That file is empty. Pick one with some writing in it.");
-    setSource("file"); setPieceId(undefined); setPieceTitle("");
+    setSource("file"); setPieceId(undefined); setPieceTitle(f.name.replace(/\.[^./\\]*$/, "").trim().slice(0, 80)); // the file name, without its extension, names the piece unless the learner types another
     loadParagraphs(ps, ps.length > 1 ? `${f.name}: ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.` : "");
   };
   /** A pasted message with blank lines is split the same way; a paste without any goes in as it always did. */

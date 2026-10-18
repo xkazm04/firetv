@@ -1780,3 +1780,16 @@ test('READER: voiceOf (maths, english, and the essay hint) is byte-identical to 
  assert.equal(V.essayReadingVoice(12,'adult').who,'an adult writer');
  assert.equal(V.essayReadingVoice(12).who,'a learner aged 11 to 13','the young essay voice is untouched');
 });
+test('L1-helena-46-EM5-6: phone-kept pieces with different typed titles and a picked file without one come back with distinct titles; the file name fills the Name field',()=>{
+ const texts=require(path.join(root,'src/lib/session/texts.ts'));
+ texts.deleteAll('em56');
+ const a=texts.addPiece('em56',{text:'Hi Anna,\n\nThe slides are ready for Friday.\n\nEma',source:'paste',format:'email',title:'Note to Anna'});
+ const b=texts.addPiece('em56',{text:'Hi Ben,\n\nCould you send Monday notes?\n\nEma',source:'paste',format:'email',title:'  Note to Ben  '});
+ const c=texts.addPiece('em56',{text:'Dear Cara,\n\nThank you for the book.\n\nEma',source:'file',format:'email',title:'thank-you-draft'});
+ assert.ok(a.ok&&b.ok&&c.ok);
+ const titles=texts.listPieces('em56').map((x)=>x.title).sort();
+ assert.deepEqual(titles,['Note to Anna','Note to Ben','thank-you-draft']);
+ texts.deleteAll('em56');
+ const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ assert.match(phone,/setSource\("file"\);[^\n]*setPieceTitle\(f\.name\.replace\(/,'a picked file names the piece by its file name without the extension');
+});
